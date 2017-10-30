@@ -1,9 +1,9 @@
 {
   "author": "ReadMe <support@readme.io> (http://readme.io)",
-  "name": "oas",
-  "description": "A collection of Open API Initiative (Swagger) tools",
+  "name": "rdme",
+  "description": "Upload your Swagger file to ReadMe",
   "bin": {
-    "oas": "index.js"
+    "rdme": "index.js"
   },
   "tags": [
     "api",
@@ -20,10 +20,10 @@
   "version": "0.6.7",
   "repository": {
     "type": "git",
-    "url": "git://github.com/readmeio/oas.git"
+    "url": "git://github.com/readmeio/rdme.git"
   },
   "bugs": {
-    "url": "https://github.com/readmeio/oas/issues"
+    "url": "https://github.com/readmeio/rdme/issues"
   },
   "main": "index.js",
   "dependencies": {

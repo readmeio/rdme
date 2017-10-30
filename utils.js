@@ -18,7 +18,7 @@ exports.config = function(env) {
   var config = require('./config/' + (env || 'config'));
 
   // TODO: Make config a JS file; do this there.
-  config.apiFile = path.join(os.homedir(), '.api.json');
+  config.apiFile = path.join(os.homedir(), '.readme.json');
 
   return config;
 };
@@ -27,6 +27,7 @@ exports.findSwagger = function(info, cb) {
   swaggerInline('**/*', {
       format: '.json',
       metadata: true,
+      base: info.opts.in,
   }).then((generatedSwaggerString) => {
     var generatedSwagger = JSON.parse(generatedSwaggerString);
 

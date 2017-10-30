@@ -1,5 +1,6 @@
 {
-    "host": {
-        "url": "https://openap.is"
-    }
+  "cli": "rdme",
+  "host": {
+    "url": "http://readme.local:3000"
+  }
 }

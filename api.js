@@ -15,6 +15,12 @@ exports.api = function(args, opts) {
   var action = args[0];
   var config = utils.config(opts.env);
 
+  // a file name will always have a "."
+  if (action.indexOf('.') >= 0) {
+    action = 'push';
+    opts['in'] = args[0];
+  }
+
   var actionObj = exports.load(action);
 
   if(!actionObj) {
@@ -25,17 +31,6 @@ exports.api = function(args, opts) {
     'args': args,
     'opts': opts,
   };
-
-  if(actionObj.login) {
-    try {
-      var login = jsonfile.readFileSync(config.apiFile);
-      info.token = login.token;
-    } catch(e) {
-      console.log('You need to log in to do this!'.red);
-      console.log('Run ' + 'oas login'.yellow);
-      return process.exit();
-    }
-  }
 
   if(actionObj.swagger) {
     utils.findSwagger(info, function(err, swagger, file) {
@@ -106,7 +101,7 @@ exports.api = function(args, opts) {
 };
 
 exports.load = function(action) {
-  if(!action) action = 'help';
+  if(!action) action = 'start';
 
   var file = path.join(__dirname, 'lib', `${action}.js`);
   if(utils.fileExists(file)) {

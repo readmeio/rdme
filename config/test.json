@@ -1,6 +1,6 @@
 {
-  "env": "test",
+  "cli": "rdme",
   "host": {
-      "url": "http://apis.host"
+    "url": "http://readme.local:3000"
   }
 }
