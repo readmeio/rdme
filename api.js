@@ -16,7 +16,7 @@ exports.api = function(args, opts) {
   var config = utils.config(opts.env);
 
   // a file name will always have a "."
-  if (action.indexOf('.') >= 0) {
+  if (action && action.indexOf('.') >= 0) {
     action = 'push';
     opts['in'] = args[0];
   }
@@ -115,7 +115,7 @@ exports.load = function(action) {
   }
 
   console.log('Action not found.'.red);
-  console.log('Type ' + 'oas help'.yellow + ' to see all commands');
+  console.log('Type ' + `${config.cli} help`.yellow + ' to see all commands');
   process.exit();
 };
 
