@@ -11,11 +11,24 @@ describe('push action', () => {
 
   it('should POST to the swagger api if no id provided', (done) => {
     const mock = nock(config.host.url).post('/v1/api/swagger', (body) => {
-      return true;
       return body.match('form-data; name=\"swagger\"');
-    }).basicAuth({ user: apiKey, pass: '' }).reply(201);
+    }).basicAuth({ user: apiKey }).reply(201);
 
     push.run(config, { args: ['./test/fixtures/json/swagger.json'], opts: { token: apiKey } }, (err) => {
+      if (err) return done(err);
+      mock.done();
+
+      return done();
+    });
+  });
+
+  it('should PUT to the swagger api if id is provided', (done) => {
+    const id = '5aa0409b7cf527a93bfb44df';
+    const mock = nock(config.host.url).put(`/v1/api/swagger/${id}`, (body) => {
+      return body.match('form-data; name=\"swagger\"');
+    }).basicAuth({ user: apiKey }).reply(201);
+
+    push.run(config, { args: ['./test/fixtures/json/swagger.json'], opts: { token: `${apiKey}-${id}` } }, (err) => {
       if (err) return done(err);
       mock.done();
 
