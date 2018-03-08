@@ -1,60 +1,26 @@
-oas
-===
+# `rdme` - ReadMe's API CLI
 
-Creating Swagger / Open API Spec files is hard. This makes it easier.
+This is a CLI wrapper around [ReadMe's HTTP API](https://readme.readme.io/v2.0/reference).
 
-[![](https://cl.ly/1h271F1M1e2T/Untitled-2.png)](http://readme.io)
+[![](https://d3vv6lp55qjaqc.cloudfront.net/items/1M3C3j0I0s0j3T362344/Untitled-2.png)](https://readme.io)
 
-Installation
-------------
-
-    npm install oas -g
-
-Usage
------
-
-Go to a directory with your API, and type:
-
-    oas init
-
-It will walk you through how to document your API with Open API Initiave.
-
-Swagger Inline
---------------
-
-Rather than trying to juggle one gigantic repo, `oas` uses something called
-[swagger-inline](https://github.com/readmeio/swagger-inline). It lets you include
-a little swagger snippet in a comment above your code, and collects them all
-together into one Swagger file:
-
-```javascript
-/*
- * @api [get] /pet/{petId}
- * description: "Returns all pets from the system that the user has access to"
- * parameters:
- *   - (path) petId=hi* {String} The pet ID
- *   - (query) limit {Integer:int32} The number of resources to return
-*/
-route.get("/pet/:petId", pet.show);
+## Installation
+```sh
+npm install rdme
 ```
 
-You need to start with `@api [method] path`, but everything below it is a valid
-[Swagger Path Definition](http://swagger.io/specification/#pathItemObject).
+## Usage
 
-You can also do **inline parameters**, which are shorthand for parameters. They
-aren't valid Swagger, however Swagger Inline knows how to compile them:
+### Uploading a new Swagger file to ReadMe
 
-```
-- (in) name=default* {type:format} Description
+```sh
+rdme {path-to-swagger.json} --token={api-key}
 ```
 
-Host your Swagger file
-----------------------
+### Editing an existing Swagger file
+```sh
+rdme {path-to-swagger.json} --token={api-key}-{existing-id}
+```
 
-Hosting Swagger files is hard! So, we have an online component that hosts your
-Swagger file for you. Just type the following to get a URL:
-
-    oas host
-
-This will upload your Swagger file and give you a URL you can use.
-
+## Future
+We will be expanding and modifying the feature set of this program as/when we expand our public API. Some things will be changed.
