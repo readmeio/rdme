@@ -15,11 +15,6 @@ exports.api = function(args, opts) {
   var action = args[0];
   var config = utils.config(opts.env);
 
-  // a file name will always have a "."
-  if (action && action.indexOf('.') >= 0) {
-    action = 'push';
-  }
-
   var actionObj = exports.load(action);
 
   if(!actionObj) {
