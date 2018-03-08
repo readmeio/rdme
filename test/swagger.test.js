@@ -14,7 +14,7 @@ describe('swagger action', () => {
       return body.match('form-data; name=\"swagger\"');
     }).basicAuth({ user: apiKey }).reply(201);
 
-    swagger.run(config, { args: ['./test/fixtures/json/swagger.json'], opts: { token: apiKey } }, (err) => {
+    swagger.run(config, { args: ['swagger', './test/fixtures/json/swagger.json'], opts: { token: apiKey } }, (err) => {
       if (err) return done(err);
       mock.done();
 
@@ -28,7 +28,7 @@ describe('swagger action', () => {
       return body.match('form-data; name=\"swagger\"');
     }).basicAuth({ user: apiKey }).reply(201);
 
-    swagger.run(config, { args: ['./test/fixtures/json/swagger.json'], opts: { token: `${apiKey}-${id}` } }, (err) => {
+    swagger.run(config, { args: ['swagger', './test/fixtures/json/swagger.json'], opts: { token: `${apiKey}-${id}` } }, (err) => {
       if (err) return done(err);
       mock.done();
 
