@@ -15,7 +15,7 @@ exports.api = function(args, opts) {
   var action = args[0];
   var config = utils.config(opts.env);
 
-  var actionObj = exports.load(action);
+  var actionObj = exports.load(config, action);
 
   if(!actionObj) {
     return;
@@ -29,7 +29,7 @@ exports.api = function(args, opts) {
   actionObj.run(config, info);
 };
 
-exports.load = function(action) {
+exports.load = function(config, action) {
   if(!action) action = 'start';
 
   var file = path.join(__dirname, 'lib', `${action}.js`);
