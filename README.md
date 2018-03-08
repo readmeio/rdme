@@ -14,12 +14,12 @@ npm install rdme
 ### Uploading a new Swagger file to ReadMe
 
 ```sh
-rdme {path-to-swagger.json} --token={api-key}
+rdme swagger {path-to-swagger.json} --token={api-key}
 ```
 
 ### Editing an existing Swagger file
 ```sh
-rdme {path-to-swagger.json} --token={api-key}-{existing-id}
+rdme swagger {path-to-swagger.json} --token={api-key}-{existing-id}
 ```
 
 ## Future
