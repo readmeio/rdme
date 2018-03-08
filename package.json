@@ -1,7 +1,7 @@
 {
   "author": "ReadMe <support@readme.io> (http://readme.io)",
   "name": "rdme",
-  "description": "Upload your Swagger file to ReadMe",
+  "description": "ReadMe's API CLI",
   "bin": {
     "rdme": "index.js"
   },

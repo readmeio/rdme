@@ -1,12 +1,12 @@
 const nock = require('nock');
 
 const utils = require('../utils');
-const push = require('../lib/push');
+const swagger = require('../lib/swagger');
 
 const config = utils.config('test');
 const apiKey = 'Xmw4bGctRVIQz7R7dQXqH9nQe5d0SPQs'
 
-describe('push action', () => {
+describe('swagger action', () => {
   after(() => nock.cleanAll());
 
   it('should POST to the swagger api if no id provided', (done) => {
@@ -14,7 +14,7 @@ describe('push action', () => {
       return body.match('form-data; name=\"swagger\"');
     }).basicAuth({ user: apiKey }).reply(201);
 
-    push.run(config, { args: ['./test/fixtures/json/swagger.json'], opts: { token: apiKey } }, (err) => {
+    swagger.run(config, { args: ['./test/fixtures/json/swagger.json'], opts: { token: apiKey } }, (err) => {
       if (err) return done(err);
       mock.done();
 
@@ -28,7 +28,7 @@ describe('push action', () => {
       return body.match('form-data; name=\"swagger\"');
     }).basicAuth({ user: apiKey }).reply(201);
 
-    push.run(config, { args: ['./test/fixtures/json/swagger.json'], opts: { token: `${apiKey}-${id}` } }, (err) => {
+    swagger.run(config, { args: ['./test/fixtures/json/swagger.json'], opts: { token: `${apiKey}-${id}` } }, (err) => {
       if (err) return done(err);
       mock.done();
 
