@@ -4,11 +4,9 @@ var os = require('os');
 var path = require('path');
 var glob = require('glob')
 var figures = require('figures');
-var open = require('open');
 var jsonfile = require('jsonfile');
 
 var _ = require('lodash');
-var status = require('node-status')
 var swagger = require('swagger-parser');
 var yaml = require('yamljs');
 var request = require('request');
@@ -86,127 +84,12 @@ exports.getAliasFile = function(unknownAction) {
   return foundAction;
 };
 
-exports.removeMetadata = function(obj) {
-  // x-si = swagger inline metadata
-  for(prop in obj) {
-    if (prop.substr(0, 5) === 'x-si-')
-      delete obj[prop];
-    else if (typeof obj[prop] === 'object')
-      exports.removeMetadata(obj[prop]);
-  }
-};
-
-exports.isSwagger = function(file) {
-  var fileType = file.split('.').slice(-1)[0];
-  if(fileType == 'json') {
-    try {
-      var content = require(file);
-      return content.swagger === "2.0";
-    } catch(e) {}
-  }
-
-  if(fileType == 'yaml') {
-    return yaml.load(file).swagger === "2.0";
-  }
-
-  return false;
-};
-
-exports.addId = function(file, id) {
-  var contents = fs.readFileSync(file, 'utf8');
-  var s = new RegExp("^\\s*['\"]?(swagger)['\"]?:\\s*[\"']([^\"']*)[\"'].*$", "m");
-  if(!contents.match(s)) return false;
-
-  contents = contents.replace(s, function(full, title, value) {
-    var comma = "";
-    if(file.match(/json$/) && !full.match(/,/)) {
-      comma = ","
-    }
-    return full + comma + "\n" + full.replace(title, 'x-api-id').replace(value, id);
-  });
-
-  if(file.match(/json$/)) {
-    try {
-      JSON.parse(contents);
-    } catch(e) {
-      return false;
-    }
-  }
-
-  try {
-    fs.writeFileSync(file, contents, 'utf8');
-  } catch(e) {
-    return false;
-  }
-
-  return true;
-};
-
 exports.fileExists = function(file) {
   try {
     return fs.statSync(file).isFile();
   } catch (err) {
     return false;
   }
-};
-
-exports.getSwaggerUrl = function(config, info, cb) {
-  var status = exports.uploadAnimation();
-
-  var user = jsonfile.readFileSync(config.apiFile);
-
-  request.post(config.host.url + '/upload', {
-    'form': {
-      'swagger': JSON.stringify(info.swagger),
-      'cli': 1,
-      'user': user.token,
-      'cli-tool-version': require('./package.json').version,
-    }
-  }, function(err, res, url) {
-    if (!res) {
-      status(false);
-      console.log("");
-      console.log("Error: ".red + "Could not reach server");
-      return process.exit();
-    }
-
-    var isError = (res.statusCode < 200 || res.statusCode >= 400);
-
-    status(!isError);
-
-    if(isError) {
-      console.log("");
-      console.log("Error: ".red + url);
-      return process.exit();
-    }
-
-    if (res.headers.warning) {
-      console.log("");
-      console.log("Warning! ".yellow + res.headers.warning.yellow);
-    }
-
-    cb(url);
-
-  });
-};
-
-exports.uploadAnimation = function() {
-  console.log("");
-  var job = status.addItem('job', {
-    steps: [
-      'Swagger uploaded',
-    ]
-  });
-
-  status.start({
-      interval: 200,
-      pattern: '{spinner.green} Uploading your Swagger file...',
-  });
-
-  return function(success) {
-    job.doneStep(success);
-    status.stop();
-  };
 };
 
 exports.guessLanguage = function(cb) {
@@ -241,10 +124,6 @@ exports.guessLanguage = function(cb) {
   });
 
   return language;
-};
-
-exports.open = function(url, info) {
-  open(url);
 };
 
 exports.swaggerInlineExample = function(_lang) {

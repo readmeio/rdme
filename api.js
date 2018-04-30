@@ -1,9 +1,7 @@
 var colors = require('colors');
-var prompt = require('prompt-sync')();
 var crypto = require('crypto');
 var fs = require('fs');
 var jsonfile = require('jsonfile');
-var uslug = require('uslug');
 var path = require('path');
 var request = require('request');
 
