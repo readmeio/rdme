@@ -1,0 +1,7 @@
+{
+  "extends": ["airbnb-base", "prettier"],
+  "rules": {
+    "no-console": 0,
+    "func-names": ["error", "never"],
+  }
+}

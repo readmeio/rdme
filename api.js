@@ -1,65 +1,42 @@
-var colors = require('colors');
-var crypto = require('crypto');
-var fs = require('fs');
-var jsonfile = require('jsonfile');
-var path = require('path');
-var request = require('request');
+require('colors');
 
-var utils = require('./utils');
+const path = require('path');
 
-exports.api = function(args, opts) {
-  opts = opts || {};
+const utils = require('./utils');
 
-  var action = args[0];
-  var config = utils.config(opts.env);
+exports.api = function(args, opts = {}) {
+  const action = args[0];
+  const config = utils.config(opts.env);
 
-  var actionObj = exports.load(config, action);
+  const actionObj = exports.load(config, action);
 
-  if(!actionObj) {
+  if (!actionObj) {
     return;
   }
 
-  var info = {
-    'args': args,
-    'opts': opts,
+  const info = {
+    args,
+    opts,
   };
 
   actionObj.run(config, info);
 };
 
-exports.load = function(config, action) {
-  if(!action) action = 'start';
-
-  var file = path.join(__dirname, 'lib', `${action}.js`);
-  if(utils.fileExists(file)) {
+exports.load = function(config, action = 'start') {
+  const file = path.join(__dirname, 'lib', `${action}.js`);
+  if (utils.fileExists(file)) {
+    // eslint-disable-next-line global-require, import/no-dynamic-require
     return require(file);
   }
 
-  var alias = utils.getAliasFile(action);
-  if(alias) {
-    var file = path.join(__dirname, 'lib', `${alias}.js`);
-    return require(file);
+  const alias = utils.getAliasFile(action);
+  if (alias) {
+    // eslint-disable-next-line global-require, import/no-dynamic-require
+    return require(path.join(__dirname, 'lib', `${alias}.js`));
   }
 
-  console.log('Action not found.'.red);
-  console.log('Type ' + `${config.cli} help`.yellow + ' to see all commands');
-  process.exit();
+  console.error('Action not found.'.red);
+  console.warn(`Type ${`${config.cli} help`.yellow} to see all commands`);
+  process.exitCode = 1;
+  return undefined;
 };
-
-function exampleId(file, apiId) {
-  if(file.match(/json$/)) {
-    console.log("");
-    console.log("    {".grey);
-    console.log("      \"swagger\": \"2.0\",".grey);
-    console.log("      \"x-api-id\": \""+apiId+"\",");
-    console.log("      \"info\": {".grey);
-    console.log("      ...".grey);
-  } else {
-    console.log("");
-    console.log("    swagger: \"2.0\"".grey);
-    console.log("    x-api-id: \""+apiId+"\"");
-    console.log("    info:".grey);
-    console.log("      ...".grey);
-  }
-};
-
