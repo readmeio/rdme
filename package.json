@@ -3,7 +3,7 @@
   "name": "rdme",
   "description": "ReadMe's API CLI",
   "bin": {
-    "rdme": "index.js"
+    "rdme": "rdme.js"
   },
   "tags": [
     "api",
