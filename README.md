@@ -2,6 +2,8 @@
 
 This is a CLI wrapper around [ReadMe's HTTP API](https://readme.readme.io/v2.0/reference).
 
+[![CircleCI](https://circleci.com/gh/readmeio/rdme.svg?style=svg)](https://circleci.com/gh/readmeio/rdme)
+
 [![](https://d3vv6lp55qjaqc.cloudfront.net/items/1M3C3j0I0s0j3T362344/Untitled-2.png)](https://readme.io)
 
 ## Installation
