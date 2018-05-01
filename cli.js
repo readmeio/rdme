@@ -16,10 +16,19 @@ function load(command = 'help') {
   }
 }
 
-module.exports = function(args, opts = {}) {
-  const command = load(args[0]);
+function defaultCallback(err) {
+  if (err) {
+    console.error(err);
+    return process.exit(1);
+  }
+
+  return process.exit();
+}
+
+module.exports = function(cmd, args, opts = {}, cb = defaultCallback) {
+  const command = load(cmd);
 
   if (!command) return;
 
-  command.run({ args: args.slice(1), opts });
+  command.run({ args, opts }, cb);
 };
