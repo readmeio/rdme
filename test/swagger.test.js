@@ -7,7 +7,7 @@ const config = utils.config('test');
 const apiKey = 'Xmw4bGctRVIQz7R7dQXqH9nQe5d0SPQs';
 
 describe('swagger action', () => {
-  after(() => nock.cleanAll());
+  afterAll(() => nock.cleanAll());
 
   it('should POST to the swagger api if no id provided', done => {
     const mock = nock(config.host.url)

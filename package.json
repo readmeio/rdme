@@ -48,7 +48,7 @@
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.11.0",
-    "mocha": "^2.5.3",
+    "jest": "^22.4.3",
     "nock": "^9.2.3",
     "prettier": "^1.12.1"
   },
@@ -56,7 +56,16 @@
     "lint": "eslint -f unix .",
     "prettier": "prettier --list-different \"./**/**.js\"",
     "pretest": "npm run lint && npm run prettier",
-    "test": "mocha"
+    "test": "jest --coverage"
   },
-  "license": "see LICENSE file"
+  "jest": {
+    "coverageThreshold": {
+      "global": {
+        "branches": 90,
+        "functions": 90,
+        "lines": 90,
+        "statements": 90
+      }
+    }
+  }
 }

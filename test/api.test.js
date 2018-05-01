@@ -4,11 +4,11 @@ const api = require('../api');
 
 describe('api', () => {
   let error;
-  before(() => {
+  beforeAll(() => {
     error = { console };
   });
 
-  after(() => {
+  afterAll(() => {
     console.error = error;
   });
 
