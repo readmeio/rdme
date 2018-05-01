@@ -1,10 +1,9 @@
 require('colors');
 
 const path = require('path');
+const config = require('config');
 
-const utils = require('./utils');
-
-function load(config, command = 'help') {
+function load(command = 'help') {
   const file = path.join(__dirname, 'lib', `${command}.js`);
   try {
     // eslint-disable-next-line global-require, import/no-dynamic-require
@@ -15,14 +14,12 @@ function load(config, command = 'help') {
     process.exitCode = 1;
     return undefined;
   }
-};
+}
 
 module.exports = function(args, opts = {}) {
-  const config = utils.config(opts.env);
-
-  const command = load(config, args[0]);
+  const command = load(args[0]);
 
   if (!command) return;
 
-  command.run(config, { args, opts });
+  command.run({ args, opts });
 };

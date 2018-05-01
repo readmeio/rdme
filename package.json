@@ -28,6 +28,7 @@
   "main": "index.js",
   "dependencies": {
     "colors": "^1.1.2",
+    "config": "^1.30.0",
     "minimist": "^1.2.0",
     "request": "^2.81.0"
   },
@@ -47,12 +48,15 @@
     "test": "jest --coverage"
   },
   "jest": {
+    "setupFiles": [
+      "./test/set-node-env"
+    ],
     "coverageThreshold": {
       "global": {
-        "branches": 15,
-        "functions": 20,
-        "lines": 40,
-        "statements": 40
+        "branches": 40,
+        "functions": 80,
+        "lines": 80,
+        "statements": 75
       }
     }
   }
