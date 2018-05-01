@@ -21,5 +21,5 @@ module.exports = function(args, opts = {}) {
 
   if (!command) return;
 
-  command.run({ args, opts });
+  command.run({ args: args.slice(1), opts });
 };
