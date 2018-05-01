@@ -17,7 +17,7 @@ describe('swagger action', () => {
 
     swagger.run(
       config,
-      { args: ['swagger', './test/fixtures/json/swagger.json'], opts: { token: apiKey } },
+      { args: ['swagger', './test/fixtures/swagger.json'], opts: { token: apiKey } },
       err => {
         if (err) return done(err);
         mock.done();
@@ -37,7 +37,7 @@ describe('swagger action', () => {
     swagger.run(
       config,
       {
-        args: ['swagger', './test/fixtures/json/swagger.json'],
+        args: ['swagger', './test/fixtures/swagger.json'],
         opts: { token: `${apiKey}-${id}` },
       },
       err => {
