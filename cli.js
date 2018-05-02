@@ -16,19 +16,10 @@ function load(command = 'help') {
   }
 }
 
-function defaultCallback(err) {
-  if (err) {
-    console.error(err);
-    return process.exit(1);
-  }
-
-  return process.exit();
-}
-
-module.exports = function(cmd, args, opts = {}, cb = defaultCallback) {
+module.exports = function(cmd, args, opts = {}) {
   const command = load(cmd);
 
-  if (!command) return;
+  if (!command) return undefined;
 
-  command.run({ args, opts }, cb);
+  return command.run({ args, opts });
 };
