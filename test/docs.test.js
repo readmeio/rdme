@@ -39,7 +39,10 @@ describe('docs command', () => {
       const doc = frontMatter(
         fs.readFileSync(path.join(__dirname, `./fixtures/existing-docs/${slug}.md`)),
       );
-      const hash = crypto.createHash('sha1').update(fs.readFileSync(path.join(__dirname, `./fixtures/existing-docs/${slug}.md`))).digest('hex');
+      const hash = crypto
+        .createHash('sha1')
+        .update(fs.readFileSync(path.join(__dirname, `./fixtures/existing-docs/${slug}.md`)))
+        .digest('hex');
 
       const getMock = nock(config.host, {
         reqheaders: {
@@ -73,7 +76,10 @@ describe('docs command', () => {
 
     it('should not send requests for docs that have not changed', () => {
       const slug = 'simple-doc';
-      const hash = crypto.createHash('sha1').update(fs.readFileSync(path.join(__dirname, `./fixtures/existing-docs/${slug}.md`))).digest('hex');
+      const hash = crypto
+        .createHash('sha1')
+        .update(fs.readFileSync(path.join(__dirname, `./fixtures/existing-docs/${slug}.md`)))
+        .digest('hex');
 
       const getMock = nock(config.host, {
         reqheaders: {
@@ -96,7 +102,10 @@ describe('docs command', () => {
       const doc = frontMatter(
         fs.readFileSync(path.join(__dirname, `./fixtures/new-docs/${slug}.md`)),
       );
-      const hash = crypto.createHash('sha1').update(fs.readFileSync(path.join(__dirname, `./fixtures/new-docs/${slug}.md`))).digest('hex');
+      const hash = crypto
+        .createHash('sha1')
+        .update(fs.readFileSync(path.join(__dirname, `./fixtures/new-docs/${slug}.md`)))
+        .digest('hex');
 
       const getMock = nock(config.host, {
         reqheaders: {

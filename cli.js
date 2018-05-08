@@ -20,7 +20,7 @@ module.exports = function(cmd, args, opts = {}) {
   try {
     const command = load(opts.help ? 'help' : cmd);
     return command.run({ args, opts });
-  } catch(e) {
+  } catch (e) {
     return Promise.reject(e);
   }
 };

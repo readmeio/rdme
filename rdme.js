@@ -10,7 +10,7 @@ const parseArgs = require('minimist')(process.argv.slice(2), {
     // // Allows --help, -h, -H
     h: 'help',
     H: 'help',
-  }
+  },
 });
 
 require('./cli')(parseArgs._[0], parseArgs._.slice(1), parseArgs)
