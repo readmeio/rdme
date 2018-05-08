@@ -24,5 +24,11 @@ rdme swagger {path-to-swagger.json} --key={api-key}
 rdme swagger {path-to-swagger.json} --key={api-key} --id={existing-id}
 ```
 
+### Syncing a folder of markdown docs to ReadMe
+
+```sh
+rdme docs path-to-markdown-files --key={api-key} --version={project-version}
+```
+
 ## Future
 We will be expanding and modifying the feature set of this program as/when we expand our public API. Some things will be changed.
