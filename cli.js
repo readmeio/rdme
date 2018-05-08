@@ -1,5 +1,6 @@
 const path = require('path');
 const config = require('config');
+const { version } = require('./package.json');
 
 function load(command = 'help') {
   const file = path.join(__dirname, 'lib', `${command}.js`);
@@ -14,8 +15,10 @@ function load(command = 'help') {
 }
 
 module.exports = function(cmd, args, opts = {}) {
+  if (opts.version && !cmd) return Promise.resolve(version);
+
   try {
-    const command = load(cmd);
+    const command = load(opts.help ? 'help' : cmd);
     return command.run({ args, opts });
   } catch(e) {
     return Promise.reject(e);

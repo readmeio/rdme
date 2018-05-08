@@ -1,6 +1,17 @@
 #! /usr/bin/env node
 require('colors');
-const parseArgs = require('minimist')(process.argv.slice(2));
+
+const parseArgs = require('minimist')(process.argv.slice(2), {
+  alias: {
+    // Allows --version, -v, -V
+    v: 'version',
+    V: 'version',
+
+    // // Allows --help, -h, -H
+    h: 'help',
+    H: 'help',
+  }
+});
 
 require('./cli')(parseArgs._[0], parseArgs._.slice(1), parseArgs)
   .then(() => process.exit())
