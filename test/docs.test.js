@@ -3,6 +3,7 @@ const config = require('config');
 const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 const frontMatter = require('gray-matter');
 
 const docs = require('../cli').bind(null, 'docs');
@@ -38,6 +39,7 @@ describe('docs command', () => {
       const doc = frontMatter(
         fs.readFileSync(path.join(__dirname, `./fixtures/existing-docs/${slug}.md`)),
       );
+      const hash = crypto.createHash('sha1').update(fs.readFileSync(path.join(__dirname, `./fixtures/existing-docs/${slug}.md`))).digest('hex');
 
       const getMock = nock(config.host, {
         reqheaders: {
@@ -57,6 +59,7 @@ describe('docs command', () => {
           category: '5ae9ece93a685f47efb9a97c',
           slug,
           body: doc.content,
+          lastUpdatedHash: hash,
           ...doc.data,
         })
         .basicAuth({ user: key })
@@ -67,6 +70,24 @@ describe('docs command', () => {
         putMock.done();
       });
     });
+
+    it('should not send requests for docs that have not changed', () => {
+      const slug = 'simple-doc';
+      const hash = crypto.createHash('sha1').update(fs.readFileSync(path.join(__dirname, `./fixtures/existing-docs/${slug}.md`))).digest('hex');
+
+      const getMock = nock(config.host, {
+        reqheaders: {
+          'x-readme-version': version,
+        },
+      })
+        .get(`/api/v1/docs/${slug}`)
+        .basicAuth({ user: key })
+        .reply(200, { category: '5ae9ece93a685f47efb9a97c', slug, lastUpdatedHash: hash });
+
+      return docs(['./test/fixtures/existing-docs'], { key, version }).then(() => {
+        getMock.done();
+      });
+    });
   });
 
   describe('new docs', () => {
@@ -75,6 +96,7 @@ describe('docs command', () => {
       const doc = frontMatter(
         fs.readFileSync(path.join(__dirname, `./fixtures/new-docs/${slug}.md`)),
       );
+      const hash = crypto.createHash('sha1').update(fs.readFileSync(path.join(__dirname, `./fixtures/new-docs/${slug}.md`))).digest('hex');
 
       const getMock = nock(config.host, {
         reqheaders: {
@@ -93,7 +115,7 @@ describe('docs command', () => {
           'x-readme-version': version,
         },
       })
-        .post(`/api/v1/docs`, { slug, body: doc.content, ...doc.data })
+        .post(`/api/v1/docs`, { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
         .reply(201);
 
