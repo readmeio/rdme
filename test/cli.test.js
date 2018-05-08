@@ -12,11 +12,11 @@ describe('cli', () => {
     console.error = error;
   });
 
-  it('command not found', done => {
-    console.error = message => {
-      assert(message.includes('Command not found'));
+  it('command not found', done =>
+    cli('notARealCommand').catch(e => {
+      assert.equal(e.message.includes('Command not found'), true)
       return done();
-    };
-    cli('notARealCommand');
+    }));
+
   });
 });
