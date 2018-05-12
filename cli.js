@@ -28,7 +28,10 @@ function load(command = 'help') {
 }
 
 module.exports = function(cmd, args, opts = {}) {
-  if (opts.version && !cmd) return Promise.resolve(version);
+  if (opts.version && !cmd) {
+    console.log(version);
+    return Promise.resolve(version);
+  }
 
   try {
     const command = load(opts.help ? 'help' : cmd);
