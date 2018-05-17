@@ -14,7 +14,10 @@ const parseArgs = require('minimist')(process.argv.slice(2), {
 });
 
 require('./cli')(parseArgs._[0], parseArgs._.slice(1), parseArgs)
-  .then(() => process.exit())
+  .then(msg => {
+    if (msg) console.log(msg);
+    process.exit();
+  })
   .catch(err => {
     if (err) {
       // `err.message` is from locally thrown Error objects
