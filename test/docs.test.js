@@ -222,7 +222,7 @@ describe('docs:edit', () => {
       return cb(0);
     }
 
-    return docsEdit([slug], { key, version: '1.0.0', mockEditor }).catch((err) => {
+    return docsEdit([slug], { key, version: '1.0.0', mockEditor }).catch(err => {
       assert.equal(err.error, 'Bad Request');
       getMock.done();
       putMock.done();
@@ -235,13 +235,13 @@ describe('docs:edit', () => {
     const slug = 'getting-started';
     nock(config.host)
       .get(`/api/v1/docs/${slug}`)
-      .reply(200, {})
+      .reply(200, {});
 
     function mockEditor(filename, cb) {
       return cb(1);
     }
 
-    return docsEdit([slug], { key, version: '1.0.0', mockEditor }).catch((err) => {
+    return docsEdit([slug], { key, version: '1.0.0', mockEditor }).catch(err => {
       assert.equal(err.message, 'Non zero exit code from $EDITOR');
       fs.unlinkSync(`${slug}.md`);
     });
