@@ -1,5 +1,6 @@
 const assert = require('assert');
 const minimist = require('minimist');
+const nock = require('nock');
 
 const cli = require('../cli');
 const { version } = require('../package.json');
@@ -30,4 +31,22 @@ describe('cli', () => {
   describe('--help', () => {
     it('should print help and not error', () => cli('', [], minimist(['--help'])));
   });
+
+  describe('subcommands', () => {
+    // docs:edit will make a backend connection
+    beforeAll(() => nock.disableNetConnect());
+
+    it('should load subcommands from the folder', () =>
+      cli('docs:edit', ['getting-started'], minimist(['--version=1.0.0', '--key=abcdef'])).catch(
+        e => {
+          assert.notEqual(e.message, 'Command not found.');
+        },
+      ));
+  });
+
+  it('should not error with undefined cmd', () =>
+    cli(undefined, []).catch(() => {
+      // This can be ignored as it's just going to be
+      // a command not found error
+    }));
 });
