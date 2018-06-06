@@ -1,33 +1,46 @@
-version: 2
-jobs:
-  build:
-    docker:
-      - image: circleci/node:10
-        environment:
-          CC_TEST_REPORTER_ID: ae1797a82fef7dc0abc059ecbd7b189664ffc3bf254869dc383339748c413c73
-
-    working_directory: ~/repo
-
-    steps:
-      - checkout
-
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
+default: &default
+  working_directory: ~/repo
+  steps:
+    - checkout
+    # Download and cache dependencies
+    - restore_cache:
+        keys:
           - v1-dependencies-{{ checksum "package.json" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
+    - run: npm install
+    - save_cache:
+        paths:
+          - node_modules
+        key: v1-dependencies-{{ checksum "package.json" }}
 
-      - run: npm install
+    # run tests!
+    - run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+    - run: chmod +x ./cc-test-reporter
+    - run: ./cc-test-reporter before-build
+    - run: npm test
+    - run: ./cc-test-reporter after-build -t lcov --exit-code $?
 
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+environment: &environment
+  CC_TEST_REPORTER_ID: ae1797a82fef7dc0abc059ecbd7b189664ffc3bf254869dc383339748c413c73
 
-      # run tests!
-      - run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-      - run: chmod +x ./cc-test-reporter
-      - run: ./cc-test-reporter before-build
-      - run: npm test
-      - run: ./cc-test-reporter after-build -t lcov --exit-code $?
+version: 2
+jobs:
+  node8:
+    <<: *default
+    docker:
+      - image: circleci/node:8
+        environment: *environment
+
+  node10:
+    <<: *default
+    docker:
+      - image: circleci/node:10
+        environment: *environment
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - node8
+      - node10
