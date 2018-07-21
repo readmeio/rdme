@@ -15,7 +15,7 @@ process.env.NODE_CONFIG_DIR = configDir;
 
 const { version } = require('./package.json');
 
-function load(command = 'help', subcommand = '') {
+function load(command = '', subcommand = '') {
   const file = path.join(__dirname, 'lib', command, subcommand);
   try {
     // eslint-disable-next-line global-require, import/no-dynamic-require
