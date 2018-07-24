@@ -15,8 +15,8 @@ process.env.NODE_CONFIG_DIR = configDir;
 
 const { version } = require('./package.json');
 
-function load(command = 'help') {
-  const file = path.join(__dirname, 'lib', `${command}.js`);
+function load(command = '', subcommand = '') {
+  const file = path.join(__dirname, 'lib', command, subcommand);
   try {
     // eslint-disable-next-line global-require, import/no-dynamic-require
     return require(file);
@@ -30,9 +30,15 @@ function load(command = 'help') {
 module.exports = function(cmd, args, opts = {}) {
   if (opts.version && !cmd) return Promise.resolve(version);
 
+  let command = cmd || '';
+  let subcommand;
+
+  if (command.includes(':')) {
+    [command, subcommand] = cmd.split(':');
+  }
+
   try {
-    const command = load(opts.help ? 'help' : cmd);
-    return command.run({ args, opts });
+    return load(opts.help ? 'help' : command, subcommand).run({ args, opts });
   } catch (e) {
     return Promise.reject(e);
   }
