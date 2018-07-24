@@ -30,5 +30,11 @@ rdme swagger {path-to-swagger.json} --key={api-key} --id={existing-id}
 rdme docs path-to-markdown-files --key={api-key} --version={project-version}
 ```
 
+### Edit a single readme doc on your local machine
+
+```sh
+rdme docs:edit <slug> --key={api-key} --version={project-version}
+```
+
 ## Future
 We will be expanding and modifying the feature set of this program as/when we expand our public API. Some things will be changed.
