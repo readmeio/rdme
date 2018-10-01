@@ -4,6 +4,7 @@ const nock = require('nock');
 
 const cli = require('../cli');
 const { version } = require('../package.json');
+const conf = require('../lib/configstore');
 
 describe('cli', () => {
   it('command not found', done =>
@@ -49,4 +50,12 @@ describe('cli', () => {
       // This can be ignored as it's just going to be
       // a command not found error
     }));
+
+  it('should add stored apiKey to opts', () => {
+    conf.set('apiKey', '123456');
+    return cli('docs', [], {}).catch(err => {
+      conf.delete('apiKey');
+      assert.equal(err.message, 'No version provided. Please use --version');
+    });
+  });
 });

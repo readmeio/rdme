@@ -14,6 +14,7 @@ const config = require('config');
 process.env.NODE_CONFIG_DIR = configDir;
 
 const { version } = require('./package.json');
+const configStore = require('./lib/configstore');
 
 function load(command = '', subcommand = '') {
   const file = path.join(__dirname, 'lib', command, subcommand);
@@ -37,8 +38,10 @@ module.exports = function(cmd, args, opts = {}) {
     [command, subcommand] = cmd.split(':');
   }
 
+  const optsWithStoredKey = Object.assign({}, { key: configStore.get('apiKey') }, opts)
+
   try {
-    return load(opts.help ? 'help' : command, subcommand).run({ args, opts });
+    return load(opts.help ? 'help' : command, subcommand).run({ args, opts: optsWithStoredKey });
   } catch (e) {
     return Promise.reject(e);
   }
