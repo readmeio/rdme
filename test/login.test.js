@@ -60,5 +60,40 @@ describe('login command', () => {
     });
   });
 
+  it('should error if missing two factor token', done => {
+    const email = 'dom@readme.io';
+    const password = '123456';
+    const project = 'subdomain';
+
+    const mock = nock(config.host)
+      .post('/api/v1/login', { email, password, project })
+      .reply(400, {
+        description: 'You must provide a Two Factor Code',
+        error: 'Bad Request',
+      });
+
+    return login([], { email, password, project }).catch(err => {
+      mock.done();
+      assert.equal(err.error, 'Bad Request');
+      assert.equal(err.description, 'You must provide a Two Factor Code');
+      return done();
+    });
+  });
+
+  it('should send 2fa token if provided', () => {
+    const email = 'dom@readme.io';
+    const password = '123456';
+    const project = 'subdomain';
+    const token = '123456';
+
+    const mock = nock(config.host)
+      .post('/api/v1/login', { email, password, project, token })
+      .reply(200, { apiKey: 123 });
+
+    return login([], { email, password, project, token }).then(() => {
+      mock.done();
+    });
+  });
+
   it('should error if trying to access a project that is not yours', () => {});
 });
