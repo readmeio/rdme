@@ -1,11 +1,9 @@
 const nock = require('nock');
 const config = require('config');
 const assert = require('assert');
-const Configstore = require('configstore');
-
-const pkg = require('../package');
 
 const login = require('../cli').bind(null, 'login');
+const configStore = require('../lib/configstore');
 
 describe('login command', () => {
   beforeAll(() => nock.disableNetConnect());
@@ -35,10 +33,10 @@ describe('login command', () => {
 
     return login([], { email, password, project }).then(() => {
       mock.done();
-      const conf = new Configstore(pkg.name);
-      assert.equal(conf.get('apiKey'), apiKey);
-      assert.equal(conf.get('email'), email);
-      assert.equal(conf.get('project'), project);
+      assert.equal(configStore.get('apiKey'), apiKey);
+      assert.equal(configStore.get('email'), email);
+      assert.equal(configStore.get('project'), project);
+      configStore.clear();
     });
   });
 

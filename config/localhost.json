@@ -1,3 +1,4 @@
 {
-  "host": "http://dash.readme.local:3000"
+  "host": "http://dash.readme.local:3000",
+  "hub": "http://{project}.readme.local:3000"
 }
