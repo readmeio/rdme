@@ -13,6 +13,14 @@ npm install rdme
 
 ## Usage
 
+### Logging in to a ReadMe project
+
+If you login to a project, you will not have to provide the `--key` option because we save it locally:
+
+```sh
+rdme login
+```
+
 ### Uploading a new Swagger file to ReadMe
 
 ```sh
@@ -34,6 +42,14 @@ rdme docs path-to-markdown-files --key={api-key} --version={project-version}
 
 ```sh
 rdme docs:edit <slug> --key={api-key} --version={project-version}
+```
+
+### Open your ReadMe project in your browser
+
+If you are logged in, this will open the project in your browser:
+
+```sh
+rdme open
 ```
 
 ## Future
