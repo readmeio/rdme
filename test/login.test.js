@@ -9,13 +9,13 @@ describe('login command', () => {
   beforeAll(() => nock.disableNetConnect());
   afterAll(() => nock.cleanAll());
 
-  it('should error if no project provided', (done) =>
+  it('should error if no project provided', done =>
     login([], {}).catch(err => {
       assert.equal(err.message, 'No project subdomain provided. Please use --project');
       return done();
     }));
 
-  it('should error if email is invalid', (done) =>
+  it('should error if email is invalid', done =>
     login([], { project: 'subdomain', email: 'this-is-not-an-email' }).catch(err => {
       assert.equal(err.message, 'You must provide a valid email address.');
       return done();
@@ -40,7 +40,7 @@ describe('login command', () => {
     });
   });
 
-  it('should error if invalid credentials are given', (done) => {
+  it('should error if invalid credentials are given', done => {
     const email = 'dom@readme.io';
     const password = '123456';
     const project = 'subdomain';
@@ -52,7 +52,7 @@ describe('login command', () => {
         error: 'Bad Request',
       });
 
-    return login([], { email, password, project }).catch((err) => {
+    return login([], { email, password, project }).catch(err => {
       mock.done();
       assert.equal(err.error, 'Bad Request');
       assert.equal(err.description, 'Invalid email/password');

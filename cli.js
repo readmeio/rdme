@@ -38,7 +38,7 @@ module.exports = function(cmd, args, opts = {}) {
     [command, subcommand] = cmd.split(':');
   }
 
-  const optsWithStoredKey = Object.assign({}, { key: configStore.get('apiKey') }, opts)
+  const optsWithStoredKey = Object.assign({}, { key: configStore.get('apiKey') }, opts);
 
   try {
     return load(opts.help ? 'help' : command, subcommand).run({ args, opts: optsWithStoredKey });
