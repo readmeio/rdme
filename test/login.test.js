@@ -8,6 +8,7 @@ const configStore = require('../lib/configstore');
 describe('login command', () => {
   beforeAll(() => nock.disableNetConnect());
   afterAll(() => nock.cleanAll());
+  afterEach(() => configStore.clear());
 
   it('should error if no project provided', done =>
     login([], {}).catch(err => {
@@ -88,7 +89,7 @@ describe('login command', () => {
 
     const mock = nock(config.host)
       .post('/api/v1/login', { email, password, project, token })
-      .reply(200, { apiKey: 123 });
+      .reply(200, { apiKey: '123' });
 
     return login([], { email, password, project, token }).then(() => {
       mock.done();
