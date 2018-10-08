@@ -17,6 +17,9 @@ describe('cli', () => {
     it('should return version from package.json', () =>
       cli('', [], minimist(['--version'])).then(v => assert.equal(v, version)));
 
+    it('should return version from package.json for help command', () =>
+      cli('help', [], minimist(['--version'])).then(v => assert.equal(v, version)));
+
     // This is necessary because we use --version for other commands like `docs`
     it('should only return version if no command', () =>
       cli('no-such-command', [], minimist(['--version']))
