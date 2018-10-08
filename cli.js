@@ -29,7 +29,7 @@ function load(command = '', subcommand = '') {
 }
 
 module.exports = function(cmd, args, opts = {}) {
-  if (opts.version && !cmd || cmd === 'help') return Promise.resolve(version);
+  if (opts.version && (!cmd || cmd === 'help')) return Promise.resolve(version);
 
   let command = cmd || '';
   let subcommand;

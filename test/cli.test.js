@@ -33,7 +33,10 @@ describe('cli', () => {
   });
 
   describe('--help', () => {
-    it('should print help and not error', () => cli('', [], minimist(['--help'])));
+    it('should print help and not version', () =>
+      cli('help', [], minimist(['--help'])).then(output => {
+        assert.notEqual(output, version);
+      }));
   });
 
   describe('subcommands', () => {
