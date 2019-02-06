@@ -91,7 +91,8 @@ describe('docs command', () => {
         .basicAuth({ user: key })
         .reply(200, { category: '5ae9ece93a685f47efb9a97c', slug, lastUpdatedHash: hash });
 
-      return docs(['./test/fixtures/existing-docs'], { key, version }).then(() => {
+      return docs(['./test/fixtures/existing-docs'], { key, version }).then(([message]) => {
+        assert.equal(message, '`simple-doc` not updated. No changes.');
         getMock.done();
       });
     });
