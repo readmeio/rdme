@@ -1,6 +1,5 @@
 const nock = require('nock');
 const config = require('config');
-const assert = require('assert');
 
 const swagger = require('../cli').bind(null, 'swagger');
 
@@ -11,14 +10,26 @@ describe('swagger command', () => {
   afterAll(() => nock.cleanAll());
 
   it('should error if no api key provided', () =>
-    swagger(['./test/fixtures/swagger.json'], {}).catch(err => {
-      assert.equal(err.message, 'No api key provided. Please use --key');
-    }));
+    expect(swagger(['./test/fixtures/swagger.json'], {})).rejects.toThrow(
+      'No api key provided. Please use --key',
+    ));
 
   it('should error if no file provided', () =>
-    swagger([], { key }).catch(err => {
-      assert.equal(err.message, 'No swagger file provided. Usage `rdme swagger <swagger-file>`');
-    }));
+    expect(swagger([], { key })).rejects.toThrow(
+      'No swagger file provided. Usage `rdme swagger <swagger-file>`',
+    ));
+
+  it('should error if API errors', async () => {
+    const mock = nock(config.host)
+      .post('/api/v1/swagger', body => body.match('form-data; name="swagger"'))
+      .basicAuth({ user: key })
+      .reply(400);
+
+    await expect(swagger(['./test/fixtures/swagger.json'], { key })).rejects.toThrow(
+      'There was an error uploading!',
+    );
+    mock.done();
+  });
 
   it('should POST to the swagger api if no id provided', () => {
     const mock = nock(config.host)
