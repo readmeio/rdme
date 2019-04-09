@@ -17,7 +17,7 @@
     "microservice",
     "documentation"
   ],
-  "version": "3.0.0",
+  "version": "3.0.1",
   "repository": {
     "type": "git",
     "url": "git://github.com/readmeio/rdme.git"
@@ -34,9 +34,9 @@
     "gray-matter": "^4.0.1",
     "isemail": "^3.1.3",
     "minimist": "^1.2.0",
-    "oas": "^0.8.8",
     "opn": "^5.4.0",
     "read": "^1.0.7",
+    "oas": "0.8.15",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.5"
   },
@@ -45,7 +45,7 @@
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.11.0",
-    "jest": "^22.4.3",
+    "jest": "^24.7.1",
     "nock": "^9.2.3",
     "prettier": "^1.12.1"
   },
