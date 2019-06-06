@@ -31,8 +31,8 @@ describe('docs command', () => {
       assert.equal(err.message, 'No folder provided. Usage `rdme docs <folder>`');
     }));
 
-  it('should error if the argument isnt a folder');
-  it('should error if the folder contains no markdown files');
+  it.todo('should error if the argument isnt a folder');
+  it.todo('should error if the folder contains no markdown files');
 
   describe('existing docs', () => {
     it('should fetch doc and merge with what is returned', () => {
