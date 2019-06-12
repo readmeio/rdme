@@ -29,7 +29,7 @@
   "dependencies": {
     "colors": "^1.1.2",
     "config": "^3.1.0",
-    "configstore": "^4.0.0",
+    "configstore": "^5.0.0",
     "editor": "^1.0.0",
     "gray-matter": "^4.0.1",
     "isemail": "^3.1.3",
