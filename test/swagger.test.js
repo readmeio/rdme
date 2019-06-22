@@ -1,5 +1,6 @@
 const nock = require('nock');
 const config = require('config');
+const fs = require('fs');
 
 const swagger = require('../cli').bind(null, 'swagger');
 
@@ -14,10 +15,43 @@ describe('swagger command', () => {
       'No api key provided. Please use --key',
     ));
 
-  it('should error if no file provided', () =>
+  it('should error if a bad api key is provided', async () => {
+    const badKey = 'thisIsABadApiKey';
+    const mock = nock(config.host)
+      .post('/api/v1/swagger', body => body.match('form-data; name="swagger"'))
+      .basicAuth({ user: badKey })
+      .reply(401);
+
+    await expect(swagger(['./test/fixtures/swagger.json'], { key: badKey })).rejects.toThrow(
+      'There was a problem with your api key. Please try again.',
+    );
+
+    mock.done();
+  });
+
+  it('should error if no file was provided or able to be discovered', () => {
     expect(swagger([], { key })).rejects.toThrow(
-      'No swagger file provided. Usage `rdme swagger <swagger-file>`',
-    ));
+      'We were unable to locate a Swagger or OpenAPI file to upload.\n' +
+        "Don't worry, it's easy to get started! Run `rdme oas init` to get started.",
+    );
+  });
+
+  it('should POST a discovered file if none provided', () => {
+    const mock = nock(config.host)
+      .post('/api/v1/swagger', body => body.match('form-data; name="swagger"'))
+      .basicAuth({ user: key })
+      .reply(201);
+
+    // Surface our test fixture to the root directory so rdme can autodiscover it. It's easier to do
+    // this than mocking out the fs module because mocking the fs module here causes Jest sourcemaps
+    // to break.
+    fs.copyFileSync('./test/fixtures/swagger.json', './swagger.json');
+
+    return swagger([], { key }).then(() => {
+      fs.unlinkSync('./swagger.json');
+      mock.done();
+    });
+  });
 
   it('should error if API errors', async () => {
     const mock = nock(config.host)
