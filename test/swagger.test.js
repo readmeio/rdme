@@ -35,7 +35,7 @@ describe('swagger command', () => {
     const mock = nock(config.host)
       .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
       .basicAuth({ user: key })
-      .reply(201);
+      .reply(201, { body: '{ id: 1 }' });
 
     return swagger(['./test/fixtures/swagger.json'], { key }).then(() => mock.done());
   });
@@ -45,7 +45,7 @@ describe('swagger command', () => {
     const mock = nock(config.host)
       .put(`/api/v1/api-specification/${id}`, body => body.match('form-data; name="spec"'))
       .basicAuth({ user: key })
-      .reply(201);
+      .reply(201, { body: '{ id: 1 }' });
 
     return swagger(['./test/fixtures/swagger.json'], { key, id }).then(() => mock.done());
   });
@@ -55,7 +55,7 @@ describe('swagger command', () => {
     const mock = nock(config.host)
       .put(`/api/v1/api-specification/${id}`, body => body.match('form-data; name="spec"'))
       .basicAuth({ user: key })
-      .reply(201);
+      .reply(201, { body: '{ id: 1 }' });
 
     return swagger(['./test/fixtures/swagger.json'], { token: `${key}-${id}` }).then(() =>
       mock.done(),
