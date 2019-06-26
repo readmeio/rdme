@@ -15,20 +15,6 @@ describe('swagger command', () => {
       'No api key provided. Please use --key',
     ));
 
-  it('should error if a bad api key is provided', async () => {
-    const badKey = 'thisIsABadApiKey';
-    const mock = nock(config.host)
-      .post('/api/v1/swagger', body => body.match('form-data; name="swagger"'))
-      .basicAuth({ user: badKey })
-      .reply(401);
-
-    await expect(swagger(['./test/fixtures/swagger.json'], { key: badKey })).rejects.toThrow(
-      'There was a problem with your api key. Please try again.',
-    );
-
-    mock.done();
-  });
-
   it('should error if no file was provided or able to be discovered', () => {
     expect(swagger([], { key })).rejects.toThrow(
       "We couldn't find a Swagger or OpenAPI file.\n\n" +
