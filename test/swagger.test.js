@@ -21,7 +21,7 @@ describe('swagger command', () => {
 
   it('should error if API errors', async () => {
     const mock = nock(config.host)
-      .post('/api/v1/swagger', body => body.match('form-data; name="swagger"'))
+      .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
       .basicAuth({ user: key })
       .reply(400);
 
@@ -33,9 +33,9 @@ describe('swagger command', () => {
 
   it('should POST to the swagger api if no id provided', () => {
     const mock = nock(config.host)
-      .post('/api/v1/swagger', body => body.match('form-data; name="swagger"'))
+      .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
       .basicAuth({ user: key })
-      .reply(201);
+      .reply(201, { body: '{ id: 1 }' });
 
     return swagger(['./test/fixtures/swagger.json'], { key }).then(() => mock.done());
   });
@@ -43,9 +43,9 @@ describe('swagger command', () => {
   it('should PUT to the swagger api if id is provided', () => {
     const id = '5aa0409b7cf527a93bfb44df';
     const mock = nock(config.host)
-      .put(`/api/v1/swagger/${id}`, body => body.match('form-data; name="swagger"'))
+      .put(`/api/v1/api-specification/${id}`, body => body.match('form-data; name="spec"'))
       .basicAuth({ user: key })
-      .reply(201);
+      .reply(201, { body: '{ id: 1 }' });
 
     return swagger(['./test/fixtures/swagger.json'], { key, id }).then(() => mock.done());
   });
@@ -53,9 +53,9 @@ describe('swagger command', () => {
   it('should still work with `token`', () => {
     const id = '5aa0409b7cf527a93bfb44df';
     const mock = nock(config.host)
-      .put(`/api/v1/swagger/${id}`, body => body.match('form-data; name="swagger"'))
+      .put(`/api/v1/api-specification/${id}`, body => body.match('form-data; name="spec"'))
       .basicAuth({ user: key })
-      .reply(201);
+      .reply(201, { body: '{ id: 1 }' });
 
     return swagger(['./test/fixtures/swagger.json'], { token: `${key}-${id}` }).then(() =>
       mock.done(),
