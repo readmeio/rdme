@@ -24,9 +24,9 @@ describe('swagger command', () => {
 
   it('should POST a discovered file if none provided', () => {
     const mock = nock(config.host)
-      .post('/api/v1/swagger', body => body.match('form-data; name="swagger"'))
+      .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
       .basicAuth({ user: key })
-      .reply(201);
+      .reply(201, { body: '{ id: 1 }' });
 
     // Surface our test fixture to the root directory so rdme can autodiscover it. It's easier to do
     // this than mocking out the fs module because mocking the fs module here causes Jest sourcemaps
