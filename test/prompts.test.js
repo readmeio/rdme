@@ -24,34 +24,25 @@ describe('prompt test bed', () => {
   let enquirer;
 
   beforeEach(() => {
-      enquirer = new Enquirer();
+    enquirer = new Enquirer({ show: false });
   });
 
   describe('generatePrompts()', () => {
     it('should return a version if update is selected', async () => {
       enquirer.on('prompt', async prompt => {
-        await prompt.submit();
-        // if (prompt.name === 'option') {
-        //   prompt.submit()
-        // } else {
-        //   prompt.value = 'red';
-        //   prompt.submit();
-        // }
+        if (prompt.name === 'option') {
+          await prompt.keypress(null, { name: 'down' });
+          // await prompt.keypress(null, { name: 'up' });
+          await prompt.submit()
+        }
+
+        if (prompt.name === 'versionSelection') {
+          assert.equal(await prompt.skip(), true);
+        }
       });
-
-      // return enquirer.prompt([{
-      //   type: 'input',
-      //   name: 'color',
-      //   message: 'Favorite color?'
-      // }]).then(answers => console.log(answers));
-
 
       return enquirer.prompt(promptHandler.generatePrompts(versionlist))
         .then(answers => console.log(answers))
-
-      // const promptCall = await
-      // assert.equal(promptCall.versionSelection, '1');
-      // done();
     });
 
     // it('should return a create option if selected', async () => {
