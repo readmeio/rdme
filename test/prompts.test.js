@@ -1,24 +1,15 @@
 const assert = require('assert');
-// const jest = require('jest');
 const Enquirer = require('enquirer');
 const promptHandler = require('../lib/prompts');
 
-// const down = { sequence: '\u001b[B', name: 'down', code: '[B' };
 const versionlist = [
   {
     version: '1',
-    _id: '32',
+  },
+  {
+    version: '2',
   },
 ];
-//
-// const opts = {
-//   version: '1',
-//   codename: 'test',
-//   fork: '1.0.0',
-//   main: true,
-//   beta: true,
-//   isPublic: true
-// };
 
 describe('prompt test bed', () => {
   let enquirer;
@@ -28,12 +19,11 @@ describe('prompt test bed', () => {
   });
 
   describe('generatePrompts()', () => {
-    it('should return a version if update is selected', async () => {
+    it('should not allow selection of version if chosen to create new version', async () => {
       enquirer.on('prompt', async prompt => {
         if (prompt.name === 'option') {
           await prompt.keypress(null, { name: 'down' });
-          // await prompt.keypress(null, { name: 'up' });
-          await prompt.submit()
+          await prompt.submit();
         }
 
         if (prompt.name === 'versionSelection') {
@@ -41,35 +31,63 @@ describe('prompt test bed', () => {
         }
       });
 
-      return enquirer.prompt(promptHandler.generatePrompts(versionlist))
-        .then(answers => console.log(answers))
+      await enquirer.prompt(promptHandler.generatePrompts(versionlist));
     });
 
-    // it('should return a create option if selected', async () => {
-    //   const prompt = promptHandler.generatePrompts(versionlist);
-    //
-    //   prompt.once('run', async () => {
-    //     await prompt.keypress(null, down);
-    //     await prompt.submit();
-    //   });
-    //
-    //   const answer = await prompt.run();
-    //   assert.equal(answer.option, 'create');
-    // });
+    it('should return a create option if selected', async () => {
+      enquirer.on('prompt', async prompt => {
+        await prompt.keypress(null, { name: 'down' });
+        await prompt.keypress(null, { name: 'up' });
+        await prompt.submit();
+        await prompt.submit();
+      });
+
+      const answer = await enquirer.prompt(promptHandler.generatePrompts(versionlist));
+      assert.equal(answer.versionSelection, '1');
+    });
   });
 
-  // describe('createVersionPrompt()', () => {
-  //   it('should not use input if the prompt is meant for creating a version', async () => {
-  //     const options = { main: true, beta: true };
-  //     const prompt = promptHandler.createVersionPrompt(versionlist, options, false);
-  //
-  //     prompt.once('run', async () => {
-  //       await prompt.submit();
-  //     });
-  //
-  //     const response = {};
-  //     const answer = await prompt.run();
-  //     assert.equal(answer, response);
-  //   });
-  // });
+  describe('createVersionPrompt()', () => {
+    it('should allow user to choose a fork if flag is not passed', async () => {
+      const opts = { main: true, beta: true };
+
+      enquirer.on('prompt', async prompt => {
+        await prompt.keypress(null, { name: 'down' });
+        await prompt.keypress(null, { name: 'up' });
+        await prompt.submit();
+      });
+      const answer = await enquirer.prompt(
+        promptHandler.createVersionPrompt(versionlist, opts, false),
+      );
+      assert.equal(answer.is_hidden, false);
+      assert.equal(answer.from, '1');
+    });
+
+    it('should skip fork prompt if value passed', async () => {
+      const opts = {
+        version: '1',
+        codename: 'test',
+        fork: '1.0.0',
+        main: false,
+        beta: true,
+        isPublic: false,
+      };
+
+      enquirer.on('prompt', async prompt => {
+        if (prompt.name === 'newVersion') {
+          // eslint-disable-next-line
+          prompt.value = '1.2.1';
+          await prompt.submit();
+        }
+        await prompt.submit();
+        await prompt.submit();
+        await prompt.submit();
+      });
+      const answer = await enquirer.prompt(
+        promptHandler.createVersionPrompt(versionlist, opts, true),
+      );
+      assert.equal(answer.is_hidden, false);
+      assert.equal(answer.from, '');
+    });
+  });
 });
