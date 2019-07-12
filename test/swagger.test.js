@@ -1,19 +1,24 @@
 const nock = require('nock');
 const config = require('config');
 const fs = require('fs');
+const Enquirer = require('enquirer');
+// const promptHandler = require('../lib/prompts');
 
 const swagger = require('../cli').bind(null, 'swagger');
 
 const key = 'Xmw4bGctRVIQz7R7dQXqH9nQe5d0SPQs';
+const version = '1.0.0';
 
 describe('swagger command', () => {
-  beforeAll(() => nock.disableNetConnect());
-  afterAll(() => nock.cleanAll());
 
-  it('should error if no api key provided', () =>
+  beforeAll(() => nock.disableNetConnect());
+  afterEach(() => nock.cleanAll());
+
+  it('should error if no api key provided', () => {
     expect(swagger(['./test/fixtures/swagger.json'], {})).rejects.toThrow(
       'No api key provided. Please use --key',
-    ));
+    );
+  });
 
   it('should error if no file was provided or able to be discovered', () => {
     expect(swagger([], { key })).rejects.toThrow(
@@ -24,7 +29,11 @@ describe('swagger command', () => {
 
   it('should POST a discovered file if none provided', () => {
     const mock = nock(config.host)
+      .get(`/api/v1/version/${version}`)
+      .basicAuth({ user: key })
+      .reply(200, { version: '1.0.0' })
       .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
+      .delayConnection(1000)
       .basicAuth({ user: key })
       .reply(201, { body: '{ id: 1 }' });
 
@@ -35,49 +44,94 @@ describe('swagger command', () => {
 
     return swagger([], { key }).then(() => {
       fs.unlinkSync('./swagger.json');
-      mock.done();
+      return mock.done();
     });
   });
 
   it('should error if API errors', async () => {
     const mock = nock(config.host)
+      .get(`/api/v1/version/${version}`)
+      .basicAuth({ user: key })
+      .reply(200, { version: '1.0.0' })
       .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
+      .delayConnection(1000)
       .basicAuth({ user: key })
       .reply(400);
 
-    await expect(swagger(['./test/fixtures/swagger.json'], { key })).rejects.toThrow(
-      'There was an error uploading!',
-    );
-    mock.done();
+    return expect(swagger(['./test/fixtures/swagger.json'], { key, version }))
+      .rejects.toThrow('There was an error uploading!')
+      .then(() => mock.done());
   });
 
   it('should POST to the swagger api if no id provided', () => {
     const mock = nock(config.host)
+      .get(`/api/v1/version/${version}`)
+      .basicAuth({ user: key })
+      .reply(200, { version: '1.0.0' })
       .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
       .basicAuth({ user: key })
       .reply(201, { body: '{ id: 1 }' });
 
-    return swagger(['./test/fixtures/swagger.json'], { key }).then(() => mock.done());
+    return swagger(['./test/fixtures/swagger.json'], { key, version }).then(() => mock.done());
+  });
+
+  xit('should request a version list if version is not found', async () => {
+    const enquirer = new Enquirer({ show: false });
+    enquirer.on('prompt', async prompt => {
+      await prompt.keypress(null, { name: 'down' });
+      await prompt.submit();
+    });
+
+    nock(config.host)
+      .get(`/api/v1/version/${version}`)
+      .basicAuth({ user: key })
+      .reply(400);
+
+    const mock = nock(config.host)
+      .get('/api/v1/version')
+      .basicAuth({ user: key })
+      .reply(200, [{ version: '1.0.0' }]);
+
+    return swagger(['./test/fixtures/swagger.json'], { key, version }).then(() => mock.done());
+  });
+
+  it('should throw an error if getting version returns something other than 400', async () => {
+    const mock = nock(config.host)
+      .get(`/api/v1/version/${version}`)
+      .basicAuth({ user: key })
+      .reply(402);
+
+    return expect(swagger(['./test/fixtures/swagger.json'], { key, version }))
+      .rejects.toThrowError()
+      .then(() => mock.done());
   });
 
   it('should PUT to the swagger api if id is provided', () => {
     const id = '5aa0409b7cf527a93bfb44df';
+
     const mock = nock(config.host)
+      .get(`/api/v1/version/${version}`)
+      .basicAuth({ user: key })
+      .reply(200, { version: '1.0.0' })
       .put(`/api/v1/api-specification/${id}`, body => body.match('form-data; name="spec"'))
       .basicAuth({ user: key })
       .reply(201, { body: '{ id: 1 }' });
 
-    return swagger(['./test/fixtures/swagger.json'], { key, id }).then(() => mock.done());
+    return swagger(['./test/fixtures/swagger.json'], { key, id, version }).then(() => mock.done());
   });
 
   it('should still work with `token`', () => {
     const id = '5aa0409b7cf527a93bfb44df';
+
     const mock = nock(config.host)
+      .get(`/api/v1/version/${version}`)
+      .basicAuth({ user: key })
+      .reply(200, { body: `{ version: '1.0.0' }` })
       .put(`/api/v1/api-specification/${id}`, body => body.match('form-data; name="spec"'))
       .basicAuth({ user: key })
       .reply(201, { body: '{ id: 1 }' });
 
-    return swagger(['./test/fixtures/swagger.json'], { token: `${key}-${id}` }).then(() =>
+    return swagger(['./test/fixtures/swagger.json'], { token: `${key}-${id}`, version }).then(() =>
       mock.done(),
     );
   });
