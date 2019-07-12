@@ -10,7 +10,6 @@ const key = 'Xmw4bGctRVIQz7R7dQXqH9nQe5d0SPQs';
 const version = '1.0.0';
 
 describe('swagger command', () => {
-
   beforeAll(() => nock.disableNetConnect());
   afterEach(() => nock.cleanAll());
 
