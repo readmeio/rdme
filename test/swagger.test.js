@@ -1,13 +1,13 @@
 const nock = require('nock');
 const config = require('config');
 const fs = require('fs');
-const Enquirer = require('enquirer');
-// const promptHandler = require('../lib/prompts');
+const promptHandler = require('../lib/prompts');
 
 const swagger = require('../cli').bind(null, 'swagger');
 
 const key = 'Xmw4bGctRVIQz7R7dQXqH9nQe5d0SPQs';
 const version = '1.0.0';
+jest.mock('../lib/prompts');
 
 describe('swagger command', () => {
   beforeAll(() => nock.disableNetConnect());
@@ -74,22 +74,22 @@ describe('swagger command', () => {
     return swagger(['./test/fixtures/swagger.json'], { key, version }).then(() => mock.done());
   });
 
-  xit('should request a version list if version is not found', async () => {
-    const enquirer = new Enquirer({ show: false });
-    enquirer.on('prompt', async prompt => {
-      await prompt.keypress(null, { name: 'down' });
-      await prompt.submit();
+  it('should request a version list if version is not found', () => {
+    promptHandler.generatePrompts.mockResolvedValue({
+      option: 'create',
+      versionSelection: '1.0.1',
     });
 
-    nock(config.host)
+    const mock = nock(config.host)
       .get(`/api/v1/version/${version}`)
       .basicAuth({ user: key })
-      .reply(400);
-
-    const mock = nock(config.host)
+      .reply(400)
       .get('/api/v1/version')
       .basicAuth({ user: key })
-      .reply(200, [{ version: '1.0.0' }]);
+      .reply(200, [{ version: '1.0.1' }])
+      .post('/api/v1/version')
+      .basicAuth({ user: key })
+      .reply(200, { version: '1.0.1' });
 
     return swagger(['./test/fixtures/swagger.json'], { key, version }).then(() => mock.done());
   });
