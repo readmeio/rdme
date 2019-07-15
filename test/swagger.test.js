@@ -89,7 +89,10 @@ describe('swagger command', () => {
       .reply(200, [{ version: '1.0.1' }])
       .post('/api/v1/version')
       .basicAuth({ user: key })
-      .reply(200, { version: '1.0.1' });
+      .reply(200, { version: '1.0.1' })
+      .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
+      .basicAuth({ user: key })
+      .reply(201, { id: 1 });
 
     return swagger(['./test/fixtures/swagger.json'], { key, version }).then(() => mock.done());
   });

@@ -178,7 +178,7 @@ describe('Versions CLI Commands', () => {
       const mockRequest = nock(config.host)
         .delete(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
-        .reply(201);
+        .reply(200);
 
       await deleteVersion([], { key, version });
       mockRequest.done();
