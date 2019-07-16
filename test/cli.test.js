@@ -4,7 +4,7 @@ const nock = require('nock');
 
 const cli = require('../cli');
 const { version } = require('../package.json');
-const conf = require('../lib/configstore');
+const conf = require('../utils/configstore');
 
 describe('cli', () => {
   it('command not found', done =>

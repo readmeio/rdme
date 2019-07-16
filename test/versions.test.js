@@ -1,7 +1,7 @@
 const nock = require('nock');
 const config = require('config');
 const assert = require('assert');
-const promptHandler = require('../lib/prompts');
+const promptHandler = require('../utils/prompts');
 
 const versions = require('../cli').bind(null, 'versions');
 const createVersion = require('../cli').bind(null, 'versions:create');
@@ -9,7 +9,7 @@ const deleteVersion = require('../cli').bind(null, 'versions:delete');
 const updateVersion = require('../cli').bind(null, 'versions:update');
 const versionById = require('../cli').bind(null, 'versions:versionId');
 
-jest.mock('../lib/prompts');
+jest.mock('../utils/prompts');
 const key = 'Xmw4bGctRVIQz7R7dQXqH9nQe5d0SPQs';
 const version = '1.0.0';
 

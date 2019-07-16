@@ -1,13 +1,13 @@
 const nock = require('nock');
 const config = require('config');
 const fs = require('fs');
-const promptHandler = require('../lib/prompts');
+const promptHandler = require('../utils/prompts');
 
 const swagger = require('../cli').bind(null, 'swagger');
 
 const key = 'Xmw4bGctRVIQz7R7dQXqH9nQe5d0SPQs';
 const version = '1.0.0';
-jest.mock('../lib/prompts');
+jest.mock('../utils/prompts');
 
 describe('swagger command', () => {
   beforeAll(() => nock.disableNetConnect());

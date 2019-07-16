@@ -2,6 +2,7 @@
 require('colors');
 
 const parseArgs = require('minimist')(process.argv.slice(2), {
+  string: 'version',
   alias: {
     // Allows --version, -v, -V
     v: 'version',
@@ -13,6 +14,7 @@ const parseArgs = require('minimist')(process.argv.slice(2), {
   },
 });
 
+console.log(parseArgs);
 require('./cli')(parseArgs._[0] || 'help', parseArgs._.slice(1), parseArgs)
   .then(msg => {
     if (msg) console.log(msg);

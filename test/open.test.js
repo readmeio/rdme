@@ -1,7 +1,7 @@
 const assert = require('assert');
 const config = require('config');
 
-const configStore = require('../lib/configstore');
+const configStore = require('../utils/configstore');
 
 const open = require('../cli').bind(null, 'open');
 

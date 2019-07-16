@@ -3,7 +3,7 @@ const config = require('config');
 const assert = require('assert');
 
 const login = require('../cli').bind(null, 'login');
-const configStore = require('../lib/configstore');
+const configStore = require('../utils/configstore');
 
 describe('login command', () => {
   beforeAll(() => nock.disableNetConnect());

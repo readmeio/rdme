@@ -14,7 +14,7 @@ const config = require('config');
 process.env.NODE_CONFIG_DIR = configDir;
 
 const { version } = require('./package.json');
-const configStore = require('./lib/configstore');
+const configStore = require('./utils/configstore');
 
 function load(command = '', subcommand = '') {
   const file = path.join(__dirname, 'lib', command, subcommand);

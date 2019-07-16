@@ -1,6 +1,6 @@
 const assert = require('assert');
 const Enquirer = require('enquirer');
-const promptHandler = require('../lib/prompts');
+const promptHandler = require('../utils/prompts');
 
 const versionlist = [
   {
