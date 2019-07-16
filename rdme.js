@@ -4,6 +4,7 @@ require('colors');
 const program = require('yargs');
 
 const argv = program
+  .usage('Usage: $0 <command> [arguments]')
   .commandDir('cmds')
   .showHelpOnFail(false, 'Specify --help for available options')
   .alias('h', 'help')
