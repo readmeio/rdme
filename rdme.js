@@ -6,6 +6,8 @@ const program = require('yargs');
 const argv = program
   .commandDir('cmds')
   .showHelpOnFail(false, 'Specify --help for available options')
+  .alias('h', 'help')
+  .alias('v', 'version')
   .strict()
   .fail((msg, err) => {
     if (err) {
