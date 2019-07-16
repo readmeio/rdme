@@ -197,7 +197,7 @@ describe('Versions CLI Commands', () => {
     });
   });
 
-  describe('create new version', () => {
+  describe('update version', () => {
     it('should error if no api key provided', () => {
       updateVersion([], {}).catch(err => {
         assert.equal(err.message, 'No api key provided. Please use --key');
@@ -221,6 +221,9 @@ describe('Versions CLI Commands', () => {
       });
 
       const mockRequest = nock(config.host)
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version })
         .put(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(201, { version });
@@ -236,6 +239,9 @@ describe('Versions CLI Commands', () => {
       });
 
       const mockRequest = nock(config.host)
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version })
         .put(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(400);

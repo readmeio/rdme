@@ -110,7 +110,7 @@ rdme versions:create --key={api-key} --version={project-version}
 #### Update a version
 The command to update a version takes the same flags as creating a new version
 ```sh
-rdme versions:create --key={api-key} --version={project-version}
+rdme versions:update --key={api-key} --version={project-version}
 ```
 
 #### Delete a version
