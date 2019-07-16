@@ -2,8 +2,8 @@ const nock = require('nock');
 const config = require('config');
 const assert = require('assert');
 
-const login = require('../cli').bind(null, 'login');
-const configStore = require('../lib/configstore');
+const configStore = require('../../lib/configstore');
+const login = require('../../cmds/login').handler;
 
 describe('login command', () => {
   beforeAll(() => nock.disableNetConnect());
@@ -11,13 +11,13 @@ describe('login command', () => {
   afterEach(() => configStore.clear());
 
   it('should error if no project provided', done =>
-    login([], {}).catch(err => {
-      assert.equal(err.message, 'No project subdomain provided. Please use --project');
+    login({}).catch(err => {
+      assert.equal(err.message, 'No project subdomain provided. Please use `--project`.');
       return done();
     }));
 
   it('should error if email is invalid', done =>
-    login([], { project: 'subdomain', email: 'this-is-not-an-email' }).catch(err => {
+    login({ project: 'subdomain', email: 'this-is-not-an-email' }).catch(err => {
       assert.equal(err.message, 'You must provide a valid email address.');
       return done();
     }));
@@ -32,7 +32,7 @@ describe('login command', () => {
       .post('/api/v1/login', { email, password, project })
       .reply(200, { apiKey });
 
-    return login([], { email, password, project }).then(() => {
+    return login({ email, password, project }).then(() => {
       mock.done();
       assert.equal(configStore.get('apiKey'), apiKey);
       assert.equal(configStore.get('email'), email);
@@ -53,7 +53,7 @@ describe('login command', () => {
         error: 'Bad Request',
       });
 
-    return login([], { email, password, project }).catch(err => {
+    return login({ email, password, project }).catch(err => {
       mock.done();
       assert.equal(err.error, 'Bad Request');
       assert.equal(err.description, 'Invalid email/password');
@@ -73,7 +73,7 @@ describe('login command', () => {
         error: 'Bad Request',
       });
 
-    return login([], { email, password, project }).catch(err => {
+    return login({ email, password, project }).catch(err => {
       mock.done();
       assert.equal(err.error, 'Bad Request');
       assert.equal(err.description, 'You must provide a Two Factor Code');
@@ -91,7 +91,7 @@ describe('login command', () => {
       .post('/api/v1/login', { email, password, project, token })
       .reply(200, { apiKey: '123' });
 
-    return login([], { email, password, project, token }).then(() => {
+    return login({ email, password, project, token }).then(() => {
       mock.done();
     });
   });

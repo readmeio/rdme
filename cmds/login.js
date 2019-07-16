@@ -5,7 +5,7 @@ const { promisify } = require('util');
 const read = promisify(require('read'));
 
 exports.command = 'login';
-exports.desc = 'Login to a ReadMe project';
+exports.desc = 'Login to a ReadMe project'.grey;
 exports.builder = {
   project: {
     description: 'Your ReadMe project subdomain.',
@@ -59,7 +59,7 @@ exports.handler = async function(opts) {
       configStore.set('email', email);
       configStore.set('project', project);
 
-      return `Successfully logged in as ${email.green} in the ${project.blue} project`;
+      console.log(`Successfully logged in as ${email.green} in the ${project.blue} project.`);
     })
     .catch(err => {
       if (err.statusCode === 400) {
