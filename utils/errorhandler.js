@@ -9,5 +9,5 @@ exports.validateErrors = validationArr => {
     }
   }
 
-  return error ? Promise.reject(new Error(error)) : 'an owl';
+  return error ? Promise.reject(new Error(error)) : 'Dependencies fulfilled';
 };
