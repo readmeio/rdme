@@ -4,9 +4,18 @@ const { validate: isEmail } = require('isemail');
 const { promisify } = require('util');
 const read = promisify(require('read'));
 
+exports.command = 'login';
 exports.desc = 'Login to a ReadMe project';
-exports.category = 'services';
-exports.weight = 1;
+exports.builder = {
+  project: {
+    description: 'Your ReadMe project subdomain.',
+    string: true,
+  },
+  '2fa': {
+    description: 'Your 2FA token.',
+    string: true,
+  },
+};
 
 const configStore = require('../lib/configstore');
 
@@ -24,7 +33,7 @@ async function getCredentials(opts) {
   };
 }
 
-exports.run = async function({ opts }) {
+exports.handler = async function(opts) {
   let { email, password, project, token } = opts;
 
   // We only want to prompt for input outside of the test environment
@@ -34,19 +43,11 @@ exports.run = async function({ opts }) {
   }
 
   if (!project) {
-    return Promise.reject(new Error('No project subdomain provided. Please use --project'));
+    return Promise.reject(new Error('No project subdomain provided. Please use `--project`.'));
   }
 
   if (!isEmail(email)) {
     return Promise.reject(new Error('You must provide a valid email address.'));
-  }
-
-  function badRequest(err) {
-    if (err.statusCode === 400) {
-      return Promise.reject(err.error);
-    }
-
-    return Promise.reject(err);
   }
 
   return request
@@ -57,7 +58,14 @@ exports.run = async function({ opts }) {
       configStore.set('apiKey', res.apiKey);
       configStore.set('email', email);
       configStore.set('project', project);
+
       return `Successfully logged in as ${email.green} in the ${project.blue} project`;
     })
-    .catch(badRequest);
+    .catch(err => {
+      if (err.statusCode === 400) {
+        return Promise.reject(err.error);
+      }
+
+      return Promise.reject(err);
+    });
 };
