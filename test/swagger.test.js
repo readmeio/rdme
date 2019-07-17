@@ -28,9 +28,12 @@ describe('swagger command', () => {
 
   it('should POST a discovered file if none provided', () => {
     const mock = nock(config.host)
-      .get(`/api/v1/version/${version}`)
+      .get(`/api/v1/version`)
       .basicAuth({ user: key })
-      .reply(200, { version: '1.0.0' })
+      .reply(200, [{ version }])
+      .post('/api/v1/version')
+      .basicAuth({ user: key })
+      .reply(200, { from: '1.0.1', version: '1.0.1' })
       .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
       .delayConnection(1000)
       .basicAuth({ user: key })
@@ -74,38 +77,26 @@ describe('swagger command', () => {
     return swagger(['./test/fixtures/swagger.json'], { key, version }).then(() => mock.done());
   });
 
+  it('should return a 404 if version flag not found', () => {});
+
   it('should request a version list if version is not found', () => {
     promptHandler.generatePrompts.mockResolvedValue({
       option: 'create',
-      versionSelection: '1.0.1',
+      newVersion: '1.0.1',
     });
 
     const mock = nock(config.host)
-      .get(`/api/v1/version/${version}`)
-      .basicAuth({ user: key })
-      .reply(400)
       .get('/api/v1/version')
       .basicAuth({ user: key })
       .reply(200, [{ version: '1.0.1' }])
       .post('/api/v1/version')
       .basicAuth({ user: key })
-      .reply(200, { version: '1.0.1' })
+      .reply(200, { from: '1.0.1', version: '1.0.1' })
       .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
       .basicAuth({ user: key })
       .reply(201, { id: 1 });
 
-    return swagger(['./test/fixtures/swagger.json'], { key, version }).then(() => mock.done());
-  });
-
-  it('should throw an error if getting version returns something other than 400', async () => {
-    const mock = nock(config.host)
-      .get(`/api/v1/version/${version}`)
-      .basicAuth({ user: key })
-      .reply(402);
-
-    return expect(swagger(['./test/fixtures/swagger.json'], { key, version }))
-      .rejects.toThrowError()
-      .then(() => mock.done());
+    return swagger(['./test/fixtures/swagger.json'], { key }).then(() => mock.done());
   });
 
   it('should PUT to the swagger api if id is provided', () => {

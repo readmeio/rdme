@@ -29,6 +29,12 @@ describe('prompt test bed', () => {
         if (prompt.name === 'versionSelection') {
           assert.equal(await prompt.skip(), true);
         }
+
+        if (prompt.name === 'newVersion') {
+          // eslint-disable-next-line
+          prompt.value = '1.2.1';
+          await prompt.submit();
+        }
       });
 
       await enquirer.prompt(promptHandler.generatePrompts(versionlist));

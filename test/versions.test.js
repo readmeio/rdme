@@ -92,18 +92,6 @@ describe('Versions CLI Commands', () => {
       mockRequest.done();
     });
 
-    it('should throw an error if get versions fails', async () => {
-      const mockRequest = nock(config.host)
-        .get('/api/v1/version')
-        .basicAuth({ user: key })
-        .reply(400);
-
-      await createVersion([], { key, version }).catch(err => {
-        assert.equal(err.message, 'StatusCodeError: 400 - undefined');
-      });
-      mockRequest.done();
-    });
-
     it('should catch any post request errors', async () => {
       promptHandler.createVersionPrompt.mockResolvedValue({
         is_stable: false,
