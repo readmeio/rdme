@@ -3,6 +3,8 @@ const open = require('opn');
 
 exports.command = 'open';
 exports.desc = 'Open your current ReadMe project in the browser';
+exports.category = 'utilities';
+exports.weight = 1;
 
 const configStore = require('../lib/configstore');
 

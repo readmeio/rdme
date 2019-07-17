@@ -5,7 +5,7 @@ const program = require('yargs');
 
 const argv = program
   .usage('Usage: $0 <command> [arguments]')
-  .commandDir('cmds')
+  .commandDir('cmds', { recurse: true })
   .showHelpOnFail(false, 'Specify --help for available options')
   .alias('h', 'help')
   .alias('v', 'version')

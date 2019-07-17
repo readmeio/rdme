@@ -5,7 +5,10 @@ const config = require('config');
 const program = require('yargs');
 
 exports.command = 'swagger';
-exports.desc = 'Upload your Swagger or OpenAPI specification to ReadMe.';
+exports.desc = 'Upload your Swagger or OpenAPI specification to ReadMe';
+exports.category = 'services';
+exports.weight = 2;
+
 exports.builder = yargs => {
   yargs.usage(`Usage: $0 swagger <file> [arguments]\n\n${exports.desc}`);
   yargs.positional('file', {

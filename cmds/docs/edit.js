@@ -1,35 +1,60 @@
 const request = require('request-promise-native');
-
 const config = require('config');
 const fs = require('fs');
 const editor = require('editor');
 const { promisify } = require('util');
+const program = require('yargs');
 
 const writeFile = promisify(fs.writeFile);
 const readFile = promisify(fs.readFile);
 const unlink = promisify(fs.unlink);
 
+exports.command = 'docs:edit';
 exports.desc = 'Edit a single file from your ReadMe project without saving locally';
 exports.category = 'services';
 exports.weight = 4;
-exports.action = 'docs:edit';
 
-exports.run = async function({ args, opts }) {
-  const { key, version } = opts;
+exports.builder = yargs => {
+  yargs.usage(`Usage: $0 docs:edit <slug> [arguments]\n\n${exports.desc}`);
+  yargs.positional('slug', {
+    describe: 'Your project file slug.',
+  });
+
+  yargs.option('key', {
+    describe: 'Your project API key.',
+    string: true,
+  });
+
+  // @todo rename to version
+  yargs.option('vers', {
+    describe: 'Your project version.',
+    string: true,
+  });
+};
+
+exports.handler = async function(opts) {
+  const slug = typeof opts._ !== 'undefined' ? opts._[1] : undefined;
+  const { key, vers } = opts;
+  const version = vers;
+
+  if (!slug && !key && !version) {
+    return program.showHelp();
+  }
 
   if (!key) {
-    return Promise.reject(new Error('No api key provided. Please use --key'));
+    return Promise.reject(new Error('No API key provided. Please use --key.'));
   }
 
   if (!version) {
-    return Promise.reject(new Error('No version provided. Please use --version'));
+    return Promise.reject(new Error('No project version provided. Please use --version.'));
   }
 
-  if (!args[0]) {
-    return Promise.reject(new Error('No slug provided. Usage `rdme docs:edit <slug>`'));
+  if (!slug) {
+    return Promise.reject(
+      new Error('No project file slug provided. Usage `rdme docs:edit <slug>`'),
+    );
   }
 
-  const slug = args[0];
   const filename = `${slug}.md`;
 
   const options = {
@@ -56,7 +81,7 @@ exports.run = async function({ args, opts }) {
 
   return new Promise((resolve, reject) => {
     (opts.mockEditor || editor)(filename, async code => {
-      if (code !== 0) return reject(new Error('Non zero exit code from $EDITOR'));
+      if (code !== 0) return reject(new Error('Non zero exit code from $EDITOR.'));
       const updatedDoc = await readFile(filename, 'utf8');
 
       return request
@@ -67,7 +92,7 @@ exports.run = async function({ args, opts }) {
           ...options,
         })
         .then(async () => {
-          console.log('Doc successfully updated. Cleaning up local file');
+          console.log('Doc successfully updated. Cleaning up local file.');
           await unlink(filename);
           return resolve();
         })

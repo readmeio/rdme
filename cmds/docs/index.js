@@ -5,31 +5,56 @@ const config = require('config');
 const crypto = require('crypto');
 const frontMatter = require('gray-matter');
 const { promisify } = require('util');
+const program = require('yargs');
 
 const readFile = promisify(fs.readFile);
 
+exports.command = 'docs';
 exports.desc = 'Sync a folder of markdown files to your ReadMe project';
 exports.category = 'services';
 exports.weight = 3;
-exports.action = 'docs';
 
-exports.run = function({ args, opts }) {
-  const { key, version } = opts;
+exports.builder = yargs => {
+  yargs.usage(`Usage: $0 docs <folder> [arguments]\n\n${exports.desc}`);
+  yargs.positional('folder', {
+    describe: 'Your project folder.',
+  });
+
+  yargs.option('key', {
+    describe: 'Your project API key.',
+    string: true,
+  });
+
+  // @todo rename to version
+  yargs.option('vers', {
+    describe: 'Your project version.',
+    string: true,
+  });
+};
+
+exports.handler = function(opts) {
+  const folder = typeof opts._ !== 'undefined' ? opts._[1] : undefined;
+  const { key, vers } = opts;
+  const version = vers;
+
+  if (!folder && !key && !version) {
+    return program.showHelp();
+  }
 
   if (!key) {
-    return Promise.reject(new Error('No api key provided. Please use --key'));
+    return Promise.reject(new Error('No API key provided. Please use --key.'));
   }
 
   if (!version) {
-    return Promise.reject(new Error('No version provided. Please use --version'));
+    return Promise.reject(new Error('No project version provided. Please use --version.'));
   }
 
-  if (!args[0]) {
+  if (!folder) {
     return Promise.reject(new Error('No folder provided. Usage `rdme docs <folder>`'));
   }
 
   const files = fs
-    .readdirSync(args[0])
+    .readdirSync(folder)
     .filter(file => file.endsWith('.md') || file.endsWith('.markdown'));
 
   const options = {
@@ -76,7 +101,7 @@ exports.run = function({ args, opts }) {
 
   return Promise.all(
     files.map(async filename => {
-      const file = await readFile(path.join(args[0], filename), 'utf8');
+      const file = await readFile(path.join(folder, filename), 'utf8');
       const matter = frontMatter(file);
       // Stripping the markdown extension from the filename
       const slug = filename.replace(path.extname(filename), '');

@@ -6,6 +6,8 @@ const spawn = promisify(cp.spawn);
 
 exports.command = 'oas';
 exports.desc = 'OAS related tasks. See https://npm.im/oas';
+exports.category = 'utilities';
+exports.weight = 4;
 
 exports.handler = function() {
   return spawn(path.join(__dirname, '..', 'node_modules', '.bin', 'oas'), process.argv.slice(3), {
