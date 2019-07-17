@@ -5,7 +5,7 @@ const { promisify } = require('util');
 const read = promisify(require('read'));
 
 exports.command = 'login';
-exports.desc = 'Login to a ReadMe project'.grey;
+exports.desc = 'Login to a ReadMe project';
 exports.builder = {
   project: {
     description: 'Your ReadMe project subdomain.',

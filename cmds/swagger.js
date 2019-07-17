@@ -2,23 +2,50 @@ const request = require('request-promise-native');
 const fs = require('fs');
 const path = require('path');
 const config = require('config');
+const program = require('yargs');
 
-exports.desc = 'Upload your swagger file to ReadMe';
-exports.category = 'services';
-exports.weight = 2;
+exports.command = 'swagger';
+exports.desc = 'Upload your Swagger or OpenAPI specification to ReadMe.';
+exports.builder = yargs => {
+  yargs.usage(`Usage: $0 swagger <file> [arguments]\n\n${exports.desc}`);
+  yargs.positional('file', {
+    describe: 'Your Swagger or OpenAPI specification.',
+  });
 
-exports.run = function({ args, opts }) {
+  yargs.option('key', {
+    describe: 'Your project API key.',
+    string: true,
+  });
+
+  yargs.option('id', {
+    describe: 'Your specifications unique identifier.',
+    string: true,
+  });
+
+  yargs.option('token', {
+    describe: 'Your project token. Please use `--key` instead.',
+    string: true,
+    hidden: true,
+  });
+};
+
+exports.handler = function(opts) {
+  const spec = typeof opts._ !== 'undefined' ? opts._[1] : undefined;
   let { key, id } = opts;
+
+  if (!spec && !key && !opts.token) {
+    return program.showHelp();
+  }
 
   if (!key && opts.token) {
     console.warn(
-      'Using `rdme` with --token has been deprecated. Please use --key and --id instead',
+      'Using `rdme` with --token has been deprecated. Please use --key and --id instead.'.yellow,
     );
     [key, id] = opts.token.split('-');
   }
 
   if (!key) {
-    return Promise.reject(new Error('No api key provided. Please use --key'));
+    return Promise.reject(new Error('No API key provided. Please use --key.'));
   }
 
   function callApi(specPath) {
@@ -27,19 +54,19 @@ exports.run = function({ args, opts }) {
         ? "You've successfully uploaded a new swagger file to your ReadMe project!"
         : "You've successfully updated a swagger file on your ReadMe project!";
       console.log(`
-  ${message}
+${message}
 
-    ${`${data.headers.location}`.green}`);
+  ${`${data.headers.location}`.green}`);
 
       console.log(`
-  To update your swagger file, run the following:
+To update your swagger file, run the following:
 
-    ${
-      `rdme swagger FILE --key=${key} --id=${
-        // eslint-disable-next-line
-        JSON.parse(data.body)._id
-      }`.green
-    }
+  ${
+    `rdme swagger ${specPath} --key=${key} --id=${
+      // eslint-disable-next-line
+      JSON.parse(data.body)._id
+    }`.green
+  }
   `);
     }
 
@@ -70,8 +97,8 @@ exports.run = function({ args, opts }) {
       .then(success, error);
   }
 
-  if (args[0]) {
-    return callApi(args[0]);
+  if (spec) {
+    return callApi(spec);
   }
 
   // If the user didn't supply a specification, let's try to locate what they've got, and upload

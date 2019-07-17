@@ -2,7 +2,7 @@ const nock = require('nock');
 const config = require('config');
 const fs = require('fs');
 
-const swagger = require('../cli').bind(null, 'swagger');
+const swagger = require('../../cmds/swagger').handler;
 
 const key = 'Xmw4bGctRVIQz7R7dQXqH9nQe5d0SPQs';
 
@@ -10,13 +10,14 @@ describe('swagger command', () => {
   beforeAll(() => nock.disableNetConnect());
   afterAll(() => nock.cleanAll());
 
-  it('should error if no api key provided', () =>
-    expect(swagger(['./test/fixtures/swagger.json'], {})).rejects.toThrow(
-      'No api key provided. Please use --key',
-    ));
+  it('should error if no api key provided', () => {
+    expect(swagger({ _: ['rdme', './test/fixtures/swagger.json'] })).rejects.toThrow(
+      'No API key provided. Please use --key.',
+    );
+  });
 
   it('should error if no file was provided or able to be discovered', () => {
-    expect(swagger([], { key })).rejects.toThrow(
+    expect(swagger({ key })).rejects.toThrow(
       "We couldn't find a Swagger or OpenAPI file.\n\n" +
         'Run `rdme swagger ./path/to/file` to upload an existing file or `rdme oas init` to create a fresh one!',
     );
@@ -33,7 +34,7 @@ describe('swagger command', () => {
     // to break.
     fs.copyFileSync('./test/fixtures/swagger.json', './swagger.json');
 
-    return swagger([], { key }).then(() => {
+    return swagger({ key }).then(() => {
       fs.unlinkSync('./swagger.json');
       mock.done();
     });
@@ -45,7 +46,7 @@ describe('swagger command', () => {
       .basicAuth({ user: key })
       .reply(400);
 
-    await expect(swagger(['./test/fixtures/swagger.json'], { key })).rejects.toThrow(
+    await expect(swagger({ _: ['rdme', './test/fixtures/swagger.json'], key })).rejects.toThrow(
       'There was an error uploading!',
     );
     mock.done();
@@ -57,7 +58,7 @@ describe('swagger command', () => {
       .basicAuth({ user: key })
       .reply(201, { body: '{ id: 1 }' });
 
-    return swagger(['./test/fixtures/swagger.json'], { key }).then(() => mock.done());
+    return swagger({ _: ['rdme', './test/fixtures/swagger.json'], key }).then(() => mock.done());
   });
 
   it('should PUT to the swagger api if id is provided', () => {
@@ -67,7 +68,9 @@ describe('swagger command', () => {
       .basicAuth({ user: key })
       .reply(201, { body: '{ id: 1 }' });
 
-    return swagger(['./test/fixtures/swagger.json'], { key, id }).then(() => mock.done());
+    return swagger({ _: ['rdme', './test/fixtures/swagger.json'], key, id }).then(() =>
+      mock.done(),
+    );
   });
 
   it('should still work with `token`', () => {
@@ -77,8 +80,8 @@ describe('swagger command', () => {
       .basicAuth({ user: key })
       .reply(201, { body: '{ id: 1 }' });
 
-    return swagger(['./test/fixtures/swagger.json'], { token: `${key}-${id}` }).then(() =>
-      mock.done(),
+    return swagger({ _: ['rdme', './test/fixtures/swagger.json'], token: `${key}-${id}` }).then(
+      () => mock.done(),
     );
   });
 });

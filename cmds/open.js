@@ -2,7 +2,7 @@ const config = require('config');
 const open = require('opn');
 
 exports.command = 'open';
-exports.desc = 'Open your current ReadMe project in the browser'.grey;
+exports.desc = 'Open your current ReadMe project in the browser';
 
 const configStore = require('../lib/configstore');
 

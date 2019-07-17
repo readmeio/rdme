@@ -11,7 +11,9 @@ const argv = program
   .alias('v', 'version')
   .strict()
   .fail((msg, err) => {
-    if (err) {
+    if (msg) {
+      console.error(msg.red);
+    } else if (err) {
       // `err.message` is from locally thrown Error objects
       // `err.error` is from remote API errors
       if (err.message) console.error(err.message.red);
