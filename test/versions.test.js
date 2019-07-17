@@ -7,7 +7,6 @@ const versions = require('../cli').bind(null, 'versions');
 const createVersion = require('../cli').bind(null, 'versions:create');
 const deleteVersion = require('../cli').bind(null, 'versions:delete');
 const updateVersion = require('../cli').bind(null, 'versions:update');
-const versionById = require('../cli').bind(null, 'versions:versionId');
 
 jest.mock('../lib/prompts');
 const key = 'Xmw4bGctRVIQz7R7dQXqH9nQe5d0SPQs';
@@ -35,6 +34,16 @@ describe('Versions CLI Commands', () => {
       mockRequest.done();
     });
 
+    it('should get a specific version object if version flag provided', async () => {
+      const mockRequest = nock(config.host)
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version });
+
+      await versions([], { key, version });
+      mockRequest.done();
+    });
+
     it('should catch any request errors', async () => {
       const mockRequest = nock(config.host)
         .get('/api/v1/version')
@@ -42,49 +51,7 @@ describe('Versions CLI Commands', () => {
         .reply(400);
 
       await versions([], { key }).catch(err => {
-        assert.equal(err.message, 'Failed to get versions attached to the provided key.');
-      });
-      mockRequest.done();
-    });
-  });
-
-  describe('get version by id', () => {
-    it('should error if no api key provided', () => {
-      versionById([], {}).catch(err => {
-        assert.equal(err.message, 'No api key provided. Please use --key');
-      });
-    });
-
-    it('should error if no version provided', () => {
-      versionById([], { key }).catch(err => {
-        assert.equal(
-          err.message,
-          'No version provided. Please specify a semantic version using --version',
-        );
-      });
-    });
-
-    it('should get a specific version object', async () => {
-      const mockRequest = nock(config.host)
-        .get(`/api/v1/version/${version}`)
-        .basicAuth({ user: key })
-        .reply(200, { version });
-
-      await versionById([], { key, version });
-      mockRequest.done();
-    });
-
-    it('should catch any request errors', async () => {
-      const mockRequest = nock(config.host)
-        .get(`/api/v1/version/${version}`)
-        .basicAuth({ user: key })
-        .reply(400);
-
-      await versionById([], { key, version }).catch(err => {
-        assert.equal(
-          err.message,
-          'Failed to get specific version using provided identifier and key.',
-        );
+        assert.equal(err.message, 'Failed to get version(s) attached to the provided key.');
       });
       mockRequest.done();
     });

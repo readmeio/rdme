@@ -93,7 +93,7 @@ rdme versions --key={api-key}
 
 #### Get all information about a particular version
 ```sh
-rdme versions:versionId --key={api-key} --version={project-version}
+rdme versions --key={api-key} --version={project-version}
 ```
 
 #### Create a new version using flags

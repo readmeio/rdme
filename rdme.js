@@ -2,7 +2,7 @@
 require('colors');
 
 const parseArgs = require('minimist')(process.argv.slice(2), {
-  string: 'version',
+  string: ['version', 'fork'],
   alias: {
     // Allows --version, -v, -V
     v: 'version',
