@@ -13,19 +13,6 @@ describe('swagger command', () => {
   beforeAll(() => nock.disableNetConnect());
   afterEach(() => nock.cleanAll());
 
-  it('should error if no api key provided', () => {
-    expect(swagger(['./test/fixtures/swagger.json'], {})).rejects.toThrow(
-      'No api key provided. Please use --key',
-    );
-  });
-
-  it('should error if no file was provided or able to be discovered', () => {
-    expect(swagger([], { key })).rejects.toThrow(
-      "We couldn't find a Swagger or OpenAPI file.\n\n" +
-        'Run `rdme swagger ./path/to/file` to upload an existing file or `rdme oas init` to create a fresh one!',
-    );
-  });
-
   it('should POST a discovered file if none provided', () => {
     const mock = nock(config.host)
       .get(`/api/v1/version`)
@@ -103,9 +90,6 @@ describe('swagger command', () => {
     const id = '5aa0409b7cf527a93bfb44df';
 
     const mock = nock(config.host)
-      .get(`/api/v1/version/${version}`)
-      .basicAuth({ user: key })
-      .reply(200, { version: '1.0.0' })
       .put(`/api/v1/api-specification/${id}`, body => body.match('form-data; name="spec"'))
       .basicAuth({ user: key })
       .reply(201, { body: '{ id: 1 }' });
@@ -117,15 +101,25 @@ describe('swagger command', () => {
     const id = '5aa0409b7cf527a93bfb44df';
 
     const mock = nock(config.host)
-      .get(`/api/v1/version/${version}`)
-      .basicAuth({ user: key })
-      .reply(200, { body: `{ version: '1.0.0' }` })
       .put(`/api/v1/api-specification/${id}`, body => body.match('form-data; name="spec"'))
       .basicAuth({ user: key })
       .reply(201, { body: '{ id: 1 }' });
 
     return swagger(['./test/fixtures/swagger.json'], { token: `${key}-${id}`, version }).then(() =>
       mock.done(),
+    );
+  });
+
+  it('should error if no api key provided', () => {
+    expect(swagger(['./test/fixtures/swagger.json'], {})).rejects.toThrow(
+      'No api key provided. Please use --key',
+    );
+  });
+
+  it('should error if no file was provided or able to be discovered', () => {
+    expect(swagger([], { key })).rejects.toThrow(
+      "We couldn't find a Swagger or OpenAPI file.\n\n" +
+        'Run `rdme swagger ./path/to/file` to upload an existing file or `rdme oas init` to create a fresh one!',
     );
   });
 });
