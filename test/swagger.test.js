@@ -117,9 +117,6 @@ describe('swagger command', () => {
   });
 
   it('should error if no file was provided or able to be discovered', () => {
-    expect(swagger([], { key })).rejects.toThrow(
-      "We couldn't find a Swagger or OpenAPI file.\n\n" +
-        'Run `rdme swagger ./path/to/file` to upload an existing file or `rdme oas init` to create a fresh one!',
-    );
+    expect(swagger([], { key })).rejects.toThrowError();
   });
 });
