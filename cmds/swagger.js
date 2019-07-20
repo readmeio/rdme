@@ -3,15 +3,46 @@ const fs = require('fs');
 const path = require('path');
 const config = require('config');
 const { prompt } = require('enquirer');
-const promptOpts = require('./prompts');
+const promptOpts = require('../lib/prompts');
 
-exports.desc = 'Upload, or sync, your Swagger/OpenAPI file to ReadMe';
+exports.command = `swagger`;
+exports.usage = `swagger ${`[spec]`.dim}`;
+exports.description = 'Upload, or sync, your Swagger/OpenAPI file to ReadMe.';
 exports.category = 'apis';
 exports.weight = 2;
 
-exports.run = async function({ args, opts }) {
-  const { version } = opts;
-  let { key, id } = opts;
+exports.hiddenArgs = ['token', 'spec'];
+exports.args = [
+  {
+    name: 'key',
+    type: String,
+    description: 'Project API key'
+  },
+  {
+    name: 'id',
+    type: String,
+    description: "Specification's unique identifier"
+  },
+  {
+    name: 'token',
+    type: String,
+    description: 'Project token. Deprecated, please use `--key` instead',
+  },
+  {
+    name: 'version',
+    type: String,
+    description: 'API version'
+  },
+  {
+    name: 'spec',
+    type: String,
+    defaultOption: true
+  },
+];
+
+exports.run = async function (opts) {
+  const {spec, version} = opts;
+  let {key, id} = opts;
   let selectedVersion;
 
   if (!key && opts.token) {
@@ -108,11 +139,13 @@ exports.run = async function({ args, opts }) {
   }
 
   if (!id) {
-    selectedVersion = await getSwaggerVersion(version);
+    selectedVersion = await getSwaggerVersion(version).catch((e) => {
+      return Promise.reject(e);
+    });
   }
 
-  if (args[0]) {
-    return callApi(args[0], selectedVersion);
+  if (spec) {
+    return callApi(spec, selectedVersion);
   }
 
   // If the user didn't supply a specification, let's try to locate what they've got, and upload

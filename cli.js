@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+const cliArgs = require('command-line-args');
 const path = require('path');
 // We have to do this otherwise `require('config')` loads
 // from the cwd where the user is running `rdme` which
@@ -15,21 +17,44 @@ process.env.NODE_CONFIG_DIR = configDir;
 
 const { version } = require('./package.json');
 const configStore = require('./lib/configstore');
+const help = require('./lib/help');
 
 function load(command = '', subcommand = '') {
-  const file = path.join(__dirname, 'lib', command, subcommand);
+  const file = path.join(__dirname, 'cmds', command, subcommand);
   try {
     // eslint-disable-next-line global-require, import/no-dynamic-require
     return require(file);
   } catch (e) {
+    console.log('e=', e)
     const error = new Error('Command not found.');
     error.description = `Type ${`${config.cli} help`.yellow} to see all commands`;
     throw error;
   }
 }
 
-module.exports = function(cmd, args, opts = {}) {
-  if (opts.version && (!cmd || cmd === 'help')) return Promise.resolve(version);
+module.exports = () => {
+  const mainArgs = [
+    {name: 'help', alias: 'h', type: Boolean, description: 'Display this usage guide'},
+    {name: 'version', alias: 'v', type: Boolean, description: `Show the current ${config.cli} version`},
+    {name: 'command', type: String, defaultOption: true},
+  ];
+
+  const argv = cliArgs(mainArgs, {partial: true});
+  const cmd = argv.command || false;
+
+  // Add support for `-H` and `-V` as `--help` and `--version` aliases.
+  if (typeof argv._unknown !== 'undefined') {
+    if (argv._unknown.indexOf('-H') !== -1) {
+      argv.help = true;
+    }
+
+    if (argv._unknown.indexOf('-V') !== -1) {
+      argv.help = true;
+    }
+  }
+
+  if (argv.version && (!cmd || cmd === 'help')) return Promise.resolve(version);
+  if (!cmd || cmd === 'help') return Promise.resolve(help.globalUsage(mainArgs));
 
   let command = cmd || '';
   let subcommand;
@@ -38,11 +63,44 @@ module.exports = function(cmd, args, opts = {}) {
     [command, subcommand] = cmd.split(':');
   }
 
-  const optsWithStoredKey = Object.assign({}, { key: configStore.get('apiKey') }, opts);
+  console.log('argv=', argv)
+  console.log('process.argv=', process.argv.slice(3))
+  console.log('---------------')
 
   try {
-    return load(opts.help ? 'help' : command, subcommand).run({ args, opts: optsWithStoredKey });
+    const bin = load(command, subcommand);
+
+    if (argv.help) {
+      return Promise.resolve(help.commandUsage(bin));
+    }
+
+    let cmdArgv;
+    try {
+      cmdArgv = cliArgs(bin.args, { argv: argv._unknown});
+    } catch (e) {
+      // If we have a command that has its own `--version` argument to accept data, that argument,
+      // if supplied in the `--version VERSION_STRING` format instead of `--version=VERSION_STRING`,
+      // will collide with the global version argument because their types differ and the argument
+      // parser gets confused.
+      //
+      // Instead of failing out to the user with an undecipherable "Unknown value: ..." error, let's
+      // try to parse their request again but a tade less eager.
+      if (e.name !== 'UNKNOWN_VALUE' || e.name === 'UNKNOWN_VALUE' && !argv.version) {
+        throw e;
+      }
+
+      cmdArgv = cliArgs(bin.args, { partial: true, argv: process.argv.slice(3) });
+    }
+
+    cmdArgv = Object.assign({}, { key: configStore.get('apiKey') }, cmdArgv);
+
+    console.log('bin=', bin);
+    console.log('binArgv=', cmdArgv)
+    console.log('---------------')
+
+    return bin.run(cmdArgv);
   } catch (e) {
+    console.log('cli error=', e)
     return Promise.reject(e);
   }
 };

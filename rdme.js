@@ -1,23 +1,10 @@
 #! /usr/bin/env node
 require('colors');
 
-const parseArgs = require('minimist')(process.argv.slice(2), {
-  string: ['version', 'fork'],
-  alias: {
-    // Allows --version, -v, -V
-    v: 'version',
-    V: 'version',
-
-    // // Allows --help, -h, -H
-    h: 'help',
-    H: 'help',
-  },
-});
-
-require('./cli')(parseArgs._[0] || 'help', parseArgs._.slice(1), parseArgs)
+require('./cli')()
   .then(msg => {
     if (msg) console.log(msg);
-    process.exit();
+    process.exit(0);
   })
   .catch(err => {
     if (err) {
@@ -26,6 +13,10 @@ require('./cli')(parseArgs._[0] || 'help', parseArgs._.slice(1), parseArgs)
       if (err.message) console.error(err.message.red);
       if (err.description) console.warn(err.description);
       if (err.errors) console.warn(err.errors);
+
+      if (!err.description && !err.errors && err.error) {
+        console.error(`Yikes, something went wrong!\n\nPlease try again and if the problem persists, get in touch with our support team at ${`support@readme.io`.underline}.`.red)
+      }
     }
 
     return process.exit(1);
