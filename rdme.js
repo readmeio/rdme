@@ -10,13 +10,13 @@ require('./cli')()
     if (err) {
       // `err.message` is from locally thrown Error objects
       // `err.error` is from remote API errors
-      if (err.message) console.error(err.message.red);
-      if (err.description) console.warn(err.description);
-      if (err.errors) console.warn(err.errors);
-
       if (!err.description && !err.errors && err.error) {
-        console.error(`Yikes, something went wrong!\n\nPlease try again and if the problem persists, get in touch with our support team at ${`support@readme.io`.underline}.`.red)
+        console.error(`Yikes, something went wrong! Please try again and if the problem persists, get in touch with our support team at ${`support@readme.io`.underline}.\n`.red)
       }
+
+      if (err.message) console.error(err.message.red);
+      if (err.description) console.error(err.description.red);
+      if (err.errors) console.error(err.errors.red);
     }
 
     return process.exit(1);
