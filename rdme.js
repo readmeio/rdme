@@ -16,7 +16,14 @@ require('./cli')()
 
       if (err.message) console.error(err.message.red);
       if (err.description) console.error(err.description.red);
-      if (err.errors) console.error(err.errors.red);
+      if (err.errors) {
+        const errors = Object.keys(err.errors);
+
+        console.error(`\nCause${errors.length > 1 && 's' || ''}:`.red.bold)
+        errors.forEach((e) => {
+          console.error(` · ${e}: ${err.errors[e]}`.red)
+        });
+      }
     }
 
     return process.exit(1);

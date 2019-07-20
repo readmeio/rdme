@@ -6,7 +6,7 @@ const { prompt } = require('enquirer');
 const promptOpts = require('../lib/prompts');
 
 exports.command = 'swagger';
-exports.usage = `swagger ${`[spec]`.dim}`;
+exports.usage = 'swagger [spec]';
 exports.description = 'Upload, or sync, your Swagger/OpenAPI file to ReadMe.';
 exports.category = 'apis';
 exports.weight = 2;
@@ -21,7 +21,7 @@ exports.args = [
   {
     name: 'id',
     type: String,
-    description: "Specification's unique identifier"
+    description: `Unique identifier for your specification. Use this if you're resyncing an existing specification`
   },
   {
     name: 'token',
@@ -31,7 +31,7 @@ exports.args = [
   {
     name: 'version',
     type: String,
-    description: 'API version'
+    description: 'Project version'
   },
   {
     name: 'spec',
