@@ -76,7 +76,7 @@ module.exports = () => {
 
     let cmdArgv;
     try {
-      cmdArgv = cliArgs(bin.args, { argv: argv._unknown});
+      cmdArgv = cliArgs(bin.args, { argv: argv._unknown || [] });
     } catch (e) {
       // If we have a command that has its own `--version` argument to accept data, that argument,
       // if supplied in the `--version VERSION_STRING` format instead of `--version=VERSION_STRING`,

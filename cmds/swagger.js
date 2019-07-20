@@ -5,7 +5,7 @@ const config = require('config');
 const { prompt } = require('enquirer');
 const promptOpts = require('../lib/prompts');
 
-exports.command = `swagger`;
+exports.command = 'swagger';
 exports.usage = `swagger ${`[spec]`.dim}`;
 exports.description = 'Upload, or sync, your Swagger/OpenAPI file to ReadMe.';
 exports.category = 'apis';
