@@ -3,7 +3,8 @@ const config = require('config');
 
 exports.command = 'versions';
 exports.usage = 'versions [options]';
-exports.description = 'List versions available in your project or get a version by SemVer (https://semver.org/).';
+exports.description =
+  'List versions available in your project or get a version by SemVer (https://semver.org/).';
 exports.category = 'versions';
 exports.weight = 3;
 
@@ -11,12 +12,12 @@ exports.args = [
   {
     name: 'key',
     type: String,
-    description: 'Project API key'
+    description: 'Project API key',
   },
   {
     name: 'version',
     type: String,
-    description: 'Project version'
+    description: 'Project version',
   },
 ];
 

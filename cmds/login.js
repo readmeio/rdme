@@ -17,13 +17,13 @@ exports.args = [
   {
     name: 'project',
     type: String,
-    description: 'Project subdomain'
+    description: 'Project subdomain',
   },
   {
     name: '2fa',
     type: Boolean,
-    description: 'Prompt for a 2FA token'
-  }
+    description: 'Prompt for a 2FA token',
+  },
 ];
 
 /* istanbul ignore next */

@@ -13,12 +13,12 @@ exports.args = [
   {
     name: 'key',
     type: String,
-    description: 'Project API key'
+    description: 'Project API key',
   },
   {
     name: 'version',
     type: String,
-    description: 'Project version'
+    description: 'Project version',
   },
 ];
 

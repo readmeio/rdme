@@ -47,7 +47,7 @@ describe('swagger command', () => {
       .basicAuth({ user: key })
       .reply(400);
 
-    return expect(swagger.run({spec: './test/fixtures/swagger.json', key, version }))
+    return expect(swagger.run({ spec: './test/fixtures/swagger.json', key, version }))
       .rejects.toThrow('There was an error uploading!')
       .then(() => mock.done());
   });
@@ -61,7 +61,9 @@ describe('swagger command', () => {
       .basicAuth({ user: key })
       .reply(201, { body: '{ id: 1 }' });
 
-    return swagger.run({spec: './test/fixtures/swagger.json', key, version }).then(() => mock.done());
+    return swagger
+      .run({ spec: './test/fixtures/swagger.json', key, version })
+      .then(() => mock.done());
   });
 
   it('should return a 404 if version flag not found', () => {});
@@ -83,7 +85,7 @@ describe('swagger command', () => {
       .basicAuth({ user: key })
       .reply(201, { id: 1 });
 
-    return swagger.run({spec: './test/fixtures/swagger.json', key }).then(() => mock.done());
+    return swagger.run({ spec: './test/fixtures/swagger.json', key }).then(() => mock.done());
   });
 
   it('should PUT to the swagger api if id is provided', () => {
@@ -94,7 +96,9 @@ describe('swagger command', () => {
       .basicAuth({ user: key })
       .reply(201, { body: '{ id: 1 }' });
 
-    return swagger.run({spec: './test/fixtures/swagger.json', key, id, version }).then(() => mock.done());
+    return swagger
+      .run({ spec: './test/fixtures/swagger.json', key, id, version })
+      .then(() => mock.done());
   });
 
   it('should still work with `token`', () => {
@@ -105,13 +109,13 @@ describe('swagger command', () => {
       .basicAuth({ user: key })
       .reply(201, { body: '{ id: 1 }' });
 
-    return swagger.run({spec: './test/fixtures/swagger.json', token: `${key}-${id}`, version }).then(() =>
-      mock.done(),
-    );
+    return swagger
+      .run({ spec: './test/fixtures/swagger.json', token: `${key}-${id}`, version })
+      .then(() => mock.done());
   });
 
   it('should error if no api key provided', () => {
-    expect(swagger.run({spec: './test/fixtures/swagger.json'})).rejects.toThrow(
+    expect(swagger.run({ spec: './test/fixtures/swagger.json' })).rejects.toThrow(
       'No project API key provided. Please use `--key`.',
     );
   });

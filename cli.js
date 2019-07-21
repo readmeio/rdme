@@ -25,7 +25,7 @@ function load(command = '', subcommand = '') {
     // eslint-disable-next-line global-require, import/no-dynamic-require
     return require(file);
   } catch (e) {
-    console.log('e=', e)
+    console.log('e=', e);
     const error = new Error('Command not found.');
     error.description = `Type ${`${config.cli} help`.yellow} to see all commands`;
     throw error;
@@ -37,14 +37,19 @@ function load(command = '', subcommand = '') {
  *    fake CLI calls.
  * @return {Promise}
  */
-module.exports = (processArgv) => {
+module.exports = processArgv => {
   const mainArgs = [
-    {name: 'help', alias: 'h', type: Boolean, description: 'Display this usage guide'},
-    {name: 'version', alias: 'v', type: Boolean, description: `Show the current ${config.cli} version`},
-    {name: 'command', type: String, defaultOption: true},
+    { name: 'help', alias: 'h', type: Boolean, description: 'Display this usage guide' },
+    {
+      name: 'version',
+      alias: 'v',
+      type: Boolean,
+      description: `Show the current ${config.cli} version`,
+    },
+    { name: 'command', type: String, defaultOption: true },
   ];
 
-  const argv = cliArgs(mainArgs, {partial: true, argv: processArgv});
+  const argv = cliArgs(mainArgs, { partial: true, argv: processArgv });
   const cmd = argv.command || false;
 
   // Add support for `-H` and `-V` as `--help` and `--version` aliases.
@@ -68,9 +73,9 @@ module.exports = (processArgv) => {
     [command, subcommand] = cmd.split(':');
   }
 
-  console.log('argv=', argv)
-  console.log('process.argv=', process.argv.slice(3))
-  console.log('---------------')
+  // console.log('argv=', argv)
+  // console.log('process.argv=', process.argv.slice(3))
+  // console.log('---------------')
 
   try {
     const bin = load(command, subcommand);
@@ -90,7 +95,7 @@ module.exports = (processArgv) => {
       //
       // Instead of failing out to the user with an undecipherable "Unknown value: ..." error, let's
       // try to parse their request again but a tade less eager.
-      if (e.name !== 'UNKNOWN_VALUE' || e.name === 'UNKNOWN_VALUE' && !argv.version) {
+      if (e.name !== 'UNKNOWN_VALUE' || (e.name === 'UNKNOWN_VALUE' && !argv.version)) {
         throw e;
       }
 
@@ -99,13 +104,13 @@ module.exports = (processArgv) => {
 
     cmdArgv = Object.assign({}, { key: configStore.get('apiKey') }, cmdArgv);
 
-    console.log('bin=', bin);
-    console.log('binArgv=', cmdArgv)
-    console.log('---------------')
+    // console.log('bin=', bin);
+    // console.log('binArgv=', cmdArgv)
+    // console.log('---------------')
 
     return bin.run(cmdArgv);
   } catch (e) {
-    console.log('cli error=', e)
+    // console.log('cli error=', e)
     return Promise.reject(e);
   }
 };

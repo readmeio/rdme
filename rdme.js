@@ -11,7 +11,11 @@ require('./cli')(process.argv.slice(2))
       // `err.message` is from locally thrown Error objects
       // `err.error` is from remote API errors
       if (!err.description && !err.errors && err.error) {
-        console.error(`Yikes, something went wrong! Please try again and if the problem persists, get in touch with our support team at ${`support@readme.io`.underline}.\n`.red)
+        console.error(
+          `Yikes, something went wrong! Please try again and if the problem persists, get in touch with our support team at ${
+            `support@readme.io`.underline
+          }.\n`.red,
+        );
       }
 
       if (err.message) console.error(err.message.red);
@@ -19,9 +23,9 @@ require('./cli')(process.argv.slice(2))
       if (err.errors) {
         const errors = Object.keys(err.errors);
 
-        console.error(`\nCause${errors.length > 1 && 's' || ''}:`.red.bold)
-        errors.forEach((e) => {
-          console.error(` · ${e}: ${err.errors[e]}`.red)
+        console.error(`\nCause${(errors.length > 1 && 's') || ''}:`.red.bold);
+        errors.forEach(e => {
+          console.error(` · ${e}: ${err.errors[e]}`.red);
         });
       }
     }

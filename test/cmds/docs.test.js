@@ -38,9 +38,7 @@ describe('docs command', () => {
   describe('existing docs', () => {
     it('should fetch doc and merge with what is returned', () => {
       const slug = 'simple-doc';
-      const doc = frontMatter(
-        fs.readFileSync(path.join(fixturesDir, `/existing-docs/${slug}.md`)),
-      );
+      const doc = frontMatter(fs.readFileSync(path.join(fixturesDir, `/existing-docs/${slug}.md`)));
       const hash = crypto
         .createHash('sha1')
         .update(fs.readFileSync(path.join(fixturesDir, `/existing-docs/${slug}.md`)))
@@ -92,19 +90,19 @@ describe('docs command', () => {
         .basicAuth({ user: key })
         .reply(200, { category: '5ae9ece93a685f47efb9a97c', slug, lastUpdatedHash: hash });
 
-      return docs.run({folder: './test/fixtures/existing-docs', key, version }).then(([message]) => {
-        assert.equal(message, '`simple-doc` not updated. No changes.');
-        getMock.done();
-      });
+      return docs
+        .run({ folder: './test/fixtures/existing-docs', key, version })
+        .then(([message]) => {
+          assert.equal(message, '`simple-doc` not updated. No changes.');
+          getMock.done();
+        });
     });
   });
 
   describe('new docs', () => {
     it('should create new doc', () => {
       const slug = 'new-doc';
-      const doc = frontMatter(
-        fs.readFileSync(path.join(fixturesDir, `/new-docs/${slug}.md`)),
-      );
+      const doc = frontMatter(fs.readFileSync(path.join(fixturesDir, `/new-docs/${slug}.md`)));
       const hash = crypto
         .createHash('sha1')
         .update(fs.readFileSync(path.join(fixturesDir, `/new-docs/${slug}.md`)))
@@ -131,7 +129,7 @@ describe('docs command', () => {
         .basicAuth({ user: key })
         .reply(201);
 
-      return docs.run({folder: './test/fixtures/new-docs', key, version }).then(() => {
+      return docs.run({ folder: './test/fixtures/new-docs', key, version }).then(() => {
         getMock.done();
         postMock.done();
       });
@@ -202,7 +200,7 @@ describe('docs:edit', () => {
       .get(`/api/v1/docs/${slug}`)
       .reply(404, { error: 'Not Found', description: 'No doc found with that slug' });
 
-    return docsEdit.run({slug, key, version: '1.0.0' }).catch(err => {
+    return docsEdit.run({ slug, key, version: '1.0.0' }).catch(err => {
       getMock.done();
       assert.equal(err.error, 'Not Found');
       assert.equal(err.description, 'No doc found with that slug');
@@ -224,7 +222,7 @@ describe('docs:edit', () => {
       return cb(0);
     }
 
-    return docsEdit.run({slug, key, version: '1.0.0', mockEditor }).catch(err => {
+    return docsEdit.run({ slug, key, version: '1.0.0', mockEditor }).catch(err => {
       assert.equal(err.error, 'Bad Request');
       getMock.done();
       putMock.done();
@@ -243,7 +241,7 @@ describe('docs:edit', () => {
       return cb(1);
     }
 
-    return docsEdit.run({slug, key, version: '1.0.0', mockEditor }).catch(err => {
+    return docsEdit.run({ slug, key, version: '1.0.0', mockEditor }).catch(err => {
       assert.equal(err.message, 'Non zero exit code from $EDITOR');
       fs.unlinkSync(`${slug}.md`);
     });

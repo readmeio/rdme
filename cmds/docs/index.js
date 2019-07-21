@@ -19,17 +19,17 @@ exports.args = [
   {
     name: 'key',
     type: String,
-    description: 'Project API key'
+    description: 'Project API key',
   },
   {
     name: 'version',
     type: String,
-    description: 'Project version'
+    description: 'Project version',
   },
   {
     name: 'folder',
     type: String,
-    defaultOption: true
+    defaultOption: true,
   },
 ];
 
@@ -45,7 +45,9 @@ exports.run = function(opts) {
   }
 
   if (!folder) {
-    return Promise.reject(new Error(`No folder provided. Usage \`${config.cli} ${exports.usage}\`.`));
+    return Promise.reject(
+      new Error(`No folder provided. Usage \`${config.cli} ${exports.usage}\`.`),
+    );
   }
 
   const files = fs
@@ -111,9 +113,9 @@ exports.run = function(opts) {
           ...options,
         })
         .then(updateDoc.bind(null, slug, matter, hash), createDoc.bind(null, slug, matter, hash))
-        .catch((err) => {
-          return Promise.reject(err)
-        })
+        .catch(err => {
+          return Promise.reject(err);
+        });
     }),
   );
 };

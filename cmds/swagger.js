@@ -16,12 +16,12 @@ exports.args = [
   {
     name: 'key',
     type: String,
-    description: 'Project API key'
+    description: 'Project API key',
   },
   {
     name: 'id',
     type: String,
-    description: `Unique identifier for your specification. Use this if you're resyncing an existing specification`
+    description: `Unique identifier for your specification. Use this if you're resyncing an existing specification`,
   },
   {
     name: 'token',
@@ -31,18 +31,18 @@ exports.args = [
   {
     name: 'version',
     type: String,
-    description: 'Project version'
+    description: 'Project version',
   },
   {
     name: 'spec',
     type: String,
-    defaultOption: true
+    defaultOption: true,
   },
 ];
 
-exports.run = async function (opts) {
-  const {spec, version} = opts;
-  let {key, id} = opts;
+exports.run = async function(opts) {
+  const { spec, version } = opts;
+  let { key, id } = opts;
   let selectedVersion;
 
   if (!key && opts.token) {
@@ -139,7 +139,7 @@ exports.run = async function (opts) {
   }
 
   if (!id) {
-    selectedVersion = await getSwaggerVersion(version).catch((e) => {
+    selectedVersion = await getSwaggerVersion(version).catch(e => {
       return Promise.reject(e);
     });
   }
