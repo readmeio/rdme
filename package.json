@@ -57,7 +57,7 @@
     "prettier": "prettier --list-different \"./**/**.js\"",
     "prettier:write": "prettier --write \"./**/**.js\"",
     "pretest": "npm run lint && npm run prettier",
-    "test": "jest --coverage"
+    "test": "jest --coverage --silent"
   },
   "jest": {
     "setupFiles": [

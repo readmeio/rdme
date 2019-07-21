@@ -27,7 +27,7 @@ function load(command = '', subcommand = '') {
   } catch (e) {
     console.log('e=', e);
     const error = new Error('Command not found.');
-    error.description = `Type ${`${config.cli} help`.yellow} to see all commands`;
+    error.description = `Type \`${`${config.cli} help`.yellow}\` ${`to see all commands`.red}`;
     throw error;
   }
 }
