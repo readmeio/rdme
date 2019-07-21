@@ -1,16 +1,30 @@
 const request = require('request-promise-native');
 const config = require('config');
 
-exports.desc = 'List versions available in your project or get version by semver';
+exports.command = 'versions';
+exports.usage = 'versions [options]';
+exports.description = 'List versions available in your project or get a version by SemVer (https://semver.org/)';
 exports.category = 'versions';
 exports.weight = 3;
-exports.action = 'versions';
 
-exports.run = function({ opts }) {
+exports.args = [
+  {
+    name: 'key',
+    type: String,
+    description: 'Project API key'
+  },
+  {
+    name: 'version',
+    type: String,
+    description: 'Project version'
+  },
+];
+
+exports.run = function(opts) {
   const { key, version } = opts;
 
   if (!key) {
-    return Promise.reject(new Error('No api key provided. Please use --key'));
+    return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
   }
 
   const uri = version

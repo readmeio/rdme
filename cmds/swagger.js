@@ -47,13 +47,13 @@ exports.run = async function (opts) {
 
   if (!key && opts.token) {
     console.warn(
-      'Using `rdme` with --token has been deprecated. Please use --key and --id instead',
+      'Using `rdme` with --token has been deprecated. Please use `--key` and `--id` instead.',
     );
     [key, id] = opts.token.split('-');
   }
 
   if (!key) {
-    return Promise.reject(new Error('No api key provided. Please use --key'));
+    return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
   }
 
   function callApi(specPath, versionCleaned) {
@@ -67,7 +67,7 @@ exports.run = async function (opts) {
     ${`${data.headers.location}`.green}`);
 
       console.log(`
-  To update your swagger file, run the following:
+  To update your Swagger or OpenAPI file, run the following:
 
     ${
       `rdme swagger FILE --key=${key} --id=${

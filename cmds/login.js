@@ -48,7 +48,7 @@ exports.run = async function(opts) {
   }
 
   if (!project) {
-    return Promise.reject(new Error('No project subdomain provided. Please use --project'));
+    return Promise.reject(new Error('No project subdomain provided. Please use `--project`.'));
   }
 
   if (!isEmail(email)) {

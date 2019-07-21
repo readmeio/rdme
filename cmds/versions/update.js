@@ -1,23 +1,37 @@
 const request = require('request-promise-native');
 const config = require('config');
 const { prompt } = require('enquirer');
-const promptOpts = require('../prompts');
+const promptOpts = require('../../lib/prompts');
 
-exports.desc = 'Update an existing version for your project';
+exports.command = 'versions:update';
+exports.usage = 'versions:update <version>';
+exports.description = 'Update an existing version for your project';
 exports.category = 'versions';
 exports.weight = 4;
-exports.action = 'versions:update';
+
+exports.args = [
+  {
+    name: 'key',
+    type: String,
+    description: 'Project API key'
+  },
+  {
+    name: 'version',
+    type: String,
+    description: 'Project version'
+  },
+];
 
 exports.run = async function({ opts }) {
   const { key, version, codename, newVersion, main, beta, isPublic, deprecated } = opts;
 
   if (!key) {
-    return Promise.reject(new Error('No api key provided. Please use --key'));
+    return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
   }
 
   if (!version) {
     return Promise.reject(
-      new Error('No version provided. Please specify a semantic version using --version'),
+      new Error('No version provided. Please specify a semantic version using `--version`.'),
     );
   }
 
@@ -43,7 +57,7 @@ exports.run = async function({ opts }) {
 
   return request
     .put(`${config.host}/api/v1/version/${version}`, options)
-    .then(() => Promise.resolve(`Version ${version} updated successfully`))
+    .then(() => Promise.resolve(`Version ${version} updated successfully.`))
     .catch(err => {
       return Promise.reject(
         new Error(

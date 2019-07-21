@@ -13,7 +13,7 @@ exports.args = [];
 exports.run = function(opts) {
   const project = configStore.get('project');
   if (!project) {
-    return Promise.reject(new Error(`Please login using \`${config.cli} login\`.`));
+    return Promise.reject(new Error(`Please login using \`${config.cli} ${exports.usage}\`.`));
   }
 
   return (opts.mockOpen || open)(config.hub.replace('{project}', project), {

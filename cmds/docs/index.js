@@ -37,11 +37,11 @@ exports.run = function(opts) {
   const { folder, key, version } = opts;
 
   if (!key) {
-    return Promise.reject(new Error('No api key provided. Please use `--key`.'));
+    return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
   }
 
   if (!version) {
-    return Promise.reject(new Error('No version provided. Please use `--version`.'));
+    return Promise.reject(new Error('No project version provided. Please use `--version`.'));
   }
 
   if (!folder) {
