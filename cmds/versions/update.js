@@ -5,7 +5,7 @@ const promptOpts = require('../../lib/prompts');
 
 exports.command = 'versions:update';
 exports.usage = 'versions:update <version>';
-exports.description = 'Update an existing version for your project';
+exports.description = 'Update an existing version for your project.';
 exports.category = 'versions';
 exports.weight = 4;
 
@@ -22,7 +22,7 @@ exports.args = [
   },
 ];
 
-exports.run = async function({ opts }) {
+exports.run = async function(opts) {
   const { key, version, codename, newVersion, main, beta, isPublic, deprecated } = opts;
 
   if (!key) {

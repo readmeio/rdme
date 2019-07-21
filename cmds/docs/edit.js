@@ -10,7 +10,7 @@ const unlink = promisify(fs.unlink);
 
 exports.command = 'docs:edit';
 exports.usage = 'docs:edit <slug>';
-exports.description = 'Edit a single file from your ReadMe project without saving locally';
+exports.description = 'Edit a single file from your ReadMe project without saving locally.';
 exports.category = 'docs';
 exports.weight = 4;
 

@@ -6,7 +6,7 @@ const spawn = promisify(cp.spawn);
 
 exports.command = 'oas';
 exports.usage = 'oas';
-exports.description = 'OAS related tasks. See https://www.npmjs.com/package/oas';
+exports.description = 'OAS related tasks. See https://npm.im/oas for more information.';
 exports.category = 'utilities';
 exports.weight = 4;
 

@@ -3,7 +3,7 @@ const config = require('config');
 
 exports.command = 'versions:delete';
 exports.usage = 'versions:delete <version>';
-exports.description = 'Delete a version associated with your ReadMe project';
+exports.description = 'Delete a version associated with your ReadMe project.';
 exports.category = 'versions';
 exports.weight = 4;
 

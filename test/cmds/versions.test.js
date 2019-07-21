@@ -1,16 +1,17 @@
 const nock = require('nock');
 const config = require('config');
 const assert = require('assert');
-const promptHandler = require('../lib/prompts');
+const promptHandler = require('../../lib/prompts');
 
-const versions = require('../cli').bind(null, 'versions');
-const createVersion = require('../cli').bind(null, 'versions:create');
-const deleteVersion = require('../cli').bind(null, 'versions:delete');
-const updateVersion = require('../cli').bind(null, 'versions:update');
+const versions = require('../../cmds/versions/index');
+const createVersion = require('../../cmds/versions/create');
+const deleteVersion = require('../../cmds/versions/delete');
+const updateVersion = require('../../cmds/versions/update');
 
-jest.mock('../lib/prompts');
 const key = 'Xmw4bGctRVIQz7R7dQXqH9nQe5d0SPQs';
 const version = '1.0.0';
+
+jest.mock('../../lib/prompts');
 
 describe('Versions CLI Commands', () => {
   beforeAll(() => nock.disableNetConnect());
@@ -18,8 +19,8 @@ describe('Versions CLI Commands', () => {
 
   describe('base command', () => {
     it('should error if no api key provided', () => {
-      versions([], {}).catch(err => {
-        assert.equal(err.message, 'No api key provided. Please use --key');
+      versions.run({}).catch(err => {
+        assert.equal(err.message, 'No project API key provided. Please use `--key`.');
       });
     });
 
@@ -29,7 +30,7 @@ describe('Versions CLI Commands', () => {
         .basicAuth({ user: key })
         .reply(200, [{ version }, { version }]);
 
-      const versionsResponse = await versions([], { key });
+      const versionsResponse = await versions.run({ key });
       assert.equal(versionsResponse.length, 2);
       mockRequest.done();
     });
@@ -40,7 +41,7 @@ describe('Versions CLI Commands', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      await versions([], { key, version });
+      await versions.run({ key, version });
       mockRequest.done();
     });
 
@@ -50,7 +51,7 @@ describe('Versions CLI Commands', () => {
         .basicAuth({ user: key })
         .reply(400);
 
-      await versions([], { key }).catch(err => {
+      await versions.run({ key }).catch(err => {
         assert.equal(err.message, 'Failed to get version(s) attached to the provided key.');
       });
       mockRequest.done();
@@ -59,16 +60,16 @@ describe('Versions CLI Commands', () => {
 
   describe('create new version', () => {
     it('should error if no api key provided', () => {
-      createVersion([], {}).catch(err => {
-        assert.equal(err.message, 'No api key provided. Please use --key');
+      createVersion.run({}).catch(err => {
+        assert.equal(err.message, 'No project API key provided. Please use `--key`.');
       });
     });
 
     it('should error if no version provided', () => {
-      createVersion([], { key }).catch(err => {
+      createVersion.run({ key }).catch(err => {
         assert.equal(
           err.message,
-          'No version provided. Please specify a semantic version using --version',
+          'No version provided. Please specify a semantic version using `--version`.',
         );
       });
     });
@@ -88,7 +89,7 @@ describe('Versions CLI Commands', () => {
         .basicAuth({ user: key })
         .reply(201, { version });
 
-      await createVersion([], { key, version });
+      await createVersion.run({ key, version });
       mockRequest.done();
     });
 
@@ -103,7 +104,7 @@ describe('Versions CLI Commands', () => {
         .basicAuth({ user: key })
         .reply(400);
 
-      await createVersion([], { key, version, fork: '0.0.5' }).catch(err => {
+      await createVersion.run({ key, version, fork: '0.0.5' }).catch(err => {
         assert.equal(
           err.message,
           'Failed to create a new version using your specified parameters.',
@@ -115,16 +116,16 @@ describe('Versions CLI Commands', () => {
 
   describe('delete version', () => {
     it('should error if no api key provided', () => {
-      deleteVersion([], {}).catch(err => {
-        assert.equal(err.message, 'No api key provided. Please use --key');
+      deleteVersion.run({}).catch(err => {
+        assert.equal(err.message, 'No project API key provided. Please use `--key`.');
       });
     });
 
     it('should error if no version provided', () => {
-      deleteVersion([], { key }).catch(err => {
+      deleteVersion.run({ key }).catch(err => {
         assert.equal(
           err.message,
-          'No version provided. Please specify a semantic version using --version',
+          'No version provided. Please specify a semantic version using `--version`.',
         );
       });
     });
@@ -135,7 +136,7 @@ describe('Versions CLI Commands', () => {
         .basicAuth({ user: key })
         .reply(200);
 
-      await deleteVersion([], { key, version });
+      await deleteVersion.run({ key, version });
       mockRequest.done();
     });
 
@@ -145,7 +146,7 @@ describe('Versions CLI Commands', () => {
         .basicAuth({ user: key })
         .reply(400);
 
-      await deleteVersion([], { key, version }).catch(err => {
+      await deleteVersion.run({ key, version }).catch(err => {
         assert.equal(err.message, 'Failed to delete target version.');
       });
       mockRequest.done();
@@ -154,16 +155,16 @@ describe('Versions CLI Commands', () => {
 
   describe('update version', () => {
     it('should error if no api key provided', () => {
-      updateVersion([], {}).catch(err => {
-        assert.equal(err.message, 'No api key provided. Please use --key');
+      updateVersion.run({}).catch(err => {
+        assert.equal(err.message, 'No project API key provided. Please use `--key`.');
       });
     });
 
     it('should error if no version provided', () => {
-      updateVersion([], { key }).catch(err => {
+      updateVersion.run({ key }).catch(err => {
         assert.equal(
           err.message,
-          'No version provided. Please specify a semantic version using --version',
+          'No version provided. Please specify a semantic version using `--version`.',
         );
       });
     });
@@ -183,7 +184,7 @@ describe('Versions CLI Commands', () => {
         .basicAuth({ user: key })
         .reply(201, { version });
 
-      await updateVersion([], { key, version });
+      await updateVersion.run({ key, version });
       mockRequest.done();
     });
 
@@ -201,7 +202,7 @@ describe('Versions CLI Commands', () => {
         .basicAuth({ user: key })
         .reply(400);
 
-      await updateVersion([], { key, version }).catch(err => {
+      await updateVersion.run({ key, version }).catch(err => {
         assert.equal(err.message, 'Failed to update version using your specified parameters.');
       });
       mockRequest.done();

@@ -9,7 +9,7 @@ const testing = process.env.NODE_ENV === 'testing';
 
 exports.command = 'login';
 exports.usage = 'login';
-exports.description = 'Login to a ReadMe project';
+exports.description = 'Login to a ReadMe project.';
 exports.category = 'admin';
 exports.weight = 1;
 

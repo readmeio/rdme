@@ -32,14 +32,19 @@ function load(command = '', subcommand = '') {
   }
 }
 
-module.exports = () => {
+/**
+ * @param {Array} processArgv - An array of arguments from the current process. Can be used to mock
+ *    fake CLI calls.
+ * @return {Promise}
+ */
+module.exports = (processArgv) => {
   const mainArgs = [
     {name: 'help', alias: 'h', type: Boolean, description: 'Display this usage guide'},
     {name: 'version', alias: 'v', type: Boolean, description: `Show the current ${config.cli} version`},
     {name: 'command', type: String, defaultOption: true},
   ];
 
-  const argv = cliArgs(mainArgs, {partial: true});
+  const argv = cliArgs(mainArgs, {partial: true, argv: processArgv});
   const cmd = argv.command || false;
 
   // Add support for `-H` and `-V` as `--help` and `--version` aliases.

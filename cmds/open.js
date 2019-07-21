@@ -4,7 +4,7 @@ const configStore = require('../lib/configstore');
 
 exports.command = 'open';
 exports.usage = 'open';
-exports.description = 'Open your current ReadMe project in the browser';
+exports.description = 'Open your current ReadMe project in the browser.';
 exports.category = 'utilities';
 exports.weight = 1;
 
