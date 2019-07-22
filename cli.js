@@ -25,7 +25,6 @@ function load(command = '', subcommand = '') {
     // eslint-disable-next-line global-require, import/no-dynamic-require
     return require(file);
   } catch (e) {
-    console.log('e=', e);
     const error = new Error('Command not found.');
     error.description = `Type \`${`${config.cli} help`.yellow}\` ${`to see all commands`.red}`;
     throw error;
@@ -59,7 +58,7 @@ module.exports = processArgv => {
     }
 
     if (argv._unknown.indexOf('-V') !== -1) {
-      argv.help = true;
+      argv.version = true;
     }
   }
 
@@ -72,10 +71,6 @@ module.exports = processArgv => {
   if (command.includes(':')) {
     [command, subcommand] = cmd.split(':');
   }
-
-  // console.log('argv=', argv)
-  // console.log('process.argv=', process.argv.slice(3))
-  // console.log('---------------')
 
   try {
     const bin = load(command, subcommand);
@@ -99,18 +94,13 @@ module.exports = processArgv => {
         throw e;
       }
 
-      cmdArgv = cliArgs(bin.args, { partial: true, argv: process.argv.slice(3) });
+      cmdArgv = cliArgs(bin.args, { partial: true, argv: processArgv.slice(1) });
     }
 
     cmdArgv = Object.assign({}, { key: configStore.get('apiKey') }, cmdArgv);
 
-    // console.log('bin=', bin);
-    // console.log('binArgv=', cmdArgv)
-    // console.log('---------------')
-
     return bin.run(cmdArgv);
   } catch (e) {
-    // console.log('cli error=', e)
     return Promise.reject(e);
   }
 };

@@ -6,10 +6,19 @@ require('./cli')(process.argv.slice(2))
     if (msg) console.log(msg);
     process.exit(0);
   })
-  .catch(err => {
-    if (err) {
+  .catch(e => {
+    if (e) {
       // `err.message` is from locally thrown Error objects
       // `err.error` is from remote API errors
+      const err = e;
+
+      // If we've got a remote API error, extract its contents so we can show the user the error.
+      if (typeof err.error === 'object' && Object.keys(err.error).length === 3) {
+        err.message = err.error.error;
+        err.description = err.error.description;
+        err.errors = err.error.errors;
+      }
+
       if (!err.description && !err.errors && err.error) {
         console.error(
           `Yikes, something went wrong! Please try again and if the problem persists, get in touch with our support team at ${
@@ -24,8 +33,8 @@ require('./cli')(process.argv.slice(2))
         const errors = Object.keys(err.errors);
 
         console.error(`\nCause${(errors.length > 1 && 's') || ''}:`.red.bold);
-        errors.forEach(e => {
-          console.error(` · ${e}: ${err.errors[e]}`.red);
+        errors.forEach(error => {
+          console.error(` · ${error}: ${err.errors[error]}`.red);
         });
       }
     }
