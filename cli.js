@@ -18,18 +18,7 @@ process.env.NODE_CONFIG_DIR = configDir;
 const { version } = require('./package.json');
 const configStore = require('./lib/configstore');
 const help = require('./lib/help');
-
-function load(command = '', subcommand = '') {
-  const file = path.join(__dirname, 'cmds', command, subcommand);
-  try {
-    // eslint-disable-next-line global-require, import/no-dynamic-require
-    return require(file);
-  } catch (e) {
-    const error = new Error('Command not found.');
-    error.description = `Type \`${`${config.cli} help`.yellow}\` ${`to see all commands`.red}`;
-    throw error;
-  }
-}
+const commands = require('./lib/commands');
 
 /**
  * @param {Array} processArgv - An array of arguments from the current process. Can be used to mock
@@ -51,35 +40,56 @@ module.exports = processArgv => {
   const argv = cliArgs(mainArgs, { partial: true, argv: processArgv });
   const cmd = argv.command || false;
 
-  // Add support for `-H` and `-V` as `--help` and `--version` aliases.
+  // Add support for `-V` as  an additional `--version` alias.
   if (typeof argv._unknown !== 'undefined') {
-    if (argv._unknown.indexOf('-H') !== -1) {
-      argv.help = true;
-    }
-
     if (argv._unknown.indexOf('-V') !== -1) {
       argv.version = true;
     }
   }
 
   if (argv.version && (!cmd || cmd === 'help')) return Promise.resolve(version);
-  if (!cmd || cmd === 'help') return Promise.resolve(help.globalUsage(mainArgs));
 
   let command = cmd || '';
-  let subcommand;
+  if (!command) {
+    command = 'help';
+  }
 
-  if (command.includes(':')) {
-    [command, subcommand] = cmd.split(':');
+  if (command === 'help') {
+    argv.help = true;
   }
 
   try {
-    const bin = load(command, subcommand);
+    let cmdArgv;
+    let bin;
 
+    // Handling for `rdme help` and `rdme help <command>` cases.
+    if (command === 'help') {
+      if ((argv._unknown || []).length === 0) {
+        return Promise.resolve(help.globalUsage(mainArgs));
+      }
+
+      if (argv._unknown.indexOf('-H') !== -1) {
+        return Promise.resolve(help.globalUsage(mainArgs));
+      }
+
+      cmdArgv = cliArgs([{ name: 'subcommand', type: String, defaultOption: true }], {
+        argv: argv._unknown,
+      });
+      if (!cmdArgv.subcommand) {
+        return Promise.resolve(help.globalUsage(mainArgs));
+      }
+
+      bin = commands.load(cmdArgv.subcommand);
+      return Promise.resolve(help.commandUsage(bin));
+    }
+
+    bin = commands.load(command);
+
+    // Handling for `rdme <command> --help`.
     if (argv.help) {
       return Promise.resolve(help.commandUsage(bin));
     }
 
-    let cmdArgv;
     try {
       cmdArgv = cliArgs(bin.args, { argv: argv._unknown || [] });
     } catch (e) {
@@ -101,6 +111,10 @@ module.exports = processArgv => {
 
     return bin.run(cmdArgv);
   } catch (e) {
+    if (e.message === 'Command not found.') {
+      e.description = `Type \`${`${config.cli} help`.yellow}\` ${`to see all commands`.red}`;
+    }
+
     return Promise.reject(e);
   }
 };

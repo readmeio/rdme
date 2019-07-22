@@ -1,7 +1,5 @@
 const assert = require('assert');
-const util = require('../lib/util');
-
-const commands = util.getCommands();
+const commands = require('../../lib/commands').list();
 
 describe('utils', () => {
   describe('getCommands', () => {

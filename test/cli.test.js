@@ -46,17 +46,26 @@ describe('cli', () => {
 
   describe('--help', () => {
     it('should print help', () =>
-      cli(['help', '--help']).then(output => {
+      cli(['--help']).then(output => {
         assert.notEqual(output, version);
       }));
 
     it('should print help for the `-H` alias', () =>
-      cli(['help', '-H']).then(output => {
+      cli(['-H']).then(output => {
         assert.notEqual(output, version);
       }));
 
     it('should print usage for a given command', () => {
       cli(['swagger', '--help']).then(output => {
+        assert.ok(output.indexOf(swaggerCmd.description) !== -1);
+        assert.ok(output.indexOf(swaggerCmd.usage) !== -1);
+        assert.ok(output.indexOf('--key') !== -1);
+        assert.ok(output.indexOf('--help') !== -1);
+      });
+    });
+
+    it('should print usage for a given command if supplied as `help <command>`', () => {
+      cli(['help', 'swagger']).then(output => {
         assert.ok(output.indexOf(swaggerCmd.description) !== -1);
         assert.ok(output.indexOf(swaggerCmd.usage) !== -1);
         assert.ok(output.indexOf('--key') !== -1);
