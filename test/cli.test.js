@@ -79,6 +79,19 @@ describe('cli', () => {
         assert.ok(output.indexOf('---spec') === -1);
       });
     });
+
+    it('should show related commands for a subcommands help menu', () => {
+      cli(['versions', '--help']).then(output => {
+        assert.ok(output.indexOf('Related commands') !== -1);
+        assert.ok(output.indexOf('versions:create') !== -1);
+      });
+    });
+
+    it('should not show related commands on commands that have none', () => {
+      cli(['login', '--help']).then(output => {
+        assert.ok(output.indexOf('Related commands') === -1);
+      });
+    });
   });
 
   describe('subcommands', () => {
