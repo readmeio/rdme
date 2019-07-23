@@ -14,7 +14,7 @@
       * [Swagger](#swagger)
       * [Docs](#docs)
       * [Versions](#versions)
-      * [Opening A Project Spec](#open)
+      * [Opening a Project](#open)
    * [Future](#future)
 
 ### About `rdme`

@@ -40,7 +40,7 @@ module.exports = processArgv => {
   const argv = cliArgs(mainArgs, { partial: true, argv: processArgv });
   const cmd = argv.command || false;
 
-  // Add support for `-V` as  an additional `--version` alias.
+  // Add support for `-V` as an additional `--version` alias.
   if (typeof argv._unknown !== 'undefined') {
     if (argv._unknown.indexOf('-V') !== -1) {
       argv.version = true;
@@ -99,7 +99,7 @@ module.exports = processArgv => {
       // parser gets confused.
       //
       // Instead of failing out to the user with an undecipherable "Unknown value: ..." error, let's
-      // try to parse their request again but a tade less eager.
+      // try to parse their request again but a tad less eager.
       if (e.name !== 'UNKNOWN_VALUE' || (e.name === 'UNKNOWN_VALUE' && !argv.version)) {
         throw e;
       }
