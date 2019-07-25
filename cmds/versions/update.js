@@ -4,7 +4,7 @@ const { prompt } = require('enquirer');
 const promptOpts = require('../../lib/prompts');
 
 exports.command = 'versions:update';
-exports.usage = 'versions:update <version>';
+exports.usage = 'versions:update <version> [options]';
 exports.description = 'Update an existing version for your project.';
 exports.category = 'versions';
 exports.weight = 4;
@@ -20,6 +20,26 @@ exports.args = [
     type: String,
     description: 'Project version',
   },
+  {
+    name: 'codename',
+    type: String,
+    description: 'The codename, or nickname, for a particular version.'
+  },
+  {
+    name: 'main',
+    type: Boolean,
+    description: 'Should this version be the primary (default) version for your project?'
+  },
+  {
+    name: 'beta',
+    type: Boolean,
+    description: 'Is this version in beta?'
+  },
+  {
+    name: 'isPublic',
+    type: Boolean,
+    description: 'Would you like to make this version public? Any primary version must be public.'
+  }
 ];
 
 exports.run = async function(opts) {

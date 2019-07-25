@@ -1,4 +1,5 @@
 const request = require('request-promise-native');
+const Table = require('table-layout');
 const config = require('config');
 
 exports.command = 'versions';
@@ -17,7 +18,7 @@ exports.args = [
   {
     name: 'version',
     type: String,
-    description: 'Project version',
+    description: 'A specific project version to view',
   },
 ];
 
@@ -36,6 +37,48 @@ exports.run = function(opts) {
     .get(uri, {
       json: true,
       auth: { user: key },
+    })
+    .then(versions => {
+      const tableData = [{
+        col1: 'Version'.bold,
+        col2: 'Codename'.bold,
+        col4: 'Is deprecated'.bold,
+        col5: 'Is hidden'.bold,
+        col6: 'Is beta'.bold,
+        col7: 'Is stable'.bold,
+        col3: 'Created on'.bold,
+      }, {
+        col1: '-------',
+        col2: '-------',
+        col3: '-------',
+        col4: '-------',
+        col5: '-------',
+        col6: '-------',
+        col7: '-------'
+      }];
+
+      versions.forEach(v => {
+        tableData.push({
+          col1: v.version,
+          col2: v.codename,
+          col3: v.is_deprecated,
+          col4: v.is_hidden,
+          col5: v.is_beta,
+          col6: v.is_stable,
+          col7: v.createdAt,
+        });
+      });
+
+      const table = new Table(tableData, {
+        noWrap: true,
+        maxWidth: 60,
+        padding: {
+          left: '| ',
+          right: ' |'
+        }
+      })
+
+      console.log(table.toString());
     })
     .catch(err => {
       return Promise.reject(

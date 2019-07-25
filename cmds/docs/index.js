@@ -9,7 +9,7 @@ const { promisify } = require('util');
 const readFile = promisify(fs.readFile);
 
 exports.command = 'docs';
-exports.usage = 'docs <folder>';
+exports.usage = 'docs <folder> [options]';
 exports.description = 'Sync a folder of markdown files to your ReadMe project.';
 exports.category = 'docs';
 exports.weight = 3;

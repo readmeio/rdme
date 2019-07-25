@@ -2,11 +2,12 @@ const request = require('request-promise-native');
 const config = require('config');
 
 exports.command = 'versions:delete';
-exports.usage = 'versions:delete <version>';
+exports.usage = 'versions:delete <version> [options]';
 exports.description = 'Delete a version associated with your ReadMe project.';
 exports.category = 'versions';
 exports.weight = 4;
 
+exports.hiddenArgs = ['version'];
 exports.args = [
   {
     name: 'key',
@@ -16,7 +17,7 @@ exports.args = [
   {
     name: 'version',
     type: String,
-    description: 'Project version',
+    defaultOption: true,
   },
 ];
 
@@ -29,7 +30,7 @@ exports.run = async function(opts) {
 
   if (!version) {
     return Promise.reject(
-      new Error('No version provided. Please specify a semantic version using `--version`.'),
+      new Error(`No version provided. Please specify a semantic version. See \`${config.cli} help ${exports.command}\` for help.`),
     );
   }
 

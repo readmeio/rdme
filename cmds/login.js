@@ -8,7 +8,7 @@ const configStore = require('../lib/configstore');
 const testing = process.env.NODE_ENV === 'testing';
 
 exports.command = 'login';
-exports.usage = 'login';
+exports.usage = 'login [options]';
 exports.description = 'Login to a ReadMe project.';
 exports.category = 'admin';
 exports.weight = 1;
