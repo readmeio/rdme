@@ -23,23 +23,23 @@ exports.args = [
   {
     name: 'codename',
     type: String,
-    description: 'The codename, or nickname, for a particular version.'
+    description: 'The codename, or nickname, for a particular version.',
   },
   {
     name: 'main',
     type: Boolean,
-    description: 'Should this version be the primary (default) version for your project?'
+    description: 'Should this version be the primary (default) version for your project?',
   },
   {
     name: 'beta',
     type: Boolean,
-    description: 'Is this version in beta?'
+    description: 'Is this version in beta?',
   },
   {
     name: 'isPublic',
     type: Boolean,
-    description: 'Would you like to make this version public? Any primary version must be public.'
-  }
+    description: 'Would you like to make this version public? Any primary version must be public.',
+  },
 ];
 
 exports.run = async function(opts) {
@@ -51,7 +51,9 @@ exports.run = async function(opts) {
 
   if (!version) {
     return Promise.reject(
-      new Error('No version provided. Please specify a semantic version using `--version`.'),
+      new Error(
+        `No version provided. Please specify a semantic version. See \`${config.cli} help ${exports.command}\` for help.`,
+      ),
     );
   }
 
@@ -77,14 +79,5 @@ exports.run = async function(opts) {
 
   return request
     .put(`${config.host}/api/v1/version/${version}`, options)
-    .then(() => Promise.resolve(`Version ${version} updated successfully.`))
-    .catch(err => {
-      return Promise.reject(
-        new Error(
-          err.error && err.error.description
-            ? err.error.description
-            : 'Failed to update version using your specified parameters.',
-        ),
-      );
-    });
+    .then(() => Promise.resolve(`Version ${version} updated successfully.`));
 };

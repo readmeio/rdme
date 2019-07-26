@@ -24,28 +24,28 @@ exports.args = [
   {
     name: 'fork',
     type: String,
-    description: "The semantic version which you'd like to fork from."
+    description: "The semantic version which you'd like to fork from.",
   },
   {
     name: 'codename',
     type: String,
-    description: 'The codename, or nickname, for a particular version.'
+    description: 'The codename, or nickname, for a particular version.',
   },
   {
     name: 'main',
     type: Boolean,
-    description: 'Should this version be the primary (default) version for your project?'
+    description: 'Should this version be the primary (default) version for your project?',
   },
   {
     name: 'beta',
     type: Boolean,
-    description: 'Is this version in beta?'
+    description: 'Is this version in beta?',
   },
   {
     name: 'isPublic',
     type: Boolean,
-    description: 'Would you like to make this version public? Any primary version must be public.'
-  }
+    description: 'Would you like to make this version public? Any primary version must be public.',
+  },
 ];
 
 exports.run = async function(opts) {
@@ -58,7 +58,9 @@ exports.run = async function(opts) {
 
   if (!version) {
     return Promise.reject(
-      new Error(`No version provided. Please specify a semantic version. See \`${config.cli} help ${exports.command}\` for help.`),
+      new Error(
+        `No version provided. Please specify a semantic version. See \`${config.cli} help ${exports.command}\` for help.`,
+      ),
     );
   }
 

@@ -30,7 +30,9 @@ exports.run = async function(opts) {
 
   if (!version) {
     return Promise.reject(
-      new Error(`No version provided. Please specify a semantic version. See \`${config.cli} help ${exports.command}\` for help.`),
+      new Error(
+        `No version provided. Please specify a semantic version. See \`${config.cli} help ${exports.command}\` for help.`,
+      ),
     );
   }
 

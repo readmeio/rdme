@@ -29,7 +29,7 @@ describe('docs command', () => {
 
   it('should error if no folder provided', () =>
     docs.run({ key, version: '1.0.0' }).catch(err => {
-      assert.equal(err.message, 'No folder provided. Usage `rdme docs <folder>`.');
+      assert.equal(err.message, 'No folder provided. Usage `rdme docs <folder> [options]`.');
     }));
 
   it.todo('should error if the argument isnt a folder');
@@ -150,7 +150,7 @@ describe('docs:edit', () => {
 
   it('should error if no slug provided', () =>
     docsEdit.run({ key, version: '1.0.0' }).catch(err => {
-      assert.equal(err.message, 'No slug provided. Usage `rdme docs:edit <slug>`.');
+      assert.equal(err.message, 'No slug provided. Usage `rdme docs:edit <slug> [options]`.');
     }));
 
   it('should fetch the doc from the api', () => {

@@ -80,9 +80,17 @@ describe('utils', () => {
                 `the \`key\` arg in ${file} does not have our consistent description`,
               );
             } else if (arg.name === 'version') {
+              // If `version` is a hidden argument on the command, it won't have a description so
+              // we don't need to bother with this test case.
+              if (Array.isArray(cmd.hiddenArgs) && cmd.hiddenArgs.indexOf('version') !== -1) {
+                return;
+              }
+
               assert.equal(
                 arg.description,
-                'Project version',
+                cmd.command !== 'versions'
+                  ? 'Project version'
+                  : 'A specific project version to view',
                 `the \`version\` arg in ${file} does not have our consistent description`,
               );
             }

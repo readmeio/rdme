@@ -2,6 +2,8 @@ const request = require('request-promise-native');
 const Table = require('table-layout');
 const config = require('config');
 
+const versionsCreate = require('./create');
+
 exports.command = 'versions';
 exports.usage = 'versions [options]';
 exports.description =
@@ -38,24 +40,40 @@ exports.run = function(opts) {
       json: true,
       auth: { user: key },
     })
-    .then(versions => {
-      const tableData = [{
-        col1: 'Version'.bold,
-        col2: 'Codename'.bold,
-        col4: 'Is deprecated'.bold,
-        col5: 'Is hidden'.bold,
-        col6: 'Is beta'.bold,
-        col7: 'Is stable'.bold,
-        col3: 'Created on'.bold,
-      }, {
-        col1: '-------',
-        col2: '-------',
-        col3: '-------',
-        col4: '-------',
-        col5: '-------',
-        col6: '-------',
-        col7: '-------'
-      }];
+    .then(data => {
+      let versions = data;
+      if (!Array.isArray(data)) {
+        versions = [data];
+      }
+
+      if (!versions.length) {
+        return Promise.reject(
+          new Error(
+            `Sorry, you haven't created any versions yet! See \`${config.cli} help ${versionsCreate.command}\` for commands on how to do that.`,
+          ),
+        );
+      }
+
+      const tableData = [
+        {
+          col1: 'Version'.bold,
+          col2: 'Codename'.bold,
+          col4: 'Is deprecated'.bold,
+          col5: 'Is hidden'.bold,
+          col6: 'Is beta'.bold,
+          col7: 'Is stable'.bold,
+          col3: 'Created on'.bold,
+        },
+        {
+          col1: '-------',
+          col2: '-------',
+          col3: '-------',
+          col4: '-------',
+          col5: '-------',
+          col6: '-------',
+          col7: '-------',
+        },
+      ];
 
       versions.forEach(v => {
         tableData.push({
@@ -74,19 +92,10 @@ exports.run = function(opts) {
         maxWidth: 60,
         padding: {
           left: '| ',
-          right: ' |'
-        }
-      })
+          right: ' |',
+        },
+      });
 
-      console.log(table.toString());
-    })
-    .catch(err => {
-      return Promise.reject(
-        new Error(
-          err.error && err.error.description
-            ? err.error.description
-            : 'Failed to get version(s) attached to the provided key.',
-        ),
-      );
+      return table.toString();
     });
 };

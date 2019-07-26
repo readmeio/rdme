@@ -27,7 +27,9 @@ require('./cli')(process.argv.slice(2))
         );
       }
 
-      if (err.message) console.error(err.message.red);
+      if (err.message && (typeof err.statusCode === 'undefined' || err.statusCode !== 404))
+        console.error(err.message.red);
+
       if (err.description) console.error(err.description.red);
       if (err.errors) {
         const errors = Object.keys(err.errors);
