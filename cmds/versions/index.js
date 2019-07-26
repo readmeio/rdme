@@ -1,7 +1,6 @@
 const request = require('request-promise-native');
-const Table = require('table-layout');
+const Table = require('cli-table');
 const config = require('config');
-
 const versionsCreate = require('./create');
 
 exports.command = 'versions';
@@ -54,48 +53,30 @@ exports.run = function(opts) {
         );
       }
 
-      const tableData = [
-        {
-          col1: 'Version'.bold,
-          col2: 'Codename'.bold,
-          col4: 'Is deprecated'.bold,
-          col5: 'Is hidden'.bold,
-          col6: 'Is beta'.bold,
-          col7: 'Is stable'.bold,
-          col3: 'Created on'.bold,
-        },
-        {
-          col1: '-------',
-          col2: '-------',
-          col3: '-------',
-          col4: '-------',
-          col5: '-------',
-          col6: '-------',
-          col7: '-------',
-        },
-      ];
+      const table = new Table({
+        head: [
+          'Version'.bold,
+          'Codename'.bold,
+          'Is deprecated'.bold,
+          'Is hidden'.bold,
+          'Is beta'.bold,
+          'Is stable'.bold,
+          'Created on'.bold,
+        ],
+      });
 
       versions.forEach(v => {
-        tableData.push({
-          col1: v.version,
-          col2: v.codename,
-          col3: v.is_deprecated,
-          col4: v.is_hidden,
-          col5: v.is_beta,
-          col6: v.is_stable,
-          col7: v.createdAt,
-        });
+        table.push([
+          v.version,
+          v.codename,
+          v.is_deprecated ? 'no' : 'yes',
+          v.is_hidden ? 'no' : 'yes',
+          v.is_beta ? 'no' : 'yes',
+          v.is_stable ? 'no' : 'yes',
+          v.createdAt,
+        ]);
       });
 
-      const table = new Table(tableData, {
-        noWrap: true,
-        maxWidth: 60,
-        padding: {
-          left: '| ',
-          right: ' |',
-        },
-      });
-
-      return table.toString();
+     return Promise.resolve(table.toString());
     });
 };
