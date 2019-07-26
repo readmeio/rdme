@@ -77,6 +77,6 @@ exports.run = function(opts) {
         ]);
       });
 
-     return Promise.resolve(table.toString());
+      return Promise.resolve(table.toString());
     });
 };
