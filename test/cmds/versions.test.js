@@ -12,6 +12,26 @@ const key = 'Xmw4bGctRVIQz7R7dQXqH9nQe5d0SPQs';
 const version = '1.0.0';
 const version2 = '2.0.0';
 
+const versionPayload = {
+  createdAt: '2019-06-17T22:39:56.462Z',
+  is_deprecated: false,
+  is_hidden: false,
+  is_beta: false,
+  is_stable: true,
+  codename: '',
+  version,
+};
+
+const version2Payload = {
+  createdAt: '2019-06-17T22:39:56.462Z',
+  is_deprecated: false,
+  is_hidden: false,
+  is_beta: false,
+  is_stable: true,
+  codename: '',
+  version: version2,
+};
+
 jest.mock('../../lib/prompts');
 
 describe('Versions CLI Commands', () => {
@@ -29,7 +49,7 @@ describe('Versions CLI Commands', () => {
       const mockRequest = nock(config.host)
         .get('/api/v1/version')
         .basicAuth({ user: key })
-        .reply(200, [{ version }, { version: version2 }]);
+        .reply(200, [versionPayload, version2Payload]);
 
       const table = await versions.run({ key });
       assert.ok(table.indexOf(version) !== -1);
@@ -41,7 +61,7 @@ describe('Versions CLI Commands', () => {
       const mockRequest = nock(config.host)
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
-        .reply(200, { version });
+        .reply(200, versionPayload);
 
       const table = await versions.run({ key, version });
       assert.ok(table.indexOf(version) !== -1);
