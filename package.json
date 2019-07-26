@@ -37,6 +37,7 @@
     "minimist": "^1.2.0",
     "oas": "0.8.15",
     "opn": "^6.0.0",
+    "puppeteer": "^1.19.0",
     "read": "^1.0.7",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.5"
