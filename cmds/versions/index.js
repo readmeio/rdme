@@ -24,11 +24,11 @@ exports.args = [
   {
     name: 'raw',
     type: Boolean,
-    description: 'Return raw output from the API instead of in a "pretty" format.'
-  }
+    description: 'Return raw output from the API instead of in a "pretty" format.',
+  },
 ];
 
-const getVersionsAsTable = (versions) => {
+const getVersionsAsTable = versions => {
   const table = new Table({
     head: [
       'Version'.bold,
@@ -56,7 +56,7 @@ const getVersionsAsTable = (versions) => {
   return table.toString();
 };
 
-const getVersionFormatted = (version) => {
+const getVersionFormatted = version => {
   const output = [
     `${'Version:'.bold} ${version.version}`,
     `${'Codename:'.bold} ${version.codename || 'None'}`,
@@ -65,12 +65,7 @@ const getVersionFormatted = (version) => {
   ];
 
   const table = new Table({
-    head: [
-      'Is deprecated'.bold,
-      'Is hidden'.bold,
-      'Is beta'.bold,
-      'Is stable'.bold,
-    ],
+    head: ['Is deprecated'.bold, 'Is hidden'.bold, 'Is beta'.bold, 'Is stable'.bold],
   });
 
   table.push([
