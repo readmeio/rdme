@@ -30,6 +30,7 @@
     "colors": "^1.1.2",
     "config": "^3.1.0",
     "configstore": "^5.0.0",
+    "easy-pdf-merge": "^0.2.2",
     "editor": "^1.0.0",
     "enquirer": "^2.3.0",
     "gray-matter": "^4.0.1",
