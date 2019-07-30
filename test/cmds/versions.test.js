@@ -57,6 +57,17 @@ describe('Versions CLI Commands', () => {
       mockRequest.done();
     });
 
+    it('should make a request to get a list of exisitng versions and return them in a raw format', async () => {
+      const mockRequest = nock(config.host)
+        .get('/api/v1/version')
+        .basicAuth({ user: key })
+        .reply(200, [versionPayload, version2Payload]);
+
+      const response = await versions.run({ key, raw: true });
+      assert.deepEqual(response, [versionPayload, version2Payload])
+      mockRequest.done();
+    })
+
     it('should get a specific version object if version flag provided', async () => {
       const mockRequest = nock(config.host)
         .get(`/api/v1/version/${version}`)
@@ -66,6 +77,17 @@ describe('Versions CLI Commands', () => {
       const table = await versions.run({ key, version });
       assert.ok(table.indexOf(version) !== -1);
       assert.ok(table.indexOf(version2) === -1);
+      mockRequest.done();
+    });
+
+    it('should get a specific version object if version flag provided and return it in a raw format', async () => {
+      const mockRequest = nock(config.host)
+      .get(`/api/v1/version/${version}`)
+      .basicAuth({ user: key })
+      .reply(200, versionPayload);
+
+      const response = await versions.run({ key, version, raw: true });
+      assert.deepEqual(response, versionPayload)
       mockRequest.done();
     });
   });

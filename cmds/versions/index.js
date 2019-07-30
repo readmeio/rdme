@@ -21,10 +21,72 @@ exports.args = [
     type: String,
     description: 'A specific project version to view',
   },
+  {
+    name: 'raw',
+    type: Boolean,
+    description: 'Return raw output from the API instead of in a "pretty" format.'
+  }
 ];
 
+const getVersionsAsTable = (versions) => {
+  const table = new Table({
+    head: [
+      'Version'.bold,
+      'Codename'.bold,
+      'Is deprecated'.bold,
+      'Is hidden'.bold,
+      'Is beta'.bold,
+      'Is stable'.bold,
+      'Created on'.bold,
+    ],
+  });
+
+  versions.forEach(v => {
+    table.push([
+      v.version,
+      v.codename || 'None',
+      v.is_deprecated ? 'no' : 'yes',
+      v.is_hidden ? 'no' : 'yes',
+      v.is_beta ? 'no' : 'yes',
+      v.is_stable ? 'no' : 'yes',
+      v.createdAt,
+    ]);
+  });
+
+  return table.toString();
+};
+
+const getVersionFormatted = (version) => {
+  const output = [
+    `${'Version:'.bold} ${version.version}`,
+    `${'Codename:'.bold} ${version.codename || 'None'}`,
+    `${'Created on:'.bold} ${version.createdAt}`,
+    `${'Released on:'.bold} ${version.releaseDate}`,
+  ];
+
+  const table = new Table({
+    head: [
+      'Is deprecated'.bold,
+      'Is hidden'.bold,
+      'Is beta'.bold,
+      'Is stable'.bold,
+    ],
+  });
+
+  table.push([
+    version.is_deprecated ? 'no' : 'yes',
+    version.is_hidden ? 'no' : 'yes',
+    version.is_beta ? 'no' : 'yes',
+    version.is_stable ? 'no' : 'yes',
+  ]);
+
+  output.push(table.toString());
+
+  return output.join('\n');
+};
+
 exports.run = function(opts) {
-  const { key, version } = opts;
+  const { key, version, raw } = opts;
 
   if (!key) {
     return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
@@ -40,6 +102,10 @@ exports.run = function(opts) {
       auth: { user: key },
     })
     .then(data => {
+      if (raw) {
+        return Promise.resolve(data);
+      }
+
       let versions = data;
       if (!Array.isArray(data)) {
         versions = [data];
@@ -53,30 +119,10 @@ exports.run = function(opts) {
         );
       }
 
-      const table = new Table({
-        head: [
-          'Version'.bold,
-          'Codename'.bold,
-          'Is deprecated'.bold,
-          'Is hidden'.bold,
-          'Is beta'.bold,
-          'Is stable'.bold,
-          'Created on'.bold,
-        ],
-      });
+      if (version === undefined) {
+        return Promise.resolve(getVersionsAsTable(versions));
+      }
 
-      versions.forEach(v => {
-        table.push([
-          v.version,
-          v.codename,
-          v.is_deprecated ? 'no' : 'yes',
-          v.is_hidden ? 'no' : 'yes',
-          v.is_beta ? 'no' : 'yes',
-          v.is_stable ? 'no' : 'yes',
-          v.createdAt,
-        ]);
-      });
-
-      return Promise.resolve(table.toString());
+      return Promise.resolve(getVersionFormatted(versions[0]));
     });
 };
