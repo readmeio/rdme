@@ -122,7 +122,7 @@ See `rdme versions:create --help` for a full list of flags.
 rdme versions:update <version>
 ```
 
-Like `versions:create`, if you wish to automate this process and not be blocked by CLI input, you can supply the necessary flags to this command. See `rdme versions:create --help` or [automating this process](#automating-this-process) for more information.
+Like `versions:create`, if you wish to automate this process and not be blocked by CLI input, you can supply the necessary flags to this command. See `rdme versions:update --help` or [automating this process](#automating-this-process) for more information.
 
 #### Delete a version
 You can remove a specific version from your project, as well as all of the attached specs
