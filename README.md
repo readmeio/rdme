@@ -65,9 +65,7 @@ rdme swagger [path-to-file.json] --version={project-version}
 ```
 
 ```sh
-rdme swagger [path-to-file.json] \
-   --id={existing-id} \
-   --version={project-version}
+rdme swagger [path-to-file.json] --id={existing-id} --version={project-version}
 ```
 
 #### Omitting the file path
@@ -114,11 +112,7 @@ If you wish to automate the process of creating a new project version, and not h
 For example:
 
 ```sh
-rdme versions:create <version> \
-   --fork={version-fork} \
-   --codename={version-name} \
-   --main \
-   --beta
+rdme versions:create <version> --fork={version-fork} --codename={version-name} --main --beta
 ```
 
 See `rdme versions:create --help` for a full list of flags.
