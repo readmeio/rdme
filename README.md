@@ -47,14 +47,14 @@ ReadMe supports both [Swagger 2.0](https://swagger.io/docs/specification/2-0/bas
 This will upload `path-to-swagger.json` to your project and return an ID and URL for you to later update your file, and view it in the client.
 
 ```sh
-rdme swagger [path-to-file.json] --key={api-key}
+rdme swagger [path-to-file.json]
 ```
 
 #### Editing (resync) an existing API description
 This will edit (resync) an existing API description (identified by `--id`) within your ReadMe project.
 
 ```sh
-rdme swagger [path-to-file.json] --key={api-key} --id={existing-id}
+rdme swagger [path-to-file.json] --id={existing-id}
 ```
 
 #### Uploading or editing an API description in a project version
@@ -105,7 +105,7 @@ If you wish to see the raw output from our API in this response, supply  the `--
 
 #### Create a new version
 ```sh
-rdme versions:create <version> --key={api-key}
+rdme versions:create <version>
 ```
 
 ##### Automating this process
