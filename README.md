@@ -1,8 +1,8 @@
 # `rdme` - ReadMe's CLI
 
-[![](https://d3vv6lp55qjaqc.cloudfront.net/items/1M3C3j0I0s0j3T362344/Untitled-2.png)](https://readme.io)
+[![](https://d3vv6lp55qjaqc.cloudfront.net/items/1M3C3j0I0s0j3T362344/Untitled-2.png)](https://readme.com)
 
-[![CircleCI](https://circleci.com/gh/readmeio/rdme.svg?style=svg)](https://circleci.com/gh/readmeio/rdme)
+[![npm](https://img.shields.io/npm/v/rdme)](https://npm.im/rdme) [![CircleCI](https://circleci.com/gh/readmeio/rdme.svg?style=svg)](https://circleci.com/gh/readmeio/rdme)
 
 ### Table of Contents
    * [What is rdme?](#about-rdme)
@@ -10,113 +10,125 @@
      * [Installation](#installation)
      * [Login](#logging-in-to-a-readme-project)
    * [Usage](#usage)
-      * [Flags](#rdme-flags)
-      * [Swagger](#swagger)
+      * [Common options](#common-rdme-options)
+      * [Swagger / OpenAPI](#swagger-/-openapi)
       * [Docs](#docs)
       * [Versions](#versions)
-      * [Opening A Project Spec](#open)
+      * [Opening a Project](#open)
    * [Future](#future)
 
 ### About `rdme`
-`rdme` is the CLI wrapper for [ReadMe's RESTful API](https://readme.readme.io/v2.0/reference). It allows you to upload and edit [Swagger](https://swagger.io/) and [OAS](https://swagger.io/specification/) files associated with projects you create on [readme](https://readme.com/). Additionally, you can sync documentation with your project, and manage project versions.
+`rdme` is the CLI wrapper for [ReadMe's RESTful API](https://readme.readme.io/v2.0/reference). It allows you to upload and edit [Swagger](https://swagger.io/) and [OAS](https://swagger.io/specification/) files associated with projects you create on [ReadMe](https://readme.com/). Additionally, you can sync documentation with your project, and manage project versions.
 
 ## Configuration
 ### Installation
 ```sh
 npm install rdme
 ```
-### Logging in to a ReadMe project
 
-If you login to a project, you will not have to provide the `--key` option because we save it locally:
+### Authentication
+If you authenticate `rdme` to your ReadMe project, we will save your API key to a local configuration file (`~/.config/configstore/rdme-production.json`) so you will not have to provide the `--key` option to commands that require it.
 
 ```sh
 rdme login
 ```
 
 ## Usage
-### `rdme` flags
-```
-swaggerfile.json || oasfile.yaml
---key              # API key associated with your ReadMe project
---version          # The version
---id               # The id of a OAS file previously uploaded. This is available through uploading a new file through this CLI
---fork             # The semantic version which you'd like to fork from
---codename         # The codename or nickname for a particular version
---main             # Should this version be the primary (default) version for your project?
---beta             # Is this version in beta?
---isPublic         # Would you like to make this version public? Any primary version must be public
-```
+If you wish to get more information about any command within `rdme`, you can execute `rdme help <command>` or `rdme <command> --help`. You an also execute `rdme help` to see a global list of commands that `rdme` offers.
 
-### Swagger
-#### Uploading a new Swagger file to ReadMe
-This will return an id and url for you to update your file and view it in the client, respectively
+### Common `rdme` options
+* `--key <string>`: The API key associated with your ReadMe project. You can obtain this from your dashboard, or alternatively if you log in with `rdme login`, we will save your API key to a local configuration file (`~/.config/configstore/rdme-production.json`), saving you the hassle of having to supply this argument on commands that have it.
+* `--version <string>`: Your project version.
+
+### Swagger / OpenAPI
+ReadMe supports both [Swagger 2.0](https://swagger.io/docs/specification/2-0/basic-structure/) and [OpenAPI 3.0](https://swagger.io/docs/specification/about/).
+
+#### Uploading a new API description to ReadMe
+This will upload `path-to-swagger.json` to your project and return an ID and URL for you to later update your file, and view it in the client.
+
 ```sh
-rdme swagger {path-to-swagger.json} --key={api-key}
+rdme swagger [path-to-file.json]
 ```
 
-#### Editing an existing Swagger file
+#### Editing (resync) an existing API description
+This will edit (resync) an existing API description (identified by `--id`) within your ReadMe project.
+
 ```sh
-rdme swagger {path-to-swagger.json} --key={api-key} --id={existing-id}
+rdme swagger [path-to-file.json] --id={existing-id}
 ```
 
-#### Uploading or editing a swagger file including with specified version
+#### Uploading or editing an API description in a project version
 You can additional include a version flag, specifying the target version for your file's destination
+
 ```sh
-rdme swagger {path-to-swagger.json} --key={api-key} --version={project-version}
+rdme swagger [path-to-file.json] --version={project-version}
+```
+
+```sh
+rdme swagger [path-to-file.json] --id={existing-id} --version={project-version}
 ```
 
 #### Omitting the file path
-If you run `rdme` within a directory that contains your Swagger or OAS file, you can omit the file path.
-Be sure to use one of the following file names: `swagger.json`, `swagger.yaml`, `openapi.json`, `openapi.yaml` if you do.
+If you run `rdme` within a directory that contains your Swagger or OAS file, you can omit the file path. We will then look for a file with the following names, and upload that: `swagger.json`, `swagger.yaml`, `openapi.json`, and `openapi.yaml`
+
 ```sh
-rdme swagger --key={api-key}
+rdme swagger
 ```
 
 ### Docs
-#### Syncing a folder of markdown docs to ReadMe
-
+#### Syncing a folder of Markdown docs to ReadMe
 ```sh
-rdme docs path-to-markdown-files --key={api-key} --version={project-version}
+rdme docs path-to-markdown-files --version={project-version}
 ```
 
-#### Edit a single readme doc on your local machine
-
+#### Edit a single ReadMe doc on your local machine
 ```sh
-rdme docs:edit <slug> --key={api-key} --version={project-version}
+rdme docs:edit <slug> --version={project-version}
 ```
 
 ### Versions
 #### Get all versions associated with your project
 ```sh
-rdme versions --key={api-key}
+rdme versions
 ```
+
+If you wish to see the raw output from our API in this response, supply  the `--raw` flag.
 
 #### Get all information about a particular version
 ```sh
-rdme versions --key={api-key} --version={project-version}
+rdme versions --version={project-version}
 ```
 
-#### Create a new version using flags
+If you wish to see the raw output from our API in this response, supply  the `--raw` flag.
+
+#### Create a new version
 ```sh
-rdme versions:create --key={api-key} --version={project-version} --fork={version-fork} --codename={version-name} --main --beta
+rdme versions:create <version>
 ```
 
-#### Create a new version without flags
-Creating a version without version-specific flags will allow the ReadMe CLI to prompt you with configuration options
+##### Automating this process
+If you wish to automate the process of creating a new project version, and not have the CLI prompt you for input, you can do so by supplying the necessary flags to `versions:create`.
+
+For example:
+
 ```sh
-rdme versions:create --key={api-key} --version={project-version}
+rdme versions:create <version> --fork={version-fork} --codename={version-name} --main --beta
 ```
+
+See `rdme versions:create --help` for a full list of flags.
 
 #### Update a version
-The command to update a version takes the same flags as creating a new version
 ```sh
-rdme versions:update --key={api-key} --version={project-version}
+rdme versions:update <version>
 ```
+
+Like `versions:create`, if you wish to automate this process and not be blocked by CLI input, you can supply the necessary flags to this command. See `rdme versions:update --help` or [automating this process](#automating-this-process) for more information.
 
 #### Delete a version
 You can remove a specific version from your project, as well as all of the attached specs
+
 ```sh
-rdme versions:delete --key={api-key} --version={project-version}
+rdme versions:delete <version>
 ```
 
 ### Open your ReadMe project in your browser
@@ -127,4 +139,4 @@ rdme open
 ```
 
 ## Future
-We are continually expanding and improving the offerings of this application as we expand our public API and are able. Some interactions may change over time.
+We are continually expanding and improving the offerings of this application as we expand our public API and are able. Some interactions may change over time, but we will do our best to retain backwards compatibility.

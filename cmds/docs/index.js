@@ -8,28 +8,50 @@ const { promisify } = require('util');
 
 const readFile = promisify(fs.readFile);
 
-exports.desc = 'Sync a folder of markdown files to your ReadMe project';
-exports.category = 'services';
+exports.command = 'docs';
+exports.usage = 'docs <folder> [options]';
+exports.description = 'Sync a folder of markdown files to your ReadMe project.';
+exports.category = 'docs';
 exports.weight = 3;
-exports.action = 'docs';
 
-exports.run = function({ args, opts }) {
-  const { key, version } = opts;
+exports.hiddenArgs = ['folder'];
+exports.args = [
+  {
+    name: 'key',
+    type: String,
+    description: 'Project API key',
+  },
+  {
+    name: 'version',
+    type: String,
+    description: 'Project version',
+  },
+  {
+    name: 'folder',
+    type: String,
+    defaultOption: true,
+  },
+];
+
+exports.run = function(opts) {
+  const { folder, key, version } = opts;
 
   if (!key) {
-    return Promise.reject(new Error('No api key provided. Please use --key'));
+    return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
   }
 
   if (!version) {
-    return Promise.reject(new Error('No version provided. Please use --version'));
+    return Promise.reject(new Error('No project version provided. Please use `--version`.'));
   }
 
-  if (!args[0]) {
-    return Promise.reject(new Error('No folder provided. Usage `rdme docs <folder>`'));
+  if (!folder) {
+    return Promise.reject(
+      new Error(`No folder provided. Usage \`${config.cli} ${exports.usage}\`.`),
+    );
   }
 
   const files = fs
-    .readdirSync(args[0])
+    .readdirSync(folder)
     .filter(file => file.endsWith('.md') || file.endsWith('.markdown'));
 
   const options = {
@@ -76,7 +98,7 @@ exports.run = function({ args, opts }) {
 
   return Promise.all(
     files.map(async filename => {
-      const file = await readFile(path.join(args[0], filename), 'utf8');
+      const file = await readFile(path.join(folder, filename), 'utf8');
       const matter = frontMatter(file);
       // Stripping the markdown extension from the filename
       const slug = filename.replace(path.extname(filename), '');
@@ -90,7 +112,10 @@ exports.run = function({ args, opts }) {
           json: true,
           ...options,
         })
-        .then(updateDoc.bind(null, slug, matter, hash), createDoc.bind(null, slug, matter, hash));
+        .then(updateDoc.bind(null, slug, matter, hash), createDoc.bind(null, slug, matter, hash))
+        .catch(err => {
+          return Promise.reject(err);
+        });
     }),
   );
 };

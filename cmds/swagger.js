@@ -3,26 +3,57 @@ const fs = require('fs');
 const path = require('path');
 const config = require('config');
 const { prompt } = require('enquirer');
-const promptOpts = require('./prompts');
+const promptOpts = require('../lib/prompts');
 
-exports.desc = 'Upload your swagger file to ReadMe';
-exports.category = 'services';
+exports.command = 'swagger';
+exports.usage = 'swagger [file] [options]';
+exports.description = 'Upload, or sync, your Swagger/OpenAPI file to ReadMe.';
+exports.category = 'apis';
 exports.weight = 2;
 
-exports.run = async function({ args, opts }) {
-  const { version } = opts;
+exports.hiddenArgs = ['token', 'spec'];
+exports.args = [
+  {
+    name: 'key',
+    type: String,
+    description: 'Project API key',
+  },
+  {
+    name: 'id',
+    type: String,
+    description: `Unique identifier for your specification. Use this if you're resyncing an existing specification`,
+  },
+  {
+    name: 'token',
+    type: String,
+    description: 'Project token. Deprecated, please use `--key` instead',
+  },
+  {
+    name: 'version',
+    type: String,
+    description: 'Project version',
+  },
+  {
+    name: 'spec',
+    type: String,
+    defaultOption: true,
+  },
+];
+
+exports.run = async function(opts) {
+  const { spec, version } = opts;
   let { key, id } = opts;
   let selectedVersion;
 
   if (!key && opts.token) {
     console.warn(
-      'Using `rdme` with --token has been deprecated. Please use --key and --id instead',
+      'Using `rdme` with --token has been deprecated. Please use `--key` and `--id` instead.',
     );
     [key, id] = opts.token.split('-');
   }
 
   if (!key) {
-    return Promise.reject(new Error('No api key provided. Please use --key'));
+    return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
   }
 
   function callApi(specPath, versionCleaned) {
@@ -36,7 +67,7 @@ exports.run = async function({ args, opts }) {
     ${`${data.headers.location}`.green}`);
 
       console.log(`
-  To update your swagger file, run the following:
+  To update your Swagger or OpenAPI file, run the following:
 
     ${
       `rdme swagger FILE --key=${key} --id=${
@@ -108,11 +139,13 @@ exports.run = async function({ args, opts }) {
   }
 
   if (!id) {
-    selectedVersion = await getSwaggerVersion(version);
+    selectedVersion = await getSwaggerVersion(version).catch(e => {
+      return Promise.reject(e);
+    });
   }
 
-  if (args[0]) {
-    return callApi(args[0], selectedVersion);
+  if (spec) {
+    return callApi(spec, selectedVersion);
   }
 
   // If the user didn't supply a specification, let's try to locate what they've got, and upload

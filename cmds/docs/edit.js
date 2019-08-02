@@ -1,5 +1,4 @@
 const request = require('request-promise-native');
-
 const config = require('config');
 const fs = require('fs');
 const editor = require('editor');
@@ -9,29 +8,47 @@ const writeFile = promisify(fs.writeFile);
 const readFile = promisify(fs.readFile);
 const unlink = promisify(fs.unlink);
 
-exports.desc = 'Edit a single file from your ReadMe project without saving locally';
-exports.category = 'services';
+exports.command = 'docs:edit';
+exports.usage = 'docs:edit <slug> [options]';
+exports.description = 'Edit a single file from your ReadMe project without saving locally.';
+exports.category = 'docs';
 exports.weight = 4;
-exports.action = 'docs:edit';
 
-exports.run = async function({ args, opts }) {
-  const { key, version } = opts;
+exports.hiddenArgs = ['slug'];
+exports.args = [
+  {
+    name: 'key',
+    type: String,
+    description: 'Project API key',
+  },
+  {
+    name: 'version',
+    type: String,
+    description: 'Project version',
+  },
+  {
+    name: 'slug',
+    type: String,
+    defaultOption: true,
+  },
+];
+
+exports.run = async function(opts) {
+  const { slug, key, version } = opts;
 
   if (!key) {
-    return Promise.reject(new Error('No api key provided. Please use --key'));
+    return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
   }
 
   if (!version) {
-    return Promise.reject(new Error('No version provided. Please use --version'));
+    return Promise.reject(new Error('No project version provided. Please use `--version`.'));
   }
 
-  if (!args[0]) {
-    return Promise.reject(new Error('No slug provided. Usage `rdme docs:edit <slug>`'));
+  if (!slug) {
+    return Promise.reject(new Error(`No slug provided. Usage \`${config.cli} ${exports.usage}\`.`));
   }
 
-  const slug = args[0];
   const filename = `${slug}.md`;
-
   const options = {
     auth: { user: key },
     headers: {
@@ -67,7 +84,7 @@ exports.run = async function({ args, opts }) {
           ...options,
         })
         .then(async () => {
-          console.log('Doc successfully updated. Cleaning up local file');
+          console.log(`Doc successfully updated. Cleaning up local file.`);
           await unlink(filename);
           return resolve();
         })

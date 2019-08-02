@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+const cliArgs = require('command-line-args');
 const path = require('path');
 // We have to do this otherwise `require('config')` loads
 // from the cwd where the user is running `rdme` which
@@ -15,34 +17,104 @@ process.env.NODE_CONFIG_DIR = configDir;
 
 const { version } = require('./package.json');
 const configStore = require('./lib/configstore');
+const help = require('./lib/help');
+const commands = require('./lib/commands');
 
-function load(command = '', subcommand = '') {
-  const file = path.join(__dirname, 'lib', command, subcommand);
-  try {
-    // eslint-disable-next-line global-require, import/no-dynamic-require
-    return require(file);
-  } catch (e) {
-    const error = new Error('Command not found.');
-    error.description = `Type ${`${config.cli} help`.yellow} to see all commands`;
-    throw error;
+/**
+ * @param {Array} processArgv - An array of arguments from the current process. Can be used to mock
+ *    fake CLI calls.
+ * @return {Promise}
+ */
+module.exports = processArgv => {
+  const mainArgs = [
+    { name: 'help', alias: 'h', type: Boolean, description: 'Display this usage guide' },
+    {
+      name: 'version',
+      alias: 'v',
+      type: Boolean,
+      description: `Show the current ${config.cli} version`,
+    },
+    { name: 'command', type: String, defaultOption: true },
+  ];
+
+  const argv = cliArgs(mainArgs, { partial: true, argv: processArgv });
+  const cmd = argv.command || false;
+
+  // Add support for `-V` as an additional `--version` alias.
+  if (typeof argv._unknown !== 'undefined') {
+    if (argv._unknown.indexOf('-V') !== -1) {
+      argv.version = true;
+    }
   }
-}
 
-module.exports = function(cmd, args, opts = {}) {
-  if (opts.version && (!cmd || cmd === 'help')) return Promise.resolve(version);
+  if (argv.version && (!cmd || cmd === 'help')) return Promise.resolve(version);
 
   let command = cmd || '';
-  let subcommand;
-
-  if (command.includes(':')) {
-    [command, subcommand] = cmd.split(':');
+  if (!command) {
+    command = 'help';
   }
 
-  const optsWithStoredKey = Object.assign({}, { key: configStore.get('apiKey') }, opts);
+  if (command === 'help') {
+    argv.help = true;
+  }
 
   try {
-    return load(opts.help ? 'help' : command, subcommand).run({ args, opts: optsWithStoredKey });
+    let cmdArgv;
+    let bin;
+
+    // Handling for `rdme help` and `rdme help <command>` cases.
+    if (command === 'help') {
+      if ((argv._unknown || []).length === 0) {
+        return Promise.resolve(help.globalUsage(mainArgs));
+      }
+
+      if (argv._unknown.indexOf('-H') !== -1) {
+        return Promise.resolve(help.globalUsage(mainArgs));
+      }
+
+      cmdArgv = cliArgs([{ name: 'subcommand', type: String, defaultOption: true }], {
+        argv: argv._unknown,
+      });
+      if (!cmdArgv.subcommand) {
+        return Promise.resolve(help.globalUsage(mainArgs));
+      }
+
+      bin = commands.load(cmdArgv.subcommand);
+      return Promise.resolve(help.commandUsage(bin));
+    }
+
+    bin = commands.load(command);
+
+    // Handling for `rdme <command> --help`.
+    if (argv.help) {
+      return Promise.resolve(help.commandUsage(bin));
+    }
+
+    try {
+      cmdArgv = cliArgs(bin.args, { argv: argv._unknown || [] });
+    } catch (e) {
+      // If we have a command that has its own `--version` argument to accept data, that argument,
+      // if supplied in the `--version VERSION_STRING` format instead of `--version=VERSION_STRING`,
+      // will collide with the global version argument because their types differ and the argument
+      // parser gets confused.
+      //
+      // Instead of failing out to the user with an undecipherable "Unknown value: ..." error, let's
+      // try to parse their request again but a tad less eager.
+      if (e.name !== 'UNKNOWN_VALUE' || (e.name === 'UNKNOWN_VALUE' && !argv.version)) {
+        throw e;
+      }
+
+      cmdArgv = cliArgs(bin.args, { partial: true, argv: processArgv.slice(1) });
+    }
+
+    cmdArgv = Object.assign({}, { key: configStore.get('apiKey') }, cmdArgv);
+
+    return bin.run(cmdArgv);
   } catch (e) {
+    if (e.message === 'Command not found.') {
+      e.description = `Type \`${`${config.cli} help`.yellow}\` ${`to see all commands`.red}`;
+    }
+
     return Promise.reject(e);
   }
 };

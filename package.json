@@ -1,5 +1,5 @@
 {
-  "author": "ReadMe <support@readme.io> (http://readme.io)",
+  "author": "ReadMe <support@readme.io> (https://readme.com)",
   "name": "rdme",
   "description": "ReadMe's API CLI",
   "bin": {
@@ -27,19 +27,22 @@
   },
   "main": "index.js",
   "dependencies": {
+    "cli-table": "^0.3.1",
     "colors": "^1.1.2",
+    "command-line-args": "^5.1.1",
+    "command-line-usage": "^6.0.2",
     "config": "^3.1.0",
     "configstore": "^5.0.0",
     "editor": "^1.0.0",
     "enquirer": "^2.3.0",
     "gray-matter": "^4.0.1",
     "isemail": "^3.1.3",
-    "minimist": "^1.2.0",
     "oas": "0.8.15",
     "opn": "^6.0.0",
     "read": "^1.0.7",
     "request": "^2.88.0",
-    "request-promise-native": "^1.0.5"
+    "request-promise-native": "^1.0.5",
+    "table-layout": "^1.0.0"
   },
   "devDependencies": {
     "eslint": "^5.16.0",
@@ -55,7 +58,7 @@
     "prettier": "prettier --list-different \"./**/**.js\"",
     "prettier:write": "prettier --write \"./**/**.js\"",
     "pretest": "npm run lint && npm run prettier",
-    "test": "jest --coverage"
+    "test": "jest --coverage --silent"
   },
   "jest": {
     "setupFiles": [

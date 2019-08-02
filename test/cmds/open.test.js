@@ -1,16 +1,14 @@
 const assert = require('assert');
 const config = require('config');
-
-const configStore = require('../lib/configstore');
-
-const open = require('../cli').bind(null, 'open');
+const configStore = require('../../lib/configstore');
+const cmd = require('../../cmds/open');
 
 describe('open command', () => {
   it('should error if no project provided', done => {
     configStore.delete('project');
 
-    open([], {}).catch(err => {
-      assert.equal(err.message, `Please login using ${config.cli} login`);
+    cmd.run({}).catch(err => {
+      assert.equal(err.message, `Please login using \`${config.cli} ${cmd.usage}\`.`);
       return done();
     });
   });
@@ -24,6 +22,6 @@ describe('open command', () => {
       return Promise.resolve();
     }
 
-    open([], { mockOpen });
+    cmd.run({ mockOpen });
   });
 });
