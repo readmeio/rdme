@@ -2,7 +2,7 @@ const assert = require('assert');
 const commands = require('../../lib/commands').list();
 
 describe('utils', () => {
-  describe('getCommands', () => {
+  describe('#getCommands', () => {
     it('should have commands returned', done => {
       assert.notEqual(commands.length, 0);
       done();

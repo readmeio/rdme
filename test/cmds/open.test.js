@@ -4,7 +4,7 @@ const configStore = require('../../lib/configstore');
 const cmd = require('../../cmds/open');
 const loginCmd = require('../../cmds/login');
 
-describe('open command', () => {
+describe('rdme open', () => {
   it('should error if no project provided', done => {
     configStore.delete('project');
 

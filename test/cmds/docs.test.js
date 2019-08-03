@@ -13,7 +13,7 @@ const fixturesDir = `${__dirname}./../fixtures`;
 const key = 'Xmw4bGctRVIQz7R7dQXqH9nQe5d0SPQs';
 const version = '1.0.0';
 
-describe('docs command', () => {
+describe('rdme docs', () => {
   beforeAll(() => nock.disableNetConnect());
   afterAll(() => nock.cleanAll());
 
@@ -137,7 +137,7 @@ describe('docs command', () => {
   });
 });
 
-describe('docs:edit', () => {
+describe('rdme docs:edit', () => {
   it('should error if no api key provided', () =>
     docsEdit.run({}).catch(err => {
       assert.equal(err.message, 'No project API key provided. Please use `--key`.');

@@ -4,7 +4,7 @@ const configStore = require('../../lib/configstore');
 const cmd = require('../../cmds/logout');
 const loginCmd = require('../../cmds/login');
 
-describe('logout command', () => {
+describe('rdme logout', () => {
   it('should error if user is not authenticated', done => {
     configStore.delete('email');
     configStore.delete('project');

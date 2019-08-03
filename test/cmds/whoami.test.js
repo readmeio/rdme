@@ -4,7 +4,7 @@ const configStore = require('../../lib/configstore');
 const cmd = require('../../cmds/whoami');
 const loginCmd = require('../../cmds/login');
 
-describe('whoami command', () => {
+describe('rdme whoami', () => {
   it('should error if user is not authenticated', done => {
     configStore.delete('email');
     configStore.delete('project');

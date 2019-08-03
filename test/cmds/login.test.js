@@ -4,7 +4,7 @@ const assert = require('assert');
 const configStore = require('../../lib/configstore');
 const cmd = require('../../cmds/login');
 
-describe('login command', () => {
+describe('rdme login', () => {
   beforeAll(() => nock.disableNetConnect());
   afterAll(() => nock.cleanAll());
   afterEach(() => configStore.clear());

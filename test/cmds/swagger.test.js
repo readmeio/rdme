@@ -9,7 +9,7 @@ const version = '1.0.0';
 
 jest.mock('../../lib/prompts');
 
-describe('swagger command', () => {
+describe('rdme swagger', () => {
   beforeAll(() => nock.disableNetConnect());
   afterEach(() => nock.cleanAll());
 
