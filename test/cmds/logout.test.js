@@ -1,10 +1,10 @@
 const assert = require('assert');
 const config = require('config');
 const configStore = require('../../lib/configstore');
-const cmd = require('../../cmds/whoami');
+const cmd = require('../../cmds/logout');
 const loginCmd = require('../../cmds/login');
 
-describe('whoami command', () => {
+describe('logout command', () => {
   it('should error if user is not authenticated', done => {
     configStore.delete('email');
     configStore.delete('project');
@@ -20,14 +20,15 @@ describe('whoami command', () => {
       });
   });
 
-  it('should return the authenticated user', done => {
+  it('should log the user out', done => {
     configStore.set('email', 'email@example.com');
     configStore.set('project', 'subdomain');
 
     cmd
       .run({})
       .then(() => {
-        assert.ok(true);
+        assert.equal(configStore.get('email'), undefined, 'config was not destroyed');
+        assert.equal(configStore.get('project'), undefined, 'config was not destroyed');
         return done();
       })
       .catch(err => {
