@@ -12,7 +12,7 @@ exports.command = 'docs:edit';
 exports.usage = 'docs:edit <slug> [options]';
 exports.description = 'Edit a single file from your ReadMe project without saving locally.';
 exports.category = 'docs';
-exports.weight = 4;
+exports.position = 2;
 
 exports.hiddenArgs = ['slug'];
 exports.args = [

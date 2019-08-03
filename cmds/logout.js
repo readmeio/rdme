@@ -6,7 +6,7 @@ exports.command = 'logout';
 exports.usage = 'logout';
 exports.description = 'Logs the currently authenticated user out of ReadMe.';
 exports.category = 'admin';
-exports.weight = 2;
+exports.position = 2;
 
 exports.args = [];
 

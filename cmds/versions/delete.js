@@ -5,7 +5,7 @@ exports.command = 'versions:delete';
 exports.usage = 'versions:delete <version> [options]';
 exports.description = 'Delete a version associated with your ReadMe project.';
 exports.category = 'versions';
-exports.weight = 4;
+exports.position = 4;
 
 exports.hiddenArgs = ['version'];
 exports.args = [

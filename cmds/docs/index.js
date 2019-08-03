@@ -12,7 +12,7 @@ exports.command = 'docs';
 exports.usage = 'docs <folder> [options]';
 exports.description = 'Sync a folder of markdown files to your ReadMe project.';
 exports.category = 'docs';
-exports.weight = 3;
+exports.position = 1;
 
 exports.hiddenArgs = ['folder'];
 exports.args = [

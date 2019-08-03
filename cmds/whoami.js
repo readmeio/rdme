@@ -6,7 +6,7 @@ exports.command = 'whoami';
 exports.usage = 'whoami';
 exports.description = 'Displays the current user and project authenticated with ReadMe.';
 exports.category = 'admin';
-exports.weight = 3;
+exports.position = 3;
 
 exports.args = [];
 

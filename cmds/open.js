@@ -7,7 +7,7 @@ exports.command = 'open';
 exports.usage = 'open';
 exports.description = 'Open your current ReadMe project in the browser.';
 exports.category = 'utilities';
-exports.weight = 1;
+exports.position = 2;
 
 exports.args = [];
 

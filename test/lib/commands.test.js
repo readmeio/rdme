@@ -35,8 +35,8 @@ describe('utils', () => {
           );
 
           assert.ok(
-            typeof cmd.weight === 'number' && cmd.usage.weight !== 0,
-            `${file} does not have a weight`,
+            typeof cmd.position === 'number' && cmd.usage.position !== 0,
+            `${file} does not have a position`,
           );
 
           assert.ok(Array.isArray(cmd.args), `${file} does not have an args array defined`);

@@ -9,7 +9,7 @@ exports.command = 'swagger';
 exports.usage = 'swagger [file] [options]';
 exports.description = 'Upload, or sync, your Swagger/OpenAPI file to ReadMe.';
 exports.category = 'apis';
-exports.weight = 2;
+exports.position = 1;
 
 exports.hiddenArgs = ['token', 'spec'];
 exports.args = [

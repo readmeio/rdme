@@ -7,7 +7,7 @@ exports.command = 'versions:update';
 exports.usage = 'versions:update <version> [options]';
 exports.description = 'Update an existing version for your project.';
 exports.category = 'versions';
-exports.weight = 4;
+exports.position = 3;
 
 exports.args = [
   {

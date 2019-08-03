@@ -11,7 +11,7 @@ exports.command = 'login';
 exports.usage = 'login [options]';
 exports.description = 'Login to a ReadMe project.';
 exports.category = 'admin';
-exports.weight = 1;
+exports.position = 1;
 
 exports.args = [
   {
