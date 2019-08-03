@@ -2,13 +2,14 @@ const assert = require('assert');
 const config = require('config');
 const configStore = require('../../lib/configstore');
 const cmd = require('../../cmds/open');
+const loginCmd = require('../../cmds/login');
 
 describe('open command', () => {
   it('should error if no project provided', done => {
     configStore.delete('project');
 
     cmd.run({}).catch(err => {
-      assert.equal(err.message, `Please login using \`${config.cli} ${cmd.usage}\`.`);
+      assert.equal(err.message, `Please login using \`${config.cli} ${loginCmd.command}\`.`);
       return done();
     });
   });

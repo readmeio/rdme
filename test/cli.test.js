@@ -88,7 +88,7 @@ describe('cli', () => {
     });
 
     it('should not show related commands on commands that have none', () => {
-      cli(['login', '--help']).then(output => {
+      cli(['swagger', '--help']).then(output => {
         assert.ok(output.indexOf('Related commands') === -1);
       });
     });
