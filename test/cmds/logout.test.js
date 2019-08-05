@@ -5,17 +5,21 @@ const cmd = require('../../cmds/logout');
 const loginCmd = require('../../cmds/login');
 
 describe('rdme logout', () => {
-  it('should error if user is not authenticated', done => {
+  it("should report the user as logged out if they aren't logged in", done => {
     configStore.delete('email');
     configStore.delete('project');
 
     cmd
       .run({})
-      .then(() => {
-        assert.ok(false, 'unauthenticated error message not displayed');
+      .then(msg => {
+        assert.equal(
+          msg,
+          `You have logged out of Readme. Please use \`${config.cli} ${loginCmd.command}\` to login again.`,
+        );
+        return done();
       })
       .catch(err => {
-        assert.equal(err.message, `Please login using \`${config.cli} ${loginCmd.command}\`.`);
+        assert.ok(false, err);
         return done();
       });
   });

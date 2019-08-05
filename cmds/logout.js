@@ -11,11 +11,9 @@ exports.position = 2;
 exports.args = [];
 
 exports.run = async () => {
-  if (!configStore.has('email') || !configStore.has('project')) {
-    return Promise.reject(new Error(`Please login using \`${config.cli} ${loginCmd.command}\`.`));
+  if (configStore.has('email') && configStore.has('project')) {
+    configStore.clear();
   }
-
-  configStore.clear();
 
   return Promise.resolve(
     `You have logged out of Readme. Please use \`${config.cli} ${loginCmd.command}\` to login again.`,
