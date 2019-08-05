@@ -8,7 +8,7 @@
    * [What is rdme?](#about-rdme)
    * [Configuration](#installation)
      * [Installation](#installation)
-     * [Login](#logging-in-to-a-readme-project)
+     * [Authentication](#authentication)
    * [Usage](#usage)
       * [Common options](#common-rdme-options)
       * [Swagger / OpenAPI](#swagger-/-openapi)
@@ -32,6 +32,8 @@ If you authenticate `rdme` to your ReadMe project, we will save your API key to 
 ```sh
 rdme login
 ```
+
+`rdme whoami` is also available to you to determine who you are logged in as, and to what project, as well as `rdme logout` for logging out of that account.
 
 ## Usage
 If you wish to get more information about any command within `rdme`, you can execute `rdme help <command>` or `rdme <command> --help`. You an also execute `rdme help` to see a global list of commands that `rdme` offers.
