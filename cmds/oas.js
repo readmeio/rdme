@@ -8,7 +8,7 @@ exports.command = 'oas';
 exports.usage = 'oas';
 exports.description = 'OAS related tasks. See https://npm.im/oas for more information.';
 exports.category = 'utilities';
-exports.weight = 4;
+exports.position = 1;
 
 exports.args = [];
 

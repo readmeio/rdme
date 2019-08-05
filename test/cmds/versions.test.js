@@ -34,11 +34,11 @@ const version2Payload = {
 
 jest.mock('../../lib/prompts');
 
-describe('Versions CLI Commands', () => {
+describe('rdme versions*', () => {
   beforeAll(() => nock.disableNetConnect());
   afterEach(() => nock.cleanAll());
 
-  describe('base command', () => {
+  describe('rdme versions', () => {
     it('should error if no api key provided', () => {
       versions.run({}).catch(err => {
         assert.equal(err.message, 'No project API key provided. Please use `--key`.');
@@ -92,7 +92,7 @@ describe('Versions CLI Commands', () => {
     });
   });
 
-  describe('create new version', () => {
+  describe('rdme versions:create', () => {
     it('should error if no api key provided', () => {
       createVersion.run({}).catch(err => {
         assert.equal(err.message, 'No project API key provided. Please use `--key`.');
@@ -148,7 +148,7 @@ describe('Versions CLI Commands', () => {
     });
   });
 
-  describe('delete version', () => {
+  describe('rdme versions:delete', () => {
     it('should error if no api key provided', () => {
       deleteVersion.run({}).catch(err => {
         assert.equal(err.message, 'No project API key provided. Please use `--key`.');
@@ -187,7 +187,7 @@ describe('Versions CLI Commands', () => {
     });
   });
 
-  describe('update version', () => {
+  describe('rdme versions:update', () => {
     it('should error if no api key provided', () => {
       updateVersion.run({}).catch(err => {
         assert.equal(err.message, 'No project API key provided. Please use `--key`.');
@@ -203,7 +203,7 @@ describe('Versions CLI Commands', () => {
       });
     });
 
-    it('should get a specific version object', async () => {
+    it('should update a specific version object', async () => {
       promptHandler.createVersionPrompt.mockResolvedValue({
         is_stable: false,
         is_beta: false,
@@ -222,7 +222,7 @@ describe('Versions CLI Commands', () => {
       mockRequest.done();
     });
 
-    it('should catch any post request errors', async () => {
+    it('should catch any put request errors', async () => {
       promptHandler.createVersionPrompt.mockResolvedValue({
         is_stable: false,
         is_beta: false,

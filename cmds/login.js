@@ -11,7 +11,7 @@ exports.command = 'login';
 exports.usage = 'login [options]';
 exports.description = 'Login to a ReadMe project.';
 exports.category = 'admin';
-exports.weight = 1;
+exports.position = 1;
 
 exports.args = [
   {
@@ -72,7 +72,7 @@ exports.run = async function(opts) {
       configStore.set('email', email);
       configStore.set('project', project);
 
-      return `Successfully logged in as ${email.green} in the ${project.blue} project`;
+      return `Successfully logged in as ${email.green} to the ${project.blue} project.`;
     })
     .catch(badRequest);
 };

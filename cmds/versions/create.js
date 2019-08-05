@@ -7,7 +7,7 @@ exports.command = 'versions:create';
 exports.usage = 'versions:create <version> [options]';
 exports.description = 'Create a new version for your project.';
 exports.category = 'versions';
-exports.weight = 4;
+exports.position = 2;
 
 exports.hiddenArgs = ['version'];
 exports.args = [
