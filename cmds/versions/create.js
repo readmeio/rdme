@@ -4,7 +4,7 @@ const { prompt } = require('enquirer');
 const promptOpts = require('../../lib/prompts');
 
 exports.command = 'versions:create';
-exports.usage = 'versions:create --version={project-version} [options]';
+exports.usage = 'versions:create <version> | --version={project-version} [options]';
 exports.description = 'Create a new version for your project.';
 exports.category = 'versions';
 exports.position = 2;

@@ -105,7 +105,7 @@ If you wish to see the raw output from our API in this response, supply  the `--
 
 #### Create a new version
 ```sh
-rdme versions:create --version={project-version}
+rdme versions:create <version> | --version={project-version}
 ```
 
 ##### Automating this process
@@ -114,7 +114,7 @@ If you wish to automate the process of creating a new project version, and not h
 For example:
 
 ```sh
-rdme versions:create --version={project-version} --fork={version-fork} --main={boolean} --beta={boolean} --isPublic={boolean}
+rdme versions:create <version> | --version={project-version} --fork={version-fork} --main={boolean} --beta={boolean} --isPublic={boolean}
 ```
 
 See `rdme versions:create --help` for a full list of flags.
