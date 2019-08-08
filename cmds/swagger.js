@@ -92,6 +92,7 @@ exports.run = async function(opts) {
       },
       headers: {
         'x-readme-version': versionCleaned,
+        'x-readme-source': 'cli',
       },
       auth: { user: key },
       resolveWithFullResponse: true,
