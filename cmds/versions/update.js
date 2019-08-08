@@ -4,7 +4,7 @@ const { prompt } = require('enquirer');
 const promptOpts = require('../../lib/prompts');
 
 exports.command = 'versions:update';
-exports.usage = 'versions:update <version> [options]';
+exports.usage = 'versions:update --version={project-version} [options]';
 exports.description = 'Update an existing version for your project.';
 exports.category = 'versions';
 exports.position = 3;
@@ -27,17 +27,17 @@ exports.args = [
   },
   {
     name: 'main',
-    type: Boolean,
+    type: String,
     description: 'Should this version be the primary (default) version for your project?',
   },
   {
     name: 'beta',
-    type: Boolean,
+    type: String,
     description: 'Is this version in beta?',
   },
   {
     name: 'isPublic',
-    type: Boolean,
+    type: String,
     description: 'Would you like to make this version public? Any primary version must be public.',
   },
 ];
@@ -69,10 +69,12 @@ exports.run = async function(opts) {
     json: {
       codename: codename || '',
       version: newVersion || promptResponse.newVersion,
-      is_stable: foundVersion.is_stable || main || promptResponse.is_stable,
-      is_beta: beta || promptResponse.is_beta,
+      is_stable: foundVersion.is_stable || main === 'true' || promptResponse.is_stable,
+      is_beta: beta === 'true' || promptResponse.is_beta,
       is_deprecated: deprecated || promptResponse.is_deprecated,
-      is_hidden: promptResponse.is_stable ? false : !(isPublic || promptResponse.is_hidden),
+      is_hidden: promptResponse.is_stable
+        ? false
+        : !(isPublic === 'true' || promptResponse.is_hidden),
     },
     auth: { user: key },
   };
