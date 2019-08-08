@@ -2,7 +2,7 @@ const request = require('request-promise-native');
 const config = require('config');
 
 exports.command = 'versions:delete';
-exports.usage = 'versions:delete <version> [options]';
+exports.usage = 'versions:delete --version={project-version} [options]';
 exports.description = 'Delete a version associated with your ReadMe project.';
 exports.category = 'versions';
 exports.position = 4;

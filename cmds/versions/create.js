@@ -4,7 +4,7 @@ const { prompt } = require('enquirer');
 const promptOpts = require('../../lib/prompts');
 
 exports.command = 'versions:create';
-exports.usage = 'versions:create <version> [options]';
+exports.usage = 'versions:create --version={project-version} [options]';
 exports.description = 'Create a new version for your project.';
 exports.category = 'versions';
 exports.position = 2;
@@ -33,17 +33,17 @@ exports.args = [
   },
   {
     name: 'main',
-    type: Boolean,
+    type: String,
     description: 'Should this version be the primary (default) version for your project?',
   },
   {
     name: 'beta',
-    type: Boolean,
+    type: String,
     description: 'Is this version in beta?',
   },
   {
     name: 'isPublic',
-    type: Boolean,
+    type: String,
     description: 'Would you like to make this version public? Any primary version must be public.',
   },
 ];
@@ -51,7 +51,7 @@ exports.args = [
 exports.run = async function(opts) {
   let versionList;
   const { key, version, codename, fork, main, beta, isPublic } = opts;
-
+  console.log(isPublic);
   if (!key) {
     return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
   }
@@ -78,10 +78,12 @@ exports.run = async function(opts) {
     json: {
       version,
       codename: codename || '',
-      is_stable: main || promptResponse.is_stable,
-      is_beta: beta || promptResponse.is_beta,
+      is_stable: main === 'true' || promptResponse.is_stable,
+      is_beta: beta === 'true' || promptResponse.is_beta,
       from: fork || promptResponse.from,
-      is_hidden: promptResponse.is_stable ? false : !(isPublic || promptResponse.is_hidden),
+      is_hidden: promptResponse.is_stable
+        ? false
+        : !(isPublic === 'true' || promptResponse.is_hidden),
     },
     auth: { user: key },
   };

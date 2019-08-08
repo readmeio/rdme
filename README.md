@@ -105,7 +105,7 @@ If you wish to see the raw output from our API in this response, supply  the `--
 
 #### Create a new version
 ```sh
-rdme versions:create <version>
+rdme versions:create --version={project-version}
 ```
 
 ##### Automating this process
@@ -114,14 +114,14 @@ If you wish to automate the process of creating a new project version, and not h
 For example:
 
 ```sh
-rdme versions:create <version> --fork={version-fork} --codename={version-name} --main --beta
+rdme versions:create --version={project-version} --fork={version-fork} --main={boolean} --beta={boolean} --isPublic={boolean}
 ```
 
 See `rdme versions:create --help` for a full list of flags.
 
 #### Update a version
 ```sh
-rdme versions:update <version>
+rdme versions:update --version={project-version}
 ```
 
 Like `versions:create`, if you wish to automate this process and not be blocked by CLI input, you can supply the necessary flags to this command. See `rdme versions:update --help` or [automating this process](#automating-this-process) for more information.
@@ -130,7 +130,7 @@ Like `versions:create`, if you wish to automate this process and not be blocked 
 You can remove a specific version from your project, as well as all of the attached specs
 
 ```sh
-rdme versions:delete <version>
+rdme versions:delete --version={project-version}
 ```
 
 ### Open your ReadMe project in your browser
