@@ -51,7 +51,7 @@ exports.args = [
 exports.run = async function(opts) {
   let versionList;
   const { key, version, codename, fork, main, beta, isPublic } = opts;
-  console.log(isPublic);
+
   if (!key) {
     return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
   }
