@@ -151,7 +151,7 @@ exports.run = async function(opts) {
 
   // If the user didn't supply a specification, let's try to locate what they've got, and upload
   // that. If they don't have any, let's let the user know how they can get one going.
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     ['swagger.json', 'swagger.yaml', 'openapi.json', 'openapi.yaml'].forEach(file => {
       if (!fs.existsSync(file)) {
         return;

@@ -107,7 +107,7 @@ module.exports = processArgv => {
       cmdArgv = cliArgs(bin.args, { partial: true, argv: processArgv.slice(1) });
     }
 
-    cmdArgv = Object.assign({}, { key: configStore.get('apiKey') }, cmdArgv);
+    cmdArgv = { key: configStore.get('apiKey'), ...cmdArgv };
 
     return bin.run(cmdArgv);
   } catch (e) {
