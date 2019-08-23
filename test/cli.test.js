@@ -117,4 +117,10 @@ describe('cli', () => {
       assert.equal(err.message, 'No project version provided. Please use `--version`.');
     });
   });
+
+  it('should not error with oas arguments passed in', () => {
+    assert.doesNotThrow(() => {
+      cli(['oas', 'init']);
+    });
+  });
 });
