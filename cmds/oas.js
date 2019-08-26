@@ -1,8 +1,5 @@
-const cp = require('child_process');
+const { spawn } = require('child_process');
 const path = require('path');
-const { promisify } = require('util');
-
-const spawn = promisify(cp.spawn);
 
 exports.command = 'oas';
 exports.usage = 'oas';
@@ -13,7 +10,15 @@ exports.position = 1;
 exports.args = [];
 
 exports.run = function() {
-  return spawn(path.join(__dirname, '..', 'node_modules', '.bin', 'oas'), process.argv.slice(3), {
+  const cp = spawn(path.join(__dirname, '..', 'node_modules', '.bin', 'oas'), process.argv.slice(3), {
     stdio: 'inherit',
+  });
+
+  return new Promise((resolve, reject) => {
+    cp.on('close', (code) => {
+      if (code && code > 0) return reject();
+
+      return resolve();
+    })
   });
 };
