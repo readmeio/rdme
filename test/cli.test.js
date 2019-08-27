@@ -120,7 +120,7 @@ describe('cli', () => {
 
   it('should not error with oas arguments passed in', () => {
     return assert.doesNotReject(() => {
-      return cli(['oas', 'init'])
+      return cli(['oas', 'init']);
     });
   });
 });
