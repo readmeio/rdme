@@ -100,7 +100,10 @@ module.exports = processArgv => {
       //
       // Instead of failing out to the user with an undecipherable "Unknown value: ..." error, let's
       // try to parse their request again but a tad less eager.
-      if (e.name !== 'UNKNOWN_VALUE' || (e.name === 'UNKNOWN_VALUE' && !argv.version)) {
+      if (
+        (e.name !== 'UNKNOWN_VALUE' || (e.name === 'UNKNOWN_VALUE' && !argv.version)) &&
+        argv.command !== 'oas'
+      ) {
         throw e;
       }
 
