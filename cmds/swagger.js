@@ -80,7 +80,8 @@ exports.run = async function(opts) {
 
     function error(err) {
       try {
-        return Promise.reject(new Error(JSON.parse(err.error).description));
+        const parsedError = JSON.parse(err.error);
+        return Promise.reject(new Error(parsedError.description || parsedError.error));
       } catch (e) {
         return Promise.reject(new Error('There was an error uploading!'));
       }
