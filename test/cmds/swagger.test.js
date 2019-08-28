@@ -66,6 +66,23 @@ describe('rdme swagger', () => {
       .then(() => mock.done());
   });
 
+  it('should properly bubble up validation error if invalid swagger is uploaded', () => {
+    const mock = nock(config.host)
+      .get(`/api/v1/version/${version}`)
+      .basicAuth({ user: key })
+      .reply(200, { version: '1.0.0' })
+      .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
+      .delayConnection(1000)
+      .basicAuth({ user: key })
+      .reply(500, {
+        error: 'README VALIDATION ERROR "x-samples-languages" must be of type "Array"',
+      });
+
+    return expect(swagger.run({ spec: './test/fixtures/invalid-swagger.json', key, version }))
+      .rejects.toThrow('README VALIDATION ERROR "x-samples-languages" must be of type "Array"')
+      .then(() => mock.done());
+  });
+
   it('should return a 404 if version flag not found', () => {});
 
   it('should request a version list if version is not found', () => {
