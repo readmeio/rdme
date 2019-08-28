@@ -74,7 +74,7 @@ describe('rdme swagger', () => {
       .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
       .delayConnection(1000)
       .basicAuth({ user: key })
-      .reply(500);
+      .reply(500, '{"error":"README VALIDATION ERROR "x-samples-languages" must be of type "Array""}');
 
     return expect(swagger.run({ spec: './test/fixtures/invalid-swagger.json', key, version }))
       .rejects.toThrow('README VALIDATION ERROR "x-samples-languages" must be of type "Array"')
