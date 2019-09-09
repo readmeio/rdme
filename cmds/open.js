@@ -1,5 +1,5 @@
 const config = require('config');
-const open = require('opn');
+const open = require('open');
 const configStore = require('../lib/configstore');
 const loginCmd = require('./login');
 
