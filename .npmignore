@@ -4,6 +4,7 @@
 .prettierignore
 .prettierrc
 .circleci
+.DS_Store
 test
 coverage
 TODO
