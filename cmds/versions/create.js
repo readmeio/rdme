@@ -1,10 +1,11 @@
 const request = require('request-promise-native');
 const config = require('config');
+const semver = require('semver');
 const { prompt } = require('enquirer');
 const promptOpts = require('../../lib/prompts');
 
 exports.command = 'versions:create';
-exports.usage = 'versions:create <version> | --version={project-version} [options]';
+exports.usage = 'versions:create --version=<version> [options]';
 exports.description = 'Create a new version for your project.';
 exports.category = 'versions';
 exports.position = 2;
@@ -56,10 +57,10 @@ exports.run = async function(opts) {
     return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
   }
 
-  if (!version) {
+  if (!version || !semver.valid(semver.coerce(version))) {
     return Promise.reject(
       new Error(
-        `No version provided. Please specify a semantic version. See \`${config.cli} help ${exports.command}\` for help.`,
+        `Please specify a semantic version. See \`${config.cli} help ${exports.command}\` for help.`,
       ),
     );
   }

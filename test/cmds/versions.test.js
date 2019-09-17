@@ -103,7 +103,7 @@ describe('rdme versions*', () => {
       createVersion.run({ key }).catch(err => {
         assert.equal(
           err.message,
-          'No version provided. Please specify a semantic version. See `rdme help versions:create` for help.',
+          'Please specify a semantic version. See `rdme help versions:create` for help.',
         );
       });
     });
@@ -159,7 +159,7 @@ describe('rdme versions*', () => {
       deleteVersion.run({ key }).catch(err => {
         assert.equal(
           err.message,
-          'No version provided. Please specify a semantic version. See `rdme help versions:delete` for help.',
+          'Please specify a semantic version. See `rdme help versions:delete` for help.',
         );
       });
     });
@@ -198,7 +198,7 @@ describe('rdme versions*', () => {
       updateVersion.run({ key }).catch(err => {
         assert.equal(
           err.message,
-          'No version provided. Please specify a semantic version. See `rdme help versions:update` for help.',
+          'Please specify a semantic version. See `rdme help versions:update` for help.',
         );
       });
     });
