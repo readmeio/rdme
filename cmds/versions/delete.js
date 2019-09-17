@@ -1,8 +1,9 @@
 const request = require('request-promise-native');
 const config = require('config');
+const semver = require('semver');
 
 exports.command = 'versions:delete';
-exports.usage = 'versions:delete --version={project-version} [options]';
+exports.usage = 'versions:delete --version=<version> [options]';
 exports.description = 'Delete a version associated with your ReadMe project.';
 exports.category = 'versions';
 exports.position = 4;
@@ -28,10 +29,10 @@ exports.run = async function(opts) {
     return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
   }
 
-  if (!version) {
+  if (!version || !semver.valid(semver.coerce(version))) {
     return Promise.reject(
       new Error(
-        `No version provided. Please specify a semantic version. See \`${config.cli} help ${exports.command}\` for help.`,
+        `Please specify a semantic version. See \`${config.cli} help ${exports.command}\` for help.`,
       ),
     );
   }

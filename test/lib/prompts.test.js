@@ -61,6 +61,11 @@ describe('prompt test bed', () => {
         await prompt.keypress(null, { name: 'down' });
         await prompt.keypress(null, { name: 'up' });
         await prompt.submit();
+        if (prompt.name === 'newVersion') {
+          // eslint-disable-next-line
+          prompt.value = '1.2.1';
+          await prompt.submit();
+        }
       });
       const answer = await enquirer.prompt(
         promptHandler.createVersionPrompt(versionlist, opts, false),
