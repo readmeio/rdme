@@ -11,6 +11,17 @@ const versionlist = [
   },
 ];
 
+const specList = [
+  {
+    _id: 'spec1',
+    title: 'spec1_title',
+  },
+  {
+    _id: 'spec2',
+    title: 'spec2_title',
+  },
+];
+
 describe('prompt test bed', () => {
   let enquirer;
 
@@ -50,6 +61,32 @@ describe('prompt test bed', () => {
 
       const answer = await enquirer.prompt(promptHandler.generatePrompts(versionlist));
       assert.equal(answer.versionSelection, '1');
+    });
+  });
+
+  describe('createOasPrompt()', () => {
+    it('should return a create option if selected', async () => {
+      enquirer.on('prompt', async prompt => {
+        await prompt.keypress(null, { name: 'down' });
+        await prompt.submit();
+      });
+      const answer = await enquirer.prompt(promptHandler.createOasPrompt([{}]));
+
+      assert.equal(answer.option, 'create');
+      assert.equal(answer.specId, '');
+    });
+
+    it('should return specId if user chooses to update file', async () => {
+      enquirer.on('prompt', async prompt => {
+        await prompt.keypress(null, { name: 'down' });
+        await prompt.keypress(null, { name: 'up' });
+        await prompt.submit();
+        await prompt.submit();
+      });
+      const answer = await enquirer.prompt(promptHandler.createOasPrompt(specList));
+
+      assert.equal(answer.option, 'update');
+      assert.equal(answer.specId, 'spec1');
     });
   });
 

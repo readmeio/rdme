@@ -14,6 +14,8 @@ describe('rdme swagger', () => {
   afterEach(() => nock.cleanAll());
 
   it('should POST a discovered file if none provided', () => {
+    promptHandler.createOasPrompt.mockResolvedValue({ option: 'create' });
+
     const mock = nock(config.host)
       .get(`/api/v1/version`)
       .basicAuth({ user: key })
@@ -21,6 +23,9 @@ describe('rdme swagger', () => {
       .post('/api/v1/version')
       .basicAuth({ user: key })
       .reply(200, { from: '1.0.1', version: '1.0.1' })
+      .get(`/api/v1/api-specification`)
+      .basicAuth({ user: key })
+      .reply(200, [])
       .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
       .delayConnection(1000)
       .basicAuth({ user: key })
@@ -42,6 +47,9 @@ describe('rdme swagger', () => {
       .get(`/api/v1/version/${version}`)
       .basicAuth({ user: key })
       .reply(200, { version: '1.0.0' })
+      .get(`/api/v1/api-specification`)
+      .basicAuth({ user: key })
+      .reply(200, [])
       .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
       .delayConnection(1000)
       .basicAuth({ user: key })
@@ -54,6 +62,9 @@ describe('rdme swagger', () => {
 
   it('should POST to the swagger api if no id provided', () => {
     const mock = nock(config.host)
+      .get(`/api/v1/api-specification`)
+      .basicAuth({ user: key })
+      .reply(200, [])
       .get(`/api/v1/version/${version}`)
       .basicAuth({ user: key })
       .reply(200, { version: '1.0.0' })
@@ -71,6 +82,9 @@ describe('rdme swagger', () => {
       .get(`/api/v1/version/${version}`)
       .basicAuth({ user: key })
       .reply(200, { version: '1.0.0' })
+      .get(`/api/v1/api-specification`)
+      .basicAuth({ user: key })
+      .reply(200, [])
       .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
       .delayConnection(1000)
       .basicAuth({ user: key })
@@ -98,6 +112,9 @@ describe('rdme swagger', () => {
       .post('/api/v1/version')
       .basicAuth({ user: key })
       .reply(200, { from: '1.0.1', version: '1.0.1' })
+      .get(`/api/v1/api-specification`)
+      .basicAuth({ user: key })
+      .reply(200, [])
       .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
       .basicAuth({ user: key })
       .reply(201, { id: 1 });
