@@ -44,6 +44,7 @@ exports.run = async function(opts) {
   const { spec, version } = opts;
   let { key, id } = opts;
   let selectedVersion;
+  let isUpdate;
 
   if (!key && opts.token) {
     console.warn(
@@ -56,9 +57,9 @@ exports.run = async function(opts) {
     return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
   }
 
-  function callApi(specPath, versionCleaned) {
+  async function callApi(specPath, versionCleaned) {
     function success(data) {
-      const message = !id
+      const message = !isUpdate
         ? "You've successfully uploaded a new swagger file to your ReadMe project!"
         : "You've successfully updated a swagger file on your ReadMe project!";
       console.log(`
@@ -99,15 +100,46 @@ exports.run = async function(opts) {
       resolveWithFullResponse: true,
     };
 
-    // Create
-    if (!id) {
+    function createSpec() {
       return request.post(`${config.host}/api/v1/api-specification`, options).then(success, error);
     }
 
-    // Update
-    return request
-      .put(`${config.host}/api/v1/api-specification/${id}`, options)
-      .then(success, error);
+    function updateSpec(specId) {
+      isUpdate = true;
+
+      return request
+        .put(`${config.host}/api/v1/api-specification/${specId}`, options)
+        .then(success, error);
+    }
+
+    /*
+      Create a new OAS file in Readme:
+        - Enter flow if user does not pass an id as cli arg
+        - Check to see if any existing files exist with a specific version
+        - If none exist, default to creating a new instance of a spec
+        - If found, prompt user to either create a new spec or update an existing one
+    */
+
+    if (!id) {
+      const apiSettings = await request.get(`${config.host}/api/v1/api-specification`, {
+        headers: {
+          'x-readme-version': versionCleaned,
+        },
+        json: true,
+        auth: { user: key },
+      });
+
+      if (!apiSettings.length) return createSpec();
+
+      const { option, specId } = await prompt(promptOpts.createOasPrompt(apiSettings));
+      return option === 'create' ? createSpec() : updateSpec(specId);
+    }
+
+    /*
+      Update an existing OAS file in Readme:
+        - Enter flow if user passes an id as cli arg
+    */
+    return updateSpec(id);
   }
 
   async function getSwaggerVersion(versionFlag) {
