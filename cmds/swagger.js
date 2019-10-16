@@ -44,6 +44,7 @@ exports.run = async function(opts) {
   const { spec, version } = opts;
   let { key, id } = opts;
   let selectedVersion;
+  let isUpdate;
 
   if (!key && opts.token) {
     console.warn(
@@ -58,7 +59,7 @@ exports.run = async function(opts) {
 
   async function callApi(specPath, versionCleaned) {
     function success(data) {
-      const message = !id
+      const message = !isUpdate
         ? "You've successfully uploaded a new swagger file to your ReadMe project!"
         : "You've successfully updated a swagger file on your ReadMe project!";
       console.log(`
@@ -104,6 +105,8 @@ exports.run = async function(opts) {
     }
 
     function updateSpec(specId) {
+      isUpdate = true;
+
       return request
         .put(`${config.host}/api/v1/api-specification/${specId}`, options)
         .then(success, error);
