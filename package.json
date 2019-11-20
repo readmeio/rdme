@@ -46,18 +46,16 @@
     "table-layout": "^1.0.0"
   },
   "devDependencies": {
+    "@readme/eslint-config": "^1.3.1",
     "eslint": "^6.2.0",
-    "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-config-prettier": "^6.0.0",
-    "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-jest": "^23.0.4",
     "jest": "^24.7.1",
     "nock": "^11.3.3",
     "prettier": "^1.12.1"
   },
   "scripts": {
-    "lint": "eslint -f unix .",
-    "prettier": "prettier --list-different \"./**/**.js\"",
-    "prettier:write": "prettier --write \"./**/**.js\"",
+    "lint": "eslint .",
+    "prettier": "prettier --list-different --write \"./**/**.js\"",
     "pretest": "npm run lint && npm run prettier",
     "test": "jest --coverage --silent"
   },

@@ -1,5 +1,20 @@
 {
+  "extends": ["@readme/eslint-config/testing"],
   "env": {
     "jest": true
+  },
+  "rules": {
+    "jest/expect-expect": [
+      "warn",
+      {
+        "assertFunctionNames": [
+          "expect",
+
+          // This rule doesn't recognize nock assertions.
+          // https://github.com/jest-community/eslint-plugin-jest/issues/471
+          "nock"
+        ]
+      }
+    ]
   }
 }

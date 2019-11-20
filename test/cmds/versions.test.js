@@ -1,6 +1,5 @@
 const nock = require('nock');
 const config = require('config');
-const assert = require('assert');
 const promptHandler = require('../../lib/prompts');
 
 const versions = require('../../cmds/versions/index');
@@ -40,8 +39,8 @@ describe('rdme versions*', () => {
 
   describe('rdme versions', () => {
     it('should error if no api key provided', () => {
-      versions.run({}).catch(err => {
-        assert.equal(err.message, 'No project API key provided. Please use `--key`.');
+      return versions.run({}).catch(err => {
+        expect(err.message).toBe('No project API key provided. Please use `--key`.');
       });
     });
 
@@ -52,8 +51,8 @@ describe('rdme versions*', () => {
         .reply(200, [versionPayload, version2Payload]);
 
       const table = await versions.run({ key });
-      assert.ok(table.indexOf(version) !== -1);
-      assert.ok(table.indexOf(version2) !== -1);
+      expect(table.indexOf(version) !== -1).toBeTruthy();
+      expect(table.indexOf(version2) !== -1).toBeTruthy();
       mockRequest.done();
     });
 
@@ -64,7 +63,7 @@ describe('rdme versions*', () => {
         .reply(200, [versionPayload, version2Payload]);
 
       const response = await versions.run({ key, raw: true });
-      assert.deepEqual(response, [versionPayload, version2Payload]);
+      expect(response).toStrictEqual([versionPayload, version2Payload]);
       mockRequest.done();
     });
 
@@ -74,10 +73,11 @@ describe('rdme versions*', () => {
         .basicAuth({ user: key })
         .reply(200, versionPayload);
 
-      const table = await versions.run({ key, version });
-      assert.ok(table.indexOf(version) !== -1);
-      assert.ok(table.indexOf(version2) === -1);
-      mockRequest.done();
+      return versions.run({ key, version }).then(table => {
+        expect(table.indexOf(version) !== -1).toBeTruthy();
+        expect(table.indexOf(version2) === -1).toBeTruthy();
+        mockRequest.done();
+      });
     });
 
     it('should get a specific version object if version flag provided and return it in a raw format', async () => {
@@ -86,23 +86,25 @@ describe('rdme versions*', () => {
         .basicAuth({ user: key })
         .reply(200, versionPayload);
 
-      const response = await versions.run({ key, version, raw: true });
-      assert.deepEqual(response, versionPayload);
-      mockRequest.done();
+      return versions.run({ key, version, raw: true }).then(response => {
+        expect(response).toStrictEqual(versionPayload);
+        mockRequest.done();
+      });
     });
   });
 
   describe('rdme versions:create', () => {
     it('should error if no api key provided', () => {
-      createVersion.run({}).catch(err => {
-        assert.equal(err.message, 'No project API key provided. Please use `--key`.');
+      expect.assertions(1);
+      return createVersion.run({}).catch(err => {
+        expect(err.message).toBe('No project API key provided. Please use `--key`.');
       });
     });
 
     it('should error if no version provided', () => {
-      createVersion.run({ key }).catch(err => {
-        assert.equal(
-          err.message,
+      expect.assertions(1);
+      return createVersion.run({ key }).catch(err => {
+        expect(err.message).toBe(
           'Please specify a semantic version. See `rdme help versions:create` for help.',
         );
       });
@@ -123,11 +125,13 @@ describe('rdme versions*', () => {
         .basicAuth({ user: key })
         .reply(201, { version });
 
-      await createVersion.run({ key, version });
-      mockRequest.done();
+      return createVersion.run({ key, version }).then(() => {
+        mockRequest.done();
+      });
     });
 
     it('should catch any post request errors', async () => {
+      expect.assertions(1);
       promptHandler.createVersionPrompt.mockResolvedValue({
         is_stable: false,
         is_beta: false,
@@ -138,27 +142,25 @@ describe('rdme versions*', () => {
         .basicAuth({ user: key })
         .reply(400);
 
-      await createVersion.run({ key, version, fork: '0.0.5' }).catch(err => {
-        assert.equal(
-          err.message,
-          'Failed to create a new version using your specified parameters.',
-        );
+      return createVersion.run({ key, version, fork: '0.0.5' }).catch(err => {
+        expect(err.message).toBe('Failed to create a new version using your specified parameters.');
+        mockRequest.done();
       });
-      mockRequest.done();
     });
   });
 
   describe('rdme versions:delete', () => {
     it('should error if no api key provided', () => {
-      deleteVersion.run({}).catch(err => {
-        assert.equal(err.message, 'No project API key provided. Please use `--key`.');
+      expect.assertions(1);
+      return deleteVersion.run({}).catch(err => {
+        expect(err.message).toBe('No project API key provided. Please use `--key`.');
       });
     });
 
     it('should error if no version provided', () => {
-      deleteVersion.run({ key }).catch(err => {
-        assert.equal(
-          err.message,
+      expect.assertions(1);
+      return deleteVersion.run({ key }).catch(err => {
+        expect(err.message).toBe(
           'Please specify a semantic version. See `rdme help versions:delete` for help.',
         );
       });
@@ -170,8 +172,9 @@ describe('rdme versions*', () => {
         .basicAuth({ user: key })
         .reply(200);
 
-      await deleteVersion.run({ key, version });
-      mockRequest.done();
+      return deleteVersion.run({ key, version }).then(() => {
+        mockRequest.done();
+      });
     });
 
     it('should catch any request errors', async () => {
@@ -180,24 +183,25 @@ describe('rdme versions*', () => {
         .basicAuth({ user: key })
         .reply(400);
 
-      await deleteVersion.run({ key, version }).catch(err => {
-        assert.equal(err.message, 'Failed to delete target version.');
+      return deleteVersion.run({ key, version }).catch(err => {
+        expect(err.message).toBe('Failed to delete target version.');
+        mockRequest.done();
       });
-      mockRequest.done();
     });
   });
 
   describe('rdme versions:update', () => {
     it('should error if no api key provided', () => {
-      updateVersion.run({}).catch(err => {
-        assert.equal(err.message, 'No project API key provided. Please use `--key`.');
+      expect.assertions(1);
+      return updateVersion.run({}).catch(err => {
+        expect(err.message).toBe('No project API key provided. Please use `--key`.');
       });
     });
 
     it('should error if no version provided', () => {
-      updateVersion.run({ key }).catch(err => {
-        assert.equal(
-          err.message,
+      expect.assertions(1);
+      return updateVersion.run({ key }).catch(err => {
+        expect(err.message).toBe(
           'Please specify a semantic version. See `rdme help versions:update` for help.',
         );
       });
@@ -218,11 +222,13 @@ describe('rdme versions*', () => {
         .basicAuth({ user: key })
         .reply(201, { version });
 
-      await updateVersion.run({ key, version });
-      mockRequest.done();
+      return updateVersion.run({ key, version }).then(() => {
+        mockRequest.done();
+      });
     });
 
     it('should catch any put request errors', async () => {
+      expect.assertions(1);
       promptHandler.createVersionPrompt.mockResolvedValue({
         is_stable: false,
         is_beta: false,
@@ -236,15 +242,10 @@ describe('rdme versions*', () => {
         .basicAuth({ user: key })
         .reply(400);
 
-      await updateVersion
-        .run({ key, version })
-        .then(() => {
-          assert.ok(false, 'error handling was not properly thrown on a bad request!');
-        })
-        .catch(() => {
-          assert.ok(true);
-        });
-      mockRequest.done();
+      return updateVersion.run({ key, version }).catch(err => {
+        expect(err.message).toBe('400 - undefined');
+        mockRequest.done();
+      });
     });
   });
 });
