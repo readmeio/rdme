@@ -1,4 +1,3 @@
-const assert = require('assert');
 const Enquirer = require('enquirer');
 const promptHandler = require('../../lib/prompts');
 
@@ -38,11 +37,11 @@ describe('prompt test bed', () => {
         }
 
         if (prompt.name === 'versionSelection') {
-          assert.equal(await prompt.skip(), true);
+          expect(await prompt.skip()).toBe(true);
         }
 
         if (prompt.name === 'newVersion') {
-          // eslint-disable-next-line
+          // eslint-disable-next-line require-atomic-updates, no-param-reassign
           prompt.value = '1.2.1';
           await prompt.submit();
         }
@@ -60,7 +59,7 @@ describe('prompt test bed', () => {
       });
 
       const answer = await enquirer.prompt(promptHandler.generatePrompts(versionlist));
-      assert.equal(answer.versionSelection, '1');
+      expect(answer.versionSelection).toBe('1');
     });
   });
 
@@ -72,8 +71,8 @@ describe('prompt test bed', () => {
       });
       const answer = await enquirer.prompt(promptHandler.createOasPrompt([{}]));
 
-      assert.equal(answer.option, 'create');
-      assert.equal(answer.specId, '');
+      expect(answer.option).toBe('create');
+      expect(answer.specId).toBe('');
     });
 
     it('should return specId if user chooses to update file', async () => {
@@ -85,8 +84,8 @@ describe('prompt test bed', () => {
       });
       const answer = await enquirer.prompt(promptHandler.createOasPrompt(specList));
 
-      assert.equal(answer.option, 'update');
-      assert.equal(answer.specId, 'spec1');
+      expect(answer.option).toBe('update');
+      expect(answer.specId).toBe('spec1');
     });
   });
 
@@ -99,7 +98,7 @@ describe('prompt test bed', () => {
         await prompt.keypress(null, { name: 'up' });
         await prompt.submit();
         if (prompt.name === 'newVersion') {
-          // eslint-disable-next-line
+          // eslint-disable-next-line require-atomic-updates, no-param-reassign
           prompt.value = '1.2.1';
           await prompt.submit();
         }
@@ -107,8 +106,8 @@ describe('prompt test bed', () => {
       const answer = await enquirer.prompt(
         promptHandler.createVersionPrompt(versionlist, opts, false),
       );
-      assert.equal(answer.is_hidden, false);
-      assert.equal(answer.from, '1');
+      expect(answer.is_hidden).toBe(false);
+      expect(answer.from).toBe('1');
     });
 
     it('should skip fork prompt if value passed', async () => {
@@ -123,7 +122,7 @@ describe('prompt test bed', () => {
 
       enquirer.on('prompt', async prompt => {
         if (prompt.name === 'newVersion') {
-          // eslint-disable-next-line
+          // eslint-disable-next-line no-param-reassign
           prompt.value = '1.2.1';
           await prompt.submit();
         }
@@ -134,8 +133,8 @@ describe('prompt test bed', () => {
       const answer = await enquirer.prompt(
         promptHandler.createVersionPrompt(versionlist, opts, true),
       );
-      assert.equal(answer.is_hidden, false);
-      assert.equal(answer.from, '');
+      expect(answer.is_hidden).toBe(false);
+      expect(answer.from).toBe('');
     });
   });
 });

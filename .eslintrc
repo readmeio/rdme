@@ -1,7 +1,7 @@
 {
-  "extends": ["airbnb-base", "prettier"],
+  "extends": ["@readme/eslint-config"],
+  "root": true,
   "rules": {
-    "no-console": 0,
-    "func-names": ["error", "never"],
+    "no-console": "off"
   }
 }

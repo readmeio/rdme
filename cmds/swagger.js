@@ -72,7 +72,7 @@ exports.run = async function(opts) {
 
     ${
       `rdme swagger FILE --key=${key} --id=${
-        // eslint-disable-next-line
+        // eslint-disable-next-line no-underscore-dangle
         JSON.parse(data.body)._id
       }`.green
     }

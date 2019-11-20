@@ -97,7 +97,7 @@ describe('rdme swagger', () => {
       .then(() => mock.done());
   });
 
-  it('should return a 404 if version flag not found', () => {});
+  it.todo('should return a 404 if version flag not found');
 
   it('should request a version list if version is not found', () => {
     promptHandler.generatePrompts.mockResolvedValue({
@@ -148,13 +148,13 @@ describe('rdme swagger', () => {
       .then(() => mock.done());
   });
 
-  it('should error if no api key provided', () => {
-    expect(swagger.run({ spec: './test/fixtures/swagger.json' })).rejects.toThrow(
+  it('should error if no api key provided', async () => {
+    await expect(swagger.run({ spec: './test/fixtures/swagger.json' })).rejects.toThrow(
       'No project API key provided. Please use `--key`.',
     );
   });
 
-  it('should error if no file was provided or able to be discovered', () => {
-    expect(swagger.run({ key })).rejects.toThrowError();
+  it('should error if no file was provided or able to be discovered', async () => {
+    await expect(swagger.run({ key })).rejects.toThrow();
   });
 });

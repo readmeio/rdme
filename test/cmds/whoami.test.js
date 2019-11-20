@@ -1,38 +1,34 @@
-const assert = require('assert');
 const config = require('config');
 const configStore = require('../../lib/configstore');
 const cmd = require('../../cmds/whoami');
 const loginCmd = require('../../cmds/login');
 
 describe('rdme whoami', () => {
-  it('should error if user is not authenticated', done => {
+  it('should error if user is not authenticated', () => {
     configStore.delete('email');
     configStore.delete('project');
 
-    cmd
+    return cmd
       .run({})
       .then(() => {
-        assert.ok(false, 'unauthenticated error message not displayed');
+        throw new Error('unauthenticated error message not displayed');
       })
       .catch(err => {
-        assert.equal(err.message, `Please login using \`${config.cli} ${loginCmd.command}\`.`);
-        return done();
+        expect(err.message).toBe(`Please login using \`${config.cli} ${loginCmd.command}\`.`);
       });
   });
 
-  it('should return the authenticated user', done => {
+  it('should return the authenticated user', () => {
     configStore.set('email', 'email@example.com');
     configStore.set('project', 'subdomain');
 
-    cmd
+    return cmd
       .run({})
       .then(() => {
-        assert.ok(true);
-        return done();
+        expect(true).toBe(true);
       })
       .catch(err => {
-        assert.ok(false, err);
-        return done();
+        throw new Error(err);
       });
   });
 });
