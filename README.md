@@ -2,7 +2,7 @@
 
 [![](https://d3vv6lp55qjaqc.cloudfront.net/items/1M3C3j0I0s0j3T362344/Untitled-2.png)](https://readme.com)
 
-[![npm](https://img.shields.io/npm/v/rdme)](https://npm.im/rdme) [![CircleCI](https://circleci.com/gh/readmeio/rdme.svg?style=svg)](https://circleci.com/gh/readmeio/rdme)
+[![npm](https://img.shields.io/npm/v/rdme)](https://npm.im/rdme) [![Build](https://github.com/readmeio/rdme/workflows/CI/badge.svg)](https://github.com/readmeio/rdme)
 
 ### Table of Contents
    * [What is rdme?](#about-rdme)
