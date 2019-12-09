@@ -155,6 +155,15 @@ describe('rdme swagger', () => {
   });
 
   it('should error if no file was provided or able to be discovered', async () => {
-    await expect(swagger.run({ key })).rejects.toThrow();
+    const mock = nock(config.host)
+      .get(`/api/v1/version/${version}`)
+      .basicAuth({ user: key })
+      .reply(200, { version: '1.0.0' });
+
+    await expect(swagger.run({ key, version })).rejects.toThrow(
+      /We couldn't find a Swagger or OpenAPI file./,
+    );
+
+    mock.done();
   });
 });
