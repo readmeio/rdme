@@ -5,7 +5,9 @@ const cmd = require('../../cmds/login');
 
 describe('rdme login', () => {
   beforeAll(() => nock.disableNetConnect());
+
   afterAll(() => nock.cleanAll());
+
   afterEach(() => configStore.clear());
 
   it('should error if no project provided', () => {

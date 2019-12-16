@@ -11,6 +11,7 @@ jest.mock('../../lib/prompts');
 
 describe('rdme swagger', () => {
   beforeAll(() => nock.disableNetConnect());
+
   afterEach(() => nock.cleanAll());
 
   it('should POST a discovered file if none provided', () => {

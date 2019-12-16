@@ -35,6 +35,7 @@ jest.mock('../../lib/prompts');
 
 describe('rdme versions*', () => {
   beforeAll(() => nock.disableNetConnect());
+
   afterEach(() => nock.cleanAll());
 
   describe('rdme versions', () => {
