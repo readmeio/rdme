@@ -14,6 +14,7 @@ const version = '1.0.0';
 
 describe('rdme docs', () => {
   beforeAll(() => nock.disableNetConnect());
+
   afterAll(() => nock.cleanAll());
 
   it('should error if no api key provided', () => {
@@ -38,6 +39,7 @@ describe('rdme docs', () => {
   });
 
   it.todo('should error if the argument isnt a folder');
+
   it.todo('should error if the folder contains no markdown files');
 
   describe('existing docs', () => {
