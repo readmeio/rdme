@@ -1,3 +1,30 @@
+## 3.6.0 (2019-12-16)
+
+* docs: creating a changelog (#112) ([e1b4203](https://github.com/readmeio/rdme/commit/e1b4203)), closes [#112](https://github.com/readmeio/rdme/issues/112)
+* chore: adding a github action ci shield to the readme ([19d78e4](https://github.com/readmeio/rdme/commit/19d78e4))
+* chore: alphabetizing scripts in the package file ([5a6de1c](https://github.com/readmeio/rdme/commit/5a6de1c))
+* chore: Bump @readme/eslint-config from 1.3.1 to 1.7.0 (#107) ([1a3f773](https://github.com/readmeio/rdme/commit/1a3f773)), closes [#107](https://github.com/readmeio/rdme/issues/107)
+* chore: Bump command-line-usage from 6.0.2 to 6.1.0 (#98) ([3756135](https://github.com/readmeio/rdme/commit/3756135)), closes [#98](https://github.com/readmeio/rdme/issues/98)
+* chore: Bump eslint from 6.6.0 to 6.7.1 (#104) ([26c2d5c](https://github.com/readmeio/rdme/commit/26c2d5c)), closes [#104](https://github.com/readmeio/rdme/issues/104)
+* chore: Bump eslint from 6.7.1 to 6.7.2 (#106) ([a3ef903](https://github.com/readmeio/rdme/commit/a3ef903)), closes [#106](https://github.com/readmeio/rdme/issues/106)
+* chore: Bump eslint-plugin-jest from 23.0.4 to 23.1.1 (#105) ([819f6e8](https://github.com/readmeio/rdme/commit/819f6e8)), closes [#105](https://github.com/readmeio/rdme/issues/105)
+* chore: Bump nock from 11.4.0 to 11.7.0 (#97) ([2c4c4cb](https://github.com/readmeio/rdme/commit/2c4c4cb)), closes [#97](https://github.com/readmeio/rdme/issues/97)
+* chore: Bump oas from 0.8.18 to 1.0.1 (#102) ([d766f11](https://github.com/readmeio/rdme/commit/d766f11)), closes [#102](https://github.com/readmeio/rdme/issues/102)
+* chore: Bump prettier from 1.18.0 to 1.19.1 (#99) ([1901244](https://github.com/readmeio/rdme/commit/1901244)), closes [#99](https://github.com/readmeio/rdme/issues/99)
+* chore: loading @readme/eslint-config and resolving issues (#103) ([26a1441](https://github.com/readmeio/rdme/commit/26a1441)), closes [#103](https://github.com/readmeio/rdme/issues/103)
+* chore: removing circleci integration ([61f6677](https://github.com/readmeio/rdme/commit/61f6677))
+* chore(deps-dev): Bump @readme/eslint-config from 1.7.0 to 1.8.0 (#110) ([c1d245f](https://github.com/readmeio/rdme/commit/c1d245f)), closes [#110](https://github.com/readmeio/rdme/issues/110)
+* chore(deps): Bump config from 3.2.3 to 3.2.4 (#93) ([74e1578](https://github.com/readmeio/rdme/commit/74e1578)), closes [#93](https://github.com/readmeio/rdme/issues/93)
+* chore(deps): Bump oas from 1.0.1 to 1.0.2 (#109) ([63a02dc](https://github.com/readmeio/rdme/commit/63a02dc)), closes [#109](https://github.com/readmeio/rdme/issues/109)
+* chore(deps): Bump open from 6.4.0 to 7.0.0 (#92) ([deceeba](https://github.com/readmeio/rdme/commit/deceeba)), closes [#92](https://github.com/readmeio/rdme/issues/92)
+* chore(deps): Bump request-promise-native from 1.0.7 to 1.0.8 (#100) ([fd3612e](https://github.com/readmeio/rdme/commit/fd3612e)), closes [#100](https://github.com/readmeio/rdme/issues/100)
+* chore(deps): Bump semver from 6.3.0 to 7.0.0 (#111) ([9aec05a](https://github.com/readmeio/rdme/commit/9aec05a)), closes [#111](https://github.com/readmeio/rdme/issues/111)
+* feat: github actions for ci builds ([cf446ee](https://github.com/readmeio/rdme/commit/cf446ee))
+* deps: Bump eslint from 6.5.1 to 6.6.0 (#95) ([3a73153](https://github.com/readmeio/rdme/commit/3a73153)), closes [#95](https://github.com/readmeio/rdme/issues/95)
+* deps: Bump eslint-config-prettier from 6.4.0 to 6.5.0 (#94) ([ee92f31](https://github.com/readmeio/rdme/commit/ee92f31)), closes [#94](https://github.com/readmeio/rdme/issues/94)
+
+
+
 ## 3.5.0 (2019-10-16)
 
 * 3.5.0 ([1e6cc4f](https://github.com/readmeio/rdme/commit/1e6cc4f))
