@@ -45,10 +45,10 @@ const getVersionsAsTable = versions => {
     table.push([
       v.version,
       v.codename || 'None',
-      v.is_deprecated ? 'no' : 'yes',
-      v.is_hidden ? 'no' : 'yes',
-      v.is_beta ? 'no' : 'yes',
-      v.is_stable ? 'no' : 'yes',
+      v.is_deprecated ? 'yes' : 'no',
+      v.is_hidden ? 'yes' : 'no',
+      v.is_beta ? 'yes' : 'no',
+      v.is_stable ? 'yes' : 'no',
       v.createdAt,
     ]);
   });
@@ -69,10 +69,10 @@ const getVersionFormatted = version => {
   });
 
   table.push([
-    version.is_deprecated ? 'no' : 'yes',
-    version.is_hidden ? 'no' : 'yes',
-    version.is_beta ? 'no' : 'yes',
-    version.is_stable ? 'no' : 'yes',
+    version.is_deprecated ? 'yes' : 'no',
+    version.is_hidden ? 'yes' : 'no',
+    version.is_beta ? 'yes' : 'no',
+    version.is_stable ? 'yes' : 'no',
   ]);
 
   output.push(table.toString());
