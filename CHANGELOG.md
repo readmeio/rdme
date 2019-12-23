@@ -1,3 +1,12 @@
+## <small>3.6.1 (2019-12-23)</small>
+
+* fix: Fix booleans (#117) ([77091c6](https://github.com/readmeio/rdme/commit/77091c6)), closes [#117](https://github.com/readmeio/rdme/issues/117)
+* chore(deps-dev): Bump @readme/eslint-config from 1.8.0 to 1.8.1 (#116) ([e433624](https://github.com/readmeio/rdme/commit/e433624)), closes [#116](https://github.com/readmeio/rdme/issues/116)
+* chore(deps): Bump oas from 1.0.2 to 1.1.0 (#115) ([00837ac](https://github.com/readmeio/rdme/commit/00837ac)), closes [#115](https://github.com/readmeio/rdme/issues/115)
+* chore(deps): Bump semver from 7.0.0 to 7.1.1 (#114) ([6923511](https://github.com/readmeio/rdme/commit/6923511)), closes [#114](https://github.com/readmeio/rdme/issues/114)
+* chore(deps-dev): Bump eslint from 6.7.2 to 6.8.0 (#113) ([e920ee8](https://github.com/readmeio/rdme/commit/e920ee8)), closes [#113](https://github.com/readmeio/rdme/issues/113)
+
+
 ## 3.6.0 (2019-12-16)
 
 * docs: creating a changelog (#112) ([e1b4203](https://github.com/readmeio/rdme/commit/e1b4203)), closes [#112](https://github.com/readmeio/rdme/issues/112)
