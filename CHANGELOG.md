@@ -12,15 +12,15 @@
 * docs: creating a changelog (#112) ([e1b4203](https://github.com/readmeio/rdme/commit/e1b4203)), closes [#112](https://github.com/readmeio/rdme/issues/112)
 * chore: adding a github action ci shield to the readme ([19d78e4](https://github.com/readmeio/rdme/commit/19d78e4))
 * chore: alphabetizing scripts in the package file ([5a6de1c](https://github.com/readmeio/rdme/commit/5a6de1c))
-* chore: Bump @readme/eslint-config from 1.3.1 to 1.7.0 (#107) ([1a3f773](https://github.com/readmeio/rdme/commit/1a3f773)), closes [#107](https://github.com/readmeio/rdme/issues/107)
-* chore: Bump command-line-usage from 6.0.2 to 6.1.0 (#98) ([3756135](https://github.com/readmeio/rdme/commit/3756135)), closes [#98](https://github.com/readmeio/rdme/issues/98)
-* chore: Bump eslint from 6.6.0 to 6.7.1 (#104) ([26c2d5c](https://github.com/readmeio/rdme/commit/26c2d5c)), closes [#104](https://github.com/readmeio/rdme/issues/104)
-* chore: Bump eslint from 6.7.1 to 6.7.2 (#106) ([a3ef903](https://github.com/readmeio/rdme/commit/a3ef903)), closes [#106](https://github.com/readmeio/rdme/issues/106)
-* chore: Bump eslint-plugin-jest from 23.0.4 to 23.1.1 (#105) ([819f6e8](https://github.com/readmeio/rdme/commit/819f6e8)), closes [#105](https://github.com/readmeio/rdme/issues/105)
-* chore: Bump nock from 11.4.0 to 11.7.0 (#97) ([2c4c4cb](https://github.com/readmeio/rdme/commit/2c4c4cb)), closes [#97](https://github.com/readmeio/rdme/issues/97)
-* chore: Bump oas from 0.8.18 to 1.0.1 (#102) ([d766f11](https://github.com/readmeio/rdme/commit/d766f11)), closes [#102](https://github.com/readmeio/rdme/issues/102)
-* chore: Bump prettier from 1.18.0 to 1.19.1 (#99) ([1901244](https://github.com/readmeio/rdme/commit/1901244)), closes [#99](https://github.com/readmeio/rdme/issues/99)
-* chore: loading @readme/eslint-config and resolving issues (#103) ([26a1441](https://github.com/readmeio/rdme/commit/26a1441)), closes [#103](https://github.com/readmeio/rdme/issues/103)
+* chore(deps-dev): Bump @readme/eslint-config from 1.3.1 to 1.7.0 (#107) ([1a3f773](https://github.com/readmeio/rdme/commit/1a3f773)), closes [#107](https://github.com/readmeio/rdme/issues/107)
+* chore(deps): Bump command-line-usage from 6.0.2 to 6.1.0 (#98) ([3756135](https://github.com/readmeio/rdme/commit/3756135)), closes [#98](https://github.com/readmeio/rdme/issues/98)
+* chore(deps-dev): Bump eslint from 6.6.0 to 6.7.1 (#104) ([26c2d5c](https://github.com/readmeio/rdme/commit/26c2d5c)), closes [#104](https://github.com/readmeio/rdme/issues/104)
+* chore(deps-dev): Bump eslint from 6.7.1 to 6.7.2 (#106) ([a3ef903](https://github.com/readmeio/rdme/commit/a3ef903)), closes [#106](https://github.com/readmeio/rdme/issues/106)
+* chore(deps-dev): Bump eslint-plugin-jest from 23.0.4 to 23.1.1 (#105) ([819f6e8](https://github.com/readmeio/rdme/commit/819f6e8)), closes [#105](https://github.com/readmeio/rdme/issues/105)
+* chore(deps-dev): Bump nock from 11.4.0 to 11.7.0 (#97) ([2c4c4cb](https://github.com/readmeio/rdme/commit/2c4c4cb)), closes [#97](https://github.com/readmeio/rdme/issues/97)
+* chore(deps): Bump oas from 0.8.18 to 1.0.1 (#102) ([d766f11](https://github.com/readmeio/rdme/commit/d766f11)), closes [#102](https://github.com/readmeio/rdme/issues/102)
+* chore(deps-dev): Bump prettier from 1.18.0 to 1.19.1 (#99) ([1901244](https://github.com/readmeio/rdme/commit/1901244)), closes [#99](https://github.com/readmeio/rdme/issues/99)
+* chore(deps-dev): loading @readme/eslint-config and resolving issues (#103) ([26a1441](https://github.com/readmeio/rdme/commit/26a1441)), closes [#103](https://github.com/readmeio/rdme/issues/103)
 * chore: removing circleci integration ([61f6677](https://github.com/readmeio/rdme/commit/61f6677))
 * chore(deps-dev): Bump @readme/eslint-config from 1.7.0 to 1.8.0 (#110) ([c1d245f](https://github.com/readmeio/rdme/commit/c1d245f)), closes [#110](https://github.com/readmeio/rdme/issues/110)
 * chore(deps): Bump config from 3.2.3 to 3.2.4 (#93) ([74e1578](https://github.com/readmeio/rdme/commit/74e1578)), closes [#93](https://github.com/readmeio/rdme/issues/93)
@@ -29,125 +29,104 @@
 * chore(deps): Bump request-promise-native from 1.0.7 to 1.0.8 (#100) ([fd3612e](https://github.com/readmeio/rdme/commit/fd3612e)), closes [#100](https://github.com/readmeio/rdme/issues/100)
 * chore(deps): Bump semver from 6.3.0 to 7.0.0 (#111) ([9aec05a](https://github.com/readmeio/rdme/commit/9aec05a)), closes [#111](https://github.com/readmeio/rdme/issues/111)
 * feat: github actions for ci builds ([cf446ee](https://github.com/readmeio/rdme/commit/cf446ee))
-* deps: Bump eslint from 6.5.1 to 6.6.0 (#95) ([3a73153](https://github.com/readmeio/rdme/commit/3a73153)), closes [#95](https://github.com/readmeio/rdme/issues/95)
-* deps: Bump eslint-config-prettier from 6.4.0 to 6.5.0 (#94) ([ee92f31](https://github.com/readmeio/rdme/commit/ee92f31)), closes [#94](https://github.com/readmeio/rdme/issues/94)
+* chore(deps-dev): Bump eslint from 6.5.1 to 6.6.0 (#95) ([3a73153](https://github.com/readmeio/rdme/commit/3a73153)), closes [#95](https://github.com/readmeio/rdme/issues/95)
+* chore(deps-dev): Bump eslint-config-prettier from 6.4.0 to 6.5.0 (#94) ([ee92f31](https://github.com/readmeio/rdme/commit/ee92f31)), closes [#94](https://github.com/readmeio/rdme/issues/94)
 
 
 
 ## 3.5.0 (2019-10-16)
 
-* 3.5.0 ([1e6cc4f](https://github.com/readmeio/rdme/commit/1e6cc4f))
 * feat: Behavioral updates to API spec uploads and updates. ([f3a24fc](https://github.com/readmeio/rdme/commit/f3a24fc))
 
 
 
 ## <small>3.4.9 (2019-10-14)</small>
 
-* 3.4.9 ([0a22dc0](https://github.com/readmeio/rdme/commit/0a22dc0))
-* Bump config from 3.2.2 to 3.2.3 (#86) ([f62750d](https://github.com/readmeio/rdme/commit/f62750d)), closes [#86](https://github.com/readmeio/rdme/issues/86)
-* deps: Bump eslint from 6.5.0 to 6.5.1 (#88) ([fde111e](https://github.com/readmeio/rdme/commit/fde111e)), closes [#88](https://github.com/readmeio/rdme/issues/88)
-* deps: Bump eslint-config-prettier from 6.3.0 to 6.4.0 (#87) ([4cb93f0](https://github.com/readmeio/rdme/commit/4cb93f0)), closes [#87](https://github.com/readmeio/rdme/issues/87)
-* deps: Bump nock from 11.3.5 to 11.4.0 (#91) ([7b807ef](https://github.com/readmeio/rdme/commit/7b807ef)), closes [#91](https://github.com/readmeio/rdme/issues/91)
-* deps: Bump oas from 0.8.17 to 0.8.18 (#90) ([16f3685](https://github.com/readmeio/rdme/commit/16f3685)), closes [#90](https://github.com/readmeio/rdme/issues/90)
+* chore(deps): Bump config from 3.2.2 to 3.2.3 (#86) ([f62750d](https://github.com/readmeio/rdme/commit/f62750d)), closes [#86](https://github.com/readmeio/rdme/issues/86)
+* chore(deps-dev): Bump eslint from 6.5.0 to 6.5.1 (#88) ([fde111e](https://github.com/readmeio/rdme/commit/fde111e)), closes [#88](https://github.com/readmeio/rdme/issues/88)
+* chore(deps-dev): Bump eslint-config-prettier from 6.3.0 to 6.4.0 (#87) ([4cb93f0](https://github.com/readmeio/rdme/commit/4cb93f0)), closes [#87](https://github.com/readmeio/rdme/issues/87)
+* chore(deps-dev): Bump nock from 11.3.5 to 11.4.0 (#91) ([7b807ef](https://github.com/readmeio/rdme/commit/7b807ef)), closes [#91](https://github.com/readmeio/rdme/issues/91)
+* chore(deps): Bump oas from 0.8.17 to 0.8.18 (#90) ([16f3685](https://github.com/readmeio/rdme/commit/16f3685)), closes [#90](https://github.com/readmeio/rdme/issues/90)
 
 
 
 ## <small>3.4.8 (2019-09-30)</small>
 
-* 3.4.8 ([db592f0](https://github.com/readmeio/rdme/commit/db592f0))
-* Bump colors from 1.3.3 to 1.4.0 ([49d4293](https://github.com/readmeio/rdme/commit/49d4293))
-* Bump enquirer from 2.3.1 to 2.3.2 (#81) ([ea1f7bb](https://github.com/readmeio/rdme/commit/ea1f7bb)), closes [#81](https://github.com/readmeio/rdme/issues/81)
-* Bump eslint from 6.3.0 to 6.5.0 ([5bda864](https://github.com/readmeio/rdme/commit/5bda864))
-* Bump eslint-config-prettier from 6.2.0 to 6.3.0 (#74) ([76b9230](https://github.com/readmeio/rdme/commit/76b9230)), closes [#74](https://github.com/readmeio/rdme/issues/74)
-* Bump nock from 11.3.3 to 11.3.5 ([b52457a](https://github.com/readmeio/rdme/commit/b52457a))
+* chore(deps): Bump colors from 1.3.3 to 1.4.0 ([49d4293](https://github.com/readmeio/rdme/commit/49d4293))
+* chore(deps): Bump enquirer from 2.3.1 to 2.3.2 (#81) ([ea1f7bb](https://github.com/readmeio/rdme/commit/ea1f7bb)), closes [#81](https://github.com/readmeio/rdme/issues/81)
+* chore(deps-dev): Bump eslint from 6.3.0 to 6.5.0 ([5bda864](https://github.com/readmeio/rdme/commit/5bda864))
+* chore(deps-dev): Bump eslint-config-prettier from 6.2.0 to 6.3.0 (#74) ([76b9230](https://github.com/readmeio/rdme/commit/76b9230)), closes [#74](https://github.com/readmeio/rdme/issues/74)
+* chore(deps-dev): Bump nock from 11.3.3 to 11.3.5 ([b52457a](https://github.com/readmeio/rdme/commit/b52457a))
 
 
 
 ## <small>3.4.7 (2019-09-17)</small>
 
-* [Security] Bump eslint-utils from 1.4.0 to 1.4.2 (#66) ([7c74f66](https://github.com/readmeio/rdme/commit/7c74f66)), closes [#66](https://github.com/readmeio/rdme/issues/66)
-* 3.4.3 ([067eefb](https://github.com/readmeio/rdme/commit/067eefb))
-* 3.4.4 ([5244ac6](https://github.com/readmeio/rdme/commit/5244ac6))
-* 3.4.5 ([456a13d](https://github.com/readmeio/rdme/commit/456a13d))
-* 3.4.6 ([9e44583](https://github.com/readmeio/rdme/commit/9e44583))
-* 3.4.7 ([781f3d8](https://github.com/readmeio/rdme/commit/781f3d8))
-* Adding .DS_Store to npmignore ([a59d867](https://github.com/readmeio/rdme/commit/a59d867))
-* Bump eslint from 5.16.0 to 6.2.0 (#60) ([446e305](https://github.com/readmeio/rdme/commit/446e305)), closes [#60](https://github.com/readmeio/rdme/issues/60)
-* Bump eslint from 6.2.0 to 6.3.0 (#68) ([a115f8b](https://github.com/readmeio/rdme/commit/a115f8b)), closes [#68](https://github.com/readmeio/rdme/issues/68)
-* Bump eslint-config-airbnb-base from 13.2.0 to 14.0.0 (#59) ([4c3bf3f](https://github.com/readmeio/rdme/commit/4c3bf3f)), closes [#59](https://github.com/readmeio/rdme/issues/59)
-* Bump eslint-config-prettier from 6.0.0 to 6.1.0 (#63) ([5a66307](https://github.com/readmeio/rdme/commit/5a66307)), closes [#63](https://github.com/readmeio/rdme/issues/63)
-* Bump eslint-config-prettier from 6.1.0 to 6.2.0 (#70) ([a98f32c](https://github.com/readmeio/rdme/commit/a98f32c)), closes [#70](https://github.com/readmeio/rdme/issues/70)
-* Bump jest from 24.8.0 to 24.9.0 (#61) ([e16a7e4](https://github.com/readmeio/rdme/commit/e16a7e4)), closes [#61](https://github.com/readmeio/rdme/issues/61)
-* Bump nock from 10.0.6 to 11.3.3 (#71) ([f280035](https://github.com/readmeio/rdme/commit/f280035)), closes [#71](https://github.com/readmeio/rdme/issues/71)
-* Bump oas from 0.8.15 to 0.8.16 (#64) ([28384a7](https://github.com/readmeio/rdme/commit/28384a7)), closes [#64](https://github.com/readmeio/rdme/issues/64)
-* Check if command is 'oas' before throwing error (#62) ([78f346b](https://github.com/readmeio/rdme/commit/78f346b)), closes [#62](https://github.com/readmeio/rdme/issues/62)
-* fix/help-semver-validation (#78) ([a6c3e83](https://github.com/readmeio/rdme/commit/a6c3e83)), closes [#78](https://github.com/readmeio/rdme/issues/78)
-* petstore.yaml should not have been committed into master. ([bf9d477](https://github.com/readmeio/rdme/commit/bf9d477))
-* Properly report OAS validation errors (#67) ([c59f038](https://github.com/readmeio/rdme/commit/c59f038)), closes [#67](https://github.com/readmeio/rdme/issues/67)
-* Replacing the opn module with open since it was renamed. (#72) ([8bde210](https://github.com/readmeio/rdme/commit/8bde210)), closes [#72](https://github.com/readmeio/rdme/issues/72)
-* Updating the oas dependency. ([4977412](https://github.com/readmeio/rdme/commit/4977412))
+* fix: Fix semver validation (#78) ([a6c3e83](https://github.com/readmeio/rdme/commit/a6c3e83)), closes [#78](https://github.com/readmeio/rdme/issues/78)
+
+
+
+## <small>3.4.6 (2019-09-10)</small>
+
+* chore(deps-dev): Updating the oas dependency. ([4977412](https://github.com/readmeio/rdme/commit/4977412))
+* chore: Adding .DS_Store to npmignore ([a59d867](https://github.com/readmeio/rdme/commit/a59d867))
+
+
+
+## <small>3.4.5 (2019-09-10)</small>
+
+* chore(deps): Replacing the opn module with open since it was renamed. (#72) ([8bde210](https://github.com/readmeio/rdme/commit/8bde210)), closes [#72](https://github.com/readmeio/rdme/issues/72)
+* chore(deps-dev): Bump nock from 10.0.6 to 11.3.3 (#71) ([f280035](https://github.com/readmeio/rdme/commit/f280035)), closes [#71](https://github.com/readmeio/rdme/issues/71)
+* chore(deps-dev): Bump eslint-config-prettier from 6.1.0 to 6.2.0 (#70) ([a98f32c](https://github.com/readmeio/rdme/commit/a98f32c)), closes [#70](https://github.com/readmeio/rdme/issues/70)
+* chore(deps-dev): Bump eslint-config-prettier from 6.0.0 to 6.1.0 (#63) ([5a66307](https://github.com/readmeio/rdme/commit/5a66307)), closes [#63](https://github.com/readmeio/rdme/issues/63)
+* chore(deps): Bump oas from 0.8.15 to 0.8.16 (#64) ([28384a7](https://github.com/readmeio/rdme/commit/28384a7)), closes [#64](https://github.com/readmeio/rdme/issues/64)
+* chore(deps-dev): Bump eslint from 6.2.0 to 6.3.0 (#68) ([a115f8b](https://github.com/readmeio/rdme/commit/a115f8b)), closes [#68](https://github.com/readmeio/rdme/issues/68)
+
+
+
+## <small>3.4.4 (2019-08-28)</small>
+
+* fix: Properly report OAS validation errors (#67) ([c59f038](https://github.com/readmeio/rdme/commit/c59f038)), closes [#67](https://github.com/readmeio/rdme/issues/67)
+
+
+
+## <small>3.4.3 (2019-08-27)</small>
+
+* fix: Check if command is 'oas' before throwing error (#62) ([78f346b](https://github.com/readmeio/rdme/commit/78f346b)), closes [#62](https://github.com/readmeio/rdme/issues/62)
+* chore(deps-dev): [Security] Bump eslint-utils from 1.4.0 to 1.4.2 (#66) ([7c74f66](https://github.com/readmeio/rdme/commit/7c74f66)), closes [#66](https://github.com/readmeio/rdme/issues/66)
+* chore(deps-dev): Bump jest from 24.8.0 to 24.9.0 (#61) ([e16a7e4](https://github.com/readmeio/rdme/commit/e16a7e4)), closes [#61](https://github.com/readmeio/rdme/issues/61)
+* chore(deps-dev): Bump eslint from 5.16.0 to 6.2.0 (#60) ([446e305](https://github.com/readmeio/rdme/commit/446e305)), closes [#60](https://github.com/readmeio/rdme/issues/60)
+* chore(deps-dev): Bump eslint-config-airbnb-base from 13.2.0 to 14.0.0 (#59) ([4c3bf3f](https://github.com/readmeio/rdme/commit/4c3bf3f)), closes [#59](https://github.com/readmeio/rdme/issues/59)
+* chore: petstore.yaml should not have been committed into master. ([bf9d477](https://github.com/readmeio/rdme/commit/bf9d477))
 
 
 
 ## <small>3.4.2 (2019-08-08)</small>
 
-* 3.4.2 ([e47ecac](https://github.com/readmeio/rdme/commit/e47ecac))
-* Add x-readme-source header (#58) ([3084bcf](https://github.com/readmeio/rdme/commit/3084bcf)), closes [#58](https://github.com/readmeio/rdme/issues/58)
+* feat: Add x-readme-source header (#58) ([3084bcf](https://github.com/readmeio/rdme/commit/3084bcf)), closes [#58](https://github.com/readmeio/rdme/issues/58)
 
 
 
 ## <small>3.4.1 (2019-08-08)</small>
 
-* 3.4.1 ([1ff5ec9](https://github.com/readmeio/rdme/commit/1ff5ec9))
-* Cleaning up some authentication docs in the readme. ([c75e117](https://github.com/readmeio/rdme/commit/c75e117))
-* fix/version-flags (#57) ([e62d55c](https://github.com/readmeio/rdme/commit/e62d55c)), closes [#57](https://github.com/readmeio/rdme/issues/57)
+* docs: Cleaning up some authentication docs in the readme. ([c75e117](https://github.com/readmeio/rdme/commit/c75e117))
+* fix: Version flags (#57) ([e62d55c](https://github.com/readmeio/rdme/commit/e62d55c)), closes [#57](https://github.com/readmeio/rdme/issues/57)
 
 
 
 ## 3.4.0 (2019-08-05)
 
-* Adding a new `logout` command. ([fa8c355](https://github.com/readmeio/rdme/commit/fa8c355))
-* Adding a new `whoami` command. ([1e68955](https://github.com/readmeio/rdme/commit/1e68955))
-* Clarifying some of the `help` internals with better property names. ([842f521](https://github.com/readmeio/rdme/commit/842f521))
-* Cleaning up the flow for logging out when not authenticated. ([1be9d86](https://github.com/readmeio/rdme/commit/1be9d86))
-* Making our unit test descriptions a bit more consistent. ([e16b590](https://github.com/readmeio/rdme/commit/e16b590))
-* v3.4.0 ([5deaafa](https://github.com/readmeio/rdme/commit/5deaafa))
+* feat: Adding a new `logout` command. ([fa8c355](https://github.com/readmeio/rdme/commit/fa8c355))
+* feat: Adding a new `whoami` command. ([1e68955](https://github.com/readmeio/rdme/commit/1e68955))
+* docs: Clarifying some of the `help` internals with better property names. ([842f521](https://github.com/readmeio/rdme/commit/842f521))
+* refactor: Cleaning up the flow for logging out when not authenticated. ([1be9d86](https://github.com/readmeio/rdme/commit/1be9d86))
+* test: Making our unit test descriptions a bit more consistent. ([e16b590](https://github.com/readmeio/rdme/commit/e16b590))
 
 
 
 ## 3.3.0 (2019-08-02)
 
-* A few more readme tweaks. ([7d764b3](https://github.com/readmeio/rdme/commit/7d764b3))
-* Adding Owlbert to --help ([931e14e](https://github.com/readmeio/rdme/commit/931e14e))
-* Adding support for `rdme help <command>`. ([c568791](https://github.com/readmeio/rdme/commit/c568791))
-* Aligning the tagline with the program name. ([f810a48](https://github.com/readmeio/rdme/commit/f810a48))
-* Boosting code coverage. ([45d1955](https://github.com/readmeio/rdme/commit/45d1955))
-* Cleaning up `--help`. ([e30935b](https://github.com/readmeio/rdme/commit/e30935b))
-* Cleaning up the main help screen. ([4cafbc3](https://github.com/readmeio/rdme/commit/4cafbc3))
-* Cleaning up the README file. ([18dca78](https://github.com/readmeio/rdme/commit/18dca78))
-* Constructing a help engine for subcommands. ([3d28b0f](https://github.com/readmeio/rdme/commit/3d28b0f))
-* Expanding our builds to run on Node 12 ([6d3b0dc](https://github.com/readmeio/rdme/commit/6d3b0dc))
-* Fixing a broken versions command test. ([5dcfdc3](https://github.com/readmeio/rdme/commit/5dcfdc3))
-* Fixing a typo in the readme. ([84f819d](https://github.com/readmeio/rdme/commit/84f819d))
-* Fixing broken command unit tests. ([7199c2a](https://github.com/readmeio/rdme/commit/7199c2a))
-* Fixing broken unit tests. ([e088aea](https://github.com/readmeio/rdme/commit/e088aea))
-* Fixing broken unit tests. ([ef8fd5e](https://github.com/readmeio/rdme/commit/ef8fd5e))
-* Fixing some typos in code comments. ([90b473a](https://github.com/readmeio/rdme/commit/90b473a))
-* Migrating the docs commands over. ([3e0b8cb](https://github.com/readmeio/rdme/commit/3e0b8cb))
-* Migrating the login command over. ([242e62c](https://github.com/readmeio/rdme/commit/242e62c))
-* Migrating the oas command into the new framework. ([2012d38](https://github.com/readmeio/rdme/commit/2012d38))
-* Migrating the open command over and pouring some sugar on it. ([6e21154](https://github.com/readmeio/rdme/commit/6e21154))
-* Migrating the version commands over. ([a1e8e34](https://github.com/readmeio/rdme/commit/a1e8e34))
-* Preferring readme.com over readme.io ([74425c3](https://github.com/readmeio/rdme/commit/74425c3))
-* Re-adding supported arguments to the versions commands. ([c4cde32](https://github.com/readmeio/rdme/commit/c4cde32))
-* Reformatting the output of the versions command to show more data. ([b0bd08f](https://github.com/readmeio/rdme/commit/b0bd08f))
-* Removing a couple more duplicate `--key` arguments in the readme. ([7ab97c5](https://github.com/readmeio/rdme/commit/7ab97c5))
-* Running prettier on everything. ([9dac2c0](https://github.com/readmeio/rdme/commit/9dac2c0))
-* Running Prettier on everything. ([494c713](https://github.com/readmeio/rdme/commit/494c713))
-* Running Prettier on everything. ([dbc27b0](https://github.com/readmeio/rdme/commit/dbc27b0))
-* Surfacing related commands on command help screens. ([325eb8c](https://github.com/readmeio/rdme/commit/325eb8c))
-* Using a better table library for `rdme versions`. ([ee0f349](https://github.com/readmeio/rdme/commit/ee0f349))
-* v3.3.0 ([f76ef57](https://github.com/readmeio/rdme/commit/f76ef57))
+* feat: Quality of life improvements. (#49) ([5213eba](https://github.com/readmeio/rdme/pull/49))
 
 
 
