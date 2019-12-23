@@ -41,7 +41,7 @@ describe('prompt test bed', () => {
         }
 
         if (prompt.name === 'newVersion') {
-          // eslint-disable-next-line require-atomic-updates, no-param-reassign
+          // eslint-disable-next-line no-param-reassign
           prompt.value = '1.2.1';
           await prompt.submit();
         }
@@ -98,7 +98,7 @@ describe('prompt test bed', () => {
         await prompt.keypress(null, { name: 'up' });
         await prompt.submit();
         if (prompt.name === 'newVersion') {
-          // eslint-disable-next-line require-atomic-updates, no-param-reassign
+          // eslint-disable-next-line no-param-reassign
           prompt.value = '1.2.1';
           await prompt.submit();
         }
