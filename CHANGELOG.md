@@ -1,3 +1,10 @@
+## <small>3.6.2 (2019-12-30)</small>
+
+* chore(deps): [Security] Bump handlebars from 4.1.2 to 4.5.3 (#118) ([62d4b22](https://github.com/readmeio/rdme/commit/62d4b22)), closes [#118](https://github.com/readmeio/rdme/issues/118)
+* docs: cleaning up the changelog a bit ([2b2317f](https://github.com/readmeio/rdme/commit/2b2317f))
+
+
+
 ## <small>3.6.1 (2019-12-23)</small>
 
 * fix: Fix booleans (#117) ([77091c6](https://github.com/readmeio/rdme/commit/77091c6)), closes [#117](https://github.com/readmeio/rdme/issues/117)
