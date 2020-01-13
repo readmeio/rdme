@@ -26,6 +26,9 @@
     "url": "https://github.com/readmeio/rdme/issues"
   },
   "main": "index.js",
+  "engines": {
+    "node": ">=10"
+  },
   "dependencies": {
     "cli-table": "^0.3.1",
     "colors": "^1.1.2",
