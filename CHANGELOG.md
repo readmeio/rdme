@@ -1,3 +1,16 @@
+## 3.7.0 (2020-01-21)
+
+* chore(deps-dev): Bump @readme/eslint-config from 1.8.1 to 1.9.0 (#120) ([be0740d](https://github.com/readmeio/rdme/commit/be0740d)), closes [#120](https://github.com/readmeio/rdme/issues/120)
+* chore(deps-dev): Bump @readme/eslint-config from 1.9.0 to 1.9.1 (#121) ([dc6b3fd](https://github.com/readmeio/rdme/commit/dc6b3fd)), closes [#121](https://github.com/readmeio/rdme/issues/121)
+* chore(deps-dev): Bump @readme/eslint-config from 1.9.1 to 1.10.0 (#126) ([5d902e6](https://github.com/readmeio/rdme/commit/5d902e6)), closes [#126](https://github.com/readmeio/rdme/issues/126)
+* chore(deps-dev): Bump nock from 11.7.0 to 11.7.1 (#119) ([d263188](https://github.com/readmeio/rdme/commit/d263188)), closes [#119](https://github.com/readmeio/rdme/issues/119)
+* chore(deps-dev): Bump nock from 11.7.1 to 11.7.2 (#123) ([2b59608](https://github.com/readmeio/rdme/commit/2b59608)), closes [#123](https://github.com/readmeio/rdme/issues/123)
+* chore(deps): Bump oas from 1.1.0 to 1.2.0 (#122) ([4d708a0](https://github.com/readmeio/rdme/commit/4d708a0)), closes [#122](https://github.com/readmeio/rdme/issues/122)
+* chore(deps): Bump oas from 1.2.0 to 1.3.0 (#127) ([ab854de](https://github.com/readmeio/rdme/commit/ab854de)), closes [#127](https://github.com/readmeio/rdme/issues/127)
+* feat: drop support for node 8 (#124) ([ca7f6b3](https://github.com/readmeio/rdme/commit/ca7f6b3)), closes [#124](https://github.com/readmeio/rdme/issues/124)
+
+
+
 ## <small>3.6.2 (2019-12-30)</small>
 
 * chore(deps): [Security] Bump handlebars from 4.1.2 to 4.5.3 (#118) ([62d4b22](https://github.com/readmeio/rdme/commit/62d4b22)), closes [#118](https://github.com/readmeio/rdme/issues/118)
