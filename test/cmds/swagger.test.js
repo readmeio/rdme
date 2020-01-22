@@ -9,10 +9,28 @@ const version = '1.0.0';
 
 jest.mock('../../lib/prompts');
 
+const getCommandOutput = () => {
+  return [console.warn.mock.calls.join('\n\n'), console.log.mock.calls.join('\n\n')]
+    .filter(Boolean)
+    .join('\n\n');
+};
+
 describe('rdme swagger', () => {
+  const exampleRefLocation = `${config.host}/project/example-project/1.0.1/refs/ex`;
+
   beforeAll(() => nock.disableNetConnect());
 
-  afterEach(() => nock.cleanAll());
+  beforeEach(() => {
+    console.log = jest.fn();
+    console.warn = jest.fn();
+  });
+
+  afterEach(() => {
+    console.log.mockRestore();
+    console.warn.mockRestore();
+
+    nock.cleanAll();
+  });
 
   it('should POST a discovered file if none provided', () => {
     promptHandler.createOasPrompt.mockResolvedValue({ option: 'create' });
@@ -30,7 +48,7 @@ describe('rdme swagger', () => {
       .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
       .delayConnection(1000)
       .basicAuth({ user: key })
-      .reply(201, { body: '{ id: 1 }' });
+      .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
     // Surface our test fixture to the root directory so rdme can autodiscover it. It's easier to do
     // this than mocking out the fs module because mocking the fs module here causes Jest sourcemaps
@@ -38,6 +56,14 @@ describe('rdme swagger', () => {
     fs.copyFileSync('./test/fixtures/swagger.json', './swagger.json');
 
     return swagger.run({ key }).then(() => {
+      expect(console.log).toHaveBeenCalledTimes(2);
+
+      const output = getCommandOutput();
+      expect(output).toMatch(/we found swagger.json/i);
+      expect(output).toMatch(/successfully uploaded/);
+      expect(output).toMatch(exampleRefLocation);
+      expect(output).toMatch(/to update your swagger or openapi file/i);
+
       fs.unlinkSync('./swagger.json');
       return mock.done();
     });
@@ -71,11 +97,19 @@ describe('rdme swagger', () => {
       .reply(200, { version: '1.0.0' })
       .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
       .basicAuth({ user: key })
-      .reply(201, { body: '{ id: 1 }' });
+      .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
-    return swagger
-      .run({ spec: './test/fixtures/swagger.json', key, version })
-      .then(() => mock.done());
+    return swagger.run({ spec: './test/fixtures/swagger.json', key, version }).then(() => {
+      expect(console.log).toHaveBeenCalledTimes(1);
+
+      const output = getCommandOutput();
+      expect(output).not.toMatch(/we found swagger.json/i);
+      expect(output).toMatch(/successfully uploaded/);
+      expect(output).toMatch(exampleRefLocation);
+      expect(output).toMatch(/to update your swagger or openapi file/i);
+
+      mock.done();
+    });
   });
 
   it('should properly bubble up validation error if invalid swagger is uploaded', () => {
@@ -118,7 +152,7 @@ describe('rdme swagger', () => {
       .reply(200, [])
       .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
       .basicAuth({ user: key })
-      .reply(201, { id: 1 });
+      .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
     return swagger.run({ spec: './test/fixtures/swagger.json', key }).then(() => mock.done());
   });
@@ -142,11 +176,20 @@ describe('rdme swagger', () => {
     const mock = nock(config.host)
       .put(`/api/v1/api-specification/${id}`, body => body.match('form-data; name="spec"'))
       .basicAuth({ user: key })
-      .reply(201, { body: '{ id: 1 }' });
+      .reply(201, { id: 1 }, { location: exampleRefLocation });
 
     return swagger
       .run({ spec: './test/fixtures/swagger.json', token: `${key}-${id}`, version })
-      .then(() => mock.done());
+      .then(() => {
+        expect(console.warn).toHaveBeenCalledTimes(1);
+        expect(console.log).toHaveBeenCalledTimes(1);
+
+        const output = getCommandOutput();
+
+        expect(output).toMatch(/using `rdme` with --token/i);
+
+        mock.done();
+      });
   });
 
   it('should error if no api key provided', async () => {
