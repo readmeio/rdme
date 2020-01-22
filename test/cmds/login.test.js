@@ -11,17 +11,16 @@ describe('rdme login', () => {
   afterEach(() => configStore.clear());
 
   it('should error if no project provided', () => {
-    expect.assertions(1);
-    return cmd.run({}).catch(err => {
-      expect(err.message).toBe('No project subdomain provided. Please use `--project`.');
-    });
+    return expect(cmd.run({})).rejects.toThrow(
+      'No project subdomain provided. Please use `--project`.',
+    );
   });
 
   it('should error if email is invalid', () => {
     expect.assertions(1);
-    return cmd.run({ project: 'subdomain', email: 'this-is-not-an-email' }).catch(err => {
-      expect(err.message).toBe('You must provide a valid email address.');
-    });
+    return expect(cmd.run({ project: 'subdomain', email: 'this-is-not-an-email' })).rejects.toThrow(
+      'You must provide a valid email address.',
+    );
   });
 
   it('should post to /login on the API', () => {

@@ -1,3 +1,4 @@
+require('colors');
 const config = require('config');
 const open = require('open');
 const configStore = require('../lib/configstore');

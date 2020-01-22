@@ -28,20 +28,23 @@ describe('cli', () => {
     it('should only return version if no command', () => {
       expect.assertions(1);
 
-      return cli(['no-such-command', '--version']).catch(err => {
+      return expect(cli(['no-such-command', '--version'])).rejects.toThrow(
         // This can be ignored as it's just going to be a command not found error
-        expect(err.message).toBe('Command not found.');
-      });
+        'Command not found.',
+      );
     });
 
     it('should not be returned if `--version` is being used on a subcommand', () => {
       expect.assertions(1);
       nock.disableNetConnect();
 
-      return cli(['docs:edit', 'getting-started', '--version', '1.0.0', '--key=abcdef']).catch(
-        e => {
-          expect(e.message).not.toBe('No project version provided. Please use `--version`.');
-        },
+      return expect(
+        cli(['docs:edit', 'getting-started', '--version', '1.0.0', '--key=abcdef']),
+      ).rejects.not.toThrow(
+        // We're testing that the docs:edit command does NOT return an error about `--version` not
+        // being here because if it throws that error, then that means that `--version` wasn't
+        // passed in as expected.
+        'No project version provided. Please use `--version`.',
       );
     });
   });
@@ -102,9 +105,9 @@ describe('cli', () => {
 
     it('should load subcommands from the folder', () => {
       expect.assertions(1);
-      return cli(['docs:edit', 'getting-started', '--version=1.0.0', '--key=abcdef']).catch(e => {
-        expect(e.message).not.toBe('Command not found.');
-      });
+      return expect(
+        cli(['docs:edit', 'getting-started', '--version=1.0.0', '--key=abcdef']),
+      ).rejects.not.toThrow('Command not found.');
     });
   });
 
@@ -125,7 +128,7 @@ describe('cli', () => {
 
   it('should not error with oas arguments passed in', () => {
     expect(() => {
-      return cli(['oas', 'init']);
+      return cli(['oas', 'endpoint']);
     }).not.toThrow();
   });
 });

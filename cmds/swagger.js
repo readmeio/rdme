@@ -1,3 +1,4 @@
+require('colors');
 const request = require('request-promise-native');
 const fs = require('fs');
 const path = require('path');
@@ -50,6 +51,7 @@ exports.run = async function(opts) {
     console.warn(
       'Using `rdme` with --token has been deprecated. Please use `--key` and `--id` instead.',
     );
+
     [key, id] = opts.token.split('-');
   }
 
@@ -58,25 +60,25 @@ exports.run = async function(opts) {
   }
 
   async function callApi(specPath, versionCleaned) {
+    // @todo Tailor messaging to what is actually being handled here. If the user is uploading an OpenAPI file, never mention that they uploaded/updated a Swagger file.
+
     function success(data) {
       const message = !isUpdate
-        ? "You've successfully uploaded a new swagger file to your ReadMe project!"
-        : "You've successfully updated a swagger file on your ReadMe project!";
-      console.log(`
-  ${message}
+        ? "You've successfully uploaded a new Swagger file to your ReadMe project!"
+        : "You've successfully updated a Swagger file on your ReadMe project!";
 
-    ${`${data.headers.location}`.green}`);
-
-      console.log(`
-  To update your Swagger or OpenAPI file, run the following:
-
-    ${
-      `rdme swagger FILE --key=${key} --id=${
-        // eslint-disable-next-line no-underscore-dangle
-        JSON.parse(data.body)._id
-      }`.green
-    }
-  `);
+      console.log(
+        [
+          message,
+          '',
+          `\t${`${data.headers.location}`.green}`,
+          '',
+          'To update your Swagger or OpenAPI file, run the following:',
+          '',
+          // eslint-disable-next-line no-underscore-dangle
+          `\trdme swagger FILE --key=${key} --id=${JSON.parse(data.body)._id}`.green,
+        ].join('\n'),
+      );
     }
 
     function error(err) {

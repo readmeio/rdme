@@ -5,16 +5,16 @@ const loginCmd = require('../../cmds/login');
 
 describe('rdme open', () => {
   it('should error if no project provided', () => {
-    expect.assertions(1);
     configStore.delete('project');
 
-    return cmd.run({}).catch(err => {
-      expect(err.message).toBe(`Please login using \`${config.cli} ${loginCmd.command}\`.`);
-    });
+    return expect(cmd.run({})).rejects.toThrow(
+      `Please login using \`${config.cli} ${loginCmd.command}\`.`,
+    );
   });
 
   it('should open the project', () => {
-    expect.assertions(1);
+    expect.assertions(2);
+    console.log = jest.fn();
     configStore.set('project', 'subdomain');
 
     function mockOpen(url) {
@@ -22,6 +22,12 @@ describe('rdme open', () => {
       return Promise.resolve();
     }
 
-    return cmd.run({ mockOpen });
+    return cmd.run({ mockOpen }).then(() => {
+      expect(console.log).toHaveBeenCalledWith(
+        expect.stringMatching(/opening (.*)subdomain.readme.io/i),
+      );
+
+      console.log.mockRestore();
+    });
   });
 });
