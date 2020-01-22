@@ -19,23 +19,21 @@ describe('rdme docs', () => {
 
   it('should error if no api key provided', () => {
     expect.assertions(1);
-    return docs.run({}).catch(err => {
-      expect(err.message).toBe('No project API key provided. Please use `--key`.');
-    });
+    return expect(docs.run({})).rejects.toThrow('No project API key provided. Please use `--key`.');
   });
 
   it('should error if no version provided', () => {
     expect.assertions(1);
-    return docs.run({ key }).catch(err => {
-      expect(err.message).toBe('No project version provided. Please use `--version`.');
-    });
+    return expect(docs.run({ key })).rejects.toThrow(
+      'No project version provided. Please use `--version`.',
+    );
   });
 
   it('should error if no folder provided', () => {
     expect.assertions(1);
-    return docs.run({ key, version: '1.0.0' }).catch(err => {
-      expect(err.message).toBe('No folder provided. Usage `rdme docs <folder> [options]`.');
-    });
+    return expect(docs.run({ key, version: '1.0.0' })).rejects.toThrow(
+      'No folder provided. Usage `rdme docs <folder> [options]`.',
+    );
   });
 
   it.todo('should error if the argument isnt a folder');
@@ -146,29 +144,34 @@ describe('rdme docs', () => {
 });
 
 describe('rdme docs:edit', () => {
+  beforeEach(() => {
+    console.log = jest.fn();
+  });
+
+  afterEach(() => {
+    console.log.mockRestore();
+  });
+
   it('should error if no api key provided', () => {
-    expect.assertions(1);
-    return docsEdit.run({}).catch(err => {
-      expect(err.message).toBe('No project API key provided. Please use `--key`.');
-    });
+    return expect(docsEdit.run({})).rejects.toThrow(
+      'No project API key provided. Please use `--key`.',
+    );
   });
 
   it('should error if no version provided', () => {
-    expect.assertions(1);
-    return docsEdit.run({ key }).catch(err => {
-      expect(err.message).toBe('No project version provided. Please use `--version`.');
-    });
+    return expect(docsEdit.run({ key })).rejects.toThrow(
+      'No project version provided. Please use `--version`.',
+    );
   });
 
   it('should error if no slug provided', () => {
-    expect.assertions(1);
-    return docsEdit.run({ key, version: '1.0.0' }).catch(err => {
-      expect(err.message).toBe('No slug provided. Usage `rdme docs:edit <slug> [options]`.');
-    });
+    return expect(docsEdit.run({ key, version: '1.0.0' })).rejects.toThrow(
+      'No slug provided. Usage `rdme docs:edit <slug> [options]`.',
+    );
   });
 
   it('should fetch the doc from the api', () => {
-    expect.assertions(3);
+    expect.assertions(4);
     const slug = 'getting-started';
     const body = 'abcdef';
     const edits = 'ghijkl';
@@ -205,6 +208,8 @@ describe('rdme docs:edit', () => {
       getMock.done();
       putMock.done();
       expect(fs.existsSync(`${slug}.md`)).toBe(false);
+
+      expect(console.log).toHaveBeenCalledWith('Doc successfully updated. Cleaning up local file.');
     });
   });
 
