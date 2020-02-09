@@ -105,9 +105,7 @@ describe('rdme versions*', () => {
     it('should error if no version provided', () => {
       expect.assertions(1);
       return createVersion.run({ key }).catch(err => {
-        expect(err.message).toBe(
-          'Please specify a semantic version. See `rdme help versions:create` for help.',
-        );
+        expect(err.message).toBe('Please specify a semantic version. See `rdme help versions:create` for help.');
       });
     });
 
@@ -161,9 +159,7 @@ describe('rdme versions*', () => {
     it('should error if no version provided', () => {
       expect.assertions(1);
       return deleteVersion.run({ key }).catch(err => {
-        expect(err.message).toBe(
-          'Please specify a semantic version. See `rdme help versions:delete` for help.',
-        );
+        expect(err.message).toBe('Please specify a semantic version. See `rdme help versions:delete` for help.');
       });
     });
 
@@ -202,9 +198,7 @@ describe('rdme versions*', () => {
     it('should error if no version provided', () => {
       expect.assertions(1);
       return updateVersion.run({ key }).catch(err => {
-        expect(err.message).toBe(
-          'Please specify a semantic version. See `rdme help versions:update` for help.',
-        );
+        expect(err.message).toBe('Please specify a semantic version. See `rdme help versions:update` for help.');
       });
     });
 

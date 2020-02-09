@@ -15,11 +15,9 @@ describe('cli', () => {
   });
 
   describe('--version', () => {
-    it('should return version from package.json', () =>
-      cli(['--version']).then(v => expect(v).toBe(version)));
+    it('should return version from package.json', () => cli(['--version']).then(v => expect(v).toBe(version)));
 
-    it('should return version if the `-V` alias is supplied', () =>
-      cli(['-V']).then(v => expect(v).toBe(version)));
+    it('should return version if the `-V` alias is supplied', () => cli(['-V']).then(v => expect(v).toBe(version)));
 
     it('should return version from package.json for help command', () =>
       cli(['help', '--version']).then(v => expect(v).toBe(version)));
@@ -30,7 +28,7 @@ describe('cli', () => {
 
       return expect(cli(['no-such-command', '--version'])).rejects.toThrow(
         // This can be ignored as it's just going to be a command not found error
-        'Command not found.',
+        'Command not found.'
       );
     });
 
@@ -38,13 +36,11 @@ describe('cli', () => {
       expect.assertions(1);
       nock.disableNetConnect();
 
-      return expect(
-        cli(['docs:edit', 'getting-started', '--version', '1.0.0', '--key=abcdef']),
-      ).rejects.not.toThrow(
+      return expect(cli(['docs:edit', 'getting-started', '--version', '1.0.0', '--key=abcdef'])).rejects.not.toThrow(
         // We're testing that the docs:edit command does NOT return an error about `--version` not
         // being here because if it throws that error, then that means that `--version` wasn't
         // passed in as expected.
-        'No project version provided. Please use `--version`.',
+        'No project version provided. Please use `--version`.'
       );
     });
   });
@@ -105,9 +101,9 @@ describe('cli', () => {
 
     it('should load subcommands from the folder', () => {
       expect.assertions(1);
-      return expect(
-        cli(['docs:edit', 'getting-started', '--version=1.0.0', '--key=abcdef']),
-      ).rejects.not.toThrow('Command not found.');
+      return expect(cli(['docs:edit', 'getting-started', '--version=1.0.0', '--key=abcdef'])).rejects.not.toThrow(
+        'Command not found.'
+      );
     });
   });
 

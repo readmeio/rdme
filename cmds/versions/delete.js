@@ -31,9 +31,7 @@ exports.run = async function(opts) {
 
   if (!version || !semver.valid(semver.coerce(version))) {
     return Promise.reject(
-      new Error(
-        `Please specify a semantic version. See \`${config.cli} help ${exports.command}\` for help.`,
-      ),
+      new Error(`Please specify a semantic version. See \`${config.cli} help ${exports.command}\` for help.`)
     );
   }
 
@@ -44,11 +42,7 @@ exports.run = async function(opts) {
     .then(() => Promise.resolve(`Version ${version} deleted successfully.`))
     .catch(err => {
       return Promise.reject(
-        new Error(
-          err.error && err.error.description
-            ? err.error.description
-            : 'Failed to delete target version.',
-        ),
+        new Error(err.error && err.error.description ? err.error.description : 'Failed to delete target version.')
       );
     });
 };

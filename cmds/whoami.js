@@ -18,6 +18,6 @@ exports.run = () => {
   return Promise.resolve(
     `You are currently logged in as ${configStore.get('email').green} to the ${
       configStore.get('project').blue
-    } project.`,
+    } project.`
   );
 };

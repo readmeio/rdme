@@ -48,9 +48,7 @@ exports.run = async function(opts) {
   let isUpdate;
 
   if (!key && opts.token) {
-    console.warn(
-      'Using `rdme` with --token has been deprecated. Please use `--key` and `--id` instead.',
-    );
+    console.warn('Using `rdme` with --token has been deprecated. Please use `--key` and `--id` instead.');
 
     [key, id] = opts.token.split('-');
   }
@@ -77,7 +75,7 @@ exports.run = async function(opts) {
           '',
           // eslint-disable-next-line no-underscore-dangle
           `\trdme swagger FILE --key=${key} --id=${JSON.parse(data.body)._id}`.green,
-        ].join('\n'),
+        ].join('\n')
       );
     }
 
@@ -109,9 +107,7 @@ exports.run = async function(opts) {
     function updateSpec(specId) {
       isUpdate = true;
 
-      return request
-        .put(`${config.host}/api/v1/api-specification/${specId}`, options)
-        .then(success, error);
+      return request.put(`${config.host}/api/v1/api-specification/${specId}`, options).then(success, error);
     }
 
     /*
@@ -150,17 +146,14 @@ exports.run = async function(opts) {
     try {
       if (versionFlag) {
         options.json.version = versionFlag;
-        const foundVersion = await request.get(
-          `${config.host}/api/v1/version/${versionFlag}`,
-          options,
-        );
+        const foundVersion = await request.get(`${config.host}/api/v1/version/${versionFlag}`, options);
 
         return foundVersion.version;
       }
 
       const versionList = await request.get(`${config.host}/api/v1/version`, options);
       const { option, versionSelection, newVersion } = await prompt(
-        promptOpts.generatePrompts(versionList, versionFlag),
+        promptOpts.generatePrompts(versionList, versionFlag)
       );
 
       if (option === 'update') return versionSelection;
@@ -199,8 +192,8 @@ exports.run = async function(opts) {
     reject(
       new Error(
         "We couldn't find a Swagger or OpenAPI file.\n\n" +
-          'Run `rdme swagger ./path/to/file` to upload an existing file or `rdme oas init` to create a fresh one!',
-      ),
+          'Run `rdme swagger ./path/to/file` to upload an existing file or `rdme oas init` to create a fresh one!'
+      )
     );
   });
 };

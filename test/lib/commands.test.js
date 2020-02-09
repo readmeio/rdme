@@ -47,9 +47,7 @@ describe('utils', () => {
               }
 
               expect(arg.description).toBe(
-                cmd.command !== 'versions'
-                  ? 'Project version'
-                  : 'A specific project version to view',
+                cmd.command !== 'versions' ? 'Project version' : 'A specific project version to view'
               );
             }
           });

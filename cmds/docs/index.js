@@ -45,14 +45,10 @@ exports.run = function(opts) {
   }
 
   if (!folder) {
-    return Promise.reject(
-      new Error(`No folder provided. Usage \`${config.cli} ${exports.usage}\`.`),
-    );
+    return Promise.reject(new Error(`No folder provided. Usage \`${config.cli} ${exports.usage}\`.`));
   }
 
-  const files = fs
-    .readdirSync(folder)
-    .filter(file => file.endsWith('.md') || file.endsWith('.markdown'));
+  const files = fs.readdirSync(folder).filter(file => file.endsWith('.md') || file.endsWith('.markdown'));
 
   const options = {
     auth: { user: key },
@@ -116,6 +112,6 @@ exports.run = function(opts) {
         .catch(err => {
           return Promise.reject(err);
         });
-    }),
+    })
   );
 };

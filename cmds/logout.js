@@ -16,6 +16,6 @@ exports.run = async () => {
   }
 
   return Promise.resolve(
-    `You have logged out of Readme. Please use \`${config.cli} ${loginCmd.command}\` to login again.`,
+    `You have logged out of Readme. Please use \`${config.cli} ${loginCmd.command}\` to login again.`
   );
 };

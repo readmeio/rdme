@@ -5,8 +5,7 @@ const versionsCreate = require('./create');
 
 exports.command = 'versions';
 exports.usage = 'versions [options]';
-exports.description =
-  'List versions available in your project or get a version by SemVer (https://semver.org/).';
+exports.description = 'List versions available in your project or get a version by SemVer (https://semver.org/).';
 exports.category = 'versions';
 exports.position = 1;
 
@@ -87,9 +86,7 @@ exports.run = function(opts) {
     return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
   }
 
-  const uri = version
-    ? `${config.host}/api/v1/version/${version}`
-    : `${config.host}/api/v1/version`;
+  const uri = version ? `${config.host}/api/v1/version/${version}` : `${config.host}/api/v1/version`;
 
   return request
     .get(uri, {
@@ -109,8 +106,8 @@ exports.run = function(opts) {
       if (!versions.length) {
         return Promise.reject(
           new Error(
-            `Sorry, you haven't created any versions yet! See \`${config.cli} help ${versionsCreate.command}\` for commands on how to do that.`,
-          ),
+            `Sorry, you haven't created any versions yet! See \`${config.cli} help ${versionsCreate.command}\` for commands on how to do that.`
+          )
         );
       }
 

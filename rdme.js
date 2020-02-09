@@ -23,7 +23,7 @@ require('./cli')(process.argv.slice(2))
         console.error(
           `Yikes, something went wrong! Please try again and if the problem persists, get in touch with our support team at ${
             `support@readme.io`.underline
-          }.\n`.red,
+          }.\n`.red
         );
       }
 

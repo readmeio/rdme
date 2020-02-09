@@ -103,9 +103,7 @@ describe('prompt test bed', () => {
           await prompt.submit();
         }
       });
-      const answer = await enquirer.prompt(
-        promptHandler.createVersionPrompt(versionlist, opts, false),
-      );
+      const answer = await enquirer.prompt(promptHandler.createVersionPrompt(versionlist, opts, false));
       expect(answer.is_hidden).toBe(false);
       expect(answer.from).toBe('1');
     });
@@ -130,9 +128,7 @@ describe('prompt test bed', () => {
         await prompt.submit();
         await prompt.submit();
       });
-      const answer = await enquirer.prompt(
-        promptHandler.createVersionPrompt(versionlist, opts, true),
-      );
+      const answer = await enquirer.prompt(promptHandler.createVersionPrompt(versionlist, opts, true));
       expect(answer.is_hidden).toBe(false);
       expect(answer.from).toBe('');
     });
