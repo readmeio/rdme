@@ -52,9 +52,7 @@ exports.run = async function(opts) {
 
   if (!version || !semver.valid(semver.coerce(version))) {
     return Promise.reject(
-      new Error(
-        `Please specify a semantic version. See \`${config.cli} help ${exports.command}\` for help.`,
-      ),
+      new Error(`Please specify a semantic version. See \`${config.cli} help ${exports.command}\` for help.`)
     );
   }
 
@@ -73,9 +71,7 @@ exports.run = async function(opts) {
       is_stable: foundVersion.is_stable || main === 'true' || promptResponse.is_stable,
       is_beta: beta === 'true' || promptResponse.is_beta,
       is_deprecated: deprecated || promptResponse.is_deprecated,
-      is_hidden: promptResponse.is_stable
-        ? false
-        : !(isPublic === 'true' || promptResponse.is_hidden),
+      is_hidden: promptResponse.is_stable ? false : !(isPublic === 'true' || promptResponse.is_hidden),
     },
     auth: { user: key },
   };

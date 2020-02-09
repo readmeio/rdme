@@ -31,9 +31,7 @@ async function getCredentials(opts) {
   return {
     email: await read({ prompt: 'Email:', default: configStore.get('email') }),
     password: await read({ prompt: 'Password:', silent: true }),
-    project:
-      opts.project ||
-      (await read({ prompt: 'Project subdomain:', default: configStore.get('project') })),
+    project: opts.project || (await read({ prompt: 'Project subdomain:', default: configStore.get('project') })),
     token: opts['2fa'] && (await read({ prompt: '2fa token:' })),
   };
 }

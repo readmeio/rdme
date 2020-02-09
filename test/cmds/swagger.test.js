@@ -10,9 +10,7 @@ const version = '1.0.0';
 jest.mock('../../lib/prompts');
 
 const getCommandOutput = () => {
-  return [console.warn.mock.calls.join('\n\n'), console.log.mock.calls.join('\n\n')]
-    .filter(Boolean)
-    .join('\n\n');
+  return [console.warn.mock.calls.join('\n\n'), console.log.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
 };
 
 describe('rdme swagger', () => {
@@ -165,9 +163,7 @@ describe('rdme swagger', () => {
       .basicAuth({ user: key })
       .reply(201, { body: '{ id: 1 }' });
 
-    return swagger
-      .run({ spec: './test/fixtures/swagger.json', key, id, version })
-      .then(() => mock.done());
+    return swagger.run({ spec: './test/fixtures/swagger.json', key, id, version }).then(() => mock.done());
   });
 
   it('should still work with `token`', () => {
@@ -178,23 +174,21 @@ describe('rdme swagger', () => {
       .basicAuth({ user: key })
       .reply(201, { id: 1 }, { location: exampleRefLocation });
 
-    return swagger
-      .run({ spec: './test/fixtures/swagger.json', token: `${key}-${id}`, version })
-      .then(() => {
-        expect(console.warn).toHaveBeenCalledTimes(1);
-        expect(console.log).toHaveBeenCalledTimes(1);
+    return swagger.run({ spec: './test/fixtures/swagger.json', token: `${key}-${id}`, version }).then(() => {
+      expect(console.warn).toHaveBeenCalledTimes(1);
+      expect(console.log).toHaveBeenCalledTimes(1);
 
-        const output = getCommandOutput();
+      const output = getCommandOutput();
 
-        expect(output).toMatch(/using `rdme` with --token/i);
+      expect(output).toMatch(/using `rdme` with --token/i);
 
-        mock.done();
-      });
+      mock.done();
+    });
   });
 
   it('should error if no api key provided', async () => {
     await expect(swagger.run({ spec: './test/fixtures/swagger.json' })).rejects.toThrow(
-      'No project API key provided. Please use `--key`.',
+      'No project API key provided. Please use `--key`.'
     );
   });
 
@@ -204,9 +198,7 @@ describe('rdme swagger', () => {
       .basicAuth({ user: key })
       .reply(200, { version: '1.0.0' });
 
-    await expect(swagger.run({ key, version })).rejects.toThrow(
-      /We couldn't find a Swagger or OpenAPI file./,
-    );
+    await expect(swagger.run({ key, version })).rejects.toThrow(/We couldn't find a Swagger or OpenAPI file./);
 
     mock.done();
   });

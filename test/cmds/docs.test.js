@@ -24,15 +24,13 @@ describe('rdme docs', () => {
 
   it('should error if no version provided', () => {
     expect.assertions(1);
-    return expect(docs.run({ key })).rejects.toThrow(
-      'No project version provided. Please use `--version`.',
-    );
+    return expect(docs.run({ key })).rejects.toThrow('No project version provided. Please use `--version`.');
   });
 
   it('should error if no folder provided', () => {
     expect.assertions(1);
     return expect(docs.run({ key, version: '1.0.0' })).rejects.toThrow(
-      'No folder provided. Usage `rdme docs <folder> [options]`.',
+      'No folder provided. Usage `rdme docs <folder> [options]`.'
     );
   });
 
@@ -96,12 +94,10 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200, { category: '5ae9ece93a685f47efb9a97c', slug, lastUpdatedHash: hash });
 
-      return docs
-        .run({ folder: './test/fixtures/existing-docs', key, version })
-        .then(([message]) => {
-          expect(message).toBe('`simple-doc` not updated. No changes.');
-          getMock.done();
-        });
+      return docs.run({ folder: './test/fixtures/existing-docs', key, version }).then(([message]) => {
+        expect(message).toBe('`simple-doc` not updated. No changes.');
+        getMock.done();
+      });
     });
   });
 
@@ -153,20 +149,16 @@ describe('rdme docs:edit', () => {
   });
 
   it('should error if no api key provided', () => {
-    return expect(docsEdit.run({})).rejects.toThrow(
-      'No project API key provided. Please use `--key`.',
-    );
+    return expect(docsEdit.run({})).rejects.toThrow('No project API key provided. Please use `--key`.');
   });
 
   it('should error if no version provided', () => {
-    return expect(docsEdit.run({ key })).rejects.toThrow(
-      'No project version provided. Please use `--version`.',
-    );
+    return expect(docsEdit.run({ key })).rejects.toThrow('No project version provided. Please use `--version`.');
   });
 
   it('should error if no slug provided', () => {
     return expect(docsEdit.run({ key, version: '1.0.0' })).rejects.toThrow(
-      'No slug provided. Usage `rdme docs:edit <slug> [options]`.',
+      'No slug provided. Usage `rdme docs:edit <slug> [options]`.'
     );
   });
 
