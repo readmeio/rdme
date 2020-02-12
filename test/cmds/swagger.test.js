@@ -152,7 +152,10 @@ describe('rdme swagger', () => {
       .basicAuth({ user: key })
       .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
-    return swagger.run({ spec: './test/fixtures/swagger.json', key }).then(() => mock.done());
+    return swagger.run({ spec: './test/fixtures/swagger.json', key }).then(() => {
+      mock.done();
+      expect(true).toBeTruthy();
+    });
   });
 
   it('should PUT to the swagger api if id is provided', () => {
@@ -163,7 +166,10 @@ describe('rdme swagger', () => {
       .basicAuth({ user: key })
       .reply(201, { body: '{ id: 1 }' });
 
-    return swagger.run({ spec: './test/fixtures/swagger.json', key, id, version }).then(() => mock.done());
+    return swagger.run({ spec: './test/fixtures/swagger.json', key, id, version }).then(() => {
+      mock.done();
+      expect(true).toBeTruthy();
+    });
   });
 
   it('should still work with `token`', () => {
