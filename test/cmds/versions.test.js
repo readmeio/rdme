@@ -126,6 +126,7 @@ describe('rdme versions*', () => {
 
       return createVersion.run({ key, version }).then(() => {
         mockRequest.done();
+        expect(true).toBeTruthy();
       });
     });
 
@@ -171,6 +172,7 @@ describe('rdme versions*', () => {
 
       return deleteVersion.run({ key, version }).then(() => {
         mockRequest.done();
+        expect(true).toBeTruthy();
       });
     });
 
@@ -219,6 +221,7 @@ describe('rdme versions*', () => {
 
       return updateVersion.run({ key, version }).then(() => {
         mockRequest.done();
+        expect(true).toBeTruthy();
       });
     });
 
