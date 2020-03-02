@@ -52,8 +52,8 @@ describe('rdme versions*', () => {
         .reply(200, [versionPayload, version2Payload]);
 
       const table = await versions.run({ key });
-      expect(table.indexOf(version) !== -1).toBeTruthy();
-      expect(table.indexOf(version2) !== -1).toBeTruthy();
+      expect(table).toContain(version);
+      expect(table).toContain(version2);
       mockRequest.done();
     });
 
@@ -75,8 +75,8 @@ describe('rdme versions*', () => {
         .reply(200, versionPayload);
 
       return versions.run({ key, version }).then(table => {
-        expect(table.indexOf(version) !== -1).toBeTruthy();
-        expect(table.indexOf(version2) === -1).toBeTruthy();
+        expect(table).toContain(version);
+        expect(table).not.toContain(version2);
         mockRequest.done();
       });
     });
@@ -126,7 +126,6 @@ describe('rdme versions*', () => {
 
       return createVersion.run({ key, version }).then(() => {
         mockRequest.done();
-        expect(true).toBeTruthy();
       });
     });
 
@@ -172,7 +171,6 @@ describe('rdme versions*', () => {
 
       return deleteVersion.run({ key, version }).then(() => {
         mockRequest.done();
-        expect(true).toBeTruthy();
       });
     });
 
@@ -221,7 +219,6 @@ describe('rdme versions*', () => {
 
       return updateVersion.run({ key, version }).then(() => {
         mockRequest.done();
-        expect(true).toBeTruthy();
       });
     });
 

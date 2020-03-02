@@ -154,7 +154,6 @@ describe('rdme swagger', () => {
 
     return swagger.run({ spec: './test/fixtures/swagger.json', key }).then(() => {
       mock.done();
-      expect(true).toBeTruthy();
     });
   });
 
@@ -168,7 +167,6 @@ describe('rdme swagger', () => {
 
     return swagger.run({ spec: './test/fixtures/swagger.json', key, id, version }).then(() => {
       mock.done();
-      expect(true).toBeTruthy();
     });
   });
 
