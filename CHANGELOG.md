@@ -1,3 +1,12 @@
+## <small>3.7.6 (2020-03-02)</small>
+
+* chore(deps-dev): Bump @readme/eslint-config from 1.13.0 to 1.14.0 (#148) ([7068c39](https://github.com/readmeio/rdme/commit/7068c39)), closes [#148](https://github.com/readmeio/rdme/issues/148)
+* chore(deps-dev): Bump nock from 12.0.1 to 12.0.2 (#149) ([4733eeb](https://github.com/readmeio/rdme/commit/4733eeb)), closes [#149](https://github.com/readmeio/rdme/issues/149)
+* chore(deps): Bump config from 3.2.6 to 3.3.0 (#147) ([1cf5660](https://github.com/readmeio/rdme/commit/1cf5660)), closes [#147](https://github.com/readmeio/rdme/issues/147)
+* chore(deps): Bump oas from 2.0.0 to 2.1.1 (#146) ([8aeb601](https://github.com/readmeio/rdme/commit/8aeb601)), closes [#146](https://github.com/readmeio/rdme/issues/146)
+
+
+
 ## <small>3.7.5 (2020-02-24)</small>
 
 * chore(deps-dev): Bump @readme/eslint-config from 1.12.0 to 1.13.0 (#142) ([2845529](https://github.com/readmeio/rdme/commit/2845529)), closes [#142](https://github.com/readmeio/rdme/issues/142)
