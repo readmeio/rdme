@@ -74,7 +74,6 @@ describe('rdme docs', () => {
       return docs.run({ folder: './test/fixtures/existing-docs', key, version }).then(() => {
         getMock.done();
         putMock.done();
-        expect(true).toBeTruthy();
       });
     });
 
@@ -135,7 +134,6 @@ describe('rdme docs', () => {
       return docs.run({ folder: './test/fixtures/new-docs', key, version }).then(() => {
         getMock.done();
         postMock.done();
-        expect(true).toBeTruthy();
       });
     });
   });

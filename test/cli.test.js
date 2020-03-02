@@ -58,39 +58,39 @@ describe('cli', () => {
 
     it('should print usage for a given command', () => {
       return cli(['swagger', '--help']).then(output => {
-        expect(output.indexOf(swaggerCmd.description) !== -1).toBeTruthy();
-        expect(output.indexOf(swaggerCmd.usage) !== -1).toBeTruthy();
-        expect(output.indexOf('--key') !== -1).toBeTruthy();
-        expect(output.indexOf('--help') !== -1).toBeTruthy();
+        expect(output).toContain(swaggerCmd.description);
+        expect(output).toContain(swaggerCmd.usage);
+        expect(output).toContain('--key');
+        expect(output).toContain('--help');
       });
     });
 
     it('should print usage for a given command if supplied as `help <command>`', () => {
       return cli(['help', 'swagger']).then(output => {
-        expect(output.indexOf(swaggerCmd.description) !== -1).toBeTruthy();
-        expect(output.indexOf(swaggerCmd.usage) !== -1).toBeTruthy();
-        expect(output.indexOf('--key') !== -1).toBeTruthy();
-        expect(output.indexOf('--help') !== -1).toBeTruthy();
+        expect(output).toContain(swaggerCmd.description);
+        expect(output).toContain(swaggerCmd.usage);
+        expect(output).toContain('--key');
+        expect(output).toContain('--help');
       });
     });
 
     it('should not surface args that are designated as hidden', () => {
       return cli(['swagger', '--help']).then(output => {
-        expect(output.indexOf('---token') === -1).toBeTruthy();
-        expect(output.indexOf('---spec') === -1).toBeTruthy();
+        expect(output).not.toContain('---token');
+        expect(output).not.toContain('---spec');
       });
     });
 
     it('should show related commands for a subcommands help menu', () => {
       return cli(['versions', '--help']).then(output => {
-        expect(output.indexOf('Related commands') !== -1).toBeTruthy();
-        expect(output.indexOf('versions:create') !== -1).toBeTruthy();
+        expect(output).toContain('Related commands');
+        expect(output).toContain('versions:create');
       });
     });
 
     it('should not show related commands on commands that have none', () => {
       return cli(['swagger', '--help']).then(output => {
-        expect(output.indexOf('Related commands') === -1).toBeTruthy();
+        expect(output).not.toContain('Related commands');
       });
     });
   });

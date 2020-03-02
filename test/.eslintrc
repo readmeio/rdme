@@ -9,7 +9,7 @@
       {
         "assertFunctionNames": [
           "expect",
-          "nock.*.reply"
+          "nock.**.reply"
         ]
       }
     ]
