@@ -1,3 +1,11 @@
+## <small>3.7.7 (2020-03-09)</small>
+
+* chore: minor updates to .npmignore ([7ddc882](https://github.com/readmeio/rdme/commit/7ddc882))
+* chore(deps): Bump oas from 2.1.1 to 3.0.0 (#151) ([a9f5a30](https://github.com/readmeio/rdme/commit/a9f5a30)), closes [#151](https://github.com/readmeio/rdme/issues/151)
+* chore(deps): Bump open from 7.0.2 to 7.0.3 (#150) ([4d8e57e](https://github.com/readmeio/rdme/commit/4d8e57e)), closes [#150](https://github.com/readmeio/rdme/issues/150)
+
+
+
 ## <small>3.7.6 (2020-03-02)</small>
 
 * chore(deps-dev): Bump @readme/eslint-config from 1.13.0 to 1.14.0 (#148) ([7068c39](https://github.com/readmeio/rdme/commit/7068c39)), closes [#148](https://github.com/readmeio/rdme/issues/148)
