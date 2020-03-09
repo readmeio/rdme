@@ -1,10 +1,9 @@
+.DS_Store
 .editorconfig
 .eslintignore
 .eslintrc
+.github/
 .prettierignore
 .prettierrc
-.circleci
-.DS_Store
-test
-coverage
-TODO
+coverage/
+test/
