@@ -1,3 +1,12 @@
+## <small>3.7.8 (2020-03-16)</small>
+
+* chore(deps-dev): Bump @readme/eslint-config from 1.14.0 to 1.15.0 (#153) ([55325bc](https://github.com/readmeio/rdme/commit/55325bc)), closes [#153](https://github.com/readmeio/rdme/issues/153)
+* chore(deps): [Security] Bump acorn from 6.4.0 to 6.4.1 (#152) ([eda588c](https://github.com/readmeio/rdme/commit/eda588c)), closes [#152](https://github.com/readmeio/rdme/issues/152)
+* chore(deps): Bump oas from 3.0.0 to 3.0.1 (#155) ([d656a89](https://github.com/readmeio/rdme/commit/d656a89)), closes [#155](https://github.com/readmeio/rdme/issues/155)
+* chore(deps): Bump table-layout from 1.0.0 to 1.0.1 (#154) ([14827a8](https://github.com/readmeio/rdme/commit/14827a8)), closes [#154](https://github.com/readmeio/rdme/issues/154)
+
+
+
 ## <small>3.7.7 (2020-03-09)</small>
 
 * chore: minor updates to .npmignore ([7ddc882](https://github.com/readmeio/rdme/commit/7ddc882))
