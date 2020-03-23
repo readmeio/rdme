@@ -43,7 +43,7 @@ exports.args = [
   },
 ];
 
-exports.run = async function(opts) {
+exports.run = async function (opts) {
   const { key, version, codename, newVersion, main, beta, isPublic, deprecated } = opts;
 
   if (!key) {

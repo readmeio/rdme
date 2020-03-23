@@ -33,7 +33,7 @@ exports.args = [
   },
 ];
 
-exports.run = function(opts) {
+exports.run = function (opts) {
   const { folder, key, version } = opts;
 
   if (!key) {
@@ -98,10 +98,7 @@ exports.run = function(opts) {
       const matter = frontMatter(file);
       // Stripping the markdown extension from the filename
       const slug = filename.replace(path.extname(filename), '');
-      const hash = crypto
-        .createHash('sha1')
-        .update(file)
-        .digest('hex');
+      const hash = crypto.createHash('sha1').update(file).digest('hex');
 
       return request
         .get(`${config.host}/api/v1/docs/${slug}`, {

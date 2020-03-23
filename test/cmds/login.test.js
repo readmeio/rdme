@@ -28,9 +28,7 @@ describe('rdme login', () => {
     const project = 'subdomain';
     const apiKey = 'abcdefg';
 
-    const mock = nock(config.host)
-      .post('/api/v1/login', { email, password, project })
-      .reply(200, { apiKey });
+    const mock = nock(config.host).post('/api/v1/login', { email, password, project }).reply(200, { apiKey });
 
     return cmd.run({ email, password, project }).then(() => {
       mock.done();
@@ -47,12 +45,10 @@ describe('rdme login', () => {
     const password = '123456';
     const project = 'subdomain';
 
-    const mock = nock(config.host)
-      .post('/api/v1/login', { email, password, project })
-      .reply(400, {
-        description: 'Invalid email/password',
-        error: 'Bad Request',
-      });
+    const mock = nock(config.host).post('/api/v1/login', { email, password, project }).reply(400, {
+      description: 'Invalid email/password',
+      error: 'Bad Request',
+    });
 
     return cmd.run({ email, password, project }).catch(err => {
       mock.done();
@@ -67,12 +63,10 @@ describe('rdme login', () => {
     const password = '123456';
     const project = 'subdomain';
 
-    const mock = nock(config.host)
-      .post('/api/v1/login', { email, password, project })
-      .reply(400, {
-        description: 'You must provide a Two Factor Code',
-        error: 'Bad Request',
-      });
+    const mock = nock(config.host).post('/api/v1/login', { email, password, project }).reply(400, {
+      description: 'You must provide a Two Factor Code',
+      error: 'Bad Request',
+    });
 
     return cmd.run({ email, password, project }).catch(err => {
       mock.done();

@@ -36,7 +36,7 @@ async function getCredentials(opts) {
   };
 }
 
-exports.run = async function(opts) {
+exports.run = async function (opts) {
   let { email, password, project, token } = opts;
 
   // We only want to prompt for input outside of the test environment

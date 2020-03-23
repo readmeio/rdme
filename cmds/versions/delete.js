@@ -22,7 +22,7 @@ exports.args = [
   },
 ];
 
-exports.run = async function(opts) {
+exports.run = async function (opts) {
   const { key, version } = opts;
 
   if (!key) {
