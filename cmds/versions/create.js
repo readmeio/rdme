@@ -49,7 +49,7 @@ exports.args = [
   },
 ];
 
-exports.run = async function(opts) {
+exports.run = async function (opts) {
   let versionList;
   const { key, version, codename, fork, main, beta, isPublic } = opts;
 

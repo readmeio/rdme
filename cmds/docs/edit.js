@@ -33,7 +33,7 @@ exports.args = [
   },
 ];
 
-exports.run = async function(opts) {
+exports.run = async function (opts) {
   const { slug, key, version } = opts;
 
   if (!key) {

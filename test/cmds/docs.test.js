@@ -224,13 +224,9 @@ describe('rdme docs:edit', () => {
     expect.assertions(2);
     const slug = 'getting-started';
 
-    const getMock = nock(config.host)
-      .get(`/api/v1/docs/${slug}`)
-      .reply(200, {});
+    const getMock = nock(config.host).get(`/api/v1/docs/${slug}`).reply(200, {});
 
-    const putMock = nock(config.host)
-      .put(`/api/v1/docs/${slug}`)
-      .reply(400, { error: 'Bad Request' });
+    const putMock = nock(config.host).put(`/api/v1/docs/${slug}`).reply(400, { error: 'Bad Request' });
 
     function mockEditor(filename, cb) {
       return cb(0);
@@ -248,9 +244,7 @@ describe('rdme docs:edit', () => {
   it('should handle error if $EDITOR fails', () => {
     expect.assertions(1);
     const slug = 'getting-started';
-    nock(config.host)
-      .get(`/api/v1/docs/${slug}`)
-      .reply(200, {});
+    nock(config.host).get(`/api/v1/docs/${slug}`).reply(200, {});
 
     function mockEditor(filename, cb) {
       return cb(1);

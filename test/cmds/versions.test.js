@@ -136,10 +136,7 @@ describe('rdme versions*', () => {
         is_beta: false,
       });
 
-      const mockRequest = nock(config.host)
-        .post(`/api/v1/version`)
-        .basicAuth({ user: key })
-        .reply(400);
+      const mockRequest = nock(config.host).post(`/api/v1/version`).basicAuth({ user: key }).reply(400);
 
       return createVersion.run({ key, version, fork: '0.0.5' }).catch(err => {
         expect(err.message).toBe('Failed to create a new version using your specified parameters.');
@@ -164,10 +161,7 @@ describe('rdme versions*', () => {
     });
 
     it('should delete a specific version', async () => {
-      const mockRequest = nock(config.host)
-        .delete(`/api/v1/version/${version}`)
-        .basicAuth({ user: key })
-        .reply(200);
+      const mockRequest = nock(config.host).delete(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200);
 
       return deleteVersion.run({ key, version }).then(() => {
         mockRequest.done();
@@ -175,10 +169,7 @@ describe('rdme versions*', () => {
     });
 
     it('should catch any request errors', async () => {
-      const mockRequest = nock(config.host)
-        .delete(`/api/v1/version/${version}`)
-        .basicAuth({ user: key })
-        .reply(400);
+      const mockRequest = nock(config.host).delete(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(400);
 
       return deleteVersion.run({ key, version }).catch(err => {
         expect(err.message).toBe('Failed to delete target version.');

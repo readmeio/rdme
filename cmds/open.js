@@ -12,7 +12,7 @@ exports.position = 2;
 
 exports.args = [];
 
-exports.run = function(opts) {
+exports.run = function (opts) {
   const project = configStore.get('project');
   if (!project) {
     return Promise.reject(new Error(`Please login using \`${config.cli} ${loginCmd.command}\`.`));

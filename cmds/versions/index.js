@@ -79,7 +79,7 @@ const getVersionFormatted = version => {
   return output.join('\n');
 };
 
-exports.run = function(opts) {
+exports.run = function (opts) {
   const { key, version, raw } = opts;
 
   if (!key) {
