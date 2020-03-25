@@ -18,7 +18,7 @@
    * [Future](#future)
 
 ### About `rdme`
-`rdme` is the CLI wrapper for [ReadMe's RESTful API](https://readme.readme.io/v2.0/reference). It allows you to upload and edit [Swagger](https://swagger.io/) and [OAS](https://swagger.io/specification/) files associated with projects you create on [ReadMe](https://readme.com/). Additionally, you can sync documentation with your project, and manage project versions.
+`rdme` is the CLI wrapper for [ReadMe's RESTful API](https://docs.readme.com/developers/reference/intro). It allows you to upload and edit [Swagger](https://swagger.io/) and [OAS](https://swagger.io/specification/) files associated with projects you create on [ReadMe](https://readme.com/). Additionally, you can sync documentation with your project, and manage project versions.
 
 ## Configuration
 ### Installation
