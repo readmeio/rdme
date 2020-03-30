@@ -1,3 +1,18 @@
+## <small>3.7.9 (2020-03-30)</small>
+
+* chore(deps-dev): Bump @readme/eslint-config from 1.15.0 to 2.0.0 (#158) ([3d32929](https://github.com/readmeio/rdme/commit/3d32929)), closes [#158](https://github.com/readmeio/rdme/issues/158)
+* chore(deps-dev): Bump @readme/eslint-config from 2.0.0 to 2.0.2 (#162) ([b40d373](https://github.com/readmeio/rdme/commit/b40d373)), closes [#162](https://github.com/readmeio/rdme/issues/162)
+* chore(deps-dev): Bump jest from 25.1.0 to 25.2.4 (#165) ([1da8386](https://github.com/readmeio/rdme/commit/1da8386)), closes [#165](https://github.com/readmeio/rdme/issues/165)
+* chore(deps-dev): Bump nock from 12.0.2 to 12.0.3 (#159) ([f9d5946](https://github.com/readmeio/rdme/commit/f9d5946)), closes [#159](https://github.com/readmeio/rdme/issues/159)
+* chore(deps-dev): Bump prettier from 2.0.1 to 2.0.2 (#164) ([847cf05](https://github.com/readmeio/rdme/commit/847cf05)), closes [#164](https://github.com/readmeio/rdme/issues/164)
+* chore(deps): Bump config from 3.3.0 to 3.3.1 (#163) ([745b254](https://github.com/readmeio/rdme/commit/745b254)), closes [#163](https://github.com/readmeio/rdme/issues/163)
+* chore(deps): Bump oas from 3.0.0 to 3.1.0 (#156) ([07ebc85](https://github.com/readmeio/rdme/commit/07ebc85)), closes [#156](https://github.com/readmeio/rdme/issues/156)
+* chore(deps): Bump oas from 3.1.0 to 3.1.3 (#157) ([6b30186](https://github.com/readmeio/rdme/commit/6b30186)), closes [#157](https://github.com/readmeio/rdme/issues/157)
+* chore(deps): Bump oas from 3.1.3 to 3.1.5 (#161) ([9691dc8](https://github.com/readmeio/rdme/commit/9691dc8)), closes [#161](https://github.com/readmeio/rdme/issues/161)
+* docs: Fix link to ReadMe API docs (#160) ([f8c41b8](https://github.com/readmeio/rdme/commit/f8c41b8)), closes [#160](https://github.com/readmeio/rdme/issues/160)
+
+
+
 ## <small>3.7.8 (2020-03-16)</small>
 
 * chore(deps-dev): Bump @readme/eslint-config from 1.14.0 to 1.15.0 (#153) ([55325bc](https://github.com/readmeio/rdme/commit/55325bc)), closes [#153](https://github.com/readmeio/rdme/issues/153)
