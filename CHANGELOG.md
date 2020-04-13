@@ -1,3 +1,17 @@
+## <small>3.7.10 (2020-04-13)</small>
+
+* chore(deps-dev): Bump @readme/eslint-config from 2.0.2 to 2.0.3 (#169) ([1bf8597](https://github.com/readmeio/rdme/commit/1bf8597)), closes [#169](https://github.com/readmeio/rdme/issues/169)
+* chore(deps-dev): Bump jest from 25.2.4 to 25.2.7 (#168) ([09787ed](https://github.com/readmeio/rdme/commit/09787ed)), closes [#168](https://github.com/readmeio/rdme/issues/168)
+* chore(deps-dev): Bump jest from 25.2.7 to 25.3.0 (#174) ([090ee8b](https://github.com/readmeio/rdme/commit/090ee8b)), closes [#174](https://github.com/readmeio/rdme/issues/174)
+* chore(deps-dev): Bump prettier from 2.0.2 to 2.0.3 (#167) ([c5ab394](https://github.com/readmeio/rdme/commit/c5ab394)), closes [#167](https://github.com/readmeio/rdme/issues/167)
+* chore(deps-dev): Bump prettier from 2.0.3 to 2.0.4 ([bac0fe6](https://github.com/readmeio/rdme/commit/bac0fe6))
+* chore(deps): Bump enquirer from 2.3.2 to 2.3.5 (#175) ([164287a](https://github.com/readmeio/rdme/commit/164287a)), closes [#175](https://github.com/readmeio/rdme/issues/175)
+* chore(deps): Bump oas from 3.1.5 to 3.1.6 (#170) ([11980d2](https://github.com/readmeio/rdme/commit/11980d2)), closes [#170](https://github.com/readmeio/rdme/issues/170)
+* chore(deps): Bump oas from 3.1.6 to 3.1.7 (#171) ([ffbb758](https://github.com/readmeio/rdme/commit/ffbb758)), closes [#171](https://github.com/readmeio/rdme/issues/171)
+* chore(deps): Bump semver from 7.1.3 to 7.2.2 (#173) ([71a0f8d](https://github.com/readmeio/rdme/commit/71a0f8d)), closes [#173](https://github.com/readmeio/rdme/issues/173)
+
+
+
 ## <small>3.7.9 (2020-03-30)</small>
 
 * chore(deps-dev): Bump @readme/eslint-config from 1.15.0 to 2.0.0 (#158) ([3d32929](https://github.com/readmeio/rdme/commit/3d32929)), closes [#158](https://github.com/readmeio/rdme/issues/158)
