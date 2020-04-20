@@ -1,3 +1,12 @@
+## <small>3.7.11 (2020-04-20)</small>
+
+* chore(deps-dev): Bump @readme/eslint-config from 2.0.3 to 2.0.4 (#177) ([e201154](https://github.com/readmeio/rdme/commit/e201154)), closes [#177](https://github.com/readmeio/rdme/issues/177)
+* chore(deps-dev): Bump jest from 25.3.0 to 25.4.0 (#176) ([bdcc1fc](https://github.com/readmeio/rdme/commit/bdcc1fc)), closes [#176](https://github.com/readmeio/rdme/issues/176)
+* chore(deps): Bump oas from 3.1.7 to 3.1.9 (#179) ([8168851](https://github.com/readmeio/rdme/commit/8168851)), closes [#179](https://github.com/readmeio/rdme/issues/179)
+* chore(deps): Bump semver from 7.2.2 to 7.3.2 (#178) ([e6bd15d](https://github.com/readmeio/rdme/commit/e6bd15d)), closes [#178](https://github.com/readmeio/rdme/issues/178)
+
+
+
 ## <small>3.7.10 (2020-04-13)</small>
 
 * chore(deps-dev): Bump @readme/eslint-config from 2.0.2 to 2.0.3 (#169) ([1bf8597](https://github.com/readmeio/rdme/commit/1bf8597)), closes [#169](https://github.com/readmeio/rdme/issues/169)
