@@ -1,3 +1,10 @@
+## <small>3.7.12 (2020-04-27)</small>
+
+* chore(deps-dev): Bump prettier from 2.0.4 to 2.0.5 (#181) ([a7c6267](https://github.com/readmeio/rdme/commit/a7c6267)), closes [#181](https://github.com/readmeio/rdme/issues/181)
+* chore(deps): Bump oas from 3.1.9 to 3.2.0 (#180) ([d93a959](https://github.com/readmeio/rdme/commit/d93a959)), closes [#180](https://github.com/readmeio/rdme/issues/180)
+
+
+
 ## <small>3.7.11 (2020-04-20)</small>
 
 * chore(deps-dev): Bump @readme/eslint-config from 2.0.3 to 2.0.4 (#177) ([e201154](https://github.com/readmeio/rdme/commit/e201154)), closes [#177](https://github.com/readmeio/rdme/issues/177)
