@@ -1,3 +1,18 @@
+## <small>3.7.13 (2020-05-18)</small>
+
+* chore(deps-dev): Bump @readme/eslint-config from 2.0.4 to 2.0.6 (#183) ([efa1d23](https://github.com/readmeio/rdme/commit/efa1d23)), closes [#183](https://github.com/readmeio/rdme/issues/183)
+* chore(deps-dev): Bump @readme/eslint-config from 2.0.6 to 2.1.0 (#185) ([c403ec1](https://github.com/readmeio/rdme/commit/c403ec1)), closes [#185](https://github.com/readmeio/rdme/issues/185)
+* chore(deps-dev): Bump @readme/eslint-config from 2.1.0 to 2.2.0 (#187) ([9d0c974](https://github.com/readmeio/rdme/commit/9d0c974)), closes [#187](https://github.com/readmeio/rdme/issues/187)
+* chore(deps-dev): Bump conventional-changelog-cli from 2.0.31 to 2.0.34 (#186) ([f586dcf](https://github.com/readmeio/rdme/commit/f586dcf)), closes [#186](https://github.com/readmeio/rdme/issues/186)
+* chore(deps-dev): Bump jest from 25.4.0 to 25.5.4 (#182) ([50138d5](https://github.com/readmeio/rdme/commit/50138d5)), closes [#182](https://github.com/readmeio/rdme/issues/182)
+* chore(deps-dev): Bump jest from 25.5.4 to 26.0.1 (#188) ([d142fbe](https://github.com/readmeio/rdme/commit/d142fbe)), closes [#188](https://github.com/readmeio/rdme/issues/188)
+* chore(deps): Bump oas from 3.2.0 to 3.3.2 (#184) ([48ccb3b](https://github.com/readmeio/rdme/commit/48ccb3b)), closes [#184](https://github.com/readmeio/rdme/issues/184)
+* chore(deps): Bump oas from 3.3.2 to 3.4.0 (#190) ([ea7e170](https://github.com/readmeio/rdme/commit/ea7e170)), closes [#190](https://github.com/readmeio/rdme/issues/190)
+* chore(deps): Bump open from 7.0.3 to 7.0.4 (#189) ([9da4f7e](https://github.com/readmeio/rdme/commit/9da4f7e)), closes [#189](https://github.com/readmeio/rdme/issues/189)
+* style: upgrading @readme/eslint-config and eslint to the latest (#191) ([432d9e0](https://github.com/readmeio/rdme/commit/432d9e0)), closes [#191](https://github.com/readmeio/rdme/issues/191)
+
+
+
 ## <small>3.7.12 (2020-04-27)</small>
 
 * chore(deps-dev): Bump prettier from 2.0.4 to 2.0.5 (#181) ([a7c6267](https://github.com/readmeio/rdme/commit/a7c6267)), closes [#181](https://github.com/readmeio/rdme/issues/181)
