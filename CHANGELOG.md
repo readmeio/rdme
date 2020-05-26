@@ -1,3 +1,12 @@
+## <small>3.7.14 (2020-05-26)</small>
+
+* chore(deps-dev): Bump @readme/eslint-config from 3.0.0 to 3.1.0 (#195) ([36382e8](https://github.com/readmeio/rdme/commit/36382e8)), closes [#195](https://github.com/readmeio/rdme/issues/195)
+* chore(deps-dev): Bump eslint from 7.0.0 to 7.1.0 (#193) ([aaccb7e](https://github.com/readmeio/rdme/commit/aaccb7e)), closes [#193](https://github.com/readmeio/rdme/issues/193)
+* chore(deps): [Security] Bump minimist from 1.2.0 to 1.2.5 (#192) ([5d1b877](https://github.com/readmeio/rdme/commit/5d1b877)), closes [#192](https://github.com/readmeio/rdme/issues/192)
+* chore(deps): Bump oas from 3.4.0 to 3.4.1 (#194) ([e41364b](https://github.com/readmeio/rdme/commit/e41364b)), closes [#194](https://github.com/readmeio/rdme/issues/194)
+
+
+
 ## <small>3.7.13 (2020-05-18)</small>
 
 * chore(deps-dev): Bump @readme/eslint-config from 2.0.4 to 2.0.6 (#183) ([efa1d23](https://github.com/readmeio/rdme/commit/efa1d23)), closes [#183](https://github.com/readmeio/rdme/issues/183)

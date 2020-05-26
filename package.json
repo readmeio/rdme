@@ -17,7 +17,7 @@
     "microservice",
     "documentation"
   ],
-  "version": "3.7.13",
+  "version": "3.7.14",
   "repository": {
     "type": "git",
     "url": "git://github.com/readmeio/rdme.git"
