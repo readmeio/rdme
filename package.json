@@ -49,9 +49,9 @@
     "table-layout": "^1.0.0"
   },
   "devDependencies": {
-    "@readme/eslint-config": "^3.0.0",
+    "@readme/eslint-config": "^3.1.0",
     "conventional-changelog-cli": "^2.0.31",
-    "eslint": "^7.0.0",
+    "eslint": "^7.1.0",
     "jest": "^26.0.1",
     "nock": "^12.0.0",
     "prettier": "^2.0.1"
