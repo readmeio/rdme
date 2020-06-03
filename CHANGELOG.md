@@ -1,3 +1,15 @@
+## <small>3.7.15 (2020-06-03)</small>
+
+* build(deps-dev): bump @readme/eslint-config from 3.1.0 to 3.1.3 (#198) ([feab655](https://github.com/readmeio/rdme/commit/feab655)), closes [#198](https://github.com/readmeio/rdme/issues/198)
+* build(deps): bump oas from 3.4.2 to 3.4.3 (#199) ([c2ba83a](https://github.com/readmeio/rdme/commit/c2ba83a)), closes [#199](https://github.com/readmeio/rdme/issues/199)
+* ci: create Dependabot config file (#197) ([143d78d](https://github.com/readmeio/rdme/commit/143d78d)), closes [#197](https://github.com/readmeio/rdme/issues/197)
+* ci: removing node 14 from tests for now ([ee7b294](https://github.com/readmeio/rdme/commit/ee7b294))
+* ci: running tests against node 14 ([36ad006](https://github.com/readmeio/rdme/commit/36ad006))
+* chore(deps-dev): upgrading eslint deps to the latest versions ([9a6cfbf](https://github.com/readmeio/rdme/commit/9a6cfbf))
+* chore(deps): upgrading oas to the latest release ([6194f26](https://github.com/readmeio/rdme/commit/6194f26))
+
+
+
 ## <small>3.7.14 (2020-05-26)</small>
 
 * chore(deps-dev): Bump @readme/eslint-config from 3.0.0 to 3.1.0 (#195) ([36382e8](https://github.com/readmeio/rdme/commit/36382e8)), closes [#195](https://github.com/readmeio/rdme/issues/195)
