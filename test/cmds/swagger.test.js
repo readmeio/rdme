@@ -67,7 +67,7 @@ describe('rdme swagger', () => {
     });
   });
 
-  it('should error if API errors', async () => {
+  it('should error if API errors', () => {
     const mock = nock(config.host)
       .get(`/api/v1/version/${version}`)
       .basicAuth({ user: key })
