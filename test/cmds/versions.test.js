@@ -68,7 +68,7 @@ describe('rdme versions*', () => {
       mockRequest.done();
     });
 
-    it('should get a specific version object if version flag provided', async () => {
+    it('should get a specific version object if version flag provided', () => {
       const mockRequest = nock(config.host)
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
@@ -81,7 +81,7 @@ describe('rdme versions*', () => {
       });
     });
 
-    it('should get a specific version object if version flag provided and return it in a raw format', async () => {
+    it('should get a specific version object if version flag provided and return it in a raw format', () => {
       const mockRequest = nock(config.host)
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
@@ -109,7 +109,7 @@ describe('rdme versions*', () => {
       });
     });
 
-    it('should get a specific version object', async () => {
+    it('should get a specific version object', () => {
       promptHandler.createVersionPrompt.mockResolvedValue({
         is_stable: true,
         is_beta: false,
@@ -129,7 +129,7 @@ describe('rdme versions*', () => {
       });
     });
 
-    it('should catch any post request errors', async () => {
+    it('should catch any post request errors', () => {
       expect.assertions(1);
       promptHandler.createVersionPrompt.mockResolvedValue({
         is_stable: false,
@@ -160,7 +160,7 @@ describe('rdme versions*', () => {
       });
     });
 
-    it('should delete a specific version', async () => {
+    it('should delete a specific version', () => {
       const mockRequest = nock(config.host).delete(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200);
 
       return deleteVersion.run({ key, version }).then(() => {
@@ -168,7 +168,7 @@ describe('rdme versions*', () => {
       });
     });
 
-    it('should catch any request errors', async () => {
+    it('should catch any request errors', () => {
       const mockRequest = nock(config.host).delete(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(400);
 
       return deleteVersion.run({ key, version }).catch(err => {
@@ -193,7 +193,7 @@ describe('rdme versions*', () => {
       });
     });
 
-    it('should update a specific version object', async () => {
+    it('should update a specific version object', () => {
       promptHandler.createVersionPrompt.mockResolvedValue({
         is_stable: false,
         is_beta: false,
@@ -213,7 +213,7 @@ describe('rdme versions*', () => {
       });
     });
 
-    it('should catch any put request errors', async () => {
+    it('should catch any put request errors', () => {
       expect.assertions(1);
       promptHandler.createVersionPrompt.mockResolvedValue({
         is_stable: false,
