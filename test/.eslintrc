@@ -12,6 +12,8 @@
           "nock.**.reply"
         ]
       }
-    ]
+    ],
+
+    "jest/no-conditional-expect": "off"
   }
 }
