@@ -1,3 +1,19 @@
+## <small>3.7.16 (2020-06-30)</small>
+
+* fix: setting initial data for newVersion when creating a version (#212) ([0fb8ba8](https://github.com/readmeio/rdme/commit/0fb8ba8)), closes [#212](https://github.com/readmeio/rdme/issues/212)
+* chore(deps-dev): bump @readme/eslint-config from 3.2.1 to 3.3.0 (#207) ([6fb98e2](https://github.com/readmeio/rdme/commit/6fb98e2)), closes [#207](https://github.com/readmeio/rdme/issues/207)
+* chore(deps-dev): bump eslint from 7.2.0 to 7.3.1 (#209) ([6748068](https://github.com/readmeio/rdme/commit/6748068)), closes [#209](https://github.com/readmeio/rdme/issues/209)
+* chore(deps-dev): bump jest from 26.0.1 to 26.1.0 (#208) ([f0149dc](https://github.com/readmeio/rdme/commit/f0149dc)), closes [#208](https://github.com/readmeio/rdme/issues/208)
+* chore(deps-dev): bump nock from 12.0.3 to 13.0.0 (#211) ([0fb1564](https://github.com/readmeio/rdme/commit/0fb1564)), closes [#211](https://github.com/readmeio/rdme/issues/211)
+* ci: updating the dependabot label and commit message formats ([984e239](https://github.com/readmeio/rdme/commit/984e239))
+* build(deps-dev): bump @readme/eslint-config from 3.1.3 to 3.2.0 (#202) ([ce0a624](https://github.com/readmeio/rdme/commit/ce0a624)), closes [#202](https://github.com/readmeio/rdme/issues/202)
+* build(deps-dev): bump @readme/eslint-config from 3.2.0 to 3.2.1 (#204) ([3f497a0](https://github.com/readmeio/rdme/commit/3f497a0)), closes [#204](https://github.com/readmeio/rdme/issues/204)
+* build(deps-dev): bump eslint from 7.1.0 to 7.2.0 (#200) ([5608339](https://github.com/readmeio/rdme/commit/5608339)), closes [#200](https://github.com/readmeio/rdme/issues/200)
+* build(deps): bump oas from 3.4.3 to 3.4.4 (#201) ([2eab99f](https://github.com/readmeio/rdme/commit/2eab99f)), closes [#201](https://github.com/readmeio/rdme/issues/201)
+* build(deps): bump oas from 3.4.4 to 3.4.6 (#203) ([b4d6d31](https://github.com/readmeio/rdme/commit/b4d6d31)), closes [#203](https://github.com/readmeio/rdme/issues/203)
+
+
+
 ## <small>3.7.15 (2020-06-03)</small>
 
 * build(deps-dev): bump @readme/eslint-config from 3.1.0 to 3.1.3 (#198) ([feab655](https://github.com/readmeio/rdme/commit/feab655)), closes [#198](https://github.com/readmeio/rdme/issues/198)
