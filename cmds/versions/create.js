@@ -72,7 +72,12 @@ exports.run = async function (opts) {
       .catch(e => Promise.reject(e.error));
   }
 
-  const promptResponse = await prompt(promptOpts.createVersionPrompt(versionList || [{}], opts));
+  const versionPrompt = promptOpts.createVersionPrompt(versionList || [{}], {
+    newVersion: version,
+    ...opts,
+  });
+
+  const promptResponse = await prompt(versionPrompt);
   const options = {
     json: {
       version,
