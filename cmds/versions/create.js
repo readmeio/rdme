@@ -3,6 +3,7 @@ const config = require('config');
 const semver = require('semver');
 const { prompt } = require('enquirer');
 const promptOpts = require('../../lib/prompts');
+const APIError = require('../../lib/apiError');
 
 exports.command = 'versions:create';
 exports.usage = 'versions:create --version=<version> [options]';
@@ -69,7 +70,7 @@ exports.run = async function (opts) {
         json: true,
         auth: { user: key },
       })
-      .catch(e => Promise.reject(e.error));
+      .catch(err => Promise.reject(new APIError(err)));
   }
 
   const versionPrompt = promptOpts.createVersionPrompt(versionList || [{}], {
@@ -93,13 +94,5 @@ exports.run = async function (opts) {
   return request
     .post(`${config.host}/api/v1/version`, options)
     .then(() => Promise.resolve(`Version ${version} created successfully.`))
-    .catch(err => {
-      return Promise.reject(
-        new Error(
-          err.error && err.error.description
-            ? err.error.description
-            : 'Failed to create a new version using your specified parameters.'
-        )
-      );
-    });
+    .catch(err => Promise.reject(new APIError(err)));
 };

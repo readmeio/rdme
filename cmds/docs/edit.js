@@ -3,6 +3,7 @@ const config = require('config');
 const fs = require('fs');
 const editor = require('editor');
 const { promisify } = require('util');
+const APIError = require('../../lib/apiError');
 
 const writeFile = promisify(fs.writeFile);
 const readFile = promisify(fs.readFile);
@@ -61,13 +62,7 @@ exports.run = async function (opts) {
       json: true,
       ...options,
     })
-    .catch(err => {
-      if (err.statusCode === 404) {
-        return Promise.reject(err.error);
-      }
-
-      return Promise.reject(err);
-    });
+    .catch(err => Promise.reject(new APIError(err)));
 
   await writeFile(filename, existingDoc.body);
 
@@ -88,13 +83,7 @@ exports.run = async function (opts) {
           await unlink(filename);
           return resolve();
         })
-        .catch(err => {
-          if (err.statusCode === 400) {
-            return reject(err.error);
-          }
-
-          return reject(err);
-        });
+        .catch(err => reject(new APIError(err)));
     });
   });
 };

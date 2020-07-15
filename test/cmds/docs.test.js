@@ -118,8 +118,10 @@ describe('rdme docs', () => {
         .get(`/api/v1/docs/${slug}`)
         .basicAuth({ user: key })
         .reply(404, {
-          description: 'No doc found with that slug',
-          error: 'Not Found',
+          error: 'DOC_NOTFOUND',
+          message: `The doc with the slug '${slug}' couldn't be found`,
+          suggestion: '...a suggestion to resolve the issue...',
+          help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
         });
 
       const postMock = nock(config.host, {
@@ -211,12 +213,17 @@ describe('rdme docs:edit', () => {
 
     const getMock = nock(config.host)
       .get(`/api/v1/docs/${slug}`)
-      .reply(404, { error: 'Not Found', description: 'No doc found with that slug' });
+      .reply(404, {
+        error: 'DOC_NOTFOUND',
+        message: `The doc with the slug '${slug}' couldn't be found`,
+        suggestion: '...a suggestion to resolve the issue...',
+        help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
+      });
 
     return docsEdit.run({ slug, key, version: '1.0.0' }).catch(err => {
       getMock.done();
-      expect(err.error).toBe('Not Found');
-      expect(err.description).toBe('No doc found with that slug');
+      expect(err.code).toBe('DOC_NOTFOUND');
+      expect(err.message).toContain("The doc with the slug 'no-such-doc' couldn't be found");
     });
   });
 
@@ -226,14 +233,19 @@ describe('rdme docs:edit', () => {
 
     const getMock = nock(config.host).get(`/api/v1/docs/${slug}`).reply(200, {});
 
-    const putMock = nock(config.host).put(`/api/v1/docs/${slug}`).reply(400, { error: 'Bad Request' });
+    const putMock = nock(config.host).put(`/api/v1/docs/${slug}`).reply(400, {
+      error: 'DOC_INVALID',
+      message: "We couldn't save this doc ({error})",
+      suggestion: '...a suggestion to resolve the issue...',
+      help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
+    });
 
     function mockEditor(filename, cb) {
       return cb(0);
     }
 
     return docsEdit.run({ slug, key, version: '1.0.0', mockEditor }).catch(err => {
-      expect(err.error).toBe('Bad Request');
+      expect(err.code).toBe('DOC_INVALID');
       getMock.done();
       putMock.done();
       expect(fs.existsSync(`${slug}.md`)).toBe(true);

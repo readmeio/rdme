@@ -5,6 +5,7 @@ const path = require('path');
 const config = require('config');
 const { prompt } = require('enquirer');
 const promptOpts = require('../lib/prompts');
+const APIError = require('../lib/apiError');
 
 exports.command = 'swagger';
 exports.usage = 'swagger [file] [options]';
@@ -82,7 +83,7 @@ exports.run = async function (opts) {
     function error(err) {
       try {
         const parsedError = JSON.parse(err.error);
-        return Promise.reject(new Error(parsedError.description || parsedError.error));
+        return Promise.reject(new APIError(parsedError));
       } catch (e) {
         return Promise.reject(new Error('There was an error uploading!'));
       }
@@ -162,8 +163,8 @@ exports.run = async function (opts) {
       await request.post(`${config.host}/api/v1/version`, options);
 
       return newVersion;
-    } catch (e) {
-      return Promise.reject(e.error);
+    } catch (err) {
+      return Promise.reject(new APIError(err));
     }
   }
 

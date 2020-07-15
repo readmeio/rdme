@@ -3,6 +3,7 @@ const config = require('config');
 const semver = require('semver');
 const { prompt } = require('enquirer');
 const promptOpts = require('../../lib/prompts');
+const APIError = require('../../lib/apiError');
 
 exports.command = 'versions:update';
 exports.usage = 'versions:update --version=<version> [options]';
@@ -61,7 +62,7 @@ exports.run = async function (opts) {
       json: true,
       auth: { user: key },
     })
-    .catch(e => Promise.reject(e.error));
+    .catch(err => Promise.reject(new APIError(err)));
 
   const promptResponse = await prompt(promptOpts.createVersionPrompt([{}], opts, foundVersion));
   const options = {
@@ -78,5 +79,6 @@ exports.run = async function (opts) {
 
   return request
     .put(`${config.host}/api/v1/version/${version}`, options)
-    .then(() => Promise.resolve(`Version ${version} updated successfully.`));
+    .then(() => Promise.resolve(`Version ${version} updated successfully.`))
+    .catch(err => Promise.reject(new APIError(err)));
 };

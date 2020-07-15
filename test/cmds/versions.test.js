@@ -57,7 +57,7 @@ describe('rdme versions*', () => {
       mockRequest.done();
     });
 
-    it('should make a request to get a list of exisitng versions and return them in a raw format', async () => {
+    it('should make a request to get a list of existing versions and return them in a raw format', async () => {
       const mockRequest = nock(config.host)
         .get('/api/v1/version')
         .basicAuth({ user: key })
@@ -136,10 +136,15 @@ describe('rdme versions*', () => {
         is_beta: false,
       });
 
-      const mockRequest = nock(config.host).post(`/api/v1/version`).basicAuth({ user: key }).reply(400);
+      const mockRequest = nock(config.host).post(`/api/v1/version`).basicAuth({ user: key }).reply(400, {
+        error: 'VERSION_EMPTY',
+        message: 'You need to include an x-readme-version header',
+        suggestion: '...a suggestion to resolve the issue...',
+        help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
+      });
 
       return createVersion.run({ key, version, fork: '0.0.5' }).catch(err => {
-        expect(err.message).toBe('Failed to create a new version using your specified parameters.');
+        expect(err.message).toContain('You need to include an x-readme-version header');
         mockRequest.done();
       });
     });
@@ -169,10 +174,16 @@ describe('rdme versions*', () => {
     });
 
     it('should catch any request errors', () => {
-      const mockRequest = nock(config.host).delete(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(400);
+      const mockRequest = nock(config.host).delete(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(404, {
+        error: 'VERSION_NOTFOUND',
+        message:
+          "The version you specified ({version}) doesn't match any of the existing versions ({versions_list}) in ReadMe.",
+        suggestion: '...a suggestion to resolve the issue...',
+        help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
+      });
 
       return deleteVersion.run({ key, version }).catch(err => {
-        expect(err.message).toBe('Failed to delete target version.');
+        expect(err.message).toContain('The version you specified');
         mockRequest.done();
       });
     });
@@ -226,10 +237,15 @@ describe('rdme versions*', () => {
         .reply(200, { version })
         .put(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
-        .reply(400);
+        .reply(400, {
+          error: 'VERSION_CANT_DEMOTE_STABLE',
+          message: "You can't make a stable version non-stable",
+          suggestion: '...a suggestion to resolve the issue...',
+          help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
+        });
 
       return updateVersion.run({ key, version }).catch(err => {
-        expect(err.message).toBe('400 - undefined');
+        expect(err.message).toContain("You can't make a stable version non-stable");
         mockRequest.done();
       });
     });

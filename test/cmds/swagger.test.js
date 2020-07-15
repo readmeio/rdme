@@ -78,10 +78,16 @@ describe('rdme swagger', () => {
       .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
       .delayConnection(1000)
       .basicAuth({ user: key })
-      .reply(400);
+      .reply(400, {
+        error: 'SPEC_VERSION_NOTFOUND',
+        message:
+          "The version you specified ({version}) doesn't match any of the existing versions ({versions_list}) in ReadMe.",
+        suggestion: '...a suggestion to resolve the issue...',
+        help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
+      });
 
     return expect(swagger.run({ spec: './test/fixtures/swagger.json', key, version }))
-      .rejects.toThrow('There was an error uploading!')
+      .rejects.toThrow('The version you specified')
       .then(() => mock.done());
   });
 
@@ -122,7 +128,10 @@ describe('rdme swagger', () => {
       .delayConnection(1000)
       .basicAuth({ user: key })
       .reply(500, {
-        error: 'README VALIDATION ERROR "x-samples-languages" must be of type "Array"',
+        error: 'INTERNAL_ERROR',
+        message: 'Unknown error (README VALIDATION ERROR "x-samples-languages" must be of type "Array")',
+        suggestion: '...a suggestion to resolve the issue...',
+        help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
       });
 
     return expect(swagger.run({ spec: './test/fixtures/invalid-swagger.json', key, version }))

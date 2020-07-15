@@ -4,6 +4,7 @@ const { validate: isEmail } = require('isemail');
 const { promisify } = require('util');
 const read = promisify(require('read'));
 const configStore = require('../lib/configstore');
+const APIError = require('../lib/apiError');
 
 const testing = process.env.NODE_ENV === 'testing';
 
@@ -53,14 +54,6 @@ exports.run = async function (opts) {
     return Promise.reject(new Error('You must provide a valid email address.'));
   }
 
-  function badRequest(err) {
-    if (err.statusCode === 400) {
-      return Promise.reject(err.error);
-    }
-
-    return Promise.reject(err);
-  }
-
   return request
     .post(`${config.host}/api/v1/login`, {
       json: { email, password, project, token },
@@ -72,5 +65,5 @@ exports.run = async function (opts) {
 
       return `Successfully logged in as ${email.green} to the ${project.blue} project.`;
     })
-    .catch(badRequest);
+    .catch(err => Promise.reject(new APIError(err)));
 };

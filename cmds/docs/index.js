@@ -5,6 +5,7 @@ const config = require('config');
 const crypto = require('crypto');
 const frontMatter = require('gray-matter');
 const { promisify } = require('util');
+const APIError = require('../../lib/apiError');
 
 const readFile = promisify(fs.readFile);
 
@@ -49,6 +50,9 @@ exports.run = function (opts) {
   }
 
   const files = fs.readdirSync(folder).filter(file => file.endsWith('.md') || file.endsWith('.markdown'));
+  if (files.length === 0) {
+    return Promise.reject(new Error(`We were unable to locate Markdown files in ${folder}.`));
+  }
 
   const options = {
     auth: { user: key },
@@ -56,14 +60,6 @@ exports.run = function (opts) {
       'x-readme-version': version,
     },
   };
-
-  function validationErrors(err) {
-    if (err.statusCode === 400) {
-      return Promise.reject(err.error);
-    }
-
-    return Promise.reject(err);
-  }
 
   function createDoc(slug, file, hash, err) {
     if (err.statusCode !== 404) return Promise.reject(err.error);
@@ -73,13 +69,14 @@ exports.run = function (opts) {
         json: { slug, body: file.content, ...file.data, lastUpdatedHash: hash },
         ...options,
       })
-      .catch(validationErrors);
+      .catch(err => Promise.reject(new APIError(err)));
   }
 
   function updateDoc(slug, file, hash, existingDoc) {
     if (hash === existingDoc.lastUpdatedHash) {
       return `\`${slug}\` not updated. No changes.`;
     }
+
     return request
       .put(`${config.host}/api/v1/docs/${slug}`, {
         json: Object.assign(existingDoc, {
@@ -89,7 +86,7 @@ exports.run = function (opts) {
         }),
         ...options,
       })
-      .catch(validationErrors);
+      .catch(err => Promise.reject(new APIError(err)));
   }
 
   return Promise.all(
@@ -106,9 +103,7 @@ exports.run = function (opts) {
           ...options,
         })
         .then(updateDoc.bind(null, slug, matter, hash), createDoc.bind(null, slug, matter, hash))
-        .catch(err => {
-          return Promise.reject(err);
-        });
+        .catch(err => Promise.reject(new APIError(err)));
     })
   );
 };
