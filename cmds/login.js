@@ -65,5 +65,5 @@ exports.run = async function (opts) {
 
       return `Successfully logged in as ${email.green} to the ${project.blue} project.`;
     })
-    .catch(err => Promise.resolve(new APIError(err)));
+    .catch(err => Promise.reject(new APIError(err)));
 };

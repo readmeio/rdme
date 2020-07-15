@@ -222,8 +222,8 @@ describe('rdme docs:edit', () => {
 
     return docsEdit.run({ slug, key, version: '1.0.0' }).catch(err => {
       getMock.done();
-      expect(err.error).toBe('DOC_NOTFOUND');
-      expect(err.message).toBe("The doc with the slug 'no-such-doc' couldn't be found");
+      expect(err.code).toBe('DOC_NOTFOUND');
+      expect(err.message).toContain("The doc with the slug 'no-such-doc' couldn't be found");
     });
   });
 
@@ -245,7 +245,7 @@ describe('rdme docs:edit', () => {
     }
 
     return docsEdit.run({ slug, key, version: '1.0.0', mockEditor }).catch(err => {
-      expect(err.error).toBe('DOC_INVALID');
+      expect(err.code).toBe('DOC_INVALID');
       getMock.done();
       putMock.done();
       expect(fs.existsSync(`${slug}.md`)).toBe(true);

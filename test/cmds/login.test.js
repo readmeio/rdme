@@ -45,15 +45,17 @@ describe('rdme login', () => {
     const password = '123456';
     const project = 'subdomain';
 
-    const mock = nock(config.host).post('/api/v1/login', { email, password, project }).reply(400, {
-      description: 'Invalid email/password',
-      error: 'Bad Request',
+    const mock = nock(config.host).post('/api/v1/login', { email, password, project }).reply(401, {
+      error: 'LOGIN_INVALID',
+      message: 'Either your email address or password is incorrect',
+      suggestion: 'You can reset your password at https://dash.readme.com/forgot',
+      help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
     });
 
     return cmd.run({ email, password, project }).catch(err => {
+      expect(err.code).toBe('LOGIN_INVALID');
+      expect(err.message).toContain('Either your email address or password is incorrect');
       mock.done();
-      expect(err.error).toBe('Bad Request');
-      expect(err.description).toBe('Invalid email/password');
     });
   });
 
@@ -63,15 +65,17 @@ describe('rdme login', () => {
     const password = '123456';
     const project = 'subdomain';
 
-    const mock = nock(config.host).post('/api/v1/login', { email, password, project }).reply(400, {
-      description: 'You must provide a Two Factor Code',
-      error: 'Bad Request',
+    const mock = nock(config.host).post('/api/v1/login', { email, password, project }).reply(401, {
+      error: 'LOGIN_TWOFACTOR',
+      message: 'You must provide a two-factor code',
+      suggestion: 'You can do it via the API using `token`, or via the CLI using `rdme login --2fa`',
+      help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
     });
 
     return cmd.run({ email, password, project }).catch(err => {
       mock.done();
-      expect(err.error).toBe('Bad Request');
-      expect(err.description).toBe('You must provide a Two Factor Code');
+      expect(err.code).toBe('LOGIN_TWOFACTOR');
+      expect(err.message).toContain('You must provide a two-factor code');
     });
   });
 
