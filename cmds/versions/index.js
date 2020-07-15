@@ -2,6 +2,7 @@ const request = require('request-promise-native');
 const Table = require('cli-table');
 const config = require('config');
 const versionsCreate = require('./create');
+const APIError = require('../../lib/apiError');
 
 exports.command = 'versions';
 exports.usage = 'versions [options]';
@@ -116,5 +117,6 @@ exports.run = function (opts) {
       }
 
       return Promise.resolve(getVersionFormatted(versions[0]));
-    });
+    })
+    .catch(err => Promise.reject(new APIError(err)));
 };

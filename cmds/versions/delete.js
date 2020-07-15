@@ -1,6 +1,7 @@
 const request = require('request-promise-native');
 const config = require('config');
 const semver = require('semver');
+const APIError = require('../../lib/apiError');
 
 exports.command = 'versions:delete';
 exports.usage = 'versions:delete --version=<version> [options]';
@@ -37,12 +38,9 @@ exports.run = async function (opts) {
 
   return request
     .delete(`${config.host}/api/v1/version/${version}`, {
+      json: true,
       auth: { user: key },
     })
     .then(() => Promise.resolve(`Version ${version} deleted successfully.`))
-    .catch(err => {
-      return Promise.reject(
-        new Error(err.error && err.error.description ? err.error.description : 'Failed to delete target version.')
-      );
-    });
+    .catch(err => Promise.reject(new APIError(err)));
 };
