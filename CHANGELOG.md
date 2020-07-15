@@ -1,3 +1,14 @@
+## 3.8.0 (2020-07-15)
+
+* feat: overhauling error handling to support the new api error responses (#218) ([0a5e92b](https://github.com/readmeio/rdme/commit/0a5e92b)), closes [#218](https://github.com/readmeio/rdme/issues/218)
+* chore(deps-dev): bump @readme/eslint-config from 3.3.0 to 3.3.2 (#213) ([d7f3fcb](https://github.com/readmeio/rdme/commit/d7f3fcb)), closes [#213](https://github.com/readmeio/rdme/issues/213)
+* chore(deps-dev): bump eslint from 7.3.1 to 7.4.0 (#215) ([9a5f94b](https://github.com/readmeio/rdme/commit/9a5f94b)), closes [#215](https://github.com/readmeio/rdme/issues/215)
+* chore(deps-dev): bump nock from 13.0.0 to 13.0.2 (#214) ([446b8ac](https://github.com/readmeio/rdme/commit/446b8ac)), closes [#214](https://github.com/readmeio/rdme/issues/214)
+* chore(deps): bump enquirer from 2.3.5 to 2.3.6 (#217) ([634edea](https://github.com/readmeio/rdme/commit/634edea)), closes [#217](https://github.com/readmeio/rdme/issues/217)
+* chore(deps): bump oas from 3.4.6 to 3.5.0 (#216) ([626f05a](https://github.com/readmeio/rdme/commit/626f05a)), closes [#216](https://github.com/readmeio/rdme/issues/216)
+
+
+
 ## <small>3.7.16 (2020-06-30)</small>
 
 * fix: setting initial data for newVersion when creating a version (#212) ([0fb8ba8](https://github.com/readmeio/rdme/commit/0fb8ba8)), closes [#212](https://github.com/readmeio/rdme/issues/212)
