@@ -1,3 +1,9 @@
+## <small>3.8.1 (2020-07-17)</small>
+
+* chore(deps): bump lodash from 4.17.14 to 4.17.19 (#219) ([08d7a09](https://github.com/readmeio/rdme/commit/08d7a09)), closes [#219](https://github.com/readmeio/rdme/issues/219)
+
+
+
 ## 3.8.0 (2020-07-15)
 
 * feat: overhauling error handling to support the new api error responses (#218) ([0a5e92b](https://github.com/readmeio/rdme/commit/0a5e92b)), closes [#218](https://github.com/readmeio/rdme/issues/218)
