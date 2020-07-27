@@ -36,6 +36,7 @@ describe('prompt test bed', () => {
           await prompt.submit();
         }
 
+        // eslint-disable-next-line jest/no-if
         if (prompt.name === 'versionSelection') {
           expect(await prompt.skip()).toBe(true);
         }
