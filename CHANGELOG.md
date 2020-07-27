@@ -1,3 +1,14 @@
+## <small>3.8.2 (2020-07-27)</small>
+
+* chore(deps-dev): bump @readme/eslint-config from 3.3.2 to 3.4.0 (#221) ([785f063](https://github.com/readmeio/rdme/commit/785f063)), closes [#221](https://github.com/readmeio/rdme/issues/221)
+* chore(deps-dev): bump eslint from 7.4.0 to 7.5.0 (#223) ([eff8079](https://github.com/readmeio/rdme/commit/eff8079)), closes [#223](https://github.com/readmeio/rdme/issues/223)
+* chore(deps): bump oas from 3.5.0 to 3.5.4 (#222) ([a660e6a](https://github.com/readmeio/rdme/commit/a660e6a)), closes [#222](https://github.com/readmeio/rdme/issues/222)
+* chore(deps): bump oas from 3.5.4 to 3.5.6 (#225) ([81cfa81](https://github.com/readmeio/rdme/commit/81cfa81)), closes [#225](https://github.com/readmeio/rdme/issues/225)
+* chore(deps): bump open from 7.0.4 to 7.1.0 (#224) ([72dd166](https://github.com/readmeio/rdme/commit/72dd166)), closes [#224](https://github.com/readmeio/rdme/issues/224)
+* chore(deps): bump request-promise-native from 1.0.8 to 1.0.9 (#220) ([4e6ac30](https://github.com/readmeio/rdme/commit/4e6ac30)), closes [#220](https://github.com/readmeio/rdme/issues/220)
+
+
+
 ## <small>3.8.1 (2020-07-17)</small>
 
 * chore(deps): bump lodash from 4.17.14 to 4.17.19 (#219) ([08d7a09](https://github.com/readmeio/rdme/commit/08d7a09)), closes [#219](https://github.com/readmeio/rdme/issues/219)
