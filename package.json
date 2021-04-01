@@ -46,7 +46,7 @@
     "request": "^2.88.0",
     "request-promise-native": "^1.0.5",
     "semver": "^7.0.0",
-    "table-layout": "^1.0.0"
+    "table-layout": "^2.1.0"
   },
   "devDependencies": {
     "@readme/eslint-config": "^4.0.0",
