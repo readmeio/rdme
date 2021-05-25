@@ -121,7 +121,7 @@ exports.run = function (opts) {
       const file = await readFile(path.join(folder, filename), 'utf8');
       const matter = frontMatter(file);
       // Stripping the subdirectories and markdown extension from the filename
-      const slug = path.baseName(filename).replace(path.extname(filename), '');
+      const slug = path.basename(filename).replace(path.extname(filename), '');
       const hash = crypto.createHash('sha1').update(file).digest('hex');
 
       return request
