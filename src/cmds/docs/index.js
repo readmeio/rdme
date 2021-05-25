@@ -93,8 +93,8 @@ exports.run = function (opts) {
     files.map(async filename => {
       const file = await readFile(path.join(folder, filename), 'utf8');
       const matter = frontMatter(file);
-      // Stripping the markdown extension from the filename
-      const slug = filename.replace(path.extname(filename), '');
+      // Stripping the markdown extension from the filename and lowecasing to get the default slug
+      const slug = filename.replace(path.extname(filename), '').toLowerCase();
       const hash = crypto.createHash('sha1').update(file).digest('hex');
 
       return request
