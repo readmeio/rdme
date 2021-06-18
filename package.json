@@ -1,7 +1,12 @@
 {
-  "author": "ReadMe <support@readme.io> (https://readme.com)",
   "name": "rdme",
+  "version": "3.8.2",
   "description": "ReadMe's API CLI",
+  "author": "ReadMe <support@readme.io> (https://readme.com)",
+  "engines": {
+    "node": "^12 || ^14 || ^16"
+  },
+  "main": "index.js",
   "bin": {
     "rdme": "rdme.js"
   },
@@ -17,17 +22,12 @@
     "microservice",
     "documentation"
   ],
-  "version": "3.8.2",
   "repository": {
     "type": "git",
     "url": "git://github.com/readmeio/rdme.git"
   },
   "bugs": {
     "url": "https://github.com/readmeio/rdme/issues"
-  },
-  "main": "index.js",
-  "engines": {
-    "node": ">=10"
   },
   "dependencies": {
     "cli-table": "^0.3.1",
