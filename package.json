@@ -49,16 +49,16 @@
     "table-layout": "^1.0.0"
   },
   "devDependencies": {
-    "@readme/eslint-config": "^4.0.0",
+    "@readme/eslint-config": "^5.1.0",
     "conventional-changelog-cli": "^2.0.31",
-    "eslint": "^7.1.0",
+    "eslint": "^7.29.0",
     "jest": "^27.0.4",
     "nock": "^13.0.0",
-    "prettier": "^2.0.1"
+    "prettier": "^2.3.1"
   },
   "scripts": {
     "lint": "eslint .",
-    "pretest": "npm run lint && npm run prettier",
+    "pretest": "npm run lint",
     "prettier": "prettier --list-different --write \"./**/**.js\"",
     "release": "conventional-changelog -i CHANGELOG.md -s",
     "test": "jest --coverage"
