@@ -230,8 +230,9 @@ describe('rdme docs:edit', () => {
   it('should error if doc fails validation', () => {
     expect.assertions(2);
     const slug = 'getting-started';
+    const body = 'abcdef';
 
-    const getMock = nock(config.host).get(`/api/v1/docs/${slug}`).reply(200, {});
+    const getMock = nock(config.host).get(`/api/v1/docs/${slug}`).reply(200, { body });
 
     const putMock = nock(config.host).put(`/api/v1/docs/${slug}`).reply(400, {
       error: 'DOC_INVALID',
@@ -256,7 +257,9 @@ describe('rdme docs:edit', () => {
   it('should handle error if $EDITOR fails', () => {
     expect.assertions(1);
     const slug = 'getting-started';
-    nock(config.host).get(`/api/v1/docs/${slug}`).reply(200, {});
+    const body = 'abcdef';
+
+    nock(config.host).get(`/api/v1/docs/${slug}`).reply(200, { body });
 
     function mockEditor(filename, cb) {
       return cb(1);
