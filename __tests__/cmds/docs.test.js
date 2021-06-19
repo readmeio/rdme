@@ -8,7 +8,7 @@ const frontMatter = require('gray-matter');
 const docs = require('../../cmds/docs/index');
 const docsEdit = require('../../cmds/docs/edit');
 
-const fixturesDir = `${__dirname}./../fixtures`;
+const fixturesDir = `${__dirname}./../__fixtures__`;
 const key = 'Xmw4bGctRVIQz7R7dQXqH9nQe5d0SPQs';
 const version = '1.0.0';
 
@@ -71,7 +71,7 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200);
 
-      return docs.run({ folder: './test/fixtures/existing-docs', key, version }).then(() => {
+      return docs.run({ folder: './__tests__/__fixtures__/existing-docs', key, version }).then(() => {
         getMock.done();
         putMock.done();
       });
@@ -94,7 +94,7 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200, { category: '5ae9ece93a685f47efb9a97c', slug, lastUpdatedHash: hash });
 
-      return docs.run({ folder: './test/fixtures/existing-docs', key, version }).then(([message]) => {
+      return docs.run({ folder: './__tests__/__fixtures__/existing-docs', key, version }).then(([message]) => {
         expect(message).toBe('`simple-doc` not updated. No changes.');
         getMock.done();
       });
@@ -133,7 +133,7 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(201);
 
-      return docs.run({ folder: './test/fixtures/new-docs', key, version }).then(() => {
+      return docs.run({ folder: './__tests__/__fixtures__/new-docs', key, version }).then(() => {
         getMock.done();
         postMock.done();
       });
