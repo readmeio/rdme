@@ -5,8 +5,8 @@ const path = require('path');
 const crypto = require('crypto');
 const frontMatter = require('gray-matter');
 
-const docs = require('../../cmds/docs/index');
-const docsEdit = require('../../cmds/docs/edit');
+const docs = require('../../src/cmds/docs');
+const docsEdit = require('../../src/cmds/docs/edit');
 
 const fixturesDir = `${__dirname}./../__fixtures__`;
 const key = 'Xmw4bGctRVIQz7R7dQXqH9nQe5d0SPQs';

@@ -8,7 +8,7 @@
   },
   "main": "index.js",
   "bin": {
-    "rdme": "rdme.js"
+    "rdme": "bin/rdme"
   },
   "tags": [
     "api",

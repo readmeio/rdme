@@ -1,11 +1,11 @@
 const nock = require('nock');
 const config = require('config');
-const promptHandler = require('../../lib/prompts');
+const promptHandler = require('../../src/lib/prompts');
 
-const versions = require('../../cmds/versions/index');
-const createVersion = require('../../cmds/versions/create');
-const deleteVersion = require('../../cmds/versions/delete');
-const updateVersion = require('../../cmds/versions/update');
+const versions = require('../../src/cmds/versions');
+const createVersion = require('../../src/cmds/versions/create');
+const deleteVersion = require('../../src/cmds/versions/delete');
+const updateVersion = require('../../src/cmds/versions/update');
 
 const key = 'Xmw4bGctRVIQz7R7dQXqH9nQe5d0SPQs';
 const version = '1.0.0';
@@ -31,7 +31,7 @@ const version2Payload = {
   version: version2,
 };
 
-jest.mock('../../lib/prompts');
+jest.mock('../../src/lib/prompts');
 
 describe('rdme versions*', () => {
   beforeAll(() => nock.disableNetConnect());

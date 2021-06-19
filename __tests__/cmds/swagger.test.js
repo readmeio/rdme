@@ -1,13 +1,13 @@
 const nock = require('nock');
 const config = require('config');
 const fs = require('fs');
-const promptHandler = require('../../lib/prompts');
-const swagger = require('../../cmds/swagger');
+const promptHandler = require('../../src/lib/prompts');
+const swagger = require('../../src/cmds/swagger');
 
 const key = 'Xmw4bGctRVIQz7R7dQXqH9nQe5d0SPQs';
 const version = '1.0.0';
 
-jest.mock('../../lib/prompts');
+jest.mock('../../src/lib/prompts');
 
 const getCommandOutput = () => {
   return [console.warn.mock.calls.join('\n\n'), console.log.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');

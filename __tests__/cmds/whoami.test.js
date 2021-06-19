@@ -1,7 +1,7 @@
 const config = require('config');
-const configStore = require('../../lib/configstore');
-const cmd = require('../../cmds/whoami');
-const loginCmd = require('../../cmds/login');
+const configStore = require('../../src/lib/configstore');
+const cmd = require('../../src/cmds/whoami');
+const loginCmd = require('../../src/cmds/login');
 
 describe('rdme whoami', () => {
   it('should error if user is not authenticated', () => {

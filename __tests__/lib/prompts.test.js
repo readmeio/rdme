@@ -1,5 +1,5 @@
 const Enquirer = require('enquirer');
-const promptHandler = require('../../lib/prompts');
+const promptHandler = require('../../src/lib/prompts');
 
 const versionlist = [
   {
