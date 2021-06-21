@@ -1,14 +1,14 @@
-const commands = require('../../lib/commands').list();
+const commands = require('../../src/lib/commands');
 
 describe('utils', () => {
-  describe('#getCommands', () => {
+  describe('#list', () => {
     it('should have commands returned', () => {
-      expect(commands).not.toHaveLength(0);
+      expect(commands.list()).not.toHaveLength(0);
     });
 
     describe('commands', () => {
       it('should be configured properly', () => {
-        commands.forEach(c => {
+        commands.list().forEach(c => {
           const cmd = c.command;
 
           expect(typeof cmd.command === 'string' && cmd.command.length !== 0).toBe(true);
@@ -31,7 +31,7 @@ describe('utils', () => {
       });
 
       it('should abide by our cli standards', () => {
-        commands.forEach(c => {
+        commands.list().forEach(c => {
           const cmd = c.command;
 
           expect(cmd.description[cmd.description.length - 1]).toBe('.');

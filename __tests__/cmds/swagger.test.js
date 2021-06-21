@@ -1,13 +1,13 @@
 const nock = require('nock');
 const config = require('config');
 const fs = require('fs');
-const promptHandler = require('../../lib/prompts');
-const swagger = require('../../cmds/swagger');
+const promptHandler = require('../../src/lib/prompts');
+const swagger = require('../../src/cmds/swagger');
 
 const key = 'Xmw4bGctRVIQz7R7dQXqH9nQe5d0SPQs';
 const version = '1.0.0';
 
-jest.mock('../../lib/prompts');
+jest.mock('../../src/lib/prompts');
 
 const getCommandOutput = () => {
   return [console.warn.mock.calls.join('\n\n'), console.log.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
@@ -51,7 +51,7 @@ describe('rdme swagger', () => {
     // Surface our test fixture to the root directory so rdme can autodiscover it. It's easier to do
     // this than mocking out the fs module because mocking the fs module here causes Jest sourcemaps
     // to break.
-    fs.copyFileSync('./test/fixtures/swagger.json', './swagger.json');
+    fs.copyFileSync('./__tests__/__fixtures__/swagger.json', './swagger.json');
 
     return swagger.run({ key }).then(() => {
       expect(console.log).toHaveBeenCalledTimes(2);
@@ -86,7 +86,7 @@ describe('rdme swagger', () => {
         help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
       });
 
-    return expect(swagger.run({ spec: './test/fixtures/swagger.json', key, version }))
+    return expect(swagger.run({ spec: './__tests__/__fixtures__/swagger.json', key, version }))
       .rejects.toThrow('The version you specified')
       .then(() => mock.done());
   });
@@ -103,7 +103,7 @@ describe('rdme swagger', () => {
       .basicAuth({ user: key })
       .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
-    return swagger.run({ spec: './test/fixtures/swagger.json', key, version }).then(() => {
+    return swagger.run({ spec: './__tests__/__fixtures__/swagger.json', key, version }).then(() => {
       expect(console.log).toHaveBeenCalledTimes(1);
 
       const output = getCommandOutput();
@@ -134,7 +134,7 @@ describe('rdme swagger', () => {
         help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
       });
 
-    return expect(swagger.run({ spec: './test/fixtures/invalid-swagger.json', key, version }))
+    return expect(swagger.run({ spec: './__tests__/__fixtures__/invalid-swagger.json', key, version }))
       .rejects.toThrow('README VALIDATION ERROR "x-samples-languages" must be of type "Array"')
       .then(() => mock.done());
   });
@@ -161,7 +161,7 @@ describe('rdme swagger', () => {
       .basicAuth({ user: key })
       .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
-    return swagger.run({ spec: './test/fixtures/swagger.json', key }).then(() => {
+    return swagger.run({ spec: './__tests__/__fixtures__/swagger.json', key }).then(() => {
       mock.done();
     });
   });
@@ -174,7 +174,7 @@ describe('rdme swagger', () => {
       .basicAuth({ user: key })
       .reply(201, { body: '{ id: 1 }' });
 
-    return swagger.run({ spec: './test/fixtures/swagger.json', key, id, version }).then(() => {
+    return swagger.run({ spec: './__tests__/__fixtures__/swagger.json', key, id, version }).then(() => {
       mock.done();
     });
   });
@@ -187,7 +187,7 @@ describe('rdme swagger', () => {
       .basicAuth({ user: key })
       .reply(201, { id: 1 }, { location: exampleRefLocation });
 
-    return swagger.run({ spec: './test/fixtures/swagger.json', token: `${key}-${id}`, version }).then(() => {
+    return swagger.run({ spec: './__tests__/__fixtures__/swagger.json', token: `${key}-${id}`, version }).then(() => {
       expect(console.warn).toHaveBeenCalledTimes(1);
       expect(console.log).toHaveBeenCalledTimes(1);
 
@@ -200,7 +200,7 @@ describe('rdme swagger', () => {
   });
 
   it('should error if no api key provided', async () => {
-    await expect(swagger.run({ spec: './test/fixtures/swagger.json' })).rejects.toThrow(
+    await expect(swagger.run({ spec: './__tests__/__fixtures__/swagger.json' })).rejects.toThrow(
       'No project API key provided. Please use `--key`.'
     );
   });

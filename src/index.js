@@ -9,13 +9,13 @@ const path = require('path');
 // but since this is only supposed to be a cli and not
 // requireable, i think this is okay
 const configDir = process.env.NODE_CONFIG_DIR;
-process.env.NODE_CONFIG_DIR = path.join(__dirname, '/config');
+process.env.NODE_CONFIG_DIR = path.join(__dirname, '../config');
 
 const config = require('config');
 
 process.env.NODE_CONFIG_DIR = configDir;
 
-const { version } = require('./package.json');
+const { version } = require('../package.json');
 const configStore = require('./lib/configstore');
 const help = require('./lib/help');
 const commands = require('./lib/commands');

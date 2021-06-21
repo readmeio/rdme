@@ -1,7 +1,7 @@
 const config = require('config');
-const configStore = require('../../lib/configstore');
-const cmd = require('../../cmds/logout');
-const loginCmd = require('../../cmds/login');
+const configStore = require('../../src/lib/configstore');
+const cmd = require('../../src/cmds/logout');
+const loginCmd = require('../../src/cmds/login');
 
 describe('rdme logout', () => {
   it("should report the user as logged out if they aren't logged in", () => {

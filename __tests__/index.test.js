@@ -1,10 +1,10 @@
 require('colors');
 
 const nock = require('nock');
-const cli = require('../cli');
+const cli = require('../src');
 const { version } = require('../package.json');
-const conf = require('../lib/configstore');
-const swaggerCmd = require('../cmds/swagger');
+const conf = require('../src/lib/configstore');
+const swaggerCmd = require('../src/cmds/swagger');
 
 describe('cli', () => {
   it('command not found', () => {

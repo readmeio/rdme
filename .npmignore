@@ -1,9 +1,5 @@
-.DS_Store
-.editorconfig
-.eslintignore
-.eslintrc
+__tests__/
 .github/
-.prettierignore
-.prettierrc
 coverage/
-test/
+.eslint*
+.prettier*

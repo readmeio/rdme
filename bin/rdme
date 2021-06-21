@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 require('colors');
 
-require('./cli')(process.argv.slice(2))
+require('../src')(process.argv.slice(2))
   .then(msg => {
     if (msg) console.log(msg);
     process.exit(0);
