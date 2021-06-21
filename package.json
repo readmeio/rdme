@@ -7,7 +7,7 @@
     "node": "^12 || ^14 || ^16"
   },
   "bin": {
-    "rdme": "rdme.js"
+    "rdme": "bin/rdme"
   },
   "tags": [
     "api",
@@ -63,9 +63,6 @@
     "test": "jest --coverage"
   },
   "jest": {
-    "setupFiles": [
-      "./test/set-node-env"
-    ],
     "coverageThreshold": {
       "global": {
         "branches": 80,
@@ -73,7 +70,13 @@
         "lines": 90,
         "statements": 90
       }
-    }
+    },
+    "setupFiles": [
+      "./__tests__/set-node-env"
+    ],
+    "testPathIgnorePatterns": [
+      "./__tests__/set-node-env"
+    ]
   },
   "prettier": "@readme/eslint-config/prettier"
 }

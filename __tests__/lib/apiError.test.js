@@ -1,4 +1,4 @@
-const APIError = require('../../lib/apiError');
+const APIError = require('../../src/lib/apiError');
 
 const response = {
   error: 'VERSION_FORK_EMPTY',

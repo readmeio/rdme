@@ -1,7 +1,7 @@
 const config = require('config');
-const configStore = require('../../lib/configstore');
-const cmd = require('../../cmds/open');
-const loginCmd = require('../../cmds/login');
+const configStore = require('../../src/lib/configstore');
+const cmd = require('../../src/cmds/open');
+const loginCmd = require('../../src/cmds/login');
 
 describe('rdme open', () => {
   it('should error if no project provided', () => {
