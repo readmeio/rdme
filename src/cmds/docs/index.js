@@ -41,6 +41,7 @@ exports.args = [
 
 exports.run = function (opts) {
   const { folder, key, version, recursive } = opts;
+  const { folder, key, version } = opts;
 
   if (!key) {
     return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
