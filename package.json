@@ -1,9 +1,13 @@
 {
-  "author": "ReadMe <support@readme.io> (https://readme.com)",
   "name": "rdme",
+  "version": "3.8.2",
   "description": "ReadMe's API CLI",
+  "author": "ReadMe <support@readme.io> (https://readme.com)",
+  "engines": {
+    "node": "^12 || ^14 || ^16"
+  },
   "bin": {
-    "rdme": "rdme.js"
+    "rdme": "bin/rdme"
   },
   "tags": [
     "api",
@@ -17,17 +21,12 @@
     "microservice",
     "documentation"
   ],
-  "version": "3.8.2",
   "repository": {
     "type": "git",
     "url": "git://github.com/readmeio/rdme.git"
   },
   "bugs": {
     "url": "https://github.com/readmeio/rdme/issues"
-  },
-  "main": "index.js",
-  "engines": {
-    "node": ">=10"
   },
   "dependencies": {
     "cli-table": "^0.3.1",
@@ -49,24 +48,21 @@
     "table-layout": "^1.0.0"
   },
   "devDependencies": {
-    "@readme/eslint-config": "^4.0.0",
+    "@readme/eslint-config": "^5.1.0",
     "conventional-changelog-cli": "^2.0.31",
-    "eslint": "^7.1.0",
-    "jest": "^26.0.1",
-    "nock": "^13.0.0",
-    "prettier": "^2.0.1"
+    "eslint": "^7.29.0",
+    "jest": "^27.0.4",
+    "nock": "^13.1.0",
+    "prettier": "^2.3.1"
   },
   "scripts": {
     "lint": "eslint .",
-    "pretest": "npm run lint && npm run prettier",
+    "pretest": "npm run lint",
     "prettier": "prettier --list-different --write \"./**/**.js\"",
     "release": "conventional-changelog -i CHANGELOG.md -s",
     "test": "jest --coverage"
   },
   "jest": {
-    "setupFiles": [
-      "./test/set-node-env"
-    ],
     "coverageThreshold": {
       "global": {
         "branches": 80,
@@ -74,7 +70,13 @@
         "lines": 90,
         "statements": 90
       }
-    }
+    },
+    "setupFiles": [
+      "./__tests__/set-node-env"
+    ],
+    "testPathIgnorePatterns": [
+      "./__tests__/set-node-env"
+    ]
   },
   "prettier": "@readme/eslint-config/prettier"
 }
