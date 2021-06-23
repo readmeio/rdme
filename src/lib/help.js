@@ -9,7 +9,10 @@ function styleCommand(command) {
 
 const owlbert = () => {
   // http://asciiart.club
-  return `       .                        
+  return `                    ${config.cli.blue.bold}
+
+    ${`a utlity for interacting with ReadMe`.bold}
+       .                        
        .\\\\                          /.
       ’  ‘                        ‘ ‘
       ( nn\\\\    .           .     /  )
