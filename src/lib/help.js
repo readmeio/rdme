@@ -10,29 +10,29 @@ function styleCommand(command) {
 const owlbert = () => {
   // http://asciiart.club
   return `           .                        
-           .V                          /.
+           .\\\\                          /.
           ’  ‘                        ‘ ‘
-          ( nnV    .           .     /  )
+          ( nn\\\\    .           .     /  )
           (nnnnn,.MM.          AM   .nn.
            .nnnndMM----_______--M.’’   /
-           |nnn/nnnnnnnnnnnnnnnnnV’mmmm|
+           |nnn/nnnnnnnnnnnnnnnnn\\\\’mmmm|
            |nnnnnnnnnnnnnnnnnnnnnmmmmm|'
            /nnnn...nnnnnnnnnnn...mmmmm(
-          /nn        ‘qnnnP’       ‘mmmV
-          /n’   .MMM. |nnn|   .MM.  Vmmb
-          An   (MOMM)  nnn   (MOMM)  mmV
+          /nn        ‘qnnnP’       ‘mmm\\\\
+          /n’   .MMM. \\\\nnn/   .MM.  \\\\mmb
+          An   (MOMM)  nnn   (MOMM)  mm\\\\
          /nn   ‘MMMM’.~”~.   ‘MMM”’ .mmmb
          dnnn.      (    )n.       .mmmmb
-        .nnnnnn....n.V ./nnnnnnnnnmmmmmmV
+        .nnnnnn....n.\\\\ ./nnnnnnnnnmmmmmm\\\\
       (READnnnnnnnnnnn’Y’nnnnnnnnnnmmmmmmME)
       REinnnnnnnnnnnnnnnnnnnnnnnnnmmmmmmmAD/
      /MEEnnnnnnnnnnnnnnnnnnnnnnnnnmmmmmmm)E'.
      READnnnnnnn*’             ‘*mmmmmmmm)MEE.
-    (READ|nnnn’    V../  V.../    ‘mmmmmM)EEE)
+    (READ|nnnn’    \\\\../  \\\\.../    ‘mmmmmM)EEE)
      READ(nn*’                      ‘mmm.MEEE)
-      ‘READn’  V._./  V__./  V.../     ‘MEE*’
+      ‘READn’  \\\\._./  \\\\__./  \\\\.../     ‘MEE*’
            *                           /*
-            V      V__.   .__/        /
+            \\\\      \\\\__.   .__/        /
             c.                      .’
            (_(  nn.             .n')_)
              ‘‘*’’  “**----*””’ ’’*‘‘`;
