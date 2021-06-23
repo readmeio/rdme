@@ -18,13 +18,12 @@ const owlbert = () => {
       ( nn\\\\    .           .     /  )
       (nnnnn,.MM.          AM   .nn.
        .nnnndMM----_______--M.’’   /
-       |nnn/nnnnnnnnnnnnnnnnn\\\\’mmmm|
-       |nnnnnnnnnnnnnnnnnnnnnmmmmm|'
-       /nnnn...nnnnnnnnnnn...mmmmm(
+       |nnn/nnnnnnnnnnnnnnnnn\\\\’mmm/
+       /nnnn...nnnnnnnnnnn...mmmmm\\\\
       /nn        ‘qnnnP’       ‘mmm\\\\
-      /n’   .MMM. \\\\nnn/   .MM.  \\\\mmb
-      An   (MOMM)  nnn   (MOMM)  mm\\\\
-     /nn   ‘MMMM’.~”~.   ‘MMM”’ .mmmb
+      /n’   .XXX. \\\\nnn/   .XX.  \\\\mmb
+      An   (XOXX)  nnn   (XOXX)  mm\\\\
+     /nn   ‘XXXX’.~”~.   ‘XXX”’ .mmmb
      dnnn.      (    )n.       .mmmmb
     .nnnnnn....n.\\\\ ./nnnnnnnnnmmmmmm\\\\
   (READnnnnnnnnnnn’Y’nnnnnnnnnnmmmmmmME)
@@ -34,11 +33,7 @@ const owlbert = () => {
 (READ|nnnn’    \\\\../  \\\\.../    ‘mmmmmM)EEE)
  READ(nn*’                      ‘mmm.MEEE)
   ‘READn’  \\\\._./  \\\\__./  \\\\.../     ‘MEE*’
-       *                           /*
-        \\\\      \\\\__.   .__/        /
-        c.                      .’
-       (_(  nn.             .n')_)
-         ‘‘*’’  “**----*””’ ’’*‘‘`;
+       *                           /*`;
 };
 
 exports.commandUsage = cmd => {
