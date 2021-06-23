@@ -9,33 +9,33 @@ function styleCommand(command) {
 
 const owlbert = () => {
   // http://asciiart.club
-  return `           .                        
-           .\\\\                          /.
-          ’  ‘                        ‘ ‘
-          ( nn\\\\    .           .     /  )
-          (nnnnn,.MM.          AM   .nn.
-           .nnnndMM----_______--M.’’   /
-           |nnn/nnnnnnnnnnnnnnnnn\\\\’mmmm|
-           |nnnnnnnnnnnnnnnnnnnnnmmmmm|'
-           /nnnn...nnnnnnnnnnn...mmmmm(
-          /nn        ‘qnnnP’       ‘mmm\\\\
-          /n’   .MMM. \\\\nnn/   .MM.  \\\\mmb
-          An   (MOMM)  nnn   (MOMM)  mm\\\\
-         /nn   ‘MMMM’.~”~.   ‘MMM”’ .mmmb
-         dnnn.      (    )n.       .mmmmb
-        .nnnnnn....n.\\\\ ./nnnnnnnnnmmmmmm\\\\
-      (READnnnnnnnnnnn’Y’nnnnnnnnnnmmmmmmME)
-      REinnnnnnnnnnnnnnnnnnnnnnnnnmmmmmmmAD/
-     /MEEnnnnnnnnnnnnnnnnnnnnnnnnnmmmmmmm)E'.
-     READnnnnnnn*’             ‘*mmmmmmmm)MEE.
-    (READ|nnnn’    \\\\../  \\\\.../    ‘mmmmmM)EEE)
-     READ(nn*’                      ‘mmm.MEEE)
-      ‘READn’  \\\\._./  \\\\__./  \\\\.../     ‘MEE*’
-           *                           /*
-            \\\\      \\\\__.   .__/        /
-            c.                      .’
-           (_(  nn.             .n')_)
-             ‘‘*’’  “**----*””’ ’’*‘‘`;
+  return `       .                        
+       .\\\\                          /.
+      ’  ‘                        ‘ ‘
+      ( nn\\\\    .           .     /  )
+      (nnnnn,.MM.          AM   .nn.
+       .nnnndMM----_______--M.’’   /
+       |nnn/nnnnnnnnnnnnnnnnn\\\\’mmmm|
+       |nnnnnnnnnnnnnnnnnnnnnmmmmm|'
+       /nnnn...nnnnnnnnnnn...mmmmm(
+      /nn        ‘qnnnP’       ‘mmm\\\\
+      /n’   .MMM. \\\\nnn/   .MM.  \\\\mmb
+      An   (MOMM)  nnn   (MOMM)  mm\\\\
+     /nn   ‘MMMM’.~”~.   ‘MMM”’ .mmmb
+     dnnn.      (    )n.       .mmmmb
+    .nnnnnn....n.\\\\ ./nnnnnnnnnmmmmmm\\\\
+  (READnnnnnnnnnnn’Y’nnnnnnnnnnmmmmmmME)
+  REinnnnnnnnnnnnnnnnnnnnnnnnnmmmmmmmAD/
+ /MEEnnnnnnnnnnnnnnnnnnnnnnnnnmmmmmmm)E'.
+ READnnnnnnn*’             ‘*mmmmmmmm)MEE.
+(READ|nnnn’    \\\\../  \\\\.../    ‘mmmmmM)EEE)
+ READ(nn*’                      ‘mmm.MEEE)
+  ‘READn’  \\\\._./  \\\\__./  \\\\.../     ‘MEE*’
+       *                           /*
+        \\\\      \\\\__.   .__/        /
+        c.                      .’
+       (_(  nn.             .n')_)
+         ‘‘*’’  “**----*””’ ’’*‘‘`;
 };
 
 exports.commandUsage = cmd => {
