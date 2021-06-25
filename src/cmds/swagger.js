@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const config = require('config');
 const { prompt } = require('enquirer');
+const OASNormalize = require('oas-normalize');
 const promptOpts = require('../lib/prompts');
 const APIError = require('../lib/apiError');
 
@@ -110,6 +111,14 @@ exports.run = async function (opts) {
 
       return request.put(`${config.host}/api/v1/api-specification/${specId}`, options).then(success, error);
     }
+
+    const oasSpec = new OASNormalize(
+      'https://raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v3.0/petstore-expanded.yaml'
+    );
+    oasSpec
+      .validate()
+      .then(console.log('good')) // currently just testing this out to make sure everything is working
+      .catch(err => console.log(err));
 
     /*
       Create a new OAS file in Readme:
