@@ -112,13 +112,12 @@ exports.run = async function (opts) {
       return request.put(`${config.host}/api/v1/api-specification/${specId}`, options).then(success, error);
     }
 
-    const oasSpec = new OASNormalize(
-      'https://raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v3.0/petstore-expanded.yaml'
-    );
-    oasSpec
-      .validate()
-      .then(console.log('good')) // currently just testing this out to make sure everything is working
-      .catch(err => console.log(err));
+    if (spec) {
+      const oas = new OASNormalize(spec, { enablePaths: true });
+      await oas.validate().catch(err => {
+        return Promise.reject(err);
+      });
+    }
 
     /*
       Create a new OAS file in Readme:

@@ -215,4 +215,12 @@ describe('rdme swagger', () => {
 
     mock.done();
   });
+
+  it('should throw an error if file is invalid', async () => {
+    const id = '5aa0409b7cf527a93bfb44df';
+
+    await expect(swagger.run({ spec: './__tests__/__fixtures__/invalid-oas.json', key, id, version })).rejects.toThrow(
+      'Token "Error" does not exist.'
+    );
+  });
 });
