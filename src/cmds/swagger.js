@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const config = require('config');
 const { prompt } = require('enquirer');
+const OASNormalize = require('oas-normalize');
 const promptOpts = require('../lib/prompts');
 const APIError = require('../lib/apiError');
 
@@ -109,6 +110,13 @@ exports.run = async function (opts) {
       isUpdate = true;
 
       return request.put(`${config.host}/api/v1/api-specification/${specId}`, options).then(success, error);
+    }
+
+    if (spec) {
+      const oas = new OASNormalize(spec, { enablePaths: true });
+      await oas.validate().catch(err => {
+        return Promise.reject(err);
+      });
     }
 
     /*
