@@ -5,7 +5,7 @@ exports.command = 'swagger';
 exports.usage = 'swagger [file] [options]';
 exports.description = 'Alias for the openapi command.';
 exports.category = 'apis';
-exports.position = 1;
+exports.position = 2;
 
 exports.hiddenArgs = ['token', 'spec'];
 exports.args = [

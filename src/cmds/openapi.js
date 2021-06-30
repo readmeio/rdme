@@ -76,7 +76,7 @@ exports.run = async function (opts) {
           'To update your Swagger or OpenAPI file, run the following:',
           '',
           // eslint-disable-next-line no-underscore-dangle
-          `\trdme swagger FILE --key=${key} --id=${JSON.parse(data.body)._id}`.green,
+          `\trdme openapi FILE --key=${key} --id=${JSON.parse(data.body)._id}`.green,
         ].join('\n')
       );
     }
@@ -201,7 +201,7 @@ exports.run = async function (opts) {
     reject(
       new Error(
         "We couldn't find a Swagger or OpenAPI file.\n\n" +
-          'Run `rdme swagger ./path/to/file` to upload an existing file or `rdme oas init` to create a fresh one!'
+          'Run `rdme openapi ./path/to/file` to upload an existing file or `rdme oas init` to create a fresh one!'
       )
     );
   });
