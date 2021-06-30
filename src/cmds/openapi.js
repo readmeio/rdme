@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const config = require('config');
 const { prompt } = require('enquirer');
+const OASNormalize = require('oas-normalize');
 const promptOpts = require('../lib/prompts');
 const APIError = require('../lib/apiError');
 
@@ -59,12 +60,12 @@ exports.run = async function (opts) {
   }
 
   async function callApi(specPath, versionCleaned) {
-    // @todo Tailor messaging to what is actually being handled here. If the user is uploading an OpenAPI file, never mention that they uploaded/updated a Swagger file. Ticket RM-1460.
+    // @todo Tailor messaging to what is actually being handled here. If the user is uploading an OpenAPI file, never mention that they uploaded/updated a Swagger file.
 
     function success(data) {
       const message = !isUpdate
         ? "You've successfully uploaded a new Swagger file to your ReadMe project!"
-        : "You've successfully updated an Swagger file on your ReadMe project!";
+        : "You've successfully updated a Swagger file on your ReadMe project!";
 
       console.log(
         [
@@ -75,7 +76,7 @@ exports.run = async function (opts) {
           'To update your Swagger or OpenAPI file, run the following:',
           '',
           // eslint-disable-next-line no-underscore-dangle
-          `\trdme openapi FILE --key=${key} --id=${JSON.parse(data.body)._id}`.green,
+          `\trdme swagger FILE --key=${key} --id=${JSON.parse(data.body)._id}`.green,
         ].join('\n')
       );
     }
@@ -109,6 +110,13 @@ exports.run = async function (opts) {
       isUpdate = true;
 
       return request.put(`${config.host}/api/v1/api-specification/${specId}`, options).then(success, error);
+    }
+
+    if (spec) {
+      const oas = new OASNormalize(spec, { enablePaths: true });
+      await oas.validate().catch(err => {
+        return Promise.reject(err);
+      });
     }
 
     /*
@@ -193,7 +201,7 @@ exports.run = async function (opts) {
     reject(
       new Error(
         "We couldn't find a Swagger or OpenAPI file.\n\n" +
-          'Run `rdme openapi ./path/to/file` to upload an existing file or `rdme oas init` to create a fresh one!'
+          'Run `rdme swagger ./path/to/file` to upload an existing file or `rdme oas init` to create a fresh one!'
       )
     );
   });
