@@ -2,6 +2,7 @@ const nock = require('nock');
 const config = require('config');
 const fs = require('fs');
 const promptHandler = require('../../src/lib/prompts');
+const swagger = require('../../src/cmds/swagger');
 const openapi = require('../../src/cmds/openapi');
 
 const key = 'Xmw4bGctRVIQz7R7dQXqH9nQe5d0SPQs';
@@ -221,6 +222,17 @@ describe('rdme openapi', () => {
 
     await expect(openapi.run({ spec: './__tests__/__fixtures__/invalid-oas.json', key, id, version })).rejects.toThrow(
       'Token "Error" does not exist.'
+    );
+  });
+});
+
+describe('rdme swagger', () => {
+  it('should run `rdme openapi`', async () => {
+    const id = '5aa0409b7cf527a93bfb44df';
+
+    await expect(swagger.run({ spec: '', key, id, version })).rejects.toThrow(
+      "We couldn't find a Swagger or OpenAPI file.\n\n" +
+        'Run `rdme openapi ./path/to/file` to upload an existing file or `rdme oas init` to create a fresh one!'
     );
   });
 });

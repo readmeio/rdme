@@ -3,7 +3,7 @@ const openapi = require('./openapi');
 
 exports.command = 'swagger';
 exports.usage = 'swagger [file] [options]';
-exports.description = 'Alias for the openapi command.';
+exports.description = 'Alias for `rdme openapi`.';
 exports.category = 'apis';
 exports.position = 2;
 
