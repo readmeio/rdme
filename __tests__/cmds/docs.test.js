@@ -138,6 +138,51 @@ describe('rdme docs', () => {
         postMock.done();
       });
     });
+
+    it('should not create new doc if the doc is invalid', () => {
+      console.log = jest.fn();
+      expect.assertions(2);
+      const slug = 'fail-doc';
+      const doc = frontMatter(fs.readFileSync(path.join(fixturesDir, `/failure-docs/${slug}.md`)));
+      const hash = crypto
+        .createHash('sha1')
+        .update(fs.readFileSync(path.join(fixturesDir, `/failure-docs/${slug}.md`)))
+        .digest('hex');
+
+      const getMock = nock(config.host, {
+        reqheaders: {
+          'x-readme-version': version,
+        },
+      })
+        .get(`/api/v1/docs/${slug}`)
+        .basicAuth({ user: key })
+        .reply(404, {
+          error: 'DOC_NOTFOUND',
+          message: `The doc with the slug '${slug}' couldn't be found`,
+          suggestion: '...a suggestion to resolve the issue...',
+          help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
+        });
+
+      const postMock = nock(config.host, {
+        reqheaders: {
+          'x-readme-version': version,
+        },
+      })
+        .post(`/api/v1/docs`, { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
+        .basicAuth({ user: key })
+        .reply(400, {
+          error: 'DOC_INVALID',
+          message: "We couldn't save this doc (Path `category` is required.).",
+        });
+
+      return docs.run({ folder: './__tests__/__fixtures__/failure-docs', key, version }).then(message => {
+        expect(console.log).toHaveBeenCalledTimes(1);
+        expect(message).toStrictEqual([]);
+        getMock.done();
+        postMock.done();
+        console.log.mockRestore();
+      });
+    });
   });
 });
 
