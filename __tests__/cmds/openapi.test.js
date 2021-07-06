@@ -3,6 +3,7 @@ const config = require('config');
 const fs = require('fs');
 const promptHandler = require('../../src/lib/prompts');
 const swagger = require('../../src/cmds/swagger');
+const openapi = require('../../src/cmds/openapi');
 
 const key = 'Xmw4bGctRVIQz7R7dQXqH9nQe5d0SPQs';
 const version = '1.0.0';
@@ -13,7 +14,7 @@ const getCommandOutput = () => {
   return [console.warn.mock.calls.join('\n\n'), console.log.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
 };
 
-describe('rdme swagger', () => {
+describe('rdme openapi', () => {
   const exampleRefLocation = `${config.host}/project/example-project/1.0.1/refs/ex`;
 
   beforeAll(() => nock.disableNetConnect());
@@ -53,7 +54,7 @@ describe('rdme swagger', () => {
     // to break.
     fs.copyFileSync('./__tests__/__fixtures__/swagger.json', './swagger.json');
 
-    return swagger.run({ key }).then(() => {
+    return openapi.run({ key }).then(() => {
       expect(console.log).toHaveBeenCalledTimes(2);
 
       const output = getCommandOutput();
@@ -86,7 +87,7 @@ describe('rdme swagger', () => {
         help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
       });
 
-    return expect(swagger.run({ spec: './__tests__/__fixtures__/swagger.json', key, version }))
+    return expect(openapi.run({ spec: './__tests__/__fixtures__/swagger.json', key, version }))
       .rejects.toThrow('The version you specified')
       .then(() => mock.done());
   });
@@ -103,7 +104,7 @@ describe('rdme swagger', () => {
       .basicAuth({ user: key })
       .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
-    return swagger.run({ spec: './__tests__/__fixtures__/swagger.json', key, version }).then(() => {
+    return openapi.run({ spec: './__tests__/__fixtures__/swagger.json', key, version }).then(() => {
       expect(console.log).toHaveBeenCalledTimes(1);
 
       const output = getCommandOutput();
@@ -134,7 +135,7 @@ describe('rdme swagger', () => {
         help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
       });
 
-    return expect(swagger.run({ spec: './__tests__/__fixtures__/invalid-swagger.json', key, version }))
+    return expect(openapi.run({ spec: './__tests__/__fixtures__/invalid-swagger.json', key, version }))
       .rejects.toThrow('README VALIDATION ERROR "x-samples-languages" must be of type "Array"')
       .then(() => mock.done());
   });
@@ -161,7 +162,7 @@ describe('rdme swagger', () => {
       .basicAuth({ user: key })
       .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
-    return swagger.run({ spec: './__tests__/__fixtures__/swagger.json', key }).then(() => {
+    return openapi.run({ spec: './__tests__/__fixtures__/swagger.json', key }).then(() => {
       mock.done();
     });
   });
@@ -174,7 +175,7 @@ describe('rdme swagger', () => {
       .basicAuth({ user: key })
       .reply(201, { body: '{ id: 1 }' });
 
-    return swagger.run({ spec: './__tests__/__fixtures__/swagger.json', key, id, version }).then(() => {
+    return openapi.run({ spec: './__tests__/__fixtures__/swagger.json', key, id, version }).then(() => {
       mock.done();
     });
   });
@@ -187,7 +188,7 @@ describe('rdme swagger', () => {
       .basicAuth({ user: key })
       .reply(201, { id: 1 }, { location: exampleRefLocation });
 
-    return swagger.run({ spec: './__tests__/__fixtures__/swagger.json', token: `${key}-${id}`, version }).then(() => {
+    return openapi.run({ spec: './__tests__/__fixtures__/swagger.json', token: `${key}-${id}`, version }).then(() => {
       expect(console.warn).toHaveBeenCalledTimes(1);
       expect(console.log).toHaveBeenCalledTimes(1);
 
@@ -200,7 +201,7 @@ describe('rdme swagger', () => {
   });
 
   it('should error if no api key provided', async () => {
-    await expect(swagger.run({ spec: './__tests__/__fixtures__/swagger.json' })).rejects.toThrow(
+    await expect(openapi.run({ spec: './__tests__/__fixtures__/swagger.json' })).rejects.toThrow(
       'No project API key provided. Please use `--key`.'
     );
   });
@@ -211,7 +212,7 @@ describe('rdme swagger', () => {
       .basicAuth({ user: key })
       .reply(200, { version: '1.0.0' });
 
-    await expect(swagger.run({ key, version })).rejects.toThrow(/We couldn't find a Swagger or OpenAPI file./);
+    await expect(openapi.run({ key, version })).rejects.toThrow(/We couldn't find a Swagger or OpenAPI file./);
 
     mock.done();
   });
@@ -219,8 +220,19 @@ describe('rdme swagger', () => {
   it('should throw an error if file is invalid', async () => {
     const id = '5aa0409b7cf527a93bfb44df';
 
-    await expect(swagger.run({ spec: './__tests__/__fixtures__/invalid-oas.json', key, id, version })).rejects.toThrow(
+    await expect(openapi.run({ spec: './__tests__/__fixtures__/invalid-oas.json', key, id, version })).rejects.toThrow(
       'Token "Error" does not exist.'
+    );
+  });
+});
+
+describe('rdme swagger', () => {
+  it('should run `rdme openapi`', async () => {
+    const id = '5aa0409b7cf527a93bfb44df';
+
+    await expect(swagger.run({ spec: '', key, id, version })).rejects.toThrow(
+      "We couldn't find a Swagger or OpenAPI file.\n\n" +
+        'Run `rdme openapi ./path/to/file` to upload an existing file or `rdme oas init` to create a fresh one!'
     );
   });
 });
