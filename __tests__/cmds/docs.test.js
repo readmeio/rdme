@@ -139,14 +139,21 @@ describe('rdme docs', () => {
       });
     });
 
-    it('should not create new doc if the doc is invalid', () => {
+    it('should create only valid docs', () => {
       console.log = jest.fn();
       expect.assertions(2);
       const slug = 'fail-doc';
+      const slugTwo = 'new-doc';
       const doc = frontMatter(fs.readFileSync(path.join(fixturesDir, `/failure-docs/${slug}.md`)));
+      const docTwo = frontMatter(fs.readFileSync(path.join(fixturesDir, `/failure-docs/${slugTwo}.md`)));
       const hash = crypto
         .createHash('sha1')
         .update(fs.readFileSync(path.join(fixturesDir, `/failure-docs/${slug}.md`)))
+        .digest('hex');
+
+      const hashTwo = crypto
+        .createHash('sha1')
+        .update(fs.readFileSync(path.join(fixturesDir, `/failure-docs/${slugTwo}.md`)))
         .digest('hex');
 
       const getMock = nock(config.host, {
@@ -163,6 +170,20 @@ describe('rdme docs', () => {
           help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
         });
 
+      const getMockTwo = nock(config.host, {
+        reqheaders: {
+          'x-readme-version': version,
+        },
+      })
+        .get(`/api/v1/docs/${slugTwo}`)
+        .basicAuth({ user: key })
+        .reply(404, {
+          error: 'DOC_NOTFOUND',
+          message: `The doc with the slug '${slugTwo}' couldn't be found`,
+          suggestion: '...a suggestion to resolve the issue...',
+          help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
+        });
+
       const postMock = nock(config.host, {
         reqheaders: {
           'x-readme-version': version,
@@ -175,11 +196,54 @@ describe('rdme docs', () => {
           message: "We couldn't save this doc (Path `category` is required.).",
         });
 
+      const postMockTwo = nock(config.host, {
+        reqheaders: {
+          'x-readme-version': version,
+        },
+      })
+        .post(`/api/v1/docs`, { slug: slugTwo, body: docTwo.content, ...docTwo.data, lastUpdatedHash: hashTwo })
+        .basicAuth({ user: key })
+        .reply(201, {
+          metadata: { image: [], title: '', description: '' },
+          api: {
+            method: 'post',
+            url: '',
+            auth: 'required',
+            params: [],
+            apiSetting: '60ddf83e30681022753e27af',
+          },
+          title: 'This is the document title',
+          updates: [],
+          type: 'endpoint',
+          slug: slugTwo,
+          body: 'Body',
+          category: '5ae122e10fdf4e39bb34db6f',
+        });
+
       return docs.run({ folder: './__tests__/__fixtures__/failure-docs', key, version }).then(message => {
         expect(console.log).toHaveBeenCalledTimes(1);
-        expect(message).toStrictEqual([]);
+        expect(message).toStrictEqual([
+          {
+            metadata: { image: [], title: '', description: '' },
+            api: {
+              method: 'post',
+              url: '',
+              auth: 'required',
+              params: [],
+              apiSetting: '60ddf83e30681022753e27af',
+            },
+            title: 'This is the document title',
+            updates: [],
+            type: 'endpoint',
+            slug: slugTwo,
+            body: 'Body',
+            category: '5ae122e10fdf4e39bb34db6f',
+          },
+        ]);
         getMock.done();
+        getMockTwo.done();
         postMock.done();
+        postMockTwo.done();
         console.log.mockRestore();
       });
     });
