@@ -120,8 +120,9 @@ exports.run = function (opts) {
     files.map(async filename => {
       const file = await readFile(path.join(folder, filename), 'utf8');
       const matter = frontMatter(file);
-      // Stripping the subdirectories and markdown extension from the filename
-      const slug = path.basename(filename).replace(path.extname(filename), '');
+      
+      // Stripping the subdirectories and markdown extension from the filename and lowercasing to get the default slug.
+      const slug = path.basename(filename).replace(path.extname(filename), '').toLowerCase();
       const hash = crypto.createHash('sha1').update(file).digest('hex');
 
       return request

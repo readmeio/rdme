@@ -88,11 +88,7 @@ describe('cli', () => {
       });
     });
 
-    it('should not show related commands on commands that have none', () => {
-      return cli(['swagger', '--help']).then(output => {
-        expect(output).not.toContain('Related commands');
-      });
-    });
+    it.todo('should not show related commands on commands that have none');
   });
 
   describe('subcommands', () => {
