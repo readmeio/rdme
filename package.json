@@ -2,6 +2,7 @@
   "name": "rdme",
   "version": "3.8.2",
   "description": "ReadMe's API CLI",
+  "license": "MIT",
   "author": "ReadMe <support@readme.io> (https://readme.com)",
   "engines": {
     "node": "^12 || ^14 || ^16"
