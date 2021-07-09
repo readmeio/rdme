@@ -1,3 +1,43 @@
+## 4.0.0 (2021-07-09)
+
+> 🚨 With this release we no longer support Node 10.
+
+* chore: directory spring cleaning (#327) ([314e74b](https://github.com/readmeio/rdme/commit/314e74b)), closes [#327](https://github.com/readmeio/rdme/issues/327)
+* chore: re-running prettier to fix failing CI ([1e332be](https://github.com/readmeio/rdme/commit/1e332be))
+* chore: running npm audit (#339) ([db0fcfd](https://github.com/readmeio/rdme/commit/db0fcfd)), closes [#339](https://github.com/readmeio/rdme/issues/339)
+* chore(deps-dev): bump @readme/eslint-config from 3.4.0 to 4.0.0 ([#229](https://github.com/readmeio/rdme/issues/229), [#239](https://github.com/readmeio/rdme/issues/239), [#246](https://github.com/readmeio/rdme/issues/246), [#253](https://github.com/readmeio/rdme/issues/253), [#261](https://github.com/readmeio/rdme/issues/261), [#273](https://github.com/readmeio/rdme/issues/273))
+* chore(deps-dev): bump conventional-changelog-cli from 2.0.34 to 2.1.1 ([#237](https://github.com/readmeio/rdme/issues/237), [#257](https://github.com/readmeio/rdme/issues/257))
+* chore(deps-dev): bump eslint from 7.5.0 to 7.12.1 ([#228](https://github.com/readmeio/rdme/issues/228), [#242](https://github.com/readmeio/rdme/issues/242), [#244](https://github.com/readmeio/rdme/issues/244), [#254](https://github.com/readmeio/rdme/issues/254), [#260](https://github.com/readmeio/rdme/issues/260), [#271](https://github.com/readmeio/rdme/issues/271), [#276](https://github.com/readmeio/rdme/issues/276))
+* chore(deps-dev): bump jest from 26.1.0 to 27.0.6 ([#226](https://github.com/readmeio/rdme/issues/226), [#233](https://github.com/readmeio/rdme/issues/233), [#235](https://github.com/readmeio/rdme/issues/235), [#255](https://github.com/readmeio/rdme/issues/255), [#258](https://github.com/readmeio/rdme/issues/258), [#337](https://github.com/readmeio/rdme/issues/337))
+* chore(deps-dev): bump nock from 13.0.2 to 13.0.5 ([#227](https://github.com/readmeio/rdme/issues/227), [#236](https://github.com/readmeio/rdme/issues/236), [#259](https://github.com/readmeio/rdme/issues/259))
+* chore(deps-dev): bump prettier from 2.0.5 to 2.3.2 ([#238](https://github.com/readmeio/rdme/issues/238), [#248](https://github.com/readmeio/rdme/issues/248), [#265](https://github.com/readmeio/rdme/issues/265), [#335](https://github.com/readmeio/rdme/issues/335))
+* chore(deps): bump actions/checkout from v2.3.2 to v2.3.4 ([#250](https://github.com/readmeio/rdme/issues/250), [#266](https://github.com/readmeio/rdme/issues/266))
+* chore(deps): bump actions/setup-node from 2.1.5 to  (#336) ([c71e982](https://github.com/readmeio/rdme/commit/c71e982)), closes
+* chore(deps): bump actions/setup-node from v1 to 2.2.0 ([#232](https://github.com/readmeio/rdme/issues/232), [#256](https://github.com/readmeio/rdme/issues/256), [#274](https://github.com/readmeio/rdme/issues/274), [#291](https://github.com/readmeio/rdme/issues/291), [#336](https://github.com/readmeio/rdme/issues/336))
+* chore(deps): bump command-line-usage from 6.1.0 to 6.1.1 (#262) ([b531b96](https://github.com/readmeio/rdme/commit/b531b96)), closes [#262](https://github.com/readmeio/rdme/issues/262)
+* chore(deps): bump config from 3.3.1 to 3.3.2 ([#249](https://github.com/readmeio/rdme/issues/249), [#263](https://github.com/readmeio/rdme/issues/263))
+* chore(deps): bump gray-matter from 4.0.2 to 4.0.3 (#305) ([1ce24ea](https://github.com/readmeio/rdme/commit/1ce24ea)), closes [#305](https://github.com/readmeio/rdme/issues/305)
+* chore(deps): bump hosted-git-info from 2.6.0 to 2.8.9 (#311) ([52e97bd](https://github.com/readmeio/rdme/commit/52e97bd)), closes [#311](https://github.com/readmeio/rdme/issues/311)
+* chore(deps): bump node-fetch from 2.6.0 to 2.6.1 (#243) ([3446002](https://github.com/readmeio/rdme/commit/3446002)), closes [#243](https://github.com/readmeio/rdme/issues/243)
+* chore(deps): bump node-notifier from 8.0.0 to 8.0.1 (#268) ([14b8bd5](https://github.com/readmeio/rdme/commit/14b8bd5)), closes [#268](https://github.com/readmeio/rdme/issues/268)
+* chore(deps): bump oas from 3.5.6 to 13.0.4  ([#240](https://github.com/readmeio/rdme/issues/240), [#247](https://github.com/readmeio/rdme/issues/247), [#334](https://github.com/readmeio/rdme/issues/334))
+* chore(deps): bump open from 7.1.0 to 8.2.1 ([#241](https://github.com/readmeio/rdme/issues/241), [#245](https://github.com/readmeio/rdme/issues/245), [#328](https://github.com/readmeio/rdme/issues/328))
+* chore(deps): bump semver from 7.3.2 to 7.3.4 (#269) ([d7e52e5](https://github.com/readmeio/rdme/commit/d7e52e5)), closes [#269](https://github.com/readmeio/rdme/issues/269)
+* chore(deps): update actions/checkout requirement to v2.3.2 (#231) ([0aa7704](https://github.com/readmeio/rdme/commit/0aa7704)), closes [#231](https://github.com/readmeio/rdme/issues/231)
+* feat: add --recursive option to doc sync command (#313) ([96ea0d8](https://github.com/readmeio/rdme/commit/96ea0d8)), closes [#313](https://github.com/readmeio/rdme/issues/313) [#325](https://github.com/readmeio/rdme/issues/325) [#327](https://github.com/readmeio/rdme/issues/327)
+* feat: lowercase filenames to match default slugs (#312) ([5503c04](https://github.com/readmeio/rdme/commit/5503c04)), closes [#312](https://github.com/readmeio/rdme/issues/312)
+* docs: adding a license field to the package file ([e5c4768](https://github.com/readmeio/rdme/commit/e5c4768))
+* docs: adding a pull request template ([d39fca1](https://github.com/readmeio/rdme/commit/d39fca1))
+* fix: catch upload timeouts and return a better error message ([773692b](https://github.com/readmeio/rdme/commit/773692b))
+* fix: change docs command to always update all valid docs (#338) ([792a2b2](https://github.com/readmeio/rdme/commit/792a2b2)), closes [#338](https://github.com/readmeio/rdme/issues/338)
+* fix: validate files before uploading in swagger command (#332) ([670f9c4](https://github.com/readmeio/rdme/commit/670f9c4)), closes [#332](https://github.com/readmeio/rdme/issues/332)
+* feat: dropping support for node 10, expanding coverage to node 14/16 (#325) ([052ed4f](https://github.com/readmeio/rdme/commit/052ed4f)), closes [#325](https://github.com/readmeio/rdme/issues/325)
+* feat: rename swagger command to openapi and keep swagger as alias (#333) ([04e7f93](https://github.com/readmeio/rdme/commit/04e7f93)), closes [#333](https://github.com/readmeio/rdme/issues/333)
+* style: update ASCII Owlbert (#330) ([a38ee76](https://github.com/readmeio/rdme/commit/a38ee76)), closes [#330](https://github.com/readmeio/rdme/issues/330)
+* ci: setting up codeql (#230) ([8c275f5](https://github.com/readmeio/rdme/commit/8c275f5)), closes [#230](https://github.com/readmeio/rdme/issues/230)
+
+
+
 ## <small>3.8.2 (2020-07-27)</small>
 
 * chore(deps-dev): bump @readme/eslint-config from 3.3.2 to 3.4.0 (#221) ([785f063](https://github.com/readmeio/rdme/commit/785f063)), closes [#221](https://github.com/readmeio/rdme/issues/221)
