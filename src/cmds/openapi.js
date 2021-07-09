@@ -86,6 +86,14 @@ exports.run = async function (opts) {
         const parsedError = JSON.parse(err.error);
         return Promise.reject(new APIError(parsedError));
       } catch (e) {
+        if (e.message.includes('Unexpected token < in JSON')) {
+          return Promise.reject(
+            new Error(
+              "We're sorry, your upload request timed out. Please try again or split your file up into smaller chunks."
+            )
+          );
+        }
+
         return Promise.reject(new Error('There was an error uploading!'));
       }
     }
