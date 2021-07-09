@@ -1,3 +1,4 @@
+require('colors');
 const request = require('request-promise-native');
 const fs = require('fs');
 const path = require('path');
@@ -34,7 +35,7 @@ exports.args = [
   },
 ];
 
-exports.run = function (opts) {
+exports.run = async function (opts) {
   const { folder, key, version } = opts;
 
   if (!key) {
@@ -89,7 +90,7 @@ exports.run = function (opts) {
       .catch(err => Promise.reject(new APIError(err)));
   }
 
-  return Promise.all(
+  const updatedDocs = await Promise.allSettled(
     files.map(async filename => {
       const file = await readFile(path.join(folder, filename), 'utf8');
       const matter = frontMatter(file);
@@ -103,7 +104,20 @@ exports.run = function (opts) {
           ...options,
         })
         .then(updateDoc.bind(null, slug, matter, hash), createDoc.bind(null, slug, matter, hash))
-        .catch(err => Promise.reject(new APIError(err)));
+        .catch(err => {
+          console.log(`\n\`${slug}\` failed to upload. ${err.message}\n`.red);
+        });
     })
   );
+
+  for (let i = 0; i < updatedDocs.length; ) {
+    if (updatedDocs[i].value !== undefined) {
+      updatedDocs[i] = updatedDocs[i].value; // returns only the value of the response
+      i += 1;
+    } else {
+      updatedDocs.splice(i, 1); // we already displayed the error messages so we can filter those out
+    }
+  }
+
+  return updatedDocs;
 };
