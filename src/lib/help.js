@@ -12,7 +12,7 @@ const owlbert = () => {
   return `                    ${config.cli.blue.bold}
 
     ${`a utlity for interacting with ReadMe`.bold}
-       .                        
+       .
        .\\\\                          /.
       ’  ‘                        ‘ ‘
       ( nn\\\\    .           .     /  )
@@ -102,7 +102,7 @@ exports.globalUsage = async args => {
     };
 
     category.commands
-      .sort((a, b) => a.position > b.position)
+      .sort((a, b) => (a.position > b.position ? 1 : -1))
       .forEach(command => {
         commandCategory.content.push({
           command: styleCommand(command),
