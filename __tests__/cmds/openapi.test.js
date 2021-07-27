@@ -200,6 +200,41 @@ describe('rdme openapi', () => {
     });
   });
 
+  it('should bundle and upload the expected content', () => {
+    let requestBody = null;
+    const mock = nock(config.host)
+      .get(`/api/v1/api-specification`)
+      .basicAuth({ user: key })
+      .reply(200, [])
+      .get(`/api/v1/version/${version}`)
+      .basicAuth({ user: key })
+      .reply(200, { version: '1.0.0' })
+      .post('/api/v1/api-specification', body => {
+        requestBody = body;
+        return body.match('form-data; name="spec"');
+      })
+      .basicAuth({ user: key })
+      .reply(201, { _id: 1 }, { location: exampleRefLocation });
+
+    return openapi.run({ spec: './__tests__/__fixtures__/ref-oas/petstore.json', key, version }).then(() => {
+      expect(console.log).toHaveBeenCalledTimes(1);
+
+      expect(requestBody).not.toMatch(
+        '"paths":{"/pet":{"post":{"tags":["pet"],"summary":"Add a new pet to the store","description":"","operationId":"addPet","requestBody":{"$ref":"__tests__/__fixtures__/ref-oas/pettest.json#/components/requestBodies/Pet"},"responses":{"405":{"description":"Invalid input"}},"security":[{"petstore_auth":["write:pets","read:pets"]}]}'
+      );
+      expect(requestBody).toMatch(
+        '"paths":{"/pet":{"post":{"tags":["pet"],"summary":"Add a new pet to the store","description":"","operationId":"addPet","requestBody":{"content":{"application/json":{"schema":{"type":"object","required":["name","photoUrls"],"properties":{"id":{"type":"integer","format":"int64","default":40,"example":25},"category":{"type":"object","properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"}},"xml":{"name":"Category"}},"name":{"type":"string","example":"doggie"},"photoUrls":{"type":"array","xml":{"name":"photoUrl","wrapped":true},"items":{"type":"string","example":"https://example.com/photo.png"}},"tags":{"type":"array","xml":{"name":"tag","wrapped":true},"items":{"type":"object","properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"}},"xml":{"name":"Tag"}}},"status":{"type":"string","description":"pet status in the store","enum":["available","pending","sold"]}},"xml":{"name":"Pet"}}},"application/xml":{"schema":{"type":"object","required":["name","photoUrls"],"properties":{"id":{"type":"integer","format":"int64","default":40,"example":25},"category":{"type":"object","properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"}},"xml":{"name":"Category"}},"name":{"type":"string","example":"doggie"},"photoUrls":{"type":"array","xml":{"name":"photoUrl","wrapped":true},"items":{"type":"string","example":"https://example.com/photo.png"}},"tags":{"type":"array","xml":{"name":"tag","wrapped":true},"items":{"type":"object","properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"}},"xml":{"name":"Tag"}}},"status":{"type":"string","description":"pet status in the store","enum":["available","pending","sold"]}},"xml":{"name":"Pet"}}}},"description":"Pet object that needs to be added to the store","required":true},"responses":{"405":{"description":"Invalid input"}},"security":[{"petstore_auth":["write:pets","read:pets"]}]}'
+      );
+
+      const output = getCommandOutput();
+      expect(output).toMatch(/successfully uploaded/);
+      expect(output).toMatch(exampleRefLocation);
+      expect(output).toMatch(/to update your swagger or openapi file/i);
+
+      mock.done();
+    });
+  });
+
   it('should error if no api key provided', async () => {
     await expect(openapi.run({ spec: './__tests__/__fixtures__/swagger.json' })).rejects.toThrow(
       'No project API key provided. Please use `--key`.'
