@@ -1,7 +1,6 @@
 require('colors');
 const request = require('request-promise-native');
 const fs = require('fs');
-const path = require('path');
 const config = require('config');
 const { prompt } = require('enquirer');
 const OASNormalize = require('oas-normalize');
@@ -99,24 +98,22 @@ exports.run = async function (opts) {
     }
 
     let bundledSpec;
-    if (spec) {
-      const oas = new OASNormalize(spec, { enablePaths: true });
-      await oas.validate().catch(err => {
+    const oas = new OASNormalize(specPath, { enablePaths: true });
+    await oas.validate().catch(err => {
+      return Promise.reject(err);
+    });
+    await oas
+      .bundle()
+      .then(res => {
+        bundledSpec = JSON.stringify(res);
+      })
+      .catch(err => {
         return Promise.reject(err);
       });
-      await oas
-        .bundle()
-        .then(res => {
-          bundledSpec = JSON.stringify(res);
-        })
-        .catch(err => {
-          return Promise.reject(err);
-        });
-    }
 
     const options = {
       formData: {
-        spec: bundledSpec || fs.createReadStream(path.resolve(process.cwd(), specPath)),
+        spec: bundledSpec,
       },
       headers: {
         'x-readme-version': versionCleaned,
