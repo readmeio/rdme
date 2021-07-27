@@ -211,6 +211,8 @@ describe('rdme openapi', () => {
       .reply(200, { version: '1.0.0' })
       .post('/api/v1/api-specification', body => {
         requestBody = body.substring(body.indexOf('{'), body.lastIndexOf('}') + 1);
+        requestBody = JSON.parse(requestBody);
+
         return body.match('form-data; name="spec"');
       })
       .basicAuth({ user: key })
