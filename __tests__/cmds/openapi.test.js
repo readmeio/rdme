@@ -200,6 +200,38 @@ describe('rdme openapi', () => {
     });
   });
 
+  it('should bundle and upload the expected content', () => {
+    let requestBody = null;
+    const mock = nock(config.host)
+      .get(`/api/v1/api-specification`)
+      .basicAuth({ user: key })
+      .reply(200, [])
+      .get(`/api/v1/version/${version}`)
+      .basicAuth({ user: key })
+      .reply(200, { version: '1.0.0' })
+      .post('/api/v1/api-specification', body => {
+        requestBody = body.substring(body.indexOf('{'), body.lastIndexOf('}') + 1);
+        requestBody = JSON.parse(requestBody);
+
+        return body.match('form-data; name="spec"');
+      })
+      .basicAuth({ user: key })
+      .reply(201, { _id: 1 }, { location: exampleRefLocation });
+
+    return openapi.run({ spec: './__tests__/__fixtures__/ref-oas/petstore.json', key, version }).then(() => {
+      expect(console.log).toHaveBeenCalledTimes(1);
+
+      expect(requestBody).toMatchSnapshot();
+
+      const output = getCommandOutput();
+      expect(output).toMatch(/successfully uploaded/);
+      expect(output).toMatch(exampleRefLocation);
+      expect(output).toMatch(/to update your swagger or openapi file/i);
+
+      mock.done();
+    });
+  });
+
   it('should error if no api key provided', async () => {
     await expect(openapi.run({ spec: './__tests__/__fixtures__/swagger.json' })).rejects.toThrow(
       'No project API key provided. Please use `--key`.'

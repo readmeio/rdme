@@ -1,7 +1,6 @@
 require('colors');
 const request = require('request-promise-native');
 const fs = require('fs');
-const path = require('path');
 const config = require('config');
 const { prompt } = require('enquirer');
 const OASNormalize = require('oas-normalize');
@@ -98,9 +97,23 @@ exports.run = async function (opts) {
       }
     }
 
+    let bundledSpec;
+    const oas = new OASNormalize(specPath, { enablePaths: true });
+    await oas.validate().catch(err => {
+      return Promise.reject(err);
+    });
+    await oas
+      .bundle()
+      .then(res => {
+        bundledSpec = JSON.stringify(res);
+      })
+      .catch(err => {
+        return Promise.reject(err);
+      });
+
     const options = {
       formData: {
-        spec: fs.createReadStream(path.resolve(process.cwd(), specPath)),
+        spec: bundledSpec,
       },
       headers: {
         'x-readme-version': versionCleaned,
@@ -118,13 +131,6 @@ exports.run = async function (opts) {
       isUpdate = true;
 
       return request.put(`${config.host}/api/v1/api-specification/${specId}`, options).then(success, error);
-    }
-
-    if (spec) {
-      const oas = new OASNormalize(spec, { enablePaths: true });
-      await oas.validate().catch(err => {
-        return Promise.reject(err);
-      });
     }
 
     /*
