@@ -68,8 +68,7 @@ exports.run = async function (opts) {
 
   // Strip out non-markdown files
   const files = allFiles.filter(file => file.endsWith('.md') || file.endsWith('.markdown'));
-
-  if (files.length === 0) {
+  if (!files.length) {
     return Promise.reject(new Error(`We were unable to locate Markdown files in ${folder}.`));
   }
 
@@ -93,7 +92,7 @@ exports.run = async function (opts) {
 
   function updateDoc(slug, file, hash, existingDoc) {
     if (hash === existingDoc.lastUpdatedHash) {
-      return `\`${slug}\` not updated. No changes.`;
+      return `\`${slug}\` was not updated because there were no changes.`;
     }
 
     return request
@@ -110,7 +109,7 @@ exports.run = async function (opts) {
 
   const updatedDocs = await Promise.allSettled(
     files.map(async filename => {
-      const file = await readFile(path.join(folder, filename), 'utf8');
+      const file = await readFile(filename, 'utf8');
       const matter = frontMatter(file);
 
       // Stripping the subdirectories and markdown extension from the filename and lowercasing to get the default slug.
