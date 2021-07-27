@@ -4,21 +4,18 @@
 
 [![npm](https://img.shields.io/npm/v/rdme)](https://npm.im/rdme) [![Build](https://github.com/readmeio/rdme/workflows/CI/badge.svg)](https://github.com/readmeio/rdme)
 
-### Table of Contents
-   * [What is rdme?](#about-rdme)
-   * [Configuration](#installation)
-     * [Installation](#installation)
-     * [Authentication](#authentication)
-   * [Usage](#usage)
-      * [Common options](#common-rdme-options)
-      * [Swagger / OpenAPI](#swagger-/-openapi)
-      * [Docs](#docs)
-      * [Versions](#versions)
-      * [Opening a Project](#open)
-   * [Future](#future)
-
-### About `rdme`
 `rdme` is the CLI wrapper for [ReadMe's RESTful API](https://docs.readme.com/developers/reference/intro). It allows you to upload and edit [Swagger](https://swagger.io/) and [OAS](https://swagger.io/specification/) files associated with projects you create on [ReadMe](https://readme.com/). Additionally, you can sync documentation with your project, and manage project versions.
+
+* [Configuration](#installation)
+   * [Installation](#installation)
+   * [Authentication](#authentication)
+* [Usage](#usage)
+   * [Common options](#common-rdme-options)
+   * [Swagger / OpenAPI](#swagger-/-openapi)
+   * [Docs](#docs)
+   * [Versions](#versions)
+   * [Opening a Project](#open)
+* [Future](#future)
 
 ## Configuration
 ### Installation
@@ -45,36 +42,38 @@ If you wish to get more information about any command within `rdme`, you can exe
 ### Swagger / OpenAPI
 ReadMe supports both [Swagger 2.0](https://swagger.io/docs/specification/2-0/basic-structure/) and [OpenAPI 3.0](https://swagger.io/docs/specification/about/).
 
+> ℹ️ Note that the `rdme swagger` command is also available alongside `rdme openapi` also supports both OpenAPI and Swagger API definitions.
+
 #### Uploading a new API description to ReadMe
-This will upload `path-to-swagger.json` to your project and return an ID and URL for you to later update your file, and view it in the client.
+This will upload `path-to-openapi.json` to your project and return an ID and URL for you to later update your file, and view it in the client.
 
 ```sh
-rdme swagger [path-to-file.json]
+rdme openapi [path-to-file.json]
 ```
 
 #### Editing (resync) an existing API description
 This will edit (resync) an existing API description (identified by `--id`) within your ReadMe project.
 
 ```sh
-rdme swagger [path-to-file.json] --id={existing-id}
+rdme openapi [path-to-file.json] --id={existing-id}
 ```
 
 #### Uploading or editing an API description in a project version
 You can additional include a version flag, specifying the target version for your file's destination
 
 ```sh
-rdme swagger [path-to-file.json] --version={project-version}
+rdme openapi [path-to-file.json] --version={project-version}
 ```
 
 ```sh
-rdme swagger [path-to-file.json] --id={existing-id} --version={project-version}
+rdme openapi [path-to-file.json] --id={existing-id} --version={project-version}
 ```
 
 #### Omitting the file path
-If you run `rdme` within a directory that contains your Swagger or OAS file, you can omit the file path. We will then look for a file with the following names, and upload that: `swagger.json`, `swagger.yaml`, `openapi.json`, and `openapi.yaml`
+If you run `rdme` within a directory that contains your Swagger or OpenAPI definition, you can omit the file path. We will then look for a file with the following names, and upload that: `swagger.json`, `swagger.yaml`, `openapi.json`, and `openapi.yaml`
 
 ```sh
-rdme swagger
+rdme openapi
 ```
 
 ### Docs
