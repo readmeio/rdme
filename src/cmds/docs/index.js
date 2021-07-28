@@ -63,11 +63,8 @@ exports.run = async function (opts) {
     return [...files, ...subFiles];
   };
 
-  // Pull off the leading subdirectory, to keep things consistant with below
-  const allFiles = readdirRecursive(folder).map(file => file.replace(`${folder}${path.sep}`, ''));
-
   // Strip out non-markdown files
-  const files = allFiles.filter(file => file.endsWith('.md') || file.endsWith('.markdown'));
+  const files = readdirRecursive(folder).filter(file => file.endsWith('.md') || file.endsWith('.markdown'));
   if (!files.length) {
     return Promise.reject(new Error(`We were unable to locate Markdown files in ${folder}.`));
   }
