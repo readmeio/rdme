@@ -1,10 +1,13 @@
 const semver = require('semver');
 
-exports.generatePrompts = versionList => [
+exports.generatePrompts = (versionList, selectOnly = false) => [
   {
     type: 'select',
     name: 'option',
     message: 'Would you like to use an existing version or create a new one to associate with your OAS file?',
+    skip() {
+      return selectOnly;
+    },
     choices: [
       { message: 'Use existing', value: 'update' },
       { message: 'Create a new version', value: 'create' },
@@ -15,7 +18,7 @@ exports.generatePrompts = versionList => [
     name: 'versionSelection',
     message: 'Select your desired version',
     skip() {
-      return this.enquirer.answers.option !== 'update';
+      return selectOnly ? false : this.enquirer.answers.option !== 'update';
     },
     choices: versionList.map(v => {
       return {
@@ -29,7 +32,7 @@ exports.generatePrompts = versionList => [
     name: 'newVersion',
     message: "What's your new version?",
     skip() {
-      return this.enquirer.answers.option === 'update';
+      return selectOnly ? true : this.enquirer.answers.option === 'update';
     },
     hint: '1.0.0',
   },

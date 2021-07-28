@@ -165,7 +165,7 @@ exports.run = async function (opts) {
   }
 
   if (!id) {
-    selectedVersion = await getSwaggerVersion(version, key).catch(e => {
+    selectedVersion = await getSwaggerVersion(version, key, true).catch(e => {
       return Promise.reject(e);
     });
   }
