@@ -9,8 +9,22 @@ const docs = require('../../src/cmds/docs');
 const docsEdit = require('../../src/cmds/docs/edit');
 
 const fixturesDir = `${__dirname}./../__fixtures__`;
-const key = 'Xmw4bGctRVIQz7R7dQXqH9nQe5d0SPQs';
+const key = 'API_KEY';
 const version = '1.0.0';
+const category = 'CATEGORY_ID';
+const apiSetting = 'API_SETTING_ID';
+
+function getNockWithVersionHeader(v) {
+  return nock(config.host, {
+    reqheaders: {
+      'x-readme-version': v,
+    },
+  });
+}
+
+function hashFileContents(contents) {
+  return crypto.createHash('sha1').update(contents).digest('hex');
+}
 
 describe('rdme docs', () => {
   beforeAll(() => nock.disableNetConnect());
@@ -39,64 +53,84 @@ describe('rdme docs', () => {
   it.todo('should error if the folder contains no markdown files');
 
   describe('existing docs', () => {
+    let simpleDoc;
+    let anotherDoc;
+
+    beforeEach(() => {
+      let fileContents = fs.readFileSync(path.join(fixturesDir, `/existing-docs/simple-doc.md`));
+      simpleDoc = {
+        slug: 'simple-doc',
+        doc: frontMatter(fileContents),
+        hash: hashFileContents(fileContents),
+      };
+
+      fileContents = fs.readFileSync(path.join(fixturesDir, `/existing-docs/subdir/another-doc.md`));
+      anotherDoc = {
+        slug: 'another-doc',
+        doc: frontMatter(fileContents),
+        hash: hashFileContents(fileContents),
+      };
+    });
+
     it('should fetch doc and merge with what is returned', () => {
-      const slug = 'simple-doc';
-      const doc = frontMatter(fs.readFileSync(path.join(fixturesDir, `/existing-docs/${slug}.md`)));
-      const hash = crypto
-        .createHash('sha1')
-        .update(fs.readFileSync(path.join(fixturesDir, `/existing-docs/${slug}.md`)))
-        .digest('hex');
+      expect.assertions(1);
 
-      const getMock = nock(config.host, {
-        reqheaders: {
-          'x-readme-version': version,
-        },
-      })
-        .get(`/api/v1/docs/${slug}`)
+      const getMocks = getNockWithVersionHeader(version)
+        .get(`/api/v1/docs/simple-doc`)
         .basicAuth({ user: key })
-        .reply(200, { category: '5ae9ece93a685f47efb9a97c', slug });
+        .reply(200, { category, slug: simpleDoc.slug, lastUpdatedHash: 'anOldHash' })
+        .get(`/api/v1/docs/another-doc`)
+        .basicAuth({ user: key })
+        .reply(200, { category, slug: anotherDoc.slug, lastUpdatedHash: 'anOldHash' });
 
-      const putMock = nock(config.host, {
-        reqheaders: {
-          'x-readme-version': version,
-        },
-      })
-        .put(`/api/v1/docs/${slug}`, {
-          category: '5ae9ece93a685f47efb9a97c',
-          slug,
-          body: doc.content,
-          lastUpdatedHash: hash,
-          ...doc.data,
+      const updateMocks = getNockWithVersionHeader(version)
+        .put('/api/v1/docs/simple-doc', {
+          category,
+          slug: simpleDoc.slug,
+          body: simpleDoc.doc.content,
+          lastUpdatedHash: simpleDoc.hash,
+          ...simpleDoc.doc.data,
+        })
+        .basicAuth({ user: key })
+        .reply(200)
+        .put('/api/v1/docs/another-doc', {
+          category,
+          slug: anotherDoc.slug,
+          body: anotherDoc.doc.content,
+          lastUpdatedHash: anotherDoc.hash,
+          ...anotherDoc.doc.data,
         })
         .basicAuth({ user: key })
         .reply(200);
 
-      return docs.run({ folder: './__tests__/__fixtures__/existing-docs', key, version }).then(() => {
-        getMock.done();
-        putMock.done();
+      return docs.run({ folder: './__tests__/__fixtures__/existing-docs', key, version }).then(skippedDocs => {
+        // All docs should have been updated because their hashes from the GET request were different from what they
+        // are currently.
+        expect(skippedDocs).toHaveLength(0);
+
+        getMocks.done();
+        updateMocks.done();
       });
     });
 
     it('should not send requests for docs that have not changed', () => {
       expect.assertions(1);
-      const slug = 'simple-doc';
-      const hash = crypto
-        .createHash('sha1')
-        .update(fs.readFileSync(path.join(fixturesDir, `/existing-docs/${slug}.md`)))
-        .digest('hex');
 
-      const getMock = nock(config.host, {
-        reqheaders: {
-          'x-readme-version': version,
-        },
-      })
-        .get(`/api/v1/docs/${slug}`)
+      const getMocks = getNockWithVersionHeader(version)
+        .get('/api/v1/docs/simple-doc')
         .basicAuth({ user: key })
-        .reply(200, { category: '5ae9ece93a685f47efb9a97c', slug, lastUpdatedHash: hash });
+        .reply(200, { category, slug: simpleDoc.slug, lastUpdatedHash: simpleDoc.hash })
+        .get('/api/v1/docs/another-doc')
+        .basicAuth({ user: key })
+        .reply(200, { category, slug: anotherDoc.slug, lastUpdatedHash: anotherDoc.hash });
 
-      return docs.run({ folder: './__tests__/__fixtures__/existing-docs', key, version }).then(([message]) => {
-        expect(message).toBe('`simple-doc` not updated. No changes.');
-        getMock.done();
+      return docs.run({ folder: './__tests__/__fixtures__/existing-docs', key, version }).then(skippedDocs => {
+        expect(skippedDocs).toStrictEqual([
+          '`simple-doc` was not updated because there were no changes.',
+          '`another-doc` was not updated because there were no changes.',
+        ]);
+
+        getMocks.done();
       });
     });
   });
@@ -105,16 +139,9 @@ describe('rdme docs', () => {
     it('should create new doc', () => {
       const slug = 'new-doc';
       const doc = frontMatter(fs.readFileSync(path.join(fixturesDir, `/new-docs/${slug}.md`)));
-      const hash = crypto
-        .createHash('sha1')
-        .update(fs.readFileSync(path.join(fixturesDir, `/new-docs/${slug}.md`)))
-        .digest('hex');
+      const hash = hashFileContents(fs.readFileSync(path.join(fixturesDir, `/new-docs/${slug}.md`)));
 
-      const getMock = nock(config.host, {
-        reqheaders: {
-          'x-readme-version': version,
-        },
-      })
+      const getMock = getNockWithVersionHeader(version)
         .get(`/api/v1/docs/${slug}`)
         .basicAuth({ user: key })
         .reply(404, {
@@ -124,11 +151,7 @@ describe('rdme docs', () => {
           help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
         });
 
-      const postMock = nock(config.host, {
-        reqheaders: {
-          'x-readme-version': version,
-        },
-      })
+      const postMock = getNockWithVersionHeader(version)
         .post(`/api/v1/docs`, { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
         .reply(201);
@@ -142,25 +165,17 @@ describe('rdme docs', () => {
     it('should create only valid docs', () => {
       console.log = jest.fn();
       expect.assertions(2);
+
       const slug = 'fail-doc';
       const slugTwo = 'new-doc';
+
       const doc = frontMatter(fs.readFileSync(path.join(fixturesDir, `/failure-docs/${slug}.md`)));
       const docTwo = frontMatter(fs.readFileSync(path.join(fixturesDir, `/failure-docs/${slugTwo}.md`)));
-      const hash = crypto
-        .createHash('sha1')
-        .update(fs.readFileSync(path.join(fixturesDir, `/failure-docs/${slug}.md`)))
-        .digest('hex');
 
-      const hashTwo = crypto
-        .createHash('sha1')
-        .update(fs.readFileSync(path.join(fixturesDir, `/failure-docs/${slugTwo}.md`)))
-        .digest('hex');
+      const hash = hashFileContents(fs.readFileSync(path.join(fixturesDir, `/failure-docs/${slug}.md`)));
+      const hashTwo = hashFileContents(fs.readFileSync(path.join(fixturesDir, `/failure-docs/${slugTwo}.md`)));
 
-      const getMock = nock(config.host, {
-        reqheaders: {
-          'x-readme-version': version,
-        },
-      })
+      const getMocks = getNockWithVersionHeader(version)
         .get(`/api/v1/docs/${slug}`)
         .basicAuth({ user: key })
         .reply(404, {
@@ -168,13 +183,7 @@ describe('rdme docs', () => {
           message: `The doc with the slug '${slug}' couldn't be found`,
           suggestion: '...a suggestion to resolve the issue...',
           help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
-        });
-
-      const getMockTwo = nock(config.host, {
-        reqheaders: {
-          'x-readme-version': version,
-        },
-      })
+        })
         .get(`/api/v1/docs/${slugTwo}`)
         .basicAuth({ user: key })
         .reply(404, {
@@ -184,24 +193,14 @@ describe('rdme docs', () => {
           help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
         });
 
-      const postMock = nock(config.host, {
-        reqheaders: {
-          'x-readme-version': version,
-        },
-      })
-        .post(`/api/v1/docs`, { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
+      const postMocks = getNockWithVersionHeader(version)
+        .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
         .reply(400, {
           error: 'DOC_INVALID',
           message: "We couldn't save this doc (Path `category` is required.).",
-        });
-
-      const postMockTwo = nock(config.host, {
-        reqheaders: {
-          'x-readme-version': version,
-        },
-      })
-        .post(`/api/v1/docs`, { slug: slugTwo, body: docTwo.content, ...docTwo.data, lastUpdatedHash: hashTwo })
+        })
+        .post('/api/v1/docs', { slug: slugTwo, body: docTwo.content, ...docTwo.data, lastUpdatedHash: hashTwo })
         .basicAuth({ user: key })
         .reply(201, {
           metadata: { image: [], title: '', description: '' },
@@ -210,14 +209,14 @@ describe('rdme docs', () => {
             url: '',
             auth: 'required',
             params: [],
-            apiSetting: '60ddf83e30681022753e27af',
+            apiSetting,
           },
           title: 'This is the document title',
           updates: [],
           type: 'endpoint',
           slug: slugTwo,
           body: 'Body',
-          category: '5ae122e10fdf4e39bb34db6f',
+          category,
         });
 
       return docs.run({ folder: './__tests__/__fixtures__/failure-docs', key, version }).then(message => {
@@ -230,20 +229,20 @@ describe('rdme docs', () => {
               url: '',
               auth: 'required',
               params: [],
-              apiSetting: '60ddf83e30681022753e27af',
+              apiSetting,
             },
             title: 'This is the document title',
             updates: [],
             type: 'endpoint',
             slug: slugTwo,
             body: 'Body',
-            category: '5ae122e10fdf4e39bb34db6f',
+            category,
           },
         ]);
-        getMock.done();
-        getMockTwo.done();
-        postMock.done();
-        postMockTwo.done();
+
+        getMocks.done();
+        postMocks.done();
+
         console.log.mockRestore();
       });
     });
@@ -279,22 +278,14 @@ describe('rdme docs:edit', () => {
     const body = 'abcdef';
     const edits = 'ghijkl';
 
-    const getMock = nock(config.host, {
-      reqheaders: {
-        'x-readme-version': version,
-      },
-    })
+    const getMock = getNockWithVersionHeader(version)
       .get(`/api/v1/docs/${slug}`)
       .basicAuth({ user: key })
-      .reply(200, { category: '5ae9ece93a685f47efb9a97c', slug, body });
+      .reply(200, { category, slug, body });
 
-    const putMock = nock(config.host, {
-      reqheaders: {
-        'x-readme-version': version,
-      },
-    })
+    const putMock = getNockWithVersionHeader(version)
       .put(`/api/v1/docs/${slug}`, {
-        category: '5ae9ece93a685f47efb9a97c',
+        category,
         slug,
         body: `${body}${edits}`,
       })

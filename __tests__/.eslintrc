@@ -9,6 +9,7 @@
       {
         "assertFunctionNames": [
           "expect",
+          "getNockWithVersionHeader.**.reply",
           "nock.**.reply"
         ]
       }

@@ -29,11 +29,6 @@ exports.args = [
     description: 'Project version',
   },
   {
-    name: 'recursive',
-    type: Boolean,
-    description: 'Search for files recursively',
-  },
-  {
     name: 'folder',
     type: String,
     defaultOption: true,
@@ -41,7 +36,7 @@ exports.args = [
 ];
 
 exports.run = async function (opts) {
-  const { folder, key, version, recursive } = opts;
+  const { folder, key, version } = opts;
 
   if (!key) {
     return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
@@ -55,30 +50,22 @@ exports.run = async function (opts) {
     return Promise.reject(new Error(`No folder provided. Usage \`${config.cli} ${exports.usage}\`.`));
   }
 
-  // Find the files to sync, either recursively or not
-  let allFiles;
-  if (recursive) {
-    // A recursive function that returns a list of child file paths
-    const readdirRecursive = folderToSearch => {
-      const filesInFolder = fs.readdirSync(folderToSearch, { withFileTypes: true });
-      const files = filesInFolder
-        .filter(fileHandle => fileHandle.isFile())
-        .map(fileHandle => path.join(folderToSearch, fileHandle.name));
-      const folders = filesInFolder.filter(fileHandle => fileHandle.isDirectory());
-      const subFiles = [].concat(
-        ...folders.map(fileHandle => readdirRecursive(path.join(folderToSearch, fileHandle.name)))
-      );
-      return [...files, ...subFiles];
-    };
-    // Pull off the leading subdirectory, to keep things consistant with below
-    allFiles = readdirRecursive(folder).map(file => file.replace(`${folder}${path.sep}`, ''));
-  } else {
-    allFiles = fs.readdirSync(folder);
-  }
-  // Strip out non-markdown files
-  const files = allFiles.filter(file => file.endsWith('.md') || file.endsWith('.markdown'));
+  // Find the files to sync
+  const readdirRecursive = folderToSearch => {
+    const filesInFolder = fs.readdirSync(folderToSearch, { withFileTypes: true });
+    const files = filesInFolder
+      .filter(fileHandle => fileHandle.isFile())
+      .map(fileHandle => path.join(folderToSearch, fileHandle.name));
+    const folders = filesInFolder.filter(fileHandle => fileHandle.isDirectory());
+    const subFiles = [].concat(
+      ...folders.map(fileHandle => readdirRecursive(path.join(folderToSearch, fileHandle.name)))
+    );
+    return [...files, ...subFiles];
+  };
 
-  if (files.length === 0) {
+  // Strip out non-markdown files
+  const files = readdirRecursive(folder).filter(file => file.endsWith('.md') || file.endsWith('.markdown'));
+  if (!files.length) {
     return Promise.reject(new Error(`We were unable to locate Markdown files in ${folder}.`));
   }
 
@@ -102,7 +89,7 @@ exports.run = async function (opts) {
 
   function updateDoc(slug, file, hash, existingDoc) {
     if (hash === existingDoc.lastUpdatedHash) {
-      return `\`${slug}\` not updated. No changes.`;
+      return `\`${slug}\` was not updated because there were no changes.`;
     }
 
     return request
@@ -119,7 +106,7 @@ exports.run = async function (opts) {
 
   const updatedDocs = await Promise.allSettled(
     files.map(async filename => {
-      const file = await readFile(path.join(folder, filename), 'utf8');
+      const file = await readFile(filename, 'utf8');
       const matter = frontMatter(file);
 
       // Stripping the subdirectories and markdown extension from the filename and lowercasing to get the default slug.
