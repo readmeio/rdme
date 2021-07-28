@@ -102,13 +102,6 @@ describe('rdme versions*', () => {
       });
     });
 
-    it('should error if no version provided', () => {
-      expect.assertions(1);
-      return createVersion.run({ key }).catch(err => {
-        expect(err.message).toBe('Please specify a semantic version. See `rdme help versions:create` for help.');
-      });
-    });
-
     it('should get a specific version object', () => {
       promptHandler.createVersionPrompt.mockResolvedValue({
         is_stable: true,
@@ -158,15 +151,14 @@ describe('rdme versions*', () => {
       });
     });
 
-    it('should error if no version provided', () => {
-      expect.assertions(1);
-      return deleteVersion.run({ key }).catch(err => {
-        expect(err.message).toBe('Please specify a semantic version. See `rdme help versions:delete` for help.');
-      });
-    });
-
     it('should delete a specific version', () => {
-      const mockRequest = nock(config.host).delete(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200);
+      const mockRequest = nock(config.host)
+        .delete(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200)
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version });
 
       return deleteVersion.run({ key, version }).then(() => {
         mockRequest.done();
@@ -174,13 +166,19 @@ describe('rdme versions*', () => {
     });
 
     it('should catch any request errors', () => {
-      const mockRequest = nock(config.host).delete(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(404, {
-        error: 'VERSION_NOTFOUND',
-        message:
-          "The version you specified ({version}) doesn't match any of the existing versions ({versions_list}) in ReadMe.",
-        suggestion: '...a suggestion to resolve the issue...',
-        help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
-      });
+      const mockRequest = nock(config.host)
+        .delete(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(404, {
+          error: 'VERSION_NOTFOUND',
+          message:
+            "The version you specified ({version}) doesn't match any of the existing versions ({versions_list}) in ReadMe.",
+          suggestion: '...a suggestion to resolve the issue...',
+          help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
+        })
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version });
 
       return deleteVersion.run({ key, version }).catch(err => {
         expect(err.message).toContain('The version you specified');
@@ -197,13 +195,6 @@ describe('rdme versions*', () => {
       });
     });
 
-    it('should error if no version provided', () => {
-      expect.assertions(1);
-      return updateVersion.run({ key }).catch(err => {
-        expect(err.message).toBe('Please specify a semantic version. See `rdme help versions:update` for help.');
-      });
-    });
-
     it('should update a specific version object', () => {
       promptHandler.createVersionPrompt.mockResolvedValue({
         is_stable: false,
@@ -217,7 +208,10 @@ describe('rdme versions*', () => {
         .reply(200, { version })
         .put(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
-        .reply(201, { version });
+        .reply(201, { version })
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version });
 
       return updateVersion.run({ key, version }).then(() => {
         mockRequest.done();
@@ -242,7 +236,10 @@ describe('rdme versions*', () => {
           message: "You can't make a stable version non-stable",
           suggestion: '...a suggestion to resolve the issue...',
           help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
-        });
+        })
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version });
 
       return updateVersion.run({ key, version }).catch(err => {
         expect(err.message).toContain("You can't make a stable version non-stable");
