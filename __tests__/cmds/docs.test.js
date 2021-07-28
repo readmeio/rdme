@@ -36,11 +36,6 @@ describe('rdme docs', () => {
     return expect(docs.run({})).rejects.toThrow('No project API key provided. Please use `--key`.');
   });
 
-  it('should error if no version provided', () => {
-    expect.assertions(1);
-    return expect(docs.run({ key })).rejects.toThrow('No project version provided. Please use `--version`.');
-  });
-
   it('should error if no folder provided', () => {
     expect.assertions(1);
     return expect(docs.run({ key, version: '1.0.0' })).rejects.toThrow(
@@ -103,6 +98,11 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200);
 
+      const versionMock = nock(config.host)
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version });
+
       return docs.run({ folder: './__tests__/__fixtures__/existing-docs', key, version }).then(skippedDocs => {
         // All docs should have been updated because their hashes from the GET request were different from what they
         // are currently.
@@ -110,6 +110,7 @@ describe('rdme docs', () => {
 
         getMocks.done();
         updateMocks.done();
+        versionMock.done();
       });
     });
 
@@ -124,6 +125,11 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200, { category, slug: anotherDoc.slug, lastUpdatedHash: anotherDoc.hash });
 
+      const versionMock = nock(config.host)
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version });
+
       return docs.run({ folder: './__tests__/__fixtures__/existing-docs', key, version }).then(skippedDocs => {
         expect(skippedDocs).toStrictEqual([
           '`simple-doc` was not updated because there were no changes.',
@@ -131,6 +137,7 @@ describe('rdme docs', () => {
         ]);
 
         getMocks.done();
+        versionMock.done();
       });
     });
   });
@@ -156,9 +163,15 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(201);
 
+      const versionMock = nock(config.host)
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version });
+
       return docs.run({ folder: './__tests__/__fixtures__/new-docs', key, version }).then(() => {
         getMock.done();
         postMock.done();
+        versionMock.done();
       });
     });
 
@@ -219,6 +232,11 @@ describe('rdme docs', () => {
           category,
         });
 
+      const versionMock = nock(config.host)
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version });
+
       return docs.run({ folder: './__tests__/__fixtures__/failure-docs', key, version }).then(message => {
         expect(console.log).toHaveBeenCalledTimes(1);
         expect(message).toStrictEqual([
@@ -242,6 +260,7 @@ describe('rdme docs', () => {
 
         getMocks.done();
         postMocks.done();
+        versionMock.done();
 
         console.log.mockRestore();
       });
@@ -260,10 +279,6 @@ describe('rdme docs:edit', () => {
 
   it('should error if no api key provided', () => {
     return expect(docsEdit.run({})).rejects.toThrow('No project API key provided. Please use `--key`.');
-  });
-
-  it('should error if no version provided', () => {
-    return expect(docsEdit.run({ key })).rejects.toThrow('No project version provided. Please use `--version`.');
   });
 
   it('should error if no slug provided', () => {
@@ -292,6 +307,11 @@ describe('rdme docs:edit', () => {
       .basicAuth({ user: key })
       .reply(200);
 
+    const versionMock = nock(config.host)
+      .get(`/api/v1/version/${version}`)
+      .basicAuth({ user: key })
+      .reply(200, { version });
+
     function mockEditor(filename, cb) {
       expect(filename).toBe(`${slug}.md`);
       expect(fs.existsSync(filename)).toBe(true);
@@ -301,6 +321,7 @@ describe('rdme docs:edit', () => {
     return docsEdit.run({ slug, key, version: '1.0.0', mockEditor }).then(() => {
       getMock.done();
       putMock.done();
+      versionMock.done();
       expect(fs.existsSync(`${slug}.md`)).toBe(false);
 
       expect(console.log).toHaveBeenCalledWith('Doc successfully updated. Cleaning up local file.');
@@ -320,8 +341,14 @@ describe('rdme docs:edit', () => {
         help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
       });
 
+    const versionMock = nock(config.host)
+      .get(`/api/v1/version/${version}`)
+      .basicAuth({ user: key })
+      .reply(200, { version });
+
     return docsEdit.run({ slug, key, version: '1.0.0' }).catch(err => {
       getMock.done();
+      versionMock.done();
       expect(err.code).toBe('DOC_NOTFOUND');
       expect(err.message).toContain("The doc with the slug 'no-such-doc' couldn't be found");
     });
@@ -341,6 +368,11 @@ describe('rdme docs:edit', () => {
       help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
     });
 
+    const versionMock = nock(config.host)
+      .get(`/api/v1/version/${version}`)
+      .basicAuth({ user: key })
+      .reply(200, { version });
+
     function mockEditor(filename, cb) {
       return cb(0);
     }
@@ -349,6 +381,7 @@ describe('rdme docs:edit', () => {
       expect(err.code).toBe('DOC_INVALID');
       getMock.done();
       putMock.done();
+      versionMock.done();
       expect(fs.existsSync(`${slug}.md`)).toBe(true);
       fs.unlinkSync(`${slug}.md`);
     });
@@ -359,7 +392,12 @@ describe('rdme docs:edit', () => {
     const slug = 'getting-started';
     const body = 'abcdef';
 
-    nock(config.host).get(`/api/v1/docs/${slug}`).reply(200, { body });
+    nock(config.host)
+      .get(`/api/v1/docs/${slug}`)
+      .reply(200, { body })
+      .get(`/api/v1/version/${version}`)
+      .basicAuth({ user: key })
+      .reply(200, { version });
 
     function mockEditor(filename, cb) {
       return cb(1);

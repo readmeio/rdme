@@ -114,7 +114,7 @@ describe('cli', () => {
     conf.set('apiKey', '123456');
     return cli(['docs']).catch(err => {
       conf.delete('apiKey');
-      expect(err.message).toBe('No project version provided. Please use `--version`.');
+      expect(err.message).toBe('No folder provided. Usage `rdme docs <folder> [options]`.');
     });
   });
 

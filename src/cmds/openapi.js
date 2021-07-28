@@ -6,6 +6,7 @@ const { prompt } = require('enquirer');
 const OASNormalize = require('oas-normalize');
 const promptOpts = require('../lib/prompts');
 const APIError = require('../lib/apiError');
+const { getSwaggerVersion } = require('../lib/versionSelect');
 
 exports.command = 'openapi';
 exports.usage = 'openapi [file] [options]';
@@ -163,35 +164,8 @@ exports.run = async function (opts) {
     return updateSpec(id);
   }
 
-  async function getSwaggerVersion(versionFlag) {
-    const options = { json: {}, auth: { user: key } };
-
-    try {
-      if (versionFlag) {
-        options.json.version = versionFlag;
-        const foundVersion = await request.get(`${config.host}/api/v1/version/${versionFlag}`, options);
-
-        return foundVersion.version;
-      }
-
-      const versionList = await request.get(`${config.host}/api/v1/version`, options);
-      const { option, versionSelection, newVersion } = await prompt(
-        promptOpts.generatePrompts(versionList, versionFlag)
-      );
-
-      if (option === 'update') return versionSelection;
-
-      options.json = { from: versionList[0].version, version: newVersion, is_stable: false };
-      await request.post(`${config.host}/api/v1/version`, options);
-
-      return newVersion;
-    } catch (err) {
-      return Promise.reject(new APIError(err));
-    }
-  }
-
   if (!id) {
-    selectedVersion = await getSwaggerVersion(version).catch(e => {
+    selectedVersion = await getSwaggerVersion(version, key).catch(e => {
       return Promise.reject(e);
     });
   }
