@@ -6,7 +6,7 @@ const { prompt } = require('enquirer');
 const OASNormalize = require('oas-normalize');
 const promptOpts = require('../lib/prompts');
 const APIError = require('../lib/apiError');
-const { getSwaggerVersion } = require('../lib/versionSelect');
+const { getProjectVersion } = require('../lib/versionSelect');
 
 exports.command = 'openapi';
 exports.usage = 'openapi [file] [options]';
@@ -165,7 +165,7 @@ exports.run = async function (opts) {
   }
 
   if (!id) {
-    selectedVersion = await getSwaggerVersion(version, key, true).catch(e => {
+    selectedVersion = await getProjectVersion(version, key, true).catch(e => {
       return Promise.reject(e);
     });
   }

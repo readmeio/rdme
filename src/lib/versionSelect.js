@@ -4,7 +4,7 @@ const request = require('request-promise-native');
 const config = require('config');
 const APIError = require('./apiError');
 
-async function getSwaggerVersion(versionFlag, key, allowNewVersion) {
+async function getProjectVersion(versionFlag, key, allowNewVersion) {
   const options = { json: {}, auth: { user: key } };
 
   try {
@@ -35,4 +35,4 @@ async function getSwaggerVersion(versionFlag, key, allowNewVersion) {
   }
 }
 
-module.exports = { getSwaggerVersion };
+module.exports = { getProjectVersion };

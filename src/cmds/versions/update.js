@@ -3,7 +3,7 @@ const config = require('config');
 const { prompt } = require('enquirer');
 const promptOpts = require('../../lib/prompts');
 const APIError = require('../../lib/apiError');
-const { getSwaggerVersion } = require('../../lib/versionSelect');
+const { getProjectVersion } = require('../../lib/versionSelect');
 
 exports.command = 'versions:update';
 exports.usage = 'versions:update --version=<version> [options]';
@@ -51,7 +51,7 @@ exports.run = async function (opts) {
     return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
   }
 
-  const selectedVersion = await getSwaggerVersion(version, key, false).catch(e => {
+  const selectedVersion = await getProjectVersion(version, key, false).catch(e => {
     return Promise.reject(e);
   });
 

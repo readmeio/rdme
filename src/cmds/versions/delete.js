@@ -1,7 +1,7 @@
 const request = require('request-promise-native');
 const config = require('config');
 const APIError = require('../../lib/apiError');
-const { getSwaggerVersion } = require('../../lib/versionSelect');
+const { getProjectVersion } = require('../../lib/versionSelect');
 
 exports.command = 'versions:delete';
 exports.usage = 'versions:delete --version=<version> [options]';
@@ -30,7 +30,7 @@ exports.run = async function (opts) {
     return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
   }
 
-  const selectedVersion = await getSwaggerVersion(version, key, false).catch(e => {
+  const selectedVersion = await getProjectVersion(version, key, false).catch(e => {
     return Promise.reject(e);
   });
 

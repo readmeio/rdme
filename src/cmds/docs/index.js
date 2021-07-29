@@ -7,7 +7,7 @@ const crypto = require('crypto');
 const frontMatter = require('gray-matter');
 const { promisify } = require('util');
 const APIError = require('../../lib/apiError');
-const { getSwaggerVersion } = require('../../lib/versionSelect');
+const { getProjectVersion } = require('../../lib/versionSelect');
 
 const readFile = promisify(fs.readFile);
 
@@ -47,7 +47,7 @@ exports.run = async function (opts) {
     return Promise.reject(new Error(`No folder provided. Usage \`${config.cli} ${exports.usage}\`.`));
   }
 
-  const selectedVersion = await getSwaggerVersion(version, key, true).catch(e => {
+  const selectedVersion = await getProjectVersion(version, key, true).catch(e => {
     return Promise.reject(e);
   });
 
