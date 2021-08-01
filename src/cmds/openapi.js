@@ -7,6 +7,7 @@ const OASNormalize = require('oas-normalize');
 const promptOpts = require('../lib/prompts');
 const APIError = require('../lib/apiError');
 const { getProjectVersion } = require('../lib/versionSelect');
+const fetch = require('node-fetch');
 
 exports.command = 'openapi';
 exports.usage = 'openapi [file] [options]';
@@ -48,6 +49,7 @@ exports.run = async function (opts) {
   let { key, id } = opts;
   let selectedVersion;
   let isUpdate;
+  const encodedString = Buffer.from(`${key}:`).toString('base64');
 
   if (!key && opts.token) {
     console.warn('Using `rdme` with --token has been deprecated. Please use `--key` and `--id` instead.');
@@ -126,6 +128,18 @@ exports.run = async function (opts) {
 
     function createSpec() {
       return request.post(`${config.host}/api/v1/api-specification`, options).then(success, error);
+      // return fetch(`${config.host}/api/v1/api-specification`, {
+      //   method: 'post',
+      //   headers: {
+      //     'x-readme-version': versionCleaned,
+      //     'x-readme-source': 'cli',
+      //     Authorization: `Basic ${encodedString}`,
+      //     'Content-Type': 'multipart/form-data',
+      //   },
+      //   body: {
+      //     spec: bundledSpec,
+      //   },
+      // });
     }
 
     function updateSpec(specId) {
@@ -143,13 +157,13 @@ exports.run = async function (opts) {
     */
 
     if (!id) {
-      const apiSettings = await request.get(`${config.host}/api/v1/api-specification`, {
+      const apiSettings = await fetch(`${config.host}/api/v1/api-specification`, {
+        method: 'get',
         headers: {
           'x-readme-version': versionCleaned,
+          Authorization: `Basic ${encodedString}`,
         },
-        json: true,
-        auth: { user: key },
-      });
+      }).then(res => res.json());
 
       if (!apiSettings.length) return createSpec();
 

@@ -2,6 +2,7 @@ const request = require('request-promise-native');
 const config = require('config');
 const APIError = require('../../lib/apiError');
 const { getProjectVersion } = require('../../lib/versionSelect');
+const fetch = require('node-fetch');
 
 exports.command = 'versions:delete';
 exports.usage = 'versions:delete --version=<version> [options]';
@@ -25,6 +26,7 @@ exports.args = [
 
 exports.run = async function (opts) {
   const { key, version } = opts;
+  const encodedString = Buffer.from(`${key}:`).toString('base64');
 
   if (!key) {
     return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
@@ -34,11 +36,23 @@ exports.run = async function (opts) {
     return Promise.reject(e);
   });
 
-  return request
-    .delete(`${config.host}/api/v1/version/${selectedVersion}`, {
-      json: true,
-      auth: { user: key },
-    })
-    .then(() => Promise.resolve(`Version ${selectedVersion} deleted successfully.`))
-    .catch(err => Promise.reject(new APIError(err)));
+  // return request
+  //   .delete(`${config.host}/api/v1/version/${selectedVersion}`, {
+  //     json: true,
+  //     auth: { user: key },
+  //   })
+  //   .then(() => Promise.resolve(`Version ${selectedVersion} deleted successfully.`))
+  //   .catch(err => Promise.reject(new APIError(err)));
+
+  return fetch(`${config.host}/api/v1/version/${selectedVersion}`, {
+    method: 'delete',
+    headers: {
+      Authorization: `Basic ${encodedString}`,
+    },
+  }).then(res => {
+    if (res.error) {
+      return Promise.reject(new APIError(res));
+    }
+    return Promise.resolve(`Version ${selectedVersion} deleted successfully.`);
+  });
 };

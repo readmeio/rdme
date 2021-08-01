@@ -4,6 +4,7 @@ const semver = require('semver');
 const { prompt } = require('enquirer');
 const promptOpts = require('../../lib/prompts');
 const APIError = require('../../lib/apiError');
+const fetch = require('node-fetch');
 
 exports.command = 'versions:create';
 exports.usage = 'versions:create --version=<version> [options]';
@@ -53,6 +54,7 @@ exports.args = [
 exports.run = async function (opts) {
   let versionList;
   const { key, version, codename, fork, main, beta, isPublic } = opts;
+  const encodedString = Buffer.from(`${key}:`).toString('base64');
 
   if (!key) {
     return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
@@ -65,12 +67,25 @@ exports.run = async function (opts) {
   }
 
   if (!fork) {
-    versionList = await request
-      .get(`${config.host}/api/v1/version`, {
-        json: true,
-        auth: { user: key },
-      })
-      .catch(err => Promise.reject(new APIError(err)));
+    // versionList = await request
+    //   .get(`${config.host}/api/v1/version`, {
+    //     json: true,
+    //     auth: { user: key },
+    //   })
+    //   .catch(err => Promise.reject(new APIError(err)));
+    versionList = await fetch(`${config.host}/api/v1/version`, {
+      method: 'get',
+      headers: {
+        Authorization: `Basic ${encodedString}`,
+      },
+    })
+      .then(res => res.json())
+      .then(res => {
+        if (res.error) {
+          return Promise.reject(new APIError(res));
+        }
+        return res;
+      });
   }
 
   const versionPrompt = promptOpts.createVersionPrompt(versionList || [{}], {
@@ -91,8 +106,30 @@ exports.run = async function (opts) {
     auth: { user: key },
   };
 
-  return request
-    .post(`${config.host}/api/v1/version`, options)
-    .then(() => Promise.resolve(`Version ${version} created successfully.`))
-    .catch(err => Promise.reject(new APIError(err)));
+  // return request
+  //   .post(`${config.host}/api/v1/version`, options)
+  //   .then(() => Promise.resolve(`Version ${version} created successfully.`))
+  //   .catch(err => Promise.reject(new APIError(err)));
+
+  return fetch(`${config.host}/api/v1/version`, {
+    method: 'post',
+    headers: {
+      Authorization: `Basic ${encodedString}`,
+    },
+    body: {
+      version,
+      codename: codename || '',
+      is_stable: main === 'true' || promptResponse.is_stable,
+      is_beta: beta === 'true' || promptResponse.is_beta,
+      from: fork || promptResponse.from,
+      is_hidden: promptResponse.is_stable ? false : !(isPublic === 'true' || promptResponse.is_hidden),
+    },
+  })
+    .then(res => res.json())
+    .then(res => {
+      if (res.error) {
+        return Promise.reject(new APIError(res));
+      }
+      return Promise.resolve(`Version ${version} created successfully.`);
+    });
 };
