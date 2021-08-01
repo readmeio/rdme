@@ -50,7 +50,7 @@
     "table-layout": "^1.0.0"
   },
   "devDependencies": {
-    "@readme/eslint-config": "^5.1.0",
+    "@readme/eslint-config": "^6.0.0",
     "conventional-changelog-cli": "^2.0.31",
     "eslint": "^7.29.0",
     "jest": "^27.0.4",
