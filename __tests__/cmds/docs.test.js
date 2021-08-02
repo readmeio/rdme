@@ -392,7 +392,7 @@ describe('rdme docs:edit', () => {
     const slug = 'getting-started';
     const body = 'abcdef';
 
-    nock(config.host)
+    const getMock = nock(config.host)
       .get(`/api/v1/docs/${slug}`)
       .reply(200, { body })
       .get(`/api/v1/version/${version}`)
@@ -404,6 +404,7 @@ describe('rdme docs:edit', () => {
     }
 
     return docsEdit.run({ slug, key, version: '1.0.0', mockEditor }).catch(err => {
+      getMock.done();
       expect(err.message).toBe('Non zero exit code from $EDITOR');
       fs.unlinkSync(`${slug}.md`);
     });
