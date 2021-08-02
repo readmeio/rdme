@@ -4,6 +4,7 @@ const fs = require('fs');
 const editor = require('editor');
 const { promisify } = require('util');
 const APIError = require('../../lib/apiError');
+const { getProjectVersion } = require('../../lib/versionSelect');
 
 const writeFile = promisify(fs.writeFile);
 const readFile = promisify(fs.readFile);
@@ -41,19 +42,19 @@ exports.run = async function (opts) {
     return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
   }
 
-  if (!version) {
-    return Promise.reject(new Error('No project version provided. Please use `--version`.'));
-  }
-
   if (!slug) {
     return Promise.reject(new Error(`No slug provided. Usage \`${config.cli} ${exports.usage}\`.`));
   }
+
+  const selectedVersion = await getProjectVersion(version, key, true).catch(e => {
+    return Promise.reject(e);
+  });
 
   const filename = `${slug}.md`;
   const options = {
     auth: { user: key },
     headers: {
-      'x-readme-version': version,
+      'x-readme-version': selectedVersion,
     },
   };
 

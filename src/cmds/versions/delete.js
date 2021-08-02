@@ -1,7 +1,7 @@
 const request = require('request-promise-native');
 const config = require('config');
-const semver = require('semver');
 const APIError = require('../../lib/apiError');
+const { getProjectVersion } = require('../../lib/versionSelect');
 
 exports.command = 'versions:delete';
 exports.usage = 'versions:delete --version=<version> [options]';
@@ -30,17 +30,15 @@ exports.run = async function (opts) {
     return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
   }
 
-  if (!version || !semver.valid(semver.coerce(version))) {
-    return Promise.reject(
-      new Error(`Please specify a semantic version. See \`${config.cli} help ${exports.command}\` for help.`)
-    );
-  }
+  const selectedVersion = await getProjectVersion(version, key, false).catch(e => {
+    return Promise.reject(e);
+  });
 
   return request
-    .delete(`${config.host}/api/v1/version/${version}`, {
+    .delete(`${config.host}/api/v1/version/${selectedVersion}`, {
       json: true,
       auth: { user: key },
     })
-    .then(() => Promise.resolve(`Version ${version} deleted successfully.`))
+    .then(() => Promise.resolve(`Version ${selectedVersion} deleted successfully.`))
     .catch(err => Promise.reject(new APIError(err)));
 };

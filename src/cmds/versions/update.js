@@ -1,9 +1,9 @@
 const request = require('request-promise-native');
 const config = require('config');
-const semver = require('semver');
 const { prompt } = require('enquirer');
 const promptOpts = require('../../lib/prompts');
 const APIError = require('../../lib/apiError');
+const { getProjectVersion } = require('../../lib/versionSelect');
 
 exports.command = 'versions:update';
 exports.usage = 'versions:update --version=<version> [options]';
@@ -51,14 +51,12 @@ exports.run = async function (opts) {
     return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
   }
 
-  if (!version || !semver.valid(semver.coerce(version))) {
-    return Promise.reject(
-      new Error(`Please specify a semantic version. See \`${config.cli} help ${exports.command}\` for help.`)
-    );
-  }
+  const selectedVersion = await getProjectVersion(version, key, false).catch(e => {
+    return Promise.reject(e);
+  });
 
   const foundVersion = await request
-    .get(`${config.host}/api/v1/version/${version}`, {
+    .get(`${config.host}/api/v1/version/${selectedVersion}`, {
       json: true,
       auth: { user: key },
     })
@@ -78,7 +76,7 @@ exports.run = async function (opts) {
   };
 
   return request
-    .put(`${config.host}/api/v1/version/${version}`, options)
-    .then(() => Promise.resolve(`Version ${version} updated successfully.`))
+    .put(`${config.host}/api/v1/version/${selectedVersion}`, options)
+    .then(() => Promise.resolve(`Version ${selectedVersion} updated successfully.`))
     .catch(err => Promise.reject(new APIError(err)));
 };
