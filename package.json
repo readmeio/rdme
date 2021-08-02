@@ -50,11 +50,11 @@
     "table-layout": "^1.0.0"
   },
   "devDependencies": {
-    "@readme/eslint-config": "^5.1.0",
+    "@readme/eslint-config": "^6.0.0",
     "conventional-changelog-cli": "^2.0.31",
-    "eslint": "^7.29.0",
+    "eslint": "^7.32.0",
     "jest": "^27.0.4",
-    "nock": "^13.1.0",
+    "nock": "^13.1.1",
     "prettier": "^2.3.1"
   },
   "scripts": {
