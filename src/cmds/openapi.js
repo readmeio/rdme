@@ -8,6 +8,7 @@ const promptOpts = require('../lib/prompts');
 const APIError = require('../lib/apiError');
 const { getProjectVersion } = require('../lib/versionSelect');
 const fetch = require('node-fetch');
+const FormData = require('form-data');
 
 exports.command = 'openapi';
 exports.usage = 'openapi [file] [options]';
@@ -126,20 +127,26 @@ exports.run = async function (opts) {
       resolveWithFullResponse: true,
     };
 
+    const formData = new FormData();
+    formData.append('spec', bundledSpec);
+
     function createSpec() {
-      return request.post(`${config.host}/api/v1/api-specification`, options).then(success, error);
-      // return fetch(`${config.host}/api/v1/api-specification`, {
-      //   method: 'post',
-      //   headers: {
-      //     'x-readme-version': versionCleaned,
-      //     'x-readme-source': 'cli',
-      //     Authorization: `Basic ${encodedString}`,
-      //     'Content-Type': 'multipart/form-data',
-      //   },
-      //   body: {
-      //     spec: bundledSpec,
-      //   },
-      // });
+      // return request.post(`${config.host}/api/v1/api-specification`, options).then(success, error);
+      return fetch(`${config.host}/api/v1/api-specification`, {
+        method: 'post',
+        headers: {
+          'x-readme-version': versionCleaned,
+          'x-readme-source': 'cli',
+          Authorization: `Basic ${encodedString}`,
+          'Content-Type': 'multipart/form-data',
+          Accept: 'application/json',
+        },
+        body: formData,
+      })
+        .then(res => res.json())
+        .then(res => console.log(res))
+        .then(res => success(res))
+        .catch(err => console.log(err));
     }
 
     function updateSpec(specId) {

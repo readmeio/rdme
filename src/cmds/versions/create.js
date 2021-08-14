@@ -1,4 +1,3 @@
-const request = require('request-promise-native');
 const config = require('config');
 const semver = require('semver');
 const { prompt } = require('enquirer');
@@ -67,12 +66,6 @@ exports.run = async function (opts) {
   }
 
   if (!fork) {
-    // versionList = await request
-    //   .get(`${config.host}/api/v1/version`, {
-    //     json: true,
-    //     auth: { user: key },
-    //   })
-    //   .catch(err => Promise.reject(new APIError(err)));
     versionList = await fetch(`${config.host}/api/v1/version`, {
       method: 'get',
       headers: {
@@ -94,36 +87,22 @@ exports.run = async function (opts) {
   });
 
   const promptResponse = await prompt(versionPrompt);
-  const options = {
-    json: {
-      version,
-      codename: codename || '',
-      is_stable: main === 'true' || promptResponse.is_stable,
-      is_beta: beta === 'true' || promptResponse.is_beta,
-      from: fork || promptResponse.from,
-      is_hidden: promptResponse.is_stable ? false : !(isPublic === 'true' || promptResponse.is_hidden),
-    },
-    auth: { user: key },
-  };
-
-  // return request
-  //   .post(`${config.host}/api/v1/version`, options)
-  //   .then(() => Promise.resolve(`Version ${version} created successfully.`))
-  //   .catch(err => Promise.reject(new APIError(err)));
 
   return fetch(`${config.host}/api/v1/version`, {
     method: 'post',
     headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
       Authorization: `Basic ${encodedString}`,
     },
-    body: {
+    body: JSON.stringify({
       version,
       codename: codename || '',
       is_stable: main === 'true' || promptResponse.is_stable,
       is_beta: beta === 'true' || promptResponse.is_beta,
       from: fork || promptResponse.from,
       is_hidden: promptResponse.is_stable ? false : !(isPublic === 'true' || promptResponse.is_hidden),
-    },
+    }),
   })
     .then(res => res.json())
     .then(res => {

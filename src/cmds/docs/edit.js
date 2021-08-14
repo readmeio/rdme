@@ -1,4 +1,3 @@
-const request = require('request-promise-native');
 const config = require('config');
 const fs = require('fs');
 const editor = require('editor');
@@ -52,20 +51,7 @@ exports.run = async function (opts) {
   });
 
   const filename = `${slug}.md`;
-  const options = {
-    auth: { user: key },
-    headers: {
-      'x-readme-version': selectedVersion,
-    },
-  };
   const encodedString = Buffer.from(`${key}:`).toString('base64');
-
-  // const existingDoc = await request
-  //   .get(`${config.host}/api/v1/docs/${slug}`, {
-  //     json: true,
-  //     ...options,
-  //   })
-  //   .catch(err => Promise.reject(new APIError(err)));
 
   const existingDoc = await fetch(`${config.host}/api/v1/docs/${slug}`, {
     method: 'get',
@@ -89,20 +75,6 @@ exports.run = async function (opts) {
     (opts.mockEditor || editor)(filename, async code => {
       if (code !== 0) return reject(new Error('Non zero exit code from $EDITOR'));
       const updatedDoc = await readFile(filename, 'utf8');
-
-      // return request
-      //   .put(`${config.host}/api/v1/docs/${slug}`, {
-      //     json: Object.assign(existingDoc, {
-      //       body: updatedDoc,
-      //     }),
-      //     ...options,
-      //   })
-      //   .then(async () => {
-      //     console.log(`Doc successfully updated. Cleaning up local file.`);
-      //     await unlink(filename);
-      //     return resolve();
-      //   })
-      //   .catch(err => reject(new APIError(err)));
 
       return fetch(`${config.host}/api/v1/docs/${slug}`, {
         method: 'put',

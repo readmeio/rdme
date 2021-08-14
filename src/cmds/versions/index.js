@@ -1,4 +1,3 @@
-const request = require('request-promise-native');
 const Table = require('cli-table');
 const config = require('config');
 const versionsCreate = require('./create');
@@ -126,35 +125,4 @@ exports.run = function (opts) {
 
       return Promise.resolve(getVersionFormatted(versions[0]));
     });
-
-  // return request
-  //   .get(uri, {
-  //     json: true,
-  //     auth: { user: key },
-  //   })
-  //   .then(data => {
-  //     if (raw) {
-  //       return Promise.resolve(data);
-  //     }
-
-  //     let versions = data;
-  //     if (!Array.isArray(data)) {
-  //       versions = [data];
-  //     }
-
-  //     if (!versions.length) {
-  //       return Promise.reject(
-  //         new Error(
-  //           `Sorry, you haven't created any versions yet! See \`${config.cli} help ${versionsCreate.command}\` for commands on how to do that.`
-  //         )
-  //       );
-  //     }
-
-  //     if (version === undefined) {
-  //       return Promise.resolve(getVersionsAsTable(versions));
-  //     }
-
-  //     return Promise.resolve(getVersionFormatted(versions[0]));
-  //   })
-  //   .catch(err => Promise.reject(new APIError(err)));
 };
