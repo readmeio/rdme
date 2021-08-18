@@ -71,8 +71,12 @@ exports.run = async function (opts) {
   }
 
   const encodedString = Buffer.from(`${key}:`).toString('base64');
-  const options = (slug, file, hash) => {
-    return {
+
+  function createDoc(slug, file, hash, err) {
+    if (err.error !== 'DOC_NOTFOUND') return Promise.reject(err);
+
+    return fetch(`${config.host}/api/v1/docs`, {
+      method: 'post',
       headers: {
         'x-readme-version': selectedVersion,
         Authorization: `Basic ${encodedString}`,
@@ -84,23 +88,29 @@ exports.run = async function (opts) {
         ...file.data,
         lastUpdatedHash: hash,
       }),
-    };
-  };
-
-  function createDoc(slug, file, hash, err) {
-    if (err.error !== 'DOC_NOTFOUND') return Promise.reject(err);
-    const fetchOpts = options(slug, file, hash);
-    fetchOpts.method = 'post';
-    return fetch(`${config.host}/api/v1/docs`, fetchOpts).then(res => handleRes(res));
+    }).then(res => handleRes(res));
   }
 
   function updateDoc(slug, file, hash, existingDoc) {
     if (hash === existingDoc.lastUpdatedHash) {
       return `\`${slug}\` was not updated because there were no changes.`;
     }
-    const fetchOpts = options(slug, file, hash);
-    fetchOpts.method = 'put';
-    return fetch(`${config.host}/api/v1/docs/${slug}`, fetchOpts).then(res => handleRes(res));
+
+    return fetch(`${config.host}/api/v1/docs/${slug}`, {
+      method: 'put',
+      headers: {
+        'x-readme-version': selectedVersion,
+        Authorization: `Basic ${encodedString}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(
+        Object.assign(existingDoc, {
+          body: file.content,
+          ...file.data,
+          lastUpdatedHash: hash,
+        })
+      ),
+    }).then(res => handleRes(res));
   }
 
   const updatedDocs = await Promise.allSettled(
@@ -117,7 +127,7 @@ exports.run = async function (opts) {
         headers: {
           'x-readme-version': selectedVersion,
           Authorization: `Basic ${encodedString}`,
-          'Content-Type': 'application/json',
+          Accept: 'application/json',
         },
       })
         .then(res => res.json())
