@@ -5,7 +5,7 @@ const promptHandler = require('../../src/lib/prompts');
 const swagger = require('../../src/cmds/swagger');
 const openapi = require('../../src/cmds/openapi');
 
-const key = 'Xmw4bGctRVIQz7R7dQXqH9nQe5d0SPQs';
+const key = 'API_KEY';
 const version = '1.0.0';
 
 jest.mock('../../src/lib/prompts');
