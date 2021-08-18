@@ -87,9 +87,14 @@ describe('rdme openapi', () => {
         help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
       });
 
-    return expect(openapi.run({ spec: './__tests__/__fixtures__/swagger.json', key, version }))
-      .rejects.toThrow('The version you specified')
-      .then(() => mock.done());
+    return openapi.run({ spec: './__tests__/__fixtures__/swagger.json', key, version }).then(() => {
+      expect(console.log).toHaveBeenCalledTimes(1);
+
+      const output = getCommandOutput();
+      expect(output).toMatch(/The version you specified/);
+
+      mock.done();
+    });
   });
 
   it('should POST to the swagger api if no id provided', () => {
@@ -135,9 +140,14 @@ describe('rdme openapi', () => {
         help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
       });
 
-    return expect(openapi.run({ spec: './__tests__/__fixtures__/invalid-swagger.json', key, version }))
-      .rejects.toThrow('README VALIDATION ERROR "x-samples-languages" must be of type "Array"')
-      .then(() => mock.done());
+    return openapi.run({ spec: './__tests__/__fixtures__/invalid-swagger.json', key, version }).then(() => {
+      expect(console.log).toHaveBeenCalledTimes(1);
+
+      const output = getCommandOutput();
+      expect(output).toMatch(/Unknown error \(README VALIDATION ERROR "x-samples-languages" /);
+
+      mock.done();
+    });
   });
 
   it.todo('should return a 404 if version flag not found');

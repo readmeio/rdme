@@ -1,13 +1,12 @@
 require('colors');
-const request = require('request-promise-native');
 const fs = require('fs');
 const path = require('path');
 const config = require('config');
 const crypto = require('crypto');
 const frontMatter = require('gray-matter');
 const { promisify } = require('util');
-const APIError = require('../../lib/apiError');
 const { getProjectVersion } = require('../../lib/versionSelect');
+const { handleRes } = require('../../lib/handleRes');
 const fetch = require('node-fetch');
 
 const readFile = promisify(fs.readFile);
@@ -71,22 +70,13 @@ exports.run = async function (opts) {
     return Promise.reject(new Error(`We were unable to locate Markdown files in ${folder}.`));
   }
 
-  const options = {
-    auth: { user: key },
-    headers: {
-      'x-readme-version': selectedVersion,
-    },
-  };
   const encodedString = Buffer.from(`${key}:`).toString('base64');
-
-  function createDoc(slug, file, hash, err) {
-    if (err.statusCode !== 404) return Promise.reject(err.error);
-
-    return fetch(`${config.host}/api/v1/docs`, {
-      method: 'post',
+  const options = (slug, file, hash) => {
+    return {
       headers: {
         'x-readme-version': selectedVersion,
         Authorization: `Basic ${encodedString}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         slug,
@@ -94,45 +84,23 @@ exports.run = async function (opts) {
         ...file.data,
         lastUpdatedHash: hash,
       }),
-    })
-      .then(res => res.json())
-      .then(res => {
-        if (res.error) {
-          return Promise.reject(new APIError(res));
-        }
-        return res;
-      });
+    };
+  };
+
+  function createDoc(slug, file, hash, err) {
+    if (err.error !== 'DOC_NOTFOUND') return Promise.reject(err);
+    const fetchOpts = options(slug, file, hash);
+    fetchOpts.method = 'post';
+    return fetch(`${config.host}/api/v1/docs`, fetchOpts).then(res => handleRes(res));
   }
 
   function updateDoc(slug, file, hash, existingDoc) {
     if (hash === existingDoc.lastUpdatedHash) {
       return `\`${slug}\` was not updated because there were no changes.`;
     }
-
-    return (
-      fetch(`${config.host}/api/v1/docs/${slug}`, {
-        method: 'put',
-        headers: {
-          'x-readme-version': selectedVersion,
-          Authorization: `Basic ${encodedString}`,
-        },
-        body: JSON.stringify(
-          Object.assign(existingDoc, {
-            body: file.content,
-            ...file.data,
-            lastUpdatedHash: hash,
-          })
-        ),
-      })
-        .then(res => res.json())
-        // eslint-disable-next-line sonarjs/no-identical-functions
-        .then(res => {
-          if (res.error) {
-            return Promise.reject(new APIError(res));
-          }
-          return res;
-        })
-    );
+    const fetchOpts = options(slug, file, hash);
+    fetchOpts.method = 'put';
+    return fetch(`${config.host}/api/v1/docs/${slug}`, fetchOpts).then(res => handleRes(res));
   }
 
   const updatedDocs = await Promise.allSettled(
@@ -144,25 +112,21 @@ exports.run = async function (opts) {
       const slug = path.basename(filename).replace(path.extname(filename), '').toLowerCase();
       const hash = crypto.createHash('sha1').update(file).digest('hex');
 
-      // return request
-      //   .get(`${config.host}/api/v1/docs/${slug}`, {
-      //     json: true,
-      //     ...options,
-      //   })
-      //   .then(updateDoc.bind(null, slug, matter, hash), createDoc.bind(null, slug, matter, hash))
-      //   .catch(err => {
-      //     console.log(`\n\`${slug}\` failed to upload. ${err.message}\n`.red);
-      //   });
       return fetch(`${config.host}/api/v1/docs/${slug}`, {
         method: 'get',
         headers: {
           'x-readme-version': selectedVersion,
           Authorization: `Basic ${encodedString}`,
-          Accept: 'application/json',
+          'Content-Type': 'application/json',
         },
       })
         .then(res => res.json())
-        .then(updateDoc.bind(null, slug, matter, hash), createDoc.bind(null, slug, matter, hash))
+        .then(res => {
+          if (res.error) {
+            return createDoc(slug, matter, hash, res);
+          }
+          return updateDoc(slug, matter, hash, res);
+        })
         .catch(err => {
           console.log(`\n\`${slug}\` failed to upload. ${err.message}\n`.red);
         });

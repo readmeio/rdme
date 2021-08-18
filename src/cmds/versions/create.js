@@ -3,6 +3,7 @@ const semver = require('semver');
 const { prompt } = require('enquirer');
 const promptOpts = require('../../lib/prompts');
 const APIError = require('../../lib/apiError');
+const { handleRes } = require('../../lib/handleRes');
 const fetch = require('node-fetch');
 
 exports.command = 'versions:create';
@@ -71,14 +72,7 @@ exports.run = async function (opts) {
       headers: {
         Authorization: `Basic ${encodedString}`,
       },
-    })
-      .then(res => res.json())
-      .then(res => {
-        if (res.error) {
-          return Promise.reject(new APIError(res));
-        }
-        return res;
-      });
+    }).then(res => handleRes(res));
   }
 
   const versionPrompt = promptOpts.createVersionPrompt(versionList || [{}], {

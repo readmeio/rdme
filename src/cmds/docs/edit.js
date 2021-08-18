@@ -4,6 +4,7 @@ const editor = require('editor');
 const { promisify } = require('util');
 const APIError = require('../../lib/apiError');
 const { getProjectVersion } = require('../../lib/versionSelect');
+const { handleRes } = require('../../lib/handleRes');
 const fetch = require('node-fetch');
 
 const writeFile = promisify(fs.writeFile);
@@ -60,14 +61,7 @@ exports.run = async function (opts) {
       Authorization: `Basic ${encodedString}`,
       Accept: 'application/json',
     },
-  })
-    .then(res => res.json())
-    .then(res => {
-      if (res.error) {
-        return Promise.reject(new APIError(res));
-      }
-      return res;
-    });
+  }).then(res => handleRes(res));
 
   await writeFile(filename, existingDoc.body);
 

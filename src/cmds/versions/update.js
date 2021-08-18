@@ -4,6 +4,7 @@ const promptOpts = require('../../lib/prompts');
 const APIError = require('../../lib/apiError');
 const { getProjectVersion } = require('../../lib/versionSelect');
 const fetch = require('node-fetch');
+const { handleRes } = require('../../lib/handleRes');
 
 exports.command = 'versions:update';
 exports.usage = 'versions:update --version=<version> [options]';
@@ -61,14 +62,7 @@ exports.run = async function (opts) {
     headers: {
       Authorization: `Basic ${encodedString}`,
     },
-  })
-    .then(res => res.json())
-    .then(res => {
-      if (res.error) {
-        return Promise.reject(new APIError(res));
-      }
-      return res;
-    });
+  }).then(res => handleRes(res));
 
   const promptResponse = await prompt(promptOpts.createVersionPrompt([{}], opts, foundVersion));
 
