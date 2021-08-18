@@ -1,5 +1,4 @@
 require('colors');
-const request = require('request-promise-native');
 const fs = require('fs');
 const config = require('config');
 const { prompt } = require('enquirer');
@@ -7,6 +6,8 @@ const OASNormalize = require('oas-normalize');
 const promptOpts = require('../lib/prompts');
 const APIError = require('../lib/apiError');
 const { getProjectVersion } = require('../lib/versionSelect');
+const fetch = require('node-fetch');
+const FormData = require('form-data');
 
 exports.command = 'openapi';
 exports.usage = 'openapi [file] [options]';
@@ -59,31 +60,35 @@ exports.run = async function (opts) {
     return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
   }
 
+  const encodedString = Buffer.from(`${key}:`).toString('base64');
+
   async function callApi(specPath, versionCleaned) {
     // @todo Tailor messaging to what is actually being handled here. If the user is uploading an OpenAPI file, never mention that they uploaded/updated a Swagger file.
 
-    function success(data) {
+    async function success(data) {
       const message = !isUpdate
         ? "You've successfully uploaded a new Swagger file to your ReadMe project!"
         : "You've successfully updated a Swagger file on your ReadMe project!";
+
+      const body = await data.json();
 
       console.log(
         [
           message,
           '',
-          `\t${`${data.headers.location}`.green}`,
+          `\t${`${data.headers.get('location')}`.green}`,
           '',
           'To update your Swagger or OpenAPI file, run the following:',
           '',
           // eslint-disable-next-line no-underscore-dangle
-          `\trdme openapi FILE --key=${key} --id=${JSON.parse(data.body)._id}`.green,
+          `\trdme openapi FILE --key=${key} --id=${body._id}`.green,
         ].join('\n')
       );
     }
 
-    function error(err) {
+    async function error(err) {
       try {
-        const parsedError = JSON.parse(err.error);
+        const parsedError = await err.json();
         return Promise.reject(new APIError(parsedError));
       } catch (e) {
         if (e.message.includes('Unexpected token < in JSON')) {
@@ -112,26 +117,38 @@ exports.run = async function (opts) {
         return Promise.reject(err);
       });
 
+    const formData = new FormData();
+    formData.append('spec', bundledSpec);
+
     const options = {
-      formData: {
-        spec: bundledSpec,
-      },
       headers: {
         'x-readme-version': versionCleaned,
         'x-readme-source': 'cli',
+        Authorization: `Basic ${encodedString}`,
+        Accept: 'application/json',
       },
-      auth: { user: key },
-      resolveWithFullResponse: true,
+      body: formData,
     };
 
     function createSpec() {
-      return request.post(`${config.host}/api/v1/api-specification`, options).then(success, error);
+      options.method = 'post';
+      return fetch(`${config.host}/api/v1/api-specification`, options)
+        .then(res => {
+          if (res.ok) return success(res);
+          return error(res);
+        })
+        .catch(err => console.log(`\n ${err.message}\n`.red));
     }
 
     function updateSpec(specId) {
       isUpdate = true;
-
-      return request.put(`${config.host}/api/v1/api-specification/${specId}`, options).then(success, error);
+      options.method = 'put';
+      return fetch(`${config.host}/api/v1/api-specification/${specId}`, options)
+        .then(res => {
+          if (res.ok) return success(res);
+          return error(res);
+        })
+        .catch(err => console.log(`\n ${err.message}\n`.red));
     }
 
     /*
@@ -143,13 +160,13 @@ exports.run = async function (opts) {
     */
 
     if (!id) {
-      const apiSettings = await request.get(`${config.host}/api/v1/api-specification`, {
+      const apiSettings = await fetch(`${config.host}/api/v1/api-specification`, {
+        method: 'get',
         headers: {
           'x-readme-version': versionCleaned,
+          Authorization: `Basic ${encodedString}`,
         },
-        json: true,
-        auth: { user: key },
-      });
+      }).then(res => res.json());
 
       if (!apiSettings.length) return createSpec();
 
