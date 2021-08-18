@@ -1,5 +1,16 @@
 const semver = require('semver');
 
+function specOptions(specList) {
+  const specs = specList.map(s => {
+    return {
+      message: s.title,
+      value: s._id, // eslint-disable-line no-underscore-dangle
+    };
+  });
+  specs.push({ message: 'More...', value: 'id' });
+  return specs;
+}
+
 exports.generatePrompts = (versionList, selectOnly = false) => [
   {
     type: 'select',
@@ -55,12 +66,7 @@ exports.createOasPrompt = specList => [
     skip() {
       return this.enquirer.answers.option !== 'update';
     },
-    choices: specList.map(s => {
-      return {
-        message: s.title,
-        value: s._id, // eslint-disable-line no-underscore-dangle
-      };
-    }),
+    choices: specOptions(specList),
   },
 ];
 
