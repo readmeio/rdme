@@ -87,7 +87,11 @@ describe('rdme docs', () => {
           ...simpleDoc.doc.data,
         })
         .basicAuth({ user: key })
-        .reply(200)
+        .reply(200, {
+          category,
+          slug: simpleDoc.slug,
+          body: simpleDoc.doc.content,
+        })
         .put('/api/v1/docs/another-doc', {
           category,
           slug: anotherDoc.slug,
@@ -96,17 +100,24 @@ describe('rdme docs', () => {
           ...anotherDoc.doc.data,
         })
         .basicAuth({ user: key })
-        .reply(200);
+        .reply(200, { category, slug: anotherDoc.slug, body: anotherDoc.doc.content });
 
       const versionMock = nock(config.host)
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      return docs.run({ folder: './__tests__/__fixtures__/existing-docs', key, version }).then(skippedDocs => {
+      return docs.run({ folder: './__tests__/__fixtures__/existing-docs', key, version }).then(updatedDocs => {
         // All docs should have been updated because their hashes from the GET request were different from what they
         // are currently.
-        expect(skippedDocs).toHaveLength(0);
+        expect(updatedDocs).toStrictEqual([
+          {
+            category,
+            slug: simpleDoc.slug,
+            body: simpleDoc.doc.content,
+          },
+          { category, slug: anotherDoc.slug, body: anotherDoc.doc.content },
+        ]);
 
         getMocks.done();
         updateMocks.done();
@@ -161,7 +172,7 @@ describe('rdme docs', () => {
       const postMock = getNockWithVersionHeader(version)
         .post(`/api/v1/docs`, { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
-        .reply(201);
+        .reply(201, { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
       const versionMock = nock(config.host)
         .get(`/api/v1/version/${version}`)
@@ -207,12 +218,6 @@ describe('rdme docs', () => {
         });
 
       const postMocks = getNockWithVersionHeader(version)
-        .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
-        .basicAuth({ user: key })
-        .reply(400, {
-          error: 'DOC_INVALID',
-          message: "We couldn't save this doc (Path `category` is required.).",
-        })
         .post('/api/v1/docs', { slug: slugTwo, body: docTwo.content, ...docTwo.data, lastUpdatedHash: hashTwo })
         .basicAuth({ user: key })
         .reply(201, {
@@ -230,6 +235,12 @@ describe('rdme docs', () => {
           slug: slugTwo,
           body: 'Body',
           category,
+        })
+        .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
+        .basicAuth({ user: key })
+        .reply(400, {
+          error: 'DOC_INVALID',
+          message: "We couldn't save this doc (Path `category` is required.).",
         });
 
       const versionMock = nock(config.host)
@@ -305,7 +316,7 @@ describe('rdme docs:edit', () => {
         body: `${body}${edits}`,
       })
       .basicAuth({ user: key })
-      .reply(200);
+      .reply(200, { category, slug });
 
     const versionMock = nock(config.host)
       .get(`/api/v1/version/${version}`)

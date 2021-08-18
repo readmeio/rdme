@@ -1,13 +1,13 @@
 require('colors');
-const request = require('request-promise-native');
 const fs = require('fs');
 const path = require('path');
 const config = require('config');
 const crypto = require('crypto');
 const frontMatter = require('gray-matter');
 const { promisify } = require('util');
-const APIError = require('../../lib/apiError');
 const { getProjectVersion } = require('../../lib/versionSelect');
+const { handleRes } = require('../../lib/handleRes');
+const fetch = require('node-fetch');
 
 const readFile = promisify(fs.readFile);
 
@@ -70,22 +70,25 @@ exports.run = async function (opts) {
     return Promise.reject(new Error(`We were unable to locate Markdown files in ${folder}.`));
   }
 
-  const options = {
-    auth: { user: key },
-    headers: {
-      'x-readme-version': selectedVersion,
-    },
-  };
+  const encodedString = Buffer.from(`${key}:`).toString('base64');
 
   function createDoc(slug, file, hash, err) {
-    if (err.statusCode !== 404) return Promise.reject(err.error);
+    if (err.error !== 'DOC_NOTFOUND') return Promise.reject(err);
 
-    return request
-      .post(`${config.host}/api/v1/docs`, {
-        json: { slug, body: file.content, ...file.data, lastUpdatedHash: hash },
-        ...options,
-      })
-      .catch(err => Promise.reject(new APIError(err)));
+    return fetch(`${config.host}/api/v1/docs`, {
+      method: 'post',
+      headers: {
+        'x-readme-version': selectedVersion,
+        Authorization: `Basic ${encodedString}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        slug,
+        body: file.content,
+        ...file.data,
+        lastUpdatedHash: hash,
+      }),
+    }).then(res => handleRes(res));
   }
 
   function updateDoc(slug, file, hash, existingDoc) {
@@ -93,16 +96,21 @@ exports.run = async function (opts) {
       return `\`${slug}\` was not updated because there were no changes.`;
     }
 
-    return request
-      .put(`${config.host}/api/v1/docs/${slug}`, {
-        json: Object.assign(existingDoc, {
+    return fetch(`${config.host}/api/v1/docs/${slug}`, {
+      method: 'put',
+      headers: {
+        'x-readme-version': selectedVersion,
+        Authorization: `Basic ${encodedString}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(
+        Object.assign(existingDoc, {
           body: file.content,
           ...file.data,
           lastUpdatedHash: hash,
-        }),
-        ...options,
-      })
-      .catch(err => Promise.reject(new APIError(err)));
+        })
+      ),
+    }).then(res => handleRes(res));
   }
 
   const updatedDocs = await Promise.allSettled(
@@ -114,12 +122,21 @@ exports.run = async function (opts) {
       const slug = path.basename(filename).replace(path.extname(filename), '').toLowerCase();
       const hash = crypto.createHash('sha1').update(file).digest('hex');
 
-      return request
-        .get(`${config.host}/api/v1/docs/${slug}`, {
-          json: true,
-          ...options,
+      return fetch(`${config.host}/api/v1/docs/${slug}`, {
+        method: 'get',
+        headers: {
+          'x-readme-version': selectedVersion,
+          Authorization: `Basic ${encodedString}`,
+          Accept: 'application/json',
+        },
+      })
+        .then(res => res.json())
+        .then(res => {
+          if (res.error) {
+            return createDoc(slug, matter, hash, res);
+          }
+          return updateDoc(slug, matter, hash, res);
         })
-        .then(updateDoc.bind(null, slug, matter, hash), createDoc.bind(null, slug, matter, hash))
         .catch(err => {
           console.log(`\n\`${slug}\` failed to upload. ${err.message}\n`.red);
         });

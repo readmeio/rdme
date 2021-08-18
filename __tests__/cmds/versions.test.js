@@ -7,7 +7,7 @@ const createVersion = require('../../src/cmds/versions/create');
 const deleteVersion = require('../../src/cmds/versions/delete');
 const updateVersion = require('../../src/cmds/versions/update');
 
-const key = 'Xmw4bGctRVIQz7R7dQXqH9nQe5d0SPQs';
+const key = 'API_KEY';
 const version = '1.0.0';
 const version2 = '2.0.0';
 

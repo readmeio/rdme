@@ -1,8 +1,8 @@
-const request = require('request-promise-native');
 const Table = require('cli-table');
 const config = require('config');
 const versionsCreate = require('./create');
 const APIError = require('../../lib/apiError');
+const fetch = require('node-fetch');
 
 exports.command = 'versions';
 exports.usage = 'versions [options]';
@@ -82,6 +82,7 @@ const getVersionFormatted = version => {
 
 exports.run = function (opts) {
   const { key, version, raw } = opts;
+  const encodedString = Buffer.from(`${key}:`).toString('base64');
 
   if (!key) {
     return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
@@ -89,12 +90,18 @@ exports.run = function (opts) {
 
   const uri = version ? `${config.host}/api/v1/version/${version}` : `${config.host}/api/v1/version`;
 
-  return request
-    .get(uri, {
-      json: true,
-      auth: { user: key },
-    })
+  return fetch(uri, {
+    method: 'get',
+    headers: {
+      Authorization: `Basic ${encodedString}`,
+    },
+  })
+    .then(res => res.json())
     .then(data => {
+      if (data.error) {
+        return Promise.reject(new APIError(data));
+      }
+
       if (raw) {
         return Promise.resolve(data);
       }
@@ -117,6 +124,5 @@ exports.run = function (opts) {
       }
 
       return Promise.resolve(getVersionFormatted(versions[0]));
-    })
-    .catch(err => Promise.reject(new APIError(err)));
+    });
 };
