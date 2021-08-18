@@ -46,8 +46,6 @@
     "oas-normalize": "^3.0.4",
     "open": "^8.2.1",
     "read": "^1.0.7",
-    "request": "^2.88.0",
-    "request-promise-native": "^1.0.5",
     "semver": "^7.0.0",
     "table-layout": "^1.0.0"
   },
