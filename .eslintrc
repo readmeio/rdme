@@ -2,6 +2,7 @@
   "extends": ["@readme/eslint-config"],
   "root": true,
   "rules": {
-    "no-console": "off"
+    "no-console": "off",
+    "sonarjs/no-nested-template-literals": "off"
   }
 }
