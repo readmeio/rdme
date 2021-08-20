@@ -1,15 +1,6 @@
 const semver = require('semver');
-
-function specOptions(specList) {
-  const specs = specList.map(s => {
-    return {
-      message: s.title,
-      value: s._id, // eslint-disable-line no-underscore-dangle
-    };
-  });
-  specs.push({ message: 'More...', value: 'id' });
-  return specs;
-}
+const { prompt } = require('enquirer');
+const parse = require('parse-link-header');
 
 exports.generatePrompts = (versionList, selectOnly = false) => [
   {
@@ -49,7 +40,59 @@ exports.generatePrompts = (versionList, selectOnly = false) => [
   },
 ];
 
-exports.createOasPrompt = specList => [
+function specOptions(specList, parsedDocs, currPage, totalPages) {
+  const specs = specList.map(s => {
+    return {
+      message: s.title,
+      value: s._id, // eslint-disable-line no-underscore-dangle
+    };
+  });
+  if (parsedDocs.prev.page) specs.push({ message: `< Prev (page ${currPage - 1} of ${totalPages})`, value: 'prev' });
+  if (parsedDocs.next.page) {
+    specs.push({ message: `Next (page ${currPage + 1} of ${totalPages}) >`, value: 'next' });
+  }
+  return specs;
+}
+
+const updateOasPrompt = (specList, parsedDocs, currPage, totalPages, getSpecs) => [
+  {
+    type: 'select',
+    name: 'specId',
+    message: 'Select your desired file to update',
+    choices: specOptions(specList, parsedDocs, currPage, totalPages),
+    async result(spec) {
+      if (spec === 'prev') {
+        try {
+          const newSpecs = await getSpecs(`${parsedDocs.prev.url}`);
+          const newParsedDocs = parse(newSpecs.headers.get('link'));
+          const newSpecList = await newSpecs.json();
+          const { specId } = await prompt(
+            updateOasPrompt(newSpecList, newParsedDocs, currPage - 1, totalPages, getSpecs)
+          );
+          return specId;
+        } catch (e) {
+          return null;
+        }
+      }
+      if (spec === 'next') {
+        try {
+          const newSpecs = await getSpecs(`${parsedDocs.next.url}`);
+          const newParsedDocs = parse(newSpecs.headers.get('link'));
+          const newSpecList = await newSpecs.json();
+          const { specId } = await prompt(
+            updateOasPrompt(newSpecList, newParsedDocs, currPage + 1, totalPages, getSpecs)
+          );
+          return specId;
+        } catch (e) {
+          return null;
+        }
+      }
+      return spec;
+    },
+  },
+];
+
+exports.createOasPrompt = (specList, parsedDocs, totalPages, getSpecs) => [
   {
     type: 'select',
     name: 'option',
@@ -58,15 +101,17 @@ exports.createOasPrompt = specList => [
       { message: 'Update existing', value: 'update' },
       { message: 'Create a new spec', value: 'create' },
     ],
-  },
-  {
-    type: 'select',
-    name: 'specId',
-    message: 'Select your desired file to update',
-    skip() {
-      return this.enquirer.answers.option !== 'update';
+    async result(picked) {
+      if (picked === 'update') {
+        try {
+          const { specId } = await prompt(updateOasPrompt(specList, parsedDocs, 1, totalPages, getSpecs));
+          return specId;
+        } catch (e) {
+          return null;
+        }
+      }
+      return picked;
     },
-    choices: specOptions(specList),
   },
 ];
 

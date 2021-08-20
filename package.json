@@ -45,6 +45,7 @@
     "oas": "^14.0.0",
     "oas-normalize": "^3.0.4",
     "open": "^8.2.1",
+    "parse-link-header": "^1.0.1",
     "read": "^1.0.7",
     "semver": "^7.0.0",
     "table-layout": "^1.0.0"

@@ -8,6 +8,7 @@ const APIError = require('../lib/apiError');
 const { getProjectVersion } = require('../lib/versionSelect');
 const fetch = require('node-fetch');
 const FormData = require('form-data');
+const parse = require('parse-link-header');
 
 exports.command = 'openapi';
 exports.usage = 'openapi [file] [options]';
@@ -159,19 +160,28 @@ exports.run = async function (opts) {
         - If found, prompt user to either create a new spec or update an existing one
     */
 
-    if (!id) {
-      const apiSettings = await fetch(`${config.host}/api/v1/api-specification`, {
+    function getSpecs(url) {
+      return fetch(`${config.host}${url}`, {
         method: 'get',
         headers: {
           'x-readme-version': versionCleaned,
           Authorization: `Basic ${encodedString}`,
         },
-      }).then(res => res.json());
+      });
+    }
 
-      if (!apiSettings.length) return createSpec();
+    if (!id) {
+      const apiSettings = await getSpecs(`/api/v1/api-specification`);
 
-      const { option, specId } = await prompt(promptOpts.createOasPrompt(apiSettings));
-      return option === 'create' ? createSpec() : updateSpec(specId);
+      const totalPages = Math.ceil(apiSettings.headers.get('x-total-count') / 10);
+      const parsedDocs = parse(apiSettings.headers.get('link'));
+
+      const apiSettingsBody = await apiSettings.json();
+      if (!apiSettingsBody.length) return createSpec();
+
+      const { option } = await prompt(promptOpts.createOasPrompt(apiSettingsBody, parsedDocs, totalPages, getSpecs));
+      if (!option) return null;
+      return option === 'create' ? createSpec() : updateSpec(option);
     }
 
     /*

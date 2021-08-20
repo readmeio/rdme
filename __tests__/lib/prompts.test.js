@@ -21,6 +21,15 @@ const specList = [
   },
 ];
 
+const getSpecs = () => {
+  return [
+    {
+      _id: 'spec3',
+      title: 'spec3_title',
+    },
+  ];
+};
+
 describe('prompt test bed', () => {
   let enquirer;
 
@@ -70,23 +79,31 @@ describe('prompt test bed', () => {
         await prompt.keypress(null, { name: 'down' });
         await prompt.submit();
       });
-      const answer = await enquirer.prompt(promptHandler.createOasPrompt([{}]));
+      const answer = await enquirer.prompt(promptHandler.createOasPrompt([{}], null, 1, null));
 
       expect(answer.option).toBe('create');
-      expect(answer.specId).toBe('');
     });
 
     it('should return specId if user chooses to update file', async () => {
+      jest.mock('enquirer');
       enquirer.on('prompt', async prompt => {
         await prompt.keypress(null, { name: 'down' });
         await prompt.keypress(null, { name: 'up' });
         await prompt.submit();
-        await prompt.submit();
       });
-      const answer = await enquirer.prompt(promptHandler.createOasPrompt(specList));
+      enquirer.prompt = jest.fn();
+      enquirer.prompt.mockReturnValue('spec1');
+      const parsedDocs = {
+        next: {
+          page: null,
+        },
+        prev: {
+          page: null,
+        },
+      };
+      const answer = await enquirer.prompt(promptHandler.createOasPrompt(specList, parsedDocs, 1, getSpecs));
 
-      expect(answer.option).toBe('update');
-      expect(answer.specId).toBe('spec1');
+      expect(answer).toBe('spec1');
     });
   });
 
