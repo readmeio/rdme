@@ -1,3 +1,20 @@
+## 5.0.0 (2021-08-20)
+
+* feat: add $ref bundling to OpenAPI/Swagger command (#342) ([af3c7c2](https://github.com/readmeio/rdme/commit/af3c7c2)), closes [#342](https://github.com/readmeio/rdme/issues/342)
+* feat: add version selection to all relevant commands (#344) ([d797d09](https://github.com/readmeio/rdme/commit/d797d09)), closes [#344](https://github.com/readmeio/rdme/issues/344)
+* feat: Adds pagination to the OpenAPI command (#353) ([fb6ec65](https://github.com/readmeio/rdme/commit/fb6ec65)), closes [#353](https://github.com/readmeio/rdme/issues/353)
+* feat: making the docs command recursive by default (#343) ([a7a5caa](https://github.com/readmeio/rdme/commit/a7a5caa)), closes [#343](https://github.com/readmeio/rdme/issues/343)
+* chore(deps-dev): bumping dev deps ([a2446ec](https://github.com/readmeio/rdme/commit/a2446ec))
+* chore(deps): bump actions/setup-node from 2.2.0 to 2.3.0 (#346) ([31cc6f2](https://github.com/readmeio/rdme/commit/31cc6f2)), closes [#346](https://github.com/readmeio/rdme/issues/346)
+* chore(deps): bumping deps ([237961d](https://github.com/readmeio/rdme/commit/237961d))
+* chore(deps): running npm audit ([e622ea2](https://github.com/readmeio/rdme/commit/e622ea2))
+* chore(deps): upgrading oas and oas-normalize ([cfad0f5](https://github.com/readmeio/rdme/commit/cfad0f5))
+* fix: command position sorting within the help screen (#341) ([14e26d4](https://github.com/readmeio/rdme/commit/14e26d4)), closes [#341](https://github.com/readmeio/rdme/issues/341)
+* fix: replace `request-promise-native` with `node-fetch` (#352) ([74bad7d](https://github.com/readmeio/rdme/commit/74bad7d)), closes [#352](https://github.com/readmeio/rdme/issues/352)
+* docs: minor changes to the readme ([25a909b](https://github.com/readmeio/rdme/commit/25a909b))
+
+
+
 ## 4.0.0 (2021-07-09)
 
 > 🚨 With this release we no longer support Node 10.
