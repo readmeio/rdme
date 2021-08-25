@@ -69,7 +69,7 @@ exports.run = async function (opts) {
     async function success(data) {
       const message = !isUpdate
         ? "You've successfully uploaded a new OpenAPI file to your ReadMe project!"
-        : "You've successfully updated a OpenAPI file on your ReadMe project!";
+        : "You've successfully updated an OpenAPI file on your ReadMe project!";
 
       const body = await data.json();
 
