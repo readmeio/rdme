@@ -61,7 +61,7 @@ describe('rdme openapi', () => {
       expect(output).toMatch(/we found swagger.json/i);
       expect(output).toMatch(/successfully uploaded/);
       expect(output).toMatch(exampleRefLocation);
-      expect(output).toMatch(/to update your swagger or openapi file/i);
+      expect(output).toMatch(/to update your openapi or swagger file/i);
 
       fs.unlinkSync('./swagger.json');
       return mock.done();
@@ -116,7 +116,7 @@ describe('rdme openapi', () => {
       expect(output).not.toMatch(/we found swagger.json/i);
       expect(output).toMatch(/successfully uploaded/);
       expect(output).toMatch(exampleRefLocation);
-      expect(output).toMatch(/to update your swagger or openapi file/i);
+      expect(output).toMatch(/to update your openapi or swagger file/i);
 
       mock.done();
     });
@@ -236,7 +236,7 @@ describe('rdme openapi', () => {
       const output = getCommandOutput();
       expect(output).toMatch(/successfully uploaded/);
       expect(output).toMatch(exampleRefLocation);
-      expect(output).toMatch(/to update your swagger or openapi file/i);
+      expect(output).toMatch(/to update your openapi or swagger file/i);
 
       mock.done();
     });
@@ -254,7 +254,7 @@ describe('rdme openapi', () => {
       .basicAuth({ user: key })
       .reply(200, { version: '1.0.0' });
 
-    await expect(openapi.run({ key, version })).rejects.toThrow(/We couldn't find a Swagger or OpenAPI file./);
+    await expect(openapi.run({ key, version })).rejects.toThrow(/We couldn't find an OpenAPI or Swagger file./);
 
     mock.done();
   });
@@ -273,7 +273,7 @@ describe('rdme swagger', () => {
     const id = '5aa0409b7cf527a93bfb44df';
 
     await expect(swagger.run({ spec: '', key, id, version })).rejects.toThrow(
-      "We couldn't find a Swagger or OpenAPI file.\n\n" +
+      "We couldn't find an OpenAPI or Swagger file.\n\n" +
         'Run `rdme openapi ./path/to/file` to upload an existing file or `rdme oas init` to create a fresh one!'
     );
   });

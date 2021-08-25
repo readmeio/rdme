@@ -3,7 +3,7 @@ const openapi = require('./openapi');
 
 exports.command = 'swagger';
 exports.usage = 'swagger [file] [options]';
-exports.description = 'Alias for `rdme openapi`.';
+exports.description = 'Alias for `rdme openapi` [deprecated].';
 exports.category = 'apis';
 exports.position = 2;
 
@@ -37,5 +37,6 @@ exports.args = [
 ];
 
 exports.run = async function (opts) {
+  console.warn('`rdme swagger` has been deprecated. Please use `rdme openapi` instead.');
   return openapi.run(opts);
 };
