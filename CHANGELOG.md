@@ -1,3 +1,15 @@
+## 5.1.0 (2021-08-25)
+
+* docs: update language to be more OpenAPI forward (#359) ([75636e9](https://github.com/readmeio/rdme/commit/75636e9)), closes [#359](https://github.com/readmeio/rdme/issues/359)
+* chore(deps-dev): bump nock from 13.1.1 to 13.1.3 (#355) ([afe507f](https://github.com/readmeio/rdme/commit/afe507f)), closes [#355](https://github.com/readmeio/rdme/issues/355)
+* chore(deps): bump actions/setup-node from 2.3.0 to 2.4.0 (#354) ([068a9d6](https://github.com/readmeio/rdme/commit/068a9d6)), closes [#354](https://github.com/readmeio/rdme/issues/354)
+* chore(deps): bump form-data from 2.3.3 to 4.0.0 (#358) ([a3f9075](https://github.com/readmeio/rdme/commit/a3f9075)), closes [#358](https://github.com/readmeio/rdme/issues/358)
+* chore(deps): bump oas from 14.0.0 to 14.3.1 (#356) ([8f10391](https://github.com/readmeio/rdme/commit/8f10391)), closes [#356](https://github.com/readmeio/rdme/issues/356)
+* chore(deps): bump oas-normalize from 3.0.4 to 3.0.5 (#357) ([2eb3dda](https://github.com/readmeio/rdme/commit/2eb3dda)), closes [#357](https://github.com/readmeio/rdme/issues/357)
+* ci: updating the dependabot label ([9428fa3](https://github.com/readmeio/rdme/commit/9428fa3))
+
+
+
 ## 5.0.0 (2021-08-20)
 
 * feat: add $ref bundling to OpenAPI/Swagger command (#342) ([af3c7c2](https://github.com/readmeio/rdme/commit/af3c7c2)), closes [#342](https://github.com/readmeio/rdme/issues/342)
