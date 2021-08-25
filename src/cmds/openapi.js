@@ -12,7 +12,7 @@ const parse = require('parse-link-header');
 
 exports.command = 'openapi';
 exports.usage = 'openapi [file] [options]';
-exports.description = 'Upload, or sync, your Swagger/OpenAPI file to ReadMe.';
+exports.description = 'Upload, or sync, your OpenAPI/Swagger file to ReadMe.';
 exports.category = 'apis';
 exports.position = 1;
 
@@ -64,12 +64,12 @@ exports.run = async function (opts) {
   const encodedString = Buffer.from(`${key}:`).toString('base64');
 
   async function callApi(specPath, versionCleaned) {
-    // @todo Tailor messaging to what is actually being handled here. If the user is uploading an OpenAPI file, never mention that they uploaded/updated a Swagger file.
+    // @todo Tailor messaging to what is actually being handled here. If the user is uploading a Swagger file, never mention that they uploaded/updated an OpenAPI file.
 
     async function success(data) {
       const message = !isUpdate
-        ? "You've successfully uploaded a new Swagger file to your ReadMe project!"
-        : "You've successfully updated a Swagger file on your ReadMe project!";
+        ? "You've successfully uploaded a new OpenAPI file to your ReadMe project!"
+        : "You've successfully updated an OpenAPI file on your ReadMe project!";
 
       const body = await data.json();
 
@@ -79,7 +79,7 @@ exports.run = async function (opts) {
           '',
           `\t${`${data.headers.get('location')}`.green}`,
           '',
-          'To update your Swagger or OpenAPI file, run the following:',
+          'To update your OpenAPI or Swagger file, run the following:',
           '',
           // eslint-disable-next-line no-underscore-dangle
           `\trdme openapi FILE --key=${key} --id=${body._id}`.green,
@@ -215,7 +215,7 @@ exports.run = async function (opts) {
 
     reject(
       new Error(
-        "We couldn't find a Swagger or OpenAPI file.\n\n" +
+        "We couldn't find an OpenAPI or Swagger file.\n\n" +
           'Run `rdme openapi ./path/to/file` to upload an existing file or `rdme oas init` to create a fresh one!'
       )
     );
