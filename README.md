@@ -35,7 +35,7 @@ rdme login
 ## Usage
 If you wish to get more information about any command within `rdme`, you can execute `rdme help <command>` or `rdme <command> --help`. You an also execute `rdme help` to see a global list of commands that `rdme` offers.
 
-### Common `rdme` options
+### Common `rdme` Options
 * `--key <string>`: The API key associated with your ReadMe project. You can obtain this from your dashboard, or alternatively if you log in with `rdme login`, we will save your API key to a local configuration file (`~/.config/configstore/rdme-production.json`), saving you the hassle of having to supply this argument on commands that have it.
 * `--version <string>`: Your project version.
 
@@ -44,21 +44,21 @@ ReadMe supports both [Swagger 2.0](https://swagger.io/docs/specification/2-0/bas
 
 > ℹ️ Note that the `rdme swagger` command is also available alongside `rdme openapi` also supports both OpenAPI and Swagger API definitions.
 
-#### Uploading a new API description to ReadMe
+#### Uploading a New API Definition to ReadMe
 This will upload `path-to-openapi.json` to your project and return an ID and URL for you to later update your file, and view it in the client.
 
 ```sh
 rdme openapi [path-to-file.json]
 ```
 
-#### Editing (resync) an existing API description
-This will edit (resync) an existing API description (identified by `--id`) within your ReadMe project.
+#### Editing (Re-Syncing) an Existing API Definition
+This will edit (re-sync) an existing API definition (identified by `--id`) within your ReadMe project.
 
 ```sh
 rdme openapi [path-to-file.json] --id={existing-id}
 ```
 
-#### Uploading or editing an API description in a project version
+#### Uploading or Editing an API Definition in a Project Version
 You can additional include a version flag, specifying the target version for your file's destination
 
 ```sh
@@ -69,7 +69,7 @@ rdme openapi [path-to-file.json] --version={project-version}
 rdme openapi [path-to-file.json] --id={existing-id} --version={project-version}
 ```
 
-#### Omitting the file path
+#### Omitting the File Path
 If you run `rdme` within a directory that contains your Swagger or OpenAPI definition, you can omit the file path. We will then look for a file with the following names, and upload that: `swagger.json`, `swagger.yaml`, `openapi.json`, and `openapi.yaml`
 
 ```sh
@@ -77,37 +77,37 @@ rdme openapi
 ```
 
 ### Docs
-#### Syncing a folder of Markdown docs to ReadMe
+#### Syncing a Folder of Markdown Docs to ReadMe
 ```sh
 rdme docs path-to-markdown-files --version={project-version}
 ```
 
-#### Edit a single ReadMe doc on your local machine
+#### Edit a Single ReadMe Doc on Your Local Machine
 ```sh
 rdme docs:edit <slug> --version={project-version}
 ```
 
 ### Versions
-#### Get all versions associated with your project
+#### Get All Versions Associated With Your Project
 ```sh
 rdme versions
 ```
 
 If you wish to see the raw output from our API in this response, supply  the `--raw` flag.
 
-#### Get all information about a particular version
+#### Get All Information About a Particular Version
 ```sh
 rdme versions --version={project-version}
 ```
 
 If you wish to see the raw output from our API in this response, supply  the `--raw` flag.
 
-#### Create a new version
+#### Create a New Version
 ```sh
 rdme versions:create <version> | --version={project-version}
 ```
 
-##### Automating this process
+##### Create a New Version
 If you wish to automate the process of creating a new project version, and not have the CLI prompt you for input, you can do so by supplying the necessary flags to `versions:create`.
 
 For example:
@@ -118,21 +118,21 @@ rdme versions:create <version> | --version={project-version} --fork={version-for
 
 See `rdme versions:create --help` for a full list of flags.
 
-#### Update a version
+#### Update a Version
 ```sh
 rdme versions:update --version={project-version}
 ```
 
 Like `versions:create`, if you wish to automate this process and not be blocked by CLI input, you can supply the necessary flags to this command. See `rdme versions:update --help` or [automating this process](#automating-this-process) for more information.
 
-#### Delete a version
+#### Delete a Version
 You can remove a specific version from your project, as well as all of the attached specs
 
 ```sh
 rdme versions:delete --version={project-version}
 ```
 
-### Open your ReadMe project in your browser
+### Open Your ReadMe Project in Your Browser
 If you are logged in, this will open the project in your browser:
 
 ```sh
