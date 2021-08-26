@@ -1,3 +1,10 @@
+## <small>5.1.2 (2021-08-26)</small>
+
+* chore(deps): upgrading oas-normalize to resolve validation quirks (#362) ([27ab077](https://github.com/readmeio/rdme/commit/27ab077)), closes [#362](https://github.com/readmeio/rdme/issues/362)
+* perf: stream bundled OpenAPI file instead of sending it wholesale (#361) ([8fbf131](https://github.com/readmeio/rdme/commit/8fbf131)), closes [#361](https://github.com/readmeio/rdme/issues/361)
+
+
+
 ## <small>5.1.1 (2021-08-26)</small>
 
 * fix: don't send header values that are 'undefined' (#360) ([ae03c1e](https://github.com/readmeio/rdme/commit/ae03c1e)), closes [#360](https://github.com/readmeio/rdme/issues/360)
