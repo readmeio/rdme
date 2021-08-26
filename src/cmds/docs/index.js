@@ -5,6 +5,7 @@ const config = require('config');
 const crypto = require('crypto');
 const frontMatter = require('gray-matter');
 const { promisify } = require('util');
+const { cleanHeaders } = require('../../lib/cleanHeaders');
 const { getProjectVersion } = require('../../lib/versionSelect');
 const { handleRes } = require('../../lib/handleRes');
 const fetch = require('node-fetch');
@@ -70,18 +71,15 @@ exports.run = async function (opts) {
     return Promise.reject(new Error(`We were unable to locate Markdown files in ${folder}.`));
   }
 
-  const encodedString = Buffer.from(`${key}:`).toString('base64');
-
   function createDoc(slug, file, hash, err) {
     if (err.error !== 'DOC_NOTFOUND') return Promise.reject(err);
 
     return fetch(`${config.host}/api/v1/docs`, {
       method: 'post',
-      headers: {
+      headers: cleanHeaders(key, {
         'x-readme-version': selectedVersion,
-        Authorization: `Basic ${encodedString}`,
         'Content-Type': 'application/json',
-      },
+      }),
       body: JSON.stringify({
         slug,
         body: file.content,
@@ -98,11 +96,10 @@ exports.run = async function (opts) {
 
     return fetch(`${config.host}/api/v1/docs/${slug}`, {
       method: 'put',
-      headers: {
+      headers: cleanHeaders(key, {
         'x-readme-version': selectedVersion,
-        Authorization: `Basic ${encodedString}`,
         'Content-Type': 'application/json',
-      },
+      }),
       body: JSON.stringify(
         Object.assign(existingDoc, {
           body: file.content,
@@ -124,11 +121,10 @@ exports.run = async function (opts) {
 
       return fetch(`${config.host}/api/v1/docs/${slug}`, {
         method: 'get',
-        headers: {
+        headers: cleanHeaders(key, {
           'x-readme-version': selectedVersion,
-          Authorization: `Basic ${encodedString}`,
           Accept: 'application/json',
-        },
+        }),
       })
         .then(res => res.json())
         .then(res => {

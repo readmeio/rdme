@@ -3,6 +3,7 @@ const semver = require('semver');
 const { prompt } = require('enquirer');
 const promptOpts = require('../../lib/prompts');
 const APIError = require('../../lib/apiError');
+const { cleanHeaders } = require('../../lib/cleanHeaders');
 const { handleRes } = require('../../lib/handleRes');
 const fetch = require('node-fetch');
 
@@ -54,7 +55,6 @@ exports.args = [
 exports.run = async function (opts) {
   let versionList;
   const { key, version, codename, fork, main, beta, isPublic } = opts;
-  const encodedString = Buffer.from(`${key}:`).toString('base64');
 
   if (!key) {
     return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
@@ -69,9 +69,7 @@ exports.run = async function (opts) {
   if (!fork) {
     versionList = await fetch(`${config.host}/api/v1/version`, {
       method: 'get',
-      headers: {
-        Authorization: `Basic ${encodedString}`,
-      },
+      headers: cleanHeaders(key),
     }).then(res => handleRes(res));
   }
 
@@ -84,11 +82,10 @@ exports.run = async function (opts) {
 
   return fetch(`${config.host}/api/v1/version`, {
     method: 'post',
-    headers: {
+    headers: cleanHeaders(key, {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      Authorization: `Basic ${encodedString}`,
-    },
+    }),
     body: JSON.stringify({
       version,
       codename: codename || '',

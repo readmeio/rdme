@@ -1,17 +1,16 @@
 const { prompt } = require('enquirer');
 const promptOpts = require('./prompts');
+const { cleanHeaders } = require('./cleanHeaders');
 const fetch = require('node-fetch');
 const config = require('config');
 const APIError = require('./apiError');
 
 async function getProjectVersion(versionFlag, key, allowNewVersion) {
-  const encodedString = Buffer.from(`${key}:`).toString('base64');
-
   try {
     if (versionFlag) {
       return await fetch(`${config.host}/api/v1/version/${versionFlag}`, {
         method: 'get',
-        headers: { Authorization: `Basic ${encodedString}` },
+        headers: cleanHeaders(key),
       })
         .then(res => res.json())
         .then(res => res.version);
@@ -19,7 +18,7 @@ async function getProjectVersion(versionFlag, key, allowNewVersion) {
 
     const versionList = await fetch(`${config.host}/api/v1/version`, {
       method: 'get',
-      headers: { Authorization: `Basic ${encodedString}` },
+      headers: cleanHeaders(key),
     }).then(res => res.json());
 
     if (allowNewVersion) {
@@ -29,7 +28,7 @@ async function getProjectVersion(versionFlag, key, allowNewVersion) {
 
       await fetch(`${config.host}/api/v1/version`, {
         method: 'post',
-        headers: { Authorization: `Basic ${encodedString}`, 'Content-Type': 'application/json' },
+        headers: cleanHeaders(key, { 'Content-Type': 'application/json' }),
         body: JSON.stringify({
           from: versionList[0].version,
           version: newVersion,

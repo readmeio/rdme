@@ -2,6 +2,7 @@ const Table = require('cli-table');
 const config = require('config');
 const versionsCreate = require('./create');
 const APIError = require('../../lib/apiError');
+const { cleanHeaders } = require('../../lib/cleanHeaders');
 const fetch = require('node-fetch');
 
 exports.command = 'versions';
@@ -82,7 +83,6 @@ const getVersionFormatted = version => {
 
 exports.run = function (opts) {
   const { key, version, raw } = opts;
-  const encodedString = Buffer.from(`${key}:`).toString('base64');
 
   if (!key) {
     return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
@@ -92,9 +92,7 @@ exports.run = function (opts) {
 
   return fetch(uri, {
     method: 'get',
-    headers: {
-      Authorization: `Basic ${encodedString}`,
-    },
+    headers: cleanHeaders(key),
   })
     .then(res => res.json())
     .then(data => {

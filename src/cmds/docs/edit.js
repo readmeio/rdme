@@ -3,6 +3,7 @@ const fs = require('fs');
 const editor = require('editor');
 const { promisify } = require('util');
 const APIError = require('../../lib/apiError');
+const { cleanHeaders } = require('../../lib/cleanHeaders');
 const { getProjectVersion } = require('../../lib/versionSelect');
 const { handleRes } = require('../../lib/handleRes');
 const fetch = require('node-fetch');
@@ -52,15 +53,13 @@ exports.run = async function (opts) {
   });
 
   const filename = `${slug}.md`;
-  const encodedString = Buffer.from(`${key}:`).toString('base64');
 
   const existingDoc = await fetch(`${config.host}/api/v1/docs/${slug}`, {
     method: 'get',
-    headers: {
+    headers: cleanHeaders(key, {
       'x-readme-version': selectedVersion,
-      Authorization: `Basic ${encodedString}`,
       Accept: 'application/json',
-    },
+    }),
   }).then(res => handleRes(res));
 
   await writeFile(filename, existingDoc.body);
@@ -72,11 +71,10 @@ exports.run = async function (opts) {
 
       return fetch(`${config.host}/api/v1/docs/${slug}`, {
         method: 'put',
-        headers: {
+        headers: cleanHeaders(key, {
           'x-readme-version': selectedVersion,
-          Authorization: `Basic ${encodedString}`,
           'Content-Type': 'application/json',
-        },
+        }),
         body: JSON.stringify(
           Object.assign(existingDoc, {
             body: updatedDoc,
