@@ -10,6 +10,7 @@ const { getProjectVersion } = require('../lib/versionSelect');
 const fetch = require('node-fetch');
 const FormData = require('form-data');
 const parse = require('parse-link-header');
+const { file: tmpFile } = require('tmp-promise');
 
 exports.command = 'openapi';
 exports.usage = 'openapi [file] [options]';
@@ -117,8 +118,14 @@ exports.run = async function (opts) {
         return Promise.reject(err);
       });
 
+    // Create a temporary file to write the bundled spec to,
+    // which we will then stream into the form data body
+    const { path } = await tmpFile({ prefix: 'rdme-openapi-', postfix: '.json' });
+    await fs.writeFileSync(path, bundledSpec);
+    const stream = fs.createReadStream(path);
+
     const formData = new FormData();
-    formData.append('spec', bundledSpec);
+    formData.append('spec', stream);
 
     const options = {
       headers: cleanHeaders(key, {

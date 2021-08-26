@@ -51,7 +51,8 @@
     "parse-link-header": "^1.0.1",
     "read": "^1.0.7",
     "semver": "^7.0.0",
-    "table-layout": "^1.0.0"
+    "table-layout": "^1.0.0",
+    "tmp-promise": "^3.0.2"
   },
   "devDependencies": {
     "@readme/eslint-config": "^6.0.0",
