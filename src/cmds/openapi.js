@@ -5,6 +5,7 @@ const { prompt } = require('enquirer');
 const OASNormalize = require('oas-normalize');
 const promptOpts = require('../lib/prompts');
 const APIError = require('../lib/apiError');
+const { cleanHeaders } = require('../lib/cleanHeaders');
 const { getProjectVersion } = require('../lib/versionSelect');
 const fetch = require('node-fetch');
 const FormData = require('form-data');
@@ -60,8 +61,6 @@ exports.run = async function (opts) {
   if (!key) {
     return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
   }
-
-  const encodedString = Buffer.from(`${key}:`).toString('base64');
 
   async function callApi(specPath, versionCleaned) {
     // @todo Tailor messaging to what is actually being handled here. If the user is uploading a Swagger file, never mention that they uploaded/updated an OpenAPI file.
@@ -122,12 +121,11 @@ exports.run = async function (opts) {
     formData.append('spec', bundledSpec);
 
     const options = {
-      headers: {
+      headers: cleanHeaders(key, {
         'x-readme-version': versionCleaned,
         'x-readme-source': 'cli',
-        Authorization: `Basic ${encodedString}`,
         Accept: 'application/json',
-      },
+      }),
       body: formData,
     };
 
@@ -163,10 +161,9 @@ exports.run = async function (opts) {
     function getSpecs(url) {
       return fetch(`${config.host}${url}`, {
         method: 'get',
-        headers: {
+        headers: cleanHeaders(key, {
           'x-readme-version': versionCleaned,
-          Authorization: `Basic ${encodedString}`,
-        },
+        }),
       });
     }
 

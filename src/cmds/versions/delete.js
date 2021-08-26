@@ -1,6 +1,7 @@
 const config = require('config');
 const APIError = require('../../lib/apiError');
 const { getProjectVersion } = require('../../lib/versionSelect');
+const { cleanHeaders } = require('../../lib/cleanHeaders');
 const fetch = require('node-fetch');
 
 exports.command = 'versions:delete';
@@ -25,7 +26,6 @@ exports.args = [
 
 exports.run = async function (opts) {
   const { key, version } = opts;
-  const encodedString = Buffer.from(`${key}:`).toString('base64');
 
   if (!key) {
     return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
@@ -37,9 +37,7 @@ exports.run = async function (opts) {
 
   return fetch(`${config.host}/api/v1/version/${selectedVersion}`, {
     method: 'delete',
-    headers: {
-      Authorization: `Basic ${encodedString}`,
-    },
+    headers: cleanHeaders(key),
   }).then(res => {
     if (res.error) {
       return Promise.reject(new APIError(res));

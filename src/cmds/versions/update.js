@@ -2,6 +2,7 @@ const config = require('config');
 const { prompt } = require('enquirer');
 const promptOpts = require('../../lib/prompts');
 const APIError = require('../../lib/apiError');
+const { cleanHeaders } = require('../../lib/cleanHeaders');
 const { getProjectVersion } = require('../../lib/versionSelect');
 const fetch = require('node-fetch');
 const { handleRes } = require('../../lib/handleRes');
@@ -47,7 +48,6 @@ exports.args = [
 
 exports.run = async function (opts) {
   const { key, version, codename, newVersion, main, beta, isPublic, deprecated } = opts;
-  const encodedString = Buffer.from(`${key}:`).toString('base64');
 
   if (!key) {
     return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
@@ -59,20 +59,17 @@ exports.run = async function (opts) {
 
   const foundVersion = await fetch(`${config.host}/api/v1/version/${selectedVersion}`, {
     method: 'get',
-    headers: {
-      Authorization: `Basic ${encodedString}`,
-    },
+    headers: cleanHeaders(key),
   }).then(res => handleRes(res));
 
   const promptResponse = await prompt(promptOpts.createVersionPrompt([{}], opts, foundVersion));
 
   return fetch(`${config.host}/api/v1/version/${selectedVersion}`, {
     method: 'put',
-    headers: {
+    headers: cleanHeaders(key, {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      Authorization: `Basic ${encodedString}`,
-    },
+    }),
     body: JSON.stringify({
       codename: codename || '',
       version: newVersion || promptResponse.newVersion,
