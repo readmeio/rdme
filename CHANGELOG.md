@@ -1,3 +1,9 @@
+## <small>5.1.1 (2021-08-26)</small>
+
+* fix: don't send header values that are 'undefined' (#360) ([ae03c1e](https://github.com/readmeio/rdme/commit/ae03c1e)), closes [#360](https://github.com/readmeio/rdme/issues/360)
+
+
+
 ## 5.1.0 (2021-08-25)
 
 * docs: update language to be more OpenAPI forward (#359) ([75636e9](https://github.com/readmeio/rdme/commit/75636e9)), closes [#359](https://github.com/readmeio/rdme/issues/359)
