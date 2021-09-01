@@ -1,3 +1,14 @@
+## <small>5.1.3 (2021-09-01)</small>
+
+* chore(deps-dev): bump @readme/eslint-config from 6.0.0 to 6.1.0 (#366) ([b0dde02](https://github.com/readmeio/rdme/commit/b0dde02)), closes [#366](https://github.com/readmeio/rdme/issues/366)
+* chore(deps-dev): bump jest from 27.0.6 to 27.1.0 (#365) ([3bcf8e1](https://github.com/readmeio/rdme/commit/3bcf8e1)), closes [#365](https://github.com/readmeio/rdme/issues/365)
+* chore(deps-dev): removing conventional-changelog-cli in favor of npx ([f6d25b4](https://github.com/readmeio/rdme/commit/f6d25b4))
+* chore(deps): bump oas from 14.3.1 to 14.4.0 (#364) ([31dbd7b](https://github.com/readmeio/rdme/commit/31dbd7b)), closes [#364](https://github.com/readmeio/rdme/issues/364)
+* chore(deps): bump oas-normalize from 4.0.0 to 4.0.1 (#367) ([d48dedd](https://github.com/readmeio/rdme/commit/d48dedd)), closes [#367](https://github.com/readmeio/rdme/issues/367)
+* ci: ignoring node-fetch updates because its now a pure esm package ([cc7aaca](https://github.com/readmeio/rdme/commit/cc7aaca))
+
+
+
 ## <small>5.1.2 (2021-08-26)</small>
 
 * chore(deps): upgrading oas-normalize to resolve validation quirks (#362) ([27ab077](https://github.com/readmeio/rdme/commit/27ab077)), closes [#362](https://github.com/readmeio/rdme/issues/362)
