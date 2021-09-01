@@ -56,7 +56,6 @@
   },
   "devDependencies": {
     "@readme/eslint-config": "^6.0.0",
-    "conventional-changelog-cli": "^2.0.31",
     "eslint": "^7.32.0",
     "jest": "^27.0.4",
     "nock": "^13.1.1",
@@ -66,7 +65,7 @@
     "lint": "eslint .",
     "pretest": "npm run lint",
     "prettier": "prettier --list-different --write \"./**/**.js\"",
-    "release": "conventional-changelog -i CHANGELOG.md -s",
+    "release": "npx conventional-changelog-cli -i CHANGELOG.md -s",
     "test": "jest --coverage"
   },
   "jest": {
