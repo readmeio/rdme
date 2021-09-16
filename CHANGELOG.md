@@ -1,3 +1,11 @@
+## <small>5.1.4 (2021-09-16)</small>
+
+* chore(deps-dev): bumping deps ([3c59ca1](https://github.com/readmeio/rdme/commit/3c59ca1))
+* chore(deps): bumping the oas dep ([398d492](https://github.com/readmeio/rdme/commit/398d492))
+* docs: adding a security policy ([8686a3e](https://github.com/readmeio/rdme/commit/8686a3e))
+
+
+
 ## <small>5.1.3 (2021-09-01)</small>
 
 * chore(deps-dev): bump @readme/eslint-config from 6.0.0 to 6.1.0 (#366) ([b0dde02](https://github.com/readmeio/rdme/commit/b0dde02)), closes [#366](https://github.com/readmeio/rdme/issues/366)
