@@ -1,3 +1,18 @@
+## 5.2.0 (2021-10-05)
+
+* chore: cleaning up some funky test logic ([3144e64](https://github.com/readmeio/rdme/commit/3144e64))
+* chore(deps-dev): bump @readme/eslint-config from 7.1.1 to 7.2.2 (#377) ([0e55604](https://github.com/readmeio/rdme/commit/0e55604)), closes [#377](https://github.com/readmeio/rdme/issues/377)
+* chore(deps-dev): bump jest from 27.2.0 to 27.2.4 (#372) ([c726b18](https://github.com/readmeio/rdme/commit/c726b18)), closes [#372](https://github.com/readmeio/rdme/issues/372)
+* chore(deps): bump actions/setup-node from 2.4.0 to 2.4.1 (#370) ([73d217d](https://github.com/readmeio/rdme/commit/73d217d)), closes [#370](https://github.com/readmeio/rdme/issues/370)
+* chore(deps): bump node-fetch from 2.6.1 to 2.6.5 (#373) ([fd383f9](https://github.com/readmeio/rdme/commit/fd383f9)), closes [#373](https://github.com/readmeio/rdme/issues/373)
+* chore(deps): bump oas-normalize from 4.0.1 to 4.0.2 (#374) ([8cdefcc](https://github.com/readmeio/rdme/commit/8cdefcc)), closes [#374](https://github.com/readmeio/rdme/issues/374)
+* chore(deps): bump oas-normalize from 4.0.2 to 4.0.3 (#376) ([58d6ac4](https://github.com/readmeio/rdme/commit/58d6ac4)), closes [#376](https://github.com/readmeio/rdme/issues/376)
+* ci: ignoring table-layout from dependabot because its now an esm-only pkg ([94bbcbe](https://github.com/readmeio/rdme/commit/94bbcbe))
+* fix: allow customers to define the slug in the metadata (#375) ([137411d](https://github.com/readmeio/rdme/commit/137411d)), closes [#375](https://github.com/readmeio/rdme/issues/375)
+* docs: adding a code of conduct ([35023d7](https://github.com/readmeio/rdme/commit/35023d7))
+
+
+
 ## <small>5.1.4 (2021-09-16)</small>
 
 * chore(deps-dev): bumping deps ([3c59ca1](https://github.com/readmeio/rdme/commit/3c59ca1))
