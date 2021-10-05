@@ -40,20 +40,21 @@ describe('prompt test bed', () => {
   describe('generatePrompts()', () => {
     it('should not allow selection of version if chosen to create new version', async () => {
       enquirer.on('prompt', async prompt => {
-        if (prompt.name === 'option') {
-          await prompt.keypress(null, { name: 'down' });
-          await prompt.submit();
-        }
+        // eslint-disable-next-line default-case
+        switch (prompt.name) {
+          case 'option':
+            await prompt.keypress(null, { name: 'down' });
+            await prompt.submit();
+            break;
 
-        // eslint-disable-next-line jest/no-if
-        if (prompt.name === 'versionSelection') {
-          expect(await prompt.skip()).toBe(true);
-        }
+          case 'versionSelection':
+            await expect(prompt.skip()).resolves.toBe(true);
+            break;
 
-        if (prompt.name === 'newVersion') {
-          // eslint-disable-next-line no-param-reassign
-          prompt.value = '1.2.1';
-          await prompt.submit();
+          case 'newVersion':
+            // eslint-disable-next-line no-param-reassign
+            prompt.value = '1.2.1';
+            await prompt.submit();
         }
       });
 
