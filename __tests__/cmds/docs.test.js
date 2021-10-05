@@ -277,6 +277,40 @@ describe('rdme docs', () => {
       });
     });
   });
+
+  describe('slug metadata', () => {
+    it('should use provided slug', () => {
+      const slug = 'new-doc-slug';
+      const doc = frontMatter(fs.readFileSync(path.join(fixturesDir, `/slug-docs/${slug}.md`)));
+      const hash = hashFileContents(fs.readFileSync(path.join(fixturesDir, `/slug-docs/${slug}.md`)));
+
+      const getMock = getNockWithVersionHeader(version)
+        .get(`/api/v1/docs/${doc.data.slug}`)
+        .basicAuth({ user: key })
+        .reply(404, {
+          error: 'DOC_NOTFOUND',
+          message: `The doc with the slug '${slug}' couldn't be found`,
+          suggestion: '...a suggestion to resolve the issue...',
+          help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
+        });
+
+      const postMock = getNockWithVersionHeader(version)
+        .post(`/api/v1/docs`, { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
+        .basicAuth({ user: key })
+        .reply(201, { slug: doc.data.slug, body: doc.content, ...doc.data, lastUpdatedHash: hash });
+
+      const versionMock = nock(config.host)
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version });
+
+      return docs.run({ folder: './__tests__/__fixtures__/slug-docs', key, version }).then(() => {
+        getMock.done();
+        postMock.done();
+        versionMock.done();
+      });
+    });
+  });
 });
 
 describe('rdme docs:edit', () => {
