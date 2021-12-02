@@ -35,13 +35,13 @@ describe('rdme openapi', () => {
     promptHandler.createOasPrompt.mockResolvedValue({ option: 'create' });
 
     const mock = nock(config.host)
-      .get(`/api/v1/version`)
+      .get('/api/v1/version')
       .basicAuth({ user: key })
       .reply(200, [{ version }])
       .post('/api/v1/version')
       .basicAuth({ user: key })
       .reply(200, { from: '1.0.1', version: '1.0.1' })
-      .get(`/api/v1/api-specification`)
+      .get('/api/v1/api-specification')
       .basicAuth({ user: key })
       .reply(200, [])
       .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
@@ -73,7 +73,7 @@ describe('rdme openapi', () => {
       .get(`/api/v1/version/${version}`)
       .basicAuth({ user: key })
       .reply(200, { version: '1.0.0' })
-      .get(`/api/v1/api-specification`)
+      .get('/api/v1/api-specification')
       .basicAuth({ user: key })
       .reply(200, [])
       .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
@@ -99,7 +99,7 @@ describe('rdme openapi', () => {
 
   it('should POST to the swagger api if no id provided', () => {
     const mock = nock(config.host)
-      .get(`/api/v1/api-specification`)
+      .get('/api/v1/api-specification')
       .basicAuth({ user: key })
       .reply(200, [])
       .get(`/api/v1/version/${version}`)
@@ -127,7 +127,7 @@ describe('rdme openapi', () => {
       .get(`/api/v1/version/${version}`)
       .basicAuth({ user: key })
       .reply(200, { version: '1.0.0' })
-      .get(`/api/v1/api-specification`)
+      .get('/api/v1/api-specification')
       .basicAuth({ user: key })
       .reply(200, [])
       .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
@@ -165,7 +165,7 @@ describe('rdme openapi', () => {
       .post('/api/v1/version')
       .basicAuth({ user: key })
       .reply(200, { from: '1.0.1', version: '1.0.1' })
-      .get(`/api/v1/api-specification`)
+      .get('/api/v1/api-specification')
       .basicAuth({ user: key })
       .reply(200, [])
       .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
@@ -213,7 +213,7 @@ describe('rdme openapi', () => {
   it('should bundle and upload the expected content', () => {
     let requestBody = null;
     const mock = nock(config.host)
-      .get(`/api/v1/api-specification`)
+      .get('/api/v1/api-specification')
       .basicAuth({ user: key })
       .reply(200, [])
       .get(`/api/v1/version/${version}`)
