@@ -9,9 +9,18 @@ on:
     - cron: '0 12 * * 1'
 
 jobs:
-  CodeQL-Build:
-
+  analyze:
+    name: Analyze
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'javascript' ]
 
     steps:
       - name: Checkout repository
@@ -20,8 +29,7 @@ jobs:
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v1
         with:
-          languages: javascript
-          config-file: ./.github/codeql/config.yml
+          languages: ${{ matrix.language }}
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v1
