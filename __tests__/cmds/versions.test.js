@@ -113,7 +113,7 @@ describe('rdme versions*', () => {
         .get('/api/v1/version')
         .basicAuth({ user: key })
         .reply(200, [{ version }, { version }])
-        .post(`/api/v1/version`)
+        .post('/api/v1/version')
         .basicAuth({ user: key })
         .reply(201, { version });
 

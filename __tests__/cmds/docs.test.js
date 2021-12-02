@@ -71,10 +71,10 @@ describe('rdme docs', () => {
       expect.assertions(1);
 
       const getMocks = getNockWithVersionHeader(version)
-        .get(`/api/v1/docs/simple-doc`)
+        .get('/api/v1/docs/simple-doc')
         .basicAuth({ user: key })
         .reply(200, { category, slug: simpleDoc.slug, lastUpdatedHash: 'anOldHash' })
-        .get(`/api/v1/docs/another-doc`)
+        .get('/api/v1/docs/another-doc')
         .basicAuth({ user: key })
         .reply(200, { category, slug: anotherDoc.slug, lastUpdatedHash: 'anOldHash' });
 
@@ -170,7 +170,7 @@ describe('rdme docs', () => {
         });
 
       const postMock = getNockWithVersionHeader(version)
-        .post(`/api/v1/docs`, { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
+        .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
         .reply(201, { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
@@ -295,7 +295,7 @@ describe('rdme docs', () => {
         });
 
       const postMock = getNockWithVersionHeader(version)
-        .post(`/api/v1/docs`, { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
+        .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
         .reply(201, { slug: doc.data.slug, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
