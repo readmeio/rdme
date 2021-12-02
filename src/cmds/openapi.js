@@ -1,4 +1,4 @@
-require('colors');
+const chalk = require('chalk');
 const fs = require('fs');
 const config = require('config');
 const { prompt } = require('enquirer');
@@ -77,12 +77,12 @@ exports.run = async function (opts) {
         [
           message,
           '',
-          `\t${`${data.headers.get('location')}`.green}`,
+          `\t${chalk.green(`${data.headers.get('location')}`)}`,
           '',
           'To update your OpenAPI or Swagger file, run the following:',
           '',
           // eslint-disable-next-line no-underscore-dangle
-          `\trdme openapi FILE --key=${key} --id=${body._id}`.green,
+          `\t${chalk.green(`rdme openapi FILE --key=${key} --id=${body._id}`)}`,
         ].join('\n')
       );
     }
@@ -143,7 +143,7 @@ exports.run = async function (opts) {
           if (res.ok) return success(res);
           return error(res);
         })
-        .catch(err => console.log(`\n ${err.message}\n`.red));
+        .catch(err => console.log(chalk.red(`\n ${err.message}\n`)));
     }
 
     function updateSpec(specId) {
@@ -154,7 +154,7 @@ exports.run = async function (opts) {
           if (res.ok) return success(res);
           return error(res);
         })
-        .catch(err => console.log(`\n ${err.message}\n`.red));
+        .catch(err => console.log(chalk.red(`\n ${err.message}\n`)));
     }
 
     /*
@@ -213,7 +213,7 @@ exports.run = async function (opts) {
         return;
       }
 
-      console.log(`We found ${file} and are attempting to upload it.`.yellow);
+      console.log(chalk.yellow(`We found ${file} and are attempting to upload it.`));
       resolve(callApi(file, selectedVersion));
     });
 

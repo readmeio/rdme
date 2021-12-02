@@ -1,3 +1,4 @@
+const chalk = require('chalk');
 const config = require('config');
 const configStore = require('../lib/configstore');
 const loginCmd = require('./login');
@@ -16,8 +17,8 @@ exports.run = () => {
   }
 
   return Promise.resolve(
-    `You are currently logged in as ${configStore.get('email').green} to the ${
-      configStore.get('project').blue
-    } project.`
+    `You are currently logged in as ${chalk.green(configStore.get('email'))} to the ${chalk.blue(
+      configStore.get('project')
+    )} project.`
   );
 };

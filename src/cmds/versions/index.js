@@ -1,3 +1,4 @@
+const chalk = require('chalk');
 const Table = require('cli-table');
 const config = require('config');
 const versionsCreate = require('./create');
@@ -32,13 +33,13 @@ exports.args = [
 const getVersionsAsTable = versions => {
   const table = new Table({
     head: [
-      'Version'.bold,
-      'Codename'.bold,
-      'Is deprecated'.bold,
-      'Is hidden'.bold,
-      'Is beta'.bold,
-      'Is stable'.bold,
-      'Created on'.bold,
+      chalk.bold('Version'),
+      chalk.bold('Codename'),
+      chalk.bold('Is deprecated'),
+      chalk.bold('Is hidden'),
+      chalk.bold('Is beta'),
+      chalk.bold('Is stable'),
+      chalk.bold('Created on'),
     ],
   });
 
@@ -59,14 +60,14 @@ const getVersionsAsTable = versions => {
 
 const getVersionFormatted = version => {
   const output = [
-    `${'Version:'.bold} ${version.version}`,
-    `${'Codename:'.bold} ${version.codename || 'None'}`,
-    `${'Created on:'.bold} ${version.createdAt}`,
-    `${'Released on:'.bold} ${version.releaseDate}`,
+    `${chalk.bold('Version:')} ${version.version}`,
+    `${chalk.bold('Codename:')} ${version.codename || 'None'}`,
+    `${chalk.bold('Created on:')} ${version.createdAt}`,
+    `${chalk.bold('Released on:')} ${version.releaseDate}`,
   ];
 
   const table = new Table({
-    head: ['Is deprecated'.bold, 'Is hidden'.bold, 'Is beta'.bold, 'Is stable'.bold],
+    head: [chalk.bold('Is deprecated'), chalk.bold('Is hidden'), chalk.bold('Is beta'), chalk.bold('Is stable')],
   });
 
   table.push([

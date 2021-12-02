@@ -1,17 +1,18 @@
+const chalk = require('chalk');
 const config = require('config');
 const Table = require('table-layout');
 const usage = require('command-line-usage');
 const commands = require('./commands');
 
 function styleCommand(command) {
-  return `${'$'.grey} ${config.cli} ${command.name}`;
+  return `${chalk.grey('$')} ${config.cli} ${command.name}`;
 }
 
 const owlbert = () => {
   // http://asciiart.club
-  return `                    ${config.cli.blue.bold}
+  return `                  📖 ${chalk.blue.bold(config.cli)}
 
-    ${`a utlity for interacting with ReadMe`.bold}
+    ${chalk.bold(`a utlity for interacting with ReadMe`)}
        .
        .\\\\                          /.
       ’  ‘                        ‘ ‘
@@ -110,7 +111,7 @@ exports.globalUsage = async args => {
         });
       });
 
-    availableCommands.push(`  ${commandCategory.header.bold}`);
+    availableCommands.push(`  ${chalk.bold(commandCategory.header)}`);
     availableCommands = availableCommands.concat(
       new Table(commandCategory.content, {
         columns: [
@@ -140,7 +141,7 @@ exports.globalUsage = async args => {
   });
 
   helpContent.push({
-    content: `Run ${`${config.cli} help <command>`.dim} for help with a specific command.`,
+    content: `Run ${chalk.dim(`${config.cli} help <command>`)} for help with a specific command.`,
     raw: true,
   });
 

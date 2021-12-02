@@ -1,4 +1,4 @@
-require('colors');
+const chalk = require('chalk');
 const config = require('config');
 const open = require('open');
 const configStore = require('../lib/configstore');
@@ -22,6 +22,6 @@ exports.run = function (opts) {
     wait: false,
     url: true,
   }).then(() => {
-    console.log(`Opening ${config.hub.replace('{project}', project).green} in your browser...`);
+    console.log(`Opening ${chalk.green(config.hub.replace('{project}', project))} in your browser...`);
   });
 };

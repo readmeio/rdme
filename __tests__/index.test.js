@@ -1,5 +1,3 @@
-require('colors');
-
 const nock = require('nock');
 const cli = require('../src');
 const { version } = require('../package.json');
