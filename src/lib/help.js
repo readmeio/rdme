@@ -10,7 +10,7 @@ function styleCommand(command) {
 
 const owlbert = () => {
   // http://asciiart.club
-  return `                  📖 ${chalk.blue.bold(config.cli)}
+  return `                    ${chalk.blue.bold(config.cli)}
 
     ${chalk.bold(`a utlity for interacting with ReadMe`)}
        .
