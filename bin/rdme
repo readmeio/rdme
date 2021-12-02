@@ -1,5 +1,5 @@
 #! /usr/bin/env node
-require('colors');
+const chalk = require('chalk');
 
 require('../src')(process.argv.slice(2))
   .then(msg => {
@@ -11,12 +11,14 @@ require('../src')(process.argv.slice(2))
       const err = e;
 
       if ('message' in err) {
-        console.error(err.message.red);
+        console.error(chalk.red(err.message));
       } else {
         console.error(
-          `Yikes, something went wrong! Please try again and if the problem persists, get in touch with our support team at ${
-            `support@readme.io`.underline
-          }.\n`.red
+          chalk.red(
+            `Yikes, something went wrong! Please try again and if the problem persists, get in touch with our support team at ${chalk.underline(
+              'support@readme.io'
+            )}.\n`
+          )
         );
       }
     }

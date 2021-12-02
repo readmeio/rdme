@@ -1,4 +1,3 @@
-require('colors');
 const openapi = require('./openapi');
 
 exports.command = 'swagger';

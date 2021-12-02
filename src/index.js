@@ -1,4 +1,5 @@
 /* eslint-disable no-underscore-dangle */
+const chalk = require('chalk');
 const cliArgs = require('command-line-args');
 const path = require('path');
 // We have to do this otherwise `require('config')` loads
@@ -112,7 +113,7 @@ module.exports = processArgv => {
     return bin.run(cmdArgv);
   } catch (e) {
     if (e.message === 'Command not found.') {
-      e.description = `Type \`${`${config.cli} help`.yellow}\` ${`to see all commands`.red}`;
+      e.description = `Type \`${chalk.yellow(`${config.cli} help`)}\` ${chalk.red('to see all commands')}`;
     }
 
     return Promise.reject(e);

@@ -1,3 +1,4 @@
+const chalk = require('chalk');
 const config = require('config');
 const { validate: isEmail } = require('isemail');
 const { promisify } = require('util');
@@ -74,6 +75,6 @@ exports.run = async function (opts) {
       configStore.set('email', email);
       configStore.set('project', project);
 
-      return `Successfully logged in as ${email.green} to the ${project.blue} project.`;
+      return `Successfully logged in as ${chalk.green(email)} to the ${chalk.blue(project)} project.`;
     });
 };

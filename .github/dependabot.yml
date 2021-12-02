@@ -25,11 +25,15 @@ updates:
       prefix: chore(deps)
       prefix-development: chore(deps-dev)
     ignore:
+      # chalk is now an ESM package and can't be used here without a rewrite.
+      - dependency-name: chalk
+        versions:
+          - ">= 5"
       # node-fetch is now an ESM package and can't be used here without a rewrite.
       - dependency-name: node-fetch
         versions:
           - ">= 3"
-      # node-fetch is now an ESM package and can't be used here without a rewrite.
+      # table-layout is now an ESM package and can't be used here without a rewrite.
       - dependency-name: table-layout
         versions:
           - ">= 3"
