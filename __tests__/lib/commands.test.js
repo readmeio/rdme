@@ -34,7 +34,8 @@ describe('utils', () => {
         commands.list().forEach(c => {
           const cmd = c.command;
 
-          expect(cmd.description[cmd.description.length - 1]).toBe('.');
+          // Command descriptions should end with punctuation.
+          expect(cmd.description[cmd.description.length - 1]).toMatch(/(.|])/);
 
           cmd.args.forEach(arg => {
             if (arg.name === 'key') {

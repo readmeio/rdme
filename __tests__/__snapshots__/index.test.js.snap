@@ -1,0 +1,241 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`cli --help should not surface args that are designated as hidden 1`] = `
+"
+Alias for \\"rdme openapi\\". [deprecated]
+
+Usage
+
+  rdme swagger [file] [options] 
+
+Options
+
+  --key string       Project API key                                            
+  --id string        Unique identifier for your specification. Use this if      
+                     you're resyncing an existing specification                 
+  --version string   Project version                                            
+  -h, --help         Display this usage guide                                   
+
+Related commands
+
+  $ rdme openapi          Upload, or sync, your OpenAPI/Swagger file to ReadMe. 
+"
+`;
+
+exports[`cli --help should print help 1`] = `
+"
+                  📖 rdme
+
+    a utlity for interacting with ReadMe
+       .
+       .\\\\                          /.
+      ’  ‘                        ‘ ‘
+      ( nn\\\\    .           .     /  )
+      (nnnnn,.MM.          AM   .nn.
+       .nnnndMM----_______--M.’’   /
+       |nnn/nnnnnnnnnnnnnnnnn\\\\’mmm/
+       /nnnn...nnnnnnnnnnn...mmmmm\\\\
+      /nn        ‘qnnnP’       ‘mmm\\\\
+      /n’   .XXX. \\\\nnn/   .XX.  \\\\mmb
+      An   (XOXX)  nnn   (XOXX)  mm\\\\
+     /nn   ‘XXXX’.~”~.   ‘XXX”’ .mmmb
+     dnnn.      (    )n.       .mmmmb
+    .nnnnnn....n.\\\\ ./nnnnnnnnnmmmmmm\\\\
+  (READnnnnnnnnnnn’Y’nnnnnnnnnnmmmmmmME)
+  REinnnnnnnnnnnnnnnnnnnnnnnnnmmmmmmmAD/
+ /MEEnnnnnnnnnnnnnnnnnnnnnnnnnmmmmmmm)E'.
+ READnnnnnnn*’             ‘*mmmmmmmm)MEE.
+(READ|nnnn’    \\\\../  \\\\.../    ‘mmmmmM)EEE)
+ READ(nn*’                      ‘mmm.MEEE)
+  ‘READn’  \\\\._./  \\\\__./  \\\\.../     ‘MEE*’
+       *                           /*
+
+Usage
+
+  rdme <command> [arguments] 
+
+Options
+
+  -h, --help       Display this usage guide      
+  -v, --version    Show the current rdme version 
+
+Administration
+
+  $ rdme login            Login to a ReadMe project.                            
+  $ rdme logout           Logs the currently authenticated user out of ReadMe.  
+  $ rdme whoami           Displays the current user and project authenticated   
+                          with ReadMe.                                          
+
+Upload OpenAPI/Swagger definitions
+
+  $ rdme openapi          Upload, or sync, your OpenAPI/Swagger file to ReadMe. 
+  $ rdme swagger          Alias for \\"rdme openapi\\". [deprecated]                
+
+Documentation
+
+  $ rdme docs:edit        Edit a single file from your ReadMe project without   
+                          saving locally.                                       
+  $ rdme docs             Sync a folder of markdown files to your ReadMe        
+                          project.                                              
+
+Versions
+
+  $ rdme versions:create  Create a new version for your project.                
+  $ rdme versions:delete  Delete a version associated with your ReadMe project. 
+  $ rdme versions         List versions available in your project or get a      
+                          version by SemVer (https://semver.org/).              
+  $ rdme versions:update  Update an existing version for your project.          
+
+Other useful commands
+
+  $ rdme oas              Helpful OpenAPI generation tooling.              
+  $ rdme open             Open your current ReadMe project in the browser. 
+
+Run rdme help <command> for help with a specific command.
+
+To get more help with ReadMe, checkout our docs at https://docs.readme.com.
+"
+`;
+
+exports[`cli --help should print help for the \`-H\` alias 1`] = `
+"
+                  📖 rdme
+
+    a utlity for interacting with ReadMe
+       .
+       .\\\\                          /.
+      ’  ‘                        ‘ ‘
+      ( nn\\\\    .           .     /  )
+      (nnnnn,.MM.          AM   .nn.
+       .nnnndMM----_______--M.’’   /
+       |nnn/nnnnnnnnnnnnnnnnn\\\\’mmm/
+       /nnnn...nnnnnnnnnnn...mmmmm\\\\
+      /nn        ‘qnnnP’       ‘mmm\\\\
+      /n’   .XXX. \\\\nnn/   .XX.  \\\\mmb
+      An   (XOXX)  nnn   (XOXX)  mm\\\\
+     /nn   ‘XXXX’.~”~.   ‘XXX”’ .mmmb
+     dnnn.      (    )n.       .mmmmb
+    .nnnnnn....n.\\\\ ./nnnnnnnnnmmmmmm\\\\
+  (READnnnnnnnnnnn’Y’nnnnnnnnnnmmmmmmME)
+  REinnnnnnnnnnnnnnnnnnnnnnnnnmmmmmmmAD/
+ /MEEnnnnnnnnnnnnnnnnnnnnnnnnnmmmmmmm)E'.
+ READnnnnnnn*’             ‘*mmmmmmmm)MEE.
+(READ|nnnn’    \\\\../  \\\\.../    ‘mmmmmM)EEE)
+ READ(nn*’                      ‘mmm.MEEE)
+  ‘READn’  \\\\._./  \\\\__./  \\\\.../     ‘MEE*’
+       *                           /*
+
+Usage
+
+  rdme <command> [arguments] 
+
+Options
+
+  -h, --help       Display this usage guide      
+  -v, --version    Show the current rdme version 
+
+Administration
+
+  $ rdme login            Login to a ReadMe project.                            
+  $ rdme logout           Logs the currently authenticated user out of ReadMe.  
+  $ rdme whoami           Displays the current user and project authenticated   
+                          with ReadMe.                                          
+
+Upload OpenAPI/Swagger definitions
+
+  $ rdme openapi          Upload, or sync, your OpenAPI/Swagger file to ReadMe. 
+  $ rdme swagger          Alias for \\"rdme openapi\\". [deprecated]                
+
+Documentation
+
+  $ rdme docs:edit        Edit a single file from your ReadMe project without   
+                          saving locally.                                       
+  $ rdme docs             Sync a folder of markdown files to your ReadMe        
+                          project.                                              
+
+Versions
+
+  $ rdme versions:create  Create a new version for your project.                
+  $ rdme versions:delete  Delete a version associated with your ReadMe project. 
+  $ rdme versions         List versions available in your project or get a      
+                          version by SemVer (https://semver.org/).              
+  $ rdme versions:update  Update an existing version for your project.          
+
+Other useful commands
+
+  $ rdme oas              Helpful OpenAPI generation tooling.              
+  $ rdme open             Open your current ReadMe project in the browser. 
+
+Run rdme help <command> for help with a specific command.
+
+To get more help with ReadMe, checkout our docs at https://docs.readme.com.
+"
+`;
+
+exports[`cli --help should print usage for a given command 1`] = `
+"
+Alias for \\"rdme openapi\\". [deprecated]
+
+Usage
+
+  rdme swagger [file] [options] 
+
+Options
+
+  --key string       Project API key                                            
+  --id string        Unique identifier for your specification. Use this if      
+                     you're resyncing an existing specification                 
+  --version string   Project version                                            
+  -h, --help         Display this usage guide                                   
+
+Related commands
+
+  $ rdme openapi          Upload, or sync, your OpenAPI/Swagger file to ReadMe. 
+"
+`;
+
+exports[`cli --help should print usage for a given command if supplied as \`help <command>\` 1`] = `
+"
+Alias for \\"rdme openapi\\". [deprecated]
+
+Usage
+
+  rdme swagger [file] [options] 
+
+Options
+
+  --key string       Project API key                                            
+  --id string        Unique identifier for your specification. Use this if      
+                     you're resyncing an existing specification                 
+  --version string   Project version                                            
+  -h, --help         Display this usage guide                                   
+
+Related commands
+
+  $ rdme openapi          Upload, or sync, your OpenAPI/Swagger file to ReadMe. 
+"
+`;
+
+exports[`cli --help should show related commands for a subcommands help menu 1`] = `
+"
+List versions available in your project or get a version by SemVer (https://semver.org/).
+
+Usage
+
+  rdme versions [options] 
+
+Options
+
+  --key string       Project API key                                            
+  --version string   A specific project version to view                         
+  --raw              Return raw output from the API instead of in a \\"pretty\\"    
+                     format.                                                    
+  -h, --help         Display this usage guide                                   
+
+Related commands
+
+  $ rdme versions:create  Create a new version for your project.                
+  $ rdme versions:delete  Delete a version associated with your ReadMe project. 
+  $ rdme versions:update  Update an existing version for your project.          
+"
+`;

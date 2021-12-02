@@ -72,7 +72,7 @@ exports.getCategories = () => {
       commands: [],
     },
     apis: {
-      description: 'Sync Swagger/OpenAPI files',
+      description: 'Upload OpenAPI/Swagger definitions',
       commands: [],
     },
     docs: {
