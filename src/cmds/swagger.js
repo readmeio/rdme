@@ -2,7 +2,7 @@ const openapi = require('./openapi');
 
 exports.command = 'swagger';
 exports.usage = 'swagger [file] [options]';
-exports.description = `Alias for "rdme openapi". [deprecated]`;
+exports.description = 'Alias for `rdme openapi`. [deprecated]';
 exports.category = 'apis';
 exports.position = 2;
 
