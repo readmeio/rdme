@@ -2,7 +2,7 @@
 
 exports[`cli --help should not surface args that are designated as hidden 1`] = `
 "
-Alias for \\"rdme openapi\\". [deprecated]
+Alias for \`rdme openapi\`. [deprecated]
 
 [4m[1mUsage[22m[24m
 
@@ -68,7 +68,7 @@ exports[`cli --help should print help 1`] = `
 [4m[1mUpload OpenAPI/Swagger definitions[22m[24m
 
   [90m$[39m rdme openapi   Upload, or sync, your OpenAPI/Swagger file to ReadMe. 
-  [90m$[39m rdme swagger   Alias for \\"rdme openapi\\". [deprecated]                
+  [90m$[39m rdme swagger   Alias for \`rdme openapi\`. [deprecated]                
 
 [4m[1mDocumentation[22m[24m
 
@@ -140,7 +140,7 @@ exports[`cli --help should print help for the \`-H\` alias 1`] = `
 [4m[1mUpload OpenAPI/Swagger definitions[22m[24m
 
   [90m$[39m rdme openapi   Upload, or sync, your OpenAPI/Swagger file to ReadMe. 
-  [90m$[39m rdme swagger   Alias for \\"rdme openapi\\". [deprecated]                
+  [90m$[39m rdme swagger   Alias for \`rdme openapi\`. [deprecated]                
 
 [4m[1mDocumentation[22m[24m
 
@@ -168,7 +168,7 @@ To get more help with ReadMe, checkout our docs at https://docs.readme.com.
 
 exports[`cli --help should print usage for a given command 1`] = `
 "
-Alias for \\"rdme openapi\\". [deprecated]
+Alias for \`rdme openapi\`. [deprecated]
 
 [4m[1mUsage[22m[24m
 
@@ -190,7 +190,7 @@ Alias for \\"rdme openapi\\". [deprecated]
 
 exports[`cli --help should print usage for a given command if supplied as \`help <command>\` 1`] = `
 "
-Alias for \\"rdme openapi\\". [deprecated]
+Alias for \`rdme openapi\`. [deprecated]
 
 [4m[1mUsage[22m[24m
 
