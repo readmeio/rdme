@@ -1,23 +1,17 @@
 const chalk = require('chalk');
 const config = require('config');
-const Table = require('table-layout');
 const usage = require('command-line-usage');
 const commands = require('./commands');
 
-function tableizeCommands(cmds) {
-  const content = cmds.map(command => {
-    return {
-      name: `${chalk.grey('$')} ${config.cli} ${command.name}`,
-      description: command.description,
-    };
-  });
-
-  return new Table(content, {
-    columns: [
-      { name: 'name', noWrap: true, width: 25, padding: { left: '  ', right: '' } },
-      { name: 'description', maxWidth: 65 },
-    ],
-  }).renderLines();
+function formatCommands(cmds) {
+  return cmds
+    .sort((a, b) => (a.position > b.position ? 1 : -1))
+    .map(command => {
+      return {
+        name: `${chalk.grey('$')} ${config.cli} ${command.name}`,
+        summary: command.description,
+      };
+    });
 }
 
 const owlbert = () => {
@@ -77,7 +71,7 @@ exports.commandUsage = cmd => {
   if (similarCommands.length) {
     helpContent.push({
       header: 'Related commands',
-      content: tableizeCommands(similarCommands),
+      content: formatCommands(similarCommands),
     });
   }
 
@@ -108,8 +102,7 @@ exports.globalUsage = async args => {
 
     helpContent.push({
       header: category.description,
-      content: tableizeCommands(category.commands),
-      raw: true,
+      content: formatCommands(category.commands),
     });
   });
 

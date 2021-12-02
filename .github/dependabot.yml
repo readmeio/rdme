@@ -33,7 +33,3 @@ updates:
       - dependency-name: node-fetch
         versions:
           - ">= 3"
-      # table-layout is now an ESM package and can't be used here without a rewrite.
-      - dependency-name: table-layout
-        versions:
-          - ">= 3"
