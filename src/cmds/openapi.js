@@ -14,7 +14,7 @@ const { file: tmpFile } = require('tmp-promise');
 
 exports.command = 'openapi';
 exports.usage = 'openapi [file] [options]';
-exports.description = 'Upload, or sync, your OpenAPI/Swagger file to ReadMe.';
+exports.description = 'Upload, or resync, your OpenAPI/Swagger definition to ReadMe.';
 exports.category = 'apis';
 exports.position = 1;
 
@@ -28,7 +28,7 @@ exports.args = [
   {
     name: 'id',
     type: String,
-    description: `Unique identifier for your specification. Use this if you're resyncing an existing specification`,
+    description: `Unique identifier for your API definition. Use this if you're resyncing an existing API definition`,
   },
   {
     name: 'token',
@@ -79,7 +79,7 @@ exports.run = async function (opts) {
           '',
           `\t${chalk.green(`${data.headers.get('location')}`)}`,
           '',
-          'To update your OpenAPI or Swagger file, run the following:',
+          'To update your OpenAPI or Swagger definition, run the following:',
           '',
           // eslint-disable-next-line no-underscore-dangle
           `\t${chalk.green(`rdme openapi FILE --key=${key} --id=${body._id}`)}`,
@@ -105,8 +105,8 @@ exports.run = async function (opts) {
     }
 
     let bundledSpec;
-    const oas = new OASNormalize(specPath, { enablePaths: true });
-    await oas.validate().catch(err => {
+    const oas = new OASNormalize(specPath, { colorizeErrors: true, enablePaths: true });
+    await oas.validate(false, { validate: { colorizeErrors: true } }).catch(err => {
       return Promise.reject(err);
     });
     await oas
@@ -205,7 +205,7 @@ exports.run = async function (opts) {
     return callApi(spec, selectedVersion);
   }
 
-  // If the user didn't supply a specification, let's try to locate what they've got, and upload
+  // If the user didn't supply an API specification, let's try to locate what they've got, and upload
   // that. If they don't have any, let's let the user know how they can get one going.
   return new Promise((resolve, reject) => {
     ['swagger.json', 'swagger.yaml', 'openapi.json', 'openapi.yaml'].forEach(file => {
@@ -219,8 +219,8 @@ exports.run = async function (opts) {
 
     reject(
       new Error(
-        "We couldn't find an OpenAPI or Swagger file.\n\n" +
-          'Run `rdme openapi ./path/to/file` to upload an existing file or `rdme oas init` to create a fresh one!'
+        "We couldn't find an OpenAPI or Swagger definition.\n\n" +
+          'Run `rdme openapi ./path/to/api/definition` to upload an existing definition or `rdme oas init` to create a fresh one!'
       )
     );
   });
