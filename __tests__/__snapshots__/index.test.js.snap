@@ -11,14 +11,14 @@ Alias for \`rdme openapi\`. [deprecated]
 [4m[1mOptions[22m[24m
 
   [1m--key[22m [4mstring[24m       Project API key                                                               
-  [1m--id[22m [4mstring[24m        Unique identifier for your specification. Use this if you're resyncing an     
-                     existing specification                                                        
+  [1m--id[22m [4mstring[24m        Unique identifier for your API definition. Use this if you're resyncing an    
+                     existing API definition                                                       
   [1m--version[22m [4mstring[24m   Project version                                                               
   [1m-h[22m, [1m--help[22m         Display this usage guide                                                      
 
 [4m[1mRelated commands[22m[24m
 
-  [90m$[39m rdme openapi   Upload, or sync, your OpenAPI/Swagger file to ReadMe. 
+  [90m$[39m rdme openapi   Upload, or resync, your OpenAPI/Swagger definition to ReadMe. 
 "
 `;
 
@@ -67,8 +67,8 @@ exports[`cli --help should print help 1`] = `
 
 [4m[1mUpload OpenAPI/Swagger definitions[22m[24m
 
-  [90m$[39m rdme openapi   Upload, or sync, your OpenAPI/Swagger file to ReadMe. 
-  [90m$[39m rdme swagger   Alias for \`rdme openapi\`. [deprecated]                
+  [90m$[39m rdme openapi   Upload, or resync, your OpenAPI/Swagger definition to ReadMe. 
+  [90m$[39m rdme swagger   Alias for \`rdme openapi\`. [deprecated]                        
 
 [4m[1mDocumentation[22m[24m
 
@@ -90,7 +90,7 @@ exports[`cli --help should print help 1`] = `
 
 Run [2mrdme help <command>[22m for help with a specific command.
 
-To get more help with ReadMe, checkout our docs at https://docs.readme.com.
+To get more help with ReadMe, check out our docs at https://docs.readme.com.
 "
 `;
 
@@ -139,8 +139,8 @@ exports[`cli --help should print help for the \`-H\` alias 1`] = `
 
 [4m[1mUpload OpenAPI/Swagger definitions[22m[24m
 
-  [90m$[39m rdme openapi   Upload, or sync, your OpenAPI/Swagger file to ReadMe. 
-  [90m$[39m rdme swagger   Alias for \`rdme openapi\`. [deprecated]                
+  [90m$[39m rdme openapi   Upload, or resync, your OpenAPI/Swagger definition to ReadMe. 
+  [90m$[39m rdme swagger   Alias for \`rdme openapi\`. [deprecated]                        
 
 [4m[1mDocumentation[22m[24m
 
@@ -162,7 +162,7 @@ exports[`cli --help should print help for the \`-H\` alias 1`] = `
 
 Run [2mrdme help <command>[22m for help with a specific command.
 
-To get more help with ReadMe, checkout our docs at https://docs.readme.com.
+To get more help with ReadMe, check out our docs at https://docs.readme.com.
 "
 `;
 
@@ -177,14 +177,14 @@ Alias for \`rdme openapi\`. [deprecated]
 [4m[1mOptions[22m[24m
 
   [1m--key[22m [4mstring[24m       Project API key                                                               
-  [1m--id[22m [4mstring[24m        Unique identifier for your specification. Use this if you're resyncing an     
-                     existing specification                                                        
+  [1m--id[22m [4mstring[24m        Unique identifier for your API definition. Use this if you're resyncing an    
+                     existing API definition                                                       
   [1m--version[22m [4mstring[24m   Project version                                                               
   [1m-h[22m, [1m--help[22m         Display this usage guide                                                      
 
 [4m[1mRelated commands[22m[24m
 
-  [90m$[39m rdme openapi   Upload, or sync, your OpenAPI/Swagger file to ReadMe. 
+  [90m$[39m rdme openapi   Upload, or resync, your OpenAPI/Swagger definition to ReadMe. 
 "
 `;
 
@@ -199,14 +199,14 @@ Alias for \`rdme openapi\`. [deprecated]
 [4m[1mOptions[22m[24m
 
   [1m--key[22m [4mstring[24m       Project API key                                                               
-  [1m--id[22m [4mstring[24m        Unique identifier for your specification. Use this if you're resyncing an     
-                     existing specification                                                        
+  [1m--id[22m [4mstring[24m        Unique identifier for your API definition. Use this if you're resyncing an    
+                     existing API definition                                                       
   [1m--version[22m [4mstring[24m   Project version                                                               
   [1m-h[22m, [1m--help[22m         Display this usage guide                                                      
 
 [4m[1mRelated commands[22m[24m
 
-  [90m$[39m rdme openapi   Upload, or sync, your OpenAPI/Swagger file to ReadMe. 
+  [90m$[39m rdme openapi   Upload, or resync, your OpenAPI/Swagger definition to ReadMe. 
 "
 `;
 

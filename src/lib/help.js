@@ -112,7 +112,7 @@ exports.globalUsage = async args => {
       raw: true,
     },
     {
-      content: `To get more help with ReadMe, checkout our docs at https://docs.readme.com.`,
+      content: `To get more help with ReadMe, check out our docs at https://docs.readme.com.`,
       raw: true,
     }
   );
