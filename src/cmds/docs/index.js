@@ -1,4 +1,4 @@
-require('colors');
+const chalk = require('chalk');
 const fs = require('fs');
 const path = require('path');
 const config = require('config');
@@ -134,7 +134,7 @@ exports.run = async function (opts) {
           return updateDoc(slug, matter, hash, res);
         })
         .catch(err => {
-          console.log(`\n\`${slug}\` failed to upload. ${err.message}\n`.red);
+          console.log(chalk.red(`\n\`${slug}\` failed to upload. ${err.message}\n`));
         });
     })
   );
