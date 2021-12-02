@@ -3,7 +3,7 @@ const path = require('path');
 
 exports.command = 'oas';
 exports.usage = 'oas';
-exports.description = 'OAS related tasks. See https://npm.im/oas for more information.';
+exports.description = 'Helpful OpenAPI generation tooling.';
 exports.category = 'utilities';
 exports.position = 1;
 
