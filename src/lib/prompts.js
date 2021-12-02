@@ -123,7 +123,6 @@ exports.createVersionPrompt = (versionList, opts, isUpdate) => [
     skip() {
       return opts.fork || isUpdate;
     },
-    // eslint-disable-next-line sonarjs/no-identical-functions
     choices: versionList.map(v => {
       return {
         message: v.version,

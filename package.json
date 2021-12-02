@@ -55,8 +55,8 @@
     "tmp-promise": "^3.0.2"
   },
   "devDependencies": {
-    "@readme/eslint-config": "^7.1.1",
-    "eslint": "^7.32.0",
+    "@readme/eslint-config": "^8.0.2",
+    "eslint": "^8.3.0",
     "jest": "^27.2.0",
     "nock": "^13.1.1",
     "prettier": "^2.4.1"
