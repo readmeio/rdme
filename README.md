@@ -40,7 +40,7 @@ If you wish to get more information about any command within `rdme`, you can exe
 * `--version <string>`: Your project version.
 
 ### OpenAPI / Swagger
-ReadMe supports both [OpenAPI 3.0.x](https://swagger.io/specification/) and [Swagger 2.x](https://swagger.io/specification/v2/).
+ReadMe supports [OpenAPI 3.0](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md), [OpenAPI 3.1](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md), and [Swagger 2.x](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/2.0.md).
 
 > ℹ️ Note that the `rdme openapi` command supports both OpenAPI and Swagger API definitions. The `rdme swagger` command is an alias for `rdme openapi` and is deprecated.
 
