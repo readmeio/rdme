@@ -1,3 +1,29 @@
+## 6.0.0 (2021-12-03)
+
+* docs: removing a dead link from the readme ([4b5308f](https://github.com/readmeio/rdme/commit/4b5308f))
+* docs: updating the readme to reflect our coming OpenAPI 3.1 support ([321d94b](https://github.com/readmeio/rdme/commit/321d94b))
+* feat: adding support for OpenAPI 3.1 (#378) ([2a6a240](https://github.com/readmeio/rdme/commit/2a6a240)), closes [#378](https://github.com/readmeio/rdme/issues/378)
+* feat: overhauling the help screen generator so it's consistent everywhere (#397) ([69fadd3](https://github.com/readmeio/rdme/commit/69fadd3)), closes [#397](https://github.com/readmeio/rdme/issues/397)
+* feat: swapping out the colors library for chalk (#396) ([7f252ae](https://github.com/readmeio/rdme/commit/7f252ae)), closes [#396](https://github.com/readmeio/rdme/issues/396)
+* chore: removing string templating where are aren't inserting vars ([738b70d](https://github.com/readmeio/rdme/commit/738b70d))
+* chore(deps-dev): bump jest from 27.2.4 to 27.3.1 (#383) ([0a0ae53](https://github.com/readmeio/rdme/commit/0a0ae53)), closes [#383](https://github.com/readmeio/rdme/issues/383)
+* chore(deps-dev): bump jest from 27.3.1 to 27.4.2 (#393) ([ad8f623](https://github.com/readmeio/rdme/commit/ad8f623)), closes [#393](https://github.com/readmeio/rdme/issues/393)
+* chore(deps-dev): bump jest from 27.4.2 to 27.4.3 (#400) ([2053211](https://github.com/readmeio/rdme/commit/2053211)), closes [#400](https://github.com/readmeio/rdme/issues/400)
+* chore(deps-dev): bump nock from 13.1.3 to 13.1.4 (#381) ([6322c30](https://github.com/readmeio/rdme/commit/6322c30)), closes [#381](https://github.com/readmeio/rdme/issues/381)
+* chore(deps-dev): bump nock from 13.1.4 to 13.2.1 (#394) ([c4f0f72](https://github.com/readmeio/rdme/commit/c4f0f72)), closes [#394](https://github.com/readmeio/rdme/issues/394)
+* chore(deps-dev): bump prettier from 2.4.1 to 2.5.0 (#391) ([718ef53](https://github.com/readmeio/rdme/commit/718ef53)), closes [#391](https://github.com/readmeio/rdme/issues/391)
+* chore(deps-dev): upgrading eslint and @readme/eslint-config ([b2f91ef](https://github.com/readmeio/rdme/commit/b2f91ef))
+* chore(deps): bump actions/checkout from 2.3.4 to 2.3.5 (#382) ([905a553](https://github.com/readmeio/rdme/commit/905a553)), closes [#382](https://github.com/readmeio/rdme/issues/382)
+* chore(deps): bump actions/checkout from 2.3.5 to 2.4.0 (#390) ([fa35d15](https://github.com/readmeio/rdme/commit/fa35d15)), closes [#390](https://github.com/readmeio/rdme/issues/390)
+* chore(deps): bump actions/setup-node from 2.4.1 to 2.5.0 (#392) ([de533c5](https://github.com/readmeio/rdme/commit/de533c5)), closes [#392](https://github.com/readmeio/rdme/issues/392)
+* chore(deps): bump cli-table from 0.3.1 to 0.3.9 (#395) ([f2552f2](https://github.com/readmeio/rdme/commit/f2552f2)), closes [#395](https://github.com/readmeio/rdme/issues/395)
+* chore(deps): bump node-fetch from 2.6.5 to 2.6.6 (#385) ([f1dc3e0](https://github.com/readmeio/rdme/commit/f1dc3e0)), closes [#385](https://github.com/readmeio/rdme/issues/385)
+* chore(deps): bump open from 8.2.1 to 8.4.0 (#384) ([3f0eaa7](https://github.com/readmeio/rdme/commit/3f0eaa7)), closes [#384](https://github.com/readmeio/rdme/issues/384)
+* chore(deps): bump tmp-promise from 3.0.2 to 3.0.3 (#379) ([9fb4bef](https://github.com/readmeio/rdme/commit/9fb4bef)), closes [#379](https://github.com/readmeio/rdme/issues/379)
+* ci: cleaning up the codeql workflow ([660b925](https://github.com/readmeio/rdme/commit/660b925))
+
+
+
 ## 5.2.0 (2021-10-05)
 
 * chore: cleaning up some funky test logic ([3144e64](https://github.com/readmeio/rdme/commit/3144e64))
