@@ -106,7 +106,7 @@ exports.run = async function (opts) {
 
     let bundledSpec;
     const oas = new OASNormalize(specPath, { colorizeErrors: true, enablePaths: true });
-    await oas.validate(false, { validate: { colorizeErrors: true } }).catch(err => {
+    await oas.validate(false).catch(err => {
       return Promise.reject(err);
     });
     await oas
