@@ -18,7 +18,8 @@ Alias for \`rdme openapi\`. [deprecated]
 
 [4m[1mRelated commands[22m[24m
 
-  [90m$[39m rdme openapi   Upload, or resync, your OpenAPI/Swagger definition to ReadMe. 
+  [90m$[39m rdme openapi    Upload, or resync, your OpenAPI/Swagger definition to ReadMe. 
+  [90m$[39m rdme validate   Validate your OpenAPI/Swagger definition.                     
 "
 `;
 
@@ -67,8 +68,9 @@ exports[`cli --help should print help 1`] = `
 
 [4m[1mUpload OpenAPI/Swagger definitions[22m[24m
 
-  [90m$[39m rdme openapi   Upload, or resync, your OpenAPI/Swagger definition to ReadMe. 
-  [90m$[39m rdme swagger   Alias for \`rdme openapi\`. [deprecated]                        
+  [90m$[39m rdme openapi    Upload, or resync, your OpenAPI/Swagger definition to ReadMe. 
+  [90m$[39m rdme validate   Validate your OpenAPI/Swagger definition.                     
+  [90m$[39m rdme swagger    Alias for \`rdme openapi\`. [deprecated]                        
 
 [4m[1mDocumentation[22m[24m
 
@@ -139,8 +141,9 @@ exports[`cli --help should print help for the \`-H\` alias 1`] = `
 
 [4m[1mUpload OpenAPI/Swagger definitions[22m[24m
 
-  [90m$[39m rdme openapi   Upload, or resync, your OpenAPI/Swagger definition to ReadMe. 
-  [90m$[39m rdme swagger   Alias for \`rdme openapi\`. [deprecated]                        
+  [90m$[39m rdme openapi    Upload, or resync, your OpenAPI/Swagger definition to ReadMe. 
+  [90m$[39m rdme validate   Validate your OpenAPI/Swagger definition.                     
+  [90m$[39m rdme swagger    Alias for \`rdme openapi\`. [deprecated]                        
 
 [4m[1mDocumentation[22m[24m
 
@@ -184,7 +187,8 @@ Alias for \`rdme openapi\`. [deprecated]
 
 [4m[1mRelated commands[22m[24m
 
-  [90m$[39m rdme openapi   Upload, or resync, your OpenAPI/Swagger definition to ReadMe. 
+  [90m$[39m rdme openapi    Upload, or resync, your OpenAPI/Swagger definition to ReadMe. 
+  [90m$[39m rdme validate   Validate your OpenAPI/Swagger definition.                     
 "
 `;
 
@@ -206,7 +210,8 @@ Alias for \`rdme openapi\`. [deprecated]
 
 [4m[1mRelated commands[22m[24m
 
-  [90m$[39m rdme openapi   Upload, or resync, your OpenAPI/Swagger definition to ReadMe. 
+  [90m$[39m rdme openapi    Upload, or resync, your OpenAPI/Swagger definition to ReadMe. 
+  [90m$[39m rdme validate   Validate your OpenAPI/Swagger definition.                     
 "
 `;
 

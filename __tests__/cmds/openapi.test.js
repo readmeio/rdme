@@ -270,14 +270,20 @@ describe('rdme openapi', () => {
           help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
         });
 
-      return openapi.run({ spec: './__tests__/__fixtures__/invalid-swagger.json', key, version }).then(() => {
-        expect(console.log).toHaveBeenCalledTimes(1);
+      return openapi
+        .run({
+          spec: './__tests__/__fixtures__/swagger-with-invalid-extensions.json',
+          key,
+          version,
+        })
+        .then(() => {
+          expect(console.log).toHaveBeenCalledTimes(1);
 
-        const output = getCommandOutput();
-        expect(output).toMatch(/Unknown error \(README VALIDATION ERROR "x-samples-languages" /);
+          const output = getCommandOutput();
+          expect(output).toMatch(/Unknown error \(README VALIDATION ERROR "x-samples-languages" /);
 
-        mock.done();
-      });
+          mock.done();
+        });
     });
 
     it('should error if API errors', () => {
