@@ -64,7 +64,7 @@ describe('rdme versions*', () => {
         .reply(200, [versionPayload, version2Payload]);
 
       const response = await versions.run({ key, raw: true });
-      expect(response).toStrictEqual([versionPayload, version2Payload]);
+      expect(response).toStrictEqual(JSON.stringify([versionPayload, version2Payload], null, 2));
       mockRequest.done();
     });
 
@@ -88,7 +88,7 @@ describe('rdme versions*', () => {
         .reply(200, versionPayload);
 
       return versions.run({ key, version, raw: true }).then(response => {
-        expect(response).toStrictEqual(versionPayload);
+        expect(response).toStrictEqual(JSON.stringify(versionPayload, null, 2));
         mockRequest.done();
       });
     });

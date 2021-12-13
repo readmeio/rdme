@@ -102,7 +102,7 @@ exports.run = function (opts) {
       }
 
       if (raw) {
-        return Promise.resolve(data);
+        return Promise.resolve(JSON.stringify(data, null, 2));
       }
 
       let versions = data;

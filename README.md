@@ -93,14 +93,14 @@ rdme docs:edit <slug> --version={project-version}
 rdme versions
 ```
 
-If you wish to see the raw output from our API in this response, supply  the `--raw` flag.
+If you wish to see the raw JSON output from our API in this response, supply  the `--raw` flag.
 
 #### Get All Information About a Particular Version
 ```sh
 rdme versions --version={project-version}
 ```
 
-If you wish to see the raw output from our API in this response, supply  the `--raw` flag.
+If you wish to see the raw JSON output from our API in this response, supply  the `--raw` flag.
 
 #### Create a New Version
 ```sh
