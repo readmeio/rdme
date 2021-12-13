@@ -11,7 +11,7 @@
    * [Authentication](#authentication)
 * [Usage](#usage)
    * [Common options](#common-rdme-options)
-   * [Swagger / OpenAPI](#swagger-/-openapi)
+   * [OpenAPI / Swagger](#openapi--swagger)
    * [Docs](#docs)
    * [Versions](#versions)
    * [Opening a Project](#open)
@@ -67,6 +67,13 @@ rdme openapi [path-to-file.json] --version={project-version}
 
 ```sh
 rdme openapi [path-to-file.json] --id={existing-id} --version={project-version}
+```
+
+#### Validating an API Definition
+You can also perform a local validation of your API definition without uploading it to ReadMe, which can be useful when constructing or editing your API definition.
+
+```sh
+rdme validate [path-to-file.json]
 ```
 
 #### Omitting the File Path
