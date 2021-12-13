@@ -1,3 +1,10 @@
+## <small>6.1.1 (2021-12-13)</small>
+
+* docs: add docs on validation, fix TOC (#405) ([d433c2f](https://github.com/readmeio/rdme/commit/d433c2f)), closes [#405](https://github.com/readmeio/rdme/issues/405)
+* feat(versions): stringify JSON for `--raw` option (#404) ([ce651e9](https://github.com/readmeio/rdme/commit/ce651e9)), closes [#404](https://github.com/readmeio/rdme/issues/404)
+
+
+
 ## 6.0.0 (2021-12-03)
 
 * docs: removing a dead link from the readme ([4b5308f](https://github.com/readmeio/rdme/commit/4b5308f))
