@@ -69,18 +69,18 @@ rdme openapi [path-to-file.json] --version={project-version}
 rdme openapi [path-to-file.json] --id={existing-id} --version={project-version}
 ```
 
-#### Validating an API Definition
-You can also perform a local validation of your API definition without uploading it to ReadMe, which can be useful when constructing or editing your API definition.
-
-```sh
-rdme validate [path-to-file.json]
-```
-
 #### Omitting the File Path
 If you run `rdme` within a directory that contains your OpenAPI or Swagger definition, you can omit the file path. We will then look for a file with the following names, and upload that: `openapi.json`, `openapi.yaml`, `swagger.json`, and `swagger.yaml`.
 
 ```sh
 rdme openapi
+```
+
+#### Validating an API Definition
+You can also perform a local validation of your API definition without uploading it to ReadMe, which can be useful when constructing or editing your API definition.
+
+```sh
+rdme validate [path-to-file.json]
 ```
 
 ### Docs
