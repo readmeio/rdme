@@ -28,7 +28,7 @@ exports.args = [
   {
     name: 'id',
     type: String,
-    description: `Unique identifier for your API definition. Use this if you're resyncing an existing API definition`,
+    description: `Unique identifier for your API definition. Use this if you're re-uploading an existing API definition`,
   },
   {
     name: 'token',
@@ -38,7 +38,7 @@ exports.args = [
   {
     name: 'version',
     type: String,
-    description: 'Project version',
+    description: 'Project version (this is not necessary if you are passing the `--id` option)',
   },
   {
     name: 'spec',
