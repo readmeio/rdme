@@ -144,12 +144,12 @@ describe('rdme openapi', () => {
       return openapi
         .run({ spec: require.resolve('@readme/oas-examples/3.1/json/petstore.json'), token: `${key}-${id}`, version })
         .then(() => {
-          expect(console.warn).toHaveBeenCalledTimes(1);
+          expect(console.warn).toHaveBeenCalledTimes(2);
           expect(console.log).toHaveBeenCalledTimes(1);
 
           const output = getCommandOutput();
 
-          expect(output).toMatch(/using `rdme` with --token has been deprecated/i);
+          expect(output).toMatch(/The `--token` option has been deprecated/i);
 
           mock.done();
         });
