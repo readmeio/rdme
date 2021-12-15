@@ -54,9 +54,13 @@ exports.run = async function (opts) {
   let isUpdate;
 
   if (!key && opts.token) {
-    console.warn('Using `rdme` with --token has been deprecated. Please use `--key` and `--id` instead.');
+    console.warn('Warning: `--token` has been deprecated. Please use `--key` and `--id` instead.');
 
     [key, id] = opts.token.split('-');
+  }
+
+  if (version && id) {
+    console.warn('Warning: `--version` parameter is ignored because `--id` parameter is');
   }
 
   if (!key) {
