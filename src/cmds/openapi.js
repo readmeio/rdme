@@ -28,7 +28,7 @@ exports.args = [
   {
     name: 'id',
     type: String,
-    description: `Unique identifier for your API definition. Use this if you're resyncing an existing API definition`,
+    description: `Unique identifier for your API definition. Use this if you're re-uploading an existing API definition`,
   },
   {
     name: 'token',
@@ -54,9 +54,21 @@ exports.run = async function (opts) {
   let isUpdate;
 
   if (!key && opts.token) {
-    console.warn('Using `rdme` with --token has been deprecated. Please use `--key` and `--id` instead.');
+    console.warn(
+      chalk.yellow('⚠️  Warning! The `--token` option has been deprecated. Please use `--key` and `--id` instead.')
+    );
 
     [key, id] = opts.token.split('-');
+  }
+
+  if (version && id) {
+    console.warn(
+      chalk.yellow(
+        `⚠️  Warning! We'll be using the version associated with the \`--${
+          opts.token ? 'token' : 'id'
+        }\` option, so the \`--version\` option will be ignored.`
+      )
+    );
   }
 
   if (!key) {

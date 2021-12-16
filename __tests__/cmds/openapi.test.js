@@ -144,12 +144,32 @@ describe('rdme openapi', () => {
       return openapi
         .run({ spec: require.resolve('@readme/oas-examples/3.1/json/petstore.json'), token: `${key}-${id}`, version })
         .then(() => {
+          expect(console.warn).toHaveBeenCalledTimes(2);
+          expect(console.log).toHaveBeenCalledTimes(1);
+
+          const output = getCommandOutput();
+
+          expect(output).toMatch(/The `--token` option has been deprecated/i);
+
+          mock.done();
+        });
+    });
+
+    it('should return warning if providing `id` and `version`', () => {
+      const mock = nock(config.host)
+        .put(`/api/v1/api-specification/${id}`, body => body.match('form-data; name="spec"'))
+        .basicAuth({ user: key })
+        .reply(201, { id: 1 }, { location: exampleRefLocation });
+
+      return openapi
+        .run({ spec: require.resolve('@readme/oas-examples/3.1/json/petstore.json'), key, id, version })
+        .then(() => {
           expect(console.warn).toHaveBeenCalledTimes(1);
           expect(console.log).toHaveBeenCalledTimes(1);
 
           const output = getCommandOutput();
 
-          expect(output).toMatch(/using `rdme` with --token has been deprecated/i);
+          expect(output).toMatch(/the `--version` option will be ignored/i);
 
           mock.done();
         });

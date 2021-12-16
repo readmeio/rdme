@@ -69,15 +69,15 @@ describe('cli', () => {
     });
 
     it('should print usage for a given command', async () => {
-      await expect(cli(['swagger', '--help'])).resolves.toMatchSnapshot();
+      await expect(cli(['openapi', '--help'])).resolves.toMatchSnapshot();
     });
 
     it('should print usage for a given command if supplied as `help <command>`', async () => {
-      await expect(cli(['help', 'swagger'])).resolves.toMatchSnapshot();
+      await expect(cli(['help', 'openapi'])).resolves.toMatchSnapshot();
     });
 
     it('should not surface args that are designated as hidden', async () => {
-      await expect(cli(['swagger', '--help'])).resolves.toMatchSnapshot();
+      await expect(cli(['openapi', '--help'])).resolves.toMatchSnapshot();
     });
 
     it('should show related commands for a subcommands help menu', async () => {

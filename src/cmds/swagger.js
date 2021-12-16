@@ -1,3 +1,4 @@
+const chalk = require('chalk');
 const openapi = require('./openapi');
 
 exports.command = 'swagger';
@@ -10,6 +11,6 @@ exports.hiddenArgs = openapi.hiddenArgs;
 exports.args = openapi.args;
 
 exports.run = async function (opts) {
-  console.warn('`rdme swagger` has been deprecated. Please use `rdme openapi` instead.');
+  console.warn(chalk.yellow('⚠️  Warning! `rdme swagger` has been deprecated. Please use `rdme openapi` instead.'));
   return openapi.run(opts);
 };
