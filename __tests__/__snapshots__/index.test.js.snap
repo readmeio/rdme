@@ -13,7 +13,7 @@ Upload, or resync, your OpenAPI/Swagger definition to ReadMe.
   [1m--key[22m [4mstring[24m       Project API key                                                               
   [1m--id[22m [4mstring[24m        Unique identifier for your API definition. Use this if you're re-uploading an 
                      existing API definition                                                       
-  [1m--version[22m [4mstring[24m   Project version (this is not necessary if you are passing the \`--id\` option)  
+  [1m--version[22m [4mstring[24m   Project version                                                               
   [1m-h[22m, [1m--help[22m         Display this usage guide                                                      
 
 [4m[1mRelated commands[22m[24m
@@ -182,7 +182,7 @@ Upload, or resync, your OpenAPI/Swagger definition to ReadMe.
   [1m--key[22m [4mstring[24m       Project API key                                                               
   [1m--id[22m [4mstring[24m        Unique identifier for your API definition. Use this if you're re-uploading an 
                      existing API definition                                                       
-  [1m--version[22m [4mstring[24m   Project version (this is not necessary if you are passing the \`--id\` option)  
+  [1m--version[22m [4mstring[24m   Project version                                                               
   [1m-h[22m, [1m--help[22m         Display this usage guide                                                      
 
 [4m[1mRelated commands[22m[24m
@@ -205,7 +205,7 @@ Upload, or resync, your OpenAPI/Swagger definition to ReadMe.
   [1m--key[22m [4mstring[24m       Project API key                                                               
   [1m--id[22m [4mstring[24m        Unique identifier for your API definition. Use this if you're re-uploading an 
                      existing API definition                                                       
-  [1m--version[22m [4mstring[24m   Project version (this is not necessary if you are passing the \`--id\` option)  
+  [1m--version[22m [4mstring[24m   Project version                                                               
   [1m-h[22m, [1m--help[22m         Display this usage guide                                                      
 
 [4m[1mRelated commands[22m[24m

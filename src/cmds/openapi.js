@@ -38,7 +38,7 @@ exports.args = [
   {
     name: 'version',
     type: String,
-    description: 'Project version (this is not necessary if you are passing the `--id` option)',
+    description: 'Project version',
   },
   {
     name: 'spec',
