@@ -54,16 +54,20 @@ exports.run = async function (opts) {
   let isUpdate;
 
   if (!key && opts.token) {
-    console.warn('Heads up! The `--token` option has been deprecated. Please use `--key` and `--id` instead.');
+    console.warn(
+      chalk.yellow('⚠️  Warning! The `--token` option has been deprecated. Please use `--key` and `--id` instead.')
+    );
 
     [key, id] = opts.token.split('-');
   }
 
   if (version && id) {
     console.warn(
-      `Heads up! We'll be using the version associated with the \`--${
-        opts.token ? 'token' : 'id'
-      }\` option, so the \`--version\` option will be ignored.`
+      chalk.yellow(
+        `⚠️  Warning! We'll be using the version associated with the \`--${
+          opts.token ? 'token' : 'id'
+        }\` option, so the \`--version\` option will be ignored.`
+      )
     );
   }
 
