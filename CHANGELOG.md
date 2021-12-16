@@ -1,3 +1,10 @@
+## <small>6.1.2 (2021-12-16)</small>
+
+* ci: drop the npm@7 requirement before installing deps in ci (#408) ([fd7dace](https://github.com/readmeio/rdme/commit/fd7dace)), closes [#408](https://github.com/readmeio/rdme/issues/408)
+* docs: add/improve our command warnings (#406) ([2228c2c](https://github.com/readmeio/rdme/commit/2228c2c)), closes [#406](https://github.com/readmeio/rdme/issues/406)
+
+
+
 ## <small>6.1.1 (2021-12-13)</small>
 
 * docs: add docs on validation, fix TOC (#405) ([d433c2f](https://github.com/readmeio/rdme/commit/d433c2f)), closes [#405](https://github.com/readmeio/rdme/issues/405)
