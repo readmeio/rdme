@@ -11,7 +11,7 @@ require('../src')(process.argv.slice(2))
       const err = e;
 
       if ('message' in err) {
-        console.error(chalk.red(err.message));
+        console.error(chalk.red(`\n${err.message}\n`));
       } else {
         console.error(
           chalk.red(

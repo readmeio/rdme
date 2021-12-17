@@ -150,23 +150,19 @@ exports.run = async function (opts) {
 
     function createSpec() {
       options.method = 'post';
-      return fetch(`${config.host}/api/v1/api-specification`, options)
-        .then(res => {
-          if (res.ok) return success(res);
-          return error(res);
-        })
-        .catch(err => console.log(chalk.red(`\n ${err.message}\n`)));
+      return fetch(`${config.host}/api/v1/api-specification`, options).then(res => {
+        if (res.ok) return success(res);
+        return error(res);
+      });
     }
 
     function updateSpec(specId) {
       isUpdate = true;
       options.method = 'put';
-      return fetch(`${config.host}/api/v1/api-specification/${specId}`, options)
-        .then(res => {
-          if (res.ok) return success(res);
-          return error(res);
-        })
-        .catch(err => console.log(chalk.red(`\n ${err.message}\n`)));
+      return fetch(`${config.host}/api/v1/api-specification/${specId}`, options).then(res => {
+        if (res.ok) return success(res);
+        return error(res);
+      });
     }
 
     /*

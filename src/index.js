@@ -113,7 +113,7 @@ module.exports = processArgv => {
     return bin.run(cmdArgv);
   } catch (e) {
     if (e.message === 'Command not found.') {
-      e.description = `Type \`${chalk.yellow(`${config.cli} help`)}\` ${chalk.red('to see all commands')}`;
+      e.message = `${e.message}\n\nType \`${chalk.yellow(`${config.cli} help`)}\` ${chalk.red('to see all commands')}`;
     }
 
     return Promise.reject(e);
