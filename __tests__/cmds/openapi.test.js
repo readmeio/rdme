@@ -4,6 +4,7 @@ const fs = require('fs');
 const promptHandler = require('../../src/lib/prompts');
 const swagger = require('../../src/cmds/swagger');
 const openapi = require('../../src/cmds/openapi');
+const APIError = require('../../src/lib/apiError');
 
 const key = 'API_KEY';
 const id = '5aa0409b7cf527a93bfb44df';
@@ -272,7 +273,14 @@ describe('rdme openapi', () => {
       ).rejects.toMatchSnapshot();
     });
 
-    it('should throw an error if an in valid Swagger definition is supplied', () => {
+    it('should throw an error if an invalid Swagger definition is supplied', async () => {
+      const errorObject = {
+        error: 'INTERNAL_ERROR',
+        message: 'Unknown error (README VALIDATION ERROR "x-samples-languages" must be of type "Array")',
+        suggestion: '...a suggestion to resolve the issue...',
+        help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
+      };
+
       const mock = nock(config.host)
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
@@ -283,30 +291,28 @@ describe('rdme openapi', () => {
         .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
         .delayConnection(1000)
         .basicAuth({ user: key })
-        .reply(500, {
-          error: 'INTERNAL_ERROR',
-          message: 'Unknown error (README VALIDATION ERROR "x-samples-languages" must be of type "Array")',
-          suggestion: '...a suggestion to resolve the issue...',
-          help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
-        });
+        .reply(500, errorObject);
 
-      return openapi
-        .run({
+      await expect(
+        openapi.run({
           spec: './__tests__/__fixtures__/swagger-with-invalid-extensions.json',
           key,
           version,
         })
-        .then(() => {
-          expect(console.log).toHaveBeenCalledTimes(1);
+      ).rejects.toStrictEqual(new APIError(errorObject));
 
-          const output = getCommandOutput();
-          expect(output).toMatch(/Unknown error \(README VALIDATION ERROR "x-samples-languages" /);
-
-          mock.done();
-        });
+      mock.done();
     });
 
-    it('should error if API errors', () => {
+    it('should error if API errors', async () => {
+      const errorObject = {
+        error: 'SPEC_VERSION_NOTFOUND',
+        message:
+          "The version you specified ({version}) doesn't match any of the existing versions ({versions_list}) in ReadMe.",
+        suggestion: '...a suggestion to resolve the issue...',
+        help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
+      };
+
       const mock = nock(config.host)
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
@@ -317,24 +323,57 @@ describe('rdme openapi', () => {
         .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
         .delayConnection(1000)
         .basicAuth({ user: key })
-        .reply(400, {
-          error: 'SPEC_VERSION_NOTFOUND',
-          message:
-            "The version you specified ({version}) doesn't match any of the existing versions ({versions_list}) in ReadMe.",
-          suggestion: '...a suggestion to resolve the issue...',
-          help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
-        });
+        .reply(400, errorObject);
 
-      return openapi
-        .run({ spec: require.resolve('@readme/oas-examples/2.0/json/petstore.json'), key, version })
-        .then(() => {
-          expect(console.log).toHaveBeenCalledTimes(1);
+      await expect(
+        openapi.run({ spec: require.resolve('@readme/oas-examples/2.0/json/petstore.json'), key, version })
+      ).rejects.toStrictEqual(new APIError(errorObject));
 
-          const output = getCommandOutput();
-          expect(output).toMatch(/The version you specified/);
+      mock.done();
+    });
 
-          mock.done();
-        });
+    it('should error if API errors (generic upload error)', async () => {
+      const mock = nock(config.host)
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version: '1.0.0' })
+        .get('/api/v1/api-specification')
+        .basicAuth({ user: key })
+        .reply(200, [])
+        .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
+        .delayConnection(1000)
+        .basicAuth({ user: key })
+        .reply(400, 'some non-JSON upload error');
+
+      await expect(
+        openapi.run({ spec: require.resolve('@readme/oas-examples/2.0/json/petstore.json'), key, version })
+      ).rejects.toStrictEqual(new Error('There was an error uploading!'));
+
+      mock.done();
+    });
+
+    it('should error if API errors (request timeout)', async () => {
+      const mock = nock(config.host)
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version: '1.0.0' })
+        .get('/api/v1/api-specification')
+        .basicAuth({ user: key })
+        .reply(200, [])
+        .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
+        .delayConnection(1000)
+        .basicAuth({ user: key })
+        .reply(400, '<html></html>');
+
+      await expect(
+        openapi.run({ spec: require.resolve('@readme/oas-examples/2.0/json/petstore.json'), key, version })
+      ).rejects.toStrictEqual(
+        new Error(
+          "We're sorry, your upload request timed out. Please try again or split your file up into smaller chunks."
+        )
+      );
+
+      mock.done();
     });
   });
 });
