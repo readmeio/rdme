@@ -1,3 +1,9 @@
+## <small>6.1.3 (2021-12-17)</small>
+
+* fix(openapi): return rejected `Promise` if spec uploads fail (#409) ([e282b54](https://github.com/readmeio/rdme/commit/e282b54)), closes [#409](https://github.com/readmeio/rdme/issues/409)
+
+
+
 ## <small>6.1.2 (2021-12-16)</small>
 
 * ci: drop the npm@7 requirement before installing deps in ci (#408) ([fd7dace](https://github.com/readmeio/rdme/commit/fd7dace)), closes [#408](https://github.com/readmeio/rdme/issues/408)
