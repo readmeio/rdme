@@ -58,18 +58,18 @@ describe('rdme validate', () => {
   });
 
   describe('error handling', () => {
-    it('should throw an error if an invalid OpenAPI 3.0 definition is supplied', async () => {
-      await expect(validate.run({ spec: './__tests__/__fixtures__/invalid-oas.json' })).rejects.toThrow(
+    it('should throw an error if an invalid OpenAPI 3.0 definition is supplied', () => {
+      return expect(validate.run({ spec: './__tests__/__fixtures__/invalid-oas.json' })).rejects.toThrow(
         'Token "Error" does not exist.'
       );
     });
 
-    it('should throw an error if an invalid OpenAPI 3.1 definition is supplied', async () => {
-      await expect(validate.run({ spec: './__tests__/__fixtures__/invalid-oas-3.1.json' })).rejects.toMatchSnapshot();
+    it('should throw an error if an invalid OpenAPI 3.1 definition is supplied', () => {
+      return expect(validate.run({ spec: './__tests__/__fixtures__/invalid-oas-3.1.json' })).rejects.toMatchSnapshot();
     });
 
-    it('should throw an error if an in valid Swagger definition is supplied', async () => {
-      await expect(validate.run({ spec: './__tests__/__fixtures__/invalid-swagger.json' })).rejects.toMatchSnapshot();
+    it('should throw an error if an in valid Swagger definition is supplied', () => {
+      return expect(validate.run({ spec: './__tests__/__fixtures__/invalid-swagger.json' })).rejects.toMatchSnapshot();
     });
   });
 });
