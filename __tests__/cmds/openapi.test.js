@@ -1,4 +1,5 @@
 const nock = require('nock');
+const chalk = require('chalk');
 const config = require('config');
 const fs = require('fs');
 const promptHandler = require('../../src/lib/prompts');
@@ -9,25 +10,41 @@ const APIError = require('../../src/lib/apiError');
 const key = 'API_KEY';
 const id = '5aa0409b7cf527a93bfb44df';
 const version = '1.0.0';
+const exampleRefLocation = `${config.host}/project/example-project/1.0.1/refs/ex`;
+const successfulMessageBase = [
+  '',
+  `\t${chalk.green(exampleRefLocation)}`,
+  '',
+  'To update your OpenAPI or Swagger definition, run the following:',
+  '',
+  `\t${chalk.green(`rdme openapi FILE --key=${key} --id=1`)}`,
+];
+const successfulUpload = [
+  "You've successfully uploaded a new OpenAPI file to your ReadMe project!",
+  ...successfulMessageBase,
+].join('\n');
+
+const successfulUpdate = [
+  "You've successfully updated an OpenAPI file on your ReadMe project!",
+  ...successfulMessageBase,
+].join('\n');
 
 jest.mock('../../src/lib/prompts');
 
 const getCommandOutput = () => {
-  return [console.warn.mock.calls.join('\n\n'), console.log.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
+  return [console.warn.mock.calls.join('\n\n'), console.info.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
 };
 
 describe('rdme openapi', () => {
-  const exampleRefLocation = `${config.host}/project/example-project/1.0.1/refs/ex`;
-
   beforeAll(() => nock.disableNetConnect());
 
   beforeEach(() => {
-    console.log = jest.fn();
+    console.info = jest.fn();
     console.warn = jest.fn();
   });
 
   afterEach(() => {
-    console.log.mockRestore();
+    console.info.mockRestore();
     console.warn.mockRestore();
 
     nock.cleanAll();
@@ -41,7 +58,7 @@ describe('rdme openapi', () => {
       ['OpenAPI 3.0', 'yaml', '3.0'],
       ['OpenAPI 3.1', 'json', '3.1'],
       ['OpenAPI 3.1', 'yaml', '3.1'],
-    ])('should support uploading a %s definition (format: %s)', (_, format, specVersion) => {
+    ])('should support uploading a %s definition (format: %s)', async (_, format, specVersion) => {
       const mock = nock(config.host)
         .get('/api/v1/api-specification')
         .basicAuth({ user: key })
@@ -53,26 +70,20 @@ describe('rdme openapi', () => {
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
-      return openapi
-        .run({
+      await expect(
+        openapi.run({
           spec: require.resolve(`@readme/oas-examples/${specVersion}/${format}/petstore.${format}`),
           key,
           version,
         })
-        .then(() => {
-          expect(console.log).toHaveBeenCalledTimes(1);
+      ).resolves.toBe(successfulUpload);
 
-          const output = getCommandOutput();
-          expect(output).not.toMatch(/we found swagger.json/i);
-          expect(output).toMatch(/successfully uploaded/);
-          expect(output).toMatch(exampleRefLocation);
-          expect(output).toMatch(/to update your openapi or swagger definition/i);
+      expect(console.info).toHaveBeenCalledTimes(0);
 
-          mock.done();
-        });
+      return mock.done();
     });
 
-    it('should discover and upload an API definition if none is provided', () => {
+    it('should discover and upload an API definition if none is provided', async () => {
       promptHandler.createOasPrompt.mockResolvedValue({ option: 'create' });
 
       const mock = nock(config.host)
@@ -93,20 +104,17 @@ describe('rdme openapi', () => {
       // Surface our test fixture to the root directory so rdme can autodiscover it. It's easier to do
       // this than mocking out the fs module because mocking the fs module here causes Jest sourcemaps
       // to break.
-      fs.copyFileSync(require.resolve('@readme/oas-examples/2.0/json/petstore.json'), './swagger.json');
+      await fs.copyFileSync(require.resolve('@readme/oas-examples/2.0/json/petstore.json'), './swagger.json');
 
-      return openapi.run({ key }).then(() => {
-        expect(console.log).toHaveBeenCalledTimes(2);
+      await expect(openapi.run({ key })).resolves.toBe(successfulUpload);
 
-        const output = getCommandOutput();
-        expect(output).toMatch(/we found swagger.json/i);
-        expect(output).toMatch(/successfully uploaded/);
-        expect(output).toMatch(exampleRefLocation);
-        expect(output).toMatch(/to update your openapi or swagger definition/i);
+      expect(console.info).toHaveBeenCalledTimes(1);
 
-        fs.unlinkSync('./swagger.json');
-        return mock.done();
-      });
+      const output = getCommandOutput();
+      expect(output).toBe(chalk.yellow('We found swagger.json and are attempting to upload it.'));
+
+      await fs.unlinkSync('./swagger.json');
+      return mock.done();
     });
   });
 
@@ -118,69 +126,73 @@ describe('rdme openapi', () => {
       ['OpenAPI 3.0', 'yaml', '3.0'],
       ['OpenAPI 3.1', 'json', '3.1'],
       ['OpenAPI 3.1', 'yaml', '3.1'],
-    ])('should support updating a %s definition (format: %s)', (_, format, specVersion) => {
+    ])('should support updating a %s definition (format: %s)', async (_, format, specVersion) => {
       const mock = nock(config.host)
         .put(`/api/v1/api-specification/${id}`, body => body.match('form-data; name="spec"'))
         .basicAuth({ user: key })
-        .reply(201, { body: '{ id: 1 }' });
+        .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
-      return openapi
-        .run({
+      await expect(
+        openapi.run({
           spec: require.resolve(`@readme/oas-examples/${specVersion}/${format}/petstore.${format}`),
           key,
           id,
           version,
         })
-        .then(() => {
-          mock.done();
-        });
+      ).resolves.toBe(successfulUpdate);
+
+      return mock.done();
     });
 
-    it('should still support `token`', () => {
+    it('should still support `token`', async () => {
       const mock = nock(config.host)
         .put(`/api/v1/api-specification/${id}`, body => body.match('form-data; name="spec"'))
         .basicAuth({ user: key })
-        .reply(201, { id: 1 }, { location: exampleRefLocation });
+        .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
-      return openapi
-        .run({ spec: require.resolve('@readme/oas-examples/3.1/json/petstore.json'), token: `${key}-${id}`, version })
-        .then(() => {
-          expect(console.warn).toHaveBeenCalledTimes(2);
-          expect(console.log).toHaveBeenCalledTimes(1);
+      await expect(
+        openapi.run({
+          spec: require.resolve('@readme/oas-examples/3.1/json/petstore.json'),
+          token: `${key}-${id}`,
+          version,
+        })
+      ).resolves.toBe(successfulUpdate);
 
-          const output = getCommandOutput();
+      expect(console.warn).toHaveBeenCalledTimes(2);
+      expect(console.info).toHaveBeenCalledTimes(0);
 
-          expect(output).toMatch(/The `--token` option has been deprecated/i);
+      const output = getCommandOutput();
 
-          mock.done();
-        });
+      expect(output).toMatch(/The `--token` option has been deprecated/i);
+
+      return mock.done();
     });
 
-    it('should return warning if providing `id` and `version`', () => {
+    it('should return warning if providing `id` and `version`', async () => {
       const mock = nock(config.host)
         .put(`/api/v1/api-specification/${id}`, body => body.match('form-data; name="spec"'))
         .basicAuth({ user: key })
-        .reply(201, { id: 1 }, { location: exampleRefLocation });
+        .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
-      return openapi
-        .run({ spec: require.resolve('@readme/oas-examples/3.1/json/petstore.json'), key, id, version })
-        .then(() => {
-          expect(console.warn).toHaveBeenCalledTimes(1);
-          expect(console.log).toHaveBeenCalledTimes(1);
+      await expect(
+        openapi.run({ spec: require.resolve('@readme/oas-examples/3.1/json/petstore.json'), key, id, version })
+      ).resolves.toBe(successfulUpdate);
 
-          const output = getCommandOutput();
+      expect(console.warn).toHaveBeenCalledTimes(1);
+      expect(console.info).toHaveBeenCalledTimes(0);
 
-          expect(output).toMatch(/the `--version` option will be ignored/i);
+      const output = getCommandOutput();
 
-          mock.done();
-        });
+      expect(output).toMatch(/the `--version` option will be ignored/i);
+
+      return mock.done();
     });
   });
 
   describe('versioning', () => {
     it.todo('should return a 404 if version flag not found');
 
-    it('should request a version list if version is not found', () => {
+    it('should request a version list if version is not found', async () => {
       promptHandler.generatePrompts.mockResolvedValue({
         option: 'create',
         newVersion: '1.0.1',
@@ -200,18 +212,15 @@ describe('rdme openapi', () => {
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
-      return openapi.run({ spec: require.resolve('@readme/oas-examples/2.0/json/petstore.json'), key }).then(() => {
-        const output = getCommandOutput();
-        expect(output).toMatch(/successfully uploaded/);
-        expect(output).toMatch(exampleRefLocation);
-        expect(output).toMatch(/to update your openapi or swagger definition/i);
+      await expect(
+        openapi.run({ spec: require.resolve('@readme/oas-examples/2.0/json/petstore.json'), key })
+      ).resolves.toBe(successfulUpload);
 
-        mock.done();
-      });
+      return mock.done();
     });
   });
 
-  it('should bundle and upload the expected content', () => {
+  it('should bundle and upload the expected content', async () => {
     let requestBody = null;
     const mock = nock(config.host)
       .get('/api/v1/api-specification')
@@ -229,23 +238,20 @@ describe('rdme openapi', () => {
       .basicAuth({ user: key })
       .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
-    return openapi.run({ spec: './__tests__/__fixtures__/ref-oas/petstore.json', key, version }).then(() => {
-      expect(console.log).toHaveBeenCalledTimes(1);
+    await expect(openapi.run({ spec: './__tests__/__fixtures__/ref-oas/petstore.json', key, version })).resolves.toBe(
+      successfulUpload
+    );
 
-      expect(requestBody).toMatchSnapshot();
+    expect(console.info).toHaveBeenCalledTimes(0);
 
-      const output = getCommandOutput();
-      expect(output).toMatch(/successfully uploaded/);
-      expect(output).toMatch(exampleRefLocation);
-      expect(output).toMatch(/to update your openapi or swagger definition/i);
+    expect(requestBody).toMatchSnapshot();
 
-      mock.done();
-    });
+    return mock.done();
   });
 
   describe('error handling', () => {
-    it('should error if no api key provided', async () => {
-      await expect(
+    it('should error if no api key provided', () => {
+      return expect(
         openapi.run({ spec: require.resolve('@readme/oas-examples/3.0/json/petstore.json') })
       ).rejects.toThrow('No project API key provided. Please use `--key`.');
     });
@@ -258,17 +264,17 @@ describe('rdme openapi', () => {
 
       await expect(openapi.run({ key, version })).rejects.toThrow(/We couldn't find an OpenAPI or Swagger definition./);
 
-      mock.done();
+      return mock.done();
     });
 
-    it('should throw an error if an invalid OpenAPI 3.0 definition is supplied', async () => {
-      await expect(
+    it('should throw an error if an invalid OpenAPI 3.0 definition is supplied', () => {
+      return expect(
         openapi.run({ spec: './__tests__/__fixtures__/invalid-oas.json', key, id, version })
       ).rejects.toThrow('Token "Error" does not exist.');
     });
 
-    it('should throw an error if an invalid OpenAPI 3.1 definition is supplied', async () => {
-      await expect(
+    it('should throw an error if an invalid OpenAPI 3.1 definition is supplied', () => {
+      return expect(
         openapi.run({ spec: './__tests__/__fixtures__/invalid-oas-3.1.json', key, id, version })
       ).rejects.toMatchSnapshot();
     });
@@ -301,7 +307,7 @@ describe('rdme openapi', () => {
         })
       ).rejects.toStrictEqual(new APIError(errorObject));
 
-      mock.done();
+      return mock.done();
     });
 
     it('should error if API errors', async () => {
@@ -329,7 +335,7 @@ describe('rdme openapi', () => {
         openapi.run({ spec: require.resolve('@readme/oas-examples/2.0/json/petstore.json'), key, version })
       ).rejects.toStrictEqual(new APIError(errorObject));
 
-      mock.done();
+      return mock.done();
     });
 
     it('should error if API errors (generic upload error)', async () => {
@@ -349,7 +355,7 @@ describe('rdme openapi', () => {
         openapi.run({ spec: require.resolve('@readme/oas-examples/2.0/json/petstore.json'), key, version })
       ).rejects.toStrictEqual(new Error('There was an error uploading!'));
 
-      mock.done();
+      return mock.done();
     });
 
     it('should error if API errors (request timeout)', async () => {
@@ -373,14 +379,14 @@ describe('rdme openapi', () => {
         )
       );
 
-      mock.done();
+      return mock.done();
     });
   });
 });
 
 describe('rdme swagger', () => {
-  it('should run `rdme openapi`', async () => {
-    await expect(swagger.run({ spec: '', key, id, version })).rejects.toThrow(
+  it('should run `rdme openapi`', () => {
+    return expect(swagger.run({ spec: '', key, id, version })).rejects.toThrow(
       "We couldn't find an OpenAPI or Swagger definition.\n\n" +
         'Run `rdme openapi ./path/to/api/definition` to upload an existing definition or `rdme oas init` to create a fresh one!'
     );
