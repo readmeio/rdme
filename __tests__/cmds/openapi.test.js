@@ -104,7 +104,7 @@ describe('rdme openapi', () => {
       // Surface our test fixture to the root directory so rdme can autodiscover it. It's easier to do
       // this than mocking out the fs module because mocking the fs module here causes Jest sourcemaps
       // to break.
-      await fs.copyFileSync(require.resolve('@readme/oas-examples/2.0/json/petstore.json'), './swagger.json');
+      fs.copyFileSync(require.resolve('@readme/oas-examples/2.0/json/petstore.json'), './swagger.json');
 
       await expect(openapi.run({ key })).resolves.toBe(successfulUpload);
 
@@ -113,7 +113,7 @@ describe('rdme openapi', () => {
       const output = getCommandOutput();
       expect(output).toBe(chalk.yellow('We found swagger.json and are attempting to upload it.'));
 
-      await fs.unlinkSync('./swagger.json');
+      fs.unlinkSync('./swagger.json');
       return mock.done();
     });
   });
