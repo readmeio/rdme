@@ -85,7 +85,7 @@ exports.run = async function (opts) {
 
       const body = await data.json();
 
-      console.log(
+      return Promise.resolve(
         [
           message,
           '',
@@ -221,7 +221,7 @@ exports.run = async function (opts) {
         return;
       }
 
-      console.log(chalk.yellow(`We found ${file} and are attempting to upload it.`));
+      console.info(chalk.yellow(`We found ${file} and are attempting to upload it.`));
       resolve(callApi(file, selectedVersion));
     });
 

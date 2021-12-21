@@ -27,10 +27,9 @@ exports.run = async function (opts) {
       .validate(false)
       .then(api => {
         if (api.swagger) {
-          console.log(chalk.green(`${specPath} is a valid Swagger API definition!`));
-        } else {
-          console.log(chalk.green(`${specPath} is a valid OpenAPI API definition!`));
+          return Promise.resolve(chalk.green(`${specPath} is a valid Swagger API definition!`));
         }
+        return Promise.resolve(chalk.green(`${specPath} is a valid OpenAPI API definition!`));
       })
       .catch(err => {
         return Promise.reject(new Error(err.message));
@@ -49,7 +48,7 @@ exports.run = async function (opts) {
         return;
       }
 
-      console.log(chalk.yellow(`We found ${file} and are attempting to validate it.`));
+      console.info(chalk.yellow(`We found ${file} and are attempting to validate it.`));
       resolve(validateSpec(file));
     });
 

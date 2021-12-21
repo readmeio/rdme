@@ -1,3 +1,4 @@
+const chalk = require('chalk');
 const config = require('config');
 const configStore = require('../../src/lib/configstore');
 const cmd = require('../../src/cmds/open');
@@ -12,18 +13,15 @@ describe('rdme open', () => {
 
   it('should open the project', () => {
     expect.assertions(2);
-    console.log = jest.fn();
     configStore.set('project', 'subdomain');
 
+    const projectUrl = 'https://subdomain.readme.io';
+
     function mockOpen(url) {
-      expect(url).toBe('https://subdomain.readme.io');
+      expect(url).toBe(projectUrl);
       return Promise.resolve();
     }
 
-    return cmd.run({ mockOpen }).then(() => {
-      expect(console.log).toHaveBeenCalledWith(expect.stringMatching(/opening (.*)subdomain.readme.io/i));
-
-      console.log.mockRestore();
-    });
+    return expect(cmd.run({ mockOpen })).resolves.toBe(`Opening ${chalk.green(projectUrl)} in your browser...`);
   });
 });

@@ -21,7 +21,5 @@ exports.run = function (opts) {
   return (opts.mockOpen || open)(config.hub.replace('{project}', project), {
     wait: false,
     url: true,
-  }).then(() => {
-    console.log(`Opening ${chalk.green(config.hub.replace('{project}', project))} in your browser...`);
-  });
+  }).then(() => Promise.resolve(`Opening ${chalk.green(config.hub.replace('{project}', project))} in your browser...`));
 };
