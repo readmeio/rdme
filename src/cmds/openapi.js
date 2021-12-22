@@ -118,17 +118,10 @@ exports.run = async function (opts) {
 
     let bundledSpec;
     const oas = new OASNormalize(specPath, { colorizeErrors: true, enablePaths: true });
-    await oas.validate(false).catch(err => {
-      return Promise.reject(err);
+    await oas.validate(false);
+    await oas.bundle().then(res => {
+      bundledSpec = JSON.stringify(res);
     });
-    await oas
-      .bundle()
-      .then(res => {
-        bundledSpec = JSON.stringify(res);
-      })
-      .catch(err => {
-        return Promise.reject(err);
-      });
 
     // Create a temporary file to write the bundled spec to,
     // which we will then stream into the form data body
