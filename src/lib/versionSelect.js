@@ -4,6 +4,7 @@ const { cleanHeaders } = require('./cleanHeaders');
 const fetch = require('node-fetch');
 const config = require('config');
 const APIError = require('./apiError');
+const { handleRes } = require('./handleRes');
 
 async function getProjectVersion(versionFlag, key, allowNewVersion) {
   try {
@@ -12,14 +13,14 @@ async function getProjectVersion(versionFlag, key, allowNewVersion) {
         method: 'get',
         headers: cleanHeaders(key),
       })
-        .then(res => res.json())
+        .then(res => handleRes(res))
         .then(res => res.version);
     }
 
     const versionList = await fetch(`${config.host}/api/v1/version`, {
       method: 'get',
       headers: cleanHeaders(key),
-    }).then(res => res.json());
+    }).then(res => handleRes(res));
 
     if (allowNewVersion) {
       const { option, versionSelection, newVersion } = await prompt(promptOpts.generatePrompts(versionList));

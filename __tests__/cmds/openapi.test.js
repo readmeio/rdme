@@ -190,7 +190,36 @@ describe('rdme openapi', () => {
   });
 
   describe('versioning', () => {
-    it.todo('should return a 404 if version flag not found');
+    it('should error if version flag sent to API returns a 404', async () => {
+      const invalidVersion = 'v1000';
+
+      const errorObject = {
+        error: 'VERSION_NOTFOUND',
+        message: `The version you specified (${invalidVersion}) doesn't match any of the existing versions (1.0) in ReadMe.`,
+        suggestion:
+          'You can pass the version in via the `x-readme-version` header. If you want to create a new version, do so in the Versions section inside ReadMe. Note that the version in the URL is our API version, not the version of your docs.',
+        docs: 'https://docs.readme.com/logs/xx-xx-xx',
+        help: "If you need help, email support@readme.io and include the following link to your API log: 'https://docs.readme.com/logs/xx-xx-xx'.",
+        poem: [
+          'We looked high and low,',
+          'Searched up, down and around.',
+          "You'll have to give it another go,",
+          `Because version ${invalidVersion}'s not found!`,
+        ],
+      };
+
+      const mock = nock(config.host).get(`/api/v1/version/${invalidVersion}`).reply(404, errorObject);
+
+      await expect(
+        openapi.run({
+          spec: require.resolve('@readme/oas-examples/3.1/json/petstore.json'),
+          key,
+          version: invalidVersion,
+        })
+      ).rejects.toStrictEqual(new APIError(errorObject));
+
+      return mock.done();
+    });
 
     it('should request a version list if version is not found', async () => {
       promptHandler.generatePrompts.mockResolvedValue({
@@ -201,10 +230,10 @@ describe('rdme openapi', () => {
       const mock = nock(config.host)
         .get('/api/v1/version')
         .basicAuth({ user: key })
-        .reply(200, [{ version: '1.0.1' }])
+        .reply(200, [{ version: '1.0.0' }])
         .post('/api/v1/version')
         .basicAuth({ user: key })
-        .reply(200, { from: '1.0.1', version: '1.0.1' })
+        .reply(200, { from: '1.0.0', version: '1.0.1' })
         .get('/api/v1/api-specification')
         .basicAuth({ user: key })
         .reply(200, [])
@@ -254,6 +283,31 @@ describe('rdme openapi', () => {
       return expect(
         openapi.run({ spec: require.resolve('@readme/oas-examples/3.0/json/petstore.json') })
       ).rejects.toThrow('No project API key provided. Please use `--key`.');
+    });
+
+    it('should error if invalid API key is sent and version list does not load', async () => {
+      const errorObject = {
+        error: 'APIKEY_NOTFOUND',
+        message: "We couldn't find your API key.",
+        suggestion:
+          "The API key you passed in (API_KEY) doesn't match any keys we have in our system. API keys must be passed in as the username part of basic auth. You can get your API key in Configuration > API Key, or in the docs.",
+        docs: 'https://docs.readme.com/logs/xx-xx-xx',
+        help: "If you need help, email support@readme.io and include the following link to your API log: 'https://docs.readme.com/logs/xx-xx-xx'.",
+        poem: [
+          'The ancient gatekeeper declares:',
+          "'To pass, reveal your API key.'",
+          "'API_KEY', you start to ramble",
+          'Oops, you remembered it poorly!',
+        ],
+      };
+
+      const mock = nock(config.host).get('/api/v1/version').reply(401, errorObject);
+
+      await expect(
+        openapi.run({ key, spec: require.resolve('@readme/oas-examples/3.1/json/petstore.json') })
+      ).rejects.toStrictEqual(new APIError(errorObject));
+
+      return mock.done();
     });
 
     it('should error if no file was provided or able to be discovered', async () => {
