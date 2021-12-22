@@ -204,9 +204,7 @@ exports.run = async function (opts) {
   }
 
   if (!id) {
-    selectedVersion = await getProjectVersion(version, key, true).catch(e => {
-      return Promise.reject(e);
-    });
+    selectedVersion = await getProjectVersion(version, key, true);
   }
 
   if (spec) {
