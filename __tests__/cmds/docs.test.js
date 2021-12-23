@@ -186,8 +186,8 @@ describe('rdme docs', () => {
       });
     });
 
-    it('should create only valid docs', () => {
-      console.log = jest.fn();
+    it('should create exclusively valid docs', () => {
+      console.info = jest.fn();
       expect.assertions(2);
 
       const slug = 'fail-doc';
@@ -249,7 +249,7 @@ describe('rdme docs', () => {
         .reply(200, { version });
 
       return docs.run({ folder: './__tests__/__fixtures__/failure-docs', key, version }).then(message => {
-        expect(console.log).toHaveBeenCalledTimes(1);
+        expect(console.info).toHaveBeenCalledTimes(1);
         expect(message).toStrictEqual([
           {
             metadata: { image: [], title: '', description: '' },
@@ -273,7 +273,7 @@ describe('rdme docs', () => {
         postMocks.done();
         versionMock.done();
 
-        console.log.mockRestore();
+        console.info.mockRestore();
       });
     });
   });
@@ -315,11 +315,11 @@ describe('rdme docs', () => {
 
 describe('rdme docs:edit', () => {
   beforeEach(() => {
-    console.log = jest.fn();
+    console.info = jest.fn();
   });
 
   afterEach(() => {
-    console.log.mockRestore();
+    console.info.mockRestore();
   });
 
   it('should error if no api key provided', () => {
@@ -369,7 +369,7 @@ describe('rdme docs:edit', () => {
       versionMock.done();
       expect(fs.existsSync(`${slug}.md`)).toBe(false);
 
-      expect(console.log).toHaveBeenCalledWith('Doc successfully updated. Cleaning up local file.');
+      expect(console.info).toHaveBeenCalledWith('Doc successfully updated. Cleaning up local file.');
     });
   });
 

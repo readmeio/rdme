@@ -86,7 +86,7 @@ exports.run = async function (opts) {
           if (res.error) {
             return reject(new APIError(res));
           }
-          console.log(`Doc successfully updated. Cleaning up local file.`);
+          console.info(`Doc successfully updated. Cleaning up local file.`);
           await unlink(filename);
           return resolve();
         });
