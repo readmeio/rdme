@@ -3,7 +3,7 @@
 exports[`rdme validate error handling should throw an error if an in valid Swagger definition is supplied 1`] = `
 [Error: Swagger schema validation failed.
 
-[31m[1mADDTIONAL PROPERTY[22m[39m[31m must NOT have additional properties[39m
+[31m[1mADDITIONAL PROPERTY[22m[39m[31m must NOT have additional properties[39m
 
 [0m [90m 23 |[39m         [32m"description"[39m[33m:[39m [32m"Find out more"[39m[33m,[39m[0m
 [0m [90m 24 |[39m         [32m"url"[39m[33m:[39m [32m"http://swagger.io"[39m[33m,[39m[0m
@@ -17,12 +17,12 @@ exports[`rdme validate error handling should throw an error if an in valid Swagg
 exports[`rdme validate error handling should throw an error if an invalid OpenAPI 3.1 definition is supplied 1`] = `
 [Error: OpenAPI schema validation failed.
 
-[31m[1mREQUIRED[22m[39m[31m must have required property 'openIdConnectUrl'[39m
+[31m[1mREQUIRED[22m[39m[31m must have required property 'name'[39m
 
 [0m [90m 24 |[39m   [32m"components"[39m[33m:[39m {[0m
 [0m [90m 25 |[39m     [32m"securitySchemes"[39m[33m:[39m {[0m
 [0m[31m[1m>[22m[39m[90m 26 |[39m       [32m"tlsAuth"[39m[33m:[39m {[0m
-[0m [90m    |[39m                  [31m[1m^[22m[39m [31m[1m☹️  [95mopenIdConnectUrl[31m is missing here![22m[39m[0m
+[0m [90m    |[39m                  [31m[1m^[22m[39m [31m[1m☹️  [95mname[31m is missing here![22m[39m[0m
 [0m [90m 27 |[39m         [32m"type"[39m[33m:[39m [32m"mutualTLS"[39m[0m
 [0m [90m 28 |[39m       }[0m
 [0m [90m 29 |[39m     }[0m]
