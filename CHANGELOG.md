@@ -1,3 +1,30 @@
+## 6.2.0 (2022-01-03)
+
+> 🚦 This includes some upgrades to our internal OpenAPI/Swagger definition parsing engine, [@readme/openapi-parser](https://npm.im/@readme/openapi-parser), to expand validation to a number of new aspects of the specifications:
+>
+> * Duplicate parameters
+> * Paths with parameters with no parameter schemas
+> * Duplicate operation IDs
+> * Invalid discriminators
+> * `type: array` with no `items`
+> * And more...
+>
+> If you have issues with any of these new validations please reach out to us either through an rdme GitHub ticket or our support team at support@readme.io
+
+* chore(deps-dev): bump @readme/eslint-config from 8.0.2 to 8.1.1 (#416) ([d057914](https://github.com/readmeio/rdme/commit/d057914)), closes [#416](https://github.com/readmeio/rdme/issues/416)
+* chore(deps-dev): bump eslint from 8.3.0 to 8.6.0 (#418) ([4dbab7c](https://github.com/readmeio/rdme/commit/4dbab7c)), closes [#418](https://github.com/readmeio/rdme/issues/418)
+* chore(deps-dev): bump jest from 27.4.3 to 27.4.5 (#419) ([e9557bb](https://github.com/readmeio/rdme/commit/e9557bb)), closes [#419](https://github.com/readmeio/rdme/issues/419)
+* chore(deps-dev): bump prettier from 2.5.0 to 2.5.1 (#415) ([6007eb1](https://github.com/readmeio/rdme/commit/6007eb1)), closes [#415](https://github.com/readmeio/rdme/issues/415)
+* chore(deps): bump actions/setup-node from 2.5.0 to 2.5.1 (#413) ([c5a159f](https://github.com/readmeio/rdme/commit/c5a159f)), closes [#413](https://github.com/readmeio/rdme/issues/413)
+* chore(deps): bump cli-table from 0.3.9 to 0.3.11 (#414) ([4b2c140](https://github.com/readmeio/rdme/commit/4b2c140)), closes [#414](https://github.com/readmeio/rdme/issues/414)
+* chore(deps): bump oas from 17.3.1 to 17.4.0 (#417) ([45841dc](https://github.com/readmeio/rdme/commit/45841dc)), closes [#417](https://github.com/readmeio/rdme/issues/417)
+* chore(deps): bump parse-link-header from 1.0.1 to 2.0.0 (#412) ([8557a1d](https://github.com/readmeio/rdme/commit/8557a1d)), closes [#412](https://github.com/readmeio/rdme/issues/412)
+* chore(deps): upgrading oas-related deps (#420) ([02f748d](https://github.com/readmeio/rdme/commit/02f748d)), closes [#420](https://github.com/readmeio/rdme/issues/420)
+* fix(openapi): error handling for incorrect project and version flags (#411) ([431a7db](https://github.com/readmeio/rdme/commit/431a7db)), closes [#411](https://github.com/readmeio/rdme/issues/411)
+* refactor(open/openapi/validate): return promises, fix tests (#410) ([8b9ad4b](https://github.com/readmeio/rdme/commit/8b9ad4b)), closes [#410](https://github.com/readmeio/rdme/issues/410)
+
+
+
 ## <small>6.1.3 (2021-12-17)</small>
 
 * fix(openapi): return rejected `Promise` if spec uploads fail (#409) ([e282b54](https://github.com/readmeio/rdme/commit/e282b54)), closes [#409](https://github.com/readmeio/rdme/issues/409)
