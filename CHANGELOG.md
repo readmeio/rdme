@@ -1,3 +1,9 @@
+## <small>6.2.1 (2022-01-04)</small>
+
+* fix(docs): directory sync fix + test bed rewrites (#421) ([b793afc](https://github.com/readmeio/rdme/commit/b793afc)), closes [#421](https://github.com/readmeio/rdme/issues/421)
+
+
+
 ## 6.2.0 (2022-01-03)
 
 > 🚦 This includes some upgrades to our internal OpenAPI/Swagger definition parsing engine, [@readme/openapi-parser](https://npm.im/@readme/openapi-parser), to expand validation to a number of new aspects of the specifications:
