@@ -304,14 +304,6 @@ describe('rdme docs', () => {
 });
 
 describe('rdme docs:edit', () => {
-  beforeEach(() => {
-    console.info = jest.fn();
-  });
-
-  afterEach(() => {
-    console.info.mockRestore();
-  });
-
   it('should error if no api key provided', () => {
     return expect(docsEdit.run({})).rejects.toThrow('No project API key provided. Please use `--key`.');
   });
@@ -324,6 +316,7 @@ describe('rdme docs:edit', () => {
 
   it('should fetch the doc from the api', async () => {
     expect.assertions(5);
+    console.info = jest.fn();
     const slug = 'getting-started';
     const body = 'abcdef';
     const edits = 'ghijkl';
@@ -360,7 +353,8 @@ describe('rdme docs:edit', () => {
     versionMock.done();
 
     expect(fs.existsSync(`${slug}.md`)).toBe(false);
-    return expect(console.info).toHaveBeenCalledWith('Doc successfully updated. Cleaning up local file.');
+    await expect(console.info).toHaveBeenCalledWith('Doc successfully updated. Cleaning up local file.');
+    return console.info.mockRestore();
   });
 
   it('should error if remote doc does not exist', async () => {
