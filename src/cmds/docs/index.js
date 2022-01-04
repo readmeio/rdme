@@ -50,6 +50,7 @@ exports.run = async function (opts) {
 
   // TODO: should we allow version selection at all here?
   // Let's revisit this once we re-evaluate our category logic in the API.
+  // Ideally we should ignore this parameter entirely if the category is included.
   const selectedVersion = await getProjectVersion(version, key, false).catch(e => {
     return Promise.reject(e);
   });
