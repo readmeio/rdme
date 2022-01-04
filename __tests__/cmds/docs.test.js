@@ -353,7 +353,7 @@ describe('rdme docs:edit', () => {
     versionMock.done();
 
     expect(fs.existsSync(`${slug}.md`)).toBe(false);
-    await expect(console.info).toHaveBeenCalledWith('Doc successfully updated. Cleaning up local file.');
+    expect(console.info).toHaveBeenCalledWith('Doc successfully updated. Cleaning up local file.');
     return console.info.mockRestore();
   });
 
