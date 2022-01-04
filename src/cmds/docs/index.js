@@ -48,7 +48,9 @@ exports.run = async function (opts) {
     return Promise.reject(new Error(`No folder provided. Usage \`${config.cli} ${exports.usage}\`.`));
   }
 
-  const selectedVersion = await getProjectVersion(version, key, true).catch(e => {
+  // TODO: should we allow version selection at all here?
+  // Let's revisit this once we re-evaluate our category logic in the API.
+  const selectedVersion = await getProjectVersion(version, key, false).catch(e => {
     return Promise.reject(e);
   });
 
