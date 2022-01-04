@@ -48,9 +48,10 @@ exports.run = async function (opts) {
     return Promise.reject(new Error(`No folder provided. Usage \`${config.cli} ${exports.usage}\`.`));
   }
 
-  const selectedVersion = await getProjectVersion(version, key, true).catch(e => {
-    return Promise.reject(e);
-  });
+  // TODO: should we allow version selection at all here?
+  // Let's revisit this once we re-evaluate our category logic in the API.
+  // Ideally we should ignore this parameter entirely if the category is included.
+  const selectedVersion = await getProjectVersion(version, key, false);
 
   // Find the files to sync
   const readdirRecursive = folderToSearch => {
@@ -110,7 +111,7 @@ exports.run = async function (opts) {
     }).then(res => handleRes(res));
   }
 
-  const updatedDocs = await Promise.allSettled(
+  const updatedDocs = await Promise.all(
     files.map(async filename => {
       const file = await readFile(filename, 'utf8');
       const matter = frontMatter(file);
@@ -134,19 +135,12 @@ exports.run = async function (opts) {
           return updateDoc(slug, matter, hash, res);
         })
         .catch(err => {
-          console.log(chalk.red(`\n\`${slug}\` failed to upload. ${err.message}\n`));
+          // eslint-disable-next-line no-param-reassign
+          err.message = `Error uploading ${chalk.underline(filename)}:\n\n${err.message}`;
+          throw err;
         });
     })
   );
-
-  for (let i = 0; i < updatedDocs.length; ) {
-    if (updatedDocs[i].value !== undefined) {
-      updatedDocs[i] = updatedDocs[i].value; // returns only the value of the response
-      i += 1;
-    } else {
-      updatedDocs.splice(i, 1); // we already displayed the error messages so we can filter those out
-    }
-  }
 
   return updatedDocs;
 };

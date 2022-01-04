@@ -83,11 +83,17 @@ exports.run = async function (opts) {
       })
         .then(res => res.json())
         .then(async res => {
+          // The reason we aren't using our handleRes() function here is
+          // because we need to use the `reject` function from
+          // the Promise that's wrapping this function.
           if (res.error) {
             return reject(new APIError(res));
           }
-          console.log(`Doc successfully updated. Cleaning up local file.`);
+          console.info(`Doc successfully updated. Cleaning up local file.`);
           await unlink(filename);
+          // Normally we should resolve with a value that is logged to the console,
+          // but since we need to wait for the temporary file to be removed,
+          // it's okay to resolve the promise with no value.
           return resolve();
         });
     });

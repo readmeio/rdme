@@ -6,7 +6,7 @@ exports.generatePrompts = (versionList, selectOnly = false) => [
   {
     type: 'select',
     name: 'option',
-    message: 'Would you like to use an existing version or create a new one to associate with your OAS file?',
+    message: 'Would you like to use an existing project version or create a new one?',
     skip() {
       return selectOnly;
     },

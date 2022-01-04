@@ -1,9 +1,12 @@
 const nock = require('nock');
+const chalk = require('chalk');
 const config = require('config');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const frontMatter = require('gray-matter');
+
+const APIError = require('../../src/lib/apiError');
 
 const docs = require('../../src/cmds/docs');
 const docsEdit = require('../../src/cmds/docs/edit');
@@ -186,18 +189,21 @@ describe('rdme docs', () => {
       });
     });
 
-    it('should create only valid docs', () => {
-      console.log = jest.fn();
-      expect.assertions(2);
-
+    it('should fail if any docs are invalid', async () => {
+      const folder = 'failure-docs';
       const slug = 'fail-doc';
       const slugTwo = 'new-doc';
 
-      const doc = frontMatter(fs.readFileSync(path.join(fixturesDir, `/failure-docs/${slug}.md`)));
-      const docTwo = frontMatter(fs.readFileSync(path.join(fixturesDir, `/failure-docs/${slugTwo}.md`)));
+      const errorObject = {
+        error: 'DOC_INVALID',
+        message: "We couldn't save this doc (Path `category` is required.).",
+      };
 
-      const hash = hashFileContents(fs.readFileSync(path.join(fixturesDir, `/failure-docs/${slug}.md`)));
-      const hashTwo = hashFileContents(fs.readFileSync(path.join(fixturesDir, `/failure-docs/${slugTwo}.md`)));
+      const doc = frontMatter(fs.readFileSync(path.join(fixturesDir, `/${folder}/${slug}.md`)));
+      const docTwo = frontMatter(fs.readFileSync(path.join(fixturesDir, `/${folder}/${slugTwo}.md`)));
+
+      const hash = hashFileContents(fs.readFileSync(path.join(fixturesDir, `/${folder}/${slug}.md`)));
+      const hashTwo = hashFileContents(fs.readFileSync(path.join(fixturesDir, `/${folder}/${slugTwo}.md`)));
 
       const getMocks = getNockWithVersionHeader(version)
         .get(`/api/v1/docs/${slug}`)
@@ -238,43 +244,27 @@ describe('rdme docs', () => {
         })
         .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
-        .reply(400, {
-          error: 'DOC_INVALID',
-          message: "We couldn't save this doc (Path `category` is required.).",
-        });
+        .reply(400, errorObject);
 
       const versionMock = nock(config.host)
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      return docs.run({ folder: './__tests__/__fixtures__/failure-docs', key, version }).then(message => {
-        expect(console.log).toHaveBeenCalledTimes(1);
-        expect(message).toStrictEqual([
-          {
-            metadata: { image: [], title: '', description: '' },
-            api: {
-              method: 'post',
-              url: '',
-              auth: 'required',
-              params: [],
-              apiSetting,
-            },
-            title: 'This is the document title',
-            updates: [],
-            type: 'endpoint',
-            slug: slugTwo,
-            body: 'Body',
-            category,
-          },
-        ]);
+      const fullDirectory = `__tests__/__fixtures__/${folder}`;
 
-        getMocks.done();
-        postMocks.done();
-        versionMock.done();
+      const formattedErrorObject = {
+        ...errorObject,
+        message: `Error uploading ${chalk.underline(`${fullDirectory}/${slug}.md`)}:\n\n${errorObject.message}`,
+      };
 
-        console.log.mockRestore();
-      });
+      await expect(docs.run({ folder: `./${fullDirectory}`, key, version })).rejects.toStrictEqual(
+        new APIError(formattedErrorObject)
+      );
+
+      getMocks.done();
+      postMocks.done();
+      versionMock.done();
     });
   });
 
@@ -314,14 +304,6 @@ describe('rdme docs', () => {
 });
 
 describe('rdme docs:edit', () => {
-  beforeEach(() => {
-    console.log = jest.fn();
-  });
-
-  afterEach(() => {
-    console.log.mockRestore();
-  });
-
   it('should error if no api key provided', () => {
     return expect(docsEdit.run({})).rejects.toThrow('No project API key provided. Please use `--key`.');
   });
@@ -332,8 +314,9 @@ describe('rdme docs:edit', () => {
     );
   });
 
-  it('should fetch the doc from the api', () => {
-    expect.assertions(4);
+  it('should fetch the doc from the api', async () => {
+    expect.assertions(5);
+    console.info = jest.fn();
     const slug = 'getting-started';
     const body = 'abcdef';
     const edits = 'ghijkl';
@@ -363,55 +346,55 @@ describe('rdme docs:edit', () => {
       fs.appendFile(filename, edits, cb.bind(null, 0));
     }
 
-    return docsEdit.run({ slug, key, version: '1.0.0', mockEditor }).then(() => {
-      getMock.done();
-      putMock.done();
-      versionMock.done();
-      expect(fs.existsSync(`${slug}.md`)).toBe(false);
+    await expect(docsEdit.run({ slug, key, version: '1.0.0', mockEditor })).resolves.toBeUndefined();
 
-      expect(console.log).toHaveBeenCalledWith('Doc successfully updated. Cleaning up local file.');
-    });
+    getMock.done();
+    putMock.done();
+    versionMock.done();
+
+    expect(fs.existsSync(`${slug}.md`)).toBe(false);
+    expect(console.info).toHaveBeenCalledWith('Doc successfully updated. Cleaning up local file.');
+    return console.info.mockRestore();
   });
 
-  it('should error if remote doc does not exist', () => {
-    expect.assertions(2);
+  it('should error if remote doc does not exist', async () => {
     const slug = 'no-such-doc';
 
-    const getMock = nock(config.host)
-      .get(`/api/v1/docs/${slug}`)
-      .reply(404, {
-        error: 'DOC_NOTFOUND',
-        message: `The doc with the slug '${slug}' couldn't be found`,
-        suggestion: '...a suggestion to resolve the issue...',
-        help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
-      });
+    const errorObject = {
+      error: 'DOC_NOTFOUND',
+      message: `The doc with the slug '${slug}' couldn't be found`,
+      suggestion: '...a suggestion to resolve the issue...',
+      help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
+    };
+
+    const getMock = nock(config.host).get(`/api/v1/docs/${slug}`).reply(404, errorObject);
 
     const versionMock = nock(config.host)
       .get(`/api/v1/version/${version}`)
       .basicAuth({ user: key })
       .reply(200, { version });
 
-    return docsEdit.run({ slug, key, version: '1.0.0' }).catch(err => {
-      getMock.done();
-      versionMock.done();
-      expect(err.code).toBe('DOC_NOTFOUND');
-      expect(err.message).toContain("The doc with the slug 'no-such-doc' couldn't be found");
-    });
+    await expect(docsEdit.run({ slug, key, version: '1.0.0' })).rejects.toThrow(new APIError(errorObject));
+
+    getMock.done();
+    return versionMock.done();
   });
 
-  it('should error if doc fails validation', () => {
+  it('should error if doc fails validation', async () => {
     expect.assertions(2);
     const slug = 'getting-started';
     const body = 'abcdef';
 
-    const getMock = nock(config.host).get(`/api/v1/docs/${slug}`).reply(200, { body });
-
-    const putMock = nock(config.host).put(`/api/v1/docs/${slug}`).reply(400, {
+    const errorObject = {
       error: 'DOC_INVALID',
-      message: "We couldn't save this doc ({error})",
+      message: `We couldn't save this doc (${slug})`,
       suggestion: '...a suggestion to resolve the issue...',
       help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
-    });
+    };
+
+    const getMock = nock(config.host).get(`/api/v1/docs/${slug}`).reply(200, { body });
+
+    const putMock = nock(config.host).put(`/api/v1/docs/${slug}`).reply(400, errorObject);
 
     const versionMock = nock(config.host)
       .get(`/api/v1/version/${version}`)
@@ -422,17 +405,17 @@ describe('rdme docs:edit', () => {
       return cb(0);
     }
 
-    return docsEdit.run({ slug, key, version: '1.0.0', mockEditor }).catch(err => {
-      expect(err.code).toBe('DOC_INVALID');
-      getMock.done();
-      putMock.done();
-      versionMock.done();
-      expect(fs.existsSync(`${slug}.md`)).toBe(true);
-      fs.unlinkSync(`${slug}.md`);
-    });
+    await expect(docsEdit.run({ slug, key, version: '1.0.0', mockEditor })).rejects.toThrow(new APIError(errorObject));
+
+    getMock.done();
+    putMock.done();
+    versionMock.done();
+
+    expect(fs.existsSync(`${slug}.md`)).toBe(true);
+    fs.unlinkSync(`${slug}.md`);
   });
 
-  it('should handle error if $EDITOR fails', () => {
+  it('should handle error if $EDITOR fails', async () => {
     expect.assertions(1);
     const slug = 'getting-started';
     const body = 'abcdef';
@@ -448,10 +431,11 @@ describe('rdme docs:edit', () => {
       return cb(1);
     }
 
-    return docsEdit.run({ slug, key, version: '1.0.0', mockEditor }).catch(err => {
-      getMock.done();
-      expect(err.message).toBe('Non zero exit code from $EDITOR');
-      fs.unlinkSync(`${slug}.md`);
-    });
+    await expect(docsEdit.run({ slug, key, version: '1.0.0', mockEditor })).rejects.toThrow(
+      new Error('Non zero exit code from $EDITOR')
+    );
+
+    getMock.done();
+    fs.unlinkSync(`${slug}.md`);
   });
 });
