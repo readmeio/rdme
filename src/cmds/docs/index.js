@@ -110,7 +110,7 @@ exports.run = async function (opts) {
     }).then(res => handleRes(res));
   }
 
-  const updatedDocs = await Promise.allSettled(
+  const updatedDocs = await Promise.all(
     files.map(async filename => {
       const file = await readFile(filename, 'utf8');
       const matter = frontMatter(file);
@@ -134,19 +134,12 @@ exports.run = async function (opts) {
           return updateDoc(slug, matter, hash, res);
         })
         .catch(err => {
-          console.log(chalk.red(`\n\`${slug}\` failed to upload. ${err.message}\n`));
+          // eslint-disable-next-line no-param-reassign
+          err.message = `Error uploading ${chalk.underline(filename)}:\n\n${err.message}`;
+          throw err;
         });
     })
   );
-
-  for (let i = 0; i < updatedDocs.length; ) {
-    if (updatedDocs[i].value !== undefined) {
-      updatedDocs[i] = updatedDocs[i].value; // returns only the value of the response
-      i += 1;
-    } else {
-      updatedDocs.splice(i, 1); // we already displayed the error messages so we can filter those out
-    }
-  }
 
   return updatedDocs;
 };
