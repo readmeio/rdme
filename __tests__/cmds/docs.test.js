@@ -1,4 +1,5 @@
 const nock = require('nock');
+const chalk = require('chalk');
 const config = require('config');
 const fs = require('fs');
 const path = require('path');
@@ -188,18 +189,21 @@ describe('rdme docs', () => {
       });
     });
 
-    it('should create exclusively valid docs', () => {
-      console.info = jest.fn();
-      expect.assertions(2);
-
+    it('should fail if any docs are invalid', async () => {
+      const folder = 'failure-docs';
       const slug = 'fail-doc';
       const slugTwo = 'new-doc';
 
-      const doc = frontMatter(fs.readFileSync(path.join(fixturesDir, `/failure-docs/${slug}.md`)));
-      const docTwo = frontMatter(fs.readFileSync(path.join(fixturesDir, `/failure-docs/${slugTwo}.md`)));
+      const errorObject = {
+        error: 'DOC_INVALID',
+        message: "We couldn't save this doc (Path `category` is required.).",
+      };
 
-      const hash = hashFileContents(fs.readFileSync(path.join(fixturesDir, `/failure-docs/${slug}.md`)));
-      const hashTwo = hashFileContents(fs.readFileSync(path.join(fixturesDir, `/failure-docs/${slugTwo}.md`)));
+      const doc = frontMatter(fs.readFileSync(path.join(fixturesDir, `/${folder}/${slug}.md`)));
+      const docTwo = frontMatter(fs.readFileSync(path.join(fixturesDir, `/${folder}/${slugTwo}.md`)));
+
+      const hash = hashFileContents(fs.readFileSync(path.join(fixturesDir, `/${folder}/${slug}.md`)));
+      const hashTwo = hashFileContents(fs.readFileSync(path.join(fixturesDir, `/${folder}/${slugTwo}.md`)));
 
       const getMocks = getNockWithVersionHeader(version)
         .get(`/api/v1/docs/${slug}`)
@@ -240,43 +244,27 @@ describe('rdme docs', () => {
         })
         .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
-        .reply(400, {
-          error: 'DOC_INVALID',
-          message: "We couldn't save this doc (Path `category` is required.).",
-        });
+        .reply(400, errorObject);
 
       const versionMock = nock(config.host)
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      return docs.run({ folder: './__tests__/__fixtures__/failure-docs', key, version }).then(message => {
-        expect(console.info).toHaveBeenCalledTimes(1);
-        expect(message).toStrictEqual([
-          {
-            metadata: { image: [], title: '', description: '' },
-            api: {
-              method: 'post',
-              url: '',
-              auth: 'required',
-              params: [],
-              apiSetting,
-            },
-            title: 'This is the document title',
-            updates: [],
-            type: 'endpoint',
-            slug: slugTwo,
-            body: 'Body',
-            category,
-          },
-        ]);
+      const fullDirectory = `__tests__/__fixtures__/${folder}`;
 
-        getMocks.done();
-        postMocks.done();
-        versionMock.done();
+      const formattedErrorObject = {
+        ...errorObject,
+        message: `Error uploading ${chalk.underline(`${fullDirectory}/${slug}.md`)}:\n\n${errorObject.message}`,
+      };
 
-        console.info.mockRestore();
-      });
+      await expect(docs.run({ folder: `./${fullDirectory}`, key, version })).rejects.toStrictEqual(
+        new APIError(formattedErrorObject)
+      );
+
+      getMocks.done();
+      postMocks.done();
+      versionMock.done();
     });
   });
 
