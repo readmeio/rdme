@@ -3,25 +3,20 @@ const chalk = require('chalk');
 
 require('../src')(process.argv.slice(2))
   .then(msg => {
+    // eslint-disable-next-line no-console
     if (msg) console.log(msg);
-    process.exit(0);
+    return process.exit(0);
   })
-  .catch(e => {
-    if (e) {
-      const err = e;
+  .catch(err => {
+    let message = `Yikes, something went wrong! Please try again and if the problem persists, get in touch with our support team at ${chalk.underline(
+      'support@readme.io'
+    )}.`;
 
-      if ('message' in err) {
-        console.error(chalk.red(`\n${err.message}\n`));
-      } else {
-        console.error(
-          chalk.red(
-            `Yikes, something went wrong! Please try again and if the problem persists, get in touch with our support team at ${chalk.underline(
-              'support@readme.io'
-            )}.\n`
-          )
-        );
-      }
+    if (err && 'message' in err) {
+      message = err.message;
     }
 
+    // eslint-disable-next-line no-console
+    console.error(chalk.red(`\n${message}\n`));
     return process.exit(1);
   });
