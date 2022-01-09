@@ -45,7 +45,7 @@ exports.run = async function (opts) {
   }
 
   if (!slug) {
-    return Promise.reject(new Error(`No slug provided. Usage \`${config.cli} ${exports.usage}\`.`));
+    return Promise.reject(new Error(`No slug provided. Usage \`${config.get('cli')} ${exports.usage}\`.`));
   }
 
   const selectedVersion = await getProjectVersion(version, key, true).catch(e => {
@@ -54,7 +54,7 @@ exports.run = async function (opts) {
 
   const filename = `${slug}.md`;
 
-  const existingDoc = await fetch(`${config.host}/api/v1/docs/${slug}`, {
+  const existingDoc = await fetch(`${config.get('host')}/api/v1/docs/${slug}`, {
     method: 'get',
     headers: cleanHeaders(key, {
       'x-readme-version': selectedVersion,
@@ -69,7 +69,7 @@ exports.run = async function (opts) {
       if (code !== 0) return reject(new Error('Non zero exit code from $EDITOR'));
       const updatedDoc = await readFile(filename, 'utf8');
 
-      return fetch(`${config.host}/api/v1/docs/${slug}`, {
+      return fetch(`${config.get('host')}/api/v1/docs/${slug}`, {
         method: 'put',
         headers: cleanHeaders(key, {
           'x-readme-version': selectedVersion,

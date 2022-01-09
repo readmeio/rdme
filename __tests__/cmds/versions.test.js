@@ -44,7 +44,7 @@ describe('rdme versions*', () => {
     });
 
     it('should make a request to get a list of existing versions', async () => {
-      const mockRequest = nock(config.host)
+      const mockRequest = nock(config.get('host'))
         .get('/api/v1/version')
         .basicAuth({ user: key })
         .reply(200, [versionPayload, version2Payload]);
@@ -56,7 +56,7 @@ describe('rdme versions*', () => {
     });
 
     it('should make a request to get a list of existing versions and return them in a raw format', async () => {
-      const mockRequest = nock(config.host)
+      const mockRequest = nock(config.get('host'))
         .get('/api/v1/version')
         .basicAuth({ user: key })
         .reply(200, [versionPayload, version2Payload]);
@@ -67,7 +67,7 @@ describe('rdme versions*', () => {
     });
 
     it('should get a specific version object if version flag provided', async () => {
-      const mockRequest = nock(config.host)
+      const mockRequest = nock(config.get('host'))
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, versionPayload);
@@ -79,7 +79,7 @@ describe('rdme versions*', () => {
     });
 
     it('should get a specific version object if version flag provided and return it in a raw format', async () => {
-      const mockRequest = nock(config.host)
+      const mockRequest = nock(config.get('host'))
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, versionPayload);
@@ -105,7 +105,7 @@ describe('rdme versions*', () => {
         from: '1.0.0',
       });
 
-      const mockRequest = nock(config.host)
+      const mockRequest = nock(config.get('host'))
         .get('/api/v1/version')
         .basicAuth({ user: key })
         .reply(200, [{ version }, { version }])
@@ -125,7 +125,7 @@ describe('rdme versions*', () => {
         is_beta: false,
       });
 
-      const mockRequest = nock(config.host).post(`/api/v1/version`).basicAuth({ user: key }).reply(400, {
+      const mockRequest = nock(config.get('host')).post(`/api/v1/version`).basicAuth({ user: key }).reply(400, {
         error: 'VERSION_EMPTY',
         message: 'You need to include an x-readme-version header',
         suggestion: '...a suggestion to resolve the issue...',
@@ -145,7 +145,7 @@ describe('rdme versions*', () => {
     });
 
     it('should delete a specific version', async () => {
-      const mockRequest = nock(config.host)
+      const mockRequest = nock(config.get('host'))
         .delete(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { removed: true })
@@ -158,7 +158,7 @@ describe('rdme versions*', () => {
     });
 
     it('should catch any request errors', async () => {
-      const mockRequest = nock(config.host)
+      const mockRequest = nock(config.get('host'))
         .delete(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(404, {
@@ -189,7 +189,7 @@ describe('rdme versions*', () => {
         is_deprecated: true,
       });
 
-      const mockRequest = nock(config.host)
+      const mockRequest = nock(config.get('host'))
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version })
@@ -210,7 +210,7 @@ describe('rdme versions*', () => {
         is_beta: false,
       });
 
-      const mockRequest = nock(config.host)
+      const mockRequest = nock(config.get('host'))
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version })

@@ -9,7 +9,7 @@ const { handleRes } = require('./handleRes');
 async function getProjectVersion(versionFlag, key, allowNewVersion) {
   try {
     if (versionFlag) {
-      return await fetch(`${config.host}/api/v1/version/${versionFlag}`, {
+      return await fetch(`${config.get('host')}/api/v1/version/${versionFlag}`, {
         method: 'get',
         headers: cleanHeaders(key),
       })
@@ -17,7 +17,7 @@ async function getProjectVersion(versionFlag, key, allowNewVersion) {
         .then(res => res.version);
     }
 
-    const versionList = await fetch(`${config.host}/api/v1/version`, {
+    const versionList = await fetch(`${config.get('host')}/api/v1/version`, {
       method: 'get',
       headers: cleanHeaders(key),
     }).then(res => handleRes(res));
@@ -27,7 +27,7 @@ async function getProjectVersion(versionFlag, key, allowNewVersion) {
 
       if (option === 'update') return versionSelection;
 
-      await fetch(`${config.host}/api/v1/version`, {
+      await fetch(`${config.get('host')}/api/v1/version`, {
         method: 'post',
         headers: cleanHeaders(key, { 'Content-Type': 'application/json' }),
         body: JSON.stringify({

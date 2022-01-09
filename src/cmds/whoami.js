@@ -13,7 +13,7 @@ exports.args = [];
 
 exports.run = () => {
   if (!configStore.has('email') || !configStore.has('project')) {
-    return Promise.reject(new Error(`Please login using \`${config.cli} ${loginCmd.command}\`.`));
+    return Promise.reject(new Error(`Please login using \`${config.get('cli')} ${loginCmd.command}\`.`));
   }
 
   return Promise.resolve(

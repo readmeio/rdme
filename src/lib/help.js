@@ -8,7 +8,7 @@ function formatCommands(cmds) {
     .sort((a, b) => (a.position > b.position ? 1 : -1))
     .map(command => {
       return {
-        name: `${chalk.grey('$')} ${config.cli} ${command.name}`,
+        name: `${chalk.grey('$')} ${config.get('cli')} ${command.name}`,
         summary: command.description,
       };
     });
@@ -16,7 +16,7 @@ function formatCommands(cmds) {
 
 const owlbert = () => {
   // http://asciiart.club
-  return `                  📖 ${chalk.blue.bold(config.cli)}
+  return `                  📖 ${chalk.blue.bold(config.get('cli'))}
 
     ${chalk.bold(`a utlity for interacting with ReadMe`)}
        .
@@ -51,7 +51,7 @@ exports.commandUsage = cmd => {
     },
     {
       header: 'Usage',
-      content: `${config.cli} ${cmd.usage}`,
+      content: `${config.get('cli')} ${cmd.usage}`,
     },
     {
       header: 'Options',
@@ -86,7 +86,7 @@ exports.globalUsage = async args => {
     },
     {
       header: 'Usage',
-      content: `${config.cli} <command> [arguments]`,
+      content: `${config.get('cli')} <command> [arguments]`,
     },
     {
       header: 'Options',
@@ -108,7 +108,7 @@ exports.globalUsage = async args => {
 
   helpContent.push(
     {
-      content: `Run ${chalk.dim(`${config.cli} help <command>`)} for help with a specific command.`,
+      content: `Run ${chalk.dim(`${config.get('cli')} help <command>`)} for help with a specific command.`,
       raw: true,
     },
     {

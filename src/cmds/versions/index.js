@@ -89,7 +89,7 @@ exports.run = function (opts) {
     return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
   }
 
-  const uri = version ? `${config.host}/api/v1/version/${version}` : `${config.host}/api/v1/version`;
+  const uri = version ? `${config.get('host')}/api/v1/version/${version}` : `${config.get('host')}/api/v1/version`;
 
   return fetch(uri, {
     method: 'get',
@@ -109,7 +109,9 @@ exports.run = function (opts) {
       if (!versions.length) {
         return Promise.reject(
           new Error(
-            `Sorry, you haven't created any versions yet! See \`${config.cli} help ${versionsCreate.command}\` for commands on how to do that.`
+            `Sorry, you haven't created any versions yet! See \`${config.get('cli')} help ${
+              versionsCreate.command
+            }\` for commands on how to do that.`
           )
         );
       }

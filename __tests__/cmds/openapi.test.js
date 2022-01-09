@@ -10,7 +10,7 @@ const APIError = require('../../src/lib/apiError');
 const key = 'API_KEY';
 const id = '5aa0409b7cf527a93bfb44df';
 const version = '1.0.0';
-const exampleRefLocation = `${config.host}/project/example-project/1.0.1/refs/ex`;
+const exampleRefLocation = `${config.get('host')}/project/example-project/1.0.1/refs/ex`;
 const successfulMessageBase = [
   '',
   `\t${chalk.green(exampleRefLocation)}`,
@@ -59,7 +59,7 @@ describe('rdme openapi', () => {
       ['OpenAPI 3.1', 'json', '3.1'],
       ['OpenAPI 3.1', 'yaml', '3.1'],
     ])('should support uploading a %s definition (format: %s)', async (_, format, specVersion) => {
-      const mock = nock(config.host)
+      const mock = nock(config.get('host'))
         .get('/api/v1/api-specification')
         .basicAuth({ user: key })
         .reply(200, [])
@@ -86,7 +86,7 @@ describe('rdme openapi', () => {
     it('should discover and upload an API definition if none is provided', async () => {
       promptHandler.createOasPrompt.mockResolvedValue({ option: 'create' });
 
-      const mock = nock(config.host)
+      const mock = nock(config.get('host'))
         .get('/api/v1/version')
         .basicAuth({ user: key })
         .reply(200, [{ version }])
@@ -127,7 +127,7 @@ describe('rdme openapi', () => {
       ['OpenAPI 3.1', 'json', '3.1'],
       ['OpenAPI 3.1', 'yaml', '3.1'],
     ])('should support updating a %s definition (format: %s)', async (_, format, specVersion) => {
-      const mock = nock(config.host)
+      const mock = nock(config.get('host'))
         .put(`/api/v1/api-specification/${id}`, body => body.match('form-data; name="spec"'))
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
@@ -145,7 +145,7 @@ describe('rdme openapi', () => {
     });
 
     it('should still support `token`', async () => {
-      const mock = nock(config.host)
+      const mock = nock(config.get('host'))
         .put(`/api/v1/api-specification/${id}`, body => body.match('form-data; name="spec"'))
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
@@ -169,7 +169,7 @@ describe('rdme openapi', () => {
     });
 
     it('should return warning if providing `id` and `version`', async () => {
-      const mock = nock(config.host)
+      const mock = nock(config.get('host'))
         .put(`/api/v1/api-specification/${id}`, body => body.match('form-data; name="spec"'))
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
@@ -208,7 +208,7 @@ describe('rdme openapi', () => {
         ],
       };
 
-      const mock = nock(config.host).get(`/api/v1/version/${invalidVersion}`).reply(404, errorObject);
+      const mock = nock(config.get('host')).get(`/api/v1/version/${invalidVersion}`).reply(404, errorObject);
 
       await expect(
         openapi.run({
@@ -227,7 +227,7 @@ describe('rdme openapi', () => {
         newVersion: '1.0.1',
       });
 
-      const mock = nock(config.host)
+      const mock = nock(config.get('host'))
         .get('/api/v1/version')
         .basicAuth({ user: key })
         .reply(200, [{ version: '1.0.0' }])
@@ -251,7 +251,7 @@ describe('rdme openapi', () => {
 
   it('should bundle and upload the expected content', async () => {
     let requestBody = null;
-    const mock = nock(config.host)
+    const mock = nock(config.get('host'))
       .get('/api/v1/api-specification')
       .basicAuth({ user: key })
       .reply(200, [])
@@ -301,7 +301,7 @@ describe('rdme openapi', () => {
         ],
       };
 
-      const mock = nock(config.host).get('/api/v1/version').reply(401, errorObject);
+      const mock = nock(config.get('host')).get('/api/v1/version').reply(401, errorObject);
 
       await expect(
         openapi.run({ key, spec: require.resolve('@readme/oas-examples/3.1/json/petstore.json') })
@@ -311,7 +311,7 @@ describe('rdme openapi', () => {
     });
 
     it('should error if no file was provided or able to be discovered', async () => {
-      const mock = nock(config.host)
+      const mock = nock(config.get('host'))
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version: '1.0.0' });
@@ -341,7 +341,7 @@ describe('rdme openapi', () => {
         help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
       };
 
-      const mock = nock(config.host)
+      const mock = nock(config.get('host'))
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version: '1.0.0' })
@@ -373,7 +373,7 @@ describe('rdme openapi', () => {
         help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
       };
 
-      const mock = nock(config.host)
+      const mock = nock(config.get('host'))
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version: '1.0.0' })
@@ -393,7 +393,7 @@ describe('rdme openapi', () => {
     });
 
     it('should error if API errors (generic upload error)', async () => {
-      const mock = nock(config.host)
+      const mock = nock(config.get('host'))
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version: '1.0.0' })
@@ -413,7 +413,7 @@ describe('rdme openapi', () => {
     });
 
     it('should error if API errors (request timeout)', async () => {
-      const mock = nock(config.host)
+      const mock = nock(config.get('host'))
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version: '1.0.0' })

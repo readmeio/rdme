@@ -35,7 +35,7 @@ exports.run = async function (opts) {
     return Promise.reject(e);
   });
 
-  return fetch(`${config.host}/api/v1/version/${selectedVersion}`, {
+  return fetch(`${config.get('host')}/api/v1/version/${selectedVersion}`, {
     method: 'delete',
     headers: cleanHeaders(key),
   })

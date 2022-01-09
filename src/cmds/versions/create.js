@@ -62,12 +62,12 @@ exports.run = async function (opts) {
 
   if (!version || !semver.valid(semver.coerce(version))) {
     return Promise.reject(
-      new Error(`Please specify a semantic version. See \`${config.cli} help ${exports.command}\` for help.`)
+      new Error(`Please specify a semantic version. See \`${config.get('cli')} help ${exports.command}\` for help.`)
     );
   }
 
   if (!fork) {
-    versionList = await fetch(`${config.host}/api/v1/version`, {
+    versionList = await fetch(`${config.get('host')}/api/v1/version`, {
       method: 'get',
       headers: cleanHeaders(key),
     }).then(res => handleRes(res));
@@ -80,7 +80,7 @@ exports.run = async function (opts) {
 
   const promptResponse = await prompt(versionPrompt);
 
-  return fetch(`${config.host}/api/v1/version`, {
+  return fetch(`${config.get('host')}/api/v1/version`, {
     method: 'post',
     headers: cleanHeaders(key, {
       Accept: 'application/json',

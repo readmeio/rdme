@@ -14,7 +14,7 @@ describe('rdme whoami', () => {
         throw new Error('unauthenticated error message not displayed');
       })
       .catch(err => {
-        expect(err.message).toBe(`Please login using \`${config.cli} ${loginCmd.command}\`.`);
+        expect(err.message).toBe(`Please login using \`${config.get('cli')} ${loginCmd.command}\`.`);
       });
   });
 

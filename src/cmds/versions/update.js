@@ -1,7 +1,6 @@
 const config = require('config');
 const { prompt } = require('enquirer');
 const promptOpts = require('../../lib/prompts');
-const APIError = require('../../lib/apiError');
 const { cleanHeaders } = require('../../lib/cleanHeaders');
 const { getProjectVersion } = require('../../lib/versionSelect');
 const fetch = require('node-fetch');
@@ -57,14 +56,14 @@ exports.run = async function (opts) {
     return Promise.reject(e);
   });
 
-  const foundVersion = await fetch(`${config.host}/api/v1/version/${selectedVersion}`, {
+  const foundVersion = await fetch(`${config.get('host')}/api/v1/version/${selectedVersion}`, {
     method: 'get',
     headers: cleanHeaders(key),
   }).then(res => handleRes(res));
 
   const promptResponse = await prompt(promptOpts.createVersionPrompt([{}], opts, foundVersion));
 
-  return fetch(`${config.host}/api/v1/version/${selectedVersion}`, {
+  return fetch(`${config.get('host')}/api/v1/version/${selectedVersion}`, {
     method: 'put',
     headers: cleanHeaders(key, {
       Accept: 'application/json',

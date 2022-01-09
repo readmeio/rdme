@@ -55,7 +55,7 @@ exports.run = async function (opts) {
     return Promise.reject(new Error('You must provide a valid email address.'));
   }
 
-  return fetch(`${config.host}/api/v1/login`, {
+  return fetch(`${config.get('host')}/api/v1/login`, {
     method: 'post',
     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
     body: JSON.stringify({

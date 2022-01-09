@@ -18,7 +18,7 @@ const category = 'CATEGORY_ID';
 const apiSetting = 'API_SETTING_ID';
 
 function getNockWithVersionHeader(v) {
-  return nock(config.host, {
+  return nock(config.get('host'), {
     reqheaders: {
       'x-readme-version': v,
     },
@@ -105,7 +105,7 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200, { category, slug: anotherDoc.slug, body: anotherDoc.doc.content });
 
-      const versionMock = nock(config.host)
+      const versionMock = nock(config.get('host'))
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version });
@@ -139,7 +139,7 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200, { category, slug: anotherDoc.slug, lastUpdatedHash: anotherDoc.hash });
 
-      const versionMock = nock(config.host)
+      const versionMock = nock(config.get('host'))
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version });
@@ -177,7 +177,7 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(201, { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
-      const versionMock = nock(config.host)
+      const versionMock = nock(config.get('host'))
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version });
@@ -246,7 +246,7 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(400, errorObject);
 
-      const versionMock = nock(config.host)
+      const versionMock = nock(config.get('host'))
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version });
@@ -289,7 +289,7 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(201, { slug: doc.data.slug, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
-      const versionMock = nock(config.host)
+      const versionMock = nock(config.get('host'))
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version });
@@ -335,7 +335,7 @@ describe('rdme docs:edit', () => {
       .basicAuth({ user: key })
       .reply(200, { category, slug });
 
-    const versionMock = nock(config.host)
+    const versionMock = nock(config.get('host'))
       .get(`/api/v1/version/${version}`)
       .basicAuth({ user: key })
       .reply(200, { version });
@@ -367,9 +367,9 @@ describe('rdme docs:edit', () => {
       help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
     };
 
-    const getMock = nock(config.host).get(`/api/v1/docs/${slug}`).reply(404, errorObject);
+    const getMock = nock(config.get('host')).get(`/api/v1/docs/${slug}`).reply(404, errorObject);
 
-    const versionMock = nock(config.host)
+    const versionMock = nock(config.get('host'))
       .get(`/api/v1/version/${version}`)
       .basicAuth({ user: key })
       .reply(200, { version });
@@ -392,11 +392,11 @@ describe('rdme docs:edit', () => {
       help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
     };
 
-    const getMock = nock(config.host).get(`/api/v1/docs/${slug}`).reply(200, { body });
+    const getMock = nock(config.get('host')).get(`/api/v1/docs/${slug}`).reply(200, { body });
 
-    const putMock = nock(config.host).put(`/api/v1/docs/${slug}`).reply(400, errorObject);
+    const putMock = nock(config.get('host')).put(`/api/v1/docs/${slug}`).reply(400, errorObject);
 
-    const versionMock = nock(config.host)
+    const versionMock = nock(config.get('host'))
       .get(`/api/v1/version/${version}`)
       .basicAuth({ user: key })
       .reply(200, { version });
@@ -420,7 +420,7 @@ describe('rdme docs:edit', () => {
     const slug = 'getting-started';
     const body = 'abcdef';
 
-    const getMock = nock(config.host)
+    const getMock = nock(config.get('host'))
       .get(`/api/v1/docs/${slug}`)
       .reply(200, { body })
       .get(`/api/v1/version/${version}`)

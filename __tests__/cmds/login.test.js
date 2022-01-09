@@ -27,7 +27,7 @@ describe('rdme login', () => {
     const project = 'subdomain';
     const apiKey = 'abcdefg';
 
-    const mock = nock(config.host).post('/api/v1/login', { email, password, project }).reply(200, { apiKey });
+    const mock = nock(config.get('host')).post('/api/v1/login', { email, password, project }).reply(200, { apiKey });
 
     await cmd.run({ email, password, project });
     mock.done();
@@ -44,7 +44,7 @@ describe('rdme login', () => {
     const password = '123456';
     const project = 'subdomain';
 
-    const mock = nock(config.host).post('/api/v1/login', { email, password, project }).reply(401, {
+    const mock = nock(config.get('host')).post('/api/v1/login', { email, password, project }).reply(401, {
       error: 'LOGIN_INVALID',
       message: 'Either your email address or password is incorrect',
       suggestion: 'You can reset your password at https://dash.readme.com/forgot',
@@ -64,7 +64,7 @@ describe('rdme login', () => {
     const password = '123456';
     const project = 'subdomain';
 
-    const mock = nock(config.host).post('/api/v1/login', { email, password, project }).reply(401, {
+    const mock = nock(config.get('host')).post('/api/v1/login', { email, password, project }).reply(401, {
       error: 'LOGIN_TWOFACTOR',
       message: 'You must provide a two-factor code',
       suggestion: 'You can do it via the API using `token`, or via the CLI using `rdme login --2fa`',
@@ -84,7 +84,7 @@ describe('rdme login', () => {
     const project = 'subdomain';
     const token = '123456';
 
-    const mock = nock(config.host)
+    const mock = nock(config.get('host'))
       .post('/api/v1/login', { email, password, project, token })
       .reply(200, { apiKey: '123' });
 

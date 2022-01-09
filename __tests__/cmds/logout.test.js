@@ -10,7 +10,7 @@ describe('rdme logout', () => {
 
     return cmd.run({}).then(msg => {
       expect(msg).toBe(
-        `You have logged out of ReadMe. Please use \`${config.cli} ${loginCmd.command}\` to login again.`
+        `You have logged out of ReadMe. Please use \`${config.get('cli')} ${loginCmd.command}\` to login again.`
       );
     });
   });
