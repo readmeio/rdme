@@ -120,10 +120,10 @@ module.exports = class VersionsCommand {
         }
 
         if (version === undefined) {
-          return Promise.resolve(command.getVersionsAsTable(versions));
+          return Promise.resolve(VersionsCommand.getVersionsAsTable(versions));
         }
 
-        return Promise.resolve(command.getVersionFormatted(versions[0]));
+        return Promise.resolve(VersionsCommand.getVersionFormatted(versions[0]));
       });
   }
 };
