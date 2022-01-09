@@ -1,6 +1,5 @@
 const config = require('config');
 const configStore = require('../lib/configstore');
-const LoginCmd = require('./login');
 
 module.exports = class LogoutCommand {
   constructor() {
@@ -18,8 +17,6 @@ module.exports = class LogoutCommand {
       configStore.clear();
     }
 
-    return Promise.resolve(
-      `You have logged out of ReadMe. Please use \`${config.get('cli')} ${new LoginCmd().command}\` to login again.`
-    );
+    return Promise.resolve(`You have logged out of ReadMe. Please use \`${config.get('cli')} login\` to login again.`);
   }
 };
