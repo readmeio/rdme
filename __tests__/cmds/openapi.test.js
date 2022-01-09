@@ -3,9 +3,12 @@ const chalk = require('chalk');
 const config = require('config');
 const fs = require('fs');
 const promptHandler = require('../../src/lib/prompts');
-const swagger = require('../../src/cmds/swagger');
-const openapi = require('../../src/cmds/openapi');
+const SwaggerCommand = require('../../src/cmds/swagger');
+const OpenAPICommand = require('../../src/cmds/openapi');
 const APIError = require('../../src/lib/apiError');
+
+const openapi = new OpenAPICommand();
+const swagger = new SwaggerCommand();
 
 const key = 'API_KEY';
 const id = '5aa0409b7cf527a93bfb44df';

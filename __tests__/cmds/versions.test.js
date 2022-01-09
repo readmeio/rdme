@@ -2,10 +2,10 @@ const nock = require('nock');
 const config = require('config');
 const promptHandler = require('../../src/lib/prompts');
 
-const versions = require('../../src/cmds/versions');
-const createVersion = require('../../src/cmds/versions/create');
-const deleteVersion = require('../../src/cmds/versions/delete');
-const updateVersion = require('../../src/cmds/versions/update');
+const VersionsCommand = require('../../src/cmds/versions');
+const CreateVersionCommand = require('../../src/cmds/versions/create');
+const DeleteVersionCommand = require('../../src/cmds/versions/delete');
+const UpdateVersionCommand = require('../../src/cmds/versions/update');
 
 const key = 'API_KEY';
 const version = '1.0.0';
@@ -39,6 +39,8 @@ describe('rdme versions*', () => {
   afterEach(() => nock.cleanAll());
 
   describe('rdme versions', () => {
+    const versions = new VersionsCommand();
+
     it('should error if no api key provided', async () => {
       await expect(versions.run({})).rejects.toThrow('No project API key provided. Please use `--key`.');
     });
@@ -91,6 +93,8 @@ describe('rdme versions*', () => {
   });
 
   describe('rdme versions:create', () => {
+    const createVersion = new CreateVersionCommand();
+
     it('should error if no api key provided', () => {
       expect.assertions(1);
       return createVersion.run({}).catch(err => {
@@ -140,6 +144,8 @@ describe('rdme versions*', () => {
   });
 
   describe('rdme versions:delete', () => {
+    const deleteVersion = new DeleteVersionCommand();
+
     it('should error if no api key provided', async () => {
       await expect(deleteVersion.run({})).rejects.toThrow('No project API key provided. Please use `--key`.');
     });
@@ -178,6 +184,8 @@ describe('rdme versions*', () => {
   });
 
   describe('rdme versions:update', () => {
+    const updateVersion = new UpdateVersionCommand();
+
     it('should error if no api key provided', async () => {
       await expect(updateVersion.run({})).rejects.toThrow('No project API key provided. Please use `--key`.');
     });

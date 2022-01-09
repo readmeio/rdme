@@ -1,7 +1,9 @@
 const nock = require('nock');
 const config = require('config');
 const configStore = require('../../src/lib/configstore');
-const cmd = require('../../src/cmds/login');
+const Command = require('../../src/cmds/login');
+
+const cmd = new Command();
 
 describe('rdme login', () => {
   beforeAll(() => nock.disableNetConnect());

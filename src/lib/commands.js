@@ -11,7 +11,8 @@ exports.load = cmd => {
   const file = path.join(__dirname, '../cmds', command, subcommand);
   try {
     // eslint-disable-next-line global-require, import/no-dynamic-require
-    return require(file);
+    const Command = require(file);
+    return new Command();
   } catch (e) {
     throw new Error('Command not found.');
   }
@@ -54,11 +55,11 @@ exports.list = () => {
 
   files.forEach(file => {
     // eslint-disable-next-line global-require, import/no-dynamic-require
-    const command = require(file);
+    const Command = require(file);
 
     commands.push({
       file,
-      command,
+      command: new Command(),
     });
   });
 

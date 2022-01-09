@@ -2,6 +2,8 @@
   "extends": ["@readme/eslint-config"],
   "root": true,
   "rules": {
+    "class-methods-use-this": ["error", { "exceptMethods": ["run"] }],
+
     /**
      * This is a small rule to prevent us from using console.log() statements in our commands.
      *

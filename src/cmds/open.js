@@ -2,26 +2,29 @@ const chalk = require('chalk');
 const config = require('config');
 const open = require('open');
 const configStore = require('../lib/configstore');
-const loginCmd = require('./login');
 
-exports.command = 'open';
-exports.usage = 'open';
-exports.description = 'Open your current ReadMe project in the browser.';
-exports.category = 'utilities';
-exports.position = 2;
+module.exports = class OpenCommand {
+  constructor() {
+    this.command = 'open';
+    this.usage = 'open';
+    this.description = 'Open your current ReadMe project in the browser.';
+    this.category = 'utilities';
+    this.position = 2;
 
-exports.args = [];
-
-exports.run = function (opts) {
-  const project = configStore.get('project');
-  if (!project) {
-    return Promise.reject(new Error(`Please login using \`${config.get('cli')} ${loginCmd.command}\`.`));
+    this.args = [];
   }
 
-  const url = config.get('hub').replace('{project}', project);
+  async run(opts) {
+    const project = configStore.get('project');
+    if (!project) {
+      return Promise.reject(new Error(`Please login using \`${config.get('cli')} login\`.`));
+    }
 
-  return (opts.mockOpen || open)(url, {
-    wait: false,
-    url: true,
-  }).then(() => Promise.resolve(`Opening ${chalk.green(url)} in your browser...`));
+    const url = config.get('hub').replace('{project}', project);
+
+    return (opts.mockOpen || open)(url, {
+      wait: false,
+      url: true,
+    }).then(() => Promise.resolve(`Opening ${chalk.green(url)} in your browser...`));
+  }
 };

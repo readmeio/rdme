@@ -1,14 +1,15 @@
 const chalk = require('chalk');
 const config = require('config');
 const configStore = require('../../src/lib/configstore');
-const cmd = require('../../src/cmds/open');
-const loginCmd = require('../../src/cmds/login');
+const Command = require('../../src/cmds/open');
+
+const cmd = new Command();
 
 describe('rdme open', () => {
   it('should error if no project provided', () => {
     configStore.delete('project');
 
-    return expect(cmd.run({})).rejects.toThrow(`Please login using \`${config.get('cli')} ${loginCmd.command}\`.`);
+    return expect(cmd.run({})).rejects.toThrow(`Please login using \`${config.get('cli')} login\`.`);
   });
 
   it('should open the project', () => {
