@@ -2,9 +2,9 @@ const chalk = require('chalk');
 const Table = require('cli-table');
 const config = require('config');
 const versionsCreate = require('./create');
-const APIError = require('../../lib/apiError');
 const { cleanHeaders } = require('../../lib/cleanHeaders');
 const fetch = require('node-fetch');
+const { handleRes } = require('../../lib/handleRes');
 
 exports.command = 'versions';
 exports.usage = 'versions [options]';
@@ -95,12 +95,8 @@ exports.run = function (opts) {
     method: 'get',
     headers: cleanHeaders(key),
   })
-    .then(res => res.json())
+    .then(handleRes)
     .then(data => {
-      if (data.error) {
-        return Promise.reject(new APIError(data));
-      }
-
       if (raw) {
         return Promise.resolve(JSON.stringify(data, null, 2));
       }

@@ -15,13 +15,12 @@ describe('rdme login', () => {
   });
 
   it('should error if email is invalid', () => {
-    expect.assertions(1);
     return expect(cmd.run({ project: 'subdomain', email: 'this-is-not-an-email' })).rejects.toThrow(
       'You must provide a valid email address.'
     );
   });
 
-  it('should post to /login on the API', () => {
+  it('should post to /login on the API', async () => {
     expect.assertions(3);
     const email = 'dom@readme.io';
     const password = '123456';
@@ -30,13 +29,13 @@ describe('rdme login', () => {
 
     const mock = nock(config.host).post('/api/v1/login', { email, password, project }).reply(200, { apiKey });
 
-    return cmd.run({ email, password, project }).then(() => {
-      mock.done();
-      expect(configStore.get('apiKey')).toBe(apiKey);
-      expect(configStore.get('email')).toBe(email);
-      expect(configStore.get('project')).toBe(project);
-      configStore.clear();
-    });
+    await cmd.run({ email, password, project });
+    mock.done();
+
+    expect(configStore.get('apiKey')).toBe(apiKey);
+    expect(configStore.get('email')).toBe(email);
+    expect(configStore.get('project')).toBe(project);
+    configStore.clear();
   });
 
   it('should error if invalid credentials are given', () => {
@@ -73,13 +72,13 @@ describe('rdme login', () => {
     });
 
     return cmd.run({ email, password, project }).catch(err => {
-      mock.done();
       expect(err.code).toBe('LOGIN_TWOFACTOR');
       expect(err.message).toContain('You must provide a two-factor code');
+      mock.done();
     });
   });
 
-  it('should send 2fa token if provided', () => {
+  it('should send 2fa token if provided', async () => {
     const email = 'dom@readme.io';
     const password = '123456';
     const project = 'subdomain';
@@ -89,9 +88,8 @@ describe('rdme login', () => {
       .post('/api/v1/login', { email, password, project, token })
       .reply(200, { apiKey: '123' });
 
-    return cmd.run({ email, password, project, token }).then(() => {
-      mock.done();
-    });
+    await cmd.run({ email, password, project, token });
+    mock.done();
   });
 
   it.todo('should error if trying to access a project that is not yours');

@@ -79,11 +79,8 @@ exports.run = async function (opts) {
       is_hidden: promptResponse.is_stable ? false : !(isPublic === 'true' || promptResponse.is_hidden),
     }),
   })
-    .then(res => res.json())
-    .then(res => {
-      if (res.error) {
-        return Promise.reject(new APIError(res));
-      }
+    .then(handleRes)
+    .then(() => {
       return Promise.resolve(`Version ${selectedVersion} updated successfully.`);
     });
 };

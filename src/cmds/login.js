@@ -4,7 +4,7 @@ const { validate: isEmail } = require('isemail');
 const { promisify } = require('util');
 const read = promisify(require('read'));
 const configStore = require('../lib/configstore');
-const APIError = require('../lib/apiError');
+const { handleRes } = require('../lib/handleRes');
 const fetch = require('node-fetch');
 
 const testing = process.env.NODE_ENV === 'testing';
@@ -65,12 +65,8 @@ exports.run = async function (opts) {
       token,
     }),
   })
-    .then(res => res.json())
+    .then(handleRes)
     .then(res => {
-      if (res.error) {
-        return Promise.reject(new APIError(res));
-      }
-
       configStore.set('apiKey', res.apiKey);
       configStore.set('email', email);
       configStore.set('project', project);
