@@ -2,14 +2,14 @@ const config = require('config');
 const configStore = require('../../src/lib/configstore');
 const Command = require('../../src/cmds/whoami');
 
-const whoami = new Command();
+const cmd = new Command();
 
 describe('rdme whoami', () => {
   it('should error if user is not authenticated', () => {
     configStore.delete('email');
     configStore.delete('project');
 
-    return whoami
+    return cmd
       .run({})
       .then(() => {
         throw new Error('unauthenticated error message not displayed');
@@ -23,7 +23,7 @@ describe('rdme whoami', () => {
     configStore.set('email', 'email@example.com');
     configStore.set('project', 'subdomain');
 
-    return whoami
+    return cmd
       .run({})
       .then(() => {
         expect(true).toBe(true);
