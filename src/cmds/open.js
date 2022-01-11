@@ -15,11 +15,13 @@ exports.args = [];
 exports.run = function (opts) {
   const project = configStore.get('project');
   if (!project) {
-    return Promise.reject(new Error(`Please login using \`${config.cli} ${loginCmd.command}\`.`));
+    return Promise.reject(new Error(`Please login using \`${config.get('cli')} ${loginCmd.command}\`.`));
   }
 
-  return (opts.mockOpen || open)(config.hub.replace('{project}', project), {
+  const url = config.get('hub').replace('{project}', project);
+
+  return (opts.mockOpen || open)(url, {
     wait: false,
     url: true,
-  }).then(() => Promise.resolve(`Opening ${chalk.green(config.hub.replace('{project}', project))} in your browser...`));
+  }).then(() => Promise.resolve(`Opening ${chalk.green(url)} in your browser...`));
 };

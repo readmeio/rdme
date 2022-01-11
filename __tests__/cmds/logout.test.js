@@ -8,20 +8,20 @@ describe('rdme logout', () => {
     configStore.delete('email');
     configStore.delete('project');
 
-    return cmd.run({}).then(msg => {
-      expect(msg).toBe(
-        `You have logged out of ReadMe. Please use \`${config.cli} ${loginCmd.command}\` to login again.`
-      );
-    });
+    return expect(cmd.run({})).resolves.toBe(
+      `You have logged out of ReadMe. Please use \`${config.get('cli')} ${loginCmd.command}\` to login again.`
+    );
   });
 
-  it('should log the user out', () => {
+  it('should log the user out', async () => {
     configStore.set('email', 'email@example.com');
     configStore.set('project', 'subdomain');
 
-    return cmd.run({}).then(() => {
-      expect(configStore.get('email')).toBeUndefined();
-      expect(configStore.get('project')).toBeUndefined();
-    });
+    await expect(cmd.run({})).resolves.toBe(
+      `You have logged out of ReadMe. Please use \`${config.get('cli')} ${loginCmd.command}\` to login again.`
+    );
+
+    expect(configStore.get('email')).toBeUndefined();
+    expect(configStore.get('project')).toBeUndefined();
   });
 });

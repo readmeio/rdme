@@ -3,15 +3,15 @@
 exports[`rdme openapi error handling should throw an error if an invalid OpenAPI 3.1 definition is supplied 1`] = `
 [SyntaxError: OpenAPI schema validation failed.
 
-[31m[1mREQUIRED[22m[39m[31m must have required property 'name'[39m
+REQUIRED must have required property 'name'
 
-[0m [90m 24 |[39m   [32m"components"[39m[33m:[39m {[0m
-[0m [90m 25 |[39m     [32m"securitySchemes"[39m[33m:[39m {[0m
-[0m[31m[1m>[22m[39m[90m 26 |[39m       [32m"tlsAuth"[39m[33m:[39m {[0m
-[0m [90m    |[39m                  [31m[1m^[22m[39m [31m[1m☹️  [95mname[31m is missing here![22m[39m[0m
-[0m [90m 27 |[39m         [32m"type"[39m[33m:[39m [32m"mutualTLS"[39m[0m
-[0m [90m 28 |[39m       }[0m
-[0m [90m 29 |[39m     }[0m]
+  24 |   "components": {
+  25 |     "securitySchemes": {
+> 26 |       "tlsAuth": {
+     |                  ^ ☹️  name is missing here!
+  27 |         "type": "mutualTLS"
+  28 |       }
+  29 |     }]
 `;
 
 exports[`rdme openapi should bundle and upload the expected content 1`] = `

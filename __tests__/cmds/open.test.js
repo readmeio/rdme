@@ -8,7 +8,7 @@ describe('rdme open', () => {
   it('should error if no project provided', () => {
     configStore.delete('project');
 
-    return expect(cmd.run({})).rejects.toThrow(`Please login using \`${config.cli} ${loginCmd.command}\`.`);
+    return expect(cmd.run({})).rejects.toThrow(`Please login using \`${config.get('cli')} ${loginCmd.command}\`.`);
   });
 
   it('should open the project', () => {

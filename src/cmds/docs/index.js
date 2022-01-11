@@ -45,7 +45,7 @@ exports.run = async function (opts) {
   }
 
   if (!folder) {
-    return Promise.reject(new Error(`No folder provided. Usage \`${config.cli} ${exports.usage}\`.`));
+    return Promise.reject(new Error(`No folder provided. Usage \`${config.get('cli')} ${exports.usage}\`.`));
   }
 
   // TODO: should we allow version selection at all here?
@@ -75,7 +75,7 @@ exports.run = async function (opts) {
   function createDoc(slug, file, hash, err) {
     if (err.error !== 'DOC_NOTFOUND') return Promise.reject(err);
 
-    return fetch(`${config.host}/api/v1/docs`, {
+    return fetch(`${config.get('host')}/api/v1/docs`, {
       method: 'post',
       headers: cleanHeaders(key, {
         'x-readme-version': selectedVersion,
@@ -95,7 +95,7 @@ exports.run = async function (opts) {
       return `\`${slug}\` was not updated because there were no changes.`;
     }
 
-    return fetch(`${config.host}/api/v1/docs/${slug}`, {
+    return fetch(`${config.get('host')}/api/v1/docs/${slug}`, {
       method: 'put',
       headers: cleanHeaders(key, {
         'x-readme-version': selectedVersion,
@@ -120,7 +120,7 @@ exports.run = async function (opts) {
       const slug = matter.data.slug || path.basename(filename).replace(path.extname(filename), '').toLowerCase();
       const hash = crypto.createHash('sha1').update(file).digest('hex');
 
-      return fetch(`${config.host}/api/v1/docs/${slug}`, {
+      return fetch(`${config.get('host')}/api/v1/docs/${slug}`, {
         method: 'get',
         headers: cleanHeaders(key, {
           'x-readme-version': selectedVersion,

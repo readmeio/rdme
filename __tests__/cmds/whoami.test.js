@@ -8,27 +8,15 @@ describe('rdme whoami', () => {
     configStore.delete('email');
     configStore.delete('project');
 
-    return cmd
-      .run({})
-      .then(() => {
-        throw new Error('unauthenticated error message not displayed');
-      })
-      .catch(err => {
-        expect(err.message).toBe(`Please login using \`${config.cli} ${loginCmd.command}\`.`);
-      });
+    return expect(cmd.run({})).rejects.toStrictEqual(
+      new Error(`Please login using \`${config.get('cli')} ${loginCmd.command}\`.`)
+    );
   });
 
   it('should return the authenticated user', () => {
     configStore.set('email', 'email@example.com');
     configStore.set('project', 'subdomain');
 
-    return cmd
-      .run({})
-      .then(() => {
-        expect(true).toBe(true);
-      })
-      .catch(err => {
-        throw new Error(err);
-      });
+    return expect(cmd.run({})).resolves.toMatchSnapshot();
   });
 });

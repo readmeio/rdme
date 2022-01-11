@@ -1,7 +1,7 @@
 const config = require('config');
-const APIError = require('../../lib/apiError');
 const { getProjectVersion } = require('../../lib/versionSelect');
 const { cleanHeaders } = require('../../lib/cleanHeaders');
+const { handleRes } = require('../../lib/handleRes');
 const fetch = require('node-fetch');
 
 exports.command = 'versions:delete';
@@ -35,13 +35,12 @@ exports.run = async function (opts) {
     return Promise.reject(e);
   });
 
-  return fetch(`${config.host}/api/v1/version/${selectedVersion}`, {
+  return fetch(`${config.get('host')}/api/v1/version/${selectedVersion}`, {
     method: 'delete',
     headers: cleanHeaders(key),
-  }).then(res => {
-    if (res.error) {
-      return Promise.reject(new APIError(res));
-    }
-    return Promise.resolve(`Version ${selectedVersion} deleted successfully.`);
-  });
+  })
+    .then(handleRes)
+    .then(() => {
+      return Promise.resolve(`Version ${selectedVersion} deleted successfully.`);
+    });
 };

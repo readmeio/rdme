@@ -33,7 +33,7 @@ module.exports = processArgv => {
       name: 'version',
       alias: 'v',
       type: Boolean,
-      description: `Show the current ${config.cli} version`,
+      description: `Show the current ${config.get('cli')} version`,
     },
     { name: 'command', type: String, defaultOption: true },
   ];
@@ -113,7 +113,9 @@ module.exports = processArgv => {
     return bin.run(cmdArgv);
   } catch (e) {
     if (e.message === 'Command not found.') {
-      e.message = `${e.message}\n\nType \`${chalk.yellow(`${config.cli} help`)}\` ${chalk.red('to see all commands')}`;
+      e.message = `${e.message}\n\nType \`${chalk.yellow(`${config.get('cli')} help`)}\` ${chalk.red(
+        'to see all commands'
+      )}`;
     }
 
     return Promise.reject(e);

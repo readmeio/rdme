@@ -143,7 +143,7 @@ exports.run = async function (opts) {
 
     function createSpec() {
       options.method = 'post';
-      return fetch(`${config.host}/api/v1/api-specification`, options).then(res => {
+      return fetch(`${config.get('host')}/api/v1/api-specification`, options).then(res => {
         if (res.ok) return success(res);
         return error(res);
       });
@@ -152,7 +152,7 @@ exports.run = async function (opts) {
     function updateSpec(specId) {
       isUpdate = true;
       options.method = 'put';
-      return fetch(`${config.host}/api/v1/api-specification/${specId}`, options).then(res => {
+      return fetch(`${config.get('host')}/api/v1/api-specification/${specId}`, options).then(res => {
         if (res.ok) return success(res);
         return error(res);
       });
@@ -167,7 +167,7 @@ exports.run = async function (opts) {
     */
 
     function getSpecs(url) {
-      return fetch(`${config.host}${url}`, {
+      return fetch(`${config.get('host')}${url}`, {
         method: 'get',
         headers: cleanHeaders(key, {
           'x-readme-version': versionCleaned,

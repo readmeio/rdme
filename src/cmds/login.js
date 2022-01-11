@@ -4,7 +4,7 @@ const { validate: isEmail } = require('isemail');
 const { promisify } = require('util');
 const read = promisify(require('read'));
 const configStore = require('../lib/configstore');
-const APIError = require('../lib/apiError');
+const { handleRes } = require('../lib/handleRes');
 const fetch = require('node-fetch');
 
 const testing = process.env.NODE_ENV === 'testing';
@@ -55,7 +55,7 @@ exports.run = async function (opts) {
     return Promise.reject(new Error('You must provide a valid email address.'));
   }
 
-  return fetch(`${config.host}/api/v1/login`, {
+  return fetch(`${config.get('host')}/api/v1/login`, {
     method: 'post',
     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -65,12 +65,8 @@ exports.run = async function (opts) {
       token,
     }),
   })
-    .then(res => res.json())
+    .then(handleRes)
     .then(res => {
-      if (res.error) {
-        return Promise.reject(new APIError(res));
-      }
-
       configStore.set('apiKey', res.apiKey);
       configStore.set('email', email);
       configStore.set('project', project);

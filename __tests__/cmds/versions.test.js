@@ -1,6 +1,7 @@
 const nock = require('nock');
 const config = require('config');
 const promptHandler = require('../../src/lib/prompts');
+const APIError = require('../../src/lib/apiError');
 
 const versions = require('../../src/cmds/versions');
 const createVersion = require('../../src/cmds/versions/create');
@@ -40,63 +41,56 @@ describe('rdme versions*', () => {
 
   describe('rdme versions', () => {
     it('should error if no api key provided', () => {
-      return versions.run({}).catch(err => {
-        expect(err.message).toBe('No project API key provided. Please use `--key`.');
-      });
+      return expect(versions.run({})).rejects.toStrictEqual(
+        new Error('No project API key provided. Please use `--key`.')
+      );
     });
 
     it('should make a request to get a list of existing versions', async () => {
-      const mockRequest = nock(config.host)
+      const mockRequest = nock(config.get('host'))
         .get('/api/v1/version')
         .basicAuth({ user: key })
         .reply(200, [versionPayload, version2Payload]);
 
-      const table = await versions.run({ key });
-      expect(table).toContain(version);
-      expect(table).toContain(version2);
+      await expect(versions.run({ key })).resolves.toMatchSnapshot();
       mockRequest.done();
     });
 
     it('should make a request to get a list of existing versions and return them in a raw format', async () => {
-      const mockRequest = nock(config.host)
+      const mockRequest = nock(config.get('host'))
         .get('/api/v1/version')
         .basicAuth({ user: key })
         .reply(200, [versionPayload, version2Payload]);
 
-      const response = await versions.run({ key, raw: true });
-      expect(response).toStrictEqual(JSON.stringify([versionPayload, version2Payload], null, 2));
+      const raw = await versions.run({ key, raw: true });
+      expect(raw).toStrictEqual(JSON.stringify([versionPayload, version2Payload], null, 2));
       mockRequest.done();
     });
 
-    it('should get a specific version object if version flag provided', () => {
-      const mockRequest = nock(config.host)
+    it('should get a specific version object if version flag provided', async () => {
+      const mockRequest = nock(config.get('host'))
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, versionPayload);
 
-      return versions.run({ key, version }).then(table => {
-        expect(table).toContain(version);
-        expect(table).not.toContain(version2);
-        mockRequest.done();
-      });
+      await expect(versions.run({ key, version })).resolves.toMatchSnapshot();
+      mockRequest.done();
     });
 
-    it('should get a specific version object if version flag provided and return it in a raw format', () => {
-      const mockRequest = nock(config.host)
+    it('should get a specific version object if version flag provided and return it in a raw format', async () => {
+      const mockRequest = nock(config.get('host'))
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, versionPayload);
 
-      return versions.run({ key, version, raw: true }).then(response => {
-        expect(response).toStrictEqual(JSON.stringify(versionPayload, null, 2));
-        mockRequest.done();
-      });
+      const raw = await versions.run({ key, version, raw: true });
+      expect(raw).toStrictEqual(JSON.stringify(versionPayload, null, 2));
+      mockRequest.done();
     });
   });
 
   describe('rdme versions:create', () => {
     it('should error if no api key provided', () => {
-      expect.assertions(1);
       return createVersion.run({}).catch(err => {
         expect(err.message).toBe('No project API key provided. Please use `--key`.');
       });
@@ -109,7 +103,7 @@ describe('rdme versions*', () => {
         from: '1.0.0',
       });
 
-      const mockRequest = nock(config.host)
+      const mockRequest = nock(config.get('host'))
         .get('/api/v1/version')
         .basicAuth({ user: key })
         .reply(200, [{ version }, { version }])
@@ -122,87 +116,89 @@ describe('rdme versions*', () => {
       });
     });
 
-    it('should catch any post request errors', () => {
+    it('should catch any post request errors', async () => {
       expect.assertions(1);
       promptHandler.createVersionPrompt.mockResolvedValue({
         is_stable: false,
         is_beta: false,
       });
 
-      const mockRequest = nock(config.host).post(`/api/v1/version`).basicAuth({ user: key }).reply(400, {
+      const errorResponse = {
         error: 'VERSION_EMPTY',
         message: 'You need to include an x-readme-version header',
         suggestion: '...a suggestion to resolve the issue...',
         help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
-      });
+      };
 
-      return createVersion.run({ key, version, fork: '0.0.5' }).catch(err => {
-        expect(err.message).toContain('You need to include an x-readme-version header');
-        mockRequest.done();
-      });
+      const mockRequest = nock(config.get('host'))
+        .post('/api/v1/version')
+        .basicAuth({ user: key })
+        .reply(400, errorResponse);
+
+      await expect(createVersion.run({ key, version, fork: '0.0.5' })).rejects.toStrictEqual(
+        new APIError(errorResponse)
+      );
+      mockRequest.done();
     });
   });
 
   describe('rdme versions:delete', () => {
     it('should error if no api key provided', () => {
-      expect.assertions(1);
-      return deleteVersion.run({}).catch(err => {
-        expect(err.message).toBe('No project API key provided. Please use `--key`.');
-      });
+      return expect(deleteVersion.run({})).rejects.toStrictEqual(
+        new Error('No project API key provided. Please use `--key`.')
+      );
     });
 
-    it('should delete a specific version', () => {
-      const mockRequest = nock(config.host)
+    it('should delete a specific version', async () => {
+      const mockRequest = nock(config.get('host'))
         .delete(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
-        .reply(200)
+        .reply(200, { removed: true })
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      return deleteVersion.run({ key, version }).then(() => {
-        mockRequest.done();
-      });
+      await expect(deleteVersion.run({ key, version })).resolves.toBe('Version 1.0.0 deleted successfully.');
+      mockRequest.done();
     });
 
-    it('should catch any request errors', () => {
-      const mockRequest = nock(config.host)
+    it('should catch any request errors', async () => {
+      const errorResponse = {
+        error: 'VERSION_NOTFOUND',
+        message:
+          "The version you specified ({version}) doesn't match any of the existing versions ({versions_list}) in ReadMe.",
+        suggestion: '...a suggestion to resolve the issue...',
+        help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
+      };
+
+      const mockRequest = nock(config.get('host'))
         .delete(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
-        .reply(404, {
-          error: 'VERSION_NOTFOUND',
-          message:
-            "The version you specified ({version}) doesn't match any of the existing versions ({versions_list}) in ReadMe.",
-          suggestion: '...a suggestion to resolve the issue...',
-          help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
-        })
+        .reply(404, errorResponse)
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      return deleteVersion.run({ key, version }).catch(err => {
-        expect(err.message).toContain('The version you specified');
-        mockRequest.done();
-      });
+      await expect(deleteVersion.run({ key, version })).rejects.toStrictEqual(new APIError(errorResponse));
+      mockRequest.done();
     });
   });
 
   describe('rdme versions:update', () => {
     it('should error if no api key provided', () => {
-      expect.assertions(1);
-      return updateVersion.run({}).catch(err => {
-        expect(err.message).toBe('No project API key provided. Please use `--key`.');
-      });
+      return expect(updateVersion.run({})).rejects.toStrictEqual(
+        new Error('No project API key provided. Please use `--key`.')
+      );
     });
 
-    it('should update a specific version object', () => {
+    it('should update a specific version object', async () => {
       promptHandler.createVersionPrompt.mockResolvedValue({
         is_stable: false,
         is_beta: false,
         is_deprecated: true,
       });
 
-      const mockRequest = nock(config.host)
+      const mockRequest = nock(config.get('host'))
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version })
@@ -213,38 +209,36 @@ describe('rdme versions*', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      return updateVersion.run({ key, version }).then(() => {
-        mockRequest.done();
-      });
+      await expect(updateVersion.run({ key, version })).resolves.toBe('Version 1.0.0 updated successfully.');
+      mockRequest.done();
     });
 
-    it('should catch any put request errors', () => {
-      expect.assertions(1);
+    it('should catch any put request errors', async () => {
       promptHandler.createVersionPrompt.mockResolvedValue({
         is_stable: false,
         is_beta: false,
       });
 
-      const mockRequest = nock(config.host)
+      const errorResponse = {
+        error: 'VERSION_CANT_DEMOTE_STABLE',
+        message: "You can't make a stable version non-stable",
+        suggestion: '...a suggestion to resolve the issue...',
+        help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
+      };
+
+      const mockRequest = nock(config.get('host'))
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version })
         .put(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
-        .reply(400, {
-          error: 'VERSION_CANT_DEMOTE_STABLE',
-          message: "You can't make a stable version non-stable",
-          suggestion: '...a suggestion to resolve the issue...',
-          help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
-        })
+        .reply(400, errorResponse)
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      return updateVersion.run({ key, version }).catch(err => {
-        expect(err.message).toContain("You can't make a stable version non-stable");
-        mockRequest.done();
-      });
+      await expect(updateVersion.run({ key, version })).rejects.toStrictEqual(new APIError(errorResponse));
+      mockRequest.done();
     });
   });
 });
