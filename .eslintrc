@@ -2,6 +2,10 @@
   "extends": ["@readme/eslint-config"],
   "root": true,
   "rules": {
+    /**
+     * Because our command classes have a `run` method that might not always call `this` we need to
+     * explicitly exclude `run` from this rule.
+     */
     "class-methods-use-this": ["error", { "exceptMethods": ["run"] }],
 
     /**
