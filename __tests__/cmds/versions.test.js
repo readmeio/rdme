@@ -39,8 +39,8 @@ describe('rdme versions*', () => {
   afterEach(() => nock.cleanAll());
 
   describe('rdme versions', () => {
-    it('should error if no api key provided', async () => {
-      await expect(versions.run({})).rejects.toThrow('No project API key provided. Please use `--key`.');
+    it('should error if no api key provided', () => {
+      return expect(versions.run({})).rejects.toThrow('No project API key provided. Please use `--key`.');
     });
 
     it('should make a request to get a list of existing versions', async () => {
@@ -92,7 +92,6 @@ describe('rdme versions*', () => {
 
   describe('rdme versions:create', () => {
     it('should error if no api key provided', () => {
-      expect.assertions(1);
       return createVersion.run({}).catch(err => {
         expect(err.message).toBe('No project API key provided. Please use `--key`.');
       });
@@ -140,8 +139,8 @@ describe('rdme versions*', () => {
   });
 
   describe('rdme versions:delete', () => {
-    it('should error if no api key provided', async () => {
-      await expect(deleteVersion.run({})).rejects.toThrow('No project API key provided. Please use `--key`.');
+    it('should error if no api key provided', () => {
+      return expect(deleteVersion.run({})).rejects.toThrow('No project API key provided. Please use `--key`.');
     });
 
     it('should delete a specific version', async () => {
@@ -178,8 +177,8 @@ describe('rdme versions*', () => {
   });
 
   describe('rdme versions:update', () => {
-    it('should error if no api key provided', async () => {
-      await expect(updateVersion.run({})).rejects.toThrow('No project API key provided. Please use `--key`.');
+    it('should error if no api key provided', () => {
+      return expect(updateVersion.run({})).rejects.toThrow('No project API key provided. Please use `--key`.');
     });
 
     it('should update a specific version object', async () => {

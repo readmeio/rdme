@@ -35,12 +35,10 @@ describe('rdme docs', () => {
   afterAll(() => nock.cleanAll());
 
   it('should error if no api key provided', () => {
-    expect.assertions(1);
     return expect(docs.run({})).rejects.toThrow('No project API key provided. Please use `--key`.');
   });
 
   it('should error if no folder provided', () => {
-    expect.assertions(1);
     return expect(docs.run({ key, version: '1.0.0' })).rejects.toThrow(
       'No folder provided. Usage `rdme docs <folder> [options]`.'
     );
@@ -381,7 +379,6 @@ describe('rdme docs:edit', () => {
   });
 
   it('should error if doc fails validation', async () => {
-    expect.assertions(2);
     const slug = 'getting-started';
     const body = 'abcdef';
 
@@ -416,7 +413,6 @@ describe('rdme docs:edit', () => {
   });
 
   it('should handle error if $EDITOR fails', async () => {
-    expect.assertions(1);
     const slug = 'getting-started';
     const body = 'abcdef';
 
