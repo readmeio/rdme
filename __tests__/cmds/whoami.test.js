@@ -8,7 +8,9 @@ describe('rdme whoami', () => {
     configStore.delete('email');
     configStore.delete('project');
 
-    return expect(cmd.run({})).rejects.toStrictEqual(new Error(`Please login using \`${config.get('cli')} ${loginCmd.command}\`.`));
+    return expect(cmd.run({})).rejects.toStrictEqual(
+      new Error(`Please login using \`${config.get('cli')} ${loginCmd.command}\`.`)
+    );
   });
 
   it('should return the authenticated user', () => {
