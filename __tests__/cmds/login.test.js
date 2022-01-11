@@ -28,12 +28,11 @@ describe('rdme login', () => {
   });
 
   it('should post to /login on the API', async () => {
-    expect.assertions(3);
     const apiKey = 'abcdefg';
 
     const mock = nock(config.get('host')).post('/api/v1/login', { email, password, project }).reply(200, { apiKey });
 
-    await cmd.run({ email, password, project });
+    await expect(cmd.run({ email, password, project })).resolves.toMatchSnapshot();
     mock.done();
 
     expect(configStore.get('apiKey')).toBe(apiKey);
@@ -77,7 +76,7 @@ describe('rdme login', () => {
       .post('/api/v1/login', { email, password, project, token })
       .reply(200, { apiKey: '123' });
 
-    await cmd.run({ email, password, project, token });
+    await expect(cmd.run({ email, password, project, token })).resolves.toMatchSnapshot();
     mock.done();
   });
 

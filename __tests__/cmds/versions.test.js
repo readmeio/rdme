@@ -52,9 +52,7 @@ describe('rdme versions*', () => {
         .basicAuth({ user: key })
         .reply(200, [versionPayload, version2Payload]);
 
-      const table = await versions.run({ key });
-      expect(table).toContain(version);
-      expect(table).toContain(version2);
+      await expect(versions.run({ key })).resolves.toMatchSnapshot();
       mockRequest.done();
     });
 
