@@ -41,7 +41,7 @@ describe('rdme versions*', () => {
 
   describe('rdme versions', () => {
     it('should error if no api key provided', () => {
-      return expect(versions.run({})).rejects.toThrow('No project API key provided. Please use `--key`.');
+      return expect(versions.run({})).rejects.toStrictEqual(new Error('No project API key provided. Please use `--key`.'));
     });
 
     it('should make a request to get a list of existing versions', async () => {
