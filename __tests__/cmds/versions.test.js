@@ -184,7 +184,7 @@ describe('rdme versions*', () => {
 
   describe('rdme versions:update', () => {
     it('should error if no api key provided', () => {
-      return expect(updateVersion.run({})).rejects.toThrow('No project API key provided. Please use `--key`.');
+      return expect(updateVersion.run({})).rejects.toStrictEqual(new Error('No project API key provided. Please use `--key`.'));
     });
 
     it('should update a specific version object', async () => {
