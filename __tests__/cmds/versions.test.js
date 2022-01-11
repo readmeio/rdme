@@ -144,7 +144,7 @@ describe('rdme versions*', () => {
 
   describe('rdme versions:delete', () => {
     it('should error if no api key provided', () => {
-      return expect(deleteVersion.run({})).rejects.toThrow('No project API key provided. Please use `--key`.');
+      return expect(deleteVersion.run({})).rejects.toStrictEqual(new Error('No project API key provided. Please use `--key`.'));
     });
 
     it('should delete a specific version', async () => {
