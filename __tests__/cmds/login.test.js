@@ -34,9 +34,7 @@ describe('rdme login', () => {
 
     const mock = nock(config.get('host')).post('/api/v1/login', { email, password, project }).reply(200, { apiKey });
 
-    const output = await cmd.run({ email, password, project });
-    expect(output).toContain('user@example.com');
-    expect(output).toContain('subdomain');
+    await expect(cmd.run({ email, password, project })).resolves.toMatchSnapshot();
 
     mock.done();
 
@@ -81,10 +79,7 @@ describe('rdme login', () => {
       .post('/api/v1/login', { email, password, project, token })
       .reply(200, { apiKey: '123' });
 
-    const output = await cmd.run({ email, password, project, token });
-    expect(output).toContain('user@example.com');
-    expect(output).toContain('subdomain');
-
+    await expect(cmd.run({ email, password, project, token })).resolves.toMatchSnapshot();
     mock.done();
   });
 
