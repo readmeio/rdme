@@ -54,7 +54,9 @@ describe('rdme versions*', () => {
         .basicAuth({ user: key })
         .reply(200, [versionPayload, version2Payload]);
 
-      await expect(versions.run({ key })).resolves.toMatchSnapshot();
+      const table = await versions.run({ key });
+      expect(table).toContain(version);
+      expect(table).toContain(version2);
       mockRequest.done();
     });
 
@@ -75,7 +77,9 @@ describe('rdme versions*', () => {
         .basicAuth({ user: key })
         .reply(200, versionPayload);
 
-      await expect(versions.run({ key, version })).resolves.toMatchSnapshot();
+      const table = await versions.run({ key, version });
+      expect(table).toContain(version);
+      expect(table).not.toContain(version2);
       mockRequest.done();
     });
 
