@@ -66,7 +66,7 @@ describe('rdme login', () => {
 
     const mock = nock(config.get('host')).post('/api/v1/login', { email, password, project }).reply(401, errorResponse);
 
-    await expect(cmd.run({ email, password, project })).rejects.toThrow(new APIError(errorResponse));
+    await expect(cmd.run({ email, password, project })).rejects.toStrictEqual(new APIError(errorResponse));
     mock.done();
   });
 
