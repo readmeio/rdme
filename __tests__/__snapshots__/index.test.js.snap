@@ -4,30 +4,30 @@ exports[`cli --help should not surface args that are designated as hidden 1`] = 
 "
 Upload, or resync, your OpenAPI/Swagger definition to ReadMe.
 
-[4m[1mUsage[22m[24m
+Usage
 
   rdme openapi [file] [options] 
 
-[4m[1mOptions[22m[24m
+Options
 
-  [1m--key[22m [4mstring[24m       Project API key                                                               
-  [1m--id[22m [4mstring[24m        Unique identifier for your API definition. Use this if you're re-uploading an 
+  --key string       Project API key                                                               
+  --id string        Unique identifier for your API definition. Use this if you're re-uploading an 
                      existing API definition                                                       
-  [1m--version[22m [4mstring[24m   Project version                                                               
-  [1m-h[22m, [1m--help[22m         Display this usage guide                                                      
+  --version string   Project version                                                               
+  -h, --help         Display this usage guide                                                      
 
-[4m[1mRelated commands[22m[24m
+Related commands
 
-  [90m$[39m rdme validate   Validate your OpenAPI/Swagger definition. 
-  [90m$[39m rdme swagger    Alias for \`rdme openapi\`. [deprecated]    
+  $ rdme validate   Validate your OpenAPI/Swagger definition. 
+  $ rdme swagger    Alias for \`rdme openapi\`. [deprecated]    
 "
 `;
 
 exports[`cli --help should print help 1`] = `
 "
-                  📖 [34m[1mrdme[22m[39m
+                  📖 rdme
 
-    [1ma utlity for interacting with ReadMe[22m
+    a utlity for interacting with ReadMe
        .
        .\\\\                          /.
       ’  ‘                        ‘ ‘
@@ -51,46 +51,46 @@ exports[`cli --help should print help 1`] = `
   ‘READn’  \\\\._./  \\\\__./  \\\\.../     ‘MEE*’
        *                           /*
 
-[4m[1mUsage[22m[24m
+Usage
 
   rdme <command> [arguments] 
 
-[4m[1mOptions[22m[24m
+Options
 
-  [1m-h[22m, [1m--help[22m       Display this usage guide      
-  [1m-v[22m, [1m--version[22m    Show the current rdme version 
+  -h, --help       Display this usage guide      
+  -v, --version    Show the current rdme version 
 
-[4m[1mAdministration[22m[24m
+Administration
 
-  [90m$[39m rdme login    Login to a ReadMe project.                                       
-  [90m$[39m rdme logout   Logs the currently authenticated user out of ReadMe.             
-  [90m$[39m rdme whoami   Displays the current user and project authenticated with ReadMe. 
+  $ rdme login    Login to a ReadMe project.                                       
+  $ rdme logout   Logs the currently authenticated user out of ReadMe.             
+  $ rdme whoami   Displays the current user and project authenticated with ReadMe. 
 
-[4m[1mUpload OpenAPI/Swagger definitions[22m[24m
+Upload OpenAPI/Swagger definitions
 
-  [90m$[39m rdme openapi    Upload, or resync, your OpenAPI/Swagger definition to ReadMe. 
-  [90m$[39m rdme validate   Validate your OpenAPI/Swagger definition.                     
-  [90m$[39m rdme swagger    Alias for \`rdme openapi\`. [deprecated]                        
+  $ rdme openapi    Upload, or resync, your OpenAPI/Swagger definition to ReadMe. 
+  $ rdme validate   Validate your OpenAPI/Swagger definition.                     
+  $ rdme swagger    Alias for \`rdme openapi\`. [deprecated]                        
 
-[4m[1mDocumentation[22m[24m
+Documentation
 
-  [90m$[39m rdme docs        Sync a folder of markdown files to your ReadMe project.             
-  [90m$[39m rdme docs:edit   Edit a single file from your ReadMe project without saving locally. 
+  $ rdme docs        Sync a folder of markdown files to your ReadMe project.             
+  $ rdme docs:edit   Edit a single file from your ReadMe project without saving locally. 
 
-[4m[1mVersions[22m[24m
+Versions
 
-  [90m$[39m rdme versions          List versions available in your project or get a version by SemVer       
+  $ rdme versions          List versions available in your project or get a version by SemVer       
                            (https://semver.org/).                                                   
-  [90m$[39m rdme versions:create   Create a new version for your project.                                   
-  [90m$[39m rdme versions:update   Update an existing version for your project.                             
-  [90m$[39m rdme versions:delete   Delete a version associated with your ReadMe project.                    
+  $ rdme versions:create   Create a new version for your project.                                   
+  $ rdme versions:update   Update an existing version for your project.                             
+  $ rdme versions:delete   Delete a version associated with your ReadMe project.                    
 
-[4m[1mOther useful commands[22m[24m
+Other useful commands
 
-  [90m$[39m rdme oas    Helpful OpenAPI generation tooling.              
-  [90m$[39m rdme open   Open your current ReadMe project in the browser. 
+  $ rdme oas    Helpful OpenAPI generation tooling.              
+  $ rdme open   Open your current ReadMe project in the browser. 
 
-Run [2mrdme help <command>[22m for help with a specific command.
+Run rdme help <command> for help with a specific command.
 
 To get more help with ReadMe, check out our docs at https://docs.readme.com.
 "
@@ -98,9 +98,9 @@ To get more help with ReadMe, check out our docs at https://docs.readme.com.
 
 exports[`cli --help should print help for the \`-H\` alias 1`] = `
 "
-                  📖 [34m[1mrdme[22m[39m
+                  📖 rdme
 
-    [1ma utlity for interacting with ReadMe[22m
+    a utlity for interacting with ReadMe
        .
        .\\\\                          /.
       ’  ‘                        ‘ ‘
@@ -124,46 +124,46 @@ exports[`cli --help should print help for the \`-H\` alias 1`] = `
   ‘READn’  \\\\._./  \\\\__./  \\\\.../     ‘MEE*’
        *                           /*
 
-[4m[1mUsage[22m[24m
+Usage
 
   rdme <command> [arguments] 
 
-[4m[1mOptions[22m[24m
+Options
 
-  [1m-h[22m, [1m--help[22m       Display this usage guide      
-  [1m-v[22m, [1m--version[22m    Show the current rdme version 
+  -h, --help       Display this usage guide      
+  -v, --version    Show the current rdme version 
 
-[4m[1mAdministration[22m[24m
+Administration
 
-  [90m$[39m rdme login    Login to a ReadMe project.                                       
-  [90m$[39m rdme logout   Logs the currently authenticated user out of ReadMe.             
-  [90m$[39m rdme whoami   Displays the current user and project authenticated with ReadMe. 
+  $ rdme login    Login to a ReadMe project.                                       
+  $ rdme logout   Logs the currently authenticated user out of ReadMe.             
+  $ rdme whoami   Displays the current user and project authenticated with ReadMe. 
 
-[4m[1mUpload OpenAPI/Swagger definitions[22m[24m
+Upload OpenAPI/Swagger definitions
 
-  [90m$[39m rdme openapi    Upload, or resync, your OpenAPI/Swagger definition to ReadMe. 
-  [90m$[39m rdme validate   Validate your OpenAPI/Swagger definition.                     
-  [90m$[39m rdme swagger    Alias for \`rdme openapi\`. [deprecated]                        
+  $ rdme openapi    Upload, or resync, your OpenAPI/Swagger definition to ReadMe. 
+  $ rdme validate   Validate your OpenAPI/Swagger definition.                     
+  $ rdme swagger    Alias for \`rdme openapi\`. [deprecated]                        
 
-[4m[1mDocumentation[22m[24m
+Documentation
 
-  [90m$[39m rdme docs        Sync a folder of markdown files to your ReadMe project.             
-  [90m$[39m rdme docs:edit   Edit a single file from your ReadMe project without saving locally. 
+  $ rdme docs        Sync a folder of markdown files to your ReadMe project.             
+  $ rdme docs:edit   Edit a single file from your ReadMe project without saving locally. 
 
-[4m[1mVersions[22m[24m
+Versions
 
-  [90m$[39m rdme versions          List versions available in your project or get a version by SemVer       
+  $ rdme versions          List versions available in your project or get a version by SemVer       
                            (https://semver.org/).                                                   
-  [90m$[39m rdme versions:create   Create a new version for your project.                                   
-  [90m$[39m rdme versions:update   Update an existing version for your project.                             
-  [90m$[39m rdme versions:delete   Delete a version associated with your ReadMe project.                    
+  $ rdme versions:create   Create a new version for your project.                                   
+  $ rdme versions:update   Update an existing version for your project.                             
+  $ rdme versions:delete   Delete a version associated with your ReadMe project.                    
 
-[4m[1mOther useful commands[22m[24m
+Other useful commands
 
-  [90m$[39m rdme oas    Helpful OpenAPI generation tooling.              
-  [90m$[39m rdme open   Open your current ReadMe project in the browser. 
+  $ rdme oas    Helpful OpenAPI generation tooling.              
+  $ rdme open   Open your current ReadMe project in the browser. 
 
-Run [2mrdme help <command>[22m for help with a specific command.
+Run rdme help <command> for help with a specific command.
 
 To get more help with ReadMe, check out our docs at https://docs.readme.com.
 "
@@ -173,22 +173,22 @@ exports[`cli --help should print usage for a given command 1`] = `
 "
 Upload, or resync, your OpenAPI/Swagger definition to ReadMe.
 
-[4m[1mUsage[22m[24m
+Usage
 
   rdme openapi [file] [options] 
 
-[4m[1mOptions[22m[24m
+Options
 
-  [1m--key[22m [4mstring[24m       Project API key                                                               
-  [1m--id[22m [4mstring[24m        Unique identifier for your API definition. Use this if you're re-uploading an 
+  --key string       Project API key                                                               
+  --id string        Unique identifier for your API definition. Use this if you're re-uploading an 
                      existing API definition                                                       
-  [1m--version[22m [4mstring[24m   Project version                                                               
-  [1m-h[22m, [1m--help[22m         Display this usage guide                                                      
+  --version string   Project version                                                               
+  -h, --help         Display this usage guide                                                      
 
-[4m[1mRelated commands[22m[24m
+Related commands
 
-  [90m$[39m rdme validate   Validate your OpenAPI/Swagger definition. 
-  [90m$[39m rdme swagger    Alias for \`rdme openapi\`. [deprecated]    
+  $ rdme validate   Validate your OpenAPI/Swagger definition. 
+  $ rdme swagger    Alias for \`rdme openapi\`. [deprecated]    
 "
 `;
 
@@ -196,22 +196,22 @@ exports[`cli --help should print usage for a given command if supplied as \`help
 "
 Upload, or resync, your OpenAPI/Swagger definition to ReadMe.
 
-[4m[1mUsage[22m[24m
+Usage
 
   rdme openapi [file] [options] 
 
-[4m[1mOptions[22m[24m
+Options
 
-  [1m--key[22m [4mstring[24m       Project API key                                                               
-  [1m--id[22m [4mstring[24m        Unique identifier for your API definition. Use this if you're re-uploading an 
+  --key string       Project API key                                                               
+  --id string        Unique identifier for your API definition. Use this if you're re-uploading an 
                      existing API definition                                                       
-  [1m--version[22m [4mstring[24m   Project version                                                               
-  [1m-h[22m, [1m--help[22m         Display this usage guide                                                      
+  --version string   Project version                                                               
+  -h, --help         Display this usage guide                                                      
 
-[4m[1mRelated commands[22m[24m
+Related commands
 
-  [90m$[39m rdme validate   Validate your OpenAPI/Swagger definition. 
-  [90m$[39m rdme swagger    Alias for \`rdme openapi\`. [deprecated]    
+  $ rdme validate   Validate your OpenAPI/Swagger definition. 
+  $ rdme swagger    Alias for \`rdme openapi\`. [deprecated]    
 "
 `;
 
@@ -219,21 +219,21 @@ exports[`cli --help should show related commands for a subcommands help menu 1`]
 "
 List versions available in your project or get a version by SemVer (https://semver.org/).
 
-[4m[1mUsage[22m[24m
+Usage
 
   rdme versions [options] 
 
-[4m[1mOptions[22m[24m
+Options
 
-  [1m--key[22m [4mstring[24m       Project API key                                                 
-  [1m--version[22m [4mstring[24m   A specific project version to view                              
-  [1m--raw[22m              Return raw output from the API instead of in a \\"pretty\\" format. 
-  [1m-h[22m, [1m--help[22m         Display this usage guide                                        
+  --key string       Project API key                                                 
+  --version string   A specific project version to view                              
+  --raw              Return raw output from the API instead of in a \\"pretty\\" format. 
+  -h, --help         Display this usage guide                                        
 
-[4m[1mRelated commands[22m[24m
+Related commands
 
-  [90m$[39m rdme versions:create   Create a new version for your project.                
-  [90m$[39m rdme versions:update   Update an existing version for your project.          
-  [90m$[39m rdme versions:delete   Delete a version associated with your ReadMe project. 
+  $ rdme versions:create   Create a new version for your project.                
+  $ rdme versions:update   Update an existing version for your project.          
+  $ rdme versions:delete   Delete a version associated with your ReadMe project. 
 "
 `;
