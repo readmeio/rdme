@@ -1,6 +1,8 @@
 const fs = require('fs');
 const chalk = require('chalk');
-const validate = require('../../src/cmds/validate');
+const Command = require('../../src/cmds/validate');
+
+const validate = new Command();
 
 const getCommandOutput = () => {
   return [console.info.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');

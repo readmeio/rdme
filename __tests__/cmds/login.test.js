@@ -1,8 +1,10 @@
 const nock = require('nock');
 const config = require('config');
 const configStore = require('../../src/lib/configstore');
-const cmd = require('../../src/cmds/login');
+const Command = require('../../src/cmds/login');
 const APIError = require('../../src/lib/apiError');
+
+const cmd = new Command();
 
 const email = 'user@example.com';
 const password = '123456';
@@ -33,6 +35,7 @@ describe('rdme login', () => {
     const mock = nock(config.get('host')).post('/api/v1/login', { email, password, project }).reply(200, { apiKey });
 
     await expect(cmd.run({ email, password, project })).resolves.toMatchSnapshot();
+
     mock.done();
 
     expect(configStore.get('apiKey')).toBe(apiKey);

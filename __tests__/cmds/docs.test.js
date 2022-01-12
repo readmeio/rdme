@@ -8,8 +8,11 @@ const frontMatter = require('gray-matter');
 
 const APIError = require('../../src/lib/apiError');
 
-const docs = require('../../src/cmds/docs');
-const docsEdit = require('../../src/cmds/docs/edit');
+const DocsCommand = require('../../src/cmds/docs');
+const DocsEditCommand = require('../../src/cmds/docs/edit');
+
+const docs = new DocsCommand();
+const docsEdit = new DocsEditCommand();
 
 const fixturesDir = `${__dirname}./../__fixtures__`;
 const key = 'API_KEY';

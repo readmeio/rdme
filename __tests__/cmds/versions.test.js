@@ -3,10 +3,10 @@ const config = require('config');
 const promptHandler = require('../../src/lib/prompts');
 const APIError = require('../../src/lib/apiError');
 
-const versions = require('../../src/cmds/versions');
-const createVersion = require('../../src/cmds/versions/create');
-const deleteVersion = require('../../src/cmds/versions/delete');
-const updateVersion = require('../../src/cmds/versions/update');
+const VersionsCommand = require('../../src/cmds/versions');
+const CreateVersionCommand = require('../../src/cmds/versions/create');
+const DeleteVersionCommand = require('../../src/cmds/versions/delete');
+const UpdateVersionCommand = require('../../src/cmds/versions/update');
 
 const key = 'API_KEY';
 const version = '1.0.0';
@@ -40,6 +40,8 @@ describe('rdme versions*', () => {
   afterEach(() => nock.cleanAll());
 
   describe('rdme versions', () => {
+    const versions = new VersionsCommand();
+
     it('should error if no api key provided', () => {
       return expect(versions.run({})).rejects.toStrictEqual(
         new Error('No project API key provided. Please use `--key`.')
@@ -52,7 +54,9 @@ describe('rdme versions*', () => {
         .basicAuth({ user: key })
         .reply(200, [versionPayload, version2Payload]);
 
-      await expect(versions.run({ key })).resolves.toMatchSnapshot();
+      const table = await versions.run({ key });
+      expect(table).toContain(version);
+      expect(table).toContain(version2);
       mockRequest.done();
     });
 
@@ -73,7 +77,9 @@ describe('rdme versions*', () => {
         .basicAuth({ user: key })
         .reply(200, versionPayload);
 
-      await expect(versions.run({ key, version })).resolves.toMatchSnapshot();
+      const table = await versions.run({ key, version });
+      expect(table).toContain(version);
+      expect(table).not.toContain(version2);
       mockRequest.done();
     });
 
@@ -90,6 +96,8 @@ describe('rdme versions*', () => {
   });
 
   describe('rdme versions:create', () => {
+    const createVersion = new CreateVersionCommand();
+
     it('should error if no api key provided', () => {
       return createVersion.run({}).catch(err => {
         expect(err.message).toBe('No project API key provided. Please use `--key`.');
@@ -143,6 +151,8 @@ describe('rdme versions*', () => {
   });
 
   describe('rdme versions:delete', () => {
+    const deleteVersion = new DeleteVersionCommand();
+
     it('should error if no api key provided', () => {
       return expect(deleteVersion.run({})).rejects.toStrictEqual(
         new Error('No project API key provided. Please use `--key`.')
@@ -185,6 +195,8 @@ describe('rdme versions*', () => {
   });
 
   describe('rdme versions:update', () => {
+    const updateVersion = new UpdateVersionCommand();
+
     it('should error if no api key provided', () => {
       return expect(updateVersion.run({})).rejects.toStrictEqual(
         new Error('No project API key provided. Please use `--key`.')

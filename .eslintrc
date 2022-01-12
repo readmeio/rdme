@@ -3,6 +3,12 @@
   "root": true,
   "rules": {
     /**
+     * Because our command classes have a `run` method that might not always call `this` we need to
+     * explicitly exclude `run` from this rule.
+     */
+    "class-methods-use-this": ["error", { "exceptMethods": ["run"] }],
+
+    /**
      * This is a small rule to prevent us from using console.log() statements in our commands.
      *
      * We've had troubles in the past where our test coverage required us to use Jest mocks for
