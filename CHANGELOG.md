@@ -1,3 +1,11 @@
+## 6.3.0 (2022-01-12)
+
+* refactor: commands into command classes (#424) ([7b8b378](https://github.com/readmeio/rdme/commit/7b8b378)), closes [#424](https://github.com/readmeio/rdme/issues/424)
+* fix: quirks with version commands and config retrieval (#423) ([026c633](https://github.com/readmeio/rdme/commit/026c633)), closes [#423](https://github.com/readmeio/rdme/issues/423)
+* ci: tweak ESLint config, small refactors (#422) ([f842480](https://github.com/readmeio/rdme/commit/f842480)), closes [#422](https://github.com/readmeio/rdme/issues/422)
+
+
+
 ## <small>6.2.1 (2022-01-04)</small>
 
 * fix(docs): directory sync fix + test bed rewrites (#421) ([b793afc](https://github.com/readmeio/rdme/commit/b793afc)), closes [#421](https://github.com/readmeio/rdme/issues/421)
