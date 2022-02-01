@@ -1,3 +1,15 @@
+## <small>6.3.2 (2022-02-01)</small>
+
+* chore(deps-dev): bump @readme/eslint-config from 8.1.1 to 8.2.0 (#434) ([f427f97](https://github.com/readmeio/rdme/commit/f427f97)), closes [#434](https://github.com/readmeio/rdme/issues/434)
+* chore(deps-dev): bump @readme/oas-examples from 4.3.3 to 4.4.0 (#432) ([bd57fc4](https://github.com/readmeio/rdme/commit/bd57fc4)), closes [#432](https://github.com/readmeio/rdme/issues/432)
+* chore(deps-dev): bump eslint from 8.6.0 to 8.8.0 (#431) ([4bfa6c7](https://github.com/readmeio/rdme/commit/4bfa6c7)), closes [#431](https://github.com/readmeio/rdme/issues/431)
+* chore(deps-dev): bump jest from 27.4.5 to 27.4.7 (#430) ([c34cf5d](https://github.com/readmeio/rdme/commit/c34cf5d)), closes [#430](https://github.com/readmeio/rdme/issues/430)
+* chore(deps-dev): bump nock from 13.2.1 to 13.2.2 (#429) ([4896c7b](https://github.com/readmeio/rdme/commit/4896c7b)), closes [#429](https://github.com/readmeio/rdme/issues/429)
+* chore(deps): bump command-line-args from 5.2.0 to 5.2.1 (#428) ([ef17420](https://github.com/readmeio/rdme/commit/ef17420)), closes [#428](https://github.com/readmeio/rdme/issues/428)
+* chore(deps): bump config from 3.3.3 to 3.3.7 (#433) ([60a765c](https://github.com/readmeio/rdme/commit/60a765c)), closes [#433](https://github.com/readmeio/rdme/issues/433)
+
+
+
 ## 6.3.0 (2022-01-12)
 
 * refactor: commands into command classes (#424) ([7b8b378](https://github.com/readmeio/rdme/commit/7b8b378)), closes [#424](https://github.com/readmeio/rdme/issues/424)
