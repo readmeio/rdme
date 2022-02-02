@@ -1,8 +1,7 @@
 const config = require('config');
 const { getProjectVersion } = require('../../lib/versionSelect');
-const { cleanHeaders } = require('../../lib/cleanHeaders');
 const fetch = require('../../lib/fetch');
-const { handleRes } = require('../../lib/fetch');
+const { cleanHeaders, handleRes } = require('../../lib/fetch');
 
 module.exports = class DeleteVersionCommand {
   constructor() {

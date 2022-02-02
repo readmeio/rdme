@@ -3,10 +3,9 @@ const fs = require('fs');
 const editor = require('editor');
 const { promisify } = require('util');
 const APIError = require('../../lib/apiError');
-const { cleanHeaders } = require('../../lib/cleanHeaders');
 const { getProjectVersion } = require('../../lib/versionSelect');
 const fetch = require('../../lib/fetch');
-const { handleRes } = require('../../lib/fetch');
+const { cleanHeaders, handleRes } = require('../../lib/fetch');
 
 const writeFile = promisify(fs.writeFile);
 const readFile = promisify(fs.readFile);
