@@ -21,6 +21,12 @@ module.exports = (url, options = {}) => {
   return fetch(url, options);
 };
 
+/**
+ * Small handler for transforming responses from our API into JSON and if there's errors, throwing
+ * an APIError exception.
+ *
+ * @param {Response} res
+ */
 module.exports.handleRes = async function handleRes(res) {
   const body = await res.json();
   if (body.error) {
