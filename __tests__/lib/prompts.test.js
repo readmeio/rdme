@@ -48,6 +48,7 @@ describe('prompt test bed', () => {
             break;
 
           case 'versionSelection':
+            // eslint-disable-next-line jest/no-conditional-expect
             await expect(prompt.skip()).resolves.toBe(true);
             break;
 

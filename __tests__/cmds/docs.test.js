@@ -7,6 +7,8 @@ const crypto = require('crypto');
 const frontMatter = require('gray-matter');
 
 const APIError = require('../../src/lib/apiError');
+const getApiNock = require('../get-api-nock');
+const { userAgent } = require('../get-api-nock');
 
 const DocsCommand = require('../../src/cmds/docs');
 const DocsEditCommand = require('../../src/cmds/docs/edit');
@@ -24,6 +26,7 @@ function getNockWithVersionHeader(v) {
   return nock(config.get('host'), {
     reqheaders: {
       'x-readme-version': v,
+      'User-Agent': userAgent,
     },
   });
 }
@@ -106,7 +109,7 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200, { category, slug: anotherDoc.slug, body: anotherDoc.doc.content });
 
-      const versionMock = nock(config.get('host'))
+      const versionMock = getApiNock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version });
@@ -140,7 +143,7 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200, { category, slug: anotherDoc.slug, lastUpdatedHash: anotherDoc.hash });
 
-      const versionMock = nock(config.get('host'))
+      const versionMock = getApiNock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version });
@@ -158,7 +161,7 @@ describe('rdme docs', () => {
   });
 
   describe('new docs', () => {
-    it('should create new doc', () => {
+    it('should create new doc', async () => {
       const slug = 'new-doc';
       const doc = frontMatter(fs.readFileSync(path.join(fixturesDir, `/new-docs/${slug}.md`)));
       const hash = hashFileContents(fs.readFileSync(path.join(fixturesDir, `/new-docs/${slug}.md`)));
@@ -178,16 +181,24 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(201, { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
-      const versionMock = nock(config.get('host'))
+      const versionMock = getApiNock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      return docs.run({ folder: './__tests__/__fixtures__/new-docs', key, version }).then(() => {
-        getMock.done();
-        postMock.done();
-        versionMock.done();
-      });
+      await expect(docs.run({ folder: './__tests__/__fixtures__/new-docs', key, version })).resolves.toStrictEqual([
+        {
+          slug: 'new-doc',
+          body: '\nBody\n',
+          category: '5ae122e10fdf4e39bb34db6f',
+          title: 'This is the document title',
+          lastUpdatedHash: 'a23046c1e9d8ab47f8875ae7c5e429cb95be1c48',
+        },
+      ]);
+
+      getMock.done();
+      postMock.done();
+      versionMock.done();
     });
 
     it('should fail if any docs are invalid', async () => {
@@ -247,7 +258,7 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(400, errorObject);
 
-      const versionMock = nock(config.get('host'))
+      const versionMock = getApiNock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version });
@@ -270,12 +281,12 @@ describe('rdme docs', () => {
   });
 
   describe('slug metadata', () => {
-    it('should use provided slug', () => {
+    it('should use provided slug', async () => {
       const slug = 'new-doc-slug';
       const doc = frontMatter(fs.readFileSync(path.join(fixturesDir, `/slug-docs/${slug}.md`)));
       const hash = hashFileContents(fs.readFileSync(path.join(fixturesDir, `/slug-docs/${slug}.md`)));
 
-      const getMock = getNockWithVersionHeader(version)
+      const getMock = getApiNock()
         .get(`/api/v1/docs/${doc.data.slug}`)
         .basicAuth({ user: key })
         .reply(404, {
@@ -285,21 +296,29 @@ describe('rdme docs', () => {
           help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
         });
 
-      const postMock = getNockWithVersionHeader(version)
+      const postMock = getApiNock()
         .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
         .reply(201, { slug: doc.data.slug, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
-      const versionMock = nock(config.get('host'))
+      const versionMock = getApiNock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      return docs.run({ folder: './__tests__/__fixtures__/slug-docs', key, version }).then(() => {
-        getMock.done();
-        postMock.done();
-        versionMock.done();
-      });
+      await expect(docs.run({ folder: './__tests__/__fixtures__/slug-docs', key, version })).resolves.toStrictEqual([
+        {
+          slug: 'marc-actually-wrote-a-test',
+          body: '\nBody\n',
+          category: 'CATEGORY_ID',
+          title: 'This is the document title',
+          lastUpdatedHash: 'c9cb7cc26e90775548e1d182ae7fcaa0eaba96bc',
+        },
+      ]);
+
+      getMock.done();
+      postMock.done();
+      versionMock.done();
     });
   });
 });
@@ -336,10 +355,7 @@ describe('rdme docs:edit', () => {
       .basicAuth({ user: key })
       .reply(200, { category, slug });
 
-    const versionMock = nock(config.get('host'))
-      .get(`/api/v1/version/${version}`)
-      .basicAuth({ user: key })
-      .reply(200, { version });
+    const versionMock = getApiNock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
     function mockEditor(filename, cb) {
       expect(filename).toBe(`${slug}.md`);
@@ -368,12 +384,9 @@ describe('rdme docs:edit', () => {
       help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
     };
 
-    const getMock = nock(config.get('host')).get(`/api/v1/docs/${slug}`).reply(404, errorObject);
+    const getMock = getApiNock().get(`/api/v1/docs/${slug}`).reply(404, errorObject);
 
-    const versionMock = nock(config.get('host'))
-      .get(`/api/v1/version/${version}`)
-      .basicAuth({ user: key })
-      .reply(200, { version });
+    const versionMock = getApiNock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
     await expect(docsEdit.run({ slug, key, version: '1.0.0' })).rejects.toThrow(new APIError(errorObject));
 
@@ -392,14 +405,9 @@ describe('rdme docs:edit', () => {
       help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
     };
 
-    const getMock = nock(config.get('host')).get(`/api/v1/docs/${slug}`).reply(200, { body });
-
-    const putMock = nock(config.get('host')).put(`/api/v1/docs/${slug}`).reply(400, errorObject);
-
-    const versionMock = nock(config.get('host'))
-      .get(`/api/v1/version/${version}`)
-      .basicAuth({ user: key })
-      .reply(200, { version });
+    const getMock = getApiNock().get(`/api/v1/docs/${slug}`).reply(200, { body });
+    const putMock = getApiNock().put(`/api/v1/docs/${slug}`).reply(400, errorObject);
+    const versionMock = getApiNock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
     function mockEditor(filename, cb) {
       return cb(0);
@@ -419,7 +427,7 @@ describe('rdme docs:edit', () => {
     const slug = 'getting-started';
     const body = 'abcdef';
 
-    const getMock = nock(config.get('host'))
+    const getMock = getApiNock()
       .get(`/api/v1/docs/${slug}`)
       .reply(200, { body })
       .get(`/api/v1/version/${version}`)

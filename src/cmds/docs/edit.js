@@ -5,8 +5,8 @@ const { promisify } = require('util');
 const APIError = require('../../lib/apiError');
 const { cleanHeaders } = require('../../lib/cleanHeaders');
 const { getProjectVersion } = require('../../lib/versionSelect');
-const { handleRes } = require('../../lib/handleRes');
-const fetch = require('node-fetch');
+const fetch = require('../../lib/fetch');
+const { handleRes } = require('../../lib/fetch');
 
 const writeFile = promisify(fs.writeFile);
 const readFile = promisify(fs.readFile);
