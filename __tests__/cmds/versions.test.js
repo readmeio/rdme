@@ -1,7 +1,7 @@
 const nock = require('nock');
 const promptHandler = require('../../src/lib/prompts');
 const APIError = require('../../src/lib/apiError');
-const apiNock = require('../get-api-nock');
+const getApiNock = require('../get-api-nock');
 
 const VersionsCommand = require('../../src/cmds/versions');
 const CreateVersionCommand = require('../../src/cmds/versions/create');
@@ -49,7 +49,7 @@ describe('rdme versions*', () => {
     });
 
     it('should make a request to get a list of existing versions', async () => {
-      const mockRequest = apiNock()
+      const mockRequest = getApiNock()
         .get('/api/v1/version')
         .basicAuth({ user: key })
         .reply(200, [versionPayload, version2Payload]);
@@ -61,7 +61,7 @@ describe('rdme versions*', () => {
     });
 
     it('should make a request to get a list of existing versions and return them in a raw format', async () => {
-      const mockRequest = apiNock()
+      const mockRequest = getApiNock()
         .get('/api/v1/version')
         .basicAuth({ user: key })
         .reply(200, [versionPayload, version2Payload]);
@@ -72,7 +72,7 @@ describe('rdme versions*', () => {
     });
 
     it('should get a specific version object if version flag provided', async () => {
-      const mockRequest = apiNock()
+      const mockRequest = getApiNock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, versionPayload);
@@ -84,7 +84,7 @@ describe('rdme versions*', () => {
     });
 
     it('should get a specific version object if version flag provided and return it in a raw format', async () => {
-      const mockRequest = apiNock()
+      const mockRequest = getApiNock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, versionPayload);
@@ -109,7 +109,7 @@ describe('rdme versions*', () => {
         from: '1.0.0',
       });
 
-      const mockRequest = apiNock()
+      const mockRequest = getApiNock()
         .get('/api/v1/version')
         .basicAuth({ user: key })
         .reply(200, [{ version }, { version }])
@@ -135,7 +135,7 @@ describe('rdme versions*', () => {
         help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
       };
 
-      const mockRequest = apiNock().post('/api/v1/version').basicAuth({ user: key }).reply(400, errorResponse);
+      const mockRequest = getApiNock().post('/api/v1/version').basicAuth({ user: key }).reply(400, errorResponse);
 
       await expect(createVersion.run({ key, version, fork: '0.0.5' })).rejects.toStrictEqual(
         new APIError(errorResponse)
@@ -154,7 +154,7 @@ describe('rdme versions*', () => {
     });
 
     it('should delete a specific version', async () => {
-      const mockRequest = apiNock()
+      const mockRequest = getApiNock()
         .delete(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { removed: true })
@@ -175,7 +175,7 @@ describe('rdme versions*', () => {
         help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
       };
 
-      const mockRequest = apiNock()
+      const mockRequest = getApiNock()
         .delete(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(404, errorResponse)
@@ -204,7 +204,7 @@ describe('rdme versions*', () => {
         is_deprecated: true,
       });
 
-      const mockRequest = apiNock()
+      const mockRequest = getApiNock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version })
@@ -232,7 +232,7 @@ describe('rdme versions*', () => {
         help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
       };
 
-      const mockRequest = apiNock()
+      const mockRequest = getApiNock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version })
