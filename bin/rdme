@@ -1,6 +1,11 @@
 #! /usr/bin/env node
 const chalk = require('chalk');
 
+const updateNotifier = require('update-notifier');
+const pkg = require('../package.json');
+
+updateNotifier({ pkg }).notify();
+
 require('../src')(process.argv.slice(2))
   .then(msg => {
     // eslint-disable-next-line no-console
