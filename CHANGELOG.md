@@ -1,3 +1,10 @@
+## 6.4.0 (2022-02-02)
+
+* feat: add update-notifier to warn when using an old version of rdme (#435) ([8daf569](https://github.com/readmeio/rdme/commit/8daf569)), closes [#435](https://github.com/readmeio/rdme/issues/435)
+* feat: sending a custom rdme user agent with all requests (#436) ([bec8c36](https://github.com/readmeio/rdme/commit/bec8c36)), closes [#436](https://github.com/readmeio/rdme/issues/436)
+
+
+
 ## <small>6.3.2 (2022-02-01)</small>
 
 * chore(deps-dev): bump @readme/eslint-config from 8.1.1 to 8.2.0 (#434) ([f427f97](https://github.com/readmeio/rdme/commit/f427f97)), closes [#434](https://github.com/readmeio/rdme/issues/434)
