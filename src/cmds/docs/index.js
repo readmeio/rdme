@@ -5,10 +5,9 @@ const config = require('config');
 const crypto = require('crypto');
 const frontMatter = require('gray-matter');
 const { promisify } = require('util');
-const { cleanHeaders } = require('../../lib/cleanHeaders');
 const { getProjectVersion } = require('../../lib/versionSelect');
-const { handleRes } = require('../../lib/handleRes');
-const fetch = require('node-fetch');
+const fetch = require('../../lib/fetch');
+const { cleanHeaders, handleRes } = require('../../lib/fetch');
 
 const readFile = promisify(fs.readFile);
 

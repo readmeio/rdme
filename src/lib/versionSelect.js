@@ -1,10 +1,9 @@
 const { prompt } = require('enquirer');
 const promptOpts = require('./prompts');
-const { cleanHeaders } = require('./cleanHeaders');
-const fetch = require('node-fetch');
 const config = require('config');
 const APIError = require('./apiError');
-const { handleRes } = require('./handleRes');
+const fetch = require('./fetch');
+const { cleanHeaders, handleRes } = require('./fetch');
 
 async function getProjectVersion(versionFlag, key, allowNewVersion) {
   try {

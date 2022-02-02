@@ -82,6 +82,7 @@
       "./__tests__/set-node-env"
     ],
     "testPathIgnorePatterns": [
+      "./__tests__/get-api-nock",
       "./__tests__/set-node-env"
     ]
   },

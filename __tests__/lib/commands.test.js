@@ -1,3 +1,4 @@
+/* eslint-disable jest/no-conditional-expect */
 const commands = require('../../src/lib/commands');
 
 describe('utils', () => {

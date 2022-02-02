@@ -2,9 +2,8 @@ const config = require('config');
 const semver = require('semver');
 const { prompt } = require('enquirer');
 const promptOpts = require('../../lib/prompts');
-const { cleanHeaders } = require('../../lib/cleanHeaders');
-const { handleRes } = require('../../lib/handleRes');
-const fetch = require('node-fetch');
+const fetch = require('../../lib/fetch');
+const { cleanHeaders, handleRes } = require('../../lib/fetch');
 
 module.exports = class CreateVersionCommand {
   constructor() {

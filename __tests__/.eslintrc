@@ -1,20 +1,3 @@
 {
-  "extends": ["@readme/eslint-config/testing"],
-  "env": {
-    "jest": true
-  },
-  "rules": {
-    "jest/expect-expect": [
-      "error",
-      {
-        "assertFunctionNames": [
-          "expect",
-          "getNockWithVersionHeader.**.reply",
-          "nock.**.reply"
-        ]
-      }
-    ],
-
-    "jest/no-conditional-expect": "off"
-  }
+  "extends": ["@readme/eslint-config/testing"]
 }

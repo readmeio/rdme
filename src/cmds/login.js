@@ -4,8 +4,8 @@ const { validate: isEmail } = require('isemail');
 const { promisify } = require('util');
 const read = promisify(require('read'));
 const configStore = require('../lib/configstore');
-const { handleRes } = require('../lib/handleRes');
-const fetch = require('node-fetch');
+const fetch = require('../lib/fetch');
+const { handleRes } = require('../lib/fetch');
 
 const testing = process.env.NODE_ENV === 'testing';
 

@@ -1,10 +1,9 @@
 const config = require('config');
 const { prompt } = require('enquirer');
 const promptOpts = require('../../lib/prompts');
-const { cleanHeaders } = require('../../lib/cleanHeaders');
 const { getProjectVersion } = require('../../lib/versionSelect');
-const fetch = require('node-fetch');
-const { handleRes } = require('../../lib/handleRes');
+const fetch = require('../../lib/fetch');
+const { cleanHeaders, handleRes } = require('../../lib/fetch');
 
 module.exports = class UpdateVersionCommand {
   constructor() {

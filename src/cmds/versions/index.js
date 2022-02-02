@@ -2,9 +2,8 @@ const chalk = require('chalk');
 const Table = require('cli-table');
 const config = require('config');
 const CreateVersionCmd = require('./create');
-const { cleanHeaders } = require('../../lib/cleanHeaders');
-const fetch = require('node-fetch');
-const { handleRes } = require('../../lib/handleRes');
+const fetch = require('../../lib/fetch');
+const { cleanHeaders, handleRes } = require('../../lib/fetch');
 
 module.exports = class VersionsCommand {
   constructor() {
