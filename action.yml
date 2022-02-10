@@ -1,0 +1,22 @@
+name: rdme
+author: ReadMe
+branding:
+  color: blue
+  icon: book-open
+description: 'Update your ReadMe developer hubs in a CI environment.'
+inputs:
+  command:
+    description: 'Command to pass into rdme'
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: setup node
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+    - name: Install deps
+      run: npm install --production
+      shell: bash
+    - run: ${{ github.action_path }}/bin/rdme ${{ inputs.command }}
+      shell: bash
