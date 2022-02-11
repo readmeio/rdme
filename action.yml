@@ -15,8 +15,8 @@ runs:
       uses: actions/setup-node@v2
       with:
         node-version: '16'
-    - name: Install deps
-      run: npm install --production --quiet
+    - name: Install rdme deps
+      run: cd ${{ github.action_path }} && npm install --production --quiet
       shell: bash
     - run: ${{ github.action_path }}/bin/rdme ${{ inputs.rdme }}
       shell: bash
