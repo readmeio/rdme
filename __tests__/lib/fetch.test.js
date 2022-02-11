@@ -24,6 +24,28 @@ describe('#fetch()', () => {
     mock.done();
   });
 
+  it('should wrap all GitHub Action env requests with a rdme-github User-Agent', async () => {
+    const temporaryEnv = process.env.GITHUB_ACTIONS;
+    process.env.GITHUB_ACTIONS = 'true';
+    const key = 'API_KEY';
+
+    const mock = getApiNock()
+      .get('/api/v1')
+      .basicAuth({ user: key })
+      .reply(200, function () {
+        return this.req.headers['user-agent'];
+      });
+
+    const userAgent = await fetch(`${config.get('host')}/api/v1`, {
+      method: 'get',
+      headers: cleanHeaders(key),
+    }).then(handleRes);
+
+    expect(userAgent.shift()).toBe(`rdme/${pkg.version}`);
+    mock.done();
+    process.env.GITHUB_ACTIONS = temporaryEnv;
+  });
+
   it('should support if we dont supply any other options with the request', async () => {
     const mock = getApiNock()
       .get('/api/v1/doesnt-need-auth')

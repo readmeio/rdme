@@ -2,7 +2,8 @@ const nock = require('nock');
 const config = require('config');
 const pkg = require('../package.json');
 
-const userAgent = `rdme/${pkg.version}`;
+const gh = process.env.GITHUB_ACTIONS === 'true' ? '-github' : '';
+const userAgent = `rdme${gh}/${pkg.version}`;
 
 module.exports = function () {
   return nock(config.get('host'), {

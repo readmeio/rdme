@@ -3,12 +3,14 @@ const fetch = require('node-fetch');
 const pkg = require('../../package.json');
 const APIError = require('./apiError');
 
+const gh = process.env.GITHUB_ACTIONS === 'true' ? '-github' : '';
+
 /**
  * Wrapper for the `fetch` API so we can add an rdme user agent to all API requests.
  *
  */
 module.exports = (url, options = {}) => {
-  const userAgent = `rdme/${pkg.version}`;
+  const userAgent = `rdme${gh}/${pkg.version}`;
 
   if (!options.headers) {
     options.headers = {
