@@ -8,7 +8,7 @@ const frontMatter = require('gray-matter');
 
 const APIError = require('../../src/lib/apiError');
 const getApiNock = require('../get-api-nock');
-const { userAgent } = require('../get-api-nock');
+const { getUserAgent } = require('../../src/lib/fetch');
 
 const DocsCommand = require('../../src/cmds/docs');
 const DocsEditCommand = require('../../src/cmds/docs/edit');
@@ -26,7 +26,7 @@ function getNockWithVersionHeader(v) {
   return nock(config.get('host'), {
     reqheaders: {
       'x-readme-version': v,
-      'User-Agent': userAgent,
+      'User-Agent': getUserAgent(),
     },
   });
 }

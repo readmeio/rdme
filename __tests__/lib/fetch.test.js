@@ -14,7 +14,7 @@ describe('#fetch()', () => {
       delete process.env.GITHUB_ACTIONS;
     });
 
-    it('should wrap all GitHub Action env requests with a rdme-github User-Agent', async () => {
+    it('should use correct user-agent for requests in GitHub Action env', async () => {
       const key = 'API_KEY';
 
       const mock = getApiNock()
@@ -29,7 +29,7 @@ describe('#fetch()', () => {
         headers: cleanHeaders(key),
       }).then(handleRes);
 
-      expect(userAgent.shift()).toBe(`rdme/${pkg.version}`);
+      expect(userAgent.shift()).toBe(`rdme-github/${pkg.version}`);
       mock.done();
     });
   });

@@ -1,16 +1,11 @@
-const nock = require('nock');
 const config = require('config');
-const pkg = require('../package.json');
-
-const gh = process.env.GITHUB_ACTIONS === 'true' ? '-github' : '';
-const userAgent = `rdme${gh}/${pkg.version}`;
+const nock = require('nock');
+const { getUserAgent } = require('../src/lib/fetch');
 
 module.exports = function () {
   return nock(config.get('host'), {
     reqheaders: {
-      'User-Agent': userAgent,
+      'User-Agent': getUserAgent(),
     },
   });
 };
-
-module.exports.userAgent = userAgent;
