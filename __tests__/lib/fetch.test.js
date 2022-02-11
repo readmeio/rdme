@@ -5,6 +5,10 @@ const getApiNock = require('../get-api-nock');
 const pkg = require('../../package.json');
 
 describe('#fetch()', () => {
+  afterEach(() => {
+    delete process.env.GITHUB_ACTIONS;
+  });
+
   it('should wrap all requests with a rdme User-Agent', async () => {
     const key = 'API_KEY';
 
@@ -25,7 +29,6 @@ describe('#fetch()', () => {
   });
 
   it('should wrap all GitHub Action env requests with a rdme-github User-Agent', async () => {
-    const temporaryEnv = process.env.GITHUB_ACTIONS;
     process.env.GITHUB_ACTIONS = 'true';
     const key = 'API_KEY';
 
@@ -43,7 +46,6 @@ describe('#fetch()', () => {
 
     expect(userAgent.shift()).toBe(`rdme/${pkg.version}`);
     mock.done();
-    process.env.GITHUB_ACTIONS = temporaryEnv;
   });
 
   it('should support if we dont supply any other options with the request', async () => {
