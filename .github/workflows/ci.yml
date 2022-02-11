@@ -5,25 +5,20 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
-    # strategy:
-    #   matrix:
-    #     node-version: [12.x, 14.x, 16.x]
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x, 16.x]
 
     steps:
       - uses: actions/checkout@v2.4.0
 
-      # - name: Use Node.js ${{ matrix.node-version }}
-      #   uses: actions/setup-node@v2.5.1
-      #   with:
-      #     node-version: ${{ matrix.node-version }}
-
-      # - name: Install deps
-      #   run: npm ci
-
-      # - name: Run tests
-      #   run: npm test
-
-      - name: Run GitHub Action command test
-        uses: ./
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2.5.1
         with:
-          command: 'validate __tests__/__fixtures__/ref-oas/petstore.json'
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
