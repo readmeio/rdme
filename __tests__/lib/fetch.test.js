@@ -5,31 +5,36 @@ const getApiNock = require('../get-api-nock');
 const pkg = require('../../package.json');
 
 describe('#fetch()', () => {
-  afterEach(() => {
-    delete process.env.GITHUB_ACTIONS;
+  describe('GitHub Actions environment', () => {
+    beforeEach(() => {
+      process.env.GITHUB_ACTIONS = 'true';
+    });
+
+    afterEach(() => {
+      delete process.env.GITHUB_ACTIONS;
+    });
+
+    it('should wrap all GitHub Action env requests with a rdme-github User-Agent', async () => {
+      const key = 'API_KEY';
+
+      const mock = getApiNock()
+        .get('/api/v1')
+        .basicAuth({ user: key })
+        .reply(200, function () {
+          return this.req.headers['user-agent'];
+        });
+
+      const userAgent = await fetch(`${config.get('host')}/api/v1`, {
+        method: 'get',
+        headers: cleanHeaders(key),
+      }).then(handleRes);
+
+      expect(userAgent.shift()).toBe(`rdme/${pkg.version}`);
+      mock.done();
+    });
   });
 
   it('should wrap all requests with a rdme User-Agent', async () => {
-    const key = 'API_KEY';
-
-    const mock = getApiNock()
-      .get('/api/v1')
-      .basicAuth({ user: key })
-      .reply(200, function () {
-        return this.req.headers['user-agent'];
-      });
-
-    const userAgent = await fetch(`${config.get('host')}/api/v1`, {
-      method: 'get',
-      headers: cleanHeaders(key),
-    }).then(handleRes);
-
-    expect(userAgent.shift()).toBe(`rdme/${pkg.version}`);
-    mock.done();
-  });
-
-  it('should wrap all GitHub Action env requests with a rdme-github User-Agent', async () => {
-    process.env.GITHUB_ACTIONS = 'true';
     const key = 'API_KEY';
 
     const mock = getApiNock()
