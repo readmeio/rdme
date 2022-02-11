@@ -3,6 +3,7 @@ author: ReadMe
 branding:
   color: blue
   icon: book-open
+description: Update your ReadMe developer hubs in a CI environment.
 inputs:
   rdme:
     description: String containing command and arguments to pass into rdme
