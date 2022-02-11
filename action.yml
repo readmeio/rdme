@@ -6,7 +6,7 @@ branding:
 description: 'Update your ReadMe developer hubs in a CI environment.'
 inputs:
   rdme:
-    description: 'String containin command and arguments to pass into rdme'
+    description: 'String containing command and arguments to pass into rdme'
     required: true
 runs:
   using: "composite"
