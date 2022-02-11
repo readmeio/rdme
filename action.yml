@@ -9,7 +9,7 @@ inputs:
     description: String containing command and arguments to pass into rdme
     required: true
 runs:
-  using: "composite"
+  using: composite
   steps:
     - name: setup node
       uses: actions/setup-node@v2
