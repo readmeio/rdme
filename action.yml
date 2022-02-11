@@ -16,7 +16,8 @@ runs:
       with:
         node-version: '16'
     - name: Install rdme deps
-      run: cd ${{ github.action_path }} && npm install --production --silent
+      run: npm install --production --silent
       shell: bash
+      working-directory: ${{ github.action_path }}
     - run: ${{ github.action_path }}/bin/rdme ${{ inputs.rdme }}
       shell: bash
