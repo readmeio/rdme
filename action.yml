@@ -20,6 +20,6 @@ runs:
       shell: bash
       working-directory: ${{ github.action_path }}
     - name: Execute rdme command
-      run: ./rdme ${{ inputs.rdme }}
+      run: bin/rdme ${{ inputs.rdme }}
       shell: bash
-      working-directory: ${{ github.action_path }}/bin
+      working-directory: ${{ github.action_path }}
