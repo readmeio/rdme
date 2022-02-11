@@ -5,8 +5,8 @@ branding:
   icon: book-open
 description: 'Update your ReadMe developer hubs in a CI environment.'
 inputs:
-  command:
-    description: 'Command to pass into rdme'
+  rdme:
+    description: 'String containin command and arguments to pass into rdme'
     required: true
 runs:
   using: "composite"
@@ -18,5 +18,5 @@ runs:
     - name: Install deps
       run: npm install --production --quiet
       shell: bash
-    - run: ${{ github.action_path }}/bin/rdme ${{ inputs.command }}
+    - run: ${{ github.action_path }}/bin/rdme ${{ inputs.rdme }}
       shell: bash
