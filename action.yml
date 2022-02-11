@@ -19,6 +19,7 @@ runs:
       run: npm install --production --silent
       shell: bash
       working-directory: ${{ github.action_path }}
-    - run: bin/rdme ${{ inputs.rdme }}
+    - name: Execute rdme command
+      run: rdme ${{ inputs.rdme }}
       shell: bash
-      working-directory: ${{ github.action_path }}
+      working-directory: ${{ github.action_path }}/bin
