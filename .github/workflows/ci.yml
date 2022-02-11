@@ -22,3 +22,8 @@ jobs:
 
       - name: Run tests
         run: npm test
+
+      - name: Run GitHub Action command test
+        uses: ./
+        with:
+          command: 'validate __tests__/__fixtures__/ref-oas/petstore.json'
