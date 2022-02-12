@@ -15,10 +15,10 @@ jobs:
         uses: actions/checkout@v2.4.0
         with:
           repository: readmeio/oas-examples
-          path: external-repo
-          token: ${{ secrets.ACTION_PAT }}
+          path: oas-examples
+          token: ${{ secrets.OAS_EXAMPLES_READ }}
 
       - name: Run GitHub Action command test
         uses: ./rdme/
         with:
-          rdme: validate 3.1/json/petstore.json 
+          rdme: validate oas-examples/3.1/json/petstore.json 
