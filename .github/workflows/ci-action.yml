@@ -7,8 +7,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.4.0
+        with:
+          repository: kanadgupta/metrotransit-nextrip-oas
 
       - name: Run GitHub Action command test
         uses: ./
         with:
-          rdme: 'validate __tests__/__fixtures__/ref-oas/petstore.json'
+          rdme: validate
