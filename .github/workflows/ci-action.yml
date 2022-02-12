@@ -6,11 +6,19 @@ jobs:
   action-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.4.0
+      - name: Checkout current copy of rdme
+        uses: actions/checkout@v2.4.0
         with:
-          repository: kanadgupta/metrotransit-nextrip-oas
+          path: rdme
+
+      - name: Checkout another repo containing OpenAPI file
+        uses: actions/checkout@v2.4.0
+        with:
+          repository: readmeio/oas-examples
+          path: external-repo
+          token: ${{ secrets.ACTION_PAT }}
 
       - name: Run GitHub Action command test
-        uses: ./
+        uses: ./rdme/
         with:
-          rdme: validate
+          rdme: validate 3.1/json/petstore.json 
