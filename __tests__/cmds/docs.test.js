@@ -1,6 +1,5 @@
 const nock = require('nock');
 const chalk = require('chalk');
-const config = require('config');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
@@ -8,7 +7,6 @@ const frontMatter = require('gray-matter');
 
 const APIError = require('../../src/lib/apiError');
 const getApiNock = require('../get-api-nock');
-const { getUserAgent } = require('../../src/lib/fetch');
 
 const DocsCommand = require('../../src/cmds/docs');
 const DocsEditCommand = require('../../src/cmds/docs/edit');
@@ -23,11 +21,8 @@ const category = 'CATEGORY_ID';
 const apiSetting = 'API_SETTING_ID';
 
 function getNockWithVersionHeader(v) {
-  return nock(config.get('host'), {
-    reqheaders: {
-      'x-readme-version': v,
-      'User-Agent': getUserAgent(),
-    },
+  return getApiNock({
+    'x-readme-version': v,
   });
 }
 
