@@ -40,7 +40,12 @@ jobs:
           repository: readmeio/oas-examples
           token: ${{ secrets.OAS_EXAMPLES_READ }}
 
-      - name: Run validate command on external repo
+      - name: Run `validate` command on external repo
         uses: ./rdme-repo/
         with:
-          rdme: validate oas-examples-repo/3.1/json/petstore.json 
+          rdme: validate oas-examples-repo/3.1/json/petstore.json
+
+      - name: Run `openapi` command
+        uses: ./rdme-repo/
+        with:
+          rdme: openapi oas-examples-repo/3.1/json/petstore.json --key=${{ secrets.RDME_TEST_PROJECT_API_KEY }} --id=${{ secrets.RDME_TEST_PROJECT_API_SETTING }}
