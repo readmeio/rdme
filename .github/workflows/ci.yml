@@ -4,6 +4,7 @@ on: [push]
 
 jobs:
   build:
+    name: Test Suite
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -22,3 +23,24 @@ jobs:
 
       - name: Run tests
         run: npm test
+
+  action-test:
+    name: GitHub Action Dry Run
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout GitHub Action
+        uses: actions/checkout@v2.4.0
+        with:
+          path: rdme-repo
+
+      - name: Checkout external repo containing OpenAPI file
+        uses: actions/checkout@v2.4.0
+        with:
+          repository: readmeio/oas-examples
+          path: oas-examples-repo
+          token: ${{ secrets.OAS_EXAMPLES_READ }}
+
+      - name: Run validate command on external repo
+        uses: ./rdme-repo/
+        with:
+          rdme: validate oas-examples-repo/3.1/json/petstore.json 
