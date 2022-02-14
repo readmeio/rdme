@@ -1,5 +1,5 @@
-const chalk = require('chalk');
 const OpenAPICommand = require('./openapi');
+const { warn } = require('../lib/logger');
 
 module.exports = class SwaggerCommand extends OpenAPICommand {
   constructor() {
@@ -12,7 +12,7 @@ module.exports = class SwaggerCommand extends OpenAPICommand {
   }
 
   async run(opts) {
-    console.warn(chalk.yellow('⚠️  Warning! `rdme swagger` has been deprecated. Please use `rdme openapi` instead.'));
+    warn('`rdme swagger` has been deprecated. Please use `rdme openapi` instead.');
     return super.run(opts);
   }
 };

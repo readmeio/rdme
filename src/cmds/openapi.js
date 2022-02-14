@@ -8,6 +8,7 @@ const APIError = require('../lib/apiError');
 const { getProjectVersion } = require('../lib/versionSelect');
 const fetch = require('../lib/fetch');
 const { cleanHeaders } = require('../lib/fetch');
+const { warn } = require('../lib/logger');
 const FormData = require('form-data');
 const parse = require('parse-link-header');
 const { file: tmpFile } = require('tmp-promise');
@@ -57,20 +58,16 @@ module.exports = class OpenAPICommand {
     let isUpdate;
 
     if (!key && opts.token) {
-      console.warn(
-        chalk.yellow('⚠️  Warning! The `--token` option has been deprecated. Please use `--key` and `--id` instead.')
-      );
+      warn('The `--token` option has been deprecated. Please use `--key` and `--id` instead.');
 
       [key, id] = opts.token.split('-');
     }
 
     if (version && id) {
-      console.warn(
-        chalk.yellow(
-          `⚠️  Warning! We'll be using the version associated with the \`--${
-            opts.token ? 'token' : 'id'
-          }\` option, so the \`--version\` option will be ignored.`
-        )
+      warn(
+        "We'll be using the version associated with",
+        `the \`--${opts.token ? 'token' : 'id'}\` option,`,
+        'so the `--version` option will be ignored.'
       );
     }
 
