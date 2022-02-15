@@ -8,17 +8,25 @@ const APIError = require('./apiError');
  *
  */
 module.exports = (url, options = {}) => {
-  const userAgent = `rdme/${pkg.version}`;
-
   if (!options.headers) {
     options.headers = {
-      'User-Agent': userAgent,
+      'User-Agent': module.exports.getUserAgent(),
     };
   } else {
-    options.headers['User-Agent'] = userAgent;
+    options.headers['User-Agent'] = module.exports.getUserAgent();
   }
 
   return fetch(url, options);
+};
+
+/**
+ * Getter function for a string to be used in the user-agent header
+ * based on the current environment.
+ *
+ */
+module.exports.getUserAgent = function getUserAgent() {
+  const gh = process.env.GITHUB_ACTIONS === 'true' ? '-github' : '';
+  return `rdme${gh}/${pkg.version}`;
 };
 
 /**

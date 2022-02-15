@@ -1,15 +1,12 @@
-const nock = require('nock');
 const config = require('config');
-const pkg = require('../package.json');
+const nock = require('nock');
+const { getUserAgent } = require('../src/lib/fetch');
 
-const userAgent = `rdme/${pkg.version}`;
-
-module.exports = function () {
+module.exports = function (reqHeaders = {}) {
   return nock(config.get('host'), {
     reqheaders: {
-      'User-Agent': userAgent,
+      'User-Agent': getUserAgent(),
+      ...reqHeaders,
     },
   });
 };
-
-module.exports.userAgent = userAgent;

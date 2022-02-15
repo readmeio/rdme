@@ -1,0 +1,28 @@
+name: rdme
+author: ReadMe
+branding:
+  color: blue
+  icon: book-open
+description: Update your ReadMe developer hubs in a CI environment.
+inputs:
+  rdme:
+    description: Command to pass into rdme
+    required: true
+runs:
+  using: composite
+  steps:
+    # This is so we can guarantee a version of npm that supports lockfile@2
+    - name: setup node
+      uses: actions/setup-node@v2
+      with:
+        node-version: 16
+    # When we add debug support, we should make this a conditional step, see RM-3545
+    - name: Install rdme deps
+      run: npm install --production --silent
+      shell: bash
+      working-directory: ${{ github.action_path }}
+    - name: Execute rdme command
+      run: ${{ github.action_path }}/bin/rdme ${{ inputs.rdme }}
+      shell: bash
+      env:
+        FORCE_COLOR: '1'

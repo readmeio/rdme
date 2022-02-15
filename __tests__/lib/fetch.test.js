@@ -2,8 +2,38 @@ const config = require('config');
 const fetch = require('../../src/lib/fetch');
 const { cleanHeaders, handleRes } = require('../../src/lib/fetch');
 const getApiNock = require('../get-api-nock');
+const pkg = require('../../package.json');
 
 describe('#fetch()', () => {
+  describe('GitHub Actions environment', () => {
+    beforeEach(() => {
+      process.env.GITHUB_ACTIONS = 'true';
+    });
+
+    afterEach(() => {
+      delete process.env.GITHUB_ACTIONS;
+    });
+
+    it('should use correct user-agent for requests in GitHub Action env', async () => {
+      const key = 'API_KEY';
+
+      const mock = getApiNock()
+        .get('/api/v1')
+        .basicAuth({ user: key })
+        .reply(200, function () {
+          return this.req.headers['user-agent'];
+        });
+
+      const userAgent = await fetch(`${config.get('host')}/api/v1`, {
+        method: 'get',
+        headers: cleanHeaders(key),
+      }).then(handleRes);
+
+      expect(userAgent.shift()).toBe(`rdme-github/${pkg.version}`);
+      mock.done();
+    });
+  });
+
   it('should wrap all requests with a rdme User-Agent', async () => {
     const key = 'API_KEY';
 
@@ -19,7 +49,7 @@ describe('#fetch()', () => {
       headers: cleanHeaders(key),
     }).then(handleRes);
 
-    expect(userAgent.shift()).toMatch(/rdme\/\d+.\d+.\d+/);
+    expect(userAgent.shift()).toBe(`rdme/${pkg.version}`);
     mock.done();
   });
 
@@ -32,7 +62,7 @@ describe('#fetch()', () => {
 
     const userAgent = await fetch(`${config.get('host')}/api/v1/doesnt-need-auth`).then(handleRes);
 
-    expect(userAgent.shift()).toMatch(/rdme\/\d+.\d+.\d+/);
+    expect(userAgent.shift()).toBe(`rdme/${pkg.version}`);
     mock.done();
   });
 });
