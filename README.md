@@ -6,17 +6,6 @@
 
 `rdme` is the CLI wrapper for [ReadMe's RESTful API](https://docs.readme.com/reference/intro-to-the-readme-api). It allows you to upload and edit [OpenAPI](https://swagger.io/specification/) and [Swagger](https://swagger.io/specification/v2/) files associated with projects you create on [ReadMe](https://readme.com/). Additionally, you can sync documentation with your project, and manage project versions.
 
-- [Configuration](#configuration)
-  - [Installation](#installation)
-  - [Authentication](#authentication)
-- [Usage](#usage)
-  - [Common `rdme` Options](#common-rdme-options)
-  - [OpenAPI / Swagger](#openapi--swagger)
-  - [Docs](#docs)
-  - [Versions](#versions)
-  - [Opening a Project](#open-your-readme-project-in-your-browser)
-- [Future](#future)
-
 ## Configuration
 
 ### Installation
