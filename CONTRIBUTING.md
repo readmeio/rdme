@@ -47,7 +47,7 @@ Stage  Job ID  Job name                 Workflow name                 Workflow f
 0      simple  GitHub Action Auth-Less  GitHub Action Simple Example  gh-action-simple.yml  workflow_dispatch
 ```
 
-And finally, you can use that Job ID to execute a workflow with the `-j` flag:
+And finally, you can use that Job ID to execute a workflow with the `-j` flag (make sure Docker is running!):
 
 ```sh
 act -j simple
