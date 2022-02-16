@@ -12,7 +12,7 @@
 
 > These setup instructions are for CLI usage only. For usage in GitHub Actions, see [GitHub Actions](#github-actions) below.
 
-We recommend installing `rdme` in your project's `devDependencies` so you don't run into unexpected behavior with mismatching versions:
+We recommend installing `rdme` in your project rather than doing a global installation so you don't run into unexpected behavior with mismatching versions. We also suggest using the `--save-dev` flag since `rdme` is typically used as part of a CI process and is unlikely to be running in your production application:
 
 ```sh
 npm install rdme --save-dev
