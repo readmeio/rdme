@@ -28,7 +28,7 @@ To ensure you're getting the latest features and security updates, we recommend 
 
 ### Authentication
 
-For usage in CI environments (GitHub Actions, CircleCI, Travis CI, etc.) or if you're working with multiple ReadMe projects, we recommend providing your project API key via the `--key` option instead of the configuration file authentication described below.
+For usage in CI environments (GitHub Actions, CircleCI, Travis CI, etc.) or if you're working with multiple ReadMe projects, we recommend providing your project API key via the `--key` option (instead of the configuration file authentication described below).
 
 For local CLI usage with a single project, you can authenticate `rdme` to your ReadMe project. This will save your API key to a local configuration file (`~/.config/configstore/rdme-production.json`) so you will not have to provide the `--key` option to commands that require it.
 
@@ -44,8 +44,8 @@ If you wish to get more information about any command within `rdme`, you can exe
 
 ### Common `rdme` Options
 
-- `--key <string>`: The API key associated with your ReadMe project. You can obtain this from your dashboard, or alternatively if you log in with `rdme login`, we will save your API key to a local configuration file (`~/.config/configstore/rdme-production.json`), saving you the hassle of having to supply this argument on commands that have it.
-- `--version <string>`: Your project version.
+- `--key <string>`: The API key associated with your ReadMe project. Note that most of the commands below require API key authentication, even though the `--key` flag is omitted from the examples. See the [Authentication](#authentication) section above for more information.
+- `--version <string>`: Your project version. See [our docs](https://docs.readme.com/docs/versions) for more information.
 
 ### GitHub Actions
 
@@ -80,7 +80,7 @@ Note that the `@XX` in the above examples refers to the version of `rdme` (e.g. 
 
 ### OpenAPI / Swagger
 
-ReadMe supports [OpenAPI 3.0](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md), [OpenAPI 3.1](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md), and [Swagger 2.x](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/2.0.md).
+ReadMe supports [OpenAPI 3.1](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md), [OpenAPI 3.0](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md), and [Swagger 2.x](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/2.0.md).
 
 The following examples use JSON files, but we support API Definitions that are written in either JSON or YAML.
 
@@ -104,14 +104,10 @@ rdme openapi [path-to-file.json] --id={existing-id}
 
 #### Uploading or Editing an API Definition in a Project Version
 
-You can additional include a version flag, specifying the target version for your file's destination
+You can additional include a version flag, specifying the target version for your file's destination. This approach will provide you with CLI prompts, so we do not recommend this technique in CI environments.
 
 ```sh
 rdme openapi [path-to-file.json] --version={project-version}
-```
-
-```sh
-rdme openapi [path-to-file.json] --id={existing-id} --version={project-version}
 ```
 
 #### Omitting the File Path
