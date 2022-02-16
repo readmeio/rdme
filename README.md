@@ -4,7 +4,7 @@
 
 [![npm](https://img.shields.io/npm/v/rdme)](https://npm.im/rdme) [![Build](https://github.com/readmeio/rdme/workflows/CI/badge.svg)](https://github.com/readmeio/rdme)
 
-`rdme` is the CLI and [GitHub Action](https://docs.github.com/actions) wrapper for [ReadMe's RESTful API](https://docs.readme.com/reference/intro-to-the-readme-api). It allows you to sync [OpenAPI](https://spec.openapis.org) and [Swagger](https://swagger.io/specification/v2/) definitions with projects you create on [ReadMe](https://readme.com/). Additionally, you can sync documentation with your project, and manage project versions.
+`rdme` is the CLI and [GitHub Action](#github-actions) wrapper for [ReadMe's RESTful API](https://docs.readme.com/reference/intro-to-the-readme-api). It allows you to sync [OpenAPI](https://spec.openapis.org) and [Swagger](https://swagger.io/specification/v2/) definitions with projects you create on [ReadMe](https://readme.com/). Additionally, you can sync documentation with your project, and manage project versions.
 
 ## Configuration
 
@@ -24,7 +24,7 @@ Once installed, we recommend using `npx` (which is included if you have `npm` in
 npx rdme validate [file]
 ```
 
-To ensure you're getting the latest features and security updates, we recommend using a tool like [Dependabot](https://docs.github.com/en/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/about-dependabot-version-updates) to keep `rdme` (and your other dependencies) up-to-date.
+To ensure you're getting the latest features and security updates, we recommend using a tool like [Dependabot](https://docs.github.com/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/about-dependabot-version-updates) to keep `rdme` (and your other dependencies) up-to-date.
 
 ### Authentication
 
@@ -53,7 +53,7 @@ If you wish to get more information about any command within `rdme`, you can exe
 
 > For a full GitHub Workflow file example and additional information on GitHub Actions usage, check out [our docs](https://docs.readme.com/docs/automatically-sync-api-specification-with-github).
 
-For usage in GitHub Actions, create [a new GitHub Workflow file](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions) in the `.github/workflows` directory of your repository and add the following [steps](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idsteps) to your workflow:
+For usage in [GitHub Actions](https://docs.github.com/actions), create [a new GitHub Workflow file](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions) in the `.github/workflows` directory of your repository and add the following [steps](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idsteps) to your workflow:
 
 ```yml
 - uses: actions/checkout@v2
@@ -76,7 +76,7 @@ To execute this command via GitHub Actions, the step would look like this:
     rdme: openapi path/to/openapi.json --key=API_KEY --id=OPENAPI_ID
 ```
 
-Note that the `@XX` in the above examples refers to the version of `rdme` (e.g. `@7.0`). We recommend [configuring Dependabot to keep your actions up-to-date](https://docs.github.com/en/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/keeping-your-actions-up-to-date-with-dependabot).
+Note that the `@XX` in the above examples refers to the version of `rdme` (e.g. `@7.0`). We recommend [configuring Dependabot to keep your actions up-to-date](https://docs.github.com/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/keeping-your-actions-up-to-date-with-dependabot).
 
 ### OpenAPI / Swagger
 
