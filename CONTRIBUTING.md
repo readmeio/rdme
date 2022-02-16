@@ -2,7 +2,7 @@
 
 ## Running Shell Commands Locally 🐚
 
-To run test commands from within the repository, simply run your commands from the root of the repository and use `bin/rdme` instead of `rdme` so it properly points to the command executable, like so:
+To run test commands from within the repository, simply run your commands from the root of the repository and use `./bin/rdme` instead of `rdme` so it properly points to the command executable, like so:
 
 ```sh
 ./bin/rdme validate __tests__/__fixtures__/ref-oas/petstore.json
