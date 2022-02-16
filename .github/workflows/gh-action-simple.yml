@@ -1,0 +1,20 @@
+# This GitHub Action isn't actually used in our CI process,
+# it's just an example workflow that doesn't require any secure tokens
+# so we can run it in any environment (i.e. a local env using `act`)
+name: GitHub Action Simple Example
+
+on: workflow_dispatch
+
+jobs:
+  simple:
+    name: GitHub Action Auth-Less
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout GitHub Action
+        uses: actions/checkout@v2.4.0
+
+      # This is a simple example that runs our `validate` command on a local file.
+      - name: Run `validate` command
+        uses: ./
+        with:
+          rdme: validate __tests__/__fixtures__/ref-oas/petstore.json
