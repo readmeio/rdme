@@ -1,9 +1,9 @@
-name: rdme 🦉
+name: rdme 🦉 Sync to ReadMe
 author: ReadMe
 branding:
   color: blue
   icon: book-open
-description: Maintaining OpenAPI definitions or Markdown documentation on GitHub? Sync it to your ReadMe Developer Hubs!
+description: Sync OpenAPI (OAS) definitions and Markdown documentation from your GitHub repository to your ReadMe developer hub
 inputs:
   rdme:
     description: Command to pass into rdme
