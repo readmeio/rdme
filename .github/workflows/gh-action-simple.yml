@@ -15,6 +15,6 @@ jobs:
 
       # This is a simple example that runs our `validate` command on a local file.
       - name: Run `validate` command
-        uses: ./
+        uses: ./ # in actual production usage, this value should be 'readmeio/rdme@XX'
         with:
           rdme: validate __tests__/__fixtures__/ref-oas/petstore.json
