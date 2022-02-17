@@ -9,7 +9,7 @@ const isGHA = require('./isGitHub');
  * @param {String} message Any number of arguments.
  */
 module.exports.debug = function (message) {
-  if (isGHA()) core.debug(message);
+  if (isGHA() && process.env.NODE_ENV !== 'testing') core.debug(message);
   return debug(message);
 };
 
@@ -21,7 +21,7 @@ module.exports.debug = function (message) {
  * https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-error-message
  */
 module.exports.error = function error(message, opts) {
-  if (isGHA()) core.error(message, opts);
+  if (isGHA() && process.env.NODE_ENV !== 'testing') core.error(message, opts);
   // eslint-disable-next-line no-console
   else console.error(chalk.red(`\n${message}\n`));
 };
@@ -34,7 +34,7 @@ module.exports.error = function error(message, opts) {
  * https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-a-notice-message
  */
 module.exports = function log(message, opts) {
-  if (isGHA()) core.notice(message, opts);
+  if (isGHA() && process.env.NODE_ENV !== 'testing') core.notice(message, opts);
   // eslint-disable-next-line no-console
   else console.log(message);
 };
@@ -48,6 +48,6 @@ module.exports = function log(message, opts) {
  * https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-a-warning-message
  */
 module.exports.warn = function (message, opts) {
-  if (isGHA()) core.warning(message, opts);
+  if (isGHA() && process.env.NODE_ENV !== 'testing') core.warning(message, opts);
   else console.warn(chalk.yellow('⚠️  Warning!', message));
 };
