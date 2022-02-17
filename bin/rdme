@@ -1,15 +1,24 @@
 #! /usr/bin/env node
 const chalk = require('chalk');
+const core = require('@actions/core');
 
 const updateNotifier = require('update-notifier');
 const pkg = require('../package.json');
+
+const isGHA = require('../src/lib/isGitHub');
 
 updateNotifier({ pkg }).notify();
 
 require('../src')(process.argv.slice(2))
   .then(msg => {
-    // eslint-disable-next-line no-console
-    if (msg) console.log(msg);
+    if (msg) {
+      if (isGHA) {
+        core.notice(msg);
+      } else {
+        // eslint-disable-next-line no-console
+        console.log(msg);
+      }
+    }
     return process.exit(0);
   })
   .catch(err => {
