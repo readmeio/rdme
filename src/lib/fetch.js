@@ -25,7 +25,7 @@ module.exports = (url, options = { headers: {} }) => {
 
   options.headers['x-readme-source'] = source;
 
-  debug(`making fetch request to ${url} with options: ${JSON.stringify(options)}`);
+  debug(`making fetch request to ${url}`);
 
   return fetch(url, options);
 };
