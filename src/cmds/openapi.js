@@ -65,9 +65,11 @@ module.exports = class OpenAPICommand {
 
     if (version && id) {
       warn(
-        "We'll be using the version associated with",
-        `the \`--${opts.token ? 'token' : 'id'}\` option,`,
-        'so the `--version` option will be ignored.'
+        [
+          "We'll be using the version associated with",
+          `the \`--${opts.token ? 'token' : 'id'}\` option,`,
+          'so the `--version` option will be ignored.',
+        ].join(' ')
       );
     }
 

@@ -1,24 +1,17 @@
 #! /usr/bin/env node
 const chalk = require('chalk');
-const core = require('@actions/core');
 
 const updateNotifier = require('update-notifier');
 const pkg = require('../package.json');
 
-const isGHA = require('../src/lib/isGitHub');
+const { error } = require('../src/lib/logger');
+const log = require('../src/lib/logger');
 
 updateNotifier({ pkg }).notify();
 
 require('../src')(process.argv.slice(2))
   .then(msg => {
-    if (msg) {
-      if (isGHA) {
-        core.notice(msg);
-      } else {
-        // eslint-disable-next-line no-console
-        console.log(msg);
-      }
-    }
+    if (msg) log(msg);
     return process.exit(0);
   })
   .catch(err => {
@@ -30,7 +23,6 @@ require('../src')(process.argv.slice(2))
       message = err.message;
     }
 
-    // eslint-disable-next-line no-console
-    console.error(chalk.red(`\n${message}\n`));
+    error(message);
     return process.exit(1);
   });
