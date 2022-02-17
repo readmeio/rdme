@@ -7,15 +7,8 @@ const APIError = require('./apiError');
  * Wrapper for the `fetch` API so we can add an rdme user agent to all API requests.
  *
  */
-module.exports = (url, options = {}) => {
-  if (!options.headers) {
-    options.headers = {
-      'User-Agent': module.exports.getUserAgent(),
-    };
-  } else {
-    options.headers['User-Agent'] = module.exports.getUserAgent();
-  }
-
+module.exports = (url, options = { headers: {} }) => {
+  options.headers['User-Agent'] = module.exports.getUserAgent();
   return fetch(url, options);
 };
 
