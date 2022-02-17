@@ -21,6 +21,7 @@ function debug(arg) {
  * by a space.
  */
 module.exports.warn = function (...args) {
+  if (isGHA() && process.env.NODE_ENV !== 'testing') return core.warning(args.join(' '));
   return console.warn(chalk.yellow('⚠️  Warning!', ...args));
 };
 
