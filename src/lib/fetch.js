@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-const debug = require('./logger');
+const { debug } = require('./logger');
 const fetch = require('node-fetch');
 const isGHA = require('./isGitHub');
 const pkg = require('../../package.json');
