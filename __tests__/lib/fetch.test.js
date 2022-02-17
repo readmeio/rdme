@@ -14,42 +14,44 @@ describe('#fetch()', () => {
       delete process.env.GITHUB_ACTIONS;
     });
 
-    it('should use correct user-agent for requests in GitHub Action env', async () => {
+    it('should have correct headers for requests in GitHub Action env', async () => {
       const key = 'API_KEY';
 
       const mock = getApiNock()
         .get('/api/v1')
         .basicAuth({ user: key })
         .reply(200, function () {
-          return this.req.headers['user-agent'];
+          return this.req.headers;
         });
 
-      const userAgent = await fetch(`${config.get('host')}/api/v1`, {
+      const headers = await fetch(`${config.get('host')}/api/v1`, {
         method: 'get',
         headers: cleanHeaders(key),
       }).then(handleRes);
 
-      expect(userAgent.shift()).toBe(`rdme-github/${pkg.version}`);
+      expect(headers['user-agent'].shift()).toBe(`rdme-github/${pkg.version}`);
+      expect(headers['x-readme-source'].shift()).toBe('cli-gh');
       mock.done();
     });
   });
 
-  it('should wrap all requests with a rdme User-Agent', async () => {
+  it('should wrap all requests with standard user-agent and source headers', async () => {
     const key = 'API_KEY';
 
     const mock = getApiNock()
       .get('/api/v1')
       .basicAuth({ user: key })
       .reply(200, function () {
-        return this.req.headers['user-agent'];
+        return this.req.headers;
       });
 
-    const userAgent = await fetch(`${config.get('host')}/api/v1`, {
+    const headers = await fetch(`${config.get('host')}/api/v1`, {
       method: 'get',
       headers: cleanHeaders(key),
     }).then(handleRes);
 
-    expect(userAgent.shift()).toBe(`rdme/${pkg.version}`);
+    expect(headers['user-agent'].shift()).toBe(`rdme/${pkg.version}`);
+    expect(headers['x-readme-source'].shift()).toBe('cli');
     mock.done();
   });
 
@@ -57,12 +59,13 @@ describe('#fetch()', () => {
     const mock = getApiNock()
       .get('/api/v1/doesnt-need-auth')
       .reply(200, function () {
-        return this.req.headers['user-agent'];
+        return this.req.headers;
       });
 
-    const userAgent = await fetch(`${config.get('host')}/api/v1/doesnt-need-auth`).then(handleRes);
+    const headers = await fetch(`${config.get('host')}/api/v1/doesnt-need-auth`).then(handleRes);
 
-    expect(userAgent.shift()).toBe(`rdme/${pkg.version}`);
+    expect(headers['user-agent'].shift()).toBe(`rdme/${pkg.version}`);
+    expect(headers['x-readme-source'].shift()).toBe('cli');
     mock.done();
   });
 });

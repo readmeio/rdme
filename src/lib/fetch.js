@@ -12,11 +12,20 @@ function isGHA() {
 }
 
 /**
- * Wrapper for the `fetch` API so we can add an rdme user agent to all API requests.
+ * Wrapper for the `fetch` API so we can add rdme-specific headers to all API requests.
  *
  */
 module.exports = (url, options = { headers: {} }) => {
+  let source = 'cli';
+
   options.headers['User-Agent'] = module.exports.getUserAgent();
+
+  if (isGHA()) {
+    source = 'cli-gh';
+  }
+
+  options.headers['x-readme-source'] = source;
+
   return fetch(url, options);
 };
 
