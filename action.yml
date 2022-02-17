@@ -1,9 +1,9 @@
-name: rdme
+name: rdme 🦉 Sync to ReadMe
 author: ReadMe
 branding:
   color: blue
   icon: book-open
-description: Update your ReadMe developer hubs in a CI environment.
+description: Sync OpenAPI (OAS) definitions and Markdown documentation from your GitHub repository to your ReadMe developer hub
 inputs:
   rdme:
     description: Command to pass into rdme

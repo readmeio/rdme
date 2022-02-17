@@ -135,7 +135,6 @@ module.exports = class OpenAPICommand {
       const options = {
         headers: cleanHeaders(key, {
           'x-readme-version': versionCleaned,
-          'x-readme-source': 'cli',
           Accept: 'application/json',
         }),
         body: formData,
