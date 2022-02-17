@@ -1,5 +1,4 @@
 /* eslint-disable no-param-reassign */
-const { debug } = require('./logger');
 const fetch = require('node-fetch');
 const isGHA = require('./isGitHub');
 const pkg = require('../../package.json');
@@ -24,8 +23,6 @@ module.exports = (url, options = { headers: {} }) => {
   }
 
   options.headers['x-readme-source'] = source;
-
-  debug(`making fetch request to ${url} with options: ${JSON.stringify(options)}`);
 
   return fetch(url, options);
 };
