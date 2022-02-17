@@ -1,17 +1,17 @@
 const chalk = require('chalk');
 const config = require('config');
 const core = require('@actions/core');
-const debug = require('debug')(config.get('cli'));
+const debugPackage = require('debug')(config.get('cli'));
 const isGHA = require('./isGitHub');
 
 /**
  * Wrapper for debug statements.
  * @param {String} arg
  */
-module.exports = function (arg) {
-  if (isGHA()) core.debug(arg);
-  return debug(arg);
-};
+function debug(arg) {
+  if (isGHA() && process.env.NODE_ENV !== 'testing') core.debug(arg);
+  return debugPackage(arg);
+}
 
 /**
  * Logs the arguments to stdout using console.warn()
@@ -23,3 +23,6 @@ module.exports = function (arg) {
 module.exports.warn = function (...args) {
   return console.warn(chalk.yellow('⚠️  Warning!', ...args));
 };
+
+module.exports = debug;
+module.exports.debug = debug;
