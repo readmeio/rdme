@@ -22,6 +22,11 @@ module.exports = (url, options = { headers: {} }) => {
 
   if (isGHA()) {
     source = 'cli-gh';
+    options.headers['x-github-repository'] = process.env.GITHUB_REPOSITORY;
+    options.headers['x-github-run-attempt'] = process.env.GITHUB_RUN_ATTEMPT;
+    options.headers['x-github-run-id'] = process.env.GITHUB_RUN_ID;
+    options.headers['x-github-run-number'] = process.env.GITHUB_RUN_NUMBER;
+    options.headers['x-github-sha'] = process.env.GITHUB_SHA;
   }
 
   options.headers['x-readme-source'] = source;
