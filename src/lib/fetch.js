@@ -1,15 +1,9 @@
 /* eslint-disable no-param-reassign */
+const debug = require('./logger');
 const fetch = require('node-fetch');
+const isGHA = require('./isGitHub');
 const pkg = require('../../package.json');
 const APIError = require('./apiError');
-
-/**
- * Small env check to determine if we're in a GitHub Actions environment
- * @link https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables
- */
-function isGHA() {
-  return process.env.GITHUB_ACTIONS === 'true';
-}
 
 /**
  * Wrapper for the `fetch` API so we can add rdme-specific headers to all API requests.
@@ -30,6 +24,8 @@ module.exports = (url, options = { headers: {} }) => {
   }
 
   options.headers['x-readme-source'] = source;
+
+  debug(`making fetch request to ${url} with options: ${JSON.stringify(options)}`);
 
   return fetch(url, options);
 };
