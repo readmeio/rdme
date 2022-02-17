@@ -49,6 +49,5 @@ module.exports = function log(message, opts) {
  */
 module.exports.warn = function (message, opts) {
   if (isGHA()) core.warning(message, opts);
-  // eslint-disable-next-line no-console
   else console.warn(chalk.yellow('⚠️  Warning!', message));
 };
