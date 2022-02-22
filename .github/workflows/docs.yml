@@ -1,10 +1,7 @@
 name: Sync `documentation` directory to ReadMe
 
 # Run workflow for every push to the `main` branch
-on:
-  push:
-    branches:
-      - main
+on: push
 
 jobs:
   sync:
