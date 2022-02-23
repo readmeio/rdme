@@ -34,9 +34,9 @@ jobs:
       # in the `documentation` directory.
       # Here's the page we're syncing: https://docs.readme.com/docs/rdme
       - name: GitHub Action
-        # Use the `main` branch as ref for GitHub Action
-        # Not recommended, this can break your workflows!
-        # We recommend specifying a fixed version
+        # We use the `main` branch as ref for GitHub Action
+        # This is NOT recommended, as it can break your workflows without notice!
+        # We recommend specifying a fixed version, i.e. @7.0
         # Docs: https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#example-using-versioned-actions
         uses: readmeio/rdme@main
         with:

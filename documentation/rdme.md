@@ -101,7 +101,7 @@ Not to get too meta on you, but... the page that you're currently reading is act
 - [The full GitHub Action workflow file that we use to sync the file to docs.readme.com](https://github.com/readmeio/rdme/blob/main/.github/workflows/docs.yml)
 - And finally... [the workflow run results](https://github.com/readmeio/rdme/actions/workflows/docs.yml)!
 
-To recreate this magic in your repository, your GitHub Workflow file will look like this:
+To recreate this magic in your repository, your GitHub Workflow file will look something like this:
 
 ```yml
 name: Sync `documentation` directory to ReadMe
