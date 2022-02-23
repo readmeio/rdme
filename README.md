@@ -18,7 +18,7 @@ We recommend installing `rdme` in your project rather than doing a global instal
 npm install rdme --save-dev
 ```
 
-Once installed, we recommend using `npx` (which is included if you have `npm` installed) to prefix all of your CLI commands. For example:
+Once installed in your project, we recommend using `npx` (which is included if you have `npm` installed) to prefix all of your CLI commands. For example:
 
 ```sh
 npx rdme validate [file]
