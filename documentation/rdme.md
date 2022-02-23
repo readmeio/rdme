@@ -1,6 +1,6 @@
 ---
 title: CLI + GitHub Action Usage
-description: Learn more about `rdme`, ReadMe's official CLI and GitHub Action!
+excerpt: Learn more about `rdme`, ReadMe's official CLI and GitHub Action!
 category: 5f7ce9e3a5504d0414d024c2
 ---
 
@@ -32,7 +32,7 @@ In order to sync a directory of Markdown files to your guides, you'll need to ad
 ```markdown
 ---
 title: CLI + GitHub Action Usage
-description: Learn more about `rdme`, ReadMe's official CLI and GitHub Action!
+excerpt: Learn more about `rdme`, ReadMe's official CLI and GitHub Action!
 category: 5f7ce9e3a5504d0414d024c2
 ---
 
@@ -46,7 +46,7 @@ We automatically derive the page's slug via the file name (e.g. the file name `r
 ```markdown
 ---
 title: CLI + GitHub Action Usage
-description: Learn more about `rdme`, ReadMe's official CLI and GitHub Action!
+excerpt: Learn more about `rdme`, ReadMe's official CLI and GitHub Action!
 category: 5f7ce9e3a5504d0414d024c2
 slug: an-alternative-page-slug-example
 ---
