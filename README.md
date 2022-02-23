@@ -49,8 +49,6 @@ If you wish to get more information about any command within `rdme`, you can exe
 
 ### GitHub Actions
 
-<!-- TODO: update this docs link if needed! -->
-
 > For a full GitHub Workflow file example and additional information on GitHub Actions usage, check out [our docs](https://docs.readme.com/docs/rdme).
 
 For usage in [GitHub Actions](https://docs.github.com/actions), create [a new GitHub Workflow file](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions) in the `.github/workflows` directory of your repository and add the following [steps](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idsteps) to your workflow:
