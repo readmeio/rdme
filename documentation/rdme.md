@@ -189,6 +189,8 @@ jobs:
           rdme: openapi [path-to-file.json] --key=API_KEY --id=API_DEFINITION_ID
 ```
 
+In the example above, every push to the `main` branch will check out your repository's contents and sync the OpenAPI file located at `./path-to-file.json` with your ReadMe project.
+
 ### Example: Using GitHub Secrets
 
 > 🚧 Secretly store your ReadMe API Key!
