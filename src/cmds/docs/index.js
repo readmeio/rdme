@@ -124,8 +124,10 @@ module.exports = class DocsCommand {
 
     const updatedDocs = await Promise.all(
       files.map(async filename => {
+        debug(`reading file ${filename}`);
         const file = await readFile(filename, 'utf8');
         const matter = frontMatter(file);
+        debug(`frontmatter for ${filename}: ${JSON.stringify(matter)}`);
 
         // Stripping the subdirectories and markdown extension from the filename and lowercasing to get the default slug.
         const slug = matter.data.slug || path.basename(filename).replace(path.extname(filename), '').toLowerCase();
