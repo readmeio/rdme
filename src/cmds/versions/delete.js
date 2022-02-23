@@ -41,6 +41,8 @@ module.exports = class DeleteVersionCommand {
       return Promise.reject(e);
     });
 
+    debug(`selectedVersion: ${selectedVersion}`);
+
     return fetch(`${config.get('host')}/api/v1/version/${selectedVersion}`, {
       method: 'delete',
       headers: cleanHeaders(key),

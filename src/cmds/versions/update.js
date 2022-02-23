@@ -62,6 +62,8 @@ module.exports = class UpdateVersionCommand {
       return Promise.reject(e);
     });
 
+    debug(`selectedVersion: ${selectedVersion}`);
+
     const foundVersion = await fetch(`${config.get('host')}/api/v1/version/${selectedVersion}`, {
       method: 'get',
       headers: cleanHeaders(key),
