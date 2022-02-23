@@ -183,7 +183,7 @@ jobs:
       - name: Checkout this repo
         uses: actions/checkout@v2.4.0
 
-      # Run GitHub Action to sync docs in `documentation` directory
+      # Run GitHub Action to sync OpenAPI file at [path-to-file.json]
       - name: GitHub Action
         # We recommend specifying a fixed version, i.e. @RDME_VERSION
         # Docs: https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#example-using-versioned-actions
