@@ -130,6 +130,8 @@ rdme validate [path-to-file.json]
 
 #### Syncing a Folder of Markdown Docs to ReadMe
 
+The Markdown files will require YAML front matter with certain ReadMe documentation attributes. Check out [our docs](https://docs.readme.com/docs/rdme#markdown-file-setup) for more info.
+
 ```sh
 rdme docs path-to-markdown-files --version={project-version}
 ```
