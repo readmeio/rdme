@@ -11,7 +11,13 @@ This Markdown page is syncing to ReadMe via the `rdme GitHub Action 🦉
 Check out the "Syncing Markdown Docs" example below,
 and peep the resulting page in our docs: https://docs.readme.com/docs/rdme
 
+We also do some fancy little find-and-replace action to swap out every instance
+of `RDME_VERSION` below with the latest version of rdme.
+Check out `.github/workflows/docs.yml` for more info on this!
+
 -->
+
+[![npm](https://img.shields.io/npm/v/rdme)](https://npm.im/rdme) [![Build](https://github.com/readmeio/rdme/workflows/CI/badge.svg)](https://github.com/readmeio/rdme)
 
 If you're anything like us, your documentation process may be a part of a broader [CI/CD](https://en.wikipedia.org/wiki/CI/CD) process. For example, you may want to automatically update your ReadMe guides or API reference every time you've ship new code. Enter [`rdme`](https://github.com/readmeio/rdme): ReadMe's official command-line interface (CLI) and GitHub Action!
 
@@ -58,18 +64,15 @@ You can also specify several other page attributes in your YAML front matter, su
 
 [GitHub Actions](https://docs.github.com/actions) makes it easy to automatically execute workflows when certain events take place in your GitHub repository (e.g. new code is merged into the default branch, a new pull request is opened, etc.).
 
-<!-- TODO: it might be nice to have some sort of CI workflow that auto-updates the version in the examples below! -->
-<!-- TODO: populate marketplace listing link! -->
-
 > 📘 Keeping `rdme` up-to-date
 >
-> Note that the `@XX` in the below examples refers to the version of `rdme` (e.g. `@7.0`), which you can find in [the Marketplace listing](). We recommend [configuring Dependabot to keep your actions up-to-date](https://docs.github.com/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/keeping-your-actions-up-to-date-with-dependabot).
+> Note that the `@RDME_VERSION` in the below examples is the latest version of `rdme`. We recommend [configuring Dependabot to keep your actions up-to-date](https://docs.github.com/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/keeping-your-actions-up-to-date-with-dependabot).
 
 For usage in [GitHub Actions](https://docs.github.com/actions), create [a new GitHub Workflow file](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions) in the `.github/workflows` directory of your repository and add the following [steps](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idsteps) to your workflow:
 
 ```yml
 - uses: actions/checkout@v2
-- uses: readmeio/rdme@XX
+- uses: readmeio/rdme@RDME_VERSION
   with:
     rdme: [your command here]
 ```
@@ -83,7 +86,7 @@ rdme openapi [path-to-file.json] --key=API_KEY --id=API_DEFINITION_ID
 To execute this command via GitHub Actions, the step would look like this:
 
 ```yml
-- uses: readmeio/rdme@XX
+- uses: readmeio/rdme@RDME_VERSION
   with:
     rdme: openapi [path-to-file.json] --key=API_KEY --id=API_DEFINITION_ID
 ```
@@ -118,9 +121,9 @@ jobs:
 
       # Run GitHub Action to sync docs in `documentation` directory
       - name: GitHub Action
-        # We recommend specifying a fixed version, i.e. @7.0
+        # We recommend specifying a fixed version, i.e. @RDME_VERSION
         # Docs: https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#example-using-versioned-actions
-        uses: readmeio/rdme@XX
+        uses: readmeio/rdme@RDME_VERSION
         with:
           rdme: docs ./documentation --key=API_KEY --version=2.0
 ```
@@ -184,7 +187,7 @@ jobs:
       - name: GitHub Action
         # We recommend specifying a fixed version, i.e. @7.0
         # Docs: https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#example-using-versioned-actions
-        uses: readmeio/rdme@XX
+        uses: readmeio/rdme@RDME_VERSION
         with:
           rdme: openapi [path-to-file.json] --key=API_KEY --id=API_DEFINITION_ID
 ```
@@ -200,7 +203,7 @@ In the example above, every push to the `main` branch will check out your reposi
 To use a GitHub secret in your `rdme` GitHub Action, first [create a new repository secret](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository). Let's say you create a new secret key called `README_API_KEY`. The usage in the `rdme` step will look something like this:
 
 ```yml
-- uses: readmeio/rdme@XX
+- uses: readmeio/rdme@RDME_VERSION
   with:
     rdme: docs ./documentation --key=${{ secrets.README_API_KEY }} --version=2.0
 ```

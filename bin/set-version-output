@@ -1,0 +1,11 @@
+#! /usr/bin/env node
+
+const pkg = require('../package.json');
+
+const name = 'RDME_VERSION';
+
+/**
+ * Sets output parameter for GitHub Actions workflow
+ * Docs: https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter
+ */
+console.log(`::set-output name=${name}::${pkg.version}`); // eslint-disable-line no-console
