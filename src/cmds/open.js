@@ -20,6 +20,8 @@ module.exports = class OpenCommand {
     debug(`opts: ${JSON.stringify(opts)}`);
 
     const project = configStore.get('project');
+    debug(`project: ${project}`);
+
     if (!project) {
       return Promise.reject(new Error(`Please login using \`${config.get('cli')} login\`.`));
     }
