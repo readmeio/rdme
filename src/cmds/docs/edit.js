@@ -58,6 +58,8 @@ module.exports = class EditDocsCommand {
       return Promise.reject(e);
     });
 
+    debug(`selectedVersion: ${selectedVersion}`);
+
     const filename = `${slug}.md`;
 
     const existingDoc = await fetch(`${config.get('host')}/api/v1/docs/${slug}`, {
@@ -70,10 +72,15 @@ module.exports = class EditDocsCommand {
 
     await writeFile(filename, existingDoc.body);
 
+    debug(`wrote to local file: ${filename}, opening editor`);
+
     return new Promise((resolve, reject) => {
       (opts.mockEditor || editor)(filename, async code => {
+        debug(`editor closed with code ${code}`);
         if (code !== 0) return reject(new Error('Non zero exit code from $EDITOR'));
         const updatedDoc = await readFile(filename, 'utf8');
+
+        debug(`read edited contents of ${filename}, sending to ReadMe`);
 
         return fetch(`${config.get('host')}/api/v1/docs/${slug}`, {
           method: 'put',
@@ -89,6 +96,7 @@ module.exports = class EditDocsCommand {
         })
           .then(res => res.json())
           .then(async res => {
+            debug(`response from PUT request: ${res}`);
             // The reason we aren't using our handleRes() function here is
             // because we need to use the `reject` function from
             // the Promise that's wrapping this function.
@@ -97,6 +105,7 @@ module.exports = class EditDocsCommand {
             }
             console.info(`Doc successfully updated. Cleaning up local file.`);
             await unlink(filename);
+            debug('file unlinked');
             // Normally we should resolve with a value that is logged to the console,
             // but since we need to wait for the temporary file to be removed,
             // it's okay to resolve the promise with no value.
