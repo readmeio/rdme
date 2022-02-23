@@ -15,6 +15,7 @@ module.exports = class OASCommand {
 
   async run() {
     debug(`command: ${this.command}`);
+    debug('spawning new process with `oas`');
 
     const cp = spawn(path.join(__dirname, '..', '..', 'node_modules', '.bin', 'oas'), process.argv.slice(3), {
       stdio: 'inherit',
@@ -22,6 +23,7 @@ module.exports = class OASCommand {
 
     return new Promise((resolve, reject) => {
       cp.on('close', code => {
+        debug(`closing \`oas\` process with code: ${code}`);
         if (code && code > 0) return reject();
 
         return resolve();
