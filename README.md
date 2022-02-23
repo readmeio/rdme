@@ -4,7 +4,7 @@
 
 [![npm](https://img.shields.io/npm/v/rdme)](https://npm.im/rdme) [![Build](https://github.com/readmeio/rdme/workflows/CI/badge.svg)](https://github.com/readmeio/rdme)
 
-`rdme` is the CLI and [GitHub Action](#github-actions) wrapper for [ReadMe's RESTful API](https://docs.readme.com/reference/intro-to-the-readme-api). It allows you to sync [OpenAPI](https://spec.openapis.org) and [Swagger](https://swagger.io/specification/v2/) definitions with projects you create on [ReadMe](https://readme.com/). Additionally, you can sync documentation with your project, and manage project versions.
+`rdme` is [ReadMe](https://readme.com)'s official command-line interface (CLI) and [GitHub Action](#github-actions) wrapper. It allows you to sync [OpenAPI](https://spec.openapis.org) and [Swagger](https://swagger.io/specification/v2/) definitions with projects you create on [ReadMe](https://readme.com/). You can also access other parts of [ReadMe's RESTful API](https://docs.readme.com/reference/intro-to-the-readme-api), including syncing Markdown documentation with your project and managing project versions.
 
 ## Configuration
 
@@ -51,7 +51,7 @@ If you wish to get more information about any command within `rdme`, you can exe
 
 <!-- TODO: update this docs link if needed! -->
 
-> For a full GitHub Workflow file example and additional information on GitHub Actions usage, check out [our docs](https://docs.readme.com/docs/automatically-sync-api-specification-with-github).
+> For a full GitHub Workflow file example and additional information on GitHub Actions usage, check out [our docs](https://docs.readme.com/docs/rdme).
 
 For usage in [GitHub Actions](https://docs.github.com/actions), create [a new GitHub Workflow file](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions) in the `.github/workflows` directory of your repository and add the following [steps](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idsteps) to your workflow:
 
@@ -65,7 +65,7 @@ For usage in [GitHub Actions](https://docs.github.com/actions), create [a new Gi
 The command syntax in GitHub Actions is functionally equivalent to the CLI. For example, take the following CLI command:
 
 ```sh
-rdme openapi path/to/openapi.json --key=API_KEY --id=OPENAPI_ID
+rdme openapi [path-to-file.json] --key=API_KEY --id=API_DEFINITION_ID
 ```
 
 To execute this command via GitHub Actions, the step would look like this:
@@ -73,7 +73,7 @@ To execute this command via GitHub Actions, the step would look like this:
 ```yml
 - uses: readmeio/rdme@XX
   with:
-    rdme: openapi path/to/openapi.json --key=API_KEY --id=OPENAPI_ID
+    rdme: openapi [path-to-file.json] --key=API_KEY --id=API_DEFINITION_ID
 ```
 
 Note that the `@XX` in the above examples refers to the version of `rdme` (e.g. `@7.0`). We recommend [configuring Dependabot to keep your actions up-to-date](https://docs.github.com/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/keeping-your-actions-up-to-date-with-dependabot).
