@@ -48,6 +48,7 @@ module.exports.getUserAgent = function getUserAgent() {
  */
 module.exports.handleRes = async function handleRes(res) {
   const body = await res.json();
+  debug(`received status code ${res.status} with response body: ${JSON.stringify(body)}`);
   if (body.error) {
     return Promise.reject(new APIError(body));
   }
