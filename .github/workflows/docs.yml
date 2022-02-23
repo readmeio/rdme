@@ -27,7 +27,7 @@ jobs:
           find: 'RDME_VERSION'
           replace: ${{ steps.rdme-version.outputs.RDME_VERSION }}
           regex: false
-          include: documentation/
+          include: documentation/*
 
       # And finally, with our updated documentation,
       # we run the `rdme` GitHub Action to sync the Markdown file
