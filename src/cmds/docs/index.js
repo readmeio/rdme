@@ -43,8 +43,8 @@ module.exports = class DocsCommand {
   async run(opts) {
     const { folder, key, version } = opts;
 
-    debug('docs command');
-    debug(`opts passed: ${JSON.stringify(opts)}`);
+    debug(`command: ${this.command}`);
+    debug(`opts: ${JSON.stringify(opts)}`);
 
     if (!key) {
       return Promise.reject(new Error('No project API key provided. Please use `--key`.'));

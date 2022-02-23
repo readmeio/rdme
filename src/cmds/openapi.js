@@ -11,6 +11,7 @@ const { cleanHeaders } = require('../lib/fetch');
 const FormData = require('form-data');
 const parse = require('parse-link-header');
 const { file: tmpFile } = require('tmp-promise');
+const { debug } = require('../lib/logger');
 
 module.exports = class OpenAPICommand {
   constructor() {
@@ -55,6 +56,9 @@ module.exports = class OpenAPICommand {
     let { key, id } = opts;
     let selectedVersion;
     let isUpdate;
+
+    debug(`command: ${this.command}`);
+    debug(`opts: ${JSON.stringify(opts)}`);
 
     if (!key && opts.token) {
       console.warn(

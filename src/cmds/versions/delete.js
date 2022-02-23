@@ -2,6 +2,7 @@ const config = require('config');
 const { getProjectVersion } = require('../../lib/versionSelect');
 const fetch = require('../../lib/fetch');
 const { cleanHeaders, handleRes } = require('../../lib/fetch');
+const { debug } = require('../../lib/logger');
 
 module.exports = class DeleteVersionCommand {
   constructor() {
@@ -28,6 +29,9 @@ module.exports = class DeleteVersionCommand {
 
   async run(opts) {
     const { key, version } = opts;
+
+    debug(`command: ${this.command}`);
+    debug(`opts: ${JSON.stringify(opts)}`);
 
     if (!key) {
       return Promise.reject(new Error('No project API key provided. Please use `--key`.'));

@@ -4,6 +4,7 @@ const config = require('config');
 const CreateVersionCmd = require('./create');
 const fetch = require('../../lib/fetch');
 const { cleanHeaders, handleRes } = require('../../lib/fetch');
+const { debug } = require('../../lib/logger');
 
 module.exports = class VersionsCommand {
   constructor() {
@@ -86,6 +87,9 @@ module.exports = class VersionsCommand {
 
   async run(opts) {
     const { key, version, raw } = opts;
+
+    debug(`command: ${this.command}`);
+    debug(`opts: ${JSON.stringify(opts)}`);
 
     if (!key) {
       return Promise.reject(new Error('No project API key provided. Please use `--key`.'));

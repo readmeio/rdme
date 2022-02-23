@@ -1,5 +1,6 @@
 const { spawn } = require('child_process');
 const path = require('path');
+const { debug } = require('../lib/logger');
 
 module.exports = class OASCommand {
   constructor() {
@@ -13,6 +14,8 @@ module.exports = class OASCommand {
   }
 
   async run() {
+    debug(`command: ${this.command}`);
+
     const cp = spawn(path.join(__dirname, '..', '..', 'node_modules', '.bin', 'oas'), process.argv.slice(3), {
       stdio: 'inherit',
     });

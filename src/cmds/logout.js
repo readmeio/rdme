@@ -1,5 +1,6 @@
 const config = require('config');
 const configStore = require('../lib/configstore');
+const { debug } = require('../lib/logger');
 
 module.exports = class LogoutCommand {
   constructor() {
@@ -13,6 +14,8 @@ module.exports = class LogoutCommand {
   }
 
   async run() {
+    debug(`command: ${this.command}`);
+
     if (configStore.has('email') && configStore.has('project')) {
       configStore.clear();
     }

@@ -1,6 +1,7 @@
 const chalk = require('chalk');
 const fs = require('fs');
 const OASNormalize = require('oas-normalize');
+const { debug } = require('../lib/logger');
 
 module.exports = class ValidateCommand {
   constructor() {
@@ -22,6 +23,9 @@ module.exports = class ValidateCommand {
 
   async run(opts) {
     const { spec } = opts;
+
+    debug(`command: ${this.command}`);
+    debug(`opts: ${JSON.stringify(opts)}`);
 
     async function validateSpec(specPath) {
       const oas = new OASNormalize(specPath, { colorizeErrors: true, enablePaths: true });
