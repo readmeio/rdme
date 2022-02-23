@@ -185,7 +185,7 @@ jobs:
 
       # Run GitHub Action to sync docs in `documentation` directory
       - name: GitHub Action
-        # We recommend specifying a fixed version, i.e. @7.0
+        # We recommend specifying a fixed version, i.e. @RDME_VERSION
         # Docs: https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#example-using-versioned-actions
         uses: readmeio/rdme@RDME_VERSION
         with:
