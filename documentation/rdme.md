@@ -17,9 +17,9 @@ Check out `.github/workflows/docs.yml` for more info on this!
 
 -->
 
-[![npm](https://img.shields.io/npm/v/rdme)](https://npm.im/rdme) [![Build](https://github.com/readmeio/rdme/workflows/CI/badge.svg)](https://github.com/readmeio/rdme)
-
 If you're anything like us, your documentation process may be a part of a broader [CI/CD](https://en.wikipedia.org/wiki/CI/CD) process. For example, you may want to automatically update your ReadMe guides or API reference every time you've ship new code. Enter [`rdme`](https://github.com/readmeio/rdme): ReadMe's official command-line interface (CLI) and GitHub Action!
+
+[![npm](https://img.shields.io/npm/v/rdme)](https://npm.im/rdme) [![Build](https://github.com/readmeio/rdme/workflows/CI/badge.svg)](https://github.com/readmeio/rdme)
 
 With `rdme`, you can create workflows for a variety of use cases, including:
 
