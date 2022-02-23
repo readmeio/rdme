@@ -25,7 +25,7 @@ module.exports = (url, options = { headers: {} }) => {
 
   options.headers['x-readme-source'] = source;
 
-  debug(`making fetch request to ${url}`);
+  debug(`making ${options.method.toUpperCase() || 'GET'} request to ${url}`);
 
   return fetch(url, options);
 };
