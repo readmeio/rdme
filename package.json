@@ -1,7 +1,7 @@
 {
   "name": "rdme",
   "version": "6.4.0",
-  "description": "The official CLI and GitHub Action wrapper for the ReadMe API.",
+  "description": "ReadMe's official CLI and GitHub Action wrapper.",
   "license": "MIT",
   "author": "ReadMe <support@readme.io> (https://readme.com)",
   "engines": {
