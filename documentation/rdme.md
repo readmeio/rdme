@@ -39,7 +39,7 @@ category: 5f7ce9e3a5504d0414d024c2
 If you're anything like us...
 ```
 
-The only required attributes are the `title` and `category`. To determine what your `category` value should be, you can use [the Get all categories endpoint](https://docs.readme.com/reference/getcategories) and grab the `id` value from the response.
+The only required attributes are the `title` and `category`. To determine what your `category` value should be, you can use [the `Get all categories` endpoint](https://docs.readme.com/reference/getcategories) and grab the `id` value from the response.
 
 We automatically derive the page's slug via the file name (e.g. the file name `rdme.md` would become `/docs/rdme` in your ReadMe project), but you can override that as well:
 
