@@ -11,6 +11,7 @@ jobs:
         uses: actions/checkout@v2.4.0
 
       # Run GitHub Action to sync docs in `documentation` directory
+      # Page we're syncing: https://docs.readme.com/docs/rdme
       - name: GitHub Action
         # Use the `main` branch as ref for GitHub Action
         # Not recommended, this can break your workflows!
