@@ -108,9 +108,7 @@ describe('cli', () => {
     conf.delete('apiKey');
   });
 
-  it('should not error with `rdme oas` arguments passed in', () => {
-    expect(() => {
-      return cli(['oas', 'endpoint']);
-    }).not.toThrow();
+  it('should error with `rdme oas` arguments passed in', async () => {
+    await expect(cli(['oas', 'endpoint'])).rejects.toThrow(/.*/);
   });
 });

@@ -1,4 +1,3 @@
-const chalk = require('chalk');
 const { debug } = require('../lib/logger');
 
 module.exports = class OASCommand {
@@ -19,6 +18,6 @@ module.exports = class OASCommand {
       "If you're looking to use the `oas` CLI directly, head over to https://npm.im/oas.",
       "If you're looking to create an OpenAPI definition, we recommend https://npm.im/swagger-inline",
     ];
-    return Promise.resolve(chalk.red(message.join('\n\n')));
+    return Promise.reject(new Error(message.join('\n\n')));
   }
 };
