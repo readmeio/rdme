@@ -5,10 +5,10 @@ const isGHA = require('./isGitHub');
 
 /**
  * Wrapper for debug statements.
- * @param {String} arg
+ * @param {String} input
  */
-module.exports.debug = function debug(arg) {
+module.exports.debug = function debug(input) {
   /* istanbul ignore next */
-  if (isGHA() && process.env.NODE_ENV !== 'testing') core.debug(arg);
-  return debugPackage(arg);
+  if (isGHA() && process.env.NODE_ENV !== 'testing') core.debug(`rdme: ${input}`);
+  return debugPackage(input);
 };
