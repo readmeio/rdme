@@ -29,7 +29,7 @@ require('../src')(process.argv.slice(2))
      * @link: https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-error-message
      * @link: https://github.com/actions/toolkit/tree/main/packages/core#annotations
      */
-    if (isGHA) {
+    if (isGHA()) {
       return core.setFailed(message);
     }
 
