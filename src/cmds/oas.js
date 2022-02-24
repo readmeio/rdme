@@ -15,6 +15,7 @@ module.exports = class OASCommand {
     const message = [
       'This `oas` integration is now inactive.',
       "If you're looking to use the `oas` CLI directly, head over to https://npm.im/oas.",
+      "If you're looking to create an OpenAPI definition, we recommend https://npm.im/swagger-inline",
     ];
     return Promise.resolve(chalk.red(message.join('\n\n')));
   }
