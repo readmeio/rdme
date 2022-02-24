@@ -155,9 +155,7 @@ describe('rdme versions*', () => {
           .reply(200, [{ version }, { version }]);
 
         await expect(createVersion.run({ key, version })).rejects.toThrow(
-          new Error(
-            "We've detected you're running within a CircleCI environment, please supply the following required arguments for your command instead of relying on our terminal prompt system: fork"
-          )
+          /We've detected you're running within a (.*) environment, please supply the following required arguments for your command instead of relying on our terminal prompt system: fork/
         );
 
         mockRequest.done();
