@@ -6,6 +6,7 @@ const read = promisify(require('read'));
 const configStore = require('../lib/configstore');
 const fetch = require('../lib/fetch');
 const { handleRes } = require('../lib/fetch');
+const { debug } = require('../lib/logger');
 
 const testing = process.env.NODE_ENV === 'testing';
 
@@ -33,6 +34,9 @@ module.exports = class LoginCommand {
 
   async run(opts) {
     let { email, password, project, token } = opts;
+
+    debug(`command: ${this.command}`);
+    debug(`opts: ${JSON.stringify(opts)}`);
 
     /* istanbul ignore next */
     async function getCredentials() {

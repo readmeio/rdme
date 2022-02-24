@@ -11,6 +11,7 @@ const { cleanHeaders } = require('../lib/fetch');
 const FormData = require('form-data');
 const parse = require('parse-link-header');
 const { file: tmpFile } = require('tmp-promise');
+const { debug } = require('../lib/logger');
 
 module.exports = class OpenAPICommand {
   constructor() {
@@ -56,6 +57,9 @@ module.exports = class OpenAPICommand {
     let selectedVersion;
     let isUpdate;
 
+    debug(`command: ${this.command}`);
+    debug(`opts: ${JSON.stringify(opts)}`);
+
     if (!key && opts.token) {
       console.warn(
         chalk.yellow('⚠️  Warning! The `--token` option has been deprecated. Please use `--key` and `--id` instead.')
@@ -74,11 +78,15 @@ module.exports = class OpenAPICommand {
       );
     }
 
+    debug(`key (final): ${key}`);
+    debug(`id (final): ${id}`);
+
     if (!key) {
       return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
     }
 
     async function callApi(specPath, versionCleaned) {
+      debug(`bundling and validating spec located at ${specPath}`);
       // @todo Tailor messaging to what is actually being handled here. If the user is uploading a Swagger file, never mention that they uploaded/updated an OpenAPI file.
 
       async function success(data) {
@@ -86,7 +94,9 @@ module.exports = class OpenAPICommand {
           ? "You've successfully uploaded a new OpenAPI file to your ReadMe project!"
           : "You've successfully updated an OpenAPI file on your ReadMe project!";
 
+        debug(`successful ${data.status} response`);
         const body = await data.json();
+        debug(`successful response payload: ${JSON.stringify(body)}`);
 
         return Promise.resolve(
           [
@@ -103,10 +113,13 @@ module.exports = class OpenAPICommand {
       }
 
       async function error(err) {
+        debug(`error response received with status code ${err.status}`);
         try {
           const parsedError = await err.json();
+          debug(`full error response: ${JSON.stringify(parsedError)}`);
           return Promise.reject(new APIError(parsedError));
         } catch (e) {
+          debug(`error parsing JSON with message: ${e.message}`);
           if (e.message.includes('Unexpected token < in JSON')) {
             return Promise.reject(
               new Error(
@@ -121,17 +134,22 @@ module.exports = class OpenAPICommand {
 
       let bundledSpec;
       const oas = new OASNormalize(specPath, { colorizeErrors: true, enablePaths: true });
+      debug('spec normalized');
       await oas.validate(false);
+      debug('spec validated');
       await oas.bundle().then(res => {
         bundledSpec = JSON.stringify(res);
       });
+      debug('spec bundled');
 
       // Create a temporary file to write the bundled spec to,
       // which we will then stream into the form data body
       const { path } = await tmpFile({ prefix: 'rdme-openapi-', postfix: '.json' });
+      debug(`creating temporary file at ${path}`);
       await fs.writeFileSync(path, bundledSpec);
       const stream = fs.createReadStream(path);
 
+      debug('file and stream created, streaming into form data payload');
       const formData = new FormData();
       formData.append('spec', stream);
 
@@ -178,15 +196,20 @@ module.exports = class OpenAPICommand {
       }
 
       if (!id) {
+        debug('no id parameter, retrieving list of API specs');
         const apiSettings = await getSpecs(`/api/v1/api-specification`);
 
         const totalPages = Math.ceil(apiSettings.headers.get('x-total-count') / 10);
         const parsedDocs = parse(apiSettings.headers.get('link'));
+        debug(`total pages: ${totalPages}`);
+        debug(`pagination result: ${JSON.stringify(parsedDocs)}`);
 
         const apiSettingsBody = await apiSettings.json();
+        debug(`api settings list response payload: ${JSON.stringify(apiSettingsBody)}`);
         if (!apiSettingsBody.length) return createSpec();
 
         const { option } = await prompt(promptOpts.createOasPrompt(apiSettingsBody, parsedDocs, totalPages, getSpecs));
+        debug(`selection result: ${option}`);
         if (!option) return null;
         return option === 'create' ? createSpec() : updateSpec(option);
       }
@@ -202,6 +225,8 @@ module.exports = class OpenAPICommand {
       selectedVersion = await getProjectVersion(version, key, true);
     }
 
+    debug(`selectedVersion: ${selectedVersion}`);
+
     if (spec) {
       return callApi(spec, selectedVersion);
     }
@@ -210,7 +235,9 @@ module.exports = class OpenAPICommand {
     // that. If they don't have any, let's let the user know how they can get one going.
     return new Promise((resolve, reject) => {
       ['swagger.json', 'swagger.yaml', 'openapi.json', 'openapi.yaml'].forEach(file => {
+        debug(`looking for definition with filename: ${file}`);
         if (!fs.existsSync(file)) {
+          debug(`${file} not found`);
           return;
         }
 
