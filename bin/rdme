@@ -25,8 +25,7 @@ require('../src')(process.argv.slice(2))
     }
 
     /**
-     * If we're in a GitHub Actions environment,
-     * log errors with that formatting instead.
+     * If we're in a GitHub Actions environment, log errors with that formatting instead.
      * @link: https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-error-message
      * @link: https://github.com/actions/toolkit/tree/main/packages/core#annotations
      */
