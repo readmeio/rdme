@@ -4,6 +4,7 @@ const { prompt } = require('enquirer');
 const promptOpts = require('../../lib/prompts');
 const fetch = require('../../lib/fetch');
 const { cleanHeaders, handleRes } = require('../../lib/fetch');
+const { debug } = require('../../lib/logger');
 
 module.exports = class CreateVersionCommand {
   constructor() {
@@ -56,6 +57,9 @@ module.exports = class CreateVersionCommand {
   async run(opts) {
     let versionList;
     const { key, version, codename, fork, main, beta, isPublic } = opts;
+
+    debug(`command: ${this.command}`);
+    debug(`opts: ${JSON.stringify(opts)}`);
 
     if (!key) {
       return Promise.reject(new Error('No project API key provided. Please use `--key`.'));

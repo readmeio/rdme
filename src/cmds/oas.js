@@ -1,4 +1,5 @@
 const chalk = require('chalk');
+const { debug } = require('../lib/logger');
 
 module.exports = class OASCommand {
   constructor() {
@@ -12,6 +13,7 @@ module.exports = class OASCommand {
   }
 
   async run() {
+    debug(`command: ${this.command}`);
     const message = [
       'This `oas` integration is now inactive.',
       "If you're looking to use the `oas` CLI directly, head over to https://npm.im/oas.",

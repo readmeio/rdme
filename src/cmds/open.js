@@ -2,6 +2,7 @@ const chalk = require('chalk');
 const config = require('config');
 const open = require('open');
 const configStore = require('../lib/configstore');
+const { debug } = require('../lib/logger');
 
 module.exports = class OpenCommand {
   constructor() {
@@ -15,7 +16,12 @@ module.exports = class OpenCommand {
   }
 
   async run(opts) {
+    debug(`command: ${this.command}`);
+    debug(`opts: ${JSON.stringify(opts)}`);
+
     const project = configStore.get('project');
+    debug(`project: ${project}`);
+
     if (!project) {
       return Promise.reject(new Error(`Please login using \`${config.get('cli')} login\`.`));
     }
