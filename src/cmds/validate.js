@@ -39,6 +39,7 @@ module.exports = class ValidateCommand {
           return Promise.resolve(chalk.green(`${specPath} is a valid OpenAPI API definition!`));
         })
         .catch(err => {
+          debug(`raw validation error object: ${JSON.stringify(err)}`);
           return Promise.reject(new Error(err.message));
         });
     }
@@ -51,7 +52,9 @@ module.exports = class ValidateCommand {
     // don't have any, let's let the user know how they can get one going.
     return new Promise((resolve, reject) => {
       ['swagger.json', 'swagger.yaml', 'openapi.json', 'openapi.yaml'].forEach(file => {
+        debug(`looking for definition with filename: ${file}`);
         if (!fs.existsSync(file)) {
+          debug(`${file} not found`);
           return;
         }
 
