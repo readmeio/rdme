@@ -1,7 +1,7 @@
 const config = require('config');
 const semver = require('semver');
-const { prompt } = require('enquirer');
-const promptOpts = require('../../lib/prompts');
+const enquirer = require('../../lib/enquirer');
+
 const fetch = require('../../lib/fetch');
 const { cleanHeaders, handleRes } = require('../../lib/fetch');
 
@@ -37,25 +37,24 @@ module.exports = class CreateVersionCommand {
       },
       {
         name: 'main',
-        type: String,
+        type: Boolean,
         description: 'Should this version be the primary (default) version for your project?',
       },
       {
         name: 'beta',
-        type: String,
+        type: Boolean,
         description: 'Is this version in beta?',
       },
       {
-        name: 'isPublic',
-        type: String,
+        name: 'public',
+        type: Boolean,
         description: 'Would you like to make this version public? Any primary version must be public.',
       },
     ];
   }
 
   async run(opts) {
-    let versionList;
-    const { key, version, codename, fork, main, beta, isPublic } = opts;
+    const { key, version } = opts;
 
     if (!key) {
       return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
@@ -67,19 +66,45 @@ module.exports = class CreateVersionCommand {
       );
     }
 
-    if (!fork) {
+    let versionList;
+    if (!opts.fork) {
       versionList = await fetch(`${config.get('host')}/api/v1/version`, {
         method: 'get',
         headers: cleanHeaders(key),
       }).then(res => handleRes(res));
     }
 
-    const versionPrompt = promptOpts.createVersionPrompt(versionList || [{}], {
-      newVersion: version,
-      ...opts,
-    });
+    const questions = [
+      {
+        type: 'select',
+        name: 'fork',
+        message: 'Which version would you like to fork from?',
+        skip: () => opts.fork,
+        choices: (versionList || [{}]).map(v => ({ message: v.version, value: v.version })),
+      },
+      {
+        type: 'confirm',
+        name: 'main',
+        message: 'Would you like to make this version the main version for this project?',
+        skip: () => 'main' in opts,
+      },
+      {
+        type: 'confirm',
+        name: 'beta',
+        message: 'Should this version be in beta?',
+        skip: () => 'beta' in opts,
+      },
+      {
+        type: 'confirm',
+        name: 'public',
+        message: 'Would you like to make this version public?',
+        skip() {
+          return 'public' in opts || opts.main || this.enquirer?.answers?.main;
+        },
+      },
+    ];
 
-    const promptResponse = await prompt(versionPrompt);
+    const answers = await enquirer(opts, questions);
 
     return fetch(`${config.get('host')}/api/v1/version`, {
       method: 'post',
@@ -89,11 +114,11 @@ module.exports = class CreateVersionCommand {
       }),
       body: JSON.stringify({
         version,
-        codename: codename || '',
-        is_stable: main === 'true' || promptResponse.is_stable,
-        is_beta: beta === 'true' || promptResponse.is_beta,
-        from: fork || promptResponse.from,
-        is_hidden: promptResponse.is_stable ? false : !(isPublic === 'true' || promptResponse.is_hidden),
+        codename: opts.codename || '',
+        is_stable: opts.main || answers.main,
+        is_beta: opts.beta || answers.beta,
+        from: opts.fork || answers.fork,
+        is_hidden: answers.is_stable ? false : !('public' in opts || answers.public),
       }),
     })
       .then(handleRes)

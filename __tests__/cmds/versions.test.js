@@ -37,6 +37,8 @@ jest.mock('../../src/lib/prompts');
 describe('rdme versions*', () => {
   beforeAll(() => nock.disableNetConnect());
 
+  beforeEach(() => jest.resetModules());
+
   afterEach(() => nock.cleanAll());
 
   describe('rdme versions', () => {
@@ -103,30 +105,36 @@ describe('rdme versions*', () => {
     });
 
     it('should create a specific version', async () => {
-      promptHandler.createVersionPrompt.mockResolvedValue({
-        is_stable: true,
-        is_beta: false,
-        from: '1.0.0',
-      });
-
       const mockRequest = getApiNock()
-        .get('/api/v1/version')
-        .basicAuth({ user: key })
-        .reply(200, [{ version }, { version }])
-        .post('/api/v1/version')
+        .post('/api/v1/version', {
+          version: '1.0.0',
+          codename: '',
+          is_stable: false,
+          is_beta: false,
+          from: '1.0.0',
+          is_hidden: true,
+        })
         .basicAuth({ user: key })
         .reply(201, { version });
 
-      await expect(createVersion.run({ key, version })).resolves.toBe('Version 1.0.0 created successfully.');
+      await expect(createVersion.run({ key, version, fork: '1.0.0', main: true, beta: false })).resolves.toBe(
+        'Version 1.0.0 created successfully.'
+      );
+
       mockRequest.done();
     });
 
+    it.todo('should prompt a version list if no `--fork` argument is supplied');
+
     it('should catch any post request errors', async () => {
-      expect.assertions(1);
-      promptHandler.createVersionPrompt.mockResolvedValue({
-        is_stable: false,
-        is_beta: false,
-      });
+      const args = {
+        key,
+        version,
+        fork: '0.0.5',
+        main: false,
+        beta: false,
+        public: false,
+      };
 
       const errorResponse = {
         error: 'VERSION_EMPTY',
@@ -137,10 +145,33 @@ describe('rdme versions*', () => {
 
       const mockRequest = getApiNock().post('/api/v1/version').basicAuth({ user: key }).reply(400, errorResponse);
 
-      await expect(createVersion.run({ key, version, fork: '0.0.5' })).rejects.toStrictEqual(
-        new APIError(errorResponse)
-      );
+      await expect(createVersion.run(args)).rejects.toThrow(new APIError(errorResponse));
       mockRequest.done();
+    });
+
+    describe('ci environments', () => {
+      beforeEach(() => {
+        process.env.CIRCLECI = true;
+      });
+
+      afterEach(() => {
+        delete process.env.CIRCLECI;
+      });
+
+      it('should prompt for missing required arguments if in a CI environment', async () => {
+        const mockRequest = getApiNock()
+          .get('/api/v1/version')
+          .basicAuth({ user: key })
+          .reply(200, [{ version }, { version }]);
+
+        await expect(createVersion.run({ key, version })).rejects.toThrow(
+          new Error(
+            "We've detected you're running within a CircleCI environment, please supply the following required arguments for your command instead of relying on our terminal prompt system: fork"
+          )
+        );
+
+        mockRequest.done();
+      });
     });
   });
 
