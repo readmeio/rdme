@@ -7,7 +7,7 @@ category: 5f7ce9e3a5504d0414d024c2
 <!--
 
 Hello curious raw Markdown reader! 👋
-This Markdown page is syncing to ReadMe via the `rdme GitHub Action 🦉
+This Markdown page is syncing to ReadMe via the `rdme` GitHub Action 🦉
 Check out the "Syncing Markdown Docs" example below,
 and peep the resulting page in our docs: https://docs.readme.com/docs/rdme
 
