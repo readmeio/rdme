@@ -3,5 +3,6 @@
  * @link https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables
  */
 module.exports = function isGHA() {
-  return process.env.GITHUB_ACTIONS === 'true';
+  // eslint-disable-next-line global-require
+  return require('ci-info').GITHUB_ACTIONS;
 };
