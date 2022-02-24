@@ -1,11 +1,10 @@
-const { spawn } = require('child_process');
-const path = require('path');
+const chalk = require('chalk');
 
 module.exports = class OASCommand {
   constructor() {
     this.command = 'oas';
     this.usage = 'oas';
-    this.description = 'Helpful OpenAPI generation tooling.';
+    this.description = 'Helpful OpenAPI generation tooling. [inactive]';
     this.category = 'utilities';
     this.position = 1;
 
@@ -13,16 +12,10 @@ module.exports = class OASCommand {
   }
 
   async run() {
-    const cp = spawn(path.join(__dirname, '..', '..', 'node_modules', '.bin', 'oas'), process.argv.slice(3), {
-      stdio: 'inherit',
-    });
-
-    return new Promise((resolve, reject) => {
-      cp.on('close', code => {
-        if (code && code > 0) return reject();
-
-        return resolve();
-      });
-    });
+    const message = [
+      'This `oas` integration is now inactive.',
+      "If you're looking to use the `oas` CLI directly, head over to https://npm.im/oas.",
+    ];
+    return Promise.resolve(chalk.red(message.join('\n\n')));
   }
 };
