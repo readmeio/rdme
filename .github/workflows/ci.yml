@@ -49,4 +49,4 @@ jobs:
       - name: Run `openapi` command
         uses: ./rdme-repo/
         with:
-          rdme: swagger oas-examples-repo/3.1/json/petstore.json --key=${{ secrets.RDME_TEST_PROJECT_API_KEY }} --id=${{ secrets.RDME_TEST_PROJECT_API_SETTING }}
+          rdme: openapi oas-examples-repo/3.1/json/petstore.json --key=${{ secrets.RDME_TEST_PROJECT_API_KEY }} --id=${{ secrets.RDME_TEST_PROJECT_API_SETTING }}

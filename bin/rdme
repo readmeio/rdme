@@ -36,6 +36,5 @@ require('../src')(process.argv.slice(2))
 
     // eslint-disable-next-line no-console
     console.error(chalk.red(`\n${message}\n`));
-
     return process.exit(1);
   });
