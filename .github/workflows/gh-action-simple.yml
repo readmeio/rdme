@@ -17,4 +17,4 @@ jobs:
       - name: Run `validate` command
         uses: ./ # in actual production usage, this value should be 'readmeio/rdme@XX'
         with:
-          rdme: validate __tests__/__fixtures__/ref-oas/petstore.json
+          rdme: validate __tests__/__fixtures__/invalid-oas.json
