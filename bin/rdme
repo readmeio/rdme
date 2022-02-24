@@ -31,11 +31,11 @@ require('../src')(process.argv.slice(2))
      * @link: https://github.com/actions/toolkit/tree/main/packages/core#annotations
      */
     if (isGHA) {
-      core.error(message);
-    } else {
-      // eslint-disable-next-line no-console
-      console.error(chalk.red(`\n${message}\n`));
+      return core.setFailed(message);
     }
+
+    // eslint-disable-next-line no-console
+    console.error(chalk.red(`\n${message}\n`));
 
     return process.exit(1);
   });
