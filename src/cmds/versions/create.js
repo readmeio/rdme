@@ -118,7 +118,7 @@ module.exports = class CreateVersionCommand {
         is_stable: opts.main || answers.main,
         is_beta: opts.beta || answers.beta,
         from: opts.fork || answers.fork,
-        is_hidden: answers.is_stable ? false : !('public' in opts || answers.public),
+        is_hidden: opts.main || answers.main ? false : !('public' in opts || answers.public),
       }),
     })
       .then(handleRes)

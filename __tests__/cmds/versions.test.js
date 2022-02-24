@@ -105,37 +105,27 @@ describe('rdme versions*', () => {
     });
 
     it('should create a specific version', async () => {
+      const args = { key, version, fork: '1.0.0', main: false, beta: true, public: true };
       const mockRequest = getApiNock()
         .post('/api/v1/version', {
           version: '1.0.0',
           codename: '',
           is_stable: false,
-          is_beta: false,
+          is_beta: true,
           from: '1.0.0',
-          is_hidden: true,
+          is_hidden: false,
         })
         .basicAuth({ user: key })
         .reply(201, { version });
 
-      await expect(createVersion.run({ key, version, fork: '1.0.0', main: true, beta: false })).resolves.toBe(
-        'Version 1.0.0 created successfully.'
-      );
-
+      await expect(createVersion.run(args)).resolves.toBe('Version 1.0.0 created successfully.');
       mockRequest.done();
     });
 
     it.todo('should prompt a version list if no `--fork` argument is supplied');
 
     it('should catch any post request errors', async () => {
-      const args = {
-        key,
-        version,
-        fork: '0.0.5',
-        main: false,
-        beta: false,
-        public: false,
-      };
-
+      const args = { key, version, fork: '0.0.5', main: false, beta: false, public: false };
       const errorResponse = {
         error: 'VERSION_EMPTY',
         message: 'You need to include an x-readme-version header',
