@@ -48,17 +48,26 @@ module.exports = class OpenAPICommand {
         type: String,
         defaultOption: true,
       },
+      {
+        name: 'workdir',
+        type: String,
+        description: 'Directory as working directory',
+      },
     ];
   }
 
   async run(opts) {
-    const { spec, version } = opts;
+    const { spec, version, workdir } = opts;
     let { key, id } = opts;
     let selectedVersion;
     let isUpdate;
 
     debug(`command: ${this.command}`);
     debug(`opts: ${JSON.stringify(opts)}`);
+
+    if (workdir) {
+      process.chdir(workdir);
+    }
 
     if (!key && opts.token) {
       console.warn(

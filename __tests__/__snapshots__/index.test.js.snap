@@ -14,6 +14,7 @@ Options
   --id string        Unique identifier for your API definition. Use this if you're re-uploading an 
                      existing API definition                                                       
   --version string   Project version                                                               
+  --workdir string   Directory as working directory                                                
   -h, --help         Display this usage guide                                                      
 
 Related commands
@@ -183,6 +184,7 @@ Options
   --id string        Unique identifier for your API definition. Use this if you're re-uploading an 
                      existing API definition                                                       
   --version string   Project version                                                               
+  --workdir string   Directory as working directory                                                
   -h, --help         Display this usage guide                                                      
 
 Related commands
@@ -206,6 +208,7 @@ Options
   --id string        Unique identifier for your API definition. Use this if you're re-uploading an 
                      existing API definition                                                       
   --version string   Project version                                                               
+  --workdir string   Directory as working directory                                                
   -h, --help         Display this usage guide                                                      
 
 Related commands
