@@ -34,11 +34,6 @@ module.exports = class OpenAPICommand {
         description: `Unique identifier for your API definition. Use this if you're re-uploading an existing API definition`,
       },
       {
-        name: 'token',
-        type: String,
-        description: 'Project token. Deprecated, please use `--key` instead',
-      },
-      {
         name: 'version',
         type: String,
         description: 'Project version',
@@ -57,8 +52,7 @@ module.exports = class OpenAPICommand {
   }
 
   async run(opts) {
-    const { spec, version, workdir } = opts;
-    let { key, id } = opts;
+    const { key, id, spec, version, workdir } = opts;
     let selectedVersion;
     let isUpdate;
 
@@ -67,14 +61,6 @@ module.exports = class OpenAPICommand {
 
     if (workdir) {
       process.chdir(workdir);
-    }
-
-    if (!key && opts.token) {
-      console.warn(
-        chalk.yellow('⚠️  Warning! The `--token` option has been deprecated. Please use `--key` and `--id` instead.')
-      );
-
-      [key, id] = opts.token.split('-');
     }
 
     if (version && id) {
