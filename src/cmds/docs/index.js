@@ -8,6 +8,7 @@ const { promisify } = require('util');
 const { getProjectVersion } = require('../../lib/versionSelect');
 const fetch = require('../../lib/fetch');
 const { cleanHeaders, handleRes } = require('../../lib/fetch');
+const { debug } = require('../../lib/logger');
 
 const readFile = promisify(fs.readFile);
 
@@ -42,6 +43,9 @@ module.exports = class DocsCommand {
   async run(opts) {
     const { folder, key, version } = opts;
 
+    debug(`command: ${this.command}`);
+    debug(`opts: ${JSON.stringify(opts)}`);
+
     if (!key) {
       return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
     }
@@ -54,6 +58,8 @@ module.exports = class DocsCommand {
     // Let's revisit this once we re-evaluate our category logic in the API.
     // Ideally we should ignore this parameter entirely if the category is included.
     const selectedVersion = await getProjectVersion(version, key, false);
+
+    debug(`selectedVersion: ${selectedVersion}`);
 
     // Find the files to sync
     const readdirRecursive = folderToSearch => {
@@ -70,6 +76,9 @@ module.exports = class DocsCommand {
 
     // Strip out non-markdown files
     const files = readdirRecursive(folder).filter(file => file.endsWith('.md') || file.endsWith('.markdown'));
+
+    debug(`number of files: ${files.length}`);
+
     if (!files.length) {
       return Promise.reject(new Error(`We were unable to locate Markdown files in ${folder}.`));
     }
@@ -115,12 +124,16 @@ module.exports = class DocsCommand {
 
     const updatedDocs = await Promise.all(
       files.map(async filename => {
+        debug(`reading file ${filename}`);
         const file = await readFile(filename, 'utf8');
         const matter = frontMatter(file);
+        debug(`frontmatter for ${filename}: ${JSON.stringify(matter)}`);
 
         // Stripping the subdirectories and markdown extension from the filename and lowercasing to get the default slug.
         const slug = matter.data.slug || path.basename(filename).replace(path.extname(filename), '').toLowerCase();
         const hash = crypto.createHash('sha1').update(file).digest('hex');
+
+        debug(`fetching data for ${slug}`);
 
         return fetch(`${config.get('host')}/api/v1/docs/${slug}`, {
           method: 'get',
@@ -131,9 +144,12 @@ module.exports = class DocsCommand {
         })
           .then(res => res.json())
           .then(res => {
+            debug(`GET /docs/:slug API response for ${slug}: ${JSON.stringify(res)}`);
             if (res.error) {
+              debug(`error retrieving data for ${slug}, creating doc`);
               return createDoc(slug, matter, hash, res);
             }
+            debug(`data received for ${slug}, updating doc`);
             return updateDoc(slug, matter, hash, res);
           })
           .catch(err => {

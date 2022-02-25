@@ -1,6 +1,7 @@
 const chalk = require('chalk');
 const fs = require('fs');
 const OASNormalize = require('oas-normalize');
+const { debug } = require('../lib/logger');
 
 module.exports = class ValidateCommand {
   constructor() {
@@ -17,11 +18,23 @@ module.exports = class ValidateCommand {
         type: String,
         defaultOption: true,
       },
+      {
+        name: 'workdir',
+        type: String,
+        description: 'Directory as working directory',
+      },
     ];
   }
 
   async run(opts) {
-    const { spec } = opts;
+    const { spec, workdir } = opts;
+
+    if (workdir) {
+      process.chdir(workdir);
+    }
+
+    debug(`command: ${this.command}`);
+    debug(`opts: ${JSON.stringify(opts)}`);
 
     async function validateSpec(specPath) {
       const oas = new OASNormalize(specPath, { colorizeErrors: true, enablePaths: true });
@@ -35,6 +48,7 @@ module.exports = class ValidateCommand {
           return Promise.resolve(chalk.green(`${specPath} is a valid OpenAPI API definition!`));
         })
         .catch(err => {
+          debug(`raw validation error object: ${JSON.stringify(err)}`);
           return Promise.reject(new Error(err.message));
         });
     }
@@ -47,7 +61,9 @@ module.exports = class ValidateCommand {
     // don't have any, let's let the user know how they can get one going.
     return new Promise((resolve, reject) => {
       ['swagger.json', 'swagger.yaml', 'openapi.json', 'openapi.yaml'].forEach(file => {
+        debug(`looking for definition with filename: ${file}`);
         if (!fs.existsSync(file)) {
+          debug(`${file} not found`);
           return;
         }
 

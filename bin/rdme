@@ -1,8 +1,11 @@
 #! /usr/bin/env node
 const chalk = require('chalk');
+const core = require('@actions/core');
 
 const updateNotifier = require('update-notifier');
 const pkg = require('../package.json');
+
+const isGHA = require('../src/lib/isGitHub');
 
 updateNotifier({ pkg }).notify();
 
@@ -19,6 +22,15 @@ require('../src')(process.argv.slice(2))
 
     if (err && 'message' in err) {
       message = err.message;
+    }
+
+    /**
+     * If we're in a GitHub Actions environment, log errors with that formatting instead.
+     * @link: https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-error-message
+     * @link: https://github.com/actions/toolkit/tree/main/packages/core#annotations
+     */
+    if (isGHA()) {
+      return core.setFailed(message);
     }
 
     // eslint-disable-next-line no-console
