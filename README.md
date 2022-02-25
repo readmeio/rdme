@@ -4,7 +4,7 @@
 
 [![npm](https://img.shields.io/npm/v/rdme)](https://npm.im/rdme) [![Build](https://github.com/readmeio/rdme/workflows/CI/badge.svg)](https://github.com/readmeio/rdme)
 
-`rdme` is [ReadMe](https://readme.com)'s official command-line interface (CLI) and [GitHub Action](#github-actions) wrapper. It allows you to sync [OpenAPI](https://spec.openapis.org) and [Swagger](https://swagger.io/specification/v2/) definitions with projects you create on [ReadMe](https://readme.com/). You can also access other parts of [ReadMe's RESTful API](https://docs.readme.com/reference/intro-to-the-readme-api), including syncing Markdown documentation with your project and managing project versions.
+`rdme` is [ReadMe](https://readme.com)'s official command-line interface (CLI) and [GitHub Action](#github-actions) wrapper. It allows you to sync [OpenAPI](https://spec.openapis.org/oas/v3.1.0.html) and [Swagger](https://swagger.io/specification/v2/) definitions with projects you create on [ReadMe](https://readme.com/). You can also access other parts of [ReadMe's RESTful API](https://docs.readme.com/reference/intro-to-the-readme-api), including syncing Markdown documentation with your project and managing project versions.
 
 ## Configuration
 
