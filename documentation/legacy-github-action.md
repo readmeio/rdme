@@ -28,7 +28,7 @@ where `API_KEY` was your project API key and the `API_DEFINITION_ID` was your AP
 For migrating to the `rdme`-based GitHub Action, simply modify the step to look like this:
 
 ```yml
-- uses: readmeio/rdme@XX
+- uses: readmeio/rdme@RDME_VERSION
   with:
     rdme: openapi path/to/file.json --key=API_KEY --id=API_DEFINITION_ID
 ```
@@ -36,7 +36,7 @@ For migrating to the `rdme`-based GitHub Action, simply modify the step to look 
 There are two things to note:
 
 1. This workflow will infer the `api-version` based on the `API_DEFINITION_ID` parameter that you pass in, so the API version parameter is no longer needed here.
-2. The `@XX` refers to the latest version of `rdme`, which you can find on [the GitHub Action Marketplace page](TKTK). As an example, the latest version as of this writing is `7.0`, so you would replace the `XX` in the above snippet with `7.0`. To ensure you're getting the latest features and security updates, we strongly recommend setting up [Dependabot](https://docs.github.com/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/keeping-your-actions-up-to-date-with-dependabot) to keep this package up-to-date.
+2. `@RDME_VERSION` is the latest version of `rdme`. To ensure you're getting the latest features and security updates, we strongly recommend setting up [Dependabot](https://docs.github.com/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/keeping-your-actions-up-to-date-with-dependabot) to keep this package up-to-date.
 
 <details>
 
