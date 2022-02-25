@@ -17,7 +17,7 @@ Check out `.github/workflows/docs.yml` for more info on this!
 
 -->
 
-If you're anything like us, your documentation process may be a part of a broader [CI/CD](https://en.wikipedia.org/wiki/CI/CD) process. For example, you may want to automatically update your ReadMe guides or API reference every time you've ship new code. Enter [`rdme`](https://github.com/readmeio/rdme): ReadMe's official command-line interface (CLI) and GitHub Action!
+If you're anything like us, your documentation process may be a part of a broader CI/CD process. For example, you may want to automatically update your ReadMe guides or API reference every time you've ship new code. Enter `rdme`: ReadMe's official command-line interface (CLI) and GitHub Action!
 
 [![npm](https://img.shields.io/npm/v/rdme)](https://npm.im/rdme) [![Build](https://github.com/readmeio/rdme/workflows/CI/badge.svg)](https://github.com/readmeio/rdme)
 
@@ -68,7 +68,7 @@ You can also specify several other page attributes in your YAML front matter, su
 >
 > Note that the `@RDME_VERSION` in the below examples is the latest version of `rdme`. We recommend [configuring Dependabot to keep your actions up-to-date](https://docs.github.com/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/keeping-your-actions-up-to-date-with-dependabot).
 
-For usage in [GitHub Actions](https://docs.github.com/actions), create [a new GitHub Workflow file](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions) in the `.github/workflows` directory of your repository and add the following [steps](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idsteps) to your workflow:
+For usage in GitHub Actions, create [a new GitHub Workflow file](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions) in the `.github/workflows` directory of your repository and add the following [steps](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idsteps) to your workflow:
 
 ```yml
 - uses: actions/checkout@v2
