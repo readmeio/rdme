@@ -198,9 +198,9 @@ In the example above, every push to the `main` branch will check out your reposi
 
 > 🚧 Secretly store your ReadMe API Key!
 >
-> GitHub Actions has [secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets) to securely store sensitive information so it isn't publicly visible. We **strongly** recommend using these for storing your ReadMe API Key, your API definition ID, and any other secret keys—whether your repository is public or private. You can read more about setting these up [in their documentation](https://docs.github.com/en/actions/security-guides/encrypted-secrets).
+> GitHub Actions has [secrets](https://docs.github.com/actions/security-guides/encrypted-secrets) to securely store sensitive information so it isn't publicly visible. We **strongly** recommend using these for storing your ReadMe API Key, your API definition ID, and any other secret keys—whether your repository is public or private. You can read more about setting these up [in their documentation](https://docs.github.com/actions/security-guides/encrypted-secrets).
 
-To use a GitHub secret in your `rdme` GitHub Action, first [create a new repository secret](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository). Let's say you create a new secret key called `README_API_KEY`. The usage in the `rdme` step will look something like this:
+To use a GitHub secret in your `rdme` GitHub Action, first [create a new repository secret](https://docs.github.com/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository). Let's say you create a new secret key called `README_API_KEY`. The usage in the `rdme` step will look something like this:
 
 ```yml
 - uses: readmeio/rdme@RDME_VERSION
