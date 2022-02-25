@@ -207,3 +207,29 @@ To use a GitHub secret in your `rdme` GitHub Action, first [create a new reposit
   with:
     rdme: docs ./documentation --key=${{ secrets.README_API_KEY }} --version=2.0
 ```
+
+## Troubleshooting
+
+If you're running into unexpected behavior with `rdme` and need to troubleshoot the issue, you have several debug logging options available. We may ask for these logs (as well as a copy of your OpenAPI definition) when you contact our support team.
+
+### Troubleshooting CLI
+
+If you're troubleshooting issues with the CLI (or in some non-GitHub Actions environment), you can use the `DEBUG` environmental variable to print helpful debugging info to the console:
+
+```sh
+DEBUG=rdme* rdme openapi [path-to-file.json]
+```
+
+Note that this should only be used for development/debugging purposes and should not be enabled in production environments.
+
+### Troubleshooting GitHub Actions
+
+If you're troubleshooting issues in a GitHub Actions environment, you can enable [step debug logs](https://docs.github.com/actions/monitoring-and-troubleshooting-workflows/enabling-debug-logging#enabling-step-debug-logging) in your GitHub Actions workflow by [setting the repository secret](https://docs.github.com/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository) `ACTIONS_STEP_DEBUG` to `true`. For more information on accessing, downloading, and deleting logs, check out [GitHub's documentation](https://docs.github.com/actions/monitoring-and-troubleshooting-workflows/using-workflow-run-logs).
+
+> 🚧 Debug Logs May Contain Sensitive Information
+>
+> Enabling step debug logs will produce comprehensive logging for **all** of your GitHub Action workflow steps. While GitHub automatically masks any sensitive information you load in with [secrets](#example-using-github-secrets), there might be other sensitive information that's exposed. Anybody with read access to the repository will be able to see these logs.
+>
+> We **strongly recommend** that you only enable step debug logs in private repositories. If working in a public repository, we suggest recreating your GitHub workflow setup (e.g. with your GitHub workflow files, OpenAPI definitions, and anything else you need for syncing to ReadMe) in a separate private repository for testing purposes before enabling this setting.
+>
+> If you do enable step debug logs in your repository and your logs produce sensitive information, here are [GitHub's docs on deleting logs](https://docs.github.com/actions/monitoring-and-troubleshooting-workflows/using-workflow-run-logs#deleting-logs).
