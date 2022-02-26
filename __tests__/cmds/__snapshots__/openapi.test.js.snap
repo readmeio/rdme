@@ -274,7 +274,7 @@ Object {
     },
   },
   "info": Object {
-    "title": "Example petstore to demo our handling of external $ref pointers",
+    "title": "Example petstore to demo our handling of relative external $ref pointers",
     "version": "1.0.0",
   },
   "openapi": "3.0.0",
