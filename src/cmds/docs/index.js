@@ -83,7 +83,7 @@ module.exports = class DocsCommand {
       return Promise.reject(new Error(`We were unable to locate Markdown files in ${folder}.`));
     }
 
-    function createDoc(slug, file, hash, err) {
+    function createDoc(slug, file, filename, hash, err) {
       if (err.error !== 'DOC_NOTFOUND') return Promise.reject(err);
 
       return fetch(`${config.get('host')}/api/v1/docs`, {
@@ -98,10 +98,12 @@ module.exports = class DocsCommand {
           ...file.data,
           lastUpdatedHash: hash,
         }),
-      }).then(res => handleRes(res));
+      })
+        .then(res => handleRes(res))
+        .then(res => `🌱 successfully created '${res.slug}' with contents from ${filename}`);
     }
 
-    function updateDoc(slug, file, hash, existingDoc) {
+    function updateDoc(slug, file, filename, hash, existingDoc) {
       if (hash === existingDoc.lastUpdatedHash) {
         return `\`${slug}\` was not updated because there were no changes.`;
       }
@@ -119,7 +121,9 @@ module.exports = class DocsCommand {
             lastUpdatedHash: hash,
           })
         ),
-      }).then(res => handleRes(res));
+      })
+        .then(res => handleRes(res))
+        .then(res => `✏️ successfully updated '${res.slug}' with contents from ${filename}`);
     }
 
     const updatedDocs = await Promise.all(
@@ -147,10 +151,10 @@ module.exports = class DocsCommand {
             debug(`GET /docs/:slug API response for ${slug}: ${JSON.stringify(res)}`);
             if (res.error) {
               debug(`error retrieving data for ${slug}, creating doc`);
-              return createDoc(slug, matter, hash, res);
+              return createDoc(slug, matter, filename, hash, res);
             }
             debug(`data received for ${slug}, updating doc`);
-            return updateDoc(slug, matter, hash, res);
+            return updateDoc(slug, matter, filename, hash, res);
           })
           .catch(err => {
             // eslint-disable-next-line no-param-reassign
@@ -160,6 +164,6 @@ module.exports = class DocsCommand {
       })
     );
 
-    return updatedDocs;
+    return chalk.green(updatedDocs.join('\n'));
   }
 };

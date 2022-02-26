@@ -112,14 +112,12 @@ describe('rdme docs', () => {
       return docs.run({ folder: './__tests__/__fixtures__/existing-docs', key, version }).then(updatedDocs => {
         // All docs should have been updated because their hashes from the GET request were different from what they
         // are currently.
-        expect(updatedDocs).toStrictEqual([
-          {
-            category,
-            slug: simpleDoc.slug,
-            body: simpleDoc.doc.content,
-          },
-          { category, slug: anotherDoc.slug, body: anotherDoc.doc.content },
-        ]);
+        expect(updatedDocs).toBe(
+          [
+            "✏️ successfully updated 'simple-doc' with contents from __tests__/__fixtures__/existing-docs/simple-doc.md",
+            "✏️ successfully updated 'another-doc' with contents from __tests__/__fixtures__/existing-docs/subdir/another-doc.md",
+          ].join('\n')
+        );
 
         getMocks.done();
         updateMocks.done();
@@ -144,10 +142,12 @@ describe('rdme docs', () => {
         .reply(200, { version });
 
       return docs.run({ folder: './__tests__/__fixtures__/existing-docs', key, version }).then(skippedDocs => {
-        expect(skippedDocs).toStrictEqual([
-          '`simple-doc` was not updated because there were no changes.',
-          '`another-doc` was not updated because there were no changes.',
-        ]);
+        expect(skippedDocs).toBe(
+          [
+            '`simple-doc` was not updated because there were no changes.',
+            '`another-doc` was not updated because there were no changes.',
+          ].join('\n')
+        );
 
         getMocks.done();
         versionMock.done();
@@ -181,15 +181,9 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      await expect(docs.run({ folder: './__tests__/__fixtures__/new-docs', key, version })).resolves.toStrictEqual([
-        {
-          slug: 'new-doc',
-          body: '\nBody\n',
-          category: '5ae122e10fdf4e39bb34db6f',
-          title: 'This is the document title',
-          lastUpdatedHash: 'a23046c1e9d8ab47f8875ae7c5e429cb95be1c48',
-        },
-      ]);
+      await expect(docs.run({ folder: './__tests__/__fixtures__/new-docs', key, version })).resolves.toBe(
+        "🌱 successfully created 'new-doc' with contents from __tests__/__fixtures__/new-docs/new-doc.md"
+      );
 
       getMock.done();
       postMock.done();
@@ -301,15 +295,9 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      await expect(docs.run({ folder: './__tests__/__fixtures__/slug-docs', key, version })).resolves.toStrictEqual([
-        {
-          slug: 'marc-actually-wrote-a-test',
-          body: '\nBody\n',
-          category: 'CATEGORY_ID',
-          title: 'This is the document title',
-          lastUpdatedHash: 'c9cb7cc26e90775548e1d182ae7fcaa0eaba96bc',
-        },
-      ]);
+      await expect(docs.run({ folder: './__tests__/__fixtures__/slug-docs', key, version })).resolves.toBe(
+        "🌱 successfully created 'marc-actually-wrote-a-test' with contents from __tests__/__fixtures__/slug-docs/new-doc-slug.md"
+      );
 
       getMock.done();
       postMock.done();
