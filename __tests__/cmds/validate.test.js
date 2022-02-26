@@ -55,11 +55,11 @@ describe('rdme validate', () => {
     fs.unlinkSync('./swagger.json');
   });
 
-  it('should use specified workdir', async () => {
+  it('should use specified working directory', async () => {
     await expect(
       validate.run({
         spec: 'petstore.json',
-        workdir: './__tests__/__fixtures__/relative-ref-oas',
+        workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
       })
     ).resolves.toBe(chalk.green('petstore.json is a valid OpenAPI API definition!'));
   });

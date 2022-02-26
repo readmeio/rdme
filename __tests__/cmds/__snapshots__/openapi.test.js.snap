@@ -250,7 +250,7 @@ Object {
 }
 `;
 
-exports[`rdme openapi should use specified workdir and upload the expected content 1`] = `
+exports[`rdme openapi should use specified working directory and upload the expected content 1`] = `
 Object {
   "components": Object {
     "securitySchemes": Object {
