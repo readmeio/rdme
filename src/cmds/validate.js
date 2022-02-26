@@ -19,18 +19,18 @@ module.exports = class ValidateCommand {
         defaultOption: true,
       },
       {
-        name: 'workdir',
+        name: 'workingDirectory',
         type: String,
-        description: 'Directory as working directory',
+        description: 'Working directory (for usage with relative external references)',
       },
     ];
   }
 
   async run(opts) {
-    const { spec, workdir } = opts;
+    const { spec, workingDirectory } = opts;
 
-    if (workdir) {
-      process.chdir(workdir);
+    if (workingDirectory) {
+      process.chdir(workingDirectory);
     }
 
     debug(`command: ${this.command}`);
