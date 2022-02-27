@@ -141,6 +141,43 @@ describe('rdme docs', () => {
       });
     });
 
+    it('should return doc update info for dry run', () => {
+      expect.assertions(1);
+
+      const getMocks = getNockWithVersionHeader(version)
+        .get('/api/v1/docs/simple-doc')
+        .basicAuth({ user: key })
+        .reply(200, { category, slug: simpleDoc.slug, lastUpdatedHash: 'anOldHash' })
+        .get('/api/v1/docs/another-doc')
+        .basicAuth({ user: key })
+        .reply(200, { category, slug: anotherDoc.slug, lastUpdatedHash: 'anOldHash' });
+
+      const versionMock = getApiNock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version });
+
+      return docs
+        .run({ dryRun: true, folder: './__tests__/__fixtures__/existing-docs', key, version })
+        .then(updatedDocs => {
+          // All docs should have been updated because their hashes from the GET request were different from what they
+          // are currently.
+          expect(updatedDocs).toBe(
+            [
+              `🎭 dry run! This will update 'simple-doc' with contents from __tests__/__fixtures__/existing-docs/simple-doc.md with the following metadata: ${JSON.stringify(
+                simpleDoc.doc.data
+              )}`,
+              `🎭 dry run! This will update 'another-doc' with contents from __tests__/__fixtures__/existing-docs/subdir/another-doc.md with the following metadata: ${JSON.stringify(
+                anotherDoc.doc.data
+              )}`,
+            ].join('\n')
+          );
+
+          getMocks.done();
+          versionMock.done();
+        });
+    });
+
     it('should not send requests for docs that have not changed', () => {
       expect.assertions(1);
 
@@ -168,6 +205,37 @@ describe('rdme docs', () => {
         getMocks.done();
         versionMock.done();
       });
+    });
+
+    it('should adjust "no changes" message if in dry run', () => {
+      expect.assertions(1);
+
+      const getMocks = getNockWithVersionHeader(version)
+        .get('/api/v1/docs/simple-doc')
+        .basicAuth({ user: key })
+        .reply(200, { category, slug: simpleDoc.slug, lastUpdatedHash: simpleDoc.hash })
+        .get('/api/v1/docs/another-doc')
+        .basicAuth({ user: key })
+        .reply(200, { category, slug: anotherDoc.slug, lastUpdatedHash: anotherDoc.hash });
+
+      const versionMock = getApiNock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version });
+
+      return docs
+        .run({ dryRun: true, folder: './__tests__/__fixtures__/existing-docs', key, version })
+        .then(skippedDocs => {
+          expect(skippedDocs).toBe(
+            [
+              '🎭 dry run! `simple-doc` will not be updated because there were no changes.',
+              '🎭 dry run! `another-doc` will not be updated because there were no changes.',
+            ].join('\n')
+          );
+
+          getMocks.done();
+          versionMock.done();
+        });
     });
   });
 
@@ -203,6 +271,35 @@ describe('rdme docs', () => {
 
       getMock.done();
       postMock.done();
+      versionMock.done();
+    });
+
+    it('should return creation info for dry run', async () => {
+      const slug = 'new-doc';
+      const doc = frontMatter(fs.readFileSync(path.join(fixturesDir, `/new-docs/${slug}.md`)));
+
+      const getMock = getNockWithVersionHeader(version)
+        .get(`/api/v1/docs/${slug}`)
+        .basicAuth({ user: key })
+        .reply(404, {
+          error: 'DOC_NOTFOUND',
+          message: `The doc with the slug '${slug}' couldn't be found`,
+          suggestion: '...a suggestion to resolve the issue...',
+          help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
+        });
+
+      const versionMock = getApiNock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version });
+
+      await expect(docs.run({ dryRun: true, folder: './__tests__/__fixtures__/new-docs', key, version })).resolves.toBe(
+        `🎭 dry run! This will create 'new-doc' with contents from __tests__/__fixtures__/new-docs/new-doc.md with the following metadata: ${JSON.stringify(
+          doc.data
+        )}`
+      );
+
+      getMock.done();
       versionMock.done();
     });
 
