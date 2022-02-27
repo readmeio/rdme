@@ -45,9 +45,25 @@ describe('rdme docs', () => {
     );
   });
 
-  it.todo('should error if the argument isnt a folder');
+  it('should error if the argument isnt a folder', async () => {
+    const versionMock = getApiNock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
-  it.todo('should error if the folder contains no markdown files');
+    await expect(docs.run({ key, version: '1.0.0', folder: 'not-a-folder' })).rejects.toThrow(
+      "ENOENT: no such file or directory, scandir 'not-a-folder'"
+    );
+
+    versionMock.done();
+  });
+
+  it('should error if the folder contains no markdown files', async () => {
+    const versionMock = getApiNock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
+
+    await expect(docs.run({ key, version: '1.0.0', folder: '.github/workflows' })).rejects.toThrow(
+      'We were unable to locate Markdown files in .github/workflows.'
+    );
+
+    versionMock.done();
+  });
 
   describe('existing docs', () => {
     let simpleDoc;
