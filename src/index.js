@@ -20,6 +20,7 @@ const { version } = require('../package.json');
 const configStore = require('./lib/configstore');
 const help = require('./lib/help');
 const commands = require('./lib/commands');
+const { debug } = require('./lib/logger');
 
 /**
  * @param {Array} processArgv - An array of arguments from the current process. Can be used to mock
@@ -40,6 +41,8 @@ module.exports = processArgv => {
 
   const argv = cliArgs(mainArgs, { partial: true, argv: processArgv });
   const cmd = argv.command || false;
+
+  debug(`command-line-args processing: ${JSON.stringify(argv)}`);
 
   // Add support for `-V` as an additional `--version` alias.
   if (typeof argv._unknown !== 'undefined') {

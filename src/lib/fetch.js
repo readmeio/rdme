@@ -1,20 +1,31 @@
 /* eslint-disable no-param-reassign */
+const { debug } = require('./logger');
 const fetch = require('node-fetch');
+const isGHA = require('./isGitHub');
 const pkg = require('../../package.json');
 const APIError = require('./apiError');
 
 /**
- * Wrapper for the `fetch` API so we can add an rdme user agent to all API requests.
+ * Wrapper for the `fetch` API so we can add rdme-specific headers to all API requests.
  *
  */
-module.exports = (url, options = {}) => {
-  if (!options.headers) {
-    options.headers = {
-      'User-Agent': module.exports.getUserAgent(),
-    };
-  } else {
-    options.headers['User-Agent'] = module.exports.getUserAgent();
+module.exports = (url, options = { headers: {} }) => {
+  let source = 'cli';
+
+  options.headers['User-Agent'] = module.exports.getUserAgent();
+
+  if (isGHA()) {
+    source = 'cli-gh';
+    options.headers['x-github-repository'] = process.env.GITHUB_REPOSITORY;
+    options.headers['x-github-run-attempt'] = process.env.GITHUB_RUN_ATTEMPT;
+    options.headers['x-github-run-id'] = process.env.GITHUB_RUN_ID;
+    options.headers['x-github-run-number'] = process.env.GITHUB_RUN_NUMBER;
+    options.headers['x-github-sha'] = process.env.GITHUB_SHA;
   }
+
+  options.headers['x-readme-source'] = source;
+
+  debug(`making ${(options.method || 'get').toUpperCase()} request to ${url}`);
 
   return fetch(url, options);
 };
@@ -25,7 +36,7 @@ module.exports = (url, options = {}) => {
  *
  */
 module.exports.getUserAgent = function getUserAgent() {
-  const gh = process.env.GITHUB_ACTIONS === 'true' ? '-github' : '';
+  const gh = isGHA() ? '-github' : '';
   return `rdme${gh}/${pkg.version}`;
 };
 
@@ -37,6 +48,7 @@ module.exports.getUserAgent = function getUserAgent() {
  */
 module.exports.handleRes = async function handleRes(res) {
   const body = await res.json();
+  debug(`received status code ${res.status} with response body: ${JSON.stringify(body)}`);
   if (body.error) {
     return Promise.reject(new APIError(body));
   }

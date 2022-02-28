@@ -1,6 +1,7 @@
 const chalk = require('chalk');
 const config = require('config');
 const configStore = require('../lib/configstore');
+const { debug } = require('../lib/logger');
 
 module.exports = class WhoAmICommand {
   constructor() {
@@ -14,6 +15,8 @@ module.exports = class WhoAmICommand {
   }
 
   async run() {
+    debug(`command: ${this.command}`);
+
     if (!configStore.has('email') || !configStore.has('project')) {
       return Promise.reject(new Error(`Please login using \`${config.get('cli')} login\`.`));
     }
