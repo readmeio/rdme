@@ -1,5 +1,4 @@
 const Enquirer = require('enquirer');
-const chalk = require('chalk');
 
 function disablePromptsInCI(answers = {}) {
   return enquirer => {
@@ -30,12 +29,9 @@ function disablePromptsInCI(answers = {}) {
       });
 
       if (missingArgs.length) {
+        // prettier-ignore
         throw new Error(
-          `We've detected you're running within a ${
-            ci.name
-          } environment, please supply the following required arguments for your command instead of relying on our terminal prompt system: ${chalk.yellow(
-            missingArgs.join(',')
-          )}`
+          `Oops! We noticed you're running this command within a ${ci.name} environment, but we have a few questions we were going to ask you! We'll need the following arguments for your command to run question-free: ${missingArgs.join(',')}`
         );
       }
 

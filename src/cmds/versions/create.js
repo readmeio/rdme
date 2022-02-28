@@ -1,6 +1,6 @@
 const config = require('config');
 const semver = require('semver');
-const enquirer = require('../../lib/enquirer');
+const prompt = require('../../lib/prompt');
 
 const fetch = require('../../lib/fetch');
 const { cleanHeaders, handleRes } = require('../../lib/fetch');
@@ -108,7 +108,10 @@ module.exports = class CreateVersionCommand {
       },
     ];
 
-    const answers = await enquirer(opts, questions);
+    const answers = await prompt(opts, questions);
+
+    const isMain = opts.main || answers.main;
+    const isPublic = 'public' in opts || answers.public;
 
     return fetch(`${config.get('host')}/api/v1/version`, {
       method: 'post',
@@ -122,7 +125,7 @@ module.exports = class CreateVersionCommand {
         is_stable: opts.main || answers.main,
         is_beta: opts.beta || answers.beta,
         from: opts.fork || answers.fork,
-        is_hidden: opts.main || answers.main ? false : !('public' in opts || answers.public),
+        is_hidden: isMain ? false : !isPublic,
       }),
     })
       .then(handleRes)
