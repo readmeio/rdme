@@ -49,15 +49,15 @@ module.exports = class OpenAPICommand {
         defaultOption: true,
       },
       {
-        name: 'workdir',
+        name: 'workingDirectory',
         type: String,
-        description: 'Directory as working directory',
+        description: 'Working directory (for usage with relative external references)',
       },
     ];
   }
 
   async run(opts) {
-    const { spec, version, workdir } = opts;
+    const { spec, version, workingDirectory } = opts;
     let { key, id } = opts;
     let selectedVersion;
     let isUpdate;
@@ -65,8 +65,8 @@ module.exports = class OpenAPICommand {
     debug(`command: ${this.command}`);
     debug(`opts: ${JSON.stringify(opts)}`);
 
-    if (workdir) {
-      process.chdir(workdir);
+    if (workingDirectory) {
+      process.chdir(workingDirectory);
     }
 
     if (!key && opts.token) {
