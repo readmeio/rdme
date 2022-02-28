@@ -1,62 +1,68 @@
-const chalk = require('chalk');
-const fs = require('fs');
-const config = require('config');
-const { prompt } = require('enquirer');
-const OASNormalize = require('oas-normalize');
-const promptOpts = require('../lib/prompts');
-const APIError = require('../lib/apiError');
-const { getProjectVersion } = require('../lib/versionSelect');
-const fetch = require('../lib/fetch');
-const { cleanHeaders } = require('../lib/fetch');
-const FormData = require('form-data');
-const parse = require('parse-link-header');
-const { file: tmpFile } = require('tmp-promise');
-const { debug } = require('../lib/logger');
+import chalk from 'chalk';
+import fs from 'fs';
+import config from 'config';
+import { prompt } from 'enquirer';
+import OASNormalize from 'oas-normalize';
+import promptOpts from '../lib/prompts';
+import APIError from '../lib/apiError';
+import { getProjectVersion } from '../lib/versionSelect';
+import fetch, { cleanHeaders } from '../lib/fetch';
+import FormData from 'form-data';
+import parse from 'parse-link-header';
+import { file as tmpFile } from 'tmp-promise';
+import { debug } from '../lib/logger';
 
-module.exports = class OpenAPICommand {
-  constructor() {
-    this.command = 'openapi';
-    this.usage = 'openapi [file] [options]';
-    this.description = 'Upload, or resync, your OpenAPI/Swagger definition to ReadMe.';
-    this.category = 'apis';
-    this.position = 1;
+type Args = {
+  key: string;
+  id: string;
+  token?: string;
+  version: string;
+  spec: string;
+  workingDirectory?: string;
+};
 
-    this.hiddenArgs = ['token', 'spec'];
-    this.args = [
-      {
-        name: 'key',
-        type: String,
-        description: 'Project API key',
-      },
-      {
-        name: 'id',
-        type: String,
-        description: `Unique identifier for your API definition. Use this if you're re-uploading an existing API definition`,
-      },
-      {
-        name: 'token',
-        type: String,
-        description: 'Project token. Deprecated, please use `--key` instead',
-      },
-      {
-        name: 'version',
-        type: String,
-        description: 'Project version',
-      },
-      {
-        name: 'spec',
-        type: String,
-        defaultOption: true,
-      },
-      {
-        name: 'workingDirectory',
-        type: String,
-        description: 'Working directory (for usage with relative external references)',
-      },
-    ];
-  }
+export default class OpenAPICommand implements Command {
+  command = 'openapi';
+  usage = 'openapi [file] [options]';
+  description = 'Upload, or resync, your OpenAPI/Swagger definition to ReadMe.';
+  category = 'apis';
+  position = 1;
 
-  async run(opts) {
+  hiddenArgs = ['token', 'spec'];
+  args = [
+    {
+      name: 'key',
+      type: String,
+      description: 'Project API key',
+    },
+    {
+      name: 'id',
+      type: String,
+      description: `Unique identifier for your API definition. Use this if you're re-uploading an existing API definition`,
+    },
+    {
+      name: 'token',
+      type: String,
+      description: 'Project token. Deprecated, please use `--key` instead',
+    },
+    {
+      name: 'version',
+      type: String,
+      description: 'Project version',
+    },
+    {
+      name: 'spec',
+      type: String,
+      defaultOption: true,
+    },
+    {
+      name: 'workingDirectory',
+      type: String,
+      description: 'Working directory (for usage with relative external references)',
+    },
+  ];
+
+  async run(opts: Args) {
     const { spec, version, workingDirectory } = opts;
     let { key, id } = opts;
     let selectedVersion;
@@ -262,4 +268,4 @@ module.exports = class OpenAPICommand {
       );
     });
   }
-};
+}

@@ -1,32 +1,35 @@
-const chalk = require('chalk');
-const fs = require('fs');
-const OASNormalize = require('oas-normalize');
-const { debug } = require('../lib/logger');
+import chalk from 'chalk';
+import fs from 'fs';
+import OASNormalize from 'oas-normalize';
+import { debug } from '../lib/logger';
 
-module.exports = class ValidateCommand {
-  constructor() {
-    this.command = 'validate';
-    this.usage = 'validate [file] [options]';
-    this.description = 'Validate your OpenAPI/Swagger definition.';
-    this.category = 'apis';
-    this.position = 2;
+type Args = {
+  spec: string;
+  workingDirectory?: string;
+};
 
-    this.hiddenArgs = ['spec'];
-    this.args = [
-      {
-        name: 'spec',
-        type: String,
-        defaultOption: true,
-      },
-      {
-        name: 'workingDirectory',
-        type: String,
-        description: 'Working directory (for usage with relative external references)',
-      },
-    ];
-  }
+export default class ValidateCommand implements Command {
+  command = 'validate';
+  usage = 'validate [file] [options]';
+  description = 'Validate your OpenAPI/Swagger definition.';
+  category = 'apis';
+  position = 2;
 
-  async run(opts) {
+  hiddenArgs = ['spec'];
+  args = [
+    {
+      name: 'spec',
+      type: String,
+      defaultOption: true,
+    },
+    {
+      name: 'workingDirectory',
+      type: String,
+      description: 'Working directory (for usage with relative external references)',
+    },
+  ];
+
+  async run(opts: Args) {
     const { spec, workingDirectory } = opts;
 
     if (workingDirectory) {
@@ -36,18 +39,18 @@ module.exports = class ValidateCommand {
     debug(`command: ${this.command}`);
     debug(`opts: ${JSON.stringify(opts)}`);
 
-    async function validateSpec(specPath) {
+    async function validateSpec(specPath: string) {
       const oas = new OASNormalize(specPath, { colorizeErrors: true, enablePaths: true });
 
       return oas
         .validate(false)
-        .then(api => {
+        .then((api: Record<string, unknown>) => {
           if (api.swagger) {
             return Promise.resolve(chalk.green(`${specPath} is a valid Swagger API definition!`));
           }
           return Promise.resolve(chalk.green(`${specPath} is a valid OpenAPI API definition!`));
         })
-        .catch(err => {
+        .catch((err: Error) => {
           debug(`raw validation error object: ${JSON.stringify(err)}`);
           return Promise.reject(new Error(err.message));
         });
@@ -78,4 +81,4 @@ module.exports = class ValidateCommand {
       );
     });
   }
-};
+}

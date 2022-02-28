@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable no-underscore-dangle */
 const chalk = require('chalk');
 const cliArgs = require('command-line-args');
@@ -27,7 +28,7 @@ const { debug } = require('./lib/logger');
  *    fake CLI calls.
  * @return {Promise}
  */
-module.exports = processArgv => {
+export default function rdme(processArgv: string[]) {
   const mainArgs = [
     { name: 'help', alias: 'h', type: Boolean, description: 'Display this usage guide' },
     {
@@ -123,4 +124,4 @@ module.exports = processArgv => {
 
     return Promise.reject(e);
   }
-};
+}

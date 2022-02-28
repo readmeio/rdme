@@ -1,7 +1,7 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
-exports.load = cmd => {
+export function load(cmd: string) {
   let command = cmd;
   let subcommand = '';
   if (cmd.includes(':')) {
@@ -10,39 +10,20 @@ exports.load = cmd => {
 
   const file = path.join(__dirname, '../cmds', command, subcommand);
   try {
-    // eslint-disable-next-line global-require, import/no-dynamic-require
+    // eslint-disable-next-line @typescript-eslint/no-var-requires, global-require, import/no-dynamic-require
     const Command = require(file);
     return new Command();
   } catch (e) {
     throw new Error('Command not found.');
   }
-};
+}
 
-exports.listByCategory = () => {
-  const categories = exports.getCategories();
-  const cmds = exports.list();
-  cmds.forEach(c => {
-    categories[c.command.category].commands.push({
-      name: c.command.command,
-      description: c.command.description,
-      position: c.command.position,
-    });
-  });
-
-  return categories;
-};
-
-exports.getSimilar = (category, excludeCommand) => {
-  const categories = exports.listByCategory();
-  return categories[category].commands.filter(cmd => cmd.name !== excludeCommand);
-};
-
-exports.list = () => {
-  const commands = [];
+export function list() {
+  const commands: { file: string; command: Command }[] = [];
   const cmdDir = `${__dirname}/../cmds`;
-  const files = fs
+  const files: string[] = fs
     .readdirSync(cmdDir)
-    .map(file => {
+    .map((file: string) => {
       const stats = fs.statSync(path.join(cmdDir, file));
       if (stats.isDirectory()) {
         return fs.readdirSync(path.join(cmdDir, file)).map(f => path.join(file, f));
@@ -54,7 +35,7 @@ exports.list = () => {
     .map(file => path.join(cmdDir, file));
 
   files.forEach(file => {
-    // eslint-disable-next-line global-require, import/no-dynamic-require
+    // eslint-disable-next-line @typescript-eslint/no-var-requires, global-require, import/no-dynamic-require
     const Command = require(file);
 
     commands.push({
@@ -64,9 +45,19 @@ exports.list = () => {
   });
 
   return commands;
-};
+}
 
-exports.getCategories = () => {
+export function getCategories(): Record<
+  string,
+  {
+    description: string;
+    commands: {
+      name: string;
+      description: string;
+      position: number;
+    }[];
+  }
+> {
   return {
     admin: {
       description: 'Administration',
@@ -89,4 +80,23 @@ exports.getCategories = () => {
       commands: [],
     },
   };
-};
+}
+
+export function listByCategory() {
+  const categories = getCategories();
+  const cmds = list();
+  cmds.forEach(c => {
+    categories[c.command.category].commands.push({
+      name: c.command.command,
+      description: c.command.description,
+      position: c.command.position,
+    });
+  });
+
+  return categories;
+}
+
+export function getSimilar(category: string, excludeCommand: string) {
+  const categories = listByCategory();
+  return categories[category].commands.filter(cmd => cmd.name !== excludeCommand);
+}

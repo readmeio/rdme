@@ -1,9 +1,10 @@
-const chalk = require('chalk');
-const config = require('config');
-const usage = require('command-line-usage');
-const commands = require('./commands');
+import type { OptionDefinition, Section } from 'command-line-usage';
+import chalk from 'chalk';
+import config from 'config';
+import usage from 'command-line-usage';
+import * as commands from './commands';
 
-function formatCommands(cmds) {
+function formatCommands(cmds: { name: string; description: string; position: number }[]) {
   return cmds
     .sort((a, b) => (a.position > b.position ? 1 : -1))
     .map(command => {
@@ -43,8 +44,8 @@ const owlbert = () => {
        *                           /*`;
 };
 
-exports.commandUsage = cmd => {
-  const helpContent = [
+export function commandUsage(cmd: Command) {
+  const helpContent: Section[] = [
     {
       content: cmd.description,
       raw: true,
@@ -76,10 +77,10 @@ exports.commandUsage = cmd => {
   }
 
   return usage(helpContent);
-};
+}
 
-exports.globalUsage = async args => {
-  const helpContent = [
+export async function globalUsage(args: OptionDefinition[]) {
+  const helpContent: Section[] = [
     {
       content: owlbert(),
       raw: true,
@@ -118,4 +119,4 @@ exports.globalUsage = async args => {
   );
 
   return usage(helpContent);
-};
+}

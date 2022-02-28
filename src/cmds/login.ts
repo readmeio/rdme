@@ -1,38 +1,48 @@
-const chalk = require('chalk');
-const config = require('config');
-const { validate: isEmail } = require('isemail');
-const { promisify } = require('util');
+import chalk from 'chalk';
+import config from 'config';
+import { validate as isEmail } from 'isemail';
+import { promisify } from 'util';
+import configStore from '../lib/configstore';
+import fetch, { handleRes } from '../lib/fetch';
+import { debug } from '../lib/logger';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const read = promisify(require('read'));
-const configStore = require('../lib/configstore');
-const fetch = require('../lib/fetch');
-const { handleRes } = require('../lib/fetch');
-const { debug } = require('../lib/logger');
 
 const testing = process.env.NODE_ENV === 'testing';
 
-module.exports = class LoginCommand {
-  constructor() {
-    this.command = 'login';
-    this.usage = 'login [options]';
-    this.description = 'Login to a ReadMe project.';
-    this.category = 'admin';
-    this.position = 1;
+type Args = {
+  email?: string;
+  password?: string;
+  project: string;
 
-    this.args = [
-      {
-        name: 'project',
-        type: String,
-        description: 'Project subdomain',
-      },
-      {
-        name: '2fa',
-        type: Boolean,
-        description: 'Prompt for a 2FA token',
-      },
-    ];
-  }
+  // Though `--2fa` and `--token` can be both be supplied via the command line we internally end
+  // up using `--token` because JS variables can't start with numbers.
+  '2fa'?: string;
+  token?: string;
+};
 
-  async run(opts) {
+export default class LoginCommand implements Command {
+  command = 'login';
+  usage = 'login [options]';
+  description = 'Login to a ReadMe project.';
+  category = 'admin';
+  position = 1;
+
+  args = [
+    {
+      name: 'project',
+      type: String,
+      description: 'Project subdomain',
+    },
+    {
+      name: '2fa',
+      type: Boolean,
+      description: 'Prompt for a 2FA token',
+    },
+  ];
+
+  async run(opts: Args) {
     let { email, password, project, token } = opts;
 
     debug(`command: ${this.command}`);
@@ -73,7 +83,7 @@ module.exports = class LoginCommand {
       }),
     })
       .then(handleRes)
-      .then(res => {
+      .then((res: Record<string, unknown>) => {
         configStore.set('apiKey', res.apiKey);
         configStore.set('email', email);
         configStore.set('project', project);
@@ -81,4 +91,4 @@ module.exports = class LoginCommand {
         return `Successfully logged in as ${chalk.green(email)} to the ${chalk.blue(project)} project.`;
       });
   }
-};
+}
