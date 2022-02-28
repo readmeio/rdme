@@ -5,6 +5,14 @@ slug: automatically-sync-api-specification-with-github
 title: OpenAPI + GitHub Sync [DEPRECATED]
 ---
 
+<!--
+
+Hello curious raw Markdown reader! 👋
+This Markdown page is syncing to ReadMe via the `rdme` GitHub Action 🦉
+Read more [on our main documentation page](rdme.md)
+
+-->
+
 > ❗️Deprecated in favor of [`rdme`](https://docs.readme.com/docs/rdme), our new GitHub Action 🔁
 >
 > This GitHub Action has been deprecated in favor of our newer (and more fully-featured) GitHub Action, [`rdme`](https://docs.readme.com/docs/rdme), which has support for syncing OpenAPI files, syncing Markdown files, and much more.
