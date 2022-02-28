@@ -91,10 +91,11 @@ module.exports = class DocsCommand {
     function createDoc(slug, file, filename, hash, err) {
       if (err.error !== 'DOC_NOTFOUND') return Promise.reject(err);
 
-      if (dryRun)
+      if (dryRun) {
         return `🎭 dry run! This will create '${slug}' with contents from ${filename} with the following metadata: ${JSON.stringify(
           file.data
         )}`;
+      }
 
       return fetch(`${config.get('host')}/api/v1/docs`, {
         method: 'post',
@@ -120,10 +121,11 @@ module.exports = class DocsCommand {
         } updated because there were no changes.`;
       }
 
-      if (dryRun)
+      if (dryRun) {
         return `🎭 dry run! This will update '${slug}' with contents from ${filename} with the following metadata: ${JSON.stringify(
           file.data
         )}`;
+      }
 
       return fetch(`${config.get('host')}/api/v1/docs/${slug}`, {
         method: 'put',
