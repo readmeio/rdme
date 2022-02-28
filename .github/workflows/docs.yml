@@ -14,13 +14,21 @@ jobs:
       # Note that these next two steps are not required
       # in order to sync your docs to ReadMe.
 
-      # First, we run a script that grabs the current version from
-      # our package.json and sets it as a GitHub Action output!
+      # First, we run a script that sets a few outputs:
+      # our package version and our Node.js version.
       - name: Retrieve `rdme` version from package.json
         id: rdme-version
         run: ./bin/set-version-output
 
-      # Next, we use this output to do a simple find and replace!
+      # Next, we use this output to do a few find/replaces!
+      - name: Find and replace version placeholders in docs
+        uses: jacobtomlinson/gha-find-replace@v2
+        with:
+          find: 'NODE_VERSION'
+          replace: ${{ steps.rdme-version.outputs.NODE_VERSION }}
+          regex: false
+          include: documentation/*
+
       - name: Find and replace version placeholders in docs
         uses: jacobtomlinson/gha-find-replace@v2
         with:
