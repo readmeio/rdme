@@ -4,6 +4,7 @@ const promptOpts = require('../../lib/prompts');
 const { getProjectVersion } = require('../../lib/versionSelect');
 const fetch = require('../../lib/fetch');
 const { cleanHeaders, handleRes } = require('../../lib/fetch');
+const { debug } = require('../../lib/logger');
 
 module.exports = class UpdateVersionCommand {
   constructor() {
@@ -50,6 +51,9 @@ module.exports = class UpdateVersionCommand {
   async run(opts) {
     const { key, version, codename, newVersion, main, beta, isPublic, deprecated } = opts;
 
+    debug(`command: ${this.command}`);
+    debug(`opts: ${JSON.stringify(opts)}`);
+
     if (!key) {
       return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
     }
@@ -57,6 +61,8 @@ module.exports = class UpdateVersionCommand {
     const selectedVersion = await getProjectVersion(version, key, false).catch(e => {
       return Promise.reject(e);
     });
+
+    debug(`selectedVersion: ${selectedVersion}`);
 
     const foundVersion = await fetch(`${config.get('host')}/api/v1/version/${selectedVersion}`, {
       method: 'get',

@@ -2,6 +2,8 @@ const fs = require('fs');
 const chalk = require('chalk');
 const Command = require('../../src/cmds/validate');
 
+const testWorkingDir = process.cwd();
+
 const validate = new Command();
 
 const getCommandOutput = () => {
@@ -15,6 +17,8 @@ describe('rdme validate', () => {
 
   afterEach(() => {
     console.info.mockRestore();
+
+    process.chdir(testWorkingDir);
   });
 
   it.each([
@@ -49,6 +53,15 @@ describe('rdme validate', () => {
     expect(output).toBe(chalk.yellow('We found swagger.json and are attempting to validate it.'));
 
     fs.unlinkSync('./swagger.json');
+  });
+
+  it('should use specified working directory', async () => {
+    await expect(
+      validate.run({
+        spec: 'petstore.json',
+        workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
+      })
+    ).resolves.toBe(chalk.green('petstore.json is a valid OpenAPI API definition!'));
   });
 
   describe('error handling', () => {
