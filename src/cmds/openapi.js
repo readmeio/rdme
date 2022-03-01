@@ -141,13 +141,14 @@ module.exports = class OpenAPICommand {
         }
       }
 
-      let bundledSpec;
       const oas = new OASNormalize(specPath, { colorizeErrors: true, enablePaths: true });
       debug('spec normalized');
+
       await oas.validate(false);
       debug('spec validated');
-      await oas.bundle().then(res => {
-        bundledSpec = JSON.stringify(res);
+
+      const bundledSpec = await oas.bundle().then(res => {
+        return JSON.stringify(res);
       });
       debug('spec bundled');
 
