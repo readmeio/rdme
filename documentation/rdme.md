@@ -97,7 +97,7 @@ We'll dive into several full GitHub Workflow file examples below!
 
 Not to get too meta on you, but... the page that you're currently reading is actually being synced from the `rdme` GitHub repository via the `rdme` GitHub Action! Here are a few links to the relevant files:
 
-- [The Markdown source file for the page you're reading](https://github.com/readmeio/rdme/tree/main/docs/rdme.md)
+- [The Markdown source file for the page you're reading](https://github.com/readmeio/rdme/tree/main/documentation/rdme.md)
 - [The full GitHub Action workflow file that we use to sync the file to docs.readme.com](https://github.com/readmeio/rdme/blob/main/.github/workflows/docs.yml)
 - And finally... [the workflow run results](https://github.com/readmeio/rdme/actions/workflows/docs.yml)!
 

@@ -13,7 +13,7 @@ Read more [on our main documentation page](rdme.md)
 
 -->
 
-> ❗️Deprecated in favor of [`rdme`](https://docs.readme.com/docs/rdme), our new GitHub Action 🔁
+> ❗️Deprecated in favor of [our new GitHub Action, `rdme`](https://docs.readme.com/docs/rdme) 🔁
 >
 > This GitHub Action has been deprecated in favor of our newer (and more fully-featured) GitHub Action, [`rdme`](https://docs.readme.com/docs/rdme), which has support for syncing OpenAPI files, syncing Markdown files, and much more.
 >
@@ -33,7 +33,7 @@ If you previously had a GitHub Workflow file set up that used this action to syn
 
 where `API_KEY` was your project API key and the `API_DEFINITION_ID` was your API definition ID in the dashboard.
 
-For migrating to the `rdme`-based GitHub Action, simply modify the step to look like this:
+For migrating to [the `rdme`-based GitHub Action](https://docs.readme.com/docs/rdme), simply modify the step to look like this:
 
 ```yml
 - uses: readmeio/rdme@RDME_VERSION
