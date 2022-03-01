@@ -21,7 +21,7 @@ jobs:
         run: ./bin/set-version-output
 
       # Next, we use this output to do a few find/replaces!
-      - name: Find and replace version placeholders in docs
+      - name: Find and replace Node.js version placeholders
         uses: jacobtomlinson/gha-find-replace@v2
         with:
           find: 'NODE_VERSION'
@@ -29,7 +29,7 @@ jobs:
           regex: false
           include: documentation/*
 
-      - name: Find and replace version placeholders in docs
+      - name: Find and replace `rdme` version placeholders
         uses: jacobtomlinson/gha-find-replace@v2
         with:
           find: 'RDME_VERSION'
