@@ -44,23 +44,23 @@ module.exports = class OpenAPICommand {
         defaultOption: true,
       },
       {
-        name: 'workdir',
+        name: 'workingDirectory',
         type: String,
-        description: 'Directory as working directory',
+        description: 'Working directory (for usage with relative external references)',
       },
     ];
   }
 
   async run(opts) {
-    const { key, id, spec, version, workdir } = opts;
+    const { key, id, spec, version, workingDirectory } = opts;
     let selectedVersion;
     let isUpdate;
 
     debug(`command: ${this.command}`);
     debug(`opts: ${JSON.stringify(opts)}`);
 
-    if (workdir) {
-      process.chdir(workdir);
+    if (workingDirectory) {
+      process.chdir(workingDirectory);
     }
 
     if (version && id) {
@@ -127,13 +127,14 @@ module.exports = class OpenAPICommand {
         }
       }
 
-      let bundledSpec;
       const oas = new OASNormalize(specPath, { colorizeErrors: true, enablePaths: true });
       debug('spec normalized');
+
       await oas.validate(false);
       debug('spec validated');
-      await oas.bundle().then(res => {
-        bundledSpec = JSON.stringify(res);
+
+      const bundledSpec = await oas.bundle().then(res => {
+        return JSON.stringify(res);
       });
       debug('spec bundled');
 

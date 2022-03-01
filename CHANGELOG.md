@@ -1,3 +1,24 @@
+## 6.5.0 (2022-03-01)
+
+With this release, we are officially shipping first-class support for GitHub Actions within `rdme` 🚀 this means you can use the power of `rdme` to sync your OpenAPI definitions and Markdown files to ReadMe any time you make changes on GitHub.
+
+Alongside this change, this release includes major documentation updates and support for relative external references when syncing OpenAPI definitions (thanks [@jdecool](https://github.com/jdecool))!
+
+* docs: add contributing guidelines (#442) ([9f86fa0](https://github.com/readmeio/rdme/commit/9f86fa0)), closes [#442](https://github.com/readmeio/rdme/issues/442)
+* docs: add GitHub Actions guidance (#439) ([3803172](https://github.com/readmeio/rdme/commit/3803172)), closes [#439](https://github.com/readmeio/rdme/issues/439) [/github.com/readmeio/rdme/pull/439#discussion_r814304680](https://github.com//github.com/readmeio/rdme/pull/439/issues/discussion_r814304680)
+* docs: legacy GitHub Action docs (#452) ([518cfd5](https://github.com/readmeio/rdme/commit/518cfd5)), closes [#452](https://github.com/readmeio/rdme/issues/452) [/github.com/readmeio/rdme/pull/439#discussion_r814304680](https://github.com//github.com/readmeio/rdme/pull/439/issues/discussion_r814304680)
+* docs: run VSCode formatter, fix TOC (#438) ([d45d9df](https://github.com/readmeio/rdme/commit/d45d9df)), closes [#438](https://github.com/readmeio/rdme/issues/438)
+* docs: update Action metadata (#441) ([1341917](https://github.com/readmeio/rdme/commit/1341917)), closes [#441](https://github.com/readmeio/rdme/issues/441)
+* docs(openapi): update working directory usage (#453) ([e1745bc](https://github.com/readmeio/rdme/commit/e1745bc)), closes [#453](https://github.com/readmeio/rdme/issues/453)
+* feat: add GitHub-specific request headers (#443) ([bf20f2d](https://github.com/readmeio/rdme/commit/bf20f2d)), closes [#443](https://github.com/readmeio/rdme/issues/443)
+* feat: add workdir arg to openapi command (#450) ([20c1659](https://github.com/readmeio/rdme/commit/20c1659)), closes [#450](https://github.com/readmeio/rdme/issues/450)
+* feat: add wrapper for GitHub Actions (#437) ([f0b9d11](https://github.com/readmeio/rdme/commit/f0b9d11)), closes [#437](https://github.com/readmeio/rdme/issues/437)
+* feat: debugging support (#446) ([bdb3c6c](https://github.com/readmeio/rdme/commit/bdb3c6c)), closes [#446](https://github.com/readmeio/rdme/issues/446) [/github.com/readmeio/rdme/pull/446#discussion_r813558777](https://github.com//github.com/readmeio/rdme/pull/446/issues/discussion_r813558777)
+* fix: properly call `isGHA()` check ([f563fb6](https://github.com/readmeio/rdme/commit/f563fb6))
+* chore: bumping the license year ([9cbcaef](https://github.com/readmeio/rdme/commit/9cbcaef))
+
+
+
 ## 6.4.0 (2022-02-02)
 
 * feat: add update-notifier to warn when using an old version of rdme (#435) ([8daf569](https://github.com/readmeio/rdme/commit/8daf569)), closes [#435](https://github.com/readmeio/rdme/issues/435)

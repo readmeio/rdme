@@ -1,0 +1,54 @@
+name: Sync `documentation` directory to ReadMe
+
+# Run workflow for every push to the `main` branch
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v2.4.0
+
+      # Let's dynamically update our docs with the latest version of rdme!
+      # Note that these next two steps are not required
+      # in order to sync your docs to ReadMe.
+
+      # First, we run a script that sets a few outputs:
+      # our package version and our Node.js version.
+      - name: Retrieve `rdme` version from package.json
+        id: rdme-version
+        run: ./bin/set-version-output
+
+      # Next, we use this output to do a few find/replaces!
+      - name: Find and replace Node.js version placeholders
+        uses: jacobtomlinson/gha-find-replace@v2
+        with:
+          find: 'NODE_VERSION'
+          replace: ${{ steps.rdme-version.outputs.NODE_VERSION }}
+          regex: false
+          include: documentation/*
+
+      - name: Find and replace `rdme` version placeholders
+        uses: jacobtomlinson/gha-find-replace@v2
+        with:
+          find: 'RDME_VERSION'
+          replace: ${{ steps.rdme-version.outputs.RDME_VERSION }}
+          regex: false
+          include: documentation/*
+
+      # And finally, with our updated documentation,
+      # we run the `rdme` GitHub Action to sync the Markdown file
+      # in the `documentation` directory.
+      # Here's the page we're syncing: https://docs.readme.com/docs/rdme
+      - name: GitHub Action
+        # We use the `main` branch as ref for GitHub Action
+        # This is NOT recommended, as it can break your workflows without notice!
+        # We recommend specifying a fixed version, i.e. @7.0
+        # Docs: https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#example-using-versioned-actions
+        uses: readmeio/rdme@main
+        with:
+          rdme: docs ./documentation --key=${{ secrets.README_PROD_PROJECT_API_KEY }} --version=2.0

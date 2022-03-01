@@ -262,7 +262,7 @@ describe('rdme openapi', () => {
     return mock.done();
   });
 
-  it('should use specified workdir and upload the expected content', async () => {
+  it('should use specified working directory and upload the expected content', async () => {
     let requestBody = null;
     const mock = getApiNock()
       .get('/api/v1/api-specification')
@@ -285,7 +285,7 @@ describe('rdme openapi', () => {
         spec: 'petstore.json',
         key,
         version,
-        workdir: './__tests__/__fixtures__/relative-ref-oas',
+        workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
       })
     ).resolves.toBe(successfulUpload);
 
