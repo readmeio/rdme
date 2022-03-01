@@ -5,7 +5,7 @@
   "license": "MIT",
   "author": "ReadMe <support@readme.io> (https://readme.com)",
   "engines": {
-    "node": "^12 || ^14 || ^16"
+    "node": "^14 || ^16"
   },
   "bin": {
     "rdme": "bin/rdme"
@@ -23,7 +23,8 @@
     "oas",
     "apidoc",
     "microservice",
-    "documentation"
+    "documentation",
+    "readme"
   ],
   "repository": {
     "type": "git",

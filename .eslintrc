@@ -1,6 +1,9 @@
 {
   "extends": ["@readme/eslint-config"],
   "root": true,
+  "parserOptions": {
+    "ecmaVersion": 2020
+  },
   "rules": {
     /**
      * Because our command classes have a `run` method that might not always call `this` we need to
