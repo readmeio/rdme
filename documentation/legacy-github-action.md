@@ -31,7 +31,7 @@ If you previously had a GitHub Workflow file set up that used this action to syn
     api-version: 'v1.0.0'
 ```
 
-where `API_KEY` was your project API key and the `API_DEFINITION_ID` was your API definition ID in the dashboard.
+where the `readme-oas-key` was a concatenation of the `API_KEY` (your project API key) and the `API_DEFINITION_ID` (your API definition ID), separated by a colon.
 
 For migrating to [the `rdme`-based GitHub Action](https://docs.readme.com/docs/rdme), simply modify the step to look like this:
 
@@ -41,10 +41,11 @@ For migrating to [the `rdme`-based GitHub Action](https://docs.readme.com/docs/r
     rdme: openapi path/to/file.json --key=API_KEY --id=API_DEFINITION_ID
 ```
 
-There are two things to note:
+There are a few things to note:
 
 1. This workflow will infer the `api-version` based on the `API_DEFINITION_ID` parameter that you pass in, so the API version parameter is no longer needed here.
 2. `@RDME_VERSION` is the latest version of `rdme`. To ensure you're getting the latest features and security updates, we strongly recommend setting up [Dependabot](https://docs.github.com/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/keeping-your-actions-up-to-date-with-dependabot) to keep this package up-to-date.
+3. If you used secrets to encrypt the `readme-oas-key` value, you'll have to split this value out into two separate secrets—one for the API key and one for the API definition ID. You can see an example of this [here](https://docs.readme.com/docs/rdme#example-using-github-secrets).
 
 <details>
 
