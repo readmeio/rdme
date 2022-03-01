@@ -208,6 +208,32 @@ To use a GitHub secret in your `rdme` GitHub Action, first [create a new reposit
     rdme: docs ./documentation --key=${{ secrets.README_API_KEY }} --version=2.0
 ```
 
+## Usage in Other CI Environments
+
+Since `rdme` is a command-line tool at its core, you can use `rdme` to sync your documentation from virtually any CI/CD environment that runs shell commands—[Bitbucket Pipelines](https://support.atlassian.com/bitbucket-cloud/docs/get-started-with-bitbucket-pipelines/), [GitLab CI/CD](https://docs.gitlab.com/ee/ci/), you name it! You can do this by invoking `rdme` with `npx -y rdme@RDME_VERSION` in a Node.js environment. See below for a few simple examples.
+
+<!-- Note: the two code blocks below must be joined, despite what VS Code's formatter tells you!-->
+
+```yml Bitbucket Pipelines (bitbucket-pipelines.yml)
+# Official framework image. Look for the different tagged releases at:
+# https://hub.docker.com/r/library/node/tags/
+image: node:NODE_VERSION
+pipelines:
+  default:
+    - step:
+        script:
+          - npx -y rdme@RDME_VERSION openapi [path-to-file.json] --key=API_KEY --id=API_DEFINITION_ID
+```
+```yml GitLab CI (rdme-sync.gitlab-ci.yml)
+# Official framework image. Look for the different tagged releases at:
+# https://hub.docker.com/r/library/node/tags/
+image: node:NODE_VERSION
+
+sync-via-rdme:
+  script:
+    - npx -y rdme@RDME_VERSION openapi [path-to-file.json] --key=API_KEY --id=API_DEFINITION_ID
+```
+
 ## Troubleshooting
 
 If you're running into unexpected behavior with `rdme` and need to troubleshoot the issue, you have several debug logging options available. We may ask for these logs (as well as a copy of your OpenAPI definition) when you contact our support team.
