@@ -152,30 +152,6 @@ describe('rdme openapi', () => {
       return mock.done();
     });
 
-    it('should still support `token`', async () => {
-      const mock = getApiNock()
-        .put(`/api/v1/api-specification/${id}`, body => body.match('form-data; name="spec"'))
-        .basicAuth({ user: key })
-        .reply(201, { _id: 1 }, { location: exampleRefLocation });
-
-      await expect(
-        openapi.run({
-          spec: require.resolve('@readme/oas-examples/3.1/json/petstore.json'),
-          token: `${key}-${id}`,
-          version,
-        })
-      ).resolves.toBe(successfulUpdate);
-
-      expect(console.warn).toHaveBeenCalledTimes(2);
-      expect(console.info).toHaveBeenCalledTimes(0);
-
-      const output = getCommandOutput();
-
-      expect(output).toMatch(/The `--token` option has been deprecated/i);
-
-      return mock.done();
-    });
-
     it('should return warning if providing `id` and `version`', async () => {
       const mock = getApiNock()
         .put(`/api/v1/api-specification/${id}`, body => body.match('form-data; name="spec"'))
