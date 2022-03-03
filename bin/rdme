@@ -24,6 +24,21 @@ require('../src')(process.argv.slice(2))
       message = err.message;
     }
 
+    if (chalk.supportsColor.stdout) {
+      // eslint-disable-next-line no-console
+      console.log('Terminal stdout supports color');
+    }
+
+    if (chalk.supportsColor.stdout.has256) {
+      // eslint-disable-next-line no-console
+      console.log('Terminal stdout supports 256 colors');
+    }
+
+    if (chalk.supportsColor.stderr.has16m) {
+      // eslint-disable-next-line no-console
+      console.log('Terminal stderr supports 16 million colors (truecolor)');
+    }
+
     /**
      * If we're in a GitHub Actions environment, log errors with that formatting instead.
      * @link: https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-error-message
