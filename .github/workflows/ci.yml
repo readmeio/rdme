@@ -43,7 +43,7 @@ jobs:
       - name: Run `validate` command
         uses: ./rdme-repo/
         with:
-          rdme: validate oas-examples-repo/3.1/json/petstore.json
+          rdme: validate rdme-repo/__tests__/__fixtures__/invalid-oas-3.1.json 
 
       # Docs: https://rdme-test.readme.io
       - name: Run `openapi` command
