@@ -25,4 +25,4 @@ runs:
       run: ${{ github.action_path }}/bin/rdme ${{ inputs.rdme }}
       shell: bash
       env:
-        FORCE_COLOR: '3'
+        FORCE_COLOR: '1'
