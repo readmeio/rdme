@@ -1,5 +1,6 @@
 #! /usr/bin/env node
 const chalk = require('chalk');
+const core = require('@actions/core');
 
 const updateNotifier = require('update-notifier');
 const pkg = require('../package.json');
@@ -29,12 +30,11 @@ require('../src')(process.argv.slice(2))
      * @link: https://github.com/actions/toolkit/tree/main/packages/core#annotations
      */
     if (isGHA()) {
-      // eslint-disable-next-line no-console
-      console.error(`::error::${chalk.red(message)}`);
-    } else {
-      // eslint-disable-next-line no-console
-      console.error(chalk.red(`\n${message}\n`));
+      return core.setFailed(message);
     }
+
+    // eslint-disable-next-line no-console
+    console.error(chalk.red(`\n${message}\n`));
 
     return process.exit(1);
   });
