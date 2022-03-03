@@ -24,20 +24,8 @@ require('../src')(process.argv.slice(2))
       message = err.message;
     }
 
-    if (chalk.supportsColor) {
-      // eslint-disable-next-line no-console
-      console.log('Terminal stdout supports color');
-    }
-
-    if (chalk.supportsColor.has256) {
-      // eslint-disable-next-line no-console
-      console.log('Terminal stdout supports 256 colors');
-    }
-
-    if (chalk.supportsColor.has16m) {
-      // eslint-disable-next-line no-console
-      console.log('Terminal stderr supports 16 million colors (truecolor)');
-    }
+    // eslint-disable-next-line no-console
+    console.log('chalk.supportsColor:', chalk.supportsColor);
 
     /**
      * If we're in a GitHub Actions environment, log errors with that formatting instead.
