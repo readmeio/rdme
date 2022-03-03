@@ -33,6 +33,8 @@ const successfulUpdate = [
   ...successfulMessageBase,
 ].join('\n');
 
+const testWorkingDir = process.cwd();
+
 jest.mock('../../src/lib/prompts');
 
 const getCommandOutput = () => {
@@ -52,6 +54,8 @@ describe('rdme openapi', () => {
     console.warn.mockRestore();
 
     nock.cleanAll();
+
+    process.chdir(testWorkingDir);
   });
 
   describe('upload', () => {
@@ -144,30 +148,6 @@ describe('rdme openapi', () => {
           version,
         })
       ).resolves.toBe(successfulUpdate);
-
-      return mock.done();
-    });
-
-    it('should still support `token`', async () => {
-      const mock = getApiNock()
-        .put(`/api/v1/api-specification/${id}`, body => body.match('form-data; name="spec"'))
-        .basicAuth({ user: key })
-        .reply(201, { _id: 1 }, { location: exampleRefLocation });
-
-      await expect(
-        openapi.run({
-          spec: require.resolve('@readme/oas-examples/3.1/json/petstore.json'),
-          token: `${key}-${id}`,
-          version,
-        })
-      ).resolves.toBe(successfulUpdate);
-
-      expect(console.warn).toHaveBeenCalledTimes(2);
-      expect(console.info).toHaveBeenCalledTimes(0);
-
-      const output = getCommandOutput();
-
-      expect(output).toMatch(/The `--token` option has been deprecated/i);
 
       return mock.done();
     });
@@ -274,6 +254,40 @@ describe('rdme openapi', () => {
     await expect(openapi.run({ spec: './__tests__/__fixtures__/ref-oas/petstore.json', key, version })).resolves.toBe(
       successfulUpload
     );
+
+    expect(console.info).toHaveBeenCalledTimes(0);
+
+    expect(requestBody).toMatchSnapshot();
+
+    return mock.done();
+  });
+
+  it('should use specified working directory and upload the expected content', async () => {
+    let requestBody = null;
+    const mock = getApiNock()
+      .get('/api/v1/api-specification')
+      .basicAuth({ user: key })
+      .reply(200, [])
+      .get(`/api/v1/version/${version}`)
+      .basicAuth({ user: key })
+      .reply(200, { version: '1.0.0' })
+      .post('/api/v1/api-specification', body => {
+        requestBody = body.substring(body.indexOf('{'), body.lastIndexOf('}') + 1);
+        requestBody = JSON.parse(requestBody);
+
+        return body.match('form-data; name="spec"');
+      })
+      .basicAuth({ user: key })
+      .reply(201, { _id: 1 }, { location: exampleRefLocation });
+
+    await expect(
+      openapi.run({
+        spec: 'petstore.json',
+        key,
+        version,
+        workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
+      })
+    ).resolves.toBe(successfulUpload);
 
     expect(console.info).toHaveBeenCalledTimes(0);
 

@@ -45,9 +45,25 @@ describe('rdme docs', () => {
     );
   });
 
-  it.todo('should error if the argument isnt a folder');
+  it('should error if the argument isnt a folder', async () => {
+    const versionMock = getApiNock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
-  it.todo('should error if the folder contains no markdown files');
+    await expect(docs.run({ key, version: '1.0.0', folder: 'not-a-folder' })).rejects.toThrow(
+      "ENOENT: no such file or directory, scandir 'not-a-folder'"
+    );
+
+    versionMock.done();
+  });
+
+  it('should error if the folder contains no markdown files', async () => {
+    const versionMock = getApiNock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
+
+    await expect(docs.run({ key, version: '1.0.0', folder: '.github/workflows' })).rejects.toThrow(
+      'We were unable to locate Markdown files in .github/workflows.'
+    );
+
+    versionMock.done();
+  });
 
   describe('existing docs', () => {
     let simpleDoc;
@@ -112,19 +128,54 @@ describe('rdme docs', () => {
       return docs.run({ folder: './__tests__/__fixtures__/existing-docs', key, version }).then(updatedDocs => {
         // All docs should have been updated because their hashes from the GET request were different from what they
         // are currently.
-        expect(updatedDocs).toStrictEqual([
-          {
-            category,
-            slug: simpleDoc.slug,
-            body: simpleDoc.doc.content,
-          },
-          { category, slug: anotherDoc.slug, body: anotherDoc.doc.content },
-        ]);
+        expect(updatedDocs).toBe(
+          [
+            "✏️ successfully updated 'simple-doc' with contents from __tests__/__fixtures__/existing-docs/simple-doc.md",
+            "✏️ successfully updated 'another-doc' with contents from __tests__/__fixtures__/existing-docs/subdir/another-doc.md",
+          ].join('\n')
+        );
 
         getMocks.done();
         updateMocks.done();
         versionMock.done();
       });
+    });
+
+    it('should return doc update info for dry run', () => {
+      expect.assertions(1);
+
+      const getMocks = getNockWithVersionHeader(version)
+        .get('/api/v1/docs/simple-doc')
+        .basicAuth({ user: key })
+        .reply(200, { category, slug: simpleDoc.slug, lastUpdatedHash: 'anOldHash' })
+        .get('/api/v1/docs/another-doc')
+        .basicAuth({ user: key })
+        .reply(200, { category, slug: anotherDoc.slug, lastUpdatedHash: 'anOldHash' });
+
+      const versionMock = getApiNock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version });
+
+      return docs
+        .run({ dryRun: true, folder: './__tests__/__fixtures__/existing-docs', key, version })
+        .then(updatedDocs => {
+          // All docs should have been updated because their hashes from the GET request were different from what they
+          // are currently.
+          expect(updatedDocs).toBe(
+            [
+              `🎭 dry run! This will update 'simple-doc' with contents from __tests__/__fixtures__/existing-docs/simple-doc.md with the following metadata: ${JSON.stringify(
+                simpleDoc.doc.data
+              )}`,
+              `🎭 dry run! This will update 'another-doc' with contents from __tests__/__fixtures__/existing-docs/subdir/another-doc.md with the following metadata: ${JSON.stringify(
+                anotherDoc.doc.data
+              )}`,
+            ].join('\n')
+          );
+
+          getMocks.done();
+          versionMock.done();
+        });
     });
 
     it('should not send requests for docs that have not changed', () => {
@@ -144,14 +195,47 @@ describe('rdme docs', () => {
         .reply(200, { version });
 
       return docs.run({ folder: './__tests__/__fixtures__/existing-docs', key, version }).then(skippedDocs => {
-        expect(skippedDocs).toStrictEqual([
-          '`simple-doc` was not updated because there were no changes.',
-          '`another-doc` was not updated because there were no changes.',
-        ]);
+        expect(skippedDocs).toBe(
+          [
+            '`simple-doc` was not updated because there were no changes.',
+            '`another-doc` was not updated because there were no changes.',
+          ].join('\n')
+        );
 
         getMocks.done();
         versionMock.done();
       });
+    });
+
+    it('should adjust "no changes" message if in dry run', () => {
+      expect.assertions(1);
+
+      const getMocks = getNockWithVersionHeader(version)
+        .get('/api/v1/docs/simple-doc')
+        .basicAuth({ user: key })
+        .reply(200, { category, slug: simpleDoc.slug, lastUpdatedHash: simpleDoc.hash })
+        .get('/api/v1/docs/another-doc')
+        .basicAuth({ user: key })
+        .reply(200, { category, slug: anotherDoc.slug, lastUpdatedHash: anotherDoc.hash });
+
+      const versionMock = getApiNock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version });
+
+      return docs
+        .run({ dryRun: true, folder: './__tests__/__fixtures__/existing-docs', key, version })
+        .then(skippedDocs => {
+          expect(skippedDocs).toBe(
+            [
+              '🎭 dry run! `simple-doc` will not be updated because there were no changes.',
+              '🎭 dry run! `another-doc` will not be updated because there were no changes.',
+            ].join('\n')
+          );
+
+          getMocks.done();
+          versionMock.done();
+        });
     });
   });
 
@@ -181,18 +265,41 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      await expect(docs.run({ folder: './__tests__/__fixtures__/new-docs', key, version })).resolves.toStrictEqual([
-        {
-          slug: 'new-doc',
-          body: '\nBody\n',
-          category: '5ae122e10fdf4e39bb34db6f',
-          title: 'This is the document title',
-          lastUpdatedHash: 'a23046c1e9d8ab47f8875ae7c5e429cb95be1c48',
-        },
-      ]);
+      await expect(docs.run({ folder: './__tests__/__fixtures__/new-docs', key, version })).resolves.toBe(
+        "🌱 successfully created 'new-doc' with contents from __tests__/__fixtures__/new-docs/new-doc.md"
+      );
 
       getMock.done();
       postMock.done();
+      versionMock.done();
+    });
+
+    it('should return creation info for dry run', async () => {
+      const slug = 'new-doc';
+      const doc = frontMatter(fs.readFileSync(path.join(fixturesDir, `/new-docs/${slug}.md`)));
+
+      const getMock = getNockWithVersionHeader(version)
+        .get(`/api/v1/docs/${slug}`)
+        .basicAuth({ user: key })
+        .reply(404, {
+          error: 'DOC_NOTFOUND',
+          message: `The doc with the slug '${slug}' couldn't be found`,
+          suggestion: '...a suggestion to resolve the issue...',
+          help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
+        });
+
+      const versionMock = getApiNock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version });
+
+      await expect(docs.run({ dryRun: true, folder: './__tests__/__fixtures__/new-docs', key, version })).resolves.toBe(
+        `🎭 dry run! This will create 'new-doc' with contents from __tests__/__fixtures__/new-docs/new-doc.md with the following metadata: ${JSON.stringify(
+          doc.data
+        )}`
+      );
+
+      getMock.done();
       versionMock.done();
     });
 
@@ -301,15 +408,9 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      await expect(docs.run({ folder: './__tests__/__fixtures__/slug-docs', key, version })).resolves.toStrictEqual([
-        {
-          slug: 'marc-actually-wrote-a-test',
-          body: '\nBody\n',
-          category: 'CATEGORY_ID',
-          title: 'This is the document title',
-          lastUpdatedHash: 'c9cb7cc26e90775548e1d182ae7fcaa0eaba96bc',
-        },
-      ]);
+      await expect(docs.run({ folder: './__tests__/__fixtures__/slug-docs', key, version })).resolves.toBe(
+        "🌱 successfully created 'marc-actually-wrote-a-test' with contents from __tests__/__fixtures__/slug-docs/new-doc-slug.md"
+      );
 
       getMock.done();
       postMock.done();

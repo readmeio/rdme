@@ -10,11 +10,12 @@ Usage
 
 Options
 
-  --key string       Project API key                                                               
-  --id string        Unique identifier for your API definition. Use this if you're re-uploading an 
-                     existing API definition                                                       
-  --version string   Project version                                                               
-  -h, --help         Display this usage guide                                                      
+  --key string                Project API key                                                       
+  --id string                 Unique identifier for your API definition. Use this if you're re-     
+                              uploading an existing API definition                                  
+  --version string            Project version                                                       
+  --workingDirectory string   Working directory (for usage with relative external references)       
+  -h, --help                  Display this usage guide                                              
 
 Related commands
 
@@ -179,11 +180,12 @@ Usage
 
 Options
 
-  --key string       Project API key                                                               
-  --id string        Unique identifier for your API definition. Use this if you're re-uploading an 
-                     existing API definition                                                       
-  --version string   Project version                                                               
-  -h, --help         Display this usage guide                                                      
+  --key string                Project API key                                                       
+  --id string                 Unique identifier for your API definition. Use this if you're re-     
+                              uploading an existing API definition                                  
+  --version string            Project version                                                       
+  --workingDirectory string   Working directory (for usage with relative external references)       
+  -h, --help                  Display this usage guide                                              
 
 Related commands
 
@@ -202,11 +204,12 @@ Usage
 
 Options
 
-  --key string       Project API key                                                               
-  --id string        Unique identifier for your API definition. Use this if you're re-uploading an 
-                     existing API definition                                                       
-  --version string   Project version                                                               
-  -h, --help         Display this usage guide                                                      
+  --key string                Project API key                                                       
+  --id string                 Unique identifier for your API definition. Use this if you're re-     
+                              uploading an existing API definition                                  
+  --version string            Project version                                                       
+  --workingDirectory string   Working directory (for usage with relative external references)       
+  -h, --help                  Display this usage guide                                              
 
 Related commands
 

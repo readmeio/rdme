@@ -13,7 +13,7 @@ runs:
   steps:
     # This is so we can guarantee a version of npm that supports lockfile@2
     - name: setup node
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: 16
     # When we add debug support, we should make this a conditional step, see RM-3545

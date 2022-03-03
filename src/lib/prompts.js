@@ -148,7 +148,7 @@ exports.createVersionPrompt = (versionList, opts, isUpdate) => [
     name: 'is_stable',
     message: 'Would you like to make this version the main version for this project?',
     skip() {
-      return opts.main || (isUpdate && isUpdate.is_stable);
+      return opts.main || isUpdate?.is_stable;
     },
   },
   {

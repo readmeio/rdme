@@ -34,11 +34,6 @@ module.exports = class OpenAPICommand {
         description: `Unique identifier for your API definition. Use this if you're re-uploading an existing API definition`,
       },
       {
-        name: 'token',
-        type: String,
-        description: 'Project token. Deprecated, please use `--key` instead',
-      },
-      {
         name: 'version',
         type: String,
         description: 'Project version',
@@ -48,24 +43,24 @@ module.exports = class OpenAPICommand {
         type: String,
         defaultOption: true,
       },
+      {
+        name: 'workingDirectory',
+        type: String,
+        description: 'Working directory (for usage with relative external references)',
+      },
     ];
   }
 
   async run(opts) {
-    const { spec, version } = opts;
-    let { key, id } = opts;
+    const { key, id, spec, version, workingDirectory } = opts;
     let selectedVersion;
     let isUpdate;
 
     debug(`command: ${this.command}`);
     debug(`opts: ${JSON.stringify(opts)}`);
 
-    if (!key && opts.token) {
-      console.warn(
-        chalk.yellow('⚠️  Warning! The `--token` option has been deprecated. Please use `--key` and `--id` instead.')
-      );
-
-      [key, id] = opts.token.split('-');
+    if (workingDirectory) {
+      process.chdir(workingDirectory);
     }
 
     if (version && id) {
@@ -132,13 +127,14 @@ module.exports = class OpenAPICommand {
         }
       }
 
-      let bundledSpec;
       const oas = new OASNormalize(specPath, { colorizeErrors: true, enablePaths: true });
       debug('spec normalized');
+
       await oas.validate(false);
       debug('spec validated');
-      await oas.bundle().then(res => {
-        bundledSpec = JSON.stringify(res);
+
+      const bundledSpec = await oas.bundle().then(res => {
+        return JSON.stringify(res);
       });
       debug('spec bundled');
 
