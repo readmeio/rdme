@@ -29,7 +29,8 @@ require('../src')(process.argv.slice(2))
      * @link: https://github.com/actions/toolkit/tree/main/packages/core#annotations
      */
     if (isGHA()) {
-      console.error(`::error::${chalk.red(`\n${message}\n`)}`);
+      // eslint-disable-next-line no-console
+      console.error(`::error::${chalk.red(message)}`);
     } else {
       // eslint-disable-next-line no-console
       console.error(chalk.red(`\n${message}\n`));
