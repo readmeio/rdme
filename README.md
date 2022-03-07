@@ -136,11 +136,15 @@ rdme validate [path-to-file.json]
 
 #### Syncing a Folder of Markdown Docs to ReadMe
 
-The Markdown files will require YAML front matter with certain ReadMe documentation attributes. Check out [our docs](https://docs.readme.com/docs/rdme#markdown-file-setup) for more info.
+The Markdown files will require YAML front matter with certain ReadMe documentation attributes. Check out [our docs](https://docs.readme.com/docs/rdme#markdown-file-setup) for more info on setting up your front matter.
+
+Passing in a path to a directory will also sync any Markdown files that are located in subdirectories.
 
 ```sh
 rdme docs path-to-markdown-files --version={project-version}
 ```
+
+This command also has a dry run mode, which can be useful for initial setup and debugging. You can read more about dry run mode [in our docs](https://docs.readme.com/docs/rdme#dry-run-mode).
 
 #### Edit a Single ReadMe Doc on Your Local Machine
 

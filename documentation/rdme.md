@@ -60,6 +60,16 @@ slug: an-alternative-page-slug-example
 
 You can also specify several other page attributes in your YAML front matter, such as `hidden` (a boolean which denotes whether your page is published or unpublished). Any attributes you omit will remain unchanged on `rdme` runs. To view the full list of attributes, check out our [`Create doc` endpoint documentation](https://docs.readme.com/reference/createdoc).
 
+#### Dry Run Mode
+
+If you're setting up new docs or if you're just generally unsure if you've set up your page attributes correctly, the `docs` command has a dry run mode. This will allow you preview the changes without actually creating/updating any docs in ReadMe, which can be extremely useful for initial setup (oh, and we have [comprehensive debugging options](#troubleshooting) available as well!). To enable dry run mode, use the `--dryRun` flag:
+
+```sh
+rdme docs path-to-markdown-files --version={project-version} --dryRun
+```
+
+The command output will indicate whether each page is being created or updated alongside all processed page attributes.
+
 ## GitHub Actions Usage
 
 [GitHub Actions](https://docs.github.com/actions) makes it easy to automatically execute workflows when certain events take place in your GitHub repository (e.g. new code is merged into the default branch, a new pull request is opened, etc.).
@@ -237,6 +247,8 @@ sync-via-rdme:
 ## Troubleshooting
 
 If you're running into unexpected behavior with `rdme` and need to troubleshoot the issue, you have several debug logging options available. We may ask for these logs (as well as a copy of your OpenAPI definition) when you contact our support team.
+
+If you're working with the `docs` command specifically, we recommend using [dry run mode](#dry-run-mode) first so your docs don't get overwritten. If you're still seeing unexpected results (or are running into issues with any other command), check out the debugging options described below.
 
 ### Troubleshooting CLI
 
