@@ -88,7 +88,7 @@ Versions
 
 Other useful commands
 
-  $ rdme oas    Helpful OpenAPI generation tooling.              
+  $ rdme oas    Helpful OpenAPI generation tooling. [inactive]   
   $ rdme open   Open your current ReadMe project in the browser. 
 
 Run rdme help <command> for help with a specific command.
@@ -161,7 +161,7 @@ Versions
 
 Other useful commands
 
-  $ rdme oas    Helpful OpenAPI generation tooling.              
+  $ rdme oas    Helpful OpenAPI generation tooling. [inactive]   
   $ rdme open   Open your current ReadMe project in the browser. 
 
 Run rdme help <command> for help with a specific command.
