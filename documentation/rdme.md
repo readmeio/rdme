@@ -37,8 +37,8 @@ In order to sync a directory of Markdown files to your guides, you'll need to ad
 
 ```markdown
 ---
-title: CLI + GitHub Action Usage
-excerpt: Learn more about `rdme`, ReadMe's official CLI and GitHub Action!
+title: Syncing Docs via CLI / GitHub
+excerpt: Update your docs automatically with `rdme`, ReadMe's official CLI and GitHub Action!
 category: 5f7ce9e3a5504d0414d024c2
 ---
 
@@ -51,8 +51,8 @@ We automatically derive the page's slug via the file name (e.g. the file name `r
 
 ```markdown
 ---
-title: CLI + GitHub Action Usage
-excerpt: Learn more about `rdme`, ReadMe's official CLI and GitHub Action!
+title: Syncing Docs via CLI / GitHub
+excerpt: Update your docs automatically with `rdme`, ReadMe's official CLI and GitHub Action!
 category: 5f7ce9e3a5504d0414d024c2
 slug: an-alternative-page-slug-example
 ---
@@ -92,43 +92,6 @@ To execute this command via GitHub Actions, the step would look like this:
 ```
 
 We'll dive into several full GitHub Workflow file examples below!
-
-### Example: Syncing Markdown Docs
-
-Not to get too meta on you, but... the page that you're currently reading is actually being synced from the `rdme` GitHub repository via the `rdme` GitHub Action! Here are a few links to the relevant files:
-
-- [The Markdown source file for the page you're reading](https://github.com/readmeio/rdme/tree/main/documentation/rdme.md)
-- [The full GitHub Action workflow file that we use to sync the file to docs.readme.com](https://github.com/readmeio/rdme/blob/main/.github/workflows/docs.yml)
-- And finally... [the workflow run results](https://github.com/readmeio/rdme/actions/workflows/docs.yml)!
-
-To recreate this magic in your repository, your GitHub Workflow file will look something like this:
-
-```yml
-name: Sync `documentation` directory to ReadMe
-
-# Run workflow for every push to the `main` branch
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  sync:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout this repo
-        uses: actions/checkout@v2.4.0
-
-      # Run GitHub Action to sync docs in `documentation` directory
-      - name: GitHub Action
-        # We recommend specifying a fixed version, i.e. @RDME_VERSION
-        # Docs: https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#example-using-versioned-actions
-        uses: readmeio/rdme@RDME_VERSION
-        with:
-          rdme: docs ./documentation --key=API_KEY --version=2.0
-```
-
-In the example above, every push to the `main` branch will check out your repository's contents and sync the contents of the `documentation` directory with your ReadMe project.
 
 ### Example: Syncing an OpenAPI Definition
 
@@ -193,6 +156,43 @@ jobs:
 ```
 
 In the example above, every push to the `main` branch will check out your repository's contents and sync the OpenAPI file located at `./path-to-file.json` with your ReadMe project.
+
+### Example: Syncing Markdown Docs
+
+Not to get too meta on you, but... the page that you're currently reading is actually being synced from the `rdme` GitHub repository via the `rdme` GitHub Action! Here are the relevant files on GitHub:
+
+- [The Markdown source file for the page you're reading](https://github.com/readmeio/rdme/blob/main/documentation/rdme.md) 📜
+- [The GitHub Action workflow file that syncs the Markdown to docs.readme.com](https://github.com/readmeio/rdme/blob/main/.github/workflows/docs.yml) 🔄
+- And finally... [the workflow run results](https://github.com/readmeio/rdme/actions/workflows/docs.yml) ✅
+
+To recreate this magic in your repository, your GitHub Workflow file will look something like this:
+
+```yml
+name: Sync `documentation` directory to ReadMe
+
+# Run workflow for every push to the `main` branch
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v2.4.0
+
+      # Run GitHub Action to sync docs in `documentation` directory
+      - name: GitHub Action
+        # We recommend specifying a fixed version, i.e. @RDME_VERSION
+        # Docs: https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#example-using-versioned-actions
+        uses: readmeio/rdme@RDME_VERSION
+        with:
+          rdme: docs ./documentation --key=API_KEY --version=2.0
+```
+
+In the example above, every push to the `main` branch will check out your repository's contents and sync the contents of the `documentation` directory with your ReadMe project.
 
 ### Example: Using GitHub Secrets
 

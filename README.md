@@ -49,7 +49,7 @@ If you wish to get more information about any command within `rdme`, you can exe
 
 ### GitHub Actions
 
-> For a full GitHub Workflow file example and additional information on GitHub Actions usage, check out [our docs](https://docs.readme.com/docs/rdme).
+> For a full GitHub Workflow file example and additional information on GitHub Actions usage, check out [our docs](https://docs.readme.com/docs/rdme#github-actions-usage).
 
 For usage in [GitHub Actions](https://docs.github.com/actions), create [a new GitHub Workflow file](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions) in the `.github/workflows` directory of your repository and add the following [steps](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idsteps) to your workflow:
 
@@ -74,7 +74,7 @@ To execute this command via GitHub Actions, the step would look like this:
     rdme: openapi [path-to-file.json] --key=API_KEY --id=API_DEFINITION_ID
 ```
 
-Note that the `@XX` in the above examples refers to the version of `rdme` (e.g. `@7.0`). We recommend [configuring Dependabot to keep your actions up-to-date](https://docs.github.com/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/keeping-your-actions-up-to-date-with-dependabot).
+Note that the `@XX` in the above examples refers to the version of `rdme`. You can see examples featuring the latest version in [our docs](https://docs.readme.com/docs/rdme#example-syncing-an-openapi-definition). We recommend pointing to a fixed version, as opposed to pointing to something like the `main` branch, which could unexpectedly break your workflows. We also recommend [configuring Dependabot to keep your actions up-to-date](https://docs.github.com/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/keeping-your-actions-up-to-date-with-dependabot).
 
 ### OpenAPI / Swagger
 
