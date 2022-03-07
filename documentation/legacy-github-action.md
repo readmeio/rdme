@@ -57,7 +57,7 @@ With [GitHub Actions](https://github.com/features/actions), it's super easy to a
 
 > ❗️Deprecated workflow instructions below
 >
-> Just as a reminder, the `readmeio/github-readme-sync` GitHub Action that's described below is now deprecated. The instructions are preserved for posterity. We strongly recommend all new and existing workflows to use our newest GitHub Action: [`rdme`](https://docs.readme.com/docs/rdme)!
+> Just as a reminder, the `readmeio/github-readme-sync` GitHub Action that's described below is now deprecated. The instructions are preserved for posterity. We strongly recommend all new and existing workflows use our newest GitHub Action: [`rdme`](https://docs.readme.com/docs/rdme)!
 
 Just create a new file in your GitHub repository called `.github/workflows/readme-github-sync.yml` and populate it with the template below. You only fill in one parameter from the ReadMe Dashboard and you'll be good to go!
 
