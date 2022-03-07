@@ -161,8 +161,8 @@ In the example above, every push to the `main` branch will check out your reposi
 
 Not to get too meta on you, but... the page that you're currently reading is actually being synced from the `rdme` GitHub repository via the `rdme` GitHub Action! Here are the relevant files on GitHub:
 
-- [The Markdown source file for the page you're reading](https://github.com/readmeio/rdme/blob/RDME_VERSION/documentation/rdme.md) 📜
-- [The GitHub Action workflow file that syncs the Markdown to docs.readme.com](https://github.com/readmeio/rdme/blob/RDME_VERSION/.github/workflows/docs.yml) 🔄
+- [The Markdown source file for the page you're reading](https://github.com/readmeio/rdme/blob/main/documentation/rdme.md) 📜
+- [The GitHub Action workflow file that syncs the Markdown to docs.readme.com](https://github.com/readmeio/rdme/blob/main/.github/workflows/docs.yml) 🔄
 - And finally... [the workflow run results](https://github.com/readmeio/rdme/actions/workflows/docs.yml) ✅
 
 To recreate this magic in your repository, your GitHub Workflow file will look something like this:
