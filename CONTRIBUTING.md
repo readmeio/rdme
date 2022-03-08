@@ -2,7 +2,7 @@
 
 ## Running Shell Commands Locally 🐚
 
-To run test commands from within the repository, simply run your commands from the root of the repository and use `./bin/rdme` instead of `rdme` so it properly points to the command executable, like so:
+To run test commands from within the repository, run your commands from the root of the repository and use `./bin/rdme` instead of `rdme` so it properly points to the command executable, like so:
 
 ```sh
 ./bin/rdme validate __tests__/__fixtures__/ref-oas/petstore.json
@@ -25,7 +25,7 @@ As of this writing, this is the version of `act` that is able to successfully ru
 act version HEAD-9abc87b
 ```
 
-Once you've installed `act`, it'll ask you what Docker image size you'd like. The standard Medium ones should work just fine. Here's what your `~/.actrc` file should look like:
+Once you've installed `act`, it'll ask you what Docker image size you'd like. The standard Medium ones should do the trick. Here's what your `~/.actrc` file should look like:
 
 ```
 -P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest
