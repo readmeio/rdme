@@ -215,7 +215,7 @@ To use a GitHub secret in your `rdme` GitHub Action, first [create a new reposit
 ```yml
 - uses: readmeio/rdme@RDME_VERSION
   with:
-    rdme: openapi [path-to-file.json] --key={{ secrets.README_API_KEY }} --id={{ secrets.README_API_DEFINITION_ID }}
+    rdme: openapi [path-to-file.json] --key=${{ secrets.README_API_KEY }} --id=${{ secrets.README_API_DEFINITION_ID }}
 ```
 
 ## Usage in Other CI Environments
