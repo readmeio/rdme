@@ -62,7 +62,7 @@ You can also specify several other page attributes in your YAML front matter, su
 
 #### Dry Run Mode
 
-If you're setting up new docs or if you're just generally unsure if you've set up your page attributes correctly, the `docs` command has a dry run mode. This will allow you preview the changes without actually creating/updating any docs in ReadMe, which can be extremely useful for initial setup (oh, and we have [comprehensive debugging options](#troubleshooting) available as well!). To enable dry run mode, use the `--dryRun` flag:
+If you're setting up new docs or if you're generally unsure if you've set up your page attributes correctly, the `docs` command has a dry run mode. This will allow you preview the changes without actually creating/updating any docs in ReadMe, which can be extremely useful for initial setup (oh, and we have [comprehensive debugging options](#troubleshooting) available as well!). To enable dry run mode, use the `--dryRun` flag:
 
 ```sh
 rdme docs path-to-markdown-files --version={project-version} --dryRun
@@ -72,7 +72,7 @@ The command output will indicate whether each page is being created or updated a
 
 ## GitHub Actions Usage
 
-[GitHub Actions](https://docs.github.com/actions) makes it easy to automatically execute workflows when certain events take place in your GitHub repository (e.g. new code is merged into the default branch, a new pull request is opened, etc.).
+With [GitHub Actions](https://docs.github.com/actions), you can automatically execute workflows when certain events take place in your GitHub repository (e.g. new code is merged into the default branch, a new pull request is opened, etc.).
 
 > 📘 Keeping `rdme` up-to-date
 >
@@ -220,7 +220,7 @@ To use a GitHub secret in your `rdme` GitHub Action, first [create a new reposit
 
 ## Usage in Other CI Environments
 
-Since `rdme` is a command-line tool at its core, you can use `rdme` to sync your documentation from virtually any CI/CD environment that runs shell commands—[Bitbucket Pipelines](https://support.atlassian.com/bitbucket-cloud/docs/get-started-with-bitbucket-pipelines/), [GitLab CI/CD](https://docs.gitlab.com/ee/ci/), you name it! You can do this by invoking `rdme` with `npx -y rdme@RDME_VERSION` in a Node.js environment. See below for a few simple examples.
+Since `rdme` is a command-line tool at its core, you can use `rdme` to sync your documentation from virtually any CI/CD environment that runs shell commands—[Bitbucket Pipelines](https://support.atlassian.com/bitbucket-cloud/docs/get-started-with-bitbucket-pipelines/), [GitLab CI/CD](https://docs.gitlab.com/ee/ci/), you name it! You can do this by invoking `rdme` with `npx -y rdme@RDME_VERSION` in a Node.js environment. See below for several examples.
 
 <!-- Note: the two code blocks below must be joined, despite what VS Code's formatter tells you!-->
 

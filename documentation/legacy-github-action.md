@@ -33,7 +33,7 @@ If you previously had a GitHub Workflow file set up that used this action to syn
 
 where the `readme-oas-key` was a concatenation of the `API_KEY` (your project API key) and the `API_DEFINITION_ID` (your API definition ID), separated by a colon.
 
-For migrating to [the `rdme`-based GitHub Action](https://docs.readme.com/docs/rdme), simply modify the step to look like this:
+For migrating to [the `rdme`-based GitHub Action](https://docs.readme.com/docs/rdme), modify the step to look like this:
 
 ```yml
 - uses: readmeio/rdme@RDME_VERSION
@@ -53,13 +53,13 @@ There are a few things to note:
 
 ## Legacy Docs
 
-With [GitHub Actions](https://github.com/features/actions), it's super easy to automatically sync your OpenAPI document whenever changes occur in your GitHub repo!
+With [GitHub Actions](https://github.com/features/actions), you can automatically sync your OpenAPI document whenever changes occur in your GitHub repo!
 
 > ❗️Deprecated workflow instructions below
 >
-> Just as a reminder, the `readmeio/github-readme-sync` GitHub Action that's described below is now deprecated. The instructions are preserved for posterity. We strongly recommend all new and existing workflows use our newest GitHub Action: [`rdme`](https://docs.readme.com/docs/rdme)!
+> As a reminder, the `readmeio/github-readme-sync` GitHub Action that's described below is now deprecated. The instructions are preserved for posterity. We strongly recommend all new and existing workflows use our newest GitHub Action: [`rdme`](https://docs.readme.com/docs/rdme)!
 
-Just create a new file in your GitHub repository called `.github/workflows/readme-github-sync.yml` and populate it with the template below. You only fill in one parameter from the ReadMe Dashboard and you'll be good to go!
+Create a new file in your GitHub repository called `.github/workflows/readme-github-sync.yml` and populate it with the template below. You only fill in one parameter from the ReadMe Dashboard and you'll be good to go!
 
 Any subsequent commits to the `main` or `master` branch (whichever is your default branch—you can also specify any GitHub event of your choice—see [GitHub's docs](https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#on) for more info) will automatically trigger the sync process and upload your specified OpenAPI file to ReadMe.
 
@@ -96,7 +96,7 @@ jobs:
 
 ### Migrating Existing APIs to GitHub Sync
 
-If you want to migrate APIs that are already synced into ReadMe via another mechanism, it's super easy! The value for `readme-oas-key` is your [ReadMe Project API Key](https://docs.readme.com/developers/docs/authentication#api-key-quick-start) and the API Specification ID (pictured below) separated by a colon (i.e. `apiKey:apiSpecId`).
+You can also migrate APIs that are already synced into ReadMe via another mechanism. The value for `readme-oas-key` is your [ReadMe Project API Key](https://docs.readme.com/developers/docs/authentication#api-key-quick-start) and the API Specification ID (pictured below) separated by a colon (i.e. `apiKey:apiSpecId`).
 
 ![](https://files.readme.io/9a89ed3-id.png)
 
