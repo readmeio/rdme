@@ -13,7 +13,7 @@ Read more [on our main documentation page](rdme.md)
 
 -->
 
-> ❗️Deprecated in favor of [our new GitHub Action, `rdme`](https://docs.readme.com/docs/rdme) 🔁
+> ❗️Deprecated in favor of [our new GitHub Action, `rdme`](https://docs.readme.com/docs/rdme) 🔄
 >
 > This GitHub Action has been deprecated in favor of our newer (and more fully-featured) GitHub Action, [`rdme`](https://docs.readme.com/docs/rdme), which has support for syncing OpenAPI files, syncing Markdown files, and much more.
 >
