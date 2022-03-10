@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout this repo
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
 
       # Let's dynamically update our docs with the latest version of rdme!
       # Note that these next two steps are not required
