@@ -49,8 +49,8 @@ act workflow_dispatch -l # all workflows with the `workflow_dispatch` event
 Running the latter command will return the following:
 
 ```
-Stage  Job ID  Job name                 Workflow name                 Workflow file         Events
-0      simple  GitHub Action Auth-Less  GitHub Action Simple Example  gh-action-simple.yml  workflow_dispatch
+Stage  Job ID  Job name                 Workflow name                 Workflow file  Events
+0      simple  GitHub Action Auth-Less  GitHub Action Simple Example  simple.yml     workflow_dispatch
 ```
 
 And finally, you can use that Job ID to execute a workflow with the `-j` flag (make sure Docker is running!):
