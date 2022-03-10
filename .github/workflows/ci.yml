@@ -38,7 +38,7 @@ jobs:
         with:
           path: oas-examples-repo
           repository: readmeio/oas-examples
-          token: ${{ secrets.OAS_EXAMPLES_READ }}
+          # token: ${{ secrets.OAS_EXAMPLES_READ }}
 
       - name: Run `validate` command
         uses: ./rdme-repo/
