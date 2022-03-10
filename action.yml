@@ -12,13 +12,21 @@ runs:
   using: composite
   steps:
     # This is so we can guarantee a version of npm that supports lockfile@2
-    - name: setup node
-      uses: actions/setup-node@v3
-      with:
-        node-version: 16
+    # - name: setup node
+    #   uses: actions/setup-node@v3
+    #   with:
+    #     node-version: 16
+    - name: Node version
+      run: node -v
+      shell: bash
+      working-directory: ${{ github.action_path }}
+    - name: npm version
+      run: npm -v
+      shell: bash
+      working-directory: ${{ github.action_path }}
     # When we add debug support, we should make this a conditional step, see RM-3545
     - name: Install rdme deps
-      run: npm install --production --silent
+      run: npm install --production > /dev/null
       shell: bash
       working-directory: ${{ github.action_path }}
     - name: Execute rdme command
