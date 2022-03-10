@@ -11,7 +11,6 @@ inputs:
 runs:
   using: composite
   steps:
-    # When we add debug support, we should make this a conditional step, see RM-3545
     - name: Install rdme deps
       run: npm install --production --silent
       shell: bash
