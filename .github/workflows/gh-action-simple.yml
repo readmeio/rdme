@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout GitHub Action
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
 
       # This is a simple example that runs our `validate` command on a local file.
       - name: Run `validate` command
