@@ -1,5 +1,11 @@
 ## 7.0.0 (2022-03-10)
 
+> v7 of `rdme` is a massive release that includes first-class GitHub Actions support, a new dry run flag for the `docs` command, and lots of improvements to our documentation. This release includes several breaking changes:
+>
+> - Removed the `oas` command
+> - Dropped support for Node 12
+> - Dropped support for the `--token` option in the `openapi` command
+
 * chore: drop support for `oas` command (#448) ([4d42700](https://github.com/readmeio/rdme/commit/4d42700)), closes [#448](https://github.com/readmeio/rdme/issues/448)
 * chore: remove deprecated `token` parameter (#451) ([3e595d4](https://github.com/readmeio/rdme/commit/3e595d4)), closes [#451](https://github.com/readmeio/rdme/issues/451)
 * chore(deps-dev): bump @readme/eslint-config from 8.2.0 to 8.4.2 (#458) ([934e96e](https://github.com/readmeio/rdme/commit/934e96e)), closes [#458](https://github.com/readmeio/rdme/issues/458)
