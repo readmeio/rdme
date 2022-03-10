@@ -1,3 +1,31 @@
+## 7.0.0 (2022-03-10)
+
+* chore: drop support for `oas` command (#448) ([4d42700](https://github.com/readmeio/rdme/commit/4d42700)), closes [#448](https://github.com/readmeio/rdme/issues/448)
+* chore: remove deprecated `token` parameter (#451) ([3e595d4](https://github.com/readmeio/rdme/commit/3e595d4)), closes [#451](https://github.com/readmeio/rdme/issues/451)
+* chore(deps-dev): bump @readme/eslint-config from 8.2.0 to 8.4.2 (#458) ([934e96e](https://github.com/readmeio/rdme/commit/934e96e)), closes [#458](https://github.com/readmeio/rdme/issues/458)
+* chore(deps-dev): bump eslint from 8.8.0 to 8.10.0 (#461) ([e4e9ac1](https://github.com/readmeio/rdme/commit/e4e9ac1)), closes [#461](https://github.com/readmeio/rdme/issues/461)
+* chore(deps-dev): bump jest from 27.4.7 to 27.5.1 (#462) ([46793d3](https://github.com/readmeio/rdme/commit/46793d3)), closes [#462](https://github.com/readmeio/rdme/issues/462)
+* chore(deps-dev): bump nock from 13.2.2 to 13.2.4 (#457) ([ce0a7b5](https://github.com/readmeio/rdme/commit/ce0a7b5)), closes [#457](https://github.com/readmeio/rdme/issues/457)
+* chore(deps): bump actions/checkout from 2.4.0 to 3 (#478) ([f055125](https://github.com/readmeio/rdme/commit/f055125)), closes [#478](https://github.com/readmeio/rdme/issues/478)
+* chore(deps): bump actions/setup-node from 2.5.1 to 3 (#459) ([e6644eb](https://github.com/readmeio/rdme/commit/e6644eb)), closes [#459](https://github.com/readmeio/rdme/issues/459)
+* chore(deps): bump to setup-node v3 in action (#465) ([cb6b2b3](https://github.com/readmeio/rdme/commit/cb6b2b3)), closes [#465](https://github.com/readmeio/rdme/issues/465)
+* chore(deps): bumping out of date deps (#477) ([440c2d0](https://github.com/readmeio/rdme/commit/440c2d0)), closes [#477](https://github.com/readmeio/rdme/issues/477)
+* ci(GHA): drop `actions/setup-node` (#476) ([14895a1](https://github.com/readmeio/rdme/commit/14895a1)), closes [#476](https://github.com/readmeio/rdme/issues/476)
+* docs: bring alex into build process (#469) ([2995f49](https://github.com/readmeio/rdme/commit/2995f49)), closes [#469](https://github.com/readmeio/rdme/issues/469)
+* docs: link touch-ups + fixes ([154aa0f](https://github.com/readmeio/rdme/commit/154aa0f))
+* docs: remove duplicated community files (#472) ([7b75047](https://github.com/readmeio/rdme/commit/7b75047)), closes [#472](https://github.com/readmeio/rdme/issues/472)
+* docs(docs): guidance on `--dryRun` flag and debugging ([e6b946a](https://github.com/readmeio/rdme/commit/e6b946a))
+* docs(GHA): small updates (#468) ([f05d8f1](https://github.com/readmeio/rdme/commit/f05d8f1)), closes [#468](https://github.com/readmeio/rdme/issues/468)
+* docs(legacy): add clarity around `readme-oas-key` (#464) ([41d7597](https://github.com/readmeio/rdme/commit/41d7597)), closes [#464](https://github.com/readmeio/rdme/issues/464)
+* docs(legacy): adjust emoji in callout ([53c554a](https://github.com/readmeio/rdme/commit/53c554a))
+* fix: a weirdly written promise (#463) ([6827352](https://github.com/readmeio/rdme/commit/6827352)), closes [#463](https://github.com/readmeio/rdme/issues/463)
+* fix(docs): github secrets usage (#471) ([5ca626f](https://github.com/readmeio/rdme/commit/5ca626f)), closes [#471](https://github.com/readmeio/rdme/issues/471)
+* fix(GHA): remove `chalk` overrides from error annotations (#466) ([0c7e364](https://github.com/readmeio/rdme/commit/0c7e364)), closes [#466](https://github.com/readmeio/rdme/issues/466)
+* feat: dropping support for node 12 (#440) ([e1552db](https://github.com/readmeio/rdme/commit/e1552db)), closes [#440](https://github.com/readmeio/rdme/issues/440)
+* feat(docs): add `--dryRun` option (#454) ([f86b5c6](https://github.com/readmeio/rdme/commit/f86b5c6)), closes [#454](https://github.com/readmeio/rdme/issues/454) [/github.com/readmeio/rdme/pull/454#discussion_r815541984](https://github.com//github.com/readmeio/rdme/pull/454/issues/discussion_r815541984)
+
+
+
 ## 6.5.0 (2022-03-01)
 
 With this release, we are officially shipping first-class support for GitHub Actions within `rdme` 🚀 this means you can use the power of `rdme` to sync your OpenAPI definitions and Markdown files to ReadMe any time you make changes on GitHub.
