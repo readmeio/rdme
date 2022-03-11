@@ -54,7 +54,7 @@ If you wish to get more information about any command within `rdme`, you can exe
 For usage in [GitHub Actions](https://docs.github.com/actions), create [a new GitHub Workflow file](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions) in the `.github/workflows` directory of your repository and add the following [steps](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idsteps) to your workflow:
 
 ```yml
-- uses: actions/checkout@v2
+- uses: actions/checkout@v3
 - uses: readmeio/rdme@XX
   with:
     rdme: [your command here]
