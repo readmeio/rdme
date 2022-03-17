@@ -72,7 +72,9 @@ The command output will indicate whether each page is being created or updated a
 
 ## GitHub Actions Usage
 
-With [GitHub Actions](https://docs.github.com/actions), you can automatically execute workflows (e.g. syncing your OpenAPI definition or Markdown docs to ReadMe) when certain events take place in your GitHub repository (e.g. code is pushed to the default branch, a new pull request is opened, etc.). There are literally [dozens of event options available](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows), making the possibilities endless!
+With [GitHub Actions](https://docs.github.com/actions), you can automatically execute workflows when certain events take place in your GitHub repository (e.g. code is pushed to the default branch, a new pull request is opened, etc.).
+
+While there are [dozens of event options available](https://docs.github.com/actions/using-workflows/events-that-trigger-workflows), you'll typically want to sync your OpenAPI definition and Markdown docs to ReadMe [when a new build is deployed](https://docs.github.com/actions/using-workflows/events-that-trigger-workflows#deployment) or [when a new release is created](https://docs.github.com/actions/using-workflows/events-that-trigger-workflows#release). If you're not using either of those features then you can sync to ReadMe [when code is pushed to the default branch](https://docs.github.com/actions/using-workflows/events-that-trigger-workflows#push).
 
 > 📘 Keeping `rdme` up-to-date
 >
