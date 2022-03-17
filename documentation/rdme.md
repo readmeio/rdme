@@ -72,7 +72,9 @@ The command output will indicate whether each page is being created or updated a
 
 ## GitHub Actions Usage
 
-With [GitHub Actions](https://docs.github.com/actions), you can automatically execute workflows when certain events take place in your GitHub repository (e.g. new code is merged into the default branch, a new pull request is opened, etc.).
+With [GitHub Actions](https://docs.github.com/actions), you can automatically execute workflows when certain events take place in your GitHub repository (e.g. code is pushed to the default branch, a new pull request is opened, etc.).
+
+While there are [dozens of event options available](https://docs.github.com/actions/using-workflows/events-that-trigger-workflows), you'll typically want to sync your OpenAPI definition and Markdown docs to ReadMe [when a new build is deployed](https://docs.github.com/actions/using-workflows/events-that-trigger-workflows#deployment) or [when a new release is created](https://docs.github.com/actions/using-workflows/events-that-trigger-workflows#release). If you're not using either of those features then you can sync to ReadMe [when code is pushed to the default branch](https://docs.github.com/actions/using-workflows/events-that-trigger-workflows#push).
 
 > 📘 Keeping `rdme` up-to-date
 >
@@ -81,7 +83,7 @@ With [GitHub Actions](https://docs.github.com/actions), you can automatically ex
 For usage in GitHub Actions, create [a new GitHub Workflow file](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions) in the `.github/workflows` directory of your repository and add the following [steps](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idsteps) to your workflow:
 
 ```yml
-- uses: actions/checkout@v2
+- uses: actions/checkout@v3
 - uses: readmeio/rdme@RDME_VERSION
   with:
     rdme: [your command here]
@@ -154,7 +156,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout this repo
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
 
       # Run GitHub Action to sync OpenAPI file at [path-to-file.json]
       - name: GitHub Action
@@ -191,7 +193,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout this repo
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
 
       # Run GitHub Action to sync docs in `documentation` directory
       - name: GitHub Action
