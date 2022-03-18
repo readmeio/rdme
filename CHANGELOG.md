@@ -1,3 +1,11 @@
+## <small>7.0.1 (2022-03-18)</small>
+
+* fix: upgrading oas-normalize to fix a bug with a nested babel dep ([ec6f35a](https://github.com/readmeio/rdme/commit/ec6f35a))
+* docs(GHA): checkout guidance, workflow triggers (#479) ([67d7640](https://github.com/readmeio/rdme/commit/67d7640)), closes [#479](https://github.com/readmeio/rdme/issues/479)
+* chore: rename file and docs ([ace94f7](https://github.com/readmeio/rdme/commit/ace94f7))
+
+
+
 ## 7.0.0 (2022-03-10)
 
 > v7 of `rdme` is a massive release that includes first-class GitHub Actions support, a new dry run flag for the `docs` command, and lots of improvements to our documentation. This release includes several breaking changes:
