@@ -135,7 +135,7 @@ You've successfully updated an OpenAPI file on your ReadMe project!
 
 To update your OpenAPI or Swagger definition, run the following:
 
-        rdme openapi FILE --key=<<user>> --id=API_DEFINITION_ID
+        rdme openapi [path-to-file.json] --key=<<user>> --id=API_DEFINITION_ID
 ```
 
 </details>
