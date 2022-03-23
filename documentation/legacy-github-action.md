@@ -26,19 +26,19 @@ If you previously had a GitHub Workflow file set up that used this action to syn
 ```yml
 - uses: readmeio/github-readme-sync@v2
   with:
-    readme-oas-key: API_KEY:API_DEFINITION_ID
+    readme-oas-key: <<user>>:API_DEFINITION_ID
     oas-file-path: path/to/file.json
     api-version: 'v1.0.0'
 ```
 
-where the `readme-oas-key` was a concatenation of the `API_KEY` (your project API key) and the `API_DEFINITION_ID` (your API definition ID), separated by a colon.
+where the `readme-oas-key` was a concatenation of `<<user>>` (your project API key) and `API_DEFINITION_ID` (your API definition ID), separated by a colon.
 
 For migrating to [the `rdme`-based GitHub Action](https://docs.readme.com/docs/rdme), modify the step to look like this:
 
 ```yml
 - uses: readmeio/rdme@RDME_VERSION
   with:
-    rdme: openapi path/to/file.json --key=API_KEY --id=API_DEFINITION_ID
+    rdme: openapi path/to/file.json --key=<<user>> --id=API_DEFINITION_ID
 ```
 
 There are a few things to note:

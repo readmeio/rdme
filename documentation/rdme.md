@@ -92,7 +92,7 @@ For usage in GitHub Actions, create [a new GitHub Workflow file](https://docs.gi
 The command syntax in GitHub Actions is functionally equivalent to the CLI. For example, take the following CLI command:
 
 ```sh
-rdme openapi [path-to-file.json] --key=API_KEY --id=API_DEFINITION_ID
+rdme openapi [path-to-file.json] --key=<<user>> --id=API_DEFINITION_ID
 ```
 
 To execute this command via GitHub Actions, the step would look like this:
@@ -100,7 +100,7 @@ To execute this command via GitHub Actions, the step would look like this:
 ```yml
 - uses: readmeio/rdme@RDME_VERSION
   with:
-    rdme: openapi [path-to-file.json] --key=API_KEY --id=API_DEFINITION_ID
+    rdme: openapi [path-to-file.json] --key=<<user>> --id=API_DEFINITION_ID
 ```
 
 We'll dive into several full GitHub Workflow file examples below!
@@ -135,7 +135,7 @@ You've successfully updated an OpenAPI file on your ReadMe project!
 
 To update your OpenAPI or Swagger definition, run the following:
 
-        rdme openapi FILE --key=API_KEY --id=API_DEFINITION_ID
+        rdme openapi FILE --key=<<user>> --id=API_DEFINITION_ID
 ```
 
 </details>
@@ -164,7 +164,7 @@ jobs:
         # Docs: https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#example-using-versioned-actions
         uses: readmeio/rdme@RDME_VERSION
         with:
-          rdme: openapi [path-to-file.json] --key=API_KEY --id=API_DEFINITION_ID
+          rdme: openapi [path-to-file.json] --key=<<user>> --id=API_DEFINITION_ID
 ```
 
 In the example above, every push to the `main` branch will check out your repository's contents and sync the OpenAPI file located at `./path-to-file.json` with your ReadMe project.
@@ -201,7 +201,7 @@ jobs:
         # Docs: https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#example-using-versioned-actions
         uses: readmeio/rdme@RDME_VERSION
         with:
-          rdme: docs ./documentation --key=API_KEY --version=2.0
+          rdme: docs ./documentation --key=<<user>> --version=2.0
 ```
 
 In the example above, every push to the `main` branch will check out your repository's contents and sync the contents of the `documentation` directory with your ReadMe project.
@@ -234,7 +234,7 @@ pipelines:
   default:
     - step:
         script:
-          - npx -y rdme@RDME_VERSION openapi [path-to-file.json] --key=API_KEY --id=API_DEFINITION_ID
+          - npx -y rdme@RDME_VERSION openapi [path-to-file.json] --key=<<user>> --id=API_DEFINITION_ID
 ```
 ```yml GitLab CI (rdme-sync.gitlab-ci.yml)
 # Official framework image. Look for the different tagged releases at:
@@ -243,7 +243,7 @@ image: node:NODE_VERSION
 
 sync-via-rdme:
   script:
-    - npx -y rdme@RDME_VERSION openapi [path-to-file.json] --key=API_KEY --id=API_DEFINITION_ID
+    - npx -y rdme@RDME_VERSION openapi [path-to-file.json] --key=<<user>> --id=API_DEFINITION_ID
 ```
 
 ## Troubleshooting
