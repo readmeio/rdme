@@ -102,7 +102,7 @@ module.exports = class OpenAPICommand {
             'To update your OpenAPI or Swagger definition, run the following:',
             '',
             // eslint-disable-next-line no-underscore-dangle
-            `\t${chalk.green(`rdme openapi FILE --key=${key} --id=${body._id}`)}`,
+            `\t${chalk.green(`rdme openapi ${specPath} --key=${key} --id=${body._id}`)}`,
           ].join('\n')
         );
       }
