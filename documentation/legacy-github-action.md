@@ -31,7 +31,7 @@ If you previously had a GitHub Workflow file set up that used this action to syn
     api-version: 'v1.0.0'
 ```
 
-where the `readme-oas-key` was a concatenation of `<<user>>` (your project API key) and `API_DEFINITION_ID` (your API definition ID), separated by a colon.
+where the `readme-oas-key` was a concatenation of `<<user>>` (the API key for <<name>>) and `API_DEFINITION_ID` (your API definition ID), separated by a colon.
 
 For migrating to [the `rdme`-based GitHub Action](https://docs.readme.com/docs/rdme), modify the step to look like this:
 
