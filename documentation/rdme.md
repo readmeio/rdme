@@ -133,7 +133,7 @@ You've successfully updated an OpenAPI file on your ReadMe project!
 
         http://dash.readme.com/project/{your_project}/v1.0/refs/pet
 
-To update your OpenAPI or Swagger definition, run the following:
+To update your OpenAPI definition, run the following:
 
         rdme openapi [path-to-file.json] --key=<<user>> --id=API_DEFINITION_ID
 ```
