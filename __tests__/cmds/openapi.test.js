@@ -15,24 +15,24 @@ const key = 'API_KEY';
 const id = '5aa0409b7cf527a93bfb44df';
 const version = '1.0.0';
 const exampleRefLocation = `${config.get('host')}/project/example-project/1.0.1/refs/ex`;
-const successfulMessageBase = specPath => [
+const successfulMessageBase = (specPath, specType) => [
   '',
   `\t${chalk.green(exampleRefLocation)}`,
   '',
-  'To update your OpenAPI or Swagger definition, run the following:',
+  `To update your ${specType} definition, run the following:`,
   '',
   `\t${chalk.green(`rdme openapi ${specPath} --key=${key} --id=1`)}`,
 ];
 const successfulUpload = (specPath, specType = 'OpenAPI') =>
   [
     `You've successfully uploaded a new ${specType} file to your ReadMe project!`,
-    ...successfulMessageBase(specPath),
+    ...successfulMessageBase(specPath, specType),
   ].join('\n');
 
 const successfulUpdate = (specPath, specType = 'OpenAPI') =>
   [
     `You've successfully updated an existing ${specType} file on your ReadMe project!`,
-    ...successfulMessageBase(specPath),
+    ...successfulMessageBase(specPath, specType),
   ].join('\n');
 
 const testWorkingDir = process.cwd();

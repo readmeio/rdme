@@ -98,7 +98,7 @@ module.exports = class OpenAPICommand {
             '',
             `\t${chalk.green(`${data.headers.get('location')}`)}`,
             '',
-            'To update your OpenAPI or Swagger definition, run the following:',
+            `To update your ${specType} definition, run the following:`,
             '',
             // eslint-disable-next-line no-underscore-dangle
             `\t${chalk.green(`rdme openapi ${specPath} --key=${key} --id=${body._id}`)}`,
