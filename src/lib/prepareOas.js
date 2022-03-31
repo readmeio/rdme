@@ -17,7 +17,9 @@ module.exports = async function prepare(path, bundle = false) {
     debug(`raw validation error object: ${JSON.stringify(err)}`);
     throw err;
   });
-  debug('spec validated');
+  debug('👇👇👇👇👇 spec validated! logging spec below 👇👇👇👇👇');
+  debug(api);
+  debug('👆👆👆👆👆 finished logging spec 👆👆👆👆👆');
 
   const specType = api.swagger ? 'Swagger' : 'OpenAPI';
   debug(`spec type: ${specType}`);
@@ -25,9 +27,15 @@ module.exports = async function prepare(path, bundle = false) {
   let bundledSpec = '';
 
   if (bundle) {
-    bundledSpec = await oas.bundle().then(res => {
-      return JSON.stringify(res);
-    });
+    bundledSpec = await oas
+      .bundle()
+      .then(res => {
+        return JSON.stringify(res);
+      })
+      .catch(err => {
+        debug(`raw bundling error object: ${JSON.stringify(err)}`);
+        throw err;
+      });
     debug('spec bundled');
   }
 
