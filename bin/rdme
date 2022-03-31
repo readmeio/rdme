@@ -32,7 +32,7 @@ require('../src')(process.argv.slice(2))
       'support@readme.io'
     )}.`;
 
-    if (err.message) {
+    if (err?.message) {
       message = err.message;
     }
 
