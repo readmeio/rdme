@@ -2,7 +2,6 @@ const chalk = require('chalk');
 const fs = require('fs');
 const config = require('config');
 const { prompt } = require('enquirer');
-const OASNormalize = require('oas-normalize');
 const promptOpts = require('../lib/prompts');
 const APIError = require('../lib/apiError');
 const { getProjectVersion } = require('../lib/versionSelect');
@@ -12,6 +11,7 @@ const FormData = require('form-data');
 const parse = require('parse-link-header');
 const { file: tmpFile } = require('tmp-promise');
 const { debug } = require('../lib/logger');
+const prepareOas = require('../lib/prepareOas');
 
 module.exports = class OpenAPICommand {
   constructor() {
@@ -81,13 +81,12 @@ module.exports = class OpenAPICommand {
     }
 
     async function callApi(specPath, versionCleaned) {
-      debug(`bundling and validating spec located at ${specPath}`);
-      // @todo Tailor messaging to what is actually being handled here. If the user is uploading a Swagger file, never mention that they uploaded/updated an OpenAPI file.
+      const { bundledSpec, specType } = await prepareOas(specPath, true);
 
       async function success(data) {
         const message = !isUpdate
-          ? "You've successfully uploaded a new OpenAPI file to your ReadMe project!"
-          : "You've successfully updated an OpenAPI file on your ReadMe project!";
+          ? `You've successfully uploaded a new ${specType} file to your ReadMe project!`
+          : `You've successfully updated an existing ${specType} file on your ReadMe project!`;
 
         debug(`successful ${data.status} response`);
         const body = await data.json();
@@ -126,17 +125,6 @@ module.exports = class OpenAPICommand {
           return Promise.reject(new Error('There was an error uploading!'));
         }
       }
-
-      const oas = new OASNormalize(specPath, { colorizeErrors: true, enablePaths: true });
-      debug('spec normalized');
-
-      await oas.validate(false);
-      debug('spec validated');
-
-      const bundledSpec = await oas.bundle().then(res => {
-        return JSON.stringify(res);
-      });
-      debug('spec bundled');
 
       // Create a temporary file to write the bundled spec to,
       // which we will then stream into the form data body

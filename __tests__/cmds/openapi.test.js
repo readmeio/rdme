@@ -23,15 +23,17 @@ const successfulMessageBase = specPath => [
   '',
   `\t${chalk.green(`rdme openapi ${specPath} --key=${key} --id=1`)}`,
 ];
-const successfulUpload = specPath =>
-  ["You've successfully uploaded a new OpenAPI file to your ReadMe project!", ...successfulMessageBase(specPath)].join(
-    '\n'
-  );
+const successfulUpload = (specPath, specType = 'OpenAPI') =>
+  [
+    `You've successfully uploaded a new ${specType} file to your ReadMe project!`,
+    ...successfulMessageBase(specPath),
+  ].join('\n');
 
-const successfulUpdate = specPath =>
-  ["You've successfully updated an OpenAPI file on your ReadMe project!", ...successfulMessageBase(specPath)].join(
-    '\n'
-  );
+const successfulUpdate = (specPath, specType = 'OpenAPI') =>
+  [
+    `You've successfully updated an existing ${specType} file on your ReadMe project!`,
+    ...successfulMessageBase(specPath),
+  ].join('\n');
 
 const testWorkingDir = process.cwd();
 
@@ -60,13 +62,13 @@ describe('rdme openapi', () => {
 
   describe('upload', () => {
     it.each([
-      ['Swagger 2.0', 'json', '2.0'],
-      ['Swagger 2.0', 'yaml', '2.0'],
-      ['OpenAPI 3.0', 'json', '3.0'],
-      ['OpenAPI 3.0', 'yaml', '3.0'],
-      ['OpenAPI 3.1', 'json', '3.1'],
-      ['OpenAPI 3.1', 'yaml', '3.1'],
-    ])('should support uploading a %s definition (format: %s)', async (_, format, specVersion) => {
+      ['Swagger 2.0', 'json', '2.0', 'Swagger'],
+      ['Swagger 2.0', 'yaml', '2.0', 'Swagger'],
+      ['OpenAPI 3.0', 'json', '3.0', 'OpenAPI'],
+      ['OpenAPI 3.0', 'yaml', '3.0', 'OpenAPI'],
+      ['OpenAPI 3.1', 'json', '3.1', 'OpenAPI'],
+      ['OpenAPI 3.1', 'yaml', '3.1', 'OpenAPI'],
+    ])('should support uploading a %s definition (format: %s)', async (_, format, specVersion, type) => {
       const mock = getApiNock()
         .get('/api/v1/api-specification')
         .basicAuth({ user: key })
@@ -86,7 +88,7 @@ describe('rdme openapi', () => {
           key,
           version,
         })
-      ).resolves.toBe(successfulUpload(spec));
+      ).resolves.toBe(successfulUpload(spec, type));
 
       expect(console.info).toHaveBeenCalledTimes(0);
 
@@ -116,7 +118,7 @@ describe('rdme openapi', () => {
       // to break.
       fs.copyFileSync(require.resolve('@readme/oas-examples/2.0/json/petstore.json'), './swagger.json');
 
-      await expect(openapi.run({ key })).resolves.toBe(successfulUpload('swagger.json'));
+      await expect(openapi.run({ key })).resolves.toBe(successfulUpload('swagger.json', 'Swagger'));
 
       expect(console.info).toHaveBeenCalledTimes(1);
 
@@ -130,13 +132,13 @@ describe('rdme openapi', () => {
 
   describe('updates / resyncs', () => {
     it.each([
-      ['Swagger 2.0', 'json', '2.0'],
-      ['Swagger 2.0', 'yaml', '2.0'],
-      ['OpenAPI 3.0', 'json', '3.0'],
-      ['OpenAPI 3.0', 'yaml', '3.0'],
-      ['OpenAPI 3.1', 'json', '3.1'],
-      ['OpenAPI 3.1', 'yaml', '3.1'],
-    ])('should support updating a %s definition (format: %s)', async (_, format, specVersion) => {
+      ['Swagger 2.0', 'json', '2.0', 'Swagger'],
+      ['Swagger 2.0', 'yaml', '2.0', 'Swagger'],
+      ['OpenAPI 3.0', 'json', '3.0', 'OpenAPI'],
+      ['OpenAPI 3.0', 'yaml', '3.0', 'OpenAPI'],
+      ['OpenAPI 3.1', 'json', '3.1', 'OpenAPI'],
+      ['OpenAPI 3.1', 'yaml', '3.1', 'OpenAPI'],
+    ])('should support updating a %s definition (format: %s)', async (_, format, specVersion, type) => {
       const mock = getApiNock()
         .put(`/api/v1/api-specification/${id}`, body => body.match('form-data; name="spec"'))
         .basicAuth({ user: key })
@@ -151,7 +153,7 @@ describe('rdme openapi', () => {
           id,
           version,
         })
-      ).resolves.toBe(successfulUpdate(spec));
+      ).resolves.toBe(successfulUpdate(spec, type));
 
       return mock.done();
     });
@@ -231,7 +233,7 @@ describe('rdme openapi', () => {
 
       const spec = require.resolve('@readme/oas-examples/2.0/json/petstore.json');
 
-      await expect(openapi.run({ spec, key })).resolves.toBe(successfulUpload(spec));
+      await expect(openapi.run({ spec, key })).resolves.toBe(successfulUpload(spec, 'Swagger'));
 
       return mock.done();
     });
