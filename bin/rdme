@@ -2,12 +2,24 @@
 const chalk = require('chalk');
 const core = require('@actions/core');
 
+const nodeVersion = require('parse-node-version')(process.version);
 const updateNotifier = require('update-notifier');
 const pkg = require('../package.json');
 
 const isGHA = require('../src/lib/isGitHub');
 
 updateNotifier({ pkg }).notify();
+
+/**
+ * We use optional chaining throughout the library, which doesn't work on Node 12, so to curb
+ * support questions about why rdme is throwing an "Unexpected token '.'" error we should hard
+ * stop if we're on any Node version that doesn't support it.
+ */
+if (nodeVersion.major <= 12) {
+  const message = `We're sorry, this release of rdme does not support your Node version of ${nodeVersion.major}.`;
+  console.error(chalk.red(`\n${message}\n`));
+  process.exit(1);
+}
 
 require('../src')(process.argv.slice(2))
   .then(msg => {
@@ -20,7 +32,7 @@ require('../src')(process.argv.slice(2))
       'support@readme.io'
     )}.`;
 
-    if (err?.message) {
+    if (err.message) {
       message = err.message;
     }
 
