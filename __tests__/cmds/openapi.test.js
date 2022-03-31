@@ -15,23 +15,25 @@ const key = 'API_KEY';
 const id = '5aa0409b7cf527a93bfb44df';
 const version = '1.0.0';
 const exampleRefLocation = `${config.get('host')}/project/example-project/1.0.1/refs/ex`;
-const successfulMessageBase = [
+const successfulMessageBase = (specPath, specType) => [
   '',
   `\t${chalk.green(exampleRefLocation)}`,
   '',
-  'To update your OpenAPI or Swagger definition, run the following:',
+  `To update your ${specType} definition, run the following:`,
   '',
-  `\t${chalk.green(`rdme openapi FILE --key=${key} --id=1`)}`,
+  `\t${chalk.green(`rdme openapi ${specPath} --key=${key} --id=1`)}`,
 ];
-const successfulUpload = [
-  "You've successfully uploaded a new OpenAPI file to your ReadMe project!",
-  ...successfulMessageBase,
-].join('\n');
+const successfulUpload = (specPath, specType = 'OpenAPI') =>
+  [
+    `You've successfully uploaded a new ${specType} file to your ReadMe project!`,
+    ...successfulMessageBase(specPath, specType),
+  ].join('\n');
 
-const successfulUpdate = [
-  "You've successfully updated an OpenAPI file on your ReadMe project!",
-  ...successfulMessageBase,
-].join('\n');
+const successfulUpdate = (specPath, specType = 'OpenAPI') =>
+  [
+    `You've successfully updated an existing ${specType} file on your ReadMe project!`,
+    ...successfulMessageBase(specPath, specType),
+  ].join('\n');
 
 const testWorkingDir = process.cwd();
 
@@ -60,13 +62,13 @@ describe('rdme openapi', () => {
 
   describe('upload', () => {
     it.each([
-      ['Swagger 2.0', 'json', '2.0'],
-      ['Swagger 2.0', 'yaml', '2.0'],
-      ['OpenAPI 3.0', 'json', '3.0'],
-      ['OpenAPI 3.0', 'yaml', '3.0'],
-      ['OpenAPI 3.1', 'json', '3.1'],
-      ['OpenAPI 3.1', 'yaml', '3.1'],
-    ])('should support uploading a %s definition (format: %s)', async (_, format, specVersion) => {
+      ['Swagger 2.0', 'json', '2.0', 'Swagger'],
+      ['Swagger 2.0', 'yaml', '2.0', 'Swagger'],
+      ['OpenAPI 3.0', 'json', '3.0', 'OpenAPI'],
+      ['OpenAPI 3.0', 'yaml', '3.0', 'OpenAPI'],
+      ['OpenAPI 3.1', 'json', '3.1', 'OpenAPI'],
+      ['OpenAPI 3.1', 'yaml', '3.1', 'OpenAPI'],
+    ])('should support uploading a %s definition (format: %s)', async (_, format, specVersion, type) => {
       const mock = getApiNock()
         .get('/api/v1/api-specification')
         .basicAuth({ user: key })
@@ -78,13 +80,15 @@ describe('rdme openapi', () => {
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
+      const spec = require.resolve(`@readme/oas-examples/${specVersion}/${format}/petstore.${format}`);
+
       await expect(
         openapi.run({
-          spec: require.resolve(`@readme/oas-examples/${specVersion}/${format}/petstore.${format}`),
+          spec,
           key,
           version,
         })
-      ).resolves.toBe(successfulUpload);
+      ).resolves.toBe(successfulUpload(spec, type));
 
       expect(console.info).toHaveBeenCalledTimes(0);
 
@@ -114,7 +118,7 @@ describe('rdme openapi', () => {
       // to break.
       fs.copyFileSync(require.resolve('@readme/oas-examples/2.0/json/petstore.json'), './swagger.json');
 
-      await expect(openapi.run({ key })).resolves.toBe(successfulUpload);
+      await expect(openapi.run({ key })).resolves.toBe(successfulUpload('swagger.json', 'Swagger'));
 
       expect(console.info).toHaveBeenCalledTimes(1);
 
@@ -128,26 +132,28 @@ describe('rdme openapi', () => {
 
   describe('updates / resyncs', () => {
     it.each([
-      ['Swagger 2.0', 'json', '2.0'],
-      ['Swagger 2.0', 'yaml', '2.0'],
-      ['OpenAPI 3.0', 'json', '3.0'],
-      ['OpenAPI 3.0', 'yaml', '3.0'],
-      ['OpenAPI 3.1', 'json', '3.1'],
-      ['OpenAPI 3.1', 'yaml', '3.1'],
-    ])('should support updating a %s definition (format: %s)', async (_, format, specVersion) => {
+      ['Swagger 2.0', 'json', '2.0', 'Swagger'],
+      ['Swagger 2.0', 'yaml', '2.0', 'Swagger'],
+      ['OpenAPI 3.0', 'json', '3.0', 'OpenAPI'],
+      ['OpenAPI 3.0', 'yaml', '3.0', 'OpenAPI'],
+      ['OpenAPI 3.1', 'json', '3.1', 'OpenAPI'],
+      ['OpenAPI 3.1', 'yaml', '3.1', 'OpenAPI'],
+    ])('should support updating a %s definition (format: %s)', async (_, format, specVersion, type) => {
       const mock = getApiNock()
         .put(`/api/v1/api-specification/${id}`, body => body.match('form-data; name="spec"'))
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
+      const spec = require.resolve(`@readme/oas-examples/${specVersion}/${format}/petstore.${format}`);
+
       await expect(
         openapi.run({
-          spec: require.resolve(`@readme/oas-examples/${specVersion}/${format}/petstore.${format}`),
+          spec,
           key,
           id,
           version,
         })
-      ).resolves.toBe(successfulUpdate);
+      ).resolves.toBe(successfulUpdate(spec, type));
 
       return mock.done();
     });
@@ -158,9 +164,9 @@ describe('rdme openapi', () => {
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
-      await expect(
-        openapi.run({ spec: require.resolve('@readme/oas-examples/3.1/json/petstore.json'), key, id, version })
-      ).resolves.toBe(successfulUpdate);
+      const spec = require.resolve('@readme/oas-examples/3.1/json/petstore.json');
+
+      await expect(openapi.run({ spec, key, id, version })).resolves.toBe(successfulUpdate(spec));
 
       expect(console.warn).toHaveBeenCalledTimes(1);
       expect(console.info).toHaveBeenCalledTimes(0);
@@ -225,9 +231,9 @@ describe('rdme openapi', () => {
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
-      await expect(
-        openapi.run({ spec: require.resolve('@readme/oas-examples/2.0/json/petstore.json'), key })
-      ).resolves.toBe(successfulUpload);
+      const spec = require.resolve('@readme/oas-examples/2.0/json/petstore.json');
+
+      await expect(openapi.run({ spec, key })).resolves.toBe(successfulUpload(spec, 'Swagger'));
 
       return mock.done();
     });
@@ -251,9 +257,9 @@ describe('rdme openapi', () => {
       .basicAuth({ user: key })
       .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
-    await expect(openapi.run({ spec: './__tests__/__fixtures__/ref-oas/petstore.json', key, version })).resolves.toBe(
-      successfulUpload
-    );
+    const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
+
+    await expect(openapi.run({ spec, key, version })).resolves.toBe(successfulUpload(spec));
 
     expect(console.info).toHaveBeenCalledTimes(0);
 
@@ -280,14 +286,16 @@ describe('rdme openapi', () => {
       .basicAuth({ user: key })
       .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
+    const spec = 'petstore.json';
+
     await expect(
       openapi.run({
-        spec: 'petstore.json',
+        spec,
         key,
         version,
         workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
       })
-    ).resolves.toBe(successfulUpload);
+    ).resolves.toBe(successfulUpload(spec));
 
     expect(console.info).toHaveBeenCalledTimes(0);
 
@@ -460,7 +468,7 @@ describe('rdme swagger', () => {
   it('should run `rdme openapi`', () => {
     return expect(swagger.run({ spec: '', key, id, version })).rejects.toThrow(
       "We couldn't find an OpenAPI or Swagger definition.\n\n" +
-        'Run `rdme openapi ./path/to/api/definition` to upload an existing definition or `rdme oas init` to create a fresh one!'
+        'Please specify the path to your definition with `rdme openapi ./path/to/api/definition`.'
     );
   });
 });

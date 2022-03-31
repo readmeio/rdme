@@ -1,7 +1,7 @@
 const chalk = require('chalk');
 const fs = require('fs');
-const OASNormalize = require('oas-normalize');
 const { debug } = require('../lib/logger');
+const prepareOas = require('../lib/prepareOas');
 
 module.exports = class ValidateCommand {
   constructor() {
@@ -37,20 +37,8 @@ module.exports = class ValidateCommand {
     debug(`opts: ${JSON.stringify(opts)}`);
 
     async function validateSpec(specPath) {
-      const oas = new OASNormalize(specPath, { colorizeErrors: true, enablePaths: true });
-
-      return oas
-        .validate(false)
-        .then(api => {
-          if (api.swagger) {
-            return Promise.resolve(chalk.green(`${specPath} is a valid Swagger API definition!`));
-          }
-          return Promise.resolve(chalk.green(`${specPath} is a valid OpenAPI API definition!`));
-        })
-        .catch(err => {
-          debug(`raw validation error object: ${JSON.stringify(err)}`);
-          return Promise.reject(new Error(err.message));
-        });
+      const { specType } = await prepareOas(specPath);
+      return Promise.resolve(chalk.green(`${specPath} is a valid ${specType} API definition!`));
     }
 
     if (spec) {
@@ -73,7 +61,7 @@ module.exports = class ValidateCommand {
 
       reject(
         new Error(
-          "We couldn't find an OpenAPI or Swagger definition.\n\nIf you need help creating one run `rdme oas init`!"
+          "We couldn't find an OpenAPI or Swagger definition.\n\nPlease specify the path to your definition with `rdme validate ./path/to/api/definition`."
         )
       );
     });
