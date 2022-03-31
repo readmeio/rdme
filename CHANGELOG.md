@@ -1,3 +1,16 @@
+## <small>7.0.2 (2022-03-31)</small>
+
+* chore: update step name to reflect actual behavior ([393ddb1](https://github.com/readmeio/rdme/commit/393ddb1))
+* chore(deps-dev): bumping out of date dev deps (#485) ([d361a0b](https://github.com/readmeio/rdme/commit/d361a0b)), closes [#485](https://github.com/readmeio/rdme/issues/485)
+* chore(deps): bump minimist from 1.2.5 to 1.2.6 (#481) ([e23bfd0](https://github.com/readmeio/rdme/commit/e23bfd0)), closes [#481](https://github.com/readmeio/rdme/issues/481)
+* feat(openapi): specify spec path and type in success response (#480) ([3a32cc2](https://github.com/readmeio/rdme/commit/3a32cc2)), closes [#480](https://github.com/readmeio/rdme/issues/480)
+* fix: upgrading oas-normalize to support openapi 3.1 $ref + description (#484) ([7ffc1f5](https://github.com/readmeio/rdme/commit/7ffc1f5)), closes [#484](https://github.com/readmeio/rdme/issues/484)
+* docs: small language tweak to use an additional variable ([b92a55c](https://github.com/readmeio/rdme/commit/b92a55c))
+* docs: update GHA description ([bb69d37](https://github.com/readmeio/rdme/commit/bb69d37))
+* docs: use variables ([c84550f](https://github.com/readmeio/rdme/commit/c84550f))
+
+
+
 ## <small>7.0.1 (2022-03-18)</small>
 
 * fix: upgrading oas-normalize to fix a bug with a nested babel dep ([ec6f35a](https://github.com/readmeio/rdme/commit/ec6f35a))
