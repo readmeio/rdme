@@ -232,7 +232,7 @@ module.exports = class OpenAPICommand {
       reject(
         new Error(
           "We couldn't find an OpenAPI or Swagger definition.\n\n" +
-            'Run `rdme openapi ./path/to/api/definition` to upload an existing definition or `rdme oas init` to create a fresh one!'
+            'Please specify the path to your definition with `rdme openapi ./path/to/api/definition`.'
         )
       );
     });

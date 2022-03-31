@@ -61,7 +61,7 @@ module.exports = class ValidateCommand {
 
       reject(
         new Error(
-          "We couldn't find an OpenAPI or Swagger definition.\n\nIf you need help creating one run `rdme oas init`!"
+          "We couldn't find an OpenAPI or Swagger definition.\n\nPlease specify the path to your definition with `rdme validate ./path/to/api/definition`."
         )
       );
     });
