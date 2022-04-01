@@ -1,3 +1,11 @@
+## <small>7.0.3 (2022-04-01)</small>
+
+* fix: our broken set-version-output script (#488) ([832768c](https://github.com/readmeio/rdme/commit/832768c)), closes [#488](https://github.com/readmeio/rdme/issues/488)
+* feat: throwing error messaging on node 12 being unsupported (#486) ([e991ef6](https://github.com/readmeio/rdme/commit/e991ef6)), closes [#486](https://github.com/readmeio/rdme/issues/486)
+* chore(deps): bump debug from 4.3.3 to 4.3.4 (#487) ([d848ff4](https://github.com/readmeio/rdme/commit/d848ff4)), closes [#487](https://github.com/readmeio/rdme/issues/487)
+
+
+
 ## <small>7.0.2 (2022-03-31)</small>
 
 * chore: update step name to reflect actual behavior ([393ddb1](https://github.com/readmeio/rdme/commit/393ddb1))
