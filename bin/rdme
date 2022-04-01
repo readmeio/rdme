@@ -7,7 +7,7 @@ const updateNotifier = require('update-notifier');
 const pkg = require('../package.json');
 
 const isGHA = require('../src/lib/isGitHub');
-const { isSupportedNodeVersion } = require('../src/lib/nodeVersionUtils');
+const isSupportedNodeVersion = require('../src/lib/isSupportedNodeVersion');
 
 updateNotifier({ pkg }).notify();
 

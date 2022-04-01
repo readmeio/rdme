@@ -1,5 +1,5 @@
 const { exec } = require('child_process');
-const { isSupportedNodeVersion } = require('../src/lib/nodeVersionUtils');
+const isSupportedNodeVersion = require('../src/lib/isSupportedNodeVersion');
 const pkg = require('../package.json');
 
 describe('bin', () => {
