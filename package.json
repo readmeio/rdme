@@ -66,7 +66,7 @@
     "prettier": "^2.6.1"
   },
   "scripts": {
-    "lint": "eslint .",
+    "lint": "eslint . bin/rdme bin/set-version-output",
     "lint-docs": "alex .",
     "pretest": "npm run lint && npm run lint-docs",
     "prettier": "prettier --list-different --write \"./**/**.js\"",
