@@ -1,8 +1,9 @@
 const { exec } = require('child_process');
-const nodeVersion = require('parse-node-version')(process.version);
+const { isSupportedNodeVersion } = require('../src/lib/nodeVersionUtils');
+const pkg = require('../package.json');
 
 describe('bin', () => {
-  if (nodeVersion.major > 12) {
+  if (isSupportedNodeVersion(process.version)) {
     it('should show our help screen', async () => {
       expect.assertions(1);
 
@@ -19,7 +20,9 @@ describe('bin', () => {
 
       await new Promise(done => {
         exec(`node ${__dirname}/../bin/rdme`, (error, stdout, stderr) => {
-          expect(stderr).toContain("We're sorry, this release of rdme does not support your Node version of 12.");
+          expect(stderr).toContain(
+            `We're sorry, this release of rdme does not support your Node version of 12. We support the following versions: ${pkg.engines.node}`
+          );
           done();
         });
       });
