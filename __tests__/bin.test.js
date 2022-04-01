@@ -21,7 +21,7 @@ describe('bin', () => {
       await new Promise(done => {
         exec(`node ${__dirname}/../bin/rdme`, (error, stdout, stderr) => {
           expect(stderr).toContain(
-            `We're sorry, this release of rdme does not support your Node version of 12. We support the following versions: ${pkg.engines.node}`
+            `We're sorry, this release of rdme does not support Node.js v${process.version}. We support the following versions: ${pkg.engines.node}`
           );
           done();
         });
