@@ -47,7 +47,7 @@ If you're anything like us...
 
 The only required attributes are the `title` and `category`. To determine what your `category` value should be, you can use [the `Get all categories` endpoint](https://docs.readme.com/reference/getcategories) and grab the `id` value from the response.
 
-We automatically derive the page's slug via the file name (e.g. the file name `rdme.md` would become `/docs/rdme` in your ReadMe project). Note that our API uses [`slugify`](https://www.npmjs.com/package/slugify) to automatically handle certain characters (e.g. spaces), which may lead to unexpected syncing behavior if your file names don't match your page slugs. If you prefer to keep your page slugs different from your file name, you can manually set the slug value in the YAML front matter:
+We automatically derive the page's slug via the file name (e.g. the file name `rdme.md` would become `/docs/rdme` in your ReadMe project). Note that our API uses [`slugify`](https://www.npmjs.com/package/slugify) to automatically handle certain characters (e.g. spaces), which may lead to unexpected syncing behavior if your file names don't match your page slugs. If you prefer to keep your page slugs different from your file names, you can manually set the `slug` value in the YAML front matter:
 
 ```markdown
 ---
