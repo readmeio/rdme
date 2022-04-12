@@ -3,7 +3,7 @@ author: ReadMe
 branding:
   color: blue
   icon: book-open
-description: Sync OpenAPI (OAS) definitions and Markdown documentation from your GitHub repository to your ReadMe developer hub
+description: Sync OpenAPI/Swagger (OAS) definitions and Markdown documentation from your GitHub repository to your ReadMe developer hub
 inputs:
   rdme:
     description: Command to pass into rdme

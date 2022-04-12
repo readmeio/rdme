@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [14.x, 16.x]
+        node-version: [14.x, 16.x, 17.x]
 
     steps:
       - uses: actions/checkout@v3
@@ -23,6 +23,26 @@ jobs:
 
       - name: Run tests
         run: npm test
+
+  build-node12:
+    name: Test Suite (Node 12)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js 12
+        uses: actions/setup-node@v3
+        with:
+          node-version: 12
+
+      - name: Install deps
+        run: npm ci
+
+      # rdme doesn't work on Node 12 but we just want to run this single test to make sure that
+      # our "we don't support node 12" error is shown.
+      - name: Run tests
+        run: npx jest __tests__/bin.test.js
 
   action:
     name: GitHub Action Dry Run

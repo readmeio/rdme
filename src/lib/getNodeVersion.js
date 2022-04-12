@@ -4,12 +4,7 @@ const pkg = require('../../package.json');
  * @example 14
  * @returns {String} The maximum major Node.js version specified in the package.json
  */
-function extractNodeVersion() {
+module.exports = function getNodeVersion() {
   const { node } = pkg.engines;
-
-  const match = Array.from(node.matchAll(/\d+/g)).pop();
-
-  return match;
-}
-
-module.exports = extractNodeVersion;
+  return Array.from(node.matchAll(/\d+/g)).pop();
+};
