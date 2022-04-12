@@ -1,3 +1,10 @@
+## 7.1.0 (2022-04-12)
+
+* feat: extending support to node 17 (#490) ([3d3985d](https://github.com/readmeio/rdme/commit/3d3985d)), closes [#490](https://github.com/readmeio/rdme/issues/490)
+* fix: messy issues with nodeVersionUtils helper needing semver installed (#489) ([bccff2c](https://github.com/readmeio/rdme/commit/bccff2c)), closes [#489](https://github.com/readmeio/rdme/issues/489)
+
+
+
 ## <small>7.0.3 (2022-04-01)</small>
 
 * fix: our broken set-version-output script (#488) ([832768c](https://github.com/readmeio/rdme/commit/832768c)), closes [#488](https://github.com/readmeio/rdme/issues/488)
