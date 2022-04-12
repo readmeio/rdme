@@ -107,7 +107,10 @@ We'll dive into several full GitHub Workflow file examples below!
 
 ### Example: Syncing an OpenAPI Definition
 
-<div style="position: relative; padding-bottom: 62.5%; height: 0;"><iframe src="https://www.loom.com/embed/e32c20a9dc2f4eeeab42d0c18ba24478" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
+<a href="https://www.loom.com/share/e32c20a9dc2f4eeeab42d0c18ba24478">
+  <img src="https://cdn.loom.com/sessions/thumbnails/e32c20a9dc2f4eeeab42d0c18ba24478-with-play.gif">
+  <em>Demo: Syncing an OpenAPI definition from GitHub to ReadMe</em>
+</a>
 
 To sync an OpenAPI or Swagger definition, you'll first want to obtain a unique API definition ID from ReadMe so we know which definition you want to update on subsequent re-syncs. You can obtain this API definition ID in one of several ways, but we'll dive into two below: uploading a file directly into the ReadMe dashboard and using the `rdme` CLI locally.
 
