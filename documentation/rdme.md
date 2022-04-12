@@ -103,12 +103,13 @@ To execute this command via GitHub Actions, the step would look like this:
     rdme: openapi [path-to-file.json] --key=<<user>> --id=API_DEFINITION_ID
 ```
 
-We'll dive into several full GitHub Workflow file examples below!
+We'll dive into several full GitHub Workflow file examples (including a video demo) below!
 
 ### Example: Syncing an OpenAPI Definition
 
 <a href="https://www.loom.com/share/e32c20a9dc2f4eeeab42d0c18ba24478">
   <img src="https://cdn.loom.com/sessions/thumbnails/e32c20a9dc2f4eeeab42d0c18ba24478-with-play.gif">
+  <br>
   <em>Demo: Syncing an OpenAPI definition from GitHub to ReadMe</em>
 </a>
 
