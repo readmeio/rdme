@@ -18,7 +18,7 @@ const owlbert = () => {
   // http://asciiart.club
   return `                  📖 ${chalk.blue.bold(config.get('cli'))}
 
-    ${chalk.bold(`a utlity for interacting with ReadMe`)}
+    ${chalk.bold(`a utility for interacting with ReadMe`)}
        .
        .\\\\                          /.
       ’  ‘                        ‘ ‘

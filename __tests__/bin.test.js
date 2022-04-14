@@ -9,7 +9,7 @@ describe('bin', () => {
 
       await new Promise(done => {
         exec(`node ${__dirname}/../bin/rdme`, (error, stdout) => {
-          expect(stdout).toContain('a utlity for interacting with ReadMe');
+          expect(stdout).toContain('a utility for interacting with ReadMe');
           done();
         });
       });
