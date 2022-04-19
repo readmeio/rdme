@@ -17,7 +17,7 @@ updateNotifier({ pkg }).notify();
  * stop if we're being run with any Node version that we don't explicitly support.
  */
 if (!isSupportedNodeVersion(process.version)) {
-  const message = `We're sorry, this release of rdme does not support Node.js v${process.version}. We support the following versions: ${pkg.engines.node}`;
+  const message = `We're sorry, this release of rdme does not support Node.js ${process.version}. We support the following versions: ${pkg.engines.node}`;
   console.error(chalk.red(`\n${message}\n`));
   process.exit(1);
 }

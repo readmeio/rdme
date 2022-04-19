@@ -61,11 +61,11 @@ describe('cli', () => {
     });
 
     it('should print help', async () => {
-      await expect(cli(['--help'])).resolves.toMatchSnapshot();
+      await expect(cli(['--help'])).resolves.toContain('a utility for interacting with ReadMe');
     });
 
     it('should print help for the `-H` alias', async () => {
-      await expect(cli(['-H'])).resolves.toMatchSnapshot();
+      await expect(cli(['-H'])).resolves.toContain('a utility for interacting with ReadMe');
     });
 
     it('should print usage for a given command', async () => {

@@ -1,3 +1,11 @@
+## <small>7.1.1 (2022-04-13)</small>
+
+* fix: unsupported version error message having double "v"s (#492) ([c422efb](https://github.com/readmeio/rdme/commit/c422efb)), closes [#492](https://github.com/readmeio/rdme/issues/492)
+* docs: minor typo and formatting fix ([6ea59ea](https://github.com/readmeio/rdme/commit/6ea59ea))
+* docs(`docs`): clarify slug handling (#491) ([715140c](https://github.com/readmeio/rdme/commit/715140c)), closes [#491](https://github.com/readmeio/rdme/issues/491)
+
+
+
 ## 7.1.0 (2022-04-12)
 
 * feat: extending support to node 17 (#490) ([3d3985d](https://github.com/readmeio/rdme/commit/3d3985d)), closes [#490](https://github.com/readmeio/rdme/issues/490)

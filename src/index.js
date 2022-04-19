@@ -34,7 +34,7 @@ module.exports = processArgv => {
       name: 'version',
       alias: 'v',
       type: Boolean,
-      description: `Show the current ${config.get('cli')} version`,
+      description: `Show the current ${config.get('cli')} version (v${version})`,
     },
     { name: 'command', type: String, defaultOption: true },
   ];
