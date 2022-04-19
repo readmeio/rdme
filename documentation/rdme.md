@@ -113,6 +113,8 @@ We'll dive into several full GitHub Workflow file examples (including a video de
   <em>Demo: Syncing an OpenAPI definition from GitHub to ReadMe</em>
 </a>
 
+<br>
+
 To sync an OpenAPI or Swagger definition, you'll first want to obtain a unique API definition ID from ReadMe so we know which definition you want to update on subsequent re-syncs. You can obtain this API definition ID in one of several ways, but we'll dive into two below: uploading a file directly into the ReadMe dashboard and using the `rdme` CLI locally.
 
 <details>
