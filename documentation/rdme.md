@@ -248,7 +248,6 @@ pipelines:
         script:
           - npx -y rdme@RDME_VERSION openapi [path-to-file.json] --key=<<user>> --id=API_DEFINITION_ID
 ```
-
 ```yml GitLab CI (rdme-sync.gitlab-ci.yml)
 # Official framework image. Look for the different tagged releases at:
 # https://hub.docker.com/r/library/node/tags/
