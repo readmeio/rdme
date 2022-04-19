@@ -107,13 +107,17 @@ We'll dive into several full GitHub Workflow file examples (including a video de
 
 ### Example: Syncing an OpenAPI Definition
 
-<a href="https://www.loom.com/share/e32c20a9dc2f4eeeab42d0c18ba24478">
-  <img src="https://cdn.loom.com/sessions/thumbnails/e32c20a9dc2f4eeeab42d0c18ba24478-with-play.gif">
-  <br>
-  <em>Demo: Syncing an OpenAPI definition from GitHub to ReadMe</em>
-</a>
+<!--
+This is a custom HTML block that we use in ReadMe.
+We'll need this to render an iframe of the Loom video demo.
+You can see the video here: https://www.loom.com/share/e32c20a9dc2f4eeeab42d0c18ba24478
+-->
 
-<br>
+[block:html]
+{
+"html": "<div style=\"position: relative; padding-bottom: 62.5%; height: 0;\"><iframe src=\"https://www.loom.com/embed/e32c20a9dc2f4eeeab42d0c18ba24478\" frameborder=\"0\" webkitallowfullscreen mozallowfullscreen allowfullscreen style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%;\"></iframe></div>"
+}
+[/block]
 
 To sync an OpenAPI or Swagger definition, you'll first want to obtain a unique API definition ID from ReadMe so we know which definition you want to update on subsequent re-syncs. You can obtain this API definition ID in one of several ways, but we'll dive into two below: uploading a file directly into the ReadMe dashboard and using the `rdme` CLI locally.
 
@@ -244,6 +248,7 @@ pipelines:
         script:
           - npx -y rdme@RDME_VERSION openapi [path-to-file.json] --key=<<user>> --id=API_DEFINITION_ID
 ```
+
 ```yml GitLab CI (rdme-sync.gitlab-ci.yml)
 # Official framework image. Look for the different tagged releases at:
 # https://hub.docker.com/r/library/node/tags/
