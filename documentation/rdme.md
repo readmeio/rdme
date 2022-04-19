@@ -103,9 +103,21 @@ To execute this command via GitHub Actions, the step would look like this:
     rdme: openapi [path-to-file.json] --key=<<user>> --id=API_DEFINITION_ID
 ```
 
-We'll dive into several full GitHub Workflow file examples below!
+We'll dive into several full GitHub Workflow file examples (including a video demo) below!
 
 ### Example: Syncing an OpenAPI Definition
+
+<!--
+This is a custom HTML block that we use in ReadMe.
+We'll need this to render an iframe of the Loom video demo.
+You can see the video here: https://www.loom.com/share/e32c20a9dc2f4eeeab42d0c18ba24478
+-->
+
+[block:html]
+{
+"html": "<div style=\"position: relative; padding-bottom: 62.5%; height: 0;\"><iframe src=\"https://www.loom.com/embed/e32c20a9dc2f4eeeab42d0c18ba24478\" frameborder=\"0\" webkitallowfullscreen mozallowfullscreen allowfullscreen style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%;\"></iframe></div>"
+}
+[/block]
 
 To sync an OpenAPI or Swagger definition, you'll first want to obtain a unique API definition ID from ReadMe so we know which definition you want to update on subsequent re-syncs. You can obtain this API definition ID in one of several ways, but we'll dive into two below: uploading a file directly into the ReadMe dashboard and using the `rdme` CLI locally.
 
@@ -224,8 +236,13 @@ To use a GitHub secret in your `rdme` GitHub Action, first [create a new reposit
 
 Since `rdme` is a command-line tool at its core, you can use `rdme` to sync your documentation from virtually any CI/CD environment that runs shell commands—[Bitbucket Pipelines](https://support.atlassian.com/bitbucket-cloud/docs/get-started-with-bitbucket-pipelines/), [GitLab CI/CD](https://docs.gitlab.com/ee/ci/), you name it! You can do this by invoking `rdme` with `npx -y rdme@RDME_VERSION` in a Node.js environment. See below for several examples.
 
-<!-- Note: the two code blocks below must be joined, despite what VS Code's formatter tells you!-->
+<!--
+The two code blocks below must be joined (i.e. no newline in between) in order to render as tabbed code blocks in ReadMe.
 
+Unfortunately we need to ignore both code blocks entirely so Prettier doesn't separate them.
+-->
+
+<!-- prettier-ignore-start -->
 ```yml Bitbucket Pipelines (bitbucket-pipelines.yml)
 # Official framework image. Look for the different tagged releases at:
 # https://hub.docker.com/r/library/node/tags/
@@ -245,6 +262,7 @@ sync-via-rdme:
   script:
     - npx -y rdme@RDME_VERSION openapi [path-to-file.json] --key=<<user>> --id=API_DEFINITION_ID
 ```
+<!-- prettier-ignore-end -->
 
 ## Troubleshooting
 
