@@ -2,7 +2,7 @@ const pkg = require('../../package.json');
 
 /**
  * @example 14
- * @returns {String} The maximum major Node.js version specified in the package.json
+ * @returns {String} The major Node.js version specified in the package.json
  */
 module.exports = function getNodeVersion() {
   const { node } = pkg.engines;
