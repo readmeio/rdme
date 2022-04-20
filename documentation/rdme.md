@@ -110,6 +110,7 @@ We'll dive into several full GitHub Workflow file examples (including a video de
 <!--
 This is a custom HTML block that we use in ReadMe.
 We'll need this to render an iframe of the Loom video demo.
+Using our embedly-powered embed block renders an iframe that's way too tall, hence we're using HTML.
 You can see the video here: https://www.loom.com/share/e32c20a9dc2f4eeeab42d0c18ba24478
 -->
 
