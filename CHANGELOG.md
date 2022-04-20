@@ -1,3 +1,12 @@
+## 7.2.0 (2022-04-20)
+
+* feat: adding support for node 18 (#495) ([774407d](https://github.com/readmeio/rdme/commit/774407d)), closes [#495](https://github.com/readmeio/rdme/issues/495)
+* feat(help): typos, add `rdme` version (#493) ([fddb614](https://github.com/readmeio/rdme/commit/fddb614)), closes [#493](https://github.com/readmeio/rdme/issues/493)
+* chore: add clarifying comment ([d331343](https://github.com/readmeio/rdme/commit/d331343))
+* docs: embed loom video (#494) ([b799547](https://github.com/readmeio/rdme/commit/b799547)), closes [#494](https://github.com/readmeio/rdme/issues/494)
+
+
+
 ## <small>7.1.1 (2022-04-13)</small>
 
 * fix: unsupported version error message having double "v"s (#492) ([c422efb](https://github.com/readmeio/rdme/commit/c422efb)), closes [#492](https://github.com/readmeio/rdme/issues/492)
