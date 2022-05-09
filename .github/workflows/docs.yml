@@ -51,4 +51,4 @@ jobs:
         # Docs: https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#example-using-versioned-actions
         uses: readmeio/rdme@main
         with:
-          rdme: docs ./documentation --key=${{ secrets.README_PROD_PROJECT_API_KEY }} --version=2.0
+          rdme: docs ./documentation --key=${{ secrets.README_DEVELOPERS_API_KEY }} --version=2.0
