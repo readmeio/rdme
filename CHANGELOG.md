@@ -1,3 +1,24 @@
+## <small>7.2.1 (2022-06-15)</small>
+
+* chore: small comment tweak ([d086cb0](https://github.com/readmeio/rdme/commit/d086cb0))
+* chore(deps-dev): bump @readme/eslint-config from 8.7.0 to 8.7.3 (#505) ([53e2c93](https://github.com/readmeio/rdme/commit/53e2c93)), closes [#505](https://github.com/readmeio/rdme/issues/505)
+* chore(deps-dev): bump @readme/eslint-config from 8.7.3 to 8.7.5 (#514) ([589b82b](https://github.com/readmeio/rdme/commit/589b82b)), closes [#514](https://github.com/readmeio/rdme/issues/514)
+* chore(deps-dev): bump @readme/oas-examples from 5.1.1 to 5.2.0 (#512) ([42ac1d4](https://github.com/readmeio/rdme/commit/42ac1d4)), closes [#512](https://github.com/readmeio/rdme/issues/512)
+* chore(deps-dev): bump eslint from 8.13.0 to 8.14.0 (#502) ([de2a611](https://github.com/readmeio/rdme/commit/de2a611)), closes [#502](https://github.com/readmeio/rdme/issues/502)
+* chore(deps-dev): bump eslint from 8.14.0 to 8.16.0 (#511) ([f64cf9b](https://github.com/readmeio/rdme/commit/f64cf9b)), closes [#511](https://github.com/readmeio/rdme/issues/511)
+* chore(deps-dev): bump jest from 27.5.1 to 28.0.3 (#501) ([09f7f5f](https://github.com/readmeio/rdme/commit/09f7f5f)), closes [#501](https://github.com/readmeio/rdme/issues/501)
+* chore(deps-dev): bump jest from 28.0.3 to 28.1.0 (#513) ([5409dd6](https://github.com/readmeio/rdme/commit/5409dd6)), closes [#513](https://github.com/readmeio/rdme/issues/513)
+* chore(deps-dev): bumping out of date dev deps ([97816f3](https://github.com/readmeio/rdme/commit/97816f3))
+* chore(deps): bump @actions/core from 1.6.0 to 1.7.0 (#503) ([8027bec](https://github.com/readmeio/rdme/commit/8027bec)), closes [#503](https://github.com/readmeio/rdme/issues/503)
+* chore(deps): bump @actions/core from 1.7.0 to 1.8.2 (#510) ([49b0c70](https://github.com/readmeio/rdme/commit/49b0c70)), closes [#510](https://github.com/readmeio/rdme/issues/510)
+* chore(deps): bump command-line-usage from 6.1.1 to 6.1.3 (#504) ([456c0f7](https://github.com/readmeio/rdme/commit/456c0f7)), closes [#504](https://github.com/readmeio/rdme/issues/504)
+* chore(deps): bump github/codeql-action from 1 to 2 (#500) ([1be275f](https://github.com/readmeio/rdme/commit/1be275f)), closes [#500](https://github.com/readmeio/rdme/issues/500)
+* fix: don't log API Key (#516) ([556834c](https://github.com/readmeio/rdme/commit/556834c)), closes [#516](https://github.com/readmeio/rdme/issues/516)
+* docs: make slug guidance a header section ([4a51cf1](https://github.com/readmeio/rdme/commit/4a51cf1))
+* ci: use org secret instead ([6dbcd4c](https://github.com/readmeio/rdme/commit/6dbcd4c))
+
+
+
 ## 7.2.0 (2022-04-20)
 
 * feat: adding support for node 18 (#495) ([774407d](https://github.com/readmeio/rdme/commit/774407d)), closes [#495](https://github.com/readmeio/rdme/issues/495)
