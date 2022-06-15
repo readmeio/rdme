@@ -101,7 +101,7 @@ module.exports = class OpenAPICommand {
             `To update your ${specType} definition, run the following:`,
             '',
             // eslint-disable-next-line no-underscore-dangle
-            `\t${chalk.green(`rdme openapi ${specPath} --key=${key} --id=${body._id}`)}`,
+            `\t${chalk.green(`rdme openapi ${specPath} --key=<key> --id=${body._id}`)}`,
           ].join('\n')
         );
       }
