@@ -21,7 +21,7 @@ const successfulMessageBase = (specPath, specType) => [
   '',
   `To update your ${specType} definition, run the following:`,
   '',
-  `\t${chalk.green(`rdme openapi ${specPath} --key=${key} --id=1`)}`,
+  `\t${chalk.green(`rdme openapi ${specPath} --key=<key> --id=1`)}`,
 ];
 const successfulUpload = (specPath, specType = 'OpenAPI') =>
   [
