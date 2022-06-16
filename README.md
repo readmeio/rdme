@@ -110,7 +110,14 @@ rdme openapi [path-to-file.json] --version={project-version}
 
 #### Omitting the File Path
 
-If you run `rdme` within a directory that contains your OpenAPI or Swagger definition, you can omit the file path. We will then look for a file with the following names, and upload that: `openapi.json`, `openapi.yaml`, `swagger.json`, and `swagger.yaml`.
+If you run `rdme` within a directory that contains your OpenAPI or Swagger definition, you can omit the file path. We will then look for a file with the following names, and upload that:
+
+- `openapi.json`
+- `openapi.yaml`
+- `openapi.yml`
+- `swagger.json`
+- `swagger.yaml`
+- `swagger.yml`
 
 ```sh
 rdme openapi
