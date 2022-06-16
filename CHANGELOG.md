@@ -1,3 +1,9 @@
+## <small>7.2.2 (2022-06-16)</small>
+
+* feat: support `.yml` files for auto-uploading (#517) ([467d5de](https://github.com/readmeio/rdme/commit/467d5de)), closes [#517](https://github.com/readmeio/rdme/issues/517)
+
+
+
 ## <small>7.2.1 (2022-06-15)</small>
 
 * chore: small comment tweak ([d086cb0](https://github.com/readmeio/rdme/commit/d086cb0))
