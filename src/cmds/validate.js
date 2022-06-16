@@ -48,7 +48,7 @@ module.exports = class ValidateCommand {
     // If the user didn't supply an API specification, let's try to locate what they've got, and validate that. If they
     // don't have any, let's let the user know how they can get one going.
     return new Promise((resolve, reject) => {
-      ['swagger.json', 'swagger.yaml', 'openapi.json', 'openapi.yaml'].forEach(file => {
+      ['swagger.json', 'swagger.yaml', 'swagger.yml', 'openapi.json', 'openapi.yaml', 'openapi.yml'].forEach(file => {
         debug(`looking for definition with filename: ${file}`);
         if (!fs.existsSync(file)) {
           debug(`${file} not found`);
