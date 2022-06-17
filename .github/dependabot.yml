@@ -1,7 +1,7 @@
 version: 2
 updates:
   - package-ecosystem: github-actions
-    directory: "/"
+    directory: '/'
     schedule:
       interval: monthly
     reviewers:
@@ -13,7 +13,7 @@ updates:
       prefix-development: chore(deps-dev)
 
   - package-ecosystem: npm
-    directory: "/"
+    directory: '/'
     schedule:
       interval: monthly
     open-pull-requests-limit: 10
@@ -28,11 +28,13 @@ updates:
       # All of these packages are now ESM-only and can't be used here without a rewrite.
       - dependency-name: chalk
         versions:
-          - ">= 5"
+          - '>= 5'
       - dependency-name: configstore
         versions:
-          - ">= 6"
+          - '>= 6'
       - dependency-name: node-fetch
         versions:
-          - ">= 3"
-
+          - '>= 3'
+      - dependency-name: ora
+        versions:
+          - '>= 6'
