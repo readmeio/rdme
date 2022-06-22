@@ -1,13 +1,11 @@
 const { handleRes } = require('./fetch');
 const config = require('config');
-const { debug } = require('./logger');
+const { debug, oraOptions } = require('./logger');
 const fetch = require('./fetch');
 const FormData = require('form-data');
 const fs = require('fs');
 const ora = require('ora');
 const { file: tmpFile } = require('tmp-promise');
-
-const testing = process.env.NODE_ENV === 'testing';
 
 const text = 'Uploading API Definition to ReadMe...';
 
@@ -18,7 +16,7 @@ const text = 'Uploading API Definition to ReadMe...';
  * @returns {String} a UUID in the API registry
  */
 module.exports = async function streamSpecToRegistry(spec) {
-  const spinner = ora({ isSilent: testing, text }).start();
+  const spinner = ora({ text, ...oraOptions() }).start();
   // Create a temporary file to write the bundled spec to,
   // which we will then stream into the form data body
   const { path } = await tmpFile({ prefix: 'rdme-openapi-', postfix: '.json' });
