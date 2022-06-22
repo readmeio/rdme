@@ -1,8 +1,6 @@
-const { debug } = require('./logger');
+const { debug, oraOptions } = require('./logger');
 const OASNormalize = require('oas-normalize');
 const ora = require('ora');
-
-const testing = process.env.NODE_ENV === 'testing';
 
 /**
  * Normalizes, validates, and (optionally) bundles an OpenAPI definition.
@@ -13,7 +11,7 @@ const testing = process.env.NODE_ENV === 'testing';
  */
 module.exports = async function prepare(path, bundle = false) {
   const text = `Validating API definition located at ${path}...`;
-  const spinner = ora({ isSilent: testing, text }).start();
+  const spinner = ora({ text, ...oraOptions() }).start();
 
   debug(`about to normalize spec located at ${path}`);
   const oas = new OASNormalize(path, { colorizeErrors: true, enablePaths: true });
