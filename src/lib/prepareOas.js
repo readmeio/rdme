@@ -22,7 +22,7 @@ module.exports = async function prepare(path, bundle = false) {
     debug(`raw validation error object: ${JSON.stringify(err)}`);
     throw err;
   });
-  spinner.succeed(`${text} done!`);
+  spinner.succeed(`${text} done! ✅`);
 
   debug('👇👇👇👇👇 spec validated! logging spec below 👇👇👇👇👇');
   debug(api);

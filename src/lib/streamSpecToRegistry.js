@@ -39,7 +39,7 @@ module.exports = async function streamSpecToRegistry(spec) {
   return fetch(`${config.get('host')}/api/v1/api-registry`, options)
     .then(res => handleRes(res))
     .then(body => {
-      spinner.stopAndPersist({ symbol: '🚀', text: `${text} done!` });
+      spinner.succeed(`${text} done! 🚀`);
       return body.registryUUID;
     })
     .catch(e => {

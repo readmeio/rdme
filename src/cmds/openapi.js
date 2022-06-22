@@ -3,9 +3,10 @@ const chalk = require('chalk');
 const { cleanHeaders } = require('../lib/fetch');
 const config = require('config');
 const fs = require('fs');
-const { debug } = require('../lib/logger');
+const { debug, oraOptions } = require('../lib/logger');
 const fetch = require('../lib/fetch');
 const { getProjectVersion } = require('../lib/versionSelect');
+const ora = require('ora');
 const parse = require('parse-link-header');
 const prepareOas = require('../lib/prepareOas');
 const { prompt } = require('enquirer');
@@ -54,6 +55,7 @@ module.exports = class OpenAPICommand {
     const { key, id, spec, version, workingDirectory } = opts;
     let selectedVersion;
     let isUpdate;
+    const spinner = ora({ ...oraOptions() });
 
     debug(`command: ${this.command}`);
     debug(`opts: ${JSON.stringify(opts)}`);
@@ -138,8 +140,14 @@ module.exports = class OpenAPICommand {
 
       function createSpec() {
         options.method = 'post';
+        const text = 'Creating the docs for your API specification in ReadMe...';
+        spinner.start(text);
         return fetch(`${config.get('host')}/api/v1/api-specification`, options).then(res => {
-          if (res.ok) return success(res);
+          if (res.ok) {
+            spinner.succeed(`${text} done! 🦉`);
+            return success(res);
+          }
+          spinner.fail();
           return error(res);
         });
       }
@@ -147,8 +155,14 @@ module.exports = class OpenAPICommand {
       function updateSpec(specId) {
         isUpdate = true;
         options.method = 'put';
+        const text = 'Updating the docs for your API specification in ReadMe...';
+        spinner.start(text);
         return fetch(`${config.get('host')}/api/v1/api-specification/${specId}`, options).then(res => {
-          if (res.ok) return success(res);
+          if (res.ok) {
+            spinner.succeed(`${text} done! 🦉`);
+            return success(res);
+          }
+          spinner.fail();
           return error(res);
         });
       }
