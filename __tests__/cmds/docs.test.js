@@ -70,14 +70,14 @@ describe('rdme docs', () => {
     let anotherDoc;
 
     beforeEach(() => {
-      let fileContents = fs.readFileSync(path.join(fixturesDir, `/existing-docs/simple-doc.md`));
+      let fileContents = fs.readFileSync(path.join(fixturesDir, '/existing-docs/simple-doc.md'));
       simpleDoc = {
         slug: 'simple-doc',
         doc: frontMatter(fileContents),
         hash: hashFileContents(fileContents),
       };
 
-      fileContents = fs.readFileSync(path.join(fixturesDir, `/existing-docs/subdir/another-doc.md`));
+      fileContents = fs.readFileSync(path.join(fixturesDir, '/existing-docs/subdir/another-doc.md'));
       anotherDoc = {
         slug: 'another-doc',
         doc: frontMatter(fileContents),
