@@ -137,6 +137,8 @@ describe('rdme openapi', () => {
       return mock.done();
     });
 
+    it.todo('should test spec selection prompts');
+
     it('should bundle and upload the expected content', async () => {
       let requestBody = null;
       const registryUUID = getRandomRegistryId();
