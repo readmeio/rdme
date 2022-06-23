@@ -409,7 +409,7 @@ describe('rdme openapi', () => {
         .post('/api/v1/api-specification', { registryUUID })
         .delayConnection(1000)
         .basicAuth({ user: key })
-        .reply(500, errorObject);
+        .reply(400, errorObject);
 
       await expect(
         openapi.run({
