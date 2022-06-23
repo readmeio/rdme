@@ -140,7 +140,7 @@ module.exports = class OpenAPICommand {
 
       function createSpec() {
         options.method = 'post';
-        const text = 'Creating the docs for your API specification in ReadMe...';
+        const text = 'Creating your API docs in ReadMe...';
         spinner.start(text);
         return fetch(`${config.get('host')}/api/v1/api-specification`, options).then(res => {
           if (res.ok) {
@@ -155,7 +155,7 @@ module.exports = class OpenAPICommand {
       function updateSpec(specId) {
         isUpdate = true;
         options.method = 'put';
-        const text = 'Updating the docs for your API specification in ReadMe...';
+        const text = 'Updating your API docs in ReadMe...';
         spinner.start(text);
         return fetch(`${config.get('host')}/api/v1/api-specification/${specId}`, options).then(res => {
           if (res.ok) {
