@@ -1,19 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`rdme validate error handling should throw an error if an in valid Swagger definition is supplied 1`] = `
-[SyntaxError: Swagger schema validation failed.
-
-ADDITIONAL PROPERTY must NOT have additional properties
-
-  23 |         "description": "Find out more",
-  24 |         "url": "http://swagger.io",
-> 25 |         "this-shouldnt-be-here": true
-     |         ^^^^^^^^^^^^^^^^^^^^^^^ 😲  this-shouldnt-be-here is not expected to be here!
-  26 |       }
-  27 |     }
-  28 |   ],]
-`;
-
 exports[`rdme validate error handling should throw an error if an invalid OpenAPI 3.1 definition is supplied 1`] = `
 [SyntaxError: OpenAPI schema validation failed.
 
@@ -26,4 +12,18 @@ REQUIRED must have required property 'name'
   27 |         "type": "mutualTLS"
   28 |       }
   29 |     }]
+`;
+
+exports[`rdme validate error handling should throw an error if an invalid Swagger definition is supplied 1`] = `
+[SyntaxError: Swagger schema validation failed.
+
+ADDITIONAL PROPERTY must NOT have additional properties
+
+  23 |         "description": "Find out more",
+  24 |         "url": "http://swagger.io",
+> 25 |         "this-shouldnt-be-here": true
+     |         ^^^^^^^^^^^^^^^^^^^^^^^ 😲  this-shouldnt-be-here is not expected to be here!
+  26 |       }
+  27 |     }
+  28 |   ],]
 `;

@@ -75,7 +75,7 @@ describe('rdme validate', () => {
       return expect(validate.run({ spec: './__tests__/__fixtures__/invalid-oas-3.1.json' })).rejects.toMatchSnapshot();
     });
 
-    it('should throw an error if an in valid Swagger definition is supplied', () => {
+    it('should throw an error if an invalid Swagger definition is supplied', () => {
       return expect(validate.run({ spec: './__tests__/__fixtures__/invalid-swagger.json' })).rejects.toMatchSnapshot();
     });
   });
