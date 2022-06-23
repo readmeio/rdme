@@ -138,6 +138,77 @@ describe('rdme openapi', () => {
       fs.unlinkSync('./swagger.json');
       return mock.done();
     });
+
+    it('should bundle and upload the expected content', async () => {
+      let requestBody = null;
+      const registryUUID = getRandomRegistryId();
+      const mock = getApiNock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version: '1.0.0' })
+        .post('/api/v1/api-registry', body => {
+          requestBody = body.substring(body.indexOf('{'), body.lastIndexOf('}') + 1);
+          requestBody = JSON.parse(requestBody);
+
+          return body.match('form-data; name="spec"');
+        })
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+        .get('/api/v1/api-specification')
+        .basicAuth({ user: key })
+        .reply(200, [])
+        .post('/api/v1/api-specification', { registryUUID })
+        .basicAuth({ user: key })
+        .reply(201, { _id: 1 }, { location: exampleRefLocation });
+
+      const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
+
+      await expect(openapi.run({ spec, key, version })).resolves.toBe(successfulUpload(spec));
+
+      expect(console.info).toHaveBeenCalledTimes(0);
+
+      expect(requestBody).toMatchSnapshot();
+
+      return mock.done();
+    });
+
+    it('should use specified working directory and upload the expected content', async () => {
+      let requestBody = null;
+      const registryUUID = getRandomRegistryId();
+      const mock = getApiNock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version: '1.0.0' })
+        .post('/api/v1/api-registry', body => {
+          requestBody = body.substring(body.indexOf('{'), body.lastIndexOf('}') + 1);
+          requestBody = JSON.parse(requestBody);
+
+          return body.match('form-data; name="spec"');
+        })
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+        .get('/api/v1/api-specification')
+        .basicAuth({ user: key })
+        .reply(200, [])
+        .post('/api/v1/api-specification', { registryUUID })
+        .basicAuth({ user: key })
+        .reply(201, { _id: 1 }, { location: exampleRefLocation });
+
+      const spec = 'petstore.json';
+
+      await expect(
+        openapi.run({
+          spec,
+          key,
+          version,
+          workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
+        })
+      ).resolves.toBe(successfulUpload(spec));
+
+      expect(console.info).toHaveBeenCalledTimes(0);
+
+      expect(requestBody).toMatchSnapshot();
+
+      return mock.done();
+    });
   });
 
   describe('updates / resyncs', () => {
@@ -259,77 +330,6 @@ describe('rdme openapi', () => {
 
       return mock.done();
     });
-  });
-
-  it('should bundle and upload the expected content', async () => {
-    let requestBody = null;
-    const registryUUID = getRandomRegistryId();
-    const mock = getApiNock()
-      .get(`/api/v1/version/${version}`)
-      .basicAuth({ user: key })
-      .reply(200, { version: '1.0.0' })
-      .post('/api/v1/api-registry', body => {
-        requestBody = body.substring(body.indexOf('{'), body.lastIndexOf('}') + 1);
-        requestBody = JSON.parse(requestBody);
-
-        return body.match('form-data; name="spec"');
-      })
-      .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
-      .get('/api/v1/api-specification')
-      .basicAuth({ user: key })
-      .reply(200, [])
-      .post('/api/v1/api-specification', { registryUUID })
-      .basicAuth({ user: key })
-      .reply(201, { _id: 1 }, { location: exampleRefLocation });
-
-    const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
-
-    await expect(openapi.run({ spec, key, version })).resolves.toBe(successfulUpload(spec));
-
-    expect(console.info).toHaveBeenCalledTimes(0);
-
-    expect(requestBody).toMatchSnapshot();
-
-    return mock.done();
-  });
-
-  it('should use specified working directory and upload the expected content', async () => {
-    let requestBody = null;
-    const registryUUID = getRandomRegistryId();
-    const mock = getApiNock()
-      .get(`/api/v1/version/${version}`)
-      .basicAuth({ user: key })
-      .reply(200, { version: '1.0.0' })
-      .post('/api/v1/api-registry', body => {
-        requestBody = body.substring(body.indexOf('{'), body.lastIndexOf('}') + 1);
-        requestBody = JSON.parse(requestBody);
-
-        return body.match('form-data; name="spec"');
-      })
-      .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
-      .get('/api/v1/api-specification')
-      .basicAuth({ user: key })
-      .reply(200, [])
-      .post('/api/v1/api-specification', { registryUUID })
-      .basicAuth({ user: key })
-      .reply(201, { _id: 1 }, { location: exampleRefLocation });
-
-    const spec = 'petstore.json';
-
-    await expect(
-      openapi.run({
-        spec,
-        key,
-        version,
-        workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-      })
-    ).resolves.toBe(successfulUpload(spec));
-
-    expect(console.info).toHaveBeenCalledTimes(0);
-
-    expect(requestBody).toMatchSnapshot();
-
-    return mock.done();
   });
 
   describe('error handling', () => {

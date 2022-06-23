@@ -14,7 +14,7 @@ REQUIRED must have required property 'name'
   29 |     }]
 `;
 
-exports[`rdme openapi should bundle and upload the expected content 1`] = `
+exports[`rdme openapi upload should bundle and upload the expected content 1`] = `
 Object {
   "components": Object {
     "securitySchemes": Object {
@@ -250,7 +250,7 @@ Object {
 }
 `;
 
-exports[`rdme openapi should use specified working directory and upload the expected content 1`] = `
+exports[`rdme openapi upload should use specified working directory and upload the expected content 1`] = `
 Object {
   "components": Object {
     "securitySchemes": Object {
