@@ -17,6 +17,7 @@ module.exports.oraOptions = function oraOptions() {
   // Disables spinner in tests so it doesn't pollute test output
   const opts = { isSilent: process.env.NODE_ENV === 'testing' };
   // Cleans up ora output so it prints nicely alongside debug logs
+  /* istanbul ignore next */
   if (debugPackage.enabled) opts.isEnabled = false;
   return opts;
 };
