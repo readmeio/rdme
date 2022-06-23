@@ -1,3 +1,15 @@
+## 7.3.0 (2022-06-23)
+
+* chore(deps-dev): bump @readme/oas-examples from 5.3.0 to 5.4.0 (#524) ([6fd6fc4](https://github.com/readmeio/rdme/commit/6fd6fc4)), closes [#524](https://github.com/readmeio/rdme/issues/524)
+* chore(deps-dev): eslint config and friends ([a0ee623](https://github.com/readmeio/rdme/commit/a0ee623))
+* chore(deps): bump @actions/core from 1.8.2 to 1.9.0 (#527) ([c9f2398](https://github.com/readmeio/rdme/commit/c9f2398)), closes [#527](https://github.com/readmeio/rdme/issues/527)
+* fix: eslint issues ([9791450](https://github.com/readmeio/rdme/commit/9791450))
+* test(openapi/validate): cleanup 🧹  (#520) ([66e8efe](https://github.com/readmeio/rdme/commit/66e8efe)), closes [#520](https://github.com/readmeio/rdme/issues/520)
+* perf(openapi): upload improvements (#518) ([e1aeac0](https://github.com/readmeio/rdme/commit/e1aeac0)), closes [#518](https://github.com/readmeio/rdme/issues/518)
+* ci(CodeQL): add config (#521) ([6dc896c](https://github.com/readmeio/rdme/commit/6dc896c)), closes [#521](https://github.com/readmeio/rdme/issues/521)
+
+
+
 ## <small>7.2.2 (2022-06-16)</small>
 
 * feat: support `.yml` files for auto-uploading (#517) ([467d5de](https://github.com/readmeio/rdme/commit/467d5de)), closes [#517](https://github.com/readmeio/rdme/issues/517)
