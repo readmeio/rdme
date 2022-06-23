@@ -1,17 +1,17 @@
+const APIError = require('../lib/apiError');
 const chalk = require('chalk');
-const fs = require('fs');
+const { cleanHeaders } = require('../lib/fetch');
 const config = require('config');
+const fs = require('fs');
+const { debug, oraOptions } = require('../lib/logger');
+const fetch = require('../lib/fetch');
+const { getProjectVersion } = require('../lib/versionSelect');
+const ora = require('ora');
+const parse = require('parse-link-header');
+const prepareOas = require('../lib/prepareOas');
 const { prompt } = require('enquirer');
 const promptOpts = require('../lib/prompts');
-const APIError = require('../lib/apiError');
-const { getProjectVersion } = require('../lib/versionSelect');
-const fetch = require('../lib/fetch');
-const { cleanHeaders } = require('../lib/fetch');
-const FormData = require('form-data');
-const parse = require('parse-link-header');
-const { file: tmpFile } = require('tmp-promise');
-const { debug } = require('../lib/logger');
-const prepareOas = require('../lib/prepareOas');
+const streamSpecToRegistry = require('../lib/streamSpecToRegistry');
 
 module.exports = class OpenAPICommand {
   constructor() {
@@ -55,6 +55,7 @@ module.exports = class OpenAPICommand {
     const { key, id, spec, version, workingDirectory } = opts;
     let selectedVersion;
     let isUpdate;
+    const spinner = ora({ ...oraOptions() });
 
     debug(`command: ${this.command}`);
     debug(`opts: ${JSON.stringify(opts)}`);
@@ -126,29 +127,27 @@ module.exports = class OpenAPICommand {
         }
       }
 
-      // Create a temporary file to write the bundled spec to,
-      // which we will then stream into the form data body
-      const { path } = await tmpFile({ prefix: 'rdme-openapi-', postfix: '.json' });
-      debug(`creating temporary file at ${path}`);
-      await fs.writeFileSync(path, bundledSpec);
-      const stream = fs.createReadStream(path);
-
-      debug('file and stream created, streaming into form data payload');
-      const formData = new FormData();
-      formData.append('spec', stream);
+      const registryUUID = await streamSpecToRegistry(bundledSpec);
 
       const options = {
         headers: cleanHeaders(key, {
-          'x-readme-version': versionCleaned,
           Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'x-readme-version': versionCleaned,
         }),
-        body: formData,
+        body: JSON.stringify({ registryUUID }),
       };
 
       function createSpec() {
         options.method = 'post';
+        const text = 'Creating your API docs in ReadMe...';
+        spinner.start(text);
         return fetch(`${config.get('host')}/api/v1/api-specification`, options).then(res => {
-          if (res.ok) return success(res);
+          if (res.ok) {
+            spinner.succeed(`${text} done! 🦉`);
+            return success(res);
+          }
+          spinner.fail();
           return error(res);
         });
       }
@@ -156,8 +155,14 @@ module.exports = class OpenAPICommand {
       function updateSpec(specId) {
         isUpdate = true;
         options.method = 'put';
+        const text = 'Updating your API docs in ReadMe...';
+        spinner.start(text);
         return fetch(`${config.get('host')}/api/v1/api-specification/${specId}`, options).then(res => {
-          if (res.ok) return success(res);
+          if (res.ok) {
+            spinner.succeed(`${text} done! 🦉`);
+            return success(res);
+          }
+          spinner.fail();
           return error(res);
         });
       }

@@ -50,6 +50,7 @@
     "node-fetch": "^2.6.1",
     "oas-normalize": "^6.0.0",
     "open": "^8.2.1",
+    "ora": "^5.4.1",
     "parse-link-header": "^2.0.0",
     "read": "^1.0.7",
     "semver": "^7.0.0",

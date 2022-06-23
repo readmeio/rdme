@@ -43,6 +43,8 @@ const getCommandOutput = () => {
   return [console.warn.mock.calls.join('\n\n'), console.info.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
 };
 
+const getRandomRegistryId = () => Math.random().toString(36).substring(2);
+
 describe('rdme openapi', () => {
   beforeAll(() => nock.disableNetConnect());
 
@@ -69,14 +71,18 @@ describe('rdme openapi', () => {
       ['OpenAPI 3.1', 'json', '3.1', 'OpenAPI'],
       ['OpenAPI 3.1', 'yaml', '3.1', 'OpenAPI'],
     ])('should support uploading a %s definition (format: %s)', async (_, format, specVersion, type) => {
+      const registryUUID = getRandomRegistryId();
+
       const mock = getApiNock()
+        .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+        .reply(201, { registryUUID, spec: { openapi: specVersion } })
         .get('/api/v1/api-specification')
         .basicAuth({ user: key })
         .reply(200, [])
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version: '1.0.0' })
-        .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
+        .post('/api/v1/api-specification', { registryUUID })
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
@@ -98,17 +104,21 @@ describe('rdme openapi', () => {
     it('should discover and upload an API definition if none is provided', async () => {
       promptHandler.createOasPrompt.mockResolvedValue({ option: 'create' });
 
+      const registryUUID = getRandomRegistryId();
+
       const mock = getApiNock()
         .get('/api/v1/version')
         .basicAuth({ user: key })
         .reply(200, [{ version }])
+        .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
         .post('/api/v1/version')
         .basicAuth({ user: key })
         .reply(200, { from: '1.0.1', version: '1.0.1' })
         .get('/api/v1/api-specification')
         .basicAuth({ user: key })
         .reply(200, [])
-        .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
+        .post('/api/v1/api-specification', { registryUUID })
         .delayConnection(1000)
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
@@ -139,8 +149,12 @@ describe('rdme openapi', () => {
       ['OpenAPI 3.1', 'json', '3.1', 'OpenAPI'],
       ['OpenAPI 3.1', 'yaml', '3.1', 'OpenAPI'],
     ])('should support updating a %s definition (format: %s)', async (_, format, specVersion, type) => {
+      const registryUUID = getRandomRegistryId();
+
       const mock = getApiNock()
-        .put(`/api/v1/api-specification/${id}`, body => body.match('form-data; name="spec"'))
+        .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+        .reply(201, { registryUUID, spec: { openapi: specVersion } })
+        .put(`/api/v1/api-specification/${id}`, { registryUUID })
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
@@ -159,8 +173,12 @@ describe('rdme openapi', () => {
     });
 
     it('should return warning if providing `id` and `version`', async () => {
+      const registryUUID = getRandomRegistryId();
+
       const mock = getApiNock()
-        .put(`/api/v1/api-specification/${id}`, body => body.match('form-data; name="spec"'))
+        .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+        .put(`/api/v1/api-specification/${id}`, { registryUUID })
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
@@ -217,6 +235,8 @@ describe('rdme openapi', () => {
         newVersion: '1.0.1',
       });
 
+      const registryUUID = getRandomRegistryId();
+
       const mock = getApiNock()
         .get('/api/v1/version')
         .basicAuth({ user: key })
@@ -224,10 +244,12 @@ describe('rdme openapi', () => {
         .post('/api/v1/version')
         .basicAuth({ user: key })
         .reply(200, { from: '1.0.0', version: '1.0.1' })
+        .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
         .get('/api/v1/api-specification')
         .basicAuth({ user: key })
         .reply(200, [])
-        .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
+        .post('/api/v1/api-specification', { registryUUID })
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
@@ -241,19 +263,22 @@ describe('rdme openapi', () => {
 
   it('should bundle and upload the expected content', async () => {
     let requestBody = null;
+    const registryUUID = getRandomRegistryId();
     const mock = getApiNock()
-      .get('/api/v1/api-specification')
-      .basicAuth({ user: key })
-      .reply(200, [])
       .get(`/api/v1/version/${version}`)
       .basicAuth({ user: key })
       .reply(200, { version: '1.0.0' })
-      .post('/api/v1/api-specification', body => {
+      .post('/api/v1/api-registry', body => {
         requestBody = body.substring(body.indexOf('{'), body.lastIndexOf('}') + 1);
         requestBody = JSON.parse(requestBody);
 
         return body.match('form-data; name="spec"');
       })
+      .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+      .get('/api/v1/api-specification')
+      .basicAuth({ user: key })
+      .reply(200, [])
+      .post('/api/v1/api-specification', { registryUUID })
       .basicAuth({ user: key })
       .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
@@ -270,19 +295,22 @@ describe('rdme openapi', () => {
 
   it('should use specified working directory and upload the expected content', async () => {
     let requestBody = null;
+    const registryUUID = getRandomRegistryId();
     const mock = getApiNock()
-      .get('/api/v1/api-specification')
-      .basicAuth({ user: key })
-      .reply(200, [])
       .get(`/api/v1/version/${version}`)
       .basicAuth({ user: key })
       .reply(200, { version: '1.0.0' })
-      .post('/api/v1/api-specification', body => {
+      .post('/api/v1/api-registry', body => {
         requestBody = body.substring(body.indexOf('{'), body.lastIndexOf('}') + 1);
         requestBody = JSON.parse(requestBody);
 
         return body.match('form-data; name="spec"');
       })
+      .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+      .get('/api/v1/api-specification')
+      .basicAuth({ user: key })
+      .reply(200, [])
+      .post('/api/v1/api-specification', { registryUUID })
       .basicAuth({ user: key })
       .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
@@ -367,17 +395,47 @@ describe('rdme openapi', () => {
         help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
       };
 
+      const registryUUID = getRandomRegistryId();
+
       const mock = getApiNock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version: '1.0.0' })
+        .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
         .get('/api/v1/api-specification')
         .basicAuth({ user: key })
         .reply(200, [])
-        .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
+        .post('/api/v1/api-specification', { registryUUID })
         .delayConnection(1000)
         .basicAuth({ user: key })
         .reply(500, errorObject);
+
+      await expect(
+        openapi.run({
+          spec: './__tests__/__fixtures__/swagger-with-invalid-extensions.json',
+          key,
+          version,
+        })
+      ).rejects.toStrictEqual(new APIError(errorObject));
+
+      return mock.done();
+    });
+
+    it('should throw an error if registry upload fails', async () => {
+      const errorObject = {
+        error: 'INTERNAL_ERROR',
+        message: 'Unknown error (Registry is offline? lol idk)',
+        suggestion: '...a suggestion to resolve the issue...',
+        help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
+      };
+
+      const mock = getApiNock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version: '1.0.0' })
+        .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+        .reply(400, errorObject);
 
       await expect(
         openapi.run({
@@ -399,14 +457,18 @@ describe('rdme openapi', () => {
         help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
       };
 
+      const registryUUID = getRandomRegistryId();
+
       const mock = getApiNock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version: '1.0.0' })
+        .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
         .get('/api/v1/api-specification')
         .basicAuth({ user: key })
         .reply(200, [])
-        .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
+        .post('/api/v1/api-specification', { registryUUID })
         .delayConnection(1000)
         .basicAuth({ user: key })
         .reply(400, errorObject);
@@ -419,14 +481,18 @@ describe('rdme openapi', () => {
     });
 
     it('should error if API errors (generic upload error)', async () => {
+      const registryUUID = getRandomRegistryId();
+
       const mock = getApiNock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version: '1.0.0' })
+        .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
         .get('/api/v1/api-specification')
         .basicAuth({ user: key })
         .reply(200, [])
-        .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
+        .post('/api/v1/api-specification', { registryUUID })
         .delayConnection(1000)
         .basicAuth({ user: key })
         .reply(400, 'some non-JSON upload error');
@@ -439,14 +505,18 @@ describe('rdme openapi', () => {
     });
 
     it('should error if API errors (request timeout)', async () => {
+      const registryUUID = getRandomRegistryId();
+
       const mock = getApiNock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version: '1.0.0' })
+        .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
         .get('/api/v1/api-specification')
         .basicAuth({ user: key })
         .reply(200, [])
-        .post('/api/v1/api-specification', body => body.match('form-data; name="spec"'))
+        .post('/api/v1/api-specification', { registryUUID })
         .delayConnection(1000)
         .basicAuth({ user: key })
         .reply(400, '<html></html>');
