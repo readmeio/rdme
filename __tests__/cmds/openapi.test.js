@@ -422,6 +422,32 @@ describe('rdme openapi', () => {
       return mock.done();
     });
 
+    it('should throw an error if registry upload fails', async () => {
+      const errorObject = {
+        error: 'INTERNAL_ERROR',
+        message: 'Unknown error (Registry is offline? lol idk)',
+        suggestion: '...a suggestion to resolve the issue...',
+        help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
+      };
+
+      const mock = getApiNock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version: '1.0.0' })
+        .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+        .reply(400, errorObject);
+
+      await expect(
+        openapi.run({
+          spec: './__tests__/__fixtures__/swagger-with-invalid-extensions.json',
+          key,
+          version,
+        })
+      ).rejects.toStrictEqual(new APIError(errorObject));
+
+      return mock.done();
+    });
+
     it('should error if API errors', async () => {
       const errorObject = {
         error: 'SPEC_VERSION_NOTFOUND',
