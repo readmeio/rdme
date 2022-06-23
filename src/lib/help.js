@@ -18,7 +18,7 @@ const owlbert = () => {
   // http://asciiart.club
   return `                  📖 ${chalk.blue.bold(config.get('cli'))}
 
-    ${chalk.bold(`a utility for interacting with ReadMe`)}
+    ${chalk.bold('a utility for interacting with ReadMe')}
        .
        .\\\\                          /.
       ’  ‘                        ‘ ‘
@@ -112,7 +112,7 @@ exports.globalUsage = async args => {
       raw: true,
     },
     {
-      content: `To get more help with ReadMe, check out our docs at https://docs.readme.com.`,
+      content: 'To get more help with ReadMe, check out our docs at https://docs.readme.com.',
       raw: true,
     }
   );

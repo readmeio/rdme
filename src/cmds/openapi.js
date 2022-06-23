@@ -31,7 +31,8 @@ module.exports = class OpenAPICommand {
       {
         name: 'id',
         type: String,
-        description: `Unique identifier for your API definition. Use this if you're re-uploading an existing API definition`,
+        description:
+          "Unique identifier for your API definition. Use this if you're re-uploading an existing API definition",
       },
       {
         name: 'version',
@@ -186,7 +187,7 @@ module.exports = class OpenAPICommand {
 
       if (!id) {
         debug('no id parameter, retrieving list of API specs');
-        const apiSettings = await getSpecs(`/api/v1/api-specification`);
+        const apiSettings = await getSpecs('/api/v1/api-specification');
 
         const totalPages = Math.ceil(apiSettings.headers.get('x-total-count') / 10);
         const parsedDocs = parse(apiSettings.headers.get('link'));
