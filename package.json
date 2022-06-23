@@ -58,13 +58,13 @@
     "update-notifier": "^5.1.0"
   },
   "devDependencies": {
-    "@readme/eslint-config": "^8.7.6",
+    "@readme/eslint-config": "^8.8.0",
     "@readme/oas-examples": "^5.3.0",
     "alex": "^10.0.0",
-    "eslint": "^8.17.0",
+    "eslint": "^8.18.0",
     "jest": "^28.1.1",
     "nock": "^13.2.7",
-    "prettier": "^2.7.0"
+    "prettier": "^2.7.1"
   },
   "scripts": {
     "lint": "eslint . bin/rdme bin/set-version-output",
