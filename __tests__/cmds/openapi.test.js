@@ -387,7 +387,7 @@ describe('rdme openapi', () => {
       ).rejects.toMatchSnapshot();
     });
 
-    it.only('should throw an error if an invalid ref is supplied', () => {
+    it('should throw an error if an invalid ref is supplied', () => {
       return expect(
         openapi.run({ spec: './__tests__/__fixtures__/invalid-ref-oas/petstore.json', key, id, version })
       ).rejects.toMatchSnapshot();
