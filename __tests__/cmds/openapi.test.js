@@ -102,8 +102,6 @@ describe('rdme openapi', () => {
     });
 
     it('should discover and upload an API definition if none is provided', async () => {
-      promptHandler.createOasPrompt.mockResolvedValue({ option: 'create' });
-
       const registryUUID = getRandomRegistryId();
 
       const mock = getApiNock()
