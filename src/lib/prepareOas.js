@@ -34,15 +34,10 @@ module.exports = async function prepare(path, bundle = false) {
   let bundledSpec = '';
 
   if (bundle) {
-    bundledSpec = await oas
-      .bundle()
-      .then(res => {
-        return JSON.stringify(res);
-      })
-      .catch(err => {
-        debug(`raw bundling error object: ${JSON.stringify(err)}`);
-        throw err;
-      });
+    bundledSpec = await oas.bundle().then(res => {
+      return JSON.stringify(res);
+    });
+
     debug('spec bundled');
   }
 
