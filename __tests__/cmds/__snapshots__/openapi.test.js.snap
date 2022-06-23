@@ -14,6 +14,8 @@ REQUIRED must have required property 'name'
   29 |     }]
 `;
 
+exports[`rdme openapi error handling should throw an error if an invalid ref is supplied 1`] = `[MissingPointerError: Token "Petty" does not exist.]`;
+
 exports[`rdme openapi upload should bundle and upload the expected content 1`] = `
 Object {
   "components": Object {
