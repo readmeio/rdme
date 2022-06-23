@@ -387,7 +387,7 @@ describe('rdme openapi', () => {
       ).rejects.toMatchSnapshot();
     });
 
-    it('should throw an error if an invalid Swagger definition is supplied', async () => {
+    it('should throw an error if an invalid Swagger definition is supplied (create)', async () => {
       const errorObject = {
         error: 'INTERNAL_ERROR',
         message: 'Unknown error (README VALIDATION ERROR "x-samples-languages" must be of type "Array")',
@@ -414,6 +414,36 @@ describe('rdme openapi', () => {
       await expect(
         openapi.run({
           spec: './__tests__/__fixtures__/swagger-with-invalid-extensions.json',
+          key,
+          version,
+        })
+      ).rejects.toStrictEqual(new APIError(errorObject));
+
+      return mock.done();
+    });
+
+    it('should throw an error if an invalid Swagger definition is supplied (update)', async () => {
+      const errorObject = {
+        error: 'INTERNAL_ERROR',
+        message: 'Unknown error (README VALIDATION ERROR "x-samples-languages" must be of type "Array")',
+        suggestion: '...a suggestion to resolve the issue...',
+        help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
+      };
+
+      const registryUUID = getRandomRegistryId();
+
+      const mock = getApiNock()
+        .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+        .put(`/api/v1/api-specification/${id}`, { registryUUID })
+        .delayConnection(1000)
+        .basicAuth({ user: key })
+        .reply(400, errorObject);
+
+      await expect(
+        openapi.run({
+          spec: './__tests__/__fixtures__/swagger-with-invalid-extensions.json',
+          id,
           key,
           version,
         })
