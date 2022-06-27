@@ -10,9 +10,11 @@ const getApiNock = require('../get-api-nock');
 
 const DocsCommand = require('../../src/cmds/docs');
 const DocsEditCommand = require('../../src/cmds/docs/edit');
+const DocsCreateCommand = require('../../src/cmds/docs/create');
 
 const docs = new DocsCommand();
 const docsEdit = new DocsEditCommand();
+const docsCreate = new DocsCreateCommand();
 
 const fixturesDir = `${__dirname}./../__fixtures__`;
 const key = 'API_KEY';
@@ -540,5 +542,105 @@ describe('rdme docs:edit', () => {
 
     getMock.done();
     fs.unlinkSync(`${slug}.md`);
+  });
+});
+
+describe('rdme docs:create', () => {
+  beforeAll(() => nock.disableNetConnect());
+
+  afterAll(() => nock.cleanAll());
+
+  it('should error if no api key provided', () => {
+    return expect(docsCreate.run({})).rejects.toThrow('No project API key provided. Please use `--key`.');
+  });
+
+  describe('new docs', () => {
+    it('should create new doc', async () => {
+      const slug = 'new-doc';
+      const doc = frontMatter(fs.readFileSync(path.join(fixturesDir, `/new-docs/${slug}.md`)));
+      const hash = hashFileContents(fs.readFileSync(path.join(fixturesDir, `/new-docs/${slug}.md`)));
+
+      const getMock = getNockWithVersionHeader(version)
+        .get(`/api/v1/docs/${slug}`)
+        .basicAuth({ user: key })
+        .reply(404, {
+          error: 'DOC_NOTFOUND',
+          message: `The doc with the slug '${slug}' couldn't be found`,
+          suggestion: '...a suggestion to resolve the issue...',
+          help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
+        });
+
+      const postMock = getNockWithVersionHeader(version)
+        .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
+        .basicAuth({ user: key })
+        .reply(201, { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash });
+
+      const versionMock = getApiNock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version });
+
+      await expect(
+        docsCreate.run({ filepath: './__tests__/__fixtures__/new-docs/new-doc.md', key, version })
+      ).resolves.toBe(
+        "🌱 successfully created 'new-doc' with contents from ./__tests__/__fixtures__/new-docs/new-doc.md"
+      );
+
+      getMock.done();
+      postMock.done();
+      versionMock.done();
+    });
+  });
+
+  describe('existing docs', () => {
+    let simpleDoc;
+
+    beforeEach(() => {
+      const fileContents = fs.readFileSync(path.join(fixturesDir, '/existing-docs/simple-doc.md'));
+      simpleDoc = {
+        slug: 'simple-doc',
+        doc: frontMatter(fileContents),
+        hash: hashFileContents(fileContents),
+      };
+    });
+
+    it('should fetch doc and merge with what is returned', () => {
+      const getMocks = getNockWithVersionHeader(version)
+        .get('/api/v1/docs/simple-doc')
+        .basicAuth({ user: key })
+        .reply(200, { category, slug: simpleDoc.slug, lastUpdatedHash: 'anOldHash' });
+
+      const updateMocks = getNockWithVersionHeader(version)
+        .put('/api/v1/docs/simple-doc', {
+          category,
+          slug: simpleDoc.slug,
+          body: simpleDoc.doc.content,
+          lastUpdatedHash: simpleDoc.hash,
+          ...simpleDoc.doc.data,
+        })
+        .basicAuth({ user: key })
+        .reply(200, {
+          category,
+          slug: simpleDoc.slug,
+          body: simpleDoc.doc.content,
+        });
+
+      const versionMock = getApiNock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version });
+
+      return docsCreate
+        .run({ filepath: './__tests__/__fixtures__/existing-docs/simple-doc.md', key, version })
+        .then(updatedDocs => {
+          expect(updatedDocs).toBe(
+            "✏️ successfully updated 'simple-doc' with contents from ./__tests__/__fixtures__/existing-docs/simple-doc.md"
+          );
+
+          getMocks.done();
+          updateMocks.done();
+          versionMock.done();
+        });
+    });
   });
 });
