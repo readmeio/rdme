@@ -1,4 +1,3 @@
-const chalk = require('chalk');
 const config = require('config');
 const changeCase = require('change-case');
 const { getProjectVersion } = require('../../lib/versionSelect');
@@ -12,7 +11,7 @@ module.exports = class CategoriesCreateCommand {
     this.usage = 'categories:create <title> [options]';
     this.description = 'Create a category with the specified tile in your ReadMe project';
     this.category = 'categories';
-    this.position = '2';
+    this.position = 2;
 
     this.hiddenargs = ['title'];
     this.args = [
@@ -62,8 +61,8 @@ module.exports = class CategoriesCreateCommand {
 
     const slug = changeCase.paramCase(title);
 
-    async function getNumberOfPages() {
-      await fetch(`${config.get('host')}/api/v1/categories?perPage=10&page=1`, {
+    function getNumberOfPages() {
+      return fetch(`${config.get('host')}/api/v1/categories?perPage=10&page=1`, {
         method: 'get',
         headers: cleanHeaders(key, {
           'x-readme-version': selectedVersion,
@@ -74,39 +73,30 @@ module.exports = class CategoriesCreateCommand {
       });
     }
 
-    async function getAllCategories() {
-      return [].concat(
-        ...(await Promise.all(
-          Array.from({ length: getNumberOfPages() }, (_, i) => i + 1).map(async page => {
-            return fetch(`${config.get('host')}/api/v1/categories?perPage=10&page=${page}`, {
-              method: 'get',
-              headers: cleanHeaders(key, {
-                'x-readme-version': selectedVersion,
-                Accept: 'application/json',
-              }),
-            }).then(res => handleRes(res));
-          })
-        ))
-      );
-    }
+    const allCategories = [].concat(
+      ...(await Promise.all(
+        Array.from({ length: await getNumberOfPages() }, (_, i) => i + 1).map(async page => {
+          return fetch(`${config.get('host')}/api/v1/categories?perPage=10&page=${page}`, {
+            method: 'get',
+            headers: cleanHeaders(key, {
+              'x-readme-version': selectedVersion,
+              Accept: 'application/json',
+            }),
+          }).then(res => handleRes(res));
+        })
+      ))
+    );
 
-    async function hasExistingCategory() {
-      const existingCategories = getAllCategories().filter(category => {
-        if (category.slug.match(`${slug}(-\\d)?`) && category.type === categoryType) {
-          return true;
-        }
-        return false;
+    async function matchCategory() {
+      return allCategories.filter(category => {
+        return category.slug.match(`${slug}(-\\d)?`) && category.type === categoryType;
       });
-
-      if (existingCategories.length > 0) {
-        return true;
-      }
-      return false;
     }
 
-    function createCategory() {
-      if (hasExistingCategory() === true) {
-        return `The ${slug} category of type ${categoryType} already exists for version ${version}, a new category was not created`;
+    async function createCategory() {
+      const matchedCategory = await matchCategory();
+      if (matchedCategory.length > 0) {
+        return JSON.stringify(matchedCategory[0]);
       }
       return fetch(`${config.get('host')}/api/v1/categories`, {
         method: 'post',
@@ -119,12 +109,12 @@ module.exports = class CategoriesCreateCommand {
           type: categoryType,
         }),
       })
-        .then(postRes => handleRes(postRes))
-        .then(postRes => `🌱 successfully created '${postRes.slug}' as a new category in version '${version}`);
+        .then(res => handleRes(res))
+        .then(res => JSON.stringify(res));
     }
 
     const createdCategory = await createCategory();
 
-    return chalk.green(createdCategory);
+    return createdCategory;
   }
 };
