@@ -37,11 +37,16 @@ module.exports = class CreateDocCommand {
         type: String,
         defaultOption: true,
       },
+      {
+        name: 'dryRun',
+        type: Boolean,
+        description: 'Runs the command without creating/updating any docs in ReadMe. Useful for debugging.',
+      },
     ];
   }
 
   async run(opts) {
-    const { filepath, key, version } = opts;
+    const { dryRun, filepath, key, version } = opts;
     debug(`command: ${this.command}`);
     debug(`opts: ${JSON.stringify(opts)}`);
 
@@ -75,6 +80,13 @@ module.exports = class CreateDocCommand {
 
     function createDoc(err) {
       if (err.error !== 'DOC_NOTFOUND') return Promise.reject(err);
+
+      if (dryRun) {
+        return `🎭 dry run! This will create '${slug}' with contents from ${filepath} with the following metadata: ${JSON.stringify(
+          matter.data
+        )}`;
+      }
+
       return fetch(`${config.get('host')}/api/v1/docs`, {
         method: 'post',
         headers: cleanHeaders(key, {
@@ -93,6 +105,18 @@ module.exports = class CreateDocCommand {
     }
 
     function updateDoc(existingDoc) {
+      if (hash === existingDoc.lastUpdatedHash) {
+        return `${dryRun ? '🎭 dry run! ' : ''}\`${slug}\` ${
+          dryRun ? 'will not be' : 'was not'
+        } updated because there were no changes.`;
+      }
+
+      if (dryRun) {
+        return `🎭 dry run! This will update '${slug}' with contents from ${filepath} with the following metadata: ${JSON.stringify(
+          matter.data
+        )}`;
+      }
+
       return fetch(`${config.get('host')}/api/v1/docs/${slug}`, {
         method: 'put',
         headers: cleanHeaders(key, {
