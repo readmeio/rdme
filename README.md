@@ -219,6 +219,24 @@ If you are logged in, this will open the project in your browser:
 rdme open
 ```
 
+### Categories
+
+#### Get All Categories Associated to Your Project Version
+
+```sh
+rdme categories --version={project-version}
+```
+
+#### Create a New Category for your Project Version
+
+You can create a new category with a specified `title` and `type` for your project version. The `title` 
+will be converted to slug in param case. If a category already exists with the same slug and type for
+the specified version then a new category is not created. This includes if the slug contains a -1 suffix. 
+
+```sh
+rdme categories:create <title> --categoryType ={category-type} --version={project-version}
+```
+
 ## Future
 
 We are continually expanding and improving the offerings of this application as we expand our public API and are able. Some interactions may change over time, but we will do our best to retain backwards compatibility.
