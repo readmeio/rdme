@@ -1,3 +1,4 @@
+const chalk = require('chalk');
 const config = require('config');
 const changeCase = require('change-case');
 const { getProjectVersion } = require('../../lib/versionSelect');
@@ -51,7 +52,7 @@ module.exports = class CategoriesCreateCommand {
       return Promise.reject(new Error(`No title provided. Usage \`${config.get('cli')} ${this.usage}\`.`));
     }
 
-    if (categoryType !== 'guide' && categoryType !== 'reference' && !categoryType) {
+    if (categoryType !== 'guide' && categoryType !== 'reference') {
       return Promise.reject(new Error('`categoryType` must be guide or reference.'));
     }
 
@@ -96,7 +97,7 @@ module.exports = class CategoriesCreateCommand {
     async function createCategory() {
       const matchedCategory = await matchCategory();
       if (matchedCategory.length > 0) {
-        return JSON.stringify(matchedCategory[0]);
+        return `The '${matchedCategory[0].slug}' category with a type of '${matchedCategory[0].type}' already exists with an id of '${matchedCategory[0].id}'. A new category was not created`;
       }
       return fetch(`${config.get('host')}/api/v1/categories`, {
         method: 'post',
@@ -110,10 +111,10 @@ module.exports = class CategoriesCreateCommand {
         }),
       })
         .then(res => handleRes(res))
-        .then(res => JSON.stringify(res));
+        .then(res => `🌱 successfully created '${res.slug}' with a type of '${res.type}' and an id of '${res.id}'`);
     }
 
-    const createdCategory = await createCategory();
+    const createdCategory = chalk.green(await createCategory());
 
     return createdCategory;
   }

@@ -35,8 +35,9 @@ module.exports = class CategoriesCommand {
     if (!key) {
       return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
     }
-
-    const selectedVersion = await getProjectVersion(version, key, false);
+    const selectedVersion = await getProjectVersion(version, key, true).catch(e => {
+      return Promise.reject(e);
+    });
 
     debug(`selectedVersion: ${selectedVersion}`);
 
@@ -61,13 +62,11 @@ module.exports = class CategoriesCommand {
               'x-readme-version': selectedVersion,
               Accept: 'application/json',
             }),
-          })
-            .then(res => handleRes(res))
-            .then(res => JSON.stringify(res));
+          }).then(res => handleRes(res));
         })
       ))
     );
 
-    return allCategories;
+    return JSON.stringify(allCategories);
   }
 };

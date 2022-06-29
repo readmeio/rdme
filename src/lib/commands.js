@@ -88,5 +88,9 @@ exports.getCategories = () => {
       description: 'Other useful commands',
       commands: [],
     },
+    categories: {
+      description: 'Categories',
+      commands: [],
+    },
   };
 };

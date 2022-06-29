@@ -2,8 +2,10 @@ const nock = require('nock');
 
 const getApiNock = require('../get-api-nock');
 
+const CategoriesCommand = require('../../src/cmds/categories');
 const CategoriesCreateCommand = require('../../src/cmds/categories/create');
 
+const categories = new CategoriesCommand();
 const categoriesCreate = new CategoriesCreateCommand();
 
 const key = 'API_KEY';
@@ -15,41 +17,157 @@ function getNockWithVersionHeader(v) {
   });
 }
 
+describe('rdme categories', () => {
+  beforeAll(() => nock.disableNetConnect());
+
+  afterEach(() => nock.cleanAll());
+
+  it('should error if no api key provided', () => {
+    return expect(categories.run({})).rejects.toThrow('No project API key provided. Please use `--key`.');
+  });
+
+  it('should return all categories for a single pages', async () => {
+    const getMock = getNockWithVersionHeader(version)
+      .persist()
+      .get('/api/v1/categories?perPage=10&page=1')
+      .basicAuth({ user: key })
+      .reply(200, [{ title: 'One Category', slug: 'one-category', type: 'guide' }], {
+        'x-total-count': '1',
+      });
+
+    const versionMock = getApiNock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
+
+    await expect(categories.run({ key, version: '1.0.0' })).resolves.toBe(
+      JSON.stringify([{ title: 'One Category', slug: 'one-category', type: 'guide' }])
+    );
+
+    getMock.done();
+    versionMock.done();
+  });
+
+  it('should return all categories for multiple pages', async () => {
+    const getMock = getNockWithVersionHeader(version)
+      .persist()
+      .get('/api/v1/categories?perPage=10&page=1')
+      .basicAuth({ user: key })
+      .reply(200, [{ title: 'One Category', slug: 'one-category', type: 'guide' }], {
+        'x-total-count': '17',
+      })
+      .get('/api/v1/categories?perPage=10&page=2')
+      .basicAuth({ user: key })
+      .reply(200, [{ title: 'Another Category', slug: 'another-category', type: 'guide' }], {
+        'x-total-count': '17',
+      });
+
+    const versionMock = getApiNock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
+
+    await expect(categories.run({ key, version: '1.0.0' })).resolves.toBe(
+      JSON.stringify([
+        { title: 'One Category', slug: 'one-category', type: 'guide' },
+        { title: 'Another Category', slug: 'another-category', type: 'guide' },
+      ])
+    );
+
+    getMock.done();
+    versionMock.done();
+  });
+});
+
 describe('rdme categories:create', () => {
   beforeAll(() => nock.disableNetConnect());
 
-  afterAll(() => nock.cleanAll());
+  afterEach(() => nock.cleanAll());
 
   it('should error if no api key provided', () => {
     return expect(categoriesCreate.run({})).rejects.toThrow('No project API key provided. Please use `--key`.');
   });
 
-  describe('new categories', () => {
-    it('should create a new category', async () => {
-      const getMock = getNockWithVersionHeader(version)
-        .get('/api/v1/categories?perPage=10&page=1')
-        .basicAuth({ user: key })
-        .reply(200, [{ title: 'Existing Category', slug: 'existing-category', type: 'guide' }], {
-          'x-total-count': '1',
-        });
+  it('should error if no title provided', () => {
+    return expect(categoriesCreate.run({ key: '123' })).rejects.toThrow(
+      'No title provided. Usage `rdme categories:create <title> [options]`.'
+    );
+  });
 
-      const postMock = getNockWithVersionHeader(version)
-        .post('/api/v1/categories')
-        .basicAuth({ user: key })
-        .reply(201, { title: 'New Category', slug: 'new-category', type: 'guide' });
+  it('should error if categoryType is blank', () => {
+    return expect(categoriesCreate.run({ key: '123', title: 'Test Title' })).rejects.toThrow(
+      '`categoryType` must be guide or reference.'
+    );
+  });
 
-      const versionMock = getApiNock()
-        .get(`/api/v1/version/${version}`)
-        .basicAuth({ user: key })
-        .reply(200, { version });
+  it('should error if categoryType is not `guide` or `reference`', () => {
+    return expect(categoriesCreate.run({ key: '123', title: 'Test Title', categoryType: 'test' })).rejects.toThrow(
+      '`categoryType` must be guide or reference.'
+    );
+  });
 
-      await expect(
-        categoriesCreate.run({ title: 'New Category', categoryType: 'guide', key, version: '1.0.0' })
-      ).resolves.toBe({ title: 'New Category', slug: 'new-category', type: 'guide' });
+  it('should create a new category if the slug and type do not match', async () => {
+    const getMock = getNockWithVersionHeader(version)
+      .persist()
+      .get('/api/v1/categories?perPage=10&page=1')
+      .basicAuth({ user: key })
+      .reply(200, [{ title: 'Existing Category', slug: 'existing-category', type: 'guide' }], {
+        'x-total-count': '1',
+      });
 
-      getMock.done();
-      postMock.done();
-      versionMock.done();
-    });
+    const postMock = getNockWithVersionHeader(version)
+      .post('/api/v1/categories')
+      .basicAuth({ user: key })
+      .reply(201, { title: 'New Category', slug: 'new-category', type: 'guide', id: '123' });
+
+    const versionMock = getApiNock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
+
+    await expect(
+      categoriesCreate.run({ title: 'New Category', categoryType: 'guide', key, version: '1.0.0' })
+    ).resolves.toBe("🌱 successfully created 'new-category' with a type of 'guide' and an id of '123'");
+
+    getMock.done();
+    postMock.done();
+    versionMock.done();
+  });
+
+  it('should create a new category if the slug matches but the type does not match', async () => {
+    const getMock = getNockWithVersionHeader(version)
+      .persist()
+      .get('/api/v1/categories?perPage=10&page=1')
+      .basicAuth({ user: key })
+      .reply(200, [{ title: 'Category', slug: 'category', type: 'guide' }], {
+        'x-total-count': '1',
+      });
+
+    const postMock = getNockWithVersionHeader(version)
+      .post('/api/v1/categories')
+      .basicAuth({ user: key })
+      .reply(201, { title: 'Category', slug: 'category', type: 'reference', id: '123' });
+
+    const versionMock = getApiNock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
+
+    await expect(
+      categoriesCreate.run({ title: 'Category', categoryType: 'reference', key, version: '1.0.0' })
+    ).resolves.toBe("🌱 successfully created 'category' with a type of 'reference' and an id of '123'");
+
+    getMock.done();
+    postMock.done();
+    versionMock.done();
+  });
+
+  it('should not create a new category if the slug and type match', async () => {
+    const getMock = getNockWithVersionHeader(version)
+      .persist()
+      .get('/api/v1/categories?perPage=10&page=1')
+      .basicAuth({ user: key })
+      .reply(200, [{ title: 'Category', slug: 'category', type: 'guide', id: '123' }], {
+        'x-total-count': '1',
+      });
+
+    const versionMock = getApiNock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
+
+    await expect(
+      categoriesCreate.run({ title: 'Category', categoryType: 'guide', key, version: '1.0.0' })
+    ).resolves.toBe(
+      "The 'category' category with a type of 'guide' already exists with an id of '123'. A new category was not created"
+    );
+
+    getMock.done();
+    versionMock.done();
   });
 });
