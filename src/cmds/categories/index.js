@@ -67,6 +67,6 @@ module.exports = class CategoriesCommand {
       ))
     );
 
-    return JSON.stringify(allCategories);
+    return JSON.stringify(allCategories, null, 2);
   }
 };

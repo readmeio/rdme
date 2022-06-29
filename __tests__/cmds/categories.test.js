@@ -38,7 +38,7 @@ describe('rdme categories', () => {
     const versionMock = getApiNock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
     await expect(categories.run({ key, version: '1.0.0' })).resolves.toBe(
-      JSON.stringify([{ title: 'One Category', slug: 'one-category', type: 'guide' }])
+      JSON.stringify([{ title: 'One Category', slug: 'one-category', type: 'guide' }], null, 2)
     );
 
     getMock.done();
@@ -62,10 +62,14 @@ describe('rdme categories', () => {
     const versionMock = getApiNock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
     await expect(categories.run({ key, version: '1.0.0' })).resolves.toBe(
-      JSON.stringify([
-        { title: 'One Category', slug: 'one-category', type: 'guide' },
-        { title: 'Another Category', slug: 'another-category', type: 'guide' },
-      ])
+      JSON.stringify(
+        [
+          { title: 'One Category', slug: 'one-category', type: 'guide' },
+          { title: 'Another Category', slug: 'another-category', type: 'guide' },
+        ],
+        null,
+        2
+      )
     );
 
     getMock.done();
