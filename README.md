@@ -230,8 +230,8 @@ rdme categories --version={project-version}
 #### Create a New Category for your Project Version
 
 You can create a new category with a specified `title` and `type` for your project version. The `title` 
-will be converted to slug in param case. If a category already exists with the same slug and type for
-the specified version then a new category is not created. This includes if the slug contains a -1 suffix. 
+will be converted to a slug in param case. If a category already exists with the same slug and type for
+the specified version then a new category is not created and the id of the existing category is returned. This includes if the slug contains incremented suffix such as `-1` or `-2`. If there are multiple categories with a matching slug and type then only one matching category is returned.
 
 ```sh
 rdme categories:create <title> --categoryType ={category-type} --version={project-version}
