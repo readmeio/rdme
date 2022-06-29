@@ -10,7 +10,7 @@ module.exports = class CategoriesCreateCommand {
   constructor() {
     this.command = 'categories:create';
     this.usage = 'categories:create <title> [options]';
-    this.description = 'Create a category with the specified tile in your ReadMe project';
+    this.description = 'Create a category with the specified title and guide in your ReadMe project';
     this.category = 'categories';
     this.position = 2;
 
