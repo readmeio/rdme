@@ -18,7 +18,7 @@ module.exports = class SingleDocCommand {
     this.usage = 'docs:single <filepath> [options]';
     this.description = 'Sync a single markdown file to your ReadMe project.';
     this.category = 'docs';
-    this.position = 1;
+    this.position = 3;
 
     this.hiddenArgs = ['filepath'];
     this.args = [
