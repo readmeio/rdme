@@ -153,15 +153,16 @@ rdme docs path-to-markdown-files --version={project-version}
 
 This command also has a dry run mode, which can be useful for initial setup and debugging. You can read more about dry run mode [in our docs](https://docs.readme.com/docs/rdme#dry-run-mode).
 
-#### Syncing a Single Markdown File to ReadMe
-```sh
-rdme docs:single path-to-markdown-file --version={project-version}
-```
-
 #### Edit a Single ReadMe Doc on Your Local Machine
 
 ```sh
 rdme docs:edit <slug> --version={project-version}
+```
+
+#### Syncing a Single Markdown File to ReadMe
+
+```sh
+rdme docs:single path-to-markdown-file --version={project-version}
 ```
 
 ### Versions
