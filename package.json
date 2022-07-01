@@ -55,7 +55,7 @@
     "read": "^1.0.7",
     "semver": "^7.0.0",
     "tmp-promise": "^3.0.2",
-    "update-notifier": "^5.1.0"
+    "update-notifier": "^6.0.2"
   },
   "devDependencies": {
     "@readme/eslint-config": "^8.8.0",
