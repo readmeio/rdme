@@ -10,11 +10,11 @@ const getApiNock = require('../get-api-nock');
 
 const DocsCommand = require('../../src/cmds/docs');
 const DocsEditCommand = require('../../src/cmds/docs/edit');
-const DocsCreateCommand = require('../../src/cmds/docs/create');
+const DocsSingleCommand = require('../../src/cmds/docs/single');
 
 const docs = new DocsCommand();
 const docsEdit = new DocsEditCommand();
-const docsCreate = new DocsCreateCommand();
+const docsSingle = new DocsSingleCommand();
 
 const fixturesDir = `${__dirname}./../__fixtures__`;
 const key = 'API_KEY';
@@ -545,23 +545,23 @@ describe('rdme docs:edit', () => {
   });
 });
 
-describe('rdme docs:create', () => {
+describe('rdme docs:single', () => {
   beforeAll(() => nock.disableNetConnect());
 
   afterAll(() => nock.cleanAll());
 
   it('should error if no api key provided', () => {
-    return expect(docsCreate.run({})).rejects.toThrow('No project API key provided. Please use `--key`.');
+    return expect(docsSingle.run({})).rejects.toThrow('No project API key provided. Please use `--key`.');
   });
 
   it('should error if no filepath provided', () => {
-    return expect(docsCreate.run({ key, version: '1.0.0' })).rejects.toThrow(
-      'No filepath provided. Usage `rdme docs:create <filepath> [options]`.'
+    return expect(docsSingle.run({ key, version: '1.0.0' })).rejects.toThrow(
+      'No filepath provided. Usage `rdme docs:single <filepath> [options]`.'
     );
   });
 
   it('should error if the argument isnt a folder', async () => {
-    await expect(docsCreate.run({ key, version: '1.0.0', filepath: 'not-a-markdown-file' })).rejects.toThrow(
+    await expect(docsSingle.run({ key, version: '1.0.0', filepath: 'not-a-markdown-file' })).rejects.toThrow(
       'The filepath specified is not a markdown file.'
     );
   });
@@ -593,7 +593,7 @@ describe('rdme docs:create', () => {
         .reply(200, { version });
 
       await expect(
-        docsCreate.run({ filepath: './__tests__/__fixtures__/new-docs/new-doc.md', key, version })
+        docsSingle.run({ filepath: './__tests__/__fixtures__/new-docs/new-doc.md', key, version })
       ).resolves.toBe(
         "🌱 successfully created 'new-doc' with contents from ./__tests__/__fixtures__/new-docs/new-doc.md"
       );
@@ -623,7 +623,7 @@ describe('rdme docs:create', () => {
         .reply(200, { version });
 
       await expect(
-        docsCreate.run({ dryRun: true, filepath: './__tests__/__fixtures__/new-docs/new-doc.md', key, version })
+        docsSingle.run({ dryRun: true, filepath: './__tests__/__fixtures__/new-docs/new-doc.md', key, version })
       ).resolves.toBe(
         `🎭 dry run! This will create 'new-doc' with contents from ./__tests__/__fixtures__/new-docs/new-doc.md with the following metadata: ${JSON.stringify(
           doc.data
@@ -674,7 +674,7 @@ describe('rdme docs:create', () => {
         message: `Error uploading ${chalk.underline(`${filepath}`)}:\n\n${errorObject.message}`,
       };
 
-      await expect(docsCreate.run({ filepath: `${filepath}`, key, version })).rejects.toStrictEqual(
+      await expect(docsSingle.run({ filepath: `${filepath}`, key, version })).rejects.toStrictEqual(
         new APIError(formattedErrorObject)
       );
 
@@ -711,7 +711,7 @@ describe('rdme docs:create', () => {
         .reply(200, { version });
 
       await expect(
-        docsCreate.run({ filepath: './__tests__/__fixtures__/slug-docs/new-doc-slug.md', key, version })
+        docsSingle.run({ filepath: './__tests__/__fixtures__/slug-docs/new-doc-slug.md', key, version })
       ).resolves.toBe(
         "🌱 successfully created 'marc-actually-wrote-a-test' with contents from ./__tests__/__fixtures__/slug-docs/new-doc-slug.md"
       );
@@ -760,7 +760,7 @@ describe('rdme docs:create', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      return docsCreate
+      return docsSingle
         .run({ filepath: './__tests__/__fixtures__/existing-docs/simple-doc.md', key, version })
         .then(updatedDocs => {
           expect(updatedDocs).toBe(
@@ -786,7 +786,7 @@ describe('rdme docs:create', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      return docsCreate
+      return docsSingle
         .run({ dryRun: true, filepath: './__tests__/__fixtures__/existing-docs/simple-doc.md', key, version })
         .then(updatedDocs => {
           // All docs should have been updated because their hashes from the GET request were different from what they
@@ -817,7 +817,7 @@ describe('rdme docs:create', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      return docsCreate
+      return docsSingle
         .run({ filepath: './__tests__/__fixtures__/existing-docs/simple-doc.md', key, version })
         .then(skippedDocs => {
           expect(skippedDocs).toBe('`simple-doc` was not updated because there were no changes.');
@@ -838,7 +838,7 @@ describe('rdme docs:create', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      return docsCreate
+      return docsSingle
         .run({ dryRun: true, filepath: './__tests__/__fixtures__/existing-docs/simple-doc.md', key, version })
         .then(skippedDocs => {
           expect(skippedDocs).toBe('🎭 dry run! `simple-doc` will not be updated because there were no changes.');

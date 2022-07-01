@@ -12,10 +12,10 @@ const { debug } = require('../../lib/logger');
 
 const readFile = promisify(fs.readFile);
 
-module.exports = class CreateDocCommand {
+module.exports = class SingleDocCommand {
   constructor() {
-    this.command = 'docs:create';
-    this.usage = 'docs:create <filepath> [options]';
+    this.command = 'docs:single';
+    this.usage = 'docs:single <filepath> [options]';
     this.description = 'Sync a single markdown file to your ReadMe project.';
     this.category = 'docs';
     this.position = 1;
