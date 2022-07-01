@@ -560,7 +560,7 @@ describe('rdme docs:single', () => {
     );
   });
 
-  it('should error if the argument isnt a folder', async () => {
+  it('should error if the argument is not a markdown file', async () => {
     await expect(docsSingle.run({ key, version: '1.0.0', filepath: 'not-a-markdown-file' })).rejects.toThrow(
       'The filepath specified is not a markdown file.'
     );
