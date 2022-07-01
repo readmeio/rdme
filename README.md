@@ -159,6 +159,12 @@ This command also has a dry run mode, which can be useful for initial setup and 
 rdme docs:edit <slug> --version={project-version}
 ```
 
+#### Syncing a Single Markdown File to ReadMe
+
+```sh
+rdme docs:single path-to-markdown-file --version={project-version}
+```
+
 ### Versions
 
 #### Get All Versions Associated With Your Project
