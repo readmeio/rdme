@@ -42,7 +42,7 @@ module.exports = class CategoriesCommand {
     debug(`selectedVersion: ${selectedVersion}`);
 
     function getNumberOfPages() {
-      return fetch(`${config.get('host')}/api/v1/categories?perPage=10&page=1`, {
+      return fetch(`${config.get('host')}/api/v1/categories?perPage=20&page=1`, {
         method: 'get',
         headers: cleanHeaders(key, {
           'x-readme-version': selectedVersion,
@@ -67,6 +67,6 @@ module.exports = class CategoriesCommand {
       ))
     );
 
-    return JSON.stringify(allCategories, null, 2);
+    return Promise.resolve(JSON.stringify(allCategories, null, 2));
   }
 };

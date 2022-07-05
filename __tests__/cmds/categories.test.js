@@ -29,7 +29,7 @@ describe('rdme categories', () => {
   it('should return all categories for a single pages', async () => {
     const getMock = getNockWithVersionHeader(version)
       .persist()
-      .get('/api/v1/categories?perPage=10&page=1')
+      .get('/api/v1/categories?perPage=20&page=1')
       .basicAuth({ user: key })
       .reply(200, [{ title: 'One Category', slug: 'one-category', type: 'guide' }], {
         'x-total-count': '1',
@@ -48,15 +48,15 @@ describe('rdme categories', () => {
   it('should return all categories for multiple pages', async () => {
     const getMock = getNockWithVersionHeader(version)
       .persist()
-      .get('/api/v1/categories?perPage=10&page=1')
+      .get('/api/v1/categories?perPage=20&page=1')
       .basicAuth({ user: key })
       .reply(200, [{ title: 'One Category', slug: 'one-category', type: 'guide' }], {
-        'x-total-count': '17',
+        'x-total-count': '21',
       })
-      .get('/api/v1/categories?perPage=10&page=2')
+      .get('/api/v1/categories?perPage=20&page=2')
       .basicAuth({ user: key })
       .reply(200, [{ title: 'Another Category', slug: 'another-category', type: 'guide' }], {
-        'x-total-count': '17',
+        'x-total-count': '21',
       });
 
     const versionMock = getApiNock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
@@ -107,7 +107,7 @@ describe('rdme categories:create', () => {
   it('should create a new category if the slug and type do not match', async () => {
     const getMock = getNockWithVersionHeader(version)
       .persist()
-      .get('/api/v1/categories?perPage=10&page=1')
+      .get('/api/v1/categories?perPage=20&page=1')
       .basicAuth({ user: key })
       .reply(200, [{ title: 'Existing Category', slug: 'existing-category', type: 'guide' }], {
         'x-total-count': '1',
@@ -132,7 +132,7 @@ describe('rdme categories:create', () => {
   it('should create a new category if the slug matches but the type does not match', async () => {
     const getMock = getNockWithVersionHeader(version)
       .persist()
-      .get('/api/v1/categories?perPage=10&page=1')
+      .get('/api/v1/categories?perPage=20&page=1')
       .basicAuth({ user: key })
       .reply(200, [{ title: 'Category', slug: 'category', type: 'guide' }], {
         'x-total-count': '1',
@@ -157,7 +157,7 @@ describe('rdme categories:create', () => {
   it('should not create a new category if the slug and type match', async () => {
     const getMock = getNockWithVersionHeader(version)
       .persist()
-      .get('/api/v1/categories?perPage=10&page=1')
+      .get('/api/v1/categories?perPage=20&page=1')
       .basicAuth({ user: key })
       .reply(200, [{ title: 'Category', slug: 'category', type: 'guide', id: '123' }], {
         'x-total-count': '1',

@@ -116,6 +116,6 @@ module.exports = class CategoriesCreateCommand {
 
     const createdCategory = chalk.green(await createCategory());
 
-    return createdCategory;
+    return Promise.resolve(createdCategory);
   }
 };
