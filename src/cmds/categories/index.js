@@ -56,7 +56,7 @@ module.exports = class CategoriesCommand {
     const allCategories = [].concat(
       ...(await Promise.all(
         Array.from({ length: await getNumberOfPages() }, (_, i) => i + 1).map(async page => {
-          return fetch(`${config.get('host')}/api/v1/categories?perPage=10&page=${page}`, {
+          return fetch(`${config.get('host')}/api/v1/categories?perPage=20&page=${page}`, {
             method: 'get',
             headers: cleanHeaders(key, {
               'x-readme-version': selectedVersion,

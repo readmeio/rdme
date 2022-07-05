@@ -63,21 +63,21 @@ module.exports = class CategoriesCreateCommand {
     const slug = changeCase.paramCase(title);
 
     function getNumberOfPages() {
-      return fetch(`${config.get('host')}/api/v1/categories?perPage=10&page=1`, {
+      return fetch(`${config.get('host')}/api/v1/categories?perPage=20&page=1`, {
         method: 'get',
         headers: cleanHeaders(key, {
           'x-readme-version': selectedVersion,
           Accept: 'application/json',
         }),
       }).then(res => {
-        return Math.ceil(res.headers.get('x-total-count') / 10);
+        return Math.ceil(res.headers.get('x-total-count') / 20);
       });
     }
 
     const allCategories = [].concat(
       ...(await Promise.all(
         Array.from({ length: await getNumberOfPages() }, (_, i) => i + 1).map(async page => {
-          return fetch(`${config.get('host')}/api/v1/categories?perPage=10&page=${page}`, {
+          return fetch(`${config.get('host')}/api/v1/categories?perPage=20&page=${page}`, {
             method: 'get',
             headers: cleanHeaders(key, {
               'x-readme-version': selectedVersion,
