@@ -49,7 +49,7 @@ module.exports = class CategoriesCommand {
           Accept: 'application/json',
         }),
       }).then(res => {
-        return Math.ceil(res.headers.get('x-total-count') / 10);
+        return Math.ceil(res.headers.get('x-total-count') / 20);
       });
     }
 
