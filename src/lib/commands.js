@@ -84,12 +84,12 @@ exports.getCategories = () => {
       description: 'Versions',
       commands: [],
     },
-    utilities: {
-      description: 'Other useful commands',
-      commands: [],
-    },
     categories: {
       description: 'Categories',
+      commands: [],
+    },
+    utilities: {
+      description: 'Other useful commands',
       commands: [],
     },
   };
