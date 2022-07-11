@@ -38,3 +38,6 @@ updates:
       - dependency-name: ora
         versions:
           - '>= 6'
+      - dependency-name: update-notifier
+        versions:
+          - '>= 6'
