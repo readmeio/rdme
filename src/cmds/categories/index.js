@@ -8,7 +8,7 @@ module.exports = class CategoriesCommand {
   constructor() {
     this.command = 'categories';
     this.usage = 'categories [options]';
-    this.description = 'Get all catefories in your ReadMe project';
+    this.description = 'Get all categories in your ReadMe project';
     this.category = 'categories';
     this.position = 1;
 
