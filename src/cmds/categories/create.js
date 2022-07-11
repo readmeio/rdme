@@ -36,11 +36,17 @@ module.exports = class CategoriesCreateCommand {
         type: String,
         description: 'Category type, must be guide or reference',
       },
+      {
+        name: 'preventDuplicates',
+        type: Boolean,
+        description:
+          'Prevents the creation of a new category if their is an existing category with a mathcing `categoryType` and exact matching `title`',
+      },
     ];
   }
 
   async run(opts) {
-    const { categoryType, title, key, version } = opts;
+    const { categoryType, title, key, version, preventDuplicates } = opts;
     debug(`command: ${this.command}`);
     debug(`opts: ${JSON.stringify(opts)}`);
 
@@ -59,8 +65,6 @@ module.exports = class CategoriesCreateCommand {
     const selectedVersion = await getProjectVersion(version, key, false);
 
     debug(`selectedVersion: ${selectedVersion}`);
-
-    const slug = changeCase.paramCase(title);
 
     function getNumberOfPages() {
       return fetch(`${config.get('host')}/api/v1/categories?perPage=20&page=1`, {
@@ -90,14 +94,16 @@ module.exports = class CategoriesCreateCommand {
 
     async function matchCategory() {
       return allCategories.filter(category => {
-        return category.slug.match(`${slug}(-\\d)?`) && category.type === categoryType;
+        return changeCase.paramCase(category.title) === changeCase.paramCase(title) && category.type === categoryType;
       });
     }
 
     async function createCategory() {
-      const matchedCategory = await matchCategory();
-      if (matchedCategory.length > 0) {
-        return `The '${matchedCategory[0].slug}' category with a type of '${matchedCategory[0].type}' already exists with an id of '${matchedCategory[0].id}'. A new category was not created`;
+      if (preventDuplicates) {
+        const matchedCategory = await matchCategory();
+        if (matchedCategory.length > 0) {
+          return `The '${matchedCategory[0].title}' category with a type of '${matchedCategory[0].type}' already exists with an id of '${matchedCategory[0].id}'. A new category was not created`;
+        }
       }
       return fetch(`${config.get('host')}/api/v1/categories`, {
         method: 'post',
@@ -111,7 +117,7 @@ module.exports = class CategoriesCreateCommand {
         }),
       })
         .then(res => handleRes(res))
-        .then(res => `🌱 successfully created '${res.slug}' with a type of '${res.type}' and an id of '${res.id}'`);
+        .then(res => `🌱 successfully created '${res.title}' with a type of '${res.type}' and an id of '${res.id}'`);
     }
 
     const createdCategory = chalk.green(await createCategory());

@@ -104,7 +104,7 @@ describe('rdme categories:create', () => {
     );
   });
 
-  it('should create a new category if the slug and type do not match', async () => {
+  it('should create a new category if the title and type do not match and the preventDuplicates flag is checked', async () => {
     const getMock = getNockWithVersionHeader(version)
       .persist()
       .get('/api/v1/categories?perPage=20&page=1')
@@ -121,15 +121,21 @@ describe('rdme categories:create', () => {
     const versionMock = getApiNock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
     await expect(
-      categoriesCreate.run({ title: 'New Category', categoryType: 'guide', key, version: '1.0.0' })
-    ).resolves.toBe("🌱 successfully created 'new-category' with a type of 'guide' and an id of '123'");
+      categoriesCreate.run({
+        title: 'New Category',
+        categoryType: 'guide',
+        key,
+        version: '1.0.0',
+        preventDuplicates: true,
+      })
+    ).resolves.toBe("🌱 successfully created 'New Category' with a type of 'guide' and an id of '123'");
 
     getMock.done();
     postMock.done();
     versionMock.done();
   });
 
-  it('should create a new category if the slug matches but the type does not match', async () => {
+  it('should create a new category if the title matches but the type does not match and the preventDuplicates flag is checked', async () => {
     const getMock = getNockWithVersionHeader(version)
       .persist()
       .get('/api/v1/categories?perPage=20&page=1')
@@ -146,15 +152,51 @@ describe('rdme categories:create', () => {
     const versionMock = getApiNock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
     await expect(
-      categoriesCreate.run({ title: 'Category', categoryType: 'reference', key, version: '1.0.0' })
-    ).resolves.toBe("🌱 successfully created 'category' with a type of 'reference' and an id of '123'");
+      categoriesCreate.run({
+        title: 'Category',
+        categoryType: 'reference',
+        key,
+        version: '1.0.0',
+        preventDuplicates: true,
+      })
+    ).resolves.toBe("🌱 successfully created 'Category' with a type of 'reference' and an id of '123'");
 
     getMock.done();
     postMock.done();
     versionMock.done();
   });
 
-  it('should not create a new category if the slug and type match', async () => {
+  it('should create a new category if the title and type match and the preventDuplicates flag is not checked', async () => {
+    const getMock = getNockWithVersionHeader(version)
+      .persist()
+      .get('/api/v1/categories?perPage=20&page=1')
+      .basicAuth({ user: key })
+      .reply(200, [{ title: 'Category', slug: 'category', type: 'guide', id: '123' }], {
+        'x-total-count': '1',
+      });
+
+    const postMock = getNockWithVersionHeader(version)
+      .post('/api/v1/categories')
+      .basicAuth({ user: key })
+      .reply(201, { title: 'Category', slug: 'category', type: 'reference', id: '123' });
+
+    const versionMock = getApiNock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
+
+    await expect(
+      categoriesCreate.run({
+        title: 'Category',
+        categoryType: 'guide',
+        key,
+        version: '1.0.0',
+      })
+    ).resolves.toBe("🌱 successfully created 'Category' with a type of 'reference' and an id of '123'");
+
+    getMock.done();
+    postMock.done();
+    versionMock.done();
+  });
+
+  it('should not create a new category if the title and type match and the preventDuplicates flag is checked', async () => {
     const getMock = getNockWithVersionHeader(version)
       .persist()
       .get('/api/v1/categories?perPage=20&page=1')
@@ -166,9 +208,15 @@ describe('rdme categories:create', () => {
     const versionMock = getApiNock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
     await expect(
-      categoriesCreate.run({ title: 'Category', categoryType: 'guide', key, version: '1.0.0' })
+      categoriesCreate.run({
+        title: 'Category',
+        categoryType: 'guide',
+        key,
+        version: '1.0.0',
+        preventDuplicates: true,
+      })
     ).resolves.toBe(
-      "The 'category' category with a type of 'guide' already exists with an id of '123'. A new category was not created"
+      "The 'Category' category with a type of 'guide' already exists with an id of '123'. A new category was not created"
     );
 
     getMock.done();
