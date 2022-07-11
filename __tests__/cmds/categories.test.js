@@ -94,13 +94,13 @@ describe('rdme categories:create', () => {
 
   it('should error if categoryType is blank', () => {
     return expect(categoriesCreate.run({ key: '123', title: 'Test Title' })).rejects.toThrow(
-      '`categoryType` must be guide or reference.'
+      '`categoryType` must be `guide` or `reference`.'
     );
   });
 
   it('should error if categoryType is not `guide` or `reference`', () => {
     return expect(categoriesCreate.run({ key: '123', title: 'Test Title', categoryType: 'test' })).rejects.toThrow(
-      '`categoryType` must be guide or reference.'
+      '`categoryType` must be `guide` or `reference`.'
     );
   });
 
