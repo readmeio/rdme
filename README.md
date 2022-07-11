@@ -239,6 +239,8 @@ rdme categories --version={project-version}
 rdme categories:create <title> --categoryType={category-type} --version={project-version}
 ```
 
+`categoryType` is required and must be set to either "guide" or "reference"
+
 If you want to prevent the creation of a duplicate category with a matching `title` and `categoryType`, supply the `--preventDuplicates` flag.
 
 ## Future
