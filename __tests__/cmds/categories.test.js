@@ -167,14 +167,6 @@ describe('rdme categories:create', () => {
   });
 
   it('should create a new category if the title and type match and the preventDuplicates flag is not checked', async () => {
-    const getMock = getNockWithVersionHeader(version)
-      .persist()
-      .get('/api/v1/categories?perPage=20&page=1')
-      .basicAuth({ user: key })
-      .reply(200, [{ title: 'Category', slug: 'category', type: 'guide', id: '123' }], {
-        'x-total-count': '1',
-      });
-
     const postMock = getNockWithVersionHeader(version)
       .post('/api/v1/categories')
       .basicAuth({ user: key })
@@ -191,7 +183,6 @@ describe('rdme categories:create', () => {
       })
     ).resolves.toBe("🌱 successfully created 'Category' with a type of 'reference' and an id of '123'");
 
-    getMock.done();
     postMock.done();
     versionMock.done();
   });

@@ -78,21 +78,21 @@ module.exports = class CategoriesCreateCommand {
       });
     }
 
-    const allCategories = [].concat(
-      ...(await Promise.all(
-        Array.from({ length: await getNumberOfPages() }, (_, i) => i + 1).map(async page => {
-          return fetch(`${config.get('host')}/api/v1/categories?perPage=20&page=${page}`, {
-            method: 'get',
-            headers: cleanHeaders(key, {
-              'x-readme-version': selectedVersion,
-              Accept: 'application/json',
-            }),
-          }).then(res => handleRes(res));
-        })
-      ))
-    );
-
     async function matchCategory() {
+      const allCategories = [].concat(
+        ...(await Promise.all(
+          Array.from({ length: await getNumberOfPages() }, (_, i) => i + 1).map(async page => {
+            return fetch(`${config.get('host')}/api/v1/categories?perPage=20&page=${page}`, {
+              method: 'get',
+              headers: cleanHeaders(key, {
+                'x-readme-version': selectedVersion,
+                Accept: 'application/json',
+              }),
+            }).then(res => handleRes(res));
+          })
+        ))
+      );
+
       return allCategories.filter(category => {
         return changeCase.paramCase(category.title) === changeCase.paramCase(title) && category.type === categoryType;
       });
