@@ -59,7 +59,7 @@ module.exports = class CategoriesCreateCommand {
     }
 
     if (categoryType !== 'guide' && categoryType !== 'reference') {
-      return Promise.reject(new Error('`categoryType` must be guide or reference.'));
+      return Promise.reject(new Error('`categoryType` must be `guide` or `reference`.'));
     }
 
     const selectedVersion = await getProjectVersion(version, key, false);
