@@ -34,7 +34,7 @@ module.exports = class CategoriesCreateCommand {
       {
         name: 'categoryType',
         type: String,
-        description: 'Category type, must be guide or reference',
+        description: 'Category type, must be `guide` or `reference`',
       },
       {
         name: 'preventDuplicates',
