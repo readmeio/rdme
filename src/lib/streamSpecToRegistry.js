@@ -7,8 +7,6 @@ const fs = require('fs');
 const ora = require('ora');
 const { file: tmpFile } = require('tmp-promise');
 
-const text = 'Uploading API Definition to ReadMe...';
-
 /**
  * Uploads a spec to the API registry for usage in ReadMe
  *
@@ -16,7 +14,7 @@ const text = 'Uploading API Definition to ReadMe...';
  * @returns {String} a UUID in the API registry
  */
 module.exports = async function streamSpecToRegistry(spec) {
-  const spinner = ora({ text, ...oraOptions() }).start();
+  const spinner = ora({ text: 'Staging your API definition for upload...', ...oraOptions() }).start();
   // Create a temporary file to write the bundled spec to,
   // which we will then stream into the form data body
   const { path } = await tmpFile({ prefix: 'rdme-openapi-', postfix: '.json' });
@@ -39,7 +37,7 @@ module.exports = async function streamSpecToRegistry(spec) {
   return fetch(`${config.get('host')}/api/v1/api-registry`, options)
     .then(res => handleRes(res))
     .then(body => {
-      spinner.succeed(`${text} done! 🚀`);
+      spinner.succeed(`${spinner.text} done! 🚀`);
       return body.registryUUID;
     })
     .catch(e => {

@@ -10,8 +10,7 @@ const ora = require('ora');
  * return a bundled spec (defaults to false)
  */
 module.exports = async function prepare(path, bundle = false) {
-  const text = `Validating API definition located at ${path}...`;
-  const spinner = ora({ text, ...oraOptions() }).start();
+  const spinner = ora({ text: `Validating API definition located at ${path}...`, ...oraOptions() }).start();
 
   debug(`about to normalize spec located at ${path}`);
   const oas = new OASNormalize(path, { colorizeErrors: true, enablePaths: true });
@@ -22,7 +21,7 @@ module.exports = async function prepare(path, bundle = false) {
     debug(`raw validation error object: ${JSON.stringify(err)}`);
     throw err;
   });
-  spinner.succeed(`${text} done! ✅`);
+  spinner.succeed(`${spinner.text} done! ✅`);
 
   debug('👇👇👇👇👇 spec validated! logging spec below 👇👇👇👇👇');
   debug(api);
