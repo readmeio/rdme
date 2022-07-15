@@ -141,11 +141,10 @@ module.exports = class OpenAPICommand {
 
       function createSpec() {
         options.method = 'post';
-        const text = 'Creating your API docs in ReadMe...';
-        spinner.start(text);
+        spinner.start('Creating your API docs in ReadMe...');
         return fetch(`${config.get('host')}/api/v1/api-specification`, options).then(res => {
           if (res.ok) {
-            spinner.succeed(`${text} done! 🦉`);
+            spinner.succeed(`${spinner.text} done! 🦉`);
             return success(res);
           }
           spinner.fail();
@@ -156,11 +155,10 @@ module.exports = class OpenAPICommand {
       function updateSpec(specId) {
         isUpdate = true;
         options.method = 'put';
-        const text = 'Updating your API docs in ReadMe...';
-        spinner.start(text);
+        spinner.start('Updating your API docs in ReadMe...');
         return fetch(`${config.get('host')}/api/v1/api-specification/${specId}`, options).then(res => {
           if (res.ok) {
-            spinner.succeed(`${text} done! 🦉`);
+            spinner.succeed(`${spinner.text} done! 🦉`);
             return success(res);
           }
           spinner.fail();
