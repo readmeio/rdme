@@ -213,4 +213,31 @@ describe('rdme categories:create', () => {
     getMock.done();
     versionMock.done();
   });
+
+  it('should not create a new category if the non case sensitive title and type match and the preventDuplicates flag is checked', async () => {
+    const getMock = getNockWithVersionHeader(version)
+      .persist()
+      .get('/api/v1/categories?perPage=20&page=1')
+      .basicAuth({ user: key })
+      .reply(200, [{ title: 'Category', slug: 'category', type: 'guide', id: '123' }], {
+        'x-total-count': '1',
+      });
+
+    const versionMock = getApiNock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
+
+    await expect(
+      categoriesCreate.run({
+        title: 'category',
+        categoryType: 'guide',
+        key,
+        version: '1.0.0',
+        preventDuplicates: true,
+      })
+    ).resolves.toBe(
+      "The 'Category' category with a type of 'guide' already exists with an id of '123'. A new category was not created"
+    );
+
+    getMock.done();
+    versionMock.done();
+  });
 });
