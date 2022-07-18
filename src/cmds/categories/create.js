@@ -92,7 +92,7 @@ module.exports = class CategoriesCreateCommand {
         ))
       );
 
-      return allCategories.filter(category => {
+      return allCategories.find(category => {
         return category.title.trim().toLowerCase() === title.trim().toLowerCase() && category.type === categoryType;
       });
     }
@@ -100,8 +100,9 @@ module.exports = class CategoriesCreateCommand {
     async function createCategory() {
       if (preventDuplicates) {
         const matchedCategory = await matchCategory();
-        if (matchedCategory.length > 0) {
-          return `The '${matchedCategory[0].title}' category with a type of '${matchedCategory[0].type}' already exists with an id of '${matchedCategory[0].id}'. A new category was not created`;
+        if (typeof matchedCategory !== 'undefined') {
+          console.log(matchedCategory);
+          return `The '${matchedCategory.title}' category with a type of '${matchedCategory.type}' already exists with an id of '${matchedCategory.id}'. A new category was not created`;
         }
       }
       return fetch(`${config.get('host')}/api/v1/categories`, {
