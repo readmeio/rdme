@@ -1,6 +1,5 @@
 const chalk = require('chalk');
 const config = require('config');
-const changeCase = require('change-case');
 const { getProjectVersion } = require('../../lib/versionSelect');
 const fetch = require('../../lib/fetch');
 const { cleanHeaders, handleRes } = require('../../lib/fetch');
@@ -94,7 +93,7 @@ module.exports = class CategoriesCreateCommand {
       );
 
       return allCategories.filter(category => {
-        return changeCase.paramCase(category.title) === changeCase.paramCase(title) && category.type === categoryType;
+        return category.title.trim().toLowerCase() === title.trim().toLowerCase() && category.type === categoryType;
       });
     }
 
