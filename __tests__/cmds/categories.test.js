@@ -206,7 +206,7 @@ describe('rdme categories:create', () => {
         version: '1.0.0',
         preventDuplicates: true,
       })
-    ).resolves.toBe(
+    ).rejects.toThrow(
       "The 'Category' category with a type of 'guide' already exists with an id of '123'. A new category was not created"
     );
 
@@ -233,7 +233,7 @@ describe('rdme categories:create', () => {
         version: '1.0.0',
         preventDuplicates: true,
       })
-    ).resolves.toBe(
+    ).rejects.toThrow(
       "The 'Category' category with a type of 'guide' already exists with an id of '123'. A new category was not created"
     );
 

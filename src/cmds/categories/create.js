@@ -102,7 +102,11 @@ module.exports = class CategoriesCreateCommand {
         const matchedCategory = await matchCategory();
         if (typeof matchedCategory !== 'undefined') {
           console.log(matchedCategory);
-          return `The '${matchedCategory.title}' category with a type of '${matchedCategory.type}' already exists with an id of '${matchedCategory.id}'. A new category was not created`;
+          return Promise.reject(
+            new Error(
+              `The '${matchedCategory.title}' category with a type of '${matchedCategory.type}' already exists with an id of '${matchedCategory.id}'. A new category was not created`
+            )
+          );
         }
       }
       return fetch(`${config.get('host')}/api/v1/categories`, {
