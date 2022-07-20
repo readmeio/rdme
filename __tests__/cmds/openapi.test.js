@@ -535,7 +535,11 @@ describe('rdme openapi', () => {
 
       await expect(
         openapi.run({ spec: require.resolve('@readme/oas-examples/2.0/json/petstore.json'), key, version })
-      ).rejects.toStrictEqual(new Error('There was an error uploading!'));
+      ).rejects.toStrictEqual(
+        new Error(
+          'Yikes, something went wrong! Please try uploading your spec again and if the problem persists, get in touch with our support team at support@readme.io.'
+        )
+      );
 
       return mock.done();
     });
@@ -555,7 +559,7 @@ describe('rdme openapi', () => {
         .post('/api/v1/api-specification', { registryUUID })
         .delayConnection(1000)
         .basicAuth({ user: key })
-        .reply(400, '<html></html>');
+        .reply(400, '<title>Application Error</title>');
 
       await expect(
         openapi.run({ spec: require.resolve('@readme/oas-examples/2.0/json/petstore.json'), key, version })
