@@ -5,6 +5,7 @@ const config = require('config');
 const fs = require('fs');
 const { debug, oraOptions } = require('../lib/logger');
 const fetch = require('../lib/fetch');
+const { handleRes } = require('../lib/fetch');
 const { getProjectVersion } = require('../lib/versionSelect');
 const ora = require('ora');
 const parse = require('parse-link-header');
@@ -108,24 +109,29 @@ module.exports = class OpenAPICommand {
         );
       }
 
-      async function error(err) {
-        debug(`error response received with status code ${err.status}`);
-        try {
-          const parsedError = await err.json();
-          debug(`full error response: ${JSON.stringify(parsedError)}`);
-          return Promise.reject(new APIError(parsedError));
-        } catch (e) {
-          debug(`error parsing JSON with message: ${e.message}`);
-          if (e.message.includes('Unexpected token < in JSON')) {
-            return Promise.reject(
-              new Error(
-                "We're sorry, your upload request timed out. Please try again or split your file up into smaller chunks."
-              )
+      async function error(res) {
+        return handleRes(res).catch(err => {
+          // If we receive an APIError, no changes needed! Throw it as is.
+          if (err instanceof APIError) {
+            throw err;
+          }
+          // If we receive certain text responses, it's likely a 5xx error from our server.
+          if (
+            typeof err === 'string' &&
+            (err.includes('<title>Application Error</title>') || // Heroku error
+              err.includes('520: Web server is returning an unknown error</title>')) // Cloudflare error
+          ) {
+            throw new Error(
+              "We're sorry, your upload request timed out. Please try again or split your file up into smaller chunks."
             );
           }
-
-          return Promise.reject(new Error('There was an error uploading!'));
-        }
+          // As a fallback, we throw a more generic error.
+          throw new Error(
+            `Yikes, something went wrong! Please try uploading your spec again and if the problem persists, get in touch with our support team at ${chalk.underline(
+              'support@readme.io'
+            )}.`
+          );
+        });
       }
 
       const registryUUID = await streamSpecToRegistry(bundledSpec);
