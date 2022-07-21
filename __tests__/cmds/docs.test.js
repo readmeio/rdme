@@ -682,6 +682,41 @@ describe('rdme docs:single', () => {
       postMock.done();
       versionMock.done();
     });
+
+    it('should fail if some other error when retrieving page slug', async () => {
+      const slug = 'fail-doc';
+
+      const errorObject = {
+        error: 'INTERNAL_ERROR',
+        message: 'Unknown error (yikes)',
+        suggestion: '...a suggestion to resolve the issue...',
+        help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
+      };
+
+      const getMock = getNockWithVersionHeader(version)
+        .get(`/api/v1/docs/${slug}`)
+        .basicAuth({ user: key })
+        .reply(500, errorObject);
+
+      const versionMock = getApiNock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version });
+
+      const filepath = './__tests__/__fixtures__/failure-docs/fail-doc.md';
+
+      const formattedErrorObject = {
+        ...errorObject,
+        message: `Error uploading ${chalk.underline(`${filepath}`)}:\n\n${errorObject.message}`,
+      };
+
+      await expect(docsSingle.run({ filepath: `${filepath}`, key, version })).rejects.toStrictEqual(
+        new APIError(formattedErrorObject)
+      );
+
+      getMock.done();
+      versionMock.done();
+    });
   });
 
   describe('slug metadata', () => {

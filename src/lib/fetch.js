@@ -55,7 +55,7 @@ module.exports.handleRes = async function handleRes(res) {
   const extension = mime.extension(contentType);
   if (extension === 'json') {
     const body = await res.json();
-    debug(`received status code ${res.status} with JSON response: ${JSON.stringify(body)}`);
+    debug(`received status code ${res.status} from ${res.url} with JSON response: ${JSON.stringify(body)}`);
     if (body.error) {
       return Promise.reject(new APIError(body));
     }
@@ -64,7 +64,7 @@ module.exports.handleRes = async function handleRes(res) {
   // If we receive a non-JSON response, it's likely an error.
   // Let's debug the raw response body and throw it.
   const body = await res.text();
-  debug(`received status code ${res.status} with non-JSON response: ${body}`);
+  debug(`received status code ${res.status} from ${res.url} with non-JSON response: ${body}`);
   return Promise.reject(body);
 };
 

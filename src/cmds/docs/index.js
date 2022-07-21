@@ -1,16 +1,11 @@
 const chalk = require('chalk');
+const config = require('config');
 const fs = require('fs');
 const path = require('path');
-const config = require('config');
-const crypto = require('crypto');
-const frontMatter = require('gray-matter');
-const { promisify } = require('util');
-const { getProjectVersion } = require('../../lib/versionSelect');
-const fetch = require('../../lib/fetch');
-const { cleanHeaders, handleRes } = require('../../lib/fetch');
-const { debug } = require('../../lib/logger');
 
-const readFile = promisify(fs.readFile);
+const { getProjectVersion } = require('../../lib/versionSelect');
+const { debug } = require('../../lib/logger');
+const pushDoc = require('../../lib/pushDoc');
 
 module.exports = class DocsCommand {
   constructor() {
@@ -88,98 +83,9 @@ module.exports = class DocsCommand {
       return Promise.reject(new Error(`We were unable to locate Markdown files in ${folder}.`));
     }
 
-    function createDoc(slug, file, filename, hash, err) {
-      if (err.error !== 'DOC_NOTFOUND') return Promise.reject(err);
-
-      if (dryRun) {
-        return `🎭 dry run! This will create '${slug}' with contents from ${filename} with the following metadata: ${JSON.stringify(
-          file.data
-        )}`;
-      }
-
-      return fetch(`${config.get('host')}/api/v1/docs`, {
-        method: 'post',
-        headers: cleanHeaders(key, {
-          'x-readme-version': selectedVersion,
-          'Content-Type': 'application/json',
-        }),
-        body: JSON.stringify({
-          slug,
-          body: file.content,
-          ...file.data,
-          lastUpdatedHash: hash,
-        }),
-      })
-        .then(res => handleRes(res))
-        .then(res => `🌱 successfully created '${res.slug}' with contents from ${filename}`);
-    }
-
-    function updateDoc(slug, file, filename, hash, existingDoc) {
-      if (hash === existingDoc.lastUpdatedHash) {
-        return `${dryRun ? '🎭 dry run! ' : ''}\`${slug}\` ${
-          dryRun ? 'will not be' : 'was not'
-        } updated because there were no changes.`;
-      }
-
-      if (dryRun) {
-        return `🎭 dry run! This will update '${slug}' with contents from ${filename} with the following metadata: ${JSON.stringify(
-          file.data
-        )}`;
-      }
-
-      return fetch(`${config.get('host')}/api/v1/docs/${slug}`, {
-        method: 'put',
-        headers: cleanHeaders(key, {
-          'x-readme-version': selectedVersion,
-          'Content-Type': 'application/json',
-        }),
-        body: JSON.stringify(
-          Object.assign(existingDoc, {
-            body: file.content,
-            ...file.data,
-            lastUpdatedHash: hash,
-          })
-        ),
-      })
-        .then(res => handleRes(res))
-        .then(res => `✏️ successfully updated '${res.slug}' with contents from ${filename}`);
-    }
-
     const updatedDocs = await Promise.all(
       files.map(async filename => {
-        debug(`reading file ${filename}`);
-        const file = await readFile(filename, 'utf8');
-        const matter = frontMatter(file);
-        debug(`frontmatter for ${filename}: ${JSON.stringify(matter)}`);
-
-        // Stripping the subdirectories and markdown extension from the filename and lowercasing to get the default slug.
-        const slug = matter.data.slug || path.basename(filename).replace(path.extname(filename), '').toLowerCase();
-        const hash = crypto.createHash('sha1').update(file).digest('hex');
-
-        debug(`fetching data for ${slug}`);
-
-        return fetch(`${config.get('host')}/api/v1/docs/${slug}`, {
-          method: 'get',
-          headers: cleanHeaders(key, {
-            'x-readme-version': selectedVersion,
-            Accept: 'application/json',
-          }),
-        })
-          .then(res => res.json())
-          .then(res => {
-            debug(`GET /docs/:slug API response for ${slug}: ${JSON.stringify(res)}`);
-            if (res.error) {
-              debug(`error retrieving data for ${slug}, creating doc`);
-              return createDoc(slug, matter, filename, hash, res);
-            }
-            debug(`data received for ${slug}, updating doc`);
-            return updateDoc(slug, matter, filename, hash, res);
-          })
-          .catch(err => {
-            // eslint-disable-next-line no-param-reassign
-            err.message = `Error uploading ${chalk.underline(filename)}:\n\n${err.message}`;
-            throw err;
-          });
+        return pushDoc(key, selectedVersion, dryRun, filename);
       })
     );
 
