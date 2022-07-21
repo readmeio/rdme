@@ -39,7 +39,7 @@ module.exports = class CategoriesCreateCommand {
         name: 'preventDuplicates',
         type: Boolean,
         description:
-          'Prevents the creation of a new category if their is an existing category with a mathcing `categoryType` and exact matching `title`',
+          'Prevents the creation of a new category if their is an existing category with a matching `categoryType` and `title`',
       },
     ];
   }
@@ -101,10 +101,9 @@ module.exports = class CategoriesCreateCommand {
       if (preventDuplicates) {
         const matchedCategory = await matchCategory();
         if (typeof matchedCategory !== 'undefined') {
-          console.log(matchedCategory);
           return Promise.reject(
             new Error(
-              `The '${matchedCategory.title}' category with a type of '${matchedCategory.type}' already exists with an id of '${matchedCategory.id}'. A new category was not created`
+              `The '${matchedCategory.title}' category with a type of '${matchedCategory.type}' already exists with an id of '${matchedCategory.id}'. A new category was not created.`
             )
           );
         }
