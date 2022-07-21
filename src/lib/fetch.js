@@ -2,6 +2,7 @@
 const { debug } = require('./logger');
 const fetch = require('node-fetch');
 const isGHA = require('./isGitHub');
+const mime = require('mime-types');
 const pkg = require('../../package.json');
 const APIError = require('./apiError');
 
@@ -41,18 +42,30 @@ module.exports.getUserAgent = function getUserAgent() {
 };
 
 /**
- * Small handler for transforming responses from our API into JSON and if there's errors, throwing
- * an APIError exception.
+ * Small handler for handling responses from our API.
+ *
+ * If we receive JSON errors, we throw an APIError exception.
+ *
+ * If we receive non-JSON responses, we consider them errors and throw them.
  *
  * @param {Response} res
  */
 module.exports.handleRes = async function handleRes(res) {
-  const body = await res.json();
-  debug(`received status code ${res.status} with response body: ${JSON.stringify(body)}`);
-  if (body.error) {
-    return Promise.reject(new APIError(body));
+  const contentType = res.headers.get('content-type');
+  const extension = mime.extension(contentType);
+  if (extension === 'json') {
+    const body = await res.json();
+    debug(`received status code ${res.status} with JSON response: ${JSON.stringify(body)}`);
+    if (body.error) {
+      return Promise.reject(new APIError(body));
+    }
+    return body;
   }
-  return body;
+  // If we receive a non-JSON response, it's likely an error.
+  // Let's debug the raw response body and throw it.
+  const body = await res.text();
+  debug(`received status code ${res.status} with non-JSON response: ${body}`);
+  return Promise.reject(body);
 };
 
 /**
