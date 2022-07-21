@@ -1,9 +1,10 @@
 const chalk = require('chalk');
-const config = require('config');
-const { getProjectVersion } = require('../../lib/versionSelect');
-const fetch = require('../../lib/fetch');
 const { cleanHeaders, handleRes } = require('../../lib/fetch');
+const config = require('config');
 const { debug } = require('../../lib/logger');
+const fetch = require('../../lib/fetch');
+const getCategories = require('../../lib/getCategories');
+const { getProjectVersion } = require('../../lib/versionSelect');
 
 module.exports = class CategoriesCreateCommand {
   constructor() {
@@ -65,32 +66,8 @@ module.exports = class CategoriesCreateCommand {
 
     debug(`selectedVersion: ${selectedVersion}`);
 
-    function getNumberOfPages() {
-      return fetch(`${config.get('host')}/api/v1/categories?perPage=20&page=1`, {
-        method: 'get',
-        headers: cleanHeaders(key, {
-          'x-readme-version': selectedVersion,
-          Accept: 'application/json',
-        }),
-      }).then(res => {
-        return Math.ceil(res.headers.get('x-total-count') / 20);
-      });
-    }
-
     async function matchCategory() {
-      const allCategories = [].concat(
-        ...(await Promise.all(
-          Array.from({ length: await getNumberOfPages() }, (_, i) => i + 1).map(async page => {
-            return fetch(`${config.get('host')}/api/v1/categories?perPage=20&page=${page}`, {
-              method: 'get',
-              headers: cleanHeaders(key, {
-                'x-readme-version': selectedVersion,
-                Accept: 'application/json',
-              }),
-            }).then(res => handleRes(res));
-          })
-        ))
-      );
+      const allCategories = await getCategories(key, selectedVersion);
 
       return allCategories.find(category => {
         return category.title.trim().toLowerCase() === title.trim().toLowerCase() && category.type === categoryType;

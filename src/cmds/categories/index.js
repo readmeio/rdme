@@ -1,8 +1,6 @@
-const config = require('config');
-const { getProjectVersion } = require('../../lib/versionSelect');
-const fetch = require('../../lib/fetch');
-const { cleanHeaders, handleRes } = require('../../lib/fetch');
 const { debug } = require('../../lib/logger');
+const { getProjectVersion } = require('../../lib/versionSelect');
+const getCategories = require('../../lib/getCategories');
 
 module.exports = class CategoriesCommand {
   constructor() {
@@ -41,31 +39,7 @@ module.exports = class CategoriesCommand {
 
     debug(`selectedVersion: ${selectedVersion}`);
 
-    function getNumberOfPages() {
-      return fetch(`${config.get('host')}/api/v1/categories?perPage=20&page=1`, {
-        method: 'get',
-        headers: cleanHeaders(key, {
-          'x-readme-version': selectedVersion,
-          Accept: 'application/json',
-        }),
-      }).then(res => {
-        return Math.ceil(res.headers.get('x-total-count') / 20);
-      });
-    }
-
-    const allCategories = [].concat(
-      ...(await Promise.all(
-        Array.from({ length: await getNumberOfPages() }, (_, i) => i + 1).map(async page => {
-          return fetch(`${config.get('host')}/api/v1/categories?perPage=20&page=${page}`, {
-            method: 'get',
-            headers: cleanHeaders(key, {
-              'x-readme-version': selectedVersion,
-              Accept: 'application/json',
-            }),
-          }).then(res => handleRes(res));
-        })
-      ))
-    );
+    const allCategories = await getCategories(key, selectedVersion);
 
     return Promise.resolve(JSON.stringify(allCategories, null, 2));
   }
