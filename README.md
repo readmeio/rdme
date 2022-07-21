@@ -223,14 +223,6 @@ You can remove a specific version from your project, as well as all of the attac
 rdme versions:delete --version={project-version}
 ```
 
-### Open Your ReadMe Project in Your Browser
-
-If you are logged in, this will open the project in your browser:
-
-```sh
-rdme open
-```
-
 ### Categories
 
 #### Get All Categories Associated to Your Project Version
@@ -248,6 +240,14 @@ rdme categories:create <title> --categoryType={category-type} --version={project
 `categoryType` is required and must be set to either `guide` or `reference`
 
 If you want to prevent the creation of a duplicate category with a matching `title` and `categoryType`, supply the `--preventDuplicates` flag.
+
+### Open Your ReadMe Project in Your Browser
+
+If you are logged in, this will open the project in your browser:
+
+```sh
+rdme open
+```
 
 ## Future
 
