@@ -23,10 +23,12 @@ describe('rdme categories', () => {
   afterEach(() => nock.cleanAll());
 
   it('should error if no api key provided', () => {
-    return expect(categories.run({})).rejects.toThrow('No project API key provided. Please use `--key`.');
+    return expect(categories.run({})).rejects.toStrictEqual(
+      new Error('No project API key provided. Please use `--key`.')
+    );
   });
 
-  it('should return all categories for a single pages', async () => {
+  it('should return all categories for a single page', async () => {
     const getMock = getNockWithVersionHeader(version)
       .persist()
       .get('/api/v1/categories?perPage=20&page=1')
@@ -83,28 +85,30 @@ describe('rdme categories:create', () => {
   afterEach(() => nock.cleanAll());
 
   it('should error if no api key provided', () => {
-    return expect(categoriesCreate.run({})).rejects.toThrow('No project API key provided. Please use `--key`.');
+    return expect(categoriesCreate.run({})).rejects.toStrictEqual(
+      new Error('No project API key provided. Please use `--key`.')
+    );
   });
 
   it('should error if no title provided', () => {
-    return expect(categoriesCreate.run({ key: '123' })).rejects.toThrow(
-      'No title provided. Usage `rdme categories:create <title> [options]`.'
+    return expect(categoriesCreate.run({ key: '123' })).rejects.toStrictEqual(
+      new Error('No title provided. Usage `rdme categories:create <title> [options]`.')
     );
   });
 
   it('should error if categoryType is blank', () => {
-    return expect(categoriesCreate.run({ key: '123', title: 'Test Title' })).rejects.toThrow(
-      '`categoryType` must be `guide` or `reference`.'
+    return expect(categoriesCreate.run({ key: '123', title: 'Test Title' })).rejects.toStrictEqual(
+      new Error('`categoryType` must be `guide` or `reference`.')
     );
   });
 
   it('should error if categoryType is not `guide` or `reference`', () => {
-    return expect(categoriesCreate.run({ key: '123', title: 'Test Title', categoryType: 'test' })).rejects.toThrow(
-      '`categoryType` must be `guide` or `reference`.'
-    );
+    return expect(
+      categoriesCreate.run({ key: '123', title: 'Test Title', categoryType: 'test' })
+    ).rejects.toStrictEqual(new Error('`categoryType` must be `guide` or `reference`.'));
   });
 
-  it('should create a new category if the title and type do not match and the preventDuplicates flag is checked', async () => {
+  it('should create a new category if the title and type do not match and preventDuplicates=true', async () => {
     const getMock = getNockWithVersionHeader(version)
       .persist()
       .get('/api/v1/categories?perPage=20&page=1')
@@ -135,7 +139,7 @@ describe('rdme categories:create', () => {
     versionMock.done();
   });
 
-  it('should create a new category if the title matches but the type does not match and the preventDuplicates flag is checked', async () => {
+  it('should create a new category if the title matches but the type does not match and preventDuplicates=true', async () => {
     const getMock = getNockWithVersionHeader(version)
       .persist()
       .get('/api/v1/categories?perPage=20&page=1')
@@ -166,7 +170,7 @@ describe('rdme categories:create', () => {
     versionMock.done();
   });
 
-  it('should create a new category if the title and type match and the preventDuplicates flag is not checked', async () => {
+  it('should create a new category if the title and type match and preventDuplicates=false', async () => {
     const postMock = getNockWithVersionHeader(version)
       .post('/api/v1/categories')
       .basicAuth({ user: key })
@@ -187,7 +191,7 @@ describe('rdme categories:create', () => {
     versionMock.done();
   });
 
-  it('should not create a new category if the title and type match and the preventDuplicates flag is checked', async () => {
+  it('should not create a new category if the title and type match and preventDuplicates=true', async () => {
     const getMock = getNockWithVersionHeader(version)
       .persist()
       .get('/api/v1/categories?perPage=20&page=1')
@@ -206,15 +210,17 @@ describe('rdme categories:create', () => {
         version: '1.0.0',
         preventDuplicates: true,
       })
-    ).rejects.toThrow(
-      "The 'Category' category with a type of 'guide' already exists with an id of '123'. A new category was not created"
+    ).rejects.toStrictEqual(
+      new Error(
+        "The 'Category' category with a type of 'guide' already exists with an id of '123'. A new category was not created."
+      )
     );
 
     getMock.done();
     versionMock.done();
   });
 
-  it('should not create a new category if the non case sensitive title and type match and the preventDuplicates flag is checked', async () => {
+  it('should not create a new category if the non case sensitive title and type match and preventDuplicates=true', async () => {
     const getMock = getNockWithVersionHeader(version)
       .persist()
       .get('/api/v1/categories?perPage=20&page=1')
@@ -233,8 +239,10 @@ describe('rdme categories:create', () => {
         version: '1.0.0',
         preventDuplicates: true,
       })
-    ).rejects.toThrow(
-      "The 'Category' category with a type of 'guide' already exists with an id of '123'. A new category was not created"
+    ).rejects.toStrictEqual(
+      new Error(
+        "The 'Category' category with a type of 'guide' already exists with an id of '123'. A new category was not created."
+      )
     );
 
     getMock.done();
