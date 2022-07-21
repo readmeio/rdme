@@ -231,6 +231,24 @@ If you are logged in, this will open the project in your browser:
 rdme open
 ```
 
+### Categories
+
+#### Get All Categories Associated to Your Project Version
+
+```sh
+rdme categories --version={project-version}
+```
+
+#### Create a New Category for your Project Version
+
+```sh
+rdme categories:create <title> --categoryType={category-type} --version={project-version}
+```
+
+`categoryType` is required and must be set to either `guide` or `reference`
+
+If you want to prevent the creation of a duplicate category with a matching `title` and `categoryType`, supply the `--preventDuplicates` flag.
+
 ## Future
 
 We are continually expanding and improving the offerings of this application as we expand our public API and are able. Some interactions may change over time, but we will do our best to retain backwards compatibility.
