@@ -1,3 +1,21 @@
+## 7.4.0 (2022-07-21)
+
+* docs: add some 2fa language (#537) ([dbd6930](https://github.com/readmeio/rdme/commit/dbd6930)), closes [#537](https://github.com/readmeio/rdme/issues/537)
+* docs: rearrange categories section ([12f5341](https://github.com/readmeio/rdme/commit/12f5341))
+* docs: remove duplicated commit conventions ([46cf29e](https://github.com/readmeio/rdme/commit/46cf29e))
+* feat: add `categories` and `categories:create` (#530) ([bbb5e03](https://github.com/readmeio/rdme/commit/bbb5e03)), closes [#530](https://github.com/readmeio/rdme/issues/530)
+* feat: add `docs:single` (#529) ([01eb66d](https://github.com/readmeio/rdme/commit/01eb66d)), closes [#529](https://github.com/readmeio/rdme/issues/529)
+* feat: better error-handling for non-JSON responses (#538) ([60b7f8f](https://github.com/readmeio/rdme/commit/60b7f8f)), closes [#538](https://github.com/readmeio/rdme/issues/538)
+* feat(config): add ability to override host + hub (#535) ([122ba5c](https://github.com/readmeio/rdme/commit/122ba5c)), closes [#535](https://github.com/readmeio/rdme/issues/535)
+* fix(openapi): clearer copy, smol refactors (#536) ([06ee0b1](https://github.com/readmeio/rdme/commit/06ee0b1)), closes [#536](https://github.com/readmeio/rdme/issues/536)
+* chore(ci): rename step for clarity ([89ed381](https://github.com/readmeio/rdme/commit/89ed381))
+* chore(dependabot): add update-notifier to ignore list ([ab0a791](https://github.com/readmeio/rdme/commit/ab0a791))
+* chore(deps-dev): bump jest from 28.1.1 to 28.1.2 (#532) ([3db1876](https://github.com/readmeio/rdme/commit/3db1876)), closes [#532](https://github.com/readmeio/rdme/issues/532)
+* chore(deps-dev): bump nock from 13.2.7 to 13.2.8 (#534) ([21e5511](https://github.com/readmeio/rdme/commit/21e5511)), closes [#534](https://github.com/readmeio/rdme/issues/534)
+* ci: run tests on `pull_request` event (#531) ([e8516b7](https://github.com/readmeio/rdme/commit/e8516b7)), closes [#531](https://github.com/readmeio/rdme/issues/531)
+
+
+
 ## 7.3.0 (2022-06-23)
 
 * chore(deps-dev): bump @readme/oas-examples from 5.3.0 to 5.4.0 (#524) ([6fd6fc4](https://github.com/readmeio/rdme/commit/6fd6fc4)), closes [#524](https://github.com/readmeio/rdme/issues/524)
