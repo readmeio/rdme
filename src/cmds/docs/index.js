@@ -16,7 +16,7 @@ module.exports = class DocsCommand {
   constructor() {
     this.command = 'docs';
     this.usage = 'docs <folder> [options]';
-    this.description = 'Sync a folder of markdown files to your ReadMe project.';
+    this.description = 'Sync a folder of Markdown files to your ReadMe project.';
     this.category = 'docs';
     this.position = 1;
 

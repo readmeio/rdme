@@ -16,7 +16,7 @@ module.exports = class SingleDocCommand {
   constructor() {
     this.command = 'docs:single';
     this.usage = 'docs:single <filepath> [options]';
-    this.description = 'Sync a single markdown file to your ReadMe project.';
+    this.description = 'Sync a single Markdown file to your ReadMe project.';
     this.category = 'docs';
     this.position = 3;
 
