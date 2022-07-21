@@ -54,9 +54,7 @@ module.exports = class EditDocsCommand {
       return Promise.reject(new Error(`No slug provided. Usage \`${config.get('cli')} ${this.usage}\`.`));
     }
 
-    const selectedVersion = await getProjectVersion(version, key, true).catch(e => {
-      return Promise.reject(e);
-    });
+    const selectedVersion = await getProjectVersion(version, key, true);
 
     debug(`selectedVersion: ${selectedVersion}`);
 

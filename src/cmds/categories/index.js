@@ -33,9 +33,7 @@ module.exports = class CategoriesCommand {
     if (!key) {
       return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
     }
-    const selectedVersion = await getProjectVersion(version, key, true).catch(e => {
-      return Promise.reject(e);
-    });
+    const selectedVersion = await getProjectVersion(version, key, true);
 
     debug(`selectedVersion: ${selectedVersion}`);
 
