@@ -5,6 +5,7 @@ const fs = require('fs');
 const grayMatter = require('gray-matter');
 const path = require('path');
 
+const APIError = require('./apiError');
 const { cleanHeaders, handleRes } = require('./fetch');
 const fetch = require('./fetch');
 const { debug } = require('./logger');
@@ -31,7 +32,7 @@ module.exports = async function pushDoc(key, selectedVersion, dryRun, filepath) 
   const hash = crypto.createHash('sha1').update(file).digest('hex');
 
   function createDoc(err) {
-    if (err.error !== 'DOC_NOTFOUND') return Promise.reject(err);
+    if (err.error !== 'DOC_NOTFOUND') return Promise.reject(new APIError(err));
 
     if (dryRun) {
       return `🎭 dry run! This will create '${slug}' with contents from ${filepath} with the following metadata: ${JSON.stringify(
