@@ -559,7 +559,7 @@ describe('rdme openapi', () => {
         .post('/api/v1/api-specification', { registryUUID })
         .delayConnection(1000)
         .basicAuth({ user: key })
-        .reply(400, '<title>Application Error</title>');
+        .reply(500, '<title>Application Error</title>');
 
       await expect(
         openapi.run({ spec: require.resolve('@readme/oas-examples/2.0/json/petstore.json'), key, version })
