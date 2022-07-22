@@ -62,7 +62,7 @@ module.exports = class SingleDocCommand {
 
     debug(`selectedVersion: ${selectedVersion}`);
 
-    const createdDoc = await pushDoc(key, selectedVersion, dryRun, filepath);
+    const createdDoc = await pushDoc(key, selectedVersion, dryRun, filepath, this.category);
 
     return chalk.green(createdDoc);
   }

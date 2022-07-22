@@ -85,7 +85,7 @@ module.exports = class DocsCommand {
 
     const updatedDocs = await Promise.all(
       files.map(async filename => {
-        return pushDoc(key, selectedVersion, dryRun, filename);
+        return pushDoc(key, selectedVersion, dryRun, filename, this.category);
       })
     );
 
