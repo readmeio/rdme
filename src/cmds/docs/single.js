@@ -8,12 +8,12 @@ const pushDoc = require('../../lib/pushDoc');
 module.exports = class SingleDocCommand {
   constructor() {
     this.command = 'docs:single';
-    this.usage = 'docs:single <filepath> [options]';
+    this.usage = 'docs:single <file> [options]';
     this.description = 'Sync a single Markdown file to your ReadMe project.';
     this.category = 'docs';
     this.position = 3;
 
-    this.hiddenArgs = ['filepath'];
+    this.hiddenArgs = ['filePath'];
     this.args = [
       {
         name: 'key',
@@ -26,7 +26,7 @@ module.exports = class SingleDocCommand {
         description: 'Project version',
       },
       {
-        name: 'filepath',
+        name: 'filePath',
         type: String,
         defaultOption: true,
       },
@@ -39,7 +39,7 @@ module.exports = class SingleDocCommand {
   }
 
   async run(opts) {
-    const { dryRun, filepath, key, version } = opts;
+    const { dryRun, filePath, key, version } = opts;
     debug(`command: ${this.command}`);
     debug(`opts: ${JSON.stringify(opts)}`);
 
@@ -47,12 +47,12 @@ module.exports = class SingleDocCommand {
       return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
     }
 
-    if (!filepath) {
-      return Promise.reject(new Error(`No filepath provided. Usage \`${config.get('cli')} ${this.usage}\`.`));
+    if (!filePath) {
+      return Promise.reject(new Error(`No file path provided. Usage \`${config.get('cli')} ${this.usage}\`.`));
     }
 
-    if (filepath.endsWith('.md') === false || !filepath.endsWith('.markdown') === false) {
-      return Promise.reject(new Error('The filepath specified is not a markdown file.'));
+    if (filePath.endsWith('.md') === false || !filePath.endsWith('.markdown') === false) {
+      return Promise.reject(new Error('The file path specified is not a markdown file.'));
     }
 
     // TODO: should we allow version selection at all here?
@@ -62,7 +62,7 @@ module.exports = class SingleDocCommand {
 
     debug(`selectedVersion: ${selectedVersion}`);
 
-    const createdDoc = await pushDoc(key, selectedVersion, dryRun, filepath, this.category);
+    const createdDoc = await pushDoc(key, selectedVersion, dryRun, filePath, this.category);
 
     return chalk.green(createdDoc);
   }
