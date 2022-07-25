@@ -14,7 +14,8 @@ const SingleChangelogCommand = require('../../src/cmds/changelogs/single');
 const changelogs = new ChangelogsCommand();
 const changelogsSingle = new SingleChangelogCommand();
 
-const fixturesDir = `${__dirname}./../__fixtures__`;
+const fixturesBaseDir = '__fixtures__/changelogs';
+const fullFixturesDir = `${__dirname}./../${fixturesBaseDir}`;
 const key = 'API_KEY';
 
 function hashFileContents(contents) {
@@ -53,14 +54,14 @@ describe('rdme changelogs', () => {
     let anotherDoc;
 
     beforeEach(() => {
-      let fileContents = fs.readFileSync(path.join(fixturesDir, '/existing-docs/simple-doc.md'));
+      let fileContents = fs.readFileSync(path.join(fullFixturesDir, '/existing-docs/simple-doc.md'));
       simpleDoc = {
         slug: 'simple-doc',
         doc: frontMatter(fileContents),
         hash: hashFileContents(fileContents),
       };
 
-      fileContents = fs.readFileSync(path.join(fixturesDir, '/existing-docs/subdir/another-doc.md'));
+      fileContents = fs.readFileSync(path.join(fullFixturesDir, '/existing-docs/subdir/another-doc.md'));
       anotherDoc = {
         slug: 'another-doc',
         doc: frontMatter(fileContents),
@@ -100,13 +101,13 @@ describe('rdme changelogs', () => {
         .basicAuth({ user: key })
         .reply(200, { slug: anotherDoc.slug, body: anotherDoc.doc.content });
 
-      return changelogs.run({ folder: './__tests__/__fixtures__/existing-docs', key }).then(updatedDocs => {
+      return changelogs.run({ folder: `./__tests__/${fixturesBaseDir}/existing-docs`, key }).then(updatedDocs => {
         // All changelogs should have been updated because their hashes from the GET request were different from what they
         // are currently.
         expect(updatedDocs).toBe(
           [
-            "✏️ successfully updated 'simple-doc' with contents from __tests__/__fixtures__/existing-docs/simple-doc.md",
-            "✏️ successfully updated 'another-doc' with contents from __tests__/__fixtures__/existing-docs/subdir/another-doc.md",
+            `✏️ successfully updated 'simple-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`,
+            `✏️ successfully updated 'another-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/subdir/another-doc.md`,
           ].join('\n')
         );
 
@@ -127,16 +128,16 @@ describe('rdme changelogs', () => {
         .reply(200, { slug: anotherDoc.slug, lastUpdatedHash: 'anOldHash' });
 
       return changelogs
-        .run({ dryRun: true, folder: './__tests__/__fixtures__/existing-docs', key })
+        .run({ dryRun: true, folder: `./__tests__/${fixturesBaseDir}/existing-docs`, key })
         .then(updatedDocs => {
           // All changelogs should have been updated because their hashes from the GET request were different from what they
           // are currently.
           expect(updatedDocs).toBe(
             [
-              `🎭 dry run! This will update 'simple-doc' with contents from __tests__/__fixtures__/existing-docs/simple-doc.md with the following metadata: ${JSON.stringify(
+              `🎭 dry run! This will update 'simple-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/simple-doc.md with the following metadata: ${JSON.stringify(
                 simpleDoc.doc.data
               )}`,
-              `🎭 dry run! This will update 'another-doc' with contents from __tests__/__fixtures__/existing-docs/subdir/another-doc.md with the following metadata: ${JSON.stringify(
+              `🎭 dry run! This will update 'another-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/subdir/another-doc.md with the following metadata: ${JSON.stringify(
                 anotherDoc.doc.data
               )}`,
             ].join('\n')
@@ -157,7 +158,7 @@ describe('rdme changelogs', () => {
         .basicAuth({ user: key })
         .reply(200, { slug: anotherDoc.slug, lastUpdatedHash: anotherDoc.hash });
 
-      return changelogs.run({ folder: './__tests__/__fixtures__/existing-docs', key }).then(skippedDocs => {
+      return changelogs.run({ folder: `./__tests__/${fixturesBaseDir}/existing-docs`, key }).then(skippedDocs => {
         expect(skippedDocs).toBe(
           [
             '`simple-doc` was not updated because there were no changes.',
@@ -181,7 +182,7 @@ describe('rdme changelogs', () => {
         .reply(200, { slug: anotherDoc.slug, lastUpdatedHash: anotherDoc.hash });
 
       return changelogs
-        .run({ dryRun: true, folder: './__tests__/__fixtures__/existing-docs', key })
+        .run({ dryRun: true, folder: `./__tests__/${fixturesBaseDir}/existing-docs`, key })
         .then(skippedDocs => {
           expect(skippedDocs).toBe(
             [
@@ -198,8 +199,8 @@ describe('rdme changelogs', () => {
   describe('new changelogs', () => {
     it('should create new changelog', async () => {
       const slug = 'new-doc';
-      const doc = frontMatter(fs.readFileSync(path.join(fixturesDir, `/new-docs/${slug}.md`)));
-      const hash = hashFileContents(fs.readFileSync(path.join(fixturesDir, `/new-docs/${slug}.md`)));
+      const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
+      const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
 
       const getMock = getApiNock()
         .get(`/api/v1/changelogs/${slug}`)
@@ -216,8 +217,8 @@ describe('rdme changelogs', () => {
         .basicAuth({ user: key })
         .reply(201, { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
-      await expect(changelogs.run({ folder: './__tests__/__fixtures__/new-docs', key })).resolves.toBe(
-        "🌱 successfully created 'new-doc' with contents from __tests__/__fixtures__/new-docs/new-doc.md"
+      await expect(changelogs.run({ folder: `./__tests__/${fixturesBaseDir}/new-docs`, key })).resolves.toBe(
+        `🌱 successfully created 'new-doc' with contents from __tests__/${fixturesBaseDir}/new-docs/new-doc.md`
       );
 
       getMock.done();
@@ -226,7 +227,7 @@ describe('rdme changelogs', () => {
 
     it('should return creation info for dry run', async () => {
       const slug = 'new-doc';
-      const doc = frontMatter(fs.readFileSync(path.join(fixturesDir, `/new-docs/${slug}.md`)));
+      const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
 
       const getMock = getApiNock()
         .get(`/api/v1/changelogs/${slug}`)
@@ -238,8 +239,10 @@ describe('rdme changelogs', () => {
           help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
         });
 
-      await expect(changelogs.run({ dryRun: true, folder: './__tests__/__fixtures__/new-docs', key })).resolves.toBe(
-        `🎭 dry run! This will create 'new-doc' with contents from __tests__/__fixtures__/new-docs/new-doc.md with the following metadata: ${JSON.stringify(
+      await expect(
+        changelogs.run({ dryRun: true, folder: `./__tests__/${fixturesBaseDir}/new-docs`, key })
+      ).resolves.toBe(
+        `🎭 dry run! This will create 'new-doc' with contents from __tests__/${fixturesBaseDir}/new-docs/new-doc.md with the following metadata: ${JSON.stringify(
           doc.data
         )}`
       );
@@ -259,11 +262,11 @@ describe('rdme changelogs', () => {
         docs: 'fake-metrics-uuid',
         help: "If you need help, email support@readme.io and include the following link to your API log: 'fake-metrics-uuid'.",
       };
-      const doc = frontMatter(fs.readFileSync(path.join(fixturesDir, `/${folder}/${slug}.md`)));
-      const docTwo = frontMatter(fs.readFileSync(path.join(fixturesDir, `/${folder}/${slugTwo}.md`)));
+      const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/${folder}/${slug}.md`)));
+      const docTwo = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/${folder}/${slugTwo}.md`)));
 
-      const hash = hashFileContents(fs.readFileSync(path.join(fixturesDir, `/${folder}/${slug}.md`)));
-      const hashTwo = hashFileContents(fs.readFileSync(path.join(fixturesDir, `/${folder}/${slugTwo}.md`)));
+      const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/${folder}/${slug}.md`)));
+      const hashTwo = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/${folder}/${slugTwo}.md`)));
 
       const getMocks = getApiNock()
         .get(`/api/v1/changelogs/${slug}`)
@@ -288,7 +291,7 @@ describe('rdme changelogs', () => {
         .basicAuth({ user: key })
         .reply(201, {
           metadata: { image: [], title: '', description: '' },
-          title: 'This is the document title',
+          title: 'This is the changelog title',
           slug: slugTwo,
           body: 'Body',
         })
@@ -296,7 +299,7 @@ describe('rdme changelogs', () => {
         .basicAuth({ user: key })
         .reply(400, errorObject);
 
-      const fullDirectory = `__tests__/__fixtures__/${folder}`;
+      const fullDirectory = `__tests__/${fixturesBaseDir}/${folder}`;
 
       const formattedErrorObject = {
         ...errorObject,
@@ -315,8 +318,8 @@ describe('rdme changelogs', () => {
   describe('slug metadata', () => {
     it('should use provided slug', async () => {
       const slug = 'new-doc-slug';
-      const doc = frontMatter(fs.readFileSync(path.join(fixturesDir, `/slug-docs/${slug}.md`)));
-      const hash = hashFileContents(fs.readFileSync(path.join(fixturesDir, `/slug-docs/${slug}.md`)));
+      const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/slug-docs/${slug}.md`)));
+      const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/slug-docs/${slug}.md`)));
 
       const getMock = getApiNock()
         .get(`/api/v1/changelogs/${doc.data.slug}`)
@@ -333,8 +336,8 @@ describe('rdme changelogs', () => {
         .basicAuth({ user: key })
         .reply(201, { slug: doc.data.slug, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
-      await expect(changelogs.run({ folder: './__tests__/__fixtures__/slug-docs', key })).resolves.toBe(
-        "🌱 successfully created 'marc-actually-wrote-a-test' with contents from __tests__/__fixtures__/slug-docs/new-doc-slug.md"
+      await expect(changelogs.run({ folder: `./__tests__/${fixturesBaseDir}/slug-docs`, key })).resolves.toBe(
+        `🌱 successfully created 'marc-actually-wrote-a-test' with contents from __tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`
       );
 
       getMock.done();
@@ -367,8 +370,8 @@ describe('rdme changelogs:single', () => {
   describe('new changelogs', () => {
     it('should create new changelog', async () => {
       const slug = 'new-doc';
-      const doc = frontMatter(fs.readFileSync(path.join(fixturesDir, `/new-docs/${slug}.md`)));
-      const hash = hashFileContents(fs.readFileSync(path.join(fixturesDir, `/new-docs/${slug}.md`)));
+      const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
+      const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
 
       const getMock = getApiNock()
         .get(`/api/v1/changelogs/${slug}`)
@@ -386,9 +389,9 @@ describe('rdme changelogs:single', () => {
         .reply(201, { slug, body: doc.content, ...doc.data });
 
       await expect(
-        changelogsSingle.run({ filePath: './__tests__/__fixtures__/new-docs/new-doc.md', key })
+        changelogsSingle.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, key })
       ).resolves.toBe(
-        "🌱 successfully created 'new-doc' with contents from ./__tests__/__fixtures__/new-docs/new-doc.md"
+        `🌱 successfully created 'new-doc' with contents from ./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`
       );
 
       getMock.done();
@@ -397,7 +400,7 @@ describe('rdme changelogs:single', () => {
 
     it('should return creation info for dry run', async () => {
       const slug = 'new-doc';
-      const doc = frontMatter(fs.readFileSync(path.join(fixturesDir, `/new-docs/${slug}.md`)));
+      const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
 
       const getMock = getApiNock()
         .get(`/api/v1/changelogs/${slug}`)
@@ -410,9 +413,9 @@ describe('rdme changelogs:single', () => {
         });
 
       await expect(
-        changelogsSingle.run({ dryRun: true, filePath: './__tests__/__fixtures__/new-docs/new-doc.md', key })
+        changelogsSingle.run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, key })
       ).resolves.toBe(
-        `🎭 dry run! This will create 'new-doc' with contents from ./__tests__/__fixtures__/new-docs/new-doc.md with the following metadata: ${JSON.stringify(
+        `🎭 dry run! This will create 'new-doc' with contents from ./__tests__/${fixturesBaseDir}/new-docs/new-doc.md with the following metadata: ${JSON.stringify(
           doc.data
         )}`
       );
@@ -432,9 +435,9 @@ describe('rdme changelogs:single', () => {
         help: "If you need help, email support@readme.io and include the following link to your API log: 'fake-metrics-uuid'.",
       };
 
-      const doc = frontMatter(fs.readFileSync(path.join(fixturesDir, `/${folder}/${slug}.md`)));
+      const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/${folder}/${slug}.md`)));
 
-      const hash = hashFileContents(fs.readFileSync(path.join(fixturesDir, `/${folder}/${slug}.md`)));
+      const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/${folder}/${slug}.md`)));
 
       const getMock = getApiNock()
         .get(`/api/v1/changelogs/${slug}`)
@@ -451,7 +454,7 @@ describe('rdme changelogs:single', () => {
         .basicAuth({ user: key })
         .reply(400, errorObject);
 
-      const filePath = './__tests__/__fixtures__/failure-docs/fail-doc.md';
+      const filePath = `./__tests__/${fixturesBaseDir}/failure-docs/fail-doc.md`;
 
       const formattedErrorObject = {
         ...errorObject,
@@ -478,7 +481,7 @@ describe('rdme changelogs:single', () => {
 
       const getMock = getApiNock().get(`/api/v1/changelogs/${slug}`).basicAuth({ user: key }).reply(500, errorObject);
 
-      const filePath = './__tests__/__fixtures__/failure-docs/fail-doc.md';
+      const filePath = `./__tests__/${fixturesBaseDir}/failure-docs/fail-doc.md`;
 
       const formattedErrorObject = {
         ...errorObject,
@@ -496,8 +499,8 @@ describe('rdme changelogs:single', () => {
   describe('slug metadata', () => {
     it('should use provided slug', async () => {
       const slug = 'new-doc-slug';
-      const doc = frontMatter(fs.readFileSync(path.join(fixturesDir, `/slug-docs/${slug}.md`)));
-      const hash = hashFileContents(fs.readFileSync(path.join(fixturesDir, `/slug-docs/${slug}.md`)));
+      const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/slug-docs/${slug}.md`)));
+      const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/slug-docs/${slug}.md`)));
 
       const getMock = getApiNock()
         .get(`/api/v1/changelogs/${doc.data.slug}`)
@@ -515,9 +518,9 @@ describe('rdme changelogs:single', () => {
         .reply(201, { slug: doc.data.slug, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
       await expect(
-        changelogsSingle.run({ filePath: './__tests__/__fixtures__/slug-docs/new-doc-slug.md', key })
+        changelogsSingle.run({ filePath: `./__tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`, key })
       ).resolves.toBe(
-        "🌱 successfully created 'marc-actually-wrote-a-test' with contents from ./__tests__/__fixtures__/slug-docs/new-doc-slug.md"
+        `🌱 successfully created 'marc-actually-wrote-a-test' with contents from ./__tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`
       );
 
       getMock.done();
@@ -529,7 +532,7 @@ describe('rdme changelogs:single', () => {
     let simpleDoc;
 
     beforeEach(() => {
-      const fileContents = fs.readFileSync(path.join(fixturesDir, '/existing-docs/simple-doc.md'));
+      const fileContents = fs.readFileSync(path.join(fullFixturesDir, '/existing-docs/simple-doc.md'));
       simpleDoc = {
         slug: 'simple-doc',
         doc: frontMatter(fileContents),
@@ -557,10 +560,10 @@ describe('rdme changelogs:single', () => {
         });
 
       return changelogsSingle
-        .run({ filePath: './__tests__/__fixtures__/existing-docs/simple-doc.md', key })
+        .run({ filePath: `./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, key })
         .then(updatedDocs => {
           expect(updatedDocs).toBe(
-            "✏️ successfully updated 'simple-doc' with contents from ./__tests__/__fixtures__/existing-docs/simple-doc.md"
+            `✏️ successfully updated 'simple-doc' with contents from ./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`
           );
 
           getMock.done();
@@ -577,13 +580,13 @@ describe('rdme changelogs:single', () => {
         .reply(200, { slug: simpleDoc.slug, lastUpdatedHash: 'anOldHash' });
 
       return changelogsSingle
-        .run({ dryRun: true, filePath: './__tests__/__fixtures__/existing-docs/simple-doc.md', key })
+        .run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, key })
         .then(updatedDocs => {
           // All changelogs should have been updated because their hashes from the GET request were different from what they
           // are currently.
           expect(updatedDocs).toBe(
             [
-              `🎭 dry run! This will update 'simple-doc' with contents from ./__tests__/__fixtures__/existing-docs/simple-doc.md with the following metadata: ${JSON.stringify(
+              `🎭 dry run! This will update 'simple-doc' with contents from ./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md with the following metadata: ${JSON.stringify(
                 simpleDoc.doc.data
               )}`,
             ].join('\n')
@@ -602,7 +605,7 @@ describe('rdme changelogs:single', () => {
         .reply(200, { slug: simpleDoc.slug, lastUpdatedHash: simpleDoc.hash });
 
       return changelogsSingle
-        .run({ filePath: './__tests__/__fixtures__/existing-docs/simple-doc.md', key })
+        .run({ filePath: `./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, key })
         .then(skippedDocs => {
           expect(skippedDocs).toBe('`simple-doc` was not updated because there were no changes.');
 
@@ -617,7 +620,7 @@ describe('rdme changelogs:single', () => {
         .reply(200, { slug: simpleDoc.slug, lastUpdatedHash: simpleDoc.hash });
 
       return changelogsSingle
-        .run({ dryRun: true, filePath: './__tests__/__fixtures__/existing-docs/simple-doc.md', key })
+        .run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, key })
         .then(skippedDocs => {
           expect(skippedDocs).toBe('🎭 dry run! `simple-doc` will not be updated because there were no changes.');
 
