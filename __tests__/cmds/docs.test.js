@@ -16,7 +16,9 @@ const docs = new DocsCommand();
 const docsEdit = new DocsEditCommand();
 const docsSingle = new DocsSingleCommand();
 
-const fixturesDir = `${__dirname}./../__fixtures__`;
+const fixturesBaseDir = '__fixtures__/docs';
+const fullFixturesDir = `${__dirname}./../${fixturesBaseDir}`;
+
 const key = 'API_KEY';
 const version = '1.0.0';
 const category = 'CATEGORY_ID';
@@ -72,14 +74,14 @@ describe('rdme docs', () => {
     let anotherDoc;
 
     beforeEach(() => {
-      let fileContents = fs.readFileSync(path.join(fixturesDir, '/existing-docs/simple-doc.md'));
+      let fileContents = fs.readFileSync(path.join(fullFixturesDir, '/existing-docs/simple-doc.md'));
       simpleDoc = {
         slug: 'simple-doc',
         doc: frontMatter(fileContents),
         hash: hashFileContents(fileContents),
       };
 
-      fileContents = fs.readFileSync(path.join(fixturesDir, '/existing-docs/subdir/another-doc.md'));
+      fileContents = fs.readFileSync(path.join(fullFixturesDir, '/existing-docs/subdir/another-doc.md'));
       anotherDoc = {
         slug: 'another-doc',
         doc: frontMatter(fileContents),
@@ -127,13 +129,13 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      return docs.run({ folder: './__tests__/__fixtures__/existing-docs', key, version }).then(updatedDocs => {
+      return docs.run({ folder: `./__tests__/${fixturesBaseDir}/existing-docs`, key, version }).then(updatedDocs => {
         // All docs should have been updated because their hashes from the GET request were different from what they
         // are currently.
         expect(updatedDocs).toBe(
           [
-            "✏️ successfully updated 'simple-doc' with contents from __tests__/__fixtures__/existing-docs/simple-doc.md",
-            "✏️ successfully updated 'another-doc' with contents from __tests__/__fixtures__/existing-docs/subdir/another-doc.md",
+            `✏️ successfully updated 'simple-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`,
+            `✏️ successfully updated 'another-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/subdir/another-doc.md`,
           ].join('\n')
         );
 
@@ -160,16 +162,16 @@ describe('rdme docs', () => {
         .reply(200, { version });
 
       return docs
-        .run({ dryRun: true, folder: './__tests__/__fixtures__/existing-docs', key, version })
+        .run({ dryRun: true, folder: `./__tests__/${fixturesBaseDir}/existing-docs`, key, version })
         .then(updatedDocs => {
           // All docs should have been updated because their hashes from the GET request were different from what they
           // are currently.
           expect(updatedDocs).toBe(
             [
-              `🎭 dry run! This will update 'simple-doc' with contents from __tests__/__fixtures__/existing-docs/simple-doc.md with the following metadata: ${JSON.stringify(
+              `🎭 dry run! This will update 'simple-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/simple-doc.md with the following metadata: ${JSON.stringify(
                 simpleDoc.doc.data
               )}`,
-              `🎭 dry run! This will update 'another-doc' with contents from __tests__/__fixtures__/existing-docs/subdir/another-doc.md with the following metadata: ${JSON.stringify(
+              `🎭 dry run! This will update 'another-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/subdir/another-doc.md with the following metadata: ${JSON.stringify(
                 anotherDoc.doc.data
               )}`,
             ].join('\n')
@@ -196,7 +198,7 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      return docs.run({ folder: './__tests__/__fixtures__/existing-docs', key, version }).then(skippedDocs => {
+      return docs.run({ folder: `./__tests__/${fixturesBaseDir}/existing-docs`, key, version }).then(skippedDocs => {
         expect(skippedDocs).toBe(
           [
             '`simple-doc` was not updated because there were no changes.',
@@ -226,7 +228,7 @@ describe('rdme docs', () => {
         .reply(200, { version });
 
       return docs
-        .run({ dryRun: true, folder: './__tests__/__fixtures__/existing-docs', key, version })
+        .run({ dryRun: true, folder: `./__tests__/${fixturesBaseDir}/existing-docs`, key, version })
         .then(skippedDocs => {
           expect(skippedDocs).toBe(
             [
@@ -244,8 +246,8 @@ describe('rdme docs', () => {
   describe('new docs', () => {
     it('should create new doc', async () => {
       const slug = 'new-doc';
-      const doc = frontMatter(fs.readFileSync(path.join(fixturesDir, `/new-docs/${slug}.md`)));
-      const hash = hashFileContents(fs.readFileSync(path.join(fixturesDir, `/new-docs/${slug}.md`)));
+      const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
+      const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
 
       const getMock = getNockWithVersionHeader(version)
         .get(`/api/v1/docs/${slug}`)
@@ -267,8 +269,8 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      await expect(docs.run({ folder: './__tests__/__fixtures__/new-docs', key, version })).resolves.toBe(
-        "🌱 successfully created 'new-doc' with contents from __tests__/__fixtures__/new-docs/new-doc.md"
+      await expect(docs.run({ folder: `./__tests__/${fixturesBaseDir}/new-docs`, key, version })).resolves.toBe(
+        `🌱 successfully created 'new-doc' with contents from __tests__/${fixturesBaseDir}/new-docs/new-doc.md`
       );
 
       getMock.done();
@@ -278,7 +280,7 @@ describe('rdme docs', () => {
 
     it('should return creation info for dry run', async () => {
       const slug = 'new-doc';
-      const doc = frontMatter(fs.readFileSync(path.join(fixturesDir, `/new-docs/${slug}.md`)));
+      const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
 
       const getMock = getNockWithVersionHeader(version)
         .get(`/api/v1/docs/${slug}`)
@@ -295,8 +297,10 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      await expect(docs.run({ dryRun: true, folder: './__tests__/__fixtures__/new-docs', key, version })).resolves.toBe(
-        `🎭 dry run! This will create 'new-doc' with contents from __tests__/__fixtures__/new-docs/new-doc.md with the following metadata: ${JSON.stringify(
+      await expect(
+        docs.run({ dryRun: true, folder: `./__tests__/${fixturesBaseDir}/new-docs`, key, version })
+      ).resolves.toBe(
+        `🎭 dry run! This will create 'new-doc' with contents from __tests__/${fixturesBaseDir}/new-docs/new-doc.md with the following metadata: ${JSON.stringify(
           doc.data
         )}`
       );
@@ -315,11 +319,11 @@ describe('rdme docs', () => {
         message: "We couldn't save this doc (Path `category` is required.).",
       };
 
-      const doc = frontMatter(fs.readFileSync(path.join(fixturesDir, `/${folder}/${slug}.md`)));
-      const docTwo = frontMatter(fs.readFileSync(path.join(fixturesDir, `/${folder}/${slugTwo}.md`)));
+      const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/${folder}/${slug}.md`)));
+      const docTwo = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/${folder}/${slugTwo}.md`)));
 
-      const hash = hashFileContents(fs.readFileSync(path.join(fixturesDir, `/${folder}/${slug}.md`)));
-      const hashTwo = hashFileContents(fs.readFileSync(path.join(fixturesDir, `/${folder}/${slugTwo}.md`)));
+      const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/${folder}/${slug}.md`)));
+      const hashTwo = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/${folder}/${slugTwo}.md`)));
 
       const getMocks = getNockWithVersionHeader(version)
         .get(`/api/v1/docs/${slug}`)
@@ -367,7 +371,7 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      const fullDirectory = `__tests__/__fixtures__/${folder}`;
+      const fullDirectory = `__tests__/${fixturesBaseDir}/${folder}`;
 
       const formattedErrorObject = {
         ...errorObject,
@@ -387,8 +391,8 @@ describe('rdme docs', () => {
   describe('slug metadata', () => {
     it('should use provided slug', async () => {
       const slug = 'new-doc-slug';
-      const doc = frontMatter(fs.readFileSync(path.join(fixturesDir, `/slug-docs/${slug}.md`)));
-      const hash = hashFileContents(fs.readFileSync(path.join(fixturesDir, `/slug-docs/${slug}.md`)));
+      const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/slug-docs/${slug}.md`)));
+      const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/slug-docs/${slug}.md`)));
 
       const getMock = getApiNock()
         .get(`/api/v1/docs/${doc.data.slug}`)
@@ -410,8 +414,8 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      await expect(docs.run({ folder: './__tests__/__fixtures__/slug-docs', key, version })).resolves.toBe(
-        "🌱 successfully created 'marc-actually-wrote-a-test' with contents from __tests__/__fixtures__/slug-docs/new-doc-slug.md"
+      await expect(docs.run({ folder: `./__tests__/${fixturesBaseDir}/slug-docs`, key, version })).resolves.toBe(
+        `🌱 successfully created 'marc-actually-wrote-a-test' with contents from __tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`
       );
 
       getMock.done();
@@ -554,23 +558,23 @@ describe('rdme docs:single', () => {
     return expect(docsSingle.run({})).rejects.toThrow('No project API key provided. Please use `--key`.');
   });
 
-  it('should error if no filepath provided', () => {
+  it('should error if no file path provided', () => {
     return expect(docsSingle.run({ key, version: '1.0.0' })).rejects.toThrow(
-      'No filepath provided. Usage `rdme docs:single <filepath> [options]`.'
+      'No file path provided. Usage `rdme docs:single <file> [options]`.'
     );
   });
 
   it('should error if the argument is not a markdown file', async () => {
-    await expect(docsSingle.run({ key, version: '1.0.0', filepath: 'not-a-markdown-file' })).rejects.toThrow(
-      'The filepath specified is not a markdown file.'
+    await expect(docsSingle.run({ key, version: '1.0.0', filePath: 'not-a-markdown-file' })).rejects.toThrow(
+      'The file path specified is not a markdown file.'
     );
   });
 
   describe('new docs', () => {
     it('should create new doc', async () => {
       const slug = 'new-doc';
-      const doc = frontMatter(fs.readFileSync(path.join(fixturesDir, `/new-docs/${slug}.md`)));
-      const hash = hashFileContents(fs.readFileSync(path.join(fixturesDir, `/new-docs/${slug}.md`)));
+      const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
+      const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
 
       const getMock = getNockWithVersionHeader(version)
         .get(`/api/v1/docs/${slug}`)
@@ -593,9 +597,9 @@ describe('rdme docs:single', () => {
         .reply(200, { version });
 
       await expect(
-        docsSingle.run({ filepath: './__tests__/__fixtures__/new-docs/new-doc.md', key, version })
+        docsSingle.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, key, version })
       ).resolves.toBe(
-        "🌱 successfully created 'new-doc' with contents from ./__tests__/__fixtures__/new-docs/new-doc.md"
+        `🌱 successfully created 'new-doc' with contents from ./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`
       );
 
       getMock.done();
@@ -605,7 +609,7 @@ describe('rdme docs:single', () => {
 
     it('should return creation info for dry run', async () => {
       const slug = 'new-doc';
-      const doc = frontMatter(fs.readFileSync(path.join(fixturesDir, `/new-docs/${slug}.md`)));
+      const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
 
       const getMock = getNockWithVersionHeader(version)
         .get(`/api/v1/docs/${slug}`)
@@ -623,9 +627,9 @@ describe('rdme docs:single', () => {
         .reply(200, { version });
 
       await expect(
-        docsSingle.run({ dryRun: true, filepath: './__tests__/__fixtures__/new-docs/new-doc.md', key, version })
+        docsSingle.run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, key, version })
       ).resolves.toBe(
-        `🎭 dry run! This will create 'new-doc' with contents from ./__tests__/__fixtures__/new-docs/new-doc.md with the following metadata: ${JSON.stringify(
+        `🎭 dry run! This will create 'new-doc' with contents from ./__tests__/${fixturesBaseDir}/new-docs/new-doc.md with the following metadata: ${JSON.stringify(
           doc.data
         )}`
       );
@@ -643,9 +647,9 @@ describe('rdme docs:single', () => {
         message: "We couldn't save this doc (Path `category` is required.).",
       };
 
-      const doc = frontMatter(fs.readFileSync(path.join(fixturesDir, `/${folder}/${slug}.md`)));
+      const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/${folder}/${slug}.md`)));
 
-      const hash = hashFileContents(fs.readFileSync(path.join(fixturesDir, `/${folder}/${slug}.md`)));
+      const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/${folder}/${slug}.md`)));
 
       const getMock = getNockWithVersionHeader(version)
         .get(`/api/v1/docs/${slug}`)
@@ -667,14 +671,14 @@ describe('rdme docs:single', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      const filepath = './__tests__/__fixtures__/failure-docs/fail-doc.md';
+      const filePath = `./__tests__/${fixturesBaseDir}/failure-docs/fail-doc.md`;
 
       const formattedErrorObject = {
         ...errorObject,
-        message: `Error uploading ${chalk.underline(`${filepath}`)}:\n\n${errorObject.message}`,
+        message: `Error uploading ${chalk.underline(`${filePath}`)}:\n\n${errorObject.message}`,
       };
 
-      await expect(docsSingle.run({ filepath: `${filepath}`, key, version })).rejects.toStrictEqual(
+      await expect(docsSingle.run({ filePath, key, version })).rejects.toStrictEqual(
         new APIError(formattedErrorObject)
       );
 
@@ -703,14 +707,14 @@ describe('rdme docs:single', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      const filepath = './__tests__/__fixtures__/failure-docs/fail-doc.md';
+      const filePath = `./__tests__/${fixturesBaseDir}/failure-docs/fail-doc.md`;
 
       const formattedErrorObject = {
         ...errorObject,
-        message: `Error uploading ${chalk.underline(`${filepath}`)}:\n\n${errorObject.message}`,
+        message: `Error uploading ${chalk.underline(`${filePath}`)}:\n\n${errorObject.message}`,
       };
 
-      await expect(docsSingle.run({ filepath: `${filepath}`, key, version })).rejects.toStrictEqual(
+      await expect(docsSingle.run({ filePath, key, version })).rejects.toStrictEqual(
         new APIError(formattedErrorObject)
       );
 
@@ -722,8 +726,8 @@ describe('rdme docs:single', () => {
   describe('slug metadata', () => {
     it('should use provided slug', async () => {
       const slug = 'new-doc-slug';
-      const doc = frontMatter(fs.readFileSync(path.join(fixturesDir, `/slug-docs/${slug}.md`)));
-      const hash = hashFileContents(fs.readFileSync(path.join(fixturesDir, `/slug-docs/${slug}.md`)));
+      const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/slug-docs/${slug}.md`)));
+      const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/slug-docs/${slug}.md`)));
 
       const getMock = getApiNock()
         .get(`/api/v1/docs/${doc.data.slug}`)
@@ -746,9 +750,9 @@ describe('rdme docs:single', () => {
         .reply(200, { version });
 
       await expect(
-        docsSingle.run({ filepath: './__tests__/__fixtures__/slug-docs/new-doc-slug.md', key, version })
+        docsSingle.run({ filePath: `./__tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`, key, version })
       ).resolves.toBe(
-        "🌱 successfully created 'marc-actually-wrote-a-test' with contents from ./__tests__/__fixtures__/slug-docs/new-doc-slug.md"
+        `🌱 successfully created 'marc-actually-wrote-a-test' with contents from ./__tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`
       );
 
       getMock.done();
@@ -761,7 +765,7 @@ describe('rdme docs:single', () => {
     let simpleDoc;
 
     beforeEach(() => {
-      const fileContents = fs.readFileSync(path.join(fixturesDir, '/existing-docs/simple-doc.md'));
+      const fileContents = fs.readFileSync(path.join(fullFixturesDir, '/existing-docs/simple-doc.md'));
       simpleDoc = {
         slug: 'simple-doc',
         doc: frontMatter(fileContents),
@@ -796,10 +800,10 @@ describe('rdme docs:single', () => {
         .reply(200, { version });
 
       return docsSingle
-        .run({ filepath: './__tests__/__fixtures__/existing-docs/simple-doc.md', key, version })
+        .run({ filePath: `./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, key, version })
         .then(updatedDocs => {
           expect(updatedDocs).toBe(
-            "✏️ successfully updated 'simple-doc' with contents from ./__tests__/__fixtures__/existing-docs/simple-doc.md"
+            `✏️ successfully updated 'simple-doc' with contents from ./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`
           );
 
           getMock.done();
@@ -822,13 +826,13 @@ describe('rdme docs:single', () => {
         .reply(200, { version });
 
       return docsSingle
-        .run({ dryRun: true, filepath: './__tests__/__fixtures__/existing-docs/simple-doc.md', key, version })
+        .run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, key, version })
         .then(updatedDocs => {
           // All docs should have been updated because their hashes from the GET request were different from what they
           // are currently.
           expect(updatedDocs).toBe(
             [
-              `🎭 dry run! This will update 'simple-doc' with contents from ./__tests__/__fixtures__/existing-docs/simple-doc.md with the following metadata: ${JSON.stringify(
+              `🎭 dry run! This will update 'simple-doc' with contents from ./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md with the following metadata: ${JSON.stringify(
                 simpleDoc.doc.data
               )}`,
             ].join('\n')
@@ -853,7 +857,7 @@ describe('rdme docs:single', () => {
         .reply(200, { version });
 
       return docsSingle
-        .run({ filepath: './__tests__/__fixtures__/existing-docs/simple-doc.md', key, version })
+        .run({ filePath: `./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, key, version })
         .then(skippedDocs => {
           expect(skippedDocs).toBe('`simple-doc` was not updated because there were no changes.');
 
@@ -874,7 +878,7 @@ describe('rdme docs:single', () => {
         .reply(200, { version });
 
       return docsSingle
-        .run({ dryRun: true, filepath: './__tests__/__fixtures__/existing-docs/simple-doc.md', key, version })
+        .run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, key, version })
         .then(skippedDocs => {
           expect(skippedDocs).toBe('🎭 dry run! `simple-doc` will not be updated because there were no changes.');
 
