@@ -68,10 +68,6 @@ exports.list = () => {
 
 exports.getCategories = () => {
   return {
-    admin: {
-      description: 'Administration',
-      commands: [],
-    },
     apis: {
       description: 'Upload OpenAPI/Swagger definitions',
       commands: [],
@@ -80,12 +76,20 @@ exports.getCategories = () => {
       description: 'Documentation',
       commands: [],
     },
-    versions: {
-      description: 'Versions',
+    changelogs: {
+      description: 'Changelog',
       commands: [],
     },
     categories: {
       description: 'Categories',
+      commands: [],
+    },
+    versions: {
+      description: 'Versions',
+      commands: [],
+    },
+    admin: {
+      description: 'Administration',
       commands: [],
     },
     utilities: {
