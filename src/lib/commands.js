@@ -22,7 +22,7 @@ exports.listByCategory = () => {
   const categories = exports.getCategories();
   const cmds = exports.list();
   cmds.forEach(c => {
-    categories[c.command.category].commands.push({
+    categories[c.command.cmdCategory].commands.push({
       name: c.command.command,
       description: c.command.description,
       position: c.command.position,
@@ -32,9 +32,9 @@ exports.listByCategory = () => {
   return categories;
 };
 
-exports.getSimilar = (category, excludeCommand) => {
+exports.getSimilar = (cmdCategory, excludeCommand) => {
   const categories = exports.listByCategory();
-  return categories[category].commands.filter(cmd => cmd.name !== excludeCommand);
+  return categories[cmdCategory].commands.filter(cmd => cmd.name !== excludeCommand);
 };
 
 exports.list = () => {

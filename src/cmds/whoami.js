@@ -8,7 +8,7 @@ module.exports = class WhoAmICommand {
     this.command = 'whoami';
     this.usage = 'whoami';
     this.description = 'Displays the current user and project authenticated with ReadMe.';
-    this.category = 'admin';
+    this.cmdCategory = 'admin';
     this.position = 3;
 
     this.args = [];

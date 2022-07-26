@@ -67,7 +67,7 @@ exports.commandUsage = cmd => {
     },
   ];
 
-  const similarCommands = commands.getSimilar(cmd.category, cmd.command);
+  const similarCommands = commands.getSimilar(cmd.cmdCategory, cmd.command);
   if (similarCommands.length) {
     helpContent.push({
       header: 'Related commands',

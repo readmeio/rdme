@@ -9,7 +9,7 @@ module.exports = class OpenCommand {
     this.command = 'open';
     this.usage = 'open';
     this.description = 'Open your current ReadMe project in the browser.';
-    this.category = 'utilities';
+    this.cmdCategory = 'utilities';
     this.position = 2;
 
     this.args = [];

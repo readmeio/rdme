@@ -5,7 +5,7 @@ module.exports = class OASCommand {
     this.command = 'oas';
     this.usage = 'oas';
     this.description = 'Helpful OpenAPI generation tooling. [inactive]';
-    this.category = 'utilities';
+    this.cmdCategory = 'utilities';
     this.position = 1;
 
     this.args = [];

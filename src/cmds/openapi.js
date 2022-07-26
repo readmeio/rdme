@@ -19,7 +19,7 @@ module.exports = class OpenAPICommand {
     this.command = 'openapi';
     this.usage = 'openapi [file] [options]';
     this.description = 'Upload, or resync, your OpenAPI/Swagger definition to ReadMe.';
-    this.category = 'apis';
+    this.cmdCategory = 'apis';
     this.position = 1;
 
     this.hiddenArgs = ['token', 'spec'];

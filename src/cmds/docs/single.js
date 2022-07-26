@@ -10,7 +10,7 @@ module.exports = class SingleDocCommand {
     this.command = 'docs:single';
     this.usage = 'docs:single <file> [options]';
     this.description = 'Sync a single Markdown file to your ReadMe project.';
-    this.category = 'docs';
+    this.cmdCategory = 'docs';
     this.position = 3;
 
     this.hiddenArgs = ['filePath'];
@@ -62,7 +62,7 @@ module.exports = class SingleDocCommand {
 
     debug(`selectedVersion: ${selectedVersion}`);
 
-    const createdDoc = await pushDoc(key, selectedVersion, dryRun, filePath, this.category);
+    const createdDoc = await pushDoc(key, selectedVersion, dryRun, filePath, this.cmdCategory);
 
     return chalk.green(createdDoc);
   }

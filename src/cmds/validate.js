@@ -8,7 +8,7 @@ module.exports = class ValidateCommand {
     this.command = 'validate';
     this.usage = 'validate [file] [options]';
     this.description = 'Validate your OpenAPI/Swagger definition.';
-    this.category = 'apis';
+    this.cmdCategory = 'apis';
     this.position = 2;
 
     this.hiddenArgs = ['spec'];

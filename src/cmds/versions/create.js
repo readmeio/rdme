@@ -11,7 +11,7 @@ module.exports = class CreateVersionCommand {
     this.command = 'versions:create';
     this.usage = 'versions:create --version=<version> [options]';
     this.description = 'Create a new version for your project.';
-    this.category = 'versions';
+    this.cmdCategory = 'versions';
     this.position = 2;
 
     this.hiddenArgs = ['version'];

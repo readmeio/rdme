@@ -7,7 +7,7 @@ module.exports = class CategoriesCommand {
     this.command = 'categories';
     this.usage = 'categories [options]';
     this.description = 'Get all categories in your ReadMe project';
-    this.category = 'categories';
+    this.cmdCategory = 'categories';
     this.position = 1;
 
     this.args = [

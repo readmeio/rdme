@@ -9,7 +9,7 @@ module.exports = class SingleChangelogCommand {
     this.command = 'changelogs:single';
     this.usage = 'changelogs:single <file> [options]';
     this.description = 'Sync a single Markdown file to your ReadMe project as a Changelog post.';
-    this.category = 'changelogs';
+    this.cmdCategory = 'changelogs';
     this.position = 3;
 
     this.hiddenArgs = ['filePath'];
@@ -49,7 +49,7 @@ module.exports = class SingleChangelogCommand {
       return Promise.reject(new Error('The file path specified is not a markdown file.'));
     }
 
-    const createdDoc = await pushDoc(key, undefined, dryRun, filePath, this.category);
+    const createdDoc = await pushDoc(key, undefined, dryRun, filePath, this.cmdCategory);
 
     return chalk.green(createdDoc);
   }
