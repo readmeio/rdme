@@ -15,7 +15,7 @@ describe('utils', () => {
           expect(typeof cmd.command === 'string' && cmd.command.length !== 0).toBe(true);
           expect(typeof cmd.usage === 'string' && cmd.usage.length !== 0).toBe(true);
           expect(typeof cmd.description === 'string' && cmd.usage.description !== 0).toBe(true);
-          expect(typeof cmd.category === 'string' && cmd.usage.category !== 0).toBe(true);
+          expect(typeof cmd.cmdCategory === 'string' && cmd.usage.cmdCategory !== 0).toBe(true);
           expect(typeof cmd.position === 'number' && cmd.usage.position !== 0).toBe(true);
           expect(Array.isArray(cmd.args)).toBe(true);
           expect(typeof cmd.run === 'function').toBe(true);
