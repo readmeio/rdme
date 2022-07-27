@@ -11,7 +11,7 @@ module.exports = class VersionsCommand {
     this.command = 'versions';
     this.usage = 'versions [options]';
     this.description = 'List versions available in your project or get a version by SemVer (https://semver.org/).';
-    this.category = 'versions';
+    this.cmdCategory = 'versions';
     this.position = 1;
 
     this.args = [

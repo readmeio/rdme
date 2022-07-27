@@ -11,7 +11,7 @@ module.exports = class UpdateVersionCommand {
     this.command = 'versions:update';
     this.usage = 'versions:update --version=<version> [options]';
     this.description = 'Update an existing version for your project.';
-    this.category = 'versions';
+    this.cmdCategory = 'versions';
     this.position = 3;
 
     this.args = [

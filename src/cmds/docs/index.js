@@ -12,7 +12,7 @@ module.exports = class DocsCommand {
     this.command = 'docs';
     this.usage = 'docs <folder> [options]';
     this.description = 'Sync a folder of Markdown files to your ReadMe project.';
-    this.category = 'docs';
+    this.cmdCategory = 'docs';
     this.position = 1;
 
     this.hiddenArgs = ['folder'];
@@ -85,7 +85,7 @@ module.exports = class DocsCommand {
 
     const updatedDocs = await Promise.all(
       files.map(async filename => {
-        return pushDoc(key, selectedVersion, dryRun, filename, this.category);
+        return pushDoc(key, selectedVersion, dryRun, filename, this.cmdCategory);
       })
     );
 

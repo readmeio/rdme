@@ -7,7 +7,7 @@ module.exports = class LogoutCommand {
     this.command = 'logout';
     this.usage = 'logout';
     this.description = 'Logs the currently authenticated user out of ReadMe.';
-    this.category = 'admin';
+    this.cmdCategory = 'admin';
     this.position = 2;
 
     this.args = [];

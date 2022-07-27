@@ -9,7 +9,7 @@ module.exports = class DeleteVersionCommand {
     this.command = 'versions:delete';
     this.usage = 'versions:delete --version=<version> [options]';
     this.description = 'Delete a version associated with your ReadMe project.';
-    this.category = 'versions';
+    this.cmdCategory = 'versions';
     this.position = 4;
 
     this.hiddenArgs = ['version'];

@@ -11,7 +11,7 @@ module.exports = class CategoriesCreateCommand {
     this.command = 'categories:create';
     this.usage = 'categories:create <title> [options]';
     this.description = 'Create a category with the specified title and guide in your ReadMe project';
-    this.category = 'categories';
+    this.cmdCategory = 'categories';
     this.position = 2;
 
     this.hiddenargs = ['title'];

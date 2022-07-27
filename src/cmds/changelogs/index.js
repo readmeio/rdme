@@ -11,7 +11,7 @@ module.exports = class ChangelogsCommand {
     this.command = 'changelogs';
     this.usage = 'changelogs <folder> [options]';
     this.description = 'Sync a folder of Markdown files to your ReadMe project as Changelog posts.';
-    this.category = 'changelogs';
+    this.cmdCategory = 'changelogs';
     this.position = 1;
 
     this.hiddenArgs = ['folder'];
@@ -72,7 +72,7 @@ module.exports = class ChangelogsCommand {
 
     const updatedDocs = await Promise.all(
       files.map(async filename => {
-        return pushDoc(key, undefined, dryRun, filename, this.category);
+        return pushDoc(key, undefined, dryRun, filename, this.cmdCategory);
       })
     );
 

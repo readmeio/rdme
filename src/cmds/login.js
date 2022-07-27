@@ -15,7 +15,7 @@ module.exports = class LoginCommand {
     this.command = 'login';
     this.usage = 'login [options]';
     this.description = 'Login to a ReadMe project.';
-    this.category = 'admin';
+    this.cmdCategory = 'admin';
     this.position = 1;
 
     this.args = [

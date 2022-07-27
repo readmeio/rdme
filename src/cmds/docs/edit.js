@@ -17,7 +17,7 @@ module.exports = class EditDocsCommand {
     this.command = 'docs:edit';
     this.usage = 'docs:edit <slug> [options]';
     this.description = 'Edit a single file from your ReadMe project without saving locally.';
-    this.category = 'docs';
+    this.cmdCategory = 'docs';
     this.position = 2;
 
     this.hiddenArgs = ['slug'];
