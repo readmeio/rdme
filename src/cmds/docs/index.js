@@ -1,11 +1,10 @@
 const chalk = require('chalk');
 const config = require('config');
-const fs = require('fs');
-const path = require('path');
 
 const { getProjectVersion } = require('../../lib/versionSelect');
 const { debug } = require('../../lib/logger');
 const pushDoc = require('../../lib/pushDoc');
+const { readdirRecursive } = require('../../lib/pushDoc');
 
 module.exports = class DocsCommand {
   constructor() {
@@ -60,19 +59,6 @@ module.exports = class DocsCommand {
     const selectedVersion = await getProjectVersion(version, key, false);
 
     debug(`selectedVersion: ${selectedVersion}`);
-
-    // Find the files to sync
-    const readdirRecursive = folderToSearch => {
-      const filesInFolder = fs.readdirSync(folderToSearch, { withFileTypes: true });
-      const files = filesInFolder
-        .filter(fileHandle => fileHandle.isFile())
-        .map(fileHandle => path.join(folderToSearch, fileHandle.name));
-      const folders = filesInFolder.filter(fileHandle => fileHandle.isDirectory());
-      const subFiles = [].concat(
-        ...folders.map(fileHandle => readdirRecursive(path.join(folderToSearch, fileHandle.name)))
-      );
-      return [...files, ...subFiles];
-    };
 
     // Strip out non-markdown files
     const files = readdirRecursive(folder).filter(file => file.endsWith('.md') || file.endsWith('.markdown'));

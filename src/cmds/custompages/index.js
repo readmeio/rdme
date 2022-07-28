@@ -1,10 +1,9 @@
 const chalk = require('chalk');
 const config = require('config');
-const fs = require('fs');
-const path = require('path');
 
 const { debug } = require('../../lib/logger');
 const pushDoc = require('../../lib/pushDoc');
+const { readdirRecursive } = require('../../lib/pushDoc');
 
 module.exports = class CustomPagesCommand {
   constructor() {
@@ -47,19 +46,6 @@ module.exports = class CustomPagesCommand {
     if (!folder) {
       return Promise.reject(new Error(`No folder provided. Usage \`${config.get('cli')} ${this.usage}\`.`));
     }
-
-    // Find the files to sync
-    const readdirRecursive = folderToSearch => {
-      const filesInFolder = fs.readdirSync(folderToSearch, { withFileTypes: true });
-      const files = filesInFolder
-        .filter(fileHandle => fileHandle.isFile())
-        .map(fileHandle => path.join(folderToSearch, fileHandle.name));
-      const folders = filesInFolder.filter(fileHandle => fileHandle.isDirectory());
-      const subFiles = [].concat(
-        ...folders.map(fileHandle => readdirRecursive(path.join(folderToSearch, fileHandle.name)))
-      );
-      return [...files, ...subFiles];
-    };
 
     // Strip out non-markdown files
     const files = readdirRecursive(folder).filter(
