@@ -570,6 +570,14 @@ describe('rdme docs:single', () => {
     );
   });
 
+  it('should support .markdown files but error if file path cannot be found', async () => {
+    const versionMock = getApiNock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
+    await expect(docsSingle.run({ key, version: '1.0.0', filePath: 'non-existent-file.markdown' })).rejects.toThrow(
+      'ENOENT: no such file or directory'
+    );
+    versionMock.done();
+  });
+
   describe('new docs', () => {
     it('should create new doc', async () => {
       const slug = 'new-doc';

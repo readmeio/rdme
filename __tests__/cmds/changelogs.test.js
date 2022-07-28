@@ -367,6 +367,12 @@ describe('rdme changelogs:single', () => {
     );
   });
 
+  it('should support .markdown files but error if file path cannot be found', async () => {
+    await expect(changelogsSingle.run({ key, filePath: 'non-existent-file.markdown' })).rejects.toThrow(
+      'ENOENT: no such file or directory'
+    );
+  });
+
   describe('new changelogs', () => {
     it('should create new changelog', async () => {
       const slug = 'new-doc';

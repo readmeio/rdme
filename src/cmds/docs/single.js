@@ -51,7 +51,7 @@ module.exports = class SingleDocCommand {
       return Promise.reject(new Error(`No file path provided. Usage \`${config.get('cli')} ${this.usage}\`.`));
     }
 
-    if (filePath.endsWith('.md') === false || !filePath.endsWith('.markdown') === false) {
+    if (!(filePath.endsWith('.md') || filePath.endsWith('.markdown'))) {
       return Promise.reject(new Error('The file path specified is not a markdown file.'));
     }
 
