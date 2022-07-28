@@ -10,7 +10,7 @@ module.exports = class SingleChangelogCommand {
     this.usage = 'changelogs:single <file> [options]';
     this.description = 'Sync a single Markdown file to your ReadMe project as a Changelog post.';
     this.cmdCategory = 'changelogs';
-    this.position = 3;
+    this.position = 2;
 
     this.hiddenArgs = ['filePath'];
     this.args = [
