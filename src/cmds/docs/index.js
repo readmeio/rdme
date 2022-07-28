@@ -61,7 +61,9 @@ module.exports = class DocsCommand {
     debug(`selectedVersion: ${selectedVersion}`);
 
     // Strip out non-markdown files
-    const files = readdirRecursive(folder).filter(file => file.endsWith('.md') || file.endsWith('.markdown'));
+    const files = readdirRecursive(folder).filter(
+      file => file.toLowerCase().endsWith('.md') || file.toLowerCase().endsWith('.markdown')
+    );
 
     debug(`number of files: ${files.length}`);
 

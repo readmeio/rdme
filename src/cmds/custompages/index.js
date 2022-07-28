@@ -49,7 +49,10 @@ module.exports = class CustomPagesCommand {
 
     // Strip out non-markdown files
     const files = readdirRecursive(folder).filter(
-      file => file.endsWith('.html') || file.endsWith('.md') || file.endsWith('.markdown')
+      file =>
+        file.toLowerCase().endsWith('.html') ||
+        file.toLowerCase().endsWith('.md') ||
+        file.toLowerCase().endsWith('.markdown')
     );
 
     debug(`number of files: ${files.length}`);

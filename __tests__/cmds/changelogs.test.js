@@ -361,9 +361,9 @@ describe('rdme changelogs:single', () => {
     );
   });
 
-  it('should error if the argument is not a markdown file', async () => {
+  it('should error if the argument is not a Markdown file', async () => {
     await expect(changelogsSingle.run({ key, filePath: 'not-a-markdown-file' })).rejects.toThrow(
-      'The file path specified is not a markdown file.'
+      'The file path specified is not a Markdown file.'
     );
   });
 
