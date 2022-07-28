@@ -1,3 +1,17 @@
+## 7.5.0 (2022-07-28)
+
+* docs: guidance on custompages + changelog (#548) ([e504b5e](https://github.com/readmeio/rdme/commit/e504b5e)), closes [#548](https://github.com/readmeio/rdme/issues/548)
+* feat: add retag-release workflow to add a vX.Y.Z tag for our GitHub Action (#545) ([d600ef4](https://github.com/readmeio/rdme/commit/d600ef4)), closes [#545](https://github.com/readmeio/rdme/issues/545)
+* feat: changelog endpoints (#543) ([9d1bcec](https://github.com/readmeio/rdme/commit/9d1bcec)), closes [#543](https://github.com/readmeio/rdme/issues/543)
+* feat: custom pages support (#547) ([af61f7e](https://github.com/readmeio/rdme/commit/af61f7e)), closes [#547](https://github.com/readmeio/rdme/issues/547) [#549](https://github.com/readmeio/rdme/issues/549) [#550](https://github.com/readmeio/rdme/issues/550) [#545](https://github.com/readmeio/rdme/issues/545)
+* fix: capitalizing `markdown` in command help screens ([c7e53a2](https://github.com/readmeio/rdme/commit/c7e53a2))
+* fix: correct position on changelogs:single ([fe24984](https://github.com/readmeio/rdme/commit/fe24984))
+* refactor: rename `category` to `cmdCategory` in `Command` class (#544) ([5ca2f06](https://github.com/readmeio/rdme/commit/5ca2f06)), closes [#544](https://github.com/readmeio/rdme/issues/544)
+* refactor: split out fixtures, test cleanup (#542) ([da0f370](https://github.com/readmeio/rdme/commit/da0f370)), closes [#542](https://github.com/readmeio/rdme/issues/542)
+* refactor(docs): consolidate logic (#540) ([9d9e40c](https://github.com/readmeio/rdme/commit/9d9e40c)), closes [#540](https://github.com/readmeio/rdme/issues/540)
+
+
+
 ## 7.4.0 (2022-07-21)
 
 * docs: add some 2fa language (#537) ([dbd6930](https://github.com/readmeio/rdme/commit/dbd6930)), closes [#537](https://github.com/readmeio/rdme/issues/537)
