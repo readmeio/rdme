@@ -49,7 +49,7 @@ describe('rdme docs', () => {
     );
   });
 
-  it('should error if the argument isnt a folder', async () => {
+  it('should error if the argument is not a folder', async () => {
     const versionMock = getApiNock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
     await expect(docs.run({ key, version: '1.0.0', folder: 'not-a-folder' })).rejects.toThrow(

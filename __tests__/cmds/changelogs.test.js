@@ -32,19 +32,19 @@ describe('rdme changelogs', () => {
   });
 
   it('should error if no folder provided', () => {
-    return expect(changelogs.run({ key, version: '1.0.0' })).rejects.toThrow(
+    return expect(changelogs.run({ key })).rejects.toThrow(
       'No folder provided. Usage `rdme changelogs <folder> [options]`.'
     );
   });
 
-  it('should error if the argument isnt a folder', () => {
-    return expect(changelogs.run({ key, version: '1.0.0', folder: 'not-a-folder' })).rejects.toThrow(
+  it('should error if the argument is not a folder', () => {
+    return expect(changelogs.run({ key, folder: 'not-a-folder' })).rejects.toThrow(
       "ENOENT: no such file or directory, scandir 'not-a-folder'"
     );
   });
 
   it('should error if the folder contains no markdown files', () => {
-    return expect(changelogs.run({ key, version: '1.0.0', folder: '.github/workflows' })).rejects.toThrow(
+    return expect(changelogs.run({ key, folder: '.github/workflows' })).rejects.toThrow(
       'We were unable to locate Markdown files in .github/workflows.'
     );
   });
@@ -356,13 +356,13 @@ describe('rdme changelogs:single', () => {
   });
 
   it('should error if no file path provided', () => {
-    return expect(changelogsSingle.run({ key, version: '1.0.0' })).rejects.toThrow(
+    return expect(changelogsSingle.run({ key })).rejects.toThrow(
       'No file path provided. Usage `rdme changelogs:single <file> [options]`.'
     );
   });
 
   it('should error if the argument is not a markdown file', async () => {
-    await expect(changelogsSingle.run({ key, version: '1.0.0', filePath: 'not-a-markdown-file' })).rejects.toThrow(
+    await expect(changelogsSingle.run({ key, filePath: 'not-a-markdown-file' })).rejects.toThrow(
       'The file path specified is not a markdown file.'
     );
   });
