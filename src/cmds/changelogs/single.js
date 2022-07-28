@@ -46,7 +46,7 @@ module.exports = class SingleChangelogCommand {
     }
 
     if (!(filePath.endsWith('.md') || filePath.endsWith('.markdown'))) {
-      return Promise.reject(new Error('The file path specified is not a markdown file.'));
+      return Promise.reject(new Error('The file path specified is not a Markdown file.'));
     }
 
     const createdDoc = await pushDoc(key, undefined, dryRun, filePath, this.cmdCategory);

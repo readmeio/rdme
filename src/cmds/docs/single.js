@@ -52,7 +52,7 @@ module.exports = class SingleDocCommand {
     }
 
     if (!(filePath.endsWith('.md') || filePath.endsWith('.markdown'))) {
-      return Promise.reject(new Error('The file path specified is not a markdown file.'));
+      return Promise.reject(new Error('The file path specified is not a Markdown file.'));
     }
 
     // TODO: should we allow version selection at all here?

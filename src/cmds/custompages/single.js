@@ -46,7 +46,7 @@ module.exports = class SingleCustomPageCommand {
     }
 
     if (!(filePath.endsWith('.html') || filePath.endsWith('.md') || filePath.endsWith('.markdown'))) {
-      return Promise.reject(new Error('The file path specified is not a markdown or HTML file.'));
+      return Promise.reject(new Error('The file path specified is not a Markdown or HTML file.'));
     }
 
     const createdDoc = await pushDoc(key, undefined, dryRun, filePath, this.cmdCategory);
