@@ -49,7 +49,7 @@ describe('rdme docs', () => {
     );
   });
 
-  it('should error if the argument isnt a folder', async () => {
+  it('should error if the argument is not a folder', async () => {
     const versionMock = getApiNock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
     await expect(docs.run({ key, version: '1.0.0', folder: 'not-a-folder' })).rejects.toThrow(
@@ -564,10 +564,18 @@ describe('rdme docs:single', () => {
     );
   });
 
-  it('should error if the argument is not a markdown file', async () => {
+  it('should error if the argument is not a Markdown file', async () => {
     await expect(docsSingle.run({ key, version: '1.0.0', filePath: 'not-a-markdown-file' })).rejects.toThrow(
-      'The file path specified is not a markdown file.'
+      'The file path specified is not a Markdown file.'
     );
+  });
+
+  it('should support .markdown files but error if file path cannot be found', async () => {
+    const versionMock = getApiNock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
+    await expect(docsSingle.run({ key, version: '1.0.0', filePath: 'non-existent-file.markdown' })).rejects.toThrow(
+      'ENOENT: no such file or directory'
+    );
+    versionMock.done();
   });
 
   describe('new docs', () => {

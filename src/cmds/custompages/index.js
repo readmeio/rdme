@@ -1,17 +1,16 @@
 const chalk = require('chalk');
 const config = require('config');
 
-const { getProjectVersion } = require('../../lib/versionSelect');
 const { debug } = require('../../lib/logger');
 const pushDoc = require('../../lib/pushDoc');
 const { readdirRecursive } = require('../../lib/pushDoc');
 
-module.exports = class DocsCommand {
+module.exports = class CustomPagesCommand {
   constructor() {
-    this.command = 'docs';
-    this.usage = 'docs <folder> [options]';
-    this.description = 'Sync a folder of Markdown files to your ReadMe project.';
-    this.cmdCategory = 'docs';
+    this.command = 'custompages';
+    this.usage = 'custompages <folder> [options]';
+    this.description = 'Sync a folder of Markdown files to your ReadMe project as Custom Pages.';
+    this.cmdCategory = 'custompages';
     this.position = 1;
 
     this.hiddenArgs = ['folder'];
@@ -22,11 +21,6 @@ module.exports = class DocsCommand {
         description: 'Project API key',
       },
       {
-        name: 'version',
-        type: String,
-        description: 'Project version',
-      },
-      {
         name: 'folder',
         type: String,
         defaultOption: true,
@@ -34,13 +28,13 @@ module.exports = class DocsCommand {
       {
         name: 'dryRun',
         type: Boolean,
-        description: 'Runs the command without creating/updating any docs in ReadMe. Useful for debugging.',
+        description: 'Runs the command without creating/updating any custom pages in ReadMe. Useful for debugging.',
       },
     ];
   }
 
   async run(opts) {
-    const { dryRun, folder, key, version } = opts;
+    const { dryRun, folder, key } = opts;
 
     debug(`command: ${this.command}`);
     debug(`opts: ${JSON.stringify(opts)}`);
@@ -53,27 +47,23 @@ module.exports = class DocsCommand {
       return Promise.reject(new Error(`No folder provided. Usage \`${config.get('cli')} ${this.usage}\`.`));
     }
 
-    // TODO: should we allow version selection at all here?
-    // Let's revisit this once we re-evaluate our category logic in the API.
-    // Ideally we should ignore this parameter entirely if the category is included.
-    const selectedVersion = await getProjectVersion(version, key, false);
-
-    debug(`selectedVersion: ${selectedVersion}`);
-
     // Strip out non-markdown files
     const files = readdirRecursive(folder).filter(
-      file => file.toLowerCase().endsWith('.md') || file.toLowerCase().endsWith('.markdown')
+      file =>
+        file.toLowerCase().endsWith('.html') ||
+        file.toLowerCase().endsWith('.md') ||
+        file.toLowerCase().endsWith('.markdown')
     );
 
     debug(`number of files: ${files.length}`);
 
     if (!files.length) {
-      return Promise.reject(new Error(`We were unable to locate Markdown files in ${folder}.`));
+      return Promise.reject(new Error(`We were unable to locate Markdown or HTML files in ${folder}.`));
     }
 
     const updatedDocs = await Promise.all(
       files.map(async filename => {
-        return pushDoc(key, selectedVersion, dryRun, filename, this.cmdCategory);
+        return pushDoc(key, undefined, dryRun, filename, this.cmdCategory);
       })
     );
 

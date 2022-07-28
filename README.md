@@ -191,6 +191,26 @@ This command also has a dry run mode, which can be useful for initial setup and 
 rdme changelogs:single path-to-markdown-file
 ```
 
+### Custom Pages
+
+#### Syncing a Folder of Custom Pages to ReadMe
+
+Custom Pages has support for both Markdown and HTML files. These files will require YAML front matter with certain ReadMe documentation attributes. Check out [our docs](https://docs.readme.com/docs/rdme#markdown-file-setup) for more info on setting up your front matter.
+
+Passing in a path to a directory will also sync any HTML/Markdown files that are located in subdirectories.
+
+```sh
+rdme custompages path-to-markdown-files
+```
+
+This command also has a dry run mode, which can be useful for initial setup and debugging. You can read more about dry run mode [in our docs](https://docs.readme.com/docs/rdme#dry-run-mode).
+
+#### Syncing a Single Custom Page to ReadMe
+
+```sh
+rdme custompages:single path-to-markdown-file
+```
+
 ### Versions
 
 #### Get All Versions Associated With Your Project
