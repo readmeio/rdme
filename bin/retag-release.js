@@ -1,10 +1,11 @@
+/* eslint-disable no-console */
 module.exports = async (github, context) => {
   const { owner, repo } = context.repo;
   const oldTag = context.payload.release.tag_name;
   if (!oldTag.match(/^[0-9]+\.[0-9]+\.[0-9]+$/)) {
     console.log('Not retagging this release: This script will only retag releases that use');
     console.log(`semantic versioning, like "1.2.3", but this release's tag is "${oldTag}".`);
-    return;
+    return {};
   }
   const newTag = `v${oldTag}`;
   console.log(`Retagging release "${oldTag}" as "${newTag}".`);
@@ -36,6 +37,6 @@ module.exports = async (github, context) => {
   return {
     original_tag: oldTag,
     new_tag: newTag,
-    sha
+    sha,
   };
-}
+};
