@@ -45,7 +45,7 @@ module.exports = class SingleChangelogCommand {
       return Promise.reject(new Error(`No file path provided. Usage \`${config.get('cli')} ${this.usage}\`.`));
     }
 
-    if (!(filePath.endsWith('.md') || filePath.endsWith('.markdown'))) {
+    if (!(filePath.toLowerCase().endsWith('.md') || filePath.toLowerCase().endsWith('.markdown'))) {
       return Promise.reject(new Error('The file path specified is not a Markdown file.'));
     }
 

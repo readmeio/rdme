@@ -45,7 +45,13 @@ module.exports = class SingleCustomPageCommand {
       return Promise.reject(new Error(`No file path provided. Usage \`${config.get('cli')} ${this.usage}\`.`));
     }
 
-    if (!(filePath.endsWith('.html') || filePath.endsWith('.md') || filePath.endsWith('.markdown'))) {
+    if (
+      !(
+        filePath.toLowerCase().endsWith('.html') ||
+        filePath.toLowerCase().endsWith('.md') ||
+        filePath.toLowerCase().endsWith('.markdown')
+      )
+    ) {
       return Promise.reject(new Error('The file path specified is not a Markdown or HTML file.'));
     }
 
