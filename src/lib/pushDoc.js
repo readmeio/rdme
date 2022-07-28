@@ -11,15 +11,15 @@ const fetch = require('./fetch');
 const { debug } = require('./logger');
 
 /**
- * Reads the contents of the specified Markdown file
- * and creates/updates the doc in ReadMe
+ * Reads the contents of the specified Markdown or HTML file
+ * and creates/updates the corresponding doc in ReadMe
  *
  * @param {String} key the project API key
  * @param {String} selectedVersion the project version
  * @param {Boolean} dryRun boolean indicating dry run mode
- * @param {String} filepath path to the Markdown file
+ * @param {String} filepath path to the HTML/Markdown file
+ *  (file extension must end in `.html`, `.md`., or `.markdown`)
  * @param {String} type module within ReadMe to update (e.g. docs, changelogs, etc.)
- *  (file extension must end in `.md` or `.markdown`)
  * @returns {Promise<String>} a string containing the result
  */
 module.exports = async function pushDoc(key, selectedVersion, dryRun, filepath, type) {
@@ -31,6 +31,16 @@ module.exports = async function pushDoc(key, selectedVersion, dryRun, filepath, 
   // Stripping the subdirectories and markdown extension from the filename and lowercasing to get the default slug.
   const slug = matter.data.slug || path.basename(filepath).replace(path.extname(filepath), '').toLowerCase();
   const hash = crypto.createHash('sha1').update(file).digest('hex');
+
+  let data = { body: matter.content, ...matter.data, lastUpdatedHash: hash };
+
+  if (type === 'custompages') {
+    if (filepath.endsWith('.html')) {
+      data = { html: matter.content, htmlmode: true, ...matter.data, lastUpdatedHash: hash };
+    } else {
+      data = { body: matter.content, htmlmode: false, ...matter.data, lastUpdatedHash: hash };
+    }
+  }
 
   function createDoc() {
     if (dryRun) {
@@ -47,9 +57,7 @@ module.exports = async function pushDoc(key, selectedVersion, dryRun, filepath, 
       }),
       body: JSON.stringify({
         slug,
-        body: matter.content,
-        ...matter.data,
-        lastUpdatedHash: hash,
+        ...data,
       }),
     })
       .then(res => handleRes(res))
@@ -77,9 +85,7 @@ module.exports = async function pushDoc(key, selectedVersion, dryRun, filepath, 
       }),
       body: JSON.stringify(
         Object.assign(existingDoc, {
-          body: matter.content,
-          ...matter.data,
-          lastUpdatedHash: hash,
+          ...data,
         })
       ),
     })
