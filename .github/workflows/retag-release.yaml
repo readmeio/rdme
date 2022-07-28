@@ -14,7 +14,7 @@ jobs:
   retag-release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/github-script@v6.1.0
+      - uses: actions/github-script@v6
         with:
           script: |
             const { owner, repo } = context.repo;
