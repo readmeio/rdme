@@ -80,6 +80,10 @@ exports.getCategories = () => {
       description: 'Changelog',
       commands: [],
     },
+    custompages: {
+      description: 'Custom Pages',
+      commands: [],
+    },
     categories: {
       description: 'Categories',
       commands: [],
