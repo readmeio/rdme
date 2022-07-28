@@ -33,7 +33,15 @@ To see detailed CLI setup instructions and all available commands, check out [th
 
 ### Markdown File Setup
 
-In order to sync a directory of Markdown files to your guides, you'll need to add certain attributes to the top of each page via a [YAML front matter block](https://jekyllrb.com/docs/front-matter/). See below for an example (using the page you're currently reading!):
+> 📘 Guides, Changelog, Custom Pages... you name it!
+>
+> The following guidance on Markdown file setup is nearly identical for Guides, Changelog, and Custom Pages. There are a couple of small diferences:
+>
+> - Guides is tied to project version and therefore it requires a `--version` parameter. Changelog and Custom Pages are the same across project versions and therefore do not have a `--version` parameter.
+> - There are slight variations in the YAML front matter attributes for each respective section of your documentation. For example, Changelog has a `type` attribute which you can set to `added`. See [Specifying Other Attributes](#specifying-other-attributes) for more information.
+> - In addition to Markdown, Custom Pages also supports HTML files. If you pass an HTML file into the `custompages` commands, the page will have the `htmlmode` flag set to `true` and it will conversely be set to `false` for Markdown files. You can override this in the YAML front matter.
+
+In order to sync a directory of Markdown files to your guides, your Changelog, or your Custom Pages, you'll need to add certain attributes to the top of each page via a [YAML front matter block](https://jekyllrb.com/docs/front-matter/). See below for an example (using the page you're currently reading!):
 
 ```markdown
 ---
@@ -62,14 +70,20 @@ slug: an-alternative-page-slug-example
 
 #### Specifying Other Attributes
 
-You can also specify several other page attributes in your YAML front matter, such as `hidden` (a boolean which denotes whether your page is published or unpublished). Any attributes you omit will remain unchanged on `rdme` runs. To view the full list of attributes, check out our [`Create doc` endpoint documentation](https://docs.readme.com/reference/createdoc).
+You can also specify several other page attributes in your YAML front matter, such as `hidden` (a boolean which denotes whether your page is published or unpublished). Any attributes you omit will remain unchanged on `rdme` runs. To view the full list of attributes, check out the `POST` endpoints for respective section of your documentation that you're syncing:
+
+- [`Create doc`](https://docs.readme.com/reference/createdoc)
+- [`Create changelog`](https://docs.readme.com/reference/createchangelog)
+- [`Create custom page`](https://docs.readme.com/reference/createcustompage)
 
 #### Dry Run Mode
 
-If you're setting up new docs or if you're generally unsure if you've set up your page attributes correctly, the `docs` command has a dry run mode. This will allow you preview the changes without actually creating/updating any docs in ReadMe, which can be extremely useful for initial setup (oh, and we have [comprehensive debugging options](#troubleshooting) available as well!). To enable dry run mode, use the `--dryRun` flag:
+If you're setting up new pages or if you're generally unsure if you've set up your page attributes correctly, each command has a dry run mode. This will allow you preview the changes without actually creating/updating any docs in ReadMe, which can be extremely useful for initial setup (oh, and we have [comprehensive debugging options](#troubleshooting) available as well!). To enable dry run mode, use the `--dryRun` flag:
 
 ```sh
 rdme docs path-to-markdown-files --version={project-version} --dryRun
+rdme changelogs path-to-markdown-files --dryRun
+rdme custompages path-to-markdown-files --dryRun
 ```
 
 The command output will indicate whether each page is being created or updated alongside all processed page attributes.
