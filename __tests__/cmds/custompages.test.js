@@ -402,9 +402,9 @@ describe('rdme custompages:single', () => {
     );
   });
 
-  it('should error if the argument is not a markdown file', async () => {
+  it('should error if the argument is not a Markdown file', async () => {
     await expect(customPagesSingle.run({ key, filePath: 'not-a-markdown-file' })).rejects.toStrictEqual(
-      new Error('The file path specified is not a markdown or HTML file.')
+      new Error('The file path specified is not a Markdown or HTML file.')
     );
   });
 
