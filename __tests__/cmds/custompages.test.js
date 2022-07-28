@@ -28,12 +28,14 @@ describe('rdme custompages', () => {
   afterAll(() => nock.cleanAll());
 
   it('should error if no api key provided', () => {
-    return expect(custompages.run({})).rejects.toThrow('No project API key provided. Please use `--key`.');
+    return expect(custompages.run({})).rejects.toStrictEqual(
+      new Error('No project API key provided. Please use `--key`.')
+    );
   });
 
   it('should error if no folder provided', () => {
-    return expect(custompages.run({ key, version: '1.0.0' })).rejects.toThrow(
-      'No folder provided. Usage `rdme custompages <folder> [options]`.'
+    return expect(custompages.run({ key })).rejects.toStrictEqual(
+      new Error('No folder provided. Usage `rdme custompages <folder> [options]`.')
     );
   });
 
@@ -44,8 +46,8 @@ describe('rdme custompages', () => {
   });
 
   it('should error if the folder contains no markdown nor HTML files', () => {
-    return expect(custompages.run({ key, version: '1.0.0', folder: '.github/workflows' })).rejects.toThrow(
-      'We were unable to locate Markdown or HTML files in .github/workflows.'
+    return expect(custompages.run({ key, folder: '.github/workflows' })).rejects.toStrictEqual(
+      new Error('We were unable to locate Markdown or HTML files in .github/workflows.')
     );
   });
 
@@ -389,18 +391,20 @@ describe('rdme custompages:single', () => {
   afterAll(() => nock.cleanAll());
 
   it('should error if no api key provided', () => {
-    return expect(customPagesSingle.run({})).rejects.toThrow('No project API key provided. Please use `--key`.');
-  });
-
-  it('should error if no file path provided', () => {
-    return expect(customPagesSingle.run({ key, version: '1.0.0' })).rejects.toThrow(
-      'No file path provided. Usage `rdme custompages:single <file> [options]`.'
+    return expect(customPagesSingle.run({})).rejects.toStrictEqual(
+      new Error('No project API key provided. Please use `--key`.')
     );
   });
 
-  it('should error if the argument is not a markdown file', async () => {
-    await expect(customPagesSingle.run({ key, version: '1.0.0', filePath: 'not-a-markdown-file' })).rejects.toThrow(
-      'The file path specified is not a markdown or HTML file.'
+  it('should error if no file path provided', () => {
+    return expect(customPagesSingle.run({ key })).rejects.toStrictEqual(
+      new Error('No file path provided. Usage `rdme custompages:single <file> [options]`.')
+    );
+  });
+
+  it('should error if the argument is not a Markdown file', async () => {
+    await expect(customPagesSingle.run({ key, filePath: 'not-a-markdown-file' })).rejects.toStrictEqual(
+      new Error('The file path specified is not a Markdown or HTML file.')
     );
   });
 
