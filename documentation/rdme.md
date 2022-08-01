@@ -35,9 +35,9 @@ To see detailed CLI setup instructions and all available commands, check out [th
 
 > 📘 Guides, Changelog, Custom Pages... you name it!
 >
-> The following guidance on Markdown file setup is nearly identical for Guides, Changelog, and Custom Pages. There are a couple of small diferences:
+> The following guidance on Markdown file setup is nearly identical for Guides (i.e. the `docs` command), Changelog (i.e. the `changelogs` command), and Custom Pages (i.e. the `custompages` command). There are a couple of small differences:
 >
-> - Guides is tied to project version and therefore it requires a `--version` parameter. Changelog and Custom Pages are the same across project versions and therefore do not have a `--version` parameter.
+> - Guides are tied to project versions and therefore require a `--version` parameter. Changelog and Custom Pages are the same across project versions and therefore do not have a `--version` parameter.
 > - There are slight variations in the YAML front matter attributes for each respective section of your documentation. For example, Changelog has a `type` attribute which you can set to `added`. See [Specifying Other Attributes](#specifying-other-attributes) for more information.
 > - In addition to Markdown, Custom Pages also supports HTML files. If you pass an HTML file into the `custompages` commands, the page will have the `htmlmode` flag set to `true` and it will conversely be set to `false` for Markdown files. You can override this in the YAML front matter.
 
