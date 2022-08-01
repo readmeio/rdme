@@ -67,13 +67,8 @@ jobs:
         with:
           rdme: validate oas-examples-repo/3.1/json/petstore.json
 
-      - name: Run `validate` command to simulate warning
-        uses: ./rdme-repo/
-        with:
-          rdme: validate --workingDirectory=rdme-repo/__tests__/__fixtures__
-
       # Docs: https://rdme-test.readme.io
       - name: Run `openapi` command
         uses: ./rdme-repo/
         with:
-          rdme: swagger oas-examples-repo/3.1/json/petstore.json --key=${{ secrets.RDME_TEST_PROJECT_API_KEY }} --id=${{ secrets.RDME_TEST_PROJECT_API_SETTING }}
+          rdme: openapi oas-examples-repo/3.1/json/petstore.json --key=${{ secrets.RDME_TEST_PROJECT_API_KEY }} --id=${{ secrets.RDME_TEST_PROJECT_API_SETTING }}
