@@ -9,6 +9,7 @@ describe('#fetch()', () => {
     // List of all GitHub Actions env variables:
     // https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables
     beforeEach(() => {
+      process.env.GITHUB_ACTION = '__repo-owner_name-of-action-repo';
       process.env.GITHUB_ACTIONS = 'true';
       process.env.GITHUB_REPOSITORY = 'octocat/Hello-World';
       process.env.GITHUB_RUN_ATTEMPT = '3';
@@ -18,6 +19,7 @@ describe('#fetch()', () => {
     });
 
     afterEach(() => {
+      delete process.env.GITHUB_ACTION;
       delete process.env.GITHUB_ACTIONS;
       delete process.env.GITHUB_REPOSITORY;
       delete process.env.GITHUB_RUN_ATTEMPT;

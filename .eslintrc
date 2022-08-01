@@ -21,6 +21,6 @@
      * so we can write robust tests and take advantage of `bin/rdme`,
      * which we use for printing function outputs and returning correct exit codes.
      */
-    "no-console": ["warn", { "allow": ["info", "warn"] }]
+    "no-console": ["warn"]
   }
 }

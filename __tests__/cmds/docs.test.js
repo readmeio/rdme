@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const nock = require('nock');
 const chalk = require('chalk');
 const fs = require('fs');

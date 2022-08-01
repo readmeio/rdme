@@ -1,3 +1,4 @@
+const chalk = require('chalk');
 const config = require('config');
 const core = require('@actions/core');
 const debugPackage = require('debug')(config.get('cli'));
@@ -11,6 +12,28 @@ module.exports.debug = function debug(input) {
   /* istanbul ignore next */
   if (isGHA() && process.env.NODE_ENV !== 'testing') core.debug(`rdme: ${input}`);
   return debugPackage(input);
+};
+
+/**
+ * Wrapper for warn statements.
+ * @param {String} input
+ */
+module.exports.warn = function warn(input) {
+  /* istanbul ignore next */
+  if (isGHA()) return core.warning(input);
+  // eslint-disable-next-line no-console
+  return console.warn(chalk.yellow(`⚠️  Warning! ${input}`));
+};
+
+/**
+ * Wrapper for info/notice statements.
+ * @param {String} input
+ */
+module.exports.info = function info(input) {
+  /* istanbul ignore next */
+  if (isGHA()) return core.notice(input);
+  // eslint-disable-next-line no-console
+  return console.info(input);
 };
 
 module.exports.oraOptions = function oraOptions() {
