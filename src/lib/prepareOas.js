@@ -3,7 +3,7 @@ const fs = require('fs');
 const OASNormalize = require('oas-normalize');
 const ora = require('ora');
 
-const { debug, oraOptions } = require('./logger');
+const { debug, info, oraOptions } = require('./logger');
 
 /**
  * Normalizes, validates, and (optionally) bundles an OpenAPI definition.
@@ -27,7 +27,7 @@ module.exports = async function prepare(path, command) {
           return;
         }
 
-        console.info(
+        info(
           chalk.yellow(`We found ${file} and are attempting to ${command === 'openapi' ? 'upload' : 'validate'} it.`)
         );
         resolve(file);

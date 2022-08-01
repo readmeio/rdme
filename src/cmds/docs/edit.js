@@ -6,7 +6,7 @@ const APIError = require('../../lib/apiError');
 const { getProjectVersion } = require('../../lib/versionSelect');
 const fetch = require('../../lib/fetch');
 const { cleanHeaders, handleRes } = require('../../lib/fetch');
-const { debug } = require('../../lib/logger');
+const { debug, info } = require('../../lib/logger');
 
 const writeFile = promisify(fs.writeFile);
 const readFile = promisify(fs.readFile);
@@ -101,7 +101,7 @@ module.exports = class EditDocsCommand {
             if (res.error) {
               return reject(new APIError(res));
             }
-            console.info('Doc successfully updated. Cleaning up local file.');
+            info('Doc successfully updated. Cleaning up local file.');
             await unlink(filename);
             debug('file unlinked');
             // Normally we should resolve with a value that is logged to the console,

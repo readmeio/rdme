@@ -2,7 +2,7 @@ const APIError = require('../lib/apiError');
 const chalk = require('chalk');
 const { cleanHeaders } = require('../lib/fetch');
 const config = require('config');
-const { debug, oraOptions } = require('../lib/logger');
+const { debug, warn, oraOptions } = require('../lib/logger');
 const fetch = require('../lib/fetch');
 const { handleRes } = require('../lib/fetch');
 const { getProjectVersion } = require('../lib/versionSelect');
@@ -66,12 +66,10 @@ module.exports = class OpenAPICommand {
     }
 
     if (version && id) {
-      console.warn(
-        chalk.yellow(
-          `⚠️  Warning! We'll be using the version associated with the \`--${
-            opts.token ? 'token' : 'id'
-          }\` option, so the \`--version\` option will be ignored.`
-        )
+      warn(
+        `We'll be using the version associated with the \`--${
+          opts.token ? 'token' : 'id'
+        }\` option, so the \`--version\` option will be ignored.`
       );
     }
 
