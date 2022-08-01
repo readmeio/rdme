@@ -20,7 +20,7 @@ module.exports.debug = function debug(input) {
  */
 module.exports.warn = function warn(input) {
   /* istanbul ignore next */
-  if (isGHA()) return core.warning(input);
+  if (isGHA() && process.env.NODE_ENV !== 'testing') return core.warning(input);
   // eslint-disable-next-line no-console
   return console.warn(chalk.yellow(`⚠️  Warning! ${input}`));
 };
@@ -31,7 +31,7 @@ module.exports.warn = function warn(input) {
  */
 module.exports.info = function info(input) {
   /* istanbul ignore next */
-  if (isGHA()) return core.notice(input);
+  if (isGHA() && process.env.NODE_ENV !== 'testing') return core.notice(input);
   // eslint-disable-next-line no-console
   return console.info(input);
 };
