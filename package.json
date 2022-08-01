@@ -59,7 +59,7 @@
     "update-notifier": "^5.1.0"
   },
   "devDependencies": {
-    "@readme/eslint-config": "^8.8.0",
+    "@readme/eslint-config": "^9.0.0",
     "@readme/oas-examples": "^5.3.0",
     "alex": "^10.0.0",
     "eslint": "^8.18.0",
