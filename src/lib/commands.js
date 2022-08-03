@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+// ES modules don't have access to `__dirname` so we need to polyfill it.
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -10,6 +11,9 @@ export async function load(cmd) {
   let subcommand = '';
   if (cmd.includes(':')) {
     [command, subcommand] = cmd.split(':');
+    subcommand = `${subcommand}.js`;
+  } else {
+    command = `${command}.js`;
   }
 
   const file = path.join(__dirname, '../cmds', command, subcommand);

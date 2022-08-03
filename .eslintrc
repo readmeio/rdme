@@ -37,7 +37,7 @@
     "no-console": ["warn"],
 
     /**
-     * `__dirname` isn't defined within ESM scope in Node!
+     * `__dirname` isn't defined within the scope of ES modules in Node!
      *
      * https://bobbyhadz.com/blog/javascript-dirname-is-not-defined-in-es-module-scope
      */
