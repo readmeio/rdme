@@ -1,8 +1,7 @@
-const config = require('config');
-const fetch = require('../../src/lib/fetch');
-const { cleanHeaders, handleRes } = require('../../src/lib/fetch');
-const getApiNock = require('../get-api-nock');
-const pkg = require('../../package.json');
+import config from 'config';
+import fetch, { cleanHeaders, handleRes } from '../../src/lib/fetch.js';
+import getApiNock from '../get-api-nock.js';
+import pkg from '../../src/lib/getPackage.js';
 
 describe('#fetch()', () => {
   describe('GitHub Actions environment', () => {

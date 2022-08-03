@@ -1,7 +1,7 @@
-const nock = require('nock');
-const cli = require('../src');
-const { version } = require('../package.json');
-const conf = require('../src/lib/configstore');
+import nock from 'nock';
+import cli from '../src/index.js';
+import pkg from '../src/lib/getPackage.js';
+import conf from '../src/lib/configstore.js';
 
 describe('cli', () => {
   it('command not found', async () => {
@@ -10,15 +10,15 @@ describe('cli', () => {
 
   describe('--version', () => {
     it('should return version from package.json', async () => {
-      await expect(cli(['--version'])).resolves.toBe(version);
+      await expect(cli(['--version'])).resolves.toBe(pkg.version);
     });
 
     it('should return version if the `-V` alias is supplied', async () => {
-      await expect(cli(['-V'])).resolves.toBe(version);
+      await expect(cli(['-V'])).resolves.toBe(pkg.version);
     });
 
     it('should return version from package.json for help command', async () => {
-      await expect(cli(['help', '--version'])).resolves.toBe(version);
+      await expect(cli(['help', '--version'])).resolves.toBe(pkg.version);
     });
 
     // This is necessary because we use --version for other commands like `docs`

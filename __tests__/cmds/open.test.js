@@ -1,7 +1,7 @@
-const chalk = require('chalk');
-const config = require('config');
-const configStore = require('../../src/lib/configstore');
-const Command = require('../../src/cmds/open');
+import chalk from 'chalk';
+import config from 'config';
+import configStore from '../../src/lib/configstore.js';
+import Command from '../../src/cmds/open.js';
 
 const cmd = new Command();
 

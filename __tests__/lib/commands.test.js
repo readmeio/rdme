@@ -1,15 +1,18 @@
 /* eslint-disable jest/no-conditional-expect */
-const commands = require('../../src/lib/commands');
+import * as commands from '../../src/lib/commands.js';
 
 describe('utils', () => {
   describe('#list', () => {
-    it('should have commands returned', () => {
-      expect(commands.list()).not.toHaveLength(0);
+    it('should have commands returned', async () => {
+      await expect(commands.list()).resolves.not.toHaveLength(0);
     });
 
     describe('commands', () => {
-      it('should be configured properly', () => {
-        commands.list().forEach(c => {
+      it('should be configured properly', async () => {
+        expect.hasAssertions();
+
+        const cmds = await commands.list();
+        cmds.forEach(c => {
           const cmd = c.command;
 
           expect(typeof cmd.command === 'string' && cmd.command.length !== 0).toBe(true);
@@ -31,8 +34,11 @@ describe('utils', () => {
         });
       });
 
-      it('should abide by our cli standards', () => {
-        commands.list().forEach(c => {
+      it('should abide by our cli standards', async () => {
+        expect.hasAssertions();
+
+        const cmds = await commands.list();
+        cmds.forEach(c => {
           const cmd = c.command;
 
           // Command descriptions should end with punctuation.

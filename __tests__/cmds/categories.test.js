@@ -1,9 +1,9 @@
-const nock = require('nock');
+import nock from 'nock';
 
-const getApiNock = require('../get-api-nock');
+import getApiNock from '../get-api-nock.js';
 
-const CategoriesCommand = require('../../src/cmds/categories');
-const CategoriesCreateCommand = require('../../src/cmds/categories/create');
+import CategoriesCommand from '../../src/cmds/categories/index.js';
+import CategoriesCreateCommand from '../../src/cmds/categories/create.js';
 
 const categories = new CategoriesCommand();
 const categoriesCreate = new CategoriesCreateCommand();

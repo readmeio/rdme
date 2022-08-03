@@ -37,7 +37,7 @@
   "dependencies": {
     "@actions/core": "^1.6.0",
     "@npmcli/ci-detect": "^2.0.0",
-    "chalk": "^5.0.1",
+    "chalk": "^4.1.2",
     "cli-table": "^0.3.1",
     "command-line-args": "^5.2.0",
     "command-line-usage": "^6.0.2",
@@ -72,27 +72,10 @@
   "scripts": {
     "lint": "eslint --ext js,cjs .",
     "lint-docs": "alex .",
-    "pretest": "npm run lint && npm run lint-docs",
     "prettier": "prettier --list-different --write \"./**/**.{cjs,js}\"",
     "release": "npx conventional-changelog-cli -i CHANGELOG.md -s",
-    "test": "jest --coverage"
-  },
-  "jest": {
-    "coverageThreshold": {
-      "global": {
-        "branches": 80,
-        "functions": 80,
-        "lines": 90,
-        "statements": 90
-      }
-    },
-    "setupFiles": [
-      "./__tests__/set-node-env"
-    ],
-    "testPathIgnorePatterns": [
-      "./__tests__/get-api-nock",
-      "./__tests__/set-node-env"
-    ]
+    "test": "node --experimental-vm-modules ./node_modules/.bin/jest",
+    "test:coverage": "node --experimental-vm-modules ./node_modules/.bin/jest --coverage"
   },
   "prettier": "@readme/eslint-config/prettier"
 }

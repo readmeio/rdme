@@ -1,5 +1,5 @@
-const Enquirer = require('enquirer');
-const promptHandler = require('../../src/lib/prompts');
+import Enquirer from 'enquirer';
+import * as promptHandler from '../../src/lib/prompts.js';
 
 const versionlist = [
   {

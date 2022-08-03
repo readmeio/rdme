@@ -1,12 +1,12 @@
-const config = require('config');
-const nock = require('nock');
-const { getUserAgent } = require('../src/lib/fetch');
+import config from 'config';
+import nock from 'nock';
+import { getUserAgent } from '../src/lib/fetch.js';
 
-module.exports = function (reqHeaders = {}) {
+export default function getAPINock(reqHeaders = {}) {
   return nock(config.get('host'), {
     reqheaders: {
       'User-Agent': getUserAgent(),
       ...reqHeaders,
     },
   });
-};
+}

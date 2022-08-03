@@ -1,15 +1,15 @@
-const nock = require('nock');
-const chalk = require('chalk');
-const fs = require('fs');
-const path = require('path');
-const crypto = require('crypto');
-const frontMatter = require('gray-matter');
+import nock from 'nock';
+import chalk from 'chalk';
+import fs from 'fs';
+import path from 'path';
+import crypto from 'crypto';
+import frontMatter from 'gray-matter';
 
-const APIError = require('../../src/lib/apiError');
-const getApiNock = require('../get-api-nock');
+import APIError from '../../src/lib/apiError.js';
+import getApiNock from '../get-api-nock.js';
 
-const ChangelogsCommand = require('../../src/cmds/changelogs');
-const SingleChangelogCommand = require('../../src/cmds/changelogs/single');
+import ChangelogsCommand from '../../src/cmds/changelogs/index.js';
+import SingleChangelogCommand from '../../src/cmds/changelogs/single.js';
 
 const changelogs = new ChangelogsCommand();
 const changelogsSingle = new SingleChangelogCommand();

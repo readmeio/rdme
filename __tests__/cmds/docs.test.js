@@ -1,17 +1,17 @@
 /* eslint-disable no-console */
-const nock = require('nock');
-const chalk = require('chalk');
-const fs = require('fs');
-const path = require('path');
-const crypto = require('crypto');
-const frontMatter = require('gray-matter');
+import nock from 'nock';
+import chalk from 'chalk';
+import fs from 'fs';
+import path from 'path';
+import crypto from 'crypto';
+import frontMatter from 'gray-matter';
 
-const APIError = require('../../src/lib/apiError');
-const getApiNock = require('../get-api-nock');
+import APIError from '../../src/lib/apiError.js';
+import getApiNock from '../get-api-nock.js';
 
-const DocsCommand = require('../../src/cmds/docs');
-const DocsEditCommand = require('../../src/cmds/docs/edit');
-const DocsSingleCommand = require('../../src/cmds/docs/single');
+import DocsCommand from '../../src/cmds/docs/index.js';
+import DocsEditCommand from '../../src/cmds/docs/edit.js';
+import DocsSingleCommand from '../../src/cmds/docs/single.js';
 
 const docs = new DocsCommand();
 const docsEdit = new DocsEditCommand();

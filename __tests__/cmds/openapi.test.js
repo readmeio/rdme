@@ -1,13 +1,13 @@
 /* eslint-disable no-console */
-const nock = require('nock');
-const chalk = require('chalk');
-const config = require('config');
-const fs = require('fs');
-const promptHandler = require('../../src/lib/prompts');
-const SwaggerCommand = require('../../src/cmds/swagger');
-const OpenAPICommand = require('../../src/cmds/openapi');
-const APIError = require('../../src/lib/apiError');
-const getApiNock = require('../get-api-nock');
+import nock from 'nock';
+import chalk from 'chalk';
+import config from 'config';
+import fs from 'fs';
+import * as promptHandler from '../../src/lib/prompts.js';
+import SwaggerCommand from '../../src/cmds/swagger.js';
+import OpenAPICommand from '../../src/cmds/openapi.js';
+import APIError from '../../src/lib/apiError.js';
+import getApiNock from '../get-api-nock.js';
 
 const openapi = new OpenAPICommand();
 const swagger = new SwaggerCommand();

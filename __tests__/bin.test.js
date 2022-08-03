@@ -1,6 +1,6 @@
-const { exec } = require('child_process');
-const isSupportedNodeVersion = require('../src/lib/isSupportedNodeVersion');
-const pkg = require('../package.json');
+import { exec } from 'child_process';
+import isSupportedNodeVersion from '../src/lib/isSupportedNodeVersion.js';
+import pkg from '../src/lib/getPackage.js';
 
 describe('bin', () => {
   if (isSupportedNodeVersion(process.version)) {

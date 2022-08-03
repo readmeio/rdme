@@ -1,15 +1,15 @@
-const nock = require('nock');
-const chalk = require('chalk');
-const fs = require('fs');
-const path = require('path');
-const crypto = require('crypto');
-const frontMatter = require('gray-matter');
+import nock from 'nock';
+import chalk from 'chalk';
+import fs from 'fs';
+import path from 'path';
+import crypto from 'crypto';
+import frontMatter from 'gray-matter';
 
-const APIError = require('../../src/lib/apiError');
-const getApiNock = require('../get-api-nock');
+import APIError from '../../src/lib/apiError.js';
+import getApiNock from '../get-api-nock.js';
 
-const CustomPagesCommand = require('../../src/cmds/custompages');
-const SingleCustomPageCommand = require('../../src/cmds/custompages/single');
+import CustomPagesCommand from '../../src/cmds/custompages/index.js';
+import SingleCustomPageCommand from '../../src/cmds/custompages/single.js';
 
 const custompages = new CustomPagesCommand();
 const customPagesSingle = new SingleCustomPageCommand();

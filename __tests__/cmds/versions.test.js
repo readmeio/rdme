@@ -1,12 +1,12 @@
-const nock = require('nock');
-const promptHandler = require('../../src/lib/prompts');
-const APIError = require('../../src/lib/apiError');
-const getApiNock = require('../get-api-nock');
+import nock from 'nock';
+import * as promptHandler from '../../src/lib/prompts.js';
+import APIError from '../../src/lib/apiError.js';
+import getApiNock from '../get-api-nock.js';
 
-const VersionsCommand = require('../../src/cmds/versions');
-const CreateVersionCommand = require('../../src/cmds/versions/create');
-const DeleteVersionCommand = require('../../src/cmds/versions/delete');
-const UpdateVersionCommand = require('../../src/cmds/versions/update');
+import VersionsCommand from '../../src/cmds/versions/index.js';
+import CreateVersionCommand from '../../src/cmds/versions/create.js';
+import DeleteVersionCommand from '../../src/cmds/versions/delete.js';
+import UpdateVersionCommand from '../../src/cmds/versions/update.js';
 
 const key = 'API_KEY';
 const version = '1.0.0';

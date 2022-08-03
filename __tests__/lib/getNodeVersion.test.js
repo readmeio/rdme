@@ -1,6 +1,6 @@
-const getNodeVersion = require('../../src/lib/getNodeVersion');
-const pkg = require('../../package.json');
-const semver = require('semver');
+import getNodeVersion from '../../src/lib/getNodeVersion.js';
+import pkg from '../../src/lib/getPackage.js';
+import semver from 'semver';
 
 describe('#getNodeVersion()', () => {
   it('should extract version that matches range in package.json', () => {

@@ -1,4 +1,4 @@
-const isSupportedNodeVersion = require('../../src/lib/isSupportedNodeVersion');
+import isSupportedNodeVersion from '../../src/lib/isSupportedNodeVersion.js';
 
 describe('#isSupportedNodeVersion()', () => {
   it('should return true for a supported version of node', () => {

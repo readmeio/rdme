@@ -1,8 +1,8 @@
-const nock = require('nock');
-const configStore = require('../../src/lib/configstore');
-const Command = require('../../src/cmds/login');
-const APIError = require('../../src/lib/apiError');
-const getApiNock = require('../get-api-nock');
+import nock from 'nock';
+import configStore from '../../src/lib/configstore.js';
+import Command from '../../src/cmds/login.js';
+import APIError from '../../src/lib/apiError.js';
+import getApiNock from '../get-api-nock.js';
 
 const cmd = new Command();
 

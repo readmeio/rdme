@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
-const fs = require('fs');
-const chalk = require('chalk');
-const Command = require('../../src/cmds/validate');
+import fs from 'fs';
+import chalk from 'chalk';
+import Command from '../../src/cmds/validate.js';
 
 const testWorkingDir = process.cwd();
 
