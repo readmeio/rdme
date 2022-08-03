@@ -1,11 +1,10 @@
-const chalk = require('chalk');
-const config = require('config');
+import chalk from 'chalk';
+import config from 'config';
 
-const { debug } = require('../../lib/logger');
-const pushDoc = require('../../lib/pushDoc');
-const { readdirRecursive } = require('../../lib/pushDoc');
+import { debug } from '../../lib/logger.js';
+import pushDoc, { readdirRecursive } from '../../lib/pushDoc.js';
 
-module.exports = class CustomPagesCommand {
+export default class CustomPagesCommand {
   constructor() {
     this.command = 'custompages';
     this.usage = 'custompages <folder> [options]';
@@ -69,4 +68,4 @@ module.exports = class CustomPagesCommand {
 
     return chalk.green(updatedDocs.join('\n'));
   }
-};
+}

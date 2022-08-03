@@ -1,12 +1,11 @@
-const chalk = require('chalk');
-const Table = require('cli-table');
-const config = require('config');
-const CreateVersionCmd = require('./create');
-const fetch = require('../../lib/fetch');
-const { cleanHeaders, handleRes } = require('../../lib/fetch');
-const { debug } = require('../../lib/logger');
+import chalk from 'chalk';
+import Table from 'cli-table';
+import config from 'config';
+import CreateVersionCmd from './create.js';
+import fetch, { cleanHeaders, handleRes } from '../../lib/fetch.js';
+import { debug } from '../../lib/logger.js';
 
-module.exports = class VersionsCommand {
+export default class VersionsCommand {
   constructor() {
     this.command = 'versions';
     this.usage = 'versions [options]';
@@ -129,4 +128,4 @@ module.exports = class VersionsCommand {
         return Promise.resolve(VersionsCommand.getVersionFormatted(versions[0]));
       });
   }
-};
+}

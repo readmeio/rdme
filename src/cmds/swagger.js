@@ -1,7 +1,7 @@
-const OpenAPICommand = require('./openapi');
-const { debug, warn } = require('../lib/logger');
+import OpenAPICommand from './openapi.js';
+import { debug, warn } from '../lib/logger.js';
 
-module.exports = class SwaggerCommand extends OpenAPICommand {
+export default class SwaggerCommand extends OpenAPICommand {
   constructor() {
     super();
 
@@ -18,4 +18,4 @@ module.exports = class SwaggerCommand extends OpenAPICommand {
     warn('`rdme swagger` has been deprecated. Please use `rdme openapi` instead.');
     return super.run(opts);
   }
-};
+}

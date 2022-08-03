@@ -5,10 +5,11 @@
   "license": "MIT",
   "author": "ReadMe <support@readme.io> (https://readme.com)",
   "engines": {
-    "node": ">=14"
+    "node": ">=14.18"
   },
+  "type": "module",
   "bin": {
-    "rdme": "bin/rdme"
+    "rdme": "bin/rdme.js"
   },
   "tags": [
     "api",
@@ -36,12 +37,12 @@
   "dependencies": {
     "@actions/core": "^1.6.0",
     "@npmcli/ci-detect": "^2.0.0",
-    "chalk": "^4.1.2",
+    "chalk": "^5.0.1",
     "cli-table": "^0.3.1",
     "command-line-args": "^5.2.0",
     "command-line-usage": "^6.0.2",
     "config": "^3.1.0",
-    "configstore": "^5.0.0",
+    "configstore": "^6.0.0",
     "debug": "^4.3.3",
     "editor": "^1.0.0",
     "enquirer": "^2.3.0",
@@ -52,12 +53,12 @@
     "node-fetch": "^2.6.1",
     "oas-normalize": "^6.0.0",
     "open": "^8.2.1",
-    "ora": "^5.4.1",
+    "ora": "^6.1.2",
     "parse-link-header": "^2.0.0",
     "read": "^1.0.7",
     "semver": "^7.0.0",
     "tmp-promise": "^3.0.2",
-    "update-notifier": "^5.1.0"
+    "update-notifier": "^6.0.2"
   },
   "devDependencies": {
     "@readme/eslint-config": "^9.0.0",
@@ -69,10 +70,10 @@
     "prettier": "^2.7.1"
   },
   "scripts": {
-    "lint": "eslint . bin/rdme bin/set-version-output",
+    "lint": "eslint --ext js,cjs .",
     "lint-docs": "alex .",
     "pretest": "npm run lint && npm run lint-docs",
-    "prettier": "prettier --list-different --write \"./**/**.js\"",
+    "prettier": "prettier --list-different --write \"./**/**.{cjs,js}\"",
     "release": "npx conventional-changelog-cli -i CHANGELOG.md -s",
     "test": "jest --coverage"
   },

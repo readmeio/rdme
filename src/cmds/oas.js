@@ -1,6 +1,6 @@
-const { debug } = require('../lib/logger');
+import { debug } from '../lib/logger.js';
 
-module.exports = class OASCommand {
+export default class OASCommand {
   constructor() {
     this.command = 'oas';
     this.usage = 'oas';
@@ -20,4 +20,4 @@ module.exports = class OASCommand {
     ];
     return Promise.reject(new Error(message.join('\n\n')));
   }
-};
+}

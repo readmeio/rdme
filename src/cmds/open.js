@@ -1,10 +1,10 @@
-const chalk = require('chalk');
-const config = require('config');
-const open = require('open');
-const configStore = require('../lib/configstore');
-const { debug } = require('../lib/logger');
+import chalk from 'chalk';
+import config from 'config';
+import open from 'open';
+import configStore from '../lib/configstore.js';
+import { debug } from '../lib/logger.js';
 
-module.exports = class OpenCommand {
+export default class OpenCommand {
   constructor() {
     this.command = 'open';
     this.usage = 'open';
@@ -33,4 +33,4 @@ module.exports = class OpenCommand {
       url: true,
     }).then(() => Promise.resolve(`Opening ${chalk.green(url)} in your browser...`));
   }
-};
+}

@@ -1,12 +1,11 @@
-const chalk = require('chalk');
-const config = require('config');
+import chalk from 'chalk';
+import config from 'config';
 
-const { getProjectVersion } = require('../../lib/versionSelect');
-const { debug } = require('../../lib/logger');
-const pushDoc = require('../../lib/pushDoc');
-const { readdirRecursive } = require('../../lib/pushDoc');
+import { getProjectVersion } from '../../lib/versionSelect.js';
+import { debug } from '../../lib/logger.js';
+import pushDoc, { readdirRecursive } from '../../lib/pushDoc.js';
 
-module.exports = class DocsCommand {
+export default class DocsCommand {
   constructor() {
     this.command = 'docs';
     this.usage = 'docs <folder> [options]';
@@ -79,4 +78,4 @@ module.exports = class DocsCommand {
 
     return chalk.green(updatedDocs.join('\n'));
   }
-};
+}

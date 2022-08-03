@@ -1,9 +1,9 @@
-const chalk = require('chalk');
-const config = require('config');
-const configStore = require('../lib/configstore');
-const { debug } = require('../lib/logger');
+import chalk from 'chalk';
+import config from 'config';
+import configStore from '../lib/configstore.js';
+import { debug } from '../lib/logger.js';
 
-module.exports = class WhoAmICommand {
+export default class WhoAmICommand {
   constructor() {
     this.command = 'whoami';
     this.usage = 'whoami';
@@ -27,4 +27,4 @@ module.exports = class WhoAmICommand {
       )} project.`
     );
   }
-};
+}

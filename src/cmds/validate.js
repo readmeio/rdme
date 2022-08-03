@@ -1,8 +1,8 @@
-const chalk = require('chalk');
-const { debug } = require('../lib/logger');
-const prepareOas = require('../lib/prepareOas');
+import chalk from 'chalk';
+import { debug } from '../lib/logger.js';
+import prepareOas from '../lib/prepareOas.js';
 
-module.exports = class ValidateCommand {
+export default class ValidateCommand {
   constructor() {
     this.command = 'validate';
     this.usage = 'validate [file] [options]';
@@ -38,4 +38,4 @@ module.exports = class ValidateCommand {
     const { specPath, specType } = await prepareOas(spec, this.command);
     return Promise.resolve(chalk.green(`${specPath} is a valid ${specType} API definition!`));
   }
-};
+}

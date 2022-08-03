@@ -1,10 +1,10 @@
-const chalk = require('chalk');
-const config = require('config');
+import chalk from 'chalk';
+import config from 'config';
 
-const { debug } = require('../../lib/logger');
-const pushDoc = require('../../lib/pushDoc');
+import { debug } from '../../lib/logger.js';
+import pushDoc from '../../lib/pushDoc.js';
 
-module.exports = class SingleCustomPageCommand {
+export default class SingleCustomPageCommand {
   constructor() {
     this.command = 'custompages:single';
     this.usage = 'custompages:single <file> [options]';
@@ -59,4 +59,4 @@ module.exports = class SingleCustomPageCommand {
 
     return chalk.green(createdDoc);
   }
-};
+}

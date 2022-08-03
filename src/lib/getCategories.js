@@ -1,6 +1,5 @@
-const config = require('config');
-const fetch = require('./fetch');
-const { cleanHeaders, handleRes } = require('./fetch');
+import config from 'config';
+import fetch, { cleanHeaders, handleRes } from './fetch.js';
 
 /**
  * Returns all categories for a given project and version
@@ -9,7 +8,7 @@ const { cleanHeaders, handleRes } = require('./fetch');
  * @param {String} selectedVersion project version
  * @returns An array of category objects
  */
-module.exports = async function getCategories(key, selectedVersion) {
+export default async function getCategories(key, selectedVersion) {
   function getNumberOfPages() {
     let totalCount = 0;
     return fetch(`${config.get('host')}/api/v1/categories?perPage=20&page=1`, {
@@ -46,4 +45,4 @@ module.exports = async function getCategories(key, selectedVersion) {
   );
 
   return allCategories;
-};
+}

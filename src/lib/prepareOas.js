@@ -1,9 +1,9 @@
-const chalk = require('chalk');
-const fs = require('fs');
-const OASNormalize = require('oas-normalize');
-const ora = require('ora');
+import chalk from 'chalk';
+import fs from 'fs';
+import OASNormalize from 'oas-normalize';
+import ora from 'ora';
 
-const { debug, info, oraOptions } = require('./logger');
+import { debug, info, oraOptions } from './logger.js';
 
 /**
  * Normalizes, validates, and (optionally) bundles an OpenAPI definition.
@@ -13,7 +13,7 @@ const { debug, info, oraOptions } = require('./logger');
  * @param {('openapi'|'validate')} command string to distinguish if it's being run in
  * an 'openapi' or 'validate' context
  */
-module.exports = async function prepare(path, command) {
+export default async function prepareOas(path, command) {
   let specPath = path;
 
   if (!specPath) {
@@ -72,4 +72,4 @@ module.exports = async function prepare(path, command) {
   }
 
   return { bundledSpec, specPath, specType };
-};
+}

@@ -1,19 +1,19 @@
-const APIError = require('../lib/apiError');
-const chalk = require('chalk');
-const { cleanHeaders } = require('../lib/fetch');
-const config = require('config');
-const { debug, warn, oraOptions } = require('../lib/logger');
-const fetch = require('../lib/fetch');
-const { handleRes } = require('../lib/fetch');
-const { getProjectVersion } = require('../lib/versionSelect');
-const ora = require('ora');
-const parse = require('parse-link-header');
-const prepareOas = require('../lib/prepareOas');
-const { prompt } = require('enquirer');
-const promptOpts = require('../lib/prompts');
-const streamSpecToRegistry = require('../lib/streamSpecToRegistry');
+import APIError from '../lib/apiError.js';
+import chalk from 'chalk';
+import config from 'config';
+import { debug, warn, oraOptions } from '../lib/logger.js';
+import fetch, { cleanHeaders, handleRes } from '../lib/fetch.js';
+import { getProjectVersion } from '../lib/versionSelect.js';
+import ora from 'ora';
+import parse from 'parse-link-header';
+import prepareOas from '../lib/prepareOas.js';
+import enquirer from 'enquirer';
+import * as promptOpts from '../lib/prompts.js';
+import streamSpecToRegistry from '../lib/streamSpecToRegistry.js';
 
-module.exports = class OpenAPICommand {
+const { prompt } = enquirer;
+
+export default class OpenAPICommand {
   constructor() {
     this.command = 'openapi';
     this.usage = 'openapi [file] [options]';
@@ -218,4 +218,4 @@ module.exports = class OpenAPICommand {
       */
     return updateSpec(id);
   }
-};
+}

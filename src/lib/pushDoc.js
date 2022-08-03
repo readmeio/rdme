@@ -1,14 +1,13 @@
-const chalk = require('chalk');
-const config = require('config');
-const crypto = require('crypto');
-const fs = require('fs');
-const grayMatter = require('gray-matter');
-const path = require('path');
+import chalk from 'chalk';
+import config from 'config';
+import crypto from 'crypto';
+import fs from 'fs';
+import grayMatter from 'gray-matter';
+import path from 'path';
 
-const APIError = require('./apiError');
-const { cleanHeaders, handleRes } = require('./fetch');
-const fetch = require('./fetch');
-const { debug } = require('./logger');
+import APIError from './apiError.js';
+import fetch, { cleanHeaders, handleRes } from './fetch.js';
+import { debug } from './logger.js';
 
 /**
  * Reads the contents of the specified Markdown or HTML file
@@ -22,7 +21,7 @@ const { debug } = require('./logger');
  * @param {String} type module within ReadMe to update (e.g. docs, changelogs, etc.)
  * @returns {Promise<String>} a string containing the result
  */
-module.exports = async function pushDoc(key, selectedVersion, dryRun, filepath, type) {
+export default async function pushDoc(key, selectedVersion, dryRun, filepath, type) {
   debug(`reading file ${filepath}`);
   const file = fs.readFileSync(filepath, 'utf8');
   const matter = grayMatter(file);
@@ -116,7 +115,7 @@ module.exports = async function pushDoc(key, selectedVersion, dryRun, filepath, 
       err.message = `Error uploading ${chalk.underline(filepath)}:\n\n${err.message}`;
       throw err;
     });
-};
+}
 
 /**
  * Recursively grabs all files within a given directory
@@ -124,7 +123,7 @@ module.exports = async function pushDoc(key, selectedVersion, dryRun, filepath, 
  * @param {String} folderToSearch path to directory
  * @returns {String[]} array of files
  */
-module.exports.readdirRecursive = function readdirRecursive(folderToSearch) {
+export function readdirRecursive(folderToSearch) {
   const filesInFolder = fs.readdirSync(folderToSearch, { withFileTypes: true });
   const files = filesInFolder
     .filter(fileHandle => fileHandle.isFile())
@@ -134,4 +133,4 @@ module.exports.readdirRecursive = function readdirRecursive(folderToSearch) {
     ...folders.map(fileHandle => readdirRecursive(path.join(folderToSearch, fileHandle.name)))
   );
   return [...files, ...subFiles];
-};
+}

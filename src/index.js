@@ -1,40 +1,28 @@
 /* eslint-disable no-underscore-dangle */
-const chalk = require('chalk');
-const cliArgs = require('command-line-args');
-const path = require('path');
-// We have to do this otherwise `require('config')` loads
-// from the cwd where the user is running `rdme` which
-// wont be what we want
-//
-// This is a little sketchy overwriting environment variables
-// but since this is only supposed to be a cli and not
-// requireable, i think this is okay
-const configDir = process.env.NODE_CONFIG_DIR;
-process.env.NODE_CONFIG_DIR = path.join(__dirname, '../config');
+import chalk from 'chalk';
+import cliArgs from 'command-line-args';
 
-const config = require('config');
+import config from './lib/config.cjs';
+import pkg from './lib/getPackage.js';
 
-process.env.NODE_CONFIG_DIR = configDir;
-
-const { version } = require('../package.json');
-const configStore = require('./lib/configstore');
-const help = require('./lib/help');
-const commands = require('./lib/commands');
-const { debug } = require('./lib/logger');
+import configStore from './lib/configstore.js';
+import * as help from './lib/help.js';
+import * as commands from './lib/commands.js';
+import { debug } from './lib/logger.js';
 
 /**
  * @param {Array} processArgv - An array of arguments from the current process. Can be used to mock
  *    fake CLI calls.
  * @return {Promise}
  */
-module.exports = processArgv => {
+export default async function rdme(processArgv) {
   const mainArgs = [
     { name: 'help', alias: 'h', type: Boolean, description: 'Display this usage guide' },
     {
       name: 'version',
       alias: 'v',
       type: Boolean,
-      description: `Show the current ${config.get('cli')} version (v${version})`,
+      description: `Show the current ${config.get('cli')} version (v${pkg.version})`,
     },
     { name: 'command', type: String, defaultOption: true },
   ];
@@ -51,7 +39,7 @@ module.exports = processArgv => {
     }
   }
 
-  if (argv.version && (!cmd || cmd === 'help')) return Promise.resolve(version);
+  if (argv.version && (!cmd || cmd === 'help')) return Promise.resolve(pkg.ersion);
 
   let command = cmd || '';
   if (!command) {
@@ -83,11 +71,11 @@ module.exports = processArgv => {
         return Promise.resolve(help.globalUsage(mainArgs));
       }
 
-      bin = commands.load(cmdArgv.subcommand);
+      bin = await commands.load(cmdArgv.subcommand);
       return Promise.resolve(help.commandUsage(bin));
     }
 
-    bin = commands.load(command);
+    bin = await commands.load(command);
 
     // Handling for `rdme <command> --help`.
     if (argv.help) {
@@ -123,4 +111,4 @@ module.exports = processArgv => {
 
     return Promise.reject(e);
   }
-};
+}

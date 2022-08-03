@@ -1,8 +1,8 @@
-const { debug } = require('../../lib/logger');
-const { getProjectVersion } = require('../../lib/versionSelect');
-const getCategories = require('../../lib/getCategories');
+import { debug } from '../../lib/logger.js';
+import { getProjectVersion } from '../../lib/versionSelect.js';
+import getCategories from '../../lib/getCategories.js';
 
-module.exports = class CategoriesCommand {
+export default class CategoriesCommand {
   constructor() {
     this.command = 'categories';
     this.usage = 'categories [options]';
@@ -41,4 +41,4 @@ module.exports = class CategoriesCommand {
 
     return Promise.resolve(JSON.stringify(allCategories, null, 2));
   }
-};
+}

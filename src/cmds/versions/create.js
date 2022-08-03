@@ -1,12 +1,13 @@
-const config = require('config');
-const semver = require('semver');
-const { prompt } = require('enquirer');
-const promptOpts = require('../../lib/prompts');
-const fetch = require('../../lib/fetch');
-const { cleanHeaders, handleRes } = require('../../lib/fetch');
-const { debug } = require('../../lib/logger');
+import config from 'config';
+import semver from 'semver';
+import enquirer from 'enquirer';
+import * as promptOpts from '../../lib/prompts.js';
+import fetch, { cleanHeaders, handleRes } from '../../lib/fetch.js';
+import { debug } from '../../lib/logger.js';
 
-module.exports = class CreateVersionCommand {
+const { prompt } = enquirer;
+
+export default class CreateVersionCommand {
   constructor() {
     this.command = 'versions:create';
     this.usage = 'versions:create --version=<version> [options]';
@@ -105,4 +106,4 @@ module.exports = class CreateVersionCommand {
         return Promise.resolve(`Version ${version} created successfully.`);
       });
   }
-};
+}

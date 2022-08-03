@@ -1,19 +1,29 @@
 /* eslint-disable no-param-reassign */
-const { debug } = require('./logger');
-const fetch = require('node-fetch');
-const isGHA = require('./isGitHub');
-const mime = require('mime-types');
-const pkg = require('../../package.json');
-const APIError = require('./apiError');
+import { debug } from './logger.js';
+import nodeFetch from 'node-fetch';
+import isGHA from './isGitHub.js';
+import mime from 'mime-types';
+import pkg from './getPackage.js';
+import APIError from './apiError.js';
+
+/**
+ * Getter function for a string to be used in the user-agent header
+ * based on the current environment.
+ *
+ */
+export function getUserAgent() {
+  const gh = isGHA() ? '-github' : '';
+  return `rdme${gh}/${pkg.version}`;
+}
 
 /**
  * Wrapper for the `fetch` API so we can add rdme-specific headers to all API requests.
  *
  */
-module.exports = (url, options = { headers: {} }) => {
+export default function fetch(url, options = { headers: {} }) {
   let source = 'cli';
 
-  options.headers['User-Agent'] = module.exports.getUserAgent();
+  options.headers['User-Agent'] = getUserAgent();
 
   if (isGHA()) {
     source = 'cli-gh';
@@ -28,18 +38,8 @@ module.exports = (url, options = { headers: {} }) => {
 
   debug(`making ${(options.method || 'get').toUpperCase()} request to ${url}`);
 
-  return fetch(url, options);
-};
-
-/**
- * Getter function for a string to be used in the user-agent header
- * based on the current environment.
- *
- */
-module.exports.getUserAgent = function getUserAgent() {
-  const gh = isGHA() ? '-github' : '';
-  return `rdme${gh}/${pkg.version}`;
-};
+  return nodeFetch(url, options);
+}
 
 /**
  * Small handler for handling responses from our API.
@@ -50,7 +50,7 @@ module.exports.getUserAgent = function getUserAgent() {
  *
  * @param {Response} res
  */
-module.exports.handleRes = async function handleRes(res) {
+export async function handleRes(res) {
   const contentType = res.headers.get('content-type');
   const extension = mime.extension(contentType);
   if (extension === 'json') {
@@ -66,7 +66,7 @@ module.exports.handleRes = async function handleRes(res) {
   const body = await res.text();
   debug(`received status code ${res.status} from ${res.url} with non-JSON response: ${body}`);
   return Promise.reject(body);
-};
+}
 
 /**
  * Returns the basic auth header and any other defined headers for use in node-fetch API calls.
@@ -75,7 +75,7 @@ module.exports.handleRes = async function handleRes(res) {
  * @param {Object} inputHeaders Any additional headers to be cleaned
  * @returns An object with cleaned request headers for usage in the node-fetch requests to the ReadMe API.
  */
-module.exports.cleanHeaders = function cleanHeaders(key, inputHeaders = {}) {
+export function cleanHeaders(key, inputHeaders = {}) {
   const encodedKey = Buffer.from(`${key}:`).toString('base64');
   const headers = {
     Authorization: `Basic ${encodedKey}`,
@@ -89,4 +89,4 @@ module.exports.cleanHeaders = function cleanHeaders(key, inputHeaders = {}) {
   });
 
   return headers;
-};
+}

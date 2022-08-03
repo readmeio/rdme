@@ -1,11 +1,10 @@
-const { handleRes } = require('./fetch');
-const config = require('config');
-const { debug, oraOptions } = require('./logger');
-const fetch = require('./fetch');
-const FormData = require('form-data');
-const fs = require('fs');
-const ora = require('ora');
-const { file: tmpFile } = require('tmp-promise');
+import config from 'config';
+import { debug, oraOptions } from './logger.js';
+import fetch, { handleRes } from './fetch.js';
+import FormData from 'form-data';
+import fs from 'fs';
+import ora from 'ora';
+import { file as tmpFile } from 'tmp-promise';
 
 /**
  * Uploads a spec to the API registry for usage in ReadMe
@@ -13,7 +12,7 @@ const { file: tmpFile } = require('tmp-promise');
  * @param {String} spec path to a bundled/validated spec file
  * @returns {String} a UUID in the API registry
  */
-module.exports = async function streamSpecToRegistry(spec) {
+export default async function streamSpecToRegistry(spec) {
   const spinner = ora({ text: 'Staging your API definition for upload...', ...oraOptions() }).start();
   // Create a temporary file to write the bundled spec to,
   // which we will then stream into the form data body
@@ -44,4 +43,4 @@ module.exports = async function streamSpecToRegistry(spec) {
       spinner.fail();
       throw e;
     });
-};
+}

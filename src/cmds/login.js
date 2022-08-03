@@ -1,16 +1,17 @@
-const chalk = require('chalk');
-const config = require('config');
-const { validate: isEmail } = require('isemail');
-const { promisify } = require('util');
-const read = promisify(require('read'));
-const configStore = require('../lib/configstore');
-const fetch = require('../lib/fetch');
-const { handleRes } = require('../lib/fetch');
-const { debug } = require('../lib/logger');
+import chalk from 'chalk';
+import config from 'config';
+import { validate as isEmail } from 'isemail';
+import { promisify } from 'util';
+import readPkg from 'read';
+import configStore from '../lib/configstore.js';
+import fetch, { handleRes } from '../lib/fetch.js';
+import { debug } from '../lib/logger.js';
+
+const read = promisify(readPkg);
 
 const testing = process.env.NODE_ENV === 'testing';
 
-module.exports = class LoginCommand {
+export default class LoginCommand {
   constructor() {
     this.command = 'login';
     this.usage = 'login [options]';
@@ -81,4 +82,4 @@ module.exports = class LoginCommand {
         return `Successfully logged in as ${chalk.green(email)} to the ${chalk.blue(project)} project.`;
       });
   }
-};
+}

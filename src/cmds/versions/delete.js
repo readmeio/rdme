@@ -1,10 +1,9 @@
-const config = require('config');
-const { getProjectVersion } = require('../../lib/versionSelect');
-const fetch = require('../../lib/fetch');
-const { cleanHeaders, handleRes } = require('../../lib/fetch');
-const { debug } = require('../../lib/logger');
+import config from 'config';
+import { getProjectVersion } from '../../lib/versionSelect.js';
+import fetch, { cleanHeaders, handleRes } from '../../lib/fetch.js';
+import { debug } from '../../lib/logger.js';
 
-module.exports = class DeleteVersionCommand {
+export default class DeleteVersionCommand {
   constructor() {
     this.command = 'versions:delete';
     this.usage = 'versions:delete --version=<version> [options]';
@@ -52,4 +51,4 @@ module.exports = class DeleteVersionCommand {
         return Promise.resolve(`Version ${selectedVersion} deleted successfully.`);
       });
   }
-};
+}

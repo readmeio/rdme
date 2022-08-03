@@ -1,11 +1,10 @@
-const chalk = require('chalk');
-const config = require('config');
+import chalk from 'chalk';
+import config from 'config';
 
-const { debug } = require('../../lib/logger');
-const pushDoc = require('../../lib/pushDoc');
-const { readdirRecursive } = require('../../lib/pushDoc');
+import { debug } from '../../lib/logger.js';
+import pushDoc, { readdirRecursive } from '../../lib/pushDoc.js';
 
-module.exports = class ChangelogsCommand {
+export default class ChangelogsCommand {
   constructor() {
     this.command = 'changelogs';
     this.usage = 'changelogs <folder> [options]';
@@ -66,4 +65,4 @@ module.exports = class ChangelogsCommand {
 
     return chalk.green(updatedDocs.join('\n'));
   }
-};
+}

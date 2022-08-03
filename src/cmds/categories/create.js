@@ -1,12 +1,11 @@
-const chalk = require('chalk');
-const { cleanHeaders, handleRes } = require('../../lib/fetch');
-const config = require('config');
-const { debug } = require('../../lib/logger');
-const fetch = require('../../lib/fetch');
-const getCategories = require('../../lib/getCategories');
-const { getProjectVersion } = require('../../lib/versionSelect');
+import chalk from 'chalk';
+import config from 'config';
+import { debug } from '../../lib/logger.js';
+import fetch, { cleanHeaders, handleRes } from '../../lib/fetch.js';
+import getCategories from '../../lib/getCategories.js';
+import { getProjectVersion } from '../../lib/versionSelect.js';
 
-module.exports = class CategoriesCreateCommand {
+export default class CategoriesCreateCommand {
   constructor() {
     this.command = 'categories:create';
     this.usage = 'categories:create <title> [options]';
@@ -104,4 +103,4 @@ module.exports = class CategoriesCreateCommand {
 
     return Promise.resolve(createdCategory);
   }
-};
+}

@@ -1,18 +1,17 @@
-const config = require('config');
-const fs = require('fs');
-const editor = require('editor');
-const { promisify } = require('util');
-const APIError = require('../../lib/apiError');
-const { getProjectVersion } = require('../../lib/versionSelect');
-const fetch = require('../../lib/fetch');
-const { cleanHeaders, handleRes } = require('../../lib/fetch');
-const { debug, info } = require('../../lib/logger');
+import config from 'config';
+import fs from 'fs';
+import editor from 'editor';
+import { promisify } from 'util';
+import APIError from '../../lib/apiError.js';
+import { getProjectVersion } from '../../lib/versionSelect.js';
+import fetch, { cleanHeaders, handleRes } from '../../lib/fetch.js';
+import { debug, info } from '../../lib/logger.js';
 
 const writeFile = promisify(fs.writeFile);
 const readFile = promisify(fs.readFile);
 const unlink = promisify(fs.unlink);
 
-module.exports = class EditDocsCommand {
+export default class EditDocsCommand {
   constructor() {
     this.command = 'docs:edit';
     this.usage = 'docs:edit <slug> [options]';
@@ -112,4 +111,4 @@ module.exports = class EditDocsCommand {
       });
     });
   }
-};
+}

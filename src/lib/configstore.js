@@ -1,4 +1,4 @@
-const Configstore = require('configstore');
-const pkg = require('../../package.json');
+import Configstore from 'configstore';
+import pkg from './getPackage.js';
 
-module.exports = new Configstore(`${pkg.name}-${process.env.NODE_ENV || 'production'}`);
+export default new Configstore(`${pkg.name}-${process.env.NODE_ENV || 'production'}`);

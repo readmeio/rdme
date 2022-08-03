@@ -1,4 +1,4 @@
-module.exports = class extends Error {
+export default class APIError extends Error {
   constructor(res) {
     let err;
 
@@ -14,6 +14,8 @@ module.exports = class extends Error {
     }
 
     super(err);
+
+    this.name = 'APIError';
 
     if (typeof err === 'object') {
       this.code = err.error;
@@ -32,4 +34,4 @@ module.exports = class extends Error {
       this.message = err;
     }
   }
-};
+}

@@ -1,7 +1,11 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-exports.load = cmd => {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export async function load(cmd) {
   let command = cmd;
   let subcommand = '';
   if (cmd.includes(':')) {
@@ -10,34 +14,14 @@ exports.load = cmd => {
 
   const file = path.join(__dirname, '../cmds', command, subcommand);
   try {
-    // eslint-disable-next-line global-require, import/no-dynamic-require
-    const Command = require(file);
+    const Command = await import(file).then(r => r.default);
     return new Command();
   } catch (e) {
     throw new Error('Command not found.');
   }
-};
+}
 
-exports.listByCategory = () => {
-  const categories = exports.getCategories();
-  const cmds = exports.list();
-  cmds.forEach(c => {
-    categories[c.command.cmdCategory].commands.push({
-      name: c.command.command,
-      description: c.command.description,
-      position: c.command.position,
-    });
-  });
-
-  return categories;
-};
-
-exports.getSimilar = (cmdCategory, excludeCommand) => {
-  const categories = exports.listByCategory();
-  return categories[cmdCategory].commands.filter(cmd => cmd.name !== excludeCommand);
-};
-
-exports.list = () => {
+export async function list() {
   const commands = [];
   const cmdDir = `${__dirname}/../cmds`;
   const files = fs
@@ -53,20 +37,19 @@ exports.list = () => {
     .filter(file => file.endsWith('.js'))
     .map(file => path.join(cmdDir, file));
 
-  files.forEach(file => {
-    // eslint-disable-next-line global-require, import/no-dynamic-require
-    const Command = require(file);
-
+  for (const file of files) {
+    // eslint-disable-next-line no-await-in-loop
+    const Command = await import(file).then(r => r.default);
     commands.push({
       file,
       command: new Command(),
     });
-  });
+  }
 
   return commands;
-};
+}
 
-exports.getCategories = () => {
+export function getCategories() {
   return {
     apis: {
       description: 'Upload OpenAPI/Swagger definitions',
@@ -101,4 +84,23 @@ exports.getCategories = () => {
       commands: [],
     },
   };
-};
+}
+
+export async function listByCategory() {
+  const categories = getCategories();
+  const cmds = await list();
+  cmds.forEach(c => {
+    categories[c.command.cmdCategory].commands.push({
+      name: c.command.command,
+      description: c.command.description,
+      position: c.command.position,
+    });
+  });
+
+  return categories;
+}
+
+export async function getSimilar(cmdCategory, excludeCommand) {
+  const categories = await listByCategory();
+  return categories[cmdCategory].commands.filter(cmd => cmd.name !== excludeCommand);
+}

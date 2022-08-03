@@ -1,11 +1,11 @@
-const chalk = require('chalk');
-const config = require('config');
+import chalk from 'chalk';
+import config from 'config';
 
-const { debug } = require('../../lib/logger');
-const { getProjectVersion } = require('../../lib/versionSelect');
-const pushDoc = require('../../lib/pushDoc');
+import { debug } from '../../lib/logger.js';
+import { getProjectVersion } from '../../lib/versionSelect.js';
+import pushDoc from '../../lib/pushDoc.js';
 
-module.exports = class SingleDocCommand {
+export default class SingleDocCommand {
   constructor() {
     this.command = 'docs:single';
     this.usage = 'docs:single <file> [options]';
@@ -66,4 +66,4 @@ module.exports = class SingleDocCommand {
 
     return chalk.green(createdDoc);
   }
-};
+}

@@ -1,10 +1,10 @@
-const semver = require('semver');
-const pkg = require('../../package.json');
+import semver from 'semver';
+import pkg from './getPackage.js';
 
 /**
  * Determine if the current version of Node is one that we explicitly support.
  *
  */
-module.exports = function isSupportedNodeVersion(version) {
+export default function isSupportedNodeVersion(version) {
   return semver.satisfies(semver.coerce(version), pkg.engines.node);
-};
+}

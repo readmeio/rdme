@@ -1,7 +1,7 @@
-const chalk = require('chalk');
-const config = require('config');
-const usage = require('command-line-usage');
-const commands = require('./commands');
+import chalk from 'chalk';
+import config from 'config';
+import usage from 'command-line-usage';
+import * as commands from './commands.js';
 
 function formatCommands(cmds) {
   return cmds
@@ -43,7 +43,7 @@ const owlbert = () => {
        *                           /*`;
 };
 
-exports.commandUsage = cmd => {
+export async function commandUsage(cmd) {
   const helpContent = [
     {
       content: cmd.description,
@@ -67,7 +67,7 @@ exports.commandUsage = cmd => {
     },
   ];
 
-  const similarCommands = commands.getSimilar(cmd.cmdCategory, cmd.command);
+  const similarCommands = await commands.getSimilar(cmd.cmdCategory, cmd.command);
   if (similarCommands.length) {
     helpContent.push({
       header: 'Related commands',
@@ -76,9 +76,9 @@ exports.commandUsage = cmd => {
   }
 
   return usage(helpContent);
-};
+}
 
-exports.globalUsage = async args => {
+export async function globalUsage(args) {
   const helpContent = [
     {
       content: owlbert(),
@@ -95,7 +95,7 @@ exports.globalUsage = async args => {
     },
   ];
 
-  const categories = commands.listByCategory();
+  const categories = await commands.listByCategory();
 
   Object.keys(categories).forEach(key => {
     const category = categories[key];
@@ -118,4 +118,4 @@ exports.globalUsage = async args => {
   );
 
   return usage(helpContent);
-};
+}

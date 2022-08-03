@@ -1,11 +1,12 @@
-const { prompt } = require('enquirer');
-const promptOpts = require('./prompts');
-const config = require('config');
-const APIError = require('./apiError');
-const fetch = require('./fetch');
-const { cleanHeaders, handleRes } = require('./fetch');
+import enquirer from 'enquirer';
+import * as promptOpts from './prompts.js';
+import config from 'config';
+import APIError from './apiError.js';
+import fetch, { cleanHeaders, handleRes } from './fetch.js';
 
-async function getProjectVersion(versionFlag, key, allowNewVersion) {
+const { prompt } = enquirer;
+
+export async function getProjectVersion(versionFlag, key, allowNewVersion) {
   try {
     if (versionFlag) {
       return await fetch(`${config.get('host')}/api/v1/version/${versionFlag}`, {
@@ -45,5 +46,3 @@ async function getProjectVersion(versionFlag, key, allowNewVersion) {
     return Promise.reject(new APIError(err));
   }
 }
-
-module.exports = { getProjectVersion };

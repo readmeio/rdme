@@ -1,12 +1,13 @@
-const config = require('config');
-const { prompt } = require('enquirer');
-const promptOpts = require('../../lib/prompts');
-const { getProjectVersion } = require('../../lib/versionSelect');
-const fetch = require('../../lib/fetch');
-const { cleanHeaders, handleRes } = require('../../lib/fetch');
-const { debug } = require('../../lib/logger');
+import config from 'config';
+import enquirer from 'enquirer';
+import * as promptOpts from '../../lib/prompts.js';
+import { getProjectVersion } from '../../lib/versionSelect.js';
+import fetch, { cleanHeaders, handleRes } from '../../lib/fetch.js';
+import { debug } from '../../lib/logger.js';
 
-module.exports = class UpdateVersionCommand {
+const { prompt } = enquirer;
+
+export default class UpdateVersionCommand {
   constructor() {
     this.command = 'versions:update';
     this.usage = 'versions:update --version=<version> [options]';
@@ -91,4 +92,4 @@ module.exports = class UpdateVersionCommand {
         return Promise.resolve(`Version ${selectedVersion} updated successfully.`);
       });
   }
-};
+}
