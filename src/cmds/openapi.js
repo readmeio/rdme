@@ -21,7 +21,7 @@ module.exports = class OpenAPICommand {
     this.cmdCategory = 'apis';
     this.position = 1;
 
-    this.hiddenArgs = ['token', 'spec'];
+    this.hiddenArgs = ['spec'];
     this.args = [
       {
         name: 'key',
@@ -66,15 +66,8 @@ module.exports = class OpenAPICommand {
     }
 
     if (version && id) {
-      warn(
-        `We'll be using the version associated with the \`--${
-          opts.token ? 'token' : 'id'
-        }\` option, so the \`--version\` option will be ignored.`
-      );
+      warn("We'll be using the version associated with the `--id` option, so the `--version` option will be ignored.");
     }
-
-    debug(`key (final): ${key}`);
-    debug(`id (final): ${id}`);
 
     if (!key) {
       return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
