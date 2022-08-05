@@ -12,8 +12,9 @@ Options
 
   --key string                Project API key                                                       
   --id string                 Unique identifier for your API definition. Use this if you're re-     
-                              uploading an existing API definition                                  
-  --version string            Project version                                                       
+                              uploading an existing API definition.                                 
+  --version string            Project version. If running command in a CI environment and this      
+                              option is not passed, the main project version will be used.          
   --workingDirectory string   Working directory (for usage with relative external references)       
   -h, --help                  Display this usage guide                                              
 
@@ -36,8 +37,9 @@ Options
 
   --key string                Project API key                                                       
   --id string                 Unique identifier for your API definition. Use this if you're re-     
-                              uploading an existing API definition                                  
-  --version string            Project version                                                       
+                              uploading an existing API definition.                                 
+  --version string            Project version. If running command in a CI environment and this      
+                              option is not passed, the main project version will be used.          
   --workingDirectory string   Working directory (for usage with relative external references)       
   -h, --help                  Display this usage guide                                              
 
@@ -60,8 +62,9 @@ Options
 
   --key string                Project API key                                                       
   --id string                 Unique identifier for your API definition. Use this if you're re-     
-                              uploading an existing API definition                                  
-  --version string            Project version                                                       
+                              uploading an existing API definition.                                 
+  --version string            Project version. If running command in a CI environment and this      
+                              option is not passed, the main project version will be used.          
   --workingDirectory string   Working directory (for usage with relative external references)       
   -h, --help                  Display this usage guide                                              
 

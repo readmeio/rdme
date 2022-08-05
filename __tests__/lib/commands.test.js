@@ -49,7 +49,9 @@ describe('utils', () => {
               }
 
               expect(arg.description).toBe(
-                cmd.command !== 'versions' ? 'Project version' : 'A specific project version to view'
+                cmd.command !== 'versions'
+                  ? 'Project version. If running command in a CI environment and this option is not passed, the main project version will be used.'
+                  : 'A specific project version to view'
               );
             }
           });
