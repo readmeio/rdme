@@ -5,6 +5,7 @@ const { debug } = require('../../lib/logger');
 const fetch = require('../../lib/fetch');
 const getCategories = require('../../lib/getCategories');
 const { getProjectVersion } = require('../../lib/versionSelect');
+const versionOpt = require('../../lib/versionOpt');
 
 module.exports = class CategoriesCreateCommand {
   constructor() {
@@ -21,11 +22,7 @@ module.exports = class CategoriesCreateCommand {
         type: String,
         description: 'Project API key',
       },
-      {
-        name: 'version',
-        type: String,
-        description: 'Project version',
-      },
+      versionOpt,
       {
         name: 'title',
         type: String,

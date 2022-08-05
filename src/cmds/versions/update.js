@@ -5,6 +5,7 @@ const { getProjectVersion } = require('../../lib/versionSelect');
 const fetch = require('../../lib/fetch');
 const { cleanHeaders, handleRes } = require('../../lib/fetch');
 const { debug } = require('../../lib/logger');
+const versionOpt = require('../../lib/versionOpt');
 
 module.exports = class UpdateVersionCommand {
   constructor() {
@@ -20,11 +21,7 @@ module.exports = class UpdateVersionCommand {
         type: String,
         description: 'Project API key',
       },
-      {
-        name: 'version',
-        type: String,
-        description: 'Project version',
-      },
+      versionOpt,
       {
         name: 'codename',
         type: String,

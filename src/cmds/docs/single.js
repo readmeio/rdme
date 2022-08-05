@@ -4,6 +4,7 @@ const config = require('config');
 const { debug } = require('../../lib/logger');
 const { getProjectVersion } = require('../../lib/versionSelect');
 const pushDoc = require('../../lib/pushDoc');
+const versionOpt = require('../../lib/versionOpt');
 
 module.exports = class SingleDocCommand {
   constructor() {
@@ -20,11 +21,7 @@ module.exports = class SingleDocCommand {
         type: String,
         description: 'Project API key',
       },
-      {
-        name: 'version',
-        type: String,
-        description: 'Project version',
-      },
+      versionOpt,
       {
         name: 'filePath',
         type: String,

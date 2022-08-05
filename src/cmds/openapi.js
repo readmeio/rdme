@@ -12,6 +12,7 @@ const prepareOas = require('../lib/prepareOas');
 const { prompt } = require('enquirer');
 const promptOpts = require('../lib/prompts');
 const streamSpecToRegistry = require('../lib/streamSpecToRegistry');
+const versionOpt = require('../lib/versionOpt');
 
 module.exports = class OpenAPICommand {
   constructor() {
@@ -34,11 +35,7 @@ module.exports = class OpenAPICommand {
         description:
           "Unique identifier for your API definition. Use this if you're re-uploading an existing API definition.",
       },
-      {
-        name: 'version',
-        type: String,
-        description: 'Project version',
-      },
+      versionOpt,
       {
         name: 'spec',
         type: String,

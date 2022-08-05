@@ -7,6 +7,7 @@ const { getProjectVersion } = require('../../lib/versionSelect');
 const fetch = require('../../lib/fetch');
 const { cleanHeaders, handleRes } = require('../../lib/fetch');
 const { debug, info } = require('../../lib/logger');
+const versionOpt = require('../../lib/versionOpt');
 
 const writeFile = promisify(fs.writeFile);
 const readFile = promisify(fs.readFile);
@@ -27,11 +28,7 @@ module.exports = class EditDocsCommand {
         type: String,
         description: 'Project API key',
       },
-      {
-        name: 'version',
-        type: String,
-        description: 'Project version',
-      },
+      versionOpt,
       {
         name: 'slug',
         type: String,

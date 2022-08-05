@@ -1,6 +1,7 @@
 const { debug } = require('../../lib/logger');
 const { getProjectVersion } = require('../../lib/versionSelect');
 const getCategories = require('../../lib/getCategories');
+const versionOpt = require('../../lib/versionOpt');
 
 module.exports = class CategoriesCommand {
   constructor() {
@@ -16,11 +17,7 @@ module.exports = class CategoriesCommand {
         type: String,
         description: 'Project API key',
       },
-      {
-        name: 'version',
-        type: String,
-        description: 'Project version',
-      },
+      versionOpt,
     ];
   }
 

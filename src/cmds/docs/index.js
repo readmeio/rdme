@@ -5,6 +5,7 @@ const { getProjectVersion } = require('../../lib/versionSelect');
 const { debug } = require('../../lib/logger');
 const pushDoc = require('../../lib/pushDoc');
 const { readdirRecursive } = require('../../lib/pushDoc');
+const versionOpt = require('../../lib/versionOpt');
 
 module.exports = class DocsCommand {
   constructor() {
@@ -21,11 +22,7 @@ module.exports = class DocsCommand {
         type: String,
         description: 'Project API key',
       },
-      {
-        name: 'version',
-        type: String,
-        description: 'Project version',
-      },
+      versionOpt,
       {
         name: 'folder',
         type: String,
