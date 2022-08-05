@@ -5,6 +5,15 @@ const APIError = require('./apiError');
 const fetch = require('./fetch');
 const { cleanHeaders, handleRes } = require('./fetch');
 
+/**
+ * Validates and returns a project version.
+ *
+ * @param {String} versionFlag version input parameter
+ * @param {String} key project API key
+ * @param {Boolean} allowNewVersion if true, goes through prompt flow
+ * for creating a new project version
+ * @returns {String} a cleaned up project version
+ */
 async function getProjectVersion(versionFlag, key, allowNewVersion) {
   try {
     if (versionFlag) {
