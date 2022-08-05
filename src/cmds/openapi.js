@@ -32,7 +32,7 @@ module.exports = class OpenAPICommand {
         name: 'id',
         type: String,
         description:
-          "Unique identifier for your API definition. Use this if you're re-uploading an existing API definition",
+          "Unique identifier for your API definition. Use this if you're re-uploading an existing API definition.",
       },
       {
         name: 'version',
