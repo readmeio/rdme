@@ -295,7 +295,7 @@ describe('rdme openapi', () => {
           return cb(null, [201, { _id: 1 }, { location: exampleRefLocation }]);
         });
 
-      const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
+      const spec = './__tests__/__fixtures__/petstore-simple-weird-version.json';
 
       await expect(openapi.run({ spec, key, version })).resolves.toBe(successfulUpload(spec));
 
