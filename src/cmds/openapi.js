@@ -2,7 +2,7 @@ const APIError = require('../lib/apiError');
 const chalk = require('chalk');
 const { cleanHeaders } = require('../lib/fetch');
 const config = require('config');
-const { debug, warn, oraOptions } = require('../lib/logger');
+const { debug, info, warn, oraOptions } = require('../lib/logger');
 const fetch = require('../lib/fetch');
 const { handleRes } = require('../lib/fetch');
 const { getProjectVersion } = require('../lib/versionSelect');
@@ -81,7 +81,7 @@ module.exports = class OpenAPICommand {
     const { bundledSpec, specPath, specType, specVersion } = await prepareOas(spec, 'openapi');
 
     if (useSpecVersion) {
-      debug(`using spec version: ${specVersion}`);
+      info(`Using the version specified in your API definition for your ReadMe project version (${specVersion})`);
       selectedVersion = specVersion;
     }
 
