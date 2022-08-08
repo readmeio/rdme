@@ -42,15 +42,15 @@ module.exports = class OpenAPICommand {
         defaultOption: true,
       },
       {
-        name: 'workingDirectory',
-        type: String,
-        description: 'Working directory (for usage with relative external references)',
-      },
-      {
         name: 'useSpecVersion',
         type: Boolean,
         description:
           'Uses the version listed in the `info.version` field in the API definition for the project version parameter.',
+      },
+      {
+        name: 'workingDirectory',
+        type: String,
+        description: 'Working directory (for usage with relative external references)',
       },
     ];
   }
