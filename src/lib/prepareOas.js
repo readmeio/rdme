@@ -61,6 +61,9 @@ module.exports = async function prepare(path, command) {
   const specType = api.swagger ? 'Swagger' : 'OpenAPI';
   debug(`spec type: ${specType}`);
 
+  const specVersion = api?.info?.version;
+  debug(`version in spec: ${specVersion}`);
+
   let bundledSpec = '';
 
   if (command === 'openapi') {
@@ -71,5 +74,5 @@ module.exports = async function prepare(path, command) {
     debug('spec bundled');
   }
 
-  return { bundledSpec, specPath, specType };
+  return { bundledSpec, specPath, specType, specVersion };
 };

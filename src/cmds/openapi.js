@@ -46,12 +46,18 @@ module.exports = class OpenAPICommand {
         type: String,
         description: 'Working directory (for usage with relative external references)',
       },
+      {
+        name: 'useSpecVersion',
+        type: Boolean,
+        description:
+          'Uses the version listed in the `info.version` field in the API definition for the project version parameter.',
+      },
     ];
   }
 
   async run(opts) {
-    const { key, id, spec, version, workingDirectory } = opts;
-    let selectedVersion;
+    const { key, id, spec, useSpecVersion, version, workingDirectory } = opts;
+    let selectedVersion = version;
     let isUpdate;
     const spinner = ora({ ...oraOptions() });
 
@@ -70,15 +76,20 @@ module.exports = class OpenAPICommand {
       return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
     }
 
+    // Reason we're hardcoding in command here is because `swagger` command
+    // relies on this and we don't want to use `swagger` in this function
+    const { bundledSpec, specPath, specType, specVersion } = await prepareOas(spec, 'openapi');
+
+    if (useSpecVersion) {
+      debug(`using spec version: ${specVersion}`);
+      selectedVersion = specVersion;
+    }
+
     if (!id) {
-      selectedVersion = await getProjectVersion(version, key, true);
+      selectedVersion = await getProjectVersion(selectedVersion, key, true);
     }
 
     debug(`selectedVersion: ${selectedVersion}`);
-
-    // Reason we're hardcoding in command here is because `swagger` command
-    // relies on this and we don't want to use `swagger` in this function
-    const { bundledSpec, specPath, specType } = await prepareOas(spec, 'openapi');
 
     async function success(data) {
       const message = !isUpdate
