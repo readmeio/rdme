@@ -365,15 +365,10 @@ describe('rdme openapi', () => {
       return mock.done();
     });
 
-    it('should error if no file was provided or able to be discovered', async () => {
-      const mock = getApiNock()
-        .get(`/api/v1/version/${version}`)
-        .basicAuth({ user: key })
-        .reply(200, { version: '1.0.0' });
-
-      await expect(openapi.run({ key, version })).rejects.toThrow(/We couldn't find an OpenAPI or Swagger definition./);
-
-      return mock.done();
+    it('should error if no file was provided or able to be discovered', () => {
+      return expect(openapi.run({ key, version })).rejects.toThrow(
+        /We couldn't find an OpenAPI or Swagger definition./
+      );
     });
 
     it('should throw an error if an invalid OpenAPI 3.0 definition is supplied', () => {
