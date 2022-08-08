@@ -1,9 +1,12 @@
-const { prompt } = require('enquirer');
-const promptOpts = require('./prompts');
+const ciDetect = require('@npmcli/ci-detect');
 const config = require('config');
+const { prompt } = require('enquirer');
+
 const APIError = require('./apiError');
-const fetch = require('./fetch');
 const { cleanHeaders, handleRes } = require('./fetch');
+const fetch = require('./fetch');
+const promptOpts = require('./prompts');
+const { warn } = require('./logger');
 
 /**
  * Validates and returns a project version.
@@ -23,6 +26,11 @@ async function getProjectVersion(versionFlag, key, allowNewVersion) {
       })
         .then(res => handleRes(res))
         .then(res => res.version);
+    }
+
+    if ((ciDetect() && process.env.NODE_ENV !== 'testing') || process.env.TEST_CI) {
+      warn('No `--version` parameter detected in current CI environment. Defaulting to main version.');
+      return undefined;
     }
 
     const versionList = await fetch(`${config.get('host')}/api/v1/version`, {
