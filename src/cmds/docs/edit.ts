@@ -53,7 +53,7 @@ export default class EditDocsCommand extends Command {
     ];
   }
 
-  async run(opts: CommandOptions<Options>) {
+  async run(opts: CommandOptions<Options>): Promise<undefined> {
     super.run(opts);
 
     const { slug, key, version } = opts;

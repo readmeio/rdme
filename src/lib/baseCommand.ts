@@ -37,7 +37,7 @@ export default class Command {
     defaultOption?: boolean;
   }[];
 
-  async run(opts: CommandOptions<{}>): Promise<any> {
+  run(opts: CommandOptions<{}>): void | Promise<string> {
     debug(`command: ${this.command}`);
     debug(`opts: ${JSON.stringify(opts)}`);
   }
