@@ -53,7 +53,7 @@ export default class SingleDocCommand extends Command {
 
     const { dryRun, filePath, key, version } = opts;
 
-    if (!opts.key) {
+    if (!key) {
       return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
     }
 

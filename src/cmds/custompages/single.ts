@@ -45,7 +45,7 @@ export default class SingleCustomPageCommand extends Command {
 
     const { dryRun, filePath, key } = opts;
 
-    if (!opts.key) {
+    if (!key) {
       return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
     }
 

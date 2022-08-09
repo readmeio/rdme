@@ -37,7 +37,7 @@ export default class DeleteVersionCommand extends Command {
 
     const { key, version } = opts;
 
-    if (!opts.key) {
+    if (!key) {
       return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
     }
 

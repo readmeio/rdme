@@ -58,7 +58,7 @@ export default class EditDocsCommand extends Command {
 
     const { slug, key, version } = opts;
 
-    if (!opts.key) {
+    if (!key) {
       return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
     }
 

@@ -69,7 +69,7 @@ export default class OpenAPICommand extends Command {
 
     const { key, id, spec, version, workingDirectory } = opts;
 
-    if (!opts.key) {
+    if (!key) {
       return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
     }
 

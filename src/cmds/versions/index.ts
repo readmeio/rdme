@@ -110,7 +110,7 @@ export default class VersionsCommand extends Command {
 
     const { key, version, raw } = opts;
 
-    if (!opts.key) {
+    if (!key) {
       return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
     }
 

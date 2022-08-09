@@ -67,7 +67,7 @@ export default class CategoriesCreateCommand extends Command {
 
     const { categoryType, title, key, version, preventDuplicates } = opts;
 
-    if (!opts.key) {
+    if (!key) {
       return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
     }
 

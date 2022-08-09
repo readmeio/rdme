@@ -68,7 +68,7 @@ export default class UpdateVersionCommand extends Command {
 
     const { key, version, codename, newVersion, main, beta, isPublic, deprecated } = opts;
 
-    if (!opts.key) {
+    if (!key) {
       return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
     }
 

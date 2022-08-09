@@ -73,7 +73,7 @@ export default class CreateVersionCommand extends Command {
     let versionList;
     const { key, version, codename, fork, main, beta, isPublic } = opts;
 
-    if (!opts.key) {
+    if (!key) {
       return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
     }
 
