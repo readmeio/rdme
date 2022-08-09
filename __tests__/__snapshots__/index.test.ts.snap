@@ -92,7 +92,7 @@ Usage
 Options
 
   --key string       Project API key                                                 
-  --version string   A specific project version to view                              
+  --version string   A specific project version to view.                             
   --raw              Return raw output from the API instead of in a \\"pretty\\" format. 
   -h, --help         Display this usage guide                                        
 
