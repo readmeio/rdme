@@ -14,6 +14,7 @@ module.exports = {
     },
   },
   modulePaths: ['<rootDir>'],
+  modulePathIgnorePatterns: ['<rootDir>/dist/'],
   preset: 'ts-jest/presets/js-with-ts',
   roots: ['<rootDir>'],
   setupFiles: ['./__tests__/set-node-env'],
