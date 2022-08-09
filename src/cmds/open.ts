@@ -6,7 +6,6 @@ import open from 'open';
 
 import Command, { CommandCategories } from '../lib/baseCommand';
 import configStore from '../lib/configstore';
-import { debug } from '../lib/logger';
 
 export type Options = {
   mockOpen?: (url: string) => Promise<void>;
@@ -29,7 +28,7 @@ export default class OpenCommand extends Command {
     super.run(opts);
 
     const project = configStore.get('project');
-    debug(`project: ${project}`);
+    Command.debug(`project: ${project}`);
 
     if (!project) {
       return Promise.reject(new Error(`Please login using \`${config.get('cli')} login\`.`));

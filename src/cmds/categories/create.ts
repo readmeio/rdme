@@ -7,7 +7,6 @@ import { Headers } from 'node-fetch';
 import Command, { CommandCategories } from '../../lib/baseCommand';
 import fetch, { cleanHeaders, handleRes } from '../../lib/fetch';
 import getCategories from '../../lib/getCategories';
-import { debug } from '../../lib/logger';
 import { getProjectVersion } from '../../lib/versionSelect';
 
 interface Category {
@@ -73,7 +72,7 @@ export default class CategoriesCreateCommand extends Command {
 
     const selectedVersion = await getProjectVersion(version, key, false);
 
-    debug(`selectedVersion: ${selectedVersion}`);
+    Command.debug(`selectedVersion: ${selectedVersion}`);
 
     async function matchCategory() {
       const allCategories = await getCategories(key, selectedVersion);

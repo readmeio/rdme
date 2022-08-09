@@ -4,7 +4,6 @@ import config from 'config';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
 import fetch, { cleanHeaders, handleRes } from '../../lib/fetch';
-import { debug } from '../../lib/logger';
 import { getProjectVersion } from '../../lib/versionSelect';
 
 export default class DeleteVersionCommand extends Command {
@@ -41,7 +40,7 @@ export default class DeleteVersionCommand extends Command {
       return Promise.reject(e);
     });
 
-    debug(`selectedVersion: ${selectedVersion}`);
+    Command.debug(`selectedVersion: ${selectedVersion}`);
 
     return fetch(`${config.get('host')}/api/v1/version/${selectedVersion}`, {
       method: 'delete',

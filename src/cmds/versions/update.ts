@@ -6,7 +6,6 @@ import { Headers } from 'node-fetch';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
 import fetch, { cleanHeaders, handleRes } from '../../lib/fetch';
-import { debug } from '../../lib/logger';
 import * as promptHandler from '../../lib/prompts';
 import { getProjectVersion } from '../../lib/versionSelect';
 
@@ -68,7 +67,7 @@ export default class UpdateVersionCommand extends Command {
       return Promise.reject(e);
     });
 
-    debug(`selectedVersion: ${selectedVersion}`);
+    Command.debug(`selectedVersion: ${selectedVersion}`);
 
     const foundVersion = await fetch(`${config.get('host')}/api/v1/version/${selectedVersion}`, {
       method: 'get',

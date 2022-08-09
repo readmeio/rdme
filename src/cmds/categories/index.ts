@@ -2,7 +2,6 @@ import type { CommandOptions } from '../../lib/baseCommand';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
 import getCategories from '../../lib/getCategories';
-import { debug } from '../../lib/logger';
 import { getProjectVersion } from '../../lib/versionSelect';
 
 export default class CategoriesCommand extends Command {
@@ -32,7 +31,7 @@ export default class CategoriesCommand extends Command {
 
     const selectedVersion = await getProjectVersion(version, key, true);
 
-    debug(`selectedVersion: ${selectedVersion}`);
+    Command.debug(`selectedVersion: ${selectedVersion}`);
 
     const allCategories = await getCategories(key, selectedVersion);
 
