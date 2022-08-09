@@ -583,6 +583,14 @@ describe('rdme openapi', () => {
 });
 
 describe('rdme swagger', () => {
+  beforeEach(() => {
+    consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
+  });
+
+  afterEach(() => {
+    consoleWarnSpy.mockRestore();
+  });
+
   it('should run `rdme openapi`', () => {
     return expect(swagger.run({ spec: '', key, id, version })).rejects.toThrow(
       "We couldn't find an OpenAPI or Swagger definition.\n\n" +

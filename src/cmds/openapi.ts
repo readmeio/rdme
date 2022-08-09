@@ -8,7 +8,6 @@ import { Headers } from 'node-fetch';
 import ora from 'ora';
 import parse from 'parse-link-header';
 
-import APIError from '../lib/apiError';
 import Command, { CommandCategories } from '../lib/baseCommand';
 import fetch, { cleanHeaders, handleRes } from '../lib/fetch';
 import { debug, warn, oraOptions } from '../lib/logger';
@@ -122,9 +121,10 @@ export default class OpenAPICommand extends Command {
     async function error(res: Response) {
       return handleRes(res).catch(err => {
         // If we receive an APIError, no changes needed! Throw it as is.
-        if (err instanceof APIError) {
+        if (err.name === 'APIError') {
           throw err;
         }
+
         // If we receive certain text responses, it's likely a 5xx error from our server.
         if (
           typeof err === 'string' &&
@@ -135,6 +135,7 @@ export default class OpenAPICommand extends Command {
             "We're sorry, your upload request timed out. Please try again or split your file up into smaller chunks."
           );
         }
+
         // As a fallback, we throw a more generic error.
         throw new Error(
           `Yikes, something went wrong! Please try uploading your spec again and if the problem persists, get in touch with our support team at ${chalk.underline(

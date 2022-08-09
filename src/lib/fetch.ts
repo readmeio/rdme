@@ -25,8 +25,11 @@ function getUserAgent() {
  */
 export default function fetch(url: string, options: RequestInit = { headers: new Headers() }) {
   let source = 'cli';
+  let headers = options.headers as Headers;
 
-  const headers = options.headers as Headers;
+  if (!(options.headers instanceof Headers)) {
+    headers = new Headers(options.headers);
+  }
 
   headers.set('User-Agent', getUserAgent());
 
