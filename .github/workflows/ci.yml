@@ -51,7 +51,7 @@ jobs:
       # rdme doesn't work on Node 12 but we just want to run this single test to make sure that
       # our "we don't support node 12" error is shown.
       - name: Run tests
-        run: npx jest __tests__/bin.test.js
+        run: npx jest __tests__/bin.test.ts
 
   action:
     name: GitHub Action Dry Run
