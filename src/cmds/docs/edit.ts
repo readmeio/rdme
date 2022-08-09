@@ -51,13 +51,9 @@ export default class EditDocsCommand extends Command {
   }
 
   async run(opts: CommandOptions<Options>): Promise<undefined> {
-    super.run(opts);
+    super.run(opts, true);
 
     const { slug, key, version } = opts;
-
-    if (!key) {
-      return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
-    }
 
     if (!slug) {
       return Promise.reject(new Error(`No slug provided. Usage \`${config.get('cli')} ${this.usage}\`.`));

@@ -61,13 +61,9 @@ export default class UpdateVersionCommand extends Command {
   }
 
   async run(opts: CommandOptions<Options>) {
-    super.run(opts);
+    super.run(opts, true);
 
     const { key, version, codename, newVersion, main, beta, isPublic, deprecated } = opts;
-
-    if (!key) {
-      return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
-    }
 
     const selectedVersion = await getProjectVersion(version, key, false).catch(e => {
       return Promise.reject(e);

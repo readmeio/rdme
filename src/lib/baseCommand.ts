@@ -33,8 +33,14 @@ export default class Command {
 
   args: OptionDefinition[];
 
-  run(opts: CommandOptions<{}>): void | Promise<string> {
+  run(opts: CommandOptions<{}>, requiresAuth?: boolean): void | Promise<string> {
     debug(`command: ${this.command}`);
     debug(`opts: ${JSON.stringify(opts)}`);
+
+    if (requiresAuth) {
+      if (!opts.key) {
+        throw new Error('No project API key provided. Please use `--key`.');
+      }
+    }
   }
 }

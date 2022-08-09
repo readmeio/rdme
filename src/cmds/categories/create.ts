@@ -60,13 +60,9 @@ export default class CategoriesCreateCommand extends Command {
   }
 
   async run(opts: CommandOptions<Options>) {
-    super.run(opts);
+    super.run(opts, true);
 
     const { categoryType, title, key, version, preventDuplicates } = opts;
-
-    if (!key) {
-      return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
-    }
 
     if (!title) {
       return Promise.reject(new Error(`No title provided. Usage \`${config.get('cli')} ${this.usage}\`.`));

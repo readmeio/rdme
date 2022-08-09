@@ -46,13 +46,9 @@ export default class SingleDocCommand extends Command {
   }
 
   async run(opts: CommandOptions<Options>) {
-    super.run(opts);
+    super.run(opts, true);
 
     const { dryRun, filePath, key, version } = opts;
-
-    if (!key) {
-      return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
-    }
 
     if (!filePath) {
       return Promise.reject(new Error(`No file path provided. Usage \`${config.get('cli')} ${this.usage}\`.`));

@@ -26,7 +26,7 @@ describe('rdme docs', () => {
   afterAll(() => nock.cleanAll());
 
   it('should error if no api key provided', () => {
-    return expect(docs.run({})).rejects.toThrow('No project API key provided. Please use `--key`.');
+    return expect(docs.run({})).rejects.toStrictEqual(new Error('No project API key provided. Please use `--key`.'));
   });
 
   it('should error if no folder provided', () => {
