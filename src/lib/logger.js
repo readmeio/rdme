@@ -33,7 +33,7 @@ module.exports.info = function info(input) {
   /* istanbul ignore next */
   if (isGHA() && process.env.NODE_ENV !== 'testing') return core.notice(input);
   // eslint-disable-next-line no-console
-  return console.info(input);
+  return console.info(`ℹ️  ${input}`);
 };
 
 module.exports.oraOptions = function oraOptions() {
