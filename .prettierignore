@@ -1,2 +1,4 @@
+__tests__/__fixtures__/**/*.md
+CHANGELOG.md
 coverage/
 dist/
