@@ -65,13 +65,9 @@ export default class OpenAPICommand extends Command {
   }
 
   async run(opts: CommandOptions<Options>) {
-    super.run(opts);
+    super.run(opts, true);
 
     const { key, id, spec, version, workingDirectory } = opts;
-
-    if (!key) {
-      return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
-    }
 
     let selectedVersion: string;
     let isUpdate: boolean;
