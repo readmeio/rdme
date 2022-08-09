@@ -4,6 +4,8 @@ import fs from 'fs';
 import { promisify } from 'util';
 
 import config from 'config';
+import { Headers } from 'node-fetch';
+
 import editor from 'editor';
 
 import APIError from '../../lib/apiError';
@@ -72,10 +74,13 @@ export default class EditDocsCommand extends Command {
 
     const existingDoc = await fetch(`${config.get('host')}/api/v1/docs/${slug}`, {
       method: 'get',
-      headers: cleanHeaders(key, {
-        'x-readme-version': selectedVersion,
-        Accept: 'application/json',
-      }),
+      headers: cleanHeaders(
+        key,
+        new Headers({
+          'x-readme-version': selectedVersion,
+          Accept: 'application/json',
+        })
+      ),
     }).then(res => handleRes(res));
 
     await writeFile(filename, existingDoc.body);
@@ -92,10 +97,13 @@ export default class EditDocsCommand extends Command {
 
         return fetch(`${config.get('host')}/api/v1/docs/${slug}`, {
           method: 'put',
-          headers: cleanHeaders(key, {
-            'x-readme-version': selectedVersion,
-            'Content-Type': 'application/json',
-          }),
+          headers: cleanHeaders(
+            key,
+            new Headers({
+              'x-readme-version': selectedVersion,
+              'Content-Type': 'application/json',
+            })
+          ),
           body: JSON.stringify(
             Object.assign(existingDoc, {
               body: updatedDoc,

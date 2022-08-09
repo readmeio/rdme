@@ -8,10 +8,12 @@
     "noImplicitAny": true,
     "outDir": "dist/",
     "paths": {
-      "@npmcli/ci-detect": [".sink.d.ts"]
+      "@npmcli/ci-detect": [".sink.d.ts"],
+      "editor": [".sink.d.ts"],
+      "oas-normalize": [".sink.d.ts"]
     },
     "resolveJsonModule": true,
-    "target": "ES3"
+    "target": "ES5"
   },
   "include": ["./config/*.js", "./config/*.json", "./src/**/*"]
 }

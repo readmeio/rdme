@@ -2,6 +2,7 @@ import type { CommandOptions } from '../../lib/baseCommand';
 
 import config from 'config';
 import { prompt } from 'enquirer';
+import { Headers } from 'node-fetch';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
 import fetch, { cleanHeaders, handleRes } from '../../lib/fetch';
@@ -95,10 +96,13 @@ export default class UpdateVersionCommand extends Command {
 
     return fetch(`${config.get('host')}/api/v1/version/${selectedVersion}`, {
       method: 'put',
-      headers: cleanHeaders(key, {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      }),
+      headers: cleanHeaders(
+        key,
+        new Headers({
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        })
+      ),
       body: JSON.stringify({
         codename: codename || '',
         version: newVersion || promptResponse.newVersion,

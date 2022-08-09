@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import config from 'config';
+import { Headers } from 'node-fetch';
 
 import pkg from '../../package.json';
 import fetch, { cleanHeaders, handleRes } from '../../src/lib/fetch';
@@ -101,25 +103,38 @@ describe('#fetch()', () => {
 
 describe('#cleanHeaders()', () => {
   it('should base64-encode key in ReadMe-friendly format', () => {
-    expect(cleanHeaders('test')).toStrictEqual({ Authorization: 'Basic dGVzdDo=' });
+    expect(Array.from(cleanHeaders('test'))).toStrictEqual([['authorization', 'Basic dGVzdDo=']]);
   });
 
   it('should filter out undefined headers', () => {
-    expect(cleanHeaders('test', { 'x-readme-version': undefined })).toStrictEqual({ Authorization: 'Basic dGVzdDo=' });
+    expect(
+      // @ts-ignore Testing a quirk of `node-fetch`.
+      Array.from(cleanHeaders('test', new Headers({ 'x-readme-version': undefined })))
+    ).toStrictEqual([['authorization', 'Basic dGVzdDo=']]);
   });
 
   it('should filter out null headers', () => {
-    expect(cleanHeaders('test', { 'x-readme-version': undefined, Accept: null })).toStrictEqual({
-      Authorization: 'Basic dGVzdDo=',
-    });
+    expect(
+      // @ts-ignore Testing a quirk of `node-fetch`.
+      Array.from(cleanHeaders('test', new Headers({ 'x-readme-version': '1234', Accept: null })))
+    ).toStrictEqual([
+      ['authorization', 'Basic dGVzdDo='],
+      ['x-readme-version', '1234'],
+    ]);
   });
 
   it('should pass in properly defined headers', () => {
-    expect(
-      cleanHeaders('test', { 'x-readme-version': undefined, Accept: null, 'Content-Type': 'application/json' })
-    ).toStrictEqual({
-      Authorization: 'Basic dGVzdDo=',
+    const headers = new Headers({
+      'x-readme-version': '1234',
+      Accept: 'text/plain',
       'Content-Type': 'application/json',
     });
+
+    expect(Array.from(cleanHeaders('test', headers))).toStrictEqual([
+      ['authorization', 'Basic dGVzdDo='],
+      ['accept', 'text/plain'],
+      ['content-type', 'application/json'],
+      ['x-readme-version', '1234'],
+    ]);
   });
 });

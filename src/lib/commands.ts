@@ -90,7 +90,7 @@ export function load(cmd: string) {
   const file = path.join(__dirname, '../cmds', command, subcommand);
   try {
     // eslint-disable-next-line @typescript-eslint/no-var-requires, global-require, import/no-dynamic-require
-    const CommandClass = require(file);
+    const { default: CommandClass } = require(file);
     return new CommandClass();
   } catch (e) {
     throw new Error('Command not found.');

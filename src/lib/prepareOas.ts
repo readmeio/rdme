@@ -1,8 +1,9 @@
 import fs from 'fs';
 
 import chalk from 'chalk';
-import OASNormalize from 'oas-normalize';
 import ora from 'ora';
+
+import OASNormalize from 'oas-normalize';
 
 import { debug, info, oraOptions } from './logger';
 

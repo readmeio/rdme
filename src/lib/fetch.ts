@@ -1,9 +1,7 @@
-/* eslint-disable no-param-reassign */
-import type { Headers } from 'form-data';
-import type { BodyInit, Response } from 'node-fetch';
+import type { RequestInit, Response } from 'node-fetch';
 
 import mime from 'mime-types';
-import nodeFetch from 'node-fetch';
+import nodeFetch, { Headers } from 'node-fetch';
 
 import pkg from '../../package.json';
 
@@ -12,8 +10,8 @@ import isGHA from './isGitHub';
 import { debug } from './logger';
 
 /**
- * Getter function for a string to be used in the user-agent header
- * based on the current environment.
+ * Getter function for a string to be used in the user-agent header based on the current
+ * environment.
  *
  */
 function getUserAgent() {
@@ -25,28 +23,30 @@ function getUserAgent() {
  * Wrapper for the `fetch` API so we can add rdme-specific headers to all API requests.
  *
  */
-export default function fetch(
-  url: string,
-  options: { body?: BodyInit; headers?: Headers; method?: string } = { headers: {} }
-) {
+export default function fetch(url: string, options: RequestInit = { headers: new Headers() }) {
   let source = 'cli';
 
-  options.headers['User-Agent'] = getUserAgent();
+  const headers = options.headers as Headers;
+
+  headers.set('User-Agent', getUserAgent());
 
   if (isGHA()) {
     source = 'cli-gh';
-    options.headers['x-github-repository'] = process.env.GITHUB_REPOSITORY;
-    options.headers['x-github-run-attempt'] = process.env.GITHUB_RUN_ATTEMPT;
-    options.headers['x-github-run-id'] = process.env.GITHUB_RUN_ID;
-    options.headers['x-github-run-number'] = process.env.GITHUB_RUN_NUMBER;
-    options.headers['x-github-sha'] = process.env.GITHUB_SHA;
+    headers.set('x-github-repository', process.env.GITHUB_REPOSITORY);
+    headers.set('x-github-run-attempt', process.env.GITHUB_RUN_ATTEMPT);
+    headers.set('x-github-run-id', process.env.GITHUB_RUN_ID);
+    headers.set('x-github-run-number', process.env.GITHUB_RUN_NUMBER);
+    headers.set('x-github-sha', process.env.GITHUB_SHA);
   }
 
-  options.headers['x-readme-source'] = source;
+  headers.set('x-readme-source', source);
 
   debug(`making ${(options.method || 'get').toUpperCase()} request to ${url}`);
 
-  return nodeFetch(url, options);
+  return nodeFetch(url, {
+    ...options,
+    headers,
+  });
 }
 
 /**
@@ -56,7 +56,6 @@ export default function fetch(
  *
  * If we receive non-JSON responses, we consider them errors and throw them.
  *
- * @param {Response} res
  */
 async function handleRes(res: Response) {
   const contentType = res.headers.get('content-type');
@@ -77,24 +76,22 @@ async function handleRes(res: Response) {
 }
 
 /**
- * Returns the basic auth header and any other defined headers for use in node-fetch API calls.
+ * Returns the basic auth header and any other defined headers for use in `node-fetch` API calls.
  *
- * @param {string} key The ReadMe project API key
- * @param {Object} inputHeaders Any additional headers to be cleaned
- * @returns An object with cleaned request headers for usage in the node-fetch requests to the ReadMe API.
  */
-function cleanHeaders(key: string, inputHeaders: Headers = {}) {
+function cleanHeaders(key: string, inputHeaders: Headers = new Headers()) {
   const encodedKey = Buffer.from(`${key}:`).toString('base64');
-  const headers: Record<string, string> = {
+  const headers = new Headers({
     Authorization: `Basic ${encodedKey}`,
-  };
-
-  Object.keys(inputHeaders).forEach(header => {
-    // For some reason, node-fetch will send in the string 'undefined'
-    // if you pass in an undefined value for a header,
-    // so that's why headers are added incrementally.
-    if (typeof inputHeaders[header] === 'string') headers[header] = inputHeaders[header];
   });
+
+  for (const header of inputHeaders.entries()) {
+    // If you supply `undefined` or `null` to the `Headers` API it'll convert that those to a
+    // string.
+    if (header[1] !== 'null' && header[1] !== 'undefined' && header[1].length > 0) {
+      headers.set(header[0], header[1]);
+    }
+  }
 
   return headers;
 }

@@ -4,6 +4,7 @@ import type { RequestInit, Response } from 'node-fetch';
 import chalk from 'chalk';
 import config from 'config';
 import { prompt } from 'enquirer';
+import { Headers } from 'node-fetch';
 import ora from 'ora';
 import parse from 'parse-link-header';
 
@@ -146,11 +147,14 @@ export default class OpenAPICommand extends Command {
     const registryUUID = await streamSpecToRegistry(bundledSpec);
 
     const options: RequestInit = {
-      headers: cleanHeaders(key, {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        'x-readme-version': selectedVersion,
-      }),
+      headers: cleanHeaders(
+        key,
+        new Headers({
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'x-readme-version': selectedVersion,
+        })
+      ),
       body: JSON.stringify({ registryUUID }),
     };
 
@@ -192,9 +196,12 @@ export default class OpenAPICommand extends Command {
     function getSpecs(url: string) {
       return fetch(`${config.get('host')}${url}`, {
         method: 'get',
-        headers: cleanHeaders(key, {
-          'x-readme-version': selectedVersion,
-        }),
+        headers: cleanHeaders(
+          key,
+          new Headers({
+            'x-readme-version': selectedVersion,
+          })
+        ),
       });
     }
 

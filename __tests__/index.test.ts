@@ -6,8 +6,7 @@ import conf from '../src/lib/configstore';
 
 describe('cli', () => {
   it('command not found', async () => {
-    // @ts-expect-error thius is fine
-    await expect(cli('notARealCommand')).rejects.toThrow('Command not found');
+    await expect(cli(['no-such-command'])).rejects.toThrow('Command not found');
   });
 
   describe('--version', () => {
@@ -57,10 +56,14 @@ describe('cli', () => {
       process.stderr.columns = 100;
     });
 
+    /* eslint-disable @typescript-eslint/ban-ts-comment */
     afterEach(() => {
+      // @ts-ignore This is the only way we can disable columns within the `table-layout` library.
       process.stdout.columns = undefined;
+      // @ts-ignore
       process.stderr.columns = undefined;
     });
+    /* eslint-enable @typescript-eslint/ban-ts-comment */
 
     it('should print help', async () => {
       await expect(cli(['--help'])).resolves.toContain('a utility for interacting with ReadMe');

@@ -2,6 +2,7 @@ import type { CommandOptions } from '../../lib/baseCommand';
 
 import chalk from 'chalk';
 import config from 'config';
+import { Headers } from 'node-fetch';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
 import fetch, { cleanHeaders, handleRes } from '../../lib/fetch';
@@ -103,10 +104,13 @@ export default class CategoriesCreateCommand extends Command {
       }
       return fetch(`${config.get('host')}/api/v1/categories`, {
         method: 'post',
-        headers: cleanHeaders(key, {
-          'x-readme-version': selectedVersion,
-          'Content-Type': 'application/json',
-        }),
+        headers: cleanHeaders(
+          key,
+          new Headers({
+            'x-readme-version': selectedVersion,
+            'Content-Type': 'application/json',
+          })
+        ),
         body: JSON.stringify({
           title,
           type: categoryType,

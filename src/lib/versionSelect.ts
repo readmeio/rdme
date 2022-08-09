@@ -1,5 +1,6 @@
 import config from 'config';
 import { prompt } from 'enquirer';
+import { Headers } from 'node-fetch';
 
 import APIError from './apiError';
 import fetch, { cleanHeaders, handleRes } from './fetch';
@@ -34,7 +35,7 @@ export async function getProjectVersion(versionFlag: string, key: string, allowN
 
       await fetch(`${config.get('host')}/api/v1/version`, {
         method: 'post',
-        headers: cleanHeaders(key, { 'Content-Type': 'application/json' }),
+        headers: cleanHeaders(key, new Headers({ 'Content-Type': 'application/json' })),
         body: JSON.stringify({
           from: versionList[0].version,
           version: newVersion,

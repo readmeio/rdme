@@ -1,4 +1,5 @@
 import config from 'config';
+import { Headers } from 'node-fetch';
 
 import fetch, { cleanHeaders, handleRes } from './fetch';
 
@@ -14,10 +15,13 @@ export default async function getCategories(key: string, selectedVersion: string
     let totalCount = 0;
     return fetch(`${config.get('host')}/api/v1/categories?perPage=20&page=1`, {
       method: 'get',
-      headers: cleanHeaders(key, {
-        'x-readme-version': selectedVersion,
-        Accept: 'application/json',
-      }),
+      headers: cleanHeaders(
+        key,
+        new Headers({
+          'x-readme-version': selectedVersion,
+          Accept: 'application/json',
+        })
+      ),
     })
       .then(res => {
         totalCount = Math.ceil(parseInt(res.headers.get('x-total-count'), 10) / 20);
@@ -36,10 +40,13 @@ export default async function getCategories(key: string, selectedVersion: string
       [...new Array(totalCount + 1).keys()].slice(2).map(async page => {
         return fetch(`${config.get('host')}/api/v1/categories?perPage=20&page=${page}`, {
           method: 'get',
-          headers: cleanHeaders(key, {
-            'x-readme-version': selectedVersion,
-            Accept: 'application/json',
-          }),
+          headers: cleanHeaders(
+            key,
+            new Headers({
+              'x-readme-version': selectedVersion,
+              Accept: 'application/json',
+            })
+          ),
         }).then(res => handleRes(res));
       })
     ))

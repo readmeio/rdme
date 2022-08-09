@@ -5,6 +5,7 @@ import path from 'path';
 import chalk from 'chalk';
 import config from 'config';
 import grayMatter from 'gray-matter';
+import { Headers } from 'node-fetch';
 
 import APIError from './apiError';
 import { CommandCategories } from './baseCommand';
@@ -63,10 +64,13 @@ export default async function pushDoc(
 
     return fetch(`${config.get('host')}/api/v1/${type}`, {
       method: 'post',
-      headers: cleanHeaders(key, {
-        'x-readme-version': selectedVersion,
-        'Content-Type': 'application/json',
-      }),
+      headers: cleanHeaders(
+        key,
+        new Headers({
+          'x-readme-version': selectedVersion,
+          'Content-Type': 'application/json',
+        })
+      ),
       body: JSON.stringify({
         slug,
         ...data,
@@ -91,10 +95,13 @@ export default async function pushDoc(
 
     return fetch(`${config.get('host')}/api/v1/${type}/${slug}`, {
       method: 'put',
-      headers: cleanHeaders(key, {
-        'x-readme-version': selectedVersion,
-        'Content-Type': 'application/json',
-      }),
+      headers: cleanHeaders(
+        key,
+        new Headers({
+          'x-readme-version': selectedVersion,
+          'Content-Type': 'application/json',
+        })
+      ),
       body: JSON.stringify(
         Object.assign(existingDoc, {
           ...data,
@@ -107,10 +114,13 @@ export default async function pushDoc(
 
   return fetch(`${config.get('host')}/api/v1/${type}/${slug}`, {
     method: 'get',
-    headers: cleanHeaders(key, {
-      'x-readme-version': selectedVersion,
-      Accept: 'application/json',
-    }),
+    headers: cleanHeaders(
+      key,
+      new Headers({
+        'x-readme-version': selectedVersion,
+        Accept: 'application/json',
+      })
+    ),
   })
     .then(async res => {
       const body = await res.json();

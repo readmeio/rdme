@@ -2,6 +2,7 @@ import type { CommandOptions } from '../../lib/baseCommand';
 
 import config from 'config';
 import { prompt } from 'enquirer';
+import { Headers } from 'node-fetch';
 import semver from 'semver';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
@@ -101,10 +102,13 @@ export default class CreateVersionCommand extends Command {
 
     return fetch(`${config.get('host')}/api/v1/version`, {
       method: 'post',
-      headers: cleanHeaders(key, {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      }),
+      headers: cleanHeaders(
+        key,
+        new Headers({
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        })
+      ),
       body: JSON.stringify({
         version,
         codename: codename || '',

@@ -52,6 +52,8 @@
      * Furthermore, we should also be using our custom loggers (see src/lib/logger.js)
      * instead of using console.info() or console.warn() statements.
      */
-    "no-console": ["warn"]
+    "no-console": "warn",
+
+    "no-restricted-syntax": "off"
   }
 }
