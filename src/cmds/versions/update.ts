@@ -4,12 +4,11 @@ import config from 'config';
 import { prompt } from 'enquirer';
 import { Headers } from 'node-fetch';
 
-import versionOpt from '../../lib/versionOpt';
-
 import Command, { CommandCategories } from '../../lib/baseCommand';
 import fetch, { cleanHeaders, handleRes } from '../../lib/fetch';
 import { debug } from '../../lib/logger';
 import * as promptHandler from '../../lib/prompts';
+import versionOpt from '../../lib/versionOpt';
 import { getProjectVersion } from '../../lib/versionSelect';
 
 export type Options = {

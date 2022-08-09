@@ -4,12 +4,11 @@ import chalk from 'chalk';
 import config from 'config';
 import { Headers } from 'node-fetch';
 
-import versionOpt from '../../lib/versionOpt';
-
 import Command, { CommandCategories } from '../../lib/baseCommand';
 import fetch, { cleanHeaders, handleRes } from '../../lib/fetch';
 import getCategories from '../../lib/getCategories';
 import { debug } from '../../lib/logger';
+import versionOpt from '../../lib/versionOpt';
 import { getProjectVersion } from '../../lib/versionSelect';
 
 interface Category {

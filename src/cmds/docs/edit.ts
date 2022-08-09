@@ -7,12 +7,12 @@ import config from 'config';
 import { Headers } from 'node-fetch';
 
 import editor from 'editor';
-import versionOpt from '../../lib/versionOpt';
 
 import APIError from '../../lib/apiError';
 import Command, { CommandCategories } from '../../lib/baseCommand';
 import fetch, { cleanHeaders, handleRes } from '../../lib/fetch';
 import { debug, info } from '../../lib/logger';
+import versionOpt from '../../lib/versionOpt';
 import { getProjectVersion } from '../../lib/versionSelect';
 
 const writeFile = promisify(fs.writeFile);
