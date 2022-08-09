@@ -77,7 +77,7 @@ export default class OpenAPICommand extends Command {
       return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
     }
 
-    let selectedVersion: string;
+    let selectedVersion = version;
     let isUpdate: boolean;
     const spinner = ora({ ...oraOptions() });
 
@@ -87,10 +87,6 @@ export default class OpenAPICommand extends Command {
 
     if (version && id) {
       warn("We'll be using the version associated with the `--id` option, so the `--version` option will be ignored.");
-    }
-
-    if (!key) {
-      return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
     }
 
     // Reason we're hardcoding in command here is because `swagger` command
