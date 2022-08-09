@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "baseUrl": "./src",
+    "downlevelIteration": true,
+    "esModuleInterop": true,
+    "lib": ["es2020"],
+    "noImplicitAny": true,
+    "outDir": "dist/",
+    "paths": {
+      "@npmcli/ci-detect": [".sink.d.ts"],
+      "editor": [".sink.d.ts"],
+      "oas-normalize": [".sink.d.ts"]
+    },
+    "resolveJsonModule": true,
+    "target": "ES5"
+  },
+  "include": ["./config/*.js", "./config/*.json", "./src/**/*"]
+}

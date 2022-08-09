@@ -62,36 +62,40 @@
   "devDependencies": {
     "@readme/eslint-config": "^9.0.0",
     "@readme/oas-examples": "^5.3.0",
+    "@types/cli-table": "^0.3.0",
+    "@types/command-line-args": "^5.2.0",
+    "@types/command-line-usage": "^5.0.2",
+    "@types/config": "^3.3.0",
+    "@types/jest": "^28.1.6",
+    "@types/mime-types": "^2.1.1",
+    "@types/node-fetch": "^2.6.2",
+    "@types/parse-link-header": "^2.0.0",
+    "@types/read": "^0.0.29",
+    "@types/semver": "^7.3.10",
+    "@types/tmp": "^0.2.3",
+    "@types/update-notifier": "^6.0.1",
     "alex": "^10.0.0",
     "eslint": "^8.21.0",
     "jest": "^28.1.1",
+    "jest-extended": "^3.0.2",
     "nock": "^13.2.7",
-    "prettier": "^2.7.1"
+    "prettier": "^2.7.1",
+    "ts-jest": "^28.0.7",
+    "ts-node": "^10.9.1",
+    "type-fest": "^2.18.0",
+    "typescript": "^4.7.4"
   },
   "scripts": {
-    "lint": "eslint . bin/rdme bin/set-version-output",
+    "build": "tsc",
+    "debug:bin": "ts-node src/cli.ts",
+    "lint": "eslint . bin/rdme bin/set-version-output --ext .js,.ts",
     "lint-docs": "alex .",
+    "prebuild": "rm -rf dist/",
+    "prepack": "npm run build",
     "pretest": "npm run lint && npm run lint-docs",
-    "prettier": "prettier --list-different --write \"./**/**.js\"",
+    "prettier": "prettier --list-different --write \"./**/**.{js,ts}\"",
     "release": "npx conventional-changelog-cli -i CHANGELOG.md -s",
     "test": "jest --coverage"
-  },
-  "jest": {
-    "coverageThreshold": {
-      "global": {
-        "branches": 80,
-        "functions": 80,
-        "lines": 90,
-        "statements": 90
-      }
-    },
-    "setupFiles": [
-      "./__tests__/set-node-env"
-    ],
-    "testPathIgnorePatterns": [
-      "./__tests__/get-api-nock",
-      "./__tests__/set-node-env"
-    ]
   },
   "prettier": "@readme/eslint-config/prettier"
 }

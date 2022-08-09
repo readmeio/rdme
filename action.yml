@@ -11,8 +11,8 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Install rdme deps
-      run: npm install --production --silent
+    - name: Set up rdme
+      run: npm install --silent && npm run build
       shell: bash
       working-directory: ${{ github.action_path }}
     - name: Execute rdme command
