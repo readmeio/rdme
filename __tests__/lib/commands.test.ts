@@ -1,8 +1,9 @@
-/* eslint-disable jest/no-if */
 /// <reference types="jest-extended" />
-/* eslint-disable jest/no-conditional-expect */
+/* eslint-disable jest/no-conditional-expect, jest/no-if */
 import type Command from '../../src/lib/baseCommand';
 
+import SingleDocCommand from '../../src/cmds/docs/single';
+import { CommandCategories } from '../../src/lib/baseCommand';
 import * as commands from '../../src/lib/commands';
 
 describe('utils', () => {
@@ -13,8 +14,6 @@ describe('utils', () => {
 
     describe('commands', () => {
       it('should be configured properly', () => {
-        expect.hasAssertions();
-
         commands.list().forEach(c => {
           const cmd = c.command;
 
@@ -37,8 +36,6 @@ describe('utils', () => {
       });
 
       describe('cli standards', () => {
-        expect.hasAssertions();
-
         describe.each<[string, Command]>(commands.list().map(cmd => [cmd.command.command, cmd.command]))(
           '%s',
           (_, command) => {
@@ -67,6 +64,42 @@ describe('utils', () => {
           }
         );
       });
+    });
+  });
+
+  describe('#load', () => {
+    it('should load a valid command', () => {
+      expect(commands.load('docs:single')).toBeInstanceOf(SingleDocCommand);
+    });
+
+    it('should throw an error on an invalid command', () => {
+      expect(() => {
+        // @ts-expect-error Testing a valid failure case.
+        commands.load('buster');
+      }).toThrow('Command not found');
+    });
+  });
+
+  describe('#listByCategory', () => {
+    it('should list commands by category', () => {
+      expect(commands.listByCategory()).toMatchSnapshot();
+    });
+  });
+
+  describe('#getSimilar', () => {
+    it('should pull similar commands', () => {
+      expect(commands.getSimilar(CommandCategories.ADMIN, 'login')).toStrictEqual([
+        {
+          name: 'logout',
+          description: 'Logs the currently authenticated user out of ReadMe.',
+          position: 2,
+        },
+        {
+          name: 'whoami',
+          description: 'Displays the current user and project authenticated with ReadMe.',
+          position: 3,
+        },
+      ]);
     });
   });
 });

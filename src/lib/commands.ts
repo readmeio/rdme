@@ -1,8 +1,6 @@
-import type Command from './baseCommand';
 import type { CommandCategories } from './baseCommand';
 
-import fs from 'fs';
-import path from 'path';
+import commands from '../cmds';
 
 export function getCategories(): Record<
   string,
@@ -52,49 +50,20 @@ export function getCategories(): Record<
 }
 
 export function list() {
-  const commands: { file: string; command: Command }[] = [];
-  const cmdDir = `${__dirname}/../cmds`;
-  const files = fs
-    .readdirSync(cmdDir)
-    .map(file => {
-      const stats = fs.statSync(path.join(cmdDir, file));
-      if (stats.isDirectory()) {
-        return fs.readdirSync(path.join(cmdDir, file)).map(f => path.join(file, f));
-      }
-      return [file];
-    })
-    .reduce((a, b) => a.concat(b), [])
-    .filter(file => file.endsWith('.ts'))
-    .map(file => path.join(cmdDir, file));
-
-  files.forEach(file => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires, global-require, import/no-dynamic-require
-    const { default: CommandClass } = require(file);
-
-    commands.push({
-      file,
-      command: new CommandClass(),
-    });
+  return Object.entries(commands).map(([name, Cmd]) => {
+    return {
+      name,
+      command: new Cmd(),
+    };
   });
-
-  return commands;
 }
 
-export function load(cmd: string) {
-  let command = cmd;
-  let subcommand = '';
-  if (cmd.includes(':')) {
-    [command, subcommand] = cmd.split(':');
-  }
-
-  const file = path.join(__dirname, '../cmds', command, subcommand);
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires, global-require, import/no-dynamic-require
-    const { default: CommandClass } = require(file);
-    return new CommandClass();
-  } catch (e) {
+export function load(cmd: keyof typeof commands) {
+  if (!(cmd in commands)) {
     throw new Error('Command not found.');
   }
+
+  return new commands[cmd]();
 }
 
 export function listByCategory() {
