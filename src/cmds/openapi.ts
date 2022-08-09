@@ -14,7 +14,6 @@ import { debug, info, warn, oraOptions } from '../lib/logger';
 import prepareOas from '../lib/prepareOas';
 import * as promptHandler from '../lib/prompts';
 import streamSpecToRegistry from '../lib/streamSpecToRegistry';
-import versionOpt from '../lib/versionOpt';
 import { getProjectVersion } from '../lib/versionSelect';
 
 export type Options = {
@@ -48,7 +47,7 @@ export default class OpenAPICommand extends Command {
         description:
           "Unique identifier for your API definition. Use this if you're re-uploading an existing API definition.",
       },
-      versionOpt,
+      this.getVersionArg(),
       {
         name: 'spec',
         type: String,

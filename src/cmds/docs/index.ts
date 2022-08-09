@@ -6,7 +6,6 @@ import config from 'config';
 import Command, { CommandCategories } from '../../lib/baseCommand';
 import { debug } from '../../lib/logger';
 import pushDoc, { readdirRecursive } from '../../lib/pushDoc';
-import versionOpt from '../../lib/versionOpt';
 import { getProjectVersion } from '../../lib/versionSelect';
 
 export type Options = {
@@ -31,7 +30,7 @@ export default class DocsCommand extends Command {
         type: String,
         description: 'Project API key',
       },
-      versionOpt,
+      this.getVersionArg(),
       {
         name: 'folder',
         type: String,

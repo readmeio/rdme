@@ -3,7 +3,6 @@ import type { CommandOptions } from '../../lib/baseCommand';
 import Command, { CommandCategories } from '../../lib/baseCommand';
 import getCategories from '../../lib/getCategories';
 import { debug } from '../../lib/logger';
-import versionOpt from '../../lib/versionOpt';
 import { getProjectVersion } from '../../lib/versionSelect';
 
 export default class CategoriesCommand extends Command {
@@ -22,7 +21,7 @@ export default class CategoriesCommand extends Command {
         type: String,
         description: 'Project API key',
       },
-      versionOpt,
+      this.getVersionArg(),
     ];
   }
 

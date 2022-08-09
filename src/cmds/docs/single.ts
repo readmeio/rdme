@@ -6,7 +6,6 @@ import config from 'config';
 import Command, { CommandCategories } from '../../lib/baseCommand';
 import { debug } from '../../lib/logger';
 import pushDoc from '../../lib/pushDoc';
-import versionOpt from '../../lib/versionOpt';
 import { getProjectVersion } from '../../lib/versionSelect';
 
 export type Options = {
@@ -31,7 +30,7 @@ export default class SingleDocCommand extends Command {
         type: String,
         description: 'Project API key',
       },
-      versionOpt,
+      this.getVersionArg(),
       {
         name: 'filePath',
         type: String,

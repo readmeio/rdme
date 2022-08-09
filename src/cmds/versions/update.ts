@@ -8,7 +8,6 @@ import Command, { CommandCategories } from '../../lib/baseCommand';
 import fetch, { cleanHeaders, handleRes } from '../../lib/fetch';
 import { debug } from '../../lib/logger';
 import * as promptHandler from '../../lib/prompts';
-import versionOpt from '../../lib/versionOpt';
 import { getProjectVersion } from '../../lib/versionSelect';
 
 export type Options = {
@@ -36,7 +35,7 @@ export default class UpdateVersionCommand extends Command {
         type: String,
         description: 'Project API key',
       },
-      versionOpt,
+      this.getVersionArg(),
       {
         name: 'codename',
         type: String,

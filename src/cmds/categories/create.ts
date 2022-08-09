@@ -8,7 +8,6 @@ import Command, { CommandCategories } from '../../lib/baseCommand';
 import fetch, { cleanHeaders, handleRes } from '../../lib/fetch';
 import getCategories from '../../lib/getCategories';
 import { debug } from '../../lib/logger';
-import versionOpt from '../../lib/versionOpt';
 import { getProjectVersion } from '../../lib/versionSelect';
 
 interface Category {
@@ -39,7 +38,7 @@ export default class CategoriesCreateCommand extends Command {
         type: String,
         description: 'Project API key',
       },
-      versionOpt,
+      this.getVersionArg(),
       {
         name: 'title',
         type: String,
