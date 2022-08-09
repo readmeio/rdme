@@ -19,7 +19,7 @@ module.exports = {
   setupFiles: ['./__tests__/set-node-env'],
   setupFilesAfterEnv: ['jest-extended/all'],
   testPathIgnorePatterns: [
-    'dist/',
+    '<rootDir>/dist/',
     '<rootDir>/__tests__/helpers/',
     '<rootDir>/__tests__/get-api-nock',
     '<rootDir>/__tests__/set-node-env',
