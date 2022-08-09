@@ -1,3 +1,5 @@
+import type { Response } from 'node-fetch';
+
 import Enquirer from 'enquirer';
 
 import * as promptHandler from '../../src/lib/prompts';
@@ -23,12 +25,14 @@ const specList = [
 ];
 
 const getSpecs = () => {
-  return [
-    {
-      _id: 'spec3',
-      title: 'spec3_title',
-    },
-  ];
+  return {
+    body: [
+      {
+        _id: 'spec3',
+        title: 'spec3_title',
+      },
+    ],
+  } as unknown as Promise<Response>;
 };
 
 describe('prompt test bed', () => {

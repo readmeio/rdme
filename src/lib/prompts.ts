@@ -126,7 +126,7 @@ export function createOasPrompt(
   specList: SpecList,
   parsedDocs: ParsedDocs,
   totalPages: number,
-  getSpecs: (url: string) => Promise<Response>
+  getSpecs: ((url: string) => Promise<Response>) | null
 ) {
   return [
     {
