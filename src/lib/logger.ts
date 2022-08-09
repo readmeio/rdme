@@ -1,7 +1,7 @@
 import type { Options as OraOptions } from 'ora';
 import type { Writable } from 'type-fest';
 
-import core from '@actions/core';
+import * as core from '@actions/core';
 import chalk from 'chalk';
 import config from 'config';
 import debugModule from 'debug';
