@@ -8,14 +8,13 @@ import { Headers } from 'node-fetch';
 import ora from 'ora';
 import parse from 'parse-link-header';
 
-import versionOpt from 'lib/versionOpt';
-
 import Command, { CommandCategories } from '../lib/baseCommand';
 import fetch, { cleanHeaders, handleRes } from '../lib/fetch';
 import { debug, info, warn, oraOptions } from '../lib/logger';
 import prepareOas from '../lib/prepareOas';
 import * as promptHandler from '../lib/prompts';
 import streamSpecToRegistry from '../lib/streamSpecToRegistry';
+import versionOpt from '../lib/versionOpt';
 import { getProjectVersion } from '../lib/versionSelect';
 
 export type Options = {

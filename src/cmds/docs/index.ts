@@ -3,7 +3,7 @@ import type { CommandOptions } from '../../lib/baseCommand';
 import chalk from 'chalk';
 import config from 'config';
 
-import versionOpt from 'lib/versionOpt';
+import versionOpt from '../../lib/versionOpt';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
 import { debug } from '../../lib/logger';

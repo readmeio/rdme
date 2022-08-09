@@ -4,7 +4,7 @@ import chalk from 'chalk';
 import config from 'config';
 import { Headers } from 'node-fetch';
 
-import versionOpt from 'lib/versionOpt';
+import versionOpt from '../../lib/versionOpt';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
 import fetch, { cleanHeaders, handleRes } from '../../lib/fetch';

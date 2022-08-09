@@ -7,7 +7,7 @@ import config from 'config';
 import { Headers } from 'node-fetch';
 
 import editor from 'editor';
-import versionOpt from 'lib/versionOpt';
+import versionOpt from '../../lib/versionOpt';
 
 import APIError from '../../lib/apiError';
 import Command, { CommandCategories } from '../../lib/baseCommand';

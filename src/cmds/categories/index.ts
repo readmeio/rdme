@@ -1,6 +1,6 @@
 import type { CommandOptions } from '../../lib/baseCommand';
 
-import versionOpt from 'lib/versionOpt';
+import versionOpt from '../../lib/versionOpt';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
 import getCategories from '../../lib/getCategories';
