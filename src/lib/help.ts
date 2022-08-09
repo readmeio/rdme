@@ -1,4 +1,5 @@
 import type Command from './baseCommand';
+import type { Section } from 'command-line-usage';
 
 import chalk from 'chalk';
 import usage from 'command-line-usage';
@@ -53,16 +54,8 @@ const owlbert = () => {
     raw?: boolean;
   }[] */
 
-type Usage = {
-  content?: any; // TODO give this a better type
-  header?: string;
-  hide?: string[];
-  optionList?: Command['args'];
-  raw?: boolean;
-}[];
-
 function commandUsage(cmd: Command) {
-  const helpContent: Usage = [
+  const helpContent: Section[] = [
     {
       content: cmd.description,
       raw: true,
@@ -97,7 +90,7 @@ function commandUsage(cmd: Command) {
 }
 
 async function globalUsage(args: Command['args']) {
-  const helpContent: Usage = [
+  const helpContent: Section[] = [
     {
       content: owlbert(),
       raw: true,

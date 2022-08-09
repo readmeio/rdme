@@ -1,3 +1,5 @@
+import type { OptionDefinition } from 'command-line-usage';
+
 import { debug } from './logger';
 
 export type CommandOptions<T> = T & {
@@ -29,13 +31,7 @@ export default class Command {
 
   hiddenArgs: string[] = [];
 
-  args: {
-    name: string;
-    alias?: string;
-    type: BooleanConstructor | StringConstructor;
-    description?: string;
-    defaultOption?: boolean;
-  }[];
+  args: OptionDefinition[];
 
   run(opts: CommandOptions<{}>): void | Promise<string> {
     debug(`command: ${this.command}`);
