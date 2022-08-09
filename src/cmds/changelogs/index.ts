@@ -43,13 +43,9 @@ export default class ChangelogsCommand extends Command {
   }
 
   async run(opts: CommandOptions<Options>) {
-    super.run(opts);
+    super.run(opts, true);
 
     const { dryRun, folder, key } = opts;
-
-    if (!key) {
-      return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
-    }
 
     if (!folder) {
       return Promise.reject(new Error(`No folder provided. Usage \`${config.get('cli')} ${this.usage}\`.`));

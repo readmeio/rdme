@@ -33,13 +33,9 @@ export default class DeleteVersionCommand extends Command {
   }
 
   async run(opts: CommandOptions<{}>) {
-    super.run(opts);
+    super.run(opts, true);
 
     const { key, version } = opts;
-
-    if (!key) {
-      return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
-    }
 
     const selectedVersion = await getProjectVersion(version, key, false).catch(e => {
       return Promise.reject(e);

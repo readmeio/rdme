@@ -68,14 +68,10 @@ export default class CreateVersionCommand extends Command {
   }
 
   async run(opts: CommandOptions<Options>) {
-    super.run(opts);
+    super.run(opts, true);
 
     let versionList;
     const { key, version, codename, fork, main, beta, isPublic } = opts;
-
-    if (!key) {
-      return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
-    }
 
     if (!version || !semver.valid(semver.coerce(version))) {
       return Promise.reject(
