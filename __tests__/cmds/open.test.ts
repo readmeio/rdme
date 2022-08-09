@@ -19,7 +19,7 @@ describe('rdme open', () => {
 
     const projectUrl = 'https://subdomain.readme.io';
 
-    function mockOpen(url) {
+    function mockOpen(url: string) {
       expect(url).toBe(projectUrl);
       return Promise.resolve();
     }

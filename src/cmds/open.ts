@@ -9,7 +9,7 @@ import configStore from '../lib/configstore';
 import { debug } from '../lib/logger';
 
 export type Options = {
-  mockOpen?: any; // @fixme this deserves a better type
+  mockOpen?: (url: string) => Promise<void>;
 };
 
 export default class OpenCommand extends Command {
