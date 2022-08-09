@@ -1,4 +1,4 @@
-import type fetch from './fetch';
+import type { Response } from 'node-fetch';
 
 import { prompt } from 'enquirer';
 import parse from 'parse-link-header';
@@ -83,7 +83,7 @@ const updateOasPrompt = (
   parsedDocs: ParsedDocs,
   currPage: number,
   totalPages: number,
-  getSpecs: (url: string) => Promise<ReturnType<typeof fetch>>
+  getSpecs: (url: string) => Promise<Response>
 ) => [
   {
     type: 'select',
@@ -126,8 +126,7 @@ export function createOasPrompt(
   specList: SpecList,
   parsedDocs: ParsedDocs,
   totalPages: number,
-  // @fixme There's a lot of funk with this type throughout the codebase.
-  getSpecs: any // (url: string) => Promise<ReturnType<typeof fetch>>
+  getSpecs: (url: string) => Promise<Response>
 ) {
   return [
     {
