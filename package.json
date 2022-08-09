@@ -87,7 +87,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "debug:bin": "node -r ts-node/register src/cli.ts",
+    "debug:bin": "ts-node src/cli.ts",
     "lint": "eslint . bin/rdme bin/set-version-output --ext .js,.ts",
     "lint-docs": "alex .",
     "prebuild": "rm -rf dist/",
