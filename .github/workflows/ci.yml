@@ -24,6 +24,9 @@ jobs:
       - name: Install deps
         run: npm ci
 
+      - name: Build dist
+        run: npm run build
+
       - name: Run tests
         run: npm test
 
@@ -41,6 +44,9 @@ jobs:
 
       - name: Install deps
         run: npm ci
+
+      - name: Build dist
+        run: npm run build
 
       # rdme doesn't work on Node 12 but we just want to run this single test to make sure that
       # our "we don't support node 12" error is shown.
