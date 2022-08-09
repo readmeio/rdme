@@ -1,0 +1,35 @@
+import type { CommandOptions } from '../lib/baseCommand';
+
+import chalk from 'chalk';
+import config from 'config';
+
+import Command, { CommandCategories } from '../lib/baseCommand';
+import configStore from '../lib/configstore';
+
+export default class WhoAmICommand extends Command {
+  constructor() {
+    super();
+
+    this.command = 'whoami';
+    this.usage = 'whoami';
+    this.description = 'Displays the current user and project authenticated with ReadMe.';
+    this.cmdCategory = CommandCategories.ADMIN;
+    this.position = 3;
+
+    this.args = [];
+  }
+
+  async run(opts: CommandOptions<{}>) {
+    super.run(opts);
+
+    if (!configStore.has('email') || !configStore.has('project')) {
+      return Promise.reject(new Error(`Please login using \`${config.get('cli')} login\`.`));
+    }
+
+    return Promise.resolve(
+      `You are currently logged in as ${chalk.green(configStore.get('email'))} to the ${chalk.blue(
+        configStore.get('project')
+      )} project.`
+    );
+  }
+}
