@@ -63,12 +63,12 @@ export function list() {
       return [file];
     })
     .reduce((a, b) => a.concat(b), [])
-    .filter(file => file.endsWith('.js'))
+    .filter(file => file.endsWith('.ts'))
     .map(file => path.join(cmdDir, file));
 
   files.forEach(file => {
     // eslint-disable-next-line @typescript-eslint/no-var-requires, global-require, import/no-dynamic-require
-    const CommandClass = require(file);
+    const { default: CommandClass } = require(file);
 
     commands.push({
       file,

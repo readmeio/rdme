@@ -1,5 +1,6 @@
-const Enquirer = require('enquirer');
-const promptHandler = require('../../src/lib/prompts');
+import Enquirer from 'enquirer';
+
+import * as promptHandler from '../../src/lib/prompts';
 
 const versionlist = [
   {
@@ -81,7 +82,20 @@ describe('prompt test bed', () => {
         await prompt.keypress(null, { name: 'down' });
         await prompt.submit();
       });
-      const answer = await enquirer.prompt(promptHandler.createOasPrompt([{}], null, 1, null));
+
+      const answer = await enquirer.prompt(
+        promptHandler.createOasPrompt(
+          [
+            {
+              _id: '1234',
+              title: 'buster',
+            },
+          ],
+          {},
+          1,
+          null
+        )
+      );
 
       expect(answer.option).toBe('create');
     });
@@ -93,16 +107,21 @@ describe('prompt test bed', () => {
         await prompt.keypress(null, { name: 'up' });
         await prompt.submit();
       });
+
       enquirer.prompt = jest.fn();
       enquirer.prompt.mockReturnValue('spec1');
+
       const parsedDocs = {
         next: {
-          page: null,
+          page: 2,
+          url: '',
         },
         prev: {
-          page: null,
+          page: 1,
+          url: '',
         },
       };
+
       const answer = await enquirer.prompt(promptHandler.createOasPrompt(specList, parsedDocs, 1, getSpecs));
 
       expect(answer).toBe('spec1');
@@ -123,7 +142,7 @@ describe('prompt test bed', () => {
           await prompt.submit();
         }
       });
-      const answer = await enquirer.prompt(promptHandler.createVersionPrompt(versionlist, opts, false));
+      const answer = await enquirer.prompt(promptHandler.createVersionPrompt(versionlist, opts));
       expect(answer.is_hidden).toBe(false);
       expect(answer.from).toBe('1');
     });
@@ -148,7 +167,9 @@ describe('prompt test bed', () => {
         await prompt.submit();
         await prompt.submit();
       });
-      const answer = await enquirer.prompt(promptHandler.createVersionPrompt(versionlist, opts, true));
+      const answer = await enquirer.prompt(
+        promptHandler.createVersionPrompt(versionlist, opts, { is_stable: '1.2.1' })
+      );
       expect(answer.is_hidden).toBe(false);
       expect(answer.from).toBe('');
     });

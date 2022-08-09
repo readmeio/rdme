@@ -8,8 +8,8 @@ import { debug } from '../../lib/logger';
 import pushDoc, { readdirRecursive } from '../../lib/pushDoc';
 
 export type Options = {
-  dryRun: boolean;
-  folder: string;
+  dryRun?: boolean;
+  folder?: string;
 };
 
 export default class ChangelogsCommand extends Command {
@@ -43,9 +43,13 @@ export default class ChangelogsCommand extends Command {
   }
 
   async run(opts: CommandOptions<Options>) {
-    super.run(opts, true);
+    super.run(opts);
 
     const { dryRun, folder, key } = opts;
+
+    if (!opts.key) {
+      return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
+    }
 
     if (!folder) {
       return Promise.reject(new Error(`No folder provided. Usage \`${config.get('cli')} ${this.usage}\`.`));

@@ -1,8 +1,8 @@
 import { debug } from './logger';
 
 export type CommandOptions<T> = T & {
-  key: string;
-  version: string;
+  key?: string;
+  version?: string;
 };
 
 export enum CommandCategories {
@@ -37,15 +37,8 @@ export default class Command {
     defaultOption?: boolean;
   }[];
 
-  // eslint-disable-next-line consistent-return
-  async run(opts: CommandOptions<{}>, requiresAuth?: boolean): Promise<any> {
+  async run(opts: CommandOptions<{}>): Promise<any> {
     debug(`command: ${this.command}`);
     debug(`opts: ${JSON.stringify(opts)}`);
-
-    if (requiresAuth) {
-      if (!opts.key) {
-        return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
-      }
-    }
   }
 }

@@ -16,11 +16,11 @@ const read = promisify(readPkg);
 const testing = process.env.NODE_ENV === 'testing';
 
 export type Options = {
-  '2fa': string;
-  email: string;
-  password: string;
-  project: string;
-  token: string;
+  '2fa'?: string;
+  email?: string;
+  password?: string;
+  project?: string;
+  token?: string;
 };
 
 export default class LoginCommand extends Command {

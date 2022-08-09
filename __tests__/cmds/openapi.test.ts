@@ -1,16 +1,23 @@
 /* eslint-disable no-console */
-const nock = require('nock');
-const chalk = require('chalk');
-const config = require('config');
-const fs = require('fs');
+import fs from 'fs';
+
+import chalk from 'chalk';
+import config from 'config';
+import nock from 'nock';
+
+import OpenAPICommand from '../../src/cmds/openapi';
+import SwaggerCommand from '../../src/cmds/swagger';
+import APIError from '../../src/lib/apiError';
+import getAPIMock from '../helpers/get-api-mock';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const promptHandler = require('../../src/lib/prompts');
-const SwaggerCommand = require('../../src/cmds/swagger');
-const OpenAPICommand = require('../../src/cmds/openapi');
-const APIError = require('../../src/lib/apiError');
-const getApiNock = require('../get-api-nock');
 
 const openapi = new OpenAPICommand();
 const swagger = new SwaggerCommand();
+
+let consoleInfoSpy;
+let consoleWarnSpy;
 
 const key = 'API_KEY';
 const id = '5aa0409b7cf527a93bfb44df';
@@ -41,7 +48,7 @@ const testWorkingDir = process.cwd();
 jest.mock('../../src/lib/prompts');
 
 const getCommandOutput = () => {
-  return [console.warn.mock.calls.join('\n\n'), console.info.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
+  return [consoleWarnSpy.mock.calls.join('\n\n'), consoleInfoSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
 };
 
 const getRandomRegistryId = () => Math.random().toString(36).substring(2);
@@ -50,13 +57,13 @@ describe('rdme openapi', () => {
   beforeAll(() => nock.disableNetConnect());
 
   beforeEach(() => {
-    console.info = jest.fn();
-    console.warn = jest.fn();
+    consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+    consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
   });
 
   afterEach(() => {
-    console.info.mockRestore();
-    console.warn.mockRestore();
+    consoleInfoSpy.mockRestore();
+    consoleWarnSpy.mockRestore();
 
     nock.cleanAll();
 
@@ -74,7 +81,7 @@ describe('rdme openapi', () => {
     ])('should support uploading a %s definition (format: %s)', async (_, format, specVersion, type) => {
       const registryUUID = getRandomRegistryId();
 
-      const mock = getApiNock()
+      const mock = getAPIMock()
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
         .reply(201, { registryUUID, spec: { openapi: specVersion } })
         .get('/api/v1/api-specification')
@@ -105,7 +112,7 @@ describe('rdme openapi', () => {
     it('should discover and upload an API definition if none is provided', async () => {
       const registryUUID = getRandomRegistryId();
 
-      const mock = getApiNock()
+      const mock = getAPIMock()
         .get('/api/v1/version')
         .basicAuth({ user: key })
         .reply(200, [{ version }])
@@ -141,9 +148,9 @@ describe('rdme openapi', () => {
     it.todo('should test spec selection prompts');
 
     it('should bundle and upload the expected content', async () => {
-      let requestBody = null;
+      let requestBody;
       const registryUUID = getRandomRegistryId();
-      const mock = getApiNock()
+      const mock = getAPIMock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version: '1.0.0' })
@@ -173,9 +180,9 @@ describe('rdme openapi', () => {
     });
 
     it('should use specified working directory and upload the expected content', async () => {
-      let requestBody = null;
+      let requestBody;
       const registryUUID = getRandomRegistryId();
-      const mock = getApiNock()
+      const mock = getAPIMock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version: '1.0.0' })
@@ -223,7 +230,7 @@ describe('rdme openapi', () => {
     ])('should support updating a %s definition (format: %s)', async (_, format, specVersion, type) => {
       const registryUUID = getRandomRegistryId();
 
-      const mock = getApiNock()
+      const mock = getAPIMock()
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
         .reply(201, { registryUUID, spec: { openapi: specVersion } })
         .put(`/api/v1/api-specification/${id}`, { registryUUID })
@@ -247,7 +254,7 @@ describe('rdme openapi', () => {
     it('should return warning if providing `id` and `version`', async () => {
       const registryUUID = getRandomRegistryId();
 
-      const mock = getApiNock()
+      const mock = getAPIMock()
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
         .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
         .put(`/api/v1/api-specification/${id}`, { registryUUID })
@@ -288,7 +295,7 @@ describe('rdme openapi', () => {
         ],
       };
 
-      const mock = getApiNock().get(`/api/v1/version/${invalidVersion}`).reply(404, errorObject);
+      const mock = getAPIMock().get(`/api/v1/version/${invalidVersion}`).reply(404, errorObject);
 
       await expect(
         openapi.run({
@@ -309,7 +316,7 @@ describe('rdme openapi', () => {
 
       const registryUUID = getRandomRegistryId();
 
-      const mock = getApiNock()
+      const mock = getAPIMock()
         .get('/api/v1/version')
         .basicAuth({ user: key })
         .reply(200, [{ version: '1.0.0' }])
@@ -356,7 +363,7 @@ describe('rdme openapi', () => {
         ],
       };
 
-      const mock = getApiNock().get('/api/v1/version').reply(401, errorObject);
+      const mock = getAPIMock().get('/api/v1/version').reply(401, errorObject);
 
       await expect(
         openapi.run({ key, spec: require.resolve('@readme/oas-examples/3.1/json/petstore.json') })
@@ -366,7 +373,7 @@ describe('rdme openapi', () => {
     });
 
     it('should error if no file was provided or able to be discovered', async () => {
-      const mock = getApiNock()
+      const mock = getAPIMock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version: '1.0.0' });
@@ -404,7 +411,7 @@ describe('rdme openapi', () => {
 
       const registryUUID = getRandomRegistryId();
 
-      const mock = getApiNock()
+      const mock = getAPIMock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version: '1.0.0' })
@@ -439,7 +446,7 @@ describe('rdme openapi', () => {
 
       const registryUUID = getRandomRegistryId();
 
-      const mock = getApiNock()
+      const mock = getAPIMock()
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
         .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
         .put(`/api/v1/api-specification/${id}`, { registryUUID })
@@ -467,7 +474,7 @@ describe('rdme openapi', () => {
         help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
       };
 
-      const mock = getApiNock()
+      const mock = getAPIMock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version: '1.0.0' })
@@ -496,7 +503,7 @@ describe('rdme openapi', () => {
 
       const registryUUID = getRandomRegistryId();
 
-      const mock = getApiNock()
+      const mock = getAPIMock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version: '1.0.0' })
@@ -520,7 +527,7 @@ describe('rdme openapi', () => {
     it('should error if API errors (generic upload error)', async () => {
       const registryUUID = getRandomRegistryId();
 
-      const mock = getApiNock()
+      const mock = getAPIMock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version: '1.0.0' })
@@ -548,7 +555,7 @@ describe('rdme openapi', () => {
     it('should error if API errors (request timeout)', async () => {
       const registryUUID = getRandomRegistryId();
 
-      const mock = getApiNock()
+      const mock = getAPIMock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version: '1.0.0' })

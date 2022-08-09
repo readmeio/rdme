@@ -1,10 +1,10 @@
 type APIErrorResponse = {
   error: string;
   message: string;
-  suggestion: string;
-  docs: string;
-  help: string;
-  poem: string[];
+  suggestion?: string;
+  docs?: string;
+  help?: string;
+  poem?: string[];
 };
 
 export default class APIError extends Error {

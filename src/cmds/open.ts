@@ -9,7 +9,7 @@ import configStore from '../lib/configstore';
 import { debug } from '../lib/logger';
 
 export type Options = {
-  mockOpen?: typeof open;
+  mockOpen?: any; // @fixme this deserves a better type
 };
 
 export default class OpenCommand extends Command {

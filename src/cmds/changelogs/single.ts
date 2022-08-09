@@ -7,8 +7,8 @@ import Command, { CommandCategories } from '../../lib/baseCommand';
 import pushDoc from '../../lib/pushDoc';
 
 export type Options = {
-  dryRun: boolean;
-  filePath: string;
+  dryRun?: boolean;
+  filePath?: string;
 };
 
 export default class SingleChangelogCommand extends Command {
@@ -42,9 +42,13 @@ export default class SingleChangelogCommand extends Command {
   }
 
   async run(opts: CommandOptions<Options>) {
-    super.run(opts, true);
+    super.run(opts);
 
     const { dryRun, filePath, key } = opts;
+
+    if (!opts.key) {
+      return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
+    }
 
     if (!filePath) {
       return Promise.reject(new Error(`No file path provided. Usage \`${config.get('cli')} ${this.usage}\`.`));

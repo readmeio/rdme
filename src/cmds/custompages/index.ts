@@ -8,8 +8,8 @@ import { debug } from '../../lib/logger';
 import pushDoc, { readdirRecursive } from '../../lib/pushDoc';
 
 export type Options = {
-  dryRun: boolean;
-  folder: string;
+  dryRun?: boolean;
+  folder?: string;
 };
 
 export default class CustomPagesCommand extends Command {

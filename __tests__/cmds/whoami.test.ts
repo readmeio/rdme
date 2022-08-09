@@ -1,6 +1,7 @@
-const config = require('config');
-const configStore = require('../../src/lib/configstore');
-const Command = require('../../src/cmds/whoami');
+import config from 'config';
+
+import Command from '../../src/cmds/whoami';
+import configStore from '../../src/lib/configstore';
 
 const cmd = new Command();
 

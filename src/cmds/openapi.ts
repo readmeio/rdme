@@ -12,15 +12,15 @@ import Command, { CommandCategories } from '../lib/baseCommand';
 import fetch, { cleanHeaders, handleRes } from '../lib/fetch';
 import { debug, warn, oraOptions } from '../lib/logger';
 import prepareOas from '../lib/prepareOas';
-import * as promptOpts from '../lib/prompts';
+import * as promptHandler from '../lib/prompts';
 import streamSpecToRegistry from '../lib/streamSpecToRegistry';
 import { getProjectVersion } from '../lib/versionSelect';
 
 export type Options = {
-  id: string;
-  spec: string;
-  version: string;
-  workingDirectory: string;
+  id?: string;
+  spec?: string;
+  version?: string;
+  workingDirectory?: string;
 };
 
 export default class OpenAPICommand extends Command {
@@ -65,8 +65,13 @@ export default class OpenAPICommand extends Command {
   }
 
   async run(opts: CommandOptions<Options>) {
-    super.run(opts, true);
+    super.run(opts);
+
     const { key, id, spec, version, workingDirectory } = opts;
+
+    if (!opts.key) {
+      return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
+    }
 
     let selectedVersion: string;
     let isUpdate: boolean;
@@ -207,8 +212,7 @@ export default class OpenAPICommand extends Command {
       if (!apiSettingsBody.length) return createSpec();
 
       const { option }: { option: 'create' | 'update' } = await prompt(
-        // @ts-expect-error `getSpecs` is getting double type in as `Promise<Promise<Response>>` for some reason.
-        promptOpts.createOasPrompt(apiSettingsBody, parsedDocs, totalPages, getSpecs)
+        promptHandler.createOasPrompt(apiSettingsBody, parsedDocs, totalPages, getSpecs)
       );
 
       debug(`selection result: ${option}`);

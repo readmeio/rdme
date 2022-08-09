@@ -126,7 +126,8 @@ export function createOasPrompt(
   specList: SpecList,
   parsedDocs: ParsedDocs,
   totalPages: number,
-  getSpecs: (url: string) => Promise<ReturnType<typeof fetch>>
+  // @fixme There's a lot of funk with this type throughout the codebase.
+  getSpecs: any // (url: string) => Promise<ReturnType<typeof fetch>>
 ) {
   return [
     {
@@ -158,11 +159,11 @@ export function createOasPrompt(
 export function createVersionPrompt(
   versionList: VersionList,
   opts: {
-    beta?: string;
+    beta?: string | boolean;
     deprecated?: string;
     fork?: string;
-    isPublic?: string;
-    main?: string;
+    isPublic?: string | boolean;
+    main?: string | boolean;
     newVersion?: string;
   },
   isUpdate?: {

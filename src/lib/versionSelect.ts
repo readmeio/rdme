@@ -3,7 +3,7 @@ import { prompt } from 'enquirer';
 
 import APIError from './apiError';
 import fetch, { cleanHeaders, handleRes } from './fetch';
-import * as promptOpts from './prompts';
+import * as promptHandler from './prompts';
 
 export async function getProjectVersion(versionFlag: string, key: string, allowNewVersion: boolean): Promise<string> {
   try {
@@ -27,7 +27,7 @@ export async function getProjectVersion(versionFlag: string, key: string, allowN
         versionSelection,
         newVersion,
       }: { option: 'update' | 'create'; versionSelection: string; newVersion: string } = await prompt(
-        promptOpts.generatePrompts(versionList)
+        promptHandler.generatePrompts(versionList)
       );
 
       if (option === 'update') return versionSelection;
@@ -46,7 +46,7 @@ export async function getProjectVersion(versionFlag: string, key: string, allowN
     }
 
     const { versionSelection }: { versionSelection: string } = await prompt(
-      promptOpts.generatePrompts(versionList, true)
+      promptHandler.generatePrompts(versionList, true)
     );
 
     return versionSelection;

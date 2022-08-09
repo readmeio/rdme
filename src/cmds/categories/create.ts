@@ -15,9 +15,9 @@ interface Category {
 }
 
 export type Options = {
-  categoryType: 'guide' | 'reference';
-  title: string;
-  preventDuplicates: boolean;
+  categoryType?: 'guide' | 'reference';
+  title?: string;
+  preventDuplicates?: boolean;
 };
 
 export default class CategoriesCreateCommand extends Command {
@@ -26,7 +26,7 @@ export default class CategoriesCreateCommand extends Command {
 
     this.command = 'categories:create';
     this.usage = 'categories:create <title> [options]';
-    this.description = 'Create a category with the specified title and guide in your ReadMe project';
+    this.description = 'Create a category with the specified title and guide in your ReadMe project.';
     this.cmdCategory = CommandCategories.CATEGORIES;
     this.position = 2;
 
@@ -62,9 +62,13 @@ export default class CategoriesCreateCommand extends Command {
   }
 
   async run(opts: CommandOptions<Options>) {
-    super.run(opts, true);
+    super.run(opts);
 
     const { categoryType, title, key, version, preventDuplicates } = opts;
+
+    if (!opts.key) {
+      return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
+    }
 
     if (!title) {
       return Promise.reject(new Error(`No title provided. Usage \`${config.get('cli')} ${this.usage}\`.`));

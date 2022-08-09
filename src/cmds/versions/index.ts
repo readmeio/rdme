@@ -21,7 +21,7 @@ interface Version {
 }
 
 export type Options = {
-  raw: boolean;
+  raw?: boolean;
 };
 
 export default class VersionsCommand extends Command {
@@ -106,8 +106,13 @@ export default class VersionsCommand extends Command {
   }
 
   async run(opts: CommandOptions<Options>) {
-    super.run(opts, true);
+    super.run(opts);
+
     const { key, version, raw } = opts;
+
+    if (!opts.key) {
+      return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
+    }
 
     const uri = version ? `${config.get('host')}/api/v1/version/${version}` : `${config.get('host')}/api/v1/version`;
 

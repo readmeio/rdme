@@ -6,16 +6,16 @@ import { prompt } from 'enquirer';
 import Command, { CommandCategories } from '../../lib/baseCommand';
 import fetch, { cleanHeaders, handleRes } from '../../lib/fetch';
 import { debug } from '../../lib/logger';
-import * as promptOpts from '../../lib/prompts';
+import * as promptHandler from '../../lib/prompts';
 import { getProjectVersion } from '../../lib/versionSelect';
 
 export type Options = {
-  beta: string;
-  codename: string;
-  deprecated: string;
-  isPublic: string;
-  main: string;
-  newVersion: string;
+  beta?: string;
+  codename?: string;
+  deprecated?: string;
+  isPublic?: string;
+  main?: string;
+  newVersion?: string;
 };
 
 export default class UpdateVersionCommand extends Command {
@@ -63,9 +63,13 @@ export default class UpdateVersionCommand extends Command {
   }
 
   async run(opts: CommandOptions<Options>) {
-    super.run(opts, true);
+    super.run(opts);
 
     const { key, version, codename, newVersion, main, beta, isPublic, deprecated } = opts;
+
+    if (!opts.key) {
+      return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
+    }
 
     const selectedVersion = await getProjectVersion(version, key, false).catch(e => {
       return Promise.reject(e);
@@ -86,7 +90,7 @@ export default class UpdateVersionCommand extends Command {
       newVersion: string;
     } = await prompt(
       // @ts-expect-error Seems like our version prompts aren't what Enquirer actually expects.
-      promptOpts.createVersionPrompt([{}], opts, foundVersion)
+      promptHandler.createVersionPrompt([{}], opts, foundVersion)
     );
 
     return fetch(`${config.get('host')}/api/v1/version/${selectedVersion}`, {

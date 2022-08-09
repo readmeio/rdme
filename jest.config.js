@@ -17,6 +17,7 @@ module.exports = {
   preset: 'ts-jest/presets/js-with-ts',
   roots: ['<rootDir>'],
   setupFiles: ['./__tests__/set-node-env'],
+  setupFilesAfterEnv: ['jest-extended/all'],
   testPathIgnorePatterns: ['dist/', './__tests__/get-api-nock', './__tests__/set-node-env'],
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.(js?|ts?)$',
   transform: {},

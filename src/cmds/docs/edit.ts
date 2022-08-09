@@ -17,8 +17,8 @@ const readFile = promisify(fs.readFile);
 const unlink = promisify(fs.unlink);
 
 export type Options = {
-  mockEditor?: boolean;
-  slug: string;
+  mockEditor?: (filename: string, cb: () => void) => void;
+  slug?: string;
 };
 
 export default class EditDocsCommand extends Command {
@@ -52,9 +52,13 @@ export default class EditDocsCommand extends Command {
   }
 
   async run(opts: CommandOptions<Options>) {
-    super.run(opts, true);
+    super.run(opts);
 
     const { slug, key, version } = opts;
+
+    if (!opts.key) {
+      return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
+    }
 
     if (!slug) {
       return Promise.reject(new Error(`No slug provided. Usage \`${config.get('cli')} ${this.usage}\`.`));
@@ -113,7 +117,7 @@ export default class EditDocsCommand extends Command {
             // Normally we should resolve with a value that is logged to the console,
             // but since we need to wait for the temporary file to be removed,
             // it's okay to resolve the promise with no value.
-            return resolve(true);
+            return resolve(undefined);
           });
       });
     });

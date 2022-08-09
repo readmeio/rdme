@@ -9,8 +9,8 @@ import pushDoc, { readdirRecursive } from '../../lib/pushDoc';
 import { getProjectVersion } from '../../lib/versionSelect';
 
 export type Options = {
-  dryRun: boolean;
-  folder: string;
+  dryRun?: boolean;
+  folder?: string;
 };
 
 export default class DocsCommand extends Command {
@@ -49,9 +49,13 @@ export default class DocsCommand extends Command {
   }
 
   async run(opts: CommandOptions<Options>) {
-    super.run(opts, true);
+    super.run(opts);
 
     const { dryRun, folder, key, version } = opts;
+
+    if (!opts.key) {
+      return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
+    }
 
     if (!folder) {
       return Promise.reject(new Error(`No folder provided. Usage \`${config.get('cli')} ${this.usage}\`.`));

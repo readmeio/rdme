@@ -9,8 +9,8 @@ import pushDoc from '../../lib/pushDoc';
 import { getProjectVersion } from '../../lib/versionSelect';
 
 export type Options = {
-  dryRun: boolean;
-  filePath: string;
+  dryRun?: boolean;
+  filePath?: string;
 };
 
 export default class SingleDocCommand extends Command {
@@ -49,9 +49,13 @@ export default class SingleDocCommand extends Command {
   }
 
   async run(opts: CommandOptions<Options>) {
-    super.run(opts, true);
+    super.run(opts);
 
     const { dryRun, filePath, key, version } = opts;
+
+    if (!opts.key) {
+      return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
+    }
 
     if (!filePath) {
       return Promise.reject(new Error(`No file path provided. Usage \`${config.get('cli')} ${this.usage}\`.`));

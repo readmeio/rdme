@@ -1,23 +1,27 @@
 /* eslint-disable no-console */
-const fs = require('fs');
-const chalk = require('chalk');
-const Command = require('../../src/cmds/validate');
+import fs from 'fs';
+
+import chalk from 'chalk';
+
+import Command from '../../src/cmds/validate';
 
 const testWorkingDir = process.cwd();
 
 const validate = new Command();
 
+let consoleSpy;
+
 const getCommandOutput = () => {
-  return [console.info.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
+  return [consoleSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
 };
 
 describe('rdme validate', () => {
   beforeEach(() => {
-    console.info = jest.fn();
+    consoleSpy = jest.spyOn(console, 'info').mockImplementation();
   });
 
   afterEach(() => {
-    console.info.mockRestore();
+    consoleSpy.mockRestore();
 
     process.chdir(testWorkingDir);
   });

@@ -11,7 +11,7 @@ export default class CategoriesCommand extends Command {
 
     this.command = 'categories';
     this.usage = 'categories [options]';
-    this.description = 'Get all categories in your ReadMe project';
+    this.description = 'Get all categories in your ReadMe project.';
     this.cmdCategory = CommandCategories.CATEGORIES;
     this.position = 1;
 
@@ -30,9 +30,13 @@ export default class CategoriesCommand extends Command {
   }
 
   async run(opts: CommandOptions<{}>) {
-    super.run(opts, true);
+    super.run(opts);
 
     const { key, version } = opts;
+
+    if (!opts.key) {
+      return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
+    }
 
     const selectedVersion = await getProjectVersion(version, key, true);
 

@@ -6,14 +6,14 @@ import semver from 'semver';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
 import fetch, { cleanHeaders, handleRes } from '../../lib/fetch';
-import * as promptOpts from '../../lib/prompts';
+import * as promptHandler from '../../lib/prompts';
 
 export type Options = {
-  fork: string;
-  codename: string;
-  main: string;
-  beta: string;
-  isPublic: string;
+  beta?: string | boolean;
+  codename?: string;
+  fork?: string;
+  isPublic?: string | boolean;
+  main?: string | boolean;
 };
 
 export default class CreateVersionCommand extends Command {
@@ -67,10 +67,14 @@ export default class CreateVersionCommand extends Command {
   }
 
   async run(opts: CommandOptions<Options>) {
-    super.run(opts, true);
+    super.run(opts);
 
     let versionList;
     const { key, version, codename, fork, main, beta, isPublic } = opts;
+
+    if (!opts.key) {
+      return Promise.reject(new Error('No project API key provided. Please use `--key`.'));
+    }
 
     if (!version || !semver.valid(semver.coerce(version))) {
       return Promise.reject(
@@ -85,7 +89,7 @@ export default class CreateVersionCommand extends Command {
       }).then(res => handleRes(res));
     }
 
-    const versionPrompt = promptOpts.createVersionPrompt(versionList || [{}], {
+    const versionPrompt = promptHandler.createVersionPrompt(versionList || [{}], {
       newVersion: version,
       ...opts,
     });

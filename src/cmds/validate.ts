@@ -6,8 +6,8 @@ import Command, { CommandCategories } from '../lib/baseCommand';
 import prepareOas from '../lib/prepareOas';
 
 export type Options = {
-  spec: string;
-  workingDirectory: string;
+  spec?: string;
+  workingDirectory?: string;
 };
 
 export default class ValidateCommand extends Command {
