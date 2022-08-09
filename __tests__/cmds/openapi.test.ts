@@ -344,7 +344,7 @@ describe('rdme openapi', () => {
     it('should error if no api key provided', () => {
       return expect(
         openapi.run({ spec: require.resolve('@readme/oas-examples/3.0/json/petstore.json') })
-      ).rejects.toThrow('No project API key provided. Please use `--key`.');
+      ).rejects.toStrictEqual(new Error('No project API key provided. Please use `--key`.'));
     });
 
     it('should error if invalid API key is sent and version list does not load', async () => {

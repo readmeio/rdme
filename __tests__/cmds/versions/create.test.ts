@@ -20,7 +20,9 @@ describe('rdme versions:create', () => {
   afterEach(() => nock.cleanAll());
 
   it('should error if no api key provided', () => {
-    return expect(createVersion.run({})).rejects.toThrow('No project API key provided. Please use `--key`.');
+    return expect(createVersion.run({})).rejects.toStrictEqual(
+      new Error('No project API key provided. Please use `--key`.')
+    );
   });
 
   it('should create a specific version', async () => {

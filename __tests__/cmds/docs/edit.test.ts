@@ -12,7 +12,9 @@ const category = 'CATEGORY_ID';
 
 describe('rdme docs:edit', () => {
   it('should error if no api key provided', () => {
-    return expect(docsEdit.run({})).rejects.toThrow('No project API key provided. Please use `--key`.');
+    return expect(docsEdit.run({})).rejects.toStrictEqual(
+      new Error('No project API key provided. Please use `--key`.')
+    );
   });
 
   it('should error if no slug provided', () => {

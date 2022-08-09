@@ -22,7 +22,9 @@ describe('rdme changelogs', () => {
   afterAll(() => nock.cleanAll());
 
   it('should error if no api key provided', () => {
-    return expect(changelogs.run({})).rejects.toThrow('No project API key provided. Please use `--key`.');
+    return expect(changelogs.run({})).rejects.toStrictEqual(
+      new Error('No project API key provided. Please use `--key`.')
+    );
   });
 
   it('should error if no folder provided', () => {
