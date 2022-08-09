@@ -58,7 +58,7 @@ describe('rdme docs:edit', () => {
 
     expect(fs.existsSync(`${slug}.md`)).toBe(false);
     // eslint-disable-next-line no-console
-    expect(console.info).toHaveBeenCalledWith('Doc successfully updated. Cleaning up local file.');
+    expect(console.info).toHaveBeenCalledWith('ℹ️  Doc successfully updated. Cleaning up local file.');
     consoleSpy.mockRestore();
   });
 
