@@ -1,5 +1,6 @@
-import chalk from 'chalk';
 import fs from 'fs';
+
+import chalk from 'chalk';
 import OASNormalize from 'oas-normalize';
 import ora from 'ora';
 

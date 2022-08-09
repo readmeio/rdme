@@ -1,7 +1,8 @@
 import config from 'config';
-import fetch, { cleanHeaders, handleRes } from '../../src/lib/fetch';
-import getApiNock from '../get-api-nock';
+
 import pkg from '../../package.json';
+import fetch, { cleanHeaders, handleRes } from '../../src/lib/fetch';
+import getAPIMock from '../helpers/get-api-mock';
 
 describe('#fetch()', () => {
   describe('GitHub Actions environment', () => {
@@ -30,7 +31,7 @@ describe('#fetch()', () => {
     it('should have correct headers for requests in GitHub Action env', async () => {
       const key = 'API_KEY';
 
-      const mock = getApiNock()
+      const mock = getAPIMock()
         .get('/api/v1')
         .basicAuth({ user: key })
         .reply(200, function () {
@@ -56,7 +57,7 @@ describe('#fetch()', () => {
   it('should wrap all requests with standard user-agent and source headers', async () => {
     const key = 'API_KEY';
 
-    const mock = getApiNock()
+    const mock = getAPIMock()
       .get('/api/v1')
       .basicAuth({ user: key })
       .reply(200, function () {
@@ -79,7 +80,7 @@ describe('#fetch()', () => {
   });
 
   it('should support if we dont supply any other options with the request', async () => {
-    const mock = getApiNock()
+    const mock = getAPIMock()
       .get('/api/v1/doesnt-need-auth')
       .reply(200, function () {
         return this.req.headers;

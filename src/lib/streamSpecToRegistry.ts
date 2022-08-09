@@ -1,10 +1,12 @@
-import config from 'config';
-import { debug, oraOptions } from './logger';
-import fetch, { handleRes } from './fetch';
-import FormData from 'form-data';
 import fs from 'fs';
+
+import config from 'config';
+import FormData from 'form-data';
 import ora from 'ora';
 import { file as tmpFile } from 'tmp-promise';
+
+import fetch, { handleRes } from './fetch';
+import { debug, oraOptions } from './logger';
 
 /**
  * Uploads a spec to the API registry for usage in ReadMe

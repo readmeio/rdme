@@ -1,6 +1,7 @@
-import getNodeVersion from '../../src/lib/getNodeVersion';
-import pkg from '../../package.json';
 import semver from 'semver';
+
+import pkg from '../../package.json';
+import getNodeVersion from '../../src/lib/getNodeVersion';
 
 describe('#getNodeVersion()', () => {
   it('should extract version that matches range in package.json', () => {

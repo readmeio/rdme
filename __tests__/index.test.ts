@@ -1,10 +1,12 @@
-const nock = require('nock');
-const cli = require('../src');
-const { version } = require('../package.json');
-const conf = require('../src/lib/configstore');
+import nock from 'nock';
+
+import { version } from '../package.json';
+import cli from '../src';
+import conf from '../src/lib/configstore';
 
 describe('cli', () => {
   it('command not found', async () => {
+    // @ts-expect-error thius is fine
     await expect(cli('notARealCommand')).rejects.toThrow('Command not found');
   });
 

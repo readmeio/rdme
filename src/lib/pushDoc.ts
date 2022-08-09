@@ -1,9 +1,10 @@
-import chalk from 'chalk';
-import config from 'config';
 import crypto from 'crypto';
 import fs from 'fs';
-import grayMatter from 'gray-matter';
 import path from 'path';
+
+import chalk from 'chalk';
+import config from 'config';
+import grayMatter from 'gray-matter';
 
 import APIError from './apiError';
 import { CommandCategories } from './baseCommand';

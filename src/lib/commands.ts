@@ -1,5 +1,6 @@
 import type Command from './baseCommand';
 import type { CommandCategories } from './baseCommand';
+
 import fs from 'fs';
 import path from 'path';
 

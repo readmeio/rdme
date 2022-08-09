@@ -3,7 +3,7 @@ import nock from 'nock';
 import Command from '../../src/cmds/login';
 import APIError from '../../src/lib/apiError';
 import configStore from '../../src/lib/configstore';
-import getApiNock from '../helpers/get-api-mock';
+import getAPIMock from '../helpers/get-api-mock';
 
 const cmd = new Command();
 
@@ -33,7 +33,7 @@ describe('rdme login', () => {
   it('should post to /login on the API', async () => {
     const apiKey = 'abcdefg';
 
-    const mock = getApiNock().post('/api/v1/login', { email, password, project }).reply(200, { apiKey });
+    const mock = getAPIMock().post('/api/v1/login', { email, password, project }).reply(200, { apiKey });
 
     await expect(cmd.run({ email, password, project })).resolves.toMatchSnapshot();
 
@@ -53,7 +53,7 @@ describe('rdme login', () => {
       help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
     };
 
-    const mock = getApiNock().post('/api/v1/login', { email, password, project }).reply(401, errorResponse);
+    const mock = getAPIMock().post('/api/v1/login', { email, password, project }).reply(401, errorResponse);
 
     await expect(cmd.run({ email, password, project })).rejects.toStrictEqual(new APIError(errorResponse));
     mock.done();
@@ -67,7 +67,7 @@ describe('rdme login', () => {
       help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
     };
 
-    const mock = getApiNock().post('/api/v1/login', { email, password, project }).reply(401, errorResponse);
+    const mock = getAPIMock().post('/api/v1/login', { email, password, project }).reply(401, errorResponse);
 
     await expect(cmd.run({ email, password, project })).rejects.toStrictEqual(new APIError(errorResponse));
     mock.done();
@@ -76,7 +76,7 @@ describe('rdme login', () => {
   it('should send 2fa token if provided', async () => {
     const token = '123456';
 
-    const mock = getApiNock().post('/api/v1/login', { email, password, project, token }).reply(200, { apiKey: '123' });
+    const mock = getAPIMock().post('/api/v1/login', { email, password, project, token }).reply(200, { apiKey: '123' });
 
     await expect(cmd.run({ email, password, project, token })).resolves.toMatchSnapshot();
     mock.done();

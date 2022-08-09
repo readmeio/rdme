@@ -1,7 +1,9 @@
 import type Command from './baseCommand';
+
 import chalk from 'chalk';
-import config from 'config';
 import usage from 'command-line-usage';
+import config from 'config';
+
 import * as commands from './commands';
 
 function formatCommands(cmds: { name: string; description: string; position: number }[]) {

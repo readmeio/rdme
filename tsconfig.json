@@ -2,13 +2,16 @@
   "compilerOptions": {
     "allowJs": true,
     "baseUrl": "./src",
-    "declaration": true,
     "downlevelIteration": true,
     "esModuleInterop": true,
     "lib": ["es2020"],
     "noImplicitAny": true,
     "outDir": "dist/",
-    "resolveJsonModule": true
+    "paths": {
+      "@npmcli/ci-detect": [".sink.d.ts"]
+    },
+    "resolveJsonModule": true,
+    "target": "ES3"
   },
-  "include": ["./src/**/*"]
+  "include": ["./config/*.js", "./config/*.json", "./src/**/*"]
 }

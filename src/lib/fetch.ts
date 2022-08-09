@@ -2,12 +2,14 @@
 import type { Headers } from 'form-data';
 import type { BodyInit, Response } from 'node-fetch';
 
-import { debug } from './logger';
-import nodeFetch from 'node-fetch';
-import isGHA from './isGitHub';
 import mime from 'mime-types';
+import nodeFetch from 'node-fetch';
+
 import pkg from '../../package.json';
+
 import APIError from './apiError';
+import isGHA from './isGitHub';
+import { debug } from './logger';
 
 /**
  * Getter function for a string to be used in the user-agent header

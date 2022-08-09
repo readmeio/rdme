@@ -1,4 +1,5 @@
 import config from 'config';
+
 import fetch, { cleanHeaders, handleRes } from './fetch';
 
 /**

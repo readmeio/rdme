@@ -72,6 +72,7 @@
     "@types/parse-link-header": "^2.0.0",
     "@types/read": "^0.0.29",
     "@types/semver": "^7.3.10",
+    "@types/tmp": "^0.2.3",
     "@types/update-notifier": "^6.0.1",
     "alex": "^10.0.0",
     "eslint": "^8.21.0",
@@ -86,7 +87,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "debug:bin": "node -r ts-node/register src/bin.ts",
+    "debug:bin": "node -r ts-node/register src/cli.ts",
     "lint": "eslint . bin/rdme bin/set-version-output --ext .js,.ts",
     "lint-docs": "alex .",
     "prebuild": "rm -rf dist/",

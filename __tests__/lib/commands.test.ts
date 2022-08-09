@@ -36,7 +36,7 @@ describe('utils', () => {
         });
       });
 
-      describe.only('cli standards', () => {
+      describe('cli standards', () => {
         expect.hasAssertions();
 
         describe.each<[string, Command]>(commands.list().map(cmd => [cmd.command.command, cmd.command]))(

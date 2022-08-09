@@ -7,6 +7,14 @@
   "parserOptions": {
     "ecmaVersion": 2020
   },
+  "overrides": [
+    {
+      "files": ["bin/set-version-output", "config/*.js"],
+      "rules": {
+        "@typescript-eslint/no-var-requires": "off"
+      }
+    }
+  ],
   "rules": {
     "@typescript-eslint/ban-types": ["error", {
       "types": {
