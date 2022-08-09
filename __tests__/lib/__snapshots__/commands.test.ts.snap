@@ -1,0 +1,151 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`utils #listByCategory should list commands by category 1`] = `
+Object {
+  "admin": Object {
+    "commands": Array [
+      Object {
+        "description": "Login to a ReadMe project.",
+        "name": "login",
+        "position": 1,
+      },
+      Object {
+        "description": "Logs the currently authenticated user out of ReadMe.",
+        "name": "logout",
+        "position": 2,
+      },
+      Object {
+        "description": "Displays the current user and project authenticated with ReadMe.",
+        "name": "whoami",
+        "position": 3,
+      },
+    ],
+    "description": "Administration",
+  },
+  "apis": Object {
+    "commands": Array [
+      Object {
+        "description": "Upload, or resync, your OpenAPI/Swagger definition to ReadMe.",
+        "name": "openapi",
+        "position": 1,
+      },
+      Object {
+        "description": "Alias for \`rdme openapi\`. [deprecated]",
+        "name": "swagger",
+        "position": 2,
+      },
+      Object {
+        "description": "Validate your OpenAPI/Swagger definition.",
+        "name": "validate",
+        "position": 2,
+      },
+    ],
+    "description": "Upload OpenAPI/Swagger definitions",
+  },
+  "categories": Object {
+    "commands": Array [
+      Object {
+        "description": "Get all categories in your ReadMe project.",
+        "name": "categories",
+        "position": 1,
+      },
+      Object {
+        "description": "Create a category with the specified title and guide in your ReadMe project.",
+        "name": "categories:create",
+        "position": 2,
+      },
+    ],
+    "description": "Categories",
+  },
+  "changelogs": Object {
+    "commands": Array [
+      Object {
+        "description": "Sync a folder of Markdown files to your ReadMe project as Changelog posts.",
+        "name": "changelogs",
+        "position": 1,
+      },
+      Object {
+        "description": "Sync a single Markdown file to your ReadMe project as a Changelog post.",
+        "name": "changelogs:single",
+        "position": 2,
+      },
+    ],
+    "description": "Changelog",
+  },
+  "custompages": Object {
+    "commands": Array [
+      Object {
+        "description": "Sync a folder of Markdown files to your ReadMe project as Custom Pages.",
+        "name": "custompages",
+        "position": 1,
+      },
+      Object {
+        "description": "Sync a single Markdown file to your ReadMe project as a Custom Page.",
+        "name": "custompages:single",
+        "position": 2,
+      },
+    ],
+    "description": "Custom Pages",
+  },
+  "docs": Object {
+    "commands": Array [
+      Object {
+        "description": "Sync a folder of Markdown files to your ReadMe project.",
+        "name": "docs",
+        "position": 1,
+      },
+      Object {
+        "description": "Edit a single file from your ReadMe project without saving locally.",
+        "name": "docs:edit",
+        "position": 2,
+      },
+      Object {
+        "description": "Sync a single Markdown file to your ReadMe project.",
+        "name": "docs:single",
+        "position": 3,
+      },
+    ],
+    "description": "Documentation",
+  },
+  "utilities": Object {
+    "commands": Array [
+      Object {
+        "description": "Helpful OpenAPI generation tooling. [inactive]",
+        "name": "oas",
+        "position": 1,
+      },
+      Object {
+        "description": "Open your current ReadMe project in the browser.",
+        "name": "open",
+        "position": 2,
+      },
+    ],
+    "description": "Other useful commands",
+  },
+  "versions": Object {
+    "commands": Array [
+      Object {
+        "description": "List versions available in your project or get a version by SemVer (https://semver.org/).",
+        "name": "versions",
+        "position": 1,
+      },
+      Object {
+        "description": "Create a new version for your project.",
+        "name": "versions:create",
+        "position": 2,
+      },
+      Object {
+        "description": "Delete a version associated with your ReadMe project.",
+        "name": "versions:delete",
+        "position": 4,
+      },
+      Object {
+        "description": "Update an existing version for your project.",
+        "name": "versions:update",
+        "position": 3,
+      },
+    ],
+    "description": "Versions",
+  },
+}
+`;

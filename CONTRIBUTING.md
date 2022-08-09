@@ -2,10 +2,17 @@
 
 ## Running Shell Commands Locally 🐚
 
-To run test commands from within the repository, run your commands from the root of the repository and use `./bin/rdme` instead of `rdme` so it properly points to the command executable, like so:
+To run test commands from within the repository, run the build and then run your commands from the root of the repository and use `./bin/rdme` instead of `rdme` so it properly points to the command executable, like so:
 
 ```sh
+npm run build
 ./bin/rdme validate __tests__/__fixtures__/ref-oas/petstore.json
+```
+
+If you need to debug commands quicker and re-building TS everytime is becoming cumbersome, you can use the debug command, like so:
+
+```sh
+npm run debug:bin -- validate __tests__/__fixtures__/ref-oas/petstore.json
 ```
 
 ## Running GitHub Actions Locally 🐳
