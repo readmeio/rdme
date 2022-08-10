@@ -1,7 +1,7 @@
 import type { CommandOptions } from '../lib/baseCommand';
 import type { Options } from './openapi';
 
-import { warn } from '../lib/logger';
+import Command from '../lib/baseCommand';
 
 import OpenAPICommand from './openapi';
 
@@ -16,7 +16,7 @@ export default class SwaggerCommand extends OpenAPICommand {
   }
 
   async run(opts: CommandOptions<Options>) {
-    warn('`rdme swagger` has been deprecated. Please use `rdme openapi` instead.');
+    Command.warn('`rdme swagger` has been deprecated. Please use `rdme openapi` instead.');
     return super.run(opts);
   }
 }

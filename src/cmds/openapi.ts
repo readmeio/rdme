@@ -10,7 +10,7 @@ import parse from 'parse-link-header';
 
 import Command, { CommandCategories } from '../lib/baseCommand';
 import fetch, { cleanHeaders, handleRes } from '../lib/fetch';
-import { debug, info, warn, oraOptions } from '../lib/logger';
+import { oraOptions } from '../lib/logger';
 import prepareOas from '../lib/prepareOas';
 import * as promptHandler from '../lib/prompts';
 import streamSpecToRegistry from '../lib/streamSpecToRegistry';
@@ -81,7 +81,9 @@ export default class OpenAPICommand extends Command {
     }
 
     if (version && id) {
-      warn("We'll be using the version associated with the `--id` option, so the `--version` option will be ignored.");
+      Command.warn(
+        "We'll be using the version associated with the `--id` option, so the `--version` option will be ignored."
+      );
     }
 
     // Reason we're hardcoding in command here is because `swagger` command
@@ -89,7 +91,9 @@ export default class OpenAPICommand extends Command {
     const { bundledSpec, specPath, specType, specVersion } = await prepareOas(spec, 'openapi');
 
     if (useSpecVersion) {
-      info(`Using the version specified in your API definition for your ReadMe project version (${specVersion})`);
+      Command.info(
+        `Using the version specified in your API definition for your ReadMe project version (${specVersion})`
+      );
       selectedVersion = specVersion;
     }
 
@@ -97,16 +101,16 @@ export default class OpenAPICommand extends Command {
       selectedVersion = await getProjectVersion(selectedVersion, key, true);
     }
 
-    debug(`selectedVersion: ${selectedVersion}`);
+    Command.debug(`selectedVersion: ${selectedVersion}`);
 
     async function success(data: Response) {
       const message = !isUpdate
         ? `You've successfully uploaded a new ${specType} file to your ReadMe project!`
         : `You've successfully updated an existing ${specType} file on your ReadMe project!`;
 
-      debug(`successful ${data.status} response`);
+      Command.debug(`successful ${data.status} response`);
       const body = await data.json();
-      debug(`successful response payload: ${JSON.stringify(body)}`);
+      Command.debug(`successful response payload: ${JSON.stringify(body)}`);
 
       return Promise.resolve(
         [
@@ -211,23 +215,23 @@ export default class OpenAPICommand extends Command {
     }
 
     if (!id) {
-      debug('no id parameter, retrieving list of API specs');
+      Command.debug('no id parameter, retrieving list of API specs');
       const apiSettings = await getSpecs('/api/v1/api-specification');
 
       const totalPages = Math.ceil(parseInt(apiSettings.headers.get('x-total-count'), 10) / 10);
       const parsedDocs = parse(apiSettings.headers.get('link'));
-      debug(`total pages: ${totalPages}`);
-      debug(`pagination result: ${JSON.stringify(parsedDocs)}`);
+      Command.debug(`total pages: ${totalPages}`);
+      Command.debug(`pagination result: ${JSON.stringify(parsedDocs)}`);
 
       const apiSettingsBody = await apiSettings.json();
-      debug(`api settings list response payload: ${JSON.stringify(apiSettingsBody)}`);
+      Command.debug(`api settings list response payload: ${JSON.stringify(apiSettingsBody)}`);
       if (!apiSettingsBody.length) return createSpec();
 
       const { option }: { option: 'create' | 'update' } = await prompt(
         promptHandler.createOasPrompt(apiSettingsBody, parsedDocs, totalPages, getSpecs)
       );
 
-      debug(`selection result: ${option}`);
+      Command.debug(`selection result: ${option}`);
       if (!option) return null;
       return option === 'create' ? createSpec() : updateSpec(option);
     }

@@ -1,6 +1,7 @@
+/* eslint-disable class-methods-use-this */
 import type { OptionDefinition } from 'command-line-usage';
 
-import { debug } from './logger';
+import { debug, info, warn } from './logger';
 
 export type CommandOptions<T> = T & {
   key?: string;
@@ -34,8 +35,8 @@ export default class Command {
   args: OptionDefinition[];
 
   run(opts: CommandOptions<{}>, requiresAuth?: boolean): void | Promise<string> {
-    debug(`command: ${this.command}`);
-    debug(`opts: ${JSON.stringify(opts)}`);
+    Command.debug(`command: ${this.command}`);
+    Command.debug(`opts: ${JSON.stringify(opts)}`);
 
     if (requiresAuth) {
       if (!opts.key) {
@@ -44,7 +45,6 @@ export default class Command {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   getVersionArg() {
     return {
       name: 'version',
@@ -52,5 +52,17 @@ export default class Command {
       description:
         'Project version. If running command in a CI environment and this option is not passed, the main project version will be used.',
     };
+  }
+
+  static debug(msg: string) {
+    debug(msg);
+  }
+
+  static info(msg: string) {
+    info(msg);
+  }
+
+  static warn(msg: string) {
+    warn(msg);
   }
 }

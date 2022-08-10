@@ -4,7 +4,6 @@ import chalk from 'chalk';
 import config from 'config';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
-import { debug } from '../../lib/logger';
 import pushDoc, { readdirRecursive } from '../../lib/pushDoc';
 
 export type Options = {
@@ -59,7 +58,7 @@ export default class CustomPagesCommand extends Command {
         file.toLowerCase().endsWith('.markdown')
     );
 
-    debug(`number of files: ${files.length}`);
+    Command.debug(`number of files: ${files.length}`);
 
     if (!files.length) {
       return Promise.reject(new Error(`We were unable to locate Markdown or HTML files in ${folder}.`));

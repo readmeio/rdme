@@ -4,7 +4,6 @@ import chalk from 'chalk';
 import config from 'config';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
-import { debug } from '../../lib/logger';
 import pushDoc, { readdirRecursive } from '../../lib/pushDoc';
 import { getProjectVersion } from '../../lib/versionSelect';
 
@@ -58,14 +57,14 @@ export default class DocsCommand extends Command {
     // Ideally we should ignore this parameter entirely if the category is included.
     const selectedVersion = await getProjectVersion(version, key, false);
 
-    debug(`selectedVersion: ${selectedVersion}`);
+    Command.debug(`selectedVersion: ${selectedVersion}`);
 
     // Strip out non-markdown files
     const files = readdirRecursive(folder).filter(
       file => file.toLowerCase().endsWith('.md') || file.toLowerCase().endsWith('.markdown')
     );
 
-    debug(`number of files: ${files.length}`);
+    Command.debug(`number of files: ${files.length}`);
 
     if (!files.length) {
       return Promise.reject(new Error(`We were unable to locate Markdown files in ${folder}.`));

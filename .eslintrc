@@ -30,15 +30,6 @@
      */
     "class-methods-use-this": ["error", { "exceptMethods": ["run"] }],
 
-    "import/order": ["error", {
-      "alphabetize": {
-        "order": "asc",
-        "caseInsensitive": true
-      },
-      "groups": ["type", "builtin", "external", "internal", "parent", "sibling", "index", "object"],
-      "newlines-between": "always"
-    }],
-
     /**
      * This is a small rule to prevent us from using console.log() statements in our commands.
      *

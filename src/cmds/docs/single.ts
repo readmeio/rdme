@@ -4,7 +4,6 @@ import chalk from 'chalk';
 import config from 'config';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
-import { debug } from '../../lib/logger';
 import pushDoc from '../../lib/pushDoc';
 import { getProjectVersion } from '../../lib/versionSelect';
 
@@ -62,7 +61,7 @@ export default class SingleDocCommand extends Command {
     // Ideally we should ignore this parameter entirely if the category is included.
     const selectedVersion = await getProjectVersion(version, key, false);
 
-    debug(`selectedVersion: ${selectedVersion}`);
+    Command.debug(`selectedVersion: ${selectedVersion}`);
 
     const createdDoc = await pushDoc(key, selectedVersion, dryRun, filePath, this.cmdCategory);
 
