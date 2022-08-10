@@ -1,9 +1,8 @@
 import fs from 'fs';
 
 import chalk from 'chalk';
-import ora from 'ora';
-
 import OASNormalize from 'oas-normalize';
+import ora from 'ora';
 
 import { debug, info, oraOptions } from './logger';
 
@@ -69,7 +68,7 @@ export default async function prepareOas(path: string, command: 'openapi' | 'val
   let bundledSpec = '';
 
   if (command === 'openapi') {
-    bundledSpec = await oas.bundle().then((res: Record<string, unknown>) => {
+    bundledSpec = await oas.bundle().then(res => {
       return JSON.stringify(res);
     });
 
