@@ -114,6 +114,22 @@ You can additional include a version flag, specifying the target version for you
 rdme openapi [path-to-file.json] --version={project-version}
 ```
 
+If you wish to use the version specified [in the `info.version` field of your API definition](https://spec.openapis.org/oas/v3.1.0#fixed-fields-0), you can pass the `--useSpecVersion` option. For example, say [the `info` object](https://spec.openapis.org/oas/v3.1.0#info-object) of your API definition looks like this:
+
+```json
+{
+  "version": "1.2.3",
+  "title": "Single Path",
+  "description": "This is a slimmed down single path version of the Petstore definition."
+}
+```
+
+You can pass in the `--useSpecVersion` option, which would be equivalent to passing in `--version=1.2.3`:
+
+```sh
+rdme openapi [path-to-file.json] --useSpecVersion
+```
+
 #### Omitting the File Path
 
 If you run `rdme` within a directory that contains your OpenAPI or Swagger definition, you can omit the file path. We will then look for a file with the following names, and upload that:
