@@ -55,7 +55,7 @@ describe('rdme validate', () => {
     expect(console.info).toHaveBeenCalledTimes(1);
 
     const output = getCommandOutput();
-    expect(output).toBe(chalk.yellow('We found swagger.json and are attempting to validate it.'));
+    expect(output).toBe(chalk.yellow('ℹ️  We found swagger.json and are attempting to validate it.'));
 
     fs.unlinkSync('./swagger.json');
   });

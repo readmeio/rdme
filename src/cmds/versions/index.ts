@@ -43,7 +43,7 @@ export default class VersionsCommand extends Command {
       {
         name: 'version',
         type: String,
-        description: 'A specific project version to view',
+        description: 'A specific project version to view.',
       },
       {
         name: 'raw',

@@ -139,7 +139,7 @@ describe('rdme openapi', () => {
       expect(console.info).toHaveBeenCalledTimes(1);
 
       const output = getCommandOutput();
-      expect(output).toBe(chalk.yellow('We found swagger.json and are attempting to upload it.'));
+      expect(output).toBe(chalk.yellow('ℹ️  We found swagger.json and are attempting to upload it.'));
 
       fs.unlinkSync('./swagger.json');
       return mock.done();
@@ -277,6 +277,110 @@ describe('rdme openapi', () => {
   });
 
   describe('versioning', () => {
+    it('should use version from version param properly', async () => {
+      expect.assertions(2);
+      let requestBody = '';
+      const registryUUID = getRandomRegistryId();
+      const mock = getAPIMock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version: '1.0.0' })
+        .post('/api/v1/api-registry', body => {
+          requestBody = body.substring(body.indexOf('{'), body.lastIndexOf('}') + 1);
+          requestBody = JSON.parse(requestBody);
+
+          return body.match('form-data; name="spec"');
+        })
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+        .get('/api/v1/api-specification')
+        .basicAuth({ user: key })
+        .reply(200, [])
+        .post('/api/v1/api-specification', { registryUUID })
+        .basicAuth({ user: key })
+        .reply(function (uri, rBody, cb) {
+          expect(this.req.headers['x-readme-version'][0]).toBe(version);
+          return cb(null, [201, { _id: 1 }, { location: exampleRefLocation }]);
+        });
+
+      const spec = './__tests__/__fixtures__/petstore-simple-weird-version.json';
+
+      await expect(openapi.run({ spec, key, version })).resolves.toBe(successfulUpload(spec));
+
+      return mock.done();
+    });
+
+    it('should use version from spec file properly', async () => {
+      expect.assertions(2);
+      const specVersion = '1.2.3';
+      let requestBody = '';
+      const registryUUID = getRandomRegistryId();
+      const mock = getAPIMock()
+        .get(`/api/v1/version/${specVersion}`)
+        .basicAuth({ user: key })
+        .reply(200, { version: specVersion })
+        .post('/api/v1/api-registry', body => {
+          requestBody = body.substring(body.indexOf('{'), body.lastIndexOf('}') + 1);
+          requestBody = JSON.parse(requestBody);
+
+          return body.match('form-data; name="spec"');
+        })
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+        .get('/api/v1/api-specification')
+        .basicAuth({ user: key })
+        .reply(200, [])
+        .post('/api/v1/api-specification', { registryUUID })
+        .basicAuth({ user: key })
+        .reply(function (uri, rBody, cb) {
+          expect(this.req.headers['x-readme-version'][0]).toBe(specVersion);
+          return cb(null, [201, { _id: 1 }, { location: exampleRefLocation }]);
+        });
+
+      const spec = './__tests__/__fixtures__/petstore-simple-weird-version.json';
+
+      await expect(openapi.run({ spec, key, version, useSpecVersion: true })).resolves.toBe(successfulUpload(spec));
+
+      return mock.done();
+    });
+
+    describe('CI version handling', () => {
+      beforeEach(() => {
+        process.env.TEST_CI = 'true';
+      });
+
+      afterEach(() => {
+        delete process.env.TEST_CI;
+      });
+
+      it('should omit version header in CI environment', async () => {
+        expect.assertions(2);
+        let requestBody = '';
+        const registryUUID = getRandomRegistryId();
+        const mock = getAPIMock()
+          .post('/api/v1/api-registry', body => {
+            requestBody = body.substring(body.indexOf('{'), body.lastIndexOf('}') + 1);
+            requestBody = JSON.parse(requestBody);
+
+            return body.match('form-data; name="spec"');
+          })
+          .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+          .get('/api/v1/api-specification')
+          .basicAuth({ user: key })
+          .reply(200, [])
+          .post('/api/v1/api-specification', { registryUUID })
+          .basicAuth({ user: key })
+          .reply(function (uri, rBody, cb) {
+            expect(this.req.headers['x-readme-version']).toBeUndefined();
+            return cb(null, [201, { _id: 1 }, { location: exampleRefLocation }]);
+          });
+
+        const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
+
+        await expect(openapi.run({ spec, key })).resolves.toBe(successfulUpload(spec));
+
+        return mock.done();
+      });
+    });
+
     it('should error if version flag sent to API returns a 404', async () => {
       const invalidVersion = 'v1000';
 
@@ -372,15 +476,10 @@ describe('rdme openapi', () => {
       return mock.done();
     });
 
-    it('should error if no file was provided or able to be discovered', async () => {
-      const mock = getAPIMock()
-        .get(`/api/v1/version/${version}`)
-        .basicAuth({ user: key })
-        .reply(200, { version: '1.0.0' });
-
-      await expect(openapi.run({ key, version })).rejects.toThrow(/We couldn't find an OpenAPI or Swagger definition./);
-
-      return mock.done();
+    it('should error if no file was provided or able to be discovered', () => {
+      return expect(openapi.run({ key, version })).rejects.toThrow(
+        /We couldn't find an OpenAPI or Swagger definition./
+      );
     });
 
     it('should throw an error if an invalid OpenAPI 3.0 definition is supplied', () => {

@@ -63,6 +63,9 @@ export default async function prepareOas(path: string, command: 'openapi' | 'val
   const specType = api.swagger ? 'Swagger' : 'OpenAPI';
   debug(`spec type: ${specType}`);
 
+  const specVersion = api?.info?.version;
+  debug(`version in spec: ${specVersion}`);
+
   let bundledSpec = '';
 
   if (command === 'openapi') {
@@ -73,5 +76,5 @@ export default async function prepareOas(path: string, command: 'openapi' | 'val
     debug('spec bundled');
   }
 
-  return { bundledSpec, specPath, specType };
+  return { bundledSpec, specPath, specType, specVersion };
 }

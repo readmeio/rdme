@@ -40,11 +40,7 @@ export default class EditDocsCommand extends Command {
         type: String,
         description: 'Project API key',
       },
-      {
-        name: 'version',
-        type: String,
-        description: 'Project version',
-      },
+      this.getVersionArg(),
       {
         name: 'slug',
         type: String,

@@ -2,8 +2,11 @@ import config from 'config';
 import { prompt } from 'enquirer';
 import { Headers } from 'node-fetch';
 
+import ciDetect from '@npmcli/ci-detect';
+
 import APIError from './apiError';
 import fetch, { cleanHeaders, handleRes } from './fetch';
+import { warn } from './logger';
 import * as promptHandler from './prompts';
 
 export async function getProjectVersion(versionFlag: string, key: string, allowNewVersion: boolean): Promise<string> {
@@ -15,6 +18,11 @@ export async function getProjectVersion(versionFlag: string, key: string, allowN
       })
         .then(res => handleRes(res))
         .then(res => res.version);
+    }
+
+    if ((ciDetect() && process.env.NODE_ENV !== 'testing') || process.env.TEST_CI) {
+      warn('No `--version` parameter detected in current CI environment. Defaulting to main version.');
+      return undefined;
     }
 
     const versionList = await fetch(`${config.get('host')}/api/v1/version`, {

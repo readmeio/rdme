@@ -21,11 +21,7 @@ export default class CategoriesCommand extends Command {
         type: String,
         description: 'Project API key',
       },
-      {
-        name: 'version',
-        type: String,
-        description: 'Project version',
-      },
+      this.getVersionArg(),
     ];
   }
 

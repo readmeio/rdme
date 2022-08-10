@@ -30,11 +30,7 @@ export default class DocsCommand extends Command {
         type: String,
         description: 'Project API key',
       },
-      {
-        name: 'version',
-        type: String,
-        description: 'Project version',
-      },
+      this.getVersionArg(),
       {
         name: 'folder',
         type: String,

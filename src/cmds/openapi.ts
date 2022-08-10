@@ -10,7 +10,7 @@ import parse from 'parse-link-header';
 
 import Command, { CommandCategories } from '../lib/baseCommand';
 import fetch, { cleanHeaders, handleRes } from '../lib/fetch';
-import { debug, warn, oraOptions } from '../lib/logger';
+import { debug, info, warn, oraOptions } from '../lib/logger';
 import prepareOas from '../lib/prepareOas';
 import * as promptHandler from '../lib/prompts';
 import streamSpecToRegistry from '../lib/streamSpecToRegistry';
@@ -20,6 +20,7 @@ export type Options = {
   id?: string;
   spec?: string;
   version?: string;
+  useSpecVersion?: boolean;
   workingDirectory?: string;
 };
 
@@ -44,17 +45,19 @@ export default class OpenAPICommand extends Command {
         name: 'id',
         type: String,
         description:
-          "Unique identifier for your API definition. Use this if you're re-uploading an existing API definition",
+          "Unique identifier for your API definition. Use this if you're re-uploading an existing API definition.",
       },
-      {
-        name: 'version',
-        type: String,
-        description: 'Project version',
-      },
+      this.getVersionArg(),
       {
         name: 'spec',
         type: String,
         defaultOption: true,
+      },
+      {
+        name: 'useSpecVersion',
+        type: Boolean,
+        description:
+          'Uses the version listed in the `info.version` field in the API definition for the project version parameter.',
       },
       {
         name: 'workingDirectory',
@@ -67,9 +70,9 @@ export default class OpenAPICommand extends Command {
   async run(opts: CommandOptions<Options>) {
     super.run(opts, true);
 
-    const { key, id, spec, version, workingDirectory } = opts;
+    const { key, id, spec, useSpecVersion, version, workingDirectory } = opts;
 
-    let selectedVersion: string;
+    let selectedVersion = version;
     let isUpdate: boolean;
     const spinner = ora({ ...oraOptions() });
 
@@ -81,15 +84,20 @@ export default class OpenAPICommand extends Command {
       warn("We'll be using the version associated with the `--id` option, so the `--version` option will be ignored.");
     }
 
+    // Reason we're hardcoding in command here is because `swagger` command
+    // relies on this and we don't want to use `swagger` in this function
+    const { bundledSpec, specPath, specType, specVersion } = await prepareOas(spec, 'openapi');
+
+    if (useSpecVersion) {
+      info(`Using the version specified in your API definition for your ReadMe project version (${specVersion})`);
+      selectedVersion = specVersion;
+    }
+
     if (!id) {
-      selectedVersion = await getProjectVersion(version, key, true);
+      selectedVersion = await getProjectVersion(selectedVersion, key, true);
     }
 
     debug(`selectedVersion: ${selectedVersion}`);
-
-    // Reason we're hardcoding in command here is because `swagger` command
-    // relies on this and we don't want to use `swagger` in this function
-    const { bundledSpec, specPath, specType } = await prepareOas(spec, 'openapi');
 
     async function success(data: Response) {
       const message = !isUpdate
