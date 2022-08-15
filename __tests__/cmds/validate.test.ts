@@ -1,6 +1,4 @@
 /* eslint-disable no-console */
-import fs from 'fs';
-
 import chalk from 'chalk';
 
 import Command from '../../src/cmds/validate';
@@ -45,19 +43,14 @@ describe('rdme validate', () => {
   });
 
   it('should discover and upload an API definition if none is provided', async () => {
-    // Surface our test fixture to the root directory so rdme can autodiscover it. It's easier to do
-    // this than mocking out the fs module because mocking the fs module here causes Jest sourcemaps
-    // to break.
-    fs.copyFileSync(require.resolve('@readme/oas-examples/2.0/json/petstore.json'), './swagger.json');
-
-    await expect(validate.run({})).resolves.toBe(chalk.green('swagger.json is a valid Swagger API definition!'));
+    await expect(validate.run({ workingDirectory: './__tests__/__fixtures__/relative-ref-oas' })).resolves.toBe(
+      chalk.green('petstore.json is a valid OpenAPI API definition!')
+    );
 
     expect(console.info).toHaveBeenCalledTimes(1);
 
     const output = getCommandOutput();
-    expect(output).toBe(chalk.yellow('ℹ️  We found swagger.json and are attempting to validate it.'));
-
-    fs.unlinkSync('./swagger.json');
+    expect(output).toBe(chalk.yellow('ℹ️  We found petstore.json and are attempting to validate it.'));
   });
 
   it('should use specified working directory', () => {
