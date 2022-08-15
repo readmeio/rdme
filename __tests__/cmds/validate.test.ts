@@ -70,6 +70,12 @@ describe('rdme validate', () => {
   });
 
   describe('error handling', () => {
+    it('should throw an error if invalid JSON is supplied', () => {
+      return expect(validate.run({ spec: './__tests__/__fixtures__/invalid-json/yikes.json' })).rejects.toStrictEqual(
+        new SyntaxError('Unexpected end of JSON input')
+      );
+    });
+
     it('should throw an error if an invalid OpenAPI 3.0 definition is supplied', () => {
       return expect(validate.run({ spec: './__tests__/__fixtures__/invalid-oas.json' })).rejects.toThrow(
         'Token "Error" does not exist.'
