@@ -60,8 +60,8 @@ describe('rdme validate', () => {
     fs.unlinkSync('./swagger.json');
   });
 
-  it('should use specified working directory', async () => {
-    await expect(
+  it('should use specified working directory', () => {
+    return expect(
       validate.run({
         spec: 'petstore.json',
         workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
