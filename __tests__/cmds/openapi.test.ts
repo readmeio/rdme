@@ -1,6 +1,4 @@
 /* eslint-disable no-console */
-import fs from 'fs';
-
 import chalk from 'chalk';
 import config from 'config';
 import nock from 'nock';
@@ -113,14 +111,11 @@ describe('rdme openapi', () => {
       const registryUUID = getRandomRegistryId();
 
       const mock = getAPIMock()
-        .get('/api/v1/version')
+        .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, [{ version }])
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
         .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
-        .post('/api/v1/version')
-        .basicAuth({ user: key })
-        .reply(200, { from: '1.0.1', version: '1.0.1' })
         .get('/api/v1/api-specification')
         .basicAuth({ user: key })
         .reply(200, [])
@@ -129,19 +124,21 @@ describe('rdme openapi', () => {
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
-      // Surface our test fixture to the root directory so rdme can autodiscover it. It's easier to do
-      // this than mocking out the fs module because mocking the fs module here causes Jest sourcemaps
-      // to break.
-      fs.copyFileSync(require.resolve('@readme/oas-examples/2.0/json/petstore.json'), './swagger.json');
+      const spec = 'petstore.json';
 
-      await expect(openapi.run({ key })).resolves.toBe(successfulUpload('swagger.json', 'Swagger'));
+      await expect(
+        openapi.run({
+          key,
+          version,
+          workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
+        })
+      ).resolves.toBe(successfulUpload(spec));
 
       expect(console.info).toHaveBeenCalledTimes(1);
 
       const output = getCommandOutput();
-      expect(output).toBe(chalk.yellow('ℹ️  We found swagger.json and are attempting to upload it.'));
+      expect(output).toBe(chalk.yellow(`ℹ️  We found ${spec} and are attempting to upload it.`));
 
-      fs.unlinkSync('./swagger.json');
       return mock.done();
     });
 
@@ -477,7 +474,7 @@ describe('rdme openapi', () => {
     });
 
     it('should error if no file was provided or able to be discovered', () => {
-      return expect(openapi.run({ key, version })).rejects.toThrow(
+      return expect(openapi.run({ key, version, workingDirectory: 'config' })).rejects.toThrow(
         /We couldn't find an OpenAPI or Swagger definition./
       );
     });
@@ -691,9 +688,8 @@ describe('rdme swagger', () => {
   });
 
   it('should run `rdme openapi`', () => {
-    return expect(swagger.run({ spec: '', key, id, version })).rejects.toThrow(
-      "We couldn't find an OpenAPI or Swagger definition.\n\n" +
-        'Please specify the path to your definition with `rdme openapi ./path/to/api/definition`.'
+    return expect(swagger.run({ spec: 'some-non-existent-path', key, id, version })).rejects.toThrow(
+      "ENOENT: no such file or directory, open 'some-non-existent-path'"
     );
   });
 });
