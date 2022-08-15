@@ -1,10 +1,19 @@
 import fs from 'fs';
 
 import chalk from 'chalk';
+import { prompt } from 'enquirer';
+import ignore from 'ignore';
 import OASNormalize from 'oas-normalize';
 import ora from 'ora';
 
+import ciDetect from '@npmcli/ci-detect';
+
 import { debug, info, oraOptions } from './logger';
+import { readdirRecursive } from './pushDoc';
+
+type FileSelection = {
+  file: string;
+};
 
 /**
  * Normalizes, validates, and (optionally) bundles an OpenAPI definition.
@@ -18,28 +27,94 @@ export default async function prepareOas(path: string, command: 'openapi' | 'val
   let specPath = path;
 
   if (!specPath) {
-    // If the user didn't supply an API specification, let's try to locate what they've got, and validate that. If they
-    // don't have any, let's let the user know how they can get one going.
-    specPath = await new Promise((resolve, reject) => {
-      ['swagger.json', 'swagger.yaml', 'swagger.yml', 'openapi.json', 'openapi.yaml', 'openapi.yml'].forEach(file => {
-        debug(`looking for definition with filename: ${file}`);
-        if (!fs.existsSync(file)) {
-          debug(`${file} not found`);
-          return;
-        }
+    /**
+     * Scans working directory for a potential OpenAPI or Swagger file.
+     * Any files in the `.git` directory or defined in a top-level `.gitignore` file
+     * are skipped.
+     *
+     * A "potential OpenAPI or Swagger file" is defined as a YAML or JSON file
+     * that has an `openapi` or `swagger` property defined at the top-level.
+     *
+     * If multiple potential files are found, the user must select a single file.
+     *
+     * An error is thrown in the following cases:
+     * - if in a CI environment and multiple files are found
+     * - no files are found
+     */
 
-        info(
-          chalk.yellow(`We found ${file} and are attempting to ${command === 'openapi' ? 'upload' : 'validate'} it.`)
-        );
-        resolve(file);
+    const fileFindingSpinner = ora({ text: 'Attempting to locate an API definition...', ...oraOptions() }).start();
+
+    const action = command === 'openapi' ? 'upload' : 'validate';
+
+    const ignoreFilter = ignore().add('.git/');
+
+    if (fs.existsSync('.gitignore')) {
+      debug('.gitignore file found, adding to ignore filter');
+      ignoreFilter.add(fs.readFileSync('.gitignore').toString());
+    }
+
+    const jsonAndYamlFiles = readdirRecursive('.', ignoreFilter.createFilter()).filter(
+      file =>
+        file.toLowerCase().endsWith('.json') ||
+        file.toLowerCase().endsWith('.yaml') ||
+        file.toLowerCase().endsWith('.yml')
+    );
+
+    debug(`number of JSON or YAML files found: ${jsonAndYamlFiles.length}`);
+
+    const possibleSpecFiles = (
+      await Promise.all(
+        jsonAndYamlFiles.map(async file => {
+          debug(`attempting to oas-normalize ${file}`);
+          const oas = new OASNormalize(file, { enablePaths: true });
+          return oas
+            .version()
+            .then(version => {
+              debug(`OpenAPI/Swagger version for ${file}: ${version}`);
+              if (version) return file;
+              return '';
+            })
+            .catch(e => {
+              debug(`error extracting OpenAPI/Swagger version for ${file}: ${e.message}`);
+              return '';
+            });
+        })
+      )
+    ).filter(Boolean);
+
+    debug(`number of possible OpenAPI/Swagger files found: ${possibleSpecFiles.length}`);
+
+    if (possibleSpecFiles.length === 0) {
+      fileFindingSpinner.fail();
+      throw new Error(
+        `We couldn't find an OpenAPI or Swagger definition.\n\nPlease specify the path to your definition with \`rdme ${command} ./path/to/api/definition\`.`
+      );
+    }
+
+    specPath = possibleSpecFiles[0];
+
+    if (possibleSpecFiles.length === 1) {
+      fileFindingSpinner.succeed(`${fileFindingSpinner.text} found! 🔍`);
+      info(chalk.yellow(`We found ${specPath} and are attempting to ${action} it.`));
+    }
+
+    if (possibleSpecFiles.length > 1) {
+      if ((ciDetect() && process.env.NODE_ENV !== 'testing') || process.env.TEST_CI) {
+        fileFindingSpinner.fail();
+        throw new Error('Multiple API definitions found in current directory. Please specify file.');
+      }
+
+      fileFindingSpinner.succeed(`${fileFindingSpinner.text} found! 🔍`);
+
+      const selection: FileSelection = await prompt({
+        name: 'file',
+        message: `Multiple potential API definitions found! Which file would you like to ${action}?`,
+        type: 'select',
+        choices: [...possibleSpecFiles],
       });
 
-      reject(
-        new Error(
-          `We couldn't find an OpenAPI or Swagger definition.\n\nPlease specify the path to your definition with \`rdme ${command} ./path/to/api/definition\`.`
-        )
-      );
-    });
+      specPath = selection.file;
+    }
   }
 
   const spinner = ora({ text: `Validating API definition located at ${specPath}...`, ...oraOptions() }).start();
