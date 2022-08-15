@@ -214,6 +214,25 @@ describe('rdme openapi', () => {
 
       return mock.done();
     });
+
+    describe('CI spec selection', () => {
+      beforeEach(() => {
+        process.env.TEST_CI = 'true';
+      });
+
+      afterEach(() => {
+        delete process.env.TEST_CI;
+      });
+
+      it('should error out if multiple possible spec matches were found', () => {
+        return expect(
+          openapi.run({
+            key,
+            version,
+          })
+        ).rejects.toStrictEqual(new Error('Multiple API definitions found in current directory. Please specify file.'));
+      });
+    });
   });
 
   describe('updates / resyncs', () => {
