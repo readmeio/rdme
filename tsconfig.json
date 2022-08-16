@@ -8,7 +8,6 @@
     "noImplicitAny": true,
     "outDir": "dist/",
     "paths": {
-      "@npmcli/ci-detect": [".sink.d.ts"],
       "editor": [".sink.d.ts"]
     },
     "resolveJsonModule": true,

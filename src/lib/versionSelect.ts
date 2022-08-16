@@ -1,14 +1,22 @@
+import ciDetect from '@npmcli/ci-detect';
 import config from 'config';
 import { prompt } from 'enquirer';
 import { Headers } from 'node-fetch';
-
-import ciDetect from '@npmcli/ci-detect';
 
 import APIError from './apiError';
 import fetch, { cleanHeaders, handleRes } from './fetch';
 import { warn } from './logger';
 import * as promptHandler from './prompts';
 
+/**
+ * Validates and returns a project version.
+ *
+ * @param versionFlag version input parameter
+ * @param key project API key
+ * @param allowNewVersion if true, goes through prompt flow
+ * for creating a new project version
+ * @returns a cleaned up project version
+ */
 export async function getProjectVersion(versionFlag: string, key: string, allowNewVersion: boolean): Promise<string> {
   try {
     if (versionFlag) {
