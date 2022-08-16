@@ -13,8 +13,7 @@ import path from 'path';
  */
 export default function readdirRecursive(
   folderToSearch: string,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  pathFilter = (_: string) => true
+  pathFilter: (path: string) => boolean = () => true
 ): string[] {
   const filesInFolder = fs.readdirSync(folderToSearch, { withFileTypes: true }).filter(item => {
     // Some logic to construct pathname the way that `ignore` package consumes it
