@@ -1,12 +1,11 @@
 import fs from 'fs';
 
+import ciDetect from '@npmcli/ci-detect';
 import chalk from 'chalk';
 import ignore from 'ignore';
 import OASNormalize from 'oas-normalize';
 import ora from 'ora';
 import prompts from 'prompts';
-
-import ciDetect from '@npmcli/ci-detect';
 
 import { debug, info, oraOptions } from './logger';
 import readdirRecursive from './readdirRecursive';
