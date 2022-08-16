@@ -1,8 +1,5 @@
-import fs from 'fs';
-
 import ciDetect from '@npmcli/ci-detect';
 import chalk from 'chalk';
-import ignore from 'ignore';
 import OASNormalize from 'oas-normalize';
 import ora from 'ora';
 import prompts from 'prompts';
@@ -19,7 +16,7 @@ type FileSelection = {
  *
  * @param {String} path path to spec file. if this is missing, the current directory is searched
  * for certain file names
- * @param {('openapi'|'validate')} command string to distinguish if it's being run in
+ * @param command string to distinguish if it's being run in
  * an 'openapi' or 'validate' context
  */
 export default async function prepareOas(path: string, command: 'openapi' | 'validate') {
@@ -45,14 +42,7 @@ export default async function prepareOas(path: string, command: 'openapi' | 'val
 
     const action = command === 'openapi' ? 'upload' : 'validate';
 
-    const ignoreFilter = ignore().add('.git/');
-
-    if (fs.existsSync('.gitignore')) {
-      debug('.gitignore file found, adding to ignore filter');
-      ignoreFilter.add(fs.readFileSync('.gitignore').toString());
-    }
-
-    const jsonAndYamlFiles = readdirRecursive('.', ignoreFilter.createFilter()).filter(
+    const jsonAndYamlFiles = readdirRecursive('.', true).filter(
       file =>
         file.toLowerCase().endsWith('.json') ||
         file.toLowerCase().endsWith('.yaml') ||

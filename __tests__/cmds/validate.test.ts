@@ -1,4 +1,6 @@
 /* eslint-disable no-console */
+import fs from 'fs';
+
 import chalk from 'chalk';
 import prompts from 'prompts';
 
@@ -67,6 +69,19 @@ describe('rdme validate', () => {
         workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
       })
     ).resolves.toBe(chalk.green('petstore.json is a valid OpenAPI API definition!'));
+  });
+
+  it('should adhere to .gitignore in subdirectories', () => {
+    fs.copyFileSync(
+      require.resolve('@readme/oas-examples/3.0/json/petstore-simple.json'),
+      './__tests__/__fixtures__/nested-gitignored-oas/nest/petstore-ignored.json'
+    );
+
+    return expect(
+      validate.run({
+        workingDirectory: './__tests__/__fixtures__/nested-gitignored-oas',
+      })
+    ).resolves.toBe(chalk.green('nest/petstore.json is a valid OpenAPI API definition!'));
   });
 
   describe('error handling', () => {

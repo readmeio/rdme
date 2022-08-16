@@ -1,0 +1,2 @@
+# This fixture is for testing .gitignore files in subdirectories
+petstore-ignored.json
