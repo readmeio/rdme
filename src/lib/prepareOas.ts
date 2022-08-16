@@ -53,7 +53,7 @@ export default async function prepareOas(path: string, command: 'openapi' | 'val
 
     const possibleSpecFiles = (
       await Promise.all(
-        jsonAndYamlFiles.map(async file => {
+        jsonAndYamlFiles.map(file => {
           debug(`attempting to oas-normalize ${file}`);
           const oas = new OASNormalize(file, { enablePaths: true });
           return oas
