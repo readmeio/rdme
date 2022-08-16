@@ -99,6 +99,7 @@ export default async function prepareOas(path: string, command: 'openapi' | 'val
     }
 
     if (possibleSpecFiles.length > 1) {
+      /* istanbul ignore next */
       if ((ciDetect() && process.env.NODE_ENV !== 'testing') || process.env.TEST_CI) {
         fileFindingSpinner.fail();
         throw new Error('Multiple API definitions found in current directory. Please specify file.');
@@ -137,7 +138,8 @@ export default async function prepareOas(path: string, command: 'openapi' | 'val
   const specType = api.swagger ? 'Swagger' : 'OpenAPI';
   debug(`spec type: ${specType}`);
 
-  const specVersion = api?.info?.version;
+  // No need to optional chain here since `info.version` is required to pass validation
+  const specVersion = api.info.version;
   debug(`version in spec: ${specVersion}`);
 
   let bundledSpec = '';
