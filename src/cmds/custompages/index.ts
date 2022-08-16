@@ -4,7 +4,8 @@ import chalk from 'chalk';
 import config from 'config';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
-import pushDoc, { readdirRecursive } from '../../lib/pushDoc';
+import pushDoc from '../../lib/pushDoc';
+import readdirRecursive from '../../lib/readdirRecursive';
 
 export type Options = {
   dryRun?: boolean;

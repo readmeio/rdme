@@ -9,7 +9,7 @@ import prompts from 'prompts';
 import ciDetect from '@npmcli/ci-detect';
 
 import { debug, info, oraOptions } from './logger';
-import { readdirRecursive } from './pushDoc';
+import readdirRecursive from './readdirRecursive';
 
 type FileSelection = {
   file: string;
