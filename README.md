@@ -135,7 +135,16 @@ rdme openapi [path-to-file.json] --useSpecVersion
 
 #### Omitting the File Path
 
-If you run `rdme` within a directory that contains your OpenAPI or Swagger definition, you can omit the file path. `rdme` will then look for JSON or YAML files (including in sub-directories) that contain a top-level [`openapi`](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#fixed-fields) or [`swagger`](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/2.0.md#fixed-fields) property. `rdme` will not scan any files or directories specified in the working directory's `.gitignore` file, if the file exists.
+If you run `rdme` within a directory that contains your OpenAPI or Swagger definition, you can omit the file path. `rdme` will then look for JSON or YAML files (including in sub-directories) that contain a top-level [`openapi`](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#fixed-fields) or [`swagger`](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/2.0.md#fixed-fields) property.
+
+<!-- This ignore block is required since GitHub's callout syntax doesn't play nicely with Prettier -->
+<!-- prettier-ignore-start -->
+> **Note**
+> `rdme` will not scan anything in the following:
+>
+> - The working directory's `.git/` directory (if it exists)
+> - Any files/directories specified in the working directory's `.gitignore` file (if this file exists)
+<!-- prettier-ignore-end -->
 
 ```sh
 rdme openapi
