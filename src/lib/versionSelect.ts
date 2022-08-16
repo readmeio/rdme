@@ -1,8 +1,7 @@
+import ciDetect from '@npmcli/ci-detect';
 import config from 'config';
 import { prompt } from 'enquirer';
 import { Headers } from 'node-fetch';
-
-import ciDetect from '@npmcli/ci-detect';
 
 import APIError from './apiError';
 import fetch, { cleanHeaders, handleRes } from './fetch';
