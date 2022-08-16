@@ -71,8 +71,7 @@ export default async function prepareOas(path: string, command: 'openapi' | 'val
             .version()
             .then(version => {
               debug(`OpenAPI/Swagger version for ${file}: ${version}`);
-              if (version) return file;
-              return '';
+              return version ? file : '';
             })
             .catch(e => {
               debug(`error extracting OpenAPI/Swagger version for ${file}: ${e.message}`);
