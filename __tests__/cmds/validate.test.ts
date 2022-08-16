@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import chalk from 'chalk';
+import prompts from 'prompts';
 
 import Command from '../../src/cmds/validate';
 
@@ -51,6 +52,12 @@ describe('rdme validate', () => {
 
     const output = getCommandOutput();
     expect(output).toBe(chalk.yellow('ℹ️  We found petstore.json and are attempting to validate it.'));
+  });
+
+  it('should select spec in prompt and validate it', async () => {
+    const spec = '__tests__/__fixtures__/petstore-simple-weird-version.json';
+    prompts.inject([spec]);
+    await expect(validate.run({})).resolves.toBe(chalk.green(`${spec} is a valid OpenAPI API definition!`));
   });
 
   it('should use specified working directory', () => {
