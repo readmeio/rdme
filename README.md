@@ -10,6 +10,7 @@
 
 ### Setup
 
+> **Note**
 > These setup instructions are for CLI usage only. For usage in GitHub Actions, see [GitHub Actions](#github-actions) below.
 
 We recommend installing `rdme` in your project rather than doing a global installation so you don't run into unexpected behavior with mismatching versions. We also suggest using the `--save-dev` flag since `rdme` is typically used as part of a CI process and is unlikely to be running in your production application:
@@ -55,6 +56,7 @@ If you wish to get more information about any command within `rdme`, you can exe
 
 ### GitHub Actions
 
+> **Note**
 > For a full GitHub Workflow file example and additional information on GitHub Actions usage, check out [our docs](https://docs.readme.com/docs/rdme#github-actions-usage).
 
 For usage in [GitHub Actions](https://docs.github.com/actions), create [a new GitHub Workflow file](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions) in the `.github/workflows` directory of your repository and add the following [steps](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idsteps) to your workflow:
@@ -86,9 +88,10 @@ Note that the `@XX` in the above examples refers to the version of `rdme`. You c
 
 ReadMe supports [OpenAPI 3.1](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md), [OpenAPI 3.0](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md), and [Swagger 2.x](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/2.0.md).
 
-The following examples use JSON files, but we support API Definitions that are written in either JSON or YAML.
+The following examples use JSON files, but `rdme` supports API Definitions that are written in either JSON or YAML.
 
-> ℹ️ Note that the `rdme openapi` command supports both OpenAPI and Swagger API definitions. The `rdme swagger` command is an alias for `rdme openapi` and is deprecated.
+> **Note**
+> The `rdme openapi` command supports both OpenAPI and Swagger API definitions. The `rdme swagger` command is an alias for `rdme openapi` and is deprecated.
 
 #### Uploading a New API Definition to ReadMe
 
@@ -132,14 +135,16 @@ rdme openapi [path-to-file.json] --useSpecVersion
 
 #### Omitting the File Path
 
-If you run `rdme` within a directory that contains your OpenAPI or Swagger definition, you can omit the file path. We will then look for a file with the following names, and upload that:
+If you run `rdme` within a directory that contains your OpenAPI or Swagger definition, you can omit the file path. `rdme` will then look for JSON or YAML files (including in sub-directories) that contain a top-level [`openapi`](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#fixed-fields) or [`swagger`](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/2.0.md#fixed-fields) property.
 
-- `openapi.json`
-- `openapi.yaml`
-- `openapi.yml`
-- `swagger.json`
-- `swagger.yaml`
-- `swagger.yml`
+<!-- This ignore block is required since GitHub's callout syntax doesn't play nicely with Prettier -->
+<!-- prettier-ignore-start -->
+> **Note**
+> `rdme` will not scan anything in the following:
+>
+> - Any `.git/` directories (if they exist)
+> - Any files/directories specified in `.gitignore` files (including any `.gitignore` files in subdirectories, if they exist)
+<!-- prettier-ignore-end -->
 
 ```sh
 rdme openapi
@@ -160,6 +165,8 @@ You can also perform a local validation of your API definition without uploading
 ```sh
 rdme validate [path-to-file.json]
 ```
+
+Similar to the `openapi` command, you can also [omit the file path](#omitting-the-file-path).
 
 ### Docs
 

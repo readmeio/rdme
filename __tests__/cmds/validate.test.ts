@@ -2,6 +2,7 @@
 import fs from 'fs';
 
 import chalk from 'chalk';
+import prompts from 'prompts';
 
 import Command from '../../src/cmds/validate';
 
@@ -45,23 +46,24 @@ describe('rdme validate', () => {
   });
 
   it('should discover and upload an API definition if none is provided', async () => {
-    // Surface our test fixture to the root directory so rdme can autodiscover it. It's easier to do
-    // this than mocking out the fs module because mocking the fs module here causes Jest sourcemaps
-    // to break.
-    fs.copyFileSync(require.resolve('@readme/oas-examples/2.0/json/petstore.json'), './swagger.json');
-
-    await expect(validate.run({})).resolves.toBe(chalk.green('swagger.json is a valid Swagger API definition!'));
+    await expect(validate.run({ workingDirectory: './__tests__/__fixtures__/relative-ref-oas' })).resolves.toBe(
+      chalk.green('petstore.json is a valid OpenAPI API definition!')
+    );
 
     expect(console.info).toHaveBeenCalledTimes(1);
 
     const output = getCommandOutput();
-    expect(output).toBe(chalk.yellow('ℹ️  We found swagger.json and are attempting to validate it.'));
-
-    fs.unlinkSync('./swagger.json');
+    expect(output).toBe(chalk.yellow('ℹ️  We found petstore.json and are attempting to validate it.'));
   });
 
-  it('should use specified working directory', async () => {
-    await expect(
+  it('should select spec in prompt and validate it', async () => {
+    const spec = '__tests__/__fixtures__/petstore-simple-weird-version.json';
+    prompts.inject([spec]);
+    await expect(validate.run({})).resolves.toBe(chalk.green(`${spec} is a valid OpenAPI API definition!`));
+  });
+
+  it('should use specified working directory', () => {
+    return expect(
       validate.run({
         spec: 'petstore.json',
         workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
@@ -69,7 +71,26 @@ describe('rdme validate', () => {
     ).resolves.toBe(chalk.green('petstore.json is a valid OpenAPI API definition!'));
   });
 
+  it('should adhere to .gitignore in subdirectories', () => {
+    fs.copyFileSync(
+      require.resolve('@readme/oas-examples/3.0/json/petstore-simple.json'),
+      './__tests__/__fixtures__/nested-gitignored-oas/nest/petstore-ignored.json'
+    );
+
+    return expect(
+      validate.run({
+        workingDirectory: './__tests__/__fixtures__/nested-gitignored-oas',
+      })
+    ).resolves.toBe(chalk.green('nest/petstore.json is a valid OpenAPI API definition!'));
+  });
+
   describe('error handling', () => {
+    it('should throw an error if invalid JSON is supplied', () => {
+      return expect(validate.run({ spec: './__tests__/__fixtures__/invalid-json/yikes.json' })).rejects.toStrictEqual(
+        new SyntaxError('Unexpected end of JSON input')
+      );
+    });
+
     it('should throw an error if an invalid OpenAPI 3.0 definition is supplied', () => {
       return expect(validate.run({ spec: './__tests__/__fixtures__/invalid-oas.json' })).rejects.toThrow(
         'Token "Error" does not exist.'

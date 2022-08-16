@@ -139,21 +139,3 @@ export default async function pushDoc(
       throw err;
     });
 }
-
-/**
- * Recursively grabs all files within a given directory
- * (including subdirectories)
- * @param {String} folderToSearch path to directory
- * @returns {String[]} array of files
- */
-export function readdirRecursive(folderToSearch: string): string[] {
-  const filesInFolder = fs.readdirSync(folderToSearch, { withFileTypes: true });
-  const files = filesInFolder
-    .filter(fileHandle => fileHandle.isFile())
-    .map(fileHandle => path.join(folderToSearch, fileHandle.name));
-  const folders = filesInFolder.filter(fileHandle => fileHandle.isDirectory());
-  const subFiles = [].concat(
-    ...folders.map(fileHandle => readdirRecursive(path.join(folderToSearch, fileHandle.name)))
-  );
-  return [...files, ...subFiles];
-}
