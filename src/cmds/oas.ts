@@ -10,7 +10,7 @@ export default class OASCommand extends Command {
     this.usage = 'oas';
     this.description = 'Helpful OpenAPI generation tooling. [inactive]';
     this.cmdCategory = CommandCategories.UTILITIES;
-    this.position = 1;
+    this.position = 2;
 
     this.args = [];
   }

@@ -19,7 +19,7 @@ export default class OpenCommand extends Command {
     this.usage = 'open';
     this.description = 'Open your current ReadMe project in the browser.';
     this.cmdCategory = CommandCategories.UTILITIES;
-    this.position = 2;
+    this.position = 1;
 
     this.args = [];
   }
