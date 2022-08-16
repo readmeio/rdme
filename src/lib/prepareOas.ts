@@ -83,7 +83,7 @@ export default async function prepareOas(path: string, command: 'openapi' | 'val
 
     debug(`number of possible OpenAPI/Swagger files found: ${possibleSpecFiles.length}`);
 
-    if (possibleSpecFiles.length === 0) {
+    if (!possibleSpecFiles.length) {
       fileFindingSpinner.fail();
       throw new Error(
         `We couldn't find an OpenAPI or Swagger definition.\n\nPlease specify the path to your definition with \`rdme ${command} ./path/to/api/definition\`.`
@@ -95,9 +95,7 @@ export default async function prepareOas(path: string, command: 'openapi' | 'val
     if (possibleSpecFiles.length === 1) {
       fileFindingSpinner.succeed(`${fileFindingSpinner.text} found! 🔍`);
       info(chalk.yellow(`We found ${specPath} and are attempting to ${action} it.`));
-    }
-
-    if (possibleSpecFiles.length > 1) {
+    } else if (possibleSpecFiles.length > 1) {
       /* istanbul ignore next */
       if ((ciDetect() && process.env.NODE_ENV !== 'testing') || process.env.TEST_CI) {
         fileFindingSpinner.fail();
