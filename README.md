@@ -142,8 +142,8 @@ If you run `rdme` within a directory that contains your OpenAPI or Swagger defin
 > **Note**
 > `rdme` will not scan anything in the following:
 >
-> - The working directory's `.git/` directory (if it exists)
-> - Any files/directories specified in the working directory's `.gitignore` file (if this file exists)
+> - Any `.git/` directories (if they exist)
+> - Any files/directories specified in `.gitignore` files (including any `.gitignore` files in subdirectories, if they exist)
 <!-- prettier-ignore-end -->
 
 ```sh
