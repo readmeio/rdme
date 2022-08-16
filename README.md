@@ -132,14 +132,7 @@ rdme openapi [path-to-file.json] --useSpecVersion
 
 #### Omitting the File Path
 
-If you run `rdme` within a directory that contains your OpenAPI or Swagger definition, you can omit the file path. We will then look for a file with the following names, and upload that:
-
-- `openapi.json`
-- `openapi.yaml`
-- `openapi.yml`
-- `swagger.json`
-- `swagger.yaml`
-- `swagger.yml`
+If you run `rdme` within a directory that contains your OpenAPI or Swagger definition, you can omit the file path. `rdme` will then look for JSON or YAML files (including in sub-directories) that contain a top-level [`openapi`](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#fixed-fields) or [`swagger`](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/2.0.md#fixed-fields) property. `rdme` will not scan any files or directories specified in the working directory's `.gitignore` file, if the file exists.
 
 ```sh
 rdme openapi
@@ -160,6 +153,8 @@ You can also perform a local validation of your API definition without uploading
 ```sh
 rdme validate [path-to-file.json]
 ```
+
+Similar to the `openapi` command, you can also [omit the file path](#omitting-the-file-path).
 
 ### Docs
 
