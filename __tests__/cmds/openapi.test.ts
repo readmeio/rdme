@@ -8,8 +8,8 @@ import SwaggerCommand from '../../src/cmds/swagger';
 import APIError from '../../src/lib/apiError';
 import getAPIMock from '../helpers/get-api-mock';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const promptHandler = require('../../src/lib/prompts');
+// // eslint-disable-next-line @typescript-eslint/no-var-requires
+// const promptHandler = require('../../src/lib/prompts');
 
 const openapi = new OpenAPICommand();
 const swagger = new SwaggerCommand();
@@ -428,11 +428,11 @@ describe('rdme openapi', () => {
       return mock.done();
     });
 
-    it('should request a version list if version is not found', async () => {
-      promptHandler.generatePrompts.mockResolvedValue({
-        option: 'create',
-        newVersion: '1.0.1',
-      });
+    it.only('should request a version list if version is not found', async () => {
+      // promptHandler.generatePrompts.mockResolvedValue({
+      //   option: 'create',
+      //   newVersion: '1.0.1',
+      // });
 
       const registryUUID = getRandomRegistryId();
 
@@ -440,7 +440,8 @@ describe('rdme openapi', () => {
         .get('/api/v1/version')
         .basicAuth({ user: key })
         .reply(200, [{ version: '1.0.0' }])
-        .post('/api/v1/version')
+        // This nock is failing because promptHandler.generatePrompts() isn't being called in this test
+        .post('/api/v1/version', { from: '1.0.0', version: '1.0.1', is_stable: false })
         .basicAuth({ user: key })
         .reply(200, { from: '1.0.0', version: '1.0.1' })
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))

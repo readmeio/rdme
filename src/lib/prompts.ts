@@ -26,6 +26,7 @@ type ParsedDocs = {
 };
 
 export function generatePrompts(versionList: VersionList, selectOnly = false) {
+  console.log("this function should be called... but it isn't and I have no idea why :sob:");
   return [
     {
       type: selectOnly ? null : 'select',
