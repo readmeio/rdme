@@ -1,8 +1,10 @@
 import type { Response } from 'node-fetch';
 
 import Enquirer from 'enquirer';
+import prompts from 'prompts';
 
 import * as promptHandler from '../../src/lib/prompts';
+import promptTerminal from '../../src/lib/promptWrapper';
 
 const versionlist = [
   {
@@ -43,40 +45,20 @@ describe('prompt test bed', () => {
   });
 
   describe('generatePrompts()', () => {
-    it('should not allow selection of version if chosen to create new version', async () => {
-      enquirer.on('prompt', async prompt => {
-        // eslint-disable-next-line default-case
-        switch (prompt.name) {
-          case 'option':
-            await prompt.keypress(null, { name: 'down' });
-            await prompt.submit();
-            break;
+    it('should return an update option if selected', async () => {
+      prompts.inject(['update', '1']);
 
-          case 'versionSelection':
-            // eslint-disable-next-line jest/no-conditional-expect
-            await expect(prompt.skip()).resolves.toBe(true);
-            break;
-
-          case 'newVersion':
-            // eslint-disable-next-line no-param-reassign
-            prompt.value = '1.2.1';
-            await prompt.submit();
-        }
-      });
-
-      await enquirer.prompt(promptHandler.generatePrompts(versionlist));
+      const answer = await promptTerminal(promptHandler.generatePrompts(versionlist));
+      expect(answer.versionSelection).toBe('1');
+      expect(answer.newVersion).toBeUndefined();
     });
 
     it('should return a create option if selected', async () => {
-      enquirer.on('prompt', async prompt => {
-        await prompt.keypress(null, { name: 'down' });
-        await prompt.keypress(null, { name: 'up' });
-        await prompt.submit();
-        await prompt.submit();
-      });
+      prompts.inject(['create', '1.1']);
 
-      const answer = await enquirer.prompt(promptHandler.generatePrompts(versionlist));
-      expect(answer.versionSelection).toBe('1');
+      const answer = await promptTerminal(promptHandler.generatePrompts(versionlist));
+      expect(answer.newVersion).toBe('1.1');
+      expect(answer.versionSelection).toBeUndefined();
     });
   });
 
