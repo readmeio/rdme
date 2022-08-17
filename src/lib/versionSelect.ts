@@ -49,7 +49,7 @@ export async function getProjectVersion(versionFlag: string, key: string, allowN
 
       if (option === 'update') return versionSelection;
 
-      await fetch(`${config.get('host')}/api/v1/version`, {
+      const { version: newVersionFromApi }: { version: string } = await fetch(`${config.get('host')}/api/v1/version`, {
         method: 'post',
         headers: cleanHeaders(key, new Headers({ 'Content-Type': 'application/json' })),
         body: JSON.stringify({
@@ -57,9 +57,9 @@ export async function getProjectVersion(versionFlag: string, key: string, allowN
           version: newVersion,
           is_stable: false,
         }),
-      });
+      }).then(res => handleRes(res));
 
-      return newVersion;
+      return newVersionFromApi;
     }
 
     const { versionSelection }: { versionSelection: string } = await prompt(
