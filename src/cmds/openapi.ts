@@ -231,9 +231,8 @@ export default class OpenAPICommand extends Command {
       const { option }: Answers<string> = await promptTerminal(
         promptHandler.createOasPrompt(apiSettingsBody, parsedDocs, totalPages, getSpecs)
       );
-
       Command.debug(`selection result: ${option}`);
-      if (!option) return null;
+
       return option === 'create' ? createSpec() : updateSpec(option);
     }
 
