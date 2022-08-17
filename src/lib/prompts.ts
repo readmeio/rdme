@@ -64,13 +64,23 @@ export function generatePrompts(versionList: VersionList, selectOnly = false) {
 function specOptions(specList: SpecList, parsedDocs: ParsedDocs, currPage: number, totalPages: number) {
   const specs = specList.map(s => {
     return {
+      description: `API Definition ID: ${s._id}`, // eslint-disable-line no-underscore-dangle
       title: s.title,
       value: s._id, // eslint-disable-line no-underscore-dangle
     };
   });
-  if (parsedDocs?.prev?.page) specs.push({ title: `< Prev (page ${currPage - 1} of ${totalPages})`, value: 'prev' });
+  if (parsedDocs?.prev?.page)
+    specs.push({
+      description: 'Go to the previous page',
+      title: `< Prev (page ${currPage - 1} of ${totalPages})`,
+      value: 'prev',
+    });
   if (parsedDocs?.next?.page) {
-    specs.push({ title: `Next (page ${currPage + 1} of ${totalPages}) >`, value: 'next' });
+    specs.push({
+      description: 'Go to the next page',
+      title: `Next (page ${currPage + 1} of ${totalPages}) >`,
+      value: 'next',
+    });
   }
   return specs as Choice[];
 }
