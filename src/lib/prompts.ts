@@ -1,4 +1,5 @@
 import type { Response } from 'node-fetch';
+import type { PromptObject } from 'prompts';
 
 import { prompt } from 'enquirer';
 import parse from 'parse-link-header';
@@ -27,41 +28,36 @@ type ParsedDocs = {
 export function generatePrompts(versionList: VersionList, selectOnly = false) {
   return [
     {
-      type: 'select',
+      type: selectOnly ? null : 'select',
       name: 'option',
       message: 'Would you like to use an existing project version or create a new one?',
-      skip() {
-        return selectOnly;
-      },
       choices: [
-        { message: 'Use existing', value: 'update' },
-        { message: 'Create a new version', value: 'create' },
+        { title: 'Use existing', value: 'update' },
+        { title: 'Create a new version', value: 'create' },
       ],
     },
     {
-      type: 'select',
+      type: (prev, values) => {
+        return (selectOnly ? false : values.option !== 'update') ? null : 'select';
+      },
       name: 'versionSelection',
       message: 'Select your desired version',
-      skip() {
-        return selectOnly ? false : this.enquirer.answers.option !== 'update';
-      },
       choices: versionList.map(v => {
         return {
-          message: v.version,
+          title: v.version,
           value: v.version,
         };
       }),
     },
     {
-      type: 'input',
+      type: (prev, values) => {
+        return (selectOnly ? true : values.option === 'update') ? null : 'text';
+      },
       name: 'newVersion',
       message: "What's your new version?",
-      skip() {
-        return selectOnly ? true : this.enquirer.answers.option === 'update';
-      },
       hint: '1.0.0',
     },
-  ];
+  ] as PromptObject[];
 }
 
 function specOptions(specList: SpecList, parsedDocs: ParsedDocs, currPage: number, totalPages: number) {
