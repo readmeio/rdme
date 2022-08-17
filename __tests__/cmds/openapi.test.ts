@@ -138,7 +138,36 @@ describe('rdme openapi', () => {
       return mock.done();
     });
 
-    it.todo('should test spec selection prompts');
+    it('should create a new spec via prompts', async () => {
+      prompts.inject(['create']);
+      const registryUUID = getRandomRegistryId();
+
+      const mock = getAPIMock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, [{ version }])
+        .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+        .get('/api/v1/api-specification')
+        .basicAuth({ user: key })
+        .reply(200, [{ _id: 'spec1', title: 'spec1_title' }])
+        .post('/api/v1/api-specification', { registryUUID })
+        .delayConnection(1000)
+        .basicAuth({ user: key })
+        .reply(201, { _id: 1 }, { location: exampleRefLocation });
+
+      const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
+
+      await expect(
+        openapi.run({
+          key,
+          version,
+          spec,
+        })
+      ).resolves.toBe(successfulUpload(spec));
+
+      return mock.done();
+    });
 
     it('should bundle and upload the expected content', async () => {
       let requestBody;
@@ -284,6 +313,39 @@ describe('rdme openapi', () => {
 
       expect(output).toMatch(/the `--version` option will be ignored/i);
 
+      return mock.done();
+    });
+
+    it('should update a spec via prompts', async () => {
+      prompts.inject(['update', 'spec2']);
+      const registryUUID = getRandomRegistryId();
+
+      const mock = getAPIMock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, [{ version }])
+        .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+        .get('/api/v1/api-specification')
+        .basicAuth({ user: key })
+        .reply(200, [
+          { _id: 'spec1', title: 'spec1_title' },
+          { _id: 'spec2', title: 'spec2_title' },
+        ])
+        .put('/api/v1/api-specification/spec2', { registryUUID })
+        .delayConnection(1000)
+        .basicAuth({ user: key })
+        .reply(201, { _id: 1 }, { location: exampleRefLocation });
+
+      const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
+
+      await expect(
+        openapi.run({
+          key,
+          version,
+          spec,
+        })
+      ).resolves.toBe(successfulUpdate(spec));
       return mock.done();
     });
   });

@@ -1,9 +1,10 @@
 import type { Response } from 'node-fetch';
-import type { PromptObject } from 'prompts';
+import type { Answers, Choice, PromptObject } from 'prompts';
 
-import { prompt } from 'enquirer';
 import parse from 'parse-link-header';
 import semver from 'semver';
+
+import promptTerminal from './promptWrapper';
 
 type SpecList = {
   _id: string;
@@ -63,15 +64,15 @@ export function generatePrompts(versionList: VersionList, selectOnly = false) {
 function specOptions(specList: SpecList, parsedDocs: ParsedDocs, currPage: number, totalPages: number) {
   const specs = specList.map(s => {
     return {
-      message: s.title,
+      title: s.title,
       value: s._id, // eslint-disable-line no-underscore-dangle
     };
   });
-  if (parsedDocs.prev.page) specs.push({ message: `< Prev (page ${currPage - 1} of ${totalPages})`, value: 'prev' });
-  if (parsedDocs.next.page) {
-    specs.push({ message: `Next (page ${currPage + 1} of ${totalPages}) >`, value: 'next' });
+  if (parsedDocs?.prev?.page) specs.push({ title: `< Prev (page ${currPage - 1} of ${totalPages})`, value: 'prev' });
+  if (parsedDocs?.next?.page) {
+    specs.push({ title: `Next (page ${currPage + 1} of ${totalPages}) >`, value: 'next' });
   }
-  return specs;
+  return specs as Choice[];
 }
 
 const updateOasPrompt = (
@@ -80,43 +81,44 @@ const updateOasPrompt = (
   currPage: number,
   totalPages: number,
   getSpecs: (url: string) => Promise<Response>
-) => [
-  {
-    type: 'select',
-    name: 'specId',
-    message: 'Select your desired file to update',
-    choices: specOptions(specList, parsedDocs, currPage, totalPages),
-    async result(spec: string) {
-      if (spec === 'prev') {
-        try {
-          const newSpecs = await getSpecs(`${parsedDocs.prev.url}`);
-          const newParsedDocs = parse(newSpecs.headers.get('link'));
-          const newSpecList = await newSpecs.json();
-          const { specId }: { specId: string } = await prompt(
-            updateOasPrompt(newSpecList, newParsedDocs, currPage - 1, totalPages, getSpecs)
-          );
-          return specId;
-        } catch (e) {
-          return null;
+) =>
+  [
+    {
+      type: 'select',
+      name: 'specId',
+      message: 'Select your desired file to update',
+      choices: specOptions(specList, parsedDocs, currPage, totalPages),
+      async format(spec: string) {
+        if (spec === 'prev') {
+          try {
+            const newSpecs = await getSpecs(`${parsedDocs.prev.url}`);
+            const newParsedDocs = parse(newSpecs.headers.get('link'));
+            const newSpecList = await newSpecs.json();
+            const { specId }: Answers<string> = await promptTerminal(
+              updateOasPrompt(newSpecList, newParsedDocs, currPage - 1, totalPages, getSpecs)
+            );
+            return specId;
+          } catch (e) {
+            return null;
+          }
+        } else if (spec === 'next') {
+          try {
+            const newSpecs = await getSpecs(`${parsedDocs.next.url}`);
+            const newParsedDocs = parse(newSpecs.headers.get('link'));
+            const newSpecList = await newSpecs.json();
+            const { specId }: Answers<string> = await promptTerminal(
+              updateOasPrompt(newSpecList, newParsedDocs, currPage + 1, totalPages, getSpecs)
+            );
+            return specId;
+          } catch (e) {
+            return null;
+          }
         }
-      } else if (spec === 'next') {
-        try {
-          const newSpecs = await getSpecs(`${parsedDocs.next.url}`);
-          const newParsedDocs = parse(newSpecs.headers.get('link'));
-          const newSpecList = await newSpecs.json();
-          const { specId }: { specId: string } = await prompt(
-            updateOasPrompt(newSpecList, newParsedDocs, currPage + 1, totalPages, getSpecs)
-          );
-          return specId;
-        } catch (e) {
-          return null;
-        }
-      }
 
-      return spec;
+        return spec;
+      },
     },
-  },
-];
+  ] as PromptObject[];
 
 export function createOasPrompt(
   specList: SpecList,
@@ -130,25 +132,21 @@ export function createOasPrompt(
       name: 'option',
       message: 'Would you like to update an existing OAS file or create a new one?',
       choices: [
-        { message: 'Update existing', value: 'update' },
-        { message: 'Create a new spec', value: 'create' },
+        { title: 'Update existing', value: 'update' },
+        { title: 'Create a new spec', value: 'create' },
       ],
-      async result(picked: string) {
+      async format(picked: string) {
         if (picked === 'update') {
-          try {
-            const { specId }: { specId: string } = await prompt(
-              updateOasPrompt(specList, parsedDocs, 1, totalPages, getSpecs)
-            );
-            return specId;
-          } catch (e) {
-            return null;
-          }
+          const { specId }: Answers<string> = await promptTerminal(
+            updateOasPrompt(specList, parsedDocs, 1, totalPages, getSpecs)
+          );
+          return specId;
         }
 
         return picked;
       },
     },
-  ];
+  ] as PromptObject[];
 }
 
 export function createVersionPrompt(

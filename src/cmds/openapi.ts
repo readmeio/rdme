@@ -1,9 +1,9 @@
 import type { CommandOptions } from '../lib/baseCommand';
 import type { RequestInit, Response } from 'node-fetch';
+import type { Answers } from 'prompts';
 
 import chalk from 'chalk';
 import config from 'config';
-import { prompt } from 'enquirer';
 import { Headers } from 'node-fetch';
 import ora from 'ora';
 import parse from 'parse-link-header';
@@ -13,6 +13,7 @@ import fetch, { cleanHeaders, handleRes } from '../lib/fetch';
 import { oraOptions } from '../lib/logger';
 import prepareOas from '../lib/prepareOas';
 import * as promptHandler from '../lib/prompts';
+import promptTerminal from '../lib/promptWrapper';
 import streamSpecToRegistry from '../lib/streamSpecToRegistry';
 import { getProjectVersion } from '../lib/versionSelect';
 
@@ -227,7 +228,7 @@ export default class OpenAPICommand extends Command {
       Command.debug(`api settings list response payload: ${JSON.stringify(apiSettingsBody)}`);
       if (!apiSettingsBody.length) return createSpec();
 
-      const { option }: { option: 'create' | 'update' } = await prompt(
+      const { option }: Answers<string> = await promptTerminal(
         promptHandler.createOasPrompt(apiSettingsBody, parsedDocs, totalPages, getSpecs)
       );
 

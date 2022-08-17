@@ -64,12 +64,9 @@ describe('prompt test bed', () => {
 
   describe('createOasPrompt()', () => {
     it('should return a create option if selected', async () => {
-      enquirer.on('prompt', async prompt => {
-        await prompt.keypress(null, { name: 'down' });
-        await prompt.submit();
-      });
+      prompts.inject(['create']);
 
-      const answer = await enquirer.prompt(
+      const answer = await promptTerminal(
         promptHandler.createOasPrompt(
           [
             {
@@ -83,19 +80,11 @@ describe('prompt test bed', () => {
         )
       );
 
-      expect(answer.option).toBe('create');
+      expect(answer).toStrictEqual({ option: 'create' });
     });
 
     it('should return specId if user chooses to update file', async () => {
-      jest.mock('enquirer');
-      enquirer.on('prompt', async prompt => {
-        await prompt.keypress(null, { name: 'down' });
-        await prompt.keypress(null, { name: 'up' });
-        await prompt.submit();
-      });
-
-      enquirer.prompt = jest.fn();
-      enquirer.prompt.mockReturnValue('spec1');
+      prompts.inject(['update', 'spec1']);
 
       const parsedDocs = {
         next: {
@@ -108,9 +97,9 @@ describe('prompt test bed', () => {
         },
       };
 
-      const answer = await enquirer.prompt(promptHandler.createOasPrompt(specList, parsedDocs, 1, getSpecs));
+      const answer = await promptTerminal(promptHandler.createOasPrompt(specList, parsedDocs, 1, getSpecs));
 
-      expect(answer).toBe('spec1');
+      expect(answer).toStrictEqual({ option: 'spec1' });
     });
   });
 
