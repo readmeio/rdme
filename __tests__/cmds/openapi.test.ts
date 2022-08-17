@@ -2,14 +2,12 @@
 import chalk from 'chalk';
 import config from 'config';
 import nock from 'nock';
+import prompts from 'prompts';
 
 import OpenAPICommand from '../../src/cmds/openapi';
 import SwaggerCommand from '../../src/cmds/swagger';
 import APIError from '../../src/lib/apiError';
 import getAPIMock from '../helpers/get-api-mock';
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const promptHandler = require('../../src/lib/prompts');
 
 const openapi = new OpenAPICommand();
 const swagger = new SwaggerCommand();
@@ -42,8 +40,6 @@ const successfulUpdate = (specPath, specType = 'OpenAPI') =>
   ].join('\n');
 
 const testWorkingDir = process.cwd();
-
-jest.mock('../../src/lib/prompts');
 
 const getCommandOutput = () => {
   return [consoleWarnSpy.mock.calls.join('\n\n'), consoleInfoSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
@@ -429,10 +425,7 @@ describe('rdme openapi', () => {
     });
 
     it('should request a version list if version is not found', async () => {
-      promptHandler.generatePrompts.mockResolvedValue({
-        option: 'create',
-        newVersion: '1.0.1',
-      });
+      prompts.inject(['create', '1.0.1']);
 
       const registryUUID = getRandomRegistryId();
 
@@ -440,7 +433,7 @@ describe('rdme openapi', () => {
         .get('/api/v1/version')
         .basicAuth({ user: key })
         .reply(200, [{ version: '1.0.0' }])
-        .post('/api/v1/version')
+        .post('/api/v1/version', { from: '1.0.0', version: '1.0.1', is_stable: false })
         .basicAuth({ user: key })
         .reply(200, { from: '1.0.0', version: '1.0.1' })
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
