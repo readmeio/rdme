@@ -25,5 +25,13 @@ export default async function promptTerminal<T extends string = string>(
     }
   };
 
-  return prompts({ ...questions, onState }, options);
+  if (Array.isArray(questions)) {
+    // eslint-disable-next-line no-param-reassign
+    questions = questions.map(question => ({ ...question, onState }));
+  } else {
+    // eslint-disable-next-line no-param-reassign
+    questions.onState = onState;
+  }
+
+  return prompts(questions, options);
 }
