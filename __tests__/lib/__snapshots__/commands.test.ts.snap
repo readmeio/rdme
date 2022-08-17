@@ -112,12 +112,12 @@ Object {
       Object {
         "description": "Helpful OpenAPI generation tooling. [inactive]",
         "name": "oas",
-        "position": 1,
+        "position": 2,
       },
       Object {
         "description": "Open your current ReadMe project in the browser.",
         "name": "open",
-        "position": 2,
+        "position": 1,
       },
     ],
     "description": "Other useful commands",
