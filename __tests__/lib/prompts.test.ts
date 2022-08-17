@@ -46,19 +46,24 @@ describe('prompt test bed', () => {
 
   describe('generatePrompts()', () => {
     it('should return an update option if selected', async () => {
-      prompts.inject(['update', '1']);
+      prompts.inject(['update', '2']);
 
       const answer = await promptTerminal(promptHandler.generatePrompts(versionlist));
-      expect(answer.versionSelection).toBe('1');
-      expect(answer.newVersion).toBeUndefined();
+      expect(answer).toStrictEqual({ option: 'update', versionSelection: '2' });
     });
 
     it('should return a create option if selected', async () => {
       prompts.inject(['create', '1.1']);
 
       const answer = await promptTerminal(promptHandler.generatePrompts(versionlist));
-      expect(answer.newVersion).toBe('1.1');
-      expect(answer.versionSelection).toBeUndefined();
+      expect(answer).toStrictEqual({ newVersion: '1.1', option: 'create' });
+    });
+
+    it('should return an update option if selectOnly=true', async () => {
+      prompts.inject(['2']);
+
+      const answer = await promptTerminal(promptHandler.generatePrompts(versionlist, true));
+      expect(answer).toStrictEqual({ versionSelection: '2' });
     });
   });
 
