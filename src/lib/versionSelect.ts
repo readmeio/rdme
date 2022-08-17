@@ -1,12 +1,12 @@
 import ciDetect from '@npmcli/ci-detect';
 import config from 'config';
 import { Headers } from 'node-fetch';
-import prompts from 'prompts';
 
 import APIError from './apiError';
 import fetch, { cleanHeaders, handleRes } from './fetch';
 import { warn } from './logger';
 import * as promptHandler from './prompts';
+import promptTerminal from './promptWrapper';
 
 /**
  * Validates and returns a project version.
@@ -39,7 +39,7 @@ export async function getProjectVersion(versionFlag: string, key: string, allowN
     }).then(res => handleRes(res));
 
     if (allowNewVersion) {
-      const { option, versionSelection, newVersion } = await prompts(promptHandler.generatePrompts(versionList));
+      const { option, versionSelection, newVersion } = await promptTerminal(promptHandler.generatePrompts(versionList));
 
       if (option === 'update') return versionSelection;
 
@@ -58,7 +58,7 @@ export async function getProjectVersion(versionFlag: string, key: string, allowN
       return newVersionFromApi;
     }
 
-    const { versionSelection } = await prompts(promptHandler.generatePrompts(versionList, true));
+    const { versionSelection } = await promptTerminal(promptHandler.generatePrompts(versionList, true));
 
     return versionSelection;
   } catch (err) {

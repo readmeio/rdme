@@ -2,9 +2,9 @@ import ciDetect from '@npmcli/ci-detect';
 import chalk from 'chalk';
 import OASNormalize from 'oas-normalize';
 import ora from 'ora';
-import prompts from 'prompts';
 
 import { debug, info, oraOptions } from './logger';
+import promptTerminal from './promptWrapper';
 import readdirRecursive from './readdirRecursive';
 
 type FileSelection = {
@@ -93,7 +93,7 @@ export default async function prepareOas(path: string, command: 'openapi' | 'val
 
       fileFindingSpinner.succeed(`${fileFindingSpinner.text} found! 🔍`);
 
-      const selection: FileSelection = await prompts({
+      const selection: FileSelection = await promptTerminal({
         name: 'file',
         message: `Multiple potential API definitions found! Which file would you like to ${action}?`,
         type: 'select',
