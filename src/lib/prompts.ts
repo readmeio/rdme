@@ -26,7 +26,7 @@ type ParsedDocs = {
   };
 };
 
-export function generatePrompts(versionList: VersionList, selectOnly = false) {
+export function generatePrompts(versionList: VersionList, selectOnly = false): PromptObject[] {
   return [
     {
       type: selectOnly ? null : 'select',
@@ -58,10 +58,10 @@ export function generatePrompts(versionList: VersionList, selectOnly = false) {
       message: "What's your new version?",
       hint: '1.0.0',
     },
-  ] as PromptObject[];
+  ];
 }
 
-function specOptions(specList: SpecList, parsedDocs: ParsedDocs, currPage: number, totalPages: number) {
+function specOptions(specList: SpecList, parsedDocs: ParsedDocs, currPage: number, totalPages: number): Choice[] {
   const specs = specList.map(s => {
     return {
       description: `API Definition ID: ${s._id}`, // eslint-disable-line no-underscore-dangle
@@ -82,7 +82,7 @@ function specOptions(specList: SpecList, parsedDocs: ParsedDocs, currPage: numbe
       value: 'next',
     });
   }
-  return specs as Choice[];
+  return specs;
 }
 
 const updateOasPrompt = (
@@ -91,51 +91,50 @@ const updateOasPrompt = (
   currPage: number,
   totalPages: number,
   getSpecs: (url: string) => Promise<Response>
-) =>
-  [
-    {
-      type: 'select',
-      name: 'specId',
-      message: 'Select your desired file to update',
-      choices: specOptions(specList, parsedDocs, currPage, totalPages),
-      async format(spec: string) {
-        if (spec === 'prev') {
-          try {
-            const newSpecs = await getSpecs(`${parsedDocs.prev.url}`);
-            const newParsedDocs = parse(newSpecs.headers.get('link'));
-            const newSpecList = await newSpecs.json();
-            const { specId }: Answers<string> = await promptTerminal(
-              updateOasPrompt(newSpecList, newParsedDocs, currPage - 1, totalPages, getSpecs)
-            );
-            return specId;
-          } catch (e) {
-            return null;
-          }
-        } else if (spec === 'next') {
-          try {
-            const newSpecs = await getSpecs(`${parsedDocs.next.url}`);
-            const newParsedDocs = parse(newSpecs.headers.get('link'));
-            const newSpecList = await newSpecs.json();
-            const { specId }: Answers<string> = await promptTerminal(
-              updateOasPrompt(newSpecList, newParsedDocs, currPage + 1, totalPages, getSpecs)
-            );
-            return specId;
-          } catch (e) {
-            return null;
-          }
+): PromptObject[] => [
+  {
+    type: 'select',
+    name: 'specId',
+    message: 'Select your desired file to update',
+    choices: specOptions(specList, parsedDocs, currPage, totalPages),
+    async format(spec: string) {
+      if (spec === 'prev') {
+        try {
+          const newSpecs = await getSpecs(`${parsedDocs.prev.url}`);
+          const newParsedDocs = parse(newSpecs.headers.get('link'));
+          const newSpecList = await newSpecs.json();
+          const { specId }: Answers<string> = await promptTerminal(
+            updateOasPrompt(newSpecList, newParsedDocs, currPage - 1, totalPages, getSpecs)
+          );
+          return specId;
+        } catch (e) {
+          return null;
         }
+      } else if (spec === 'next') {
+        try {
+          const newSpecs = await getSpecs(`${parsedDocs.next.url}`);
+          const newParsedDocs = parse(newSpecs.headers.get('link'));
+          const newSpecList = await newSpecs.json();
+          const { specId }: Answers<string> = await promptTerminal(
+            updateOasPrompt(newSpecList, newParsedDocs, currPage + 1, totalPages, getSpecs)
+          );
+          return specId;
+        } catch (e) {
+          return null;
+        }
+      }
 
-        return spec;
-      },
+      return spec;
     },
-  ] as PromptObject[];
+  },
+];
 
 export function createOasPrompt(
   specList: SpecList,
   parsedDocs: ParsedDocs,
   totalPages: number,
   getSpecs: ((url: string) => Promise<Response>) | null
-) {
+): PromptObject[] {
   return [
     {
       type: 'select',
@@ -156,7 +155,7 @@ export function createOasPrompt(
         return picked;
       },
     },
-  ] as PromptObject[];
+  ];
 }
 
 export function createVersionPrompt(
