@@ -1,13 +1,13 @@
 import type { CommandOptions } from '../../lib/baseCommand';
 
 import config from 'config';
-import { prompt } from 'enquirer';
 import { Headers } from 'node-fetch';
 import semver from 'semver';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
 import fetch, { cleanHeaders, handleRes } from '../../lib/fetch';
 import * as promptHandler from '../../lib/prompts';
+import promptTerminal from '../../lib/promptWrapper';
 
 export type VersionCreateOptions = { fork?: string } & VersionBaseOptions;
 
@@ -69,15 +69,12 @@ export default class CreateVersionCommand extends Command {
       }).then(res => handleRes(res));
     }
 
-    const versionPrompt = promptHandler.createVersionPrompt(versionList || [{}], {
+    const versionPrompt = promptHandler.createVersionPrompt(versionList || [], {
       newVersion: version,
       ...opts,
     });
 
-    const promptResponse: { from: string; is_beta: string; is_hidden: string; is_stable: string } = await prompt(
-      // @ts-expect-error Seems like our version prompts aren't what Enquirer actually expects.
-      versionPrompt
-    );
+    const promptResponse = await promptTerminal(versionPrompt);
 
     return fetch(`${config.get('host')}/api/v1/version`, {
       method: 'post',

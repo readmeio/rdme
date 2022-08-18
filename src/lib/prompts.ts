@@ -166,64 +166,52 @@ export function createVersionPrompt(
   isUpdate?: {
     is_stable: string;
   }
-) {
+): PromptObject[] {
   return [
     {
-      type: 'select',
+      type: opts.fork || isUpdate ? null : 'select',
       name: 'from',
       message: 'Which version would you like to fork from?',
-      skip() {
-        return opts.fork || isUpdate;
-      },
       choices: versionList.map(v => {
         return {
-          message: v.version,
+          title: v.version,
           value: v.version,
         };
       }),
     },
     {
-      type: 'input',
+      type: opts.newVersion || !isUpdate ? null : 'text',
       name: 'newVersion',
       message: "What's your new version?",
       initial: opts.newVersion || false,
-      skip() {
-        return opts.newVersion || !isUpdate;
-      },
       hint: '1.0.0',
       validate(val: string) {
         return semver.valid(semver.coerce(val)) ? true : this.styles.danger('Please specify a semantic version.');
       },
     },
     {
-      type: 'confirm',
+      type: opts.main || isUpdate?.is_stable ? null : 'confirm',
       name: 'is_stable',
       message: 'Would you like to make this version the main version for this project?',
-      skip() {
-        return opts.main || isUpdate?.is_stable;
-      },
     },
     {
-      type: 'confirm',
+      type: opts.beta ? null : 'confirm',
       name: 'is_beta',
       message: 'Should this version be in beta?',
-      skip: () => opts.beta,
     },
     {
-      type: 'confirm',
+      type: (prev, values) => {
+        return opts.isPublic || opts.main || values.is_stable ? null : 'confirm';
+      },
       name: 'is_hidden',
       message: 'Would you like to make this version public?',
-      skip() {
-        return opts.isPublic || opts.main || this.enquirer.answers.is_stable;
-      },
     },
     {
-      type: 'confirm',
+      type: (prev, values) => {
+        return opts.deprecated || opts.main || !isUpdate || values.is_stable ? null : 'confirm';
+      },
       name: 'is_deprecated',
       message: 'Would you like to deprecate this version?',
-      skip() {
-        return opts.deprecated || opts.main || !isUpdate || this.enquirer.answers.is_stable;
-      },
     },
   ];
 }

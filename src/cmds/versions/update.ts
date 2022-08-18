@@ -2,12 +2,12 @@ import type { CommandOptions } from '../../lib/baseCommand';
 import type { VersionBaseOptions } from './create';
 
 import config from 'config';
-import { prompt } from 'enquirer';
 import { Headers } from 'node-fetch';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
 import fetch, { cleanHeaders, handleRes } from '../../lib/fetch';
 import * as promptHandler from '../../lib/prompts';
+import promptTerminal from '../../lib/promptWrapper';
 import { getProjectVersion } from '../../lib/versionSelect';
 
 export type VersionUpdateOptions = { deprecated?: 'true' | 'false' } & VersionBaseOptions;
@@ -49,16 +49,7 @@ export default class UpdateVersionCommand extends Command {
       headers: cleanHeaders(key),
     }).then(res => handleRes(res));
 
-    const promptResponse: {
-      is_beta: string;
-      is_deprecated: string;
-      is_hidden: string;
-      is_stable: string;
-      newVersion: string;
-    } = await prompt(
-      // @ts-expect-error Seems like our version prompts aren't what Enquirer actually expects.
-      promptHandler.createVersionPrompt([{}], opts, foundVersion)
-    );
+    const promptResponse = await promptTerminal(promptHandler.createVersionPrompt([], opts, foundVersion));
 
     return fetch(`${config.get('host')}/api/v1/version/${selectedVersion}`, {
       method: 'put',
