@@ -186,7 +186,7 @@ export function createVersionPrompt(
       initial: opts.newVersion || false,
       hint: '1.0.0',
       validate(val: string) {
-        return semver.valid(semver.coerce(val)) ? true : this.styles.danger('Please specify a semantic version.');
+        return semver.valid(semver.coerce(val)) ? true : 'Please specify a semantic version.';
       },
     },
     {
