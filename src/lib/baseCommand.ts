@@ -45,6 +45,9 @@ export default class Command {
     }
   }
 
+  /**
+   * Used in any command where `version` is an option.
+   */
   getVersionArg() {
     return {
       name: 'version',
