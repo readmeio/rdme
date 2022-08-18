@@ -21,6 +21,18 @@ describe('rdme versions:create', () => {
     );
   });
 
+  it('should error if no version provided', () => {
+    return expect(createVersion.run({ key })).rejects.toStrictEqual(
+      new Error('Please specify a semantic version. See `rdme help versions:create` for help.')
+    );
+  });
+
+  it('should error if invaild version provided', () => {
+    return expect(createVersion.run({ key, version: 'test' })).rejects.toStrictEqual(
+      new Error('Please specify a semantic version. See `rdme help versions:create` for help.')
+    );
+  });
+
   it('should create a specific version', async () => {
     prompts.inject([version, false, true, true]);
     const newVersion = '1.0.1';
