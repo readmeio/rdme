@@ -16,7 +16,6 @@ export type VersionBaseOptions = {
   codename?: string;
   isPublic?: 'true' | 'false';
   main?: 'true' | 'false';
-  newVersion?: string;
 };
 
 export default class CreateVersionCommand extends Command {
@@ -54,7 +53,7 @@ export default class CreateVersionCommand extends Command {
     super.run(opts, true);
 
     let versionList;
-    const { key, version, codename, fork, main, beta, isPublic } = opts;
+    const { key, version, fork, codename, main, beta, isPublic } = opts;
 
     if (!version || !semver.valid(semver.coerce(version))) {
       return Promise.reject(

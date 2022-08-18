@@ -10,7 +10,7 @@ import * as promptHandler from '../../lib/prompts';
 import promptTerminal from '../../lib/promptWrapper';
 import { getProjectVersion } from '../../lib/versionSelect';
 
-export type VersionUpdateOptions = { deprecated?: 'true' | 'false' } & VersionBaseOptions;
+export type VersionUpdateOptions = { deprecated?: 'true' | 'false'; newVersion?: string } & VersionBaseOptions;
 
 export default class UpdateVersionCommand extends Command {
   constructor() {
@@ -29,14 +29,24 @@ export default class UpdateVersionCommand extends Command {
         description: 'Project API key',
       },
       this.getVersionArg(),
+      {
+        name: 'newVersion',
+        type: String,
+        description: 'What should the version be renamed to?',
+      },
       ...this.getVersionOpts(),
+      {
+        name: 'deprecated',
+        type: String,
+        description: 'Would you like to deprecate this version?',
+      },
     ];
   }
 
   async run(opts: CommandOptions<VersionUpdateOptions>) {
     super.run(opts, true);
 
-    const { key, version, codename, newVersion, main, beta, isPublic, deprecated } = opts;
+    const { key, version, newVersion, codename, main, beta, isPublic, deprecated } = opts;
 
     const selectedVersion = await getProjectVersion(version, key, false).catch(e => {
       return Promise.reject(e);
