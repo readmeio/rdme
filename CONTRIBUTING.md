@@ -12,7 +12,7 @@ npm run build
 If you need to debug commands quicker and re-building TS everytime is becoming cumbersome, you can use the debug command, like so:
 
 ```sh
-npm run debug:bin -- validate __tests__/__fixtures__/ref-oas/petstore.json
+npm run debug -- validate __tests__/__fixtures__/ref-oas/petstore.json
 ```
 
 ## Running GitHub Actions Locally 🐳
