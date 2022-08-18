@@ -1,7 +1,6 @@
 import type { VersionCreateOptions } from '../../src/cmds/versions/create';
 import type { Response } from 'node-fetch';
 
-import Enquirer from 'enquirer';
 import prompts from 'prompts';
 
 import * as promptHandler from '../../src/lib/prompts';
@@ -39,12 +38,6 @@ const getSpecs = () => {
 };
 
 describe('prompt test bed', () => {
-  let enquirer;
-
-  beforeEach(() => {
-    enquirer = new Enquirer({ show: false });
-  });
-
   describe('generatePrompts()', () => {
     it('should return an update option if selected', async () => {
       prompts.inject(['update', '2']);
@@ -110,49 +103,26 @@ describe('prompt test bed', () => {
   });
 
   describe('createVersionPrompt()', () => {
-    it('should allow user to choose a fork if flag is not passed', async () => {
-      const opts = { main: 'true', beta: 'true' } as VersionCreateOptions;
+    it('should allow user to choose a fork if flag is not passed (creating version)', async () => {
+      const opts = { newVersion: '1.2.1' } as VersionCreateOptions;
 
-      enquirer.on('prompt', async prompt => {
-        await prompt.keypress(null, { name: 'down' });
-        await prompt.keypress(null, { name: 'up' });
-        await prompt.submit();
-        if (prompt.name === 'newVersion') {
-          // eslint-disable-next-line no-param-reassign
-          prompt.value = '1.2.1';
-          await prompt.submit();
-        }
-      });
-      const answer = await enquirer.prompt(promptHandler.createVersionPrompt(versionlist, opts));
-      expect(answer.is_hidden).toBe(false);
-      expect(answer.from).toBe('1');
+      prompts.inject(['1', true, true]);
+
+      const answer = await promptTerminal(promptHandler.createVersionPrompt(versionlist, opts));
+      expect(answer).toStrictEqual({ from: '1', is_stable: true, is_beta: true });
     });
 
-    it('should skip fork prompt if value passed', async () => {
-      const opts = {
-        version: '1',
-        codename: 'test',
-        fork: '1.0.0',
-        main: 'false',
-        beta: 'true',
-        isPublic: 'false',
-      } as VersionCreateOptions;
+    it('should skip fork prompt if value passed (updating version)', async () => {
+      prompts.inject(['1.2.1', false, true, true, false]);
 
-      enquirer.on('prompt', async prompt => {
-        if (prompt.name === 'newVersion') {
-          // eslint-disable-next-line no-param-reassign
-          prompt.value = '1.2.1';
-          await prompt.submit();
-        }
-        await prompt.submit();
-        await prompt.submit();
-        await prompt.submit();
+      const answer = await promptTerminal(promptHandler.createVersionPrompt(versionlist, {}, { is_stable: false }));
+      expect(answer).toStrictEqual({
+        newVersion: '1.2.1',
+        is_stable: false,
+        is_beta: true,
+        is_hidden: true,
+        is_deprecated: false,
       });
-      const answer = await enquirer.prompt(
-        promptHandler.createVersionPrompt(versionlist, opts, { is_stable: '1.2.1' })
-      );
-      expect(answer.is_hidden).toBe(false);
-      expect(answer.from).toBe('');
     });
   });
 });
