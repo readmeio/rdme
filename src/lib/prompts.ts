@@ -182,7 +182,7 @@ export function createVersionPrompt(
     {
       type: opts.newVersion || !isUpdate ? null : 'text',
       name: 'newVersion',
-      message: "What's your new version?",
+      message: 'What should the version be renamed to?',
       initial: opts.newVersion || false,
       hint: '1.0.0',
       validate(val: string) {
