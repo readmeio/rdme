@@ -20,7 +20,9 @@ export default async function promptTerminal<T extends string = string>(
       // If we don't re-enable the terminal cursor before exiting the program, the cursor will
       // remain hidden.
       enableTerminalCursor();
-      process.stdout.write('\n');
+      process.stdout.write('\n\n');
+      process.stdout.write('Thanks for using rdme! See you soon ✌️');
+      process.stdout.write('\n\n');
       process.exit(1);
     }
   };
