@@ -2,4 +2,6 @@
 
 exports[`rdme login should post to /login on the API 1`] = `"Successfully logged in as user@example.com to the subdomain project."`;
 
+exports[`rdme login should post to /login on the API if passing in project via opt 1`] = `"Successfully logged in as user@example.com to the subdomain project."`;
+
 exports[`rdme login should send 2fa token if provided 1`] = `"Successfully logged in as user@example.com to the subdomain project."`;

@@ -1,22 +1,16 @@
 import type { CommandOptions } from '../lib/baseCommand';
 
-import { promisify } from 'util';
-
 import chalk from 'chalk';
 import config from 'config';
-import { validate as isEmail } from 'isemail';
-import readPkg from 'read';
+import isEmail from 'validator/lib/isEmail';
 
 import Command, { CommandCategories } from '../lib/baseCommand';
 import configStore from '../lib/configstore';
 import fetch, { handleRes } from '../lib/fetch';
-
-const read = promisify(readPkg);
-
-const testing = process.env.NODE_ENV === 'testing';
+import promptTerminal from '../lib/promptWrapper';
 
 export type Options = {
-  '2fa'?: string;
+  '2fa'?: boolean;
   email?: string;
   password?: string;
   project?: string;
@@ -50,23 +44,39 @@ export default class LoginCommand extends Command {
   async run(opts: CommandOptions<Options>) {
     super.run(opts);
 
-    let { email, password, project, token } = opts;
+    let { project } = opts;
 
-    /* istanbul ignore next */
-    async function getCredentials() {
-      return {
-        email: await read({ prompt: 'Email:', default: configStore.get('email') }),
-        password: await read({ prompt: 'Password:', silent: true }),
-        project: opts.project || (await read({ prompt: 'Project subdomain:', default: configStore.get('project') })),
-        token: opts['2fa'] && (await read({ prompt: '2fa token:' })),
-      };
-    }
+    const promptResults = await promptTerminal([
+      {
+        type: 'text',
+        name: 'email',
+        message: 'What is your email address?',
+        initial: configStore.get('email'),
+        validate(val) {
+          return isEmail(val) ? true : 'Please provide a valid email address.';
+        },
+      },
+      {
+        type: 'invisible',
+        name: 'password',
+        message: 'What is your password?',
+      },
+      {
+        type: opts.project ? null : 'text',
+        name: 'project',
+        message: 'What project are you logging into?',
+        initial: configStore.get('project'),
+      },
+      {
+        type: opts['2fa'] ? 'text' : null,
+        name: 'token',
+        message: 'What is your 2FA token?',
+      },
+    ]);
 
-    // We only want to prompt for input outside of the test environment
-    /* istanbul ignore next */
-    if (!testing) {
-      ({ email, password, project, token } = await getCredentials());
-    }
+    const { email, password, token } = promptResults;
+
+    if (promptResults.project) project = promptResults.project;
 
     if (!project) {
       return Promise.reject(new Error('No project subdomain provided. Please use `--project`.'));
