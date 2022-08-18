@@ -164,7 +164,7 @@ export function createVersionPrompt(
   versionList: VersionList,
   opts: VersionCreateOptions & VersionUpdateOptions,
   isUpdate?: {
-    is_stable: string;
+    is_stable: boolean;
   }
 ): PromptObject[] {
   return [
