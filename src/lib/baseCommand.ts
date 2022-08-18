@@ -54,6 +54,34 @@ export default class Command {
     };
   }
 
+  /**
+   * Used in the versions:create and versions:update commands.
+   */
+  getVersionOpts() {
+    return [
+      {
+        name: 'codename',
+        type: String,
+        description: 'The codename, or nickname, for a particular version.',
+      },
+      {
+        name: 'main',
+        type: String,
+        description: 'Should this version be the primary (default) version for your project?',
+      },
+      {
+        name: 'beta',
+        type: String,
+        description: 'Is this version in beta?',
+      },
+      {
+        name: 'isPublic',
+        type: String,
+        description: 'Would you like to make this version public? Any primary version must be public.',
+      },
+    ];
+  }
+
   static debug(msg: string) {
     debug(msg);
   }
