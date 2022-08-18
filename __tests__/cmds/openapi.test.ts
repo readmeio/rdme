@@ -348,6 +348,8 @@ describe('rdme openapi', () => {
       ).resolves.toBe(successfulUpdate(spec));
       return mock.done();
     });
+
+    it.todo('should paginate to next and previous pages of specs');
   });
 
   describe('versioning', () => {
