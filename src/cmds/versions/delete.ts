@@ -36,9 +36,7 @@ export default class DeleteVersionCommand extends Command {
 
     const { key, version } = opts;
 
-    const selectedVersion = await getProjectVersion(version, key, false).catch(e => {
-      return Promise.reject(e);
-    });
+    const selectedVersion = await getProjectVersion(version, key, false);
 
     Command.debug(`selectedVersion: ${selectedVersion}`);
 
