@@ -1,3 +1,4 @@
+import type { VersionCreateOptions } from '../../src/cmds/versions/create';
 import type { Response } from 'node-fetch';
 
 import Enquirer from 'enquirer';
@@ -110,7 +111,7 @@ describe('prompt test bed', () => {
 
   describe('createVersionPrompt()', () => {
     it('should allow user to choose a fork if flag is not passed', async () => {
-      const opts = { main: true, beta: true };
+      const opts = { main: 'true', beta: 'true' } as VersionCreateOptions;
 
       enquirer.on('prompt', async prompt => {
         await prompt.keypress(null, { name: 'down' });
@@ -132,10 +133,10 @@ describe('prompt test bed', () => {
         version: '1',
         codename: 'test',
         fork: '1.0.0',
-        main: false,
-        beta: true,
-        isPublic: false,
-      };
+        main: 'false',
+        beta: 'true',
+        isPublic: 'false',
+      } as VersionCreateOptions;
 
       enquirer.on('prompt', async prompt => {
         if (prompt.name === 'newVersion') {

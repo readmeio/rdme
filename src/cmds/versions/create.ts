@@ -9,12 +9,14 @@ import Command, { CommandCategories } from '../../lib/baseCommand';
 import fetch, { cleanHeaders, handleRes } from '../../lib/fetch';
 import * as promptHandler from '../../lib/prompts';
 
-export type Options = {
-  beta?: string | boolean;
+export type VersionCreateOptions = { fork?: string } & VersionBaseOptions;
+
+export type VersionBaseOptions = {
+  beta?: 'true' | 'false';
   codename?: string;
-  fork?: string;
-  isPublic?: string | boolean;
-  main?: string | boolean;
+  isPublic?: 'true' | 'false';
+  main?: 'true' | 'false';
+  newVersion?: string;
 };
 
 export default class CreateVersionCommand extends Command {
@@ -48,7 +50,7 @@ export default class CreateVersionCommand extends Command {
     ];
   }
 
-  async run(opts: CommandOptions<Options>) {
+  async run(opts: CommandOptions<VersionCreateOptions>) {
     super.run(opts, true);
 
     let versionList;

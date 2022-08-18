@@ -1,3 +1,5 @@
+import type { VersionCreateOptions } from 'cmds/versions/create';
+import type { VersionUpdateOptions } from 'cmds/versions/update';
 import type { Response } from 'node-fetch';
 import type { Answers, Choice, PromptObject } from 'prompts';
 
@@ -160,14 +162,7 @@ export function createOasPrompt(
 
 export function createVersionPrompt(
   versionList: VersionList,
-  opts: {
-    beta?: string | boolean;
-    deprecated?: string;
-    fork?: string;
-    isPublic?: string | boolean;
-    main?: string | boolean;
-    newVersion?: string;
-  },
+  opts: VersionCreateOptions & VersionUpdateOptions,
   isUpdate?: {
     is_stable: string;
   }
