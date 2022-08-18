@@ -44,7 +44,6 @@
     "configstore": "^5.0.0",
     "debug": "^4.3.3",
     "editor": "^1.0.0",
-    "enquirer": "^2.3.0",
     "form-data": "^4.0.0",
     "gray-matter": "^4.0.1",
     "ignore": "^5.2.0",
