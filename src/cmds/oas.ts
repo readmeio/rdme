@@ -1,7 +1,9 @@
 import type { CommandOptions } from '../lib/baseCommand';
 
 import Command, { CommandCategories } from '../lib/baseCommand';
+import isHidden from '../lib/decorators/isHidden';
 
+@isHidden
 export default class OASCommand extends Command {
   constructor() {
     super();

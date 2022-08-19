@@ -132,7 +132,7 @@ Object {
     "commands": Array [
       Object {
         "description": "Helpful OpenAPI generation tooling. [inactive]",
-        "hidden": false,
+        "hidden": true,
         "name": "oas",
         "position": 2,
       },
