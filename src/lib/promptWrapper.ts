@@ -15,25 +15,13 @@ export default async function promptTerminal<T extends string = string>(
     process.stdout.write('\x1B[?25h');
   };
 
-  const onState = (state: { aborted: boolean }) => {
-    if (state.aborted) {
-      // If we don't re-enable the terminal cursor before exiting the program, the cursor will
-      // remain hidden.
-      enableTerminalCursor();
-      process.stdout.write('\n\n');
-      process.stdout.write('Thanks for using rdme! See you soon ✌️');
-      process.stdout.write('\n\n');
-      process.exit(1);
-    }
+  const onCancel = () => {
+    enableTerminalCursor();
+    process.stdout.write('\n');
+    process.stdout.write('Thanks for using rdme! See you soon ✌️');
+    process.stdout.write('\n\n');
+    process.exit(1);
   };
 
-  if (Array.isArray(questions)) {
-    // eslint-disable-next-line no-param-reassign
-    questions = questions.map(question => ({ ...question, onState }));
-  } else {
-    // eslint-disable-next-line no-param-reassign
-    questions.onState = onState;
-  }
-
-  return prompts(questions, options);
+  return prompts(questions, { onCancel, ...options });
 }
