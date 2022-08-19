@@ -11,6 +11,10 @@ export default async function promptTerminal<T extends string = string>(
   questions: prompts.PromptObject<T> | prompts.PromptObject<T>[],
   options?: prompts.Options
 ): Promise<prompts.Answers<T>> {
+  /**
+   * The CTRL+C handler discussed above.
+   * @see {@link https://github.com/terkelg/prompts#optionsoncancel}
+   */
   const onCancel = () => {
     process.stdout.write('\n');
     process.stdout.write('Thanks for using rdme! See you soon ✌️');
