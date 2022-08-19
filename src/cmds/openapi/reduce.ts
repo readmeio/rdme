@@ -172,7 +172,8 @@ export default class OpenAPIReduceCommand extends Command {
 
       spinner.succeed(`${spinner.text} done! ✅`);
     } catch (err) {
-      Command.debug(`err=${err.message}`);
+      Command.debug(`reducer err: ${err.message}`);
+      spinner.fail();
       throw err;
     }
 
