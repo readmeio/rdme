@@ -74,7 +74,7 @@ export default class OpenAPICommand extends Command {
   }
 
   async run(opts: CommandOptions<Options>) {
-    super.run(opts, true);
+    super.run(opts);
 
     const { key, id, spec, create, useSpecVersion, version, workingDirectory } = opts;
 

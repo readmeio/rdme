@@ -50,7 +50,7 @@ export default class CreateVersionCommand extends Command {
   }
 
   async run(opts: CommandOptions<VersionCreateOptions>) {
-    super.run(opts, true);
+    super.run(opts);
 
     let versionList;
     const { key, version, fork, codename, main, beta, isPublic } = opts;

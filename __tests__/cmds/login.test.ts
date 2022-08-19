@@ -103,5 +103,21 @@ describe('rdme login', () => {
     mock.done();
   });
 
-  it.todo('should error if trying to access a project that is not yours');
+  it('should error if trying to access a project that is not yours', async () => {
+    const projectThatIsNotYours = 'unauthorized-project';
+    prompts.inject([email, password, projectThatIsNotYours]);
+    const errorResponse = {
+      error: 'PROJECT_NOTFOUND',
+      message: `The project (${projectThatIsNotYours}) can't be found.`,
+      suggestion: `The project is referred to as your \`subdomain\` in the dashboard when you're looking for it. If you're sure it exists, maybe you don't have access to it? You can check if it exists here: https://${projectThatIsNotYours}.readme.io.`,
+      help: 'If you need help, email support@readme.io',
+    };
+
+    const mock = getAPIMock()
+      .post('/api/v1/login', { email, password, project: projectThatIsNotYours })
+      .reply(404, errorResponse);
+
+    await expect(cmd.run({})).rejects.toStrictEqual(new APIError(errorResponse));
+    mock.done();
+  });
 });

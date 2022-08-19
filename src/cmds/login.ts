@@ -2,6 +2,7 @@ import type { CommandOptions } from '../lib/baseCommand';
 
 import chalk from 'chalk';
 import config from 'config';
+import prompts from 'prompts';
 import isEmail from 'validator/lib/isEmail';
 
 import Command, { CommandCategories } from '../lib/baseCommand';
@@ -44,9 +45,9 @@ export default class LoginCommand extends Command {
   async run(opts: CommandOptions<Options>) {
     super.run(opts);
 
-    let { project } = opts;
+    prompts.override(opts);
 
-    const promptResults = await promptTerminal([
+    const { email, password, project, token } = await promptTerminal([
       {
         type: 'text',
         name: 'email',
@@ -62,7 +63,7 @@ export default class LoginCommand extends Command {
         message: 'What is your password?',
       },
       {
-        type: opts.project ? null : 'text',
+        type: 'text',
         name: 'project',
         message: 'What project are you logging into?',
         initial: configStore.get('project'),
@@ -73,10 +74,6 @@ export default class LoginCommand extends Command {
         message: 'What is your 2FA token?',
       },
     ]);
-
-    const { email, password, token } = promptResults;
-
-    if (promptResults.project) project = promptResults.project;
 
     if (!project) {
       return Promise.reject(new Error('No project subdomain provided. Please use `--project`.'));

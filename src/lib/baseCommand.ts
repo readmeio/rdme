@@ -71,11 +71,11 @@ export default class Command {
    */
   args: OptionDefinition[];
 
-  run(opts: CommandOptions<{}>, requiresAuth?: boolean): void | Promise<string> {
+  run(opts: CommandOptions<{}>): void | Promise<string> {
     Command.debug(`command: ${this.command}`);
     Command.debug(`opts: ${JSON.stringify(opts)}`);
 
-    if (requiresAuth) {
+    if (this.args.some(arg => arg.name === 'key')) {
       if (!opts.key) {
         throw new Error('No project API key provided. Please use `--key`.');
       }

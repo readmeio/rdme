@@ -106,7 +106,7 @@ export default class VersionsCommand extends Command {
   }
 
   async run(opts: CommandOptions<Options>) {
-    super.run(opts, true);
+    super.run(opts);
 
     const { key, version, raw } = opts;
 
