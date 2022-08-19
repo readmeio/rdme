@@ -61,7 +61,6 @@ export default class OpenAPIReduceCommand extends Command {
         type: 'select',
         name: 'reduceBy',
         message: 'Would you like to reduce by paths or tags?',
-        initial: 0,
         choices: [
           { title: 'Tags', value: 'tags' },
           { title: 'Paths', value: 'paths' },
