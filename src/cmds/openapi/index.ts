@@ -92,6 +92,10 @@ export default class OpenAPICommand extends Command {
       );
     }
 
+    if (create && id) {
+      Command.warn("We'll be using the `--create` option , so the `--id` parameter will be ignored.");
+    }
+
     // Reason we're hardcoding in command here is because `swagger` command
     // relies on this and we don't want to use `swagger` in this function
     const { bundledSpec, specPath, specType, specVersion } = await prepareOas(spec, 'openapi');
@@ -220,8 +224,9 @@ export default class OpenAPICommand extends Command {
       });
     }
 
+    if (create) return createSpec();
+
     if (!id) {
-      if (create) return createSpec();
       Command.debug('no id parameter, retrieving list of API specs');
       const apiSettings = await getSpecs('/api/v1/api-specification');
 
