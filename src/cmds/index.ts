@@ -12,6 +12,7 @@ import LogoutCommand from './logout';
 import OASCommand from './oas';
 import OpenCommand from './open';
 import OpenAPICommand from './openapi';
+import OpenAPIReduceCommand from './openapi/reduce';
 import SwaggerCommand from './swagger';
 import ValidateCommand from './validate';
 import VersionsCommand from './versions';
@@ -44,6 +45,7 @@ const commands = {
   oas: OASCommand,
   open: OpenCommand,
   openapi: OpenAPICommand,
+  'openapi:reduce': OpenAPIReduceCommand,
   swagger: SwaggerCommand,
   validate: ValidateCommand,
   whoami: WhoAmICommand,
