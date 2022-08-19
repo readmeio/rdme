@@ -1,7 +1,7 @@
 import type { VersionCreateOptions } from 'cmds/versions/create';
 import type { VersionUpdateOptions } from 'cmds/versions/update';
 import type { Response } from 'node-fetch';
-import type { Answers, Choice, PromptObject } from 'prompts';
+import type { Choice, PromptObject } from 'prompts';
 
 import parse from 'parse-link-header';
 import semver from 'semver';
@@ -71,12 +71,13 @@ function specOptions(specList: SpecList, parsedDocs: ParsedDocs, currPage: numbe
       value: s._id, // eslint-disable-line no-underscore-dangle
     };
   });
-  if (parsedDocs?.prev?.page)
+  if (parsedDocs?.prev?.page) {
     specs.push({
       description: 'Go to the previous page',
       title: `< Prev (page ${currPage - 1} of ${totalPages})`,
       value: 'prev',
     });
+  }
   if (parsedDocs?.next?.page) {
     specs.push({
       description: 'Go to the next page',
@@ -105,7 +106,9 @@ const updateOasPrompt = (
           const newSpecs = await getSpecs(`${parsedDocs.prev.url}`);
           const newParsedDocs = parse(newSpecs.headers.get('link'));
           const newSpecList = await newSpecs.json();
-          const { specId }: Answers<string> = await promptTerminal(
+          // @todo: figure out how to add a stricter type here, see:
+          // https://github.com/readmeio/rdme/pull/570#discussion_r949715913
+          const { specId } = await promptTerminal(
             updateOasPrompt(newSpecList, newParsedDocs, currPage - 1, totalPages, getSpecs)
           );
           return specId;
@@ -117,7 +120,9 @@ const updateOasPrompt = (
           const newSpecs = await getSpecs(`${parsedDocs.next.url}`);
           const newParsedDocs = parse(newSpecs.headers.get('link'));
           const newSpecList = await newSpecs.json();
-          const { specId }: Answers<string> = await promptTerminal(
+          // @todo: figure out how to add a stricter type here, see:
+          // https://github.com/readmeio/rdme/pull/570#discussion_r949715913
+          const { specId } = await promptTerminal(
             updateOasPrompt(newSpecList, newParsedDocs, currPage + 1, totalPages, getSpecs)
           );
           return specId;
@@ -146,11 +151,11 @@ export function createOasPrompt(
         { title: 'Update existing', value: 'update' },
         { title: 'Create a new spec', value: 'create' },
       ],
-      async format(picked: string) {
+      async format(picked: 'update' | 'create') {
         if (picked === 'update') {
-          const { specId }: Answers<string> = await promptTerminal(
-            updateOasPrompt(specList, parsedDocs, 1, totalPages, getSpecs)
-          );
+          // @todo: figure out how to add a stricter type here, see:
+          // https://github.com/readmeio/rdme/pull/570#discussion_r949715913
+          const { specId } = await promptTerminal(updateOasPrompt(specList, parsedDocs, 1, totalPages, getSpecs));
           return specId;
         }
 

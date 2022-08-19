@@ -1,6 +1,5 @@
 import type { CommandOptions } from '../lib/baseCommand';
 import type { RequestInit, Response } from 'node-fetch';
-import type { Answers } from 'prompts';
 
 import chalk from 'chalk';
 import config from 'config';
@@ -228,7 +227,9 @@ export default class OpenAPICommand extends Command {
       Command.debug(`api settings list response payload: ${JSON.stringify(apiSettingsBody)}`);
       if (!apiSettingsBody.length) return createSpec();
 
-      const { option }: Answers<string> = await promptTerminal(
+      // @todo: figure out how to add a stricter type here, see:
+      // https://github.com/readmeio/rdme/pull/570#discussion_r949715913
+      const { option } = await promptTerminal(
         promptHandler.createOasPrompt(apiSettingsBody, parsedDocs, totalPages, getSpecs)
       );
       Command.debug(`selection result: ${option}`);

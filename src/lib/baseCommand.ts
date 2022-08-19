@@ -58,7 +58,7 @@ export default class Command {
   }
 
   /**
-   * Used in the versions:create and versions:update commands.
+   * Used in the `versions:create` and `versions:update` commands.
    */
   getVersionOpts() {
     return [
