@@ -1,6 +1,7 @@
 import type { CommandOptions } from '../../lib/baseCommand';
 
 import fs from 'fs';
+import path from 'path';
 
 import chalk from 'chalk';
 import jsonpath from 'jsonpath';
@@ -86,9 +87,9 @@ export default class OpenAPIReduceCommand extends Command {
         message: 'Choose which paths to reduce by:',
         min: 1,
         choices: () => {
-          return Object.keys(parsedBundledSpec.paths).map(path => ({
-            title: path,
-            value: path,
+          return Object.keys(parsedBundledSpec.paths).map(p => ({
+            title: p,
+            value: p,
           }));
         },
       },
@@ -98,9 +99,9 @@ export default class OpenAPIReduceCommand extends Command {
         message: 'Choose which HTTP methods that are available across these paths to reduce by:',
         min: 1,
         choices: (prev, values) => {
-          const paths = values.paths;
+          const paths: string[] = values.paths;
           let methods = paths
-            .map((path: string) => Object.keys(parsedBundledSpec.paths[path]))
+            .map((p: string) => Object.keys(parsedBundledSpec.paths[p]))
             .flat()
             .filter((method: string) => method.toLowerCase() !== 'parameters');
 
@@ -117,6 +118,10 @@ export default class OpenAPIReduceCommand extends Command {
         type: 'text',
         name: 'outputPath',
         message: 'Enter the path to save your reduced API definition to:',
+        initial: () => {
+          const extension = path.extname(specPath);
+          return `${path.basename(specPath).split(extension)[0]}-reduced${extension}`;
+        },
         validate: value => {
           if (value.length) {
             if (!fs.existsSync(value)) {
