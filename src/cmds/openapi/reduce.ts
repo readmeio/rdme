@@ -75,7 +75,14 @@ export default class OpenAPIReduceCommand extends Command {
         message: 'Choose which tags to reduce by:',
         min: 1,
         choices: () => {
-          const tags = jsonpath.query(parsedBundledSpec, '$..paths..tags').flat();
+          const tags = jsonpath
+            .query(parsedBundledSpec, '$..paths..tags')
+            .flat()
+            .filter(tag => {
+              // A spec may have a `name: tag` which this JSONPath query will pick up. Since that
+              // definitely isn't a tag we want here we need to filter them out.
+              return typeof tag === 'string';
+            });
 
           return [...new Set(tags)].map(tag => ({
             title: tag,
