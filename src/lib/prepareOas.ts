@@ -40,7 +40,7 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
 
     const fileFindingSpinner = ora({ text: 'Attempting to locate API definitions...', ...oraOptions() }).start();
 
-    let action;
+    let action: 'upload' | 'reduce' | 'validate';
     switch (command) {
       case 'openapi':
         action = 'upload';
