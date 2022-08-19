@@ -38,7 +38,7 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
      * - no files are found
      */
 
-    const fileFindingSpinner = ora({ text: 'Attempting to locate API definitions...', ...oraOptions() }).start();
+    const fileFindingSpinner = ora({ text: 'Looking for API definitions...', ...oraOptions() }).start();
 
     let action: 'upload' | 'reduce' | 'validate';
     switch (command) {
