@@ -170,7 +170,7 @@ Similar to the `openapi` command, you can also [omit the file path](#omitting-th
 
 #### Reducing an API Definition
 
-We also offer a tool that allows you to reduce a large API definition down to a specific set of tags or paths. This can be useful if you're debugging a problematic schema somewhere, or if you have a file that is just too big to manage.
+We also offer a tool that allows you to reduce a large API definition down to a specific set of tags or paths. This can be useful if you're debugging a problematic schema somewhere, or if you have a file that is too big to maintain.
 
 ```sh
 rdme openapi:reduce [path-to-file.json]
