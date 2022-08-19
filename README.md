@@ -168,6 +168,16 @@ rdme validate [path-to-file.json]
 
 Similar to the `openapi` command, you can also [omit the file path](#omitting-the-file-path).
 
+#### Reducing an API Definition
+
+We also offer a tool that allows you to reduce a large API definition down to a specific set of tags or paths. This can be useful if you're debugging a problematic schema somewhere, or if you have a file that is just too big to manage.
+
+```sh
+rdme openapi:reduce [path-to-file.json]
+```
+
+The command will ask you a couple questions about how you wish to reduce the file and then do so. And as with the `openapi` command, you can also [omit the file path](#omitting-the-file-path).
+
 ### Docs
 
 #### Syncing a Folder of Markdown Docs to ReadMe

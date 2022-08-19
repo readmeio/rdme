@@ -97,6 +97,7 @@ export default class OpenAPIReduceCommand extends Command {
         type: (prev, values) => (values.reduceBy === 'paths' ? 'multiselect' : null),
         name: 'methods',
         message: 'Choose which HTTP methods that are available across these paths to reduce by:',
+        min: 1,
         choices: (prev, values) => {
           const paths = values.paths;
           let methods = paths
