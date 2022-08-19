@@ -115,7 +115,7 @@ export default class OpenAPIReduceCommand extends Command {
       },
       {
         type: 'text',
-        name: 'ouputPath',
+        name: 'outputPath',
         message: 'Enter the path to save your reduced API definition to:',
         validate: value => {
           if (value.length) {
