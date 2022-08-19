@@ -20,6 +20,7 @@ export type Options = {
   id?: string;
   spec?: string;
   version?: string;
+  create?: boolean;
   useSpecVersion?: boolean;
   workingDirectory?: string;
 };
@@ -54,6 +55,11 @@ export default class OpenAPICommand extends Command {
         defaultOption: true,
       },
       {
+        name: 'create',
+        type: Boolean,
+        description: 'Bypasses the update/create prompt and creates a new API definition.',
+      },
+      {
         name: 'useSpecVersion',
         type: Boolean,
         description:
@@ -70,7 +76,7 @@ export default class OpenAPICommand extends Command {
   async run(opts: CommandOptions<Options>) {
     super.run(opts, true);
 
-    const { key, id, spec, useSpecVersion, version, workingDirectory } = opts;
+    const { key, id, spec, create, useSpecVersion, version, workingDirectory } = opts;
 
     let selectedVersion = version;
     let isUpdate: boolean;
@@ -215,6 +221,7 @@ export default class OpenAPICommand extends Command {
     }
 
     if (!id) {
+      if (create) return createSpec();
       Command.debug('no id parameter, retrieving list of API specs');
       const apiSettings = await getSpecs('/api/v1/api-specification');
 
