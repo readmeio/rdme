@@ -150,7 +150,7 @@ export default class OpenAPIReduceCommand extends Command {
       }, {}),
     });
 
-    Command.debug(`saving reduced spec to ${promptResults.ouputPath}`);
+    Command.debug(`saving reduced spec to ${promptResults.outputPath}`);
 
     await fs.writeFileSync(promptResults.ouputPath, JSON.stringify(reducedSpec, null, 2));
 
