@@ -20,18 +20,55 @@ export enum CommandCategories {
 }
 
 export default class Command {
+  /**
+   * The command name
+   *
+   * @example openapi
+   */
   command: string;
 
+  /**
+   * Example command usage, used on invidivual command help screens
+   *
+   * @example openapi [file] [options]
+   */
   usage: string;
 
+  /**
+   * The command description, used on help screens
+   *
+   * @example Upload, or resync, your OpenAPI/Swagger definition to ReadMe.
+   */
   description: string;
 
+  /**
+   * The category that the command belongs to, used on
+   * the general help screen to group commands together
+   * and on individual command help screens
+   * to show related commands
+   *
+   * @example CommandCategories.APIS
+   */
   cmdCategory: CommandCategories;
 
+  /**
+   * The order in which to display the command within the `cmdCategory`
+   *
+   * @example 1
+   */
   position: number;
 
+  /**
+   * Arguments to hide from the individual command help screen
+   * (typically used for hiding default arguments)
+   *
+   * @example ['spec']
+   */
   hiddenArgs: string[] = [];
 
+  /**
+   * All documented arguments for the command
+   */
   args: OptionDefinition[];
 
   run(opts: CommandOptions<{}>, requiresAuth?: boolean): void | Promise<string> {
