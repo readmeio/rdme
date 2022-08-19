@@ -1,4 +1,4 @@
-import type { CommandOptions } from '../lib/baseCommand';
+import type { CommandOptions } from '../../lib/baseCommand';
 import type { RequestInit, Response } from 'node-fetch';
 
 import chalk from 'chalk';
@@ -7,14 +7,14 @@ import { Headers } from 'node-fetch';
 import ora from 'ora';
 import parse from 'parse-link-header';
 
-import Command, { CommandCategories } from '../lib/baseCommand';
-import fetch, { cleanHeaders, handleRes } from '../lib/fetch';
-import { oraOptions } from '../lib/logger';
-import prepareOas from '../lib/prepareOas';
-import * as promptHandler from '../lib/prompts';
-import promptTerminal from '../lib/promptWrapper';
-import streamSpecToRegistry from '../lib/streamSpecToRegistry';
-import { getProjectVersion } from '../lib/versionSelect';
+import Command, { CommandCategories } from '../../lib/baseCommand';
+import fetch, { cleanHeaders, handleRes } from '../../lib/fetch';
+import { oraOptions } from '../../lib/logger';
+import prepareOas from '../../lib/prepareOas';
+import * as promptHandler from '../../lib/prompts';
+import promptTerminal from '../../lib/promptWrapper';
+import streamSpecToRegistry from '../../lib/streamSpecToRegistry';
+import { getProjectVersion } from '../../lib/versionSelect';
 
 export type Options = {
   id?: string;
@@ -68,7 +68,7 @@ export default class OpenAPICommand extends Command {
   }
 
   async run(opts: CommandOptions<Options>) {
-    super.run(opts, true);
+    super.run(opts);
 
     const { key, id, spec, useSpecVersion, version, workingDirectory } = opts;
 

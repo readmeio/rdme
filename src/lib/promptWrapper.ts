@@ -1,3 +1,4 @@
+import ciDetect from '@npmcli/ci-detect';
 import prompts from 'prompts';
 
 /**
@@ -11,29 +12,47 @@ export default async function promptTerminal<T extends string = string>(
   questions: prompts.PromptObject<T> | prompts.PromptObject<T>[],
   options?: prompts.Options
 ): Promise<prompts.Answers<T>> {
-  const enableTerminalCursor = () => {
-    process.stdout.write('\x1B[?25h');
+  /**
+   * The CTRL+C handler discussed above.
+   * @see {@link https://github.com/terkelg/prompts#optionsoncancel}
+   */
+  const onCancel = () => {
+    process.stdout.write('\n');
+    process.stdout.write('Thanks for using rdme! See you soon ✌️');
+    process.stdout.write('\n\n');
+    process.exit(1);
   };
 
-  const onState = (state: { aborted: boolean }) => {
-    if (state.aborted) {
-      // If we don't re-enable the terminal cursor before exiting the program, the cursor will
-      // remain hidden.
-      enableTerminalCursor();
+  /**
+   * Runs a check before every prompt renders to make sure that
+   * prompt is not being run in a CI environment.
+   *
+   * @todo it'd be cool if we could just throw an error here
+   * and have it bubble up the error to our top-level error handler
+   * in src/cli.ts
+   */
+  function onRender() {
+    if (ciDetect() && process.env.NODE_ENV !== 'testing') {
+      process.stdout.write('\n');
+      process.stdout.write(
+        'Yikes! Looks like we prompted you for something in a CI environment. Are you missing an argument?'
+      );
       process.stdout.write('\n\n');
-      process.stdout.write('Thanks for using rdme! See you soon ✌️');
+      process.stdout.write('Try running `rdme <command> --help` or get in touch at support@readme.io.');
       process.stdout.write('\n\n');
       process.exit(1);
     }
-  };
+  }
 
   if (Array.isArray(questions)) {
     // eslint-disable-next-line no-param-reassign
-    questions = questions.map(question => ({ ...question, onState }));
+    questions = questions.map(question => ({ onRender, ...question }));
   } else {
+    // @ts-expect-error onRender is not a documented type,
+    // but it definitely is a thing: https://github.com/terkelg/prompts#onrender
     // eslint-disable-next-line no-param-reassign
-    questions.onState = onState;
+    questions.onRender = onRender;
   }
 
-  return prompts(questions, options);
+  return prompts(questions, { onCancel, ...options });
 }

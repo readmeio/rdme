@@ -4,10 +4,10 @@ import config from 'config';
 import nock from 'nock';
 import prompts from 'prompts';
 
-import OpenAPICommand from '../../src/cmds/openapi';
-import SwaggerCommand from '../../src/cmds/swagger';
-import APIError from '../../src/lib/apiError';
-import getAPIMock from '../helpers/get-api-mock';
+import OpenAPICommand from '../../../src/cmds/openapi';
+import SwaggerCommand from '../../../src/cmds/swagger';
+import APIError from '../../../src/lib/apiError';
+import getAPIMock from '../../helpers/get-api-mock';
 
 const openapi = new OpenAPICommand();
 const swagger = new SwaggerCommand();

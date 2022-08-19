@@ -30,9 +30,14 @@ Object {
         "position": 1,
       },
       Object {
+        "description": "Reduce an OpenAPI definition into a smaller subset.",
+        "name": "openapi:reduce",
+        "position": 3,
+      },
+      Object {
         "description": "Alias for \`rdme openapi\`. [deprecated]",
         "name": "swagger",
-        "position": 2,
+        "position": 4,
       },
       Object {
         "description": "Validate your OpenAPI/Swagger definition.",

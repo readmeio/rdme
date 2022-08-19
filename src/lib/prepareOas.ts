@@ -14,12 +14,12 @@ type FileSelection = {
 /**
  * Normalizes, validates, and (optionally) bundles an OpenAPI definition.
  *
- * @param {String} path path to spec file. if this is missing, the current directory is searched
- * for certain file names
- * @param command string to distinguish if it's being run in
- * an 'openapi' or 'validate' context
+ * @param path Path to a spec file. If this is missing, the current directory is searched for
+ *    certain file names.
+ * @param command The command context in which this is being run within (uploading a spec,
+ *    validation, or reducing one).
  */
-export default async function prepareOas(path: string, command: 'openapi' | 'validate') {
+export default async function prepareOas(path: string, command: 'openapi' | 'openapi:reduce' | 'validate') {
   let specPath = path;
 
   if (!specPath) {
@@ -38,9 +38,19 @@ export default async function prepareOas(path: string, command: 'openapi' | 'val
      * - no files are found
      */
 
-    const fileFindingSpinner = ora({ text: 'Attempting to locate API definitions...', ...oraOptions() }).start();
+    const fileFindingSpinner = ora({ text: 'Looking for API definitions...', ...oraOptions() }).start();
 
-    const action = command === 'openapi' ? 'upload' : 'validate';
+    let action: 'upload' | 'reduce' | 'validate';
+    switch (command) {
+      case 'openapi':
+        action = 'upload';
+        break;
+      case 'openapi:reduce':
+        action = 'reduce';
+        break;
+      default:
+        action = command;
+    }
 
     const jsonAndYamlFiles = readdirRecursive('.', true).filter(
       file =>
@@ -104,7 +114,7 @@ export default async function prepareOas(path: string, command: 'openapi' | 'val
     }
   }
 
-  const spinner = ora({ text: `Validating API definition located at ${specPath}...`, ...oraOptions() }).start();
+  const spinner = ora({ text: `Validating the API definition located at ${specPath}...`, ...oraOptions() }).start();
 
   debug(`about to normalize spec located at ${specPath}`);
   const oas = new OASNormalize(specPath, { colorizeErrors: true, enablePaths: true });
@@ -130,7 +140,7 @@ export default async function prepareOas(path: string, command: 'openapi' | 'val
 
   let bundledSpec = '';
 
-  if (command === 'openapi') {
+  if (command === 'openapi' || command === 'openapi:reduce') {
     bundledSpec = await oas.bundle().then(res => {
       return JSON.stringify(res);
     });

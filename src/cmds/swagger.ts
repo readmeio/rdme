@@ -14,7 +14,7 @@ export default class SwaggerCommand extends OpenAPICommand {
     this.command = 'swagger';
     this.usage = 'swagger [file] [options]';
     this.description = 'Alias for `rdme openapi`. [deprecated]';
-    this.position += 1;
+    this.position = 4;
   }
 
   async run(opts: CommandOptions<Options>) {

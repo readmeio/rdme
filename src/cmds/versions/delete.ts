@@ -32,7 +32,7 @@ export default class DeleteVersionCommand extends Command {
   }
 
   async run(opts: CommandOptions<{}>) {
-    super.run(opts, true);
+    super.run(opts);
 
     const { key, version } = opts;
 
