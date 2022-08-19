@@ -156,6 +156,6 @@ export default class OpenAPIReduceCommand extends Command {
 
     Command.debug('reduced spec saved');
 
-    return Promise.resolve(chalk.green(`${specPath} has been reduced to ${promptResults.ouputPath}! 🤏`));
+    return Promise.resolve(chalk.green(`${specPath} has been reduced to ${promptResults.outputPath}! 🤏`));
   }
 }
