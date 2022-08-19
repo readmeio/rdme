@@ -101,7 +101,7 @@ This will upload `path-to-openapi.json` to your project and return an ID and URL
 rdme openapi [path-to-file.json]
 ```
 
-If you want to bypass the prompt to upload or create an API definition, you can pass the `--create` flag:
+If you want to bypass the prompt to create or update an API definition, you can pass the `--create` flag:
 
 ```sh
 rdme openapi [path-to-file.json] --version={project-version} --create

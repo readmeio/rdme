@@ -57,7 +57,7 @@ export default class OpenAPICommand extends Command {
       {
         name: 'create',
         type: Boolean,
-        description: 'Bypasses the update/create prompt and creates a new API definition.',
+        description: 'Bypasses the create/update prompt and creates a new API definition.',
       },
       {
         name: 'useSpecVersion',
