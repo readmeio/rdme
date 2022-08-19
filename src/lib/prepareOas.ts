@@ -16,7 +16,7 @@ type FileSelection = {
  *
  * @param path Path to a spec file. If this is missing, the current directory is searched for
  *    certain file names.
- * @param action The action context in which this is being run within (uploading a spec,
+ * @param command The command context in which this is being run within (uploading a spec,
  *    validation, or reducing one).
  */
 export default async function prepareOas(path: string, command: 'openapi' | 'openapi:reduce' | 'validate') {
