@@ -23,7 +23,6 @@ Options
 Related commands
 
   $ rdme validate   Validate your OpenAPI/Swagger definition. 
-  $ rdme swagger    Alias for \`rdme openapi\`. [deprecated]    
 "
 `;
 
@@ -50,7 +49,6 @@ Options
 Related commands
 
   $ rdme validate   Validate your OpenAPI/Swagger definition. 
-  $ rdme swagger    Alias for \`rdme openapi\`. [deprecated]    
 "
 `;
 
@@ -77,7 +75,6 @@ Options
 Related commands
 
   $ rdme validate   Validate your OpenAPI/Swagger definition. 
-  $ rdme swagger    Alias for \`rdme openapi\`. [deprecated]    
 "
 `;
 
