@@ -2,14 +2,12 @@
 import chalk from 'chalk';
 import config from 'config';
 import nock from 'nock';
+import prompts from 'prompts';
 
 import OpenAPICommand from '../../src/cmds/openapi';
 import SwaggerCommand from '../../src/cmds/swagger';
 import APIError from '../../src/lib/apiError';
 import getAPIMock from '../helpers/get-api-mock';
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const promptHandler = require('../../src/lib/prompts');
 
 const openapi = new OpenAPICommand();
 const swagger = new SwaggerCommand();
@@ -42,8 +40,6 @@ const successfulUpdate = (specPath, specType = 'OpenAPI') =>
   ].join('\n');
 
 const testWorkingDir = process.cwd();
-
-jest.mock('../../src/lib/prompts');
 
 const getCommandOutput = () => {
   return [consoleWarnSpy.mock.calls.join('\n\n'), consoleInfoSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
@@ -142,7 +138,36 @@ describe('rdme openapi', () => {
       return mock.done();
     });
 
-    it.todo('should test spec selection prompts');
+    it('should create a new spec via prompts', async () => {
+      prompts.inject(['create']);
+      const registryUUID = getRandomRegistryId();
+
+      const mock = getAPIMock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, [{ version }])
+        .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+        .get('/api/v1/api-specification')
+        .basicAuth({ user: key })
+        .reply(200, [{ _id: 'spec1', title: 'spec1_title' }])
+        .post('/api/v1/api-specification', { registryUUID })
+        .delayConnection(1000)
+        .basicAuth({ user: key })
+        .reply(201, { _id: 1 }, { location: exampleRefLocation });
+
+      const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
+
+      await expect(
+        openapi.run({
+          key,
+          version,
+          spec,
+        })
+      ).resolves.toBe(successfulUpload(spec));
+
+      return mock.done();
+    });
 
     it('should bundle and upload the expected content', async () => {
       let requestBody;
@@ -290,6 +315,41 @@ describe('rdme openapi', () => {
 
       return mock.done();
     });
+
+    it('should update a spec via prompts', async () => {
+      prompts.inject(['update', 'spec2']);
+      const registryUUID = getRandomRegistryId();
+
+      const mock = getAPIMock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, [{ version }])
+        .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+        .get('/api/v1/api-specification')
+        .basicAuth({ user: key })
+        .reply(200, [
+          { _id: 'spec1', title: 'spec1_title' },
+          { _id: 'spec2', title: 'spec2_title' },
+        ])
+        .put('/api/v1/api-specification/spec2', { registryUUID })
+        .delayConnection(1000)
+        .basicAuth({ user: key })
+        .reply(201, { _id: 1 }, { location: exampleRefLocation });
+
+      const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
+
+      await expect(
+        openapi.run({
+          key,
+          version,
+          spec,
+        })
+      ).resolves.toBe(successfulUpdate(spec));
+      return mock.done();
+    });
+
+    it.todo('should paginate to next and previous pages of specs');
   });
 
   describe('versioning', () => {
@@ -429,10 +489,7 @@ describe('rdme openapi', () => {
     });
 
     it('should request a version list if version is not found', async () => {
-      promptHandler.generatePrompts.mockResolvedValue({
-        option: 'create',
-        newVersion: '1.0.1',
-      });
+      prompts.inject(['create', '1.0.1']);
 
       const registryUUID = getRandomRegistryId();
 
@@ -440,7 +497,7 @@ describe('rdme openapi', () => {
         .get('/api/v1/version')
         .basicAuth({ user: key })
         .reply(200, [{ version: '1.0.0' }])
-        .post('/api/v1/version')
+        .post('/api/v1/version', { from: '1.0.0', version: '1.0.1', is_stable: false })
         .basicAuth({ user: key })
         .reply(200, { from: '1.0.0', version: '1.0.1' })
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))

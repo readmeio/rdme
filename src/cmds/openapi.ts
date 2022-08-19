@@ -3,7 +3,6 @@ import type { RequestInit, Response } from 'node-fetch';
 
 import chalk from 'chalk';
 import config from 'config';
-import { prompt } from 'enquirer';
 import { Headers } from 'node-fetch';
 import ora from 'ora';
 import parse from 'parse-link-header';
@@ -13,6 +12,7 @@ import fetch, { cleanHeaders, handleRes } from '../lib/fetch';
 import { oraOptions } from '../lib/logger';
 import prepareOas from '../lib/prepareOas';
 import * as promptHandler from '../lib/prompts';
+import promptTerminal from '../lib/promptWrapper';
 import streamSpecToRegistry from '../lib/streamSpecToRegistry';
 import { getProjectVersion } from '../lib/versionSelect';
 
@@ -227,12 +227,13 @@ export default class OpenAPICommand extends Command {
       Command.debug(`api settings list response payload: ${JSON.stringify(apiSettingsBody)}`);
       if (!apiSettingsBody.length) return createSpec();
 
-      const { option }: { option: 'create' | 'update' } = await prompt(
+      // @todo: figure out how to add a stricter type here, see:
+      // https://github.com/readmeio/rdme/pull/570#discussion_r949715913
+      const { option } = await promptTerminal(
         promptHandler.createOasPrompt(apiSettingsBody, parsedDocs, totalPages, getSpecs)
       );
-
       Command.debug(`selection result: ${option}`);
-      if (!option) return null;
+
       return option === 'create' ? createSpec() : updateSpec(option);
     }
 

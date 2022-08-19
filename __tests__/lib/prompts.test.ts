@@ -1,8 +1,10 @@
+import type { VersionCreateOptions } from '../../src/cmds/versions/create';
 import type { Response } from 'node-fetch';
 
-import Enquirer from 'enquirer';
+import prompts from 'prompts';
 
 import * as promptHandler from '../../src/lib/prompts';
+import promptTerminal from '../../src/lib/promptWrapper';
 
 const versionlist = [
   {
@@ -36,58 +38,34 @@ const getSpecs = () => {
 };
 
 describe('prompt test bed', () => {
-  let enquirer;
-
-  beforeEach(() => {
-    enquirer = new Enquirer({ show: false });
-  });
-
   describe('generatePrompts()', () => {
-    it('should not allow selection of version if chosen to create new version', async () => {
-      enquirer.on('prompt', async prompt => {
-        // eslint-disable-next-line default-case
-        switch (prompt.name) {
-          case 'option':
-            await prompt.keypress(null, { name: 'down' });
-            await prompt.submit();
-            break;
+    it('should return an update option if selected', async () => {
+      prompts.inject(['update', '2']);
 
-          case 'versionSelection':
-            // eslint-disable-next-line jest/no-conditional-expect
-            await expect(prompt.skip()).resolves.toBe(true);
-            break;
-
-          case 'newVersion':
-            // eslint-disable-next-line no-param-reassign
-            prompt.value = '1.2.1';
-            await prompt.submit();
-        }
-      });
-
-      await enquirer.prompt(promptHandler.generatePrompts(versionlist));
+      const answer = await promptTerminal(promptHandler.generatePrompts(versionlist));
+      expect(answer).toStrictEqual({ option: 'update', versionSelection: '2' });
     });
 
     it('should return a create option if selected', async () => {
-      enquirer.on('prompt', async prompt => {
-        await prompt.keypress(null, { name: 'down' });
-        await prompt.keypress(null, { name: 'up' });
-        await prompt.submit();
-        await prompt.submit();
-      });
+      prompts.inject(['create', '1.1']);
 
-      const answer = await enquirer.prompt(promptHandler.generatePrompts(versionlist));
-      expect(answer.versionSelection).toBe('1');
+      const answer = await promptTerminal(promptHandler.generatePrompts(versionlist));
+      expect(answer).toStrictEqual({ newVersion: '1.1', option: 'create' });
+    });
+
+    it('should return an update option if selectOnly=true', async () => {
+      prompts.inject(['2']);
+
+      const answer = await promptTerminal(promptHandler.generatePrompts(versionlist, true));
+      expect(answer).toStrictEqual({ versionSelection: '2' });
     });
   });
 
   describe('createOasPrompt()', () => {
     it('should return a create option if selected', async () => {
-      enquirer.on('prompt', async prompt => {
-        await prompt.keypress(null, { name: 'down' });
-        await prompt.submit();
-      });
+      prompts.inject(['create']);
 
-      const answer = await enquirer.prompt(
+      const answer = await promptTerminal(
         promptHandler.createOasPrompt(
           [
             {
@@ -101,19 +79,11 @@ describe('prompt test bed', () => {
         )
       );
 
-      expect(answer.option).toBe('create');
+      expect(answer).toStrictEqual({ option: 'create' });
     });
 
     it('should return specId if user chooses to update file', async () => {
-      jest.mock('enquirer');
-      enquirer.on('prompt', async prompt => {
-        await prompt.keypress(null, { name: 'down' });
-        await prompt.keypress(null, { name: 'up' });
-        await prompt.submit();
-      });
-
-      enquirer.prompt = jest.fn();
-      enquirer.prompt.mockReturnValue('spec1');
+      prompts.inject(['update', 'spec1']);
 
       const parsedDocs = {
         next: {
@@ -126,56 +96,33 @@ describe('prompt test bed', () => {
         },
       };
 
-      const answer = await enquirer.prompt(promptHandler.createOasPrompt(specList, parsedDocs, 1, getSpecs));
+      const answer = await promptTerminal(promptHandler.createOasPrompt(specList, parsedDocs, 1, getSpecs));
 
-      expect(answer).toBe('spec1');
+      expect(answer).toStrictEqual({ option: 'spec1' });
     });
   });
 
   describe('createVersionPrompt()', () => {
-    it('should allow user to choose a fork if flag is not passed', async () => {
-      const opts = { main: true, beta: true };
+    it('should allow user to choose a fork if flag is not passed (creating version)', async () => {
+      const opts = { newVersion: '1.2.1' } as VersionCreateOptions;
 
-      enquirer.on('prompt', async prompt => {
-        await prompt.keypress(null, { name: 'down' });
-        await prompt.keypress(null, { name: 'up' });
-        await prompt.submit();
-        if (prompt.name === 'newVersion') {
-          // eslint-disable-next-line no-param-reassign
-          prompt.value = '1.2.1';
-          await prompt.submit();
-        }
-      });
-      const answer = await enquirer.prompt(promptHandler.createVersionPrompt(versionlist, opts));
-      expect(answer.is_hidden).toBe(false);
-      expect(answer.from).toBe('1');
+      prompts.inject(['1', true, true]);
+
+      const answer = await promptTerminal(promptHandler.createVersionPrompt(versionlist, opts));
+      expect(answer).toStrictEqual({ from: '1', is_stable: true, is_beta: true });
     });
 
-    it('should skip fork prompt if value passed', async () => {
-      const opts = {
-        version: '1',
-        codename: 'test',
-        fork: '1.0.0',
-        main: false,
-        beta: true,
-        isPublic: false,
-      };
+    it('should skip fork prompt if value passed (updating version)', async () => {
+      prompts.inject(['1.2.1', false, true, true, false]);
 
-      enquirer.on('prompt', async prompt => {
-        if (prompt.name === 'newVersion') {
-          // eslint-disable-next-line no-param-reassign
-          prompt.value = '1.2.1';
-          await prompt.submit();
-        }
-        await prompt.submit();
-        await prompt.submit();
-        await prompt.submit();
+      const answer = await promptTerminal(promptHandler.createVersionPrompt(versionlist, {}, { is_stable: false }));
+      expect(answer).toStrictEqual({
+        newVersion: '1.2.1',
+        is_stable: false,
+        is_beta: true,
+        is_hidden: true,
+        is_deprecated: false,
       });
-      const answer = await enquirer.prompt(
-        promptHandler.createVersionPrompt(versionlist, opts, { is_stable: '1.2.1' })
-      );
-      expect(answer.is_hidden).toBe(false);
-      expect(answer.from).toBe('');
     });
   });
 });

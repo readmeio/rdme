@@ -1,20 +1,21 @@
 import type { CommandOptions } from '../../lib/baseCommand';
 
 import config from 'config';
-import { prompt } from 'enquirer';
 import { Headers } from 'node-fetch';
 import semver from 'semver';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
 import fetch, { cleanHeaders, handleRes } from '../../lib/fetch';
 import * as promptHandler from '../../lib/prompts';
+import promptTerminal from '../../lib/promptWrapper';
 
-export type Options = {
-  beta?: string | boolean;
+export type VersionCreateOptions = { fork?: string } & VersionBaseOptions;
+
+export type VersionBaseOptions = {
+  beta?: 'true' | 'false';
   codename?: string;
-  fork?: string;
-  isPublic?: string | boolean;
-  main?: string | boolean;
+  isPublic?: 'true' | 'false';
+  main?: 'true' | 'false';
 };
 
 export default class CreateVersionCommand extends Command {
@@ -44,34 +45,15 @@ export default class CreateVersionCommand extends Command {
         type: String,
         description: "The semantic version which you'd like to fork from.",
       },
-      {
-        name: 'codename',
-        type: String,
-        description: 'The codename, or nickname, for a particular version.',
-      },
-      {
-        name: 'main',
-        type: String,
-        description: 'Should this version be the primary (default) version for your project?',
-      },
-      {
-        name: 'beta',
-        type: String,
-        description: 'Is this version in beta?',
-      },
-      {
-        name: 'isPublic',
-        type: String,
-        description: 'Would you like to make this version public? Any primary version must be public.',
-      },
+      ...this.getVersionOpts(),
     ];
   }
 
-  async run(opts: CommandOptions<Options>) {
+  async run(opts: CommandOptions<VersionCreateOptions>) {
     super.run(opts, true);
 
     let versionList;
-    const { key, version, codename, fork, main, beta, isPublic } = opts;
+    const { key, version, fork, codename, main, beta, isPublic } = opts;
 
     if (!version || !semver.valid(semver.coerce(version))) {
       return Promise.reject(
@@ -86,15 +68,12 @@ export default class CreateVersionCommand extends Command {
       }).then(res => handleRes(res));
     }
 
-    const versionPrompt = promptHandler.createVersionPrompt(versionList || [{}], {
+    const versionPrompt = promptHandler.createVersionPrompt(versionList || [], {
       newVersion: version,
       ...opts,
     });
 
-    const promptResponse: { from: string; is_beta: string; is_hidden: string; is_stable: string } = await prompt(
-      // @ts-expect-error Seems like our version prompts aren't what Enquirer actually expects.
-      versionPrompt
-    );
+    const promptResponse = await promptTerminal(versionPrompt);
 
     return fetch(`${config.get('host')}/api/v1/version`, {
       method: 'post',

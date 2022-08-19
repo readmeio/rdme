@@ -1,12 +1,12 @@
 import ciDetect from '@npmcli/ci-detect';
 import config from 'config';
-import { prompt } from 'enquirer';
 import { Headers } from 'node-fetch';
 
 import APIError from './apiError';
 import fetch, { cleanHeaders, handleRes } from './fetch';
 import { warn } from './logger';
 import * as promptHandler from './prompts';
+import promptTerminal from './promptWrapper';
 
 /**
  * Validates and returns a project version.
@@ -39,17 +39,11 @@ export async function getProjectVersion(versionFlag: string, key: string, allowN
     }).then(res => handleRes(res));
 
     if (allowNewVersion) {
-      const {
-        option,
-        versionSelection,
-        newVersion,
-      }: { option: 'update' | 'create'; versionSelection: string; newVersion: string } = await prompt(
-        promptHandler.generatePrompts(versionList)
-      );
+      const { option, versionSelection, newVersion } = await promptTerminal(promptHandler.generatePrompts(versionList));
 
       if (option === 'update') return versionSelection;
 
-      await fetch(`${config.get('host')}/api/v1/version`, {
+      const newVersionFromApi = await fetch(`${config.get('host')}/api/v1/version`, {
         method: 'post',
         headers: cleanHeaders(key, new Headers({ 'Content-Type': 'application/json' })),
         body: JSON.stringify({
@@ -57,14 +51,14 @@ export async function getProjectVersion(versionFlag: string, key: string, allowN
           version: newVersion,
           is_stable: false,
         }),
-      });
+      })
+        .then(res => handleRes(res))
+        .then(res => res.version);
 
-      return newVersion;
+      return newVersionFromApi;
     }
 
-    const { versionSelection }: { versionSelection: string } = await prompt(
-      promptHandler.generatePrompts(versionList, true)
-    );
+    const { versionSelection } = await promptTerminal(promptHandler.generatePrompts(versionList, true));
 
     return versionSelection;
   } catch (err) {

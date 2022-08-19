@@ -1,16 +1,12 @@
 import nock from 'nock';
+import prompts from 'prompts';
 
 import CreateVersionCommand from '../../../src/cmds/versions/create';
 import APIError from '../../../src/lib/apiError';
 import getAPIMock from '../../helpers/get-api-mock';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const promptHandler = require('../../../src/lib/prompts');
-
 const key = 'API_KEY';
 const version = '1.0.0';
-
-jest.mock('../../../src/lib/prompts');
 
 const createVersion = new CreateVersionCommand();
 
@@ -25,32 +21,72 @@ describe('rdme versions:create', () => {
     );
   });
 
+  it('should error if no version provided', () => {
+    return expect(createVersion.run({ key })).rejects.toStrictEqual(
+      new Error('Please specify a semantic version. See `rdme help versions:create` for help.')
+    );
+  });
+
+  it('should error if invaild version provided', () => {
+    return expect(createVersion.run({ key, version: 'test' })).rejects.toStrictEqual(
+      new Error('Please specify a semantic version. See `rdme help versions:create` for help.')
+    );
+  });
+
   it('should create a specific version', async () => {
-    promptHandler.createVersionPrompt.mockResolvedValue({
-      is_stable: true,
-      is_beta: false,
-      from: '1.0.0',
-    });
+    prompts.inject([version, false, true, true]);
+    const newVersion = '1.0.1';
 
     const mockRequest = getAPIMock()
       .get('/api/v1/version')
       .basicAuth({ user: key })
-      .reply(200, [{ version }, { version }])
-      .post('/api/v1/version')
+      .reply(200, [{ version }, { version: '1.1.0' }])
+      .post('/api/v1/version', {
+        version: newVersion,
+        codename: '',
+        is_stable: false,
+        is_beta: true,
+        from: '1.0.0',
+        is_hidden: false,
+      })
       .basicAuth({ user: key })
-      .reply(201, { version });
+      .reply(201, { version: newVersion });
 
-    await expect(createVersion.run({ key, version })).resolves.toBe('Version 1.0.0 created successfully.');
+    await expect(createVersion.run({ key, version: newVersion })).resolves.toBe(
+      `Version ${newVersion} created successfully.`
+    );
+    mockRequest.done();
+  });
+
+  it('should create a specific version with options', async () => {
+    const newVersion = '1.0.1';
+
+    const mockRequest = getAPIMock()
+      .post('/api/v1/version', {
+        version: newVersion,
+        codename: 'test',
+        from: '1.0.0',
+        is_hidden: false,
+      })
+      .basicAuth({ user: key })
+      .reply(201, { version: newVersion });
+
+    await expect(
+      createVersion.run({
+        key,
+        version: newVersion,
+        fork: version,
+        beta: 'false',
+        main: 'false',
+        codename: 'test',
+        isPublic: 'true',
+      })
+    ).resolves.toBe(`Version ${newVersion} created successfully.`);
+
     mockRequest.done();
   });
 
   it('should catch any post request errors', async () => {
-    expect.assertions(1);
-    promptHandler.createVersionPrompt.mockResolvedValue({
-      is_stable: false,
-      is_beta: false,
-    });
-
     const errorResponse = {
       error: 'VERSION_EMPTY',
       message: 'You need to include an x-readme-version header',

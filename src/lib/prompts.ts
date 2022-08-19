@@ -1,8 +1,12 @@
+import type { VersionCreateOptions } from 'cmds/versions/create';
+import type { VersionUpdateOptions } from 'cmds/versions/update';
 import type { Response } from 'node-fetch';
+import type { Choice, PromptObject } from 'prompts';
 
-import { prompt } from 'enquirer';
 import parse from 'parse-link-header';
 import semver from 'semver';
+
+import promptTerminal from './promptWrapper';
 
 type SpecList = {
   _id: string;
@@ -24,56 +28,62 @@ type ParsedDocs = {
   };
 };
 
-export function generatePrompts(versionList: VersionList, selectOnly = false) {
+export function generatePrompts(versionList: VersionList, selectOnly = false): PromptObject[] {
   return [
     {
-      type: 'select',
+      type: selectOnly ? null : 'select',
       name: 'option',
       message: 'Would you like to use an existing project version or create a new one?',
-      skip() {
-        return selectOnly;
-      },
       choices: [
-        { message: 'Use existing', value: 'update' },
-        { message: 'Create a new version', value: 'create' },
+        { title: 'Use existing', value: 'update' },
+        { title: 'Create a new version', value: 'create' },
       ],
     },
     {
-      type: 'select',
+      type: (prev, values) => {
+        return (selectOnly ? false : values.option !== 'update') ? null : 'select';
+      },
       name: 'versionSelection',
       message: 'Select your desired version',
-      skip() {
-        return selectOnly ? false : this.enquirer.answers.option !== 'update';
-      },
       choices: versionList.map(v => {
         return {
-          message: v.version,
+          title: v.version,
           value: v.version,
         };
       }),
     },
     {
-      type: 'input',
+      type: (prev, values) => {
+        return (selectOnly ? true : values.option === 'update') ? null : 'text';
+      },
       name: 'newVersion',
       message: "What's your new version?",
-      skip() {
-        return selectOnly ? true : this.enquirer.answers.option === 'update';
-      },
       hint: '1.0.0',
     },
   ];
 }
 
-function specOptions(specList: SpecList, parsedDocs: ParsedDocs, currPage: number, totalPages: number) {
+function specOptions(specList: SpecList, parsedDocs: ParsedDocs, currPage: number, totalPages: number): Choice[] {
   const specs = specList.map(s => {
     return {
-      message: s.title,
+      description: `API Definition ID: ${s._id}`, // eslint-disable-line no-underscore-dangle
+      title: s.title,
       value: s._id, // eslint-disable-line no-underscore-dangle
     };
   });
-  if (parsedDocs.prev.page) specs.push({ message: `< Prev (page ${currPage - 1} of ${totalPages})`, value: 'prev' });
-  if (parsedDocs.next.page) {
-    specs.push({ message: `Next (page ${currPage + 1} of ${totalPages}) >`, value: 'next' });
+  if (parsedDocs?.prev?.page) {
+    specs.push({
+      description: 'Go to the previous page',
+      title: `< Prev (page ${currPage - 1} of ${totalPages})`,
+      value: 'prev',
+    });
+  }
+  if (parsedDocs?.next?.page) {
+    specs.push({
+      description: 'Go to the next page',
+      title: `Next (page ${currPage + 1} of ${totalPages}) >`,
+      value: 'next',
+    });
   }
   return specs;
 }
@@ -84,19 +94,21 @@ const updateOasPrompt = (
   currPage: number,
   totalPages: number,
   getSpecs: (url: string) => Promise<Response>
-) => [
+): PromptObject[] => [
   {
     type: 'select',
     name: 'specId',
     message: 'Select your desired file to update',
     choices: specOptions(specList, parsedDocs, currPage, totalPages),
-    async result(spec: string) {
+    async format(spec: string) {
       if (spec === 'prev') {
         try {
           const newSpecs = await getSpecs(`${parsedDocs.prev.url}`);
           const newParsedDocs = parse(newSpecs.headers.get('link'));
           const newSpecList = await newSpecs.json();
-          const { specId }: { specId: string } = await prompt(
+          // @todo: figure out how to add a stricter type here, see:
+          // https://github.com/readmeio/rdme/pull/570#discussion_r949715913
+          const { specId } = await promptTerminal(
             updateOasPrompt(newSpecList, newParsedDocs, currPage - 1, totalPages, getSpecs)
           );
           return specId;
@@ -108,7 +120,9 @@ const updateOasPrompt = (
           const newSpecs = await getSpecs(`${parsedDocs.next.url}`);
           const newParsedDocs = parse(newSpecs.headers.get('link'));
           const newSpecList = await newSpecs.json();
-          const { specId }: { specId: string } = await prompt(
+          // @todo: figure out how to add a stricter type here, see:
+          // https://github.com/readmeio/rdme/pull/570#discussion_r949715913
+          const { specId } = await promptTerminal(
             updateOasPrompt(newSpecList, newParsedDocs, currPage + 1, totalPages, getSpecs)
           );
           return specId;
@@ -127,26 +141,22 @@ export function createOasPrompt(
   parsedDocs: ParsedDocs,
   totalPages: number,
   getSpecs: ((url: string) => Promise<Response>) | null
-) {
+): PromptObject[] {
   return [
     {
       type: 'select',
       name: 'option',
       message: 'Would you like to update an existing OAS file or create a new one?',
       choices: [
-        { message: 'Update existing', value: 'update' },
-        { message: 'Create a new spec', value: 'create' },
+        { title: 'Update existing', value: 'update' },
+        { title: 'Create a new spec', value: 'create' },
       ],
-      async result(picked: string) {
+      async format(picked: 'update' | 'create') {
         if (picked === 'update') {
-          try {
-            const { specId }: { specId: string } = await prompt(
-              updateOasPrompt(specList, parsedDocs, 1, totalPages, getSpecs)
-            );
-            return specId;
-          } catch (e) {
-            return null;
-          }
+          // @todo: figure out how to add a stricter type here, see:
+          // https://github.com/readmeio/rdme/pull/570#discussion_r949715913
+          const { specId } = await promptTerminal(updateOasPrompt(specList, parsedDocs, 1, totalPages, getSpecs));
+          return specId;
         }
 
         return picked;
@@ -157,75 +167,56 @@ export function createOasPrompt(
 
 export function createVersionPrompt(
   versionList: VersionList,
-  opts: {
-    beta?: string | boolean;
-    deprecated?: string;
-    fork?: string;
-    isPublic?: string | boolean;
-    main?: string | boolean;
-    newVersion?: string;
-  },
+  opts: VersionCreateOptions & VersionUpdateOptions,
   isUpdate?: {
-    is_stable: string;
+    is_stable: boolean;
   }
-) {
+): PromptObject[] {
   return [
     {
-      type: 'select',
+      type: opts.fork || isUpdate ? null : 'select',
       name: 'from',
       message: 'Which version would you like to fork from?',
-      skip() {
-        return opts.fork || isUpdate;
-      },
       choices: versionList.map(v => {
         return {
-          message: v.version,
+          title: v.version,
           value: v.version,
         };
       }),
     },
     {
-      type: 'input',
+      type: opts.newVersion || !isUpdate ? null : 'text',
       name: 'newVersion',
-      message: "What's your new version?",
+      message: 'What should the version be renamed to?',
       initial: opts.newVersion || false,
-      skip() {
-        return opts.newVersion || !isUpdate;
-      },
       hint: '1.0.0',
       validate(val: string) {
-        return semver.valid(semver.coerce(val)) ? true : this.styles.danger('Please specify a semantic version.');
+        return semver.valid(semver.coerce(val)) ? true : 'Please specify a semantic version.';
       },
     },
     {
-      type: 'confirm',
+      type: opts.main || isUpdate?.is_stable ? null : 'confirm',
       name: 'is_stable',
       message: 'Would you like to make this version the main version for this project?',
-      skip() {
-        return opts.main || isUpdate?.is_stable;
-      },
     },
     {
-      type: 'confirm',
+      type: opts.beta ? null : 'confirm',
       name: 'is_beta',
       message: 'Should this version be in beta?',
-      skip: () => opts.beta,
     },
     {
-      type: 'confirm',
+      type: (prev, values) => {
+        return opts.isPublic || opts.main || values.is_stable ? null : 'confirm';
+      },
       name: 'is_hidden',
       message: 'Would you like to make this version public?',
-      skip() {
-        return opts.isPublic || opts.main || this.enquirer.answers.is_stable;
-      },
     },
     {
-      type: 'confirm',
+      type: (prev, values) => {
+        return opts.deprecated || opts.main || !isUpdate || values.is_stable ? null : 'confirm';
+      },
       name: 'is_deprecated',
       message: 'Would you like to deprecate this version?',
-      skip() {
-        return opts.deprecated || opts.main || !isUpdate || this.enquirer.answers.is_stable;
-      },
     },
   ];
 }
