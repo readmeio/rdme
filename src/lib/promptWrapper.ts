@@ -11,12 +11,7 @@ export default async function promptTerminal<T extends string = string>(
   questions: prompts.PromptObject<T> | prompts.PromptObject<T>[],
   options?: prompts.Options
 ): Promise<prompts.Answers<T>> {
-  const enableTerminalCursor = () => {
-    process.stdout.write('\x1B[?25h');
-  };
-
   const onCancel = () => {
-    enableTerminalCursor();
     process.stdout.write('\n');
     process.stdout.write('Thanks for using rdme! See you soon ✌️');
     process.stdout.write('\n\n');
