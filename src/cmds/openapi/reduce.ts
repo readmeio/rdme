@@ -6,8 +6,10 @@ import path from 'path';
 import chalk from 'chalk';
 import jsonpath from 'jsonpath';
 import oasReducer from 'oas/dist/lib/reducer';
+import ora from 'ora';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
+import { oraOptions } from '../../lib/logger';
 import prepareOas from '../../lib/prepareOas';
 import promptTerminal from '../../lib/promptWrapper';
 
@@ -147,13 +149,25 @@ export default class OpenAPIReduceCommand extends Command {
 
     Command.debug(`about to reduce spec located at ${specPath}`);
 
-    const reducedSpec = oasReducer(parsedBundledSpec, {
-      tags: promptResults.tags || [],
-      paths: (promptResults.paths || []).reduce((acc: Record<string, string[]>, p: string) => {
-        acc[p] = promptResults.methods;
-        return acc;
-      }, {}),
-    });
+    const spinner = ora({ ...oraOptions() });
+    spinner.start('Reducing your API definition...');
+
+    let reducedSpec;
+
+    try {
+      reducedSpec = oasReducer(parsedBundledSpec, {
+        tags: promptResults.tags || [],
+        paths: (promptResults.paths || []).reduce((acc: Record<string, string[]>, p: string) => {
+          acc[p] = promptResults.methods;
+          return acc;
+        }, {}),
+      });
+
+      spinner.succeed(`${spinner.text} done! ✅`);
+    } catch (err) {
+      Command.debug(`err=${err.message}`);
+      throw err;
+    }
 
     Command.debug(`saving reduced spec to ${promptResults.outputPath}`);
 
@@ -161,6 +175,8 @@ export default class OpenAPIReduceCommand extends Command {
 
     Command.debug('reduced spec saved');
 
-    return Promise.resolve(chalk.green(`${specPath} has been reduced to ${promptResults.outputPath}! 🤏`));
+    return Promise.resolve(
+      chalk.green(`Your reduced API definition has been saved to ${promptResults.outputPath}! 🤏`)
+    );
   }
 }

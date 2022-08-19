@@ -8,7 +8,7 @@ import OpenAPIReduceCommand from '../../../src/cmds/openapi/reduce';
 
 const reducer = new OpenAPIReduceCommand();
 
-const successfulReduction = specPath => `${specPath} has been reduced to output.json! 🤏`;
+const successfulReduction = () => 'Your reduced API definition has been saved to output.json! 🤏';
 
 const testWorkingDir = process.cwd();
 
@@ -52,7 +52,7 @@ describe('rdme openapi:reduce', () => {
           reducer.run({
             spec,
           })
-        ).resolves.toBe(successfulReduction(spec));
+        ).resolves.toBe(successfulReduction());
 
         expect(fs.writeFileSync).toHaveBeenCalledWith('output.json', expect.any(String));
         expect(reducedSpec.tags).toHaveLength(1);
@@ -80,7 +80,7 @@ describe('rdme openapi:reduce', () => {
           reducer.run({
             workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
           })
-        ).resolves.toBe(successfulReduction(spec));
+        ).resolves.toBe(successfulReduction());
 
         expect(console.info).toHaveBeenCalledTimes(1);
 
@@ -112,7 +112,7 @@ describe('rdme openapi:reduce', () => {
           reducer.run({
             spec,
           })
-        ).resolves.toBe(successfulReduction(spec));
+        ).resolves.toBe(successfulReduction());
 
         expect(fs.writeFileSync).toHaveBeenCalledWith('output.json', expect.any(String));
         expect(reducedSpec.tags).toHaveLength(1);
