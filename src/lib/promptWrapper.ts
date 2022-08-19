@@ -1,3 +1,4 @@
+import ciDetect from '@npmcli/ci-detect';
 import prompts from 'prompts';
 
 /**
@@ -21,6 +22,37 @@ export default async function promptTerminal<T extends string = string>(
     process.stdout.write('\n\n');
     process.exit(1);
   };
+
+  /**
+   * Runs a check before every prompt renders to make sure that
+   * prompt is not being run in a CI environment.
+   *
+   * @todo it'd be cool if we could just throw an error here
+   * and have it bubble up the error to our top-level error handler
+   * in src/cli.ts
+   */
+  function onRender() {
+    if (ciDetect() && process.env.NODE_ENV !== 'testing') {
+      process.stdout.write('\n');
+      process.stdout.write(
+        'Yikes! Looks like we prompted you for something in a CI environment. Are you missing an argument?'
+      );
+      process.stdout.write('\n\n');
+      process.stdout.write('Try running `rdme <command> --help` or get in touch at support@readme.io.');
+      process.stdout.write('\n\n');
+      process.exit(1);
+    }
+  }
+
+  if (Array.isArray(questions)) {
+    // eslint-disable-next-line no-param-reassign
+    questions = questions.map(question => ({ onRender, ...question }));
+  } else {
+    // @ts-expect-error onRender is not a documented type,
+    // but it definitely is a thing: https://github.com/terkelg/prompts#onrender
+    // eslint-disable-next-line no-param-reassign
+    questions.onRender = onRender;
+  }
 
   return prompts(questions, { onCancel, ...options });
 }
