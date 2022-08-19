@@ -106,6 +106,30 @@
           }
         ]
       }
+    },
+    "/user": {
+      "post": {
+        "tags": ["user"],
+        "summary": "Create user",
+        "description": "This can only be done by the logged in user.",
+        "operationId": "createUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "components/external-components.json#/schemas/User"
+              }
+            }
+          },
+          "description": "Created user object",
+          "required": true
+        },
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
     }
   },
   "components": {

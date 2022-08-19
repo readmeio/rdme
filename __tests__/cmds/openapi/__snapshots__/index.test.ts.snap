@@ -479,6 +479,64 @@ Object {
         ],
       },
     },
+    "/user": Object {
+      "post": Object {
+        "description": "This can only be done by the logged in user.",
+        "operationId": "createUser",
+        "requestBody": Object {
+          "content": Object {
+            "application/json": Object {
+              "schema": Object {
+                "properties": Object {
+                  "email": Object {
+                    "type": "string",
+                  },
+                  "firstName": Object {
+                    "type": "string",
+                  },
+                  "id": Object {
+                    "format": "int64",
+                    "type": "integer",
+                  },
+                  "lastName": Object {
+                    "type": "string",
+                  },
+                  "password": Object {
+                    "type": "string",
+                  },
+                  "phone": Object {
+                    "type": "string",
+                  },
+                  "userStatus": Object {
+                    "description": "User Status",
+                    "format": "int32",
+                    "type": "integer",
+                  },
+                  "username": Object {
+                    "type": "string",
+                  },
+                },
+                "type": "object",
+                "xml": Object {
+                  "name": "User",
+                },
+              },
+            },
+          },
+          "description": "Created user object",
+          "required": true,
+        },
+        "responses": Object {
+          "default": Object {
+            "description": "successful operation",
+          },
+        },
+        "summary": "Create user",
+        "tags": Array [
+          "user",
+        ],
+      },
+    },
   },
   "servers": Array [
     Object {
