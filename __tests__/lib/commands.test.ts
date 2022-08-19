@@ -95,11 +95,13 @@ describe('utils', () => {
           name: 'logout',
           description: 'Logs the currently authenticated user out of ReadMe.',
           position: 2,
+          hidden: false,
         },
         {
           name: 'whoami',
           description: 'Displays the current user and project authenticated with ReadMe.',
           position: 3,
+          hidden: false,
         },
       ]);
     });

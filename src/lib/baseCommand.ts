@@ -61,7 +61,7 @@ export default class Command {
   /**
    * Should the command be hidden from our `--help` screens?
    */
-  hidden: boolean;
+  hidden = false;
 
   /**
    * Arguments to hide from the individual command help screen

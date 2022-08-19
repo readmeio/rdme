@@ -6,7 +6,7 @@ import isHidden from '../lib/decorators/isHidden';
 
 import OpenAPICommand from './openapi';
 
-@isHidden()
+@isHidden
 export default class SwaggerCommand extends OpenAPICommand {
   constructor() {
     super();
