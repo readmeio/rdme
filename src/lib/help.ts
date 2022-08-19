@@ -7,9 +7,10 @@ import config from 'config';
 
 import * as commands from './commands';
 
-function formatCommands(cmds: { name: string; description: string; position: number }[]) {
+function formatCommands(cmds: { name: string; description: string; hidden: boolean; position: number }[]) {
   return cmds
     .sort((a, b) => (a.position > b.position ? 1 : -1))
+    .filter(command => !command.hidden)
     .map(command => {
       return {
         name: `${chalk.grey('$')} ${config.get('cli')} ${command.name}`,

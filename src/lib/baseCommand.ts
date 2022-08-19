@@ -59,6 +59,11 @@ export default class Command {
   position: number;
 
   /**
+   * Should the command be hidden from our `--help` screens?
+   */
+  hidden: boolean;
+
+  /**
    * Arguments to hide from the individual command help screen
    * (typically used for hiding default arguments)
    *

@@ -10,6 +10,7 @@ export function getCategories(): Record<
       name: string;
       description: string;
       position: number;
+      hidden: boolean;
     }[];
   }
 > {
@@ -74,6 +75,7 @@ export function listByCategory() {
       name: c.command.command,
       description: c.command.description,
       position: c.command.position,
+      hidden: c.command.hidden,
     });
   });
 
@@ -82,5 +84,5 @@ export function listByCategory() {
 
 export function getSimilar(cmdCategory: CommandCategories, excludeCommand: string) {
   const categories = listByCategory();
-  return categories[cmdCategory].commands.filter(cmd => cmd.name !== excludeCommand);
+  return categories[cmdCategory].commands.filter(cmd => cmd.name !== excludeCommand && !cmd.hidden);
 }
