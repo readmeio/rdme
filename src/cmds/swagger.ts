@@ -2,9 +2,11 @@ import type { CommandOptions } from '../lib/baseCommand';
 import type { Options } from './openapi';
 
 import Command from '../lib/baseCommand';
+import isHidden from '../lib/decorators/isHidden';
 
 import OpenAPICommand from './openapi';
 
+@isHidden
 export default class SwaggerCommand extends OpenAPICommand {
   constructor() {
     super();
