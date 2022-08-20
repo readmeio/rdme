@@ -169,6 +169,66 @@ describe('rdme openapi', () => {
       return mock.done();
     });
 
+    it('should create a new spec via `--create` flag', async () => {
+      const registryUUID = getRandomRegistryId();
+
+      const mock = getAPIMock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, [{ version }])
+        .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+        .post('/api/v1/api-specification', { registryUUID })
+        .delayConnection(1000)
+        .basicAuth({ user: key })
+        .reply(201, { _id: 1 }, { location: exampleRefLocation });
+
+      const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
+
+      await expect(
+        openapi.run({
+          key,
+          version,
+          spec,
+          create: true,
+        })
+      ).resolves.toBe(successfulUpload(spec));
+
+      return mock.done();
+    });
+
+    it('should create a new spec via `--create` flag and ignore `--id`', async () => {
+      const registryUUID = getRandomRegistryId();
+
+      const mock = getAPIMock()
+        .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+        .post('/api/v1/api-specification', { registryUUID })
+        .delayConnection(1000)
+        .basicAuth({ user: key })
+        .reply(201, { _id: 1 }, { location: exampleRefLocation });
+
+      const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
+
+      await expect(
+        openapi.run({
+          key,
+          spec,
+          id: 'some-id',
+          create: true,
+        })
+      ).resolves.toBe(successfulUpload(spec));
+
+      expect(console.warn).toHaveBeenCalledTimes(1);
+      expect(console.info).toHaveBeenCalledTimes(0);
+
+      const output = getCommandOutput();
+
+      expect(output).toMatch(/the `--id` parameter will be ignored/i);
+
+      return mock.done();
+    });
+
     it('should bundle and upload the expected content', async () => {
       let requestBody;
       const registryUUID = getRandomRegistryId();

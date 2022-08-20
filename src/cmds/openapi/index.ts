@@ -20,6 +20,7 @@ export type Options = {
   id?: string;
   spec?: string;
   version?: string;
+  create?: boolean;
   useSpecVersion?: boolean;
   workingDirectory?: string;
 };
@@ -54,6 +55,11 @@ export default class OpenAPICommand extends Command {
         defaultOption: true,
       },
       {
+        name: 'create',
+        type: Boolean,
+        description: 'Bypasses the create/update prompt and creates a new API definition.',
+      },
+      {
         name: 'useSpecVersion',
         type: Boolean,
         description:
@@ -70,7 +76,7 @@ export default class OpenAPICommand extends Command {
   async run(opts: CommandOptions<Options>) {
     super.run(opts);
 
-    const { key, id, spec, useSpecVersion, version, workingDirectory } = opts;
+    const { key, id, spec, create, useSpecVersion, version, workingDirectory } = opts;
 
     let selectedVersion = version;
     let isUpdate: boolean;
@@ -84,6 +90,10 @@ export default class OpenAPICommand extends Command {
       Command.warn(
         "We'll be using the version associated with the `--id` option, so the `--version` option will be ignored."
       );
+    }
+
+    if (create && id) {
+      Command.warn("We'll be using the `--create` option , so the `--id` parameter will be ignored.");
     }
 
     // Reason we're hardcoding in command here is because `swagger` command
@@ -213,6 +223,8 @@ export default class OpenAPICommand extends Command {
         ),
       });
     }
+
+    if (create) return createSpec();
 
     if (!id) {
       Command.debug('no id parameter, retrieving list of API specs');
