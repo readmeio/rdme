@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * This TypeScript decorator will cause the decorated command to be hidden from all help and
  * "Related commands" screens.
