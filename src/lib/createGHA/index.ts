@@ -90,7 +90,11 @@ export default async function createGHAHelper(
     }
   );
 
-  if (!createGHA) throw new Error('GitHub Action Workflow cancelled.');
+  if (!createGHA) {
+    throw new Error(
+      'GitHub Action Workflow cancelled. If you ever change your mind, you can run this command again with the `--github` flag.'
+    );
+  }
 
   const optsString = constructOptsString(args, opts);
   const rdmeVersion = await getLatestPackageVersion();
