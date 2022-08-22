@@ -109,7 +109,7 @@ export default class OpenAPICommand extends Command {
 
     Command.debug(`selectedVersion: ${selectedVersion}`);
 
-    async function success(data: Response) {
+    const success = async (data: Response) => {
       const message = !isUpdate
         ? `You've successfully uploaded a new ${specType} file to your ReadMe project!`
         : `You've successfully updated an existing ${specType} file on your ReadMe project!`;
@@ -130,9 +130,9 @@ export default class OpenAPICommand extends Command {
           `\t${chalk.green(`rdme openapi ${specPath} --key=<key> --id=${body._id}`)}`,
         ].join('\n')
       );
-    }
+    };
 
-    async function error(res: Response) {
+    const error = (res: Response) => {
       return handleRes(res).catch(err => {
         // If we receive an APIError, no changes needed! Throw it as is.
         if (err.name === 'APIError') {
@@ -157,7 +157,7 @@ export default class OpenAPICommand extends Command {
           )}.`
         );
       });
-    }
+    };
 
     const registryUUID = await streamSpecToRegistry(bundledSpec);
 
