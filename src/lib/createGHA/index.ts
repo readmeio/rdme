@@ -103,9 +103,12 @@ export default async function createGHAHelper(
   /**
    * Custom resolver for usage in `hercule`.
    *
+   * @param url The variables from the `base.yml` template
    * @see {@link https://github.com/jamesramsay/hercule#resolvers}
    */
-  const customResolver = function (url: string): { content: string; url?: string } | null {
+  const customResolver = function (url: 'branch' | 'command' | 'rdmeVersion' | 'optsString' | 'timestamp'): {
+    content: string;
+  } {
     const data = {
       branch,
       command,
@@ -113,8 +116,7 @@ export default async function createGHAHelper(
       timestamp,
       optsString,
     };
-    const output: string = data[url];
-    return { content: output };
+    return { content: data[url] };
   };
 
   const { output } = await transcludeFile('./src/lib/createGHA/base.yml', { resolvers: [customResolver] });
