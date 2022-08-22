@@ -1,4 +1,5 @@
 /* eslint-disable class-methods-use-this */
+import type commands from '../cmds';
 import type { OptionDefinition } from 'command-line-usage';
 
 import { debug, info, warn } from './logger';
@@ -25,7 +26,7 @@ export default class Command {
    *
    * @example openapi
    */
-  command: string;
+  command: keyof typeof commands;
 
   /**
    * Example command usage, used on invidivual command help screens
