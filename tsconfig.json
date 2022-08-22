@@ -9,7 +9,8 @@
     "noImplicitAny": true,
     "outDir": "dist/",
     "paths": {
-      "editor": [".sink.d.ts"]
+      "editor": [".sink.d.ts"],
+      "hercule/promises": [".sink.d.ts"]
     },
     "resolveJsonModule": true,
     "target": "ES5"

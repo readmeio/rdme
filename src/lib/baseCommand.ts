@@ -2,6 +2,7 @@
 import type commands from '../cmds';
 import type { OptionDefinition } from 'command-line-usage';
 
+import createGHAHelper from './createGHA';
 import { debug, info, warn } from './logger';
 
 export type CommandOptions<T> = T & {
@@ -86,6 +87,16 @@ export default class Command {
         throw new Error('No project API key provided. Please use `--key`.');
       }
     }
+  }
+
+  /**
+   * Post-command flow for creating a GitHub Action workflow file.
+   */
+  createGHA(msg: string, opts: CommandOptions<{}>) {
+    // eslint-disable-next-line no-console
+    if (msg) console.log(msg);
+
+    return createGHAHelper(this.command, this.args, opts);
   }
 
   /**
