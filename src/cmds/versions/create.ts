@@ -30,11 +30,7 @@ export default class CreateVersionCommand extends Command {
 
     this.hiddenArgs = ['version'];
     this.args = [
-      {
-        name: 'key',
-        type: String,
-        description: 'Project API key',
-      },
+      this.getKeyArg(),
       {
         name: 'version',
         type: String,

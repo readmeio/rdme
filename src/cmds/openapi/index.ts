@@ -37,11 +37,7 @@ export default class OpenAPICommand extends Command {
 
     this.hiddenArgs = ['spec'];
     this.args = [
-      {
-        name: 'key',
-        type: String,
-        description: 'Project API key',
-      },
+      this.getKeyArg(),
       {
         name: 'id',
         type: String,

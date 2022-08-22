@@ -23,11 +23,7 @@ export default class SingleChangelogCommand extends Command {
 
     this.hiddenArgs = ['filePath'];
     this.args = [
-      {
-        name: 'key',
-        type: String,
-        description: 'Project API key',
-      },
+      this.getKeyArg(),
       {
         name: 'filePath',
         type: String,

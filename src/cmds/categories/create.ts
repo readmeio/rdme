@@ -32,11 +32,7 @@ export default class CategoriesCreateCommand extends Command {
 
     this.hiddenArgs = ['title'];
     this.args = [
-      {
-        name: 'key',
-        type: String,
-        description: 'Project API key',
-      },
+      this.getKeyArg(),
       this.getVersionArg(),
       {
         name: 'title',

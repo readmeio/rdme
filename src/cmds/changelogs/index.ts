@@ -24,11 +24,7 @@ export default class ChangelogsCommand extends Command {
 
     this.hiddenArgs = ['folder'];
     this.args = [
-      {
-        name: 'key',
-        type: String,
-        description: 'Project API key',
-      },
+      this.getKeyArg(),
       {
         name: 'folder',
         type: String,

@@ -89,6 +89,17 @@ export default class Command {
   }
 
   /**
+   * Used in any command where `key` is an option.
+   */
+  getKeyArg(): OptionDefinition {
+    return {
+      name: 'key',
+      type: String,
+      description: 'Project API key',
+    };
+  }
+
+  /**
    * Used in any command where `version` is an option.
    */
   getVersionArg() {

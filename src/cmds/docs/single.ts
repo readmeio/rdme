@@ -24,11 +24,7 @@ export default class SingleDocCommand extends Command {
 
     this.hiddenArgs = ['filePath'];
     this.args = [
-      {
-        name: 'key',
-        type: String,
-        description: 'Project API key',
-      },
+      this.getKeyArg(),
       this.getVersionArg(),
       {
         name: 'filePath',

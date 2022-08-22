@@ -23,11 +23,7 @@ export default class UpdateVersionCommand extends Command {
     this.position = 3;
 
     this.args = [
-      {
-        name: 'key',
-        type: String,
-        description: 'Project API key',
-      },
+      this.getKeyArg(),
       this.getVersionArg(),
       {
         name: 'newVersion',

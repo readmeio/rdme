@@ -25,11 +25,7 @@ export default class DocsCommand extends Command {
 
     this.hiddenArgs = ['folder'];
     this.args = [
-      {
-        name: 'key',
-        type: String,
-        description: 'Project API key',
-      },
+      this.getKeyArg(),
       this.getVersionArg(),
       {
         name: 'folder',
