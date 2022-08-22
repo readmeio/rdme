@@ -25,22 +25,45 @@ describe('#createGHA', () => {
     global.Date = _Date;
   });
 
-  it('should test GHA creation workflow', async () => {
-    prompts.inject([true, 'main', 'rdme-validate']);
+  describe('validate', () => {
+    it('should run GHA creation workflow', async () => {
+      const fileName = 'rdme-validate';
+      prompts.inject([true, 'main', fileName]);
 
-    let yamlOutput;
+      let yamlOutput;
 
-    fs.writeFileSync = jest.fn((f, d) => {
-      yamlOutput = d;
-      return true;
+      fs.writeFileSync = jest.fn((f, d) => {
+        yamlOutput = d;
+        return true;
+      });
+
+      await expect(
+        // @ts-expect-error need to figure out a better way to digest opts
+        createGHAHelper('validate', validateCommand.args, { spec: 'petstore.json' })
+      ).resolves.toMatchSnapshot();
+
+      expect(yamlOutput).toMatchSnapshot();
+      expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yaml`, expect.any(String));
     });
 
-    await expect(
-      // @ts-expect-error need to figure out a better way to digest opts
-      createGHAHelper('validate', validateCommand.args, { spec: 'petstore.json' })
-    ).resolves.toMatchSnapshot();
+    it('should run GHA creation workflow with `--github` flag', async () => {
+      const fileName = 'rdme-validate-with-github-flag';
+      prompts.inject(['main', fileName]);
 
-    expect(yamlOutput).toMatchSnapshot();
-    expect(fs.writeFileSync).toHaveBeenCalledWith('.github/workflows/rdme-validate.yaml', expect.any(String));
+      let yamlOutput;
+
+      fs.writeFileSync = jest.fn((f, d) => {
+        yamlOutput = d;
+        return true;
+      });
+
+      await expect(
+        // @ts-expect-error need to figure out a better way to digest opts
+        createGHAHelper('validate', validateCommand.args, { spec: 'petstore.json', github: true })
+      ).resolves.toMatchSnapshot();
+
+      expect(yamlOutput).toMatchSnapshot();
+      expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yaml`, expect.any(String));
+    });
   });
 });

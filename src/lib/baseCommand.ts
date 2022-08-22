@@ -8,6 +8,7 @@ import { debug, info, warn } from './logger';
 export type CommandOptions<T> = T & {
   key?: string;
   version?: string;
+  github?: string;
 };
 
 export enum CommandCategories {
@@ -97,6 +98,17 @@ export default class Command {
     if (msg) console.log(msg);
 
     return createGHAHelper(this.command, this.args, opts);
+  }
+
+  /**
+   * Used in any command where `github` is an option.
+   */
+  getGitHubArg(): OptionDefinition {
+    return {
+      name: 'github',
+      type: Boolean,
+      description: 'Create a GitHub Action workflow for this command',
+    };
   }
 
   /**

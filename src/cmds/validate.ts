@@ -32,6 +32,7 @@ export default class ValidateCommand extends Command {
         type: String,
         description: 'Working directory (for usage with relative external references)',
       },
+      this.getGitHubArg(),
     ];
   }
 

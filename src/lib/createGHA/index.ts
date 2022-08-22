@@ -7,6 +7,7 @@ import path from 'path';
 
 import chalk from 'chalk';
 import fetch from 'node-fetch';
+import prompts from 'prompts';
 
 import { transcludeFile } from 'hercule/promises';
 
@@ -38,6 +39,8 @@ function constructOptsString(args: OptionDefinition[], opts: CommandOptions<{}>)
       if (arg.defaultOption) return val;
       // obfuscate the key in a GitHub secret
       if (arg.name === 'key') return `--key=$\{{ secrets.${GITHUB_SECRET_NAME} }}`;
+      // remove the GitHub flag
+      if (arg.name === 'github') return false;
       // if a boolean value, return the flag
       if (arg.type === Boolean && val) return `--${arg.name}`;
       if (val) return `--${arg.name}=${val}`;
@@ -56,6 +59,8 @@ export default async function createGHAHelper(
   args: OptionDefinition[],
   opts: CommandOptions<{}>
 ) {
+  prompts.override({ createGHA: opts.github });
+
   const { branch, createGHA, filePath } = await promptTerminal(
     [
       {
