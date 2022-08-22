@@ -14,10 +14,7 @@ export default class CategoriesCommand extends Command {
     this.cmdCategory = CommandCategories.CATEGORIES;
     this.position = 1;
 
-    this.args = [
-      this.getKeyArg(),
-      this.getVersionArg(),
-    ];
+    this.args = [this.getKeyArg(), this.getVersionArg()];
   }
 
   async run(opts: CommandOptions<{}>) {
