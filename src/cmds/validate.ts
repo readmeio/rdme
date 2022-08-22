@@ -47,7 +47,7 @@ export default class ValidateCommand extends Command {
 
     const { specPath, specType } = await prepareOas(spec, 'validate');
     return Promise.resolve(chalk.green(`${specPath} is a valid ${specType} API definition!`)).then(msg =>
-      this.createGHA.call(this, msg, opts)
+      this.createGHA.call(this, msg, { ...opts, spec: specPath })
     );
   }
 }
