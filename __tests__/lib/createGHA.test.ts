@@ -65,5 +65,18 @@ describe('#createGHA', () => {
       expect(yamlOutput).toMatchSnapshot();
       expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yaml`, expect.any(String));
     });
+
+    it('should exit if user does not want to set up GHA', async () => {
+      prompts.inject([false]);
+
+      await expect(
+        // @ts-expect-error need to figure out a better way to digest opts
+        createGHAHelper('validate', validateCommand.args, { spec: 'petstore.json' })
+      ).rejects.toStrictEqual(
+        new Error(
+          'GitHub Action Workflow cancelled. If you ever change your mind, you can run this command again with the `--github` flag.'
+        )
+      );
+    });
   });
 });
