@@ -102,7 +102,7 @@ export default class Command {
   /**
    * Used in any command where `version` is an option.
    */
-  getVersionArg() {
+  getVersionArg(): OptionDefinition {
     return {
       name: 'version',
       type: String,
