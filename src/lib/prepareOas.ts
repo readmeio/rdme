@@ -105,7 +105,7 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
 
       const selection: FileSelection = await promptTerminal({
         name: 'file',
-        message: `Multiple potential API definitions found! Which file would you like to ${action}?`,
+        message: `Multiple potential API definitions found! Which one would you like to ${action}?`,
         type: 'select',
         choices: possibleSpecFiles.map(file => ({ title: file, value: file })),
       });
