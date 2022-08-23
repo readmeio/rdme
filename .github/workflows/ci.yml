@@ -80,5 +80,10 @@ jobs:
       # Docs: https://rdme-test.readme.io
       - name: Run `openapi` command
         uses: ./rdme-repo/
+        # Only run this step if the GitHub secrets are present
+        # (this won't be the case for external contributors' forks)
+        # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idif
+        # https://docs.github.com/en/actions/learn-github-actions/expressions#about-expressions
+        if: ${{ secrets.RDME_TEST_PROJECT_API_KEY }}
         with:
           rdme: openapi oas-examples-repo/3.1/json/petstore.json --key=${{ secrets.RDME_TEST_PROJECT_API_KEY }} --id=${{ secrets.RDME_TEST_PROJECT_API_SETTING }}
