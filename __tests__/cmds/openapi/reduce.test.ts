@@ -17,8 +17,6 @@ const getCommandOutput = () => consoleInfoSpy.mock.calls.join('\n\n');
 
 describe('rdme openapi:reduce', () => {
   beforeEach(() => {
-    jest.mock('fs');
-
     consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
   });
 
