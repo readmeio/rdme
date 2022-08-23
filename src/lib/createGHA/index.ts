@@ -7,13 +7,22 @@ import path from 'path';
 
 import chalk from 'chalk';
 import prompts from 'prompts';
+import simpleGit from 'simple-git';
 
 import { transcludeFile } from 'hercule/promises';
 
 import pkg from '../../../package.json';
+import isCI from '../isCI';
+import { debug } from '../logger';
 import promptTerminal from '../promptWrapper';
 
 const GITHUB_SECRET_NAME = 'README_API_KEY';
+
+export const git = simpleGit();
+
+// Expressions to search raw output of `git remote show origin`
+const headRegEx = /^ {2}HEAD branch: /g;
+const headLineRegEx = /^ {2}HEAD branch:.*/gm;
 
 /**
  * Constructs the command string that we pass into the workflow file.
@@ -45,6 +54,46 @@ function constructCmdString(
 }
 
 /**
+ * Function to return various git attributes needed for running GitHub Action
+ */
+export async function getGitData() {
+  const isRepo = await git.checkIsRepo().catch(e => {
+    debug(`error running git.checkIsRepo: ${e.message}`);
+    return false;
+  });
+
+  let containsGitHubRemote;
+  let containsNonGitHubRemote;
+  let defaultBranch;
+  const rawRemotes = await git.remote([]).catch(e => {
+    debug(`error grabbing git remotes: ${e.message}`);
+    return '';
+  });
+
+  if (rawRemotes) {
+    const remote = rawRemotes.split('\n')[0];
+    const rawRemote = await git.remote(['show', remote]);
+    // Extract head branch from git output
+    const rawHead = headLineRegEx.exec(rawRemote as string)?.[0];
+    if (rawHead) defaultBranch = rawHead.replace(headRegEx, '');
+
+    // Extract the word 'github' from git output
+    const remotesList = (await git.remote(['-v'])) as string;
+    // This is a bit hairy but we want to keep it fairly general here
+    // in case of GitHub Enterprise, etc.
+    containsGitHubRemote = /github.com/.test(remotesList);
+    containsNonGitHubRemote = /gitlab/.test(remotesList) || /bitbucket/.test(remotesList);
+  }
+
+  const repoRoot = await git.revparse(['--show-toplevel']).catch(e => {
+    debug(`error grabbing git root: ${e.message}`);
+    return '';
+  });
+
+  return { containsGitHubRemote, containsNonGitHubRemote, defaultBranch, isRepo, repoRoot };
+}
+
+/**
  * Post-command flow for creating a GitHub Action workflow file.
  *
  */
@@ -54,8 +103,25 @@ export default async function createGHA(
   args: OptionDefinition[],
   opts: CommandOptions<{}>
 ) {
+  const { containsGitHubRemote, containsNonGitHubRemote, defaultBranch, isRepo, repoRoot } = await getGitData();
+
+  if (
+    // not a repo
+    !isRepo ||
+    // in a CI environment
+    isCI() ||
+    // is a repo, but only contains non-GitHub remotes
+    (isRepo && containsNonGitHubRemote && !containsGitHubRemote) ||
+    // not testing this function
+    (process.env.NODE_ENV === 'testing' && !process.env.TEST_CREATEGHA)
+  ) {
+    return msg;
+  }
+
   // eslint-disable-next-line no-console
   if (msg) console.log(msg);
+
+  if (repoRoot) process.chdir(repoRoot);
 
   prompts.override({ shouldCreateGHA: opts.github });
 
@@ -71,7 +137,7 @@ export default async function createGHA(
         message: 'What branch on GitHub should this workflow run on?',
         name: 'branch',
         type: 'text',
-        initial: 'main',
+        initial: defaultBranch || 'main',
       },
       {
         message: 'What would you like to name this file?',

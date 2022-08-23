@@ -1,12 +1,49 @@
 import type { Options as ValidateOptions } from '../../src/cmds/validate';
 import type { CommandOptions } from '../../src/lib/baseCommand';
+import type { Response } from 'simple-git';
 
 import fs from 'fs';
 
 import prompts from 'prompts';
 
 import ValidateCommand from '../../src/cmds/validate';
-import createGHA from '../../src/lib/createGHA';
+import createGHA, { git, getGitData } from '../../src/lib/createGHA';
+
+/**
+ * Creates a Jest mock function for testing `git.remote`
+ * @param remote remote to return (usually `origin`)
+ * @param remoteUrl git URL for the given remote
+ * @param defaultBranch the HEAD branch
+ */
+function createGitRemoteMock(
+  remote = 'origin',
+  remoteUrl = 'https://github.com/readmeio/rdme.git',
+  defaultBranch = 'main'
+) {
+  return jest.fn(arr => {
+    // first call (used to grab remote for usage in subsequent commands)
+    if (!arr.length) {
+      return Promise.resolve(remote) as unknown as Response<string>;
+    }
+    // second call (used to grab default branch)
+    if (arr.length === 2 && arr[0] === 'show' && arr[1] === remote) {
+      return Promise.resolve(`* remote origin
+  Fetch URL: ${remoteUrl}
+  Push  URL: ${remoteUrl}
+  HEAD branch: ${defaultBranch}
+`) as unknown as Response<string>;
+    }
+
+    // third call (used to grab remote URLs)
+    if (arr.length === 1 && arr[0] === '-v') {
+      return Promise.resolve(`origin  ${remoteUrl} (fetch)
+origin  ${remoteUrl} (push)
+    `) as unknown as Response<string>;
+    }
+
+    return Promise.reject(new Error('Bad mock uh oh')) as unknown as Response<string>;
+  });
+}
 
 const validateCommand = new ValidateCommand();
 
@@ -18,9 +55,11 @@ describe('#createGHA', () => {
     // @ts-expect-error we're just overriding the constructor for tests,
     // no need to construct everything
     global.Date = jest.fn(() => DATE_TO_USE);
+    process.env.TEST_CREATEGHA = 'true';
   });
 
   afterEach(() => {
+    delete process.env.TEST_CREATEGHA;
     jest.clearAllMocks();
   });
 
@@ -36,6 +75,8 @@ describe('#createGHA', () => {
         yamlOutput = d;
         return true;
       });
+
+      git.remote = createGitRemoteMock();
 
       await expect(
         createGHA('', 'validate', validateCommand.args, { spec: 'petstore.json' } as CommandOptions<ValidateOptions>)
