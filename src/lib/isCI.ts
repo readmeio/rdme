@@ -8,3 +8,14 @@ import ciDetect from '@npmcli/ci-detect';
 export function isGHA() {
   return ciDetect() === 'github-actions';
 }
+
+/**
+ * Small check to ensure we're in a safe CI environment.
+ *
+ * The reason we have this `env` variable is because we run our tests in a CI environment
+ * and we don't want false positives when running tests on logic only intended for CI.
+ */
+export default function isCI() {
+  /* istanbul ignore next */
+  return (ciDetect() && process.env.NODE_ENV !== 'testing') || process.env.TEST_CI;
+}

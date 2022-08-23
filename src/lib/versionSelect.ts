@@ -1,9 +1,9 @@
-import ciDetect from '@npmcli/ci-detect';
 import config from 'config';
 import { Headers } from 'node-fetch';
 
 import APIError from './apiError';
 import fetch, { cleanHeaders, handleRes } from './fetch';
+import isCI from './isCI';
 import { warn } from './logger';
 import * as promptHandler from './prompts';
 import promptTerminal from './promptWrapper';
@@ -28,7 +28,7 @@ export async function getProjectVersion(versionFlag: string, key: string, allowN
         .then(res => res.version);
     }
 
-    if ((ciDetect() && process.env.NODE_ENV !== 'testing') || process.env.TEST_CI) {
+    if (isCI()) {
       warn('No `--version` parameter detected in current CI environment. Defaulting to main version.');
       return undefined;
     }
