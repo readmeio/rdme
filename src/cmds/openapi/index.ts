@@ -23,7 +23,7 @@ export type Options = {
   create?: boolean;
   useSpecVersion?: boolean;
   workingDirectory?: string;
-  updateSingleSpec?: boolean;
+  update?: boolean;
 };
 
 export default class OpenAPICommand extends Command {
@@ -72,9 +72,10 @@ export default class OpenAPICommand extends Command {
         description: 'Working directory (for usage with relative external references)',
       },
       {
-        name: 'updateSingleSpec',
+        name: 'update',
         type: Boolean,
-        description: "Automatically update an existing spec file if it's the only one found",
+        description:
+          "Automatically update an existing API definition in ReadMe if it's the only one associated with the current version.",
       },
     ];
   }
@@ -82,7 +83,7 @@ export default class OpenAPICommand extends Command {
   async run(opts: CommandOptions<Options>) {
     super.run(opts);
 
-    const { key, id, spec, create, useSpecVersion, version, workingDirectory, updateSingleSpec } = opts;
+    const { key, id, spec, create, useSpecVersion, version, workingDirectory, update } = opts;
 
     let selectedVersion = version;
     let isUpdate: boolean;
@@ -102,9 +103,9 @@ export default class OpenAPICommand extends Command {
       Command.warn("We'll be using the `--create` option , so the `--id` parameter will be ignored.");
     }
 
-    if (updateSingleSpec && id) {
+    if (update && id) {
       Command.warn(
-        'When using the `--id` option the `--updateSingleSpec` option is ignored, as the desired spec id is already specified.'
+        "We'll be updating the API definition associated with the `--id` parameter, so the `--update` parameter will be ignored."
       );
     }
 
@@ -251,10 +252,10 @@ export default class OpenAPICommand extends Command {
       Command.debug(`api settings list response payload: ${JSON.stringify(apiSettingsBody)}`);
       if (!apiSettingsBody.length) return createSpec();
 
-      if (updateSingleSpec) {
+      if (update) {
         if (apiSettingsBody.length > 1) {
           throw new Error(
-            `The option \`--updateSingleSpec\` can't be used when there's more than one spec file available (found ${apiSettingsBody.length}).`
+            `The \`--update\` option cannot be used when there's more than one API definition available (found ${apiSettingsBody.length}).`
           );
         }
         const { _id: specId } = apiSettingsBody[0];

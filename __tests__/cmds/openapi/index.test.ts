@@ -409,8 +409,8 @@ describe('rdme openapi', () => {
       return mock.done();
     });
 
-    describe('--updateSingleSpec', () => {
-      it("should update a spec file without prompts if providing `updateSingleSpec` and it's the only spec available", async () => {
+    describe('--update', () => {
+      it("should update a spec file without prompts if providing `update` and it's the only spec available", async () => {
         const registryUUID = getRandomRegistryId();
 
         const mock = getAPIMock()
@@ -434,13 +434,13 @@ describe('rdme openapi', () => {
             key,
             version,
             spec,
-            updateSingleSpec: true,
+            update: true,
           })
         ).resolves.toBe(successfulUpdate(spec));
         return mock.done();
       });
 
-      it('should error if providing `updateSingleSpec` and there are multiple specs available', async () => {
+      it('should error if providing `update` and there are multiple specs available', async () => {
         const registryUUID = getRandomRegistryId();
 
         const mock = getAPIMock()
@@ -463,17 +463,17 @@ describe('rdme openapi', () => {
             key,
             version,
             spec,
-            updateSingleSpec: true,
+            update: true,
           })
         ).rejects.toStrictEqual(
           new Error(
-            "The option `--updateSingleSpec` can't be used when there's more than one spec file available (found 2)."
+            "The `--update` option cannot be used when there's more than one API definition available (found 2)."
           )
         );
         return mock.done();
       });
 
-      it('should warn if providing both `updateSingleSpec` and `id`', async () => {
+      it('should warn if providing both `update` and `id`', async () => {
         const registryUUID = getRandomRegistryId();
 
         const mock = getAPIMock()
@@ -489,7 +489,7 @@ describe('rdme openapi', () => {
           openapi.run({
             key,
             spec,
-            updateSingleSpec: true,
+            update: true,
             id: 'spec1',
           })
         ).resolves.toBe(successfulUpdate(spec));
@@ -498,9 +498,7 @@ describe('rdme openapi', () => {
         expect(console.info).toHaveBeenCalledTimes(0);
 
         const output = getCommandOutput();
-        expect(output).toMatch(
-          /When using the `--id` option the `--updateSingleSpec` option is ignored, as the desired spec id is already specified./
-        );
+        expect(output).toMatch(/the `--update` parameter will be ignored./);
         return mock.done();
       });
     });
