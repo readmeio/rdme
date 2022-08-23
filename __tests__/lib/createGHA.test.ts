@@ -1,9 +1,12 @@
+import type { Options as ValidateOptions } from '../../src/cmds/validate';
+import type { CommandOptions } from '../../src/lib/baseCommand';
+
 import fs from 'fs';
 
 import prompts from 'prompts';
 
 import ValidateCommand from '../../src/cmds/validate';
-import createGHAHelper from '../../src/lib/createGHA';
+import createGHA from '../../src/lib/createGHA';
 
 const validateCommand = new ValidateCommand();
 
@@ -38,8 +41,7 @@ describe('#createGHA', () => {
       });
 
       await expect(
-        // @ts-expect-error need to figure out a better way to digest opts
-        createGHAHelper('validate', validateCommand.args, { spec: 'petstore.json' })
+        createGHA('', 'validate', validateCommand.args, { spec: 'petstore.json' } as CommandOptions<ValidateOptions>)
       ).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();
@@ -58,8 +60,10 @@ describe('#createGHA', () => {
       });
 
       await expect(
-        // @ts-expect-error need to figure out a better way to digest opts
-        createGHAHelper('validate', validateCommand.args, { spec: 'petstore.json', github: true })
+        createGHA('', 'validate', validateCommand.args, {
+          github: true,
+          spec: 'petstore.json',
+        } as CommandOptions<ValidateOptions>)
       ).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();
@@ -70,8 +74,7 @@ describe('#createGHA', () => {
       prompts.inject([false]);
 
       await expect(
-        // @ts-expect-error need to figure out a better way to digest opts
-        createGHAHelper('validate', validateCommand.args, { spec: 'petstore.json' })
+        createGHA('', 'validate', validateCommand.args, { spec: 'petstore.json' } as CommandOptions<ValidateOptions>)
       ).rejects.toStrictEqual(
         new Error(
           'GitHub Action Workflow cancelled. If you ever change your mind, you can run this command again with the `--github` flag.'

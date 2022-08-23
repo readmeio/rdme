@@ -51,21 +51,25 @@ function constructOptsString(args: OptionDefinition[], opts: CommandOptions<{}>)
 }
 
 /**
- * Helper function for creating a GitHub Actions workflow file
+ * Post-command flow for creating a GitHub Action workflow file.
  *
  */
-export default async function createGHAHelper(
+export default async function createGHA(
+  msg: string,
   command: keyof typeof commands,
   args: OptionDefinition[],
   opts: CommandOptions<{}>
 ) {
-  prompts.override({ createGHA: opts.github });
+  // eslint-disable-next-line no-console
+  if (msg) console.log(msg);
 
-  const { branch, createGHA, filePath } = await promptTerminal(
+  prompts.override({ shouldCreateGHA: opts.github });
+
+  const { branch, shouldCreateGHA, filePath } = await promptTerminal(
     [
       {
         message: 'Do you want to create a GitHub Action so you can run this command automatically in GitHub?',
-        name: 'createGHA',
+        name: 'shouldCreateGHA',
         type: 'confirm',
         initial: true,
       },
@@ -86,11 +90,11 @@ export default async function createGHAHelper(
     {
       // @ts-expect-error answers is definitely an object,
       // despite TS insisting that it's an array.
-      onSubmit: (p, a, answers: { createGHA: boolean }) => !answers.createGHA,
+      onSubmit: (p, a, answers: { shouldCreateGHA: boolean }) => !answers.shouldCreateGHA,
     }
   );
 
-  if (!createGHA) {
+  if (!shouldCreateGHA) {
     throw new Error(
       'GitHub Action Workflow cancelled. If you ever change your mind, you can run this command again with the `--github` flag.'
     );
