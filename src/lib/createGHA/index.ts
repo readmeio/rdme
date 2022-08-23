@@ -68,7 +68,7 @@ export default async function createGHA(
         initial: true,
       },
       {
-        message: 'What branch do you want to run this on?',
+        message: 'What branch on GitHub should this workflow run on?',
         name: 'branch',
         type: 'text',
         initial: 'main',

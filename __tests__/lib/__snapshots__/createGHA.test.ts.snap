@@ -17,19 +17,19 @@ name: ReadMe GitHub Action 🦉
 on:
   push:
     branches:
-      # You can add more branches by duplicating this line below
-      # for each branch you'd like to add!
+      # This workflow will run every time you push code to the \`main\` branch.
+      # Check out GitHub's docs for more info on configuring this:
+      # https://docs.github.com/actions/using-workflows/events-that-trigger-workflows
       - main
 
 jobs:
-  simple:
-    name: My First GitHub Action
+  rdme-validate:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout GitHub Action
+      - name: Check out repo 📚
         uses: actions/checkout@v3
 
-      - name: Run \`validate\` command
+      - name: Run \`validate\` command 🚀
         uses: readmeio/rdme@7.5.0
         with:
           rdme: validate petstore.json
@@ -53,19 +53,19 @@ name: ReadMe GitHub Action 🦉
 on:
   push:
     branches:
-      # You can add more branches by duplicating this line below
-      # for each branch you'd like to add!
+      # This workflow will run every time you push code to the \`main\` branch.
+      # Check out GitHub's docs for more info on configuring this:
+      # https://docs.github.com/actions/using-workflows/events-that-trigger-workflows
       - main
 
 jobs:
-  simple:
-    name: My First GitHub Action
+  rdme-validate:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout GitHub Action
+      - name: Check out repo 📚
         uses: actions/checkout@v3
 
-      - name: Run \`validate\` command
+      - name: Run \`validate\` command 🚀
         uses: readmeio/rdme@7.5.0
         with:
           rdme: validate petstore.json
