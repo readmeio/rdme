@@ -117,11 +117,13 @@ rdme openapi [path-to-file.json] --id={existing-id}
 
 #### Uploading or Editing an API Definition in a Project Version
 
-You can additional include a version flag, specifying the target version for your file's destination. This approach will provide you with CLI prompts, so we do not recommend this technique in CI environments.
+You can additionally include a version flag, specifying the target version for your file's destination. This approach will provide you with CLI prompts, so we do not recommend this technique in CI environments.
 
 ```sh
 rdme openapi [path-to-file.json] --version={project-version}
 ```
+
+You can add `--updateSingleSpec` to the command so if there's only one spec file available to update, it will select it without any prompts.
 
 If you wish to use the version specified [in the `info.version` field of your API definition](https://spec.openapis.org/oas/v3.1.0#fixed-fields-0), you can pass the `--useSpecVersion` option. For example, say [the `info` object](https://spec.openapis.org/oas/v3.1.0#info-object) of your API definition looks like this:
 
