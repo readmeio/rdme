@@ -2,6 +2,7 @@
 import type commands from '../cmds';
 import type { OptionDefinition } from 'command-line-usage';
 
+import isCI from './isCI';
 import { debug, info, warn } from './logger';
 
 export type CommandOptions<T> = T & {
@@ -86,6 +87,10 @@ export default class Command {
       if (!opts.key) {
         throw new Error('No project API key provided. Please use `--key`.');
       }
+    }
+
+    if (opts.github && isCI()) {
+      throw new Error('The `--github` flag is only for usage in non-CI environments.');
     }
   }
 

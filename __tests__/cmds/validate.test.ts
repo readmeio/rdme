@@ -105,4 +105,20 @@ describe('rdme validate', () => {
       return expect(validate.run({ spec: './__tests__/__fixtures__/invalid-swagger.json' })).rejects.toMatchSnapshot();
     });
   });
+
+  describe('CI tests', () => {
+    beforeEach(() => {
+      process.env.TEST_CI = 'true';
+    });
+
+    afterEach(() => {
+      delete process.env.TEST_CI;
+    });
+
+    it('should fail if user attempts to pass `--github` flag in CI environment', () => {
+      return expect(
+        validate.run({ github: true, spec: '__tests__/__fixtures__/petstore-simple-weird-version.json' })
+      ).rejects.toStrictEqual(new Error('The `--github` flag is only for usage in non-CI environments.'));
+    });
+  });
 });
