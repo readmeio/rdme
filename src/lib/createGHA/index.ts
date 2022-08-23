@@ -6,29 +6,14 @@ import fs from 'fs';
 import path from 'path';
 
 import chalk from 'chalk';
-import fetch from 'node-fetch';
 import prompts from 'prompts';
 
 import { transcludeFile } from 'hercule/promises';
 
 import pkg from '../../../package.json';
-import { debug } from '../logger';
 import promptTerminal from '../promptWrapper';
 
-const latestGitHubPackageUrl = 'https://api.github.com/repos/readmeio/rdme/releases/latest';
-
 const GITHUB_SECRET_NAME = 'README_API_KEY';
-
-function getLatestPackageVersion(): Promise<string> {
-  return fetch(latestGitHubPackageUrl)
-    .then(res => res.json())
-    .then(res => res.tag_name)
-    .catch(err => {
-      debug(`error fetching package tag from github: ${err.message}`);
-      // as a fallback, return package version
-      return pkg.version;
-    });
-}
 
 function constructOptsString(
   args: OptionDefinition[],
@@ -104,7 +89,7 @@ export default async function createGHA(
   }
 
   const optsString = constructOptsString(args, opts);
-  const rdmeVersion = await getLatestPackageVersion();
+  const rdmeVersion = pkg.version;
   const timestamp = new Date().toISOString();
 
   /**
