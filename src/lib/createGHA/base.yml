@@ -20,4 +20,4 @@ jobs:
       - name: Run `:[](command)` command
         uses: readmeio/rdme@:[](rdmeVersion)
         with:
-          rdme: :[](command) :[](optsString)
+          rdme: :[](commandString)

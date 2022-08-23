@@ -15,11 +15,15 @@ import promptTerminal from '../promptWrapper';
 
 const GITHUB_SECRET_NAME = 'README_API_KEY';
 
-function constructOptsString(
+/**
+ * Constructs the command string that we pass into the workflow file.
+ */
+function constructCmdString(
+  command: keyof typeof commands,
   args: OptionDefinition[],
   opts: CommandOptions<Record<string, string | boolean | undefined>>
 ): string {
-  return args
+  const optsString = args
     .sort(arg => (arg.defaultOption ? -1 : 0))
     .map(arg => {
       const val = opts[arg.name];
@@ -36,6 +40,8 @@ function constructOptsString(
     })
     .filter(Boolean)
     .join(' ');
+
+  return `${command} ${optsString}`.trim();
 }
 
 /**
@@ -88,7 +94,7 @@ export default async function createGHA(
     );
   }
 
-  const optsString = constructOptsString(args, opts);
+  const commandString = constructCmdString(command, args, opts);
   const rdmeVersion = pkg.version;
   const timestamp = new Date().toISOString();
 
@@ -98,15 +104,15 @@ export default async function createGHA(
    * @param url The variables from the `base.yml` template
    * @see {@link https://github.com/jamesramsay/hercule#resolvers}
    */
-  const customResolver = function (url: 'branch' | 'command' | 'rdmeVersion' | 'optsString' | 'timestamp'): {
+  const customResolver = function (url: 'branch' | 'command' | 'rdmeVersion' | 'commandString' | 'timestamp'): {
     content: string;
   } {
     const data = {
       branch,
       command,
+      commandString,
       rdmeVersion,
       timestamp,
-      optsString,
     };
     return { content: data[url] };
   };
