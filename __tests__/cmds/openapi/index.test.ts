@@ -678,6 +678,12 @@ describe('rdme openapi', () => {
       ).rejects.toStrictEqual(new Error('No project API key provided. Please use `--key`.'));
     });
 
+    it('should error if `--create` and `--update` flags are passed simultaneously', () => {
+      return expect(openapi.run({ key, create: true, update: true })).rejects.toStrictEqual(
+        new Error('The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!')
+      );
+    });
+
     it('should error if invalid API key is sent and version list does not load', async () => {
       const errorObject = {
         error: 'APIKEY_NOTFOUND',

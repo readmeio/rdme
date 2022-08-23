@@ -89,6 +89,12 @@ export default class OpenAPICommand extends Command {
     let isUpdate: boolean;
     const spinner = ora({ ...oraOptions() });
 
+    if (create && update) {
+      throw new Error(
+        'The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!'
+      );
+    }
+
     if (workingDirectory) {
       process.chdir(workingDirectory);
     }
