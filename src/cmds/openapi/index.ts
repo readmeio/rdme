@@ -106,7 +106,7 @@ export default class OpenAPICommand extends Command {
     }
 
     if (create && id) {
-      Command.warn("We'll be using the `--create` option , so the `--id` parameter will be ignored.");
+      Command.warn("We'll be using the `--create` option, so the `--id` parameter will be ignored.");
     }
 
     if (update && id) {
