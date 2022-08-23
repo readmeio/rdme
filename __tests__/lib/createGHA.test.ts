@@ -121,4 +121,38 @@ describe('#createGHA', () => {
       );
     });
   });
+
+  describe('#getGitData', () => {
+    it('should return correct data in default case', () => {
+      git.remote = createGitRemoteMock();
+
+      git.revparse = jest.fn(() => {
+        return Promise.resolve('/someroot') as unknown as Response<string>;
+      });
+
+      return expect(getGitData()).resolves.toStrictEqual({
+        containsGitHubRemote: true,
+        containsNonGitHubRemote: false,
+        defaultBranch: 'main',
+        isRepo: true,
+        repoRoot: '/someroot',
+      });
+    });
+
+    it('should return empty repoRoot if function fails', () => {
+      git.remote = createGitRemoteMock();
+
+      git.revparse = jest.fn(() => {
+        return Promise.reject(new Error('some error')) as unknown as Response<string>;
+      });
+
+      return expect(getGitData()).resolves.toStrictEqual({
+        containsGitHubRemote: true,
+        containsNonGitHubRemote: false,
+        defaultBranch: 'main',
+        isRepo: true,
+        repoRoot: '',
+      });
+    });
+  });
 });
