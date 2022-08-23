@@ -74,7 +74,7 @@ export default class OpenAPICommand extends Command {
       {
         name: 'updateSingleSpec',
         type: Boolean,
-        description: 'Automatically update an existing spec file if it\'s the only one found',
+        description: "Automatically update an existing spec file if it's the only one found",
       },
     ];
   }
@@ -246,7 +246,7 @@ export default class OpenAPICommand extends Command {
       if (!apiSettingsBody.length) return createSpec();
 
       if (apiSettingsBody.length === 1 && updateSingleSpec) {
-        const {_id: specId} = apiSettingsBody[0];
+        const { _id: specId } = apiSettingsBody[0];
         return updateSpec(specId);
       }
 

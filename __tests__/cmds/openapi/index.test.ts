@@ -409,7 +409,7 @@ describe('rdme openapi', () => {
       return mock.done();
     });
 
-    it('should update a spec file without prompts if providing `updateSingleSpec` and it\'s the only spec available' , async () => {
+    it("should update a spec file without prompts if providing `updateSingleSpec` and it's the only spec available", async () => {
       const registryUUID = getRandomRegistryId();
 
       const mock = getAPIMock()
@@ -420,9 +420,7 @@ describe('rdme openapi', () => {
         .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
         .get('/api/v1/api-specification')
         .basicAuth({ user: key })
-        .reply(200, [
-          { _id: 'spec1', title: 'spec1_title' },
-        ])
+        .reply(200, [{ _id: 'spec1', title: 'spec1_title' }])
         .put('/api/v1/api-specification/spec1', { registryUUID })
         .delayConnection(1000)
         .basicAuth({ user: key })
@@ -435,7 +433,7 @@ describe('rdme openapi', () => {
           key,
           version,
           spec,
-          updateSingleSpec: true
+          updateSingleSpec: true,
         })
       ).resolves.toBe(successfulUpdate(spec));
       return mock.done();
