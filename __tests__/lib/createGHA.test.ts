@@ -68,7 +68,7 @@ describe('#createGHA', () => {
       expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yaml`, expect.any(String));
     });
 
-    it('should exit if user does not want to set up GHA', async () => {
+    it('should exit if user does not want to set up GHA', () => {
       prompts.inject([false]);
 
       return expect(
