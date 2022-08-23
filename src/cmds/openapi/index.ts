@@ -245,7 +245,12 @@ export default class OpenAPICommand extends Command {
       Command.debug(`api settings list response payload: ${JSON.stringify(apiSettingsBody)}`);
       if (!apiSettingsBody.length) return createSpec();
 
-      if (apiSettingsBody.length === 1 && updateSingleSpec) {
+      if (updateSingleSpec) {
+        if (apiSettingsBody.length > 1) {
+          throw new Error(
+            `The option \`--updateSingleSpec\` can't be used when there's more than one spec file available (found ${apiSettingsBody.length}).`
+          );
+        }
         const { _id: specId } = apiSettingsBody[0];
         return updateSpec(specId);
       }
