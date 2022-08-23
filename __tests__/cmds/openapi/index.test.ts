@@ -472,6 +472,37 @@ describe('rdme openapi', () => {
         );
         return mock.done();
       });
+
+      it('should warn if providing both `updateSingleSpec` and `id`', async () => {
+        const registryUUID = getRandomRegistryId();
+
+        const mock = getAPIMock()
+          .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+          .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+          .put('/api/v1/api-specification/spec1', { registryUUID })
+          .delayConnection(1000)
+          .basicAuth({ user: key })
+          .reply(201, { _id: 1 }, { location: exampleRefLocation });
+        const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
+
+        await expect(
+          openapi.run({
+            key,
+            spec,
+            updateSingleSpec: true,
+            id: 'spec1',
+          })
+        ).resolves.toBe(successfulUpdate(spec));
+
+        expect(console.warn).toHaveBeenCalledTimes(1);
+        expect(console.info).toHaveBeenCalledTimes(0);
+
+        const output = getCommandOutput();
+        expect(output).toMatch(
+          /When using the `--id` option the `--updateSingleSpec` option is ignored, as the desired spec id is already specified./
+        );
+        return mock.done();
+      });
     });
 
     it.todo('should paginate to next and previous pages of specs');

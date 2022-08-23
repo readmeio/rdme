@@ -102,6 +102,12 @@ export default class OpenAPICommand extends Command {
       Command.warn("We'll be using the `--create` option , so the `--id` parameter will be ignored.");
     }
 
+    if (updateSingleSpec && id) {
+      Command.warn(
+        'When using the `--id` option the `--updateSingleSpec` option is ignored, as the desired spec id is already specified.'
+      );
+    }
+
     // Reason we're hardcoding in command here is because `swagger` command
     // relies on this and we don't want to use `swagger` in this function
     const { bundledSpec, specPath, specType, specVersion } = await prepareOas(spec, 'openapi');
