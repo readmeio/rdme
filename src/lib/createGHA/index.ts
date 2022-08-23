@@ -30,7 +30,10 @@ function getLatestPackageVersion(): Promise<string> {
     });
 }
 
-function constructOptsString(args: OptionDefinition[], opts: CommandOptions<{}>): string {
+function constructOptsString(
+  args: OptionDefinition[],
+  opts: CommandOptions<Record<string, string | boolean | undefined>>
+): string {
   return args
     .sort(arg => (arg.defaultOption ? -1 : 0))
     .map(arg => {
