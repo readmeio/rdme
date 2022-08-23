@@ -11,25 +11,22 @@ import createGHA from '../../src/lib/createGHA';
 const validateCommand = new ValidateCommand();
 
 describe('#createGHA', () => {
-  // eslint-disable-next-line no-underscore-dangle
-  let _Date;
-
   beforeEach(() => {
     // global Date override to handle timestamp generation
     // stolen from here: https://github.com/facebook/jest/issues/2234#issuecomment-294873406
     const DATE_TO_USE = new Date('2022');
-    _Date = Date;
     // @ts-expect-error we're just overriding the constructor for tests,
     // no need to construct everything
     global.Date = jest.fn(() => DATE_TO_USE);
   });
 
   afterEach(() => {
-    global.Date = _Date;
+    jest.clearAllMocks();
   });
 
   describe('validate', () => {
     it('should run GHA creation workflow', async () => {
+      expect.assertions(3);
       const fileName = 'rdme-validate';
       prompts.inject([true, 'main', fileName]);
 
@@ -49,6 +46,7 @@ describe('#createGHA', () => {
     });
 
     it('should run GHA creation workflow with `--github` flag', async () => {
+      expect.assertions(3);
       const fileName = 'rdme-validate-with-github-flag';
       prompts.inject(['main', fileName]);
 
@@ -73,7 +71,7 @@ describe('#createGHA', () => {
     it('should exit if user does not want to set up GHA', async () => {
       prompts.inject([false]);
 
-      await expect(
+      return expect(
         createGHA('', 'validate', validateCommand.args, { spec: 'petstore.json' } as CommandOptions<ValidateOptions>)
       ).rejects.toStrictEqual(
         new Error(
