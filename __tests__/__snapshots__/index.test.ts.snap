@@ -19,6 +19,7 @@ Options
   --useSpecVersion            Uses the version listed in the \`info.version\` field in the API        
                               definition for the project version parameter.                         
   --workingDirectory string   Working directory (for usage with relative external references)       
+  --updateSingleSpec          Automatically update an existing spec file if it's the only one found 
   -h, --help                  Display this usage guide                                              
 
 Related commands
@@ -47,6 +48,7 @@ Options
   --useSpecVersion            Uses the version listed in the \`info.version\` field in the API        
                               definition for the project version parameter.                         
   --workingDirectory string   Working directory (for usage with relative external references)       
+  --updateSingleSpec          Automatically update an existing spec file if it's the only one found 
   -h, --help                  Display this usage guide                                              
 
 Related commands
@@ -75,6 +77,7 @@ Options
   --useSpecVersion            Uses the version listed in the \`info.version\` field in the API        
                               definition for the project version parameter.                         
   --workingDirectory string   Working directory (for usage with relative external references)       
+  --updateSingleSpec          Automatically update an existing spec file if it's the only one found 
   -h, --help                  Display this usage guide                                              
 
 Related commands
