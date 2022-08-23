@@ -409,6 +409,38 @@ describe('rdme openapi', () => {
       return mock.done();
     });
 
+    it('should update a spec file without prompts if providing `updateSingleSpec` and it\'s the only spec available' , async () => {
+      const registryUUID = getRandomRegistryId();
+
+      const mock = getAPIMock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, [{ version }])
+        .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+        .get('/api/v1/api-specification')
+        .basicAuth({ user: key })
+        .reply(200, [
+          { _id: 'spec1', title: 'spec1_title' },
+        ])
+        .put('/api/v1/api-specification/spec1', { registryUUID })
+        .delayConnection(1000)
+        .basicAuth({ user: key })
+        .reply(201, { _id: 1 }, { location: exampleRefLocation });
+
+      const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
+
+      await expect(
+        openapi.run({
+          key,
+          version,
+          spec,
+          updateSingleSpec: true
+        })
+      ).resolves.toBe(successfulUpdate(spec));
+      return mock.done();
+    });
+
     it.todo('should paginate to next and previous pages of specs');
   });
 

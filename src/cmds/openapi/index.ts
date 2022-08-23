@@ -23,6 +23,7 @@ export type Options = {
   create?: boolean;
   useSpecVersion?: boolean;
   workingDirectory?: string;
+  updateSingleSpec?: boolean;
 };
 
 export default class OpenAPICommand extends Command {
@@ -70,13 +71,18 @@ export default class OpenAPICommand extends Command {
         type: String,
         description: 'Working directory (for usage with relative external references)',
       },
+      {
+        name: 'updateSingleSpec',
+        type: Boolean,
+        description: 'Automatically update an existing spec file if it\'s the only one found',
+      },
     ];
   }
 
   async run(opts: CommandOptions<Options>) {
     super.run(opts);
 
-    const { key, id, spec, create, useSpecVersion, version, workingDirectory } = opts;
+    const { key, id, spec, create, useSpecVersion, version, workingDirectory, updateSingleSpec } = opts;
 
     let selectedVersion = version;
     let isUpdate: boolean;
@@ -238,6 +244,11 @@ export default class OpenAPICommand extends Command {
       const apiSettingsBody = await apiSettings.json();
       Command.debug(`api settings list response payload: ${JSON.stringify(apiSettingsBody)}`);
       if (!apiSettingsBody.length) return createSpec();
+
+      if (apiSettingsBody.length === 1 && updateSingleSpec) {
+        const {_id: specId} = apiSettingsBody[0];
+        return updateSpec(specId);
+      }
 
       // @todo: figure out how to add a stricter type here, see:
       // https://github.com/readmeio/rdme/pull/570#discussion_r949715913
