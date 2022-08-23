@@ -5,6 +5,6 @@ import ciDetect from '@npmcli/ci-detect';
  *
  * @see {@link https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables}
  */
-export default function isGHA() {
+export function isGHA() {
   return ciDetect() === 'github-actions';
 }
