@@ -23,6 +23,7 @@ export type Options = {
   create?: boolean;
   useSpecVersion?: boolean;
   workingDirectory?: string;
+  update?: boolean;
 };
 
 export default class OpenAPICommand extends Command {
@@ -66,17 +67,29 @@ export default class OpenAPICommand extends Command {
         type: String,
         description: 'Working directory (for usage with relative external references)',
       },
+      {
+        name: 'update',
+        type: Boolean,
+        description:
+          "Automatically update an existing API definition in ReadMe if it's the only one associated with the current version.",
+      },
     ];
   }
 
   async run(opts: CommandOptions<Options>) {
     super.run(opts);
 
-    const { key, id, spec, create, useSpecVersion, version, workingDirectory } = opts;
+    const { key, id, spec, create, useSpecVersion, version, workingDirectory, update } = opts;
 
     let selectedVersion = version;
     let isUpdate: boolean;
     const spinner = ora({ ...oraOptions() });
+
+    if (create && update) {
+      throw new Error(
+        'The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!'
+      );
+    }
 
     if (workingDirectory) {
       process.chdir(workingDirectory);
@@ -89,7 +102,13 @@ export default class OpenAPICommand extends Command {
     }
 
     if (create && id) {
-      Command.warn("We'll be using the `--create` option , so the `--id` parameter will be ignored.");
+      Command.warn("We'll be using the `--create` option, so the `--id` parameter will be ignored.");
+    }
+
+    if (update && id) {
+      Command.warn(
+        "We'll be updating the API definition associated with the `--id` parameter, so the `--update` parameter will be ignored."
+      );
     }
 
     // Reason we're hardcoding in command here is because `swagger` command
@@ -234,6 +253,16 @@ export default class OpenAPICommand extends Command {
       const apiSettingsBody = await apiSettings.json();
       Command.debug(`api settings list response payload: ${JSON.stringify(apiSettingsBody)}`);
       if (!apiSettingsBody.length) return createSpec();
+
+      if (update) {
+        if (apiSettingsBody.length > 1) {
+          throw new Error(
+            `The \`--update\` option cannot be used when there's more than one API definition available (found ${apiSettingsBody.length}).`
+          );
+        }
+        const { _id: specId } = apiSettingsBody[0];
+        return updateSpec(specId);
+      }
 
       // @todo: figure out how to add a stricter type here, see:
       // https://github.com/readmeio/rdme/pull/570#discussion_r949715913

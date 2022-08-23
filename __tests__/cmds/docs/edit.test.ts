@@ -78,7 +78,7 @@ describe('rdme docs:edit', () => {
 
     const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
-    await expect(docsEdit.run({ slug, key, version: '1.0.0' })).rejects.toThrow(new APIError(errorObject));
+    await expect(docsEdit.run({ slug, key, version: '1.0.0' })).rejects.toStrictEqual(new APIError(errorObject));
 
     getMock.done();
     versionMock.done();
@@ -103,7 +103,9 @@ describe('rdme docs:edit', () => {
       return cb(0);
     }
 
-    await expect(docsEdit.run({ slug, key, version: '1.0.0', mockEditor })).rejects.toThrow(new APIError(errorObject));
+    await expect(docsEdit.run({ slug, key, version: '1.0.0', mockEditor })).rejects.toStrictEqual(
+      new APIError(errorObject)
+    );
 
     getMock.done();
     putMock.done();

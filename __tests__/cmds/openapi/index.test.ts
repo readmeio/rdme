@@ -409,6 +409,100 @@ describe('rdme openapi', () => {
       return mock.done();
     });
 
+    describe('--update', () => {
+      it("should update a spec file without prompts if providing `update` and it's the only spec available", async () => {
+        const registryUUID = getRandomRegistryId();
+
+        const mock = getAPIMock()
+          .get(`/api/v1/version/${version}`)
+          .basicAuth({ user: key })
+          .reply(200, [{ version }])
+          .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+          .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+          .get('/api/v1/api-specification')
+          .basicAuth({ user: key })
+          .reply(200, [{ _id: 'spec1', title: 'spec1_title' }])
+          .put('/api/v1/api-specification/spec1', { registryUUID })
+          .delayConnection(1000)
+          .basicAuth({ user: key })
+          .reply(201, { _id: 1 }, { location: exampleRefLocation });
+
+        const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
+
+        await expect(
+          openapi.run({
+            key,
+            version,
+            spec,
+            update: true,
+          })
+        ).resolves.toBe(successfulUpdate(spec));
+        return mock.done();
+      });
+
+      it('should error if providing `update` and there are multiple specs available', async () => {
+        const registryUUID = getRandomRegistryId();
+
+        const mock = getAPIMock()
+          .get(`/api/v1/version/${version}`)
+          .basicAuth({ user: key })
+          .reply(200, [{ version }])
+          .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+          .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+          .get('/api/v1/api-specification')
+          .basicAuth({ user: key })
+          .reply(200, [
+            { _id: 'spec1', title: 'spec1_title' },
+            { _id: 'spec2', title: 'spec2_title' },
+          ]);
+
+        const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
+
+        await expect(
+          openapi.run({
+            key,
+            version,
+            spec,
+            update: true,
+          })
+        ).rejects.toStrictEqual(
+          new Error(
+            "The `--update` option cannot be used when there's more than one API definition available (found 2)."
+          )
+        );
+        return mock.done();
+      });
+
+      it('should warn if providing both `update` and `id`', async () => {
+        const registryUUID = getRandomRegistryId();
+
+        const mock = getAPIMock()
+          .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+          .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+          .put('/api/v1/api-specification/spec1', { registryUUID })
+          .delayConnection(1000)
+          .basicAuth({ user: key })
+          .reply(201, { _id: 1 }, { location: exampleRefLocation });
+        const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
+
+        await expect(
+          openapi.run({
+            key,
+            spec,
+            update: true,
+            id: 'spec1',
+          })
+        ).resolves.toBe(successfulUpdate(spec));
+
+        expect(console.warn).toHaveBeenCalledTimes(1);
+        expect(console.info).toHaveBeenCalledTimes(0);
+
+        const output = getCommandOutput();
+        expect(output).toMatch(/the `--update` parameter will be ignored./);
+        return mock.done();
+      });
+    });
+
     it.todo('should paginate to next and previous pages of specs');
   });
 
@@ -582,6 +676,12 @@ describe('rdme openapi', () => {
       return expect(
         openapi.run({ spec: require.resolve('@readme/oas-examples/3.0/json/petstore.json') })
       ).rejects.toStrictEqual(new Error('No project API key provided. Please use `--key`.'));
+    });
+
+    it('should error if `--create` and `--update` flags are passed simultaneously', () => {
+      return expect(openapi.run({ key, create: true, update: true })).rejects.toStrictEqual(
+        new Error('The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!')
+      );
     });
 
     it('should error if invalid API key is sent and version list does not load', async () => {

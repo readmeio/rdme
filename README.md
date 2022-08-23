@@ -109,7 +109,7 @@ rdme openapi [path-to-file.json] --version={project-version} --create
 
 #### Editing (Re-Syncing) an Existing API Definition
 
-This will edit (re-sync) an existing API definition (identified by `--id`) within your ReadMe project.
+This will edit (re-sync) an existing API definition (identified by `--id`) within your ReadMe project. **This is the recommended approach for usage in CI environments.**
 
 ```sh
 rdme openapi [path-to-file.json] --id={existing-id}
@@ -117,7 +117,7 @@ rdme openapi [path-to-file.json] --id={existing-id}
 
 #### Uploading or Editing an API Definition in a Project Version
 
-You can additional include a version flag, specifying the target version for your file's destination. This approach will provide you with CLI prompts, so we do not recommend this technique in CI environments.
+You can additionally include a version flag, specifying the target version for your file's destination. This approach will provide you with CLI prompts, so we do not recommend this technique in CI environments.
 
 ```sh
 rdme openapi [path-to-file.json] --version={project-version}
@@ -137,6 +137,12 @@ You can pass in the `--useSpecVersion` option, which would be equivalent to pass
 
 ```sh
 rdme openapi [path-to-file.json] --useSpecVersion
+```
+
+You can add `--update` to the command so if there's only one API definition for the given project version to update, it will select it without any prompts:
+
+```sh
+rdme openapi [path-to-file.json] --version={project-version} --update
 ```
 
 #### Omitting the File Path
