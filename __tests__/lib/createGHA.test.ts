@@ -124,10 +124,11 @@ describe('#createGHA', () => {
 
   describe('#getGitData', () => {
     it('should return correct data in default case', () => {
+      const repoRoot = '/someroot';
       git.remote = createGitRemoteMock();
 
       git.revparse = jest.fn(() => {
-        return Promise.resolve('/someroot') as unknown as Response<string>;
+        return Promise.resolve(repoRoot) as unknown as Response<string>;
       });
 
       return expect(getGitData()).resolves.toStrictEqual({
@@ -135,7 +136,7 @@ describe('#createGHA', () => {
         containsNonGitHubRemote: false,
         defaultBranch: 'main',
         isRepo: true,
-        repoRoot: '/someroot',
+        repoRoot,
       });
     });
 
