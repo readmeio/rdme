@@ -6,6 +6,7 @@ import fs from 'fs';
 
 import prompts from 'prompts';
 
+import OpenAPICommand from '../../src/cmds/openapi';
 import ValidateCommand from '../../src/cmds/validate';
 import createGHA, { git, getGitData } from '../../src/lib/createGHA';
 
