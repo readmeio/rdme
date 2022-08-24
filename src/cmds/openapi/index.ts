@@ -113,6 +113,7 @@ export default class OpenAPICommand extends Command {
     }
 
     if (update && id) {
+      ignoredGHAParameters.update = undefined;
       Command.warn(
         "We'll be updating the API definition associated with the `--id` parameter, so the `--update` parameter will be ignored."
       );
