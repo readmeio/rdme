@@ -204,6 +204,9 @@ rdme docs path-to-markdown-files --version={project-version}
 
 This command also has a dry run mode, which can be useful for initial setup and debugging. You can read more about dry run mode [in our docs](https://docs.readme.com/docs/rdme#dry-run-mode).
 
+#### Deleting missing documents
+If you wish to delete documents from ReadMe that are no longer present in the directory, pass the `--deleteMissing` option to the command. 
+
 #### Edit a Single ReadMe Doc on Your Local Machine
 
 ```sh

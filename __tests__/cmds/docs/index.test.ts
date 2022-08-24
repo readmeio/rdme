@@ -374,6 +374,63 @@ describe('rdme docs', () => {
     });
   });
 
+  describe('delete docs', () => {
+    it('should delete doc if file is missing and --deleteMissing option is used', async () => {
+      const versionMock = getAPIMock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version });
+      const apiMocks = getAPIMockWithVersionHeader(version)
+        .get('/api/v1/categories?perPage=20&page=1')
+        .basicAuth({ user: key })
+        .reply(200, [{ slug: 'category1' }], { 'x-total-count': '1' })
+        .get('/api/v1/categories/category1/docs')
+        .basicAuth({ user: key })
+        .reply(200, [{ slug: 'thisDocShouldBeMissingInFolder' }])
+        .delete('/api/v1/docs/thisDocShouldBeMissingInFolder')
+        .basicAuth({ user: key })
+        .reply(204, '');
+      const folderWithoutDocs = './__tests__/__fixtures__/ref-oas';
+      await expect(
+        docs.run({
+          folder: folderWithoutDocs,
+          key,
+          version,
+          deleteMissing: true,
+        })
+      ).resolves.toBe('successfully deleted `thisDocShouldBeMissingInFolder`');
+
+      apiMocks.done();
+      versionMock.done();
+    });
+
+    it('should return doc delete info for dry run', async () => {
+      const versionMock = getAPIMock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version });
+      const apiMocks = getAPIMockWithVersionHeader(version)
+        .get('/api/v1/categories?perPage=20&page=1')
+        .basicAuth({ user: key })
+        .reply(200, [{ slug: 'category1' }], { 'x-total-count': '1' })
+        .get('/api/v1/categories/category1/docs')
+        .basicAuth({ user: key })
+        .reply(200, [{ slug: 'thisDocShouldBeMissingInFolder' }]);
+      const folderWithoutDocs = './__tests__/__fixtures__/ref-oas';
+      await expect(
+        docs.run({
+          folder: folderWithoutDocs,
+          key,
+          version,
+          deleteMissing: true,
+          dryRun: true,
+        })
+      ).resolves.toBe('🎭 dry run! This will delete `thisDocShouldBeMissingInFolder`');
+      apiMocks.done();
+      versionMock.done();
+    });
+  });
+
   describe('slug metadata', () => {
     it('should use provided slug', async () => {
       const slug = 'new-doc-slug';
