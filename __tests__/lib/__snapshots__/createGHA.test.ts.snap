@@ -17,10 +17,10 @@ name: ReadMe GitHub Action 🦉
 on:
   push:
     branches:
-      # This workflow will run every time you push code to the \`main\` branch.
+      # This workflow will run every time you push code to the following branch: \`some-branch\`
       # Check out GitHub's docs for more info on configuring this:
       # https://docs.github.com/actions/using-workflows/events-that-trigger-workflows
-      - main
+      - some-branch
 
 jobs:
   rdme-openapi:
@@ -53,10 +53,10 @@ name: ReadMe GitHub Action 🦉
 on:
   push:
     branches:
-      # This workflow will run every time you push code to the \`main\` branch.
+      # This workflow will run every time you push code to the following branch: \`another-branch\`
       # Check out GitHub's docs for more info on configuring this:
       # https://docs.github.com/actions/using-workflows/events-that-trigger-workflows
-      - main
+      - another-branch
 
 jobs:
   rdme-openapi:
@@ -89,10 +89,10 @@ name: ReadMe GitHub Action 🦉
 on:
   push:
     branches:
-      # This workflow will run every time you push code to the \`main\` branch.
+      # This workflow will run every time you push code to the following branch: \`some-branch\`
       # Check out GitHub's docs for more info on configuring this:
       # https://docs.github.com/actions/using-workflows/events-that-trigger-workflows
-      - main
+      - some-branch
 
 jobs:
   rdme-validate:
@@ -125,10 +125,10 @@ name: ReadMe GitHub Action 🦉
 on:
   push:
     branches:
-      # This workflow will run every time you push code to the \`main\` branch.
+      # This workflow will run every time you push code to the following branch: \`another-branch\`
       # Check out GitHub's docs for more info on configuring this:
       # https://docs.github.com/actions/using-workflows/events-that-trigger-workflows
-      - main
+      - another-branch
 
 jobs:
   rdme-validate:

@@ -76,7 +76,7 @@ describe('#createGHA', () => {
       it('should run GHA creation workflow and generate valid workflow file', async () => {
         expect.assertions(6);
         const fileName = `rdme-${cmd}`;
-        prompts.inject([true, 'main', fileName]);
+        prompts.inject([true, 'some-branch', fileName]);
 
         let yamlOutput;
 
@@ -98,7 +98,7 @@ describe('#createGHA', () => {
       it('should run GHA creation workflow with `--github` flag and generate valid workflow file', async () => {
         expect.assertions(4);
         const fileName = `rdme-${cmd}-with-github-flag`;
-        prompts.inject(['main', fileName]);
+        prompts.inject(['another-branch', fileName]);
 
         let yamlOutput;
 
