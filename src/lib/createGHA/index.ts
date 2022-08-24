@@ -130,13 +130,18 @@ export default async function createGHA(
     }
   }
 
+  /**
+   * The reason we're using console.info() in these lines as opposed to
+   * our logger is because that logger has some formatting limitations
+   * and this function doesn't ever run in a GitHub Actions environment.
+   * By using `info` as opposed to `log`, we also can mock it in our tests
+   * while also freely using `log` when debugging our code.
+   *
+   * @see {@link https://github.com/readmeio/rdme/blob/main/CONTRIBUTING.md#usage-of-console}
+   */
   // eslint-disable-next-line no-console
-  if (msg) console.log(msg);
+  if (msg) console.info(msg);
 
-  // The reason we're using console.info() here as opposed to our logger
-  // is because that logger has some formatting limitations and this function
-  // doesn't ever run in a GitHub Actions environment.
-  // By using `info` as opposed to `log`, we also can mock it in our tests.
   // eslint-disable-next-line no-console
   console.info('\n🐙 GitHub Repository detected! 🐙\n');
 
