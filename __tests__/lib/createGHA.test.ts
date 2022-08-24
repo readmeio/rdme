@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import type commands from '../../src/cmds';
 import type { CommandOptions } from '../../src/lib/baseCommand';
 import type { Response } from 'simple-git';
@@ -11,10 +12,13 @@ import prompts from 'prompts';
 
 import OpenAPICommand from '../../src/cmds/openapi';
 import ValidateCommand from '../../src/cmds/validate';
-import createGHA, { git, getGitData } from '../../src/lib/createGHA';
+import createGHA, { cleanUpFileName, git, getGitData } from '../../src/lib/createGHA';
 import ghaWorkflowSchemaBackup from '../helpers/github-workflow-schema.json';
 
 const ghaWorkflowUrl = 'https://json.schemastore.org/github-workflow.json';
+
+let consoleInfoSpy;
+const getCommandOutput = () => consoleInfoSpy.mock.calls.join('\n\n');
 
 /**
  * Creates a Jest mock function for testing `git.remote`
@@ -62,29 +66,32 @@ describe('#createGHA', () => {
     ghaWorkflowSchema = await fetch(ghaWorkflowUrl)
       .then(res => res.json())
       .catch(() => {
-        // eslint-disable-next-line no-console
         console.error('error fetching JSON schema');
         return ghaWorkflowSchemaBackup;
       });
   });
 
   beforeEach(() => {
+    consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+
     // global Date override to handle timestamp generation
     // stolen from here: https://github.com/facebook/jest/issues/2234#issuecomment-294873406
     const DATE_TO_USE = new Date('2022');
     // @ts-expect-error we're just overriding the constructor for tests,
     // no need to construct everything
     global.Date = jest.fn(() => DATE_TO_USE);
-    process.env.TEST_CREATEGHA = 'true';
 
     git.checkIsRepo = jest.fn(() => {
       return Promise.resolve(true) as unknown as Response<boolean>;
     });
 
     git.remote = createGitRemoteMock();
+
+    process.env.TEST_CREATEGHA = 'true';
   });
 
   afterEach(() => {
+    consoleInfoSpy.mockRestore();
     delete process.env.TEST_CREATEGHA;
     jest.clearAllMocks();
   });
@@ -105,7 +112,7 @@ describe('#createGHA', () => {
       });
 
       it('should run GHA creation workflow and generate valid workflow file', async () => {
-        expect.assertions(4);
+        expect.assertions(6);
         const fileName = `rdme-${cmd}`;
         prompts.inject([true, 'main', fileName]);
 
@@ -121,6 +128,9 @@ describe('#createGHA', () => {
         expect(yamlOutput).toBeValidSchema(ghaWorkflowSchema);
         expect(yamlOutput).toMatchSnapshot();
         expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yaml`, expect.any(String));
+        expect(console.info).toHaveBeenCalledTimes(1);
+        const output = getCommandOutput();
+        expect(output).toMatch('GitHub Repository detected!');
       });
 
       it('should run GHA creation workflow with `--github` flag and generate valid workflow file', async () => {
@@ -162,6 +172,8 @@ describe('#createGHA', () => {
         return expect(createGHA('success!', cmd, command.args, opts)).resolves.toBe('success!');
       });
 
+      // it.todo('should not run if in a CI environment');
+
       it('should not run if repo only contains non-GitHub remotes', () => {
         git.remote = createGitRemoteMock('origin', 'https://gitlab.com', 'main');
 
@@ -170,54 +182,70 @@ describe('#createGHA', () => {
     });
   });
 
-  describe('#getGitData helper function', () => {
-    it('should return correct data in default case', () => {
-      const repoRoot = '/someroot';
+  describe('helper functions', () => {
+    describe('#getGitData', () => {
+      it('should return correct data in default case', () => {
+        const repoRoot = '/someroot';
 
-      git.revparse = jest.fn(() => {
-        return Promise.resolve(repoRoot) as unknown as Response<string>;
+        git.revparse = jest.fn(() => {
+          return Promise.resolve(repoRoot) as unknown as Response<string>;
+        });
+
+        return expect(getGitData()).resolves.toStrictEqual({
+          containsGitHubRemote: true,
+          containsNonGitHubRemote: false,
+          defaultBranch: 'main',
+          isRepo: true,
+          repoRoot,
+        });
       });
 
-      return expect(getGitData()).resolves.toStrictEqual({
-        containsGitHubRemote: true,
-        containsNonGitHubRemote: false,
-        defaultBranch: 'main',
-        isRepo: true,
-        repoRoot,
+      it('should return empty repoRoot if function fails', () => {
+        git.revparse = jest.fn(() => {
+          return Promise.reject(new Error('some error')) as unknown as Response<string>;
+        });
+
+        return expect(getGitData()).resolves.toStrictEqual({
+          containsGitHubRemote: true,
+          containsNonGitHubRemote: false,
+          defaultBranch: 'main',
+          isRepo: true,
+          repoRoot: '',
+        });
+      });
+
+      it('should still return values if every git check fails', () => {
+        git.remote = createGitRemoteMock('', '', '');
+
+        git.checkIsRepo = jest.fn(() => {
+          return Promise.reject(new Error('some error')) as unknown as Response<boolean>;
+        });
+
+        git.revparse = jest.fn(() => {
+          return Promise.reject(new Error('some error')) as unknown as Response<string>;
+        });
+
+        return expect(getGitData()).resolves.toStrictEqual({
+          containsGitHubRemote: undefined,
+          containsNonGitHubRemote: undefined,
+          defaultBranch: undefined,
+          isRepo: false,
+          repoRoot: '',
+        });
       });
     });
 
-    it('should return empty repoRoot if function fails', () => {
-      git.revparse = jest.fn(() => {
-        return Promise.reject(new Error('some error')) as unknown as Response<string>;
+    describe('#cleanUpFileName', () => {
+      it('should return cleaned up file name', () => {
+        expect(cleanUpFileName('test')).toBe('.github/workflows/test.yaml');
       });
 
-      return expect(getGitData()).resolves.toStrictEqual({
-        containsGitHubRemote: true,
-        containsNonGitHubRemote: false,
-        defaultBranch: 'main',
-        isRepo: true,
-        repoRoot: '',
-      });
-    });
-
-    it('should still return values if every git check fails', () => {
-      git.remote = createGitRemoteMock('', '', '');
-
-      git.checkIsRepo = jest.fn(() => {
-        return Promise.reject(new Error('some error')) as unknown as Response<boolean>;
+      it('should lowercase and remove whitespace', () => {
+        expect(cleanUpFileName('Hello World')).toBe('.github/workflows/hello-world.yaml');
       });
 
-      git.revparse = jest.fn(() => {
-        return Promise.reject(new Error('some error')) as unknown as Response<string>;
-      });
-
-      return expect(getGitData()).resolves.toStrictEqual({
-        containsGitHubRemote: undefined,
-        containsNonGitHubRemote: undefined,
-        defaultBranch: undefined,
-        isRepo: false,
-        repoRoot: '',
+      it('should clean up weird characters', () => {
+        expect(cleanUpFileName('Hello_World-Test*Ex@mple!')).toBe('.github/workflows/hello-world-test-ex-mple-.yaml');
       });
     });
   });

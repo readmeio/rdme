@@ -21,6 +21,15 @@ const GITHUB_SECRET_NAME = 'README_API_KEY';
 export const git = simpleGit();
 
 /**
+ * Removes any non-file-friendly characters and adds
+ * the full path + file extension for GitHub Workflow files.
+ * @param fileName raw file name to clean up
+ */
+export const cleanUpFileName = (fileName: string) => {
+  return path.join('.github/workflows/', `${fileName.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.yaml`);
+};
+
+/**
  * Constructs the command string that we pass into the workflow file.
  */
 function constructCmdString(
@@ -105,22 +114,31 @@ export default async function createGHA(
 ) {
   const { containsGitHubRemote, containsNonGitHubRemote, defaultBranch, isRepo, repoRoot } = await getGitData();
 
-  if (
-    // not a repo
-    !isRepo ||
-    // in a CI environment
-    isCI() ||
-    // is a repo, but only contains non-GitHub remotes
-    (isRepo && containsNonGitHubRemote && !containsGitHubRemote) ||
-    // not testing this function
-    (process.env.NODE_ENV === 'testing' && !process.env.TEST_CREATEGHA)
-  ) {
-    // We return the message and pretend this command flow never happened.
-    return msg;
+  if (!opts.github) {
+    if (
+      // not a repo
+      !isRepo ||
+      // in a CI environment
+      isCI() ||
+      // is a repo, but only contains non-GitHub remotes
+      (isRepo && containsNonGitHubRemote && !containsGitHubRemote) ||
+      // not testing this function
+      (process.env.NODE_ENV === 'testing' && !process.env.TEST_CREATEGHA)
+    ) {
+      // We return the original command message and pretend this command flow never happened.
+      return msg;
+    }
   }
 
   // eslint-disable-next-line no-console
   if (msg) console.log(msg);
+
+  // The reason we're using console.info() here as opposed to our logger
+  // is because that logger has some formatting limitations and this function
+  // doesn't ever run in a GitHub Actions environment.
+  // By using `info` as opposed to `log`, we also can mock it in our tests.
+  // eslint-disable-next-line no-console
+  console.info('\n🐙 GitHub Repository detected! 🐙\n');
 
   if (repoRoot) process.chdir(repoRoot);
 
@@ -145,7 +163,19 @@ export default async function createGHA(
         name: 'filePath',
         type: 'text',
         initial: `rdme-${command}`,
-        format: prev => path.join('.github/workflows/', `${prev}.yaml`),
+        format: prev => cleanUpFileName(prev),
+        validate: value => {
+          if (value.length) {
+            const fullPath = cleanUpFileName(value);
+            if (!fs.existsSync(fullPath)) {
+              return true;
+            }
+
+            return 'Specified output path already exists.';
+          }
+
+          return 'An output path must be supplied.';
+        },
       },
     ],
     {
