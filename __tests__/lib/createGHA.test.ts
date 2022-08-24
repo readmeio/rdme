@@ -66,6 +66,11 @@ describe('#createGHA', () => {
 
   describe.each([
     ['validate' as keyof typeof commands, ValidateCommand, { spec: 'petstore.json' } as CommandOptions<{}>],
+    [
+      'openapi' as keyof typeof commands,
+      OpenAPICommand,
+      { spec: 'petstore.json', id: 'spec_id' } as CommandOptions<{}>,
+    ],
   ])('%s', (cmd, CmdClass, opts) => {
     let command;
 

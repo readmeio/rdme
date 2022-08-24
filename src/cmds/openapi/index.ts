@@ -8,6 +8,7 @@ import ora from 'ora';
 import parse from 'parse-link-header';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
+import createGHA from '../../lib/createGHA';
 import fetch, { cleanHeaders, handleRes } from '../../lib/fetch';
 import { oraOptions } from '../../lib/logger';
 import prepareOas from '../../lib/prepareOas';
@@ -84,6 +85,11 @@ export default class OpenAPICommand extends Command {
     let selectedVersion = version;
     let isUpdate: boolean;
     const spinner = ora({ ...oraOptions() });
+    /**
+     * The `version` and `update` parameters are not typically ones we'd want to include
+     * in GitHub Action workflow files, so we're going to collect them in this object.
+     */
+    const ignoredGHAParameters: Options = { version: undefined, update: undefined };
 
     if (create && update) {
       throw new Error(
@@ -102,6 +108,7 @@ export default class OpenAPICommand extends Command {
     }
 
     if (create && id) {
+      ignoredGHAParameters.id = undefined;
       Command.warn("We'll be using the `--create` option, so the `--id` parameter will be ignored.");
     }
 
@@ -148,6 +155,9 @@ export default class OpenAPICommand extends Command {
           // eslint-disable-next-line no-underscore-dangle
           `\t${chalk.green(`rdme openapi ${specPath} --key=<key> --id=${body._id}`)}`,
         ].join('\n')
+      ).then(msg =>
+        // eslint-disable-next-line no-underscore-dangle
+        createGHA(msg, this.command, this.args, { ...opts, spec: specPath, id: body._id, ...ignoredGHAParameters })
       );
     };
 
@@ -239,7 +249,10 @@ export default class OpenAPICommand extends Command {
       });
     }
 
-    if (create) return createSpec();
+    if (create) {
+      delete ignoredGHAParameters.version;
+      return createSpec();
+    }
 
     if (!id) {
       Command.debug('no id parameter, retrieving list of API specs');
