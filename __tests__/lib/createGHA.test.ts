@@ -76,6 +76,12 @@ describe('#createGHA', () => {
     // no need to construct everything
     global.Date = jest.fn(() => DATE_TO_USE);
     process.env.TEST_CREATEGHA = 'true';
+
+    git.checkIsRepo = jest.fn(() => {
+      return Promise.resolve(true) as unknown as Response<boolean>;
+    });
+
+    git.remote = createGitRemoteMock();
   });
 
   afterEach(() => {
@@ -109,8 +115,6 @@ describe('#createGHA', () => {
           yamlOutput = d;
           return true;
         });
-
-        git.remote = createGitRemoteMock();
 
         await expect(createGHA('', cmd, command.args, opts)).resolves.toMatchSnapshot();
 
@@ -147,13 +151,28 @@ describe('#createGHA', () => {
           )
         );
       });
+
+      it('should not run if not a repo', () => {
+        git.checkIsRepo = jest.fn(() => {
+          return Promise.reject(new Error('not a repo')) as unknown as Response<boolean>;
+        });
+
+        git.remote = createGitRemoteMock('', '', '');
+
+        return expect(createGHA('success!', cmd, command.args, opts)).resolves.toBe('success!');
+      });
+
+      it('should not run if repo only contains non-GitHub remotes', () => {
+        git.remote = createGitRemoteMock('origin', 'https://gitlab.com', 'main');
+
+        return expect(createGHA('success!', cmd, command.args, opts)).resolves.toBe('success!');
+      });
     });
   });
 
   describe('#getGitData helper function', () => {
     it('should return correct data in default case', () => {
       const repoRoot = '/someroot';
-      git.remote = createGitRemoteMock();
 
       git.revparse = jest.fn(() => {
         return Promise.resolve(repoRoot) as unknown as Response<string>;
@@ -169,8 +188,6 @@ describe('#createGHA', () => {
     });
 
     it('should return empty repoRoot if function fails', () => {
-      git.remote = createGitRemoteMock();
-
       git.revparse = jest.fn(() => {
         return Promise.reject(new Error('some error')) as unknown as Response<string>;
       });

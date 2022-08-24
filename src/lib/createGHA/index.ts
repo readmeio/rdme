@@ -58,7 +58,7 @@ export async function getGitData() {
   const headLineRegEx = /^ {2}HEAD branch:.*/gm;
 
   const isRepo = await git.checkIsRepo().catch(e => {
-    debug(`error running git.checkIsRepo: ${e.message}`);
+    debug(`error running git repo check: ${e.message}`);
     return false;
   });
 
@@ -115,6 +115,7 @@ export default async function createGHA(
     // not testing this function
     (process.env.NODE_ENV === 'testing' && !process.env.TEST_CREATEGHA)
   ) {
+    // We return the message and pretend this command flow never happened.
     return msg;
   }
 
