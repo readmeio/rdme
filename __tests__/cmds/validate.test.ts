@@ -115,6 +115,13 @@ describe('rdme validate', () => {
       delete process.env.TEST_CI;
     });
 
+    it('should successfully validate prompt and not run GHA onboarding', async () => {
+      process.env.TEST_CREATEGHA = 'true';
+      const spec = '__tests__/__fixtures__/petstore-simple-weird-version.json';
+      await expect(validate.run({ spec })).resolves.toBe(chalk.green(`${spec} is a valid OpenAPI API definition!`));
+      delete process.env.TEST_CREATEGHA;
+    });
+
     it('should fail if user attempts to pass `--github` flag in CI environment', () => {
       return expect(
         validate.run({ github: true, spec: '__tests__/__fixtures__/petstore-simple-weird-version.json' })

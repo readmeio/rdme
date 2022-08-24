@@ -172,7 +172,11 @@ describe('#createGHA', () => {
         return expect(createGHA('success!', cmd, command.args, opts)).resolves.toBe('success!');
       });
 
-      // it.todo('should not run if in a CI environment');
+      it('should not run if in a CI environment', async () => {
+        process.env.TEST_CI = 'true';
+        await expect(createGHA('success!', cmd, command.args, opts)).resolves.toBe('success!');
+        delete process.env.TEST_CI;
+      });
 
       it('should not run if repo only contains non-GitHub remotes', () => {
         git.remote = createGitRemoteMock('origin', 'https://gitlab.com', 'main');
