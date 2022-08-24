@@ -95,9 +95,9 @@ describe('#createGHA', () => {
         expect(output).toMatch('GitHub Repository detected!');
       });
 
-      it('should run GHA creation workflow with `--github` flag and generate valid workflow file', async () => {
+      it('should run GHA creation workflow with `--github` flag and messy file name and generate valid workflow file', async () => {
         expect.assertions(4);
-        const fileName = `rdme-${cmd}-with-github-flag`;
+        const fileName = `rdme-${cmd} with GitHub flag`;
         prompts.inject(['another-branch', fileName]);
 
         let yamlOutput;
@@ -111,7 +111,7 @@ describe('#createGHA', () => {
 
         expect(yamlOutput).toBeValidSchema(ghaWorkflowSchema);
         expect(yamlOutput).toMatchSnapshot();
-        expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
+        expect(fs.writeFileSync).toHaveBeenCalledWith(cleanUpFileName(fileName), expect.any(String));
       });
 
       it('should exit if user does not want to set up GHA', () => {
