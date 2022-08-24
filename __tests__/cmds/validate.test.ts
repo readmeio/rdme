@@ -1,10 +1,14 @@
 /* eslint-disable no-console */
+import type { Response } from 'simple-git';
+
 import fs from 'fs';
 
 import chalk from 'chalk';
 import prompts from 'prompts';
 
 import Command from '../../src/cmds/validate';
+import { git } from '../../src/lib/createGHA';
+import createGitRemoteMock from '../helpers/get-git-mock';
 
 const testWorkingDir = process.cwd();
 
@@ -126,6 +130,123 @@ describe('rdme validate', () => {
       return expect(
         validate.run({ github: true, spec: '__tests__/__fixtures__/petstore-simple-weird-version.json' })
       ).rejects.toStrictEqual(new Error('The `--github` flag is only for usage in non-CI environments.'));
+    });
+  });
+
+  describe('GHA onboarding E2E tests', () => {
+    let consoleInfoSpy;
+
+    beforeEach(() => {
+      consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+
+      // global Date override to handle timestamp generation
+      // stolen from here: https://github.com/facebook/jest/issues/2234#issuecomment-294873406
+      const DATE_TO_USE = new Date('2022');
+      // @ts-expect-error we're just overriding the constructor for tests,
+      // no need to construct everything
+      global.Date = jest.fn(() => DATE_TO_USE);
+
+      git.checkIsRepo = jest.fn(() => {
+        return Promise.resolve(true) as unknown as Response<boolean>;
+      });
+
+      git.remote = createGitRemoteMock();
+
+      process.env.TEST_CREATEGHA = 'true';
+    });
+
+    afterEach(() => {
+      consoleInfoSpy.mockRestore();
+      delete process.env.TEST_CREATEGHA;
+      jest.clearAllMocks();
+    });
+
+    it('should create GHA workflow if user passes in spec via prompts', async () => {
+      expect.assertions(6);
+      let yamlOutput;
+      const spec = '__tests__/__fixtures__/petstore-simple-weird-version.json';
+      const fileName = 'validate-test-file';
+      prompts.inject([spec, true, 'validate-test-branch', fileName]);
+
+      fs.writeFileSync = jest.fn((f, d) => {
+        yamlOutput = d;
+        return true;
+      });
+
+      await expect(validate.run({})).resolves.toMatchSnapshot();
+
+      expect(yamlOutput).toMatchSnapshot();
+      expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
+      expect(console.info).toHaveBeenCalledTimes(2);
+      const output = getCommandOutput();
+      expect(output).toMatch('GitHub Repository detected!');
+      expect(output).toMatch('is a valid OpenAPI API definition!');
+    });
+
+    it('should create GHA workflow if user passes in spec via opt', async () => {
+      expect.assertions(3);
+      let yamlOutput;
+      const spec = '__tests__/__fixtures__/petstore-simple-weird-version.json';
+      const fileName = 'validate-test-opt-spec-file';
+      prompts.inject([true, 'validate-test-opt-spec-branch', fileName]);
+
+      fs.writeFileSync = jest.fn((f, d) => {
+        yamlOutput = d;
+        return true;
+      });
+
+      await expect(validate.run({ spec })).resolves.toMatchSnapshot();
+
+      expect(yamlOutput).toMatchSnapshot();
+      expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
+    });
+
+    it('should create GHA workflow if user passes in spec via opt (github flag enabled)', async () => {
+      expect.assertions(3);
+      let yamlOutput;
+      const spec = '__tests__/__fixtures__/petstore-simple-weird-version.json';
+      const fileName = 'validate-test-opt-spec-github-file';
+      prompts.inject(['validate-test-opt-spec-github-branch', fileName]);
+
+      fs.writeFileSync = jest.fn((f, d) => {
+        yamlOutput = d;
+        return true;
+      });
+
+      await expect(validate.run({ spec, github: true })).resolves.toMatchSnapshot();
+
+      expect(yamlOutput).toMatchSnapshot();
+      expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
+    });
+
+    it('should create GHA workflow if user passes in spec via opt (including workingDirectory)', async () => {
+      expect.assertions(3);
+      let yamlOutput;
+      const spec = 'petstore.json';
+      const fileName = 'validate-test-opt-spec-workdir-file';
+      prompts.inject([true, 'validate-test-opt-spec-github-branch', fileName]);
+
+      fs.writeFileSync = jest.fn((f, d) => {
+        yamlOutput = d;
+        return true;
+      });
+
+      await expect(
+        validate.run({ spec, workingDirectory: './__tests__/__fixtures__/relative-ref-oas' })
+      ).resolves.toMatchSnapshot();
+
+      expect(yamlOutput).toMatchSnapshot();
+      expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
+    });
+
+    it('should reject if user says no to creating GHA workflow', () => {
+      const spec = '__tests__/__fixtures__/petstore-simple-weird-version.json';
+      prompts.inject([spec, false]);
+      return expect(validate.run({})).rejects.toStrictEqual(
+        new Error(
+          'GitHub Action Workflow cancelled. If you ever change your mind, you can run this command again with the `--github` flag.'
+        )
+      );
     });
   });
 });
