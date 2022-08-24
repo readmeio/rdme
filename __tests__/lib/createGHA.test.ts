@@ -83,72 +83,74 @@ describe('#createGHA', () => {
     jest.clearAllMocks();
   });
 
-  describe.each([
-    ['validate' as keyof typeof commands, ValidateCommand, { spec: 'petstore.json' } as CommandOptions<{}>],
-    [
-      'openapi' as keyof typeof commands,
-      OpenAPICommand,
-      { spec: 'petstore.json', id: 'spec_id' } as CommandOptions<{}>,
-    ],
-  ])('%s', (cmd, CmdClass, opts) => {
-    let command;
+  describe('command inputs', () => {
+    describe.each([
+      ['validate' as keyof typeof commands, ValidateCommand, { spec: 'petstore.json' } as CommandOptions<{}>],
+      [
+        'openapi' as keyof typeof commands,
+        OpenAPICommand,
+        { spec: 'petstore.json', id: 'spec_id' } as CommandOptions<{}>,
+      ],
+    ])('%s', (cmd, CmdClass, opts) => {
+      let command;
 
-    beforeEach(() => {
-      command = new CmdClass();
-    });
-
-    it('should run GHA creation workflow', async () => {
-      expect.assertions(4);
-      const fileName = `rdme-${cmd}`;
-      prompts.inject([true, 'main', fileName]);
-
-      let yamlOutput;
-
-      fs.writeFileSync = jest.fn((f, d) => {
-        yamlOutput = d;
-        return true;
+      beforeEach(() => {
+        command = new CmdClass();
       });
 
-      git.remote = createGitRemoteMock();
+      it('should run GHA creation workflow and generate valid workflow file', async () => {
+        expect.assertions(4);
+        const fileName = `rdme-${cmd}`;
+        prompts.inject([true, 'main', fileName]);
 
-      await expect(createGHA('', cmd, command.args, opts)).resolves.toMatchSnapshot();
+        let yamlOutput;
 
-      expect(yamlOutput).toBeValidSchema(ghaWorkflowSchema);
-      expect(yamlOutput).toMatchSnapshot();
-      expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yaml`, expect.any(String));
-    });
+        fs.writeFileSync = jest.fn((f, d) => {
+          yamlOutput = d;
+          return true;
+        });
 
-    it('should run GHA creation workflow with `--github` flag', async () => {
-      expect.assertions(4);
-      const fileName = `rdme-${cmd}-with-github-flag`;
-      prompts.inject(['main', fileName]);
+        git.remote = createGitRemoteMock();
 
-      let yamlOutput;
+        await expect(createGHA('', cmd, command.args, opts)).resolves.toMatchSnapshot();
 
-      fs.writeFileSync = jest.fn((f, d) => {
-        yamlOutput = d;
-        return true;
+        expect(yamlOutput).toBeValidSchema(ghaWorkflowSchema);
+        expect(yamlOutput).toMatchSnapshot();
+        expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yaml`, expect.any(String));
       });
 
-      await expect(createGHA('', cmd, command.args, { ...opts, github: true })).resolves.toMatchSnapshot();
+      it('should run GHA creation workflow with `--github` flag and generate valid workflow file', async () => {
+        expect.assertions(4);
+        const fileName = `rdme-${cmd}-with-github-flag`;
+        prompts.inject(['main', fileName]);
 
-      expect(yamlOutput).toBeValidSchema(ghaWorkflowSchema);
-      expect(yamlOutput).toMatchSnapshot();
-      expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yaml`, expect.any(String));
-    });
+        let yamlOutput;
 
-    it('should exit if user does not want to set up GHA', () => {
-      prompts.inject([false]);
+        fs.writeFileSync = jest.fn((f, d) => {
+          yamlOutput = d;
+          return true;
+        });
 
-      return expect(createGHA('', cmd, command.args, opts)).rejects.toStrictEqual(
-        new Error(
-          'GitHub Action Workflow cancelled. If you ever change your mind, you can run this command again with the `--github` flag.'
-        )
-      );
+        await expect(createGHA('', cmd, command.args, { ...opts, github: true })).resolves.toMatchSnapshot();
+
+        expect(yamlOutput).toBeValidSchema(ghaWorkflowSchema);
+        expect(yamlOutput).toMatchSnapshot();
+        expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yaml`, expect.any(String));
+      });
+
+      it('should exit if user does not want to set up GHA', () => {
+        prompts.inject([false]);
+
+        return expect(createGHA('', cmd, command.args, opts)).rejects.toStrictEqual(
+          new Error(
+            'GitHub Action Workflow cancelled. If you ever change your mind, you can run this command again with the `--github` flag.'
+          )
+        );
+      });
     });
   });
 
-  describe('#getGitData', () => {
+  describe('#getGitData helper function', () => {
     it('should return correct data in default case', () => {
       const repoRoot = '/someroot';
       git.remote = createGitRemoteMock();
