@@ -23,10 +23,12 @@ function createGitRemoteMock(
   return jest.fn(arr => {
     // first call (used to grab remote for usage in subsequent commands)
     if (!arr.length) {
+      if (!remote) return Promise.reject(new Error('Bad mock uh oh')) as unknown as Response<string>;
       return Promise.resolve(remote) as unknown as Response<string>;
     }
     // second call (used to grab default branch)
     if (arr.length === 2 && arr[0] === 'show' && arr[1] === remote) {
+      if (!defaultBranch) return Promise.reject(new Error('Bad mock uh oh')) as unknown as Response<string>;
       return Promise.resolve(`* remote origin
   Fetch URL: ${remoteUrl}
   Push  URL: ${remoteUrl}
@@ -36,6 +38,7 @@ function createGitRemoteMock(
 
     // third call (used to grab remote URLs)
     if (arr.length === 1 && arr[0] === '-v') {
+      if (!remoteUrl) return Promise.reject(new Error('Bad mock uh oh')) as unknown as Response<string>;
       return Promise.resolve(`origin  ${remoteUrl} (fetch)
 origin  ${remoteUrl} (push)
     `) as unknown as Response<string>;
@@ -149,6 +152,26 @@ describe('#createGHA', () => {
         containsNonGitHubRemote: false,
         defaultBranch: 'main',
         isRepo: true,
+        repoRoot: '',
+      });
+    });
+
+    it('should still return values if every git check fails', () => {
+      git.remote = createGitRemoteMock('', '', '');
+
+      git.checkIsRepo = jest.fn(() => {
+        return Promise.reject(new Error('some error')) as unknown as Response<boolean>;
+      });
+
+      git.revparse = jest.fn(() => {
+        return Promise.reject(new Error('some error')) as unknown as Response<string>;
+      });
+
+      return expect(getGitData()).resolves.toStrictEqual({
+        containsGitHubRemote: undefined,
+        containsNonGitHubRemote: undefined,
+        defaultBranch: undefined,
+        isRepo: false,
         repoRoot: '',
       });
     });
