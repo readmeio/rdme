@@ -81,7 +81,7 @@ export async function getGitData() {
     const remotesList = (await git.remote(['-v'])) as string;
     // This is a bit hairy but we want to keep it fairly general here
     // in case of GitHub Enterprise, etc.
-    containsGitHubRemote = /github.com/.test(remotesList);
+    containsGitHubRemote = /github/.test(remotesList);
     containsNonGitHubRemote = /gitlab/.test(remotesList) || /bitbucket/.test(remotesList);
   }
 
