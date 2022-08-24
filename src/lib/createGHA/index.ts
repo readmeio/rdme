@@ -20,10 +20,6 @@ const GITHUB_SECRET_NAME = 'README_API_KEY';
 
 export const git = simpleGit();
 
-// Expressions to search raw output of `git remote show origin`
-const headRegEx = /^ {2}HEAD branch: /g;
-const headLineRegEx = /^ {2}HEAD branch:.*/gm;
-
 /**
  * Constructs the command string that we pass into the workflow file.
  */
@@ -57,6 +53,10 @@ function constructCmdString(
  * Function to return various git attributes needed for running GitHub Action
  */
 export async function getGitData() {
+  // Expressions to search raw output of `git remote show origin`
+  const headRegEx = /^ {2}HEAD branch: /g;
+  const headLineRegEx = /^ {2}HEAD branch:.*/gm;
+
   const isRepo = await git.checkIsRepo().catch(e => {
     debug(`error running git.checkIsRepo: ${e.message}`);
     return false;

@@ -122,7 +122,7 @@ describe('#createGHA', () => {
     });
   });
 
-  describe.skip('#getGitData', () => {
+  describe('#getGitData', () => {
     it('should return correct data in default case', () => {
       git.remote = createGitRemoteMock();
 
