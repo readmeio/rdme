@@ -5,7 +5,7 @@ exports[`#createGHA command inputs openapi should run GHA creation workflow and 
 Your GitHub Action has been created! ✨
 
 You're almost finished! Just a couple more steps:
-1. Commit and push your newly created file (.github/workflows/rdme-openapi.yaml) to GitHub 🚀
+1. Commit and push your newly created file (.github/workflows/rdme-openapi.yml) to GitHub 🚀
 2. Create a GitHub secret called \`README_API_KEY\` and populate that with a ReadMe API key 🔑"
 `;
 
@@ -41,7 +41,7 @@ exports[`#createGHA command inputs openapi should run GHA creation workflow with
 Your GitHub Action has been created! ✨
 
 You're almost finished! Just a couple more steps:
-1. Commit and push your newly created file (.github/workflows/rdme-openapi-with-github-flag.yaml) to GitHub 🚀
+1. Commit and push your newly created file (.github/workflows/rdme-openapi-with-github-flag.yml) to GitHub 🚀
 2. Create a GitHub secret called \`README_API_KEY\` and populate that with a ReadMe API key 🔑"
 `;
 
@@ -77,7 +77,7 @@ exports[`#createGHA command inputs validate should run GHA creation workflow and
 Your GitHub Action has been created! ✨
 
 You're almost finished! Just a couple more steps:
-1. Commit and push your newly created file (.github/workflows/rdme-validate.yaml) to GitHub 🚀
+1. Commit and push your newly created file (.github/workflows/rdme-validate.yml) to GitHub 🚀
 2. Create a GitHub secret called \`README_API_KEY\` and populate that with a ReadMe API key 🔑"
 `;
 
@@ -113,7 +113,7 @@ exports[`#createGHA command inputs validate should run GHA creation workflow wit
 Your GitHub Action has been created! ✨
 
 You're almost finished! Just a couple more steps:
-1. Commit and push your newly created file (.github/workflows/rdme-validate-with-github-flag.yaml) to GitHub 🚀
+1. Commit and push your newly created file (.github/workflows/rdme-validate-with-github-flag.yml) to GitHub 🚀
 2. Create a GitHub secret called \`README_API_KEY\` and populate that with a ReadMe API key 🔑"
 `;
 

@@ -26,7 +26,7 @@ export const git = simpleGit();
  * @param fileName raw file name to clean up
  */
 export const cleanUpFileName = (fileName: string) => {
-  return path.join('.github/workflows/', `${fileName.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.yaml`);
+  return path.join('.github/workflows/', `${fileName.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.yml`);
 };
 
 /**

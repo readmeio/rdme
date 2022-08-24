@@ -127,7 +127,7 @@ describe('#createGHA', () => {
 
         expect(yamlOutput).toBeValidSchema(ghaWorkflowSchema);
         expect(yamlOutput).toMatchSnapshot();
-        expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yaml`, expect.any(String));
+        expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
         expect(console.info).toHaveBeenCalledTimes(1);
         const output = getCommandOutput();
         expect(output).toMatch('GitHub Repository detected!');
@@ -149,7 +149,7 @@ describe('#createGHA', () => {
 
         expect(yamlOutput).toBeValidSchema(ghaWorkflowSchema);
         expect(yamlOutput).toMatchSnapshot();
-        expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yaml`, expect.any(String));
+        expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
       });
 
       it('should exit if user does not want to set up GHA', () => {
@@ -237,15 +237,15 @@ describe('#createGHA', () => {
 
     describe('#cleanUpFileName', () => {
       it('should return cleaned up file name', () => {
-        expect(cleanUpFileName('test')).toBe('.github/workflows/test.yaml');
+        expect(cleanUpFileName('test')).toBe('.github/workflows/test.yml');
       });
 
       it('should lowercase and remove whitespace', () => {
-        expect(cleanUpFileName('Hello World')).toBe('.github/workflows/hello-world.yaml');
+        expect(cleanUpFileName('Hello World')).toBe('.github/workflows/hello-world.yml');
       });
 
       it('should clean up weird characters', () => {
-        expect(cleanUpFileName('Hello_World-Test*Ex@mple!')).toBe('.github/workflows/hello-world-test-ex-mple-.yaml');
+        expect(cleanUpFileName('Hello_World-Test*Ex@mple!')).toBe('.github/workflows/hello-world-test-ex-mple-.yml');
       });
     });
   });
