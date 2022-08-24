@@ -1,4 +1,4 @@
-import type { Options as ValidateOptions } from '../../src/cmds/validate';
+import type commands from '../../src/cmds';
 import type { CommandOptions } from '../../src/lib/baseCommand';
 import type { Response } from 'simple-git';
 
@@ -45,8 +45,6 @@ origin  ${remoteUrl} (push)
   });
 }
 
-const validateCommand = new ValidateCommand();
-
 describe('#createGHA', () => {
   beforeEach(() => {
     // global Date override to handle timestamp generation
@@ -63,10 +61,18 @@ describe('#createGHA', () => {
     jest.clearAllMocks();
   });
 
-  describe('validate', () => {
+  describe.each([
+    ['validate' as keyof typeof commands, ValidateCommand, { spec: 'petstore.json' } as CommandOptions<{}>],
+  ])('%s', (cmd, CmdClass, opts) => {
+    let command;
+
+    beforeEach(() => {
+      command = new CmdClass();
+    });
+
     it('should run GHA creation workflow', async () => {
       expect.assertions(3);
-      const fileName = 'rdme-validate';
+      const fileName = `rdme-${cmd}`;
       prompts.inject([true, 'main', fileName]);
 
       let yamlOutput;
@@ -78,9 +84,7 @@ describe('#createGHA', () => {
 
       git.remote = createGitRemoteMock();
 
-      await expect(
-        createGHA('', 'validate', validateCommand.args, { spec: 'petstore.json' } as CommandOptions<ValidateOptions>)
-      ).resolves.toMatchSnapshot();
+      await expect(createGHA('', cmd, command.args, opts)).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();
       expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yaml`, expect.any(String));
@@ -88,7 +92,7 @@ describe('#createGHA', () => {
 
     it('should run GHA creation workflow with `--github` flag', async () => {
       expect.assertions(3);
-      const fileName = 'rdme-validate-with-github-flag';
+      const fileName = `rdme-${cmd}-with-github-flag`;
       prompts.inject(['main', fileName]);
 
       let yamlOutput;
@@ -98,12 +102,7 @@ describe('#createGHA', () => {
         return true;
       });
 
-      await expect(
-        createGHA('', 'validate', validateCommand.args, {
-          github: true,
-          spec: 'petstore.json',
-        } as CommandOptions<ValidateOptions>)
-      ).resolves.toMatchSnapshot();
+      await expect(createGHA('', cmd, command.args, { ...opts, github: true })).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();
       expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yaml`, expect.any(String));
@@ -112,9 +111,7 @@ describe('#createGHA', () => {
     it('should exit if user does not want to set up GHA', () => {
       prompts.inject([false]);
 
-      return expect(
-        createGHA('', 'validate', validateCommand.args, { spec: 'petstore.json' } as CommandOptions<ValidateOptions>)
-      ).rejects.toStrictEqual(
+      return expect(createGHA('', cmd, command.args, opts)).rejects.toStrictEqual(
         new Error(
           'GitHub Action Workflow cancelled. If you ever change your mind, you can run this command again with the `--github` flag.'
         )
