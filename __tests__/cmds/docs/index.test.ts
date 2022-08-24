@@ -383,7 +383,7 @@ describe('rdme docs', () => {
       const apiMocks = getAPIMockWithVersionHeader(version)
         .get('/api/v1/categories?perPage=20&page=1')
         .basicAuth({ user: key })
-        .reply(200, [{ slug: 'category1' }], { 'x-total-count': '1' })
+        .reply(200, [{ slug: 'category1', type: 'guide' }], { 'x-total-count': '1' })
         .get('/api/v1/categories/category1/docs')
         .basicAuth({ user: key })
         .reply(200, [{ slug: 'thisDocShouldBeMissingInFolder' }])
@@ -412,7 +412,7 @@ describe('rdme docs', () => {
       const apiMocks = getAPIMockWithVersionHeader(version)
         .get('/api/v1/categories?perPage=20&page=1')
         .basicAuth({ user: key })
-        .reply(200, [{ slug: 'category1' }], { 'x-total-count': '1' })
+        .reply(200, [{ slug: 'category1', type: 'guide' }], { 'x-total-count': '1' })
         .get('/api/v1/categories/category1/docs')
         .basicAuth({ user: key })
         .reply(200, [{ slug: 'thisDocShouldBeMissingInFolder' }]);

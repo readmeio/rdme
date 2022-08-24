@@ -31,6 +31,7 @@ export default async function getDocs(key: string, selectedVersion: string, cate
   }
 
   return getCategories(key, selectedVersion)
+    .then(categories => categories.filter(({ type }: { type: string }) => type === 'guide'))
     .then(categories => categories.map(({ slug }: { slug: string }) => getCategoryDocs(key, selectedVersion, slug)))
     .then(Promise.all.bind(Promise))
     .then(args => [].concat(...args));
