@@ -2,13 +2,19 @@ import type commands from '../../src/cmds';
 import type { CommandOptions } from '../../src/lib/baseCommand';
 import type { Response } from 'simple-git';
 
+import '../helpers/jest.matchers';
+
 import fs from 'fs';
 
+import fetch from 'node-fetch';
 import prompts from 'prompts';
 
 import OpenAPICommand from '../../src/cmds/openapi';
 import ValidateCommand from '../../src/cmds/validate';
 import createGHA, { git, getGitData } from '../../src/lib/createGHA';
+import ghaWorkflowSchemaBackup from '../helpers/github-workflow-schema.json';
+
+const ghaWorkflowUrl = 'https://json.schemastore.org/github-workflow.json';
 
 /**
  * Creates a Jest mock function for testing `git.remote`
@@ -50,6 +56,18 @@ origin  ${remoteUrl} (push)
 }
 
 describe('#createGHA', () => {
+  let ghaWorkflowSchema;
+
+  beforeAll(async () => {
+    ghaWorkflowSchema = await fetch(ghaWorkflowUrl)
+      .then(res => res.json())
+      .catch(() => {
+        // eslint-disable-next-line no-console
+        console.error('error fetching JSON schema');
+        return ghaWorkflowSchemaBackup;
+      });
+  });
+
   beforeEach(() => {
     // global Date override to handle timestamp generation
     // stolen from here: https://github.com/facebook/jest/issues/2234#issuecomment-294873406
@@ -80,7 +98,7 @@ describe('#createGHA', () => {
     });
 
     it('should run GHA creation workflow', async () => {
-      expect.assertions(3);
+      expect.assertions(4);
       const fileName = `rdme-${cmd}`;
       prompts.inject([true, 'main', fileName]);
 
@@ -95,12 +113,13 @@ describe('#createGHA', () => {
 
       await expect(createGHA('', cmd, command.args, opts)).resolves.toMatchSnapshot();
 
+      expect(yamlOutput).toBeValidSchema(ghaWorkflowSchema);
       expect(yamlOutput).toMatchSnapshot();
       expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yaml`, expect.any(String));
     });
 
     it('should run GHA creation workflow with `--github` flag', async () => {
-      expect.assertions(3);
+      expect.assertions(4);
       const fileName = `rdme-${cmd}-with-github-flag`;
       prompts.inject(['main', fileName]);
 
@@ -113,6 +132,7 @@ describe('#createGHA', () => {
 
       await expect(createGHA('', cmd, command.args, { ...opts, github: true })).resolves.toMatchSnapshot();
 
+      expect(yamlOutput).toBeValidSchema(ghaWorkflowSchema);
       expect(yamlOutput).toMatchSnapshot();
       expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yaml`, expect.any(String));
     });
