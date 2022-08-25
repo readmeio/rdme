@@ -30,14 +30,9 @@ async function getCategoryDocs(key: string, selectedVersion: string, category: s
  *
  * @param {String} key the project API key
  * @param {String} selectedVersion the project version
- * @param {String} [category] Get docs from the specified category only
  * @returns {Promise<Array<Document>>} an array containing the docs
  */
-export default async function getDocs(key: string, selectedVersion: string, category?: string): Promise<Document[]> {
-  if (category) {
-    return getCategoryDocs(key, selectedVersion, category);
-  }
-
+export default async function getDocs(key: string, selectedVersion: string): Promise<Document[]> {
   return getCategories(key, selectedVersion)
     .then(categories => categories.filter(({ type }: { type: string }) => type === 'guide'))
     .then(categories => categories.map(({ slug }: { slug: string }) => getCategoryDocs(key, selectedVersion, slug)))
