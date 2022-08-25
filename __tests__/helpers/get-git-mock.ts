@@ -6,7 +6,7 @@ import type { Response } from 'simple-git';
  * @param remoteUrl git URL for the given remote
  * @param defaultBranch the HEAD branch
  */
-export default function createGitRemoteMock(
+export default function getGitRemoteMock(
   remote = 'origin',
   remoteUrl = 'https://github.com/readmeio/rdme.git',
   defaultBranch = 'main'

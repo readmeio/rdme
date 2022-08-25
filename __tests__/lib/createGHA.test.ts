@@ -13,7 +13,7 @@ import prompts from 'prompts';
 import OpenAPICommand from '../../src/cmds/openapi';
 import ValidateCommand from '../../src/cmds/validate';
 import createGHA, { cleanUpFileName, git, getGitData } from '../../src/lib/createGHA';
-import createGitRemoteMock from '../helpers/get-git-mock';
+import getGitRemoteMock from '../helpers/get-git-mock';
 import ghaWorkflowSchemaBackup from '../helpers/github-workflow-schema.json';
 
 const ghaWorkflowUrl = 'https://json.schemastore.org/github-workflow.json';
@@ -47,7 +47,7 @@ describe('#createGHA', () => {
       return Promise.resolve(true) as unknown as Response<boolean>;
     });
 
-    git.remote = createGitRemoteMock();
+    git.remote = getGitRemoteMock();
 
     process.env.TEST_CREATEGHA = 'true';
   });
@@ -129,7 +129,7 @@ describe('#createGHA', () => {
           return Promise.reject(new Error('not a repo')) as unknown as Response<boolean>;
         });
 
-        git.remote = createGitRemoteMock('', '', '');
+        git.remote = getGitRemoteMock('', '', '');
 
         return expect(createGHA('success!', cmd, command.args, opts)).resolves.toBe('success!');
       });
@@ -141,7 +141,7 @@ describe('#createGHA', () => {
       });
 
       it('should not run if repo only contains non-GitHub remotes', () => {
-        git.remote = createGitRemoteMock('origin', 'https://gitlab.com', 'main');
+        git.remote = getGitRemoteMock('origin', 'https://gitlab.com', 'main');
 
         return expect(createGHA('success!', cmd, command.args, opts)).resolves.toBe('success!');
       });
@@ -181,7 +181,7 @@ describe('#createGHA', () => {
       });
 
       it('should still return values if every git check fails', () => {
-        git.remote = createGitRemoteMock('', '', '');
+        git.remote = getGitRemoteMock('', '', '');
 
         git.checkIsRepo = jest.fn(() => {
           return Promise.reject(new Error('some error')) as unknown as Response<boolean>;

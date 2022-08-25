@@ -8,7 +8,7 @@ import prompts from 'prompts';
 
 import Command from '../../src/cmds/validate';
 import { git } from '../../src/lib/createGHA';
-import createGitRemoteMock from '../helpers/get-git-mock';
+import getGitRemoteMock from '../helpers/get-git-mock';
 
 const testWorkingDir = process.cwd();
 
@@ -150,7 +150,7 @@ describe('rdme validate', () => {
         return Promise.resolve(true) as unknown as Response<boolean>;
       });
 
-      git.remote = createGitRemoteMock();
+      git.remote = getGitRemoteMock();
 
       process.env.TEST_CREATEGHA = 'true';
     });
