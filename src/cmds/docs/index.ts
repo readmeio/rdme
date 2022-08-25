@@ -78,6 +78,7 @@ export default class DocsCommand extends Command {
 
     const changes: string[] = [];
     if (deleteMissing) {
+      Command.warn(`We're going to delete from ReadMe any document that isn\'t found in ${folder}.`)
       const docs = await getDocs(key, selectedVersion);
       const docSlugs = docs.map(({ slug }: { slug: string }) => slug);
       const fileSlugs = new Set(files.map(getSlug));
