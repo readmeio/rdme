@@ -5,6 +5,7 @@ import path from 'path';
 import chalk from 'chalk';
 import frontMatter from 'gray-matter';
 import nock from 'nock';
+import prompts from 'prompts';
 
 import DocsCommand from '../../../src/cmds/docs';
 import APIError from '../../../src/lib/apiError';
@@ -444,6 +445,26 @@ describe('rdme docs', () => {
           '🎭 dry run! `some-doc` will not be updated because there were no changes.'
       );
       apiMocks.done();
+      versionMock.done();
+    });
+
+    it('should do nothing if using --deleteMissing but thr folder is empty and the user aborted', async () => {
+      prompts.inject([false]);
+
+      const versionMock = getAPIMock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version });
+
+      await expect(
+        docs.run({
+          folder: './__tests__/__fixtures__/ref-oas',
+          key,
+          version,
+          deleteMissing: true,
+        })
+      ).rejects.toStrictEqual(new Error('Aborting, no changes were made.'));
+
       versionMock.done();
     });
   });

@@ -6,6 +6,8 @@ import config from 'config';
 import Command, { CommandCategories } from '../../lib/baseCommand';
 import deleteDoc from '../../lib/deleteDoc';
 import getDocs from '../../lib/getDocs';
+import * as promptHandler from '../../lib/prompts';
+import promptTerminal from '../../lib/promptWrapper';
 import pushDoc from '../../lib/pushDoc';
 import readdirRecursive from '../../lib/readdirRecursive';
 import readDoc from '../../lib/readDoc';
@@ -83,6 +85,13 @@ export default class DocsCommand extends Command {
 
     const changes: string[] = [];
     if (deleteMissing) {
+      if (!files.length) {
+        const { deleteAll } = await promptTerminal(promptHandler.deleteDocsPrompt(selectedVersion));
+        if (!deleteAll) {
+          return Promise.reject(new Error('Aborting, no changes were made.'));
+        }
+      }
+
       Command.warn(`We're going to delete from ReadMe any document that isn't found in ${folder}.`);
       const docs = await getDocs(key, selectedVersion);
       const docSlugs = docs.map(({ slug }: { slug: string }) => slug);
