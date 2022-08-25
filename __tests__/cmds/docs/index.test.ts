@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
 
@@ -375,30 +376,41 @@ describe('rdme docs', () => {
   });
 
   describe('delete docs', () => {
+    const folder = `./__tests__/${fixturesBaseDir}/delete-docs`;
+    const someDocContent = fs.readFileSync(path.join(folder, 'some-doc.md'));
+    const lastUpdatedHash = crypto.createHash('sha1').update(someDocContent).digest('hex');
+
     it('should delete doc if file is missing and --deleteMissing option is used', async () => {
       const versionMock = getAPIMock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version });
+
       const apiMocks = getAPIMockWithVersionHeader(version)
         .get('/api/v1/categories?perPage=20&page=1')
         .basicAuth({ user: key })
         .reply(200, [{ slug: 'category1', type: 'guide' }], { 'x-total-count': '1' })
         .get('/api/v1/categories/category1/docs')
         .basicAuth({ user: key })
-        .reply(200, [{ slug: 'thisDocShouldBeMissingInFolder' }])
-        .delete('/api/v1/docs/thisDocShouldBeMissingInFolder')
+        .reply(200, [{ slug: 'this-doc-should-be-missing-in-folder' }, { slug: 'some-doc' }])
+        .delete('/api/v1/docs/this-doc-should-be-missing-in-folder')
         .basicAuth({ user: key })
-        .reply(204, '');
-      const folderWithoutDocs = './__tests__/__fixtures__/ref-oas';
+        .reply(204, '')
+        .get('/api/v1/docs/some-doc')
+        .basicAuth({ user: key })
+        .reply(200, { lastUpdatedHash });
+
       await expect(
         docs.run({
-          folder: folderWithoutDocs,
+          folder,
           key,
           version,
           deleteMissing: true,
         })
-      ).resolves.toBe('successfully deleted `thisDocShouldBeMissingInFolder`');
+      ).resolves.toBe(
+        'successfully deleted `this-doc-should-be-missing-in-folder`.\n' +
+          '`some-doc` was not updated because there were no changes.'
+      );
 
       apiMocks.done();
       versionMock.done();
@@ -415,17 +427,22 @@ describe('rdme docs', () => {
         .reply(200, [{ slug: 'category1', type: 'guide' }], { 'x-total-count': '1' })
         .get('/api/v1/categories/category1/docs')
         .basicAuth({ user: key })
-        .reply(200, [{ slug: 'thisDocShouldBeMissingInFolder' }]);
-      const folderWithoutDocs = './__tests__/__fixtures__/ref-oas';
+        .reply(200, [{ slug: 'this-doc-should-be-missing-in-folder' }])
+        .get('/api/v1/docs/some-doc')
+        .basicAuth({ user: key })
+        .reply(200, { lastUpdatedHash });
       await expect(
         docs.run({
-          folder: folderWithoutDocs,
+          folder,
           key,
           version,
           deleteMissing: true,
           dryRun: true,
         })
-      ).resolves.toBe('🎭 dry run! This will delete `thisDocShouldBeMissingInFolder`');
+      ).resolves.toBe(
+        '🎭 dry run! This will delete `this-doc-should-be-missing-in-folder`.\n' +
+          '🎭 dry run! `some-doc` will not be updated because there were no changes.'
+      );
       apiMocks.done();
       versionMock.done();
     });

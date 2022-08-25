@@ -23,7 +23,7 @@ export default async function deleteDoc(
   type: CommandCategories
 ): Promise<string> {
   if (dryRun) {
-    return Promise.resolve(`🎭 dry run! This will delete \`${slug}\``);
+    return Promise.resolve(`🎭 dry run! This will delete \`${slug}\`.`);
   }
   return fetch(`${config.get('host')}/api/v1/${type}/${slug}`, {
     method: 'delete',
@@ -36,5 +36,5 @@ export default async function deleteDoc(
     ),
   })
     .then(handleRes)
-    .then(() => `successfully deleted \`${slug}\``);
+    .then(() => `successfully deleted \`${slug}\`.`);
 }
