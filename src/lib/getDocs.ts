@@ -12,6 +12,11 @@ type Document = {
   hidden: boolean;
   children: Document[];
 };
+
+function flatten(data: Document[][]): Document[] {
+  return [].concat(...data);
+}
+
 async function getCategoryDocs(key: string, selectedVersion: string, category: string): Promise<Document[]> {
   return fetch(`${config.get('host')}/api/v1/categories/${category}/docs`, {
     method: 'get',
@@ -36,6 +41,6 @@ export default async function getDocs(key: string, selectedVersion: string): Pro
   return getCategories(key, selectedVersion)
     .then(categories => categories.filter(({ type }: { type: string }) => type === 'guide'))
     .then(categories => categories.map(({ slug }: { slug: string }) => getCategoryDocs(key, selectedVersion, slug)))
-    .then(Promise.all.bind(Promise))
-    .then(args => [].concat(...args));
+    .then(categoryDocsPromises => Promise.all(categoryDocsPromises))
+    .then(flatten);
 }
