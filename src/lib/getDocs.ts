@@ -4,7 +4,15 @@ import { Headers } from 'node-fetch';
 import fetch, { cleanHeaders, handleRes } from './fetch';
 import getCategories from './getCategories';
 
-async function getCategoryDocs(key: string, selectedVersion: string, category: string) {
+type Document = {
+  _id: string;
+  title: string;
+  slug: string;
+  order: number;
+  hidden: boolean;
+  children: Document[];
+};
+async function getCategoryDocs(key: string, selectedVersion: string, category: string): Promise<Document[]> {
   return fetch(`${config.get('host')}/api/v1/categories/${category}/docs`, {
     method: 'get',
     headers: cleanHeaders(
@@ -23,9 +31,9 @@ async function getCategoryDocs(key: string, selectedVersion: string, category: s
  * @param {String} key the project API key
  * @param {String} selectedVersion the project version
  * @param {String} [category] Get docs from the specified category only
- * @returns {Promise<Array<Object>>} an array containing the docs
+ * @returns {Promise<Array<Document>>} an array containing the docs
  */
-export default async function getDocs(key: string, selectedVersion: string, category?: string) {
+export default async function getDocs(key: string, selectedVersion: string, category?: string): Promise<Document[]> {
   if (category) {
     return getCategoryDocs(key, selectedVersion, category);
   }

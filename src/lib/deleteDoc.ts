@@ -21,7 +21,7 @@ export default async function deleteDoc(
   dryRun: boolean,
   slug: string,
   type: CommandCategories
-) {
+): Promise<string> {
   if (dryRun) {
     return Promise.resolve(`🎭 dry run! This will delete \`${slug}\``);
   }
