@@ -73,12 +73,12 @@ async function handleRes(res: Response) {
     }
     return body;
   }
-  // If we receive a non-JSON response, it's likely an error.
-  // Let's debug the raw response body and throw it.
-  const body = await res.text();
   if (res.status === SUCCESS_NO_CONTENT) {
     return {};
   }
+  // If we receive a non-JSON response, it's likely an error.
+  // Let's debug the raw response body and throw it.
+  const body = await res.text();
   debug(`received status code ${res.status} from ${res.url} with non-JSON response: ${body}`);
   return Promise.reject(body);
 }
