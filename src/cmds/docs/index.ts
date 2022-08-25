@@ -6,9 +6,9 @@ import config from 'config';
 import Command, { CommandCategories } from '../../lib/baseCommand';
 import deleteDoc from '../../lib/deleteDoc';
 import getDocs from '../../lib/getDocs';
-import getSlug from '../../lib/getSlug';
 import pushDoc from '../../lib/pushDoc';
 import readdirRecursive from '../../lib/readdirRecursive';
+import readDoc from '../../lib/readDoc';
 import { getProjectVersion } from '../../lib/versionSelect';
 
 export type Options = {
@@ -16,6 +16,11 @@ export type Options = {
   folder?: string;
   deleteMissing?: boolean;
 };
+
+function getSlug(filename: string): string {
+  const { slug } = readDoc(filename);
+  return slug;
+}
 
 export default class DocsCommand extends Command {
   constructor() {
@@ -78,7 +83,7 @@ export default class DocsCommand extends Command {
 
     const changes: string[] = [];
     if (deleteMissing) {
-      Command.warn(`We're going to delete from ReadMe any document that isn\'t found in ${folder}.`)
+      Command.warn(`We're going to delete from ReadMe any document that isn't found in ${folder}.`);
       const docs = await getDocs(key, selectedVersion);
       const docSlugs = docs.map(({ slug }: { slug: string }) => slug);
       const fileSlugs = new Set(files.map(getSlug));
