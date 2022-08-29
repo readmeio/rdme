@@ -16,6 +16,8 @@ import createGHA, { cleanUpFileName, git, getGitData } from '../../src/lib/creat
 import getGitRemoteMock from '../helpers/get-git-mock';
 import ghaWorkflowSchemaBackup from '../helpers/github-workflow-schema.json';
 
+const testWorkingDir = process.cwd();
+
 const ghaWorkflowUrl = 'https://json.schemastore.org/github-workflow.json';
 
 let consoleInfoSpy;
@@ -56,6 +58,7 @@ describe('#createGHA', () => {
     consoleInfoSpy.mockRestore();
     delete process.env.TEST_CREATEGHA;
     jest.clearAllMocks();
+    process.chdir(testWorkingDir);
   });
 
   describe('command inputs', () => {
@@ -112,6 +115,31 @@ describe('#createGHA', () => {
         expect(yamlOutput).toBeValidSchema(ghaWorkflowSchema);
         expect(yamlOutput).toMatchSnapshot();
         expect(fs.writeFileSync).toHaveBeenCalledWith(cleanUpFileName(fileName), expect.any(String));
+      });
+
+      it('should create workflow directory if it does not exist', async () => {
+        expect.assertions(3);
+        const repoRoot = '__tests__/__fixtures__';
+
+        git.revparse = jest.fn(() => {
+          return Promise.resolve(repoRoot) as unknown as Response<string>;
+        });
+
+        const fileName = `rdme-${cmd}`;
+        prompts.inject([true, 'some-branch', fileName]);
+
+        fs.mkdirSync = jest.fn(() => {
+          return '';
+        });
+
+        fs.writeFileSync = jest.fn(() => {
+          return true;
+        });
+
+        await expect(createGHA('', cmd, command.args, opts)).resolves.toBeTruthy();
+
+        expect(fs.mkdirSync).toHaveBeenCalledWith('.github/workflows', { recursive: true });
+        expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
       });
 
       it('should exit if user does not want to set up GHA', () => {

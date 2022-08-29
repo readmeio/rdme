@@ -18,6 +18,14 @@ import promptTerminal from '../promptWrapper';
 
 import yamlBase from './baseFile';
 
+/**
+ * The directory where GitHub Actions workflow files are stored.
+ *
+ * This is the same across all repositories on GitHub.
+ *
+ * @see {@link https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#about-yaml-syntax-for-workflows}
+ */
+const GITHUB_WORKFLOW_DIR = '.github/workflows';
 const GITHUB_SECRET_NAME = 'README_API_KEY';
 
 export const git = simpleGit();
@@ -28,7 +36,7 @@ export const git = simpleGit();
  * @param fileName raw file name to clean up
  */
 export const cleanUpFileName = (fileName: string) => {
-  return path.join('.github/workflows/', `${fileName.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.yml`);
+  return path.join(GITHUB_WORKFLOW_DIR, `${fileName.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.yml`);
 };
 
 /**
@@ -222,6 +230,10 @@ export default async function createGHA(
   };
 
   const { output } = await transcludeString(yamlBase, { resolvers: [customResolver] });
+
+  if (!fs.existsSync(GITHUB_WORKFLOW_DIR)) {
+    fs.mkdirSync(GITHUB_WORKFLOW_DIR, { recursive: true });
+  }
 
   fs.writeFileSync(filePath, output);
 
