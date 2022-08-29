@@ -53,20 +53,21 @@ export default class OpenAPICommand extends Command {
         defaultOption: true,
       },
       {
-        name: 'create',
-        type: Boolean,
-        description: 'Bypasses the create/update prompt and creates a new API definition.',
-      },
-      {
         name: 'useSpecVersion',
         type: Boolean,
         description:
           'Uses the version listed in the `info.version` field in the API definition for the project version parameter.',
       },
+      this.getGitHubArg(),
       {
         name: 'workingDirectory',
         type: String,
         description: 'Working directory (for usage with relative external references)',
+      },
+      {
+        name: 'create',
+        type: Boolean,
+        description: 'Bypasses the create/update prompt and creates a new API definition.',
       },
       {
         name: 'update',
