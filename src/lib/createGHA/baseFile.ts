@@ -20,7 +20,7 @@ on:
       - :[](branch)
 
 jobs:
-  rdme-:[](command):
+  rdme-:[](cleanCommand):
     runs-on: ubuntu-latest
     steps:
       - name: Check out repo 📚

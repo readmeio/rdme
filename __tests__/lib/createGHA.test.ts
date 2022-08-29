@@ -14,7 +14,7 @@ import DocsCommand from '../../src/cmds/docs';
 import OpenAPICommand from '../../src/cmds/openapi';
 import ValidateCommand from '../../src/cmds/validate';
 import configstore from '../../src/lib/configstore';
-import createGHA, { cleanUpFileName, git, getGitData, getConfigStoreKey } from '../../src/lib/createGHA';
+import createGHA, { getConfigStoreKey, getGHAFileName, getGitData, git } from '../../src/lib/createGHA';
 import getGitRemoteMock from '../helpers/get-git-mock';
 import ghaWorkflowSchemaBackup from '../helpers/github-workflow-schema.json';
 
@@ -96,7 +96,7 @@ describe('#createGHA', () => {
 
         expect(yamlOutput).toBeValidSchema(ghaWorkflowSchema);
         expect(yamlOutput).toMatchSnapshot();
-        expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
+        expect(fs.writeFileSync).toHaveBeenCalledWith(getGHAFileName(fileName), expect.any(String));
         expect(console.info).toHaveBeenCalledTimes(1);
         const output = getCommandOutput();
         expect(output).toMatch('GitHub Repository detected!');
@@ -118,7 +118,7 @@ describe('#createGHA', () => {
 
         expect(yamlOutput).toBeValidSchema(ghaWorkflowSchema);
         expect(yamlOutput).toMatchSnapshot();
-        expect(fs.writeFileSync).toHaveBeenCalledWith(cleanUpFileName(fileName), expect.any(String));
+        expect(fs.writeFileSync).toHaveBeenCalledWith(getGHAFileName(fileName), expect.any(String));
       });
 
       it('should create workflow directory if it does not exist', async () => {
@@ -143,7 +143,7 @@ describe('#createGHA', () => {
         await expect(createGHA('', cmd, command.args, opts)).resolves.toBeTruthy();
 
         expect(fs.mkdirSync).toHaveBeenCalledWith('.github/workflows', { recursive: true });
-        expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
+        expect(fs.writeFileSync).toHaveBeenCalledWith(getGHAFileName(fileName), expect.any(String));
       });
 
       it('should set config and exit if user does not want to set up GHA', async () => {
@@ -254,17 +254,17 @@ describe('#createGHA', () => {
       });
     });
 
-    describe('#cleanUpFileName', () => {
+    describe('#getGHAFileName', () => {
       it('should return cleaned up file name', () => {
-        expect(cleanUpFileName('test')).toBe('.github/workflows/test.yml');
+        expect(getGHAFileName('test')).toBe('.github/workflows/test.yml');
       });
 
       it('should lowercase and remove whitespace', () => {
-        expect(cleanUpFileName('Hello World')).toBe('.github/workflows/hello-world.yml');
+        expect(getGHAFileName('Hello World')).toBe('.github/workflows/hello-world.yml');
       });
 
       it('should clean up weird characters', () => {
-        expect(cleanUpFileName('Hello_World-Test*Ex@mple!')).toBe('.github/workflows/hello-world-test-ex-mple-.yml');
+        expect(getGHAFileName('Hello_World-Test*Ex@mple!')).toBe('.github/workflows/hello-world-test-ex-mple-.yml');
       });
     });
   });

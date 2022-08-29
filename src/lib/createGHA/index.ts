@@ -37,12 +37,19 @@ const GITHUB_SECRET_NAME = 'README_API_KEY';
 export const git = simpleGit();
 
 /**
+ * Removes any non-alphanumeric characters and replaces them with hyphens.
+ *
+ * This is used for file names and for YAML keys.
+ */
+const cleanFileName = (input: string) => input.replace(/[^a-z0-9]/gi, '-');
+
+/**
  * Removes any non-file-friendly characters and adds
  * the full path + file extension for GitHub Workflow files.
  * @param fileName raw file name to clean up
  */
-export const cleanUpFileName = (fileName: string) => {
-  return path.join(GITHUB_WORKFLOW_DIR, `${fileName.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.yml`);
+export const getGHAFileName = (fileName: string) => {
+  return path.join(GITHUB_WORKFLOW_DIR, `${cleanFileName(fileName).toLowerCase()}.yml`);
 };
 
 /**
@@ -186,11 +193,11 @@ export default async function createGHA(
           message: 'What would you like to name the GitHub Actions workflow file?',
           name: 'filePath',
           type: 'text',
-          initial: `rdme-${command}`,
-          format: prev => cleanUpFileName(prev),
+          initial: cleanFileName(`rdme-${command}`),
+          format: prev => getGHAFileName(prev),
           validate: value => {
             if (value.length) {
-              const fullPath = cleanUpFileName(value);
+              const fullPath = getGHAFileName(value);
               if (!fs.existsSync(fullPath)) {
                 return true;
               }
@@ -219,6 +226,7 @@ export default async function createGHA(
     );
   }
 
+  const cleanCommand = cleanFileName(command);
   const commandString = constructCmdString(command, args, opts);
   const rdmeVersion = pkg.version;
   const timestamp = new Date().toISOString();
@@ -229,11 +237,14 @@ export default async function createGHA(
    * @param url The variables from [the file template](./baseFile.ts)
    * @see {@link https://github.com/jamesramsay/hercule#resolvers}
    */
-  const customResolver = function (url: 'branch' | 'command' | 'rdmeVersion' | 'commandString' | 'timestamp'): {
+  const customResolver = function (
+    url: 'branch' | 'cleanCommand' | 'command' | 'commandString' | 'rdmeVersion' | 'timestamp'
+  ): {
     content: string;
   } {
     const data = {
       branch,
+      cleanCommand,
       command,
       commandString,
       rdmeVersion,
