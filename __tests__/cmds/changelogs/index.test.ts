@@ -195,6 +195,7 @@ describe('rdme changelogs', () => {
   describe('new changelogs', () => {
     it('should create new changelog', async () => {
       const slug = 'new-doc';
+      const id = '1234';
       const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
 
@@ -211,10 +212,10 @@ describe('rdme changelogs', () => {
       const postMock = getAPIMock()
         .post('/api/v1/changelogs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
-        .reply(201, { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash });
+        .reply(201, { slug, id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
       await expect(changelogs.run({ folder: `./__tests__/${fixturesBaseDir}/new-docs`, key })).resolves.toBe(
-        `🌱 successfully created 'new-doc' with contents from __tests__/${fixturesBaseDir}/new-docs/new-doc.md`
+        `🌱 successfully created 'new-doc' with contents from __tests__/${fixturesBaseDir}/new-docs/new-doc.md with an id of 1234`
       );
 
       getMock.done();
@@ -314,6 +315,7 @@ describe('rdme changelogs', () => {
   describe('slug metadata', () => {
     it('should use provided slug', async () => {
       const slug = 'new-doc-slug';
+      const id = '1234';
       const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/slug-docs/${slug}.md`)));
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/slug-docs/${slug}.md`)));
 
@@ -330,10 +332,10 @@ describe('rdme changelogs', () => {
       const postMock = getAPIMock()
         .post('/api/v1/changelogs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
-        .reply(201, { slug: doc.data.slug, body: doc.content, ...doc.data, lastUpdatedHash: hash });
+        .reply(201, { slug: doc.data.slug, id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
       await expect(changelogs.run({ folder: `./__tests__/${fixturesBaseDir}/slug-docs`, key })).resolves.toBe(
-        `🌱 successfully created 'marc-actually-wrote-a-test' with contents from __tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`
+        `🌱 successfully created 'marc-actually-wrote-a-test' with contents from __tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md with an id of 1234`
       );
 
       getMock.done();
