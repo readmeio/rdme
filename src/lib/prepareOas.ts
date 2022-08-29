@@ -138,6 +138,9 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
   const specVersion = api.info.version;
   debug(`version in spec: ${specVersion}`);
 
+  const specTitle = api.info.title;
+  debug(`title in this spec: ${specTitle}`);
+
   let bundledSpec = '';
 
   if (command === 'openapi' || command === 'openapi:reduce') {
@@ -148,5 +151,5 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
     debug('spec bundled');
   }
 
-  return { bundledSpec, specPath, specType, specVersion };
+  return { bundledSpec, specPath, specType, specVersion, specTitle };
 }
