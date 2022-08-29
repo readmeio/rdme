@@ -196,6 +196,7 @@ export default async function createGHA(
     {
       // @ts-expect-error answers is definitely an object,
       // despite TS insisting that it's an array.
+      // link: https://github.com/terkelg/prompts#optionsonsubmit
       onSubmit: (p, a, answers: { shouldCreateGHA: boolean }) => !answers.shouldCreateGHA,
     }
   );
