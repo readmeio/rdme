@@ -9,6 +9,7 @@ import parse from 'parse-link-header';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
 import fetch, { cleanHeaders, handleRes } from '../../lib/fetch';
+import getSpecifications from '../../lib/getSpecifications';
 import { oraOptions } from '../../lib/logger';
 import prepareOas from '../../lib/prepareOas';
 import * as promptHandler from '../../lib/prompts';
@@ -24,6 +25,12 @@ export type Options = {
   useSpecVersion?: boolean;
   workingDirectory?: string;
   update?: boolean;
+  matchOnTitleAndVersion?: string;
+};
+
+type Spec = {
+  _id: string;
+  title: string;
 };
 
 export default class OpenAPICommand extends Command {
@@ -77,13 +84,18 @@ export default class OpenAPICommand extends Command {
         description:
           "Automatically update an existing API definition in ReadMe if it's the only one associated with the current version.",
       },
+      {
+        name: 'matchOnTitleAndVersion',
+        type: Boolean,
+        description: 'Automatically update an existing API definition if the title and version match.',
+      },
     ];
   }
 
   async run(opts: CommandOptions<Options>) {
     super.run(opts);
 
-    const { key, id, spec, create, useSpecVersion, version, workingDirectory, update } = opts;
+    const { key, id, spec, create, useSpecVersion, version, workingDirectory, update, matchOnTitleAndVersion } = opts;
 
     let selectedVersion = version;
     let isUpdate: boolean;
@@ -115,9 +127,15 @@ export default class OpenAPICommand extends Command {
       );
     }
 
+    if (matchOnTitleAndVersion && id) {
+      Command.warn(
+        "We'll be updating the API definition associated with the `--id` parameter, so the `--matchOnTitleAndVersion` parameter will be ignored."
+      );
+    }
+
     // Reason we're hardcoding in command here is because `swagger` command
     // relies on this and we don't want to use `swagger` in this function
-    const { bundledSpec, specPath, specType, specVersion } = await prepareOas(spec, 'openapi');
+    const { bundledSpec, specPath, specType, specVersion, specTitle } = await prepareOas(spec, 'openapi');
 
     if (useSpecVersion) {
       Command.info(
@@ -243,6 +261,13 @@ export default class OpenAPICommand extends Command {
       });
     }
 
+    async function findSpecBasedOnTitleAndVersion() {
+      const allSpecifications = await getSpecifications(key, version);
+      return allSpecifications.find((apiSpec: Spec) => {
+        return apiSpec.title.trim().toLowerCase() === specTitle.trim().toLowerCase();
+      });
+    }
+
     if (create) return createSpec();
 
     if (!id) {
@@ -266,6 +291,13 @@ export default class OpenAPICommand extends Command {
         }
         const { _id: specId } = apiSettingsBody[0];
         return updateSpec(specId);
+      }
+
+      if (matchOnTitleAndVersion) {
+        const { _id: specId } = await findSpecBasedOnTitleAndVersion();
+        if (!specId) {
+          return updateSpec(specId);
+        }
       }
 
       // @todo: figure out how to add a stricter type here, see:
