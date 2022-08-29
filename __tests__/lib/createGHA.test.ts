@@ -10,7 +10,12 @@ import fs from 'fs';
 import fetch from 'node-fetch';
 import prompts from 'prompts';
 
+import ChangelogsCommand from '../../src/cmds/changelogs';
+import SingleChangelogCommand from '../../src/cmds/changelogs/single';
+import CustomPagesCommand from '../../src/cmds/custompages';
+import SingleCustomPageCommand from '../../src/cmds/custompages/single';
 import DocsCommand from '../../src/cmds/docs';
+import SingleDocCommand from '../../src/cmds/docs/single';
 import OpenAPICommand from '../../src/cmds/openapi';
 import ValidateCommand from '../../src/cmds/validate';
 import configstore from '../../src/lib/configstore';
@@ -73,6 +78,23 @@ describe('#createGHA', () => {
         { spec: 'petstore.json', id: 'spec_id' } as CommandOptions<{}>,
       ],
       ['docs' as keyof typeof commands, DocsCommand, { folder: './docs', version: '1.0.0' } as CommandOptions<{}>],
+      [
+        'docs:single' as keyof typeof commands,
+        SingleDocCommand,
+        { filePath: './docs/rdme.md', version: '1.0.0' } as CommandOptions<{}>,
+      ],
+      ['changelogs' as keyof typeof commands, ChangelogsCommand, { folder: './changelogs' } as CommandOptions<{}>],
+      [
+        'changelogs:single' as keyof typeof commands,
+        SingleChangelogCommand,
+        { filePath: './changelogs/rdme.md' } as CommandOptions<{}>,
+      ],
+      ['custompages' as keyof typeof commands, CustomPagesCommand, { folder: './custompages' } as CommandOptions<{}>],
+      [
+        'custompages:single' as keyof typeof commands,
+        SingleCustomPageCommand,
+        { filePath: './custompages/rdme.md' } as CommandOptions<{}>,
+      ],
     ])('%s', (cmd, CmdClass, opts) => {
       let command;
 
