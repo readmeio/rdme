@@ -4,6 +4,7 @@ import chalk from 'chalk';
 import config from 'config';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
+import createGHA from '../../lib/createGHA';
 import pushDoc from '../../lib/pushDoc';
 import readdirRecursive from '../../lib/readdirRecursive';
 
@@ -30,6 +31,7 @@ export default class ChangelogsCommand extends Command {
         type: String,
         defaultOption: true,
       },
+      this.getGitHubArg(),
       {
         name: 'dryRun',
         type: Boolean,
@@ -64,6 +66,8 @@ export default class ChangelogsCommand extends Command {
       })
     );
 
-    return chalk.green(updatedDocs.join('\n'));
+    return Promise.resolve(chalk.green(updatedDocs.join('\n'))).then(msg =>
+      createGHA(msg, this.command, this.args, opts)
+    );
   }
 }

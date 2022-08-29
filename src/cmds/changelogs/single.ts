@@ -4,6 +4,7 @@ import chalk from 'chalk';
 import config from 'config';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
+import createGHA from '../../lib/createGHA';
 import pushDoc from '../../lib/pushDoc';
 
 export type Options = {
@@ -29,6 +30,7 @@ export default class SingleChangelogCommand extends Command {
         type: String,
         defaultOption: true,
       },
+      this.getGitHubArg(),
       {
         name: 'dryRun',
         type: Boolean,
@@ -52,6 +54,6 @@ export default class SingleChangelogCommand extends Command {
 
     const createdDoc = await pushDoc(key, undefined, dryRun, filePath, this.cmdCategory);
 
-    return chalk.green(createdDoc);
+    return Promise.resolve(chalk.green(createdDoc)).then(msg => createGHA(msg, this.command, this.args, opts));
   }
 }

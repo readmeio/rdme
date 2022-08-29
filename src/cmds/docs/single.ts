@@ -4,6 +4,7 @@ import chalk from 'chalk';
 import config from 'config';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
+import createGHA from '../../lib/createGHA';
 import pushDoc from '../../lib/pushDoc';
 import { getProjectVersion } from '../../lib/versionSelect';
 
@@ -31,6 +32,7 @@ export default class SingleDocCommand extends Command {
         type: String,
         defaultOption: true,
       },
+      this.getGitHubArg(),
       {
         name: 'dryRun',
         type: Boolean,
@@ -61,6 +63,8 @@ export default class SingleDocCommand extends Command {
 
     const createdDoc = await pushDoc(key, selectedVersion, dryRun, filePath, this.cmdCategory);
 
-    return chalk.green(createdDoc);
+    return Promise.resolve(chalk.green(createdDoc)).then(msg =>
+      createGHA(msg, this.command, this.args, { ...opts, version: selectedVersion })
+    );
   }
 }
