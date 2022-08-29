@@ -1,13 +1,20 @@
+/* eslint-disable no-console */
+import type { Response } from 'simple-git';
+
 import fs from 'fs';
 import path from 'path';
 
 import chalk from 'chalk';
 import frontMatter from 'gray-matter';
 import nock from 'nock';
+import prompts from 'prompts';
 
 import DocsCommand from '../../../src/cmds/docs';
 import APIError from '../../../src/lib/apiError';
+import configstore from '../../../src/lib/configstore';
+import { git } from '../../../src/lib/createGHA';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock';
+import getGitRemoteMock from '../../helpers/get-git-mock';
 import hashFileContents from '../../helpers/hash-file-contents';
 
 const docs = new DocsCommand();
@@ -19,6 +26,8 @@ const key = 'API_KEY';
 const version = '1.0.0';
 const category = 'CATEGORY_ID';
 const apiSetting = 'API_SETTING_ID';
+
+const testWorkingDir = process.cwd();
 
 describe('rdme docs', () => {
   beforeAll(() => nock.disableNetConnect());
@@ -402,6 +411,226 @@ describe('rdme docs', () => {
 
       await expect(docs.run({ folder: `./__tests__/${fixturesBaseDir}/slug-docs`, key, version })).resolves.toBe(
         `🌱 successfully created 'marc-actually-wrote-a-test' with contents from __tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`
+      );
+
+      getMock.done();
+      postMock.done();
+      versionMock.done();
+    });
+  });
+
+  describe('GHA onboarding E2E tests', () => {
+    let consoleInfoSpy;
+
+    const getCommandOutput = () => {
+      return [consoleInfoSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
+    };
+
+    beforeEach(() => {
+      consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+
+      // global Date override to handle timestamp generation
+      // stolen from here: https://github.com/facebook/jest/issues/2234#issuecomment-294873406
+      const DATE_TO_USE = new Date('2022');
+      // @ts-expect-error we're just overriding the constructor for tests,
+      // no need to construct everything
+      global.Date = jest.fn(() => DATE_TO_USE);
+
+      git.checkIsRepo = jest.fn(() => {
+        return Promise.resolve(true) as unknown as Response<boolean>;
+      });
+
+      git.remote = getGitRemoteMock();
+
+      process.env.TEST_CREATEGHA = 'true';
+    });
+
+    afterEach(() => {
+      configstore.clear();
+      consoleInfoSpy.mockRestore();
+      delete process.env.TEST_CREATEGHA;
+      jest.clearAllMocks();
+      process.chdir(testWorkingDir);
+    });
+
+    it('should create GHA workflow with version passed in via prompt', async () => {
+      expect.assertions(6);
+
+      const altVersion = '1.0.1';
+      const slug = 'new-doc';
+      const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
+      const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
+
+      const versionsMock = getAPIMock()
+        .get('/api/v1/version')
+        .basicAuth({ user: key })
+        .reply(200, [{ version: altVersion }]);
+
+      const getMock = getAPIMockWithVersionHeader(altVersion)
+        .get(`/api/v1/docs/${slug}`)
+        .basicAuth({ user: key })
+        .reply(404, {
+          error: 'DOC_NOTFOUND',
+          message: `The doc with the slug '${slug}' couldn't be found`,
+          suggestion: '...a suggestion to resolve the issue...',
+          help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
+        });
+
+      const postMock = getAPIMockWithVersionHeader(altVersion)
+        .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
+        .basicAuth({ user: key })
+        .reply(201, { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash });
+
+      let yamlOutput;
+      const fileName = 'docs-test-file';
+      prompts.inject([altVersion, true, 'docs-test-branch', fileName]);
+
+      fs.writeFileSync = jest.fn((f, d) => {
+        yamlOutput = d;
+        return true;
+      });
+
+      await expect(docs.run({ folder: `./__tests__/${fixturesBaseDir}/new-docs`, key })).resolves.toMatchSnapshot();
+
+      expect(yamlOutput).toMatchSnapshot();
+      expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
+      expect(console.info).toHaveBeenCalledTimes(2);
+      const output = getCommandOutput();
+      expect(output).toMatch('GitHub Repository detected!');
+      expect(output).toMatch(`successfully created '${slug}' with contents from`);
+
+      versionsMock.done();
+      getMock.done();
+      postMock.done();
+    });
+
+    it('should create GHA workflow with version passed in via opt', async () => {
+      expect.assertions(3);
+
+      const slug = 'new-doc';
+      const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
+      const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
+
+      const getMock = getAPIMockWithVersionHeader(version)
+        .get(`/api/v1/docs/${slug}`)
+        .basicAuth({ user: key })
+        .reply(404, {
+          error: 'DOC_NOTFOUND',
+          message: `The doc with the slug '${slug}' couldn't be found`,
+          suggestion: '...a suggestion to resolve the issue...',
+          help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
+        });
+
+      const postMock = getAPIMockWithVersionHeader(version)
+        .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
+        .basicAuth({ user: key })
+        .reply(201, { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash });
+
+      const versionMock = getAPIMock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version });
+
+      let yamlOutput;
+      const fileName = 'docs-test-file';
+      prompts.inject([true, 'docs-test-branch', fileName]);
+
+      fs.writeFileSync = jest.fn((f, d) => {
+        yamlOutput = d;
+        return true;
+      });
+
+      await expect(
+        docs.run({ folder: `./__tests__/${fixturesBaseDir}/new-docs`, key, version })
+      ).resolves.toMatchSnapshot();
+
+      expect(yamlOutput).toMatchSnapshot();
+      expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
+
+      getMock.done();
+      postMock.done();
+      versionMock.done();
+    });
+
+    it('should create GHA workflow with version passed as opt (github flag enabled)', async () => {
+      expect.assertions(3);
+
+      const slug = 'new-doc';
+      const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
+      const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
+
+      const getMock = getAPIMockWithVersionHeader(version)
+        .get(`/api/v1/docs/${slug}`)
+        .basicAuth({ user: key })
+        .reply(404, {
+          error: 'DOC_NOTFOUND',
+          message: `The doc with the slug '${slug}' couldn't be found`,
+          suggestion: '...a suggestion to resolve the issue...',
+          help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
+        });
+
+      const postMock = getAPIMockWithVersionHeader(version)
+        .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
+        .basicAuth({ user: key })
+        .reply(201, { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash });
+
+      const versionMock = getAPIMock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version });
+
+      let yamlOutput;
+      const fileName = 'docs-test-file-github-flag';
+      prompts.inject(['docs-test-branch-github-flag', fileName]);
+
+      fs.writeFileSync = jest.fn((f, d) => {
+        yamlOutput = d;
+        return true;
+      });
+
+      await expect(
+        docs.run({ folder: `./__tests__/${fixturesBaseDir}/new-docs`, github: true, key, version })
+      ).resolves.toMatchSnapshot();
+
+      expect(yamlOutput).toMatchSnapshot();
+      expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
+
+      getMock.done();
+      postMock.done();
+      versionMock.done();
+    });
+
+    it('should reject if user says no to creating GHA workflow', async () => {
+      const slug = 'new-doc';
+      const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
+      const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
+
+      const getMock = getAPIMockWithVersionHeader(version)
+        .get(`/api/v1/docs/${slug}`)
+        .basicAuth({ user: key })
+        .reply(404, {
+          error: 'DOC_NOTFOUND',
+          message: `The doc with the slug '${slug}' couldn't be found`,
+          suggestion: '...a suggestion to resolve the issue...',
+          help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
+        });
+
+      const postMock = getAPIMockWithVersionHeader(version)
+        .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
+        .basicAuth({ user: key })
+        .reply(201, { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash });
+
+      const versionMock = getAPIMock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version });
+
+      prompts.inject([false]);
+
+      await expect(docs.run({ folder: `./__tests__/${fixturesBaseDir}/new-docs`, key, version })).rejects.toStrictEqual(
+        new Error(
+          'GitHub Action Workflow cancelled. If you ever change your mind, you can run this command again with the `--github` flag.'
+        )
       );
 
       getMock.done();

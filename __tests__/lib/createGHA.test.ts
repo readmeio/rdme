@@ -10,6 +10,7 @@ import fs from 'fs';
 import fetch from 'node-fetch';
 import prompts from 'prompts';
 
+import DocsCommand from '../../src/cmds/docs';
 import OpenAPICommand from '../../src/cmds/openapi';
 import ValidateCommand from '../../src/cmds/validate';
 import configstore from '../../src/lib/configstore';
@@ -71,6 +72,7 @@ describe('#createGHA', () => {
         OpenAPICommand,
         { spec: 'petstore.json', id: 'spec_id' } as CommandOptions<{}>,
       ],
+      ['docs' as keyof typeof commands, DocsCommand, { folder: './docs', version: '1.0.0' } as CommandOptions<{}>],
     ])('%s', (cmd, CmdClass, opts) => {
       let command;
 
