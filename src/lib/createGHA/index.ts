@@ -167,47 +167,48 @@ export default async function createGHA(
 
   prompts.override({ shouldCreateGHA: opts.github });
 
-  const { branch, shouldCreateGHA, filePath } = await promptTerminal(
-    [
-      {
-        message: 'Do you want to create a GitHub Action so you can run this command automatically in GitHub?',
-        name: 'shouldCreateGHA',
-        type: 'confirm',
-        initial: true,
-      },
-      {
-        message: 'What branch on GitHub should this workflow run on?',
-        name: 'branch',
-        type: 'text',
-        initial: defaultBranch || 'main',
-      },
-      {
-        message: 'What would you like to name this file?',
-        name: 'filePath',
-        type: 'text',
-        initial: `rdme-${command}`,
-        format: prev => cleanUpFileName(prev),
-        validate: value => {
-          if (value.length) {
-            const fullPath = cleanUpFileName(value);
-            if (!fs.existsSync(fullPath)) {
-              return true;
+  const { branch, filePath, shouldCreateGHA }: { branch: string; filePath: string; shouldCreateGHA: boolean } =
+    await promptTerminal(
+      [
+        {
+          message: 'Do you want to create a GitHub Action so you can run this command automatically in GitHub?',
+          name: 'shouldCreateGHA',
+          type: 'confirm',
+          initial: true,
+        },
+        {
+          message: 'What branch on GitHub should this workflow run on?',
+          name: 'branch',
+          type: 'text',
+          initial: defaultBranch || 'main',
+        },
+        {
+          message: 'What would you like to name the GitHub Actions workflow file?',
+          name: 'filePath',
+          type: 'text',
+          initial: `rdme-${command}`,
+          format: prev => cleanUpFileName(prev),
+          validate: value => {
+            if (value.length) {
+              const fullPath = cleanUpFileName(value);
+              if (!fs.existsSync(fullPath)) {
+                return true;
+              }
+
+              return 'Specified output path already exists.';
             }
 
-            return 'Specified output path already exists.';
-          }
-
-          return 'An output path must be supplied.';
+            return 'An output path must be supplied.';
+          },
         },
-      },
-    ],
-    {
-      // @ts-expect-error answers is definitely an object,
-      // despite TS insisting that it's an array.
-      // link: https://github.com/terkelg/prompts#optionsonsubmit
-      onSubmit: (p, a, answers: { shouldCreateGHA: boolean }) => !answers.shouldCreateGHA,
-    }
-  );
+      ],
+      {
+        // @ts-expect-error answers is definitely an object,
+        // despite TS insisting that it's an array.
+        // link: https://github.com/terkelg/prompts#optionsonsubmit
+        onSubmit: (p, a, answers: { shouldCreateGHA: boolean }) => !answers.shouldCreateGHA,
+      }
+    );
 
   if (!shouldCreateGHA) {
     // if the user says no, we store data in the configstore for the current repo
