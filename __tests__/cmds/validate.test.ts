@@ -135,11 +135,9 @@ describe('rdme validate', () => {
   });
 
   describe('GHA onboarding E2E tests', () => {
-    let consoleInfoSpy;
+    let yamlOutput;
 
     beforeEach(() => {
-      consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
-
       // global Date override to handle timestamp generation
       // stolen from here: https://github.com/facebook/jest/issues/2234#issuecomment-294873406
       const DATE_TO_USE = new Date('2022');
@@ -153,27 +151,25 @@ describe('rdme validate', () => {
 
       git.remote = getGitRemoteMock();
 
+      fs.writeFileSync = jest.fn((f, d) => {
+        yamlOutput = d;
+        return true;
+      });
+
       process.env.TEST_CREATEGHA = 'true';
     });
 
     afterEach(() => {
       configstore.clear();
-      consoleInfoSpy.mockRestore();
       delete process.env.TEST_CREATEGHA;
       jest.clearAllMocks();
     });
 
     it('should create GHA workflow if user passes in spec via prompts', async () => {
       expect.assertions(6);
-      let yamlOutput;
       const spec = '__tests__/__fixtures__/petstore-simple-weird-version.json';
       const fileName = 'validate-test-file';
       prompts.inject([spec, true, 'validate-test-branch', fileName]);
-
-      fs.writeFileSync = jest.fn((f, d) => {
-        yamlOutput = d;
-        return true;
-      });
 
       await expect(validate.run({})).resolves.toMatchSnapshot();
 
@@ -187,15 +183,9 @@ describe('rdme validate', () => {
 
     it('should create GHA workflow if user passes in spec via opt', async () => {
       expect.assertions(3);
-      let yamlOutput;
       const spec = '__tests__/__fixtures__/petstore-simple-weird-version.json';
       const fileName = 'validate-test-opt-spec-file';
       prompts.inject([true, 'validate-test-opt-spec-branch', fileName]);
-
-      fs.writeFileSync = jest.fn((f, d) => {
-        yamlOutput = d;
-        return true;
-      });
 
       await expect(validate.run({ spec })).resolves.toMatchSnapshot();
 
@@ -205,15 +195,9 @@ describe('rdme validate', () => {
 
     it('should create GHA workflow if user passes in spec via opt (github flag enabled)', async () => {
       expect.assertions(3);
-      let yamlOutput;
       const spec = '__tests__/__fixtures__/petstore-simple-weird-version.json';
       const fileName = 'validate-test-opt-spec-github-file';
       prompts.inject(['validate-test-opt-spec-github-branch', fileName]);
-
-      fs.writeFileSync = jest.fn((f, d) => {
-        yamlOutput = d;
-        return true;
-      });
 
       await expect(validate.run({ spec, github: true })).resolves.toMatchSnapshot();
 
@@ -223,15 +207,9 @@ describe('rdme validate', () => {
 
     it('should create GHA workflow if user passes in spec via opt (including workingDirectory)', async () => {
       expect.assertions(3);
-      let yamlOutput;
       const spec = 'petstore.json';
       const fileName = 'validate-test-opt-spec-workdir-file';
       prompts.inject([true, 'validate-test-opt-spec-github-branch', fileName]);
-
-      fs.writeFileSync = jest.fn((f, d) => {
-        yamlOutput = d;
-        return true;
-      });
 
       await expect(
         validate.run({ spec, workingDirectory: './__tests__/__fixtures__/relative-ref-oas' })

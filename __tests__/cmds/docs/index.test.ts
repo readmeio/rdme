@@ -421,6 +421,7 @@ describe('rdme docs', () => {
 
   describe('GHA onboarding E2E tests', () => {
     let consoleInfoSpy;
+    let yamlOutput;
 
     const getCommandOutput = () => {
       return [consoleInfoSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
@@ -441,6 +442,11 @@ describe('rdme docs', () => {
       });
 
       git.remote = getGitRemoteMock();
+
+      fs.writeFileSync = jest.fn((f, d) => {
+        yamlOutput = d;
+        return true;
+      });
 
       process.env.TEST_CREATEGHA = 'true';
     });
@@ -481,14 +487,8 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(201, { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
-      let yamlOutput;
       const fileName = 'docs-test-file';
       prompts.inject([altVersion, true, 'docs-test-branch', fileName]);
-
-      fs.writeFileSync = jest.fn((f, d) => {
-        yamlOutput = d;
-        return true;
-      });
 
       await expect(docs.run({ folder: `./__tests__/${fixturesBaseDir}/new-docs`, key })).resolves.toMatchSnapshot();
 
@@ -531,14 +531,8 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      let yamlOutput;
       const fileName = 'docs-test-file';
       prompts.inject([true, 'docs-test-branch', fileName]);
-
-      fs.writeFileSync = jest.fn((f, d) => {
-        yamlOutput = d;
-        return true;
-      });
 
       await expect(
         docs.run({ folder: `./__tests__/${fixturesBaseDir}/new-docs`, key, version })
@@ -579,14 +573,8 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      let yamlOutput;
       const fileName = 'docs-test-file-github-flag';
       prompts.inject(['docs-test-branch-github-flag', fileName]);
-
-      fs.writeFileSync = jest.fn((f, d) => {
-        yamlOutput = d;
-        return true;
-      });
 
       await expect(
         docs.run({ folder: `./__tests__/${fixturesBaseDir}/new-docs`, github: true, key, version })
