@@ -12,12 +12,18 @@ import simpleGit from 'simple-git';
 import { transcludeString } from 'hercule/promises';
 
 import pkg from '../../../package.json';
+import configstore from '../configstore';
 import isCI from '../isCI';
 import { debug } from '../logger';
 import promptTerminal from '../promptWrapper';
 
 import yamlBase from './baseFile';
 
+/**
+ * Generates the key for storing info in `configstore` object.
+ * @param repoRoot The root of the repo
+ */
+export const getConfigStoreKey = (repoRoot: string) => `createGHA.${repoRoot}`;
 /**
  * The directory where GitHub Actions workflow files are stored.
  *
@@ -130,6 +136,8 @@ export default async function createGHA(
       !isRepo ||
       // in a CI environment
       isCI() ||
+      // we've already asked if user wants set up a GHA for this repo and they said no
+      configstore.get(getConfigStoreKey(repoRoot)) ||
       // is a repo, but only contains non-GitHub remotes
       (isRepo && containsNonGitHubRemote && !containsGitHubRemote) ||
       // not testing this function
@@ -202,6 +210,7 @@ export default async function createGHA(
   );
 
   if (!shouldCreateGHA) {
+    configstore.set(getConfigStoreKey(repoRoot), new Date());
     throw new Error(
       'GitHub Action Workflow cancelled. If you ever change your mind, you can run this command again with the `--github` flag.'
     );

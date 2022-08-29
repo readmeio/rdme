@@ -12,7 +12,8 @@ import prompts from 'prompts';
 
 import OpenAPICommand from '../../src/cmds/openapi';
 import ValidateCommand from '../../src/cmds/validate';
-import createGHA, { cleanUpFileName, git, getGitData } from '../../src/lib/createGHA';
+import configstore from '../../src/lib/configstore';
+import createGHA, { cleanUpFileName, git, getGitData, getConfigStoreKey } from '../../src/lib/createGHA';
 import getGitRemoteMock from '../helpers/get-git-mock';
 import ghaWorkflowSchemaBackup from '../helpers/github-workflow-schema.json';
 
@@ -55,6 +56,7 @@ describe('#createGHA', () => {
   });
 
   afterEach(() => {
+    configstore.clear();
     consoleInfoSpy.mockRestore();
     delete process.env.TEST_CREATEGHA;
     jest.clearAllMocks();
@@ -142,14 +144,23 @@ describe('#createGHA', () => {
         expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
       });
 
-      it('should exit if user does not want to set up GHA', () => {
+      it('should set config and exit if user does not want to set up GHA', async () => {
+        expect.assertions(2);
         prompts.inject([false]);
 
-        return expect(createGHA('', cmd, command.args, opts)).rejects.toStrictEqual(
+        const repoRoot = process.cwd();
+
+        git.revparse = jest.fn(() => {
+          return Promise.resolve(repoRoot) as unknown as Response<string>;
+        });
+
+        await expect(createGHA('', cmd, command.args, opts)).rejects.toStrictEqual(
           new Error(
             'GitHub Action Workflow cancelled. If you ever change your mind, you can run this command again with the `--github` flag.'
           )
         );
+
+        expect(configstore.get(getConfigStoreKey(repoRoot))).toBe('2022-01-01T00:00:00.000Z');
       });
 
       it('should not run if not a repo', () => {
@@ -158,6 +169,18 @@ describe('#createGHA', () => {
         });
 
         git.remote = getGitRemoteMock('', '', '');
+
+        return expect(createGHA('success!', cmd, command.args, opts)).resolves.toBe('success!');
+      });
+
+      it('should not run if user previously declined to set up GHA for current directory', () => {
+        const repoRoot = process.cwd();
+
+        configstore.set(getConfigStoreKey(repoRoot), 'some-date');
+
+        git.revparse = jest.fn(() => {
+          return Promise.resolve(repoRoot) as unknown as Response<string>;
+        });
 
         return expect(createGHA('success!', cmd, command.args, opts)).resolves.toBe('success!');
       });
