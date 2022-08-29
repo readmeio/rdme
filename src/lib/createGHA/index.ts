@@ -9,12 +9,14 @@ import chalk from 'chalk';
 import prompts from 'prompts';
 import simpleGit from 'simple-git';
 
-import { transcludeFile } from 'hercule/promises';
+import { transcludeString } from 'hercule/promises';
 
 import pkg from '../../../package.json';
 import isCI from '../isCI';
 import { debug } from '../logger';
 import promptTerminal from '../promptWrapper';
+
+import yamlBase from './baseFile';
 
 const GITHUB_SECRET_NAME = 'README_API_KEY';
 
@@ -219,7 +221,7 @@ export default async function createGHA(
     return { content: data[url] };
   };
 
-  const { output } = await transcludeFile('./src/lib/createGHA/base.yml', { resolvers: [customResolver] });
+  const { output } = await transcludeString(yamlBase, { resolvers: [customResolver] });
 
   fs.writeFileSync(filePath, output);
 
