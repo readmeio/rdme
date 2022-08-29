@@ -7,6 +7,7 @@ import chalk from 'chalk';
 import prompts from 'prompts';
 
 import Command from '../../src/cmds/validate';
+import configstore from '../../src/lib/configstore';
 import { git } from '../../src/lib/createGHA';
 import getGitRemoteMock from '../helpers/get-git-mock';
 
@@ -156,6 +157,7 @@ describe('rdme validate', () => {
     });
 
     afterEach(() => {
+      configstore.clear();
       consoleInfoSpy.mockRestore();
       delete process.env.TEST_CREATEGHA;
       jest.clearAllMocks();
