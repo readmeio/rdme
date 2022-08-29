@@ -210,6 +210,8 @@ export default async function createGHA(
   );
 
   if (!shouldCreateGHA) {
+    // if the user says no, we store data in the configstore for the current repo
+    // so we know in the future not to ask them again
     configstore.set(getConfigStoreKey(repoRoot), new Date());
     throw new Error(
       'GitHub Action Workflow cancelled. If you ever change your mind, you can run this command again with the `--github` flag.'
@@ -223,7 +225,7 @@ export default async function createGHA(
   /**
    * Custom resolver for usage in `hercule`.
    *
-   * @param url The variables from the `base.yml` template
+   * @param url The variables from [the file template](./baseFile.ts)
    * @see {@link https://github.com/jamesramsay/hercule#resolvers}
    */
   const customResolver = function (url: 'branch' | 'command' | 'rdmeVersion' | 'commandString' | 'timestamp'): {

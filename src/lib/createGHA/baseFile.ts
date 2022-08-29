@@ -2,8 +2,8 @@
  * The base GitHub Action workflow file, which is used for generating the YAML file.
  *
  * The reason this is expressed as a JavaScript string as opposed to a YAML file is because
- * TypeScript doesn't have a great way to copy over non-TS files, and this way we can write internal
- * comments like this!
+ * TypeScript doesn't have a great way to copy over non-TS files to the `dist/`.
+ * Plus, this way we can write internal comments like this!
  *
  * @see {@link https://github.com/microsoft/TypeScript/issues/30835}
  */
