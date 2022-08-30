@@ -376,12 +376,12 @@ describe('rdme docs', () => {
     });
   });
 
-  describe('delete docs', () => {
+  describe('cleanup docs', () => {
     const folder = `./__tests__/${fixturesBaseDir}/delete-docs`;
     const someDocContent = fs.readFileSync(path.join(folder, 'some-doc.md'));
     const lastUpdatedHash = crypto.createHash('sha1').update(someDocContent).digest('hex');
 
-    it('should delete doc if file is missing and --deleteMissing option is used', async () => {
+    it('should delete doc if file is missing and --cleanup option is used', async () => {
       const versionMock = getAPIMock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
@@ -406,7 +406,7 @@ describe('rdme docs', () => {
           folder,
           key,
           version,
-          deleteMissing: true,
+          cleanup: true,
         })
       ).resolves.toBe(
         'successfully deleted `this-doc-should-be-missing-in-folder`.\n' +
@@ -437,7 +437,7 @@ describe('rdme docs', () => {
           folder,
           key,
           version,
-          deleteMissing: true,
+          cleanup: true,
           dryRun: true,
         })
       ).resolves.toBe(
@@ -448,7 +448,7 @@ describe('rdme docs', () => {
       versionMock.done();
     });
 
-    it('should do nothing if using --deleteMissing but thr folder is empty and the user aborted', async () => {
+    it('should do nothing if using --cleanup but thr folder is empty and the user aborted', async () => {
       prompts.inject([false]);
 
       const versionMock = getAPIMock()
@@ -461,7 +461,7 @@ describe('rdme docs', () => {
           folder: './__tests__/__fixtures__/ref-oas',
           key,
           version,
-          deleteMissing: true,
+          cleanup: true,
         })
       ).rejects.toStrictEqual(new Error('Aborting, no changes were made.'));
 

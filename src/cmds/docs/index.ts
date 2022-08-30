@@ -16,7 +16,7 @@ import { getProjectVersion } from '../../lib/versionSelect';
 export type Options = {
   dryRun?: boolean;
   folder?: string;
-  deleteMissing?: boolean;
+  cleanup?: boolean;
 };
 
 function getSlug(filename: string): string {
@@ -53,7 +53,7 @@ export default class DocsCommand extends Command {
         description: 'Runs the command without creating/updating any docs in ReadMe. Useful for debugging.',
       },
       {
-        name: 'deleteMissing',
+        name: 'cleanup',
         type: Boolean,
         description: "Delete a doc from ReadMe if its slug can't be found in the target folder.",
       },
@@ -63,7 +63,7 @@ export default class DocsCommand extends Command {
   async run(opts: CommandOptions<Options>) {
     super.run(opts);
 
-    const { dryRun, folder, key, version, deleteMissing } = opts;
+    const { dryRun, folder, key, version, cleanup } = opts;
 
     if (!folder) {
       return Promise.reject(new Error(`No folder provided. Usage \`${config.get('cli')} ${this.usage}\`.`));
@@ -84,7 +84,7 @@ export default class DocsCommand extends Command {
     Command.debug(`number of files: ${files.length}`);
 
     const changes: string[] = [];
-    if (deleteMissing) {
+    if (cleanup) {
       if (!files.length) {
         const { deleteAll } = await promptTerminal(promptHandler.deleteDocsPrompt(selectedVersion));
         if (!deleteAll) {
