@@ -2,11 +2,16 @@
 
 exports[`#createGHA command inputs changelogs should run GHA creation workflow and generate valid workflow file 1`] = `
 "
-Your GitHub Action has been created! ✨
+Your GitHub Actions workflow file has been created! ✨
 
-You're almost finished! Just a couple more steps:
-1. Commit and push your newly created file (.github/workflows/rdme-changelogs.yml) to GitHub 🚀
-2. Create a GitHub secret called \`README_API_KEY\` and populate that with a ReadMe API key 🔑"
+Almost done! Just a couple more steps:
+1. Push your newly created file (.github/workflows/rdme-changelogs.yml) to GitHub 🚀
+2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
+
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+
+🦉 If you have any more questions, feel free to drop us a line! support@readme.io
+"
 `;
 
 exports[`#createGHA command inputs changelogs should run GHA creation workflow and generate valid workflow file 2`] = `
@@ -38,11 +43,16 @@ jobs:
 
 exports[`#createGHA command inputs changelogs should run GHA creation workflow with \`--github\` flag and messy file name and generate valid workflow file 1`] = `
 "
-Your GitHub Action has been created! ✨
+Your GitHub Actions workflow file has been created! ✨
 
-You're almost finished! Just a couple more steps:
-1. Commit and push your newly created file (.github/workflows/rdme-changelogs-with-github-flag.yml) to GitHub 🚀
-2. Create a GitHub secret called \`README_API_KEY\` and populate that with a ReadMe API key 🔑"
+Almost done! Just a couple more steps:
+1. Push your newly created file (.github/workflows/rdme-changelogs-with-github-flag.yml) to GitHub 🚀
+2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
+
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+
+🦉 If you have any more questions, feel free to drop us a line! support@readme.io
+"
 `;
 
 exports[`#createGHA command inputs changelogs should run GHA creation workflow with \`--github\` flag and messy file name and generate valid workflow file 2`] = `
@@ -74,11 +84,16 @@ jobs:
 
 exports[`#createGHA command inputs changelogs:single should run GHA creation workflow and generate valid workflow file 1`] = `
 "
-Your GitHub Action has been created! ✨
+Your GitHub Actions workflow file has been created! ✨
 
-You're almost finished! Just a couple more steps:
-1. Commit and push your newly created file (.github/workflows/rdme-changelogs-single.yml) to GitHub 🚀
-2. Create a GitHub secret called \`README_API_KEY\` and populate that with a ReadMe API key 🔑"
+Almost done! Just a couple more steps:
+1. Push your newly created file (.github/workflows/rdme-changelogs-single.yml) to GitHub 🚀
+2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
+
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+
+🦉 If you have any more questions, feel free to drop us a line! support@readme.io
+"
 `;
 
 exports[`#createGHA command inputs changelogs:single should run GHA creation workflow and generate valid workflow file 2`] = `
@@ -110,11 +125,16 @@ jobs:
 
 exports[`#createGHA command inputs changelogs:single should run GHA creation workflow with \`--github\` flag and messy file name and generate valid workflow file 1`] = `
 "
-Your GitHub Action has been created! ✨
+Your GitHub Actions workflow file has been created! ✨
 
-You're almost finished! Just a couple more steps:
-1. Commit and push your newly created file (.github/workflows/rdme-changelogs-single-with-github-flag.yml) to GitHub 🚀
-2. Create a GitHub secret called \`README_API_KEY\` and populate that with a ReadMe API key 🔑"
+Almost done! Just a couple more steps:
+1. Push your newly created file (.github/workflows/rdme-changelogs-single-with-github-flag.yml) to GitHub 🚀
+2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
+
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+
+🦉 If you have any more questions, feel free to drop us a line! support@readme.io
+"
 `;
 
 exports[`#createGHA command inputs changelogs:single should run GHA creation workflow with \`--github\` flag and messy file name and generate valid workflow file 2`] = `
@@ -146,11 +166,16 @@ jobs:
 
 exports[`#createGHA command inputs custompages should run GHA creation workflow and generate valid workflow file 1`] = `
 "
-Your GitHub Action has been created! ✨
+Your GitHub Actions workflow file has been created! ✨
 
-You're almost finished! Just a couple more steps:
-1. Commit and push your newly created file (.github/workflows/rdme-custompages.yml) to GitHub 🚀
-2. Create a GitHub secret called \`README_API_KEY\` and populate that with a ReadMe API key 🔑"
+Almost done! Just a couple more steps:
+1. Push your newly created file (.github/workflows/rdme-custompages.yml) to GitHub 🚀
+2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
+
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+
+🦉 If you have any more questions, feel free to drop us a line! support@readme.io
+"
 `;
 
 exports[`#createGHA command inputs custompages should run GHA creation workflow and generate valid workflow file 2`] = `
@@ -182,11 +207,16 @@ jobs:
 
 exports[`#createGHA command inputs custompages should run GHA creation workflow with \`--github\` flag and messy file name and generate valid workflow file 1`] = `
 "
-Your GitHub Action has been created! ✨
+Your GitHub Actions workflow file has been created! ✨
 
-You're almost finished! Just a couple more steps:
-1. Commit and push your newly created file (.github/workflows/rdme-custompages-with-github-flag.yml) to GitHub 🚀
-2. Create a GitHub secret called \`README_API_KEY\` and populate that with a ReadMe API key 🔑"
+Almost done! Just a couple more steps:
+1. Push your newly created file (.github/workflows/rdme-custompages-with-github-flag.yml) to GitHub 🚀
+2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
+
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+
+🦉 If you have any more questions, feel free to drop us a line! support@readme.io
+"
 `;
 
 exports[`#createGHA command inputs custompages should run GHA creation workflow with \`--github\` flag and messy file name and generate valid workflow file 2`] = `
@@ -218,11 +248,16 @@ jobs:
 
 exports[`#createGHA command inputs custompages:single should run GHA creation workflow and generate valid workflow file 1`] = `
 "
-Your GitHub Action has been created! ✨
+Your GitHub Actions workflow file has been created! ✨
 
-You're almost finished! Just a couple more steps:
-1. Commit and push your newly created file (.github/workflows/rdme-custompages-single.yml) to GitHub 🚀
-2. Create a GitHub secret called \`README_API_KEY\` and populate that with a ReadMe API key 🔑"
+Almost done! Just a couple more steps:
+1. Push your newly created file (.github/workflows/rdme-custompages-single.yml) to GitHub 🚀
+2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
+
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+
+🦉 If you have any more questions, feel free to drop us a line! support@readme.io
+"
 `;
 
 exports[`#createGHA command inputs custompages:single should run GHA creation workflow and generate valid workflow file 2`] = `
@@ -254,11 +289,16 @@ jobs:
 
 exports[`#createGHA command inputs custompages:single should run GHA creation workflow with \`--github\` flag and messy file name and generate valid workflow file 1`] = `
 "
-Your GitHub Action has been created! ✨
+Your GitHub Actions workflow file has been created! ✨
 
-You're almost finished! Just a couple more steps:
-1. Commit and push your newly created file (.github/workflows/rdme-custompages-single-with-github-flag.yml) to GitHub 🚀
-2. Create a GitHub secret called \`README_API_KEY\` and populate that with a ReadMe API key 🔑"
+Almost done! Just a couple more steps:
+1. Push your newly created file (.github/workflows/rdme-custompages-single-with-github-flag.yml) to GitHub 🚀
+2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
+
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+
+🦉 If you have any more questions, feel free to drop us a line! support@readme.io
+"
 `;
 
 exports[`#createGHA command inputs custompages:single should run GHA creation workflow with \`--github\` flag and messy file name and generate valid workflow file 2`] = `
@@ -290,11 +330,16 @@ jobs:
 
 exports[`#createGHA command inputs docs should run GHA creation workflow and generate valid workflow file 1`] = `
 "
-Your GitHub Action has been created! ✨
+Your GitHub Actions workflow file has been created! ✨
 
-You're almost finished! Just a couple more steps:
-1. Commit and push your newly created file (.github/workflows/rdme-docs.yml) to GitHub 🚀
-2. Create a GitHub secret called \`README_API_KEY\` and populate that with a ReadMe API key 🔑"
+Almost done! Just a couple more steps:
+1. Push your newly created file (.github/workflows/rdme-docs.yml) to GitHub 🚀
+2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
+
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+
+🦉 If you have any more questions, feel free to drop us a line! support@readme.io
+"
 `;
 
 exports[`#createGHA command inputs docs should run GHA creation workflow and generate valid workflow file 2`] = `
@@ -326,11 +371,16 @@ jobs:
 
 exports[`#createGHA command inputs docs should run GHA creation workflow with \`--github\` flag and messy file name and generate valid workflow file 1`] = `
 "
-Your GitHub Action has been created! ✨
+Your GitHub Actions workflow file has been created! ✨
 
-You're almost finished! Just a couple more steps:
-1. Commit and push your newly created file (.github/workflows/rdme-docs-with-github-flag.yml) to GitHub 🚀
-2. Create a GitHub secret called \`README_API_KEY\` and populate that with a ReadMe API key 🔑"
+Almost done! Just a couple more steps:
+1. Push your newly created file (.github/workflows/rdme-docs-with-github-flag.yml) to GitHub 🚀
+2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
+
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+
+🦉 If you have any more questions, feel free to drop us a line! support@readme.io
+"
 `;
 
 exports[`#createGHA command inputs docs should run GHA creation workflow with \`--github\` flag and messy file name and generate valid workflow file 2`] = `
@@ -362,11 +412,16 @@ jobs:
 
 exports[`#createGHA command inputs docs:single should run GHA creation workflow and generate valid workflow file 1`] = `
 "
-Your GitHub Action has been created! ✨
+Your GitHub Actions workflow file has been created! ✨
 
-You're almost finished! Just a couple more steps:
-1. Commit and push your newly created file (.github/workflows/rdme-docs-single.yml) to GitHub 🚀
-2. Create a GitHub secret called \`README_API_KEY\` and populate that with a ReadMe API key 🔑"
+Almost done! Just a couple more steps:
+1. Push your newly created file (.github/workflows/rdme-docs-single.yml) to GitHub 🚀
+2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
+
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+
+🦉 If you have any more questions, feel free to drop us a line! support@readme.io
+"
 `;
 
 exports[`#createGHA command inputs docs:single should run GHA creation workflow and generate valid workflow file 2`] = `
@@ -398,11 +453,16 @@ jobs:
 
 exports[`#createGHA command inputs docs:single should run GHA creation workflow with \`--github\` flag and messy file name and generate valid workflow file 1`] = `
 "
-Your GitHub Action has been created! ✨
+Your GitHub Actions workflow file has been created! ✨
 
-You're almost finished! Just a couple more steps:
-1. Commit and push your newly created file (.github/workflows/rdme-docs-single-with-github-flag.yml) to GitHub 🚀
-2. Create a GitHub secret called \`README_API_KEY\` and populate that with a ReadMe API key 🔑"
+Almost done! Just a couple more steps:
+1. Push your newly created file (.github/workflows/rdme-docs-single-with-github-flag.yml) to GitHub 🚀
+2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
+
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+
+🦉 If you have any more questions, feel free to drop us a line! support@readme.io
+"
 `;
 
 exports[`#createGHA command inputs docs:single should run GHA creation workflow with \`--github\` flag and messy file name and generate valid workflow file 2`] = `
@@ -434,11 +494,16 @@ jobs:
 
 exports[`#createGHA command inputs openapi should run GHA creation workflow and generate valid workflow file 1`] = `
 "
-Your GitHub Action has been created! ✨
+Your GitHub Actions workflow file has been created! ✨
 
-You're almost finished! Just a couple more steps:
-1. Commit and push your newly created file (.github/workflows/rdme-openapi.yml) to GitHub 🚀
-2. Create a GitHub secret called \`README_API_KEY\` and populate that with a ReadMe API key 🔑"
+Almost done! Just a couple more steps:
+1. Push your newly created file (.github/workflows/rdme-openapi.yml) to GitHub 🚀
+2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
+
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+
+🦉 If you have any more questions, feel free to drop us a line! support@readme.io
+"
 `;
 
 exports[`#createGHA command inputs openapi should run GHA creation workflow and generate valid workflow file 2`] = `
@@ -470,11 +535,16 @@ jobs:
 
 exports[`#createGHA command inputs openapi should run GHA creation workflow with \`--github\` flag and messy file name and generate valid workflow file 1`] = `
 "
-Your GitHub Action has been created! ✨
+Your GitHub Actions workflow file has been created! ✨
 
-You're almost finished! Just a couple more steps:
-1. Commit and push your newly created file (.github/workflows/rdme-openapi-with-github-flag.yml) to GitHub 🚀
-2. Create a GitHub secret called \`README_API_KEY\` and populate that with a ReadMe API key 🔑"
+Almost done! Just a couple more steps:
+1. Push your newly created file (.github/workflows/rdme-openapi-with-github-flag.yml) to GitHub 🚀
+2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
+
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+
+🦉 If you have any more questions, feel free to drop us a line! support@readme.io
+"
 `;
 
 exports[`#createGHA command inputs openapi should run GHA creation workflow with \`--github\` flag and messy file name and generate valid workflow file 2`] = `
@@ -506,11 +576,12 @@ jobs:
 
 exports[`#createGHA command inputs validate should run GHA creation workflow and generate valid workflow file 1`] = `
 "
-Your GitHub Action has been created! ✨
+Your GitHub Actions workflow file has been created! ✨
 
-You're almost finished! Just a couple more steps:
-1. Commit and push your newly created file (.github/workflows/rdme-validate.yml) to GitHub 🚀
-2. Create a GitHub secret called \`README_API_KEY\` and populate that with a ReadMe API key 🔑"
+Almost done! Push your newly created file (.github/workflows/rdme-validate.yml) to GitHub and you're all set 🚀
+
+🦉 If you have any more questions, feel free to drop us a line! support@readme.io
+"
 `;
 
 exports[`#createGHA command inputs validate should run GHA creation workflow and generate valid workflow file 2`] = `
@@ -542,11 +613,12 @@ jobs:
 
 exports[`#createGHA command inputs validate should run GHA creation workflow with \`--github\` flag and messy file name and generate valid workflow file 1`] = `
 "
-Your GitHub Action has been created! ✨
+Your GitHub Actions workflow file has been created! ✨
 
-You're almost finished! Just a couple more steps:
-1. Commit and push your newly created file (.github/workflows/rdme-validate-with-github-flag.yml) to GitHub 🚀
-2. Create a GitHub secret called \`README_API_KEY\` and populate that with a ReadMe API key 🔑"
+Almost done! Push your newly created file (.github/workflows/rdme-validate-with-github-flag.yml) to GitHub and you're all set 🚀
+
+🦉 If you have any more questions, feel free to drop us a line! support@readme.io
+"
 `;
 
 exports[`#createGHA command inputs validate should run GHA creation workflow with \`--github\` flag and messy file name and generate valid workflow file 2`] = `

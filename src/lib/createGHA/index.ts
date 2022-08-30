@@ -71,6 +71,17 @@ export const getGHAFileName = (fileName: string) => {
 };
 
 /**
+ * Returns a redacted `key` if the current command uses authentication.
+ * Otherwise, returns `false`.
+ */
+function getKey(args: OptionDefinition[], opts: CommandOptions<{}>): string | false {
+  if (args.some(arg => arg.name === 'key')) {
+    return `••••••••••••${opts.key.slice(-5)}`;
+  }
+  return false;
+}
+
+/**
  * Constructs the command string that we pass into the workflow file.
  */
 function constructCmdString(
@@ -295,12 +306,36 @@ export default async function createGHA(
 
   fs.writeFileSync(filePath, output);
 
-  return Promise.resolve(
-    [
-      chalk.green('\nYour GitHub Action has been created! ✨\n'),
-      "You're almost finished! Just a couple more steps:",
-      `1. Commit and push your newly created file (${filePath}) to GitHub 🚀`,
-      `2. Create a GitHub secret called \`${GITHUB_SECRET_NAME}\` and populate that with a ReadMe API key 🔑`,
-    ].join('\n')
+  const success = [chalk.green('\nYour GitHub Actions workflow file has been created! ✨\n')];
+
+  const key = getKey(args, opts);
+
+  if (key) {
+    success.push(
+      chalk.bold('Almost done! Just a couple more steps:'),
+      `1. Push your newly created file (${chalk.underline(filePath)}) to GitHub 🚀`,
+      // TODO: only show this if opts.key is a thing
+      `2. Create a GitHub secret called ${chalk.bold(
+        GITHUB_SECRET_NAME
+      )} and populate the value with your ReadMe API key (${key}) 🔑`,
+      '',
+      `🔐 Check out GitHub's docs for more info on creating encrypted secrets (${chalk.underline(
+        'https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository'
+      )})`
+    );
+  } else {
+    success.push(
+      `${chalk.bold('Almost done!')} Push your newly created file (${chalk.underline(
+        filePath
+      )}) to GitHub and you're all set 🚀`
+    );
+  }
+
+  success.push(
+    '',
+    `🦉 If you have any more questions, feel free to drop us a line! ${chalk.underline('support@readme.io')}`,
+    ''
   );
+
+  return Promise.resolve(success.join('\n'));
 }

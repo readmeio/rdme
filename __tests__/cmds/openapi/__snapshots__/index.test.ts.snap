@@ -2,11 +2,16 @@
 
 exports[`rdme openapi GHA onboarding E2E tests should create GHA workflow (--create flag enabled with ignored id opt) 1`] = `
 "
-Your GitHub Action has been created! ✨
+Your GitHub Actions workflow file has been created! ✨
 
-You're almost finished! Just a couple more steps:
-1. Commit and push your newly created file (.github/workflows/openapi-file-create-flag-id-opt.yml) to GitHub 🚀
-2. Create a GitHub secret called \`README_API_KEY\` and populate that with a ReadMe API key 🔑"
+Almost done! Just a couple more steps:
+1. Push your newly created file (.github/workflows/openapi-file-create-flag-id-opt.yml) to GitHub 🚀
+2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
+
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+
+🦉 If you have any more questions, feel free to drop us a line! support@readme.io
+"
 `;
 
 exports[`rdme openapi GHA onboarding E2E tests should create GHA workflow (--create flag enabled with ignored id opt) 2`] = `
@@ -38,11 +43,16 @@ jobs:
 
 exports[`rdme openapi GHA onboarding E2E tests should create GHA workflow (--create flag enabled) 1`] = `
 "
-Your GitHub Action has been created! ✨
+Your GitHub Actions workflow file has been created! ✨
 
-You're almost finished! Just a couple more steps:
-1. Commit and push your newly created file (.github/workflows/openapi-file-create-flag.yml) to GitHub 🚀
-2. Create a GitHub secret called \`README_API_KEY\` and populate that with a ReadMe API key 🔑"
+Almost done! Just a couple more steps:
+1. Push your newly created file (.github/workflows/openapi-file-create-flag.yml) to GitHub 🚀
+2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
+
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+
+🦉 If you have any more questions, feel free to drop us a line! support@readme.io
+"
 `;
 
 exports[`rdme openapi GHA onboarding E2E tests should create GHA workflow (--create flag enabled) 2`] = `
@@ -74,11 +84,16 @@ jobs:
 
 exports[`rdme openapi GHA onboarding E2E tests should create GHA workflow (--github flag enabled) 1`] = `
 "
-Your GitHub Action has been created! ✨
+Your GitHub Actions workflow file has been created! ✨
 
-You're almost finished! Just a couple more steps:
-1. Commit and push your newly created file (.github/workflows/openapi-file-github-flag.yml) to GitHub 🚀
-2. Create a GitHub secret called \`README_API_KEY\` and populate that with a ReadMe API key 🔑"
+Almost done! Just a couple more steps:
+1. Push your newly created file (.github/workflows/openapi-file-github-flag.yml) to GitHub 🚀
+2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
+
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+
+🦉 If you have any more questions, feel free to drop us a line! support@readme.io
+"
 `;
 
 exports[`rdme openapi GHA onboarding E2E tests should create GHA workflow (--github flag enabled) 2`] = `
@@ -110,11 +125,16 @@ jobs:
 
 exports[`rdme openapi GHA onboarding E2E tests should create GHA workflow (--update flag enabled) 1`] = `
 "
-Your GitHub Action has been created! ✨
+Your GitHub Actions workflow file has been created! ✨
 
-You're almost finished! Just a couple more steps:
-1. Commit and push your newly created file (.github/workflows/openapi-file-update-flag.yml) to GitHub 🚀
-2. Create a GitHub secret called \`README_API_KEY\` and populate that with a ReadMe API key 🔑"
+Almost done! Just a couple more steps:
+1. Push your newly created file (.github/workflows/openapi-file-update-flag.yml) to GitHub 🚀
+2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
+
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+
+🦉 If you have any more questions, feel free to drop us a line! support@readme.io
+"
 `;
 
 exports[`rdme openapi GHA onboarding E2E tests should create GHA workflow (--update flag enabled) 2`] = `
@@ -146,11 +166,16 @@ jobs:
 
 exports[`rdme openapi GHA onboarding E2E tests should create GHA workflow (create spec) 1`] = `
 "
-Your GitHub Action has been created! ✨
+Your GitHub Actions workflow file has been created! ✨
 
-You're almost finished! Just a couple more steps:
-1. Commit and push your newly created file (.github/workflows/openapi-file.yml) to GitHub 🚀
-2. Create a GitHub secret called \`README_API_KEY\` and populate that with a ReadMe API key 🔑"
+Almost done! Just a couple more steps:
+1. Push your newly created file (.github/workflows/openapi-file.yml) to GitHub 🚀
+2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
+
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+
+🦉 If you have any more questions, feel free to drop us a line! support@readme.io
+"
 `;
 
 exports[`rdme openapi GHA onboarding E2E tests should create GHA workflow (create spec) 2`] = `
@@ -182,11 +207,16 @@ jobs:
 
 exports[`rdme openapi GHA onboarding E2E tests should create GHA workflow (including workingDirectory) 1`] = `
 "
-Your GitHub Action has been created! ✨
+Your GitHub Actions workflow file has been created! ✨
 
-You're almost finished! Just a couple more steps:
-1. Commit and push your newly created file (.github/workflows/openapi-file-workingdirectory.yml) to GitHub 🚀
-2. Create a GitHub secret called \`README_API_KEY\` and populate that with a ReadMe API key 🔑"
+Almost done! Just a couple more steps:
+1. Push your newly created file (.github/workflows/openapi-file-workingdirectory.yml) to GitHub 🚀
+2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
+
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+
+🦉 If you have any more questions, feel free to drop us a line! support@readme.io
+"
 `;
 
 exports[`rdme openapi GHA onboarding E2E tests should create GHA workflow (including workingDirectory) 2`] = `
@@ -218,11 +248,16 @@ jobs:
 
 exports[`rdme openapi GHA onboarding E2E tests should create GHA workflow (update spec via prompt) 1`] = `
 "
-Your GitHub Action has been created! ✨
+Your GitHub Actions workflow file has been created! ✨
 
-You're almost finished! Just a couple more steps:
-1. Commit and push your newly created file (.github/workflows/openapi-file-update-prompt.yml) to GitHub 🚀
-2. Create a GitHub secret called \`README_API_KEY\` and populate that with a ReadMe API key 🔑"
+Almost done! Just a couple more steps:
+1. Push your newly created file (.github/workflows/openapi-file-update-prompt.yml) to GitHub 🚀
+2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
+
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+
+🦉 If you have any more questions, feel free to drop us a line! support@readme.io
+"
 `;
 
 exports[`rdme openapi GHA onboarding E2E tests should create GHA workflow (update spec via prompt) 2`] = `

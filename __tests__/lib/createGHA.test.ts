@@ -37,6 +37,8 @@ const ghaWorkflowUrl = 'https://json.schemastore.org/github-workflow.json';
 let consoleInfoSpy;
 const getCommandOutput = () => consoleInfoSpy.mock.calls.join('\n\n');
 
+const key = 'API_KEY';
+
 describe('#createGHA', () => {
   let ghaWorkflowSchema;
   let yamlOutput;
@@ -91,25 +93,29 @@ describe('#createGHA', () => {
       [
         'openapi' as keyof typeof commands,
         OpenAPICommand,
-        { spec: 'petstore.json', id: 'spec_id' } as CommandOptions<{}>,
+        { key, spec: 'petstore.json', id: 'spec_id' } as CommandOptions<{}>,
       ],
-      ['docs' as keyof typeof commands, DocsCommand, { folder: './docs', version: '1.0.0' } as CommandOptions<{}>],
+      ['docs' as keyof typeof commands, DocsCommand, { key, folder: './docs', version: '1.0.0' } as CommandOptions<{}>],
       [
         'docs:single' as keyof typeof commands,
         SingleDocCommand,
-        { filePath: './docs/rdme.md', version: '1.0.0' } as CommandOptions<{}>,
+        { key, filePath: './docs/rdme.md', version: '1.0.0' } as CommandOptions<{}>,
       ],
-      ['changelogs' as keyof typeof commands, ChangelogsCommand, { folder: './changelogs' } as CommandOptions<{}>],
+      ['changelogs' as keyof typeof commands, ChangelogsCommand, { key, folder: './changelogs' } as CommandOptions<{}>],
       [
         'changelogs:single' as keyof typeof commands,
         SingleChangelogCommand,
-        { filePath: './changelogs/rdme.md' } as CommandOptions<{}>,
+        { key, filePath: './changelogs/rdme.md' } as CommandOptions<{}>,
       ],
-      ['custompages' as keyof typeof commands, CustomPagesCommand, { folder: './custompages' } as CommandOptions<{}>],
+      [
+        'custompages' as keyof typeof commands,
+        CustomPagesCommand,
+        { key, folder: './custompages' } as CommandOptions<{}>,
+      ],
       [
         'custompages:single' as keyof typeof commands,
         SingleCustomPageCommand,
-        { filePath: './custompages/rdme.md' } as CommandOptions<{}>,
+        { key, filePath: './custompages/rdme.md' } as CommandOptions<{}>,
       ],
     ])('%s', (cmd, CmdClass, opts) => {
       let command;
@@ -174,7 +180,9 @@ describe('#createGHA', () => {
 
         configstore.set(getConfigStoreKey(repoRoot), rdmeVersionMajor - 1);
 
-        return expect(createGHA('', cmd, command.args, opts)).resolves.toMatch('Your GitHub Action has been created!');
+        return expect(createGHA('', cmd, command.args, opts)).resolves.toMatch(
+          'Your GitHub Actions workflow file has been created!'
+        );
       });
 
       it('should set config and exit if user does not want to set up GHA', async () => {
