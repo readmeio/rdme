@@ -39,15 +39,18 @@ const GITHUB_SECRET_NAME = 'README_API_KEY';
  * The current `rdme` version
  *
  * @example "8.0.0"
+ * @note the reason why this is a function is
+ * because we want to mock it for our snapshots.
+ * @see {@link https://stackoverflow.com/a/54245672}
  */
-const rdmeVersion = pkg.version;
+export const getPkgVersion = () => pkg.version;
 
 /**
  * The current major `rdme` version
  *
  * @example 8
  */
-export const rdmeVersionMajor = semverMajor(rdmeVersion);
+export const rdmeVersionMajor = semverMajor(getPkgVersion());
 
 export const git = simpleGit();
 
@@ -266,7 +269,7 @@ export default async function createGHA(
       cleanCommand,
       command,
       commandString,
-      rdmeVersion,
+      rdmeVersion: getPkgVersion(),
       timestamp,
     };
     return { content: data[url] };

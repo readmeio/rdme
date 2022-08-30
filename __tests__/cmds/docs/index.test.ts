@@ -13,6 +13,7 @@ import DocsCommand from '../../../src/cmds/docs';
 import APIError from '../../../src/lib/apiError';
 import configstore from '../../../src/lib/configstore';
 import { git } from '../../../src/lib/createGHA';
+import * as createGHAObject from '../../../src/lib/createGHA';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock';
 import getGitRemoteMock from '../../helpers/get-git-mock';
 import hashFileContents from '../../helpers/hash-file-contents';
@@ -447,6 +448,9 @@ describe('rdme docs', () => {
         yamlOutput = d;
         return true;
       });
+
+      const spy = jest.spyOn(createGHAObject, 'getPkgVersion');
+      spy.mockReturnValue('7.8.9');
 
       process.env.TEST_CREATEGHA = 'true';
     });

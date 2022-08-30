@@ -26,6 +26,7 @@ import createGHA, {
   git,
   rdmeVersionMajor,
 } from '../../src/lib/createGHA';
+import * as createGHAObject from '../../src/lib/createGHA';
 import getGitRemoteMock from '../helpers/get-git-mock';
 import ghaWorkflowSchemaBackup from '../helpers/github-workflow-schema.json';
 
@@ -69,6 +70,9 @@ describe('#createGHA', () => {
       yamlOutput = d;
       return true;
     });
+
+    const spy = jest.spyOn(createGHAObject, 'getPkgVersion');
+    spy.mockReturnValue('7.8.9');
 
     process.env.TEST_CREATEGHA = 'true';
   });
