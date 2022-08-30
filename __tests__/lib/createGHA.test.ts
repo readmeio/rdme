@@ -189,7 +189,7 @@ describe('#createGHA', () => {
 
         await expect(createGHA('', cmd, command.args, opts)).rejects.toStrictEqual(
           new Error(
-            'GitHub Action Workflow cancelled. If you ever change your mind, you can run this command again with the `--github` flag.'
+            'GitHub Actions workflow creation cancelled. If you ever change your mind, you can run this command again with the `--github` flag.'
           )
         );
 
