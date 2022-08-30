@@ -7,7 +7,7 @@ import prompts from 'prompts';
 import OpenAPICommand from '../../../src/cmds/openapi';
 import SwaggerCommand from '../../../src/cmds/swagger';
 import APIError from '../../../src/lib/apiError';
-import getAPIMock from '../../helpers/get-api-mock';
+import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock';
 
 const openapi = new OpenAPICommand();
 const swagger = new SwaggerCommand();
@@ -109,9 +109,11 @@ describe('rdme openapi', () => {
       const mock = getAPIMock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
-        .reply(200, [{ version }])
+        .reply(200, { version })
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
-        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
+
+      const mockWithHeader = getAPIMockWithVersionHeader(version)
         .get('/api/v1/api-specification')
         .basicAuth({ user: key })
         .reply(200, [])
@@ -135,6 +137,7 @@ describe('rdme openapi', () => {
       const output = getCommandOutput();
       expect(output).toBe(chalk.yellow(`ℹ️  We found ${spec} and are attempting to upload it.`));
 
+      mockWithHeader.done();
       return mock.done();
     });
 
@@ -145,9 +148,11 @@ describe('rdme openapi', () => {
       const mock = getAPIMock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
-        .reply(200, [{ version }])
+        .reply(200, { version })
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
-        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
+
+      const mockWithHeader = getAPIMockWithVersionHeader(version)
         .get('/api/v1/api-specification')
         .basicAuth({ user: key })
         .reply(200, [{ _id: 'spec1', title: 'spec1_title' }])
@@ -166,6 +171,7 @@ describe('rdme openapi', () => {
         })
       ).resolves.toBe(successfulUpload(spec));
 
+      mockWithHeader.done();
       return mock.done();
     });
 
@@ -175,9 +181,11 @@ describe('rdme openapi', () => {
       const mock = getAPIMock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
-        .reply(200, [{ version }])
+        .reply(200, { version })
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
-        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
+
+      const postMock = getAPIMockWithVersionHeader(version)
         .post('/api/v1/api-specification', { registryUUID })
         .delayConnection(1000)
         .basicAuth({ user: key })
@@ -194,6 +202,7 @@ describe('rdme openapi', () => {
         })
       ).resolves.toBe(successfulUpload(spec));
 
+      postMock.done();
       return mock.done();
     });
 
@@ -383,9 +392,11 @@ describe('rdme openapi', () => {
       const mock = getAPIMock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
-        .reply(200, [{ version }])
+        .reply(200, { version })
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
-        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
+
+      const mockWithHeader = getAPIMockWithVersionHeader(version)
         .get('/api/v1/api-specification')
         .basicAuth({ user: key })
         .reply(200, [
@@ -406,19 +417,23 @@ describe('rdme openapi', () => {
           spec,
         })
       ).resolves.toBe(successfulUpdate(spec));
+
+      mockWithHeader.done();
       return mock.done();
     });
 
     describe('--update', () => {
-      it("should update a spec file without prompts if providing `update` and it's the only spec available", async () => {
+      it("should update a spec file without prompts if providing `update` and it's the one spec available", async () => {
         const registryUUID = getRandomRegistryId();
 
         const mock = getAPIMock()
           .get(`/api/v1/version/${version}`)
           .basicAuth({ user: key })
-          .reply(200, [{ version }])
+          .reply(200, { version })
           .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
-          .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+          .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
+
+        const mockWithHeader = getAPIMockWithVersionHeader(version)
           .get('/api/v1/api-specification')
           .basicAuth({ user: key })
           .reply(200, [{ _id: 'spec1', title: 'spec1_title' }])
@@ -437,6 +452,8 @@ describe('rdme openapi', () => {
             update: true,
           })
         ).resolves.toBe(successfulUpdate(spec));
+
+        mockWithHeader.done();
         return mock.done();
       });
 
@@ -446,7 +463,7 @@ describe('rdme openapi', () => {
         const mock = getAPIMock()
           .get(`/api/v1/version/${version}`)
           .basicAuth({ user: key })
-          .reply(200, [{ version }])
+          .reply(200, { version })
           .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
           .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
           .get('/api/v1/api-specification')
