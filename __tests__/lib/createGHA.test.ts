@@ -19,7 +19,13 @@ import SingleDocCommand from '../../src/cmds/docs/single';
 import OpenAPICommand from '../../src/cmds/openapi';
 import ValidateCommand from '../../src/cmds/validate';
 import configstore from '../../src/lib/configstore';
-import createGHA, { getConfigStoreKey, getGHAFileName, getGitData, git } from '../../src/lib/createGHA';
+import createGHA, {
+  getConfigStoreKey,
+  getGHAFileName,
+  getGitData,
+  git,
+  rdmeVersionMajor,
+} from '../../src/lib/createGHA';
 import getGitRemoteMock from '../helpers/get-git-mock';
 import ghaWorkflowSchemaBackup from '../helpers/github-workflow-schema.json';
 
@@ -156,6 +162,17 @@ describe('#createGHA', () => {
         expect(fs.writeFileSync).toHaveBeenCalledWith(getGHAFileName(fileName), expect.any(String));
       });
 
+      it('should run if user is on an outdated package version', () => {
+        const fileName = `rdme-${cmd}`;
+        prompts.inject([true, 'some-branch', fileName]);
+
+        const repoRoot = process.cwd();
+
+        configstore.set(getConfigStoreKey(repoRoot), rdmeVersionMajor - 1);
+
+        return expect(createGHA('', cmd, command.args, opts)).resolves.toMatch('Your GitHub Action has been created!');
+      });
+
       it('should set config and exit if user does not want to set up GHA', async () => {
         expect.assertions(2);
         prompts.inject([false]);
@@ -172,7 +189,7 @@ describe('#createGHA', () => {
           )
         );
 
-        expect(configstore.get(getConfigStoreKey(repoRoot))).toBe('2022-01-01T00:00:00.000Z');
+        expect(configstore.get(getConfigStoreKey(repoRoot))).toBe(rdmeVersionMajor);
       });
 
       it('should not run if not a repo', () => {
@@ -185,14 +202,10 @@ describe('#createGHA', () => {
         return expect(createGHA('success!', cmd, command.args, opts)).resolves.toBe('success!');
       });
 
-      it('should not run if user previously declined to set up GHA for current directory', () => {
+      it('should not run if user previously declined to set up GHA for current directory + pkg version', () => {
         const repoRoot = process.cwd();
 
-        configstore.set(getConfigStoreKey(repoRoot), 'some-date');
-
-        git.revparse = jest.fn(() => {
-          return Promise.resolve(repoRoot) as unknown as Response<string>;
-        });
+        configstore.set(getConfigStoreKey(repoRoot), rdmeVersionMajor);
 
         return expect(createGHA('success!', cmd, command.args, opts)).resolves.toBe('success!');
       });

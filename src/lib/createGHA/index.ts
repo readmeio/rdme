@@ -7,6 +7,7 @@ import path from 'path';
 
 import chalk from 'chalk';
 import prompts from 'prompts';
+import semverMajor from 'semver/functions/major';
 import simpleGit from 'simple-git';
 
 import { transcludeString } from 'hercule/promises';
@@ -33,6 +34,20 @@ export const getConfigStoreKey = (repoRoot: string) => `createGHA.${repoRoot}`;
  */
 const GITHUB_WORKFLOW_DIR = '.github/workflows';
 const GITHUB_SECRET_NAME = 'README_API_KEY';
+
+/**
+ * The current `rdme` version
+ *
+ * @example "8.0.0"
+ */
+const rdmeVersion = pkg.version;
+
+/**
+ * The current major `rdme` version
+ *
+ * @example 8
+ */
+export const rdmeVersionMajor = semverMajor(rdmeVersion);
 
 export const git = simpleGit();
 
@@ -143,8 +158,8 @@ export default async function createGHA(
       !isRepo ||
       // in a CI environment
       isCI() ||
-      // we've already asked if user wants set up a GHA for this repo and they said no
-      configstore.get(getConfigStoreKey(repoRoot)) ||
+      // user has previously declined to set up GHA for current repo and `rdme` package version
+      configstore.get(getConfigStoreKey(repoRoot)) === rdmeVersionMajor ||
       // is a repo, but only contains non-GitHub remotes
       (isRepo && containsNonGitHubRemote && !containsGitHubRemote) ||
       // not testing this function
@@ -223,9 +238,9 @@ export default async function createGHA(
     );
 
   if (!shouldCreateGHA) {
-    // if the user says no, we store data in the configstore for the current repo
-    // so we know in the future not to ask them again
-    configstore.set(getConfigStoreKey(repoRoot), new Date());
+    // if the user says no, we don't want to bug them again
+    // for this repo and version of `rdme
+    configstore.set(getConfigStoreKey(repoRoot), rdmeVersionMajor);
     throw new Error(
       'GitHub Action Workflow cancelled. If you ever change your mind, you can run this command again with the `--github` flag.'
     );
@@ -233,7 +248,6 @@ export default async function createGHA(
 
   const cleanCommand = cleanFileName(command);
   const commandString = constructCmdString(command, args, opts);
-  const rdmeVersion = pkg.version;
   const timestamp = new Date().toISOString();
 
   /**
