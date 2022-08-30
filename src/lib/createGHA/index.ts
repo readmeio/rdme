@@ -144,7 +144,7 @@ export async function getGitData() {
 }
 
 /**
- * Post-command flow for creating a GitHub Action workflow file.
+ * Post-command flow for creating a GitHub Actions workflow file.
  *
  */
 export default async function createGHA(

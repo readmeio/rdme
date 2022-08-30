@@ -101,7 +101,7 @@ export default class Command {
     return {
       name: 'github',
       type: Boolean,
-      description: 'Create a new GitHub Action workflow for this command.',
+      description: 'Create a new GitHub Actions workflow for this command.',
     };
   }
 

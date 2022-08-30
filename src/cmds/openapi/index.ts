@@ -88,7 +88,7 @@ export default class OpenAPICommand extends Command {
     const spinner = ora({ ...oraOptions() });
     /**
      * The `version` and `update` parameters are not typically ones we'd want to include
-     * in GitHub Action workflow files, so we're going to collect them in this object.
+     * in GitHub Actions workflow files, so we're going to collect them in this object.
      */
     const ignoredGHAParameters: Options = { version: undefined, update: undefined };
 
