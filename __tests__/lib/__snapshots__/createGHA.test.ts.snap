@@ -8,7 +8,7 @@ Almost done! Just a couple more steps:
 1. Push your newly created file (.github/workflows/rdme-changelogs.yml) to GitHub 🚀
 2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
 
-🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
 
 🦉 If you have any more questions, feel free to drop us a line! support@readme.io
 "
@@ -49,7 +49,7 @@ Almost done! Just a couple more steps:
 1. Push your newly created file (.github/workflows/rdme-changelogs-with-github-flag.yml) to GitHub 🚀
 2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
 
-🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
 
 🦉 If you have any more questions, feel free to drop us a line! support@readme.io
 "
@@ -90,7 +90,7 @@ Almost done! Just a couple more steps:
 1. Push your newly created file (.github/workflows/rdme-changelogs-single.yml) to GitHub 🚀
 2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
 
-🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
 
 🦉 If you have any more questions, feel free to drop us a line! support@readme.io
 "
@@ -131,7 +131,7 @@ Almost done! Just a couple more steps:
 1. Push your newly created file (.github/workflows/rdme-changelogs-single-with-github-flag.yml) to GitHub 🚀
 2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
 
-🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
 
 🦉 If you have any more questions, feel free to drop us a line! support@readme.io
 "
@@ -172,7 +172,7 @@ Almost done! Just a couple more steps:
 1. Push your newly created file (.github/workflows/rdme-custompages.yml) to GitHub 🚀
 2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
 
-🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
 
 🦉 If you have any more questions, feel free to drop us a line! support@readme.io
 "
@@ -213,7 +213,7 @@ Almost done! Just a couple more steps:
 1. Push your newly created file (.github/workflows/rdme-custompages-with-github-flag.yml) to GitHub 🚀
 2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
 
-🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
 
 🦉 If you have any more questions, feel free to drop us a line! support@readme.io
 "
@@ -254,7 +254,7 @@ Almost done! Just a couple more steps:
 1. Push your newly created file (.github/workflows/rdme-custompages-single.yml) to GitHub 🚀
 2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
 
-🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
 
 🦉 If you have any more questions, feel free to drop us a line! support@readme.io
 "
@@ -295,7 +295,7 @@ Almost done! Just a couple more steps:
 1. Push your newly created file (.github/workflows/rdme-custompages-single-with-github-flag.yml) to GitHub 🚀
 2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
 
-🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
 
 🦉 If you have any more questions, feel free to drop us a line! support@readme.io
 "
@@ -336,7 +336,7 @@ Almost done! Just a couple more steps:
 1. Push your newly created file (.github/workflows/rdme-docs.yml) to GitHub 🚀
 2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
 
-🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
 
 🦉 If you have any more questions, feel free to drop us a line! support@readme.io
 "
@@ -377,7 +377,7 @@ Almost done! Just a couple more steps:
 1. Push your newly created file (.github/workflows/rdme-docs-with-github-flag.yml) to GitHub 🚀
 2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
 
-🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
 
 🦉 If you have any more questions, feel free to drop us a line! support@readme.io
 "
@@ -418,7 +418,7 @@ Almost done! Just a couple more steps:
 1. Push your newly created file (.github/workflows/rdme-docs-single.yml) to GitHub 🚀
 2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
 
-🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
 
 🦉 If you have any more questions, feel free to drop us a line! support@readme.io
 "
@@ -459,7 +459,7 @@ Almost done! Just a couple more steps:
 1. Push your newly created file (.github/workflows/rdme-docs-single-with-github-flag.yml) to GitHub 🚀
 2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
 
-🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
 
 🦉 If you have any more questions, feel free to drop us a line! support@readme.io
 "
@@ -500,7 +500,7 @@ Almost done! Just a couple more steps:
 1. Push your newly created file (.github/workflows/rdme-openapi.yml) to GitHub 🚀
 2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
 
-🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
 
 🦉 If you have any more questions, feel free to drop us a line! support@readme.io
 "
@@ -541,7 +541,7 @@ Almost done! Just a couple more steps:
 1. Push your newly created file (.github/workflows/rdme-openapi-with-github-flag.yml) to GitHub 🚀
 2. Create a GitHub secret called README_API_KEY and populate the value with your ReadMe API key (••••••••••••I_KEY) 🔑
 
-🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+🔐 Check out GitHub's docs for more info on creating encrypted secrets (https://docs.github.com/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
 
 🦉 If you have any more questions, feel free to drop us a line! support@readme.io
 "

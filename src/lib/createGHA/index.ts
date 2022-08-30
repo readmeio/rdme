@@ -320,7 +320,7 @@ export default async function createGHA(
       )} and populate the value with your ReadMe API key (${key}) 🔑`,
       '',
       `🔐 Check out GitHub's docs for more info on creating encrypted secrets (${chalk.underline(
-        'https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository'
+        'https://docs.github.com/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository'
       )})`
     );
   } else {
