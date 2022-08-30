@@ -32,6 +32,7 @@ const getCommandOutput = () => consoleInfoSpy.mock.calls.join('\n\n');
 
 describe('#createGHA', () => {
   let ghaWorkflowSchema;
+  let yamlOutput;
 
   beforeAll(async () => {
     ghaWorkflowSchema = await fetch(ghaWorkflowUrl)
@@ -57,6 +58,11 @@ describe('#createGHA', () => {
     });
 
     git.remote = getGitRemoteMock();
+
+    fs.writeFileSync = jest.fn((f, d) => {
+      yamlOutput = d;
+      return true;
+    });
 
     process.env.TEST_CREATEGHA = 'true';
   });
@@ -107,13 +113,6 @@ describe('#createGHA', () => {
         const fileName = `rdme-${cmd}`;
         prompts.inject([true, 'some-branch', fileName]);
 
-        let yamlOutput;
-
-        fs.writeFileSync = jest.fn((f, d) => {
-          yamlOutput = d;
-          return true;
-        });
-
         await expect(createGHA('', cmd, command.args, opts)).resolves.toMatchSnapshot();
 
         expect(yamlOutput).toBeValidSchema(ghaWorkflowSchema);
@@ -128,13 +127,6 @@ describe('#createGHA', () => {
         expect.assertions(4);
         const fileName = `rdme-${cmd} with GitHub flag`;
         prompts.inject(['another-branch', fileName]);
-
-        let yamlOutput;
-
-        fs.writeFileSync = jest.fn((f, d) => {
-          yamlOutput = d;
-          return true;
-        });
 
         await expect(createGHA('', cmd, command.args, { ...opts, github: true })).resolves.toMatchSnapshot();
 
@@ -156,10 +148,6 @@ describe('#createGHA', () => {
 
         fs.mkdirSync = jest.fn(() => {
           return '';
-        });
-
-        fs.writeFileSync = jest.fn(() => {
-          return true;
         });
 
         await expect(createGHA('', cmd, command.args, opts)).resolves.toBeTruthy();
