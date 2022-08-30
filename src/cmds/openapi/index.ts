@@ -109,12 +109,10 @@ export default class OpenAPICommand extends Command {
     }
 
     if (create && id) {
-      ignoredGHAParameters.id = undefined;
       Command.warn("We'll be using the `--create` option, so the `--id` parameter will be ignored.");
     }
 
     if (update && id) {
-      ignoredGHAParameters.update = undefined;
       Command.warn(
         "We'll be updating the API definition associated with the `--id` parameter, so the `--update` parameter will be ignored."
       );
@@ -158,8 +156,14 @@ export default class OpenAPICommand extends Command {
           `\t${chalk.green(`rdme openapi ${specPath} --key=<key> --id=${body._id}`)}`,
         ].join('\n')
       ).then(msg =>
-        // eslint-disable-next-line no-underscore-dangle
-        createGHA(msg, this.command, this.args, { ...opts, spec: specPath, id: body._id, ...ignoredGHAParameters })
+        createGHA(msg, this.command, this.args, {
+          ...opts,
+          spec: specPath,
+          // eslint-disable-next-line no-underscore-dangle
+          id: body._id,
+          version: selectedVersion,
+          ...ignoredGHAParameters,
+        })
       );
     };
 
@@ -252,6 +256,7 @@ export default class OpenAPICommand extends Command {
     }
 
     if (create) {
+      ignoredGHAParameters.id = undefined;
       delete ignoredGHAParameters.version;
       return createSpec();
     }
