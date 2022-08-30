@@ -145,6 +145,12 @@ You can add `--update` to the command so if there's only one API definition for 
 rdme openapi [path-to-file.json] --version={project-version} --update
 ```
 
+You can add `--matchOnTitleAndVersion` to the command so if there's an existing API definition for the given project version that has the same title as the spec being being synced, then it will select it without and prompts.
+
+```sh
+rdme openapi [path-to-file.json] --version={project-version} --matchOnTitleAndVersion
+```
+
 #### Omitting the File Path
 
 If you run `rdme` within a directory that contains your OpenAPI or Swagger definition, you can omit the file path. `rdme` will then look for JSON or YAML files (including in sub-directories) that contain a top-level [`openapi`](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#fixed-fields) or [`swagger`](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/2.0.md#fixed-fields) property.
