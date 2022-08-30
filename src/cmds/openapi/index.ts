@@ -131,7 +131,7 @@ export default class OpenAPICommand extends Command {
       selectedVersion = specVersion;
     }
 
-    if (!id) {
+    if (create || !id) {
       selectedVersion = await getProjectVersion(selectedVersion, key, true);
     }
 

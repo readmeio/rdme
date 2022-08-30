@@ -12,7 +12,7 @@ export default function getAPIMock(reqHeaders = {}) {
   });
 }
 
-export function getAPIMockWithVersionHeader(v) {
+export function getAPIMockWithVersionHeader(v: string) {
   return getAPIMock({
     'x-readme-version': v,
   });
