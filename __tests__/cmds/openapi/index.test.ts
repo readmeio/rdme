@@ -1063,7 +1063,7 @@ describe('rdme openapi', () => {
       expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${yamlFileName}.yml`, expect.any(String));
       expect(console.info).toHaveBeenCalledTimes(2);
       const output = getCommandOutput();
-      expect(output).toMatch('GitHub Repository detected!');
+      expect(output).toMatch("Looks like you're running this command in a GitHub Repository!");
       expect(output).toMatch('successfully uploaded a new OpenAPI file to your ReadMe project');
 
       mockWithHeader.done();
@@ -1107,7 +1107,7 @@ describe('rdme openapi', () => {
       expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${yamlFileName}.yml`, expect.any(String));
       expect(console.info).toHaveBeenCalledTimes(2);
       const output = getCommandOutput();
-      expect(output).toMatch('`--github` option detected!');
+      expect(output).toMatch("Let's get you set up with GitHub Actions!");
       expect(output).toMatch('successfully uploaded a new OpenAPI file to your ReadMe project');
 
       mockWithHeader.done();

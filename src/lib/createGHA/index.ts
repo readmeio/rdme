@@ -187,10 +187,22 @@ export default async function createGHA(
 
   if (opts.github) {
     // eslint-disable-next-line no-console
-    console.info('\n🐙 `--github` option detected! 🐙\n');
+    console.info(chalk.bold("\n🚀 Let's get you set up with GitHub Actions! 🚀\n"));
   } else {
     // eslint-disable-next-line no-console
-    console.info('\n🐙 GitHub Repository detected! 🐙\n');
+    console.info(
+      [
+        '',
+        chalk.bold("🐙 Looks like you're running this command in a GitHub Repository! 🐙"),
+        '',
+        `🚀 With a few quick clicks, you can run this \`${command}\` command via GitHub Actions (${chalk.underline(
+          'https://github.com/features/actions'
+        )})`,
+        '',
+        `✨ This means it will run ${chalk.italic('automagically')} with every push to a branch of your choice!`,
+        '',
+      ].join('\n')
+    );
   }
 
   if (repoRoot) process.chdir(repoRoot);
@@ -201,13 +213,13 @@ export default async function createGHA(
     await promptTerminal(
       [
         {
-          message: 'Do you want to create a GitHub Action so you can run this command automatically in GitHub?',
+          message: 'Would you like to create a GitHub Actions workflow?',
           name: 'shouldCreateGHA',
           type: 'confirm',
           initial: true,
         },
         {
-          message: 'What branch on GitHub should this workflow run on?',
+          message: 'What GitHub branch should this workflow run on?',
           name: 'branch',
           type: 'text',
           initial: defaultBranch || 'main',

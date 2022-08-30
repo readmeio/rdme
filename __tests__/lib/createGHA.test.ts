@@ -130,7 +130,7 @@ describe('#createGHA', () => {
         expect(fs.writeFileSync).toHaveBeenCalledWith(getGHAFileName(fileName), expect.any(String));
         expect(console.info).toHaveBeenCalledTimes(1);
         const output = getCommandOutput();
-        expect(output).toMatch('GitHub Repository detected!');
+        expect(output).toMatch("Looks like you're running this command in a GitHub Repository!");
       });
 
       it('should run GHA creation workflow with `--github` flag and messy file name and generate valid workflow file', async () => {

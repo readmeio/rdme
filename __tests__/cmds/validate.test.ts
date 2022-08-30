@@ -181,7 +181,7 @@ describe('rdme validate', () => {
       expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
       expect(console.info).toHaveBeenCalledTimes(2);
       const output = getCommandOutput();
-      expect(output).toMatch('GitHub Repository detected!');
+      expect(output).toMatch("Looks like you're running this command in a GitHub Repository!");
       expect(output).toMatch('is a valid OpenAPI API definition!');
     });
 

@@ -500,7 +500,7 @@ describe('rdme docs', () => {
       expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
       expect(console.info).toHaveBeenCalledTimes(2);
       const output = getCommandOutput();
-      expect(output).toMatch('GitHub Repository detected!');
+      expect(output).toMatch("Looks like you're running this command in a GitHub Repository!");
       expect(output).toMatch(`successfully created '${slug}' with contents from`);
 
       versionsMock.done();
