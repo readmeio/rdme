@@ -990,7 +990,7 @@ describe('rdme openapi', () => {
     });
   });
 
-  describe.only('GHA onboarding E2E tests', () => {
+  describe('GHA onboarding E2E tests', () => {
     let yamlOutput;
 
     beforeEach(() => {
