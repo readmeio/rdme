@@ -25,7 +25,7 @@ export type Options = {
   useSpecVersion?: boolean;
   workingDirectory?: string;
   update?: boolean;
-  matchOnTitleAndVersion?: string;
+  matchOnTitleAndVersion?: boolean;
 };
 
 type Spec = {
@@ -130,6 +130,12 @@ export default class OpenAPICommand extends Command {
     if (matchOnTitleAndVersion && id) {
       Command.warn(
         "We'll be updating the API definition associated with the `--id` parameter, so the `--matchOnTitleAndVersion` parameter will be ignored."
+      );
+    }
+
+    if (update && matchOnTitleAndVersion) {
+      Command.warn(
+        "We'll be updating the API definition with the a matching `title`, so the `--update` parameter will be ignored."
       );
     }
 
@@ -271,6 +277,15 @@ export default class OpenAPICommand extends Command {
     if (create) return createSpec();
 
     if (!id) {
+      if (matchOnTitleAndVersion) {
+        const matchedSpec = await findSpecBasedOnTitleAndVersion();
+        if (typeof matchedSpec !== 'undefined') {
+          // eslint-disable-next-line no-underscore-dangle
+          return updateSpec(matchedSpec._id);
+        }
+
+        throw new Error(`No API specifcation with a title of ${specTitle} was found for version ${version}.`);
+      }
       Command.debug('no id parameter, retrieving list of API specs');
       const apiSettings = await getSpecs('/api/v1/api-specification');
 
@@ -291,13 +306,6 @@ export default class OpenAPICommand extends Command {
         }
         const { _id: specId } = apiSettingsBody[0];
         return updateSpec(specId);
-      }
-
-      if (matchOnTitleAndVersion) {
-        const { _id: specId } = await findSpecBasedOnTitleAndVersion();
-        if (!specId) {
-          return updateSpec(specId);
-        }
       }
 
       // @todo: figure out how to add a stricter type here, see:

@@ -503,7 +503,156 @@ describe('rdme openapi', () => {
       });
     });
 
-    it.todo('should paginate to next and previous pages of specs');
+    describe('--matchOnTitleAndVersion', () => {
+      it('should update a spec file without prompts if providing `matchOnTitleAndVersion` and an existing api spec has the same title', async () => {
+        const registryUUID = getRandomRegistryId();
+
+        const mock = getAPIMock()
+          .get(`/api/v1/version/${version}`)
+          .basicAuth({ user: key })
+          .reply(200, [{ version }])
+          .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+          .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+          .get('/api/v1/api-specification?perPage=20&page=1')
+          .basicAuth({ user: key })
+          .reply(200, [{ _id: 'spec1', title: 'Example petstore to demo our handling of external $ref pointers' }], {
+            'x-total-count': '21',
+          })
+          .get('/api/v1/api-specification?perPage=20&page=2')
+          .basicAuth({ user: key })
+          .reply(200, [{ _id: 'spec2', title: 'Example petstore to demo our handling of external $ref pointers2' }], {
+            'x-total-count': '21',
+          })
+          .put('/api/v1/api-specification/spec1', { registryUUID })
+          .delayConnection(1000)
+          .basicAuth({ user: key })
+          .reply(201, { _id: 1 }, { location: exampleRefLocation });
+
+        const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
+
+        await expect(
+          openapi.run({
+            key,
+            version,
+            spec,
+            matchOnTitleAndVersion: true,
+          })
+        ).resolves.toBe(successfulUpdate(spec));
+        return mock.done();
+      });
+
+      it('should error if providing `matchOnTitleAndVersion` and an existing api spec does not have a matching title.', async () => {
+        const registryUUID = getRandomRegistryId();
+
+        const mock = getAPIMock()
+          .get(`/api/v1/version/${version}`)
+          .basicAuth({ user: key })
+          .reply(200, [{ version }])
+          .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+          .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+          .get('/api/v1/api-specification?perPage=20&page=1')
+          .basicAuth({ user: key })
+          .reply(200, [{ _id: 'spec3', title: 'Example petstore1' }], {
+            'x-total-count': '21',
+          })
+          .get('/api/v1/api-specification?perPage=20&page=2')
+          .basicAuth({ user: key })
+          .reply(200, [{ _id: 'spec2', title: 'Example petstore2' }], {
+            'x-total-count': '21',
+          });
+
+        const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
+
+        await expect(
+          openapi.run({
+            key,
+            version,
+            spec,
+            matchOnTitleAndVersion: true,
+          })
+        ).rejects.toStrictEqual(
+          new Error(
+            'No API specifcation with a title of Example petstore to demo our handling of external $ref pointers was found for version 1.0.0.'
+          )
+        );
+        return mock.done();
+      });
+
+      it('should warn if providing both `matchOnTitleAndVersion` and `id`', async () => {
+        const registryUUID = getRandomRegistryId();
+
+        const mock = getAPIMock()
+          .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+          .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+          .put('/api/v1/api-specification/spec1', { registryUUID })
+          .delayConnection(1000)
+          .basicAuth({ user: key })
+          .reply(201, { _id: 1 }, { location: exampleRefLocation });
+        const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
+
+        await expect(
+          openapi.run({
+            key,
+            spec,
+            matchOnTitleAndVersion: true,
+            id: 'spec1',
+          })
+        ).resolves.toBe(successfulUpdate(spec));
+
+        expect(console.warn).toHaveBeenCalledTimes(1);
+        expect(console.info).toHaveBeenCalledTimes(0);
+
+        const output = getCommandOutput();
+        expect(output).toMatch(/the `--matchOnTitleAndVersion` parameter will be ignored./);
+        return mock.done();
+      });
+
+      it('should warn if providing both `update` and `matchOnTitleAndVersion`', async () => {
+        const registryUUID = getRandomRegistryId();
+
+        const mock = getAPIMock()
+          .get(`/api/v1/version/${version}`)
+          .basicAuth({ user: key })
+          .reply(200, [{ version }])
+          .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+          .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+          .get('/api/v1/api-specification?perPage=20&page=1')
+          .basicAuth({ user: key })
+          .reply(200, [{ _id: 'spec1', title: 'Example petstore to demo our handling of external $ref pointers' }], {
+            'x-total-count': '21',
+          })
+          .get('/api/v1/api-specification?perPage=20&page=2')
+          .basicAuth({ user: key })
+          .reply(200, [{ _id: 'spec2', title: 'Example petstore to demo our handling of external $ref pointers2' }], {
+            'x-total-count': '21',
+          })
+          .put('/api/v1/api-specification/spec1', { registryUUID })
+          .delayConnection(1000)
+          .basicAuth({ user: key })
+          .reply(201, { _id: 1 }, { location: exampleRefLocation });
+
+        const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
+
+        await expect(
+          openapi.run({
+            key,
+            spec,
+            version,
+            update: true,
+            matchOnTitleAndVersion: true,
+          })
+        ).resolves.toBe(successfulUpdate(spec));
+
+        expect(console.warn).toHaveBeenCalledTimes(1);
+        expect(console.info).toHaveBeenCalledTimes(0);
+
+        const output = getCommandOutput();
+        expect(output).toMatch(/the `--update` parameter will be ignored./);
+        return mock.done();
+      });
+
+      it.todo('should paginate to next and previous pages of specs');
+    });
   });
 
   describe('versioning', () => {

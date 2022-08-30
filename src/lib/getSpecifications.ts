@@ -33,7 +33,6 @@ export default async function getSpecification(key: string, selectedVersion: str
   }
 
   const { firstPage, totalCount } = await getNumberOfPages();
-
   const allSpecifications = firstPage.concat(
     ...(await Promise.all(
       // retrieves all specifications beyond first page
