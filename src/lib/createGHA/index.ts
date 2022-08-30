@@ -167,8 +167,13 @@ export default async function createGHA(
   // eslint-disable-next-line no-console
   if (msg) console.info(msg);
 
-  // eslint-disable-next-line no-console
-  console.info('\n🐙 GitHub Repository detected! 🐙\n');
+  if (opts.github) {
+    // eslint-disable-next-line no-console
+    console.info('\n🐙 `--github` option detected! 🐙\n');
+  } else {
+    // eslint-disable-next-line no-console
+    console.info('\n🐙 GitHub Repository detected! 🐙\n');
+  }
 
   if (repoRoot) process.chdir(repoRoot);
 
