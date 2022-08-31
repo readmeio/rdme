@@ -224,7 +224,7 @@ export default async function createGHA(
     await promptTerminal(
       [
         {
-          message: 'Would you like to create a GitHub Actions workflow?',
+          message: 'Would you like to add a GitHub Actions workflow?',
           name: 'shouldCreateGHA',
           type: 'confirm',
           initial: true,
