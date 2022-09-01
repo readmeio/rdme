@@ -47,9 +47,7 @@ jobs:
           node-version: 12
 
       - name: Install deps
-        run: |
-          npm ci
-          npm remove jest-extended
+        run: npm ci
 
       - name: Build dist
         run: npm run build
