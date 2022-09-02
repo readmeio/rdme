@@ -257,7 +257,7 @@ describe('rdme docs', () => {
         .reply(200, { version });
 
       await expect(docs.run({ folder: `./__tests__/${fixturesBaseDir}/new-docs`, key, version })).resolves.toBe(
-        `🌱 successfully created 'new-doc' with contents from __tests__/${fixturesBaseDir}/new-docs/new-doc.md with an id of 1234`
+        `🌱 successfully created 'new-doc' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/new-docs/new-doc.md`
       );
 
       getMock.done();
@@ -403,7 +403,7 @@ describe('rdme docs', () => {
         .reply(200, { version });
 
       await expect(docs.run({ folder: `./__tests__/${fixturesBaseDir}/slug-docs`, key, version })).resolves.toBe(
-        `🌱 successfully created 'marc-actually-wrote-a-test' with contents from __tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md with an id of 1234`
+        `🌱 successfully created 'marc-actually-wrote-a-test' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`
       );
 
       getMock.done();

@@ -218,7 +218,7 @@ describe('rdme custompages', () => {
         .reply(201, { slug, id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
       await expect(custompages.run({ folder: `./__tests__/${fixturesBaseDir}/new-docs`, key })).resolves.toBe(
-        `🌱 successfully created 'new-doc' with contents from __tests__/${fixturesBaseDir}/new-docs/new-doc.md with an id of 1234`
+        `🌱 successfully created 'new-doc' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/new-docs/new-doc.md`
       );
 
       getMock.done();
@@ -247,7 +247,7 @@ describe('rdme custompages', () => {
         .reply(201, { slug, id, html: doc.content, htmlmode: true, ...doc.data, lastUpdatedHash: hash });
 
       await expect(custompages.run({ folder: `./__tests__/${fixturesBaseDir}/new-docs-html`, key })).resolves.toBe(
-        `🌱 successfully created 'new-doc' with contents from __tests__/${fixturesBaseDir}/new-docs-html/new-doc.html with an id of 1234`
+        `🌱 successfully created 'new-doc' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/new-docs-html/new-doc.html`
       );
 
       getMock.done();
@@ -373,7 +373,7 @@ describe('rdme custompages', () => {
         .reply(201, { slug: doc.data.slug, id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
       await expect(custompages.run({ folder: `./__tests__/${fixturesBaseDir}/slug-docs`, key })).resolves.toBe(
-        `🌱 successfully created 'marc-actually-wrote-a-test' with contents from __tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md with an id of 1234`
+        `🌱 successfully created 'marc-actually-wrote-a-test' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`
       );
 
       getMock.done();
