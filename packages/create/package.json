@@ -2,7 +2,7 @@
   "name": "@readme/create",
   "version": "0.0.1",
   "description": "Sync your OpenAPI definition to ReadMe",
-  "bin": "npx rdme@latest openapi --github",
+  "bin": "npx rdme@next openapi --github",
   "repository": {
     "type": "git",
     "url": "https://github.com/readmeio/rdme.git",
