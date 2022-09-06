@@ -15,10 +15,11 @@ Options
                               uploading an existing API definition.                                 
   --version string            Project version. If running command in a CI environment and this      
                               option is not passed, the main project version will be used.          
-  --create                    Bypasses the create/update prompt and creates a new API definition.   
   --useSpecVersion            Uses the version listed in the \`info.version\` field in the API        
                               definition for the project version parameter.                         
+  --github                    Create a new GitHub Actions workflow for this command.                
   --workingDirectory string   Working directory (for usage with relative external references)       
+  --create                    Bypasses the create/update prompt and creates a new API definition.   
   --update                    Automatically update an existing API definition in ReadMe if it's the 
                               only one associated with the current version.                         
   -h, --help                  Display this usage guide                                              
@@ -45,10 +46,11 @@ Options
                               uploading an existing API definition.                                 
   --version string            Project version. If running command in a CI environment and this      
                               option is not passed, the main project version will be used.          
-  --create                    Bypasses the create/update prompt and creates a new API definition.   
   --useSpecVersion            Uses the version listed in the \`info.version\` field in the API        
                               definition for the project version parameter.                         
+  --github                    Create a new GitHub Actions workflow for this command.                
   --workingDirectory string   Working directory (for usage with relative external references)       
+  --create                    Bypasses the create/update prompt and creates a new API definition.   
   --update                    Automatically update an existing API definition in ReadMe if it's the 
                               only one associated with the current version.                         
   -h, --help                  Display this usage guide                                              
@@ -75,10 +77,11 @@ Options
                               uploading an existing API definition.                                 
   --version string            Project version. If running command in a CI environment and this      
                               option is not passed, the main project version will be used.          
-  --create                    Bypasses the create/update prompt and creates a new API definition.   
   --useSpecVersion            Uses the version listed in the \`info.version\` field in the API        
                               definition for the project version parameter.                         
+  --github                    Create a new GitHub Actions workflow for this command.                
   --workingDirectory string   Working directory (for usage with relative external references)       
+  --create                    Bypasses the create/update prompt and creates a new API definition.   
   --update                    Automatically update an existing API definition in ReadMe if it's the 
                               only one associated with the current version.                         
   -h, --help                  Display this usage guide                                              

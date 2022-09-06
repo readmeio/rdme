@@ -5,6 +5,7 @@ import chalk from 'chalk';
 import prompts from 'prompts';
 
 import Command from '../../src/cmds/validate';
+import { after, before } from '../helpers/get-gha-setup';
 
 const testWorkingDir = process.cwd();
 
@@ -103,6 +104,107 @@ describe('rdme validate', () => {
 
     it('should throw an error if an invalid Swagger definition is supplied', () => {
       return expect(validate.run({ spec: './__tests__/__fixtures__/invalid-swagger.json' })).rejects.toMatchSnapshot();
+    });
+  });
+
+  describe('CI tests', () => {
+    beforeEach(() => {
+      process.env.TEST_CI = 'true';
+    });
+
+    afterEach(() => {
+      delete process.env.TEST_CI;
+    });
+
+    it('should successfully validate prompt and not run GHA onboarding', async () => {
+      process.env.TEST_CREATEGHA = 'true';
+      const spec = '__tests__/__fixtures__/petstore-simple-weird-version.json';
+      await expect(validate.run({ spec })).resolves.toBe(chalk.green(`${spec} is a valid OpenAPI API definition!`));
+      delete process.env.TEST_CREATEGHA;
+    });
+
+    it('should fail if user attempts to pass `--github` flag in CI environment', () => {
+      return expect(
+        validate.run({ github: true, spec: '__tests__/__fixtures__/petstore-simple-weird-version.json' })
+      ).rejects.toStrictEqual(new Error('The `--github` flag is only for usage in non-CI environments.'));
+    });
+  });
+
+  describe('GHA onboarding E2E tests', () => {
+    let yamlOutput;
+
+    beforeEach(() => {
+      before((fileName, data) => {
+        yamlOutput = data;
+      });
+    });
+
+    afterEach(() => {
+      after();
+    });
+
+    it('should create GHA workflow if user passes in spec via prompts', async () => {
+      expect.assertions(6);
+      const spec = '__tests__/__fixtures__/petstore-simple-weird-version.json';
+      const fileName = 'validate-test-file';
+      prompts.inject([spec, true, 'validate-test-branch', fileName]);
+
+      await expect(validate.run({})).resolves.toMatchSnapshot();
+
+      expect(yamlOutput).toMatchSnapshot();
+      expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
+      expect(console.info).toHaveBeenCalledTimes(2);
+      const output = getCommandOutput();
+      expect(output).toMatch("Looks like you're running this command in a GitHub Repository!");
+      expect(output).toMatch('is a valid OpenAPI API definition!');
+    });
+
+    it('should create GHA workflow if user passes in spec via opt', async () => {
+      expect.assertions(3);
+      const spec = '__tests__/__fixtures__/petstore-simple-weird-version.json';
+      const fileName = 'validate-test-opt-spec-file';
+      prompts.inject([true, 'validate-test-opt-spec-branch', fileName]);
+
+      await expect(validate.run({ spec })).resolves.toMatchSnapshot();
+
+      expect(yamlOutput).toMatchSnapshot();
+      expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
+    });
+
+    it('should create GHA workflow if user passes in spec via opt (github flag enabled)', async () => {
+      expect.assertions(3);
+      const spec = '__tests__/__fixtures__/petstore-simple-weird-version.json';
+      const fileName = 'validate-test-opt-spec-github-file';
+      prompts.inject(['validate-test-opt-spec-github-branch', fileName]);
+
+      await expect(validate.run({ spec, github: true })).resolves.toMatchSnapshot();
+
+      expect(yamlOutput).toMatchSnapshot();
+      expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
+    });
+
+    it('should create GHA workflow if user passes in spec via opt (including workingDirectory)', async () => {
+      expect.assertions(3);
+      const spec = 'petstore.json';
+      const fileName = 'validate-test-opt-spec-workdir-file';
+      prompts.inject([true, 'validate-test-opt-spec-github-branch', fileName]);
+
+      await expect(
+        validate.run({ spec, workingDirectory: './__tests__/__fixtures__/relative-ref-oas' })
+      ).resolves.toMatchSnapshot();
+
+      expect(yamlOutput).toMatchSnapshot();
+      expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
+    });
+
+    it('should reject if user says no to creating GHA workflow', () => {
+      const spec = '__tests__/__fixtures__/petstore-simple-weird-version.json';
+      prompts.inject([spec, false]);
+      return expect(validate.run({})).rejects.toStrictEqual(
+        new Error(
+          'GitHub Actions workflow creation cancelled. If you ever change your mind, you can run this command again with the `--github` flag.'
+        )
+      );
     });
   });
 });

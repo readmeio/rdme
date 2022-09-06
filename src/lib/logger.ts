@@ -6,7 +6,7 @@ import chalk from 'chalk';
 import config from 'config';
 import debugModule from 'debug';
 
-import isGHA from './isGitHub';
+import { isGHA } from './isCI';
 
 const debugPackage = debugModule(config.get('cli'));
 

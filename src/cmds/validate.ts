@@ -3,6 +3,7 @@ import type { CommandOptions } from '../lib/baseCommand';
 import chalk from 'chalk';
 
 import Command, { CommandCategories } from '../lib/baseCommand';
+import createGHA from '../lib/createGHA';
 import prepareOas from '../lib/prepareOas';
 
 export type Options = {
@@ -32,6 +33,7 @@ export default class ValidateCommand extends Command {
         type: String,
         description: 'Working directory (for usage with relative external references)',
       },
+      this.getGitHubArg(),
     ];
   }
 
@@ -45,6 +47,8 @@ export default class ValidateCommand extends Command {
     }
 
     const { specPath, specType } = await prepareOas(spec, 'validate');
-    return Promise.resolve(chalk.green(`${specPath} is a valid ${specType} API definition!`));
+    return Promise.resolve(chalk.green(`${specPath} is a valid ${specType} API definition!`)).then(msg =>
+      createGHA(msg, this.command, this.args, { ...opts, spec: specPath } as CommandOptions<Options>)
+    );
   }
 }

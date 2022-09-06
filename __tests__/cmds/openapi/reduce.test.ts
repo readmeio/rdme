@@ -17,8 +17,6 @@ const getCommandOutput = () => consoleInfoSpy.mock.calls.join('\n\n');
 
 describe('rdme openapi:reduce', () => {
   beforeEach(() => {
-    jest.mock('fs');
-
     consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
   });
 
@@ -41,9 +39,8 @@ describe('rdme openapi:reduce', () => {
         const spec = require.resolve(`@readme/oas-examples/${specVersion}/${format}/petstore.${format}`);
 
         let reducedSpec;
-        fs.writeFileSync = jest.fn((f, d) => {
-          reducedSpec = JSON.parse(d as string);
-          return true;
+        fs.writeFileSync = jest.fn((fileName, data) => {
+          reducedSpec = JSON.parse(data as string);
         });
 
         prompts.inject(['tags', ['pet'], 'output.json']);
@@ -69,9 +66,8 @@ describe('rdme openapi:reduce', () => {
         const spec = 'petstore.json';
 
         let reducedSpec;
-        fs.writeFileSync = jest.fn((f, d) => {
-          reducedSpec = JSON.parse(d as string);
-          return true;
+        fs.writeFileSync = jest.fn((fileName, data) => {
+          reducedSpec = JSON.parse(data as string);
         });
 
         prompts.inject(['tags', ['user'], 'output.json']);
@@ -101,9 +97,8 @@ describe('rdme openapi:reduce', () => {
         const spec = require.resolve(`@readme/oas-examples/${specVersion}/${format}/petstore.${format}`);
 
         let reducedSpec;
-        fs.writeFileSync = jest.fn((f, d) => {
-          reducedSpec = JSON.parse(d as string);
-          return true;
+        fs.writeFileSync = jest.fn((fileName, data) => {
+          reducedSpec = JSON.parse(data as string);
         });
 
         prompts.inject(['paths', ['/pet', '/pet/findByStatus'], ['get', 'post'], 'output.json']);

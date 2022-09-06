@@ -112,7 +112,7 @@ If you're seeing failures with the GitHub Action and need to troubleshoot the is
 
 > 🚧 Debug Logs May Contain Sensitive Information
 >
-> Enabling [Step Debug Logs](https://github.com/actions/toolkit/blob/main/docs/action-debugging.md#step-debug-logs) will produce comprehensive logging for **all** of your GitHub Action workflows. While we sanitize all logging output to prevent API keys from being visible, the logs may contain other sensitive information (from ReadMe and any other services that you use). Anybody with read access to the repository will be able to see these logs.
+> Enabling [Step Debug Logs](https://github.com/actions/toolkit/blob/main/docs/action-debugging.md#step-debug-logs) will produce comprehensive logging for **all** of your GitHub Actions workflows. While we sanitize all logging output to prevent API keys from being visible, the logs may contain other sensitive information (from ReadMe and any other services that you use). Anybody with read access to the repository will be able to see these logs.
 >
 > We **strongly recommend** that you only enable this setting in private repositories. If working in a public repository, we suggest creating a separate private repository with your GitHub workflow and OpenAPI/Swagger files before enabling this debugger.
 >

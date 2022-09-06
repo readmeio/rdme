@@ -1,8 +1,12 @@
 import nock from 'nock';
+import prompts from 'prompts';
 
 import { version } from '../package.json';
 import cli from '../src';
 import conf from '../src/lib/configstore';
+
+import getAPIMock from './helpers/get-api-mock';
+import { after, before } from './helpers/get-gha-setup';
 
 describe('cli', () => {
   it('command not found', async () => {
@@ -115,5 +119,51 @@ describe('cli', () => {
 
   it('should error with `rdme oas` arguments passed in', async () => {
     await expect(cli(['oas', 'endpoint'])).rejects.toThrow(/.*/);
+  });
+
+  describe('GHA onboarding via @supportsGHA decorator', () => {
+    let consoleInfoSpy;
+    const key = '123';
+    const slug = 'new-doc';
+
+    beforeEach(() => {
+      before(() => true);
+      consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+    });
+
+    afterEach(() => {
+      after();
+      consoleInfoSpy.mockRestore();
+    });
+
+    const getCommandOutput = () => {
+      return [consoleInfoSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
+    };
+
+    it.each([
+      ['changelogs', 'changelogs', ''],
+      ['changelogs:single', 'changelogs', `${slug}.md`],
+      ['custompages', 'custompages', ''],
+      ['custompages:single', 'custompages', `${slug}.md`],
+    ])('should run GHA workflow for the %s command', async (cmd, type, file) => {
+      expect.assertions(3);
+      prompts.inject([false]);
+
+      const getMock = getAPIMock().get(`/api/v1/${type}/${slug}`).basicAuth({ user: key }).reply(404, {});
+
+      await expect(
+        cli([cmd, '--dryRun', `--key=${key}`, `__tests__/__fixtures__/${type}/new-docs/${file}`])
+      ).rejects.toStrictEqual(
+        new Error(
+          'GitHub Actions workflow creation cancelled. If you ever change your mind, you can run this command again with the `--github` flag.'
+        )
+      );
+
+      const output = getCommandOutput();
+      expect(output).toMatch(`dry run! This will create '${slug}'`);
+      expect(output).toMatch("Looks like you're running this command in a GitHub Repository!");
+
+      getMock.done();
+    });
   });
 });

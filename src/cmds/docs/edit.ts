@@ -34,11 +34,7 @@ export default class EditDocsCommand extends Command {
 
     this.hiddenArgs = ['slug'];
     this.args = [
-      {
-        name: 'key',
-        type: String,
-        description: 'Project API key',
-      },
+      this.getKeyArg(),
       this.getVersionArg(),
       {
         name: 'slug',

@@ -1,12 +1,16 @@
 /* eslint-disable class-methods-use-this */
+import type commands from '../cmds';
+import type { CommandLineOptions } from 'command-line-args';
 import type { OptionDefinition } from 'command-line-usage';
 
+import isCI from './isCI';
 import { debug, info, warn } from './logger';
 
 export type CommandOptions<T> = T & {
   key?: string;
   version?: string;
-};
+  github?: boolean;
+} & CommandLineOptions;
 
 export enum CommandCategories {
   ADMIN = 'admin',
@@ -25,7 +29,7 @@ export default class Command {
    *
    * @example openapi
    */
-  command: string;
+  command: keyof typeof commands;
 
   /**
    * Example command usage, used on invidivual command help screens
@@ -64,6 +68,12 @@ export default class Command {
   hidden = false;
 
   /**
+   * Does the command run the GitHub Actions onboarding called via
+   * `src/index.ts`?
+   */
+  supportsGHA = false;
+
+  /**
    * Arguments to hide from the individual command help screen
    * (typically used for hiding default arguments)
    *
@@ -76,7 +86,7 @@ export default class Command {
    */
   args: OptionDefinition[];
 
-  run(opts: CommandOptions<{}>): void | Promise<string> {
+  run(opts: CommandOptions<{}>): Promise<string> {
     Command.debug(`command: ${this.command}`);
     Command.debug(`opts: ${JSON.stringify(opts)}`);
 
@@ -85,12 +95,42 @@ export default class Command {
         throw new Error('No project API key provided. Please use `--key`.');
       }
     }
+
+    if (opts.github && isCI()) {
+      throw new Error('The `--github` flag is only for usage in non-CI environments.');
+    }
+
+    // This is a bit of a hack so we can keep our types consistent
+    // for this `run` function.
+    return Promise.resolve('');
+  }
+
+  /**
+   * Used in any command where `github` is an option.
+   */
+  getGitHubArg(): OptionDefinition {
+    return {
+      name: 'github',
+      type: Boolean,
+      description: 'Create a new GitHub Actions workflow for this command.',
+    };
+  }
+
+  /**
+   * Used in any command where `key` is an option.
+   */
+  getKeyArg(): OptionDefinition {
+    return {
+      name: 'key',
+      type: String,
+      description: 'Project API key',
+    };
   }
 
   /**
    * Used in any command where `version` is an option.
    */
-  getVersionArg() {
+  getVersionArg(): OptionDefinition {
     return {
       name: 'version',
       type: String,

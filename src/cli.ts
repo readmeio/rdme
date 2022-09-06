@@ -5,7 +5,7 @@ import updateNotifier from 'update-notifier';
 
 import pkg from '../package.json';
 
-import isGHA from './lib/isGitHub';
+import { isGHA } from './lib/isCI';
 
 import rdme from '.';
 

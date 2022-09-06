@@ -4,6 +4,7 @@ import chalk from 'chalk';
 import config from 'config';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
+import supportsGHA from '../../lib/decorators/supportsGHA';
 import pushDoc from '../../lib/pushDoc';
 
 export type Options = {
@@ -11,6 +12,7 @@ export type Options = {
   filePath?: string;
 };
 
+@supportsGHA
 export default class SingleChangelogCommand extends Command {
   constructor() {
     super();
@@ -23,16 +25,13 @@ export default class SingleChangelogCommand extends Command {
 
     this.hiddenArgs = ['filePath'];
     this.args = [
-      {
-        name: 'key',
-        type: String,
-        description: 'Project API key',
-      },
+      this.getKeyArg(),
       {
         name: 'filePath',
         type: String,
         defaultOption: true,
       },
+      this.getGitHubArg(),
       {
         name: 'dryRun',
         type: Boolean,
@@ -56,6 +55,6 @@ export default class SingleChangelogCommand extends Command {
 
     const createdDoc = await pushDoc(key, undefined, dryRun, filePath, this.cmdCategory);
 
-    return chalk.green(createdDoc);
+    return Promise.resolve(chalk.green(createdDoc));
   }
 }

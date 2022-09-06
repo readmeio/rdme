@@ -1,7 +1,7 @@
 # This script adds a "vX.Y.Z" tag to every new release.
 #
 # Our releases are tagged like "1.2.3" but we want people to be able to write
-# GitHub Action workflows to say "uses: readmeio/readme@v1.2.3" because that's
+# GitHub Actions workflows to say "uses: readmeio/readme@v1.2.3" because that's
 # the usual GitHub convention.
 
 name: retag-release

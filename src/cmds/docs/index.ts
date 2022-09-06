@@ -4,6 +4,7 @@ import chalk from 'chalk';
 import config from 'config';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
+import createGHA from '../../lib/createGHA';
 import pushDoc from '../../lib/pushDoc';
 import readdirRecursive from '../../lib/readdirRecursive';
 import { getProjectVersion } from '../../lib/versionSelect';
@@ -25,17 +26,14 @@ export default class DocsCommand extends Command {
 
     this.hiddenArgs = ['folder'];
     this.args = [
-      {
-        name: 'key',
-        type: String,
-        description: 'Project API key',
-      },
+      this.getKeyArg(),
       this.getVersionArg(),
       {
         name: 'folder',
         type: String,
         defaultOption: true,
       },
+      this.getGitHubArg(),
       {
         name: 'dryRun',
         type: Boolean,
@@ -77,6 +75,8 @@ export default class DocsCommand extends Command {
       })
     );
 
-    return chalk.green(updatedDocs.join('\n'));
+    return Promise.resolve(chalk.green(updatedDocs.join('\n'))).then(msg =>
+      createGHA(msg, this.command, this.args, { ...opts, version: selectedVersion })
+    );
   }
 }
