@@ -123,33 +123,47 @@ export async function getGitData() {
     return false;
   });
 
+  debug(`[getGitData] isRepo result: ${isRepo}`);
+
   let containsGitHubRemote;
   let containsNonGitHubRemote;
   let defaultBranch;
   const rawRemotes = await git.remote([]).catch(e => {
-    debug(`error grabbing git remotes: ${e.message}`);
+    debug(`[getGitData] error grabbing git remotes: ${e.message}`);
     return '';
   });
 
+  debug(`[getGitData] rawRemotes result: ${rawRemotes}`);
+
   if (rawRemotes) {
     const remote = rawRemotes.split('\n')[0];
+    debug(`[getGitData] remote result: ${remote}`);
     const rawRemote = await git.remote(['show', remote]);
+    debug(`[getGitData] rawRemote result: ${rawRemote}`);
     // Extract head branch from git output
     const rawHead = headLineRegEx.exec(rawRemote as string)?.[0];
+    debug(`[getGitData] rawHead result: ${rawHead}`);
     if (rawHead) defaultBranch = rawHead.replace(headRegEx, '');
 
     // Extract the word 'github' from git output
     const remotesList = (await git.remote(['-v'])) as string;
+    debug(`[getGitData] remotesList result: ${remotesList}`);
     // This is a bit hairy but we want to keep it fairly general here
     // in case of GitHub Enterprise, etc.
     containsGitHubRemote = /github/.test(remotesList);
     containsNonGitHubRemote = /gitlab/.test(remotesList) || /bitbucket/.test(remotesList);
   }
 
+  debug(`[getGitData] containsGitHubRemote result: ${containsGitHubRemote}`);
+  debug(`[getGitData] containsNonGitHubRemote result: ${containsNonGitHubRemote}`);
+  debug(`[getGitData] defaultBranch result: ${defaultBranch}`);
+
   const repoRoot = await git.revparse(['--show-toplevel']).catch(e => {
-    debug(`error grabbing git root: ${e.message}`);
+    debug(`[getGitData] error grabbing git root: ${e.message}`);
     return '';
   });
+
+  debug(`[getGitData] repoRoot result: ${repoRoot}`);
 
   return { containsGitHubRemote, containsNonGitHubRemote, defaultBranch, isRepo, repoRoot };
 }
@@ -164,7 +178,13 @@ export default async function createGHA(
   args: OptionDefinition[],
   opts: CommandOptions<{}>
 ) {
+  debug(`running GHA onboarding for ${command} command`);
+  debug(`opts used in createGHA: ${JSON.stringify(opts)}`);
+
   const { containsGitHubRemote, containsNonGitHubRemote, defaultBranch, isRepo, repoRoot } = await getGitData();
+
+  const configVal = configstore.get(getConfigStoreKey(repoRoot));
+  debug(`repo value in config: ${configVal}`);
 
   if (!opts.github) {
     if (
@@ -173,12 +193,13 @@ export default async function createGHA(
       // in a CI environment
       isCI() ||
       // user has previously declined to set up GHA for current repo and `rdme` package version
-      configstore.get(getConfigStoreKey(repoRoot)) === rdmeVersionMajor ||
+      configVal === rdmeVersionMajor ||
       // is a repo, but only contains non-GitHub remotes
       (isRepo && containsNonGitHubRemote && !containsGitHubRemote) ||
       // not testing this function
       (process.env.NODE_ENV === 'testing' && !process.env.TEST_CREATEGHA)
     ) {
+      debug('not running GHA onboarding workflow, exiting');
       // We return the original command message and pretend this command flow never happened.
       return msg;
     }
@@ -272,9 +293,16 @@ export default async function createGHA(
     );
   }
 
-  const cleanCommand = cleanFileName(command);
-  const commandString = constructCmdString(command, args, opts);
-  const timestamp = new Date().toISOString();
+  const data = {
+    branch,
+    cleanCommand: cleanFileName(command),
+    command,
+    commandString: constructCmdString(command, args, opts),
+    rdmeVersion: getPkgVersion(),
+    timestamp: new Date().toISOString(),
+  };
+
+  debug(`data for resolver: ${JSON.stringify(data)}`);
 
   /**
    * Custom resolver for usage in `hercule`.
@@ -287,20 +315,13 @@ export default async function createGHA(
   ): {
     content: string;
   } {
-    const data = {
-      branch,
-      cleanCommand,
-      command,
-      commandString,
-      rdmeVersion: getPkgVersion(),
-      timestamp,
-    };
     return { content: data[url] };
   };
 
   const { output } = await transcludeString(yamlBase, { resolvers: [customResolver] });
 
   if (!fs.existsSync(GITHUB_WORKFLOW_DIR)) {
+    debug('GHA workflow directory does not exist, creating');
     fs.mkdirSync(GITHUB_WORKFLOW_DIR, { recursive: true });
   }
 
