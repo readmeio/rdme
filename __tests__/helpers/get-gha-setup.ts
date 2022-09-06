@@ -39,8 +39,6 @@ export function before(writeFileSyncCb) {
 
 /**
  * A helper function for tearing down tests for our GitHub Action onboarding.
- *
- * @see {@link __tests__/lib/createGHA.test.ts}
  */
 export function after() {
   configstore.clear();
