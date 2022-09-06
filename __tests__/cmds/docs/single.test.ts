@@ -53,6 +53,7 @@ describe('rdme docs:single', () => {
   describe('new docs', () => {
     it('should create new doc', async () => {
       const slug = 'new-doc';
+      const id = '1234';
       const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
 
@@ -69,7 +70,7 @@ describe('rdme docs:single', () => {
       const postMock = getAPIMockWithVersionHeader(version)
         .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
-        .reply(201, { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash });
+        .reply(201, { slug, id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
       const versionMock = getAPIMock()
         .get(`/api/v1/version/${version}`)
@@ -79,7 +80,7 @@ describe('rdme docs:single', () => {
       await expect(
         docsSingle.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, key, version })
       ).resolves.toBe(
-        `🌱 successfully created 'new-doc' with contents from ./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`
+        `🌱 successfully created 'new-doc' (ID: 1234) with contents from ./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`
       );
 
       getMock.done();
@@ -206,6 +207,7 @@ describe('rdme docs:single', () => {
   describe('slug metadata', () => {
     it('should use provided slug', async () => {
       const slug = 'new-doc-slug';
+      const id = '1234';
       const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/slug-docs/${slug}.md`)));
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/slug-docs/${slug}.md`)));
 
@@ -222,7 +224,7 @@ describe('rdme docs:single', () => {
       const postMock = getAPIMock()
         .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
-        .reply(201, { slug: doc.data.slug, body: doc.content, ...doc.data, lastUpdatedHash: hash });
+        .reply(201, { slug: doc.data.slug, id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
       const versionMock = getAPIMock()
         .get(`/api/v1/version/${version}`)
@@ -232,7 +234,7 @@ describe('rdme docs:single', () => {
       await expect(
         docsSingle.run({ filePath: `./__tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`, key, version })
       ).resolves.toBe(
-        `🌱 successfully created 'marc-actually-wrote-a-test' with contents from ./__tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`
+        `🌱 successfully created 'marc-actually-wrote-a-test' (ID: 1234) with contents from ./__tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`
       );
 
       getMock.done();
