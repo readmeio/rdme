@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import type commands from '../../src/cmds';
 import type { CommandOptions } from '../../src/lib/baseCommand';
+import type Command from '../../src/lib/baseCommand';
 import type { Response } from 'simple-git';
 
 import fs from 'fs';
@@ -55,36 +56,24 @@ describe('#createGHA', () => {
   });
 
   describe('command inputs', () => {
-    describe.each([
-      ['validate' as keyof typeof commands, ValidateCommand, { spec: 'petstore.json' } as CommandOptions<{}>],
-      [
-        'openapi' as keyof typeof commands,
-        OpenAPICommand,
-        { key, spec: 'petstore.json', id: 'spec_id' } as CommandOptions<{}>,
-      ],
-      ['docs' as keyof typeof commands, DocsCommand, { key, folder: './docs', version: '1.0.0' } as CommandOptions<{}>],
-      [
-        'docs:single' as keyof typeof commands,
-        SingleDocCommand,
-        { key, filePath: './docs/rdme.md', version: '1.0.0' } as CommandOptions<{}>,
-      ],
-      ['changelogs' as keyof typeof commands, ChangelogsCommand, { key, folder: './changelogs' } as CommandOptions<{}>],
-      [
-        'changelogs:single' as keyof typeof commands,
-        SingleChangelogCommand,
-        { key, filePath: './changelogs/rdme.md' } as CommandOptions<{}>,
-      ],
-      [
-        'custompages' as keyof typeof commands,
-        CustomPagesCommand,
-        { key, folder: './custompages' } as CommandOptions<{}>,
-      ],
-      [
-        'custompages:single' as keyof typeof commands,
-        SingleCustomPageCommand,
-        { key, filePath: './custompages/rdme.md' } as CommandOptions<{}>,
-      ],
-    ])('%s', (cmd, CmdClass, opts) => {
+    describe.each<{
+      cmd: keyof typeof commands;
+      CmdClass: typeof Command;
+      opts: CommandOptions<Record<string, string>>;
+    }>([
+      { cmd: 'validate', CmdClass: ValidateCommand, opts: { spec: 'petstore.json' } },
+      { cmd: 'openapi', CmdClass: OpenAPICommand, opts: { key, spec: 'petstore.json', id: 'spec_id' } },
+      { cmd: 'docs', CmdClass: DocsCommand, opts: { key, folder: './docs', version: '1.0.0' } },
+      { cmd: 'docs:single', CmdClass: SingleDocCommand, opts: { key, filePath: './docs/rdme.md', version: '1.0.0' } },
+      { cmd: 'changelogs', CmdClass: ChangelogsCommand, opts: { key, folder: './changelogs' } },
+      { cmd: 'changelogs:single', CmdClass: SingleChangelogCommand, opts: { key, filePath: './changelogs/rdme.md' } },
+      { cmd: 'custompages', CmdClass: CustomPagesCommand, opts: { key, folder: './custompages' } },
+      {
+        cmd: 'custompages:single',
+        CmdClass: SingleCustomPageCommand,
+        opts: { key, filePath: './custompages/rdme.md' },
+      },
+    ])('$cmd', ({ cmd, CmdClass, opts }) => {
       let command;
 
       beforeEach(() => {
