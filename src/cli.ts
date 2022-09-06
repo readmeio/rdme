@@ -6,23 +6,10 @@ import updateNotifier from 'update-notifier';
 import pkg from '../package.json';
 
 import isGHA from './lib/isGitHub';
-import isSupportedNodeVersion from './lib/isSupportedNodeVersion';
 
 import rdme from '.';
 
 updateNotifier({ pkg }).notify();
-
-/**
- * We use optional chaining throughout the library, which doesn't work on Node 12, so to curb
- * support questions about why rdme is throwing an "Unexpected token '.'" error we should hard
- * stop if we're being run with any Node version that we don't explicitly support.
- */
-if (!isSupportedNodeVersion(process.version)) {
-  const message = `We're sorry, this release of rdme does not support Node.js ${process.version}. We support the following versions: ${pkg.engines.node}`;
-  // eslint-disable-next-line no-console
-  console.error(chalk.red(`\n${message}\n`));
-  process.exit(1);
-}
 
 rdme(process.argv.slice(2))
   .then((msg: string) => {
