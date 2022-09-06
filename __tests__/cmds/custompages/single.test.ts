@@ -48,6 +48,7 @@ describe('rdme custompages:single', () => {
   describe('new custompages', () => {
     it('should create new custom page', async () => {
       const slug = 'new-doc';
+      const id = '1234';
       const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
 
@@ -64,12 +65,12 @@ describe('rdme custompages:single', () => {
       const postMock = getAPIMock()
         .post('/api/v1/custompages', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
-        .reply(201, { slug, body: doc.content, ...doc.data });
+        .reply(201, { slug, id, body: doc.content, ...doc.data });
 
       await expect(
         customPagesSingle.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, key })
       ).resolves.toBe(
-        `🌱 successfully created 'new-doc' with contents from ./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`
+        `🌱 successfully created 'new-doc' (ID: 1234) with contents from ./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`
       );
 
       getMock.done();
@@ -78,6 +79,7 @@ describe('rdme custompages:single', () => {
 
     it('should create new HTML custom page', async () => {
       const slug = 'new-doc';
+      const id = '1234';
       const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs-html/${slug}.html`)));
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/new-docs-html/${slug}.html`)));
 
@@ -94,12 +96,12 @@ describe('rdme custompages:single', () => {
       const postMock = getAPIMock()
         .post('/api/v1/custompages', { slug, html: doc.content, htmlmode: true, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
-        .reply(201, { slug, html: doc.content, htmlmode: true, ...doc.data });
+        .reply(201, { slug, id, html: doc.content, htmlmode: true, ...doc.data });
 
       await expect(
         customPagesSingle.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs-html/new-doc.html`, key })
       ).resolves.toBe(
-        `🌱 successfully created 'new-doc' with contents from ./__tests__/${fixturesBaseDir}/new-docs-html/new-doc.html`
+        `🌱 successfully created 'new-doc' (ID: 1234) with contents from ./__tests__/${fixturesBaseDir}/new-docs-html/new-doc.html`
       );
 
       getMock.done();
@@ -207,6 +209,7 @@ describe('rdme custompages:single', () => {
   describe('slug metadata', () => {
     it('should use provided slug', async () => {
       const slug = 'new-doc-slug';
+      const id = '1234';
       const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/slug-docs/${slug}.md`)));
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/slug-docs/${slug}.md`)));
 
@@ -223,12 +226,12 @@ describe('rdme custompages:single', () => {
       const postMock = getAPIMock()
         .post('/api/v1/custompages', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
-        .reply(201, { slug: doc.data.slug, body: doc.content, ...doc.data, lastUpdatedHash: hash });
+        .reply(201, { slug: doc.data.slug, id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
       await expect(
         customPagesSingle.run({ filePath: `./__tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`, key })
       ).resolves.toBe(
-        `🌱 successfully created 'marc-actually-wrote-a-test' with contents from ./__tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`
+        `🌱 successfully created 'marc-actually-wrote-a-test' (ID: 1234) with contents from ./__tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`
       );
 
       getMock.done();
