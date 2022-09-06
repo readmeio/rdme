@@ -4,7 +4,7 @@ import chalk from 'chalk';
 import config from 'config';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
-import createGHA from '../../lib/createGHA';
+import supportsGHA from '../../lib/decorators/supportsGHA';
 import pushDoc from '../../lib/pushDoc';
 import readdirRecursive from '../../lib/readdirRecursive';
 
@@ -13,6 +13,7 @@ export type Options = {
   folder?: string;
 };
 
+@supportsGHA
 export default class ChangelogsCommand extends Command {
   constructor() {
     super();
@@ -66,8 +67,6 @@ export default class ChangelogsCommand extends Command {
       })
     );
 
-    return Promise.resolve(chalk.green(updatedDocs.join('\n'))).then(msg =>
-      createGHA(msg, this.command, this.args, opts)
-    );
+    return Promise.resolve(chalk.green(updatedDocs.join('\n')));
   }
 }

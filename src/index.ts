@@ -24,6 +24,9 @@ import * as commands from './lib/commands';
 import configStore from './lib/configstore';
 import * as help from './lib/help';
 import { debug } from './lib/logger';
+import createGHA from './lib/createGHA';
+import type Command from './lib/baseCommand';
+import type { CommandOptions } from './lib/baseCommand';
 
 /**
  * @param {Array} processArgv - An array of arguments from the current process. Can be used to mock
@@ -66,8 +69,8 @@ export default function rdme(processArgv: NodeJS.Process['argv']) {
   }
 
   try {
-    let cmdArgv;
-    let bin;
+    let cmdArgv: CommandOptions<{}>;
+    let bin: Command;
 
     // Handling for `rdme help` and `rdme help <command>` cases.
     if (command === 'help') {
@@ -116,7 +119,12 @@ export default function rdme(processArgv: NodeJS.Process['argv']) {
 
     cmdArgv = { key: configStore.get('apiKey'), ...cmdArgv };
 
-    return bin.run(cmdArgv);
+    return bin.run(cmdArgv).then((msg: string) => {
+      if (bin.supportsGHA) {
+        return createGHA(msg, bin.command, bin.args, cmdArgv);
+      }
+      return msg;
+    });
   } catch (e) {
     if (e.message === 'Command not found.') {
       e.message = `${e.message}\n\nType \`${chalk.yellow(`${config.get('cli')} help`)}\` ${chalk.red(

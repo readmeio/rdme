@@ -4,7 +4,7 @@ import chalk from 'chalk';
 import config from 'config';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
-import createGHA from '../../lib/createGHA';
+import supportsGHA from '../../lib/decorators/supportsGHA';
 import pushDoc from '../../lib/pushDoc';
 
 export type Options = {
@@ -12,6 +12,7 @@ export type Options = {
   filePath?: string;
 };
 
+@supportsGHA
 export default class SingleChangelogCommand extends Command {
   constructor() {
     super();
@@ -54,6 +55,6 @@ export default class SingleChangelogCommand extends Command {
 
     const createdDoc = await pushDoc(key, undefined, dryRun, filePath, this.cmdCategory);
 
-    return Promise.resolve(chalk.green(createdDoc)).then(msg => createGHA(msg, this.command, this.args, opts));
+    return Promise.resolve(chalk.green(createdDoc));
   }
 }
