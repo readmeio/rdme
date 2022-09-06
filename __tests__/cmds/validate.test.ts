@@ -134,9 +134,8 @@ describe('rdme validate', () => {
     let yamlOutput;
 
     beforeEach(() => {
-      before((f, d) => {
-        yamlOutput = d;
-        return true;
+      before((fileName, data) => {
+        yamlOutput = data;
       });
     });
 

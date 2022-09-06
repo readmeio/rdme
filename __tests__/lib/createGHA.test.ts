@@ -42,9 +42,8 @@ describe('#createGHA', () => {
   beforeEach(() => {
     consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
 
-    before((f, d) => {
-      yamlOutput = d;
-      return true;
+    before((fileName, data) => {
+      yamlOutput = data;
     });
   });
 
