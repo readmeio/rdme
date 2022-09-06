@@ -470,6 +470,7 @@ describe('rdme docs', () => {
 
       const altVersion = '1.0.1';
       const slug = 'new-doc';
+      const id = '1234';
       const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
 
@@ -491,7 +492,7 @@ describe('rdme docs', () => {
       const postMock = getAPIMockWithVersionHeader(altVersion)
         .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
-        .reply(201, { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash });
+        .reply(201, { id, slug, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
       const fileName = 'docs-test-file';
       prompts.inject([altVersion, true, 'docs-test-branch', fileName]);
@@ -503,7 +504,7 @@ describe('rdme docs', () => {
       expect(console.info).toHaveBeenCalledTimes(2);
       const output = getCommandOutput();
       expect(output).toMatch("Looks like you're running this command in a GitHub Repository!");
-      expect(output).toMatch(`successfully created '${slug}' with contents from`);
+      expect(output).toMatch(`successfully created '${slug}' (ID: ${id}) with contents from`);
 
       versionsMock.done();
       getMock.done();
