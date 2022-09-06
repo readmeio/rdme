@@ -1,16 +1,11 @@
 /* eslint-disable no-console */
-import type { Response } from 'simple-git';
-
 import fs from 'fs';
 
 import chalk from 'chalk';
 import prompts from 'prompts';
 
 import Command from '../../src/cmds/validate';
-import configstore from '../../src/lib/configstore';
-import { git } from '../../src/lib/createGHA';
-import * as createGHAObject from '../../src/lib/createGHA';
-import getGitRemoteMock from '../helpers/get-git-mock';
+import { after, before } from '../helpers/get-gha-setup';
 
 const testWorkingDir = process.cwd();
 
@@ -139,34 +134,14 @@ describe('rdme validate', () => {
     let yamlOutput;
 
     beforeEach(() => {
-      // global Date override to handle timestamp generation
-      // stolen from here: https://github.com/facebook/jest/issues/2234#issuecomment-294873406
-      const DATE_TO_USE = new Date('2022');
-      // @ts-expect-error we're just overriding the constructor for tests,
-      // no need to construct everything
-      global.Date = jest.fn(() => DATE_TO_USE);
-
-      git.checkIsRepo = jest.fn(() => {
-        return Promise.resolve(true) as unknown as Response<boolean>;
-      });
-
-      git.remote = getGitRemoteMock();
-
-      fs.writeFileSync = jest.fn((f, d) => {
+      before((f, d) => {
         yamlOutput = d;
         return true;
       });
-
-      const spy = jest.spyOn(createGHAObject, 'getPkgVersion');
-      spy.mockReturnValue('7.8.9');
-
-      process.env.TEST_CREATEGHA = 'true';
     });
 
     afterEach(() => {
-      configstore.clear();
-      delete process.env.TEST_CREATEGHA;
-      jest.clearAllMocks();
+      after();
     });
 
     it('should create GHA workflow if user passes in spec via prompts', async () => {
