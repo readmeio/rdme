@@ -3,11 +3,8 @@ import type commands from '../../src/cmds';
 import type { CommandOptions } from '../../src/lib/baseCommand';
 import type { Response } from 'simple-git';
 
-import '../helpers/jest.matchers';
-
 import fs from 'fs';
 
-import fetch from 'node-fetch';
 import prompts from 'prompts';
 
 import ChangelogsCommand from '../../src/cmds/changelogs';
@@ -28,11 +25,10 @@ import createGHA, {
 } from '../../src/lib/createGHA';
 import * as createGHAObject from '../../src/lib/createGHA';
 import getGitRemoteMock from '../helpers/get-git-mock';
-import ghaWorkflowSchemaBackup from '../helpers/github-workflow-schema.json';
+import ghaWorkflowSchema from '../helpers/github-workflow-schema.json';
+import '../helpers/jest.matchers';
 
 const testWorkingDir = process.cwd();
-
-const ghaWorkflowUrl = 'https://json.schemastore.org/github-workflow.json';
 
 let consoleInfoSpy;
 const getCommandOutput = () => consoleInfoSpy.mock.calls.join('\n\n');
@@ -40,17 +36,7 @@ const getCommandOutput = () => consoleInfoSpy.mock.calls.join('\n\n');
 const key = 'API_KEY';
 
 describe('#createGHA', () => {
-  let ghaWorkflowSchema;
   let yamlOutput;
-
-  beforeAll(async () => {
-    ghaWorkflowSchema = await fetch(ghaWorkflowUrl)
-      .then(res => res.json())
-      .catch(() => {
-        console.error('error fetching JSON schema');
-        return ghaWorkflowSchemaBackup;
-      });
-  });
 
   beforeEach(() => {
     consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
