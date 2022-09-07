@@ -1,8 +1,8 @@
-import ciDetect from '@npmcli/ci-detect';
 import chalk from 'chalk';
 import OASNormalize from 'oas-normalize';
 import ora from 'ora';
 
+import isCI from './isCI';
 import { debug, info, oraOptions } from './logger';
 import promptTerminal from './promptWrapper';
 import readdirRecursive from './readdirRecursive';
@@ -95,8 +95,7 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
       fileFindingSpinner.succeed(`${fileFindingSpinner.text} found! 🔍`);
       info(chalk.yellow(`We found ${specPath} and are attempting to ${action} it.`));
     } else if (possibleSpecFiles.length > 1) {
-      /* istanbul ignore next */
-      if ((ciDetect() && process.env.NODE_ENV !== 'testing') || process.env.TEST_CI) {
+      if (isCI()) {
         fileFindingSpinner.fail();
         throw new Error('Multiple API definitions found in current directory. Please specify file.');
       }
@@ -105,7 +104,7 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
 
       const selection: FileSelection = await promptTerminal({
         name: 'file',
-        message: `Multiple potential API definitions found! Which file would you like to ${action}?`,
+        message: `Multiple potential API definitions found! Which one would you like to ${action}?`,
         type: 'select',
         choices: possibleSpecFiles.map(file => ({ title: file, value: file })),
       });

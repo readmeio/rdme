@@ -35,11 +35,7 @@ export default class VersionsCommand extends Command {
     this.position = 1;
 
     this.args = [
-      {
-        name: 'key',
-        type: String,
-        description: 'Project API key',
-      },
+      this.getKeyArg(),
       {
         name: 'version',
         type: String,

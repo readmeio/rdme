@@ -32,11 +32,7 @@ export default class CategoriesCreateCommand extends Command {
 
     this.hiddenArgs = ['title'];
     this.args = [
-      {
-        name: 'key',
-        type: String,
-        description: 'Project API key',
-      },
+      this.getKeyArg(),
       this.getVersionArg(),
       {
         name: 'title',
@@ -52,7 +48,7 @@ export default class CategoriesCreateCommand extends Command {
         name: 'preventDuplicates',
         type: Boolean,
         description:
-          'Prevents the creation of a new category if their is an existing category with a matching `categoryType` and `title`',
+          'Prevents the creation of a new category if there is an existing category with a matching `categoryType` and `title`',
       },
     ];
   }

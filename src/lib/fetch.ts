@@ -6,7 +6,7 @@ import nodeFetch, { Headers } from 'node-fetch';
 import pkg from '../../package.json';
 
 import APIError from './apiError';
-import isGHA from './isGitHub';
+import { isGHA } from './isCI';
 import { debug } from './logger';
 
 const SUCCESS_NO_CONTENT = 204;

@@ -4,6 +4,7 @@ import chalk from 'chalk';
 import config from 'config';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
+import createGHA from '../../lib/createGHA';
 import deleteDoc from '../../lib/deleteDoc';
 import getDocs from '../../lib/getDocs';
 import * as promptHandler from '../../lib/prompts';
@@ -36,17 +37,14 @@ export default class DocsCommand extends Command {
 
     this.hiddenArgs = ['folder'];
     this.args = [
-      {
-        name: 'key',
-        type: String,
-        description: 'Project API key',
-      },
+      this.getKeyArg(),
       this.getVersionArg(),
       {
         name: 'folder',
         type: String,
         defaultOption: true,
       },
+      this.getGitHubArg(),
       {
         name: 'dryRun',
         type: Boolean,
@@ -111,6 +109,8 @@ export default class DocsCommand extends Command {
       })
     );
     changes.push(...updatedDocs);
-    return chalk.green(changes.join('\n'));
+    return Promise.resolve(chalk.green(changes.join('\n'))).then(msg =>
+      createGHA(msg, this.command, this.args, { ...opts, version: selectedVersion })
+    );
   }
 }

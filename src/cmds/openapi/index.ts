@@ -8,6 +8,7 @@ import ora from 'ora';
 import parse from 'parse-link-header';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
+import createGHA from '../../lib/createGHA';
 import fetch, { cleanHeaders, handleRes } from '../../lib/fetch';
 import { oraOptions } from '../../lib/logger';
 import prepareOas from '../../lib/prepareOas';
@@ -38,11 +39,7 @@ export default class OpenAPICommand extends Command {
 
     this.hiddenArgs = ['spec'];
     this.args = [
-      {
-        name: 'key',
-        type: String,
-        description: 'Project API key',
-      },
+      this.getKeyArg(),
       {
         name: 'id',
         type: String,
@@ -56,20 +53,21 @@ export default class OpenAPICommand extends Command {
         defaultOption: true,
       },
       {
-        name: 'create',
-        type: Boolean,
-        description: 'Bypasses the create/update prompt and creates a new API definition.',
-      },
-      {
         name: 'useSpecVersion',
         type: Boolean,
         description:
           'Uses the version listed in the `info.version` field in the API definition for the project version parameter.',
       },
+      this.getGitHubArg(),
       {
         name: 'workingDirectory',
         type: String,
         description: 'Working directory (for usage with relative external references)',
+      },
+      {
+        name: 'create',
+        type: Boolean,
+        description: 'Bypasses the create/update prompt and creates a new API definition.',
       },
       {
         name: 'update',
@@ -88,6 +86,11 @@ export default class OpenAPICommand extends Command {
     let selectedVersion = version;
     let isUpdate: boolean;
     const spinner = ora({ ...oraOptions() });
+    /**
+     * The `version` and `update` parameters are not typically ones we'd want to include
+     * in GitHub Actions workflow files, so we're going to collect them in this object.
+     */
+    const ignoredGHAParameters: Options = { version: undefined, update: undefined };
 
     if (create && update) {
       throw new Error(
@@ -126,13 +129,13 @@ export default class OpenAPICommand extends Command {
       selectedVersion = specVersion;
     }
 
-    if (!id) {
+    if (create || !id) {
       selectedVersion = await getProjectVersion(selectedVersion, key, true);
     }
 
     Command.debug(`selectedVersion: ${selectedVersion}`);
 
-    async function success(data: Response) {
+    const success = async (data: Response) => {
       const message = !isUpdate
         ? `You've successfully uploaded a new ${specType} file to your ReadMe project!`
         : `You've successfully updated an existing ${specType} file on your ReadMe project!`;
@@ -152,10 +155,19 @@ export default class OpenAPICommand extends Command {
           // eslint-disable-next-line no-underscore-dangle
           `\t${chalk.green(`rdme openapi ${specPath} --key=<key> --id=${body._id}`)}`,
         ].join('\n')
+      ).then(msg =>
+        createGHA(msg, this.command, this.args, {
+          ...opts,
+          spec: specPath,
+          // eslint-disable-next-line no-underscore-dangle
+          id: body._id,
+          version: selectedVersion,
+          ...ignoredGHAParameters,
+        })
       );
-    }
+    };
 
-    async function error(res: Response) {
+    const error = (res: Response) => {
       return handleRes(res).catch(err => {
         // If we receive an APIError, no changes needed! Throw it as is.
         if (err.name === 'APIError') {
@@ -180,7 +192,7 @@ export default class OpenAPICommand extends Command {
           )}.`
         );
       });
-    }
+    };
 
     const registryUUID = await streamSpecToRegistry(bundledSpec);
 
@@ -243,7 +255,11 @@ export default class OpenAPICommand extends Command {
       });
     }
 
-    if (create) return createSpec();
+    if (create) {
+      ignoredGHAParameters.id = undefined;
+      delete ignoredGHAParameters.version;
+      return createSpec();
+    }
 
     if (!id) {
       Command.debug('no id parameter, retrieving list of API specs');

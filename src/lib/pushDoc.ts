@@ -69,7 +69,7 @@ export default async function pushDoc(
       }),
     })
       .then(res => handleRes(res))
-      .then(res => `🌱 successfully created '${res.slug}' with contents from ${filepath}`);
+      .then(res => `🌱 successfully created '${res.slug}' (ID: ${res.id}) with contents from ${filepath}`);
   }
 
   function updateDoc(existingDoc: typeof data) {
