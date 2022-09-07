@@ -53,7 +53,7 @@ Object {
       },
       Object {
         "description": "Alias for \`rdme openapi:validate\`.",
-        "hidden": false,
+        "hidden": true,
         "name": "validate",
         "position": 5,
       },
