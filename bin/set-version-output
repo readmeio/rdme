@@ -12,7 +12,6 @@ const name2 = 'NODE_VERSION';
 async function setOutputs() {
   console.log(`::set-output name=${name1}::${await getPkgVersion('latest')}`); // eslint-disable-line no-console
   console.log(`::set-output name=${name2}::${getNodeVersion()}`); // eslint-disable-line no-console
-  process.exit(0);
 }
 
 setOutputs();

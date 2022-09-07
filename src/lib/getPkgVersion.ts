@@ -5,11 +5,6 @@ import pkg from '../../package.json';
 const registryUrl = 'https://registry.npmjs.com/rdme';
 
 /**
- * The reason this file has remained in JavaScript is because we need to
- * be able to run this file without installing/building any dependencies.
- */
-
-/**
  * The current `rdme` version
  *
  * @param npmDistTag the `npm` dist tag to retrieve. If this value is omitted,
