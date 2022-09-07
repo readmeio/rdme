@@ -4,12 +4,14 @@ import fs from 'fs';
 import chalk from 'chalk';
 import prompts from 'prompts';
 
-import Command from '../../src/cmds/validate';
-import { after, before } from '../helpers/get-gha-setup';
+import OpenAPIValidateCommand from '../../../src/cmds/openapi/validate';
+import ValidateAliasCommand from '../../../src/cmds/validate';
+import { after, before } from '../../helpers/get-gha-setup';
 
 const testWorkingDir = process.cwd();
 
-const validate = new Command();
+const validate = new OpenAPIValidateCommand();
+const validateAlias = new ValidateAliasCommand();
 
 let consoleSpy;
 
@@ -17,7 +19,7 @@ const getCommandOutput = () => {
   return [consoleSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
 };
 
-describe('rdme validate', () => {
+describe('rdme openapi:validate', () => {
   beforeEach(() => {
     consoleSpy = jest.spyOn(console, 'info').mockImplementation();
   });
@@ -83,6 +85,15 @@ describe('rdme validate', () => {
         workingDirectory: './__tests__/__fixtures__/nested-gitignored-oas',
       })
     ).resolves.toBe(chalk.green('nest/petstore.json is a valid OpenAPI API definition!'));
+  });
+
+  it('should validate via alias', () => {
+    return expect(
+      validateAlias.run({
+        spec: 'petstore.json',
+        workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
+      })
+    ).resolves.toBe(chalk.green('petstore.json is a valid OpenAPI API definition!'));
   });
 
   describe('error handling', () => {

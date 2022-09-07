@@ -22,7 +22,7 @@ npm install rdme --save-dev
 Once installed in your project, we recommend using `npx` (which is included if you have `npm` installed) to prefix all of your CLI commands. For example:
 
 ```sh
-npx rdme validate [file]
+npx rdme openapi:validate [file]
 ```
 
 To ensure you're getting the latest features and security updates, we recommend using a tool like [Dependabot](https://docs.github.com/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/about-dependabot-version-updates) to keep `rdme` (and your other dependencies) up-to-date.
@@ -175,7 +175,7 @@ rdme openapi petstore.json --workingDirectory=[path to directory]
 You can also perform a local validation of your API definition without uploading it to ReadMe, which can be useful when constructing or editing your API definition.
 
 ```sh
-rdme validate [path-to-file.json]
+rdme openapi:validate [path-to-file.json]
 ```
 
 Similar to the `openapi` command, you can also [omit the file path](#omitting-the-file-path).
