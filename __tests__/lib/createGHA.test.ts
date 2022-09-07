@@ -15,7 +15,7 @@ import SingleCustomPageCommand from '../../src/cmds/custompages/single';
 import DocsCommand from '../../src/cmds/docs';
 import SingleDocCommand from '../../src/cmds/docs/single';
 import OpenAPICommand from '../../src/cmds/openapi';
-import ValidateCommand from '../../src/cmds/validate';
+import OpenAPIValidateCommand from '../../src/cmds/openapi/validate';
 import configstore from '../../src/lib/configstore';
 import createGHA, {
   getConfigStoreKey,
@@ -60,7 +60,7 @@ describe('#createGHA', () => {
       CmdClass: typeof Command;
       opts: CommandOptions<Record<string, string>>;
     }>([
-      { cmd: 'validate', CmdClass: ValidateCommand, opts: { spec: 'petstore.json' } },
+      { cmd: 'openapi:validate', CmdClass: OpenAPIValidateCommand, opts: { spec: 'petstore.json' } },
       { cmd: 'openapi', CmdClass: OpenAPICommand, opts: { key, spec: 'petstore.json', id: 'spec_id' } },
       { cmd: 'docs', CmdClass: DocsCommand, opts: { key, folder: './docs', version: '1.0.0' } },
       { cmd: 'docs:single', CmdClass: SingleDocCommand, opts: { key, filePath: './docs/rdme.md', version: '1.0.0' } },

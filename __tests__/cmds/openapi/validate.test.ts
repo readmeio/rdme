@@ -4,12 +4,14 @@ import fs from 'fs';
 import chalk from 'chalk';
 import prompts from 'prompts';
 
-import Command from '../../src/cmds/validate';
-import { after, before } from '../helpers/get-gha-setup';
+import OpenAPIValidateCommand from '../../../src/cmds/openapi/validate';
+import ValidateAliasCommand from '../../../src/cmds/validate';
+import { after, before } from '../../helpers/get-gha-setup';
 
 const testWorkingDir = process.cwd();
 
-const validate = new Command();
+const validate = new OpenAPIValidateCommand();
+const validateAlias = new ValidateAliasCommand();
 
 let consoleSpy;
 
@@ -17,7 +19,7 @@ const getCommandOutput = () => {
   return [consoleSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
 };
 
-describe('rdme validate', () => {
+describe('rdme openapi:validate', () => {
   beforeEach(() => {
     consoleSpy = jest.spyOn(console, 'info').mockImplementation();
   });
@@ -206,5 +208,36 @@ describe('rdme validate', () => {
         )
       );
     });
+  });
+});
+
+describe('rdme validate', () => {
+  let consoleWarnSpy;
+
+  const getWarningCommandOutput = () => {
+    return [consoleWarnSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
+  };
+
+  beforeEach(() => {
+    consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
+  });
+
+  afterEach(() => {
+    consoleWarnSpy.mockRestore();
+  });
+
+  it('should should `rdme openapi:validate`', async () => {
+    await expect(
+      validateAlias.run({
+        spec: require.resolve('@readme/oas-examples/3.0/json/petstore.json'),
+      })
+    ).resolves.toContain(chalk.green('petstore.json is a valid OpenAPI API definition!'));
+
+    expect(console.warn).toHaveBeenCalledTimes(1);
+
+    const output = getWarningCommandOutput();
+    expect(output).toBe(
+      chalk.yellow('⚠️  Warning! `rdme validate` has been deprecated. Please use `rdme openapi:validate` instead.')
+    );
   });
 });

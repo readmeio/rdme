@@ -13,8 +13,9 @@ import OASCommand from './oas';
 import OpenCommand from './open';
 import OpenAPICommand from './openapi';
 import OpenAPIReduceCommand from './openapi/reduce';
+import OpenAPIValidateCommand from './openapi/validate';
 import SwaggerCommand from './swagger';
-import ValidateCommand from './validate';
+import ValidateAliasCommand from './validate';
 import VersionsCommand from './versions';
 import CreateVersionCommand from './versions/create';
 import DeleteVersionCommand from './versions/delete';
@@ -46,8 +47,9 @@ const commands = {
   open: OpenCommand,
   openapi: OpenAPICommand,
   'openapi:reduce': OpenAPIReduceCommand,
+  'openapi:validate': OpenAPIValidateCommand,
   swagger: SwaggerCommand,
-  validate: ValidateCommand,
+  validate: ValidateAliasCommand,
   whoami: WhoAmICommand,
 };
 
