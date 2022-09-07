@@ -12,6 +12,7 @@ import simpleGit from 'simple-git';
 
 import { transcludeString } from 'hercule/promises';
 
+import { checkFilePath, cleanFileName } from '../checkFile';
 import configstore from '../configstore';
 import { getPkgVersion } from '../getPkgVersion';
 import isCI from '../isCI';
@@ -43,13 +44,6 @@ const GITHUB_SECRET_NAME = 'README_API_KEY';
 export const getMajorRdmeVersion = async () => semverMajor(await getPkgVersion());
 
 export const git = simpleGit();
-
-/**
- * Removes any non-alphanumeric characters and replaces them with hyphens.
- *
- * This is used for file names and for YAML keys.
- */
-const cleanFileName = (input: string) => input.replace(/[^a-z0-9]/gi, '-');
 
 /**
  * Removes any non-file-friendly characters and adds
@@ -255,18 +249,7 @@ export default async function createGHA(
           type: 'text',
           initial: cleanFileName(`rdme-${command}`),
           format: prev => getGHAFileName(prev),
-          validate: value => {
-            if (value.length) {
-              const fullPath = getGHAFileName(value);
-              if (!fs.existsSync(fullPath)) {
-                return true;
-              }
-
-              return 'Specified output path already exists.';
-            }
-
-            return 'An output path must be supplied.';
-          },
+          validate: value => checkFilePath(value, getGHAFileName),
         },
       ],
       {
