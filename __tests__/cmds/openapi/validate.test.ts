@@ -87,15 +87,6 @@ describe('rdme openapi:validate', () => {
     ).resolves.toBe(chalk.green('nest/petstore.json is a valid OpenAPI API definition!'));
   });
 
-  it('should validate via alias', () => {
-    return expect(
-      validateAlias.run({
-        spec: 'petstore.json',
-        workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-      })
-    ).resolves.toBe(chalk.green('petstore.json is a valid OpenAPI API definition!'));
-  });
-
   describe('error handling', () => {
     it('should throw an error if invalid JSON is supplied', () => {
       return expect(validate.run({ spec: './__tests__/__fixtures__/invalid-json/yikes.json' })).rejects.toStrictEqual(
@@ -217,5 +208,36 @@ describe('rdme openapi:validate', () => {
         )
       );
     });
+  });
+});
+
+describe('rdme validate', () => {
+  let consoleWarnSpy;
+
+  const getWarningCommandOutput = () => {
+    return [consoleWarnSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
+  };
+
+  beforeEach(() => {
+    consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
+  });
+
+  afterEach(() => {
+    consoleWarnSpy.mockRestore();
+  });
+
+  it('should should `rdme openapi:validate`', async () => {
+    await expect(
+      validateAlias.run({
+        spec: require.resolve('@readme/oas-examples/3.0/json/petstore.json'),
+      })
+    ).resolves.toContain(chalk.green('petstore.json is a valid OpenAPI API definition!'));
+
+    expect(console.warn).toHaveBeenCalledTimes(1);
+
+    const output = getWarningCommandOutput();
+    expect(output).toBe(
+      chalk.yellow('⚠️  Warning! `rdme validate` has been deprecated. Please use `rdme openapi:validate` instead.')
+    );
   });
 });
