@@ -12,8 +12,8 @@ import simpleGit from 'simple-git';
 
 import { transcludeString } from 'hercule/promises';
 
-import pkg from '../../../package.json';
 import configstore from '../configstore';
+import { getPkgVersion } from '../getPkgVersion';
 import isCI from '../isCI';
 import { debug } from '../logger';
 import promptTerminal from '../promptWrapper';
@@ -36,21 +36,11 @@ const GITHUB_WORKFLOW_DIR = '.github/workflows';
 const GITHUB_SECRET_NAME = 'README_API_KEY';
 
 /**
- * The current `rdme` version
- *
- * @example "8.0.0"
- * @note the reason why this is a function is
- * because we want to mock it for our snapshots.
- * @see {@link https://stackoverflow.com/a/54245672}
- */
-export const getPkgVersion = () => pkg.version;
-
-/**
  * The current major `rdme` version
  *
  * @example 8
  */
-export const rdmeVersionMajor = semverMajor(getPkgVersion());
+export const getMajorRdmeVersion = async () => semverMajor(await getPkgVersion());
 
 export const git = simpleGit();
 
@@ -186,6 +176,9 @@ export default async function createGHA(
   const configVal = configstore.get(getConfigStoreKey(repoRoot));
   debug(`repo value in config: ${configVal}`);
 
+  const majorPkgVersion = await getMajorRdmeVersion();
+  debug(`major pkg version: ${majorPkgVersion}`);
+
   if (!opts.github) {
     if (
       // not a repo
@@ -193,7 +186,7 @@ export default async function createGHA(
       // in a CI environment
       isCI() ||
       // user has previously declined to set up GHA for current repo and `rdme` package version
-      configVal === rdmeVersionMajor ||
+      configVal === majorPkgVersion ||
       // is a repo, but only contains non-GitHub remotes
       (isRepo && containsNonGitHubRemote && !containsGitHubRemote) ||
       // not testing this function
@@ -287,7 +280,7 @@ export default async function createGHA(
   if (!shouldCreateGHA) {
     // if the user says no, we don't want to bug them again
     // for this repo and version of `rdme
-    configstore.set(getConfigStoreKey(repoRoot), rdmeVersionMajor);
+    configstore.set(getConfigStoreKey(repoRoot), majorPkgVersion);
     throw new Error(
       'GitHub Actions workflow creation cancelled. If you ever change your mind, you can run this command again with the `--github` flag.'
     );
@@ -298,7 +291,7 @@ export default async function createGHA(
     cleanCommand: cleanFileName(command),
     command,
     commandString: constructCmdString(command, args, opts),
-    rdmeVersion: getPkgVersion(),
+    rdmeVersion: await getPkgVersion(),
     timestamp: new Date().toISOString(),
   };
 

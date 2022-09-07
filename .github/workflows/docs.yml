@@ -10,6 +10,9 @@ jobs:
       - name: Checkout this repo
         uses: actions/checkout@v3
 
+      - name: Install and build rdme deps
+        run: npm ci && npm run build
+
       # Let's dynamically update our docs with the latest version of rdme!
       # Note that these next three steps are not required
       # in order to sync your docs to ReadMe.

@@ -21,8 +21,8 @@ import createGHA, {
   getConfigStoreKey,
   getGHAFileName,
   getGitData,
+  getMajorRdmeVersion,
   git,
-  rdmeVersionMajor,
 } from '../../src/lib/createGHA';
 import { after, before } from '../helpers/get-gha-setup';
 import getGitRemoteMock from '../helpers/get-git-mock';
@@ -127,13 +127,13 @@ describe('#createGHA', () => {
         expect(fs.writeFileSync).toHaveBeenCalledWith(getGHAFileName(fileName), expect.any(String));
       });
 
-      it('should run if user is on an outdated package version', () => {
+      it('should run if user is on an outdated package version', async () => {
         const fileName = `rdme-${cmd}`;
         prompts.inject([true, 'some-branch', fileName]);
 
         const repoRoot = process.cwd();
 
-        configstore.set(getConfigStoreKey(repoRoot), rdmeVersionMajor - 1);
+        configstore.set(getConfigStoreKey(repoRoot), (await getMajorRdmeVersion()) - 1);
 
         return expect(createGHA('', cmd, command.args, opts)).resolves.toMatch(
           'Your GitHub Actions workflow file has been created!'
@@ -156,7 +156,7 @@ describe('#createGHA', () => {
           )
         );
 
-        expect(configstore.get(getConfigStoreKey(repoRoot))).toBe(rdmeVersionMajor);
+        expect(configstore.get(getConfigStoreKey(repoRoot))).toBe(await getMajorRdmeVersion());
       });
 
       it('should not run if not a repo', () => {
@@ -169,10 +169,10 @@ describe('#createGHA', () => {
         return expect(createGHA('success!', cmd, command.args, opts)).resolves.toBe('success!');
       });
 
-      it('should not run if user previously declined to set up GHA for current directory + pkg version', () => {
+      it('should not run if user previously declined to set up GHA for current directory + pkg version', async () => {
         const repoRoot = process.cwd();
 
-        configstore.set(getConfigStoreKey(repoRoot), rdmeVersionMajor);
+        configstore.set(getConfigStoreKey(repoRoot), await getMajorRdmeVersion());
 
         return expect(createGHA('success!', cmd, command.args, opts)).resolves.toBe('success!');
       });
