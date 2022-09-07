@@ -37,6 +37,12 @@ Object {
         "description": "Reduce an OpenAPI definition into a smaller subset.",
         "hidden": false,
         "name": "openapi:reduce",
+        "position": 2,
+      },
+      Object {
+        "description": "Validate your OpenAPI/Swagger definition.",
+        "hidden": false,
+        "name": "openapi:validate",
         "position": 3,
       },
       Object {
@@ -46,10 +52,10 @@ Object {
         "position": 4,
       },
       Object {
-        "description": "Validate your OpenAPI/Swagger definition.",
-        "hidden": false,
+        "description": "Alias for \`rdme openapi:validate\` [deprecated].",
+        "hidden": true,
         "name": "validate",
-        "position": 2,
+        "position": 5,
       },
     ],
     "description": "Upload OpenAPI/Swagger definitions",

@@ -49,10 +49,10 @@ jobs:
           path: oas-examples-repo
           repository: readmeio/oas-examples
 
-      - name: Run `validate` command
+      - name: Run `openapi:validate` command
         uses: ./rdme-repo/
         with:
-          rdme: validate oas-examples-repo/3.1/json/petstore.json
+          rdme: openapi:validate oas-examples-repo/3.1/json/petstore.json
 
       # Docs: https://rdme-test.readme.io
       - name: Run `openapi` command
