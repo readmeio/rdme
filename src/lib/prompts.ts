@@ -225,6 +225,6 @@ export function deleteDocsPrompt(version: string): PromptObject {
   return {
     type: 'confirm',
     name: 'deleteAll',
-    message: `This action will delete all docs under version ${version} from ReadMe, are you sure you wish to continue?`,
+    message: `This action will delete all docs under version ${version} from ReadMe, would you like to continue?`,
   };
 }

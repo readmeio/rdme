@@ -36,5 +36,5 @@ export default async function deleteDoc(
     ),
   })
     .then(handleRes)
-    .then(() => `successfully deleted \`${slug}\`.`);
+    .then(() => `🗑️ successfully deleted \`${slug}\`.`);
 }

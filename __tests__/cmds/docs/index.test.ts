@@ -385,6 +385,19 @@ describe('rdme docs', () => {
     const folder = `./__tests__/${fixturesBaseDir}/delete-docs`;
     const someDocContent = fs.readFileSync(path.join(folder, 'some-doc.md'));
     const lastUpdatedHash = crypto.createHash('sha1').update(someDocContent).digest('hex');
+    let consoleWarnSpy;
+
+    function getWarningCommandOutput() {
+      return [consoleWarnSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
+    }
+
+    beforeEach(() => {
+      consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
+    });
+
+    afterEach(() => {
+      consoleWarnSpy.mockRestore();
+    });
 
     it('should delete doc if file is missing and --cleanup option is used', async () => {
       const versionMock = getAPIMock()
@@ -414,8 +427,12 @@ describe('rdme docs', () => {
           cleanup: true,
         })
       ).resolves.toBe(
-        'successfully deleted `this-doc-should-be-missing-in-folder`.\n' +
+        '🗑️ successfully deleted `this-doc-should-be-missing-in-folder`.\n' +
           '`some-doc` was not updated because there were no changes.'
+      );
+      const warningOutput = getWarningCommandOutput();
+      expect(warningOutput).toBe(
+        "⚠️  Warning! We're going to delete from ReadMe any document that isn't found in ./__tests__/__fixtures__/docs/delete-docs."
       );
 
       apiMocks.done();
@@ -449,11 +466,16 @@ describe('rdme docs', () => {
         '🎭 dry run! This will delete `this-doc-should-be-missing-in-folder`.\n' +
           '🎭 dry run! `some-doc` will not be updated because there were no changes.'
       );
+      const warningOutput = getWarningCommandOutput();
+      expect(warningOutput).toBe(
+        "⚠️  Warning! We're going to delete from ReadMe any document that isn't found in ./__tests__/__fixtures__/docs/delete-docs."
+      );
+
       apiMocks.done();
       versionMock.done();
     });
 
-    it('should do nothing if using --cleanup but thr folder is empty and the user aborted', async () => {
+    it('should do nothing if using --cleanup but the folder is empty and the user aborted', async () => {
       prompts.inject([false]);
 
       const versionMock = getAPIMock()
@@ -469,6 +491,9 @@ describe('rdme docs', () => {
           cleanup: true,
         })
       ).rejects.toStrictEqual(new Error('Aborting, no changes were made.'));
+
+      const warningOutput = getWarningCommandOutput();
+      expect(warningOutput).toBe('');
 
       versionMock.done();
     });
