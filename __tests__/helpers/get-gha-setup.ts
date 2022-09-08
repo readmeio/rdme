@@ -3,8 +3,8 @@ import type { Response } from 'simple-git';
 import fs from 'fs';
 
 import configstore from '../../src/lib/configstore';
-import * as createGHAObject from '../../src/lib/createGHA';
 import { git } from '../../src/lib/createGHA';
+import * as getPkgVersion from '../../src/lib/getPkgVersion';
 
 import getGitRemoteMock from './get-git-mock';
 
@@ -33,8 +33,8 @@ export function before(writeFileSyncCb) {
 
   process.env.TEST_CREATEGHA = 'true';
 
-  const spy = jest.spyOn(createGHAObject, 'getPkgVersion');
-  spy.mockReturnValue('7.8.9');
+  const spy = jest.spyOn(getPkgVersion, 'getPkgVersion');
+  spy.mockReturnValue(Promise.resolve('7.8.9'));
 }
 
 /**

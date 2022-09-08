@@ -19,7 +19,7 @@ type FileSelection = {
  * @param command The command context in which this is being run within (uploading a spec,
  *    validation, or reducing one).
  */
-export default async function prepareOas(path: string, command: 'openapi' | 'openapi:reduce' | 'validate') {
+export default async function prepareOas(path: string, command: 'openapi' | 'openapi:reduce' | 'openapi:validate') {
   let specPath = path;
 
   if (!specPath) {
@@ -45,11 +45,8 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
       case 'openapi':
         action = 'upload';
         break;
-      case 'openapi:reduce':
-        action = 'reduce';
-        break;
       default:
-        action = command;
+        action = command.split(':')[1] as 'reduce' | 'validate';
     }
 
     const jsonAndYamlFiles = readdirRecursive('.', true).filter(

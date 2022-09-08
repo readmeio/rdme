@@ -6,13 +6,13 @@ To run test commands from within the repository, run the build and then run your
 
 ```sh
 npm run build
-./bin/rdme validate __tests__/__fixtures__/ref-oas/petstore.json
+./bin/rdme openapi:validate __tests__/__fixtures__/ref-oas/petstore.json
 ```
 
 If you need to debug commands quicker and re-building TS everytime is becoming cumbersome, you can use the debug command, like so:
 
 ```sh
-npm run debug -- validate __tests__/__fixtures__/ref-oas/petstore.json
+npm run debug -- openapi:validate __tests__/__fixtures__/ref-oas/petstore.json
 ```
 
 ## Running GitHub Actions Locally 🐳
