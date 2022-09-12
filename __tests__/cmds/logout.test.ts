@@ -6,6 +6,10 @@ import configStore from '../../src/lib/configstore';
 const cmd = new Command();
 
 describe('rdme logout', () => {
+  afterEach(() => {
+    configStore.clear();
+  });
+
   it("should report the user as logged out if they aren't logged in", () => {
     configStore.delete('email');
     configStore.delete('project');
