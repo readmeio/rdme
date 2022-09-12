@@ -114,7 +114,7 @@ describe('cli', () => {
     conf.set('apiKey', '123456');
 
     await expect(cli(['docs'])).rejects.toThrow('No folder provided. Usage `rdme docs <folder> [options]`.');
-    conf.delete('apiKey');
+    conf.clear();
   });
 
   it('should error with `rdme oas` arguments passed in', async () => {
