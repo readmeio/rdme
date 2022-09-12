@@ -17,14 +17,18 @@ export default class UpdateVersionCommand extends Command {
     super();
 
     this.command = 'versions:update';
-    this.usage = 'versions:update --version=<version> [options]';
+    this.usage = 'versions:update <version> [options]';
     this.description = 'Update an existing version for your project.';
     this.cmdCategory = CommandCategories.VERSIONS;
     this.position = 3;
 
     this.args = [
       this.getKeyArg(),
-      this.getVersionArg(),
+      {
+        name: 'version',
+        type: String,
+        defaultOption: true,
+      },
       {
         name: 'newVersion',
         type: String,
@@ -34,7 +38,7 @@ export default class UpdateVersionCommand extends Command {
       {
         name: 'deprecated',
         type: String,
-        description: 'Would you like to deprecate this version?',
+        description: "Would you like to deprecate this version? (Must be 'true' or 'false')",
       },
     ];
   }
@@ -69,7 +73,7 @@ export default class UpdateVersionCommand extends Command {
         version: newVersion || promptResponse.newVersion,
         is_stable: foundVersion.is_stable || main === 'true' || promptResponse.is_stable,
         is_beta: beta === 'true' || promptResponse.is_beta,
-        is_deprecated: deprecated || promptResponse.is_deprecated,
+        is_deprecated: deprecated === 'true' || promptResponse.is_deprecated,
         is_hidden: promptResponse.is_stable ? false : !(isPublic === 'true' || promptResponse.is_hidden),
       }),
     })

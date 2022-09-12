@@ -277,7 +277,7 @@ If you wish to see the raw JSON output from our API in this response, supply the
 #### Create a New Version
 
 ```sh
-rdme versions:create <version> | --version={project-version}
+rdme versions:create <version>
 ```
 
 ##### Create a New Version
@@ -287,7 +287,7 @@ If you wish to automate the process of creating a new project version, and not h
 For example:
 
 ```sh
-rdme versions:create <version> | --version={project-version} --fork={version-fork} --main={boolean} --beta={boolean} --isPublic={boolean}
+rdme versions:create <version> --fork={version-fork} --main={true|false} --beta={true|false} --isPublic={true|false}
 ```
 
 See `rdme versions:create --help` for a full list of flags.
@@ -295,7 +295,7 @@ See `rdme versions:create --help` for a full list of flags.
 #### Update a Version
 
 ```sh
-rdme versions:update --version={project-version}
+rdme versions:update <version>
 ```
 
 Like `versions:create`, if you wish to automate this process and not be blocked by CLI input, you can supply the necessary flags to this command. See `rdme versions:update --help` for more information.
@@ -305,7 +305,7 @@ Like `versions:create`, if you wish to automate this process and not be blocked 
 You can remove a specific version from your project, as well as all of the attached specs
 
 ```sh
-rdme versions:delete --version={project-version}
+rdme versions:delete <version>
 ```
 
 ### Categories

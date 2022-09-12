@@ -23,7 +23,7 @@ export default class CreateVersionCommand extends Command {
     super();
 
     this.command = 'versions:create';
-    this.usage = 'versions:create --version=<version> [options]';
+    this.usage = 'versions:create <version> [options]';
     this.description = 'Create a new version for your project.';
     this.cmdCategory = CommandCategories.VERSIONS;
     this.position = 2;
