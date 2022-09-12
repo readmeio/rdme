@@ -13,8 +13,8 @@ export const cleanFileName = (input: string) => input.replace(/[^a-z0-9]/gi, '-'
  *
  * @param value the file name
  * @param getFullPath An optional function for adding a file path or any filename validations
- * @returns true if path is valid, otherwise a string containing
- * the error message
+ * @returns true if path is valid (i.e. is non-empty and doesn't already exist),
+ * otherwise a string containing the error message
  */
 export function checkFilePath(value: string, getFullPath: (file: string) => string = file => file) {
   if (value.length) {
