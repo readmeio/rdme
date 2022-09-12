@@ -8,11 +8,6 @@ module.exports = {
       statements: 90,
     },
   },
-  globals: {
-    'ts-jest': {
-      tsconfig: '__tests__/tsconfig.json',
-    },
-  },
   modulePaths: ['<rootDir>'],
   modulePathIgnorePatterns: ['<rootDir>/dist/'],
   preset: 'ts-jest/presets/js-with-ts',
@@ -26,5 +21,16 @@ module.exports = {
     '<rootDir>/__tests__/set-node-env',
   ],
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.(js?|ts?)$',
-  transform: {},
+  transform: {
+    '<regex_match_files>': [
+      'ts-jest',
+      {
+        tsconfig: {
+          module: 'es6',
+          moduleResolution: 'node',
+          noImplicitAny: false,
+        },
+      },
+    ],
+  },
 };
