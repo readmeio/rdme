@@ -60,7 +60,7 @@
     "semver": "^7.0.0",
     "simple-git": "^3.13.0",
     "tmp-promise": "^3.0.2",
-    "update-notifier": "^5.1.0",
+    "update-notifier-cjs": "^5.1.5",
     "validator": "^13.7.0"
   },
   "devDependencies": {
@@ -80,10 +80,8 @@
     "@types/prompts": "^2.0.14",
     "@types/semver": "^7.3.12",
     "@types/tmp": "^0.2.3",
-    "@types/update-notifier": "^6.0.1",
     "@types/validator": "^13.7.6",
     "ajv": "^8.11.0",
-    "alex": "^10.0.0",
     "eslint": "^8.23.0",
     "jest": "^28.1.1",
     "jest-extended": "^3.0.0",
@@ -99,7 +97,7 @@
     "build": "tsc",
     "debug": "ts-node src/cli.ts",
     "lint": "eslint . bin/rdme bin/set-version-output --ext .js,.ts",
-    "lint-docs": "alex . && npm run prettier",
+    "lint-docs": "npx alex@10 . && npm run prettier",
     "prebuild": "rm -rf dist/",
     "prepack": "npm run build",
     "pretest": "npm run lint && npm run lint-docs",
