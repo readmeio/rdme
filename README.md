@@ -264,8 +264,6 @@ rdme custompages:single path-to-markdown-file
 rdme versions
 ```
 
-If you wish to see the raw JSON output from our API in this response, supply the `--raw` flag.
-
 #### Get All Information About a Particular Version
 
 ```sh
