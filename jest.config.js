@@ -22,6 +22,6 @@ module.exports = {
   ],
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.(js?|ts?)$',
   transform: {
-    '<regex_match_files>': ['ts-jest', { tsconfig: '__tests__/tsconfig.json' }],
+    '<regex_match_files>': ['ts-jest', { tsconfig: '<rootDir>/__tests__/tsconfig.json' }],
   },
 };
