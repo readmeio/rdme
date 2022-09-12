@@ -1,16 +1,14 @@
 import crypto from 'crypto';
-import fs from 'fs';
-import path from 'path';
 
 import chalk from 'chalk';
 import config from 'config';
-import grayMatter from 'gray-matter';
 import { Headers } from 'node-fetch';
 
 import APIError from './apiError';
 import { CommandCategories } from './baseCommand';
 import fetch, { cleanHeaders, handleRes } from './fetch';
 import { debug } from './logger';
+import readDoc from './readDoc';
 
 /**
  * Reads the contents of the specified Markdown or HTML file
@@ -31,14 +29,8 @@ export default async function pushDoc(
   filepath: string,
   type: CommandCategories
 ) {
-  debug(`reading file ${filepath}`);
-  const file = fs.readFileSync(filepath, 'utf8');
-  const matter = grayMatter(file);
-  debug(`frontmatter for ${filepath}: ${JSON.stringify(matter)}`);
-
-  // Stripping the subdirectories and markdown extension from the filename and lowercasing to get the default slug.
-  const slug = matter.data.slug || path.basename(filepath).replace(path.extname(filepath), '').toLowerCase();
-  const hash = crypto.createHash('sha1').update(file).digest('hex');
+  const { content, matter, slug } = readDoc(filepath);
+  const hash = crypto.createHash('sha1').update(content).digest('hex');
 
   let data: {
     body?: string;
