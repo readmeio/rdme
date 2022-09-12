@@ -1,3 +1,4 @@
+import type { Version } from '.';
 import type { CommandOptions } from '../../lib/baseCommand';
 
 import config from 'config';
@@ -71,6 +72,15 @@ export default class CreateVersionCommand extends Command {
 
     const promptResponse = await promptTerminal(versionPrompt);
 
+    const body: Version = {
+      version,
+      codename: codename || '',
+      is_stable: main === 'true' || promptResponse.is_stable,
+      is_beta: beta === 'true' || promptResponse.is_beta,
+      from: fork || promptResponse.from,
+      is_hidden: promptResponse.is_stable ? false : !(isPublic === 'true' || promptResponse.is_hidden),
+    };
+
     return fetch(`${config.get('host')}/api/v1/version`, {
       method: 'post',
       headers: cleanHeaders(
@@ -80,14 +90,7 @@ export default class CreateVersionCommand extends Command {
           'Content-Type': 'application/json',
         })
       ),
-      body: JSON.stringify({
-        version,
-        codename: codename || '',
-        is_stable: main === 'true' || promptResponse.is_stable,
-        is_beta: beta === 'true' || promptResponse.is_beta,
-        from: fork || promptResponse.from,
-        is_hidden: promptResponse.is_stable ? false : !(isPublic === 'true' || promptResponse.is_hidden),
-      }),
+      body: JSON.stringify(body),
     })
       .then(handleRes)
       .then(() => {

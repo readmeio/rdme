@@ -7,10 +7,11 @@ import fetch, { cleanHeaders, handleRes } from '../../lib/fetch';
 
 export interface Version {
   codename?: string;
-  createdAt: string;
-  is_beta: boolean;
-  is_deprecated: boolean;
-  is_hidden: boolean;
+  createdAt?: string;
+  from?: string;
+  is_beta?: boolean;
+  is_deprecated?: boolean;
+  is_hidden?: boolean;
   is_stable: boolean;
   version: string;
 }

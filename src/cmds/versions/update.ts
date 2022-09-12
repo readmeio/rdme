@@ -1,3 +1,4 @@
+import type { Version } from '.';
 import type { CommandOptions } from '../../lib/baseCommand';
 import type { VersionBaseOptions } from './create';
 
@@ -60,6 +61,15 @@ export default class UpdateVersionCommand extends Command {
 
     const promptResponse = await promptTerminal(promptHandler.createVersionPrompt([], opts, foundVersion));
 
+    const body: Version = {
+      codename: codename || '',
+      version: newVersion || promptResponse.newVersion,
+      is_stable: foundVersion.is_stable || main === 'true' || promptResponse.is_stable,
+      is_beta: beta === 'true' || promptResponse.is_beta,
+      is_deprecated: deprecated === 'true' || promptResponse.is_deprecated,
+      is_hidden: promptResponse.is_stable ? false : !(isPublic === 'true' || promptResponse.is_hidden),
+    };
+
     return fetch(`${config.get('host')}/api/v1/version/${selectedVersion}`, {
       method: 'put',
       headers: cleanHeaders(
@@ -69,14 +79,7 @@ export default class UpdateVersionCommand extends Command {
           'Content-Type': 'application/json',
         })
       ),
-      body: JSON.stringify({
-        codename: codename || '',
-        version: newVersion || promptResponse.newVersion,
-        is_stable: foundVersion.is_stable || main === 'true' || promptResponse.is_stable,
-        is_beta: beta === 'true' || promptResponse.is_beta,
-        is_deprecated: deprecated === 'true' || promptResponse.is_deprecated,
-        is_hidden: promptResponse.is_stable ? false : !(isPublic === 'true' || promptResponse.is_hidden),
-      }),
+      body: JSON.stringify(body),
     })
       .then(handleRes)
       .then(() => {
