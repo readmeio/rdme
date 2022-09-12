@@ -53,7 +53,7 @@ export default class DocsCommand extends Command {
       {
         name: 'cleanup',
         type: Boolean,
-        description: "Delete a doc from ReadMe if its slug can't be found in the target folder.",
+        description: 'Delete any docs from ReadMe if their slugs are not found in the target folder.',
       },
     ];
   }
