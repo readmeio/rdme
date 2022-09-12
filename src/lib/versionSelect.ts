@@ -1,3 +1,5 @@
+import type { Version } from '../cmds/versions';
+
 import config from 'config';
 import { Headers } from 'node-fetch';
 
@@ -25,7 +27,7 @@ export async function getProjectVersion(versionFlag: string, key: string, allowN
         headers: cleanHeaders(key),
       })
         .then(res => handleRes(res))
-        .then(res => res.version);
+        .then((res: Version) => res.version);
     }
 
     if (isCI()) {
@@ -33,7 +35,7 @@ export async function getProjectVersion(versionFlag: string, key: string, allowN
       return undefined;
     }
 
-    const versionList = await fetch(`${config.get('host')}/api/v1/version`, {
+    const versionList: Version[] = await fetch(`${config.get('host')}/api/v1/version`, {
       method: 'get',
       headers: cleanHeaders(key),
     }).then(res => handleRes(res));
@@ -43,17 +45,19 @@ export async function getProjectVersion(versionFlag: string, key: string, allowN
 
       if (option === 'update') return versionSelection;
 
+      const body: Version = {
+        from: versionList[0].version,
+        version: newVersion,
+        is_stable: false,
+      };
+
       const newVersionFromApi = await fetch(`${config.get('host')}/api/v1/version`, {
         method: 'post',
         headers: cleanHeaders(key, new Headers({ 'Content-Type': 'application/json' })),
-        body: JSON.stringify({
-          from: versionList[0].version,
-          version: newVersion,
-          is_stable: false,
-        }),
+        body: JSON.stringify(body),
       })
         .then(res => handleRes(res))
-        .then(res => res.version);
+        .then((res: Version) => res.version);
 
       return newVersionFromApi;
     }
