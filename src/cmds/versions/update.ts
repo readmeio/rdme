@@ -22,6 +22,7 @@ export default class UpdateVersionCommand extends Command {
     this.cmdCategory = CommandCategories.VERSIONS;
     this.position = 3;
 
+    this.hiddenArgs = ['version'];
     this.args = [
       this.getKeyArg(),
       {
