@@ -11,7 +11,7 @@ export default class DeleteVersionCommand extends Command {
     super();
 
     this.command = 'versions:delete';
-    this.usage = 'versions:delete --version=<version> [options]';
+    this.usage = 'versions:delete <version> [options]';
     this.description = 'Delete a version associated with your ReadMe project.';
     this.cmdCategory = CommandCategories.VERSIONS;
     this.position = 4;

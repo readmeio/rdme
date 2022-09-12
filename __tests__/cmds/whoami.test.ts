@@ -6,6 +6,10 @@ import configStore from '../../src/lib/configstore';
 const cmd = new Command();
 
 describe('rdme whoami', () => {
+  afterEach(() => {
+    configStore.clear();
+  });
+
   it('should error if user is not authenticated', () => {
     configStore.delete('email');
     configStore.delete('project');
