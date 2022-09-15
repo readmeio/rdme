@@ -25,6 +25,7 @@ export type Options = {
   useSpecVersion?: boolean;
   workingDirectory?: string;
   update?: boolean;
+  dryRun?: boolean;
 };
 
 export default class OpenAPICommand extends Command {
@@ -75,13 +76,18 @@ export default class OpenAPICommand extends Command {
         description:
           "Automatically update an existing API definition in ReadMe if it's the only one associated with the current version.",
       },
+      {
+        name: 'dryRun',
+        type: Boolean,
+        description: 'Runs the command without creating/updating any OAS specs in ReadMe. Useful for debugging.',
+      },
     ];
   }
 
   async run(opts: CommandOptions<Options>) {
     super.run(opts);
 
-    const { key, id, spec, create, useSpecVersion, version, workingDirectory, update } = opts;
+    const { dryRun, key, id, spec, create, useSpecVersion, version, workingDirectory, update } = opts;
 
     let selectedVersion = version;
     let isUpdate: boolean;
@@ -91,6 +97,12 @@ export default class OpenAPICommand extends Command {
      * in GitHub Actions workflow files, so we're going to collect them in this object.
      */
     const ignoredGHAParameters: Options = { version: undefined, update: undefined };
+
+    if (dryRun) {
+      Command.warn(
+        '🎭 dry run! This will not create or update any API definition and is used only for debug purposes!'
+      );
+    }
 
     if (create && update) {
       throw new Error(
