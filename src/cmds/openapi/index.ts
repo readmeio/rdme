@@ -238,6 +238,10 @@ export default class OpenAPICommand extends Command {
     }
 
     function updateSpec(specId: string) {
+      if (dryRun) {
+        return `🎭 dry run! The spec with the id ${specId} will be updated`;
+      }
+
       isUpdate = true;
       options.method = 'put';
       spinner.start('Updating your API docs in ReadMe...');
