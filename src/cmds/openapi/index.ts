@@ -221,6 +221,10 @@ export default class OpenAPICommand extends Command {
     };
 
     function createSpec() {
+      if (dryRun) {
+        return `🎭 dry run! The spec at ${specPath} will be uploaded to version ${selectedVersion}`;
+      }
+
       options.method = 'post';
       spinner.start('Creating your API docs in ReadMe...');
       return fetch(`${config.get('host')}/api/v1/api-specification`, options).then(res => {
