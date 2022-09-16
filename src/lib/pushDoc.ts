@@ -1,5 +1,3 @@
-import crypto from 'crypto';
-
 import chalk from 'chalk';
 import config from 'config';
 import { Headers } from 'node-fetch';
@@ -29,28 +27,27 @@ export default async function pushDoc(
   filepath: string,
   type: CommandCategories
 ) {
-  const { content, matter, slug } = readDoc(filepath);
-  const hash = crypto.createHash('sha1').update(content).digest('hex');
+  const { content, data, hash, slug } = readDoc(filepath);
 
-  let data: {
+  let payload: {
     body?: string;
     html?: string;
     htmlmode?: boolean;
     lastUpdatedHash: string;
-  } = { body: matter.content, ...matter.data, lastUpdatedHash: hash };
+  } = { body: content, ...data, lastUpdatedHash: hash };
 
   if (type === CommandCategories.CUSTOM_PAGES) {
     if (filepath.endsWith('.html')) {
-      data = { html: matter.content, htmlmode: true, ...matter.data, lastUpdatedHash: hash };
+      payload = { html: content, htmlmode: true, ...data, lastUpdatedHash: hash };
     } else {
-      data = { body: matter.content, htmlmode: false, ...matter.data, lastUpdatedHash: hash };
+      payload = { body: content, htmlmode: false, ...data, lastUpdatedHash: hash };
     }
   }
 
   function createDoc() {
     if (dryRun) {
       return `🎭 dry run! This will create '${slug}' with contents from ${filepath} with the following metadata: ${JSON.stringify(
-        matter.data
+        data
       )}`;
     }
 
@@ -65,14 +62,14 @@ export default async function pushDoc(
       ),
       body: JSON.stringify({
         slug,
-        ...data,
+        ...payload,
       }),
     })
       .then(res => handleRes(res))
       .then(res => `🌱 successfully created '${res.slug}' (ID: ${res.id}) with contents from ${filepath}`);
   }
 
-  function updateDoc(existingDoc: typeof data) {
+  function updateDoc(existingDoc: typeof payload) {
     if (hash === existingDoc.lastUpdatedHash) {
       return `${dryRun ? '🎭 dry run! ' : ''}\`${slug}\` ${
         dryRun ? 'will not be' : 'was not'
@@ -81,7 +78,7 @@ export default async function pushDoc(
 
     if (dryRun) {
       return `🎭 dry run! This will update '${slug}' with contents from ${filepath} with the following metadata: ${JSON.stringify(
-        matter.data
+        data
       )}`;
     }
 
@@ -96,7 +93,7 @@ export default async function pushDoc(
       ),
       body: JSON.stringify(
         Object.assign(existingDoc, {
-          ...data,
+          ...payload,
         })
       ),
     })
