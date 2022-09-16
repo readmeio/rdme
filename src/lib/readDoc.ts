@@ -19,7 +19,6 @@ type DocMetadata = {
  *
  * @param {String} filepath path to the HTML/Markdown file
  *  (file extension must end in `.html`, `.md`., or `.markdown`)
- * @returns {DocMetadata} an object containing the file's content, matter, and slug
  */
 export default function readDoc(filepath: string): DocMetadata {
   debug(`reading file ${filepath}`);
