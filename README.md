@@ -93,6 +93,8 @@ The following examples use JSON files, but `rdme` supports API Definitions that 
 > **Note**
 > The `rdme openapi` command supports both OpenAPI and Swagger API definitions. The `rdme swagger` command is an alias for `rdme openapi` and is deprecated.
 
+If you wish to see the raw JSON output of any of the `openapi` command examples below, supply the `--raw` flag.
+
 #### Uploading a New API Definition to ReadMe
 
 This will upload `path-to-openapi.json` to your project and return an ID and URL for you to later update your file, and view it in the client.
