@@ -8,7 +8,7 @@ import grayMatter from 'gray-matter';
 
 import { debug } from './logger';
 
-type DocMetadata = {
+type ReadDocMetadata = {
   hash: string;
   matter: matter.GrayMatterFile<string>;
   slug: string;
@@ -20,7 +20,7 @@ type DocMetadata = {
  * @param {String} filepath path to the HTML/Markdown file
  *  (file extension must end in `.html`, `.md`., or `.markdown`)
  */
-export default function readDoc(filepath: string): DocMetadata {
+export default function readDoc(filepath: string): ReadDocMetadata {
   debug(`reading file ${filepath}`);
   const content = fs.readFileSync(filepath, 'utf8');
   const matter = grayMatter(content);

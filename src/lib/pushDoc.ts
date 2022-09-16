@@ -29,7 +29,7 @@ export default async function pushDoc(
 ) {
   const { hash, matter, slug } = readDoc(filepath);
 
-  let data: {
+  let payload: {
     body?: string;
     html?: string;
     htmlmode?: boolean;
@@ -38,9 +38,9 @@ export default async function pushDoc(
 
   if (type === CommandCategories.CUSTOM_PAGES) {
     if (filepath.endsWith('.html')) {
-      data = { html: matter.content, htmlmode: true, ...matter.data, lastUpdatedHash: hash };
+      payload = { html: matter.content, htmlmode: true, ...matter.data, lastUpdatedHash: hash };
     } else {
-      data = { body: matter.content, htmlmode: false, ...matter.data, lastUpdatedHash: hash };
+      payload = { body: matter.content, htmlmode: false, ...matter.data, lastUpdatedHash: hash };
     }
   }
 
@@ -62,14 +62,14 @@ export default async function pushDoc(
       ),
       body: JSON.stringify({
         slug,
-        ...data,
+        ...payload,
       }),
     })
       .then(res => handleRes(res))
       .then(res => `🌱 successfully created '${res.slug}' (ID: ${res.id}) with contents from ${filepath}`);
   }
 
-  function updateDoc(existingDoc: typeof data) {
+  function updateDoc(existingDoc: typeof payload) {
     if (hash === existingDoc.lastUpdatedHash) {
       return `${dryRun ? '🎭 dry run! ' : ''}\`${slug}\` ${
         dryRun ? 'will not be' : 'was not'
@@ -93,7 +93,7 @@ export default async function pushDoc(
       ),
       body: JSON.stringify(
         Object.assign(existingDoc, {
-          ...data,
+          ...payload,
         })
       ),
     })
