@@ -1,5 +1,3 @@
-import crypto from 'crypto';
-
 import chalk from 'chalk';
 import config from 'config';
 import { Headers } from 'node-fetch';
@@ -29,8 +27,7 @@ export default async function pushDoc(
   filepath: string,
   type: CommandCategories
 ) {
-  const { content, matter, slug } = readDoc(filepath);
-  const hash = crypto.createHash('sha1').update(content).digest('hex');
+  const { hash, matter, slug } = readDoc(filepath);
 
   let data: {
     body?: string;

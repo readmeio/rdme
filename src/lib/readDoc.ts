@@ -1,5 +1,6 @@
 import type matter from 'gray-matter';
 
+import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
 
@@ -8,7 +9,7 @@ import grayMatter from 'gray-matter';
 import { debug } from './logger';
 
 type DocMetadata = {
-  content: string;
+  hash: string;
   matter: matter.GrayMatterFile<string>;
   slug: string;
 };
@@ -28,5 +29,7 @@ export default function readDoc(filepath: string): DocMetadata {
 
   // Stripping the subdirectories and markdown extension from the filename and lowercasing to get the default slug.
   const slug = matter.data.slug || path.basename(filepath).replace(path.extname(filepath), '').toLowerCase();
-  return { content, matter, slug };
+
+  const hash = crypto.createHash('sha1').update(content).digest('hex');
+  return { hash, matter, slug };
 }
