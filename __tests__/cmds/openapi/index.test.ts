@@ -286,6 +286,44 @@ describe('rdme openapi', () => {
       return mock.done();
     });
 
+    it('should upload the expected content and return raw output', async () => {
+      let requestBody;
+      const registryUUID = getRandomRegistryId();
+      const mock = getAPIMock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version: '1.0.0' })
+        .post('/api/v1/api-registry', body => {
+          requestBody = body.substring(body.indexOf('{'), body.lastIndexOf('}') + 1);
+          requestBody = JSON.parse(requestBody);
+
+          return body.match('form-data; name="spec"');
+        })
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+        .get('/api/v1/api-specification')
+        .basicAuth({ user: key })
+        .reply(200, []);
+
+      const postMock = getAPIMockWithVersionHeader(version)
+        .post('/api/v1/api-specification', { registryUUID })
+        .basicAuth({ user: key })
+        .reply(201, { _id: 1 }, { location: exampleRefLocation });
+
+      const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
+
+      await expect(openapi.run({ spec, key, version, raw: true })).resolves.toMatchInlineSnapshot(`
+        "{
+          \\"docs\\": \\"https://dash.readme.com/project/example-project/1.0.1/refs/ex\\",
+          \\"id\\": 1,
+          \\"specPath\\": \\"./__tests__/__fixtures__/ref-oas/petstore.json\\",
+          \\"specType\\": \\"OpenAPI\\"
+        }"
+      `);
+
+      postMock.done();
+      return mock.done();
+    });
+
     it('should use specified working directory and upload the expected content', async () => {
       let requestBody;
       const registryUUID = getRandomRegistryId();

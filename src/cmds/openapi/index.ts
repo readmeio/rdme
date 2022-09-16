@@ -22,6 +22,7 @@ export type Options = {
   spec?: string;
   version?: string;
   create?: boolean;
+  // raw?: boolean;
   useSpecVersion?: boolean;
   workingDirectory?: string;
   update?: boolean;
@@ -58,6 +59,11 @@ export default class OpenAPICommand extends Command {
         description:
           'Uses the version listed in the `info.version` field in the API definition for the project version parameter.',
       },
+      {
+        name: 'raw',
+        type: Boolean,
+        description: 'TKTK',
+      },
       this.getGitHubArg(),
       {
         name: 'workingDirectory',
@@ -81,7 +87,7 @@ export default class OpenAPICommand extends Command {
   async run(opts: CommandOptions<Options>) {
     super.run(opts);
 
-    const { key, id, spec, create, useSpecVersion, version, workingDirectory, update } = opts;
+    const { key, id, spec, create, raw, useSpecVersion, version, workingDirectory, update } = opts;
 
     let selectedVersion = version;
     let isUpdate: boolean;
@@ -144,18 +150,25 @@ export default class OpenAPICommand extends Command {
       const body = await data.json();
       Command.debug(`successful response payload: ${JSON.stringify(body)}`);
 
-      return Promise.resolve(
-        [
-          message,
-          '',
-          `\t${chalk.green(`${data.headers.get('location')}`)}`,
-          '',
-          `To update your ${specType} definition, run the following:`,
-          '',
-          // eslint-disable-next-line no-underscore-dangle
-          `\t${chalk.green(`rdme openapi ${specPath} --key=<key> --id=${body._id}`)}`,
-        ].join('\n')
-      ).then(msg =>
+      const output = {
+        docs: data.headers.get('location'),
+        // eslint-disable-next-line no-underscore-dangle
+        id: body._id,
+        specPath,
+        specType,
+      };
+
+      const prettyOutput = [
+        message,
+        '',
+        `\t${chalk.green(output.docs)}`,
+        '',
+        `To update your ${specType} definition, run the following:`,
+        '',
+        `\t${chalk.green(`rdme openapi ${specPath} --key=<key> --id=${output.id}`)}`,
+      ].join('\n');
+
+      return Promise.resolve(raw ? JSON.stringify(output, null, 2) : prettyOutput).then(msg =>
         createGHA(msg, this.command, this.args, {
           ...opts,
           spec: specPath,
