@@ -151,11 +151,13 @@ export default class OpenAPICommand extends Command {
       Command.debug(`successful response payload: ${JSON.stringify(body)}`);
 
       const output = {
+        commandType: isUpdate ? 'update' : 'create',
         docs: data.headers.get('location'),
         // eslint-disable-next-line no-underscore-dangle
         id: body._id,
         specPath,
         specType,
+        version: selectedVersion,
       };
 
       const prettyOutput = [
