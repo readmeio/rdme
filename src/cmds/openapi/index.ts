@@ -22,7 +22,7 @@ export type Options = {
   spec?: string;
   version?: string;
   create?: boolean;
-  // raw?: boolean;
+  raw?: boolean;
   useSpecVersion?: boolean;
   workingDirectory?: string;
   update?: boolean;

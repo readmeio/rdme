@@ -17,6 +17,8 @@ Options
                               option is not passed, the main project version will be used.          
   --useSpecVersion            Uses the version listed in the \`info.version\` field in the API        
                               definition for the project version parameter.                         
+  --raw                       Return the command results as a JSON object instead of a pretty       
+                              output.                                                               
   --github                    Create a new GitHub Actions workflow for this command.                
   --workingDirectory string   Working directory (for usage with relative external references)       
   --create                    Bypasses the create/update prompt and creates a new API definition.   
@@ -48,6 +50,8 @@ Options
                               option is not passed, the main project version will be used.          
   --useSpecVersion            Uses the version listed in the \`info.version\` field in the API        
                               definition for the project version parameter.                         
+  --raw                       Return the command results as a JSON object instead of a pretty       
+                              output.                                                               
   --github                    Create a new GitHub Actions workflow for this command.                
   --workingDirectory string   Working directory (for usage with relative external references)       
   --create                    Bypasses the create/update prompt and creates a new API definition.   
@@ -79,6 +83,8 @@ Options
                               option is not passed, the main project version will be used.          
   --useSpecVersion            Uses the version listed in the \`info.version\` field in the API        
                               definition for the project version parameter.                         
+  --raw                       Return the command results as a JSON object instead of a pretty       
+                              output.                                                               
   --github                    Create a new GitHub Actions workflow for this command.                
   --workingDirectory string   Working directory (for usage with relative external references)       
   --create                    Bypasses the create/update prompt and creates a new API definition.   
