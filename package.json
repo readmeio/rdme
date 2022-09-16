@@ -1,6 +1,6 @@
 {
   "name": "rdme",
-  "version": "8.0.0-beta.2",
+  "version": "8.0.0-beta.3",
   "description": "ReadMe's official CLI and GitHub Action wrapper.",
   "license": "MIT",
   "author": "ReadMe <support@readme.io> (https://readme.com)",
