@@ -62,7 +62,7 @@ export default class OpenAPICommand extends Command {
       {
         name: 'raw',
         type: Boolean,
-        description: 'TKTK',
+        description: 'Return the command results as a JSON object instead of a pretty output.',
       },
       this.getGitHubArg(),
       {
