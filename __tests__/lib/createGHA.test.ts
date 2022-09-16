@@ -127,13 +127,13 @@ describe('#createGHA', () => {
         expect(fs.writeFileSync).toHaveBeenCalledWith(getGHAFileName(fileName), expect.any(String));
       });
 
-      it('should run if user is on an outdated package version', async () => {
+      it('should run if user is on an outdated package version', () => {
         const fileName = `rdme-${cmd}`;
         prompts.inject([true, 'some-branch', fileName]);
 
         const repoRoot = process.cwd();
 
-        configstore.set(getConfigStoreKey(repoRoot), (await getMajorRdmeVersion()) - 1);
+        configstore.set(getConfigStoreKey(repoRoot), getMajorRdmeVersion() - 1);
 
         return expect(createGHA('', cmd, command.args, opts)).resolves.toMatch(
           'Your GitHub Actions workflow file has been created!'
@@ -156,7 +156,7 @@ describe('#createGHA', () => {
           )
         );
 
-        expect(configstore.get(getConfigStoreKey(repoRoot))).toBe(await getMajorRdmeVersion());
+        expect(configstore.get(getConfigStoreKey(repoRoot))).toBe(getMajorRdmeVersion());
       });
 
       it('should not run if not a repo', () => {
@@ -169,10 +169,10 @@ describe('#createGHA', () => {
         return expect(createGHA('success!', cmd, command.args, opts)).resolves.toBe('success!');
       });
 
-      it('should not run if user previously declined to set up GHA for current directory + pkg version', async () => {
+      it('should not run if user previously declined to set up GHA for current directory + pkg version', () => {
         const repoRoot = process.cwd();
 
-        configstore.set(getConfigStoreKey(repoRoot), await getMajorRdmeVersion());
+        configstore.set(getConfigStoreKey(repoRoot), getMajorRdmeVersion());
 
         return expect(createGHA('success!', cmd, command.args, opts)).resolves.toBe('success!');
       });

@@ -41,7 +41,7 @@ const GITHUB_SECRET_NAME = 'README_API_KEY';
  *
  * @example 8
  */
-export const getMajorRdmeVersion = async () => semverMajor(await getPkgVersion());
+export const getMajorRdmeVersion = () => semverMajor(getPkgVersion());
 
 export const git = simpleGit();
 
@@ -170,7 +170,7 @@ export default async function createGHA(
   const configVal = configstore.get(getConfigStoreKey(repoRoot));
   debug(`repo value in config: ${configVal}`);
 
-  const majorPkgVersion = await getMajorRdmeVersion();
+  const majorPkgVersion = getMajorRdmeVersion();
   debug(`major pkg version: ${majorPkgVersion}`);
 
   if (!opts.github) {
@@ -274,7 +274,7 @@ export default async function createGHA(
     cleanCommand: cleanFileName(command),
     command,
     commandString: constructCmdString(command, args, opts),
-    rdmeVersion: await getPkgVersion(),
+    rdmeVersion: getPkgVersion(),
     timestamp: new Date().toISOString(),
   };
 
