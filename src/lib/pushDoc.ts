@@ -27,27 +27,27 @@ export default async function pushDoc(
   filepath: string,
   type: CommandCategories
 ) {
-  const { hash, matter, slug } = readDoc(filepath);
+  const { content, data, hash, slug } = readDoc(filepath);
 
   let payload: {
     body?: string;
     html?: string;
     htmlmode?: boolean;
     lastUpdatedHash: string;
-  } = { body: matter.content, ...matter.data, lastUpdatedHash: hash };
+  } = { body: content, ...data, lastUpdatedHash: hash };
 
   if (type === CommandCategories.CUSTOM_PAGES) {
     if (filepath.endsWith('.html')) {
-      payload = { html: matter.content, htmlmode: true, ...matter.data, lastUpdatedHash: hash };
+      payload = { html: content, htmlmode: true, ...data, lastUpdatedHash: hash };
     } else {
-      payload = { body: matter.content, htmlmode: false, ...matter.data, lastUpdatedHash: hash };
+      payload = { body: content, htmlmode: false, ...data, lastUpdatedHash: hash };
     }
   }
 
   function createDoc() {
     if (dryRun) {
       return `🎭 dry run! This will create '${slug}' with contents from ${filepath} with the following metadata: ${JSON.stringify(
-        matter.data
+        data
       )}`;
     }
 
@@ -78,7 +78,7 @@ export default async function pushDoc(
 
     if (dryRun) {
       return `🎭 dry run! This will update '${slug}' with contents from ${filepath} with the following metadata: ${JSON.stringify(
-        matter.data
+        data
       )}`;
     }
 

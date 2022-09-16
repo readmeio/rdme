@@ -1,5 +1,3 @@
-import type matter from 'gray-matter';
-
 import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
@@ -9,8 +7,16 @@ import grayMatter from 'gray-matter';
 import { debug } from './logger';
 
 type ReadDocMetadata = {
+  /** The contents of the file below the YAML front matter */
+  content: string;
+  /** A JSON object with the YAML front matter */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data: Record<string, any>;
+  /**
+   * A hash of the file contents (including the front matter)
+   */
   hash: string;
-  matter: matter.GrayMatterFile<string>;
+  /** The page slug */
   slug: string;
 };
 
@@ -22,13 +28,14 @@ type ReadDocMetadata = {
  */
 export default function readDoc(filepath: string): ReadDocMetadata {
   debug(`reading file ${filepath}`);
-  const content = fs.readFileSync(filepath, 'utf8');
-  const matter = grayMatter(content);
-  debug(`frontmatter for ${filepath}: ${JSON.stringify(matter)}`);
+  const rawFileContents = fs.readFileSync(filepath, 'utf8');
+  const matter = grayMatter(rawFileContents);
+  const { content, data } = matter;
+  debug(`front matter for ${filepath}: ${JSON.stringify(matter)}`);
 
   // Stripping the subdirectories and markdown extension from the filename and lowercasing to get the default slug.
   const slug = matter.data.slug || path.basename(filepath).replace(path.extname(filepath), '').toLowerCase();
 
-  const hash = crypto.createHash('sha1').update(content).digest('hex');
-  return { hash, matter, slug };
+  const hash = crypto.createHash('sha1').update(rawFileContents).digest('hex');
+  return { content, data, hash, slug };
 }
