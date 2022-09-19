@@ -328,6 +328,46 @@ describe('rdme openapi', () => {
       return mock.done();
     });
 
+    it('should return spec create info for dry run', async () => {
+      const registryUUID = getRandomRegistryId();
+
+      const mock = getAPIMock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version })
+        .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
+
+      const mockWithHeader = getAPIMockWithVersionHeader(version)
+        .get('/api/v1/api-specification')
+        .basicAuth({ user: key })
+        .reply(200, [])
+        .post('/api/v1/api-specification', { registryUUID })
+        .delayConnection(1000)
+        .basicAuth({ user: key })
+        .reply(201, { _id: 1 }, { location: exampleRefLocation });
+
+      const spec = 'petstore.json';
+
+      await expect(
+        openapi.run({
+          key,
+          version,
+          dryRun: true,
+          workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
+        })
+      ).resolves.toBe('🎭 dry run! The spec at petstore.json will be uploaded to version 1.0.0');
+
+      const output = getCommandOutput();
+      expect(output).toBe(
+        chalk.yellow(
+          `⚠️  Warning! 🎭 dry run! This will not create or update any API definition and is used only for debug purposes!
+
+ℹ️  We found ${spec} and are attempting to upload it.`
+        )
+      );
+    });
+
     describe('CI spec selection', () => {
       beforeEach(() => {
         process.env.TEST_CI = 'true';
