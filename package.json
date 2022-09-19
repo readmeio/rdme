@@ -104,7 +104,7 @@
     "prettier": "prettier --list-different \"./**/**.{md,js,ts}\"",
     "prettier:write": "prettier --list-different --write \"./**/**.{md,js,ts}\"",
     "release": "npx conventional-changelog-cli -i CHANGELOG.md -s",
-    "test": "jest --coverage --detectOpenHandles"
+    "test": "jest --coverage"
   },
   "prettier": "@readme/eslint-config/prettier"
 }
