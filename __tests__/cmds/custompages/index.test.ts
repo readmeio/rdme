@@ -215,7 +215,7 @@ describe('rdme custompages', () => {
       const postMock = getAPIMock()
         .post('/api/v1/custompages', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
-        .reply(201, { slug, id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
+        .reply(201, { slug, _id: id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
       await expect(custompages.run({ folder: `./__tests__/${fixturesBaseDir}/new-docs`, key })).resolves.toBe(
         `🌱 successfully created 'new-doc' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/new-docs/new-doc.md`
@@ -244,7 +244,7 @@ describe('rdme custompages', () => {
       const postMock = getAPIMock()
         .post('/api/v1/custompages', { slug, html: doc.content, htmlmode: true, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
-        .reply(201, { slug, id, html: doc.content, htmlmode: true, ...doc.data, lastUpdatedHash: hash });
+        .reply(201, { slug, _id: id, html: doc.content, htmlmode: true, ...doc.data, lastUpdatedHash: hash });
 
       await expect(custompages.run({ folder: `./__tests__/${fixturesBaseDir}/new-docs-html`, key })).resolves.toBe(
         `🌱 successfully created 'new-doc' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/new-docs-html/new-doc.html`
@@ -370,7 +370,7 @@ describe('rdme custompages', () => {
       const postMock = getAPIMock()
         .post('/api/v1/custompages', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
-        .reply(201, { slug: doc.data.slug, id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
+        .reply(201, { slug: doc.data.slug, _id: id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
       await expect(custompages.run({ folder: `./__tests__/${fixturesBaseDir}/slug-docs`, key })).resolves.toBe(
         `🌱 successfully created 'marc-actually-wrote-a-test' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`

@@ -255,7 +255,7 @@ describe('rdme docs', () => {
       const postMock = getAPIMockWithVersionHeader(version)
         .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
-        .reply(201, { slug, id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
+        .reply(201, { slug, _id: id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
       const versionMock = getAPIMock()
         .get(`/api/v1/version/${version}`)
@@ -519,7 +519,7 @@ describe('rdme docs', () => {
       const postMock = getAPIMock()
         .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
-        .reply(201, { slug: doc.data.slug, id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
+        .reply(201, { slug: doc.data.slug, _id: id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
       const versionMock = getAPIMock()
         .get(`/api/v1/version/${version}`)
@@ -586,7 +586,7 @@ describe('rdme docs', () => {
       const postMock = getAPIMockWithVersionHeader(altVersion)
         .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
-        .reply(201, { id, slug, body: doc.content, ...doc.data, lastUpdatedHash: hash });
+        .reply(201, { _id: id, slug, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
       const fileName = 'docs-test-file';
       prompts.inject([altVersion, true, 'docs-test-branch', fileName]);

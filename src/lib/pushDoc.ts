@@ -51,22 +51,25 @@ export default async function pushDoc(
       )}`;
     }
 
-    return fetch(`${config.get('host')}/api/v1/${type}`, {
-      method: 'post',
-      headers: cleanHeaders(
-        key,
-        new Headers({
-          'x-readme-version': selectedVersion,
-          'Content-Type': 'application/json',
-        })
-      ),
-      body: JSON.stringify({
-        slug,
-        ...payload,
-      }),
-    })
-      .then(res => handleRes(res))
-      .then(res => `🌱 successfully created '${res.slug}' (ID: ${res.id}) with contents from ${filepath}`);
+    return (
+      fetch(`${config.get('host')}/api/v1/${type}`, {
+        method: 'post',
+        headers: cleanHeaders(
+          key,
+          new Headers({
+            'x-readme-version': selectedVersion,
+            'Content-Type': 'application/json',
+          })
+        ),
+        body: JSON.stringify({
+          slug,
+          ...payload,
+        }),
+      })
+        .then(res => handleRes(res))
+        // eslint-disable-next-line no-underscore-dangle
+        .then(res => `🌱 successfully created '${res.slug}' (ID: ${res._id}) with contents from ${filepath}`)
+    );
   }
 
   function updateDoc(existingDoc: typeof payload) {
