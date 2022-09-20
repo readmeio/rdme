@@ -483,6 +483,40 @@ describe('rdme openapi', () => {
       return mock.done();
     });
 
+    it('should return spec update info for dry run', async () => {
+      prompts.inject(['update', 'spec2']);
+      const registryUUID = getRandomRegistryId();
+
+      const mock = getAPIMock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version })
+        .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
+
+      const mockWithHeader = getAPIMockWithVersionHeader(version)
+        .get('/api/v1/api-specification')
+        .basicAuth({ user: key })
+        .reply(200, [
+          { _id: 'spec1', title: 'spec1_title' },
+          { _id: 'spec2', title: 'spec2_title' },
+        ]);
+
+      const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
+
+      await expect(
+        openapi.run({
+          key,
+          version,
+          spec,
+          dryRun: true,
+        })
+      ).resolves.toMatch('dry run! The spec with the id spec2 will be updated');
+
+      mockWithHeader.done();
+      return mock.done();
+    });
+
     describe('--update', () => {
       it("should update a spec file without prompts if providing `update` and it's the one spec available", async () => {
         const registryUUID = getRandomRegistryId();
