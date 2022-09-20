@@ -341,13 +341,7 @@ describe('rdme openapi', () => {
       const mockWithHeader = getAPIMockWithVersionHeader(version)
         .get('/api/v1/api-specification')
         .basicAuth({ user: key })
-        .reply(200, [])
-        .post('/api/v1/api-specification', { registryUUID })
-        .delayConnection(1000)
-        .basicAuth({ user: key })
-        .reply(201, { _id: 1 }, { location: exampleRefLocation });
-
-      const spec = 'petstore.json';
+        .reply(200, []);
 
       await expect(
         openapi.run({
@@ -359,13 +353,14 @@ describe('rdme openapi', () => {
       ).resolves.toBe('🎭 dry run! The spec at petstore.json will be uploaded to version 1.0.0');
 
       const output = getCommandOutput();
-      expect(output).toBe(
+      expect(output).toMatch(
         chalk.yellow(
-          `⚠️  Warning! 🎭 dry run! This will not create or update any API definition and is used only for debug purposes!
-
-ℹ️  We found ${spec} and are attempting to upload it.`
+          '🎭 dry run! This will not create or update any API definition and is used only for debug purposes!'
         )
       );
+
+      mockWithHeader.done();
+      return mock.done();
     });
 
     describe('CI spec selection', () => {
