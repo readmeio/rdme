@@ -54,6 +54,11 @@ export default class OpenAPICommand extends Command {
         defaultOption: true,
       },
       {
+        name: 'workingDirectory',
+        type: String,
+        description: 'Working directory (for usage with relative external references)',
+      },
+      {
         name: 'useSpecVersion',
         type: Boolean,
         description:
@@ -65,11 +70,6 @@ export default class OpenAPICommand extends Command {
         description: 'Return the command results as a JSON object instead of a pretty output.',
       },
       this.getGitHubArg(),
-      {
-        name: 'workingDirectory',
-        type: String,
-        description: 'Working directory (for usage with relative external references)',
-      },
       {
         name: 'create',
         type: Boolean,
