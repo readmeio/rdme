@@ -74,6 +74,7 @@ async function handleRes(res: Response) {
     return body;
   }
   if (res.status === SUCCESS_NO_CONTENT) {
+    debug(`received status code ${res.status} from ${res.url} with no content`);
     return {};
   }
   // If we receive a non-JSON response, it's likely an error.

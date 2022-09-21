@@ -212,7 +212,7 @@ describe('rdme changelogs', () => {
       const postMock = getAPIMock()
         .post('/api/v1/changelogs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
-        .reply(201, { slug, id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
+        .reply(201, { slug, _id: id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
       await expect(changelogs.run({ folder: `./__tests__/${fixturesBaseDir}/new-docs`, key })).resolves.toBe(
         `🌱 successfully created 'new-doc' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/new-docs/new-doc.md`
@@ -332,7 +332,7 @@ describe('rdme changelogs', () => {
       const postMock = getAPIMock()
         .post('/api/v1/changelogs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
-        .reply(201, { slug: doc.data.slug, id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
+        .reply(201, { slug: doc.data.slug, _id: id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
       await expect(changelogs.run({ folder: `./__tests__/${fixturesBaseDir}/slug-docs`, key })).resolves.toBe(
         `🌱 successfully created 'marc-actually-wrote-a-test' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`
