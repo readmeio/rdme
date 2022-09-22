@@ -390,13 +390,13 @@ describe('rdme openapi', () => {
           dryRun: true,
           workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
         })
-      ).resolves.toBe('🎭 dry run! The spec at petstore.json will be uploaded to version 1.0.0');
+      ).resolves.toMatch(
+        '🎭 dry run! The API Definition located at petstore.json will be created for this project version: 1.0.0'
+      );
 
       const output = getCommandOutput();
       expect(output).toMatch(
-        chalk.yellow(
-          '🎭 dry run! This will not create or update any API definition and is used only for debug purposes!'
-        )
+        chalk.yellow('🎭 dry run option detected! No API definitions will be created or updated in ReadMe.')
       );
 
       mockWithHeader.done();
@@ -551,7 +551,7 @@ describe('rdme openapi', () => {
           spec,
           dryRun: true,
         })
-      ).resolves.toMatch('dry run! The spec with the id spec2 will be updated');
+      ).resolves.toMatch(`dry run! The API Definition located at ${spec} will update this API Definition ID: spec2`);
 
       mockWithHeader.done();
       return mock.done();
