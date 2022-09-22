@@ -368,6 +368,41 @@ describe('rdme openapi', () => {
       return mock.done();
     });
 
+    it('should return spec create info for dry run', async () => {
+      const registryUUID = getRandomRegistryId();
+
+      const mock = getAPIMock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version })
+        .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
+
+      const mockWithHeader = getAPIMockWithVersionHeader(version)
+        .get('/api/v1/api-specification')
+        .basicAuth({ user: key })
+        .reply(200, []);
+
+      await expect(
+        openapi.run({
+          key,
+          version,
+          dryRun: true,
+          workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
+        })
+      ).resolves.toMatch(
+        '🎭 dry run! The API Definition located at petstore.json will be created for this project version: 1.0.0'
+      );
+
+      const output = getCommandOutput();
+      expect(output).toMatch(
+        chalk.yellow('🎭 dry run option detected! No API definitions will be created or updated in ReadMe.')
+      );
+
+      mockWithHeader.done();
+      return mock.done();
+    });
+
     describe('CI spec selection', () => {
       beforeEach(() => {
         process.env.TEST_CI = 'true';
@@ -483,6 +518,40 @@ describe('rdme openapi', () => {
           spec,
         })
       ).resolves.toBe(successfulUpdate(spec));
+
+      mockWithHeader.done();
+      return mock.done();
+    });
+
+    it('should return spec update info for dry run', async () => {
+      prompts.inject(['update', 'spec2']);
+      const registryUUID = getRandomRegistryId();
+
+      const mock = getAPIMock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version })
+        .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
+
+      const mockWithHeader = getAPIMockWithVersionHeader(version)
+        .get('/api/v1/api-specification')
+        .basicAuth({ user: key })
+        .reply(200, [
+          { _id: 'spec1', title: 'spec1_title' },
+          { _id: 'spec2', title: 'spec2_title' },
+        ]);
+
+      const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
+
+      await expect(
+        openapi.run({
+          key,
+          version,
+          spec,
+          dryRun: true,
+        })
+      ).resolves.toMatch(`dry run! The API Definition located at ${spec} will update this API Definition ID: spec2`);
 
       mockWithHeader.done();
       return mock.done();

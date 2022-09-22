@@ -26,6 +26,7 @@ export type Options = {
   useSpecVersion?: boolean;
   workingDirectory?: string;
   update?: boolean;
+  dryRun?: boolean;
 };
 
 export default class OpenAPICommand extends Command {
@@ -81,13 +82,18 @@ export default class OpenAPICommand extends Command {
         description:
           "Automatically update an existing API definition in ReadMe if it's the only one associated with the current version.",
       },
+      {
+        name: 'dryRun',
+        type: Boolean,
+        description: 'Runs the command without creating/updating any API Definitions in ReadMe. Useful for debugging.',
+      },
     ];
   }
 
   async run(opts: CommandOptions<Options>) {
     super.run(opts);
 
-    const { key, id, spec, create, raw, useSpecVersion, version, workingDirectory, update } = opts;
+    const { dryRun, key, id, spec, create, raw, useSpecVersion, version, workingDirectory, update } = opts;
 
     let selectedVersion = version;
     let isUpdate: boolean;
@@ -97,6 +103,10 @@ export default class OpenAPICommand extends Command {
      * in GitHub Actions workflow files, so we're going to collect them in this object.
      */
     const ignoredGHAParameters: Options = { version: undefined, update: undefined };
+
+    if (dryRun) {
+      Command.warn('🎭 dry run option detected! No API definitions will be created or updated in ReadMe.');
+    }
 
     if (create && update) {
       throw new Error(
@@ -224,6 +234,10 @@ export default class OpenAPICommand extends Command {
     };
 
     function createSpec() {
+      if (dryRun) {
+        return `🎭 dry run! The API Definition located at ${specPath} will be created for this project version: ${selectedVersion}`;
+      }
+
       options.method = 'post';
       spinner.start('Creating your API docs in ReadMe...');
       return fetch(`${config.get('host')}/api/v1/api-specification`, options).then(res => {
@@ -237,6 +251,10 @@ export default class OpenAPICommand extends Command {
     }
 
     function updateSpec(specId: string) {
+      if (dryRun) {
+        return `🎭 dry run! The API Definition located at ${specPath} will update this API Definition ID: ${specId}`;
+      }
+
       isUpdate = true;
       options.method = 'put';
       spinner.start('Updating your API docs in ReadMe...');

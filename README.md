@@ -112,6 +112,8 @@ If you want to bypass the prompt to create or update an API definition, you can 
 rdme openapi [path-to-file.json] --version={project-version} --create
 ```
 
+This command also has a dry run mode, which can be useful for initial setup and debugging. You can perform a dry run by supplying the `--dryRun` flag.
+
 #### Editing (Re-Syncing) an Existing API Definition
 
 This will edit (re-sync) an existing API definition (identified by `--id`) within your ReadMe project. **This is the recommended approach for usage in CI environments.**
@@ -149,6 +151,8 @@ You can add `--update` to the command so if there's only one API definition for 
 ```sh
 rdme openapi [path-to-file.json] --version={project-version} --update
 ```
+
+This command also has a dry run mode, which can be useful for initial setup and debugging. You can perform a dry run by supplying the `--dryRun` flag.
 
 #### Omitting the File Path
 
