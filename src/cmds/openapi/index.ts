@@ -85,7 +85,7 @@ export default class OpenAPICommand extends Command {
       {
         name: 'dryRun',
         type: Boolean,
-        description: 'Runs the command without creating/updating any OAS specs in ReadMe. Useful for debugging.',
+        description: 'Runs the command without creating/updating any API Definitions in ReadMe. Useful for debugging.',
       },
     ];
   }
@@ -105,9 +105,7 @@ export default class OpenAPICommand extends Command {
     const ignoredGHAParameters: Options = { version: undefined, update: undefined };
 
     if (dryRun) {
-      Command.warn(
-        '🎭 dry run! This will not create or update any API definition and is used only for debug purposes!'
-      );
+      Command.warn('🎭 dry run option detected! No API definitions will be created or updated in ReadMe.');
     }
 
     if (create && update) {
@@ -237,7 +235,7 @@ export default class OpenAPICommand extends Command {
 
     function createSpec() {
       if (dryRun) {
-        return `🎭 dry run! The spec at ${specPath} will be uploaded to version ${selectedVersion}`;
+        return `🎭 dry run! The API Definition located at ${specPath} will be created for this project version: ${selectedVersion}`;
       }
 
       options.method = 'post';
@@ -254,7 +252,7 @@ export default class OpenAPICommand extends Command {
 
     function updateSpec(specId: string) {
       if (dryRun) {
-        return `🎭 dry run! The spec with the id ${specId} will be updated`;
+        return `🎭 dry run! The API Definition located at ${specPath} will update this API Definition ID: ${specId}`;
       }
 
       isUpdate = true;
