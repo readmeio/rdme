@@ -95,16 +95,19 @@
   },
   "scripts": {
     "build": "tsc",
+    "bump": "npm version -m 'build: %s release'",
     "debug": "ts-node src/cli.ts",
     "lint": "eslint . bin/rdme bin/set-version-output --ext .js,.ts",
     "lint-docs": "npx alex@10 . && npm run prettier",
+    "postversion": "git tag $(npm pkg get version | tr -d '\"')",
     "prebuild": "rm -rf dist/",
     "prepack": "npm run build",
     "pretest": "npm run lint && npm run lint-docs",
     "prettier": "prettier --list-different \"./**/**.{md,js,ts}\"",
     "prettier:write": "prettier --list-different --write \"./**/**.{md,js,ts}\"",
     "release": "npx conventional-changelog-cli -i CHANGELOG.md -s",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "version": "npm run release && git add ."
   },
   "prettier": "@readme/eslint-config/prettier"
 }
