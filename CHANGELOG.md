@@ -1,3 +1,14 @@
+## 8.0.0-beta.4 (2022-09-23)
+
+* chore: bump scripts ([a4998f5](https://github.com/readmeio/rdme/commit/a4998f5))
+* chore: prompt copy, openapi opts cleanup ([70b7f4d](https://github.com/readmeio/rdme/commit/70b7f4d))
+* feat(openapi): add `--dryRun` option (#612) ([8cb48e8](https://github.com/readmeio/rdme/commit/8cb48e8)), closes [#612](https://github.com/readmeio/rdme/issues/612)
+* test: minor test flakiness (#611) ([2880fa3](https://github.com/readmeio/rdme/commit/2880fa3)), closes [#611](https://github.com/readmeio/rdme/issues/611)
+* fix(docs): use correct `_id` param (#616) ([7175537](https://github.com/readmeio/rdme/commit/7175537)), closes [#616](https://github.com/readmeio/rdme/issues/616)
+* refactor(docs): internal command signatures (#615) ([c071bc1](https://github.com/readmeio/rdme/commit/c071bc1)), closes [#615](https://github.com/readmeio/rdme/issues/615)
+
+
+
 ## 8.0.0-beta.3 (2022-09-16)
 
 * docs: add description of `--useSpecVersion` ([df8e224](https://github.com/readmeio/rdme/commit/df8e224))
