@@ -40,12 +40,6 @@ For local CLI usage with a single project, you can authenticate `rdme` to your R
 rdme login
 ```
 
-If you have [two-factor authentication (2FA)](https://docs.readme.com/docs/two-factor-authentication) enabled on your account, you'll need to pass in the `--2fa` option:
-
-```sh
-rdme login --2fa
-```
-
 `rdme whoami` is also available to you to determine who you are logged in as, and to what project, as well as `rdme logout` for logging out of that account.
 
 ## Usage
