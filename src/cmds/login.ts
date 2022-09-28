@@ -8,15 +8,27 @@ import isEmail from 'validator/lib/isEmail';
 import Command, { CommandCategories } from '../lib/baseCommand';
 import configStore from '../lib/configstore';
 import fetch, { handleRes } from '../lib/fetch';
+import { debug } from '../lib/logger';
 import promptTerminal from '../lib/promptWrapper';
 
 export type Options = {
-  '2fa'?: boolean;
+  project?: string;
+};
+
+type LoginBody = {
   email?: string;
   password?: string;
   project?: string;
   token?: string;
 };
+
+function loginFetch(body: LoginBody) {
+  return fetch(`${config.get('host')}/api/v1/login`, {
+    method: 'post',
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+}
 
 export default class LoginCommand extends Command {
   constructor() {
@@ -34,11 +46,6 @@ export default class LoginCommand extends Command {
         type: String,
         description: 'Project subdomain',
       },
-      {
-        name: '2fa',
-        type: Boolean,
-        description: 'Prompt for a 2FA token',
-      },
     ];
   }
 
@@ -47,7 +54,7 @@ export default class LoginCommand extends Command {
 
     prompts.override(opts);
 
-    const { email, password, project, token } = await promptTerminal([
+    const { email, password, project } = await promptTerminal([
       {
         type: 'text',
         name: 'email',
@@ -68,11 +75,6 @@ export default class LoginCommand extends Command {
         message: 'What project are you logging into?',
         initial: configStore.get('project'),
       },
-      {
-        type: opts['2fa'] ? 'text' : null,
-        name: 'token',
-        message: 'What is your 2FA token?',
-      },
     ]);
 
     if (!project) {
@@ -83,17 +85,22 @@ export default class LoginCommand extends Command {
       return Promise.reject(new Error('You must provide a valid email address.'));
     }
 
-    return fetch(`${config.get('host')}/api/v1/login`, {
-      method: 'post',
-      headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email,
-        password,
-        project,
-        token,
-      }),
-    })
+    return loginFetch({ email, password, project })
       .then(handleRes)
+      .catch(async err => {
+        // if the user's login requires 2FA, let's prompt them for the token!
+        if (err.code === 'LOGIN_TWOFACTOR') {
+          debug('2FA error response, prompting for 2FA code');
+          const { token } = await promptTerminal({
+            type: 'text',
+            name: 'token',
+            message: 'What is your 2FA token?',
+          });
+
+          return loginFetch({ email, password, project, token }).then(handleRes);
+        }
+        throw err;
+      })
       .then(res => {
         configStore.set('apiKey', res.apiKey);
         configStore.set('email', email);
