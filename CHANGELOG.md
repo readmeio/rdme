@@ -1,3 +1,9 @@
+## 8.0.0-beta.5 (2022-09-28)
+
+* feat(breaking/login): remove `2fa` flag in favor of better prompts (#619) ([29109ec](https://github.com/readmeio/rdme/commit/29109ec)), closes [#619](https://github.com/readmeio/rdme/issues/619)
+
+
+
 ## 8.0.0-beta.4 (2022-09-23)
 
 * chore: bump scripts ([a4998f5](https://github.com/readmeio/rdme/commit/a4998f5))
