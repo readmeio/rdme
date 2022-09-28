@@ -78,8 +78,8 @@ describe('rdme login', () => {
     mock.done();
   });
 
-  it('should error if missing two factor token', async () => {
-    prompts.inject([email, password, project]);
+  it('should make additional prompt for token if login requires 2FA', async () => {
+    prompts.inject([email, password, project, token]);
     const errorResponse = {
       error: 'LOGIN_TWOFACTOR',
       message: 'You must provide a two-factor code',
@@ -87,21 +87,19 @@ describe('rdme login', () => {
       help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
     };
 
-    const mock = getAPIMock().post('/api/v1/login', { email, password, project }).reply(401, errorResponse);
+    const mock = getAPIMock()
+      .post('/api/v1/login', { email, password, project })
+      .reply(401, errorResponse)
+      .post('/api/v1/login', { email, password, project, token })
+      .reply(200, { apiKey });
 
-    await expect(cmd.run({})).rejects.toStrictEqual(new APIError(errorResponse));
+    await expect(cmd.run({})).resolves.toBe('Successfully logged in as user@example.com to the subdomain project.');
+
     mock.done();
-  });
 
-  it('should send 2fa token if provided', async () => {
-    prompts.inject([email, password, project, token]);
-
-    const mock = getAPIMock().post('/api/v1/login', { email, password, project, token }).reply(200, { apiKey: '123' });
-
-    await expect(cmd.run({ '2fa': true })).resolves.toBe(
-      'Successfully logged in as user@example.com to the subdomain project.'
-    );
-    mock.done();
+    expect(configStore.get('apiKey')).toBe(apiKey);
+    expect(configStore.get('email')).toBe(email);
+    expect(configStore.get('project')).toBe(project);
   });
 
   it('should error if trying to access a project that is not yours', async () => {
