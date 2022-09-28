@@ -8,9 +8,11 @@ import getAPIMock from '../helpers/get-api-mock';
 
 const cmd = new Command();
 
+const apiKey = 'abcdefg';
 const email = 'user@example.com';
-const password = '123456';
+const password = 'password';
 const project = 'subdomain';
+const token = '123456';
 
 describe('rdme login', () => {
   beforeAll(() => nock.disableNetConnect());
@@ -33,34 +35,32 @@ describe('rdme login', () => {
 
   it('should post to /login on the API', async () => {
     prompts.inject([email, password, project]);
-    const apiKey = 'abcdefg';
 
     const mock = getAPIMock().post('/api/v1/login').reply(200, { apiKey });
 
-    await expect(cmd.run({})).resolves.toMatchSnapshot();
+    await expect(cmd.run({})).resolves.toBe('Successfully logged in as user@example.com to the subdomain project.');
 
     mock.done();
 
     expect(configStore.get('apiKey')).toBe(apiKey);
     expect(configStore.get('email')).toBe(email);
     expect(configStore.get('project')).toBe(project);
-    configStore.clear();
   });
 
   it('should post to /login on the API if passing in project via opt', async () => {
     prompts.inject([email, password]);
-    const apiKey = 'abcdefg';
 
     const mock = getAPIMock().post('/api/v1/login').reply(200, { apiKey });
 
-    await expect(cmd.run({ project })).resolves.toMatchSnapshot();
+    await expect(cmd.run({ project })).resolves.toBe(
+      'Successfully logged in as user@example.com to the subdomain project.'
+    );
 
     mock.done();
 
     expect(configStore.get('apiKey')).toBe(apiKey);
     expect(configStore.get('email')).toBe(email);
     expect(configStore.get('project')).toBe(project);
-    configStore.clear();
   });
 
   it('should error if invalid credentials are given', async () => {
@@ -94,12 +94,13 @@ describe('rdme login', () => {
   });
 
   it('should send 2fa token if provided', async () => {
-    const token = '123456';
     prompts.inject([email, password, project, token]);
 
     const mock = getAPIMock().post('/api/v1/login', { email, password, project, token }).reply(200, { apiKey: '123' });
 
-    await expect(cmd.run({ '2fa': true })).resolves.toMatchSnapshot();
+    await expect(cmd.run({ '2fa': true })).resolves.toBe(
+      'Successfully logged in as user@example.com to the subdomain project.'
+    );
     mock.done();
   });
 
