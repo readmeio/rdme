@@ -1,3 +1,5 @@
+/** @type {import('ts-jest').JestConfigWithTsJest} */
+
 module.exports = {
   coveragePathIgnorePatterns: ['/dist', '/node_modules'],
   coverageThreshold: {
@@ -10,7 +12,11 @@ module.exports = {
   },
   modulePaths: ['<rootDir>'],
   modulePathIgnorePatterns: ['<rootDir>/dist/'],
-  preset: 'ts-jest/presets/js-with-ts',
+  // Not sure why, but the non-legacy preset gives us TS compilation errors
+  // since it's not properly reading our test tsconfig.json.
+  // https://kulshekhar.github.io/ts-jest/docs/getting-started/presets
+  // https://kulshekhar.github.io/ts-jest/docs/getting-started/options/tsconfig/
+  preset: 'ts-jest/presets/js-with-ts-legacy',
   roots: ['<rootDir>'],
   setupFiles: ['./__tests__/set-node-env'],
   setupFilesAfterEnv: ['jest-extended/all'],
@@ -22,14 +28,10 @@ module.exports = {
   ],
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.(js?|ts?)$',
   transform: {
-    '<regex_match_files>': [
+    '^.+\\.[tj]s$': [
       'ts-jest',
       {
-        tsconfig: {
-          module: 'es6',
-          moduleResolution: 'node',
-          noImplicitAny: false,
-        },
+        tsconfig: '__tests__/tsconfig.json',
       },
     ],
   },
