@@ -22,9 +22,11 @@ export type Options = {
   spec?: string;
   version?: string;
   create?: boolean;
+  raw?: boolean;
   useSpecVersion?: boolean;
   workingDirectory?: string;
   update?: boolean;
+  dryRun?: boolean;
 };
 
 export default class OpenAPICommand extends Command {
@@ -53,17 +55,22 @@ export default class OpenAPICommand extends Command {
         defaultOption: true,
       },
       {
+        name: 'workingDirectory',
+        type: String,
+        description: 'Working directory (for usage with relative external references)',
+      },
+      {
         name: 'useSpecVersion',
         type: Boolean,
         description:
           'Uses the version listed in the `info.version` field in the API definition for the project version parameter.',
       },
-      this.getGitHubArg(),
       {
-        name: 'workingDirectory',
-        type: String,
-        description: 'Working directory (for usage with relative external references)',
+        name: 'raw',
+        type: Boolean,
+        description: 'Return the command results as a JSON object instead of a pretty output.',
       },
+      this.getGitHubArg(),
       {
         name: 'create',
         type: Boolean,
@@ -75,13 +82,18 @@ export default class OpenAPICommand extends Command {
         description:
           "Automatically update an existing API definition in ReadMe if it's the only one associated with the current version.",
       },
+      {
+        name: 'dryRun',
+        type: Boolean,
+        description: 'Runs the command without creating/updating any API Definitions in ReadMe. Useful for debugging.',
+      },
     ];
   }
 
   async run(opts: CommandOptions<Options>) {
     super.run(opts);
 
-    const { key, id, spec, create, useSpecVersion, version, workingDirectory, update } = opts;
+    const { dryRun, key, id, spec, create, raw, useSpecVersion, version, workingDirectory, update } = opts;
 
     let selectedVersion = version;
     let isUpdate: boolean;
@@ -91,6 +103,10 @@ export default class OpenAPICommand extends Command {
      * in GitHub Actions workflow files, so we're going to collect them in this object.
      */
     const ignoredGHAParameters: Options = { version: undefined, update: undefined };
+
+    if (dryRun) {
+      Command.warn('🎭 dry run option detected! No API definitions will be created or updated in ReadMe.');
+    }
 
     if (create && update) {
       throw new Error(
@@ -144,18 +160,27 @@ export default class OpenAPICommand extends Command {
       const body = await data.json();
       Command.debug(`successful response payload: ${JSON.stringify(body)}`);
 
-      return Promise.resolve(
-        [
-          message,
-          '',
-          `\t${chalk.green(`${data.headers.get('location')}`)}`,
-          '',
-          `To update your ${specType} definition, run the following:`,
-          '',
-          // eslint-disable-next-line no-underscore-dangle
-          `\t${chalk.green(`rdme openapi ${specPath} --key=<key> --id=${body._id}`)}`,
-        ].join('\n')
-      ).then(msg =>
+      const output = {
+        commandType: isUpdate ? 'update' : 'create',
+        docs: data.headers.get('location'),
+        // eslint-disable-next-line no-underscore-dangle
+        id: body._id,
+        specPath,
+        specType,
+        version: selectedVersion,
+      };
+
+      const prettyOutput = [
+        message,
+        '',
+        `\t${chalk.green(output.docs)}`,
+        '',
+        `To update your ${specType} definition, run the following:`,
+        '',
+        `\t${chalk.green(`rdme openapi ${specPath} --key=<key> --id=${output.id}`)}`,
+      ].join('\n');
+
+      return Promise.resolve(raw ? JSON.stringify(output, null, 2) : prettyOutput).then(msg =>
         createGHA(msg, this.command, this.args, {
           ...opts,
           spec: specPath,
@@ -209,6 +234,10 @@ export default class OpenAPICommand extends Command {
     };
 
     function createSpec() {
+      if (dryRun) {
+        return `🎭 dry run! The API Definition located at ${specPath} will be created for this project version: ${selectedVersion}`;
+      }
+
       options.method = 'post';
       spinner.start('Creating your API docs in ReadMe...');
       return fetch(`${config.get('host')}/api/v1/api-specification`, options).then(res => {
@@ -222,6 +251,10 @@ export default class OpenAPICommand extends Command {
     }
 
     function updateSpec(specId: string) {
+      if (dryRun) {
+        return `🎭 dry run! The API Definition located at ${specPath} will update this API Definition ID: ${specId}`;
+      }
+
       isUpdate = true;
       options.method = 'put';
       spinner.start('Updating your API docs in ReadMe...');

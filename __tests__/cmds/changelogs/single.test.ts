@@ -65,7 +65,7 @@ describe('rdme changelogs:single', () => {
       const postMock = getAPIMock()
         .post('/api/v1/changelogs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
-        .reply(201, { slug, id, body: doc.content, ...doc.data });
+        .reply(201, { slug, _id: id, body: doc.content, ...doc.data });
 
       await expect(
         changelogsSingle.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, key })
@@ -195,7 +195,7 @@ describe('rdme changelogs:single', () => {
       const postMock = getAPIMock()
         .post('/api/v1/changelogs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
-        .reply(201, { slug: doc.data.slug, id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
+        .reply(201, { slug: doc.data.slug, _id: id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
       await expect(
         changelogsSingle.run({ filePath: `./__tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`, key })

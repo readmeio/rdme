@@ -1,3 +1,6 @@
+> **Note**
+> These docs are for [the forthcoming `v8` release](https://github.com/readmeio/rdme/milestone/3). You can view the docs for the current release (`v7.5.0`) [here](https://github.com/readmeio/rdme/tree/7.5.0#readme).
+
 # 📖 rdme
 
 [![](https://d3vv6lp55qjaqc.cloudfront.net/items/1M3C3j0I0s0j3T362344/Untitled-2.png)](https://readme.com)
@@ -35,12 +38,6 @@ For local CLI usage with a single project, you can authenticate `rdme` to your R
 
 ```sh
 rdme login
-```
-
-If you have [two-factor authentication (2FA)](https://docs.readme.com/docs/two-factor-authentication) enabled on your account, you'll need to pass in the `--2fa` option:
-
-```sh
-rdme login --2fa
 ```
 
 `rdme whoami` is also available to you to determine who you are logged in as, and to what project, as well as `rdme logout` for logging out of that account.
@@ -93,6 +90,8 @@ The following examples use JSON files, but `rdme` supports API Definitions that 
 > **Note**
 > The `rdme openapi` command supports both OpenAPI and Swagger API definitions. The `rdme swagger` command is an alias for `rdme openapi` and is deprecated.
 
+If you wish to see the raw JSON output of any of the `openapi` command examples below, supply the `--raw` flag.
+
 #### Uploading a New API Definition to ReadMe
 
 This will upload `path-to-openapi.json` to your project and return an ID and URL for you to later update your file, and view it in the client.
@@ -106,6 +105,8 @@ If you want to bypass the prompt to create or update an API definition, you can 
 ```sh
 rdme openapi [path-to-file.json] --version={project-version} --create
 ```
+
+This command also has a dry run mode, which can be useful for initial setup and debugging. You can perform a dry run by supplying the `--dryRun` flag.
 
 #### Editing (Re-Syncing) an Existing API Definition
 
@@ -144,6 +145,8 @@ You can add `--update` to the command so if there's only one API definition for 
 ```sh
 rdme openapi [path-to-file.json] --version={project-version} --update
 ```
+
+This command also has a dry run mode, which can be useful for initial setup and debugging. You can perform a dry run by supplying the `--dryRun` flag.
 
 #### Omitting the File Path
 
