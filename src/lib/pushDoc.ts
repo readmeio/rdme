@@ -1,16 +1,12 @@
-import crypto from 'crypto';
-import fs from 'fs';
-import path from 'path';
-
 import chalk from 'chalk';
 import config from 'config';
-import grayMatter from 'gray-matter';
 import { Headers } from 'node-fetch';
 
 import APIError from './apiError';
 import { CommandCategories } from './baseCommand';
 import fetch, { cleanHeaders, handleRes } from './fetch';
 import { debug } from './logger';
+import readDoc from './readDoc';
 
 /**
  * Reads the contents of the specified Markdown or HTML file
@@ -31,56 +27,52 @@ export default async function pushDoc(
   filepath: string,
   type: CommandCategories
 ) {
-  debug(`reading file ${filepath}`);
-  const file = fs.readFileSync(filepath, 'utf8');
-  const matter = grayMatter(file);
-  debug(`frontmatter for ${filepath}: ${JSON.stringify(matter)}`);
+  const { content, data, hash, slug } = readDoc(filepath);
 
-  // Stripping the subdirectories and markdown extension from the filename and lowercasing to get the default slug.
-  const slug = matter.data.slug || path.basename(filepath).replace(path.extname(filepath), '').toLowerCase();
-  const hash = crypto.createHash('sha1').update(file).digest('hex');
-
-  let data: {
+  let payload: {
     body?: string;
     html?: string;
     htmlmode?: boolean;
     lastUpdatedHash: string;
-  } = { body: matter.content, ...matter.data, lastUpdatedHash: hash };
+  } = { body: content, ...data, lastUpdatedHash: hash };
 
   if (type === CommandCategories.CUSTOM_PAGES) {
     if (filepath.endsWith('.html')) {
-      data = { html: matter.content, htmlmode: true, ...matter.data, lastUpdatedHash: hash };
+      payload = { html: content, htmlmode: true, ...data, lastUpdatedHash: hash };
     } else {
-      data = { body: matter.content, htmlmode: false, ...matter.data, lastUpdatedHash: hash };
+      payload = { body: content, htmlmode: false, ...data, lastUpdatedHash: hash };
     }
   }
 
   function createDoc() {
     if (dryRun) {
       return `🎭 dry run! This will create '${slug}' with contents from ${filepath} with the following metadata: ${JSON.stringify(
-        matter.data
+        data
       )}`;
     }
 
-    return fetch(`${config.get('host')}/api/v1/${type}`, {
-      method: 'post',
-      headers: cleanHeaders(
-        key,
-        new Headers({
-          'x-readme-version': selectedVersion,
-          'Content-Type': 'application/json',
-        })
-      ),
-      body: JSON.stringify({
-        slug,
-        ...data,
-      }),
-    })
-      .then(res => handleRes(res))
-      .then(res => `🌱 successfully created '${res.slug}' (ID: ${res.id}) with contents from ${filepath}`);
+    return (
+      fetch(`${config.get('host')}/api/v1/${type}`, {
+        method: 'post',
+        headers: cleanHeaders(
+          key,
+          new Headers({
+            'x-readme-version': selectedVersion,
+            'Content-Type': 'application/json',
+          })
+        ),
+        body: JSON.stringify({
+          slug,
+          ...payload,
+        }),
+      })
+        .then(res => handleRes(res))
+        // eslint-disable-next-line no-underscore-dangle
+        .then(res => `🌱 successfully created '${res.slug}' (ID: ${res._id}) with contents from ${filepath}`)
+    );
   }
 
-  function updateDoc(existingDoc: typeof data) {
+  function updateDoc(existingDoc: typeof payload) {
     if (hash === existingDoc.lastUpdatedHash) {
       return `${dryRun ? '🎭 dry run! ' : ''}\`${slug}\` ${
         dryRun ? 'will not be' : 'was not'
@@ -89,7 +81,7 @@ export default async function pushDoc(
 
     if (dryRun) {
       return `🎭 dry run! This will update '${slug}' with contents from ${filepath} with the following metadata: ${JSON.stringify(
-        matter.data
+        data
       )}`;
     }
 
@@ -104,7 +96,7 @@ export default async function pushDoc(
       ),
       body: JSON.stringify(
         Object.assign(existingDoc, {
-          ...data,
+          ...payload,
         })
       ),
     })

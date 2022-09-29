@@ -9,6 +9,7 @@ import oasReducer from 'oas/dist/lib/reducer';
 import ora from 'ora';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
+import { checkFilePath } from '../../lib/checkFile';
 import { oraOptions } from '../../lib/logger';
 import prepareOas from '../../lib/prepareOas';
 import promptTerminal from '../../lib/promptWrapper';
@@ -26,7 +27,7 @@ export default class OpenAPIReduceCommand extends Command {
     this.usage = 'openapi:reduce [file] [options]';
     this.description = 'Reduce an OpenAPI definition into a smaller subset.';
     this.cmdCategory = CommandCategories.APIS;
-    this.position = 3;
+    this.position = 2;
 
     this.hiddenArgs = ['spec'];
     this.args = [
@@ -131,17 +132,7 @@ export default class OpenAPIReduceCommand extends Command {
           const extension = path.extname(specPath);
           return `${path.basename(specPath).split(extension)[0]}-reduced${extension}`;
         },
-        validate: value => {
-          if (value.length) {
-            if (!fs.existsSync(value)) {
-              return true;
-            }
-
-            return 'Specified output path already exists.';
-          }
-
-          return 'An output path must be supplied.';
-        },
+        validate: value => checkFilePath(value),
       },
     ]);
 

@@ -9,6 +9,8 @@ import APIError from './apiError';
 import { isGHA } from './isCI';
 import { debug } from './logger';
 
+const SUCCESS_NO_CONTENT = 204;
+
 /**
  * Getter function for a string to be used in the user-agent header based on the current
  * environment.
@@ -70,6 +72,10 @@ async function handleRes(res: Response) {
       return Promise.reject(new APIError(body));
     }
     return body;
+  }
+  if (res.status === SUCCESS_NO_CONTENT) {
+    debug(`received status code ${res.status} from ${res.url} with no content`);
+    return {};
   }
   // If we receive a non-JSON response, it's likely an error.
   // Let's debug the raw response body and throw it.

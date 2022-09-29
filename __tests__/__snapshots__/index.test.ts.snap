@@ -15,19 +15,23 @@ Options
                               uploading an existing API definition.                                 
   --version string            Project version. If running command in a CI environment and this      
                               option is not passed, the main project version will be used.          
+  --workingDirectory string   Working directory (for usage with relative external references)       
   --useSpecVersion            Uses the version listed in the \`info.version\` field in the API        
                               definition for the project version parameter.                         
+  --raw                       Return the command results as a JSON object instead of a pretty       
+                              output.                                                               
   --github                    Create a new GitHub Actions workflow for this command.                
-  --workingDirectory string   Working directory (for usage with relative external references)       
   --create                    Bypasses the create/update prompt and creates a new API definition.   
   --update                    Automatically update an existing API definition in ReadMe if it's the 
                               only one associated with the current version.                         
+  --dryRun                    Runs the command without creating/updating any API Definitions in     
+                              ReadMe. Useful for debugging.                                         
   -h, --help                  Display this usage guide                                              
 
 Related commands
 
-  $ rdme validate         Validate your OpenAPI/Swagger definition.           
-  $ rdme openapi:reduce   Reduce an OpenAPI definition into a smaller subset. 
+  $ rdme openapi:reduce     Reduce an OpenAPI definition into a smaller subset. 
+  $ rdme openapi:validate   Validate your OpenAPI/Swagger definition.           
 "
 `;
 
@@ -46,19 +50,23 @@ Options
                               uploading an existing API definition.                                 
   --version string            Project version. If running command in a CI environment and this      
                               option is not passed, the main project version will be used.          
+  --workingDirectory string   Working directory (for usage with relative external references)       
   --useSpecVersion            Uses the version listed in the \`info.version\` field in the API        
                               definition for the project version parameter.                         
+  --raw                       Return the command results as a JSON object instead of a pretty       
+                              output.                                                               
   --github                    Create a new GitHub Actions workflow for this command.                
-  --workingDirectory string   Working directory (for usage with relative external references)       
   --create                    Bypasses the create/update prompt and creates a new API definition.   
   --update                    Automatically update an existing API definition in ReadMe if it's the 
                               only one associated with the current version.                         
+  --dryRun                    Runs the command without creating/updating any API Definitions in     
+                              ReadMe. Useful for debugging.                                         
   -h, --help                  Display this usage guide                                              
 
 Related commands
 
-  $ rdme validate         Validate your OpenAPI/Swagger definition.           
-  $ rdme openapi:reduce   Reduce an OpenAPI definition into a smaller subset. 
+  $ rdme openapi:reduce     Reduce an OpenAPI definition into a smaller subset. 
+  $ rdme openapi:validate   Validate your OpenAPI/Swagger definition.           
 "
 `;
 
@@ -77,19 +85,23 @@ Options
                               uploading an existing API definition.                                 
   --version string            Project version. If running command in a CI environment and this      
                               option is not passed, the main project version will be used.          
+  --workingDirectory string   Working directory (for usage with relative external references)       
   --useSpecVersion            Uses the version listed in the \`info.version\` field in the API        
                               definition for the project version parameter.                         
+  --raw                       Return the command results as a JSON object instead of a pretty       
+                              output.                                                               
   --github                    Create a new GitHub Actions workflow for this command.                
-  --workingDirectory string   Working directory (for usage with relative external references)       
   --create                    Bypasses the create/update prompt and creates a new API definition.   
   --update                    Automatically update an existing API definition in ReadMe if it's the 
                               only one associated with the current version.                         
+  --dryRun                    Runs the command without creating/updating any API Definitions in     
+                              ReadMe. Useful for debugging.                                         
   -h, --help                  Display this usage guide                                              
 
 Related commands
 
-  $ rdme validate         Validate your OpenAPI/Swagger definition.           
-  $ rdme openapi:reduce   Reduce an OpenAPI definition into a smaller subset. 
+  $ rdme openapi:reduce     Reduce an OpenAPI definition into a smaller subset. 
+  $ rdme openapi:validate   Validate your OpenAPI/Swagger definition.           
 "
 `;
 
@@ -103,10 +115,9 @@ Usage
 
 Options
 
-  --key string       Project API key                                                 
-  --version string   A specific project version to view.                             
-  --raw              Return raw output from the API instead of in a \\"pretty\\" format. 
-  -h, --help         Display this usage guide                                        
+  --key string       Project API key                     
+  --version string   A specific project version to view. 
+  -h, --help         Display this usage guide            
 
 Related commands
 

@@ -1,3 +1,6 @@
+> **Note**
+> These docs are for [the forthcoming `v8` release](https://github.com/readmeio/rdme/milestone/3). You can view the docs for the current release (`v7.5.0`) [here](https://github.com/readmeio/rdme/tree/7.5.0#readme).
+
 # 📖 rdme
 
 [![](https://d3vv6lp55qjaqc.cloudfront.net/items/1M3C3j0I0s0j3T362344/Untitled-2.png)](https://readme.com)
@@ -22,7 +25,7 @@ npm install rdme --save-dev
 Once installed in your project, we recommend using `npx` (which is included if you have `npm` installed) to prefix all of your CLI commands. For example:
 
 ```sh
-npx rdme validate [file]
+npx rdme openapi:validate [file]
 ```
 
 To ensure you're getting the latest features and security updates, we recommend using a tool like [Dependabot](https://docs.github.com/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/about-dependabot-version-updates) to keep `rdme` (and your other dependencies) up-to-date.
@@ -35,12 +38,6 @@ For local CLI usage with a single project, you can authenticate `rdme` to your R
 
 ```sh
 rdme login
-```
-
-If you have [two-factor authentication (2FA)](https://docs.readme.com/docs/two-factor-authentication) enabled on your account, you'll need to pass in the `--2fa` option:
-
-```sh
-rdme login --2fa
 ```
 
 `rdme whoami` is also available to you to determine who you are logged in as, and to what project, as well as `rdme logout` for logging out of that account.
@@ -93,6 +90,8 @@ The following examples use JSON files, but `rdme` supports API Definitions that 
 > **Note**
 > The `rdme openapi` command supports both OpenAPI and Swagger API definitions. The `rdme swagger` command is an alias for `rdme openapi` and is deprecated.
 
+If you wish to see the raw JSON output of any of the `openapi` command examples below, supply the `--raw` flag.
+
 #### Uploading a New API Definition to ReadMe
 
 This will upload `path-to-openapi.json` to your project and return an ID and URL for you to later update your file, and view it in the client.
@@ -106,6 +105,8 @@ If you want to bypass the prompt to create or update an API definition, you can 
 ```sh
 rdme openapi [path-to-file.json] --version={project-version} --create
 ```
+
+This command also has a dry run mode, which can be useful for initial setup and debugging. You can perform a dry run by supplying the `--dryRun` flag.
 
 #### Editing (Re-Syncing) an Existing API Definition
 
@@ -145,6 +146,8 @@ You can add `--update` to the command so if there's only one API definition for 
 rdme openapi [path-to-file.json] --version={project-version} --update
 ```
 
+This command also has a dry run mode, which can be useful for initial setup and debugging. You can perform a dry run by supplying the `--dryRun` flag.
+
 #### Omitting the File Path
 
 If you run `rdme` within a directory that contains your OpenAPI or Swagger definition, you can omit the file path. `rdme` will then look for JSON or YAML files (including in sub-directories) that contain a top-level [`openapi`](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#fixed-fields) or [`swagger`](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/2.0.md#fixed-fields) property.
@@ -175,7 +178,7 @@ rdme openapi petstore.json --workingDirectory=[path to directory]
 You can also perform a local validation of your API definition without uploading it to ReadMe, which can be useful when constructing or editing your API definition.
 
 ```sh
-rdme validate [path-to-file.json]
+rdme openapi:validate [path-to-file.json]
 ```
 
 Similar to the `openapi` command, you can also [omit the file path](#omitting-the-file-path).
@@ -203,6 +206,10 @@ rdme docs path-to-markdown-files --version={project-version}
 ```
 
 This command also has a dry run mode, which can be useful for initial setup and debugging. You can read more about dry run mode [in our docs](https://docs.readme.com/docs/rdme#dry-run-mode).
+
+#### Cleanup
+
+If you wish to delete documents from ReadMe that are no longer present in your local directory, pass the `--cleanup` option to the command.
 
 #### Edit a Single ReadMe Doc on Your Local Machine
 
@@ -264,8 +271,6 @@ rdme custompages:single path-to-markdown-file
 rdme versions
 ```
 
-If you wish to see the raw JSON output from our API in this response, supply the `--raw` flag.
-
 #### Get All Information About a Particular Version
 
 ```sh
@@ -277,7 +282,7 @@ If you wish to see the raw JSON output from our API in this response, supply the
 #### Create a New Version
 
 ```sh
-rdme versions:create <version> | --version={project-version}
+rdme versions:create <version>
 ```
 
 ##### Create a New Version
@@ -287,7 +292,7 @@ If you wish to automate the process of creating a new project version, and not h
 For example:
 
 ```sh
-rdme versions:create <version> | --version={project-version} --fork={version-fork} --main={boolean} --beta={boolean} --isPublic={boolean}
+rdme versions:create <version> --fork={version-fork} --main={true|false} --beta={true|false} --isPublic={true|false}
 ```
 
 See `rdme versions:create --help` for a full list of flags.
@@ -295,7 +300,7 @@ See `rdme versions:create --help` for a full list of flags.
 #### Update a Version
 
 ```sh
-rdme versions:update --version={project-version}
+rdme versions:update <version>
 ```
 
 Like `versions:create`, if you wish to automate this process and not be blocked by CLI input, you can supply the necessary flags to this command. See `rdme versions:update --help` for more information.
@@ -305,7 +310,7 @@ Like `versions:create`, if you wish to automate this process and not be blocked 
 You can remove a specific version from your project, as well as all of the attached specs
 
 ```sh
-rdme versions:delete --version={project-version}
+rdme versions:delete <version>
 ```
 
 ### Categories

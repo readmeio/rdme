@@ -7,6 +7,10 @@ import configStore from '../../src/lib/configstore';
 const cmd = new Command();
 
 describe('rdme open', () => {
+  afterEach(() => {
+    configStore.clear();
+  });
+
   it('should error if no project provided', () => {
     configStore.delete('project');
 

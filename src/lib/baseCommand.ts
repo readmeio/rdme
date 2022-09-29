@@ -152,17 +152,19 @@ export default class Command {
       {
         name: 'main',
         type: String,
-        description: 'Should this version be the primary (default) version for your project?',
+        description:
+          "Should this version be the primary (default) version for your project? (Must be 'true' or 'false')",
       },
       {
         name: 'beta',
         type: String,
-        description: 'Is this version in beta?',
+        description: "Is this version in beta? (Must be 'true' or 'false')",
       },
       {
         name: 'isPublic',
         type: String,
-        description: 'Would you like to make this version public? Any primary version must be public.',
+        description:
+          "Would you like to make this version public? Any primary version must be public. (Must be 'true' or 'false')",
       },
     ];
   }

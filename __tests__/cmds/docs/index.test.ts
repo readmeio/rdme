@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
 
@@ -254,7 +255,7 @@ describe('rdme docs', () => {
       const postMock = getAPIMockWithVersionHeader(version)
         .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
-        .reply(201, { slug, id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
+        .reply(201, { slug, _id: id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
       const versionMock = getAPIMock()
         .get(`/api/v1/version/${version}`)
@@ -380,6 +381,124 @@ describe('rdme docs', () => {
     });
   });
 
+  describe('cleanup docs', () => {
+    const folder = `./__tests__/${fixturesBaseDir}/delete-docs`;
+    const someDocContent = fs.readFileSync(path.join(folder, 'some-doc.md'));
+    const lastUpdatedHash = crypto.createHash('sha1').update(someDocContent).digest('hex');
+    let consoleWarnSpy;
+
+    function getWarningCommandOutput() {
+      return [consoleWarnSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
+    }
+
+    beforeEach(() => {
+      consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
+    });
+
+    afterEach(() => {
+      consoleWarnSpy.mockRestore();
+    });
+
+    it('should delete doc if file is missing and --cleanup option is used', async () => {
+      const versionMock = getAPIMock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version });
+
+      const apiMocks = getAPIMockWithVersionHeader(version)
+        .get('/api/v1/categories?perPage=20&page=1')
+        .basicAuth({ user: key })
+        .reply(200, [{ slug: 'category1', type: 'guide' }], { 'x-total-count': '1' })
+        .get('/api/v1/categories/category1/docs')
+        .basicAuth({ user: key })
+        .reply(200, [{ slug: 'this-doc-should-be-missing-in-folder' }, { slug: 'some-doc' }])
+        .delete('/api/v1/docs/this-doc-should-be-missing-in-folder')
+        .basicAuth({ user: key })
+        .reply(204, '')
+        .get('/api/v1/docs/some-doc')
+        .basicAuth({ user: key })
+        .reply(200, { lastUpdatedHash });
+
+      await expect(
+        docs.run({
+          folder,
+          key,
+          version,
+          cleanup: true,
+        })
+      ).resolves.toBe(
+        '🗑️ successfully deleted `this-doc-should-be-missing-in-folder`.\n' +
+          '`some-doc` was not updated because there were no changes.'
+      );
+      const warningOutput = getWarningCommandOutput();
+      expect(warningOutput).toBe(
+        "⚠️  Warning! We're going to delete from ReadMe any document that isn't found in ./__tests__/__fixtures__/docs/delete-docs."
+      );
+
+      apiMocks.done();
+      versionMock.done();
+    });
+
+    it('should return doc delete info for dry run', async () => {
+      const versionMock = getAPIMock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version });
+      const apiMocks = getAPIMockWithVersionHeader(version)
+        .get('/api/v1/categories?perPage=20&page=1')
+        .basicAuth({ user: key })
+        .reply(200, [{ slug: 'category1', type: 'guide' }], { 'x-total-count': '1' })
+        .get('/api/v1/categories/category1/docs')
+        .basicAuth({ user: key })
+        .reply(200, [{ slug: 'this-doc-should-be-missing-in-folder' }])
+        .get('/api/v1/docs/some-doc')
+        .basicAuth({ user: key })
+        .reply(200, { lastUpdatedHash });
+      await expect(
+        docs.run({
+          folder,
+          key,
+          version,
+          cleanup: true,
+          dryRun: true,
+        })
+      ).resolves.toBe(
+        '🎭 dry run! This will delete `this-doc-should-be-missing-in-folder`.\n' +
+          '🎭 dry run! `some-doc` will not be updated because there were no changes.'
+      );
+      const warningOutput = getWarningCommandOutput();
+      expect(warningOutput).toBe(
+        "⚠️  Warning! We're going to delete from ReadMe any document that isn't found in ./__tests__/__fixtures__/docs/delete-docs."
+      );
+
+      apiMocks.done();
+      versionMock.done();
+    });
+
+    it('should do nothing if using --cleanup but the folder is empty and the user aborted', async () => {
+      prompts.inject([false]);
+
+      const versionMock = getAPIMock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version });
+
+      await expect(
+        docs.run({
+          folder: './__tests__/__fixtures__/ref-oas',
+          key,
+          version,
+          cleanup: true,
+        })
+      ).rejects.toStrictEqual(new Error('Aborting, no changes were made.'));
+
+      const warningOutput = getWarningCommandOutput();
+      expect(warningOutput).toBe('');
+
+      versionMock.done();
+    });
+  });
+
   describe('slug metadata', () => {
     it('should use provided slug', async () => {
       const slug = 'new-doc-slug';
@@ -400,7 +519,7 @@ describe('rdme docs', () => {
       const postMock = getAPIMock()
         .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
-        .reply(201, { slug: doc.data.slug, id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
+        .reply(201, { slug: doc.data.slug, _id: id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
       const versionMock = getAPIMock()
         .get(`/api/v1/version/${version}`)
@@ -467,7 +586,7 @@ describe('rdme docs', () => {
       const postMock = getAPIMockWithVersionHeader(altVersion)
         .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
-        .reply(201, { id, slug, body: doc.content, ...doc.data, lastUpdatedHash: hash });
+        .reply(201, { _id: id, slug, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
       const fileName = 'docs-test-file';
       prompts.inject([altVersion, true, 'docs-test-branch', fileName]);
