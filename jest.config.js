@@ -12,10 +12,12 @@ module.exports = {
   },
   modulePaths: ['<rootDir>'],
   modulePathIgnorePatterns: ['<rootDir>/dist/'],
-  // Not sure why, but the non-legacy preset gives us TS compilation errors
-  // since it's not properly reading our test tsconfig.json.
-  // https://kulshekhar.github.io/ts-jest/docs/getting-started/presets
-  // https://kulshekhar.github.io/ts-jest/docs/getting-started/options/tsconfig/
+  /**
+   * Not sure why, but the non-legacy preset gives us TS compilation errors
+   * since it's not properly reading our testing TS config.
+   * @see {@link https://kulshekhar.github.io/ts-jest/docs/getting-started/presets}
+   * @see {@link https://kulshekhar.github.io/ts-jest/docs/getting-started/options/tsconfig/}
+   */
   preset: 'ts-jest/presets/js-with-ts-legacy',
   roots: ['<rootDir>'],
   setupFiles: ['./__tests__/setup'],
