@@ -2,4 +2,6 @@ import Configstore from 'configstore';
 
 import pkg from '../../package.json';
 
-export default new Configstore(`${pkg.name}-${process.env.NODE_ENV || 'production'}`);
+export default new Configstore(
+  `${pkg.name}-${process.env.NODE_ENV || 'production'}${process.env.JEST_WORKER_ID || ''}`
+);
