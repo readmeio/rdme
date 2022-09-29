@@ -1,22 +1,22 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`utils #listByCategory should list commands by category 1`] = `
-Object {
-  "admin": Object {
-    "commands": Array [
-      Object {
+{
+  "admin": {
+    "commands": [
+      {
         "description": "Login to a ReadMe project.",
         "hidden": false,
         "name": "login",
         "position": 1,
       },
-      Object {
+      {
         "description": "Logs the currently authenticated user out of ReadMe.",
         "hidden": false,
         "name": "logout",
         "position": 2,
       },
-      Object {
+      {
         "description": "Displays the current user and project authenticated with ReadMe.",
         "hidden": false,
         "name": "whoami",
@@ -25,33 +25,33 @@ Object {
     ],
     "description": "Administration",
   },
-  "apis": Object {
-    "commands": Array [
-      Object {
+  "apis": {
+    "commands": [
+      {
         "description": "Upload, or resync, your OpenAPI/Swagger definition to ReadMe.",
         "hidden": false,
         "name": "openapi",
         "position": 1,
       },
-      Object {
+      {
         "description": "Reduce an OpenAPI definition into a smaller subset.",
         "hidden": false,
         "name": "openapi:reduce",
         "position": 2,
       },
-      Object {
+      {
         "description": "Validate your OpenAPI/Swagger definition.",
         "hidden": false,
         "name": "openapi:validate",
         "position": 3,
       },
-      Object {
+      {
         "description": "Alias for \`rdme openapi\`. [deprecated]",
         "hidden": true,
         "name": "swagger",
         "position": 4,
       },
-      Object {
+      {
         "description": "Alias for \`rdme openapi:validate\` [deprecated].",
         "hidden": true,
         "name": "validate",
@@ -60,15 +60,15 @@ Object {
     ],
     "description": "Upload OpenAPI/Swagger definitions",
   },
-  "categories": Object {
-    "commands": Array [
-      Object {
+  "categories": {
+    "commands": [
+      {
         "description": "Get all categories in your ReadMe project.",
         "hidden": false,
         "name": "categories",
         "position": 1,
       },
-      Object {
+      {
         "description": "Create a category with the specified title and guide in your ReadMe project.",
         "hidden": false,
         "name": "categories:create",
@@ -77,15 +77,15 @@ Object {
     ],
     "description": "Categories",
   },
-  "changelogs": Object {
-    "commands": Array [
-      Object {
+  "changelogs": {
+    "commands": [
+      {
         "description": "Sync a folder of Markdown files to your ReadMe project as Changelog posts.",
         "hidden": false,
         "name": "changelogs",
         "position": 1,
       },
-      Object {
+      {
         "description": "Sync a single Markdown file to your ReadMe project as a Changelog post.",
         "hidden": false,
         "name": "changelogs:single",
@@ -94,15 +94,15 @@ Object {
     ],
     "description": "Changelog",
   },
-  "custompages": Object {
-    "commands": Array [
-      Object {
+  "custompages": {
+    "commands": [
+      {
         "description": "Sync a folder of Markdown files to your ReadMe project as Custom Pages.",
         "hidden": false,
         "name": "custompages",
         "position": 1,
       },
-      Object {
+      {
         "description": "Sync a single Markdown file to your ReadMe project as a Custom Page.",
         "hidden": false,
         "name": "custompages:single",
@@ -111,21 +111,21 @@ Object {
     ],
     "description": "Custom Pages",
   },
-  "docs": Object {
-    "commands": Array [
-      Object {
+  "docs": {
+    "commands": [
+      {
         "description": "Sync a folder of Markdown files to your ReadMe project.",
         "hidden": false,
         "name": "docs",
         "position": 1,
       },
-      Object {
+      {
         "description": "Edit a single file from your ReadMe project without saving locally.",
         "hidden": false,
         "name": "docs:edit",
         "position": 2,
       },
-      Object {
+      {
         "description": "Sync a single Markdown file to your ReadMe project.",
         "hidden": false,
         "name": "docs:single",
@@ -134,15 +134,15 @@ Object {
     ],
     "description": "Documentation",
   },
-  "utilities": Object {
-    "commands": Array [
-      Object {
+  "utilities": {
+    "commands": [
+      {
         "description": "Helpful OpenAPI generation tooling. [inactive]",
         "hidden": true,
         "name": "oas",
         "position": 2,
       },
-      Object {
+      {
         "description": "Open your current ReadMe project in the browser.",
         "hidden": false,
         "name": "open",
@@ -151,27 +151,27 @@ Object {
     ],
     "description": "Other useful commands",
   },
-  "versions": Object {
-    "commands": Array [
-      Object {
+  "versions": {
+    "commands": [
+      {
         "description": "List versions available in your project or get a version by SemVer (https://semver.org/).",
         "hidden": false,
         "name": "versions",
         "position": 1,
       },
-      Object {
+      {
         "description": "Create a new version for your project.",
         "hidden": false,
         "name": "versions:create",
         "position": 2,
       },
-      Object {
+      {
         "description": "Delete a version associated with your ReadMe project.",
         "hidden": false,
         "name": "versions:delete",
         "position": 4,
       },
-      Object {
+      {
         "description": "Update an existing version for your project.",
         "hidden": false,
         "name": "versions:update",
