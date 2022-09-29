@@ -32,7 +32,7 @@ export default async function promptTerminal<T extends string = string>(
    * in src/cli.ts
    */
   function onRender() {
-    if (ciDetect() && process.env.NODE_ENV !== 'testing') {
+    if (ciDetect() && process.env.NODE_ENV !== 'test') {
       process.stdout.write('\n');
       process.stdout.write(
         'Yikes! Looks like we were about to prompt you for something in a CI environment. Are you missing an argument?'

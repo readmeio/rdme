@@ -16,7 +16,7 @@ const debugPackage = debugModule(config.get('cli'));
  */
 function debug(input: string) {
   /* istanbul ignore next */
-  if (isGHA() && process.env.NODE_ENV !== 'testing') core.debug(`rdme: ${input}`);
+  if (isGHA() && process.env.NODE_ENV !== 'test') core.debug(`rdme: ${input}`);
   return debugPackage(input);
 }
 
@@ -26,7 +26,7 @@ function debug(input: string) {
  */
 function warn(input: string) {
   /* istanbul ignore next */
-  if (isGHA() && process.env.NODE_ENV !== 'testing') return core.warning(input);
+  if (isGHA() && process.env.NODE_ENV !== 'test') return core.warning(input);
   // eslint-disable-next-line no-console
   return console.warn(chalk.yellow(`⚠️  Warning! ${input}`));
 }
@@ -37,14 +37,14 @@ function warn(input: string) {
  */
 function info(input: string) {
   /* istanbul ignore next */
-  if (isGHA() && process.env.NODE_ENV !== 'testing') return core.notice(input);
+  if (isGHA() && process.env.NODE_ENV !== 'test') return core.notice(input);
   // eslint-disable-next-line no-console
   return console.info(`ℹ️  ${input}`);
 }
 
 function oraOptions() {
   // Disables spinner in tests so it doesn't pollute test output
-  const opts: Writable<OraOptions> = { isSilent: process.env.NODE_ENV === 'testing' };
+  const opts: Writable<OraOptions> = { isSilent: process.env.NODE_ENV === 'test' };
 
   // Cleans up ora output so it prints nicely alongside debug logs
   /* istanbul ignore next */
