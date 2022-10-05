@@ -1,3 +1,10 @@
+## 8.0.0-beta.6 (2022-09-30)
+
+* chore: update version scripts ([e76f69b](https://github.com/readmeio/rdme/commit/e76f69b))
+* fix(bin): another `create` attempt (#620) ([90c71ad](https://github.com/readmeio/rdme/commit/90c71ad)), closes [#620](https://github.com/readmeio/rdme/issues/620)
+
+
+
 ## 8.0.0-beta.5 (2022-09-28)
 
 * feat(breaking/login): remove `2fa` flag in favor of better prompts (#619) ([29109ec](https://github.com/readmeio/rdme/commit/29109ec)), closes [#619](https://github.com/readmeio/rdme/issues/619)

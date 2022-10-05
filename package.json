@@ -1,6 +1,6 @@
 {
   "name": "rdme",
-  "version": "8.0.0-beta.5",
+  "version": "8.0.0-beta.6",
   "description": "ReadMe's official CLI and GitHub Action wrapper.",
   "license": "MIT",
   "author": "ReadMe <support@readme.io> (https://readme.com)",
@@ -91,7 +91,7 @@
     "prettier": "^2.7.1",
     "ts-jest": "^29.0.0",
     "ts-node": "^10.9.1",
-    "type-fest": "^2.19.0",
+    "type-fest": "^3.0.0",
     "typescript": "^4.8.2"
   },
   "scripts": {
@@ -100,7 +100,7 @@
     "debug": "ts-node src/cli.ts",
     "lint": "eslint . bin/rdme bin/set-version-output --ext .js,.ts",
     "lint-docs": "npx alex@10 . && npm run prettier",
-    "postversion": "git tag $(npm pkg get version | tr -d '\"')",
+    "postversion": "git tag $npm_package_version",
     "prebuild": "rm -rf dist/",
     "prepack": "npm run build",
     "pretest": "npm run lint && npm run lint-docs",
@@ -108,7 +108,7 @@
     "prettier:write": "prettier --list-different --write \"./**/**.{md,js,ts}\"",
     "release": "npx conventional-changelog-cli -i CHANGELOG.md -s",
     "test": "jest --coverage",
-    "version": "npm run release && git add ."
+    "version": "npm run release && git add CHANGELOG.md"
   },
   "prettier": "@readme/eslint-config/prettier"
 }
