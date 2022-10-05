@@ -17,5 +17,5 @@ export function isGHA() {
  */
 export default function isCI() {
   /* istanbul ignore next */
-  return (ciDetect() && process.env.NODE_ENV !== 'testing') || process.env.TEST_CI;
+  return (ciDetect() && process.env.NODE_ENV !== 'test') || process.env.TEST_CI;
 }

@@ -184,7 +184,7 @@ export default async function createGHA(
       // is a repo, but only contains non-GitHub remotes
       (isRepo && containsNonGitHubRemote && !containsGitHubRemote) ||
       // not testing this function
-      (process.env.NODE_ENV === 'testing' && !process.env.TEST_CREATEGHA)
+      (process.env.NODE_ENV === 'test' && !process.env.TEST_CREATEGHA)
     ) {
       debug('not running GHA onboarding workflow, exiting');
       // We return the original command message and pretend this command flow never happened.
