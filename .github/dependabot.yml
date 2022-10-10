@@ -6,6 +6,7 @@ updates:
       interval: monthly
     reviewers:
       - erunion
+      - kanadgupta
     labels:
       - dependencies
     commit-message:
@@ -19,6 +20,7 @@ updates:
     open-pull-requests-limit: 10
     reviewers:
       - erunion
+      - kanadgupta
     labels:
       - dependencies
     commit-message:
