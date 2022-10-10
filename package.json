@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@actions/core": "^1.6.0",
-    "@npmcli/ci-detect": "^2.0.0",
+    "@npmcli/ci-detect": "^3.0.0",
     "chalk": "^4.1.2",
     "command-line-args": "^5.2.0",
     "command-line-usage": "^6.0.2",
