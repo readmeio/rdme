@@ -16,8 +16,6 @@ This command will automatically bump the version in the `package.json` and the `
 
 The next step is to push these changes to GitHub:
 
-<!-- TODO: figure out the one `git push` command that can push both code and tags... but this is fine in the meantime? -->
-
 ```sh
 git push # pushes the code
 git push --tags # pushes the tags
