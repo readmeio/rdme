@@ -16,13 +16,15 @@
 > **Note**
 > These setup instructions are for CLI usage only. For usage in GitHub Actions, see [GitHub Actions](#github-actions) below.
 
-We recommend installing `rdme` in your project rather than doing a global installation so you don't run into unexpected behavior with mismatching versions. We also suggest using the `--save-dev` flag since `rdme` is typically used as part of a CI process and is unlikely to be running in your production application:
+#### Installing `rdme` to a Project
+
+The recommended approach for shared projects is to install `rdme` in your project's dependencies. That way you don't run into unexpected behavior with mismatching versions of `rdme`. We also suggest using the `--save-dev` flag since `rdme` is typically used as part of a CI process and is unlikely to be running in your production application:
 
 ```sh
 npm install rdme --save-dev
 ```
 
-Once installed in your project, we recommend using `npx` (which is included if you have `npm` installed) to prefix all of your CLI commands. For example:
+Once installed in your project, you can use the `npx` prefix (which is included if you have `npm` installed) to run your CLI commands locally. For example:
 
 ```sh
 npx rdme openapi:validate [file]
@@ -30,17 +32,23 @@ npx rdme openapi:validate [file]
 
 To ensure you're getting the latest features and security updates, we recommend using a tool like [Dependabot](https://docs.github.com/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/about-dependabot-version-updates) to keep `rdme` (and your other dependencies) up-to-date.
 
-### Authentication
+#### Installing `rdme` to Your Local Machine
 
-For usage in CI environments (GitHub Actions, CircleCI, Travis CI, etc.) or if you're working with multiple ReadMe projects, we recommend providing your project API key via the `--key` option (instead of the configuration file authentication described below).
-
-For local CLI usage with a single project, you can authenticate `rdme` to your ReadMe project. This will save your API key to a local configuration file (`~/.config/configstore/rdme-production.json`) so you will not have to provide the `--key` option to commands that require it.
+The simplest way to use `rdme` is to install it globally:
 
 ```sh
-rdme login
+npm install -g rdme
 ```
 
-`rdme whoami` is also available to you to determine who you are logged in as, and to what project, as well as `rdme logout` for logging out of that account.
+With a global installation, you'll be able to run `rdme` within any directory on your local machine. If you log in once, you can quickly access your project without having to remember your API key (see the [Authentication](#authentication) section below).
+
+### Authentication
+
+For usage in CI environments (GitHub Actions, CircleCI, Travis CI, etc.) or if you're working with multiple ReadMe projects, we recommend providing a project API key via the `--key` option (instead of the configuration file authentication described below).
+
+For local CLI usage with a single project, you can authenticate `rdme` to your ReadMe project using `rdme login`. Once you follow the prompts and are successfully authenticated, your API key will be saved to a local configuration file (`~/.config/configstore/rdme-production.json`) and you won't have to provide the `--key` option to commands that require it.
+
+`rdme whoami` is also available to you to determine who is logged in, and to what project. You can clear your stored credentials with `rdme logout`.
 
 ## Usage
 
