@@ -108,7 +108,7 @@ The fastest way to create a GitHub Actions workflow file is by doing the followi
 rdme openapi --github
 ```
 
-This will run through the command, ask you a few quick questions, and then automatically generate a GitHub Actions workflow file for you 🪄
+This will run through the `openapi` command, ask you a few quick questions, and then automatically create a fully functional GitHub Actions workflow file for you 🪄
 
 If you don't include the `--github` flag but the CLI detects that you are in a GitHub repository, we'll ask if you'd like to set up the GitHub Action. If you answer "no", we won't ask you again for that major version of `rdme` (i.e., if you decline to set up a GitHub Actions workflow for version 8 of `rdme`, we won't ask again until you've upgraded to version 9 or above).
 
