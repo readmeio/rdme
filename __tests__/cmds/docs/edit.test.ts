@@ -1,5 +1,7 @@
 import fs from 'fs';
 
+import nock from 'nock';
+
 import DocsEditCommand from '../../../src/cmds/docs/edit';
 import APIError from '../../../src/lib/apiError';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock';
@@ -11,6 +13,10 @@ const version = '1.0.0';
 const category = 'CATEGORY_ID';
 
 describe('rdme docs:edit', () => {
+  beforeAll(() => nock.disableNetConnect());
+
+  afterAll(() => nock.cleanAll());
+
   it('should error if no api key provided', () => {
     return expect(docsEdit.run({})).rejects.toStrictEqual(
       new Error('No project API key provided. Please use `--key`.')
