@@ -97,8 +97,10 @@ export default class Command {
         if (isCI()) {
           throw new Error('No project API key provided. Please use `--key`.');
         } else {
+          // eslint-disable-next-line no-console
           console.info("Looks like you're missing a ReadMe API key, let's fix that! 🦉");
           const result = await loginFlow();
+          // eslint-disable-next-line no-console
           console.info(result);
           // eslint-disable-next-line no-param-reassign
           opts.key = configstore.get('apiKey');
