@@ -81,9 +81,9 @@ You can also specify several other page attributes in your YAML front matter, su
 If you're setting up new pages or if you're generally unsure if you've set up your page attributes correctly, each command has a dry run mode. This will allow you preview the changes without actually creating/updating any docs in ReadMe, which can be extremely useful for initial setup (oh, and we have [comprehensive debugging options](#troubleshooting) available as well!). To enable dry run mode, use the `--dryRun` flag:
 
 ```sh
-rdme docs path-to-markdown-files --version={project-version} --dryRun
-rdme changelogs path-to-markdown-files --dryRun
-rdme custompages path-to-markdown-files --dryRun
+rdme docs [path-to-directory-of-markdown] --version={project-version} --dryRun
+rdme changelogs [path-to-directory-of-markdown] --dryRun
+rdme custompages [path-to-directory-of-markdown] --dryRun
 ```
 
 The command output will indicate whether each page is being created or updated alongside all processed page attributes.
@@ -98,7 +98,47 @@ While there are [dozens of event options available](https://docs.github.com/acti
 >
 > Note that the `@RDME_VERSION` in the below examples is the latest version of `rdme`. We recommend [configuring Dependabot to keep your actions up-to-date](https://docs.github.com/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/keeping-your-actions-up-to-date-with-dependabot).
 
-For usage in GitHub Actions, create [a new GitHub Workflow file](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions) in the `.github/workflows` directory of your repository and add the following [steps](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idsteps) to your workflow:
+The fastest way to create a GitHub Actions workflow file is by doing the following:
+
+1. Download `rdme` to your local machine (see [our setup instructions](https://github.com/readmeio/rdme#setup))
+2. Open your command line at the root of your GitHub repository
+3. Run the command you wish to automate on your local machine with the `--github` flag tacked on at the end. For example:
+
+```sh
+rdme openapi --github
+```
+
+This will run through the command, ask you a few quick questions, and then automatically generate a GitHub Actions workflow file for you 🪄
+
+If you don't include the `--github` flag but the CLI detects that you are in a GitHub repository, we'll ask if you'd like to set up the GitHub Action. If you answer "no", we won't ask you again for that major version of `rdme` (i.e., if you decline to set up a GitHub Actions workflow for version 8 of `rdme`, we won't ask again until you've upgraded to version 9 or above).
+
+> 👍 Did you know?
+>
+> Not to get too meta on you, but... the page that you're currently reading is actually being synced from the `rdme` GitHub repository via the `rdme` GitHub Action 🤯
+>
+> Here are the relevant files on GitHub:
+>
+> - [The Markdown source file for the page you're reading](https://github.com/readmeio/rdme/blob/main/documentation/rdme.md) 📜
+> - [The GitHub Actions workflow file that syncs the Markdown to docs.readme.com](https://github.com/readmeio/rdme/blob/main/.github/workflows/docs.yml) 🔄
+> - And finally... [the workflow run results](https://github.com/readmeio/rdme/actions/workflows/docs.yml) ✅
+
+### Securely Using Your API Key
+
+> 🚧 Secretly store your ReadMe API Key!
+>
+> GitHub Actions has [secrets](https://docs.github.com/actions/security-guides/encrypted-secrets) to securely store sensitive information so it isn't publicly visible. We **strongly** recommend using these for storing your ReadMe API Key and and any other secret keys—whether your repository is public or private. You can read more about setting these up [in their documentation](https://docs.github.com/actions/security-guides/encrypted-secrets).
+
+To use sensitive information (like your ReadMe API key) in your `rdme` GitHub Action, first [create a new repository secret](https://docs.github.com/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository). Let's say you create a new secret key called `README_API_KEY`. The usage in the `rdme` step will look something like this:
+
+```yml
+- uses: readmeio/rdme@RDME_VERSION
+  with:
+    rdme: openapi [path-to-file.json] --key=${{ secrets.README_API_KEY }} --id=API_DEFINITION_ID
+```
+
+<details><summary><b>Manually Creating a GitHub Actions Workflow File</b></summary>
+
+If you need to manually set up a workflow, create a new [GitHub Actions workflow file](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions) in the `.github/workflows` directory of your repository (or use an existing workflow file) and add the following [steps](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idsteps) to your workflow:
 
 ```yml
 - uses: actions/checkout@v3
@@ -110,7 +150,7 @@ For usage in GitHub Actions, create [a new GitHub Workflow file](https://docs.gi
 The command syntax in GitHub Actions is functionally equivalent to the CLI. For example, take the following CLI command:
 
 ```sh
-rdme openapi [path-to-file.json] --key=<<user>> --id=API_DEFINITION_ID
+rdme validate [path-to-file.json]
 ```
 
 To execute this command via GitHub Actions, the step would look like this:
@@ -118,142 +158,28 @@ To execute this command via GitHub Actions, the step would look like this:
 ```yml
 - uses: readmeio/rdme@RDME_VERSION
   with:
-    rdme: openapi [path-to-file.json] --key=<<user>> --id=API_DEFINITION_ID
-```
-
-We'll dive into several full GitHub Workflow file examples (including a video demo) below!
-
-### Example: Syncing an OpenAPI Definition
-
-<!--
-This is a custom HTML block that we use in ReadMe.
-We'll need this to render an iframe of the Loom video demo.
-Using our embedly-powered embed block renders an iframe that's way too tall, hence we're using HTML.
-You can see the video here: https://www.loom.com/share/e32c20a9dc2f4eeeab42d0c18ba24478
--->
-
-[block:html]
-{
-"html": "<div style=\"position: relative; padding-bottom: 62.5%; height: 0;\"><iframe src=\"https://www.loom.com/embed/e32c20a9dc2f4eeeab42d0c18ba24478\" frameborder=\"0\" webkitallowfullscreen mozallowfullscreen allowfullscreen style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%;\"></iframe></div>"
-}
-[/block]
-
-To sync an OpenAPI or Swagger definition, you'll first want to obtain a unique API definition ID from ReadMe so we know which definition you want to update on subsequent re-syncs. You can obtain this API definition ID in one of several ways, but we'll dive into two below: uploading a file directly into the ReadMe dashboard and using the `rdme` CLI locally.
-
-<details>
-<summary>Uploading a file</summary>
-
-Follow [these instructions](https://docs.readme.com/docs/openapi#file-upload) on uploading a new OpenAPI file in the dashboard. Once the file is uploaded, you'll see the following in the API Reference settings of your dashboard (the red outline is where you'll find your API definition ID):
-
-![](https://files.readme.io/d57b7c8-Screen_Shot_2022-02-23_at_11.54.21_AM.png)
-
-</details>
-<details>
-<summary>Using the <code>rdme</code> CLI</summary>
-
-Alternatively, you can obtain the API definition ID by running the following `rdme` CLI command on your local machine:
-
-```sh
-rdme openapi [path-to-file.json]
-```
-
-Once you follow the prompts and upload your OpenAPI definition, you'll receive a confirmation message that looks something like this:
-
-```
-You've successfully updated an OpenAPI file on your ReadMe project!
-
-        http://dash.readme.com/project/{your_project}/v1.0/refs/pet
-
-To update your OpenAPI definition, run the following:
-
-        rdme openapi [path-to-file.json] --key=<<user>> --id=API_DEFINITION_ID
+    rdme: validate [path-to-file.json]
 ```
 
 </details>
 
-Once you've obtained your API definition ID, your full GitHub Workflow file will look something like this:
+### GitHub Actions Examples
 
-```yml
-name: Sync OpenAPI definition to ReadMe
+Want to start syncing? We have several example workflow files available:
 
-# Run workflow for every push to the `main` branch
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  sync:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout this repo
-        uses: actions/checkout@v3
-
-      # Run GitHub Action to sync OpenAPI file at [path-to-file.json]
-      - name: GitHub Action
-        # We recommend specifying a fixed version, i.e. @RDME_VERSION
-        # Docs: https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#example-using-versioned-actions
-        uses: readmeio/rdme@RDME_VERSION
-        with:
-          rdme: openapi [path-to-file.json] --key=<<user>> --id=API_DEFINITION_ID
-```
-
-In the example above, every push to the `main` branch will check out your repository's contents and sync the OpenAPI file located at `./path-to-file.json` with your ReadMe project.
-
-### Example: Syncing Markdown Docs
-
-Not to get too meta on you, but... the page that you're currently reading is actually being synced from the `rdme` GitHub repository via the `rdme` GitHub Action! Here are the relevant files on GitHub:
-
-- [The Markdown source file for the page you're reading](https://github.com/readmeio/rdme/blob/main/documentation/rdme.md) 📜
-- [The GitHub Actions workflow file that syncs the Markdown to docs.readme.com](https://github.com/readmeio/rdme/blob/main/.github/workflows/docs.yml) 🔄
-- And finally... [the workflow run results](https://github.com/readmeio/rdme/actions/workflows/docs.yml) ✅
-
-To recreate this magic in your repository, your GitHub Workflow file will look something like this:
-
-```yml
-name: Sync `documentation` directory to ReadMe
-
-# Run workflow for every push to the `main` branch
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  sync:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout this repo
-        uses: actions/checkout@v3
-
-      # Run GitHub Action to sync docs in `documentation` directory
-      - name: GitHub Action
-        # We recommend specifying a fixed version, i.e. @RDME_VERSION
-        # Docs: https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#example-using-versioned-actions
-        uses: readmeio/rdme@RDME_VERSION
-        with:
-          rdme: docs ./documentation --key=<<user>> --version=2.0
-```
-
-In the example above, every push to the `main` branch will check out your repository's contents and sync the contents of the `documentation` directory with your ReadMe project.
-
-### Example: Using GitHub Secrets
-
-> 🚧 Secretly store your ReadMe API Key!
->
-> GitHub Actions has [secrets](https://docs.github.com/actions/security-guides/encrypted-secrets) to securely store sensitive information so it isn't publicly visible. We **strongly** recommend using these for storing your ReadMe API Key, your API definition ID, and any other secret keys—whether your repository is public or private. You can read more about setting these up [in their documentation](https://docs.github.com/actions/security-guides/encrypted-secrets).
-
-To use a GitHub secret in your `rdme` GitHub Action, first [create a new repository secret](https://docs.github.com/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository). Let's say you create a new secret key called `README_API_KEY`. The usage in the `rdme` step will look something like this:
-
-```yml
-- uses: readmeio/rdme@RDME_VERSION
-  with:
-    rdme: openapi [path-to-file.json] --key=${{ secrets.README_API_KEY }} --id=${{ secrets.README_API_DEFINITION_ID }}
-```
+- [Syncing an OpenAPI definition](https://docs.readme.com/docs/github-actions-openapi-example)
+- [Syncing a directory of Markdown files](https://docs.readme.com/docs/github-actions-docs-example)
 
 ## Usage in Other CI Environments
 
 Since `rdme` is a command-line tool at its core, you can use `rdme` to sync your documentation from virtually any CI/CD environment that runs shell commands—[Bitbucket Pipelines](https://support.atlassian.com/bitbucket-cloud/docs/get-started-with-bitbucket-pipelines/), [GitLab CI/CD](https://docs.gitlab.com/ee/ci/), you name it! You can do this by invoking `rdme` with `npx rdme@RDME_VERSION` in a Node.js environment. See below for several examples.
+
+> 🚧 Secretly store your ReadMe API Key!
+>
+> Nearly every CI service has a way to securely add secrets so that they're not exposed in your scripts and build logs. We strongly recommend using such a feature for storing your ReadMe API key. The following examples use `$README_API_KEY`, which is how you typically load such variables in your scripts. We've included some links below on how to configure these for the respective examples:
+>
+> - [Bitbucket Pipelines](https://support.atlassian.com/bitbucket-cloud/docs/variables-and-secrets/#Secured-variables)
+> - [GitLab CI](https://docs.gitlab.com/ee/ci/variables/#add-a-cicd-variable-to-a-project)
 
 <!--
 The two code blocks below must be joined (i.e. no newline in between) in order to render as tabbed code blocks in ReadMe.
@@ -270,7 +196,7 @@ pipelines:
   default:
     - step:
         script:
-          - npx rdme@RDME_VERSION openapi [path-to-file.json] --key=<<user>> --id=API_DEFINITION_ID
+          - npx rdme@RDME_VERSION openapi [path-to-file.json] --key=$README_API_KEY --id=API_DEFINITION_ID
 ```
 ```yml GitLab CI (rdme-sync.gitlab-ci.yml)
 # Official framework image. Look for the different tagged releases at:
@@ -279,7 +205,7 @@ image: node:NODE_VERSION
 
 sync-via-rdme:
   script:
-    - npx rdme@RDME_VERSION openapi [path-to-file.json] --key=<<user>> --id=API_DEFINITION_ID
+    - npx rdme@RDME_VERSION openapi [path-to-file.json] --key=$README_API_KEY --id=API_DEFINITION_ID
 ```
 <!-- prettier-ignore-end -->
 
@@ -305,7 +231,7 @@ If you're troubleshooting issues in a GitHub Actions environment, you can enable
 
 > 🚧 Debug Logs May Contain Sensitive Information
 >
-> Enabling step debug logs will produce comprehensive logging for **all** of your GitHub Actions workflow steps. While GitHub automatically masks any sensitive information you load in with [secrets](#example-using-github-secrets), there might be other sensitive information that's exposed. Anybody with read access to the repository will be able to see these logs.
+> Enabling step debug logs will produce comprehensive logging for **all** of your GitHub Actions workflow steps. While GitHub automatically masks any sensitive information you load in with [secrets](#securely-using-your-api-key), there might be other sensitive information that's exposed. Anybody with read access to the repository will be able to see these logs.
 >
 > We **strongly recommend** that you only enable step debug logs in private repositories. If working in a public repository, we suggest recreating your GitHub workflow setup (e.g. with your GitHub workflow files, OpenAPI definitions, and anything else you need for syncing to ReadMe) in a separate private repository for testing purposes before enabling this setting.
 >

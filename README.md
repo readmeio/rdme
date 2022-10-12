@@ -207,7 +207,7 @@ The Markdown files will require YAML front matter with certain ReadMe documentat
 Passing in a path to a directory will also sync any Markdown files that are located in subdirectories.
 
 ```sh
-rdme docs path-to-markdown-files --version={project-version}
+rdme docs [path-to-directory-of-markdown] --version={project-version}
 ```
 
 This command also has a dry run mode, which can be useful for initial setup and debugging. You can read more about dry run mode [in our docs](https://docs.readme.com/docs/rdme#dry-run-mode).
@@ -225,7 +225,7 @@ rdme docs:edit <slug> --version={project-version}
 #### Syncing a Single Markdown File to ReadMe
 
 ```sh
-rdme docs:single path-to-markdown-file --version={project-version}
+rdme docs:single [path-to-file.md] --version={project-version}
 ```
 
 ### Changelogs
@@ -237,7 +237,7 @@ The Markdown files will require YAML front matter with certain ReadMe documentat
 Passing in a path to a directory will also sync any Markdown files that are located in subdirectories.
 
 ```sh
-rdme changelogs path-to-markdown-files
+rdme changelogs [path-to-directory-of-markdown]
 ```
 
 This command also has a dry run mode, which can be useful for initial setup and debugging. You can read more about dry run mode [in our docs](https://docs.readme.com/docs/rdme#dry-run-mode).
@@ -245,7 +245,7 @@ This command also has a dry run mode, which can be useful for initial setup and 
 #### Syncing a Single Markdown File to ReadMe
 
 ```sh
-rdme changelogs:single path-to-markdown-file
+rdme changelogs:single [path-to-file.md]
 ```
 
 ### Custom Pages
@@ -257,7 +257,7 @@ Custom Pages has support for both Markdown and HTML files. These files will requ
 Passing in a path to a directory will also sync any HTML/Markdown files that are located in subdirectories.
 
 ```sh
-rdme custompages path-to-markdown-files
+rdme custompages [path-to-directory-of-markdown]
 ```
 
 This command also has a dry run mode, which can be useful for initial setup and debugging. You can read more about dry run mode [in our docs](https://docs.readme.com/docs/rdme#dry-run-mode).
@@ -265,7 +265,7 @@ This command also has a dry run mode, which can be useful for initial setup and 
 #### Syncing a Single Custom Page to ReadMe
 
 ```sh
-rdme custompages:single path-to-markdown-file
+rdme custompages:single [path-to-file.md]
 ```
 
 ### Versions
