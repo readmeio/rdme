@@ -66,7 +66,7 @@ export default class CategoriesCreateCommand extends Command {
       return Promise.reject(new Error('`categoryType` must be `guide` or `reference`.'));
     }
 
-    const selectedVersion = await getProjectVersion(version, key, false);
+    const selectedVersion = await getProjectVersion(version, key);
 
     Command.debug(`selectedVersion: ${selectedVersion}`);
 

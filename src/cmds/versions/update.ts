@@ -50,7 +50,7 @@ export default class UpdateVersionCommand extends Command {
 
     const { key, version, newVersion, codename, main, beta, isPublic, deprecated } = opts;
 
-    const selectedVersion = await getProjectVersion(version, key, false);
+    const selectedVersion = await getProjectVersion(version, key);
 
     Command.debug(`selectedVersion: ${selectedVersion}`);
 
