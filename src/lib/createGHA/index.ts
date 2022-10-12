@@ -311,7 +311,6 @@ export default async function createGHA(
     success.push(
       chalk.bold('Almost done! Just a couple more steps:'),
       `1. Push your newly created file (${chalk.underline(filePath)}) to GitHub 🚀`,
-      // TODO: only show this if opts.key is a thing
       `2. Create a GitHub secret called ${chalk.bold(
         GITHUB_SECRET_NAME
       )} and populate the value with your ReadMe API key (${key}) 🔑`,
