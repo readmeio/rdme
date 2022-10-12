@@ -1,6 +1,3 @@
-> **Note**
-> These docs are for [the forthcoming `v8` release](https://github.com/readmeio/rdme/milestone/3). You can view the docs for the current release (`v7.5.0`) [here](https://github.com/readmeio/rdme/tree/7.5.0#readme).
-
 # 📖 rdme
 
 [![](https://d3vv6lp55qjaqc.cloudfront.net/items/1M3C3j0I0s0j3T362344/Untitled-2.png)](https://readme.com)
