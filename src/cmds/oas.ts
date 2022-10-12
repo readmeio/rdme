@@ -18,7 +18,7 @@ export default class OASCommand extends Command {
   }
 
   async run(opts: CommandOptions<{}>) {
-    super.run(opts);
+    await super.run(opts);
 
     const message = [
       'This `oas` integration is now inactive.',
