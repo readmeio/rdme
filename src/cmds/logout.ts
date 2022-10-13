@@ -19,7 +19,7 @@ export default class LogoutCommand extends Command {
   }
 
   async run(opts: CommandOptions<{}>) {
-    super.run(opts);
+    await super.run(opts);
 
     if (configStore.has('email') && configStore.has('project')) {
       configStore.clear();

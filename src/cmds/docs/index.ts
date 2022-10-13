@@ -59,7 +59,7 @@ export default class DocsCommand extends Command {
   }
 
   async run(opts: CommandOptions<Options>) {
-    super.run(opts);
+    await super.run(opts);
 
     const { dryRun, folder, key, version, cleanup } = opts;
 

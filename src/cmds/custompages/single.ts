@@ -40,7 +40,7 @@ export default class SingleCustomPageCommand extends Command {
   }
 
   async run(opts: CommandOptions<Options>) {
-    super.run(opts);
+    await super.run(opts);
 
     const { dryRun, filePath, key } = opts;
 

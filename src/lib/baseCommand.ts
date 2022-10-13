@@ -3,8 +3,10 @@ import type commands from '../cmds';
 import type { CommandLineOptions } from 'command-line-args';
 import type { OptionDefinition } from 'command-line-usage';
 
+import configstore from './configstore';
 import isCI from './isCI';
 import { debug, info, warn } from './logger';
+import loginFlow from './loginFlow';
 
 export type CommandOptions<T> = T & {
   key?: string;
@@ -86,13 +88,20 @@ export default class Command {
    */
   args: OptionDefinition[];
 
-  run(opts: CommandOptions<{}>): Promise<string> {
+  async run(opts: CommandOptions<{}>): Promise<string> {
     Command.debug(`command: ${this.command}`);
     Command.debug(`opts: ${JSON.stringify(opts)}`);
 
     if (this.args.some(arg => arg.name === 'key')) {
       if (!opts.key) {
-        throw new Error('No project API key provided. Please use `--key`.');
+        if (isCI()) {
+          throw new Error('No project API key provided. Please use `--key`.');
+        }
+        info("Looks like you're missing a ReadMe API key, let's fix that! 🦉", false);
+        const result = await loginFlow();
+        info(result, false);
+        // eslint-disable-next-line no-param-reassign
+        opts.key = configstore.get('apiKey');
       }
     }
 

@@ -26,10 +26,6 @@ export default async function promptTerminal<T extends string = string>(
   /**
    * Runs a check before every prompt renders to make sure that
    * prompt is not being run in a CI environment.
-   *
-   * @todo it'd be cool if we could just throw an error here
-   * and have it bubble up the error to our top-level error handler
-   * in src/cli.ts
    */
   function onRender() {
     if (ciDetect() && process.env.NODE_ENV !== 'test') {

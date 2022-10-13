@@ -46,7 +46,7 @@ export default class UpdateVersionCommand extends Command {
   }
 
   async run(opts: CommandOptions<VersionUpdateOptions>) {
-    super.run(opts);
+    await super.run(opts);
 
     const { key, version, newVersion, codename, main, beta, isPublic, deprecated } = opts;
 
