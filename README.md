@@ -225,7 +225,7 @@ rdme changelogs [path-to-directory-of-markdown]
 
 This command also has a dry run mode, which can be useful for initial setup and debugging. You can read more about dry run mode [in our docs](https://docs.readme.com/docs/rdme#dry-run-mode).
 
-#### Syncing a Single Markdown File to ReadMe
+#### Syncing a Single Changelog to ReadMe
 
 ```sh
 rdme changelogs:single [path-to-file.md]
@@ -272,8 +272,6 @@ If you wish to see the raw JSON output from our API in this response, supply the
 ```sh
 rdme versions:create <version>
 ```
-
-##### Create a New Version
 
 If you wish to automate the process of creating a new project version, and not have the CLI prompt you for input, you can do so by supplying the necessary flags to `versions:create`.
 
