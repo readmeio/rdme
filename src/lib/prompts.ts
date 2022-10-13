@@ -1,3 +1,4 @@
+import type { Version } from '../cmds/versions';
 import type { VersionCreateOptions } from 'cmds/versions/create';
 import type { VersionUpdateOptions } from 'cmds/versions/update';
 import type { Response } from 'node-fetch';
@@ -13,10 +14,6 @@ type SpecList = {
   title: string;
 }[];
 
-type VersionList = {
-  version: string;
-}[];
-
 type ParsedDocs = {
   next?: {
     page: number;
@@ -27,41 +24,6 @@ type ParsedDocs = {
     url: string;
   };
 };
-
-export function generatePrompts(versionList: VersionList, selectOnly = false): PromptObject[] {
-  return [
-    {
-      type: selectOnly ? null : 'select',
-      name: 'option',
-      message: 'Would you like to use an existing project version or create a new one?',
-      choices: [
-        { title: 'Use existing', value: 'update' },
-        { title: 'Create a new version', value: 'create' },
-      ],
-    },
-    {
-      type: (prev, values) => {
-        return (selectOnly ? false : values.option !== 'update') ? null : 'select';
-      },
-      name: 'versionSelection',
-      message: 'Select your desired version',
-      choices: versionList.map(v => {
-        return {
-          title: v.version,
-          value: v.version,
-        };
-      }),
-    },
-    {
-      type: (prev, values) => {
-        return (selectOnly ? true : values.option === 'update') ? null : 'text';
-      },
-      name: 'newVersion',
-      message: "What's your new version?",
-      hint: '1.0.0',
-    },
-  ];
-}
 
 function specOptions(specList: SpecList, parsedDocs: ParsedDocs, currPage: number, totalPages: number): Choice[] {
   const specs = specList.map(s => {
@@ -166,7 +128,7 @@ export function createOasPrompt(
 }
 
 export function createVersionPrompt(
-  versionList: VersionList,
+  versionList: Version[],
   opts: VersionCreateOptions & VersionUpdateOptions,
   isUpdate?: {
     is_stable: boolean;
