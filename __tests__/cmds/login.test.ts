@@ -36,7 +36,7 @@ describe('rdme login', () => {
   it('should post to /login on the API', async () => {
     prompts.inject([email, password, project]);
 
-    const mock = getAPIMock().post('/api/v1/login').reply(200, { apiKey });
+    const mock = getAPIMock().post('/api/v1/login', { email, password, project }).reply(200, { apiKey });
 
     await expect(cmd.run({})).resolves.toBe('Successfully logged in as user@example.com to the subdomain project.');
 
@@ -50,7 +50,7 @@ describe('rdme login', () => {
   it('should post to /login on the API if passing in project via opt', async () => {
     prompts.inject([email, password]);
 
-    const mock = getAPIMock().post('/api/v1/login').reply(200, { apiKey });
+    const mock = getAPIMock().post('/api/v1/login', { email, password, project }).reply(200, { apiKey });
 
     await expect(cmd.run({ project })).resolves.toBe(
       'Successfully logged in as user@example.com to the subdomain project.'

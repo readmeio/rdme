@@ -4,6 +4,7 @@ import path from 'path';
 import chalk from 'chalk';
 import frontMatter from 'gray-matter';
 import nock from 'nock';
+import prompts from 'prompts';
 
 import CustomPagesCommand from '../../../src/cmds/custompages';
 import APIError from '../../../src/lib/apiError';
@@ -21,10 +22,19 @@ describe('rdme custompages', () => {
 
   afterAll(() => nock.cleanAll());
 
-  it('should error if no api key provided', () => {
-    return expect(custompages.run({})).rejects.toStrictEqual(
+  it('should prompt for login if no API key provided', async () => {
+    const consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+    prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
+    await expect(custompages.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
+    consoleInfoSpy.mockRestore();
+  });
+
+  it('should error in CI if no API key provided', async () => {
+    process.env.TEST_CI = 'true';
+    await expect(custompages.run({})).rejects.toStrictEqual(
       new Error('No project API key provided. Please use `--key`.')
     );
+    delete process.env.TEST_CI;
   });
 
   it('should error if no folder provided', () => {

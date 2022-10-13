@@ -1,6 +1,7 @@
 import type { Version } from '../../../src/cmds/versions';
 
 import nock from 'nock';
+import prompts from 'prompts';
 
 import VersionsCommand from '../../../src/cmds/versions';
 import getAPIMock from '../../helpers/get-api-mock';
@@ -36,10 +37,17 @@ describe('rdme versions', () => {
 
   afterEach(() => nock.cleanAll());
 
-  it('should error if no api key provided', () => {
-    return expect(versions.run({})).rejects.toStrictEqual(
-      new Error('No project API key provided. Please use `--key`.')
-    );
+  it('should prompt for login if no API key provided', async () => {
+    const consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+    prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
+    await expect(versions.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
+    consoleInfoSpy.mockRestore();
+  });
+
+  it('should error in CI if no API key provided', async () => {
+    process.env.TEST_CI = 'true';
+    await expect(versions.run({})).rejects.toStrictEqual(new Error('No project API key provided. Please use `--key`.'));
+    delete process.env.TEST_CI;
   });
 
   it('should make a request to get a list of existing versions', async () => {

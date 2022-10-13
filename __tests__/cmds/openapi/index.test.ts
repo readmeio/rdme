@@ -839,10 +839,17 @@ describe('rdme openapi', () => {
   });
 
   describe('error handling', () => {
-    it('should error if no api key provided', () => {
-      return expect(
-        openapi.run({ spec: require.resolve('@readme/oas-examples/3.0/json/petstore.json') })
-      ).rejects.toStrictEqual(new Error('No project API key provided. Please use `--key`.'));
+    it('should prompt for login if no API key provided', () => {
+      prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
+      return expect(openapi.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
+    });
+
+    it('should error in CI if no API key provided', async () => {
+      process.env.TEST_CI = 'true';
+      await expect(openapi.run({})).rejects.toStrictEqual(
+        new Error('No project API key provided. Please use `--key`.')
+      );
+      delete process.env.TEST_CI;
     });
 
     it('should error if `--create` and `--update` flags are passed simultaneously', () => {
