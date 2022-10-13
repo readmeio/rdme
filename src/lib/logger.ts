@@ -31,10 +31,14 @@ function warn(input: string) {
 
 /**
  * Wrapper for info/notice statements.
+ * @param {Boolean} includeEmojiPrefix whether or not to prefix
+ * the statement with this emoji: ℹ️
  */
-function info(input: string) {
+function info(input: string, includeEmojiPrefix = true) {
   /* istanbul ignore next */
   if (isGHA() && process.env.NODE_ENV !== 'test') return core.notice(input);
+  /* istanbul ignore next */
+  if (!includeEmojiPrefix) return console.info(input); // eslint-disable-line no-console
   // eslint-disable-next-line no-console
   return console.info(`ℹ️  ${input}`);
 }
