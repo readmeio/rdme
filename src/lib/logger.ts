@@ -12,7 +12,6 @@ const debugPackage = debugModule(config.get('cli'));
 
 /**
  * Wrapper for debug statements.
- * @param {String} input
  */
 function debug(input: string) {
   /* istanbul ignore next */
@@ -22,7 +21,6 @@ function debug(input: string) {
 
 /**
  * Wrapper for warn statements.
- * @param {String} input
  */
 function warn(input: string) {
   /* istanbul ignore next */
@@ -33,7 +31,6 @@ function warn(input: string) {
 
 /**
  * Wrapper for info/notice statements.
- * @param {String} input
  */
 function info(input: string) {
   /* istanbul ignore next */
