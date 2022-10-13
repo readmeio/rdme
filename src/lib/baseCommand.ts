@@ -96,13 +96,12 @@ export default class Command {
       if (!opts.key) {
         if (isCI()) {
           throw new Error('No project API key provided. Please use `--key`.');
-        } else {
-          info("Looks like you're missing a ReadMe API key, let's fix that! 🦉", false);
-          const result = await loginFlow();
-          info(result, false);
-          // eslint-disable-next-line no-param-reassign
-          opts.key = configstore.get('apiKey');
         }
+        info("Looks like you're missing a ReadMe API key, let's fix that! 🦉", false);
+        const result = await loginFlow();
+        info(result, false);
+        // eslint-disable-next-line no-param-reassign
+        opts.key = configstore.get('apiKey');
       }
     }
 
