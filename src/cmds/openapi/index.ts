@@ -146,7 +146,7 @@ export default class OpenAPICommand extends Command {
     }
 
     if (create || !id) {
-      selectedVersion = await getProjectVersion(selectedVersion, key, true);
+      selectedVersion = await getProjectVersion(selectedVersion, key);
     }
 
     Command.debug(`selectedVersion: ${selectedVersion}`);

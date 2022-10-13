@@ -53,7 +53,7 @@ export default class EditDocsCommand extends Command {
       return Promise.reject(new Error(`No slug provided. Usage \`${config.get('cli')} ${this.usage}\`.`));
     }
 
-    const selectedVersion = await getProjectVersion(version, key, true);
+    const selectedVersion = await getProjectVersion(version, key);
 
     Command.debug(`selectedVersion: ${selectedVersion}`);
 
