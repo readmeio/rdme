@@ -80,16 +80,24 @@ You can see examples featuring the latest version in [our docs](https://docs.rea
 
 ### OpenAPI / Swagger
 
-ReadMe supports [OpenAPI 3.1](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md), [OpenAPI 3.0](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md), and [Swagger 2.x](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/2.0.md).
+With `rdme`, you have access to a variety of tools to manage your OpenAPI or Swagger definition, most of which don't require an account on ReadMe. These tools include:
+
+- [Reduction](#reducing-an-api-definition) 📉
+- [Syncing](#syncing-an-api-definition-to-readme) 🦉
+- [Validation](#validating-an-api-definition) ✅
+
+`rdme` supports [OpenAPI 3.1](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md), [OpenAPI 3.0](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md), and [Swagger 2.x](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/2.0.md).
 
 The following examples use JSON files, but `rdme` supports API Definitions that are written in either JSON or YAML.
+
+#### Syncing an API Definition to ReadMe
 
 > **Note**
 > The `rdme openapi` command supports both OpenAPI and Swagger API definitions. The `rdme swagger` command is an alias for `rdme openapi` and is deprecated.
 
 If you wish to see the raw JSON output of any of the `openapi` command examples below, supply the `--raw` flag.
 
-#### Uploading a New API Definition to ReadMe
+##### Uploading a New API Definition to ReadMe
 
 This will upload `path-to-openapi.json` to your project and return an ID and URL for you to later update your file, and view it in the client.
 
@@ -105,7 +113,7 @@ rdme openapi [path-to-file.json] --version={project-version} --create
 
 This command also has a dry run mode, which can be useful for initial setup and debugging. You can perform a dry run by supplying the `--dryRun` flag.
 
-#### Editing (Re-Syncing) an Existing API Definition
+##### Editing (Re-Syncing) an Existing API Definition
 
 This will edit (re-sync) an existing API definition (identified by `--id`) within your ReadMe project. **This is the recommended approach for usage in CI environments.**
 
@@ -113,7 +121,7 @@ This will edit (re-sync) an existing API definition (identified by `--id`) withi
 rdme openapi [path-to-file.json] --id={existing-id}
 ```
 
-#### Uploading or Editing an API Definition in a Project Version
+##### Uploading or Editing an API Definition in a Project Version
 
 You can additionally include a version flag, specifying the target version for your file's destination. This approach will provide you with CLI prompts, so we do not recommend this technique in CI environments.
 
@@ -145,7 +153,7 @@ rdme openapi [path-to-file.json] --version={project-version} --update
 
 This command also has a dry run mode, which can be useful for initial setup and debugging. You can perform a dry run by supplying the `--dryRun` flag.
 
-#### Omitting the File Path
+##### Omitting the File Path
 
 If you run `rdme` within a directory that contains your OpenAPI or Swagger definition, you can omit the file path. `rdme` will then look for JSON or YAML files (including in sub-directories) that contain a top-level [`openapi`](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#fixed-fields) or [`swagger`](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/2.0.md#fixed-fields) property.
 
@@ -162,7 +170,7 @@ If you run `rdme` within a directory that contains your OpenAPI or Swagger defin
 rdme openapi
 ```
 
-#### Override the Working Directory
+##### Override the Working Directory
 
 By default, `rdme` bundles all [references](https://swagger.io/docs/specification/using-ref/) with paths based on the directory that `rdme` is being run in. You can override the working directory using the `--workingDirectory` option, which can be helpful for bundling certain external references (see [here](__tests__/__fixtures__/relative-ref-oas/petstore.json) for an example file).
 
@@ -172,7 +180,7 @@ rdme openapi petstore.json --workingDirectory=[path to directory]
 
 #### Validating an API Definition
 
-You can also perform a local validation of your API definition without uploading it to ReadMe, which can be useful when constructing or editing your API definition.
+You can also perform a local validation of your API definition (no ReadMe account required!), which can be useful when constructing or editing your API definition.
 
 ```sh
 rdme openapi:validate [path-to-file.json]
