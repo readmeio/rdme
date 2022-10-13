@@ -17,9 +17,20 @@ Check out `.github/workflows/docs.yml` for more info on this!
 
 -->
 
-If you're anything like us, your documentation process may be a part of a broader CI/CD process. For example, you may want to automatically update your ReadMe guides or API reference every time you've ship new code. Enter `rdme`: ReadMe's official command-line interface (CLI) and GitHub Action!
+[![rdme](https://user-images.githubusercontent.com/8854718/195465739-0f0f83d5-2e18-4e6c-96ae-944e3bb6880a.png)](https://readme.com)
 
-[![npm](https://img.shields.io/npm/v/rdme)](https://npm.im/rdme) [![Build](https://github.com/readmeio/rdme/workflows/CI/badge.svg)](https://github.com/readmeio/rdme)
+<p align="center">
+  <a href="https://readme.com">ReadMe</a>'s official command-line interface (CLI) and <a href="#github-actions">GitHub Action</a>.
+</p>
+
+<p align="center">
+  <a href="https://npm.im/rdme"><img src="https://img.shields.io/npm/v/rdme.svg?style=for-the-badge" alt="NPM Version"></a>
+  <a href="https://npm.im/rdme"><img src="https://img.shields.io/node/v/rdme.svg?style=for-the-badge" alt="Node Version"></a>
+  <a href="https://npm.im/rdme"><img src="https://img.shields.io/npm/l/rdme.svg?style=for-the-badge" alt="MIT License"></a>
+  <a href="https://github.com/readmeio/rdme"><img src="https://img.shields.io/github/workflow/status/readmeio/rdme/CI.svg?style=for-the-badge" alt="Build status"></a>
+</p>
+
+If you're anything like us, your documentation process may be a part of a broader CI/CD process. For example, you may want to automatically update your ReadMe guides or API reference every time you've ship new code. Enter `rdme`: ReadMe's official command-line interface (CLI) and GitHub Action!
 
 With `rdme`, you can create workflows for a variety of use cases, including:
 

@@ -1,8 +1,17 @@
 [![rdme](https://user-images.githubusercontent.com/8854718/195465739-0f0f83d5-2e18-4e6c-96ae-944e3bb6880a.png)](https://readme.com)
 
-[![npm](https://img.shields.io/npm/v/rdme)](https://npm.im/rdme) [![Build](https://github.com/readmeio/rdme/workflows/CI/badge.svg)](https://github.com/readmeio/rdme)
+<p align="center">
+  <a href="https://readme.com">ReadMe</a>'s official command-line interface (CLI) and <a href="#github-actions">GitHub Action</a>.
+</p>
 
-`rdme` is [ReadMe](https://readme.com)'s official command-line interface (CLI) and [GitHub Action](#github-actions) wrapper. It allows you to sync [OpenAPI](https://spec.openapis.org/oas/v3.1.0.html) and [Swagger](https://swagger.io/specification/v2/) definitions with projects you create on [ReadMe](https://readme.com/). You can also access other parts of [ReadMe's RESTful API](https://docs.readme.com/reference/intro-to-the-readme-api), including syncing Markdown documentation with your project and managing project versions.
+<p align="center">
+  <a href="https://npm.im/rdme"><img src="https://img.shields.io/npm/v/rdme.svg?style=for-the-badge" alt="NPM Version"></a>
+  <a href="https://npm.im/rdme"><img src="https://img.shields.io/node/v/rdme.svg?style=for-the-badge" alt="Node Version"></a>
+  <a href="https://npm.im/rdme"><img src="https://img.shields.io/npm/l/rdme.svg?style=for-the-badge" alt="MIT License"></a>
+  <a href="https://github.com/readmeio/rdme"><img src="https://img.shields.io/github/workflow/status/readmeio/rdme/CI.svg?style=for-the-badge" alt="Build status"></a>
+</p>
+
+With `rdme`, you can manage your [OpenAPI](https://spec.openapis.org/oas/v3.1.0.html) (or [Swagger](https://swagger.io/specification/v2/)) definition and sync it to your API reference docs on [ReadMe](https://readme.com/). You can also access other parts of [ReadMe's RESTful API](https://docs.readme.com/reference/intro-to-the-readme-api), including syncing Markdown documentation with your ReadMe project and managing project versions.
 
 ## Configuration
 
