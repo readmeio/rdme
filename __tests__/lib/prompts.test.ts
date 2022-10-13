@@ -1,4 +1,3 @@
-import type { Version } from '../../src/cmds/versions';
 import type { VersionUpdateOptions } from '../../src/cmds/versions/update';
 import type { Response } from 'node-fetch';
 
@@ -7,7 +6,7 @@ import prompts from 'prompts';
 import * as promptHandler from '../../src/lib/prompts';
 import promptTerminal from '../../src/lib/promptWrapper';
 
-const versionlist: Version[] = [
+const versionlist = [
   {
     version: '1',
     is_stable: true,
