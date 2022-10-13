@@ -16,7 +16,7 @@ import { checkFilePath, cleanFileName } from '../checkFile';
 import configstore from '../configstore';
 import { getPkgVersion } from '../getPkgVersion';
 import isCI from '../isCI';
-import { debug } from '../logger';
+import { debug, info } from '../logger';
 import promptTerminal from '../promptWrapper';
 
 import yamlBase from './baseFile';
@@ -192,24 +192,12 @@ export default async function createGHA(
     }
   }
 
-  /**
-   * The reason we're using console.info() in these lines as opposed to
-   * our logger is because that logger has some formatting limitations
-   * and this function doesn't ever run in a GitHub Actions environment.
-   * By using `info` as opposed to `log`, we also can mock it in our tests
-   * while also freely using `log` when debugging our code.
-   *
-   * @see {@link https://github.com/readmeio/rdme/blob/main/CONTRIBUTING.md#usage-of-console}
-   */
-  // eslint-disable-next-line no-console
-  if (msg) console.info(msg);
+  if (msg) info(msg, false);
 
   if (opts.github) {
-    // eslint-disable-next-line no-console
-    console.info(chalk.bold("\n🚀 Let's get you set up with GitHub Actions! 🚀\n"));
+    info(chalk.bold("\n🚀 Let's get you set up with GitHub Actions! 🚀\n", false));
   } else {
-    // eslint-disable-next-line no-console
-    console.info(
+    info(
       [
         '',
         chalk.bold("🐙 Looks like you're running this command in a GitHub Repository! 🐙"),
@@ -220,7 +208,8 @@ export default async function createGHA(
         '',
         `✨ This means it will run ${chalk.italic('automagically')} with every push to a branch of your choice!`,
         '',
-      ].join('\n')
+      ].join('\n'),
+      false
     );
   }
 

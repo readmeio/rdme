@@ -25,7 +25,7 @@ export default class OpenCommand extends Command {
   }
 
   async run(opts: CommandOptions<Options>) {
-    super.run(opts);
+    await super.run(opts);
 
     const project = configStore.get('project');
     Command.debug(`project: ${project}`);
