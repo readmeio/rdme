@@ -6,7 +6,6 @@ import APIError from './apiError';
 import fetch, { cleanHeaders, handleRes } from './fetch';
 import isCI from './isCI';
 import { warn } from './logger';
-import * as promptHandler from './prompts';
 import promptTerminal from './promptWrapper';
 
 /**
@@ -37,7 +36,17 @@ export async function getProjectVersion(versionFlag: string, key: string): Promi
       headers: cleanHeaders(key),
     }).then(res => handleRes(res));
 
-    const { versionSelection } = await promptTerminal(promptHandler.generatePrompts(versionList, true));
+    const { versionSelection } = await promptTerminal({
+      type: 'select',
+      name: 'versionSelection',
+      message: 'Select your desired version',
+      choices: versionList.map(v => {
+        return {
+          title: v.version,
+          value: v.version,
+        };
+      }),
+    });
 
     return versionSelection;
   } catch (err) {
