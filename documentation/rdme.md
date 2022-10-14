@@ -109,6 +109,8 @@ While there are [dozens of event options available](https://docs.github.com/acti
 >
 > Note that the `@RDME_VERSION` in the below examples is the latest version of `rdme`. We recommend [configuring Dependabot to keep your actions up-to-date](https://docs.github.com/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/keeping-your-actions-up-to-date-with-dependabot).
 
+### GitHub Actions Quick Start
+
 The fastest way to create a GitHub Actions workflow file is by doing the following:
 
 1. Download `rdme` to your local machine (see [our setup instructions](https://github.com/readmeio/rdme#setup))
@@ -120,8 +122,6 @@ rdme openapi --github
 ```
 
 This will run through the `openapi` command, ask you a few quick questions, and then automatically create a fully functional GitHub Actions workflow file for you 🪄
-
-If you don't include the `--github` flag but the CLI detects that you are in a GitHub repository, we'll ask if you'd like to set up the GitHub Action. If you answer "no", we won't ask you again for that major version of `rdme` (i.e., if you decline to set up a GitHub Actions workflow for version 8 of `rdme`, we won't ask again until you've upgraded to version 9 or above).
 
 > 👍 Did you know?
 >
@@ -147,12 +147,21 @@ To use sensitive information (like your ReadMe API key) in your `rdme` GitHub Ac
     rdme: openapi [path-to-file.json] --key=${{ secrets.README_API_KEY }} --id=API_DEFINITION_ID
 ```
 
-<details><summary><b>Manually Creating a GitHub Actions Workflow File</b></summary>
+### Manually Configuring a GitHub Actions Workflow
 
-If you need to manually set up a workflow, create a new [GitHub Actions workflow file](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions) in the `.github/workflows` directory of your repository (or use an existing workflow file) and add the following [steps](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idsteps) to your workflow:
+We recommend using the [quick start](#github-actions-quick-start) to get started with GitHub Actions. But if you are familiar with the [workflow syntax](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions) and wish to manually configure a workflow, follow these steps:
+
+1. Create a new [GitHub Actions workflow file](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions) in the `.github/workflows` directory of your repository (or use an existing workflow file)
+
+1. Configure the [`on`](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#on) property, which determines what triggers the execution of the workflow.
+
+1. Add the following two [steps](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idsteps) to your workflow:
 
 ```yml
+# Required in order for the GitHub Action to access your repo's contents
 - uses: actions/checkout@v3
+
+# Runs the `rdme` command on your repo's contents
 - uses: readmeio/rdme@RDME_VERSION
   with:
     rdme: [your command here]
@@ -172,7 +181,7 @@ To execute this command via GitHub Actions, the step would look like this:
     rdme: validate [path-to-file.json]
 ```
 
-</details>
+The following section has links to full GitHub Actions workflow file examples.
 
 ### GitHub Actions Examples
 
