@@ -1,3 +1,28 @@
+## 8.0.0-beta.7 (2022-10-14)
+
+* feat: prompt for login any time a user omits API key (#636) ([542307b](https://github.com/readmeio/rdme/commit/542307b)), closes [#636](https://github.com/readmeio/rdme/issues/636)
+* feat(breaking): drop version creation question from prompt flows (#635) ([6223ae5](https://github.com/readmeio/rdme/commit/6223ae5)), closes [#635](https://github.com/readmeio/rdme/issues/635)
+* chore: remove some outdated TODOs ([31b5bae](https://github.com/readmeio/rdme/commit/31b5bae))
+* chore(dependabot): add yours truly as a reviewer ([a6d3552](https://github.com/readmeio/rdme/commit/a6d3552))
+* chore(deps-dev): bump @readme/eslint-config from 10.1.0 to 10.1.1 (#629) ([b2fbd69](https://github.com/readmeio/rdme/commit/b2fbd69)), closes [#629](https://github.com/readmeio/rdme/issues/629)
+* chore(deps-dev): bump @readme/oas-examples from 5.6.0 to 5.7.0 (#621) ([4060a93](https://github.com/readmeio/rdme/commit/4060a93)), closes [#621](https://github.com/readmeio/rdme/issues/621)
+* chore(deps-dev): bump @types/jest from 29.1.1 to 29.1.2 (#628) ([7987304](https://github.com/readmeio/rdme/commit/7987304)), closes [#628](https://github.com/readmeio/rdme/issues/628)
+* chore(deps-dev): bump @types/prompts from 2.0.14 to 2.4.1 (#633) ([97760b0](https://github.com/readmeio/rdme/commit/97760b0)), closes [#633](https://github.com/readmeio/rdme/issues/633)
+* chore(deps-dev): bump @types/validator from 13.7.6 to 13.7.7 (#627) ([2918c48](https://github.com/readmeio/rdme/commit/2918c48)), closes [#627](https://github.com/readmeio/rdme/issues/627)
+* chore(deps-dev): bump eslint from 8.23.1 to 8.24.0 (#622) ([e664294](https://github.com/readmeio/rdme/commit/e664294)), closes [#622](https://github.com/readmeio/rdme/issues/622)
+* chore(deps-dev): bump eslint from 8.24.0 to 8.25.0 (#631) ([169ae38](https://github.com/readmeio/rdme/commit/169ae38)), closes [#631](https://github.com/readmeio/rdme/issues/631)
+* chore(deps-dev): bump type-fest from 2.19.0 to 3.0.0 (#624) ([c02b6dd](https://github.com/readmeio/rdme/commit/c02b6dd)), closes [#624](https://github.com/readmeio/rdme/issues/624)
+* chore(deps-dev): bump type-fest from 3.0.0 to 3.1.0 (#630) ([85628a1](https://github.com/readmeio/rdme/commit/85628a1)), closes [#630](https://github.com/readmeio/rdme/issues/630)
+* chore(deps-dev): bump typescript from 4.8.3 to 4.8.4 (#625) ([39da5ce](https://github.com/readmeio/rdme/commit/39da5ce)), closes [#625](https://github.com/readmeio/rdme/issues/625)
+* chore(deps): bump @actions/core from 1.9.1 to 1.10.0 (#623) ([93a021d](https://github.com/readmeio/rdme/commit/93a021d)), closes [#623](https://github.com/readmeio/rdme/issues/623)
+* chore(deps): bump @npmcli/ci-detect from 2.0.0 to 3.0.0 (#634) ([b4935c0](https://github.com/readmeio/rdme/commit/b4935c0)), closes [#634](https://github.com/readmeio/rdme/issues/634)
+* chore(deps): bump semver from 7.3.7 to 7.3.8 (#632) ([3b8e975](https://github.com/readmeio/rdme/commit/3b8e975)), closes [#632](https://github.com/readmeio/rdme/issues/632)
+* chore(deps): bump simple-git from 3.14.0 to 3.14.1 (#626) ([123319e](https://github.com/readmeio/rdme/commit/123319e)), closes [#626](https://github.com/readmeio/rdme/issues/626)
+* chore(testbed): jest 29, flakiness fixes (#610) ([8d0af81](https://github.com/readmeio/rdme/commit/8d0af81)), closes [#610](https://github.com/readmeio/rdme/issues/610)
+* docs: create MAINTAINERS.md (#618) ([37ae20d](https://github.com/readmeio/rdme/commit/37ae20d)), closes [#618](https://github.com/readmeio/rdme/issues/618)
+
+
+
 ## 8.0.0-beta.6 (2022-09-30)
 
 * chore: update version scripts ([e76f69b](https://github.com/readmeio/rdme/commit/e76f69b))
