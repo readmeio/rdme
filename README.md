@@ -92,10 +92,27 @@ The following examples use JSON files, but `rdme` supports API Definitions that 
 
 #### Syncing an API Definition to ReadMe
 
+`rdme openapi` locates your API definition (if [you don't supply one](#omitting-the-file-path)), validates it, and then syncs it to your API reference on ReadMe.
+
 > **Note**
 > The `rdme openapi` command supports both OpenAPI and Swagger API definitions. The `rdme swagger` command is an alias for `rdme openapi` and is deprecated.
 
-If you wish to see the raw JSON output of any of the `openapi` command examples below, supply the `--raw` flag.
+If you wish to programmatically access any of this script's results (such as the API defintion ID or the link to the corresponding docs in your dashboard), supply the `--raw` flag and the command will return a JSON output.
+
+This command also has a dry run mode, which can be useful for initial setup and debugging. You can perform a dry run by supplying the `--dryRun` flag.
+
+##### Omitting the File Path
+
+If you run `rdme` within a directory that contains your OpenAPI or Swagger definition, you can omit the file path. `rdme` will then look for JSON or YAML files (including in sub-directories) that contain a top-level [`openapi`](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#fixed-fields) or [`swagger`](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/2.0.md#fixed-fields) property.
+
+> **Note** `rdme` will not scan anything in the following:
+>
+> - Any `.git/` directories (if they exist)
+> - Any files/directories specified in `.gitignore` files (including any `.gitignore` files in subdirectories, if they exist)
+
+```sh
+rdme openapi
+```
 
 ##### Uploading a New API Definition to ReadMe
 
@@ -110,8 +127,6 @@ If you want to bypass the prompt to create or update an API definition, you can 
 ```sh
 rdme openapi [path-to-file.json] --version={project-version} --create
 ```
-
-This command also has a dry run mode, which can be useful for initial setup and debugging. You can perform a dry run by supplying the `--dryRun` flag.
 
 ##### Editing (Re-Syncing) an Existing API Definition
 
@@ -149,25 +164,6 @@ You can add `--update` to the command so if there's only one API definition for 
 
 ```sh
 rdme openapi [path-to-file.json] --version={project-version} --update
-```
-
-This command also has a dry run mode, which can be useful for initial setup and debugging. You can perform a dry run by supplying the `--dryRun` flag.
-
-##### Omitting the File Path
-
-If you run `rdme` within a directory that contains your OpenAPI or Swagger definition, you can omit the file path. `rdme` will then look for JSON or YAML files (including in sub-directories) that contain a top-level [`openapi`](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#fixed-fields) or [`swagger`](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/2.0.md#fixed-fields) property.
-
-<!-- This ignore block is required since GitHub's callout syntax doesn't play nicely with Prettier -->
-<!-- prettier-ignore-start -->
-> **Note**
-> `rdme` will not scan anything in the following:
->
-> - Any `.git/` directories (if they exist)
-> - Any files/directories specified in `.gitignore` files (including any `.gitignore` files in subdirectories, if they exist)
-<!-- prettier-ignore-end -->
-
-```sh
-rdme openapi
 ```
 
 ##### Override the Working Directory
