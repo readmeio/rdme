@@ -107,6 +107,10 @@ describe('rdme openapi:validate', () => {
     it('should throw an error if an invalid Swagger definition is supplied', () => {
       return expect(validate.run({ spec: './__tests__/__fixtures__/invalid-swagger.json' })).rejects.toMatchSnapshot();
     });
+
+    it('should throw an error if an invalid API definition has many errors', () => {
+      return expect(validate.run({ spec: './__tests__/__fixtures__/very-invalid-oas.json' })).rejects.toMatchSnapshot();
+    });
   });
 
   describe('CI tests', () => {

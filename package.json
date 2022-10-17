@@ -1,6 +1,6 @@
 {
   "name": "rdme",
-  "version": "8.0.0-beta.7",
+  "version": "8.0.0-beta.8",
   "description": "ReadMe's official CLI and GitHub Action wrapper.",
   "license": "MIT",
   "author": "ReadMe <support@readme.io> (https://readme.com)",
@@ -50,8 +50,8 @@
     "jsonpath": "^1.1.1",
     "mime-types": "^2.1.35",
     "node-fetch": "^2.6.1",
-    "oas": "^18.4.4",
-    "oas-normalize": "^7.0.0",
+    "oas": "^19.0.1",
+    "oas-normalize": "^7.1.0",
     "open": "^8.2.1",
     "ora": "^5.4.1",
     "parse-link-header": "^2.0.0",
