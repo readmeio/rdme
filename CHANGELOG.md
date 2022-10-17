@@ -1,3 +1,9 @@
+## 8.0.0-beta.8 (2022-10-17)
+
+* fix: surface all validation errors (#639) ([39b2c61](https://github.com/readmeio/rdme/commit/39b2c61)), closes [#639](https://github.com/readmeio/rdme/issues/639)
+
+
+
 ## 8.0.0-beta.7 (2022-10-14)
 
 * feat: prompt for login any time a user omits API key (#636) ([542307b](https://github.com/readmeio/rdme/commit/542307b)), closes [#636](https://github.com/readmeio/rdme/issues/636)
