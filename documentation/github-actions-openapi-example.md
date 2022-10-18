@@ -17,7 +17,7 @@ Check out `.github/workflows/docs.yml` for more info on this!
 
 Is your OpenAPI definition stored on GitHub? With [the `rdme` GitHub Action](https://docs.readme.com/docs/rdme), you can sync it to ReadMe every time it's updated in GitHub. Let's go over how to set this up!
 
-## "Automagical" Workflow File Generation 🪄
+## "Automagical" Workflow File Generation
 
 To set up a GitHub Actions workflow for syncing an OpenAPI or Swagger definition, the fastest and easiest way to do so is by running the following command on your local machine:
 
@@ -27,11 +27,11 @@ rdme openapi --github
 
 This will locate your OpenAPI definition, sync it to ReadMe, and then create your GitHub Actions workflow file. Once that's done, create your [repository secret](url), push your workflow file to GitHub, and get syncing! 🎊
 
-## Constructing a GitHub Actions Workflow File By Hand 🔨
+## Constructing a GitHub Actions Workflow File By Hand
 
 > 🚧 Wait — there’s an easier way to do this!
 >
-> The information below is useful if you have experience using GitHub Actions, but for most folks, we recommend using the steps [detailed above](#automagical-workflow-file-generation-🪄). The `rdme` CLI will ask you a few questions before automatically creating the GitHub Actions workflow file for you, complete with every parameter you need to get syncing.
+> The information below is useful if you have experience using GitHub Actions, but for most folks, we recommend using the steps [detailed above](#automagical-workflow-file-generation). The `rdme` CLI will ask you a few questions before automatically creating the GitHub Actions workflow file for you, complete with every parameter you need to get syncing.
 
 In order to construct the file by hand, you'll first want to obtain a unique API definition ID from ReadMe so we know which definition you want to update on subsequent re-syncs. You can obtain this API definition ID in one of several ways, but we'll dive into two below: uploading a file directly into the ReadMe dashboard and using the `rdme` CLI locally.
 
