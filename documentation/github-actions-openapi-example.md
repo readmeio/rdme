@@ -3,6 +3,18 @@ title: 'GitHub Action Example: Syncing OpenAPI'
 category: 5f7ce9e3a5504d0414d024c2
 ---
 
+<!--
+
+Hello curious raw Markdown reader! 👋
+This Markdown page is syncing to ReadMe via the `rdme` GitHub Action 🦉
+Peep the resulting page in our docs: https://docs.readme.com/docs/github-actions-openapi-example
+
+We also do some fancy little find-and-replace action to swap out every instance
+of `RDME_VERSION` below with the latest version of rdme.
+Check out `.github/workflows/docs.yml` for more info on this!
+
+-->
+
 Is your OpenAPI definition stored on GitHub? With [the `rdme` GitHub Action](https://docs.readme.com/docs/rdme), you can sync it to ReadMe every time it's updated in GitHub. Let's go over how to set this up!
 
 ## "Automagical" Workflow File Generation 🪄

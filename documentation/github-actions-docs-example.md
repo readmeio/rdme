@@ -3,6 +3,19 @@ title: 'GitHub Action Example: Syncing Markdown'
 category: 5f7ce9e3a5504d0414d024c2
 ---
 
+<!--
+
+Hello curious raw Markdown reader! 👋
+This Markdown page is syncing to ReadMe via the `rdme` GitHub Action 🦉
+Check out the full example below,
+and peep the resulting page in our docs: https://docs.readme.com/docs/github-actions-docs-example
+
+We also do some fancy little find-and-replace action to swap out every instance
+of `RDME_VERSION` below with the latest version of rdme.
+Check out `.github/workflows/docs.yml` for more info on this!
+
+-->
+
 Do you have Markdown files stored on GitHub? With [the `rdme` GitHub Action](https://docs.readme.com/docs/rdme), you can sync them to ReadMe every time they're updated in GitHub. Let's go over how to set this up!
 
 ## "Automagical" Workflow File Generation 🪄
