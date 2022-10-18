@@ -198,7 +198,9 @@ Since `rdme` is a command-line tool at its core, you can use `rdme` to sync your
 > Nearly every CI service has a way to securely add secrets so that they're not exposed in your scripts and build logs. We strongly recommend using such a feature for storing your ReadMe API key. The following examples use `$README_API_KEY`, which is how you typically load such variables in your scripts. We've included some links below on how to configure these for the respective examples:
 >
 > - [Bitbucket Pipelines](https://support.atlassian.com/bitbucket-cloud/docs/variables-and-secrets/#Secured-variables)
+> - [CircleCI](https://circleci.com/docs/env-vars/)
 > - [GitLab CI](https://docs.gitlab.com/ee/ci/variables/#add-a-cicd-variable-to-a-project)
+> - [Travis CI](https://docs.travis-ci.com/user/environment-variables)
 
 <!--
 The two code blocks below must be joined (i.e. no newline in between) in order to render as tabbed code blocks in ReadMe.
@@ -217,6 +219,18 @@ pipelines:
         script:
           - npx rdme@RDME_VERSION openapi [path-to-file.json] --key=$README_API_KEY --id=API_DEFINITION_ID
 ```
+```yml CircleCI (.circleci/config.yml)
+version: 2.1
+jobs:
+  sync-via-rdme:
+    docker:
+      # Official framework image. Look for the different tagged releases at:
+      # https://hub.docker.com/r/library/node/tags/
+      - image: node:NODE_VERSION
+    steps:
+      - run:
+          command: npx rdme@RDME_VERSION openapi [path-to-file.json] --key=$README_API_KEY --id=API_DEFINITION_ID
+```
 ```yml GitLab CI (rdme-sync.gitlab-ci.yml)
 # Official framework image. Look for the different tagged releases at:
 # https://hub.docker.com/r/library/node/tags/
@@ -226,7 +240,17 @@ sync-via-rdme:
   script:
     - npx rdme@RDME_VERSION openapi [path-to-file.json] --key=$README_API_KEY --id=API_DEFINITION_ID
 ```
+```yml Travis CI (.travis.yml)
+# https://docs.travis-ci.com/user/languages/javascript-with-nodejs/#specifying-nodejs-versions
+language: node_js
+node_js:
+  - NODE_VERSION
+
+script: npx rdme@RDME_VERSION openapi [path-to-file.json] --key=$README_API_KEY --id=API_DEFINITION_ID
+```
 <!-- prettier-ignore-end -->
+
+If you notice any issues with any of these examples, please open up an issue on [the `rdme` repository on GitHub](https://github.com/readmeio/rdme).
 
 ## Troubleshooting
 
