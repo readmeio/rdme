@@ -36,7 +36,7 @@ With a global installation, you'll be able to run `rdme` within any directory on
 
 #### Installing `rdme` to a Project
 
-The recommended approach for shared projects is to install `rdme` in your project's dependencies. That way you don't run into unexpected behavior with mismatching versions of `rdme`. We also suggest using the `--save-dev` flag since `rdme` is typically used as part of a CI process and is unlikely to be running in your production application:
+The recommended approach for shared projects is to install `rdme` in your project's dependencies, that way you don't run into unexpected behavior with mismatching versions of `rdme`. We also suggest using the `--save-dev` flag since `rdme` is typically used as part of a CI process and is unlikely to be running in your production application:
 
 ```sh
 npm install rdme --save-dev
