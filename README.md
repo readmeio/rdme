@@ -13,6 +13,23 @@
 
 With `rdme`, you can manage your [OpenAPI](https://spec.openapis.org/oas/v3.1.0.html) (or [Swagger](https://swagger.io/specification/v2/)) definition and sync it to your API reference docs on [ReadMe](https://readme.com/). You can also access other parts of [ReadMe's RESTful API](https://docs.readme.com/reference/intro-to-the-readme-api), including syncing Markdown documentation with your ReadMe project and managing project versions.
 
+## Table of Contents
+
+- [Configuration](#configuration)
+  - [Setup](#setup)
+  - [Authentication](#authentication)
+- [Usage](#usage)
+  - [Common `rdme` Options](#common-rdme-options)
+  - [GitHub Actions](#github-actions)
+  - [OpenAPI / Swagger](#openapi--swagger)
+  - [Docs](#docs)
+  - [Changelogs](#changelogs)
+  - [Custom Pages](#custom-pages)
+  - [Versions](#versions)
+  - [Categories](#categories)
+  - [Open Your ReadMe Project in Your Browser](#open-your-readme-project-in-your-browser)
+- [Future](#future)
+
 ## Configuration
 
 ### Setup
