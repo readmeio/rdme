@@ -120,7 +120,7 @@ The fastest way to create a GitHub Actions workflow file is by doing the followi
 rdme openapi --github
 ```
 
-This will run through the `openapi` command, ask you a few quick questions, and then automatically create a fully functional GitHub Actions workflow file for you 🪄
+This will run through the `openapi` command, ask you a few quick questions, and then automatically create a fully functional GitHub Actions workflow file for you. 🪄
 
 > 👍 Did you know?
 >
