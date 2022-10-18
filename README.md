@@ -20,6 +20,20 @@ With `rdme`, you can manage your [OpenAPI](https://spec.openapis.org/oas/v3.1.0.
 > **Note**
 > These setup instructions are for CLI usage only. For usage in GitHub Actions, see [GitHub Actions](#github-actions) below.
 
+<img align="right" src="https://img.shields.io/node/v/rdme.svg?style=for-the-badge&label=" alt="Node Version">
+
+To install the `rdme` CLI, you'll need to have [Node.js](https://nodejs.org) installed. Node.js comes bundled with [the `npm` CLI](https://github.com/npm/cli), which you'll need to install `rdme`. You can see our current Node.js version requirements in the green badge on the right.
+
+#### Installing `rdme` to Your Local Machine
+
+The simplest way to use `rdme` is to install it globally:
+
+```sh
+npm install -g rdme
+```
+
+With a global installation, you'll be able to run `rdme` within any directory on your local machine. If you log in once, you can quickly access your project without having to remember your API key (see the [Authentication](#authentication) section below).
+
 #### Installing `rdme` to a Project
 
 The recommended approach for shared projects is to install `rdme` in your project's dependencies. That way you don't run into unexpected behavior with mismatching versions of `rdme`. We also suggest using the `--save-dev` flag since `rdme` is typically used as part of a CI process and is unlikely to be running in your production application:
@@ -35,16 +49,6 @@ npx rdme openapi:validate [file]
 ```
 
 To ensure you're getting the latest features and security updates, we recommend using a tool like [Dependabot](https://docs.github.com/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/about-dependabot-version-updates) to keep `rdme` (and your other dependencies) up-to-date.
-
-#### Installing `rdme` to Your Local Machine
-
-The simplest way to use `rdme` is to install it globally:
-
-```sh
-npm install -g rdme
-```
-
-With a global installation, you'll be able to run `rdme` within any directory on your local machine. If you log in once, you can quickly access your project without having to remember your API key (see the [Authentication](#authentication) section below).
 
 ### Authentication
 
