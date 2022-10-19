@@ -193,15 +193,6 @@ Want to start syncing? We have several example workflow files available:
 
 Since `rdme` is a command-line tool at its core, you can use `rdme` to sync your documentation from virtually any CI/CD environment that runs shell commands—[Bitbucket Pipelines](https://support.atlassian.com/bitbucket-cloud/docs/get-started-with-bitbucket-pipelines/), [GitLab CI/CD](https://docs.gitlab.com/ee/ci/), you name it! You can do this by invoking `rdme` with `npx rdme@RDME_VERSION` in a Node.js environment. See below for several examples.
 
-> 🚧 Secretly store your ReadMe API Key!
->
-> Nearly every CI service has a way to securely add secrets so that they're not exposed in your scripts and build logs. We strongly recommend using such a feature for storing your ReadMe API key. The following examples use `$README_API_KEY`, which is how you typically load such variables in your scripts. We've included some links below on how to configure these for the respective examples:
->
-> - [Bitbucket Pipelines](https://support.atlassian.com/bitbucket-cloud/docs/variables-and-secrets/#Secured-variables)
-> - [CircleCI](https://circleci.com/docs/env-vars/)
-> - [GitLab CI](https://docs.gitlab.com/ee/ci/variables/#add-a-cicd-variable-to-a-project)
-> - [Travis CI](https://docs.travis-ci.com/user/environment-variables)
-
 <!--
 The two code blocks below must be joined (i.e. no newline in between) in order to render as tabbed code blocks in ReadMe.
 
@@ -251,6 +242,15 @@ script: npx rdme@RDME_VERSION openapi [path-to-file.json] --key=$README_API_KEY 
 <!-- prettier-ignore-end -->
 
 If you notice any issues with any of these examples, please open up an issue on [the `rdme` repository on GitHub](https://github.com/readmeio/rdme).
+
+> 🚧 Secretly store your ReadMe API Key!
+>
+> Nearly every CI service has a way to securely add secrets so that they're not exposed in your scripts and build logs. We strongly recommend using such a feature for storing your ReadMe API key. The examples above use `$README_API_KEY`, which is how you typically load such variables in your scripts. We've included some links below on how to configure these for the respective examples:
+>
+> - [Bitbucket Pipelines](https://support.atlassian.com/bitbucket-cloud/docs/variables-and-secrets/#Secured-variables)
+> - [CircleCI](https://circleci.com/docs/env-vars/)
+> - [GitLab CI](https://docs.gitlab.com/ee/ci/variables/#add-a-cicd-variable-to-a-project)
+> - [Travis CI](https://docs.travis-ci.com/user/environment-variables)
 
 ## Troubleshooting
 
