@@ -23,12 +23,12 @@ Not using ReadMe for your docs? No worries. `rdme` has a variety of tools to hel
 - [GitHub Actions Configuration](#github-actions-configuration)
 - [Usage](#usage)
   - [Common `rdme` Options](#common-rdme-options)
-  - [OpenAPI / Swagger](#openapi--swagger)
-  - [Docs](#docs)
-  - [Changelogs](#changelogs)
-  - [Custom Pages](#custom-pages)
-  - [Versions](#versions)
-  - [Categories](#categories)
+  - [OpenAPI / Swagger 📚](#openapi--swagger-%F0%9F%93%9A)
+  - [Docs 📘](#docs-%F0%9F%93%98)
+  - [Changelogs 📣](#changelogs-%F0%9F%93%A3)
+  - [Custom Pages 📄](#custom-pages-%F0%9F%93%84)
+  - [Versions ⏳](#versions-%E2%8F%B3)
+  - [Categories 🪣](#categories-%F0%9F%AA%A3)
   - [Open Your ReadMe Project in Your Browser](#open-your-readme-project-in-your-browser)
 - [Future](#future)
 
@@ -101,7 +101,7 @@ If you wish to get more information about any command within `rdme`, you can exe
 - `--key <string>`: The API key associated with your ReadMe project. Note that most of the commands below require API key authentication, even though the `--key` flag is omitted from the examples. See the [Authentication](#authentication) section above for more information.
 - `--version <string>`: Your project version. See [our docs](https://docs.readme.com/docs/versions) for more information.
 
-### OpenAPI / Swagger
+### OpenAPI / Swagger 📚
 
 With `rdme`, you have access to a variety of tools to manage your OpenAPI or Swagger definition, most of which don't require an account on ReadMe. These tools include:
 
@@ -217,7 +217,7 @@ rdme openapi:reduce [path-to-file.json]
 
 The command will ask you a couple questions about how you wish to reduce the file and then do so. And as with the `openapi` command, you can also [omit the file path](#omitting-the-file-path).
 
-### Docs
+### Docs 📘
 
 #### Syncing a Folder of Markdown Docs to ReadMe
 
@@ -247,7 +247,7 @@ rdme docs:edit <slug> --version={project-version}
 rdme docs:single [path-to-file.md] --version={project-version}
 ```
 
-### Changelogs
+### Changelogs 📣
 
 #### Syncing a Folder of Markdown to ReadMe
 
@@ -267,7 +267,7 @@ This command also has a dry run mode, which can be useful for initial setup and 
 rdme changelogs:single [path-to-file.md]
 ```
 
-### Custom Pages
+### Custom Pages 📄
 
 #### Syncing a Folder of Custom Pages to ReadMe
 
@@ -287,7 +287,7 @@ This command also has a dry run mode, which can be useful for initial setup and 
 rdme custompages:single [path-to-file.md]
 ```
 
-### Versions
+### Versions ⏳
 
 #### Get All Versions Associated With Your Project
 
@@ -335,7 +335,7 @@ You can remove a specific version from your project, as well as all of the attac
 rdme versions:delete <version>
 ```
 
-### Categories
+### Categories 🪣
 
 #### Get All Categories Associated to Your Project Version
 
