@@ -19,7 +19,7 @@ Check out `.github/workflows/docs.yml` for more info on this!
 [![rdme](https://user-images.githubusercontent.com/8854718/195465739-0f0f83d5-2e18-4e6c-96ae-944e3bb6880a.png)](https://readme.com)
 
 <p align="center">
-  <a href="https://readme.com">ReadMe</a>'s official command-line interface (CLI) and <a href="#github-actions">GitHub Action</a>.
+  <a href="https://readme.com">ReadMe</a>'s official command-line interface (CLI) and <a href="#github-actions-usage">GitHub Action</a>.
 </p>
 
 <p align="center">
@@ -108,7 +108,7 @@ While there are [dozens of event options available](https://docs.github.com/acti
 >
 > Note that `@RDME_VERSION` (used in the examples on this page) is the latest version of `rdme`. We recommend [configuring Dependabot to keep your actions up-to-date](https://docs.github.com/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/keeping-your-actions-up-to-date-with-dependabot).
 
-### GitHub Actions Quick Start
+### Quick Start
 
 The fastest way to create a GitHub Actions workflow file is by doing the following:
 
@@ -148,7 +148,7 @@ To use sensitive information (like your ReadMe API key) in your `rdme` GitHub Ac
 
 ### Manually Configuring a GitHub Actions Workflow
 
-We recommend using the [quick start](#github-actions-quick-start) to get started with GitHub Actions. But if you are familiar with the [workflow syntax](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions) and wish to manually configure a workflow, follow these steps:
+We recommend using the [quick start](#quick-start) to get started with GitHub Actions. But if you are familiar with the [workflow syntax](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions) and wish to manually configure a workflow, follow these steps:
 
 1. Create a new [GitHub Actions workflow file](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions) in the `.github/workflows` directory of your repository (or use an existing workflow file)
 

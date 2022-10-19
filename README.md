@@ -1,7 +1,7 @@
 [![rdme](https://user-images.githubusercontent.com/8854718/195465739-0f0f83d5-2e18-4e6c-96ae-944e3bb6880a.png)](https://readme.com)
 
 <p align="center">
-  <a href="https://readme.com">ReadMe</a>'s official command-line interface (CLI) and <a href="#github-actions">GitHub Action</a>.
+  <a href="https://readme.com">ReadMe</a>'s official command-line interface (CLI) and <a href="#github-actions-configuration">GitHub Action</a>.
 </p>
 
 <p align="center">
@@ -17,12 +17,12 @@ Not using ReadMe for your docs? No worries. `rdme` has a variety of tools to hel
 
 ## Table of Contents
 
-- [Configuration](#configuration)
+- [CLI Configuration](#cli-configuration)
   - [Setup](#setup)
   - [Authentication](#authentication)
+- [GitHub Actions Configuration](#github-actions-configuration)
 - [Usage](#usage)
   - [Common `rdme` Options](#common-rdme-options)
-  - [GitHub Actions](#github-actions)
   - [OpenAPI / Swagger](#openapi--swagger)
   - [Docs](#docs)
   - [Changelogs](#changelogs)
@@ -32,12 +32,12 @@ Not using ReadMe for your docs? No worries. `rdme` has a variety of tools to hel
   - [Open Your ReadMe Project in Your Browser](#open-your-readme-project-in-your-browser)
 - [Future](#future)
 
-## Configuration
+## CLI Configuration
 
 ### Setup
 
 > **Note**
-> These setup instructions are for CLI usage only. For usage in GitHub Actions, see [GitHub Actions](#github-actions) below.
+> These setup instructions are for CLI usage only. For usage in GitHub Actions, see [GitHub Actions Configuration](#github-actions-configuration) below.
 
 <img align="right" src="https://img.shields.io/node/v/rdme.svg?style=for-the-badge&label=" alt="Node Version">
 
@@ -71,22 +71,13 @@ To ensure you're getting the latest features and security updates, we recommend 
 
 ### Authentication
 
-For usage in CI environments (GitHub Actions, CircleCI, Travis CI, etc.) or if you're working with multiple ReadMe projects, we recommend providing a project API key via the `--key` option (instead of the configuration file authentication described below).
-
 For local CLI usage with a single project, you can authenticate `rdme` to your ReadMe project using `rdme login`. Once you follow the prompts and are successfully authenticated, your API key will be saved to a local configuration file (`~/.config/configstore/rdme-production.json`) and you won't have to provide the `--key` option to commands that require it.
+
+For usage in CI environments (GitHub Actions, CircleCI, Travis CI, etc.) or if you're working with multiple ReadMe projects, we recommend providing a project API key via the `--key` option (instead of the configuration file authentication described above).
 
 `rdme whoami` is also available to you to determine who is logged in, and to what project. You can clear your stored credentials with `rdme logout`.
 
-## Usage
-
-If you wish to get more information about any command within `rdme`, you can execute `rdme help <command>` or `rdme <command> --help`. You an also execute `rdme help` to see a global list of commands that `rdme` offers.
-
-### Common `rdme` Options
-
-- `--key <string>`: The API key associated with your ReadMe project. Note that most of the commands below require API key authentication, even though the `--key` flag is omitted from the examples. See the [Authentication](#authentication) section above for more information.
-- `--version <string>`: Your project version. See [our docs](https://docs.readme.com/docs/versions) for more information.
-
-### GitHub Actions
+## GitHub Actions Configuration
 
 > **Note**
 > For a full GitHub Workflow file example and additional information on GitHub Actions usage, check out [our docs](https://docs.readme.com/docs/rdme#github-actions-usage).
@@ -100,6 +91,15 @@ rdme openapi --github
 This will run through the `openapi` command, ask you a few quick questions, and then automatically create a fully functional GitHub Actions workflow file for you. 🪄
 
 You can see examples featuring the latest version in [our docs](https://docs.readme.com/docs/rdme#github-actions-examples). We recommend [configuring Dependabot to keep your actions up-to-date](https://docs.github.com/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/keeping-your-actions-up-to-date-with-dependabot).
+
+## Usage
+
+If you wish to get more information about any command within `rdme`, you can execute `rdme help <command>` or `rdme <command> --help`. You an also execute `rdme help` to see a global list of commands that `rdme` offers.
+
+### Common `rdme` Options
+
+- `--key <string>`: The API key associated with your ReadMe project. Note that most of the commands below require API key authentication, even though the `--key` flag is omitted from the examples. See the [Authentication](#authentication) section above for more information.
+- `--version <string>`: Your project version. See [our docs](https://docs.readme.com/docs/versions) for more information.
 
 ### OpenAPI / Swagger
 
