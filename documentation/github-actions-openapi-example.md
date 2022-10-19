@@ -109,3 +109,7 @@ jobs:
 ```
 
 In the example above, every push to the `main` branch will sync the OpenAPI file located at `./path-to-file.json` to the API specification `API_DEFINITION_ID` in your ReadMe project.
+
+> 📘 Keeping `rdme` up-to-date
+>
+> Note that `@RDME_VERSION` (used in the above example) is the latest version of `rdme`. We recommend [configuring Dependabot to keep your actions up-to-date](https://docs.github.com/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/keeping-your-actions-up-to-date-with-dependabot).
