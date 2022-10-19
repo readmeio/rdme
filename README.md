@@ -17,6 +17,19 @@ Not using ReadMe for your docs? No worries. `rdme` has a variety of tools to hel
 
 ## Table of Contents
 
+<!--
+Pro tip: to autogenerate this TOC, run the following from your command line:
+
+```
+npx markdown-toc README.md --maxdepth 3 --bullets="-" -i
+```
+
+You'll need to remove the character escapes from where the emojis are used, see:
+https://github.com/jonschlinkert/markdown-toc/issues/119
+-->
+
+<!-- toc -->
+
 - [CLI Configuration](#cli-configuration)
   - [Setup](#setup)
   - [Authentication](#authentication)
@@ -31,6 +44,8 @@ Not using ReadMe for your docs? No worries. `rdme` has a variety of tools to hel
   - [Categories 🪣](#categories-)
   - [Open Your ReadMe Project in Your Browser](#open-your-readme-project-in-your-browser)
 - [Future](#future)
+
+<!-- tocstop -->
 
 ## CLI Configuration
 
