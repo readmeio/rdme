@@ -104,9 +104,9 @@ With [GitHub Actions](https://docs.github.com/actions), you can automatically ex
 
 While there are [dozens of event options available](https://docs.github.com/actions/using-workflows/events-that-trigger-workflows), you'll typically want to sync your OpenAPI definition and Markdown docs to ReadMe when one of the following events takes place:
 
-- [When code is pushed to the default branch](https://docs.github.com/actions/using-workflows/events-that-trigger-workflows#push) 🌴
-- [A new build is deployed](https://docs.github.com/actions/using-workflows/events-that-trigger-workflows#deployment) 🚀
-- [A new release is created](https://docs.github.com/actions/using-workflows/events-that-trigger-workflows#release) 🆕
+- [Code is pushed to the default branch](https://docs.github.com/actions/using-workflows/events-that-trigger-workflows#push) 🌴
+- [A build is deployed](https://docs.github.com/actions/using-workflows/events-that-trigger-workflows#deployment) 🚀
+- [A release is created](https://docs.github.com/actions/using-workflows/events-that-trigger-workflows#release) 🆕
 
 > 📘 Keeping `rdme` up-to-date
 >
