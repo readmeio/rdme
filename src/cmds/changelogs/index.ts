@@ -1,16 +1,12 @@
 import type { CommandOptions } from '../../lib/baseCommand';
 
-import chalk from 'chalk';
-import config from 'config';
-
 import Command, { CommandCategories } from '../../lib/baseCommand';
 import supportsGHA from '../../lib/decorators/supportsGHA';
-import pushDoc from '../../lib/pushDoc';
-import readdirRecursive from '../../lib/readdirRecursive';
+import readPath from '../../lib/readPath';
 
 export type Options = {
   dryRun?: boolean;
-  folder?: string;
+  filePath?: string;
 };
 
 @supportsGHA
@@ -19,8 +15,9 @@ export default class ChangelogsCommand extends Command {
     super();
 
     this.command = 'changelogs';
-    this.usage = 'changelogs <folder> [options]';
-    this.description = 'Sync a folder of Markdown files to your ReadMe project as Changelog posts.';
+    this.usage = 'changelogs <path> [options]';
+    this.description =
+      'Sync Markdown files to your ReadMe project as Changelog posts. Can either be a path to a directory or a single Markdown file.';
     this.cmdCategory = CommandCategories.CHANGELOGS;
     this.position = 1;
 
@@ -28,7 +25,7 @@ export default class ChangelogsCommand extends Command {
     this.args = [
       this.getKeyArg(),
       {
-        name: 'folder',
+        name: 'filePath',
         type: String,
         defaultOption: true,
       },
@@ -44,29 +41,10 @@ export default class ChangelogsCommand extends Command {
   async run(opts: CommandOptions<Options>) {
     await super.run(opts);
 
-    const { dryRun, folder, key } = opts;
+    const { dryRun, filePath, key } = opts;
 
-    if (!folder) {
-      return Promise.reject(new Error(`No folder provided. Usage \`${config.get('cli')} ${this.usage}\`.`));
-    }
+    const result = await readPath(filePath, this.usage, key, dryRun, this.cmdCategory, undefined);
 
-    // Strip out non-markdown files
-    const files = readdirRecursive(folder).filter(
-      file => file.toLowerCase().endsWith('.md') || file.toLowerCase().endsWith('.markdown')
-    );
-
-    Command.debug(`number of files: ${files.length}`);
-
-    if (!files.length) {
-      return Promise.reject(new Error(`We were unable to locate Markdown files in ${folder}.`));
-    }
-
-    const updatedDocs = await Promise.all(
-      files.map(async filename => {
-        return pushDoc(key, undefined, dryRun, filename, this.cmdCategory);
-      })
-    );
-
-    return Promise.resolve(chalk.green(updatedDocs.join('\n')));
+    return Promise.resolve(result);
   }
 }

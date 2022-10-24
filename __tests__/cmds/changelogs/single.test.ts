@@ -6,18 +6,18 @@ import frontMatter from 'gray-matter';
 import nock from 'nock';
 import prompts from 'prompts';
 
-import SingleChangelogCommand from '../../../src/cmds/changelogs/single';
+import ChangelogsCommand from '../../../src/cmds/changelogs';
 import APIError from '../../../src/lib/apiError';
 import getAPIMock from '../../helpers/get-api-mock';
 import hashFileContents from '../../helpers/hash-file-contents';
 
-const changelogsSingle = new SingleChangelogCommand();
+const changelogsSingle = new ChangelogsCommand();
 
 const fixturesBaseDir = '__fixtures__/changelogs';
 const fullFixturesDir = `${__dirname}./../../${fixturesBaseDir}`;
 const key = 'API_KEY';
 
-describe('rdme changelogs:single', () => {
+describe('rdme changelogs (single)', () => {
   beforeAll(() => nock.disableNetConnect());
 
   afterAll(() => nock.cleanAll());
@@ -39,19 +39,19 @@ describe('rdme changelogs:single', () => {
 
   it('should error if no file path provided', () => {
     return expect(changelogsSingle.run({ key })).rejects.toThrow(
-      'No file path provided. Usage `rdme changelogs:single <file> [options]`.'
+      'No path provided. Usage `rdme changelogs <path> [options]`.'
     );
   });
 
   it('should error if the argument is not a Markdown file', async () => {
-    await expect(changelogsSingle.run({ key, filePath: 'not-a-markdown-file' })).rejects.toThrow(
-      'The file path specified is not a Markdown file.'
+    await expect(changelogsSingle.run({ key, filePath: 'package.json' })).rejects.toStrictEqual(
+      new Error('Invalid file extension (.json). Must be one of the following: .markdown, .md')
     );
   });
 
   it('should support .markdown files but error if file path cannot be found', async () => {
-    await expect(changelogsSingle.run({ key, filePath: 'non-existent-file.markdown' })).rejects.toThrow(
-      'ENOENT: no such file or directory'
+    await expect(changelogsSingle.run({ key, filePath: 'non-existent-file.markdown' })).rejects.toStrictEqual(
+      new Error("Oops! We couldn't locate a file or directory at the path you provided.")
     );
   });
 

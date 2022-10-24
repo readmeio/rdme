@@ -37,21 +37,23 @@ describe('rdme changelogs', () => {
     delete process.env.TEST_CI;
   });
 
-  it('should error if no folder provided', () => {
+  it('should error if no path provided', () => {
     return expect(changelogs.run({ key })).rejects.toThrow(
-      'No folder provided. Usage `rdme changelogs <folder> [options]`.'
+      'No path provided. Usage `rdme changelogs <path> [options]`.'
     );
   });
 
   it('should error if the argument is not a folder', () => {
-    return expect(changelogs.run({ key, folder: 'not-a-folder' })).rejects.toThrow(
-      "ENOENT: no such file or directory, scandir 'not-a-folder'"
+    return expect(changelogs.run({ key, filePath: 'not-a-folder' })).rejects.toStrictEqual(
+      new Error("Oops! We couldn't locate a file or directory at the path you provided.")
     );
   });
 
   it('should error if the folder contains no markdown files', () => {
-    return expect(changelogs.run({ key, folder: '.github/workflows' })).rejects.toThrow(
-      'We were unable to locate Markdown files in .github/workflows.'
+    return expect(changelogs.run({ key, filePath: '.github/workflows' })).rejects.toStrictEqual(
+      new Error(
+        "The directory you provided (.github/workflows) doesn't contain any of the following required files: .markdown, .md."
+      )
     );
   });
 
@@ -107,7 +109,7 @@ describe('rdme changelogs', () => {
         .basicAuth({ user: key })
         .reply(200, { slug: anotherDoc.slug, body: anotherDoc.doc.content });
 
-      return changelogs.run({ folder: `./__tests__/${fixturesBaseDir}/existing-docs`, key }).then(updatedDocs => {
+      return changelogs.run({ filePath: `./__tests__/${fixturesBaseDir}/existing-docs`, key }).then(updatedDocs => {
         // All changelogs should have been updated because their hashes from the GET request were different from what they
         // are currently.
         expect(updatedDocs).toBe(
@@ -134,7 +136,7 @@ describe('rdme changelogs', () => {
         .reply(200, { slug: anotherDoc.slug, lastUpdatedHash: 'anOldHash' });
 
       return changelogs
-        .run({ dryRun: true, folder: `./__tests__/${fixturesBaseDir}/existing-docs`, key })
+        .run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/existing-docs`, key })
         .then(updatedDocs => {
           // All changelogs should have been updated because their hashes from the GET request were different from what they
           // are currently.
@@ -164,7 +166,7 @@ describe('rdme changelogs', () => {
         .basicAuth({ user: key })
         .reply(200, { slug: anotherDoc.slug, lastUpdatedHash: anotherDoc.hash });
 
-      return changelogs.run({ folder: `./__tests__/${fixturesBaseDir}/existing-docs`, key }).then(skippedDocs => {
+      return changelogs.run({ filePath: `./__tests__/${fixturesBaseDir}/existing-docs`, key }).then(skippedDocs => {
         expect(skippedDocs).toBe(
           [
             '`simple-doc` was not updated because there were no changes.',
@@ -188,7 +190,7 @@ describe('rdme changelogs', () => {
         .reply(200, { slug: anotherDoc.slug, lastUpdatedHash: anotherDoc.hash });
 
       return changelogs
-        .run({ dryRun: true, folder: `./__tests__/${fixturesBaseDir}/existing-docs`, key })
+        .run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/existing-docs`, key })
         .then(skippedDocs => {
           expect(skippedDocs).toBe(
             [
@@ -224,7 +226,7 @@ describe('rdme changelogs', () => {
         .basicAuth({ user: key })
         .reply(201, { slug, _id: id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
-      await expect(changelogs.run({ folder: `./__tests__/${fixturesBaseDir}/new-docs`, key })).resolves.toBe(
+      await expect(changelogs.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs`, key })).resolves.toBe(
         `🌱 successfully created 'new-doc' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/new-docs/new-doc.md`
       );
 
@@ -247,7 +249,7 @@ describe('rdme changelogs', () => {
         });
 
       await expect(
-        changelogs.run({ dryRun: true, folder: `./__tests__/${fixturesBaseDir}/new-docs`, key })
+        changelogs.run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/new-docs`, key })
       ).resolves.toBe(
         `🎭 dry run! This will create 'new-doc' with contents from __tests__/${fixturesBaseDir}/new-docs/new-doc.md with the following metadata: ${JSON.stringify(
           doc.data
@@ -313,7 +315,7 @@ describe('rdme changelogs', () => {
         message: `Error uploading ${chalk.underline(`${fullDirectory}/${slug}.md`)}:\n\n${errorObject.message}`,
       };
 
-      await expect(changelogs.run({ folder: `./${fullDirectory}`, key })).rejects.toStrictEqual(
+      await expect(changelogs.run({ filePath: `./${fullDirectory}`, key })).rejects.toStrictEqual(
         new APIError(formattedErrorObject)
       );
 
@@ -344,7 +346,7 @@ describe('rdme changelogs', () => {
         .basicAuth({ user: key })
         .reply(201, { slug: doc.data.slug, _id: id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
-      await expect(changelogs.run({ folder: `./__tests__/${fixturesBaseDir}/slug-docs`, key })).resolves.toBe(
+      await expect(changelogs.run({ filePath: `./__tests__/${fixturesBaseDir}/slug-docs`, key })).resolves.toBe(
         `🌱 successfully created 'marc-actually-wrote-a-test' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`
       );
 

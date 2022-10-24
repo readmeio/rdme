@@ -1,7 +1,6 @@
 import CategoriesCommand from './categories';
 import CategoriesCreateCommand from './categories/create';
 import ChangelogsCommand from './changelogs';
-import SingleChangelogCommand from './changelogs/single';
 import CustomPagesCommand from './custompages';
 import SingleCustomPageCommand from './custompages/single';
 import DocsCommand from './docs';
@@ -27,7 +26,6 @@ const commands = {
   'categories:create': CategoriesCreateCommand,
 
   changelogs: ChangelogsCommand,
-  'changelogs:single': SingleChangelogCommand,
 
   custompages: CustomPagesCommand,
   'custompages:single': SingleCustomPageCommand,
