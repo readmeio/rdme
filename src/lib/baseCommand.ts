@@ -104,11 +104,13 @@ export default class Command {
         opts.key = configstore.get('apiKey');
       }
 
-      info(
-        `You're currently making updates to the project: ${configstore.get('project')} on the account ${configstore.get(
-          'email'
-        )}`
-      );
+      if (configstore.get('email')) {
+        info(
+          `You're currently making updates to the project: ${configstore.get(
+            'project'
+          )} on the account ${configstore.get('email')}`
+        );
+      }
     }
 
     if (opts.github && isCI()) {
