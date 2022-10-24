@@ -33,7 +33,7 @@ export default async function readPath(
   let output: string;
 
   if (stat.isDirectory()) {
-    // Strip out non-markdown files
+    // Filter out any files that don't match allowedFileExtensions
     const files = readdirRecursive(pathInput).filter(file =>
       allowedFileExtensions.includes(path.extname(file).toLowerCase())
     );
