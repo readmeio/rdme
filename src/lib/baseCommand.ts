@@ -103,6 +103,12 @@ export default class Command {
         // eslint-disable-next-line no-param-reassign
         opts.key = configstore.get('apiKey');
       }
+
+      info(
+        `You're currently making updates to the project: ${configstore.get('project')} on the account ${configstore.get(
+          'email'
+        )}`
+      );
     }
 
     if (opts.github && isCI()) {
