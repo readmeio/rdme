@@ -12,13 +12,13 @@ import readDoc from './readDoc';
  * Reads the contents of the specified Markdown or HTML file
  * and creates/updates the corresponding doc in ReadMe
  *
- * @param {String} key the project API key
- * @param {String} selectedVersion the project version
- * @param {Boolean} dryRun boolean indicating dry run mode
- * @param {String} filepath path to the HTML/Markdown file
+ * @param key the project API key
+ * @param selectedVersion the project version
+ * @param dryRun boolean indicating dry run mode
+ * @param filepath path to the HTML/Markdown file
  *  (file extension must end in `.html`, `.md`., or `.markdown`)
- * @param {String} type module within ReadMe to update (e.g. docs, changelogs, etc.)
- * @returns {Promise<String>} a string containing the result
+ * @param type module within ReadMe to update (e.g. docs, changelogs, etc.)
+ * @returns a string containing the result
  */
 export default async function pushDoc(
   key: string,
