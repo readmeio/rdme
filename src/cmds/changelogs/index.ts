@@ -21,7 +21,7 @@ export default class ChangelogsCommand extends Command {
     this.cmdCategory = CommandCategories.CHANGELOGS;
     this.position = 1;
 
-    this.hiddenArgs = ['folder'];
+    this.hiddenArgs = ['filePath'];
     this.args = [
       this.getKeyArg(),
       {
