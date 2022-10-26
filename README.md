@@ -209,7 +209,11 @@ This command also has a dry run mode, which can be useful for initial setup and 
 
 #### Cleanup
 
-If you wish to delete documents from ReadMe that are no longer present in your local directory, pass the `--cleanup` option to the command.
+If you wish to delete documents from ReadMe that are no longer present in your local directory:
+
+```sh
+rdme docs:cleanup path-to-markdown-files
+```
 
 #### Edit a Single ReadMe Doc on Your Local Machine
 
