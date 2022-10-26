@@ -142,7 +142,6 @@ describe('cli', () => {
 
     it.each([
       ['changelogs', 'changelogs', ''],
-      ['changelogs:single', 'changelogs', `${slug}.md`],
       ['custompages', 'custompages', ''],
       ['custompages:single', 'custompages', `${slug}.md`],
     ])('should run GHA workflow for the %s command', async (cmd, type, file) => {
