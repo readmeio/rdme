@@ -30,7 +30,7 @@ export default class EditDocsCommand extends Command {
     this.usage = 'docs:edit <slug> [options]';
     this.description = 'Edit a single file from your ReadMe project without saving locally.';
     this.cmdCategory = CommandCategories.DOCS;
-    this.position = 2;
+    this.position = 3;
 
     this.hiddenArgs = ['slug'];
     this.args = [

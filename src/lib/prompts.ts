@@ -182,11 +182,3 @@ export function createVersionPrompt(
     },
   ];
 }
-
-export function deleteDocsPrompt(version: string): PromptObject {
-  return {
-    type: 'confirm',
-    name: 'deleteAll',
-    message: `This action will delete all docs under version ${version} from ReadMe, would you like to continue?`,
-  };
-}
