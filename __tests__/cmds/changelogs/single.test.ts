@@ -38,19 +38,19 @@ describe('rdme changelogs (single)', () => {
   });
 
   it('should error if no file path provided', () => {
-    return expect(changelogsSingle.run({ key })).rejects.toThrow(
-      'No path provided. Usage `rdme changelogs <path> [options]`.'
+    return expect(changelogsSingle.run({ key })).rejects.toStrictEqual(
+      new Error('No path provided. Usage `rdme changelogs <path> [options]`.')
     );
   });
 
-  it('should error if the argument is not a Markdown file', async () => {
-    await expect(changelogsSingle.run({ key, filePath: 'package.json' })).rejects.toStrictEqual(
+  it('should error if the argument is not a Markdown file', () => {
+    return expect(changelogsSingle.run({ key, filePath: 'package.json' })).rejects.toStrictEqual(
       new Error('Invalid file extension (.json). Must be one of the following: .markdown, .md')
     );
   });
 
-  it('should support .markdown files but error if file path cannot be found', async () => {
-    await expect(changelogsSingle.run({ key, filePath: 'non-existent-file.markdown' })).rejects.toStrictEqual(
+  it('should support .markdown files but error if file path cannot be found', () => {
+    return expect(changelogsSingle.run({ key, filePath: 'non-existent-file.markdown' })).rejects.toStrictEqual(
       new Error("Oops! We couldn't locate a file or directory at the path you provided.")
     );
   });
@@ -150,9 +150,7 @@ describe('rdme changelogs (single)', () => {
         message: `Error uploading ${chalk.underline(`${filePath}`)}:\n\n${errorObject.message}`,
       };
 
-      await expect(changelogsSingle.run({ filePath: `${filePath}`, key })).rejects.toStrictEqual(
-        new APIError(formattedErrorObject)
-      );
+      await expect(changelogsSingle.run({ filePath, key })).rejects.toStrictEqual(new APIError(formattedErrorObject));
 
       getMock.done();
       postMock.done();
@@ -177,9 +175,7 @@ describe('rdme changelogs (single)', () => {
         message: `Error uploading ${chalk.underline(`${filePath}`)}:\n\n${errorObject.message}`,
       };
 
-      await expect(changelogsSingle.run({ filePath: `${filePath}`, key })).rejects.toStrictEqual(
-        new APIError(formattedErrorObject)
-      );
+      await expect(changelogsSingle.run({ filePath, key })).rejects.toStrictEqual(new APIError(formattedErrorObject));
 
       getMock.done();
     });

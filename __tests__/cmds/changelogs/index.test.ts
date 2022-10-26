@@ -38,8 +38,8 @@ describe('rdme changelogs', () => {
   });
 
   it('should error if no path provided', () => {
-    return expect(changelogs.run({ key })).rejects.toThrow(
-      'No path provided. Usage `rdme changelogs <path> [options]`.'
+    return expect(changelogs.run({ key })).rejects.toStrictEqual(
+      new Error('No path provided. Usage `rdme changelogs <path> [options]`.')
     );
   });
 
