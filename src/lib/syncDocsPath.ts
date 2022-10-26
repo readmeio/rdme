@@ -10,13 +10,25 @@ import Command from './baseCommand';
 import pushDoc from './pushDoc';
 import readdirRecursive from './readdirRecursive';
 
-export default async function readPath(
-  pathInput: string,
-  usage: string,
+/**
+ * Takes a path (either to a directory of files or to a single file)
+ * and syncs those (either via POST or PUT) to ReadMe.
+ * @returns A promise-wrapped string with the results
+ */
+export default async function syncDocsPath(
+  /** Project API key */
   key: string,
-  dryRun: boolean,
-  cmdType: CommandCategories,
+  /** ReadMe project version */
   selectedVersion: string,
+  /** module within ReadMe to update (e.g. docs, changelogs, etc.) */
+  cmdType: CommandCategories,
+  /** Example command usage, used in error message */
+  usage: string,
+  /** Path input, can either be a directory or a single file */
+  pathInput: string,
+  /** boolean indicating dry run mode */
+  dryRun: boolean,
+  /** array of allowed file extensions */
   allowedFileExtensions = ['.markdown', '.md']
 ) {
   if (!pathInput) {

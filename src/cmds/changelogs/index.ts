@@ -2,7 +2,7 @@ import type { CommandOptions } from '../../lib/baseCommand';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
 import supportsGHA from '../../lib/decorators/supportsGHA';
-import readPath from '../../lib/readPath';
+import syncDocsPath from '../../lib/syncDocsPath';
 
 export type Options = {
   dryRun?: boolean;
@@ -43,7 +43,7 @@ export default class ChangelogsCommand extends Command {
 
     const { dryRun, filePath, key } = opts;
 
-    const result = await readPath(filePath, this.usage, key, dryRun, this.cmdCategory, undefined);
+    const result = await syncDocsPath(key, undefined, this.cmdCategory, this.usage, filePath, dryRun);
 
     return Promise.resolve(result);
   }
