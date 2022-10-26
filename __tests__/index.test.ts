@@ -143,7 +143,6 @@ describe('cli', () => {
     it.each([
       ['changelogs', 'changelogs', ''],
       ['custompages', 'custompages', ''],
-      ['custompages:single', 'custompages', `${slug}.md`],
     ])('should run GHA workflow for the %s command', async (cmd, type, file) => {
       expect.assertions(3);
       prompts.inject([false]);

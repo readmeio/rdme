@@ -91,16 +91,10 @@ exports[`utils #listByCategory should list commands by category 1`] = `
   "custompages": {
     "commands": [
       {
-        "description": "Sync a folder of Markdown files to your ReadMe project as Custom Pages.",
+        "description": "Sync Markdown/HTML files to your ReadMe project as Custom Pages. Can either be a path to a directory or a single Markdown/HTML file.",
         "hidden": false,
         "name": "custompages",
         "position": 1,
-      },
-      {
-        "description": "Sync a single Markdown file to your ReadMe project as a Custom Page.",
-        "hidden": false,
-        "name": "custompages:single",
-        "position": 2,
       },
     ],
     "description": "Custom Pages",

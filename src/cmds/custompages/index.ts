@@ -1,16 +1,12 @@
 import type { CommandOptions } from '../../lib/baseCommand';
 
-import chalk from 'chalk';
-import config from 'config';
-
 import Command, { CommandCategories } from '../../lib/baseCommand';
 import supportsGHA from '../../lib/decorators/supportsGHA';
-import pushDoc from '../../lib/pushDoc';
-import readdirRecursive from '../../lib/readdirRecursive';
+import syncDocsPath from '../../lib/syncDocsPath';
 
 export type Options = {
   dryRun?: boolean;
-  folder?: string;
+  filePath?: string;
 };
 
 @supportsGHA
@@ -19,16 +15,17 @@ export default class CustomPagesCommand extends Command {
     super();
 
     this.command = 'custompages';
-    this.usage = 'custompages <folder> [options]';
-    this.description = 'Sync a folder of Markdown files to your ReadMe project as Custom Pages.';
+    this.usage = 'custompages <path> [options]';
+    this.description =
+      'Sync Markdown/HTML files to your ReadMe project as Custom Pages. Can either be a path to a directory or a single Markdown/HTML file.';
     this.cmdCategory = CommandCategories.CUSTOM_PAGES;
     this.position = 1;
 
-    this.hiddenArgs = ['folder'];
+    this.hiddenArgs = ['filePath'];
     this.args = [
       this.getKeyArg(),
       {
-        name: 'folder',
+        name: 'filePath',
         type: String,
         defaultOption: true,
       },
@@ -44,32 +41,8 @@ export default class CustomPagesCommand extends Command {
   async run(opts: CommandOptions<Options>) {
     await super.run(opts);
 
-    const { dryRun, folder, key } = opts;
+    const { dryRun, filePath, key } = opts;
 
-    if (!folder) {
-      return Promise.reject(new Error(`No folder provided. Usage \`${config.get('cli')} ${this.usage}\`.`));
-    }
-
-    // Strip out non-markdown files
-    const files = readdirRecursive(folder).filter(
-      file =>
-        file.toLowerCase().endsWith('.html') ||
-        file.toLowerCase().endsWith('.md') ||
-        file.toLowerCase().endsWith('.markdown')
-    );
-
-    Command.debug(`number of files: ${files.length}`);
-
-    if (!files.length) {
-      return Promise.reject(new Error(`We were unable to locate Markdown or HTML files in ${folder}.`));
-    }
-
-    const updatedDocs = await Promise.all(
-      files.map(async filename => {
-        return pushDoc(key, undefined, dryRun, filename, this.cmdCategory);
-      })
-    );
-
-    return Promise.resolve(chalk.green(updatedDocs.join('\n')));
+    return syncDocsPath(key, undefined, this.cmdCategory, this.usage, filePath, dryRun, ['.html', '.markdown', '.md']);
   }
 }

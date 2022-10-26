@@ -10,7 +10,6 @@ import prompts from 'prompts';
 
 import ChangelogsCommand from '../../src/cmds/changelogs';
 import CustomPagesCommand from '../../src/cmds/custompages';
-import SingleCustomPageCommand from '../../src/cmds/custompages/single';
 import DocsCommand from '../../src/cmds/docs';
 import SingleDocCommand from '../../src/cmds/docs/single';
 import OpenAPICommand from '../../src/cmds/openapi';
@@ -65,10 +64,10 @@ describe('#createGHA', () => {
       { cmd: 'docs:single', CmdClass: SingleDocCommand, opts: { key, filePath: './docs/rdme.md', version: '1.0.0' } },
       { cmd: 'changelogs', CmdClass: ChangelogsCommand, opts: { key, filePath: './changelogs' } },
       { cmd: 'changelogs', CmdClass: ChangelogsCommand, opts: { key, filePath: './changelogs/rdme.md' } },
-      { cmd: 'custompages', CmdClass: CustomPagesCommand, opts: { key, folder: './custompages' } },
+      { cmd: 'custompages', CmdClass: CustomPagesCommand, opts: { key, filePath: './custompages' } },
       {
-        cmd: 'custompages:single',
-        CmdClass: SingleCustomPageCommand,
+        cmd: 'custompages',
+        CmdClass: CustomPagesCommand,
         opts: { key, filePath: './custompages/rdme.md' },
       },
     ])('$cmd', ({ cmd, CmdClass, opts }) => {
