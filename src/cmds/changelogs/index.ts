@@ -43,8 +43,6 @@ export default class ChangelogsCommand extends Command {
 
     const { dryRun, filePath, key } = opts;
 
-    const result = await syncDocsPath(key, undefined, this.cmdCategory, this.usage, filePath, dryRun);
-
-    return Promise.resolve(result);
+    return syncDocsPath(key, undefined, this.cmdCategory, this.usage, filePath, dryRun);
   }
 }
