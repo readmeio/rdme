@@ -31,12 +31,12 @@ export function getCategories(): Record<
       description: 'Custom Pages',
       commands: [],
     },
-    categories: {
-      description: 'Categories',
-      commands: [],
-    },
     versions: {
       description: 'Versions',
+      commands: [],
+    },
+    categories: {
+      description: 'Categories',
       commands: [],
     },
     admin: {
