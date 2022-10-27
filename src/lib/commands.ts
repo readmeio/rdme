@@ -16,7 +16,7 @@ export function getCategories(): Record<
 > {
   return {
     apis: {
-      description: 'Upload OpenAPI/Swagger definitions',
+      description: 'OpenAPI / Swagger',
       commands: [],
     },
     docs: {

@@ -58,7 +58,7 @@ exports[`utils #listByCategory should list commands by category 1`] = `
         "position": 5,
       },
     ],
-    "description": "Upload OpenAPI/Swagger definitions",
+    "description": "OpenAPI / Swagger",
   },
   "categories": {
     "commands": [
