@@ -16,11 +16,11 @@ export function getCategories(): Record<
 > {
   return {
     apis: {
-      description: 'Upload OpenAPI/Swagger definitions',
+      description: 'OpenAPI / Swagger',
       commands: [],
     },
     docs: {
-      description: 'Documentation',
+      description: 'Docs (a.k.a. Guides)',
       commands: [],
     },
     changelogs: {
@@ -31,12 +31,12 @@ export function getCategories(): Record<
       description: 'Custom Pages',
       commands: [],
     },
-    categories: {
-      description: 'Categories',
-      commands: [],
-    },
     versions: {
       description: 'Versions',
+      commands: [],
+    },
+    categories: {
+      description: 'Categories',
       commands: [],
     },
     admin: {

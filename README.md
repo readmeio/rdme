@@ -193,7 +193,7 @@ rdme openapi:reduce [path-to-file.json]
 
 The command will ask you a couple questions about how you wish to reduce the file and then do so. And as with the `openapi` command, you can also [omit the file path](#omitting-the-file-path).
 
-### Docs
+### Docs (a.k.a. Guides)
 
 The Markdown files will require YAML front matter with certain ReadMe documentation attributes. Check out [our docs](https://docs.readme.com/docs/rdme#markdown-file-setup) for more info on setting up your front matter.
 
@@ -201,6 +201,12 @@ Passing in a path to a directory will also sync any Markdown files that are loca
 
 ```sh
 rdme docs [path] --version={project-version}
+```
+
+This command also has an alias called `guides`:
+
+```
+rdme guides [path] --version={project-version}
 ```
 
 This command also has a dry run mode, which can be useful for initial setup and debugging. You can read more about dry run mode [in our docs](https://docs.readme.com/docs/rdme#dry-run-mode).
@@ -213,7 +219,13 @@ If you wish to delete documents from ReadMe that are no longer present in your l
 rdme docs:prune path-to-directory-of-markdown
 ```
 
-### Changelogs
+This command also has an alias called `guides:prune`:
+
+```sh
+rdme guides:prune path-to-directory-of-markdown
+```
+
+### Changelog
 
 The Markdown files will require YAML front matter with certain ReadMe documentation attributes. Check out [our docs](https://docs.readme.com/docs/rdme#markdown-file-setup) for more info on setting up your front matter.
 
