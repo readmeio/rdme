@@ -117,6 +117,41 @@ describe('cli', () => {
     conf.clear();
   });
 
+  describe('project info', () => {
+    let consoleInfoSpy;
+    const getCommandOutput = () => {
+      return [consoleInfoSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
+    };
+
+    beforeEach(() => {
+      conf.set('email', 'owlbert@readme.io');
+      conf.set('project', 'owlbert');
+      conf.set('apiKey', '123456');
+      consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+    });
+
+    afterEach(() => {
+      consoleInfoSpy.mockRestore();
+      conf.clear();
+    });
+
+    it('should inform a logged in user which project is being updated', async () => {
+      await expect(cli(['docs'])).rejects.toThrow('No folder provided. Usage `rdme docs <folder> [options]`.');
+
+      expect(getCommandOutput()).toMatch(
+        "You're currently making updates to the project: owlbert on the account owlbert@readme.io"
+      );
+    });
+
+    it('should not inform a logged in user when they pass their own key', async () => {
+      await expect(cli(['docs', '--key=asdf'])).rejects.toThrow(
+        'No folder provided. Usage `rdme docs <folder> [options]`.'
+      );
+
+      expect(getCommandOutput()).toBe('');
+    });
+  });
+
   it('should error with `rdme oas` arguments passed in', async () => {
     await expect(cli(['oas', 'endpoint'])).rejects.toThrow(/.*/);
   });
