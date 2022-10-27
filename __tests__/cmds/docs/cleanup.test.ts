@@ -126,7 +126,6 @@ describe('rdme docs:cleanup', () => {
         folder,
         key,
         version,
-        cleanup: true,
         dryRun: true,
       })
     ).resolves.toBe('🎭 dry run! This will delete `this-doc-should-be-missing-in-folder`.');
