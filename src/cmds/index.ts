@@ -1,13 +1,10 @@
 import CategoriesCommand from './categories';
 import CategoriesCreateCommand from './categories/create';
 import ChangelogsCommand from './changelogs';
-import SingleChangelogCommand from './changelogs/single';
 import CustomPagesCommand from './custompages';
-import SingleCustomPageCommand from './custompages/single';
 import DocsCommand from './docs';
 import DocsEditCommand from './docs/edit';
 import DocsPruneCommand from './docs/prune';
-import SingleDocCommand from './docs/single';
 import LoginCommand from './login';
 import LogoutCommand from './logout';
 import OASCommand from './oas';
@@ -28,15 +25,11 @@ const commands = {
   'categories:create': CategoriesCreateCommand,
 
   changelogs: ChangelogsCommand,
-  'changelogs:single': SingleChangelogCommand,
-
   custompages: CustomPagesCommand,
-  'custompages:single': SingleCustomPageCommand,
 
   docs: DocsCommand,
   'docs:prune': DocsPruneCommand,
   'docs:edit': DocsEditCommand,
-  'docs:single': SingleDocCommand,
 
   versions: VersionsCommand,
   'versions:create': CreateVersionCommand,

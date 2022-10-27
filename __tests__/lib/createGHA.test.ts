@@ -9,11 +9,8 @@ import fs from 'fs';
 import prompts from 'prompts';
 
 import ChangelogsCommand from '../../src/cmds/changelogs';
-import SingleChangelogCommand from '../../src/cmds/changelogs/single';
 import CustomPagesCommand from '../../src/cmds/custompages';
-import SingleCustomPageCommand from '../../src/cmds/custompages/single';
 import DocsCommand from '../../src/cmds/docs';
-import SingleDocCommand from '../../src/cmds/docs/single';
 import OpenAPICommand from '../../src/cmds/openapi';
 import OpenAPIValidateCommand from '../../src/cmds/openapi/validate';
 import configstore from '../../src/lib/configstore';
@@ -63,13 +60,13 @@ describe('#createGHA', () => {
       { cmd: 'openapi:validate', CmdClass: OpenAPIValidateCommand, opts: { spec: 'petstore.json' } },
       { cmd: 'openapi', CmdClass: OpenAPICommand, opts: { key, spec: 'petstore.json', id: 'spec_id' } },
       { cmd: 'docs', CmdClass: DocsCommand, opts: { key, folder: './docs', version: '1.0.0' } },
-      { cmd: 'docs:single', CmdClass: SingleDocCommand, opts: { key, filePath: './docs/rdme.md', version: '1.0.0' } },
-      { cmd: 'changelogs', CmdClass: ChangelogsCommand, opts: { key, folder: './changelogs' } },
-      { cmd: 'changelogs:single', CmdClass: SingleChangelogCommand, opts: { key, filePath: './changelogs/rdme.md' } },
-      { cmd: 'custompages', CmdClass: CustomPagesCommand, opts: { key, folder: './custompages' } },
+      { cmd: 'docs', CmdClass: DocsCommand, opts: { key, filePath: './docs/rdme.md', version: '1.0.0' } },
+      { cmd: 'changelogs', CmdClass: ChangelogsCommand, opts: { key, filePath: './changelogs' } },
+      { cmd: 'changelogs', CmdClass: ChangelogsCommand, opts: { key, filePath: './changelogs/rdme.md' } },
+      { cmd: 'custompages', CmdClass: CustomPagesCommand, opts: { key, filePath: './custompages' } },
       {
-        cmd: 'custompages:single',
-        CmdClass: SingleCustomPageCommand,
+        cmd: 'custompages',
+        CmdClass: CustomPagesCommand,
         opts: { key, filePath: './custompages/rdme.md' },
       },
     ])('$cmd', ({ cmd, CmdClass, opts }) => {
