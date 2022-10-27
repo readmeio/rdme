@@ -195,73 +195,47 @@ The command will ask you a couple questions about how you wish to reduce the fil
 
 ### Docs
 
-#### Syncing a Folder of Markdown Docs to ReadMe
-
 The Markdown files will require YAML front matter with certain ReadMe documentation attributes. Check out [our docs](https://docs.readme.com/docs/rdme#markdown-file-setup) for more info on setting up your front matter.
 
-Passing in a path to a directory will also sync any Markdown files that are located in subdirectories.
+Passing in a path to a directory will also sync any Markdown files that are located in subdirectories. The path input can also be individual Markdown files.
 
 ```sh
-rdme docs path-to-markdown-files --version={project-version}
+rdme docs [path] --version={project-version}
 ```
 
 This command also has a dry run mode, which can be useful for initial setup and debugging. You can read more about dry run mode [in our docs](https://docs.readme.com/docs/rdme#dry-run-mode).
 
-#### Cleanup
+#### Prune
 
-If you wish to delete documents from ReadMe that are no longer present in your local directory, pass the `--cleanup` option to the command.
-
-#### Edit a Single ReadMe Doc on Your Local Machine
+If you wish to delete documents from ReadMe that are no longer present in your local directory:
 
 ```sh
-rdme docs:edit <slug> --version={project-version}
-```
-
-#### Syncing a Single Markdown File to ReadMe
-
-```sh
-rdme docs:single path-to-markdown-file --version={project-version}
+rdme docs:prune path-to-directory-of-markdown
 ```
 
 ### Changelogs
 
-#### Syncing a Folder of Markdown to ReadMe
-
 The Markdown files will require YAML front matter with certain ReadMe documentation attributes. Check out [our docs](https://docs.readme.com/docs/rdme#markdown-file-setup) for more info on setting up your front matter.
 
-Passing in a path to a directory will also sync any Markdown files that are located in subdirectories.
+Passing in a path to a directory will also sync any Markdown files that are located in subdirectories. The path input can also be individual Markdown files.
 
 ```sh
-rdme changelogs path-to-markdown-files
+rdme changelogs [path]
 ```
 
 This command also has a dry run mode, which can be useful for initial setup and debugging. You can read more about dry run mode [in our docs](https://docs.readme.com/docs/rdme#dry-run-mode).
-
-#### Syncing a Single Markdown File to ReadMe
-
-```sh
-rdme changelogs:single path-to-markdown-file
-```
 
 ### Custom Pages
 
-#### Syncing a Folder of Custom Pages to ReadMe
-
 Custom Pages has support for both Markdown and HTML files. These files will require YAML front matter with certain ReadMe documentation attributes. Check out [our docs](https://docs.readme.com/docs/rdme#markdown-file-setup) for more info on setting up your front matter.
 
-Passing in a path to a directory will also sync any HTML/Markdown files that are located in subdirectories.
+Passing in a path to a directory will also sync any HTML/Markdown files that are located in subdirectories. The path input can also be individual HTML/Markdown files.
 
 ```sh
-rdme custompages path-to-markdown-files
+rdme custompages [path]
 ```
 
 This command also has a dry run mode, which can be useful for initial setup and debugging. You can read more about dry run mode [in our docs](https://docs.readme.com/docs/rdme#dry-run-mode).
-
-#### Syncing a Single Custom Page to ReadMe
-
-```sh
-rdme custompages:single path-to-markdown-file
-```
 
 ### Versions
 

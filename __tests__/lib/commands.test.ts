@@ -2,7 +2,7 @@
 /* eslint-disable jest/no-conditional-expect, jest/no-if */
 import type Command from '../../src/lib/baseCommand';
 
-import SingleDocCommand from '../../src/cmds/docs/single';
+import DocsCommand from '../../src/cmds/docs';
 import { CommandCategories } from '../../src/lib/baseCommand';
 import * as commands from '../../src/lib/commands';
 
@@ -71,7 +71,7 @@ describe('utils', () => {
 
   describe('#load', () => {
     it('should load a valid command', () => {
-      expect(commands.load('docs:single')).toBeInstanceOf(SingleDocCommand);
+      expect(commands.load('docs')).toBeInstanceOf(DocsCommand);
     });
 
     it('should throw an error on an invalid command', () => {

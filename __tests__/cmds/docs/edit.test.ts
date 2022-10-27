@@ -14,6 +14,20 @@ const version = '1.0.0';
 const category = 'CATEGORY_ID';
 
 describe('rdme docs:edit', () => {
+  let consoleWarnSpy;
+
+  function getWarningCommandOutput() {
+    return [consoleWarnSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
+  }
+
+  beforeEach(() => {
+    consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
+  });
+
+  afterEach(() => {
+    consoleWarnSpy.mockRestore();
+  });
+
   beforeAll(() => nock.disableNetConnect());
 
   afterAll(() => nock.cleanAll());
@@ -29,6 +43,13 @@ describe('rdme docs:edit', () => {
     process.env.TEST_CI = 'true';
     await expect(docsEdit.run({})).rejects.toStrictEqual(new Error('No project API key provided. Please use `--key`.'));
     delete process.env.TEST_CI;
+  });
+
+  it('should log deprecation notice', async () => {
+    process.env.TEST_CI = 'true';
+    await expect(docsEdit.run({})).rejects.toStrictEqual(new Error('No project API key provided. Please use `--key`.'));
+    delete process.env.TEST_CI;
+    expect(getWarningCommandOutput()).toMatch('is now deprecated');
   });
 
   it('should error if no slug provided', () => {

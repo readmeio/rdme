@@ -80,16 +80,10 @@ exports[`utils #listByCategory should list commands by category 1`] = `
   "changelogs": {
     "commands": [
       {
-        "description": "Sync a folder of Markdown files to your ReadMe project as Changelog posts.",
+        "description": "Sync Markdown files to your ReadMe project as Changelog posts. Can either be a path to a directory or a single Markdown file.",
         "hidden": false,
         "name": "changelogs",
         "position": 1,
-      },
-      {
-        "description": "Sync a single Markdown file to your ReadMe project as a Changelog post.",
-        "hidden": false,
-        "name": "changelogs:single",
-        "position": 2,
       },
     ],
     "description": "Changelog",
@@ -97,16 +91,10 @@ exports[`utils #listByCategory should list commands by category 1`] = `
   "custompages": {
     "commands": [
       {
-        "description": "Sync a folder of Markdown files to your ReadMe project as Custom Pages.",
+        "description": "Sync Markdown/HTML files to your ReadMe project as Custom Pages. Can either be a path to a directory or a single Markdown/HTML file.",
         "hidden": false,
         "name": "custompages",
         "position": 1,
-      },
-      {
-        "description": "Sync a single Markdown file to your ReadMe project as a Custom Page.",
-        "hidden": false,
-        "name": "custompages:single",
-        "position": 2,
       },
     ],
     "description": "Custom Pages",
@@ -114,21 +102,21 @@ exports[`utils #listByCategory should list commands by category 1`] = `
   "docs": {
     "commands": [
       {
-        "description": "Sync a folder of Markdown files to your ReadMe project.",
+        "description": "Sync Markdown files to your ReadMe project as Guides. Can either be a path to a directory or a single Markdown file.",
         "hidden": false,
         "name": "docs",
         "position": 1,
       },
       {
-        "description": "Edit a single file from your ReadMe project without saving locally.",
+        "description": "Delete any docs from ReadMe if their slugs are not found in the target folder.",
         "hidden": false,
-        "name": "docs:edit",
+        "name": "docs:prune",
         "position": 2,
       },
       {
-        "description": "Sync a single Markdown file to your ReadMe project.",
-        "hidden": false,
-        "name": "docs:single",
+        "description": "Edit a single file from your ReadMe project without saving locally. [deprecated]",
+        "hidden": true,
+        "name": "docs:edit",
         "position": 3,
       },
     ],

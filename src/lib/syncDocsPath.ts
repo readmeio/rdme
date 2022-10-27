@@ -1,26 +1,29 @@
+import fs from 'fs/promises';
+import path from 'path';
+
 import chalk from 'chalk';
 import config from 'config';
 import { Headers } from 'node-fetch';
 
 import APIError from './apiError';
-import { CommandCategories } from './baseCommand';
+import Command, { CommandCategories } from './baseCommand';
 import fetch, { cleanHeaders, handleRes } from './fetch';
 import { debug } from './logger';
+import readdirRecursive from './readdirRecursive';
 import readDoc from './readDoc';
 
 /**
  * Reads the contents of the specified Markdown or HTML file
  * and creates/updates the corresponding doc in ReadMe
  *
- * @param {String} key the project API key
- * @param {String} selectedVersion the project version
- * @param {Boolean} dryRun boolean indicating dry run mode
- * @param {String} filepath path to the HTML/Markdown file
- *  (file extension must end in `.html`, `.md`., or `.markdown`)
- * @param {String} type module within ReadMe to update (e.g. docs, changelogs, etc.)
- * @returns {Promise<String>} a string containing the result
+ * @param key the project API key
+ * @param selectedVersion the project version
+ * @param dryRun boolean indicating dry run mode
+ * @param filepath path to file
+ * @param type module within ReadMe to update (e.g. docs, changelogs, etc.)
+ * @returns A promise-wrapped string with the result
  */
-export default async function pushDoc(
+async function pushDoc(
   key: string,
   selectedVersion: string,
   dryRun: boolean,
@@ -130,4 +133,77 @@ export default async function pushDoc(
       err.message = `Error uploading ${chalk.underline(filepath)}:\n\n${err.message}`;
       throw err;
     });
+}
+
+/**
+ * Takes a path (either to a directory of files or to a single file)
+ * and syncs those (either via POST or PUT) to ReadMe.
+ * @returns A promise-wrapped string with the results
+ */
+export default async function syncDocsPath(
+  /** Project API key */
+  key: string,
+  /** ReadMe project version */
+  selectedVersion: string,
+  /** module within ReadMe to update (e.g. docs, changelogs, etc.) */
+  cmdType: CommandCategories,
+  /** Example command usage, used in error message */
+  usage: string,
+  /** Path input, can either be a directory or a single file */
+  pathInput: string,
+  /** boolean indicating dry run mode */
+  dryRun: boolean,
+  /** array of allowed file extensions */
+  allowedFileExtensions = ['.markdown', '.md']
+) {
+  if (!pathInput) {
+    return Promise.reject(new Error(`No path provided. Usage \`${config.get('cli')} ${usage}\`.`));
+  }
+
+  const stat = await fs.stat(pathInput).catch(err => {
+    if (err.code === 'ENOENT') {
+      throw new Error("Oops! We couldn't locate a file or directory at the path you provided.");
+    }
+    throw err;
+  });
+
+  let output: string;
+
+  if (stat.isDirectory()) {
+    // Filter out any files that don't match allowedFileExtensions
+    const files = readdirRecursive(pathInput).filter(file =>
+      allowedFileExtensions.includes(path.extname(file).toLowerCase())
+    );
+
+    Command.debug(`number of files: ${files.length}`);
+
+    if (!files.length) {
+      return Promise.reject(
+        new Error(
+          `The directory you provided (${pathInput}) doesn't contain any of the following required files: ${allowedFileExtensions.join(
+            ', '
+          )}.`
+        )
+      );
+    }
+
+    output = (
+      await Promise.all(
+        files.map(async filename => {
+          return pushDoc(key, selectedVersion, dryRun, filename, cmdType);
+        })
+      )
+    ).join('\n');
+  } else {
+    const fileExtension = path.extname(pathInput).toLowerCase();
+    if (!allowedFileExtensions.includes(fileExtension)) {
+      return Promise.reject(
+        new Error(
+          `Invalid file extension (${fileExtension}). Must be one of the following: ${allowedFileExtensions.join(', ')}`
+        )
+      );
+    }
+    output = await pushDoc(key, selectedVersion, dryRun, pathInput, cmdType);
+  }
+  return Promise.resolve(chalk.green(output));
 }

@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
 
@@ -44,17 +43,21 @@ describe('rdme docs', () => {
     delete process.env.TEST_CI;
   });
 
-  it('should error if no folder provided', () => {
-    return expect(docs.run({ key, version: '1.0.0' })).rejects.toThrow(
-      'No folder provided. Usage `rdme docs <folder> [options]`.'
+  it('should error if no path provided', async () => {
+    const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
+
+    await expect(docs.run({ key, version: '1.0.0' })).rejects.toStrictEqual(
+      new Error('No path provided. Usage `rdme docs <path> [options]`.')
     );
+
+    versionMock.done();
   });
 
   it('should error if the argument is not a folder', async () => {
     const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
-    await expect(docs.run({ key, version: '1.0.0', folder: 'not-a-folder' })).rejects.toThrow(
-      "ENOENT: no such file or directory, scandir 'not-a-folder'"
+    await expect(docs.run({ key, version: '1.0.0', filePath: 'not-a-folder' })).rejects.toStrictEqual(
+      new Error("Oops! We couldn't locate a file or directory at the path you provided.")
     );
 
     versionMock.done();
@@ -63,8 +66,10 @@ describe('rdme docs', () => {
   it('should error if the folder contains no markdown files', async () => {
     const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
-    await expect(docs.run({ key, version: '1.0.0', folder: '.github/workflows' })).rejects.toThrow(
-      'We were unable to locate Markdown files in .github/workflows.'
+    await expect(docs.run({ key, version: '1.0.0', filePath: '.github/workflows' })).rejects.toStrictEqual(
+      new Error(
+        "The directory you provided (.github/workflows) doesn't contain any of the following required files: .markdown, .md."
+      )
     );
 
     versionMock.done();
@@ -130,7 +135,7 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      return docs.run({ folder: `./__tests__/${fixturesBaseDir}/existing-docs`, key, version }).then(updatedDocs => {
+      return docs.run({ filePath: `./__tests__/${fixturesBaseDir}/existing-docs`, key, version }).then(updatedDocs => {
         // All docs should have been updated because their hashes from the GET request were different from what they
         // are currently.
         expect(updatedDocs).toBe(
@@ -163,7 +168,7 @@ describe('rdme docs', () => {
         .reply(200, { version });
 
       return docs
-        .run({ dryRun: true, folder: `./__tests__/${fixturesBaseDir}/existing-docs`, key, version })
+        .run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/existing-docs`, key, version })
         .then(updatedDocs => {
           // All docs should have been updated because their hashes from the GET request were different from what they
           // are currently.
@@ -199,7 +204,7 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      return docs.run({ folder: `./__tests__/${fixturesBaseDir}/existing-docs`, key, version }).then(skippedDocs => {
+      return docs.run({ filePath: `./__tests__/${fixturesBaseDir}/existing-docs`, key, version }).then(skippedDocs => {
         expect(skippedDocs).toBe(
           [
             '`simple-doc` was not updated because there were no changes.',
@@ -229,7 +234,7 @@ describe('rdme docs', () => {
         .reply(200, { version });
 
       return docs
-        .run({ dryRun: true, folder: `./__tests__/${fixturesBaseDir}/existing-docs`, key, version })
+        .run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/existing-docs`, key, version })
         .then(skippedDocs => {
           expect(skippedDocs).toBe(
             [
@@ -271,7 +276,7 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      await expect(docs.run({ folder: `./__tests__/${fixturesBaseDir}/new-docs`, key, version })).resolves.toBe(
+      await expect(docs.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs`, key, version })).resolves.toBe(
         `🌱 successfully created 'new-doc' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/new-docs/new-doc.md`
       );
 
@@ -300,7 +305,7 @@ describe('rdme docs', () => {
         .reply(200, { version });
 
       await expect(
-        docs.run({ dryRun: true, folder: `./__tests__/${fixturesBaseDir}/new-docs`, key, version })
+        docs.run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/new-docs`, key, version })
       ).resolves.toBe(
         `🎭 dry run! This will create 'new-doc' with contents from __tests__/${fixturesBaseDir}/new-docs/new-doc.md with the following metadata: ${JSON.stringify(
           doc.data
@@ -380,130 +385,12 @@ describe('rdme docs', () => {
         message: `Error uploading ${chalk.underline(`${fullDirectory}/${slug}.md`)}:\n\n${errorObject.message}`,
       };
 
-      await expect(docs.run({ folder: `./${fullDirectory}`, key, version })).rejects.toStrictEqual(
+      await expect(docs.run({ filePath: `./${fullDirectory}`, key, version })).rejects.toStrictEqual(
         new APIError(formattedErrorObject)
       );
 
       getMocks.done();
       postMocks.done();
-      versionMock.done();
-    });
-  });
-
-  describe('cleanup docs', () => {
-    const folder = `./__tests__/${fixturesBaseDir}/delete-docs`;
-    const someDocContent = fs.readFileSync(path.join(folder, 'some-doc.md'));
-    const lastUpdatedHash = crypto.createHash('sha1').update(someDocContent).digest('hex');
-    let consoleWarnSpy;
-
-    function getWarningCommandOutput() {
-      return [consoleWarnSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
-    }
-
-    beforeEach(() => {
-      consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
-    });
-
-    afterEach(() => {
-      consoleWarnSpy.mockRestore();
-    });
-
-    it('should delete doc if file is missing and --cleanup option is used', async () => {
-      const versionMock = getAPIMock()
-        .get(`/api/v1/version/${version}`)
-        .basicAuth({ user: key })
-        .reply(200, { version });
-
-      const apiMocks = getAPIMockWithVersionHeader(version)
-        .get('/api/v1/categories?perPage=20&page=1')
-        .basicAuth({ user: key })
-        .reply(200, [{ slug: 'category1', type: 'guide' }], { 'x-total-count': '1' })
-        .get('/api/v1/categories/category1/docs')
-        .basicAuth({ user: key })
-        .reply(200, [{ slug: 'this-doc-should-be-missing-in-folder' }, { slug: 'some-doc' }])
-        .delete('/api/v1/docs/this-doc-should-be-missing-in-folder')
-        .basicAuth({ user: key })
-        .reply(204, '')
-        .get('/api/v1/docs/some-doc')
-        .basicAuth({ user: key })
-        .reply(200, { lastUpdatedHash });
-
-      await expect(
-        docs.run({
-          folder,
-          key,
-          version,
-          cleanup: true,
-        })
-      ).resolves.toBe(
-        '🗑️ successfully deleted `this-doc-should-be-missing-in-folder`.\n' +
-          '`some-doc` was not updated because there were no changes.'
-      );
-      const warningOutput = getWarningCommandOutput();
-      expect(warningOutput).toBe(
-        "⚠️  Warning! We're going to delete from ReadMe any document that isn't found in ./__tests__/__fixtures__/docs/delete-docs."
-      );
-
-      apiMocks.done();
-      versionMock.done();
-    });
-
-    it('should return doc delete info for dry run', async () => {
-      const versionMock = getAPIMock()
-        .get(`/api/v1/version/${version}`)
-        .basicAuth({ user: key })
-        .reply(200, { version });
-      const apiMocks = getAPIMockWithVersionHeader(version)
-        .get('/api/v1/categories?perPage=20&page=1')
-        .basicAuth({ user: key })
-        .reply(200, [{ slug: 'category1', type: 'guide' }], { 'x-total-count': '1' })
-        .get('/api/v1/categories/category1/docs')
-        .basicAuth({ user: key })
-        .reply(200, [{ slug: 'this-doc-should-be-missing-in-folder' }])
-        .get('/api/v1/docs/some-doc')
-        .basicAuth({ user: key })
-        .reply(200, { lastUpdatedHash });
-      await expect(
-        docs.run({
-          folder,
-          key,
-          version,
-          cleanup: true,
-          dryRun: true,
-        })
-      ).resolves.toBe(
-        '🎭 dry run! This will delete `this-doc-should-be-missing-in-folder`.\n' +
-          '🎭 dry run! `some-doc` will not be updated because there were no changes.'
-      );
-      const warningOutput = getWarningCommandOutput();
-      expect(warningOutput).toBe(
-        "⚠️  Warning! We're going to delete from ReadMe any document that isn't found in ./__tests__/__fixtures__/docs/delete-docs."
-      );
-
-      apiMocks.done();
-      versionMock.done();
-    });
-
-    it('should do nothing if using --cleanup but the folder is empty and the user aborted', async () => {
-      prompts.inject([false]);
-
-      const versionMock = getAPIMock()
-        .get(`/api/v1/version/${version}`)
-        .basicAuth({ user: key })
-        .reply(200, { version });
-
-      await expect(
-        docs.run({
-          folder: './__tests__/__fixtures__/ref-oas',
-          key,
-          version,
-          cleanup: true,
-        })
-      ).rejects.toStrictEqual(new Error('Aborting, no changes were made.'));
-
-      const warningOutput = getWarningCommandOutput();
-      expect(warningOutput).toBe('');
-
       versionMock.done();
     });
   });
@@ -535,7 +422,7 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      await expect(docs.run({ folder: `./__tests__/${fixturesBaseDir}/slug-docs`, key, version })).resolves.toBe(
+      await expect(docs.run({ filePath: `./__tests__/${fixturesBaseDir}/slug-docs`, key, version })).resolves.toBe(
         `🌱 successfully created 'marc-actually-wrote-a-test' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`
       );
 
@@ -600,7 +487,7 @@ describe('rdme docs', () => {
       const fileName = 'docs-test-file';
       prompts.inject([altVersion, true, 'docs-test-branch', fileName]);
 
-      await expect(docs.run({ folder: `./__tests__/${fixturesBaseDir}/new-docs`, key })).resolves.toMatchSnapshot();
+      await expect(docs.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs`, key })).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();
       expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
@@ -645,7 +532,7 @@ describe('rdme docs', () => {
       prompts.inject([true, 'docs-test-branch', fileName]);
 
       await expect(
-        docs.run({ folder: `./__tests__/${fixturesBaseDir}/new-docs`, key, version })
+        docs.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs`, key, version })
       ).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();
@@ -687,7 +574,7 @@ describe('rdme docs', () => {
       prompts.inject(['docs-test-branch-github-flag', fileName]);
 
       await expect(
-        docs.run({ folder: `./__tests__/${fixturesBaseDir}/new-docs`, github: true, key, version })
+        docs.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs`, github: true, key, version })
       ).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();
@@ -725,7 +612,9 @@ describe('rdme docs', () => {
 
       prompts.inject([false]);
 
-      await expect(docs.run({ folder: `./__tests__/${fixturesBaseDir}/new-docs`, key, version })).rejects.toStrictEqual(
+      await expect(
+        docs.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs`, key, version })
+      ).rejects.toStrictEqual(
         new Error(
           'GitHub Actions workflow creation cancelled. If you ever change your mind, you can run this command again with the `--github` flag.'
         )
