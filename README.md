@@ -207,12 +207,12 @@ rdme docs path-to-markdown-files --version={project-version}
 
 This command also has a dry run mode, which can be useful for initial setup and debugging. You can read more about dry run mode [in our docs](https://docs.readme.com/docs/rdme#dry-run-mode).
 
-#### Cleanup
+#### Prune
 
 If you wish to delete documents from ReadMe that are no longer present in your local directory:
 
 ```sh
-rdme docs:cleanup path-to-markdown-files
+rdme docs:prune path-to-markdown-files
 ```
 
 #### Edit a Single ReadMe Doc on Your Local Machine

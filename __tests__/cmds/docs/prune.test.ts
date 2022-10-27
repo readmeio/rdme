@@ -1,17 +1,17 @@
 import nock from 'nock';
 import prompts from 'prompts';
 
-import DocsCleanupCommand from '../../../src/cmds/docs/cleanup';
+import DocsPruneCommand from '../../../src/cmds/docs/prune';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock';
 
-const docsCleanup = new DocsCleanupCommand();
+const docsPrune = new DocsPruneCommand();
 
 const fixturesBaseDir = '__fixtures__/docs';
 
 const key = 'API_KEY';
 const version = '1.0.0';
 
-describe('rdme docs:cleanup', () => {
+describe('rdme docs:prune', () => {
   const folder = `./__tests__/${fixturesBaseDir}/delete-docs`;
   let consoleWarnSpy;
 
@@ -34,28 +34,28 @@ describe('rdme docs:cleanup', () => {
   it('should prompt for login if no API key provided', async () => {
     const consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
     prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
-    await expect(docsCleanup.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
+    await expect(docsPrune.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
     consoleInfoSpy.mockRestore();
   });
 
   it('should error in CI if no API key provided', async () => {
     process.env.TEST_CI = 'true';
-    await expect(docsCleanup.run({})).rejects.toStrictEqual(
+    await expect(docsPrune.run({})).rejects.toStrictEqual(
       new Error('No project API key provided. Please use `--key`.')
     );
     delete process.env.TEST_CI;
   });
 
   it('should error if no folder provided', () => {
-    return expect(docsCleanup.run({ key, version: '1.0.0' })).rejects.toThrow(
-      'No folder provided. Usage `rdme docs:cleanup <folder> [options]`.'
+    return expect(docsPrune.run({ key, version: '1.0.0' })).rejects.toThrow(
+      'No folder provided. Usage `rdme docs:prune <folder> [options]`.'
     );
   });
 
   it('should error if the argument is not a folder', async () => {
     const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
-    await expect(docsCleanup.run({ key, version: '1.0.0', folder: 'not-a-folder' })).rejects.toThrow(
+    await expect(docsPrune.run({ key, version: '1.0.0', folder: 'not-a-folder' })).rejects.toThrow(
       "ENOENT: no such file or directory, scandir 'not-a-folder'"
     );
 
@@ -68,7 +68,7 @@ describe('rdme docs:cleanup', () => {
     const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
     await expect(
-      docsCleanup.run({
+      docsPrune.run({
         folder: '.github/workflows',
         key,
         version,
@@ -96,7 +96,7 @@ describe('rdme docs:cleanup', () => {
       .reply(204, '');
 
     await expect(
-      docsCleanup.run({
+      docsPrune.run({
         folder,
         key,
         version,
@@ -122,7 +122,7 @@ describe('rdme docs:cleanup', () => {
       .reply(200, [{ slug: 'this-doc-should-be-missing-in-folder' }]);
 
     await expect(
-      docsCleanup.run({
+      docsPrune.run({
         folder,
         key,
         version,

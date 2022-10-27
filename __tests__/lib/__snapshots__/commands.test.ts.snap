@@ -122,7 +122,7 @@ exports[`utils #listByCategory should list commands by category 1`] = `
       {
         "description": "Delete any docs from ReadMe if their slugs are not found in the target folder.",
         "hidden": false,
-        "name": "docs:cleanup",
+        "name": "docs:prune",
         "position": 2,
       },
       {
