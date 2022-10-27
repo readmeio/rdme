@@ -29,7 +29,7 @@ Check out `.github/workflows/docs.yml` for more info on this!
   <a href="https://github.com/readmeio/rdme"><img src="https://img.shields.io/github/workflow/status/readmeio/rdme/CI.svg?style=for-the-badge" alt="Build status"></a>
 </p>
 
-If you're anything like us, your documentation process may be a part of a broader CI/CD process. For example, you may want to automatically update your ReadMe guides or API reference every time you've ship new code. Enter `rdme`: ReadMe's official command-line interface (CLI) and GitHub Action!
+If you're anything like us, your documentation process may be a part of a broader CI/CD process. For example, you may want to automatically update your Guides or API reference on ReadMe every time you've ship new code. Enter `rdme`: ReadMe's official command-line interface (CLI) and GitHub Action!
 
 With `rdme`, you can create workflows for a variety of use cases, including:
 
@@ -51,7 +51,7 @@ To see detailed CLI setup instructions and all available commands, check out [th
 > - There are slight variations in the YAML front matter attributes for each respective section of your documentation. For example, Changelog has a `type` attribute which you can set to `added`. See [Specifying Other Attributes](#specifying-other-attributes) for more information.
 > - In addition to Markdown, Custom Pages also supports HTML files. If you pass an HTML file into the `custompages` commands, the page will have the `htmlmode` flag set to `true` and it will conversely be set to `false` for Markdown files. You can override this in the YAML front matter.
 
-In order to sync a directory of Markdown files to your guides, your Changelog, or your Custom Pages, you'll need to add certain attributes to the top of each page via a [YAML front matter block](https://jekyllrb.com/docs/front-matter/). See below for an example (using the page you're currently reading!):
+In order to sync Markdown files to your Guides, your Changelog, or your Custom Pages, you'll need to add certain attributes to the top of each page via a [YAML front matter block](https://jekyllrb.com/docs/front-matter/). See below for an example (using the page you're currently reading!):
 
 ```markdown
 ---
@@ -91,9 +91,9 @@ You can also specify several other page attributes in your YAML front matter, su
 If you're setting up new pages or if you're generally unsure if you've set up your page attributes correctly, each command has a dry run mode. This will allow you preview the changes without actually creating/updating any docs in ReadMe, which can be extremely useful for initial setup (oh, and we have [comprehensive debugging options](#troubleshooting) available as well!). To enable dry run mode, use the `--dryRun` flag:
 
 ```sh
-rdme docs [path-to-directory-of-markdown] --version={project-version} --dryRun
-rdme changelogs [path-to-directory-of-markdown] --dryRun
-rdme custompages [path-to-directory-of-markdown] --dryRun
+rdme docs [path] --version={project-version} --dryRun
+rdme changelogs [path] --dryRun
+rdme custompages [path] --dryRun
 ```
 
 The command output will indicate whether each page is being created or updated alongside all processed page attributes.

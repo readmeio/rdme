@@ -249,7 +249,7 @@ This command also has a dry run mode, which can be useful for initial setup and 
 If you wish to delete documents from ReadMe that are no longer present in your local directory:
 
 ```sh
-rdme docs:prune path-to-directory-of-markdown
+rdme docs:prune [path-to-directory-of-markdown]
 ```
 
 ### Changelogs 📣
