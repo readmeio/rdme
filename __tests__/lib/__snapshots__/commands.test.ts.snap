@@ -58,7 +58,7 @@ exports[`utils #listByCategory should list commands by category 1`] = `
         "position": 5,
       },
     ],
-    "description": "Upload OpenAPI/Swagger definitions",
+    "description": "OpenAPI / Swagger",
   },
   "categories": {
     "commands": [
@@ -119,8 +119,20 @@ exports[`utils #listByCategory should list commands by category 1`] = `
         "name": "docs:edit",
         "position": 3,
       },
+      {
+        "description": "Alias for \`rdme docs\`.",
+        "hidden": false,
+        "name": "guides",
+        "position": 3,
+      },
+      {
+        "description": "Alias for \`rdme docs:prune\`.",
+        "hidden": false,
+        "name": "guides:prune",
+        "position": 4,
+      },
     ],
-    "description": "Documentation",
+    "description": "Docs (a.k.a. Guides)",
   },
   "utilities": {
     "commands": [

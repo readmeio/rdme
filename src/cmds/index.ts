@@ -5,6 +5,8 @@ import CustomPagesCommand from './custompages';
 import DocsCommand from './docs';
 import DocsEditCommand from './docs/edit';
 import DocsPruneCommand from './docs/prune';
+import GuidesCommand from './guides';
+import GuidesPruneCommand from './guides/prune';
 import LoginCommand from './login';
 import LogoutCommand from './logout';
 import OASCommand from './oas';
@@ -30,6 +32,8 @@ const commands = {
   docs: DocsCommand,
   'docs:prune': DocsPruneCommand,
   'docs:edit': DocsEditCommand,
+  guides: GuidesCommand,
+  'guides:prune': GuidesPruneCommand,
 
   versions: VersionsCommand,
   'versions:create': CreateVersionCommand,
