@@ -132,7 +132,7 @@ exports[`utils #listByCategory should list commands by category 1`] = `
         "position": 4,
       },
     ],
-    "description": "Documentation",
+    "description": "Docs (a.k.a. Guides)",
   },
   "utilities": {
     "commands": [

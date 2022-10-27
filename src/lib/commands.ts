@@ -20,7 +20,7 @@ export function getCategories(): Record<
       commands: [],
     },
     docs: {
-      description: 'Documentation',
+      description: 'Docs (a.k.a. Guides)',
       commands: [],
     },
     changelogs: {
