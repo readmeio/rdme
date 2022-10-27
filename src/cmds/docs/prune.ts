@@ -73,19 +73,15 @@ export default class DocsPruneCommand extends Command {
 
     Command.debug(`number of files: ${files.length}`);
 
-    if (!files.length) {
-      const { deleteAll } = await promptTerminal({
-        type: 'confirm',
-        name: 'deleteAll',
-        message: `This action will delete all docs under version ${selectedVersion} from ReadMe, would you like to continue?`,
-      });
+    const { continueWithDeletion } = await promptTerminal({
+      type: 'confirm',
+      name: 'continueWithDeletion',
+      message: `This command will delete all guides page from your ReadMe project (version ${selectedVersion}) that are not also in ${folder}, would you like to continue?`,
+    });
 
-      if (!deleteAll) {
-        return Promise.reject(new Error('Aborting, no changes were made.'));
-      }
+    if (!continueWithDeletion) {
+      return Promise.reject(new Error('Aborting, no changes were made.'));
     }
-
-    Command.warn(`We're going to delete from ReadMe any document that isn't found in ${folder}.`);
 
     const docs = await getDocs(key, selectedVersion);
     const docSlugs = docs.map(({ slug }: { slug: string }) => slug);

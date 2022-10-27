@@ -13,23 +13,10 @@ const version = '1.0.0';
 
 describe('rdme docs:prune', () => {
   const folder = `./__tests__/${fixturesBaseDir}/delete-docs`;
-  let consoleWarnSpy;
-
-  function getWarningCommandOutput() {
-    return [consoleWarnSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
-  }
 
   beforeAll(() => nock.disableNetConnect());
 
   afterAll(() => nock.cleanAll());
-
-  beforeEach(() => {
-    consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
-  });
-
-  afterEach(() => {
-    consoleWarnSpy.mockRestore();
-  });
 
   it('should prompt for login if no API key provided', async () => {
     const consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
@@ -47,8 +34,8 @@ describe('rdme docs:prune', () => {
   });
 
   it('should error if no folder provided', () => {
-    return expect(docsPrune.run({ key, version: '1.0.0' })).rejects.toThrow(
-      'No folder provided. Usage `rdme docs:prune <folder> [options]`.'
+    return expect(docsPrune.run({ key, version: '1.0.0' })).rejects.toStrictEqual(
+      new Error('No folder provided. Usage `rdme docs:prune <folder> [options]`.')
     );
   });
 
@@ -62,26 +49,25 @@ describe('rdme docs:prune', () => {
     versionMock.done();
   });
 
-  it('should do nothing if the folder is empty and the user aborted', async () => {
+  it('should do nothing if the user aborted', async () => {
     prompts.inject([false]);
 
     const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
     await expect(
       docsPrune.run({
-        folder: '.github/workflows',
+        folder,
         key,
         version,
       })
     ).rejects.toStrictEqual(new Error('Aborting, no changes were made.'));
 
-    const warningOutput = getWarningCommandOutput();
-    expect(warningOutput).toBe('');
-
     versionMock.done();
   });
 
   it('should delete doc if file is missing', async () => {
+    prompts.inject([true]);
+
     const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
     const apiMocks = getAPIMockWithVersionHeader(version)
@@ -102,16 +88,14 @@ describe('rdme docs:prune', () => {
         version,
       })
     ).resolves.toBe('🗑️ successfully deleted `this-doc-should-be-missing-in-folder`.');
-    const warningOutput = getWarningCommandOutput();
-    expect(warningOutput).toBe(
-      "⚠️  Warning! We're going to delete from ReadMe any document that isn't found in ./__tests__/__fixtures__/docs/delete-docs."
-    );
 
     apiMocks.done();
     versionMock.done();
   });
 
   it('should return doc delete info for dry run', async () => {
+    prompts.inject([true]);
+
     const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
     const apiMocks = getAPIMockWithVersionHeader(version)
       .get('/api/v1/categories?perPage=20&page=1')
@@ -129,11 +113,6 @@ describe('rdme docs:prune', () => {
         dryRun: true,
       })
     ).resolves.toBe('🎭 dry run! This will delete `this-doc-should-be-missing-in-folder`.');
-
-    const warningOutput = getWarningCommandOutput();
-    expect(warningOutput).toBe(
-      "⚠️  Warning! We're going to delete from ReadMe any document that isn't found in ./__tests__/__fixtures__/docs/delete-docs."
-    );
 
     apiMocks.done();
     versionMock.done();
