@@ -1,6 +1,6 @@
 import prompts from 'prompts';
 
-import { version } from '../package.json';
+import { version as pkgVersion } from '../package.json';
 import cli from '../src';
 import conf from '../src/lib/configstore';
 
@@ -14,15 +14,15 @@ describe('cli', () => {
 
   describe('--version', () => {
     it('should return version from package.json', async () => {
-      await expect(cli(['--version'])).resolves.toBe(version);
+      await expect(cli(['--version'])).resolves.toBe(pkgVersion);
     });
 
     it('should return version if the `-V` alias is supplied', async () => {
-      await expect(cli(['-V'])).resolves.toBe(version);
+      await expect(cli(['-V'])).resolves.toBe(pkgVersion);
     });
 
     it('should return version from package.json for help command', async () => {
-      await expect(cli(['help', '--version'])).resolves.toBe(version);
+      await expect(cli(['help', '--version'])).resolves.toBe(pkgVersion);
     });
 
     // This is necessary because we use --version for other commands like `docs`
@@ -94,10 +94,18 @@ describe('cli', () => {
 
   it('should add stored apiKey to opts', async () => {
     expect.assertions(1);
-    conf.set('apiKey', '123456');
+    const key = '123456';
+    const version = '1.0.0';
+    conf.set('apiKey', key);
 
-    await expect(cli(['docs'])).rejects.toThrow('No folder provided. Usage `rdme docs <folder> [options]`.');
+    const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
+
+    await expect(cli(['docs', `--version=${version}`])).rejects.toStrictEqual(
+      new Error('No path provided. Usage `rdme docs <path> [options]`.')
+    );
+
     conf.clear();
+    versionMock.done();
   });
 
   it('should error with `rdme oas` arguments passed in', async () => {

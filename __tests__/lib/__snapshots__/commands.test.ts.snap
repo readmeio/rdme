@@ -102,7 +102,7 @@ exports[`utils #listByCategory should list commands by category 1`] = `
   "docs": {
     "commands": [
       {
-        "description": "Sync a folder of Markdown files to your ReadMe project.",
+        "description": "Sync Markdown files to your ReadMe project as Guides. Can either be a path to a directory or a single Markdown file.",
         "hidden": false,
         "name": "docs",
         "position": 1,
@@ -117,12 +117,6 @@ exports[`utils #listByCategory should list commands by category 1`] = `
         "description": "Edit a single file from your ReadMe project without saving locally. [deprecated]",
         "hidden": true,
         "name": "docs:edit",
-        "position": 3,
-      },
-      {
-        "description": "Sync a single Markdown file to your ReadMe project.",
-        "hidden": false,
-        "name": "docs:single",
         "position": 3,
       },
     ],
