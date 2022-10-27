@@ -8,12 +8,14 @@ import nock from 'nock';
 import prompts from 'prompts';
 
 import DocsCommand from '../../../src/cmds/docs';
+import GuidesCommand from '../../../src/cmds/guides';
 import APIError from '../../../src/lib/apiError';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock';
 import { after, before } from '../../helpers/get-gha-setup';
 import hashFileContents from '../../helpers/hash-file-contents';
 
 const docs = new DocsCommand();
+const guides = new GuidesCommand();
 
 const fixturesBaseDir = '__fixtures__/docs';
 const fullFixturesDir = `${__dirname}./../../${fixturesBaseDir}`;
@@ -624,5 +626,21 @@ describe('rdme docs', () => {
       postMock.done();
       versionMock.done();
     });
+  });
+});
+
+describe('rdme guides', () => {
+  beforeAll(() => nock.disableNetConnect());
+
+  afterAll(() => nock.cleanAll());
+
+  it('should error if no path provided', async () => {
+    const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
+
+    await expect(guides.run({ key, version: '1.0.0' })).rejects.toStrictEqual(
+      new Error('No path provided. Usage `rdme guides <path> [options]`.')
+    );
+
+    versionMock.done();
   });
 });

@@ -119,6 +119,18 @@ exports[`utils #listByCategory should list commands by category 1`] = `
         "name": "docs:edit",
         "position": 3,
       },
+      {
+        "description": "Alias for \`rdme docs\`.",
+        "hidden": false,
+        "name": "guides",
+        "position": 3,
+      },
+      {
+        "description": "Alias for \`rdme docs:prune\`.",
+        "hidden": false,
+        "name": "guides:prune",
+        "position": 4,
+      },
     ],
     "description": "Documentation",
   },

@@ -2,9 +2,11 @@ import nock from 'nock';
 import prompts from 'prompts';
 
 import DocsPruneCommand from '../../../src/cmds/docs/prune';
+import GuidesPruneCommand from '../../../src/cmds/guides/prune';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock';
 
 const docsPrune = new DocsPruneCommand();
+const guidesPrune = new GuidesPruneCommand();
 
 const fixturesBaseDir = '__fixtures__/docs';
 
@@ -116,5 +118,17 @@ describe('rdme docs:prune', () => {
 
     apiMocks.done();
     versionMock.done();
+  });
+});
+
+describe('rdme guides:prune', () => {
+  beforeAll(() => nock.disableNetConnect());
+
+  afterAll(() => nock.cleanAll());
+
+  it('should error if no folder provided', () => {
+    return expect(guidesPrune.run({ key, version: '1.0.0' })).rejects.toStrictEqual(
+      new Error('No folder provided. Usage `rdme guides:prune <folder> [options]`.')
+    );
   });
 });
