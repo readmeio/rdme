@@ -37,7 +37,7 @@ https://github.com/jonschlinkert/markdown-toc/issues/119
 - [Usage](#usage)
   - [Common `rdme` Options](#common-rdme-options)
   - [OpenAPI / Swagger 📚](#openapi--swagger-)
-  - [Docs 📘](#docs-)
+  - [Docs 📖](#docs-)
   - [Changelogs 📣](#changelogs-)
   - [Custom Pages 📄](#custom-pages-)
   - [Versions ⏳](#versions-)
@@ -232,7 +232,7 @@ rdme openapi:reduce [path-to-file.json]
 
 The command will ask you a couple questions about how you wish to reduce the file and then do so. And as with the `openapi` command, you can also [omit the file path](#omitting-the-file-path).
 
-### Docs 📘
+### Docs 📖
 
 The Markdown files will require YAML front matter with certain ReadMe documentation attributes. Check out [our docs](https://docs.readme.com/docs/rdme#markdown-file-setup) for more info on setting up your front matter.
 
