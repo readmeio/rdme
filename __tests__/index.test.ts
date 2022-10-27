@@ -117,7 +117,7 @@ describe('cli', () => {
     conf.clear();
   });
 
-  describe('project info', () => {
+  describe('logged-in user notifications', () => {
     let consoleInfoSpy;
     const getCommandOutput = () => {
       return [consoleInfoSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
@@ -138,9 +138,7 @@ describe('cli', () => {
     it('should inform a logged in user which project is being updated', async () => {
       await expect(cli(['docs'])).rejects.toThrow('No folder provided. Usage `rdme docs <folder> [options]`.');
 
-      expect(getCommandOutput()).toMatch(
-        "You're currently making updates to the project: owlbert on the account owlbert@readme.io"
-      );
+      expect(getCommandOutput()).toMatch('is currently logged in, using the stored API key for this project:');
     });
 
     it('should not inform a logged in user when they pass their own key', async () => {

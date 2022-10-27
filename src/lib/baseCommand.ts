@@ -3,6 +3,8 @@ import type commands from '../cmds';
 import type { CommandLineOptions } from 'command-line-args';
 import type { OptionDefinition } from 'command-line-usage';
 
+import chalk from 'chalk';
+
 import configstore from './configstore';
 import isCI from './isCI';
 import { debug, info, warn } from './logger';
@@ -95,9 +97,12 @@ export default class Command {
     if (this.args.some(arg => arg.name === 'key')) {
       if (opts.key && configstore.get('apiKey') === opts.key) {
         info(
-          `You're currently making updates to the project: ${configstore.get(
-            'project'
-          )} on the account ${configstore.get('email')}`
+          `🔑 ${configstore.get(
+            'email'
+          )} is currently logged in, using the stored API key for this project: ${chalk.blue(
+            configstore.get('project')
+          )}`,
+          false
         );
       }
 
