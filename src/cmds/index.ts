@@ -5,8 +5,8 @@ import SingleChangelogCommand from './changelogs/single';
 import CustomPagesCommand from './custompages';
 import SingleCustomPageCommand from './custompages/single';
 import DocsCommand from './docs';
+import DocsEditCommand from './docs/edit';
 import DocsPruneCommand from './docs/prune';
-import EditDocsCommand from './docs/edit';
 import SingleDocCommand from './docs/single';
 import LoginCommand from './login';
 import LogoutCommand from './logout';
@@ -35,7 +35,7 @@ const commands = {
 
   docs: DocsCommand,
   'docs:prune': DocsPruneCommand,
-  'docs:edit': EditDocsCommand,
+  'docs:edit': DocsEditCommand,
   'docs:single': SingleDocCommand,
 
   versions: VersionsCommand,

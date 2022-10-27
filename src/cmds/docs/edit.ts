@@ -22,7 +22,7 @@ export type Options = {
   slug?: string;
 };
 
-export default class EditDocsCommand extends Command {
+export default class DocsEditCommand extends Command {
   constructor() {
     super();
 
