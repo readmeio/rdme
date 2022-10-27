@@ -89,7 +89,7 @@ describe('cli', () => {
   });
 
   it('should not error with undefined cmd', async () => {
-    await expect(cli([])).resolves.toContain('Upload OpenAPI/Swagger definitions');
+    await expect(cli([])).resolves.toContain('OpenAPI / Swagger');
   });
 
   it('should add stored apiKey to opts', async () => {
