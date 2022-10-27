@@ -1,8 +1,8 @@
-import type { CommandOptions } from '../../lib/baseCommand';
+import type { CommandOptions } from '../lib/baseCommand';
 
-import Command, { CommandCategories } from '../../lib/baseCommand';
-import supportsGHA from '../../lib/decorators/supportsGHA';
-import syncDocsPath from '../../lib/syncDocsPath';
+import Command, { CommandCategories } from '../lib/baseCommand';
+import supportsGHA from '../lib/decorators/supportsGHA';
+import syncDocsPath from '../lib/syncDocsPath';
 
 export type Options = {
   dryRun?: boolean;
