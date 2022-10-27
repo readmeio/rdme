@@ -3,7 +3,8 @@ import CategoriesCreateCommand from './categories/create';
 import ChangelogsCommand from './changelogs';
 import CustomPagesCommand from './custompages';
 import DocsCommand from './docs';
-import EditDocsCommand from './docs/edit';
+import DocsEditCommand from './docs/edit';
+import DocsPruneCommand from './docs/prune';
 import SingleDocCommand from './docs/single';
 import LoginCommand from './login';
 import LogoutCommand from './logout';
@@ -28,7 +29,8 @@ const commands = {
   custompages: CustomPagesCommand,
 
   docs: DocsCommand,
-  'docs:edit': EditDocsCommand,
+  'docs:prune': DocsPruneCommand,
+  'docs:edit': DocsEditCommand,
   'docs:single': SingleDocCommand,
 
   versions: VersionsCommand,

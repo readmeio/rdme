@@ -1,4 +1,3 @@
-import nock from 'nock';
 import prompts from 'prompts';
 
 import { version } from '../package.json';
@@ -31,17 +30,6 @@ describe('cli', () => {
       await expect(cli(['no-such-command', '--version'])).rejects.toThrow(
         // This can be ignored as it's just going to be a command not found error
         'Command not found.'
-      );
-    });
-
-    it('should not be returned if `--version` is being used on a subcommand', async () => {
-      nock.disableNetConnect();
-
-      await expect(cli(['docs:edit', 'getting-started', '--version', '1.0.0', '--key=abcdef'])).rejects.not.toThrow(
-        // We're testing that the docs:edit command does NOT return an error about `--version` not
-        // being here because if it throws that error, then that means that `--version` wasn't
-        // passed in as expected.
-        'No project version provided. Please use `--version`.'
       );
     });
   });
@@ -95,13 +83,8 @@ describe('cli', () => {
   });
 
   describe('subcommands', () => {
-    // docs:edit will make a backend connection
-    beforeAll(() => nock.disableNetConnect());
-
     it('should load subcommands from the folder', async () => {
-      await expect(cli(['docs:edit', 'getting-started', '--version=1.0.0', '--key=abcdef'])).rejects.not.toThrow(
-        'Command not found.'
-      );
+      await expect(cli(['openapi:validate', 'package.json'])).rejects.not.toThrow('Command not found.');
     });
   });
 

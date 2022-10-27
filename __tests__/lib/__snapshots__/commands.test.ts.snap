@@ -108,10 +108,16 @@ exports[`utils #listByCategory should list commands by category 1`] = `
         "position": 1,
       },
       {
-        "description": "Edit a single file from your ReadMe project without saving locally.",
+        "description": "Delete any docs from ReadMe if their slugs are not found in the target folder.",
         "hidden": false,
-        "name": "docs:edit",
+        "name": "docs:prune",
         "position": 2,
+      },
+      {
+        "description": "Edit a single file from your ReadMe project without saving locally. [deprecated]",
+        "hidden": true,
+        "name": "docs:edit",
+        "position": 3,
       },
       {
         "description": "Sync a single Markdown file to your ReadMe project.",

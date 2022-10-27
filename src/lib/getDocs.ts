@@ -31,7 +31,7 @@ async function getCategoryDocs(key: string, selectedVersion: string, category: s
 }
 
 /**
- * Retrieve the docs under all categories or under a specific one
+ * Retrieve the docs under all categories
  *
  * @param {String} key the project API key
  * @param {String} selectedVersion the project version
