@@ -108,6 +108,41 @@ describe('cli', () => {
     versionMock.done();
   });
 
+  describe('logged-in user notifications', () => {
+    let consoleInfoSpy;
+    const getCommandOutput = () => {
+      return [consoleInfoSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
+    };
+
+    beforeEach(() => {
+      conf.set('email', 'owlbert@readme.io');
+      conf.set('project', 'owlbert');
+      conf.set('apiKey', '123456');
+      consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+    });
+
+    afterEach(() => {
+      consoleInfoSpy.mockRestore();
+      conf.clear();
+    });
+
+    it('should inform a logged in user which project is being updated', async () => {
+      await expect(cli(['openapi', '--create', '--update'])).rejects.toThrow(
+        'The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!'
+      );
+
+      expect(getCommandOutput()).toMatch('is currently logged in, using the stored API key for this project:');
+    });
+
+    it('should not inform a logged in user when they pass their own key', async () => {
+      await expect(cli(['openapi', '--create', '--update', '--key=asdf'])).rejects.toThrow(
+        'The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!'
+      );
+
+      expect(getCommandOutput()).toBe('');
+    });
+  });
+
   it('should error with `rdme oas` arguments passed in', async () => {
     await expect(cli(['oas', 'endpoint'])).rejects.toThrow(/.*/);
   });
