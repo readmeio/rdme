@@ -24,7 +24,7 @@ export type Options = {
 };
 
 @isHidden
-export default class EditDocsCommand extends Command {
+export default class DocsEditCommand extends Command {
   constructor() {
     super();
 
@@ -32,7 +32,7 @@ export default class EditDocsCommand extends Command {
     this.usage = 'docs:edit <slug> [options]';
     this.description = 'Edit a single file from your ReadMe project without saving locally. [deprecated]';
     this.cmdCategory = CommandCategories.DOCS;
-    this.position = 2;
+    this.position = 3;
 
     this.hiddenArgs = ['slug'];
     this.args = [
