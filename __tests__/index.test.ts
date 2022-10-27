@@ -2,6 +2,7 @@ import prompts from 'prompts';
 
 import { version as pkgVersion } from '../package.json';
 import cli from '../src';
+import OpenAPICommand from '../src/cmds/openapi';
 import conf from '../src/lib/configstore';
 
 import getAPIMock from './helpers/get-api-mock';
@@ -127,15 +128,18 @@ describe('cli', () => {
     });
 
     it('should inform a logged in user which project is being updated', async () => {
-      await expect(cli(['docs'])).rejects.toThrow('No folder provided. Usage `rdme docs <folder> [options]`.');
+      const openapi = new OpenAPICommand();
+      const key = '123456';
+
+      await expect(openapi.run({ key, create: true, update: true })).rejects.toStrictEqual(
+        new Error('The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!')
+      );
 
       expect(getCommandOutput()).toMatch('is currently logged in, using the stored API key for this project:');
     });
 
     it('should not inform a logged in user when they pass their own key', async () => {
-      await expect(cli(['docs', '--key=asdf'])).rejects.toThrow(
-        'No folder provided. Usage `rdme docs <folder> [options]`.'
-      );
+      await expect(cli(['openapi --create --update', '--key=asdf'])).rejects.toThrow('Command not found.');
 
       expect(getCommandOutput()).toBe('');
     });
