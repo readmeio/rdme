@@ -11,7 +11,7 @@ import APIError from '../../../src/lib/apiError';
 import getAPIMock from '../../helpers/get-api-mock';
 import hashFileContents from '../../helpers/hash-file-contents';
 
-const changelogsSingle = new ChangelogsCommand();
+const changelogs = new ChangelogsCommand();
 
 const fixturesBaseDir = '__fixtures__/changelogs';
 const fullFixturesDir = `${__dirname}./../../${fixturesBaseDir}`;
@@ -25,32 +25,32 @@ describe('rdme changelogs (single)', () => {
   it('should prompt for login if no API key provided', async () => {
     const consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
     prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
-    await expect(changelogsSingle.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
+    await expect(changelogs.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
     consoleInfoSpy.mockRestore();
   });
 
   it('should error in CI if no API key provided', async () => {
     process.env.TEST_CI = 'true';
-    await expect(changelogsSingle.run({})).rejects.toStrictEqual(
+    await expect(changelogs.run({})).rejects.toStrictEqual(
       new Error('No project API key provided. Please use `--key`.')
     );
     delete process.env.TEST_CI;
   });
 
   it('should error if no file path provided', () => {
-    return expect(changelogsSingle.run({ key })).rejects.toStrictEqual(
+    return expect(changelogs.run({ key })).rejects.toStrictEqual(
       new Error('No path provided. Usage `rdme changelogs <path> [options]`.')
     );
   });
 
   it('should error if the argument is not a Markdown file', () => {
-    return expect(changelogsSingle.run({ key, filePath: 'package.json' })).rejects.toStrictEqual(
+    return expect(changelogs.run({ key, filePath: 'package.json' })).rejects.toStrictEqual(
       new Error('Invalid file extension (.json). Must be one of the following: .markdown, .md')
     );
   });
 
   it('should support .markdown files but error if file path cannot be found', () => {
-    return expect(changelogsSingle.run({ key, filePath: 'non-existent-file.markdown' })).rejects.toStrictEqual(
+    return expect(changelogs.run({ key, filePath: 'non-existent-file.markdown' })).rejects.toStrictEqual(
       new Error("Oops! We couldn't locate a file or directory at the path you provided.")
     );
   });
@@ -78,7 +78,7 @@ describe('rdme changelogs (single)', () => {
         .reply(201, { slug, _id: id, body: doc.content, ...doc.data });
 
       await expect(
-        changelogsSingle.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, key })
+        changelogs.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, key })
       ).resolves.toBe(
         `🌱 successfully created 'new-doc' (ID: 1234) with contents from ./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`
       );
@@ -102,7 +102,7 @@ describe('rdme changelogs (single)', () => {
         });
 
       await expect(
-        changelogsSingle.run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, key })
+        changelogs.run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, key })
       ).resolves.toBe(
         `🎭 dry run! This will create 'new-doc' with contents from ./__tests__/${fixturesBaseDir}/new-docs/new-doc.md with the following metadata: ${JSON.stringify(
           doc.data
@@ -150,7 +150,7 @@ describe('rdme changelogs (single)', () => {
         message: `Error uploading ${chalk.underline(`${filePath}`)}:\n\n${errorObject.message}`,
       };
 
-      await expect(changelogsSingle.run({ filePath, key })).rejects.toStrictEqual(new APIError(formattedErrorObject));
+      await expect(changelogs.run({ filePath, key })).rejects.toStrictEqual(new APIError(formattedErrorObject));
 
       getMock.done();
       postMock.done();
@@ -175,7 +175,7 @@ describe('rdme changelogs (single)', () => {
         message: `Error uploading ${chalk.underline(`${filePath}`)}:\n\n${errorObject.message}`,
       };
 
-      await expect(changelogsSingle.run({ filePath, key })).rejects.toStrictEqual(new APIError(formattedErrorObject));
+      await expect(changelogs.run({ filePath, key })).rejects.toStrictEqual(new APIError(formattedErrorObject));
 
       getMock.done();
     });
@@ -204,7 +204,7 @@ describe('rdme changelogs (single)', () => {
         .reply(201, { slug: doc.data.slug, _id: id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
       await expect(
-        changelogsSingle.run({ filePath: `./__tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`, key })
+        changelogs.run({ filePath: `./__tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`, key })
       ).resolves.toBe(
         `🌱 successfully created 'marc-actually-wrote-a-test' (ID: 1234) with contents from ./__tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`
       );
@@ -245,7 +245,7 @@ describe('rdme changelogs (single)', () => {
           body: simpleDoc.doc.content,
         });
 
-      return changelogsSingle
+      return changelogs
         .run({ filePath: `./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, key })
         .then(updatedDocs => {
           expect(updatedDocs).toBe(
@@ -265,7 +265,7 @@ describe('rdme changelogs (single)', () => {
         .basicAuth({ user: key })
         .reply(200, { slug: simpleDoc.slug, lastUpdatedHash: 'anOldHash' });
 
-      return changelogsSingle
+      return changelogs
         .run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, key })
         .then(updatedDocs => {
           // All changelogs should have been updated because their hashes from the GET request were different from what they
@@ -290,7 +290,7 @@ describe('rdme changelogs (single)', () => {
         .basicAuth({ user: key })
         .reply(200, { slug: simpleDoc.slug, lastUpdatedHash: simpleDoc.hash });
 
-      return changelogsSingle
+      return changelogs
         .run({ filePath: `./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, key })
         .then(skippedDocs => {
           expect(skippedDocs).toBe('`simple-doc` was not updated because there were no changes.');
@@ -305,7 +305,7 @@ describe('rdme changelogs (single)', () => {
         .basicAuth({ user: key })
         .reply(200, { slug: simpleDoc.slug, lastUpdatedHash: simpleDoc.hash });
 
-      return changelogsSingle
+      return changelogs
         .run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, key })
         .then(skippedDocs => {
           expect(skippedDocs).toBe('🎭 dry run! `simple-doc` will not be updated because there were no changes.');
