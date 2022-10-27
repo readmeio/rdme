@@ -126,8 +126,8 @@ exports[`utils #listByCategory should list commands by category 1`] = `
         "position": 2,
       },
       {
-        "description": "Edit a single file from your ReadMe project without saving locally.",
-        "hidden": false,
+        "description": "Edit a single file from your ReadMe project without saving locally. [deprecated]",
+        "hidden": true,
         "name": "docs:edit",
         "position": 3,
       },
