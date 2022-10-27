@@ -10,6 +10,7 @@ import editor from 'editor';
 
 import APIError from '../../lib/apiError';
 import Command, { CommandCategories } from '../../lib/baseCommand';
+import isHidden from '../../lib/decorators/isHidden';
 import fetch, { cleanHeaders, handleRes } from '../../lib/fetch';
 import { getProjectVersion } from '../../lib/versionSelect';
 
@@ -22,15 +23,16 @@ export type Options = {
   slug?: string;
 };
 
-export default class EditDocsCommand extends Command {
+@isHidden
+export default class DocsEditCommand extends Command {
   constructor() {
     super();
 
     this.command = 'docs:edit';
     this.usage = 'docs:edit <slug> [options]';
-    this.description = 'Edit a single file from your ReadMe project without saving locally.';
+    this.description = 'Edit a single file from your ReadMe project without saving locally. [deprecated]';
     this.cmdCategory = CommandCategories.DOCS;
-    this.position = 2;
+    this.position = 3;
 
     this.hiddenArgs = ['slug'];
     this.args = [
@@ -45,6 +47,7 @@ export default class EditDocsCommand extends Command {
   }
 
   async run(opts: CommandOptions<Options>): Promise<undefined> {
+    Command.warn('`rdme docs:edit` is now deprecated and will be removed in a future release.');
     await super.run(opts);
 
     const { slug, key, version } = opts;

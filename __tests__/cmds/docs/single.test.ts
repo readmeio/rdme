@@ -6,12 +6,12 @@ import frontMatter from 'gray-matter';
 import nock from 'nock';
 import prompts from 'prompts';
 
-import DocsSingleCommand from '../../../src/cmds/docs/single';
+import DocsCommand from '../../../src/cmds/docs';
 import APIError from '../../../src/lib/apiError';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock';
 import hashFileContents from '../../helpers/hash-file-contents';
 
-const docsSingle = new DocsSingleCommand();
+const docs = new DocsCommand();
 
 const fixturesBaseDir = '__fixtures__/docs';
 const fullFixturesDir = `${__dirname}./../../${fixturesBaseDir}`;
@@ -20,7 +20,7 @@ const key = 'API_KEY';
 const version = '1.0.0';
 const category = 'CATEGORY_ID';
 
-describe('rdme docs:single', () => {
+describe('rdme docs (single)', () => {
   beforeAll(() => nock.disableNetConnect());
 
   afterAll(() => nock.cleanAll());
@@ -28,34 +28,40 @@ describe('rdme docs:single', () => {
   it('should prompt for login if no API key provided', async () => {
     const consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
     prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
-    await expect(docsSingle.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
+    await expect(docs.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
     consoleInfoSpy.mockRestore();
   });
 
   it('should error in CI if no API key provided', async () => {
     process.env.TEST_CI = 'true';
-    await expect(docsSingle.run({})).rejects.toStrictEqual(
-      new Error('No project API key provided. Please use `--key`.')
-    );
+    await expect(docs.run({})).rejects.toStrictEqual(new Error('No project API key provided. Please use `--key`.'));
     delete process.env.TEST_CI;
   });
 
-  it('should error if no file path provided', () => {
-    return expect(docsSingle.run({ key, version: '1.0.0' })).rejects.toThrow(
-      'No file path provided. Usage `rdme docs:single <file> [options]`.'
+  it('should error if no file path provided', async () => {
+    const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
+
+    await expect(docs.run({ key, version })).rejects.toStrictEqual(
+      new Error('No path provided. Usage `rdme docs <path> [options]`.')
     );
+
+    versionMock.done();
   });
 
   it('should error if the argument is not a Markdown file', async () => {
-    await expect(docsSingle.run({ key, version: '1.0.0', filePath: 'not-a-markdown-file' })).rejects.toThrow(
-      'The file path specified is not a Markdown file.'
+    const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
+
+    await expect(docs.run({ key, version, filePath: 'not-a-markdown-file' })).rejects.toStrictEqual(
+      new Error("Oops! We couldn't locate a file or directory at the path you provided.")
     );
+
+    versionMock.done();
   });
 
   it('should support .markdown files but error if file path cannot be found', async () => {
     const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
-    await expect(docsSingle.run({ key, version: '1.0.0', filePath: 'non-existent-file.markdown' })).rejects.toThrow(
-      'ENOENT: no such file or directory'
+    await expect(docs.run({ key, version, filePath: 'non-existent-file.markdown' })).rejects.toStrictEqual(
+      new Error("Oops! We couldn't locate a file or directory at the path you provided.")
     );
     versionMock.done();
   });
@@ -88,7 +94,7 @@ describe('rdme docs:single', () => {
         .reply(200, { version });
 
       await expect(
-        docsSingle.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, key, version })
+        docs.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, key, version })
       ).resolves.toBe(
         `🌱 successfully created 'new-doc' (ID: 1234) with contents from ./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`
       );
@@ -118,7 +124,7 @@ describe('rdme docs:single', () => {
         .reply(200, { version });
 
       await expect(
-        docsSingle.run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, key, version })
+        docs.run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, key, version })
       ).resolves.toBe(
         `🎭 dry run! This will create 'new-doc' with contents from ./__tests__/${fixturesBaseDir}/new-docs/new-doc.md with the following metadata: ${JSON.stringify(
           doc.data
@@ -169,9 +175,7 @@ describe('rdme docs:single', () => {
         message: `Error uploading ${chalk.underline(`${filePath}`)}:\n\n${errorObject.message}`,
       };
 
-      await expect(docsSingle.run({ filePath, key, version })).rejects.toStrictEqual(
-        new APIError(formattedErrorObject)
-      );
+      await expect(docs.run({ filePath, key, version })).rejects.toStrictEqual(new APIError(formattedErrorObject));
 
       getMock.done();
       postMock.done();
@@ -205,9 +209,7 @@ describe('rdme docs:single', () => {
         message: `Error uploading ${chalk.underline(`${filePath}`)}:\n\n${errorObject.message}`,
       };
 
-      await expect(docsSingle.run({ filePath, key, version })).rejects.toStrictEqual(
-        new APIError(formattedErrorObject)
-      );
+      await expect(docs.run({ filePath, key, version })).rejects.toStrictEqual(new APIError(formattedErrorObject));
 
       getMock.done();
       versionMock.done();
@@ -242,7 +244,7 @@ describe('rdme docs:single', () => {
         .reply(200, { version });
 
       await expect(
-        docsSingle.run({ filePath: `./__tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`, key, version })
+        docs.run({ filePath: `./__tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`, key, version })
       ).resolves.toBe(
         `🌱 successfully created 'marc-actually-wrote-a-test' (ID: 1234) with contents from ./__tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`
       );
@@ -291,7 +293,7 @@ describe('rdme docs:single', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      return docsSingle
+      return docs
         .run({ filePath: `./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, key, version })
         .then(updatedDocs => {
           expect(updatedDocs).toBe(
@@ -317,7 +319,7 @@ describe('rdme docs:single', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      return docsSingle
+      return docs
         .run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, key, version })
         .then(updatedDocs => {
           // All docs should have been updated because their hashes from the GET request were different from what they
@@ -348,7 +350,7 @@ describe('rdme docs:single', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      return docsSingle
+      return docs
         .run({ filePath: `./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, key, version })
         .then(skippedDocs => {
           expect(skippedDocs).toBe('`simple-doc` was not updated because there were no changes.');
@@ -369,7 +371,7 @@ describe('rdme docs:single', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      return docsSingle
+      return docs
         .run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, key, version })
         .then(skippedDocs => {
           expect(skippedDocs).toBe('🎭 dry run! `simple-doc` will not be updated because there were no changes.');
