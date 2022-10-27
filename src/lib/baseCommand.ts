@@ -93,6 +93,14 @@ export default class Command {
     Command.debug(`opts: ${JSON.stringify(opts)}`);
 
     if (this.args.some(arg => arg.name === 'key')) {
+      if (opts.key && configstore.get('apiKey') === opts.key) {
+        info(
+          `You're currently making updates to the project: ${configstore.get(
+            'project'
+          )} on the account ${configstore.get('email')}`
+        );
+      }
+
       if (!opts.key) {
         if (isCI()) {
           throw new Error('No project API key provided. Please use `--key`.');
@@ -102,14 +110,6 @@ export default class Command {
         info(result, false);
         // eslint-disable-next-line no-param-reassign
         opts.key = configstore.get('apiKey');
-      }
-
-      if (configstore.get('email')) {
-        info(
-          `You're currently making updates to the project: ${configstore.get(
-            'project'
-          )} on the account ${configstore.get('email')}`
-        );
       }
     }
 
