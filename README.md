@@ -1,7 +1,7 @@
 [![rdme](https://user-images.githubusercontent.com/8854718/195465739-0f0f83d5-2e18-4e6c-96ae-944e3bb6880a.png)](https://readme.com)
 
 <p align="center">
-  <a href="https://readme.com">ReadMe</a>'s official command-line interface (CLI) and <a href="#github-actions-configuration">GitHub Action</a>.
+  <a href="https://readme.com">ReadMe</a>'s official command-line interface (CLI) and <a href="#github-actions-configuration">GitHub Action</a> 🌊
 </p>
 
 <p align="center">
