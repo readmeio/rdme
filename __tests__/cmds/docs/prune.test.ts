@@ -67,6 +67,33 @@ describe('rdme docs:prune', () => {
     versionMock.done();
   });
 
+  it('should not ask for user confirmation if `confirm` is set to true', async () => {
+    const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
+
+    const apiMocks = getAPIMockWithVersionHeader(version)
+      .get('/api/v1/categories?perPage=20&page=1')
+      .basicAuth({ user: key })
+      .reply(200, [{ slug: 'category1', type: 'guide' }], { 'x-total-count': '1' })
+      .get('/api/v1/categories/category1/docs')
+      .basicAuth({ user: key })
+      .reply(200, [{ slug: 'this-doc-should-be-missing-in-folder' }, { slug: 'some-doc' }])
+      .delete('/api/v1/docs/this-doc-should-be-missing-in-folder')
+      .basicAuth({ user: key })
+      .reply(204, '');
+
+    await expect(
+      docsPrune.run({
+        folder,
+        key,
+        confirm: true,
+        version,
+      })
+    ).resolves.toBe('🗑️ successfully deleted `this-doc-should-be-missing-in-folder`.');
+
+    apiMocks.done();
+    versionMock.done();
+  });
+
   it('should delete doc if file is missing', async () => {
     prompts.inject([true]);
 
