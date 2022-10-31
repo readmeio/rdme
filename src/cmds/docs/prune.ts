@@ -47,13 +47,18 @@ export default class DocsPruneCommand extends Command {
         type: Boolean,
         description: 'Runs the command without creating/updating any docs in ReadMe. Useful for debugging.',
       },
+      {
+        name: 'noPrompt',
+        type: Boolean,
+        description: 'Runs the command without asking confirmation from the user. Useful for CI environments.',
+      },
     ];
   }
 
   async run(opts: CommandOptions<Options>) {
     await super.run(opts);
 
-    const { dryRun, folder, key, version } = opts;
+    const { dryRun, folder, key, noPrompt, version } = opts;
 
     if (!folder) {
       return Promise.reject(new Error(`No folder provided. Usage \`${config.get('cli')} ${this.usage}\`.`));
@@ -73,14 +78,16 @@ export default class DocsPruneCommand extends Command {
 
     Command.debug(`number of files: ${files.length}`);
 
-    const { continueWithDeletion } = await promptTerminal({
-      type: 'confirm',
-      name: 'continueWithDeletion',
-      message: `This command will delete all guides page from your ReadMe project (version ${selectedVersion}) that are not also in ${folder}, would you like to continue?`,
-    });
+    if (!noPrompt) {
+      const { continueWithDeletion } = await promptTerminal({
+        type: 'confirm',
+        name: 'continueWithDeletion',
+        message: `This command will delete all guides page from your ReadMe project (version ${selectedVersion}) that are not also in ${folder}, would you like to continue?`,
+      });
 
-    if (!continueWithDeletion) {
-      return Promise.reject(new Error('Aborting, no changes were made.'));
+      if (!continueWithDeletion) {
+        return Promise.reject(new Error('Aborting, no changes were made.'));
+      }
     }
 
     const docs = await getDocs(key, selectedVersion);
