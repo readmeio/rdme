@@ -298,13 +298,11 @@ This command also has a dry run mode, which can be useful for initial setup and 
 rdme versions
 ```
 
-#### Get All Information About a Particular Version
+##### Get All Information About a Particular Version
 
 ```sh
 rdme versions --version={project-version}
 ```
-
-If you wish to see the raw JSON output from our API in this response, supply the `--raw` flag.
 
 #### Create a New Version
 
