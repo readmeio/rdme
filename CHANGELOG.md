@@ -1,3 +1,14 @@
+## 8.0.0-beta.9 (2022-10-28)
+
+* feat(baseCommand): inform user which project they're making changes to (#643) ([1bb2448](https://github.com/readmeio/rdme/commit/1bb2448)), closes [#643](https://github.com/readmeio/rdme/issues/643)
+* feat(breaking/docs): deprecate `docs:edit` (#646) ([0009d20](https://github.com/readmeio/rdme/commit/0009d20)), closes [#646](https://github.com/readmeio/rdme/issues/646)
+* feat(docs): add `guides` alias (#647) ([d412a04](https://github.com/readmeio/rdme/commit/d412a04)), closes [#647](https://github.com/readmeio/rdme/issues/647)
+* feat(docs): consolidate `single` commands (#642) ([7552501](https://github.com/readmeio/rdme/commit/7552501)), closes [#642](https://github.com/readmeio/rdme/issues/642)
+* refactor(docs): move `--cleanup` option into `docs:prune` command (#644) ([4bc98c5](https://github.com/readmeio/rdme/commit/4bc98c5)), closes [#644](https://github.com/readmeio/rdme/issues/644)
+* ci: run tests against node 19 (#641) ([6ca5d8c](https://github.com/readmeio/rdme/commit/6ca5d8c)), closes [#641](https://github.com/readmeio/rdme/issues/641)
+
+
+
 ## 8.0.0-beta.8 (2022-10-17)
 
 * fix: surface all validation errors (#639) ([39b2c61](https://github.com/readmeio/rdme/commit/39b2c61)), closes [#639](https://github.com/readmeio/rdme/issues/639)

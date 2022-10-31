@@ -2,6 +2,7 @@ import type { CommandOptions } from '../../lib/baseCommand';
 
 import chalk from 'chalk';
 import config from 'config';
+import prompts from 'prompts';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
 import createGHA from '../../lib/createGHA';
@@ -13,6 +14,7 @@ import readDoc from '../../lib/readDoc';
 import { getProjectVersion } from '../../lib/versionSelect';
 
 export type Options = {
+  confirm?: boolean;
   dryRun?: boolean;
   folder?: string;
 };
@@ -42,6 +44,11 @@ export default class DocsPruneCommand extends Command {
         defaultOption: true,
       },
       this.getGitHubArg(),
+      {
+        name: 'confirm',
+        type: Boolean,
+        description: 'Bypass the confirmation prompt. Useful for CI environments.',
+      },
       {
         name: 'dryRun',
         type: Boolean,
@@ -73,13 +80,15 @@ export default class DocsPruneCommand extends Command {
 
     Command.debug(`number of files: ${files.length}`);
 
-    const { continueWithDeletion } = await promptTerminal({
+    prompts.override(opts);
+
+    const { confirm } = await promptTerminal({
       type: 'confirm',
-      name: 'continueWithDeletion',
-      message: `This command will delete all guides page from your ReadMe project (version ${selectedVersion}) that are not also in ${folder}, would you like to continue?`,
+      name: 'confirm',
+      message: `This command will delete all guides page from your ReadMe project (version ${selectedVersion}) that are not also in ${folder}, would you like to confirm?`,
     });
 
-    if (!continueWithDeletion) {
+    if (!confirm) {
       return Promise.reject(new Error('Aborting, no changes were made.'));
     }
 
