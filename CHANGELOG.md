@@ -1,3 +1,10 @@
+## 8.0.0 (2022-10-31)
+
+* docs: v8 docs (#637) ([757981e](https://github.com/readmeio/rdme/commit/757981e)), closes [#637](https://github.com/readmeio/rdme/issues/637)
+* feat(docs:prune): `--confirm` flag to bypass prompt (#648) ([34aa184](https://github.com/readmeio/rdme/commit/34aa184)), closes [#648](https://github.com/readmeio/rdme/issues/648)
+
+
+
 ## 8.0.0-beta.9 (2022-10-28)
 
 * feat(baseCommand): inform user which project they're making changes to (#643) ([1bb2448](https://github.com/readmeio/rdme/commit/1bb2448)), closes [#643](https://github.com/readmeio/rdme/issues/643)
