@@ -40,7 +40,7 @@ Once you've installed `act`, it'll ask you what Docker image size you'd like. Th
 -P ubuntu-18.04=ghcr.io/catthehacker/ubuntu:act-18.04
 ```
 
-Our GitHub Actions guidance states that Action workflows should have a [`runs-on` value](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idruns-on) of `ubuntu-latest`. These runners are updated frequently — you can find links to the the latest versions by navigating [here](https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners#preinstalled-software) and selecting the latest Ubuntu link. Because of this, you'll want to make sure your `ghcr.io/catthehacker/ubuntu` image stays up-to-date by doing a periodic pull:
+Our GitHub Actions guidance states that Action workflows should have a [`runs-on` value](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idruns-on) of `ubuntu-latest`. These runners are updated frequently — you can find links to the latest versions by navigating [here](https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners#preinstalled-software) and selecting the latest Ubuntu link. Because of this, you'll want to make sure your `ghcr.io/catthehacker/ubuntu` image stays up-to-date by doing a periodic pull:
 
 ```sh
 docker pull ghcr.io/catthehacker/ubuntu:act-latest
