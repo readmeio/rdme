@@ -219,7 +219,7 @@ If you wish to delete documents from ReadMe that are no longer present in your l
 rdme docs:prune path-to-directory-of-markdown
 ```
 
-Run with `--noPrompt` to deleted files without asking for confirmation (useful for CI environments)
+Run with `--confirm` to bypass the confirmation prompt (useful for CI environments).
 
 This command also has an alias called `guides:prune`:
 
