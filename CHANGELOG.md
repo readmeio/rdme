@@ -1,3 +1,14 @@
+## <small>8.0.1 (2022-11-01)</small>
+
+* fix(gha-onboarding): don't run git commands in CI (#657) ([a3955f2](https://github.com/readmeio/rdme/commit/a3955f2)), closes [#657](https://github.com/readmeio/rdme/issues/657)
+* chore(deps-dev): bump @readme/oas-examples from 5.7.0 to 5.8.0 (#656) ([2902430](https://github.com/readmeio/rdme/commit/2902430)), closes [#656](https://github.com/readmeio/rdme/issues/656)
+* chore(deps): bump @npmcli/ci-detect from 3.0.0 to 3.0.1 (#654) ([90a10c6](https://github.com/readmeio/rdme/commit/90a10c6)), closes [#654](https://github.com/readmeio/rdme/issues/654)
+* chore(deps): bump a bunch of deps (#658) ([0007322](https://github.com/readmeio/rdme/commit/0007322)), closes [#658](https://github.com/readmeio/rdme/issues/658)
+* docs: fix titles of example pages ([d2e05ad](https://github.com/readmeio/rdme/commit/d2e05ad))
+* docs(versions): fix outdated language on --raw flag ([6712bc5](https://github.com/readmeio/rdme/commit/6712bc5))
+
+
+
 ## 8.0.0 (2022-10-31)
 
 * docs: v8 docs (#637) ([757981e](https://github.com/readmeio/rdme/commit/757981e)), closes [#637](https://github.com/readmeio/rdme/issues/637)
