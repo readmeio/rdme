@@ -1,5 +1,5 @@
 ---
-title: 'GitHub Action Example: Syncing Markdown'
+title: 'GitHub Actions Example: Syncing Markdown'
 category: 5f7ce9e3a5504d0414d024c2
 ---
 

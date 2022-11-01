@@ -1,5 +1,5 @@
 ---
-title: 'GitHub Action Example: Syncing OpenAPI'
+title: 'GitHub Actions Example: Syncing OpenAPI'
 category: 5f7ce9e3a5504d0414d024c2
 ---
 
