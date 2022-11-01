@@ -177,6 +177,8 @@ describe('#createGHA', () => {
       it('should not run if in a CI environment', async () => {
         process.env.TEST_CI = 'true';
         await expect(createGHA('success!', cmd, command.args, opts)).resolves.toBe('success!');
+        // asserts that git commands aren't run in CI
+        expect(git.checkIsRepo).not.toHaveBeenCalled();
         delete process.env.TEST_CI;
       });
 

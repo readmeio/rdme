@@ -165,6 +165,12 @@ export default async function createGHA(
   debug(`running GHA onboarding for ${command} command`);
   debug(`opts used in createGHA: ${JSON.stringify(opts)}`);
 
+  // if in a CI environment,
+  // don't even bother running the git commands
+  if (!opts.github && isCI()) {
+    return msg;
+  }
+
   const { containsGitHubRemote, containsNonGitHubRemote, defaultBranch, isRepo, repoRoot } = await getGitData();
 
   const configVal = configstore.get(getConfigStoreKey(repoRoot));
@@ -177,8 +183,6 @@ export default async function createGHA(
     if (
       // not a repo
       !isRepo ||
-      // in a CI environment
-      isCI() ||
       // user has previously declined to set up GHA for current repo and `rdme` package version
       configVal === majorPkgVersion ||
       // is a repo, but only contains non-GitHub remotes
