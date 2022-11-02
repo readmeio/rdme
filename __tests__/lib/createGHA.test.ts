@@ -182,6 +182,14 @@ describe('#createGHA', () => {
         delete process.env.TEST_RDME_CI;
       });
 
+      it('should not run if in an npm lifecycle', async () => {
+        process.env.TEST_RDME_NPM_SCRIPT = 'true';
+        await expect(createGHA('success!', cmd, command.args, opts)).resolves.toBe('success!');
+        // asserts that git commands aren't run in CI
+        expect(git.checkIsRepo).not.toHaveBeenCalled();
+        delete process.env.TEST_RDME_NPM_SCRIPT;
+      });
+
       it('should not run if repo only contains non-GitHub remotes', () => {
         git.remote = getGitRemoteMock('origin', 'https://gitlab.com', 'main');
 

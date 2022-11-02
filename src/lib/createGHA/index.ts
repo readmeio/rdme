@@ -15,7 +15,7 @@ import { transcludeString } from 'hercule/promises';
 import { checkFilePath, cleanFileName } from '../checkFile';
 import configstore from '../configstore';
 import { getPkgVersion } from '../getPkgVersion';
-import isCI, { isTest } from '../isCI';
+import isCI, { isNpmScript, isTest } from '../isCI';
 import { debug, info } from '../logger';
 import promptTerminal from '../promptWrapper';
 
@@ -167,7 +167,7 @@ export default async function createGHA(
 
   // if in a CI environment,
   // don't even bother running the git commands
-  if (!opts.github && isCI()) {
+  if (!opts.github && (isCI() || isNpmScript())) {
     return msg;
   }
 

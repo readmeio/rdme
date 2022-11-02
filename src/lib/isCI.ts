@@ -17,10 +17,26 @@ export function isTest() {
 }
 
 /**
+ * Small env check to determine if the current command is being run
+ * via an npm (or yarn) script.
+ *
+ * The reason we have this weird conditional logic is because we run our tests via
+ * an npm script and we don't want false positives when running tests.
+ *
+ * @see {@link https://docs.npmjs.com/cli/v8/using-npm/scripts#current-lifecycle-event}
+ * @see {@link https://docs.npmjs.com/cli/v6/using-npm/scripts#current-lifecycle-event}
+ * @see {@link https://yarnpkg.com/advanced/lifecycle-scripts}
+ */
+export function isNpmScript() {
+  /* istanbul ignore next */
+  return (!!process.env.npm_lifecycle_event && !isTest()) || !!process.env.TEST_RDME_NPM_SCRIPT;
+}
+
+/**
  * Small check to ensure we're in a safe CI environment.
  *
- * The reason we have this `env` variable is because we run our tests in a CI environment
- * and we don't want false positives when running tests on logic only intended for CI.
+ * The reason we have this weird conditional logic is because we run our tests in
+ * a CI environment and we don't want false positives when running tests.
  */
 export default function isCI() {
   /* istanbul ignore next */
