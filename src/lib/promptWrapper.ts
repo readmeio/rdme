@@ -1,5 +1,6 @@
-import ciDetect from '@npmcli/ci-detect';
 import prompts from 'prompts';
+
+import isCI from './isCI';
 
 /**
  * The `prompts` library doesn't always interpret CTRL+C and release the terminal back to the user
@@ -28,7 +29,7 @@ export default async function promptTerminal<T extends string = string>(
    * prompt is not being run in a CI environment.
    */
   function onRender() {
-    if (ciDetect() && process.env.NODE_ENV !== 'test') {
+    if (isCI()) {
       process.stdout.write('\n');
       process.stdout.write(
         'Yikes! Looks like we were about to prompt you for something in a CI environment. Are you missing an argument?'

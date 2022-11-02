@@ -33,7 +33,7 @@ export function before(writeFileSyncCb) {
   // no need to construct everything
   global.Date = jest.fn(() => DATE_TO_USE);
 
-  process.env.TEST_CREATEGHA = 'true';
+  process.env.TEST_RDME_CREATEGHA = 'true';
 
   const spy = jest.spyOn(getPkgVersion, 'getPkgVersion');
   spy.mockReturnValue(Promise.resolve('7.8.9'));
@@ -44,7 +44,7 @@ export function before(writeFileSyncCb) {
  */
 export function after() {
   configstore.clear();
-  delete process.env.TEST_CREATEGHA;
+  delete process.env.TEST_RDME_CREATEGHA;
   jest.clearAllMocks();
   process.chdir(testWorkingDir);
 }

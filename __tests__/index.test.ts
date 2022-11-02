@@ -92,24 +92,9 @@ describe('cli', () => {
     await expect(cli([])).resolves.toContain('OpenAPI / Swagger');
   });
 
-  it('should add stored apiKey to opts', async () => {
-    expect.assertions(1);
-    const key = '123456';
-    const version = '1.0.0';
-    conf.set('apiKey', key);
-
-    const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
-
-    await expect(cli(['docs', `--version=${version}`])).rejects.toStrictEqual(
-      new Error('No path provided. Usage `rdme docs <path> [options]`.')
-    );
-
-    conf.clear();
-    versionMock.done();
-  });
-
-  describe('logged-in user notifications', () => {
+  describe('stored API key', () => {
     let consoleInfoSpy;
+    const key = '123456';
     const getCommandOutput = () => {
       return [consoleInfoSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
     };
@@ -117,13 +102,30 @@ describe('cli', () => {
     beforeEach(() => {
       conf.set('email', 'owlbert@readme.io');
       conf.set('project', 'owlbert');
-      conf.set('apiKey', '123456');
+      conf.set('apiKey', key);
       consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
     });
 
     afterEach(() => {
       consoleInfoSpy.mockRestore();
       conf.clear();
+    });
+
+    it('should add stored apiKey to opts', async () => {
+      expect.assertions(1);
+      const version = '1.0.0';
+
+      const versionMock = getAPIMock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version });
+
+      await expect(cli(['docs', `--version=${version}`])).rejects.toStrictEqual(
+        new Error('No path provided. Usage `rdme docs <path> [options]`.')
+      );
+
+      conf.clear();
+      versionMock.done();
     });
 
     it('should inform a logged in user which project is being updated', async () => {

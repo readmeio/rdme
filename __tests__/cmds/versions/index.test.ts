@@ -45,9 +45,9 @@ describe('rdme versions', () => {
   });
 
   it('should error in CI if no API key provided', async () => {
-    process.env.TEST_CI = 'true';
+    process.env.TEST_RDME_CI = 'true';
     await expect(versions.run({})).rejects.toStrictEqual(new Error('No project API key provided. Please use `--key`.'));
-    delete process.env.TEST_CI;
+    delete process.env.TEST_RDME_CI;
   });
 
   it('should make a request to get a list of existing versions', async () => {
