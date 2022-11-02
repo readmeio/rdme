@@ -1,3 +1,9 @@
+## <small>8.0.3 (2022-11-02)</small>
+
+* fix: keyv should be a regular dep :facepalm: ([4290d50](https://github.com/readmeio/rdme/commit/4290d50))
+
+
+
 ## <small>8.0.2 (2022-11-02)</small>
 
 * fix: npm script awareness, TS fixes, test env refactors (#659) ([05c34da](https://github.com/readmeio/rdme/commit/05c34da)), closes [#659](https://github.com/readmeio/rdme/issues/659)
