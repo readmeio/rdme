@@ -1,3 +1,9 @@
+## <small>8.0.2 (2022-11-02)</small>
+
+* fix: npm script awareness, TS fixes, test env refactors (#659) ([05c34da](https://github.com/readmeio/rdme/commit/05c34da)), closes [#659](https://github.com/readmeio/rdme/issues/659)
+
+
+
 ## <small>8.0.1 (2022-11-01)</small>
 
 * fix(gha-onboarding): don't run git commands in CI (#657) ([a3955f2](https://github.com/readmeio/rdme/commit/a3955f2)), closes [#657](https://github.com/readmeio/rdme/issues/657)
