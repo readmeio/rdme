@@ -22,11 +22,11 @@ describe('rdme categories', () => {
   });
 
   it('should error in CI if no API key provided', async () => {
-    process.env.TEST_CI = 'true';
+    process.env.TEST_RDME_CI = 'true';
     await expect(categories.run({})).rejects.toStrictEqual(
       new Error('No project API key provided. Please use `--key`.')
     );
-    delete process.env.TEST_CI;
+    delete process.env.TEST_RDME_CI;
   });
 
   it('should return all categories for a single page', async () => {

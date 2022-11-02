@@ -23,11 +23,11 @@ describe('rdme versions:update', () => {
   });
 
   it('should error in CI if no API key provided', async () => {
-    process.env.TEST_CI = 'true';
+    process.env.TEST_RDME_CI = 'true';
     await expect(updateVersion.run({})).rejects.toStrictEqual(
       new Error('No project API key provided. Please use `--key`.')
     );
-    delete process.env.TEST_CI;
+    delete process.env.TEST_RDME_CI;
   });
 
   it('should update a specific version object', async () => {

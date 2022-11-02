@@ -15,7 +15,7 @@ import { transcludeString } from 'hercule/promises';
 import { checkFilePath, cleanFileName } from '../checkFile';
 import configstore from '../configstore';
 import { getPkgVersion } from '../getPkgVersion';
-import isCI from '../isCI';
+import isCI, { isTest } from '../isCI';
 import { debug, info } from '../logger';
 import promptTerminal from '../promptWrapper';
 
@@ -188,7 +188,7 @@ export default async function createGHA(
       // is a repo, but only contains non-GitHub remotes
       (isRepo && containsNonGitHubRemote && !containsGitHubRemote) ||
       // not testing this function
-      (process.env.NODE_ENV === 'test' && !process.env.TEST_CREATEGHA)
+      (isTest() && !process.env.TEST_RDME_CREATEGHA)
     ) {
       debug('not running GHA onboarding workflow, exiting');
       // We return the original command message and pretend this command flow never happened.

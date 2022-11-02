@@ -405,11 +405,11 @@ describe('rdme openapi', () => {
 
     describe('CI spec selection', () => {
       beforeEach(() => {
-        process.env.TEST_CI = 'true';
+        process.env.TEST_RDME_CI = 'true';
       });
 
       afterEach(() => {
-        delete process.env.TEST_CI;
+        delete process.env.TEST_RDME_CI;
       });
 
       it('should error out if multiple possible spec matches were found', () => {
@@ -737,11 +737,11 @@ describe('rdme openapi', () => {
 
     describe('CI version handling', () => {
       beforeEach(() => {
-        process.env.TEST_CI = 'true';
+        process.env.TEST_RDME_CI = 'true';
       });
 
       afterEach(() => {
-        delete process.env.TEST_CI;
+        delete process.env.TEST_RDME_CI;
       });
 
       it('should omit version header in CI environment', async () => {
@@ -842,11 +842,11 @@ describe('rdme openapi', () => {
     });
 
     it('should error in CI if no API key provided', async () => {
-      process.env.TEST_CI = 'true';
+      process.env.TEST_RDME_CI = 'true';
       await expect(openapi.run({})).rejects.toStrictEqual(
         new Error('No project API key provided. Please use `--key`.')
       );
-      delete process.env.TEST_CI;
+      delete process.env.TEST_RDME_CI;
     });
 
     it('should error if `--create` and `--update` flags are passed simultaneously', () => {

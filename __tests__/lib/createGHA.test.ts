@@ -175,11 +175,11 @@ describe('#createGHA', () => {
       });
 
       it('should not run if in a CI environment', async () => {
-        process.env.TEST_CI = 'true';
+        process.env.TEST_RDME_CI = 'true';
         await expect(createGHA('success!', cmd, command.args, opts)).resolves.toBe('success!');
         // asserts that git commands aren't run in CI
         expect(git.checkIsRepo).not.toHaveBeenCalled();
-        delete process.env.TEST_CI;
+        delete process.env.TEST_RDME_CI;
       });
 
       it('should not run if repo only contains non-GitHub remotes', () => {

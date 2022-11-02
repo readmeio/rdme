@@ -10,6 +10,13 @@ export function isGHA() {
 }
 
 /**
+ * Small env check to determine if we're running our testbed
+ */
+export function isTest() {
+  return process.env.NODE_ENV === 'rdme-test';
+}
+
+/**
  * Small check to ensure we're in a safe CI environment.
  *
  * The reason we have this `env` variable is because we run our tests in a CI environment
@@ -17,5 +24,5 @@ export function isGHA() {
  */
 export default function isCI() {
   /* istanbul ignore next */
-  return (ciDetect() && process.env.NODE_ENV !== 'test') || process.env.TEST_CI;
+  return (ciDetect() && !isTest()) || !!process.env.TEST_RDME_CI;
 }
