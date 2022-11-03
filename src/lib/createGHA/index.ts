@@ -10,8 +10,6 @@ import prompts from 'prompts';
 import semverMajor from 'semver/functions/major';
 import simpleGit from 'simple-git';
 
-import { transcludeString } from 'hercule/promises';
-
 import { checkFilePath, cleanFileName } from '../checkFile';
 import configstore from '../configstore';
 import { getPkgVersion } from '../getPkgVersion';
@@ -273,21 +271,11 @@ export default async function createGHA(
 
   debug(`data for resolver: ${JSON.stringify(data)}`);
 
-  /**
-   * Custom resolver for usage in `hercule`.
-   *
-   * @param url The variables from [the file template](./baseFile.ts)
-   * @see {@link https://github.com/jamesramsay/hercule#resolvers}
-   */
-  const customResolver = function (
-    url: 'branch' | 'cleanCommand' | 'command' | 'commandString' | 'rdmeVersion' | 'timestamp'
-  ): {
-    content: string;
-  } {
-    return { content: data[url] };
-  };
+  let output = yamlBase;
 
-  const { output } = await transcludeString(yamlBase, { resolvers: [customResolver] });
+  Object.keys(data).forEach((key: keyof typeof data) => {
+    output = output.replace(new RegExp(`{{${key}}}`, 'g'), data[key]);
+  });
 
   if (!fs.existsSync(GITHUB_WORKFLOW_DIR)) {
     debug('GHA workflow directory does not exist, creating');
