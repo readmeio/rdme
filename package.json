@@ -74,6 +74,7 @@
     "@types/jest": "^29.1.1",
     "@types/js-yaml": "^4.0.5",
     "@types/jsonpath": "^0.2.0",
+    "@types/keyv": "3.1.4",
     "@types/mime-types": "^2.1.1",
     "@types/node-fetch": "^2.6.2",
     "@types/npmcli__ci-detect": "^2.0.0",
