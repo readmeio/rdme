@@ -1,3 +1,10 @@
+## <small>8.0.4-beta.0 (2022-11-03)</small>
+
+* chore(deps-dev): attempt to fix keyv types ([7e3cf0d](https://github.com/readmeio/rdme/commit/7e3cf0d))
+* revert: uninstall keyv ([0a6c0df](https://github.com/readmeio/rdme/commit/0a6c0df))
+
+
+
 ## <small>8.0.3 (2022-11-02)</small>
 
 * fix: keyv should be a regular dep :facepalm: ([4290d50](https://github.com/readmeio/rdme/commit/4290d50))
