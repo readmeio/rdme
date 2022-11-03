@@ -1,3 +1,11 @@
+## <small>8.0.4 (2022-11-03)</small>
+
+* chore(deps): bump update-notifier-cjs ([879d0c8](https://github.com/readmeio/rdme/commit/879d0c8)), closes [#661](https://github.com/readmeio/rdme/issues/661)
+* refactor(createGHA): drop hercule in favor of native solution (#660) ([e55b89e](https://github.com/readmeio/rdme/commit/e55b89e)), closes [#660](https://github.com/readmeio/rdme/issues/660)
+* revert: uninstall keyv ([0a6c0df](https://github.com/readmeio/rdme/commit/0a6c0df))
+
+
+
 ## <small>8.0.3 (2022-11-02)</small>
 
 * fix: keyv should be a regular dep :facepalm: ([4290d50](https://github.com/readmeio/rdme/commit/4290d50))
