@@ -10,7 +10,7 @@
   "bin": {
     "rdme": "bin/rdme"
   },
-  "tags": [
+  "keywords": [
     "api",
     "apis",
     "openapi",
