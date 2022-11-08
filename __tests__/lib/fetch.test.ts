@@ -4,10 +4,13 @@ import { Headers } from 'node-fetch';
 
 import pkg from '../../package.json';
 import fetch, { cleanHeaders, handleRes } from '../../src/lib/fetch';
+import * as isCI from '../../src/lib/isCI';
 import getAPIMock from '../helpers/get-api-mock';
 
 describe('#fetch()', () => {
   describe('GitHub Actions environment', () => {
+    let spy: jest.SpyInstance;
+
     // List of all GitHub Actions env variables:
     // https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables
     beforeEach(() => {
@@ -18,6 +21,8 @@ describe('#fetch()', () => {
       process.env.GITHUB_RUN_ID = '1658821493';
       process.env.GITHUB_RUN_NUMBER = '3';
       process.env.GITHUB_SHA = 'ffac537e6cbbf934b08745a378932722df287a53';
+      spy = jest.spyOn(isCI, 'isGHA');
+      spy.mockReturnValue(true);
     });
 
     afterEach(() => {
@@ -28,6 +33,7 @@ describe('#fetch()', () => {
       delete process.env.GITHUB_RUN_ID;
       delete process.env.GITHUB_RUN_NUMBER;
       delete process.env.GITHUB_SHA;
+      spy.mockReset();
     });
 
     it('should have correct headers for requests in GitHub Action env', async () => {
