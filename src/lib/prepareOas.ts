@@ -71,7 +71,7 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
               return ['openapi', 'swagger', 'postman'].includes(specification) ? file : '';
             })
             .catch(e => {
-              debug(`error extracting OpenAPI/Swagger version for ${file}: ${e.message}`);
+              debug(`error extracting API definition specification version for ${file}: ${e.message}`);
               return '';
             });
         })
