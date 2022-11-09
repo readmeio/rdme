@@ -102,7 +102,7 @@
     "postversion": "git tag $npm_package_version",
     "prebuild": "rm -rf dist/",
     "prepack": "npm run build",
-    "__pretest": "npm run lint && npm run lint-docs",
+    "pretest": "npm run lint && npm run lint-docs",
     "prettier": "prettier --list-different \"./**/**.{md,js,ts}\"",
     "prettier:docs": "prettier --list-different \"./**/**.md\"",
     "prettier:write": "prettier --list-different --write \"./**/**.{md,js,ts}\"",
