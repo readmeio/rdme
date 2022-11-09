@@ -182,11 +182,13 @@ describe('rdme changelogs (single)', () => {
   });
 
   describe('slug metadata', () => {
-    it('should use provided slug', async () => {
+    it.only('should use provided slug', async () => {
       const slug = 'new-doc-slug';
       const id = '1234';
       const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/slug-docs/${slug}.md`)));
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/slug-docs/${slug}.md`)));
+
+      const filePath = path.join('.', '__tests__', fixturesBaseDir, 'slug-docs', 'new-doc-slug.md');
 
       const getMock = getAPIMock()
         .get(`/api/v1/changelogs/${doc.data.slug}`)
@@ -203,10 +205,8 @@ describe('rdme changelogs (single)', () => {
         .basicAuth({ user: key })
         .reply(201, { slug: doc.data.slug, _id: id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
-      await expect(
-        changelogs.run({ filePath: `./__tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`, key })
-      ).resolves.toBe(
-        `🌱 successfully created 'marc-actually-wrote-a-test' (ID: 1234) with contents from ./__tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`
+      await expect(changelogs.run({ filePath, key })).resolves.toBe(
+        `🌱 successfully created 'marc-actually-wrote-a-test' (ID: 1234) with contents from ${filePath}`
       );
 
       getMock.done();
