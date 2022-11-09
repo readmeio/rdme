@@ -66,17 +66,9 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
           return oas
             .version()
             .then(({ specification, version }) => {
-              if (specification === 'openapi') {
-                debug(`OpenAPI version for ${file}: ${version}`);
-              } else if (specification === 'swagger') {
-                debug(`Swagger version for ${file}: ${version}`);
-              } else if (specification === 'postman') {
-                debug(`Postman version for ${file}: ${version}`);
-              } else {
-                return '';
-              }
-
-              return file;
+              debug(`specification type for ${file}: ${specification}`);
+              debug(`version for ${file}: ${version}`);
+              return ['openapi', 'swagger', 'postman'].includes(specification) ? file : '';
             })
             .catch(e => {
               debug(`error extracting OpenAPI/Swagger version for ${file}: ${e.message}`);
