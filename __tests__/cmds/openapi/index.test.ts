@@ -75,6 +75,10 @@ describe('rdme openapi', () => {
       ['OpenAPI 3.0', 'yaml', '3.0', 'OpenAPI'],
       ['OpenAPI 3.1', 'json', '3.1', 'OpenAPI'],
       ['OpenAPI 3.1', 'yaml', '3.1', 'OpenAPI'],
+
+      // Postman collections get automatically converted to OpenAPI 3.0 by `oas-normalize`.
+      ['Postman', 'json', '3.0', 'Postman'],
+      ['Postman', 'yaml', '3.0', 'Postman'],
     ])('should support uploading a %s definition (format: %s)', async (_, format, specVersion, type) => {
       const registryUUID = getRandomRegistryId();
 
@@ -93,7 +97,12 @@ describe('rdme openapi', () => {
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
-      const spec = require.resolve(`@readme/oas-examples/${specVersion}/${format}/petstore.${format}`);
+      let spec;
+      if (type === 'Postman') {
+        spec = require.resolve(`../../__fixtures__/postman/petstore.collection.${format}`);
+      } else {
+        spec = require.resolve(`@readme/oas-examples/${specVersion}/${format}/petstore.${format}`);
+      }
 
       await expect(
         openapi.run({

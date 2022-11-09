@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import OASNormalize from 'oas-normalize';
+import OASNormalize, { getAPIDefinitionType } from 'oas-normalize';
 import ora from 'ora';
 
 import isCI from './isCI';
@@ -65,9 +65,18 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
           const oas = new OASNormalize(file, { enablePaths: true });
           return oas
             .version()
-            .then(version => {
-              debug(`OpenAPI/Swagger version for ${file}: ${version}`);
-              return version ? file : '';
+            .then(({ specification, version }) => {
+              if (specification === 'openapi') {
+                debug(`OpenAPI version for ${file}: ${version}`);
+              } else if (specification === 'swagger') {
+                debug(`Swagger version for ${file}: ${version}`);
+              } else if (specification === 'postman') {
+                debug(`Postman version for ${file}: ${version}`);
+              } else {
+                return '';
+              }
+
+              return file;
             })
             .catch(e => {
               debug(`error extracting OpenAPI/Swagger version for ${file}: ${e.message}`);
@@ -116,7 +125,20 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
   const oas = new OASNormalize(specPath, { colorizeErrors: true, enablePaths: true });
   debug('spec normalized');
 
-  const api = await oas.validate(false).catch((err: Error) => {
+  // We're retrieving the original specification type here instead of after validation because if
+  // they give us a Postman colletion we should tell them that we handled a Postman collection, not
+  // an OpenAPI definition (eventhough we'll actually convert it to OpenAPI under the hood).
+  //
+  // And though `.validate()` will run `.load()` itself running `.load()` here will not have any
+  // performance implications as `oas-normalizes` caches the result of `.load()` the first time you
+  // run it.
+  const specType = await oas.load().then(schema => {
+    const type = getAPIDefinitionType(schema);
+    return type === 'openapi' ? 'OpenAPI' : type.charAt(0).toUpperCase() + type.slice(1);
+  });
+
+  // If we were supplied a Postman collection this will **always** convert it to OpenAPI 3.0.
+  const api = await oas.validate({ convertToLatest: false }).catch((err: Error) => {
     spinner.fail();
     debug(`raw validation error object: ${JSON.stringify(err)}`);
     throw err;
@@ -126,8 +148,6 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
   debug('👇👇👇👇👇 spec validated! logging spec below 👇👇👇👇👇');
   debug(api);
   debug('👆👆👆👆👆 finished logging spec 👆👆👆👆👆');
-
-  const specType = api.swagger ? 'Swagger' : 'OpenAPI';
   debug(`spec type: ${specType}`);
 
   // No need to optional chain here since `info.version` is required to pass validation
