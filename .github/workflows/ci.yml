@@ -9,8 +9,12 @@ on:
 jobs:
   build:
     name: Test Suite
+    runs-on: ${{ matrix.os }}
     runs-on: ubuntu-latest
     strategy:
+      os:
+        - ubuntu-latest
+        - windows-latest
       matrix:
         node-version:
           - 14
