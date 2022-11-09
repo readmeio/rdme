@@ -11,10 +11,10 @@ jobs:
     name: Test Suite
     runs-on: ${{ matrix.os }}
     strategy:
-      os:
-        - ubuntu-latest
-        - windows-latest
       matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
         node-version:
           - 14
           - 16
