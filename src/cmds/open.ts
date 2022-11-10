@@ -9,6 +9,7 @@ import configStore from '../lib/configstore';
 
 export type Options = {
   mockOpen?: (url: string) => Promise<void>;
+  dash?: boolean;
 };
 
 export default class OpenCommand extends Command {
@@ -21,12 +22,19 @@ export default class OpenCommand extends Command {
     this.cmdCategory = CommandCategories.UTILITIES;
     this.position = 1;
 
-    this.args = [];
+    this.args = [
+      {
+        name: 'dash',
+        type: Boolean,
+        description: 'Opens the current project dashboard.',
+      },
+    ];
   }
 
   async run(opts: CommandOptions<Options>) {
     await super.run(opts);
 
+    const { dash } = opts;
     const project = configStore.get('project');
     Command.debug(`project: ${project}`);
 
