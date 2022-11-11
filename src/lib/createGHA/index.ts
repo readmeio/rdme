@@ -108,7 +108,6 @@ export async function getGitData() {
   debug(`[getGitData] isRepo result: ${isRepo}`);
 
   let containsGitHubRemote;
-  let containsNonGitHubRemote;
   let defaultBranch;
   const rawRemotes = await git.remote([]).catch(e => {
     debug(`[getGitData] error grabbing git remotes: ${e.message}`);
@@ -133,11 +132,9 @@ export async function getGitData() {
     // This is a bit hairy but we want to keep it fairly general here
     // in case of GitHub Enterprise, etc.
     containsGitHubRemote = /github/.test(remotesList);
-    containsNonGitHubRemote = /gitlab/.test(remotesList) || /bitbucket/.test(remotesList);
   }
 
   debug(`[getGitData] containsGitHubRemote result: ${containsGitHubRemote}`);
-  debug(`[getGitData] containsNonGitHubRemote result: ${containsNonGitHubRemote}`);
   debug(`[getGitData] defaultBranch result: ${defaultBranch}`);
 
   const repoRoot = await git.revparse(['--show-toplevel']).catch(e => {
@@ -147,7 +144,7 @@ export async function getGitData() {
 
   debug(`[getGitData] repoRoot result: ${repoRoot}`);
 
-  return { containsGitHubRemote, containsNonGitHubRemote, defaultBranch, isRepo, repoRoot };
+  return { containsGitHubRemote, defaultBranch, isRepo, repoRoot };
 }
 
 /**
@@ -169,7 +166,7 @@ export default async function createGHA(
     return msg;
   }
 
-  const { containsGitHubRemote, containsNonGitHubRemote, defaultBranch, isRepo, repoRoot } = await getGitData();
+  const { containsGitHubRemote, defaultBranch, isRepo, repoRoot } = await getGitData();
 
   const configVal = configstore.get(getConfigStoreKey(repoRoot));
   debug(`repo value in config: ${configVal}`);
@@ -183,8 +180,8 @@ export default async function createGHA(
       !isRepo ||
       // user has previously declined to set up GHA for current repo and `rdme` package version
       configVal === majorPkgVersion ||
-      // is a repo, but only contains non-GitHub remotes
-      (isRepo && containsNonGitHubRemote && !containsGitHubRemote) ||
+      // is a repo, but does not contain a GitHub remote
+      (isRepo && !containsGitHubRemote) ||
       // not testing this function
       (isTest() && !process.env.TEST_RDME_CREATEGHA)
     ) {
