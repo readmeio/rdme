@@ -28,7 +28,7 @@ const apiSetting = 'API_SETTING_ID';
 
 const testWorkingDir = process.cwd();
 
-describe.only('rdme docs', () => {
+describe('rdme docs', () => {
   beforeAll(() => nock.disableNetConnect());
 
   afterAll(() => nock.cleanAll());

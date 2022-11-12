@@ -1,5 +1,4 @@
 /* eslint-disable jest/valid-expect */
-
 const normalizeString = (str: string) => str.replace(/\\/g, '/');
 
 /**

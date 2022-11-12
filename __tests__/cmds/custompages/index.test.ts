@@ -8,6 +8,7 @@ import prompts from 'prompts';
 
 import CustomPagesCommand from '../../../src/cmds/custompages';
 import APIError from '../../../src/lib/apiError';
+import expectOSAgnostic from '../../helpers/expect-os-agnostic';
 import getAPIMock from '../../helpers/get-api-mock';
 import hashFileContents from '../../helpers/hash-file-contents';
 
@@ -17,7 +18,7 @@ const fixturesBaseDir = '__fixtures__/custompages';
 const fullFixturesDir = `${__dirname}./../../${fixturesBaseDir}`;
 const key = 'API_KEY';
 
-describe('rdme custompages', () => {
+describe.only('rdme custompages', () => {
   beforeAll(() => nock.disableNetConnect());
 
   afterAll(() => nock.cleanAll());
@@ -115,7 +116,7 @@ describe('rdme custompages', () => {
       return custompages.run({ filePath: `./__tests__/${fixturesBaseDir}/existing-docs`, key }).then(updatedDocs => {
         // All custompages should have been updated because their hashes from the GET request were different from what they
         // are currently.
-        expect(updatedDocs).toBe(
+        expectOSAgnostic(updatedDocs).toBe(
           [
             `✏️ successfully updated 'simple-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`,
             `✏️ successfully updated 'another-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/subdir/another-doc.md`,
@@ -143,7 +144,7 @@ describe('rdme custompages', () => {
         .then(updatedDocs => {
           // All custompages should have been updated because their hashes from the GET request were different from what they
           // are currently.
-          expect(updatedDocs).toBe(
+          expectOSAgnostic(updatedDocs).toBe(
             [
               `🎭 dry run! This will update 'simple-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/simple-doc.md with the following metadata: ${JSON.stringify(
                 simpleDoc.doc.data
@@ -229,7 +230,9 @@ describe('rdme custompages', () => {
         .basicAuth({ user: key })
         .reply(201, { slug, _id: id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
-      await expect(custompages.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs`, key })).resolves.toBe(
+      await expectOSAgnostic(
+        custompages.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs`, key })
+      ).resolves.toBe(
         `🌱 successfully created 'new-doc' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/new-docs/new-doc.md`
       );
 
@@ -258,7 +261,9 @@ describe('rdme custompages', () => {
         .basicAuth({ user: key })
         .reply(201, { slug, _id: id, html: doc.content, htmlmode: true, ...doc.data, lastUpdatedHash: hash });
 
-      await expect(custompages.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs-html`, key })).resolves.toBe(
+      await expectOSAgnostic(
+        custompages.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs-html`, key })
+      ).resolves.toBe(
         `🌱 successfully created 'new-doc' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/new-docs-html/new-doc.html`
       );
 
@@ -280,7 +285,7 @@ describe('rdme custompages', () => {
           help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
         });
 
-      await expect(
+      await expectOSAgnostic(
         custompages.run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/new-docs`, key })
       ).resolves.toBe(
         `🎭 dry run! This will create 'new-doc' with contents from __tests__/${fixturesBaseDir}/new-docs/new-doc.md with the following metadata: ${JSON.stringify(
@@ -353,7 +358,7 @@ describe('rdme custompages', () => {
         message: `Error uploading ${chalk.underline(`${fullDirectory}/${slug}.md`)}:\n\n${errorObject.message}`,
       };
 
-      await expect(custompages.run({ filePath: `./${fullDirectory}`, key })).rejects.toStrictEqual(
+      await expectOSAgnostic(custompages.run({ filePath: `./${fullDirectory}`, key })).rejects.toStrictEqual(
         new APIError(formattedErrorObject)
       );
 
@@ -384,7 +389,7 @@ describe('rdme custompages', () => {
         .basicAuth({ user: key })
         .reply(201, { slug: doc.data.slug, _id: id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
-      await expect(custompages.run({ filePath: `./__tests__/${fixturesBaseDir}/slug-docs`, key })).resolves.toBe(
+      await expectOSAgnostic(custompages.run({ filePath: `./__tests__/${fixturesBaseDir}/slug-docs`, key })).resolves.toBe(
         `🌱 successfully created 'marc-actually-wrote-a-test' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`
       );
 
