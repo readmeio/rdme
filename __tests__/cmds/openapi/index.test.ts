@@ -96,7 +96,7 @@ describe.only('rdme openapi', () => {
 
       const spec = require.resolve(`@readme/oas-examples/${specVersion}/${format}/petstore.${format}`);
 
-      await expectOSAgnostic(
+      await expect(
         openapi.run({
           spec,
           key,
@@ -131,7 +131,7 @@ describe.only('rdme openapi', () => {
 
       const spec = 'petstore.json';
 
-      await expectOSAgnostic(
+      await expect(
         openapi.run({
           key,
           version,
