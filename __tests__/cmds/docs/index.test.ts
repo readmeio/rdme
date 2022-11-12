@@ -498,11 +498,11 @@ describe('rdme docs', () => {
         if (typeof actual === 'object') {
           if (typeof actual.then === 'function') {
             // eslint-disable-next-line jest/valid-expect
-            return expect(actual.then(str => str.replace(path.sep, '/')));
+            return expect(actual.then((str: string) => str.replace(/\\/g, '/')));
           }
         } else if (typeof actual === 'string') {
           // eslint-disable-next-line jest/valid-expect
-          return expect(actual.replace(path.sep, '/'));
+          return expect(actual.replace(/\\/g, '/'));
         }
 
         // eslint-disable-next-line jest/valid-expect
