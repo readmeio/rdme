@@ -21,7 +21,16 @@ export default function readdirRecursive(folderToSearch: string, ignoreGit = fal
   let ignoreFilter: Ignore;
   if (ignoreGit) {
     // Initialize ignore filter with `.git` directory
-    ignoreFilter = ignore().add(path.join(folderToSearch, '.git', path.sep));
+    ignoreFilter = ignore().add(
+      path.join(
+        process.cwd(),
+        '.git',
+        // There's a problem in the `ignore` library where if a path separator if `\`, like it is on
+        // Windows, the library doesn't escape it, resulting in a corrupted regex matcher.
+        path.sep === '\\' ? `\\${path.sep}` : path.sep
+      )
+    );
+
     // If .gitignore file exists, load its contents into ignore filter
     if (fs.existsSync(path.join(folderToSearch, '.gitignore'))) {
       debug('.gitignore file found, adding to ignore filter');
