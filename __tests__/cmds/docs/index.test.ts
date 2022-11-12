@@ -390,7 +390,7 @@ describe.only('rdme docs', () => {
         message: `Error uploading ${chalk.underline(`${fullDirectory}/${slug}.md`)}:\n\n${errorObject.message}`,
       };
 
-      await expect(docs.run({ filePath: `./${fullDirectory}`, key, version })).rejects.toStrictEqual(
+      await expectOSAgnostic(docs.run({ filePath: `./${fullDirectory}`, key, version })).rejects.toStrictEqual(
         new APIError(formattedErrorObject)
       );
 
