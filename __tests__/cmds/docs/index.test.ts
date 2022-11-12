@@ -10,6 +10,7 @@ import prompts from 'prompts';
 import DocsCommand from '../../../src/cmds/docs';
 import GuidesCommand from '../../../src/cmds/guides';
 import APIError from '../../../src/lib/apiError';
+import expectOSAgnostic from '../../helpers/expect-os-agnostic';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock';
 import { after, before } from '../../helpers/get-gha-setup';
 import hashFileContents from '../../helpers/hash-file-contents';
@@ -27,7 +28,7 @@ const apiSetting = 'API_SETTING_ID';
 
 const testWorkingDir = process.cwd();
 
-describe('rdme docs', () => {
+describe.only('rdme docs', () => {
   beforeAll(() => nock.disableNetConnect());
 
   afterAll(() => nock.cleanAll());
@@ -140,7 +141,7 @@ describe('rdme docs', () => {
       return docs.run({ filePath: `./__tests__/${fixturesBaseDir}/existing-docs`, key, version }).then(updatedDocs => {
         // All docs should have been updated because their hashes from the GET request were different from what they
         // are currently.
-        expect(updatedDocs).toBe(
+        expectOSAgnostic(updatedDocs).toBe(
           [
             `✏️ successfully updated 'simple-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`,
             `✏️ successfully updated 'another-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/subdir/another-doc.md`,
@@ -174,7 +175,7 @@ describe('rdme docs', () => {
         .then(updatedDocs => {
           // All docs should have been updated because their hashes from the GET request were different from what they
           // are currently.
-          expect(updatedDocs).toBe(
+          expectOSAgnostic(updatedDocs).toBe(
             [
               `🎭 dry run! This will update 'simple-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/simple-doc.md with the following metadata: ${JSON.stringify(
                 simpleDoc.doc.data
@@ -207,7 +208,7 @@ describe('rdme docs', () => {
         .reply(200, { version });
 
       return docs.run({ filePath: `./__tests__/${fixturesBaseDir}/existing-docs`, key, version }).then(skippedDocs => {
-        expect(skippedDocs).toBe(
+        expectOSAgnostic(skippedDocs).toBe(
           [
             '`simple-doc` was not updated because there were no changes.',
             '`another-doc` was not updated because there were no changes.',
@@ -238,7 +239,7 @@ describe('rdme docs', () => {
       return docs
         .run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/existing-docs`, key, version })
         .then(skippedDocs => {
-          expect(skippedDocs).toBe(
+          expectOSAgnostic(skippedDocs).toBe(
             [
               '🎭 dry run! `simple-doc` will not be updated because there were no changes.',
               '🎭 dry run! `another-doc` will not be updated because there were no changes.',
@@ -278,7 +279,9 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      await expect(docs.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs`, key, version })).resolves.toBe(
+      await expectOSAgnostic(
+        docs.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs`, key, version })
+      ).resolves.toBe(
         `🌱 successfully created 'new-doc' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/new-docs/new-doc.md`
       );
 
@@ -306,7 +309,7 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      await expect(
+      await expectOSAgnostic(
         docs.run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/new-docs`, key, version })
       ).resolves.toBe(
         `🎭 dry run! This will create 'new-doc' with contents from __tests__/${fixturesBaseDir}/new-docs/new-doc.md with the following metadata: ${JSON.stringify(
@@ -424,7 +427,9 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      await expect(docs.run({ filePath: `./__tests__/${fixturesBaseDir}/slug-docs`, key, version })).resolves.toBe(
+      await expectOSAgnostic(
+        docs.run({ filePath: `./__tests__/${fixturesBaseDir}/slug-docs`, key, version })
+      ).resolves.toBe(
         `🌱 successfully created 'marc-actually-wrote-a-test' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`
       );
 
@@ -457,9 +462,7 @@ describe('rdme docs', () => {
       process.chdir(testWorkingDir);
     });
 
-    it.only('should create GHA workflow with version passed in via prompt', async () => {
-      // expect.assertions(6);
-
+    it('should create GHA workflow with version passed in via prompt', async () => {
       const altVersion = '1.0.1';
       const slug = 'new-doc';
       const id = '1234';
@@ -489,26 +492,6 @@ describe('rdme docs', () => {
       const fileName = 'docs-test-file';
       prompts.inject([altVersion, true, 'docs-test-branch', fileName]);
 
-      /**
-       * Normalize all data expectations to be OS-agnostic and match against Unix-based filesystems
-       * that have path separators of a forward slash.
-       *
-       */
-      function expectOSAgnostic(actual: any) {
-        if (typeof actual === 'object') {
-          if (typeof actual.then === 'function') {
-            // eslint-disable-next-line jest/valid-expect
-            return expect(actual.then((str: string) => str.replace(/\\/g, '/')));
-          }
-        } else if (typeof actual === 'string') {
-          // eslint-disable-next-line jest/valid-expect
-          return expect(actual.replace(/\\/g, '/'));
-        }
-
-        // eslint-disable-next-line jest/valid-expect
-        return expect(actual);
-      }
-
       await expectOSAgnostic(
         docs.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs`, key })
       ).resolves.toMatchSnapshot();
@@ -529,8 +512,6 @@ describe('rdme docs', () => {
     });
 
     it('should create GHA workflow with version passed in via opt', async () => {
-      expect.assertions(3);
-
       const slug = 'new-doc';
       const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
@@ -558,12 +539,15 @@ describe('rdme docs', () => {
       const fileName = 'docs-test-file';
       prompts.inject([true, 'docs-test-branch', fileName]);
 
-      await expect(
+      await expectOSAgnostic(
         docs.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs`, key, version })
       ).resolves.toMatchSnapshot();
 
-      expect(yamlOutput).toMatchSnapshot();
-      expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
+      expectOSAgnostic(yamlOutput).toMatchSnapshot();
+      expect(fs.writeFileSync).toHaveBeenCalledWith(
+        path.join('.github', 'workflows', `${fileName}.yml`),
+        expect.any(String)
+      );
 
       getMock.done();
       postMock.done();
@@ -600,12 +584,15 @@ describe('rdme docs', () => {
       const fileName = 'docs-test-file-github-flag';
       prompts.inject(['docs-test-branch-github-flag', fileName]);
 
-      await expect(
+      await expectOSAgnostic(
         docs.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs`, github: true, key, version })
       ).resolves.toMatchSnapshot();
 
-      expect(yamlOutput).toMatchSnapshot();
-      expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
+      expectOSAgnostic(yamlOutput).toMatchSnapshot();
+      expect(fs.writeFileSync).toHaveBeenCalledWith(
+        path.join('.github', 'workflows', `${fileName}.yml`),
+        expect.any(String)
+      );
 
       getMock.done();
       postMock.done();
