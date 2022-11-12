@@ -489,16 +489,39 @@ describe('rdme docs', () => {
       const fileName = 'docs-test-file';
       prompts.inject([altVersion, true, 'docs-test-branch', fileName]);
 
-      await expect(docs.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs`, key })).resolves.toMatchSnapshot();
+      /**
+       * Normalize all data expectations to be OS-agnostic and match against Unix-based filesystems
+       * that have path separators of a forward slash.
+       *
+       */
+      function expectOSAgnostic(actual: any) {
+        if (typeof actual === 'object') {
+          if (typeof actual.then === 'function') {
+            // eslint-disable-next-line jest/valid-expect
+            return expect(actual.then(str => str.replace(path.sep, '/')));
+          }
+        } else if (typeof actual === 'string') {
+          // eslint-disable-next-line jest/valid-expect
+          return expect(actual.replace(path.sep, '/'));
+        }
 
-      // console.log(yamlOutput)
+        // eslint-disable-next-line jest/valid-expect
+        return expect(actual);
+      }
 
-      // expect(yamlOutput).toMatchSnapshot();
-      // expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
-      // expect(console.info).toHaveBeenCalledTimes(2);
-      // const output = getCommandOutput();
-      // expect(output).toMatch("Looks like you're running this command in a GitHub Repository!");
-      // expect(output).toMatch(`successfully created '${slug}' (ID: ${id}) with contents from`);
+      await expectOSAgnostic(
+        docs.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs`, key })
+      ).resolves.toMatchSnapshot();
+
+      expectOSAgnostic(yamlOutput).toMatchSnapshot();
+      expect(fs.writeFileSync).toHaveBeenCalledWith(
+        path.join('.github', 'workflows', `${fileName}.yml`),
+        expect.any(String)
+      );
+      expect(console.info).toHaveBeenCalledTimes(2);
+      const output = getCommandOutput();
+      expect(output).toMatch("Looks like you're running this command in a GitHub Repository!");
+      expect(output).toMatch(`successfully created '${slug}' (ID: ${id}) with contents from`);
 
       versionsMock.done();
       getMock.done();
