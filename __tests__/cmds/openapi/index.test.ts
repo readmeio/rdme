@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import fs from 'fs';
+import path from 'path';
 
 import chalk from 'chalk';
 import config from 'config';
@@ -1114,7 +1115,6 @@ describe.only('rdme openapi', () => {
     });
 
     it('should create GHA workflow (create spec)', async () => {
-      expect.assertions(6);
       const yamlFileName = 'openapi-file';
       prompts.inject(['create', true, 'openapi-branch', yamlFileName]);
       const registryUUID = getRandomRegistryId();
@@ -1137,7 +1137,7 @@ describe.only('rdme openapi', () => {
 
       const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
 
-      await expect(
+      await expectOSAgnostic(
         openapi.run({
           key,
           version,
@@ -1145,8 +1145,11 @@ describe.only('rdme openapi', () => {
         })
       ).resolves.toMatchSnapshot();
 
-      expect(yamlOutput).toMatchSnapshot();
-      expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${yamlFileName}.yml`, expect.any(String));
+      expectOSAgnostic(yamlOutput).toMatchSnapshot();
+      expect(fs.writeFileSync).toHaveBeenCalledWith(
+        path.join('.github', 'workflows', `${yamlFileName}.yml`),
+        expect.any(String)
+      );
       expect(console.info).toHaveBeenCalledTimes(2);
       const output = getCommandOutput();
       expect(output).toMatch("Looks like you're running this command in a GitHub Repository!");
@@ -1157,7 +1160,6 @@ describe.only('rdme openapi', () => {
     });
 
     it('should create GHA workflow (--github flag enabled)', async () => {
-      expect.assertions(6);
       const yamlFileName = 'openapi-file-github-flag';
       prompts.inject(['create', 'openapi-branch-github-flag', yamlFileName]);
       const registryUUID = getRandomRegistryId();
@@ -1180,7 +1182,7 @@ describe.only('rdme openapi', () => {
 
       const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
 
-      await expect(
+      await expectOSAgnostic(
         openapi.run({
           key,
           version,
@@ -1189,8 +1191,11 @@ describe.only('rdme openapi', () => {
         })
       ).resolves.toMatchSnapshot();
 
-      expect(yamlOutput).toMatchSnapshot();
-      expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${yamlFileName}.yml`, expect.any(String));
+      expectOSAgnostic(yamlOutput).toMatchSnapshot();
+      expect(fs.writeFileSync).toHaveBeenCalledWith(
+        path.join('.github', 'workflows', `${yamlFileName}.yml`),
+        expect.any(String)
+      );
       expect(console.info).toHaveBeenCalledTimes(2);
       const output = getCommandOutput();
       expect(output).toMatch("Let's get you set up with GitHub Actions!");
@@ -1227,7 +1232,7 @@ describe.only('rdme openapi', () => {
 
       const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
 
-      await expect(
+      await expectOSAgnostic(
         openapi.run({
           key,
           version,
@@ -1235,15 +1240,17 @@ describe.only('rdme openapi', () => {
         })
       ).resolves.toMatchSnapshot();
 
-      expect(yamlOutput).toMatchSnapshot();
-      expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${yamlFileName}.yml`, expect.any(String));
+      expectOSAgnostic(yamlOutput).toMatchSnapshot();
+      expect(fs.writeFileSync).toHaveBeenCalledWith(
+        path.join('.github', 'workflows', `${yamlFileName}.yml`),
+        expect.any(String)
+      );
 
       mockWithHeader.done();
       return mock.done();
     });
 
     it('should create GHA workflow (--create flag enabled)', async () => {
-      expect.assertions(3);
       const yamlFileName = 'openapi-file-create-flag';
       const altVersion = '1.0.1';
       prompts.inject([true, 'openapi-branch-create-flag', yamlFileName]);
@@ -1264,7 +1271,7 @@ describe.only('rdme openapi', () => {
 
       const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
 
-      await expect(
+      await expectOSAgnostic(
         openapi.run({
           key,
           version: altVersion,
@@ -1273,15 +1280,17 @@ describe.only('rdme openapi', () => {
         })
       ).resolves.toMatchSnapshot();
 
-      expect(yamlOutput).toMatchSnapshot();
-      expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${yamlFileName}.yml`, expect.any(String));
+      expectOSAgnostic(yamlOutput).toMatchSnapshot();
+      expect(fs.writeFileSync).toHaveBeenCalledWith(
+        path.join('.github', 'workflows', `${yamlFileName}.yml`),
+        expect.any(String)
+      );
 
       mockWithHeader.done();
       return mock.done();
     });
 
     it('should create GHA workflow (--create flag enabled with ignored id opt)', async () => {
-      expect.assertions(3);
       const yamlFileName = 'openapi-file-create-flag-id-opt';
       prompts.inject([version, true, 'openapi-branch-create-flag-id-opt', yamlFileName]);
       const registryUUID = getRandomRegistryId();
@@ -1301,7 +1310,7 @@ describe.only('rdme openapi', () => {
 
       const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
 
-      await expect(
+      await expectOSAgnostic(
         openapi.run({
           key,
           spec,
@@ -1310,15 +1319,17 @@ describe.only('rdme openapi', () => {
         })
       ).resolves.toMatchSnapshot();
 
-      expect(yamlOutput).toMatchSnapshot();
-      expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${yamlFileName}.yml`, expect.any(String));
+      expectOSAgnostic(yamlOutput).toMatchSnapshot();
+      expect(fs.writeFileSync).toHaveBeenCalledWith(
+        path.join('.github', 'workflows', `${yamlFileName}.yml`),
+        expect.any(String)
+      );
 
       postMock.done();
       return mock.done();
     });
 
     it('should create GHA workflow (--update flag enabled)', async () => {
-      expect.assertions(3);
       const yamlFileName = 'openapi-file-update-flag';
       prompts.inject([true, 'openapi-branch-update-flag', yamlFileName]);
       const registryUUID = getRandomRegistryId();
@@ -1341,7 +1352,7 @@ describe.only('rdme openapi', () => {
 
       const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
 
-      await expect(
+      await expectOSAgnostic(
         openapi.run({
           key,
           version,
@@ -1350,15 +1361,17 @@ describe.only('rdme openapi', () => {
         })
       ).resolves.toMatchSnapshot();
 
-      expect(yamlOutput).toMatchSnapshot();
-      expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${yamlFileName}.yml`, expect.any(String));
+      expectOSAgnostic(yamlOutput).toMatchSnapshot();
+      expect(fs.writeFileSync).toHaveBeenCalledWith(
+        path.join('.github', 'workflows', `${yamlFileName}.yml`),
+        expect.any(String)
+      );
 
       mockWithHeader.done();
       return mock.done();
     });
 
     it('should create GHA workflow (including workingDirectory)', async () => {
-      expect.assertions(4);
       const yamlFileName = 'openapi-file-workingdirectory';
       prompts.inject([true, 'openapi-branch-workingdirectory', yamlFileName]);
       const registryUUID = getRandomRegistryId();
@@ -1380,7 +1393,7 @@ describe.only('rdme openapi', () => {
 
       const spec = 'petstore.json';
 
-      await expect(
+      await expectOSAgnostic(
         openapi.run({
           spec,
           key,
@@ -1389,9 +1402,13 @@ describe.only('rdme openapi', () => {
         })
       ).resolves.toMatchSnapshot();
 
-      expect(yamlOutput).toMatchSnapshot();
+      expectOSAgnostic(yamlOutput).toMatchSnapshot();
       expect(fs.writeFileSync).toHaveBeenCalledTimes(2);
-      expect(fs.writeFileSync).toHaveBeenNthCalledWith(2, `.github/workflows/${yamlFileName}.yml`, expect.any(String));
+      expect(fs.writeFileSync).toHaveBeenNthCalledWith(
+        2,
+        path.join('github', 'workflows', `${yamlFileName}.yml`),
+        expect.any(String)
+      );
 
       mockWithHeader.done();
       return mock.done();
