@@ -9,6 +9,7 @@ import prompts from 'prompts';
 import OpenAPICommand from '../../../src/cmds/openapi';
 import SwaggerCommand from '../../../src/cmds/swagger';
 import APIError from '../../../src/lib/apiError';
+import expectOSAgnostic from '../../helpers/expect-os-agnostic';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock';
 import { after, before } from '../../helpers/get-gha-setup';
 
@@ -50,7 +51,7 @@ const getCommandOutput = () => {
 
 const getRandomRegistryId = () => Math.random().toString(36).substring(2);
 
-describe.skip('rdme openapi', () => {
+describe.only('rdme openapi', () => {
   beforeAll(() => nock.disableNetConnect());
 
   beforeEach(() => {
@@ -95,7 +96,7 @@ describe.skip('rdme openapi', () => {
 
       const spec = require.resolve(`@readme/oas-examples/${specVersion}/${format}/petstore.${format}`);
 
-      await expect(
+      await expectOSAgnostic(
         openapi.run({
           spec,
           key,
@@ -130,7 +131,7 @@ describe.skip('rdme openapi', () => {
 
       const spec = 'petstore.json';
 
-      await expect(
+      await expectOSAgnostic(
         openapi.run({
           key,
           version,
@@ -169,7 +170,7 @@ describe.skip('rdme openapi', () => {
 
       const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
 
-      await expect(
+      await expectOSAgnostic(
         openapi.run({
           key,
           version,

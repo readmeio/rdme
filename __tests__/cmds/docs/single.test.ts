@@ -8,6 +8,7 @@ import prompts from 'prompts';
 
 import DocsCommand from '../../../src/cmds/docs';
 import APIError from '../../../src/lib/apiError';
+import expectOSAgnostic from '../../helpers/expect-os-agnostic';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock';
 import hashFileContents from '../../helpers/hash-file-contents';
 
@@ -93,7 +94,7 @@ describe('rdme docs (single)', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      await expect(
+      await expectOSAgnostic(
         docs.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, key, version })
       ).resolves.toBe(
         `🌱 successfully created 'new-doc' (ID: 1234) with contents from ./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`
@@ -123,7 +124,7 @@ describe('rdme docs (single)', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      await expect(
+      await expectOSAgnostic(
         docs.run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, key, version })
       ).resolves.toBe(
         `🎭 dry run! This will create 'new-doc' with contents from ./__tests__/${fixturesBaseDir}/new-docs/new-doc.md with the following metadata: ${JSON.stringify(
@@ -175,7 +176,9 @@ describe('rdme docs (single)', () => {
         message: `Error uploading ${chalk.underline(`${filePath}`)}:\n\n${errorObject.message}`,
       };
 
-      await expect(docs.run({ filePath, key, version })).rejects.toStrictEqual(new APIError(formattedErrorObject));
+      await expectOSAgnostic(docs.run({ filePath, key, version })).rejects.toStrictEqual(
+        new APIError(formattedErrorObject)
+      );
 
       getMock.done();
       postMock.done();
@@ -209,7 +212,9 @@ describe('rdme docs (single)', () => {
         message: `Error uploading ${chalk.underline(`${filePath}`)}:\n\n${errorObject.message}`,
       };
 
-      await expect(docs.run({ filePath, key, version })).rejects.toStrictEqual(new APIError(formattedErrorObject));
+      await expectOSAgnostic(docs.run({ filePath, key, version })).rejects.toStrictEqual(
+        new APIError(formattedErrorObject)
+      );
 
       getMock.done();
       versionMock.done();
@@ -243,7 +248,7 @@ describe('rdme docs (single)', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      await expect(
+      await expectOSAgnostic(
         docs.run({ filePath: `./__tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`, key, version })
       ).resolves.toBe(
         `🌱 successfully created 'marc-actually-wrote-a-test' (ID: 1234) with contents from ./__tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`
@@ -296,7 +301,7 @@ describe('rdme docs (single)', () => {
       return docs
         .run({ filePath: `./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, key, version })
         .then(updatedDocs => {
-          expect(updatedDocs).toBe(
+          expectOSAgnostic(updatedDocs).toBe(
             `✏️ successfully updated 'simple-doc' with contents from ./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`
           );
 
@@ -324,7 +329,7 @@ describe('rdme docs (single)', () => {
         .then(updatedDocs => {
           // All docs should have been updated because their hashes from the GET request were different from what they
           // are currently.
-          expect(updatedDocs).toBe(
+          expectOSAgnostic(updatedDocs).toBe(
             [
               `🎭 dry run! This will update 'simple-doc' with contents from ./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md with the following metadata: ${JSON.stringify(
                 simpleDoc.doc.data
