@@ -18,7 +18,7 @@ const fixturesBaseDir = '__fixtures__/custompages';
 const fullFixturesDir = `${__dirname}./../../${fixturesBaseDir}`;
 const key = 'API_KEY';
 
-describe.only('rdme custompages', () => {
+describe('rdme custompages', () => {
   beforeAll(() => nock.disableNetConnect());
 
   afterAll(() => nock.cleanAll());
@@ -389,7 +389,9 @@ describe.only('rdme custompages', () => {
         .basicAuth({ user: key })
         .reply(201, { slug: doc.data.slug, _id: id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
-      await expectOSAgnostic(custompages.run({ filePath: `./__tests__/${fixturesBaseDir}/slug-docs`, key })).resolves.toBe(
+      await expectOSAgnostic(
+        custompages.run({ filePath: `./__tests__/${fixturesBaseDir}/slug-docs`, key })
+      ).resolves.toBe(
         `🌱 successfully created 'marc-actually-wrote-a-test' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`
       );
 
