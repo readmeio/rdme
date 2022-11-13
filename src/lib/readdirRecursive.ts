@@ -21,16 +21,7 @@ export default function readdirRecursive(folderToSearch: string, ignoreGit = fal
   let ignoreFilter: Ignore;
   if (ignoreGit) {
     // Initialize ignore filter with `.git` directory
-    let gitDirectory;
-
-    // There's a problem in the `ignore` library where if a path separator if `\`, like it is on
-    // Windows, the library doesn't escape it, resulting in a corrupted regex matcher.
-    if (path.sep === '\\') {
-      gitDirectory = path.join(process.cwd(), '.git');
-    } else {
-      gitDirectory = path.join(process.cwd(), '.git');
-    }
-
+    let gitDirectory = path.join(process.cwd(), '.git');
     ignoreFilter = ignore().add(gitDirectory);
 
     // If .gitignore file exists, load its contents into ignore filter
