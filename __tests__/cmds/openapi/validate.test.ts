@@ -76,7 +76,7 @@ describe('rdme openapi:validate', () => {
     ).resolves.toBe(chalk.green('petstore.json is a valid OpenAPI API definition!'));
   });
 
-  it('should adhere to .gitignore in subdirectories', () => {
+  it.only('should adhere to .gitignore in subdirectories', () => {
     fs.copyFileSync(
       require.resolve('@readme/oas-examples/3.0/json/petstore-simple.json'),
       './__tests__/__fixtures__/nested-gitignored-oas/nest/petstore-ignored.json'

@@ -13,6 +13,8 @@ export default function expectOSAgnostic(actual: any) {
         actual
           .then((res: any) => {
             if (typeof res === 'string') {
+console.log({ actual: res, normalized: normalizeString(res) })
+
               return normalizeString(res);
             }
 
