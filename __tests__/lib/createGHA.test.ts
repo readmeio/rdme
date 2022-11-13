@@ -33,7 +33,7 @@ const getCommandOutput = () => consoleInfoSpy.mock.calls.join('\n\n');
 
 const key = 'API_KEY';
 
-describe.skip('#createGHA', () => {
+describe('#createGHA', () => {
   let yamlOutput;
 
   beforeEach(() => {
