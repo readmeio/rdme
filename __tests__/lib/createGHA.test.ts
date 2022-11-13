@@ -83,7 +83,7 @@ describe('#createGHA', () => {
         const fileName = `rdme-${cmd}`;
         prompts.inject([true, 'some-branch', fileName]);
 
-        await expect(createGHA('', cmd, command.args, opts)).resolves.toMatchSnapshot();
+        await expectOSAgnostic(createGHA('', cmd, command.args, opts)).resolves.toMatchSnapshot();
 
         expect(yamlOutput).toBeValidSchema(ghaWorkflowSchema);
         expectOSAgnostic(yamlOutput).toMatchSnapshot();
@@ -98,7 +98,7 @@ describe('#createGHA', () => {
         const fileName = `rdme-${cmd} with GitHub flag`;
         prompts.inject(['another-branch', fileName]);
 
-        await expect(createGHA('', cmd, command.args, { ...opts, github: true })).resolves.toMatchSnapshot();
+        await expectOSAgnostic(createGHA('', cmd, command.args, { ...opts, github: true })).resolves.toMatchSnapshot();
 
         expect(yamlOutput).toBeValidSchema(ghaWorkflowSchema);
         expectOSAgnostic(yamlOutput).toMatchSnapshot();
