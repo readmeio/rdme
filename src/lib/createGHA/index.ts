@@ -31,7 +31,7 @@ export const getConfigStoreKey = (repoRoot: string) => `createGHA.${repoRoot}`;
  *
  * @see {@link https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#about-yaml-syntax-for-workflows}
  */
-const GITHUB_WORKFLOW_DIR = '.github/workflows';
+const GITHUB_WORKFLOW_DIR = path.join('.github', 'workflows');
 const GITHUB_SECRET_NAME = 'README_API_KEY';
 
 /**
