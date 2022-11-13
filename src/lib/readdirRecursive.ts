@@ -26,7 +26,7 @@ export default function readdirRecursive(folderToSearch: string, ignoreGit = fal
     // There's a problem in the `ignore` library where if a path separator if `\`, like it is on
     // Windows, the library doesn't escape it, resulting in a corrupted regex matcher.
     if (path.sep === '\\') {
-      gitDirectory = path.join(process.cwd(), '.git', path.sep);
+      gitDirectory = path.join(process.cwd(), '.git');
     } else {
       gitDirectory = path.join(process.cwd(), '.git');
     }
