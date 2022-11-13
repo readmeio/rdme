@@ -1404,8 +1404,7 @@ describe('rdme openapi', () => {
 
       expectOSAgnostic(yamlOutput).toMatchSnapshot();
       expect(fs.writeFileSync).toHaveBeenCalledTimes(2);
-      expect(fs.writeFileSync).toHaveBeenNthCalledWith(
-        2,
+      expect(fs.writeFileSync).toHaveBeenLastCalledWith(
         path.join('github', 'workflows', `${yamlFileName}.yml`),
         expect.any(String)
       );

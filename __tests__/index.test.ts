@@ -1,3 +1,5 @@
+import os from 'os';
+
 import prompts from 'prompts';
 
 import { version as pkgVersion } from '../package.json';
@@ -67,25 +69,25 @@ describe('cli', () => {
 
     it('should print usage for a given command', () => {
       return cli(['openapi', '--help']).then(usage => {
-        expect(usage.replace(new RegExp('\r\n', 'g'), '\n')).toMatchSnapshot();
+        expect(usage.replace(new RegExp(os.EOL, 'g'), '\n')).toMatchSnapshot();
       });
     });
 
     it('should print usage for a given command if supplied as `help <command>`', () => {
       return cli(['help', 'openapi']).then(usage => {
-        expect(usage.replace(new RegExp('\r\n', 'g'), '\n')).toMatchSnapshot();
+        expect(usage.replace(new RegExp(os.EOL, 'g'), '\n')).toMatchSnapshot();
       });
     });
 
     it('should not surface args that are designated as hidden', () => {
       return cli(['openapi', '--help']).then(usage => {
-        expect(usage.replace(new RegExp('\r\n', 'g'), '\n')).toMatchSnapshot();
+        expect(usage.replace(new RegExp(os.EOL, 'g'), '\n')).toMatchSnapshot();
       });
     });
 
     it('should show related commands for a subcommands help menu', () => {
       return cli(['versions', '--help']).then(usage => {
-        expect(usage.replace(new RegExp('\r\n', 'g'), '\n')).toMatchSnapshot();
+        expect(usage.replace(new RegExp(os.EOL, 'g'), '\n')).toMatchSnapshot();
       });
     });
   });
