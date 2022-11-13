@@ -48,13 +48,6 @@ const owlbert = () => {
        *                           /*`;
 };
 
-/* : {
-    content?: string;
-    header?: string;
-    optionList?: Command.args[];
-    raw?: boolean;
-  }[] */
-
 function commandUsage(cmd: Command) {
   const helpContent: Section[] = [
     {
