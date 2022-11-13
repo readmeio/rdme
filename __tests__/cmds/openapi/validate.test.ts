@@ -1,11 +1,13 @@
 /* eslint-disable no-console */
 import fs from 'fs';
+import path from 'path';
 
 import chalk from 'chalk';
 import prompts from 'prompts';
 
 import OpenAPIValidateCommand from '../../../src/cmds/openapi/validate';
 import ValidateAliasCommand from '../../../src/cmds/validate';
+import expectOSAgnostic from '../../helpers/expect-os-agnostic';
 import { after, before } from '../../helpers/get-gha-setup';
 
 const testWorkingDir = process.cwd();
@@ -80,11 +82,11 @@ describe('rdme openapi:validate', () => {
       './__tests__/__fixtures__/nested-gitignored-oas/nest/petstore-ignored.json'
     );
 
-    return expect(
+    return expectOSAgnostic(
       validate.run({
         workingDirectory: './__tests__/__fixtures__/nested-gitignored-oas',
       })
-    ).resolves.toBe(chalk.green('nest/petstore.json is a valid OpenAPI API definition!'));
+    ).resolves.toBe(chalk.green(`${path.join('nest', 'petstore.json')} is a valid OpenAPI API definition!`));
   });
 
   describe('error handling', () => {
@@ -150,15 +152,17 @@ describe('rdme openapi:validate', () => {
     });
 
     it('should create GHA workflow if user passes in spec via prompts', async () => {
-      expect.assertions(6);
       const spec = '__tests__/__fixtures__/petstore-simple-weird-version.json';
       const fileName = 'validate-test-file';
       prompts.inject([spec, true, 'validate-test-branch', fileName]);
 
-      await expect(validate.run({})).resolves.toMatchSnapshot();
+      await expectOSAgnostic(validate.run({})).resolves.toMatchSnapshot();
 
-      expect(yamlOutput).toMatchSnapshot();
-      expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
+      expectOSAgnostic(yamlOutput).toMatchSnapshot();
+      expect(fs.writeFileSync).toHaveBeenCalledWith(
+        path.join('.github', 'workflows', `${fileName}.yml`),
+        expect.any(String)
+      );
       expect(console.info).toHaveBeenCalledTimes(2);
       const output = getCommandOutput();
       expect(output).toMatch("Looks like you're running this command in a GitHub Repository!");
@@ -166,41 +170,47 @@ describe('rdme openapi:validate', () => {
     });
 
     it('should create GHA workflow if user passes in spec via opt', async () => {
-      expect.assertions(3);
       const spec = '__tests__/__fixtures__/petstore-simple-weird-version.json';
       const fileName = 'validate-test-opt-spec-file';
       prompts.inject([true, 'validate-test-opt-spec-branch', fileName]);
 
-      await expect(validate.run({ spec })).resolves.toMatchSnapshot();
+      await expectOSAgnostic(validate.run({ spec })).resolves.toMatchSnapshot();
 
-      expect(yamlOutput).toMatchSnapshot();
-      expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
+      expectOSAgnostic(yamlOutput).toMatchSnapshot();
+      expect(fs.writeFileSync).toHaveBeenCalledWith(
+        path.join('.github', 'workflows', `${fileName}.yml`),
+        expect.any(String)
+      );
     });
 
     it('should create GHA workflow if user passes in spec via opt (github flag enabled)', async () => {
-      expect.assertions(3);
       const spec = '__tests__/__fixtures__/petstore-simple-weird-version.json';
       const fileName = 'validate-test-opt-spec-github-file';
       prompts.inject(['validate-test-opt-spec-github-branch', fileName]);
 
-      await expect(validate.run({ spec, github: true })).resolves.toMatchSnapshot();
+      await expectOSAgnostic(validate.run({ spec, github: true })).resolves.toMatchSnapshot();
 
-      expect(yamlOutput).toMatchSnapshot();
-      expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
+      expectOSAgnostic(yamlOutput).toMatchSnapshot();
+      expect(fs.writeFileSync).toHaveBeenCalledWith(
+        path.join('.github', 'workflows', `${fileName}.yml`),
+        expect.any(String)
+      );
     });
 
     it('should create GHA workflow if user passes in spec via opt (including workingDirectory)', async () => {
-      expect.assertions(3);
       const spec = 'petstore.json';
       const fileName = 'validate-test-opt-spec-workdir-file';
       prompts.inject([true, 'validate-test-opt-spec-github-branch', fileName]);
 
-      await expect(
+      await expectOSAgnostic(
         validate.run({ spec, workingDirectory: './__tests__/__fixtures__/relative-ref-oas' })
       ).resolves.toMatchSnapshot();
 
-      expect(yamlOutput).toMatchSnapshot();
-      expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
+      expectOSAgnostic(yamlOutput).toMatchSnapshot();
+      expect(fs.writeFileSync).toHaveBeenCalledWith(
+        path.join('.github', 'workflows', `${fileName}.yml`),
+        expect.any(String)
+      );
     });
 
     it('should reject if user says no to creating GHA workflow', () => {

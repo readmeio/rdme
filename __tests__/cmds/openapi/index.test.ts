@@ -52,7 +52,7 @@ const getCommandOutput = () => {
 
 const getRandomRegistryId = () => Math.random().toString(36).substring(2);
 
-describe.only('rdme openapi', () => {
+describe('rdme openapi', () => {
   beforeAll(() => nock.disableNetConnect());
 
   beforeEach(() => {
