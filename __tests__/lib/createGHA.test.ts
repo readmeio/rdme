@@ -5,6 +5,7 @@ import type Command from '../../src/lib/baseCommand';
 import type { Response } from 'simple-git';
 
 import fs from 'fs';
+import path from 'path';
 
 import prompts from 'prompts';
 
@@ -21,6 +22,7 @@ import createGHA, {
   getMajorRdmeVersion,
   git,
 } from '../../src/lib/createGHA';
+import expectOSAgnostic from '../helpers/expect-os-agnostic';
 import { after, before } from '../helpers/get-gha-setup';
 import getGitRemoteMock from '../helpers/get-git-mock';
 import ghaWorkflowSchema from '../helpers/github-workflow-schema.json';
@@ -84,7 +86,7 @@ describe('#createGHA', () => {
         await expect(createGHA('', cmd, command.args, opts)).resolves.toMatchSnapshot();
 
         expect(yamlOutput).toBeValidSchema(ghaWorkflowSchema);
-        expect(yamlOutput).toMatchSnapshot();
+        expectOSAgnostic(yamlOutput).toMatchSnapshot();
         expect(fs.writeFileSync).toHaveBeenCalledWith(getGHAFileName(fileName), expect.any(String));
         expect(console.info).toHaveBeenCalledTimes(1);
         const output = getCommandOutput();
@@ -99,7 +101,7 @@ describe('#createGHA', () => {
         await expect(createGHA('', cmd, command.args, { ...opts, github: true })).resolves.toMatchSnapshot();
 
         expect(yamlOutput).toBeValidSchema(ghaWorkflowSchema);
-        expect(yamlOutput).toMatchSnapshot();
+        expectOSAgnostic(yamlOutput).toMatchSnapshot();
         expect(fs.writeFileSync).toHaveBeenCalledWith(getGHAFileName(fileName), expect.any(String));
       });
 
@@ -120,7 +122,7 @@ describe('#createGHA', () => {
 
         await expect(createGHA('', cmd, command.args, opts)).resolves.toBeTruthy();
 
-        expect(fs.mkdirSync).toHaveBeenCalledWith('.github/workflows', { recursive: true });
+        expect(fs.mkdirSync).toHaveBeenCalledWith(path.join('.github', 'workflows'), { recursive: true });
         expect(fs.writeFileSync).toHaveBeenCalledWith(getGHAFileName(fileName), expect.any(String));
       });
 
@@ -253,15 +255,17 @@ describe('#createGHA', () => {
 
     describe('#getGHAFileName', () => {
       it('should return cleaned up file name', () => {
-        expect(getGHAFileName('test')).toBe('.github/workflows/test.yml');
+        expect(getGHAFileName('test')).toBe(path.join('.github', 'workflows', 'test.yml'));
       });
 
       it('should lowercase and remove whitespace', () => {
-        expect(getGHAFileName('Hello World')).toBe('.github/workflows/hello-world.yml');
+        expect(getGHAFileName('Hello World')).toBe(path.join('.github', 'workflows', 'hello-world.yml'));
       });
 
       it('should clean up weird characters', () => {
-        expect(getGHAFileName('Hello_World-Test*Ex@mple!')).toBe('.github/workflows/hello-world-test-ex-mple-.yml');
+        expect(getGHAFileName('Hello_World-Test*Ex@mple!')).toBe(
+          path.join('.github', 'workflows', 'hello-world-test-ex-mple-.yml')
+        );
       });
     });
   });
