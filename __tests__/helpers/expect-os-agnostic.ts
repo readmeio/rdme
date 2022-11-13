@@ -1,5 +1,5 @@
 /* eslint-disable jest/valid-expect */
-const normalizeString = (str: string) => str.replace(/\\/g, '/');
+const normalizeString = (str: string) => str.replace(/\\+/g, '/');
 
 /**
  * Normalize all data expectations to be OS-agnostic and match against Unix-based filesystems
