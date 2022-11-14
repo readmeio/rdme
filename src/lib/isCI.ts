@@ -1,4 +1,4 @@
-import ciDetect from '@npmcli/ci-detect';
+import ci from 'ci-info';
 
 /**
  * Small env check to determine if we're in a GitHub Actions environment.
@@ -6,7 +6,7 @@ import ciDetect from '@npmcli/ci-detect';
  * @see {@link https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables}
  */
 export function isGHA() {
-  return ciDetect() === 'github-actions';
+  return ci.GITHUB_ACTIONS;
 }
 
 /**
@@ -40,5 +40,5 @@ export function isNpmScript() {
  */
 export default function isCI() {
   /* istanbul ignore next */
-  return (ciDetect() && !isTest()) || !!process.env.TEST_RDME_CI;
+  return (ci.isCI && !isTest()) || !!process.env.TEST_RDME_CI;
 }
