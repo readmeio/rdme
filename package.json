@@ -37,7 +37,7 @@
   "dependencies": {
     "@actions/core": "^1.6.0",
     "chalk": "^4.1.2",
-    "ci-info": "^3.5.0",
+    "ci-info": "^3.6.1",
     "command-line-args": "^5.2.0",
     "command-line-usage": "^6.0.2",
     "config": "^3.1.0",
