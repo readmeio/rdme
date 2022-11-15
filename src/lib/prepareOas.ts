@@ -143,7 +143,7 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
   debug(`spec type: ${specType}`);
 
   // No need to optional chain here since `info.version` is required to pass validation
-  const specVersion = api.info.version;
+  const specVersion: string = api.info.version;
   debug(`version in spec: ${specVersion}`);
 
   let bundledSpec = '';
@@ -156,5 +156,16 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
     debug('spec bundled');
   }
 
-  return { bundledSpec, specPath, specType, specVersion };
+  return {
+    bundledSpec,
+    specPath,
+    specType,
+    /**
+     * The `info.version` field, extracted from the normalized spec.
+     * This is **not** the OpenAPI version (e.g., 3.1, 3.0),
+     * this is a user input that we use to specify the version in ReadMe
+     * (if they use the `useSpecVersion` flag)
+     */
+    specVersion,
+  };
 }
