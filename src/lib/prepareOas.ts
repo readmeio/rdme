@@ -90,7 +90,7 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
     specPath = possibleSpecFiles[0];
 
     if (possibleSpecFiles.length === 1) {
-      fileFindingSpinner.succeed(`${fileFindingSpinner.text} found! 🔍`);
+      fileFindingSpinner.stop();
       info(chalk.yellow(`We found ${specPath} and are attempting to ${action} it.`));
     } else if (possibleSpecFiles.length > 1) {
       if (isCI()) {
@@ -98,7 +98,7 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
         throw new Error('Multiple API definitions found in current directory. Please specify file.');
       }
 
-      fileFindingSpinner.succeed(`${fileFindingSpinner.text} found! 🔍`);
+      fileFindingSpinner.stop();
 
       const selection: FileSelection = await promptTerminal({
         name: 'file',
