@@ -101,7 +101,7 @@ describe('cli', () => {
 
     beforeEach(() => {
       conf.set('email', 'owlbert@readme.io');
-      conf.set('project', 'owlbert');
+      conf.set('project', 'project-owlbert');
       conf.set('apiKey', key);
       consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
     });
@@ -133,7 +133,9 @@ describe('cli', () => {
         'The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!'
       );
 
-      expect(getCommandOutput()).toMatch('is currently logged in, using the stored API key for this project:');
+      expect(getCommandOutput()).toMatch(
+        'owlbert@readme.io is currently logged in, using the stored API key for this project: project-owlbert'
+      );
     });
 
     it('should not inform a logged in user when they pass their own key', async () => {
