@@ -98,7 +98,7 @@
     "bump": "npm version -m 'build: %s release'",
     "debug": "ts-node src/cli.ts",
     "lint": "eslint . bin/rdme bin/set-version-output --ext .js,.ts",
-    "lint-docs": "npx alex@10 . && npm run prettier:docs",
+    "lint-docs": "npx alex . && npm run prettier:docs",
     "postversion": "git tag $npm_package_version",
     "prebuild": "rm -rf dist/",
     "prepack": "npm run build",
