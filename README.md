@@ -11,6 +11,8 @@
   <a href="https://github.com/readmeio/rdme"><img src="https://img.shields.io/github/workflow/status/readmeio/rdme/CI.svg?style=for-the-badge" alt="Build status"></a>
 </p>
 
+<!--alex ignore postman-postwoman-->
+
 With `rdme`, you can manage your API definition (we support [OpenAPI](https://spec.openapis.org/oas/v3.1.0.html), [Swagger](https://swagger.io/specification/v2/), and [Postman](https://www.postman.com/collection/)) and sync it to your API reference docs on ReadMe. You can also access other parts of [ReadMe's RESTful API](https://docs.readme.com/reference), including syncing Markdown documentation with your ReadMe project and managing project versions.
 
 Not using ReadMe for your docs? No worries. `rdme` has a variety of tools to help you identify issues with your API definition — no ReadMe account required.
@@ -125,6 +127,8 @@ With `rdme`, you have access to a variety of tools to manage your API definition
 - [Reduction](#reducing-an-api-definition) 📉
 
 `rdme` supports [OpenAPI 3.1](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md), [OpenAPI 3.0](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md), and [Swagger 2.x](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/2.0.md).
+
+<!--alex ignore postman-postwoman-->
 
 You can also pass in [Postman Collections](https://www.postman.com/collection/). Postman Collections are converted to OpenAPI using [`postman-to-openapi`](https://github.com/joolfe/postman-to-openapi) prior to any syncing/validation/reduction.
 
