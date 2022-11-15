@@ -7,6 +7,17 @@ import { debug, info, oraOptions } from './logger';
 import promptTerminal from './promptWrapper';
 import readdirRecursive from './readdirRecursive';
 
+type FoundSpecFile = {
+  /** path to the spec file */
+  filePath: string;
+  specType: 'OpenAPI' | 'Swagger' | 'Postman';
+  /**
+   * OpenAPI or Postman specification version
+   * @example '3.1'
+   */
+  version: string;
+};
+
 type FileSelection = {
   file: string;
 };
@@ -61,7 +72,7 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
 
     debug(`number of JSON or YAML files found: ${jsonAndYamlFiles.length}`);
 
-    const possibleSpecFiles = (
+    const possibleSpecFiles: FoundSpecFile[] = (
       await Promise.all(
         jsonAndYamlFiles.map(file => {
           debug(`attempting to oas-normalize ${file}`);
@@ -71,11 +82,13 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
             .then(({ specification, version }) => {
               debug(`specification type for ${file}: ${specification}`);
               debug(`version for ${file}: ${version}`);
-              return ['openapi', 'swagger', 'postman'].includes(specification) ? file : '';
+              return ['openapi', 'swagger', 'postman'].includes(specification)
+                ? { filePath: file, specType: capitalizeSpecType(specification), version }
+                : null;
             })
             .catch(e => {
               debug(`error extracting API definition specification version for ${file}: ${e.message}`);
-              return '';
+              return null;
             });
         })
       )
@@ -90,7 +103,7 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
       );
     }
 
-    specPath = possibleSpecFiles[0];
+    specPath = possibleSpecFiles[0].filePath;
 
     if (possibleSpecFiles.length === 1) {
       fileFindingSpinner.stop();
@@ -107,7 +120,11 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
         name: 'file',
         message: `Multiple potential API definitions found! Which one would you like to ${action}?`,
         type: 'select',
-        choices: possibleSpecFiles.map(file => ({ title: file, value: file })),
+        choices: possibleSpecFiles.map(file => ({
+          title: file.filePath,
+          value: file.filePath,
+          description: `${file.specType} ${file.version}`,
+        })),
       });
 
       specPath = selection.file;
