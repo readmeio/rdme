@@ -7,9 +7,23 @@ import { debug, info, oraOptions } from './logger';
 import promptTerminal from './promptWrapper';
 import readdirRecursive from './readdirRecursive';
 
+type FoundSpecFile = {
+  /** path to the spec file */
+  filePath: string;
+  specType: 'OpenAPI' | 'Swagger' | 'Postman';
+  /**
+   * OpenAPI or Postman specification version
+   * @example '3.1'
+   */
+  version: string;
+};
+
 type FileSelection = {
   file: string;
 };
+
+const capitalizeSpecType = (type: string) =>
+  type === 'openapi' ? 'OpenAPI' : type.charAt(0).toUpperCase() + type.slice(1);
 
 /**
  * Normalizes, validates, and (optionally) bundles an OpenAPI definition.
@@ -58,7 +72,7 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
 
     debug(`number of JSON or YAML files found: ${jsonAndYamlFiles.length}`);
 
-    const possibleSpecFiles = (
+    const possibleSpecFiles: FoundSpecFile[] = (
       await Promise.all(
         jsonAndYamlFiles.map(file => {
           debug(`attempting to oas-normalize ${file}`);
@@ -68,11 +82,13 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
             .then(({ specification, version }) => {
               debug(`specification type for ${file}: ${specification}`);
               debug(`version for ${file}: ${version}`);
-              return ['openapi', 'swagger', 'postman'].includes(specification) ? file : '';
+              return ['openapi', 'swagger', 'postman'].includes(specification)
+                ? { filePath: file, specType: capitalizeSpecType(specification), version }
+                : null;
             })
             .catch(e => {
               debug(`error extracting API definition specification version for ${file}: ${e.message}`);
-              return '';
+              return null;
             });
         })
       )
@@ -87,10 +103,10 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
       );
     }
 
-    specPath = possibleSpecFiles[0];
+    specPath = possibleSpecFiles[0].filePath;
 
     if (possibleSpecFiles.length === 1) {
-      fileFindingSpinner.succeed(`${fileFindingSpinner.text} found! 🔍`);
+      fileFindingSpinner.stop();
       info(chalk.yellow(`We found ${specPath} and are attempting to ${action} it.`));
     } else if (possibleSpecFiles.length > 1) {
       if (isCI()) {
@@ -98,13 +114,17 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
         throw new Error('Multiple API definitions found in current directory. Please specify file.');
       }
 
-      fileFindingSpinner.succeed(`${fileFindingSpinner.text} found! 🔍`);
+      fileFindingSpinner.stop();
 
       const selection: FileSelection = await promptTerminal({
         name: 'file',
         message: `Multiple potential API definitions found! Which one would you like to ${action}?`,
         type: 'select',
-        choices: possibleSpecFiles.map(file => ({ title: file, value: file })),
+        choices: possibleSpecFiles.map(file => ({
+          title: file.filePath,
+          value: file.filePath,
+          description: `${file.specType} ${file.version}`,
+        })),
       });
 
       specPath = selection.file;
@@ -118,7 +138,7 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
   debug('spec normalized');
 
   // We're retrieving the original specification type here instead of after validation because if
-  // they give us a Postman colletion we should tell them that we handled a Postman collection, not
+  // they give us a Postman collection we should tell them that we handled a Postman collection, not
   // an OpenAPI definition (eventhough we'll actually convert it to OpenAPI under the hood).
   //
   // And though `.validate()` will run `.load()` itself running `.load()` here will not have any
@@ -126,7 +146,7 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
   // run it.
   const specType = await oas.load().then(schema => {
     const type = getAPIDefinitionType(schema);
-    return type === 'openapi' ? 'OpenAPI' : type.charAt(0).toUpperCase() + type.slice(1);
+    return capitalizeSpecType(type);
   });
 
   // If we were supplied a Postman collection this will **always** convert it to OpenAPI 3.0.
@@ -143,7 +163,7 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
   debug(`spec type: ${specType}`);
 
   // No need to optional chain here since `info.version` is required to pass validation
-  const specVersion = api.info.version;
+  const specVersion: string = api.info.version;
   debug(`version in spec: ${specVersion}`);
 
   let bundledSpec = '';
@@ -156,5 +176,16 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
     debug('spec bundled');
   }
 
-  return { bundledSpec, specPath, specType, specVersion };
+  return {
+    bundledSpec,
+    specPath,
+    specType,
+    /**
+     * The `info.version` field, extracted from the normalized spec.
+     * This is **not** the OpenAPI version (e.g., 3.1, 3.0),
+     * this is a user input that we use to specify the version in ReadMe
+     * (if they use the `useSpecVersion` flag)
+     */
+    specVersion,
+  };
 }
