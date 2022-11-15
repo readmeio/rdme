@@ -97,8 +97,8 @@ export default class Command {
     if (this.args.some(arg => arg.name === 'key')) {
       if (opts.key && configstore.get('apiKey') === opts.key) {
         info(
-          `🔑 ${configstore.get(
-            'email'
+          `🔑 ${chalk.green(
+            configstore.get('email')
           )} is currently logged in, using the stored API key for this project: ${chalk.blue(
             configstore.get('project')
           )}`,
