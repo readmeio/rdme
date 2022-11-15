@@ -11,6 +11,9 @@ type FileSelection = {
   file: string;
 };
 
+const capitalizeSpecType = (type: string) =>
+  type === 'openapi' ? 'OpenAPI' : type.charAt(0).toUpperCase() + type.slice(1);
+
 /**
  * Normalizes, validates, and (optionally) bundles an OpenAPI definition.
  *
@@ -126,7 +129,7 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
   // run it.
   const specType = await oas.load().then(schema => {
     const type = getAPIDefinitionType(schema);
-    return type === 'openapi' ? 'OpenAPI' : type.charAt(0).toUpperCase() + type.slice(1);
+    return capitalizeSpecType(type);
   });
 
   // If we were supplied a Postman collection this will **always** convert it to OpenAPI 3.0.
