@@ -13,7 +13,7 @@
 
 <!--alex ignore postman-postwoman-->
 
-With `rdme`, you can manage your API definition (we support [OpenAPI](https://spec.openapis.org/oas/v3.1.0.html), [Swagger](https://swagger.io/specification/v2/), and [Postman](https://www.postman.com/collection/)) and sync it to your API reference docs on ReadMe. You can also access other parts of [ReadMe's RESTful API](https://docs.readme.com/reference), including syncing Markdown documentation with your ReadMe project and managing project versions.
+With `rdme`, you can manage your API definition (we support [OpenAPI](https://spec.openapis.org/oas/v3.1.0.html), [Swagger](https://swagger.io/specification/v2/), and [Postman](https://schema.postman.com/)) and sync it to your API reference docs on ReadMe. You can also access other parts of [ReadMe's RESTful API](https://docs.readme.com/reference), including syncing Markdown documentation with your ReadMe project and managing project versions.
 
 Not using ReadMe for your docs? No worries. `rdme` has a variety of tools to help you identify issues with your API definition — no ReadMe account required.
 
