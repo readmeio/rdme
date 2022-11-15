@@ -118,7 +118,7 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
   debug('spec normalized');
 
   // We're retrieving the original specification type here instead of after validation because if
-  // they give us a Postman colletion we should tell them that we handled a Postman collection, not
+  // they give us a Postman collection we should tell them that we handled a Postman collection, not
   // an OpenAPI definition (eventhough we'll actually convert it to OpenAPI under the hood).
   //
   // And though `.validate()` will run `.load()` itself running `.load()` here will not have any
