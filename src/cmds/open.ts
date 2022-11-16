@@ -46,7 +46,7 @@ export default class OpenCommand extends Command {
     let url: string;
 
     if (dash) {
-      const selectedVersion = await getProjectVersion(undefined, configStore.get('apiKey'));
+      const selectedVersion = await getProjectVersion(undefined, configStore.get('apiKey'), true);
       const dashURL: string = config.get('host');
       url = `${dashURL}/project/${project}/v${selectedVersion}/overview`;
     } else {
