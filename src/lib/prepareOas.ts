@@ -155,7 +155,7 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
     debug(`raw validation error object: ${JSON.stringify(err)}`);
     throw err;
   });
-  spinner.succeed(`${spinner.text} done! ✅`);
+  spinner.stop();
 
   debug('👇👇👇👇👇 spec validated! logging spec below 👇👇👇👇👇');
   debug(api);
