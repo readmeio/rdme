@@ -166,6 +166,12 @@ describe('#createGHA', () => {
         return expect(createGHA('success!', cmd, command.args, opts)).resolves.toBe('success!');
       });
 
+      it('should not run if a repo with no remote', () => {
+        git.remote = getGitRemoteMock('', '', '');
+
+        return expect(createGHA('success!', cmd, command.args, opts)).resolves.toBe('success!');
+      });
+
       it('should not run if user previously declined to set up GHA for current directory + pkg version', async () => {
         const repoRoot = process.cwd();
 
@@ -209,7 +215,6 @@ describe('#createGHA', () => {
 
         return expect(getGitData()).resolves.toStrictEqual({
           containsGitHubRemote: true,
-          containsNonGitHubRemote: false,
           defaultBranch: 'main',
           isRepo: true,
           repoRoot,
@@ -223,7 +228,6 @@ describe('#createGHA', () => {
 
         return expect(getGitData()).resolves.toStrictEqual({
           containsGitHubRemote: true,
-          containsNonGitHubRemote: false,
           defaultBranch: 'main',
           isRepo: true,
           repoRoot: '',
@@ -243,7 +247,6 @@ describe('#createGHA', () => {
 
         return expect(getGitData()).resolves.toStrictEqual({
           containsGitHubRemote: undefined,
-          containsNonGitHubRemote: undefined,
           defaultBranch: undefined,
           isRepo: false,
           repoRoot: '',
