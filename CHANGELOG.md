@@ -1,3 +1,17 @@
+## 8.1.0 (2022-11-16)
+
+* fix: package.json keywords declarations (#666) ([9d026cb](https://github.com/readmeio/rdme/commit/9d026cb)), closes [#666](https://github.com/readmeio/rdme/issues/666)
+* fix: swap out `@npmcli/ci-detect` for `ci-info` (#667) ([6cc1f01](https://github.com/readmeio/rdme/commit/6cc1f01)), closes [#667](https://github.com/readmeio/rdme/issues/667)
+* fix: upgrade oas-normalize to fix a postman conversion issue (#672) ([64c8f77](https://github.com/readmeio/rdme/commit/64c8f77)), closes [#672](https://github.com/readmeio/rdme/issues/672)
+* fix(createGHA): remove non-github remote check (#665) ([480cdad](https://github.com/readmeio/rdme/commit/480cdad)), closes [#665](https://github.com/readmeio/rdme/issues/665)
+* fix(openapi): spinner.stop() in validation step ([7712adc](https://github.com/readmeio/rdme/commit/7712adc))
+* feat: adding support for uploading and validating Postman collections (#669) ([93f80c6](https://github.com/readmeio/rdme/commit/93f80c6)), closes [#669](https://github.com/readmeio/rdme/issues/669)
+* feat: postman-related enhancements, output cleanup (#673) ([1097fb5](https://github.com/readmeio/rdme/commit/1097fb5)), closes [#673](https://github.com/readmeio/rdme/issues/673)
+* ci: lint docs against latest version of alex ([e606aa0](https://github.com/readmeio/rdme/commit/e606aa0))
+* ci: stop running tests in node 19 ([53109d3](https://github.com/readmeio/rdme/commit/53109d3))
+
+
+
 ## <small>8.0.4 (2022-11-03)</small>
 
 * chore(deps): bump update-notifier-cjs ([879d0c8](https://github.com/readmeio/rdme/commit/879d0c8)), closes [#661](https://github.com/readmeio/rdme/issues/661)
