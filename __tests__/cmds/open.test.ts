@@ -52,7 +52,10 @@ describe('rdme open', () => {
         version,
       };
 
-      const mockRequest = getAPIMock().get('/api/v1/version').basicAuth({ user: key }).reply(200, [versionPayload]);
+      const mockRequest = getAPIMock()
+        .get('/api/v1/version')
+        .basicAuth({ user: key })
+        .reply(200, [versionPayload, { version: '1.0.1' }]);
 
       const dashUrl = 'https://dash.readme.com/project/subdomain/v1.0/overview';
 
