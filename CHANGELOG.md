@@ -1,3 +1,12 @@
+## <small>8.1.1 (2022-11-17)</small>
+
+* fix: don't prompt for version if only one exists (#675) ([0180883](https://github.com/readmeio/rdme/commit/0180883)), closes [#675](https://github.com/readmeio/rdme/issues/675)
+* feat(open): `rdme open` should have a flag for opening the dash (#671) ([c2677f7](https://github.com/readmeio/rdme/commit/c2677f7)), closes [#671](https://github.com/readmeio/rdme/issues/671)
+* docs: update maintainers guidance ([1aa7214](https://github.com/readmeio/rdme/commit/1aa7214))
+* ci: remove retag-release workflow (#674) ([5ed84a0](https://github.com/readmeio/rdme/commit/5ed84a0)), closes [#674](https://github.com/readmeio/rdme/issues/674)
+
+
+
 ## 8.1.0 (2022-11-16)
 
 * fix: package.json keywords declarations (#666) ([9d026cb](https://github.com/readmeio/rdme/commit/9d026cb)), closes [#666](https://github.com/readmeio/rdme/issues/666)
