@@ -6,9 +6,11 @@ import open from 'open';
 
 import Command, { CommandCategories } from '../lib/baseCommand';
 import configStore from '../lib/configstore';
+import { getProjectVersion } from '../lib/versionSelect';
 
 export type Options = {
   mockOpen?: (url: string) => Promise<void>;
+  dash?: boolean;
 };
 
 export default class OpenCommand extends Command {
@@ -21,12 +23,19 @@ export default class OpenCommand extends Command {
     this.cmdCategory = CommandCategories.UTILITIES;
     this.position = 1;
 
-    this.args = [];
+    this.args = [
+      {
+        name: 'dash',
+        type: Boolean,
+        description: 'Opens your current ReadMe project dashboard.',
+      },
+    ];
   }
 
   async run(opts: CommandOptions<Options>) {
     await super.run(opts);
 
+    const { dash } = opts;
     const project = configStore.get('project');
     Command.debug(`project: ${project}`);
 
@@ -34,8 +43,21 @@ export default class OpenCommand extends Command {
       return Promise.reject(new Error(`Please login using \`${config.get('cli')} login\`.`));
     }
 
-    const hubURL: string = config.get('hub');
-    const url = hubURL.replace('{project}', project);
+    let url: string;
+
+    if (dash) {
+      const key = configStore.get('apiKey');
+      if (!key) {
+        return Promise.reject(new Error(`Please login using \`${config.get('cli')} login\`.`));
+      }
+
+      const selectedVersion = await getProjectVersion(undefined, key, true);
+      const dashURL: string = config.get('host');
+      url = `${dashURL}/project/${project}/v${selectedVersion}/overview`;
+    } else {
+      const hubURL: string = config.get('hub');
+      url = hubURL.replace('{project}', project);
+    }
 
     return (opts.mockOpen || open)(url, {
       wait: false,
