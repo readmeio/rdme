@@ -15,7 +15,7 @@ import promptTerminal from './promptWrapper';
  * @param key project API key
  * @returns a cleaned up project version
  */
-export async function getProjectVersion(versionFlag: string, key: string): Promise<string> {
+export async function getProjectVersion(versionFlag: string, key: string, returnStable = false): Promise<string> {
   try {
     if (versionFlag) {
       return await fetch(`${config.get('host')}/api/v1/version/${versionFlag}`, {
@@ -38,6 +38,11 @@ export async function getProjectVersion(versionFlag: string, key: string): Promi
 
     if (versionList.length === 1) {
       return versionList[0].version;
+    }
+
+    if (returnStable) {
+      const stableVersion = versionList.find(v => v.is_stable === true);
+      return stableVersion.version;
     }
 
     const { versionSelection } = await promptTerminal({
