@@ -36,6 +36,10 @@ export async function getProjectVersion(versionFlag: string, key: string): Promi
       headers: cleanHeaders(key),
     }).then(res => handleRes(res));
 
+    if (versionList.length === 1) {
+      return versionList[0].version;
+    }
+
     const { versionSelection } = await promptTerminal({
       type: 'select',
       name: 'versionSelection',
