@@ -27,7 +27,7 @@ export default class OpenCommand extends Command {
       {
         name: 'dash',
         type: Boolean,
-        description: 'Opens the current project dashboard.',
+        description: 'Opens your current ReadMe project dashboard.',
       },
     ];
   }
