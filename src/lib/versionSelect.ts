@@ -36,6 +36,10 @@ export async function getProjectVersion(versionFlag: string, key: string, return
       headers: cleanHeaders(key),
     }).then(res => handleRes(res));
 
+    if (versionList.length === 1) {
+      return versionList[0].version;
+    }
+
     if (returnStable) {
       const stableVersion = versionList.find(v => v.is_stable === true);
       return stableVersion.version;
