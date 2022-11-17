@@ -46,7 +46,12 @@ export default class OpenCommand extends Command {
     let url: string;
 
     if (dash) {
-      const selectedVersion = await getProjectVersion(undefined, configStore.get('apiKey'), true);
+      const key = configStore.get('apiKey');
+      if (!key) {
+        return Promise.reject(new Error(`Please login using \`${config.get('cli')} login\`.`));
+      }
+
+      const selectedVersion = await getProjectVersion(undefined, key, true);
       const dashURL: string = config.get('host');
       url = `${dashURL}/project/${project}/v${selectedVersion}/overview`;
     } else {
