@@ -35,7 +35,7 @@ describe('rdme open', () => {
   });
 
   describe('open --dash', () => {
-    it('should open the dash', () => {
+    it('should open the dash', async () => {
       expect.assertions(2);
       configStore.set('project', 'subdomain');
       configStore.set('apiKey', '12345');
@@ -64,9 +64,10 @@ describe('rdme open', () => {
         return Promise.resolve();
       }
 
-      return expect(cmd.run({ mockOpen, dash: true, key: '12345' })).resolves.toBe(
+      await expect(cmd.run({ mockOpen, dash: true, key: '12345' })).resolves.toBe(
         `Opening ${chalk.green(dashUrl)} in your browser...`
       );
+
       mockRequest.done();
     });
 
