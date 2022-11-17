@@ -469,7 +469,7 @@ describe('rdme docs', () => {
       const versionsMock = getAPIMock()
         .get('/api/v1/version')
         .basicAuth({ user: key })
-        .reply(200, [{ version: altVersion }]);
+        .reply(200, [{ version }, { version: altVersion }]);
 
       const getMock = getAPIMockWithVersionHeader(altVersion)
         .get(`/api/v1/docs/${slug}`)

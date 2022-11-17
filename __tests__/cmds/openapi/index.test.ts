@@ -222,7 +222,6 @@ describe('rdme openapi', () => {
     });
 
     it('should create a new spec via `--create` flag and ignore `--id`', async () => {
-      prompts.inject([version]);
       const registryUUID = getRandomRegistryId();
 
       const mock = getAPIMock()
@@ -1297,7 +1296,7 @@ describe('rdme openapi', () => {
       const mock = getAPIMock()
         .get('/api/v1/version')
         .basicAuth({ user: key })
-        .reply(200, [{ version }])
+        .reply(200, [{ version }, { version: '1.1.0' }])
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
         .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
 
