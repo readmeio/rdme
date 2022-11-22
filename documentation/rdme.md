@@ -1,7 +1,7 @@
 ---
 title: Syncing Docs via CLI / GitHub
 excerpt: Update your docs automatically with `rdme`, ReadMe's official CLI and GitHub Action!
-category: 5f7ce9e3a5504d0414d024c2
+category: 62056dee230e07007218be06
 ---
 
 <!--
@@ -57,7 +57,7 @@ In order to sync Markdown files to your Guides, your Changelog, or your Custom P
 ---
 title: Syncing Docs via CLI / GitHub
 excerpt: Update your docs automatically with `rdme`, ReadMe's official CLI and GitHub Action!
-category: 5f7ce9e3a5504d0414d024c2
+category: 62056dee230e07007218be06
 ---
 
 If you're anything like us...
@@ -73,7 +73,7 @@ By default, we automatically derive the page's slug via the file name (e.g. the 
 ---
 title: Syncing Docs via CLI / GitHub
 excerpt: Update your docs automatically with `rdme`, ReadMe's official CLI and GitHub Action!
-category: 5f7ce9e3a5504d0414d024c2
+category: 62056dee230e07007218be06
 slug: an-alternative-page-slug-example
 ---
 ```

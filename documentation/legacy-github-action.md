@@ -1,5 +1,5 @@
 ---
-category: 5f7ce9e3a5504d0414d024c2
+category: 62056dee230e07007218be06
 hidden: true
 slug: automatically-sync-api-specification-with-github
 title: OpenAPI + GitHub Sync [DEPRECATED]
