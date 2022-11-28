@@ -35,6 +35,7 @@ https://github.com/jonschlinkert/markdown-toc/issues/119
 - [CLI Configuration](#cli-configuration)
   - [Setup](#setup)
   - [Authentication](#authentication)
+  - [Proxy](#proxy)
 - [GitHub Actions Configuration](#github-actions-configuration)
 - [Usage](#usage)
   - [Common `rdme` Options](#common-rdme-options)
