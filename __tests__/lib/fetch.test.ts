@@ -87,7 +87,7 @@ describe('#fetch()', () => {
     mock.done();
   });
 
-  it('should support if we dont supply any other options with the request', async () => {
+  it('should make fetch call if no other request options are provided', async () => {
     const mock = getAPIMock()
       .get('/api/v1/doesnt-need-auth')
       .reply(200, function () {
