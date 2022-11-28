@@ -12,6 +12,16 @@ import { debug } from './logger';
 
 const SUCCESS_NO_CONTENT = 204;
 
+function getProxy() {
+  // this is something of an industry standard env var, hence the checks for different casings
+  const proxy = process.env.HTTPS_PROXY || process.env.https_proxy;
+  if (proxy) {
+    // adds trailing slash
+    return proxy.endsWith('/') ? proxy : `${proxy}/`;
+  }
+  return '';
+}
+
 /**
  * Getter function for a string to be used in the user-agent header based on the current
  * environment.
@@ -47,9 +57,11 @@ export default function fetch(url: string, options: RequestInit = { headers: new
 
   headers.set('x-readme-source', source);
 
-  debug(`making ${(options.method || 'get').toUpperCase()} request to ${url}`);
+  const fullUrl = `${getProxy()}${url}`;
 
-  return nodeFetch(url, {
+  debug(`making ${(options.method || 'get').toUpperCase()} request to ${fullUrl}`);
+
+  return nodeFetch(fullUrl, {
     ...options,
     headers,
   });

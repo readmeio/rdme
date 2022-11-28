@@ -105,6 +105,49 @@ describe('#fetch()', () => {
     expect(headers['x-github-sha']).toBeUndefined();
     mock.done();
   });
+
+  describe('proxies', () => {
+    afterEach(() => {
+      delete process.env.https_proxy;
+      delete process.env.HTTPS_PROXY;
+    });
+
+    it('should support proxies via HTTPS_PROXY env variable', async () => {
+      const proxy = 'https://proxy.example.com:5678';
+
+      process.env.HTTPS_PROXY = proxy;
+
+      const mock = getAPIMock({}, `${proxy}/`).get('/api/v1/proxy').reply(200);
+
+      await fetch(`${config.get('host')}/api/v1/proxy`);
+
+      expect(mock.isDone()).toBe(true);
+    });
+
+    it('should support proxies via https_proxy env variable', async () => {
+      const proxy = 'https://proxy.example.com:5678';
+
+      process.env.https_proxy = proxy;
+
+      const mock = getAPIMock({}, `${proxy}/`).get('/api/v1/proxy').reply(200);
+
+      await fetch(`${config.get('host')}/api/v1/proxy`);
+
+      expect(mock.isDone()).toBe(true);
+    });
+
+    it('should handle trailing slash in proxy URL', async () => {
+      const proxy = 'https://proxy.example.com:5678/';
+
+      process.env.https_proxy = proxy;
+
+      const mock = getAPIMock({}, proxy).get('/api/v1/proxy').reply(200);
+
+      await fetch(`${config.get('host')}/api/v1/proxy`);
+
+      expect(mock.isDone()).toBe(true);
+    });
+  });
 });
 
 describe('#cleanHeaders()', () => {

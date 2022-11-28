@@ -94,6 +94,15 @@ For usage in CI environments (GitHub Actions, CircleCI, Travis CI, etc.) or if y
 
 `rdme whoami` is also available to you to determine who is logged in, and to what project. You can clear your stored credentials with `rdme logout`.
 
+### Proxy
+
+`rdme` makes API requests to the ReadMe API, which is located at [dash.readme.com](https://dash.readme.com). If you need to configure a proxy for these requests, you can do so by setting the `HTTPS_PROXY` environmental variable.
+
+```sh
+export HTTPS_PROXY=https://proxy.example.com:5678
+rdme openapi
+```
+
 ## GitHub Actions Configuration
 
 > **Note**
