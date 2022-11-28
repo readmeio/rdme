@@ -1,6 +1,7 @@
 import type { RequestInit, Response } from 'node-fetch';
 
 import mime from 'mime-types';
+// eslint-disable-next-line no-restricted-imports
 import nodeFetch, { Headers } from 'node-fetch';
 
 import pkg from '../../package.json';

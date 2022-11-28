@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import fetch from 'node-fetch';
 
 import pkg from '../../package.json';

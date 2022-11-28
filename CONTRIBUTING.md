@@ -76,6 +76,12 @@ When writing command logic, avoid using `console` statements (and correspondingl
 
 <img align="right" width="25%" style="margin-bottom: 2em" src="https://owlbert.io/images/owlberts-png/Blocks.psd.png">
 
+### Making `fetch` requests
+
+`fetch` requests are very common in this codebase. When sending `fetch` requests to the ReadMe API (i.e., [dash.readme.com](https://dash.readme.com)), make sure to use the `fetch` wrapper function located in [`src/lib/fetch.ts`](src/lib/fetch.ts). We have an ESLint rule to flag this.
+
+In that wrapper function, we set several important request headers and configure the proxy, if the user added one via `HTTPS_PROXY`.
+
 ### Commit Conventions
 
 For our general commit conventions, please consult our organization contributing guidelines [here](https://github.com/readmeio/.github/blob/main/.github/CONTRIBUTING.md#commit-conventions).
