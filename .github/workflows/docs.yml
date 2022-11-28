@@ -21,7 +21,7 @@ jobs:
       # our package version and our Node.js version.
       - name: Retrieve version values
         id: rdme-version
-        run: ./bin/set-version-output
+        run: ./bin/set-version-output.js
 
       # Next, we use this output to do a few find/replaces!
       - name: Find and replace Node.js version placeholders

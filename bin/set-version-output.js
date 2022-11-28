@@ -1,6 +1,6 @@
 #! /usr/bin/env node
+const { getNodeVersion } = require('../dist/src/lib/getNodeVersion');
 const { getPkgVersion } = require('../dist/src/lib/getPkgVersion');
-const getNodeVersion = require('../src/lib/getNodeVersion');
 
 const name1 = 'RDME_VERSION';
 const name2 = 'NODE_VERSION';

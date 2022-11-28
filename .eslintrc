@@ -9,7 +9,7 @@
   },
   "overrides": [
     {
-      "files": ["bin/set-version-output", "config/*.js"],
+      "files": ["bin/set-version-output.js", "config/*.js"],
       "rules": {
         "@typescript-eslint/no-var-requires": "off"
       }
