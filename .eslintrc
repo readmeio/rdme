@@ -1,8 +1,5 @@
 {
-  "extends": [
-    "@readme/eslint-config",
-    "@readme/eslint-config/typescript"
-  ],
+  "extends": ["@readme/eslint-config", "@readme/eslint-config/typescript"],
   "root": true,
   "parserOptions": {
     "ecmaVersion": 2020
@@ -16,13 +13,16 @@
     }
   ],
   "rules": {
-    "@typescript-eslint/ban-types": ["error", {
-      "types": {
-        // We specify `{}` in `CommandOptions` generics when those commands don't have their own
-        // options and it's cleaner for us to do that than `Record<string, unknown>`.
-        "{}": false
+    "@typescript-eslint/ban-types": [
+      "error",
+      {
+        "types": {
+          // We specify `{}` in `CommandOptions` generics when those commands don't have their own
+          // options and it's cleaner for us to do that than `Record<string, unknown>`.
+          "{}": false
+        }
       }
-    }],
+    ],
 
     /**
      * Because our command classes have a `run` method that might not always call `this` we need to
@@ -45,6 +45,19 @@
      */
     "no-console": "warn",
 
-    "no-restricted-syntax": "off"
+    "no-restricted-syntax": "off",
+
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "node-fetch",
+            "importNames": ["default"],
+            "message": "Avoid using `node-fetch` directly and instead use the fetch wrapper located in `lib/fetch.ts`. See CONTRIBUTING.md for more information."
+          }
+        ]
+      }
+    ]
   }
 }

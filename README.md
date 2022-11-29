@@ -35,6 +35,7 @@ https://github.com/jonschlinkert/markdown-toc/issues/119
 - [CLI Configuration](#cli-configuration)
   - [Setup](#setup)
   - [Authentication](#authentication)
+  - [Proxy](#proxy)
 - [GitHub Actions Configuration](#github-actions-configuration)
 - [Usage](#usage)
   - [Common `rdme` Options](#common-rdme-options)
@@ -93,6 +94,15 @@ For local CLI usage with a single project, you can authenticate `rdme` to your R
 For usage in CI environments (GitHub Actions, CircleCI, Travis CI, etc.) or if you're working with multiple ReadMe projects, we recommend providing a project API key via the `--key` option (instead of the configuration file authentication described above).
 
 `rdme whoami` is also available to you to determine who is logged in, and to what project. You can clear your stored credentials with `rdme logout`.
+
+### Proxy
+
+`rdme` makes API requests to the ReadMe API, which is located at [dash.readme.com](https://dash.readme.com). If you need to configure a proxy for these requests, you can do so by setting the `HTTPS_PROXY` environmental variable.
+
+```sh
+export HTTPS_PROXY=https://proxy.example.com:5678
+rdme openapi
+```
 
 ## GitHub Actions Configuration
 
