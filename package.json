@@ -106,6 +106,7 @@
     "prettier": "prettier --list-different \"./**/**.{md,js,ts}\"",
     "prettier:docs": "prettier --list-different \"./**/**.md\"",
     "prettier:write": "prettier --list-different --write \"./**/**.{md,js,ts}\"",
+    "preversion": "npm ci && npm run build",
     "release": "npx conventional-changelog-cli -i CHANGELOG.md -s",
     "test": "jest --coverage",
     "version": "npm run release && git add CHANGELOG.md"
