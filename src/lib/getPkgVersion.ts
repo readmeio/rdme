@@ -16,6 +16,8 @@ export function getNodeVersion() {
   return semver.minVersion(node).major;
 }
 
+type npmDistTag = 'latest';
+
 /**
  * The current `rdme` version
  *
@@ -26,7 +28,7 @@ export function getNodeVersion() {
  * @note we mock this function in our snapshots, hence it's not the default
  * @see {@link https://stackoverflow.com/a/54245672}
  */
-export async function getPkgVersion(npmDistTag?: 'latest' | 'next'): Promise<string> {
+export async function getPkgVersion(npmDistTag?: npmDistTag): Promise<string> {
   if (npmDistTag) {
     return fetch(registryUrl)
       .then(res => res.json())
@@ -39,3 +41,11 @@ export async function getPkgVersion(npmDistTag?: 'latest' | 'next'): Promise<str
   }
   return pkg.version;
 }
+
+/**
+ * The current major `rdme` version
+ *
+ * @example 8
+ */
+export const getMajorPkgVersion = async (npmDistTag?: npmDistTag): Promise<number> =>
+  semver.major(await getPkgVersion(npmDistTag));
