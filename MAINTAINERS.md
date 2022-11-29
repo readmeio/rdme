@@ -18,7 +18,7 @@ The next step is to push these changes to GitHub:
 
 ```sh
 git push # pushes the code
-git push --tags # pushes the tags
+git push --tags -f # pushes the tags
 ```
 
 Once the code and tags are pushed to GitHub, [create a new release](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository#creating-a-release) so the latest tag is surfaced in [the GitHub Marketplace listing](https://github.com/marketplace/actions/rdme-sync-to-readme).
