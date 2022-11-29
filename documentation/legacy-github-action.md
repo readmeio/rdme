@@ -44,7 +44,7 @@ For migrating to [the `rdme`-based GitHub Action](https://docs.readme.com/docs/r
 There are a few things to note:
 
 1. This workflow will infer the `api-version` based on the `API_DEFINITION_ID` parameter that you pass in, so the API version parameter is no longer needed here.
-2. `@RDME_VERSION` is the latest version of `rdme`. To ensure you're getting the latest features and security updates, we strongly recommend setting up [Dependabot](https://docs.github.com/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/keeping-your-actions-up-to-date-with-dependabot) to keep this package up-to-date.
+2. `@RDME_VERSION` is the latest version of `rdme`. To ensure you're getting the latest features and security updates, we strongly recommend setting up [Dependabot](https://docs.github.com/code-security/dependabot/working-with-dependabot/keeping-your-actions-up-to-date-with-dependabot) to keep this package up-to-date.
 3. If you used secrets to encrypt the `readme-oas-key` value, you'll have to split this value out into two separate secrets—one for the API key and one for the API definition ID. You can see an example of this [here](https://docs.readme.com/docs/github-actions-openapi-example).
 
 <details>

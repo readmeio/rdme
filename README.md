@@ -85,7 +85,7 @@ Once installed in your project, you can use the `npx` prefix (which is included 
 npx rdme openapi:validate [file]
 ```
 
-To ensure you're getting the latest features and security updates, we recommend using a tool like [Dependabot](https://docs.github.com/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/about-dependabot-version-updates) to keep `rdme` (and your other dependencies) up-to-date.
+To ensure you're getting the latest features and security updates, we recommend using a tool like [Dependabot](https://docs.github.com/code-security/dependabot/dependabot-version-updates/about-dependabot-version-updates) to keep `rdme` (and your other dependencies) up-to-date.
 
 ### Authentication
 
@@ -117,7 +117,7 @@ rdme openapi --github
 
 This will run through the `openapi` command, ask you a few quick questions, and then automatically create a fully functional GitHub Actions workflow file for you. 🪄
 
-You can see examples featuring the latest version in [our docs](https://docs.readme.com/docs/rdme#github-actions-examples). We recommend [configuring Dependabot to keep your actions up-to-date](https://docs.github.com/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/keeping-your-actions-up-to-date-with-dependabot).
+You can see examples featuring the latest version in [our docs](https://docs.readme.com/docs/rdme#github-actions-examples). We recommend [configuring Dependabot to keep your actions up-to-date](https://docs.github.com/code-security/dependabot/working-with-dependabot/keeping-your-actions-up-to-date-with-dependabot).
 
 ## Usage
 

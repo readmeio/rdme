@@ -110,7 +110,7 @@ While there are [dozens of event options available](https://docs.github.com/acti
 
 > 📘 Keeping `rdme` up-to-date
 >
-> Note that `@RDME_VERSION` (used in the examples on this page) is the latest version of `rdme`. We recommend [configuring Dependabot to keep your actions up-to-date](https://docs.github.com/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/keeping-your-actions-up-to-date-with-dependabot).
+> Note that `@RDME_VERSION` (used in the examples on this page) is the latest version of `rdme`. We recommend [configuring Dependabot to keep your actions up-to-date](https://docs.github.com/code-security/dependabot/working-with-dependabot/keeping-your-actions-up-to-date-with-dependabot).
 
 ### Quick Start
 
