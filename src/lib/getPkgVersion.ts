@@ -29,9 +29,9 @@ export async function getPkgVersion(npmDistTag?: 'latest' | 'next'): Promise<str
     return fetch(registryUrl)
       .then(res => res.json())
       .then(body => body['dist-tags'][npmDistTag])
-      .catch(() => {
+      .catch(err => {
         // eslint-disable-next-line no-console
-        console.error('error fetching version from npm registry');
+        console.error('error fetching version from npm registry:', err.message);
         return pkg.version;
       });
   }
