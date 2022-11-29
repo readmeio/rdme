@@ -46,4 +46,9 @@ describe('#getPkgVersion()', () => {
 
     mock.done();
   });
+
+  it('should grab major version from package.json', async () => {
+    const result = await getPkgVersion('major');
+    return expect(result).not.toContain('.');
+  });
 });
