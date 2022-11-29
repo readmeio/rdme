@@ -20,13 +20,13 @@ function debug(input: string) {
 }
 
 /**
- * Wrapper for warn statements.
+ * Wrapper for error statements.
  */
-function warn(input: string) {
+function error(input: string) {
   /* istanbul ignore next */
-  if (isGHA() && !isTest()) return core.warning(input);
+  if (isGHA() && !isTest()) return core.error(input);
   // eslint-disable-next-line no-console
-  return console.warn(chalk.yellow(`⚠️  Warning! ${input}`));
+  return console.error(chalk.red(input));
 }
 
 /**
@@ -53,4 +53,14 @@ function oraOptions() {
   return opts;
 }
 
-export { debug, warn, info, oraOptions };
+/**
+ * Wrapper for warn statements.
+ */
+function warn(input: string) {
+  /* istanbul ignore next */
+  if (isGHA() && !isTest()) return core.warning(input);
+  // eslint-disable-next-line no-console
+  return console.warn(chalk.yellow(`⚠️  Warning! ${input}`));
+}
+
+export { debug, error, info, oraOptions, warn };

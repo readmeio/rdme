@@ -4,6 +4,8 @@ import semver from 'semver';
 
 import pkg from '../../package.json';
 
+import { error } from './logger';
+
 const registryUrl = 'https://registry.npmjs.com/rdme';
 
 /**
@@ -37,8 +39,7 @@ export async function getPkgVersion(npmDistTag?: npmDistTag): Promise<string> {
       .then(res => res.json())
       .then(body => body['dist-tags'][npmDistTag])
       .catch(err => {
-        // eslint-disable-next-line no-console
-        console.error('error fetching version from npm registry:', err.message);
+        error(`error fetching version from npm registry: ${err.message}`);
         return pkg.version;
       });
   }
