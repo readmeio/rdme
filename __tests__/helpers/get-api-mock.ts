@@ -3,8 +3,13 @@ import nock from 'nock';
 
 import { getUserAgent } from '../../src/lib/fetch';
 
-export default function getAPIMock(reqHeaders = {}) {
-  return nock(config.get('host'), {
+/**
+ * Nock wrapper that adds required `user-agent` request header
+ * so it gets properly picked up by nock.
+ * @param proxy Optional proxy URL. Must contain trailing slash.
+ */
+export default function getAPIMock(reqHeaders = {}, proxy = '') {
+  return nock(`${proxy}${config.get('host')}`, {
     reqheaders: {
       'User-Agent': getUserAgent(),
       ...reqHeaders,
