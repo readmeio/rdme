@@ -1,3 +1,12 @@
+## 8.2.0 (2022-11-29)
+
+* feat: major version tags (#682) ([dc103c0](https://github.com/readmeio/rdme/commit/dc103c0)), closes [#682](https://github.com/readmeio/rdme/issues/682)
+* feat: proxy support (#681) ([0e4644a](https://github.com/readmeio/rdme/commit/0e4644a)), closes [#681](https://github.com/readmeio/rdme/issues/681)
+* docs: update version/category to reflect new location (#678) ([0166c1e](https://github.com/readmeio/rdme/commit/0166c1e)), closes [#678](https://github.com/readmeio/rdme/issues/678)
+* fix: unreachable code and those not getting flagged by eslint (#677) ([c5dcf19](https://github.com/readmeio/rdme/commit/c5dcf19)), closes [#677](https://github.com/readmeio/rdme/issues/677)
+
+
+
 ## <small>8.1.1 (2022-11-17)</small>
 
 * fix: don't prompt for version if only one exists (#675) ([0180883](https://github.com/readmeio/rdme/commit/0180883)), closes [#675](https://github.com/readmeio/rdme/issues/675)
