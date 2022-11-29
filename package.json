@@ -99,7 +99,7 @@
     "debug": "ts-node src/cli.ts",
     "lint": "eslint . bin/rdme --ext .js,.ts",
     "lint-docs": "npx alex . && npm run prettier:docs",
-    "postversion": "git tag $npm_package_version",
+    "postversion": "git tag $npm_package_version && ./bin/set-major-version-tag.js",
     "prebuild": "rm -rf dist/",
     "prepack": "npm run build",
     "pretest": "npm run lint && npm run lint-docs",
