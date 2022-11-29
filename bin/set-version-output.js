@@ -1,8 +1,7 @@
 #! /usr/bin/env node
 const core = require('@actions/core');
 
-const { getNodeVersion } = require('../dist/src/lib/getNodeVersion');
-const { getPkgVersion } = require('../dist/src/lib/getPkgVersion');
+const { getNodeVersion, getPkgVersion } = require('../dist/src/lib/getPkgVersion');
 
 /**
  * Sets output parameters for GitHub Actions workflow
