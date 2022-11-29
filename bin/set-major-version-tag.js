@@ -1,23 +1,28 @@
 #! /usr/bin/env node
+const { exec } = require('child_process');
+
 const semverMajor = require('semver/functions/major');
-const simpleGit = require('simple-git');
 
-const { getPkgVersion } = require('../dist/src/lib/getPkgVersion');
-
-const git = simpleGit();
+const pkg = require('../package.json');
 
 /**
- * Sets tags as part of release process
+ * Sets major git tag as part of release process
+ *
+ * @example v7
  */
-async function setTag() {
-  const fullVersion = await getPkgVersion();
+async function setMajorVersionTag() {
+  const fullVersion = pkg.version;
   const majorVersion = semverMajor(fullVersion);
 
-  git.tag([`v${majorVersion}`, '-f', '-m', `Alias for ${fullVersion}`]).catch(e => {
+  exec(`git tag v${majorVersion} -f -m 'Top-level tag pointing to ${fullVersion}'`, (err, stdout) => {
+    if (err) {
+      // eslint-disable-next-line no-console
+      console.error(err);
+      process.exit(1);
+    }
     // eslint-disable-next-line no-console
-    console.error(e);
-    process.exit(1);
+    if (stdout) console.log(stdout);
   });
 }
 
-setTag();
+setMajorVersionTag();
