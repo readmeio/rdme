@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import semver from 'semver';
 
 import pkg from '../../package.json';
 
@@ -11,7 +12,7 @@ const registryUrl = 'https://registry.npmjs.com/rdme';
  */
 export function getNodeVersion() {
   const { node } = pkg.engines;
-  return Array.from(node.matchAll(/\d+/g)).pop().toString();
+  return semver.minVersion(node).major;
 }
 
 /**
