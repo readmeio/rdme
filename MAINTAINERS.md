@@ -30,14 +30,14 @@ Auto-generating release notes is sufficient, but I like to summarize the changes
 
 ## Publishing to `npm` :rocket:
 
-Finally, publish the changes to `npm`. If you're publishing to the default [distribution tag](https://docs.npmjs.com/adding-dist-tags-to-packages) (i.e., `latest`), you can run the following:
-
-```sh
-npm publish
-```
-
-If you're publishing to another [distribution tag](https://docs.npmjs.com/adding-dist-tags-to-packages) for prelease purposes or otherwise (e.g., `alpha`, `beta`, `next`, etc.), include the tag like so:
+Finally, publish the changes to `npm`. If you're publishing to a non-standard [distribution tag](https://docs.npmjs.com/adding-dist-tags-to-packages) for prelease purposes or otherwise (e.g., `alpha`, `beta`, `next`, etc.), you can run the following:
 
 ```sh
 npm publish --tag <tag>
+```
+
+If you're publishing to the default [distribution tag](https://docs.npmjs.com/adding-dist-tags-to-packages) (i.e., `latest`), you can omit the `--tag` flag like so:
+
+```sh
+npm publish
 ```
