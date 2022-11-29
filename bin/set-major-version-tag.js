@@ -1,4 +1,5 @@
 #! /usr/bin/env node
+const semverMajor = require('semver/functions/major');
 const simpleGit = require('simple-git');
 
 const { getPkgVersion } = require('../dist/src/lib/getPkgVersion');
@@ -10,7 +11,7 @@ const git = simpleGit();
  */
 async function setTag() {
   const fullVersion = await getPkgVersion();
-  const majorVersion = await getPkgVersion('major');
+  const majorVersion = semverMajor(fullVersion);
 
   git.tag([`v${majorVersion}`, '-f', '-m', `Alias for ${fullVersion}`]).catch(e => {
     // eslint-disable-next-line no-console
