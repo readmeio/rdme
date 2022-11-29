@@ -35,8 +35,8 @@ export function before(writeFileSyncCb) {
 
   process.env.TEST_RDME_CREATEGHA = 'true';
 
-  const spy = jest.spyOn(getPkgVersion, 'getPkgVersion');
-  spy.mockReturnValue(Promise.resolve('7.8.9'));
+  const spy = jest.spyOn(getPkgVersion, 'getMajorPkgVersion');
+  spy.mockReturnValue(Promise.resolve(7));
 }
 
 /**

@@ -31,7 +31,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run \`openapi:validate\` command 🚀
-        uses: readmeio/rdme@7.8.9
+        uses: readmeio/rdme@v7
         with:
           rdme: openapi:validate __tests__/__fixtures__/petstore-simple-weird-version.json
 "
@@ -68,7 +68,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run \`openapi:validate\` command 🚀
-        uses: readmeio/rdme@7.8.9
+        uses: readmeio/rdme@v7
         with:
           rdme: openapi:validate petstore.json --workingDirectory=./__tests__/__fixtures__/relative-ref-oas
 "
@@ -105,7 +105,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run \`openapi:validate\` command 🚀
-        uses: readmeio/rdme@7.8.9
+        uses: readmeio/rdme@v7
         with:
           rdme: openapi:validate __tests__/__fixtures__/petstore-simple-weird-version.json
 "
@@ -142,7 +142,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run \`openapi:validate\` command 🚀
-        uses: readmeio/rdme@7.8.9
+        uses: readmeio/rdme@v7
         with:
           rdme: openapi:validate __tests__/__fixtures__/petstore-simple-weird-version.json
 "

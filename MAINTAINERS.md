@@ -18,7 +18,7 @@ The next step is to push these changes to GitHub:
 
 ```sh
 git push # pushes the code
-git push --tags # pushes the tags
+git push --tags -f # pushes the tags
 ```
 
 Once the code and tags are pushed to GitHub, [create a new release](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository#creating-a-release) so the latest tag is surfaced in [the GitHub Marketplace listing](https://github.com/marketplace/actions/rdme-sync-to-readme).
@@ -30,14 +30,14 @@ Auto-generating release notes is sufficient, but I like to summarize the changes
 
 ## Publishing to `npm` :rocket:
 
-Finally, publish the changes to `npm`. If you're publishing to the default [distribution tag](https://docs.npmjs.com/adding-dist-tags-to-packages) (i.e., `latest`), you can run the following:
-
-```sh
-npm publish
-```
-
-If you're publishing to another [distribution tag](https://docs.npmjs.com/adding-dist-tags-to-packages) for prelease purposes or otherwise (e.g., `alpha`, `beta`, `next`, etc.), include the tag like so:
+Finally, publish the changes to `npm`. If you're publishing to a non-standard [distribution tag](https://docs.npmjs.com/adding-dist-tags-to-packages) for prelease purposes or otherwise (e.g., `alpha`, `beta`, `next`, etc.), you can run the following:
 
 ```sh
 npm publish --tag <tag>
+```
+
+If you're publishing to the default [distribution tag](https://docs.npmjs.com/adding-dist-tags-to-packages) (i.e., `latest`), you can omit the `--tag` flag like so:
+
+```sh
+npm publish
 ```

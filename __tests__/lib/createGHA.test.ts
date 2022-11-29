@@ -14,13 +14,8 @@ import DocsCommand from '../../src/cmds/docs';
 import OpenAPICommand from '../../src/cmds/openapi';
 import OpenAPIValidateCommand from '../../src/cmds/openapi/validate';
 import configstore from '../../src/lib/configstore';
-import createGHA, {
-  getConfigStoreKey,
-  getGHAFileName,
-  getGitData,
-  getMajorRdmeVersion,
-  git,
-} from '../../src/lib/createGHA';
+import createGHA, { getConfigStoreKey, getGHAFileName, getGitData, git } from '../../src/lib/createGHA';
+import { getMajorPkgVersion } from '../../src/lib/getPkgVersion';
 import { after, before } from '../helpers/get-gha-setup';
 import getGitRemoteMock from '../helpers/get-git-mock';
 import ghaWorkflowSchema from '../helpers/github-workflow-schema.json';
@@ -130,7 +125,7 @@ describe('#createGHA', () => {
 
         const repoRoot = process.cwd();
 
-        configstore.set(getConfigStoreKey(repoRoot), (await getMajorRdmeVersion()) - 1);
+        configstore.set(getConfigStoreKey(repoRoot), (await getMajorPkgVersion()) - 1);
 
         return expect(createGHA('', cmd, command.args, opts)).resolves.toMatch(
           'Your GitHub Actions workflow file has been created!'
@@ -153,7 +148,7 @@ describe('#createGHA', () => {
           )
         );
 
-        expect(configstore.get(getConfigStoreKey(repoRoot))).toBe(await getMajorRdmeVersion());
+        expect(configstore.get(getConfigStoreKey(repoRoot))).toBe(await getMajorPkgVersion());
       });
 
       it('should not run if not a repo', () => {
@@ -175,7 +170,7 @@ describe('#createGHA', () => {
       it('should not run if user previously declined to set up GHA for current directory + pkg version', async () => {
         const repoRoot = process.cwd();
 
-        configstore.set(getConfigStoreKey(repoRoot), await getMajorRdmeVersion());
+        configstore.set(getConfigStoreKey(repoRoot), await getMajorPkgVersion());
 
         return expect(createGHA('success!', cmd, command.args, opts)).resolves.toBe('success!');
       });
