@@ -19,7 +19,7 @@ async function setMajorVersionTag() {
     return;
   }
 
-  exec(`git tag v${parsedVersion.jaor} -f -m 'Top-level tag pointing to ${parsedVersion.version}'`, (err, stdout) => {
+  exec(`git tag v${parsedVersion.major} -f -m 'Top-level tag pointing to ${parsedVersion.version}'`, (err, stdout) => {
     if (err) {
       // eslint-disable-next-line no-console
       console.error(err);
