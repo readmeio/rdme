@@ -7,6 +7,11 @@ import pkg from '../../package.json';
 const registryUrl = 'https://registry.npmjs.com/rdme';
 
 /**
+ * @see {@link https://docs.npmjs.com/adding-dist-tags-to-packages}
+ */
+type npmDistTag = 'latest';
+
+/**
  * Return the major Node.js version specified in our `package.json` config.
  *
  * @example 14
@@ -16,15 +21,13 @@ export function getNodeVersion() {
   return semver.minVersion(node).major;
 }
 
-type npmDistTag = 'latest';
-
 /**
  * The current `rdme` version
  *
  * @param npmDistTag the `npm` dist tag to retrieve. If this value is omitted,
  * the version from the `package.json` is returned.
  * @example "8.0.0"
- * @see {@link https://docs.npmjs.com/cli/dist-tag}
+ * @see {@link https://docs.npmjs.com/adding-dist-tags-to-packages}
  * @note we mock this function in our snapshots, hence it's not the default
  * @see {@link https://stackoverflow.com/a/54245672}
  */
