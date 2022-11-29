@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 const { exec } = require('child_process');
 
-const semverMajor = require('semver/functions/major');
+const semverParse = require('semver/functions/parse');
 
 const pkg = require('../package.json');
 
@@ -11,10 +11,15 @@ const pkg = require('../package.json');
  * @example v7
  */
 async function setMajorVersionTag() {
-  const fullVersion = pkg.version;
-  const majorVersion = semverMajor(fullVersion);
+  const parsedVersion = semverParse(pkg.version);
 
-  exec(`git tag v${majorVersion} -f -m 'Top-level tag pointing to ${fullVersion}'`, (err, stdout) => {
+  if (parsedVersion.prerelease.length) {
+    // eslint-disable-next-line no-console
+    console.warn('Pre-release version, not setting major version tag');
+    return;
+  }
+
+  exec(`git tag v${parsedVersion.jaor} -f -m 'Top-level tag pointing to ${parsedVersion.version}'`, (err, stdout) => {
     if (err) {
       // eslint-disable-next-line no-console
       console.error(err);
