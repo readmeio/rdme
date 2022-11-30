@@ -181,10 +181,24 @@ describe('rdme openapi:reduce', () => {
       ).rejects.toStrictEqual(new Error('Sorry, this reducer feature in rdme only supports OpenAPI 3.0+ definitions.'));
     });
 
-    it('should fail if you attempt to reduce a spec to nothing', async () => {
+    it('should fail if you attempt to reduce a spec to nothing via tags', async () => {
       const spec = require.resolve('@readme/oas-examples/3.0/json/petstore.json');
 
       prompts.inject(['tags', ['unknown-tag'], 'output.json']);
+
+      await expect(
+        reducer.run({
+          spec,
+        })
+      ).rejects.toStrictEqual(
+        new Error('All paths in the API definition were removed. Did you supply the right path name to reduce by?')
+      );
+    });
+
+    it('should fail if you attempt to reduce a spec to nothin via paths', async () => {
+      const spec = require.resolve('@readme/oas-examples/3.0/json/petstore.json');
+
+      prompts.inject(['paths', ['unknown-path'], 'output.json']);
 
       await expect(
         reducer.run({

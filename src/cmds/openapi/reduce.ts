@@ -151,7 +151,7 @@ export default class OpenAPIReduceCommand extends Command {
         choices: (prev, values) => {
           const paths: string[] = values.paths;
           let methods = paths
-            .map((p: string) => Object.keys(parsedBundledSpec.paths[p]))
+            .map((p: string) => Object.keys(parsedBundledSpec.paths[p] || {}))
             .flat()
             .filter((method: string) => method.toLowerCase() !== 'parameters');
 
