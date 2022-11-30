@@ -155,6 +155,13 @@ export default class OpenAPIReduceCommand extends Command {
             .flat()
             .filter((method: string) => method.toLowerCase() !== 'parameters');
 
+          // We have to catch this case so prompt doesn't crash
+          if (!methods.length && !opts.method?.length) {
+            throw new Error(
+              'All paths in the API definition were removed. Did you supply the right path name to reduce by?'
+            );
+          }
+
           methods = [...new Set(methods)];
           methods.sort();
 

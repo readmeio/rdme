@@ -232,5 +232,18 @@ describe('rdme openapi:reduce', () => {
         })
       ).rejects.toStrictEqual(new Error('You can pass in either tags or paths/methods, but not both.'));
     });
+
+    it('should fail if you attempt to pass non-existent path and no method', async () => {
+      const spec = require.resolve('@readme/oas-examples/3.0/json/petstore.json');
+
+      await expect(
+        reducer.run({
+          spec,
+          path: ['unknown-path'],
+        })
+      ).rejects.toStrictEqual(
+        new Error('All paths in the API definition were removed. Did you supply the right path name to reduce by?')
+      );
+    });
   });
 });
