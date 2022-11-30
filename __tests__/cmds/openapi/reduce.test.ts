@@ -214,7 +214,7 @@ describe('rdme openapi:reduce', () => {
         reducer.run({
           spec,
           tag: ['tag1', 'tag2'],
-          path: ['/path'],
+          method: ['get'],
         })
       ).rejects.toStrictEqual(new Error('You can pass in either tags or paths/methods, but not both.'));
     });
