@@ -1,3 +1,9 @@
+## 8.3.0-beta.0 (2022-11-30)
+
+* feat(`openapi:reduce`): pass opts (#684) ([5fc4cee](https://github.com/readmeio/rdme/commit/5fc4cee)), closes [#684](https://github.com/readmeio/rdme/issues/684)
+
+
+
 ## 8.2.0 (2022-11-29)
 
 * feat: major version tags (#682) ([dc103c0](https://github.com/readmeio/rdme/commit/dc103c0)), closes [#682](https://github.com/readmeio/rdme/issues/682)
