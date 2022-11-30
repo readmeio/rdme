@@ -140,7 +140,7 @@ export default class OpenAPIReduceCommand extends Command {
     Command.debug(
       `options being supplied to the reducer: ${JSON.stringify({
         tags: promptResults.tags,
-        paths: promptResults.tags,
+        paths: promptResults.paths,
         methods: promptResults.methods,
       })}`
     );
