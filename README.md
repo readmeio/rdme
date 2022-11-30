@@ -246,7 +246,19 @@ We also offer a tool that allows you to reduce a large API definition down to a 
 rdme openapi:reduce [path-to-file.json]
 ```
 
-The command will ask you a couple questions about how you wish to reduce the file and then do so. And as with the `openapi` command, you can also [omit the file path](#omitting-the-file-path).
+The command will ask you a couple questions about how you wish to reduce the file and then do so. If you wish to automate this command, you can pass in CLI arguments to bypass the prompts. Here's an example use case:
+
+- The input API definition is called `petstore.json`
+- The file is reduced to only the `/pet/{id}` path and the `GET` and `PUT` methods
+- The output file is called `petstore-reduced.json`
+
+Here's what the resulting command looks like:
+
+```
+rdme openapi:reduce petstore.json --path /pet/{id} --method get --method put --out petstore-reduced.json
+```
+
+As with the `openapi` command, you can also [omit the file path](#omitting-the-file-path).
 
 ### Docs (a.k.a. Guides) 📖
 
