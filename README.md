@@ -249,7 +249,7 @@ rdme openapi:reduce [path-to-file.json]
 The command will ask you a couple questions about how you wish to reduce the file and then do so. If you wish to automate this command, you can pass in CLI arguments to bypass the prompts. Here's an example use case:
 
 - The input API definition is called `petstore.json`
-- The file is reduced by the `/pet/{id}` path and the `GET` and `PUT` methods
+- The file is reduced to only the `/pet/{id}` path and the `GET` and `PUT` methods
 - The output file is called `petstore-reduced.json`
 
 Here's what the resulting command looks like:
