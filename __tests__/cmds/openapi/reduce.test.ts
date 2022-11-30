@@ -195,7 +195,7 @@ describe('rdme openapi:reduce', () => {
       );
     });
 
-    it('should fail if you attempt to reduce a spec to nothin via paths', async () => {
+    it('should fail if you attempt to reduce a spec to nothing via paths', async () => {
       const spec = require.resolve('@readme/oas-examples/3.0/json/petstore.json');
 
       prompts.inject(['paths', ['unknown-path'], 'output.json']);
