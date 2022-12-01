@@ -7,6 +7,7 @@ import chalk from 'chalk';
 import jsonpath from 'jsonpath';
 import oasReducer from 'oas/dist/lib/reducer';
 import ora from 'ora';
+import prompts from 'prompts';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
 import { checkFilePath } from '../../lib/checkFile';
@@ -16,6 +17,10 @@ import promptTerminal from '../../lib/promptWrapper';
 
 export type Options = {
   spec?: string;
+  tag?: string[];
+  path?: string[];
+  method?: string[];
+  out?: string;
   workingDirectory?: string;
 };
 
@@ -35,6 +40,29 @@ export default class OpenAPIReduceCommand extends Command {
         name: 'spec',
         type: String,
         defaultOption: true,
+      },
+      {
+        name: 'tag',
+        type: String,
+        multiple: true,
+        description: 'Tags to reduce by',
+      },
+      {
+        name: 'path',
+        type: String,
+        multiple: true,
+        description: 'Paths to reduce by',
+      },
+      {
+        name: 'method',
+        type: String,
+        multiple: true,
+        description: 'Methods to reduce by (can only be used alongside the `path` option)',
+      },
+      {
+        name: 'out',
+        type: String,
+        description: 'Output file path to write reduced file to',
       },
       {
         name: 'workingDirectory',
@@ -59,6 +87,18 @@ export default class OpenAPIReduceCommand extends Command {
     if (specType !== 'OpenAPI') {
       throw new Error('Sorry, this reducer feature in rdme only supports OpenAPI 3.0+ definitions.');
     }
+
+    if ((opts.path?.length || opts.method?.length) && opts.tag?.length) {
+      throw new Error('You can pass in either tags or paths/methods, but not both.');
+    }
+
+    prompts.override({
+      reduceBy: opts.tag?.length ? 'tags' : opts.path?.length ? 'paths' : undefined,
+      tags: opts.tag,
+      paths: opts.path,
+      methods: opts.method,
+      outputPath: opts.out,
+    });
 
     const promptResults = await promptTerminal([
       {
@@ -111,9 +151,16 @@ export default class OpenAPIReduceCommand extends Command {
         choices: (prev, values) => {
           const paths: string[] = values.paths;
           let methods = paths
-            .map((p: string) => Object.keys(parsedBundledSpec.paths[p]))
+            .map((p: string) => Object.keys(parsedBundledSpec.paths[p] || {}))
             .flat()
             .filter((method: string) => method.toLowerCase() !== 'parameters');
+
+          // We have to catch this case so prompt doesn't crash
+          if (!methods.length && !opts.method?.length) {
+            throw new Error(
+              'All paths in the API definition were removed. Did you supply the right path name to reduce by?'
+            );
+          }
 
           methods = [...new Set(methods)];
           methods.sort();
@@ -140,7 +187,7 @@ export default class OpenAPIReduceCommand extends Command {
     Command.debug(
       `options being supplied to the reducer: ${JSON.stringify({
         tags: promptResults.tags,
-        paths: promptResults.tags,
+        paths: promptResults.paths,
         methods: promptResults.methods,
       })}`
     );
