@@ -74,7 +74,7 @@ As you'll learn in our commands logic (see [`bin/rdme`](bin/rdme) and the [`src/
 
 When writing command logic, avoid using `console` statements (and correspondingly, avoid mocking `console` statements in tests) when possible.
 
-<img align="right" width="25%" style="margin-bottom: 2em" src="https://owlbert.io/images/owlberts-png/Blocks.psd.png">
+<img align="right" width="25%" style="margin-bottom: 2em" src="https://owlbertsio-resized.s3.amazonaws.com/Blocks.psd.png">
 
 ### Making `fetch` requests
 
