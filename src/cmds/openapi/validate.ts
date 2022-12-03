@@ -16,7 +16,7 @@ export default class OpenAPIValidateCommand extends Command {
     super();
 
     this.command = 'openapi:validate';
-    this.usage = 'openapi:validate [file] [options]';
+    this.usage = 'openapi:validate [file|url] [options]';
     this.description = 'Validate your OpenAPI/Swagger definition.';
     this.cmdCategory = CommandCategories.APIS;
     this.position = 3;

@@ -29,7 +29,7 @@ export default class OpenAPIReduceCommand extends Command {
     super();
 
     this.command = 'openapi:reduce';
-    this.usage = 'openapi:reduce [file] [options]';
+    this.usage = 'openapi:reduce [file|url] [options]';
     this.description = 'Reduce an OpenAPI definition into a smaller subset.';
     this.cmdCategory = CommandCategories.APIS;
     this.position = 2;
