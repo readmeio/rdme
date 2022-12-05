@@ -91,7 +91,8 @@ To ensure you're getting the latest features and security updates, we recommend 
 
 For local CLI usage with a single project, you can authenticate `rdme` to your ReadMe project using `rdme login`. Once you follow the prompts and are successfully authenticated, your API key will be saved to a local configuration file (`~/.config/configstore/rdme-production.json`) and you won't have to provide the `--key` option to commands that require it.
 
-**Warning** For security reasons, we strongly recommend providing a project API key via the `--key` option in automations or CI environments (GitHub Actions, CircleCI, Travis CI, etc.). It's also recommended if you're working with multiple ReadMe projects to avoid accidentally overwriting existing data.
+> **Warning**
+> For security reasons, we strongly recommend providing a project API key via the `--key` option in automations or CI environments (GitHub Actions, CircleCI, Travis CI, etc.). It's also recommended if you're working with multiple ReadMe projects to avoid accidentally overwriting existing data.
 
 `rdme whoami` is also available to you to determine who is logged in, and to what project. You can clear your stored credentials with `rdme logout`.
 
