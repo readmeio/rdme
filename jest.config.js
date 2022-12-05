@@ -22,12 +22,15 @@ module.exports = {
   roots: ['<rootDir>'],
   setupFiles: ['./__tests__/setup'],
   setupFilesAfterEnv: ['jest-extended/all'],
+  globalSetup: './__tests__/global-setup',
   globalTeardown: './__tests__/teardown',
   testPathIgnorePatterns: [
     '<rootDir>/dist/',
     '<rootDir>/__tests__/helpers/',
     '<rootDir>/__tests__/get-api-nock',
+    '<rootDir>/__tests__/global-setup',
     '<rootDir>/__tests__/setup',
+    '<rootDir>/__tests__/teardown',
   ],
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.(js?|ts?)$',
   transform: {
