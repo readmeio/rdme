@@ -2,6 +2,6 @@ __tests__/
 .eslint*
 .github/
 .prettier*
-coverage/
+kanad-jest-cov/
 jest.*.js
 packages/

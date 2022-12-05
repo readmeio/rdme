@@ -17,7 +17,7 @@ module.exports = {
   setupFilesAfterEnv: ['jest-extended/all'],
   globalSetup: './__tests__/global-setup',
   globalTeardown: './__tests__/teardown',
-  coverageDirectory: '<rootDir>/coverage',
+  coverageDirectory: '<rootDir>/kanad-jest-cov',
   testPathIgnorePatterns: [
     '<rootDir>/dist/',
     '<rootDir>/__tests__/helpers/',
