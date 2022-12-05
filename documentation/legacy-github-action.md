@@ -96,7 +96,7 @@ jobs:
 
 ### Migrating Existing APIs to GitHub Sync
 
-You can also migrate APIs that are already synced into ReadMe via another mechanism. The value for `readme-oas-key` is your [ReadMe Project API Key](https://docs.readme.com/developers/docs/authentication#api-key-quick-start) and the API Specification ID (pictured below) separated by a colon (i.e. `apiKey:apiSpecId`).
+You can also migrate APIs that are already synced into ReadMe via another mechanism. The value for `readme-oas-key` is your [ReadMe Project API Key](https://docs.readme.com/main/reference/intro/authentication#api-key-quick-start) and the API Specification ID (pictured below) separated by a colon (i.e. `apiKey:apiSpecId`).
 
 ![](https://files.readme.io/9a89ed3-id.png)
 

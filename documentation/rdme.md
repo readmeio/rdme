@@ -29,6 +29,10 @@ Check out `.github/workflows/docs.yml` for more info on this!
   <a href="https://github.com/readmeio/rdme"><img src="https://img.shields.io/github/workflow/status/readmeio/rdme/CI.svg?style=for-the-badge" alt="Build status"></a>
 </p>
 
+<p align="center">
+  <a href="https://readme.com"><img src="https://raw.githubusercontent.com/readmeio/.github/main/oss-badge.svg" /></a>
+</p>
+
 If you're anything like us, your documentation process may be a part of a broader CI/CD process. For example, you may want to automatically update your Guides or API reference on ReadMe every time you've ship new code. Enter `rdme`: ReadMe's official command-line interface (CLI) and GitHub Action!
 
 With `rdme`, you can create workflows for a variety of use cases, including:
