@@ -22,6 +22,7 @@ module.exports = {
   roots: ['<rootDir>'],
   setupFiles: ['./__tests__/setup'],
   setupFilesAfterEnv: ['jest-extended/all'],
+  globalTeardown: './__tests__/teardown',
   testPathIgnorePatterns: [
     '<rootDir>/dist/',
     '<rootDir>/__tests__/helpers/',

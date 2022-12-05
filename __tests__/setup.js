@@ -6,3 +6,6 @@ process.env.FORCE_COLOR = 0;
 // Sets our test NODE_ENV to a custom value in case of false positives
 // if someone is using this tool in a testing environment
 process.env.NODE_ENV = 'rdme-test';
+
+// eslint-disable-next-line no-console
+console.log('WORKING DIR (SETUP):', process.cwd());
