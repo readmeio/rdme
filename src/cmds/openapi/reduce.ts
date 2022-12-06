@@ -5,7 +5,7 @@ import path from 'path';
 
 import chalk from 'chalk';
 import { JSONPath } from 'jsonpath-plus';
-import oasReducer from 'oas/dist/reducer';
+import oasReducer from 'oas/dist/lib/reducer';
 import ora from 'ora';
 import prompts from 'prompts';
 
