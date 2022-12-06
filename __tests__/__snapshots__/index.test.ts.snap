@@ -6,7 +6,7 @@ Upload, or resync, your OpenAPI/Swagger definition to ReadMe.
 
 Usage
 
-  rdme openapi [file] [options] 
+  rdme openapi [file|url] [options] 
 
 Options
 
@@ -30,8 +30,10 @@ Options
 
 Related commands
 
-  $ rdme openapi:reduce     Reduce an OpenAPI definition into a smaller subset. 
-  $ rdme openapi:validate   Validate your OpenAPI/Swagger definition.           
+  $ rdme openapi:reduce     Reduce an OpenAPI definition into a smaller subset.                     
+  $ rdme openapi:validate   Validate your OpenAPI/Swagger definition.                               
+  $ rdme openapi:uses       Analyze an OpenAPI/Swagger definition for various OpenAPI and ReadMe    
+                            feature usage.                                                          
 "
 `;
 
@@ -41,7 +43,7 @@ Upload, or resync, your OpenAPI/Swagger definition to ReadMe.
 
 Usage
 
-  rdme openapi [file] [options] 
+  rdme openapi [file|url] [options] 
 
 Options
 
@@ -65,8 +67,10 @@ Options
 
 Related commands
 
-  $ rdme openapi:reduce     Reduce an OpenAPI definition into a smaller subset. 
-  $ rdme openapi:validate   Validate your OpenAPI/Swagger definition.           
+  $ rdme openapi:reduce     Reduce an OpenAPI definition into a smaller subset.                     
+  $ rdme openapi:validate   Validate your OpenAPI/Swagger definition.                               
+  $ rdme openapi:uses       Analyze an OpenAPI/Swagger definition for various OpenAPI and ReadMe    
+                            feature usage.                                                          
 "
 `;
 
@@ -76,7 +80,7 @@ Upload, or resync, your OpenAPI/Swagger definition to ReadMe.
 
 Usage
 
-  rdme openapi [file] [options] 
+  rdme openapi [file|url] [options] 
 
 Options
 
@@ -100,8 +104,10 @@ Options
 
 Related commands
 
-  $ rdme openapi:reduce     Reduce an OpenAPI definition into a smaller subset. 
-  $ rdme openapi:validate   Validate your OpenAPI/Swagger definition.           
+  $ rdme openapi:reduce     Reduce an OpenAPI definition into a smaller subset.                     
+  $ rdme openapi:validate   Validate your OpenAPI/Swagger definition.                               
+  $ rdme openapi:uses       Analyze an OpenAPI/Swagger definition for various OpenAPI and ReadMe    
+                            feature usage.                                                          
 "
 `;
 

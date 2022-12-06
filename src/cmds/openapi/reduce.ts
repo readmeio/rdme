@@ -4,8 +4,8 @@ import fs from 'fs';
 import path from 'path';
 
 import chalk from 'chalk';
-import jsonpath from 'jsonpath';
-import oasReducer from 'oas/dist/lib/reducer';
+import { JSONPath } from 'jsonpath-plus';
+import oasReducer from 'oas/dist/reducer';
 import ora from 'ora';
 import prompts from 'prompts';
 
@@ -116,14 +116,11 @@ export default class OpenAPIReduceCommand extends Command {
         message: 'Choose which tags to reduce by:',
         min: 1,
         choices: () => {
-          const tags = jsonpath
-            .query(parsedBundledSpec, '$..paths..tags')
-            .flat()
-            .filter(tag => {
-              // A spec may have a `name: tag` which this JSONPath query will pick up. Since that
-              // definitely isn't a tag we want here we need to filter them out.
-              return typeof tag === 'string';
-            });
+          const tags: string[] = JSONPath({
+            path: '$..paths[*].tags',
+            json: parsedBundledSpec,
+            resultType: 'value',
+          }).flat();
 
           return [...new Set(tags)].map(tag => ({
             title: tag,
