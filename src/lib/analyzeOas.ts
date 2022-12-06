@@ -3,7 +3,7 @@ import type { OASDocument } from 'oas/dist/rmoas.types';
 
 import analyzer from 'oas/dist/analyzer';
 
-interface AnalyzedFeature extends OASAnalysisFeature {
+export interface AnalyzedFeature extends OASAnalysisFeature {
   description: string;
   url?:
     | string
@@ -16,7 +16,7 @@ interface AnalyzedFeature extends OASAnalysisFeature {
       };
 }
 
-interface Analysis extends OASAnalysis {
+export interface Analysis extends OASAnalysis {
   openapi: {
     additionalProperties: AnalyzedFeature;
     callbacks: AnalyzedFeature;
@@ -50,13 +50,21 @@ interface Analysis extends OASAnalysis {
   };
 }
 
-const OPENAPI_FEATURE_DOCS = {
+const OPENAPI_FEATURE_DOCS: Record<keyof Analysis['openapi'], Pick<AnalyzedFeature, 'description' | 'url'>> = {
   additionalProperties: {
     description: 'additionalProperties allows you to document dictionaries where the keys are user-supplied strings.',
+    url: {
+      '3.0': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#schema-object',
+      '3.1': 'https://json-schema.org/understanding-json-schema/reference/object.html#additional-properties',
+    },
   },
   callbacks: {
     description:
       'Callbacks are asynchronous, out-of-band requests that your service will send to some other service in response to certain events.',
+    url: {
+      '3.0': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#callback-object',
+      '3.1': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#callback-object',
+    },
   },
   circularRefs: {
     description: 'Circular references are $ref pointers that at some point in their lineage reference themselves.',
@@ -64,12 +72,24 @@ const OPENAPI_FEATURE_DOCS = {
   discriminators: {
     description:
       'With schemas that can be, or contain, different shapes, discriminators help you assist your users in identifying and determining the kind of shape they can supply or receive.',
+    url: {
+      '3.0': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#discriminator-object',
+      '3.1': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#discriminator-object',
+    },
   },
   links: {
     description: 'Links allow you to define at call-time relationships to other operations within your API.',
+    url: {
+      '3.0': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#link-object',
+      '3.1': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#link-object',
+    },
   },
   style: {
     description: 'Parameter serialization (style) allows you to describe how the parameter should be sent to your API.',
+    url: {
+      '3.0': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#parameter-style',
+      '3.1': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#parameter-style',
+    },
   },
   polymorphism: {
     description:
@@ -101,7 +121,7 @@ const OPENAPI_FEATURE_DOCS = {
   },
 };
 
-const README_FEATURE_DOCS = {
+const README_FEATURE_DOCS: Record<keyof Analysis['readme'], Pick<AnalyzedFeature, 'description' | 'url'>> = {
   'x-default': {
     description:
       'The x-default extension allows you to define static authentication credential defaults for OAuth 2 and API Key security types.',
@@ -148,7 +168,7 @@ const README_FEATURE_DOCS = {
  * feature uses it may contain.
  *
  */
-export default async function analyzeOas(definition: OASDocument) {
+async function analyzeOas(definition: OASDocument) {
   return analyzer(definition).then((analysis: Analysis) => {
     if (analysis.openapi) {
       Object.entries(OPENAPI_FEATURE_DOCS).forEach(([feature, docs]: [keyof Analysis['openapi'], AnalyzedFeature]) => {
@@ -162,6 +182,13 @@ export default async function analyzeOas(definition: OASDocument) {
 
     if (analysis.readme) {
       Object.entries(README_FEATURE_DOCS).forEach(([feature, docs]: [keyof Analysis['readme'], AnalyzedFeature]) => {
+        // If this ReadMe feature isn't in our resulted analysis result then it's a deprecated
+        // feature that this API definition doesn't contain so we don't need to inform the user of
+        // something they neither use, can't use anyways, nor should know about.
+        if (!(feature in analysis.readme)) {
+          return;
+        }
+
         // eslint-disable-next-line no-param-reassign
         analysis.readme[feature] = {
           ...analysis.readme[feature],
@@ -173,3 +200,12 @@ export default async function analyzeOas(definition: OASDocument) {
     return analysis;
   });
 }
+
+export function getSupportedFeatures() {
+  return [
+    // OpenAPI features
+    ...Object.keys(OPENAPI_FEATURE_DOCS),
+  ];
+}
+
+export default analyzeOas;

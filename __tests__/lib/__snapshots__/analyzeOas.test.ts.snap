@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`analyzeOas should analyze an OpenAPI definition 1`] = `
+exports[`#analyzeOas should analyze an OpenAPI definition 1`] = `
 {
   "general": {
     "mediaTypes": {
@@ -31,11 +31,19 @@ exports[`analyzeOas should analyze an OpenAPI definition 1`] = `
         "/paths/~1store~1inventory/get/responses/200/content/application~1json/schema/additionalProperties",
       ],
       "present": true,
+      "url": {
+        "3.0": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#schema-object",
+        "3.1": "https://json-schema.org/understanding-json-schema/reference/object.html#additional-properties",
+      },
     },
     "callbacks": {
       "description": "Callbacks are asynchronous, out-of-band requests that your service will send to some other service in response to certain events.",
       "locations": [],
       "present": false,
+      "url": {
+        "3.0": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#callback-object",
+        "3.1": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#callback-object",
+      },
     },
     "circularRefs": {
       "description": "Circular references are $ref pointers that at some point in their lineage reference themselves.",
@@ -46,11 +54,19 @@ exports[`analyzeOas should analyze an OpenAPI definition 1`] = `
       "description": "With schemas that can be, or contain, different shapes, discriminators help you assist your users in identifying and determining the kind of shape they can supply or receive.",
       "locations": [],
       "present": false,
+      "url": {
+        "3.0": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#discriminator-object",
+        "3.1": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#discriminator-object",
+      },
     },
     "links": {
       "description": "Links allow you to define at call-time relationships to other operations within your API.",
       "locations": [],
       "present": false,
+      "url": {
+        "3.0": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#link-object",
+        "3.1": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#link-object",
+      },
     },
     "polymorphism": {
       "description": "Polymorphism (allOf, oneOf, and anyOf) allow you to describe schemas that may contain either many different shapes, or a single shape containing multiple different schemas.",
@@ -74,6 +90,10 @@ exports[`analyzeOas should analyze an OpenAPI definition 1`] = `
       "description": "Parameter serialization (style) allows you to describe how the parameter should be sent to your API.",
       "locations": [],
       "present": false,
+      "url": {
+        "3.0": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#parameter-style",
+        "3.1": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#parameter-style",
+      },
     },
     "webhooks": {
       "description": "Webhooks allow you to describe out of band requests that may be initiated by your users.",
