@@ -187,7 +187,7 @@ export default async function createGHA(
   if (msg) info(msg, false);
 
   if (opts.github) {
-    info(chalk.bold("\n🚀 Let's get you set up with GitHub Actions! 🚀\n", false));
+    info(chalk.bold("\n🚀 Let's get you set up with GitHub Actions! 🚀\n"), false);
   } else {
     info(
       [
