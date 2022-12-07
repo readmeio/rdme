@@ -82,22 +82,40 @@ export default class OpenAPIUsesCommand extends Command {
 
   // eslint-disable-next-line class-methods-use-this
   buildFeaturesReport(analysis: Analysis, features: string[]) {
-    const report: string[] = [];
+    const report: string[] = [''];
 
     features.forEach(feature => {
       if (feature in analysis.openapi) {
         const info = analysis.openapi[feature as keyof Analysis['openapi']];
         if (!info.present) {
-          report.push(`You are ${chalk.bold('not')} currently using ${pluralize(feature)}.`, '');
-          return;
+          report.push(`${feature}: You do not use this.`);
+        } else {
+          report.push('');
+          report.push(`${feature}:`);
+          report.push(...(info.locations as string[]).map(loc => ` · ${chalk.yellow(loc)}`));
+          report.push('');
         }
-
-        report.push(`You ${chalk.bold('are')} using ${pluralize(feature)} here:`, '');
-        report.push(...(info.locations as string[]).map(loc => ` · ${chalk.yellow(loc)}`));
       }
-
-      report.push('');
     });
+
+    if (features.includes('readme')) {
+      Object.entries(analysis.readme).forEach(([feature, info]) => {
+        if (!info.present) {
+          report.push(`${feature}: You do not use this.`);
+        } else {
+          report.push('');
+          report.push(`${feature}:`);
+          report.push(...(info.locations as string[]).map(loc => ` · ${chalk.yellow(loc)}`));
+        }
+      });
+    }
+
+    // Because we add a little bit of padding between our report and the "analyzing your spec" copy
+    // if this second entry in the report is an empty line then we can safely remove it so we don't
+    // end up with multiple empty lines at the top of our report.
+    if (!report[1].length) {
+      report.splice(0, 1);
+    }
 
     // If the last entry in our report array is an empty string then we should remove it.
     if (!report[report.length - 1].length) {
@@ -207,9 +225,13 @@ export default class OpenAPIUsesCommand extends Command {
 
     const spinner = ora({ ...oraOptions() });
     if (features) {
-      spinner.start(`Analyizing your API definition for usage of ${new Intl.ListFormat('en').format(features)}...`);
+      spinner.start(
+        `Analyzing your API definition for usage of ${new Intl.ListFormat('en').format(
+          features.map(feature => (feature === 'readme' ? 'ReadMe extensions' : feature))
+        )}...`
+      );
     } else {
-      spinner.start('Analyizing your API definition for OpenAPI and ReadMe feature usage...');
+      spinner.start('Analyzing your API definition for OpenAPI and ReadMe feature usage...');
     }
 
     const analysis = await analyzeOas(parsedBundledSpec).catch(err => {

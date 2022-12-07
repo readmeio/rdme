@@ -205,6 +205,8 @@ export function getSupportedFeatures() {
   return [
     // OpenAPI features
     ...Object.keys(OPENAPI_FEATURE_DOCS),
+
+    'readme', // A catch-all for ReadMe features and extensions. Will look for everything.
   ];
 }
 
