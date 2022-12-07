@@ -1,3 +1,15 @@
+## <small>8.2.1 (2022-12-07)</small>
+
+* fix(createGHA): git remote connection errors (#705) ([18f5468](https://github.com/readmeio/rdme/commit/18f5468)), closes [#705](https://github.com/readmeio/rdme/issues/705) [/github.com/readmeio/rdme/pull/705#discussion_r1042466669](https://github.com//github.com/readmeio/rdme/pull/705/issues/discussion_r1042466669)
+* docs: better callout for `rdme login` usage (#699) ([82ae922](https://github.com/readmeio/rdme/commit/82ae922)), closes [#699](https://github.com/readmeio/rdme/issues/699)
+* docs: fix outdated link, add OSS badge ([7eb5b29](https://github.com/readmeio/rdme/commit/7eb5b29))
+* docs: fix owlbert img link ([f7a718b](https://github.com/readmeio/rdme/commit/f7a718b))
+* test: cleaning up our jest config (#700) ([bea7231](https://github.com/readmeio/rdme/commit/bea7231)), closes [#700](https://github.com/readmeio/rdme/issues/700)
+* ci: caching deps in ci (#696) ([baff9c0](https://github.com/readmeio/rdme/commit/baff9c0)), closes [#696](https://github.com/readmeio/rdme/issues/696)
+* chore(deps): bump a bunch of deps (#695) ([77ec4c9](https://github.com/readmeio/rdme/commit/77ec4c9)), closes [#695](https://github.com/readmeio/rdme/issues/695)
+
+
+
 ## 8.3.0-beta.0 (2022-11-30)
 
 * feat(`openapi:reduce`): pass opts (#684) ([5fc4cee](https://github.com/readmeio/rdme/commit/5fc4cee)), closes [#684](https://github.com/readmeio/rdme/issues/684)
