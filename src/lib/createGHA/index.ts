@@ -155,6 +155,7 @@ export default async function createGHA(
   // if in a CI environment,
   // don't even bother running the git commands
   if (!opts.github && (isCI() || isNpmScript())) {
+    debug('not running GHA onboarding workflow in CI and/or npm script, exiting');
     return msg;
   }
 
