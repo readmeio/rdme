@@ -111,7 +111,11 @@ export async function getGitData() {
   if (rawRemotes) {
     const remote = rawRemotes.split('\n')[0];
     debug(`[getGitData] remote result: ${remote}`);
-    const rawRemote = await git.remote(['show', remote]);
+    const rawRemote = await git.remote(['show', remote]).catch(e => {
+      debug(`[getGitData] error accessing remote: ${e.message}`);
+      return '';
+    });
+
     debug(`[getGitData] rawRemote result: ${rawRemote}`);
     // Extract head branch from git output
     const rawHead = headLineRegEx.exec(rawRemote as string)?.[0];

@@ -180,6 +180,12 @@ describe('#createGHA', () => {
         return expect(createGHA('success!', cmd, command.args, opts)).resolves.toBe('success!');
       });
 
+      it('should not run if unable to connect to remote', () => {
+        git.remote = getGitRemoteMock('bad-remote', 'http://somebadurl.git');
+
+        return expect(createGHA('success!', cmd, command.args, opts)).resolves.toBe('success!');
+      });
+
       it('should not run if user previously declined to set up GHA for current directory + pkg version', async () => {
         const repoRoot = process.cwd();
 
