@@ -50,21 +50,34 @@ describe('#createGHA', () => {
     describe.each<{
       cmd: keyof typeof commands;
       CmdClass: typeof Command;
+      /** used to differentiate describe blocks */
+      label: string;
       opts: CommandOptions<Record<string, string>>;
     }>([
-      { cmd: 'openapi:validate', CmdClass: OpenAPIValidateCommand, opts: { spec: 'petstore.json' } },
-      { cmd: 'openapi', CmdClass: OpenAPICommand, opts: { key, spec: 'petstore.json', id: 'spec_id' } },
-      { cmd: 'docs', CmdClass: DocsCommand, opts: { key, folder: './docs', version: '1.0.0' } },
-      { cmd: 'docs', CmdClass: DocsCommand, opts: { key, filePath: './docs/rdme.md', version: '1.0.0' } },
-      { cmd: 'changelogs', CmdClass: ChangelogsCommand, opts: { key, filePath: './changelogs' } },
-      { cmd: 'changelogs', CmdClass: ChangelogsCommand, opts: { key, filePath: './changelogs/rdme.md' } },
-      { cmd: 'custompages', CmdClass: CustomPagesCommand, opts: { key, filePath: './custompages' } },
+      { cmd: 'openapi:validate', CmdClass: OpenAPIValidateCommand, opts: { spec: 'petstore.json' }, label: '' },
+      { cmd: 'openapi', CmdClass: OpenAPICommand, opts: { key, spec: 'petstore.json', id: 'spec_id' }, label: '' },
+      { cmd: 'docs', CmdClass: DocsCommand, opts: { key, folder: './docs', version: '1.0.0' }, label: '' },
+      {
+        cmd: 'docs',
+        CmdClass: DocsCommand,
+        label: ' (single)',
+        opts: { key, filePath: './docs/rdme.md', version: '1.0.0' },
+      },
+      { cmd: 'changelogs', CmdClass: ChangelogsCommand, opts: { key, filePath: './changelogs' }, label: '' },
+      {
+        cmd: 'changelogs',
+        CmdClass: ChangelogsCommand,
+        label: ' (single)',
+        opts: { key, filePath: './changelogs/rdme.md' },
+      },
+      { cmd: 'custompages', CmdClass: CustomPagesCommand, opts: { key, filePath: './custompages' }, label: '' },
       {
         cmd: 'custompages',
         CmdClass: CustomPagesCommand,
+        label: ' (single)',
         opts: { key, filePath: './custompages/rdme.md' },
       },
-    ])('$cmd', ({ cmd, CmdClass, opts }) => {
+    ])('$cmd$label', ({ cmd, CmdClass, opts }) => {
       let command;
 
       beforeEach(() => {
@@ -167,6 +180,12 @@ describe('#createGHA', () => {
         return expect(createGHA('success!', cmd, command.args, opts)).resolves.toBe('success!');
       });
 
+      it('should not run if unable to connect to remote', () => {
+        git.remote = getGitRemoteMock('bad-remote', 'http://somebadurl.git');
+
+        return expect(createGHA('success!', cmd, command.args, opts)).resolves.toBe('success!');
+      });
+
       it('should not run if user previously declined to set up GHA for current directory + pkg version', async () => {
         const repoRoot = process.cwd();
 
@@ -191,7 +210,7 @@ describe('#createGHA', () => {
         delete process.env.TEST_RDME_NPM_SCRIPT;
       });
 
-      it('should not run if repo only contains non-GitHub remotes', () => {
+      it('should not run if repo solely contains non-GitHub remotes', () => {
         git.remote = getGitRemoteMock('origin', 'https://gitlab.com', 'main');
 
         return expect(createGHA('success!', cmd, command.args, opts)).resolves.toBe('success!');
