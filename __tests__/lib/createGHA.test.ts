@@ -191,7 +191,7 @@ describe('#createGHA', () => {
         delete process.env.TEST_RDME_NPM_SCRIPT;
       });
 
-      it('should not run if repo only contains non-GitHub remotes', () => {
+      it('should not run if repo solely contains non-GitHub remotes', () => {
         git.remote = getGitRemoteMock('origin', 'https://gitlab.com', 'main');
 
         return expect(createGHA('success!', cmd, command.args, opts)).resolves.toBe('success!');
