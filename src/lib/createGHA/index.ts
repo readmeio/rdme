@@ -188,10 +188,10 @@ export default async function createGHA(
     }
   }
 
-  if (msg) info(msg, false);
+  if (msg) info(msg, { includeEmojiPrefix: false });
 
   if (opts.github) {
-    info(chalk.bold("\n🚀 Let's get you set up with GitHub Actions! 🚀\n"), false);
+    info(chalk.bold("\n🚀 Let's get you set up with GitHub Actions! 🚀\n"), { includeEmojiPrefix: false });
   } else {
     info(
       [
@@ -205,7 +205,7 @@ export default async function createGHA(
         `✨ This means it will run ${chalk.italic('automagically')} with every push to a branch of your choice!`,
         '',
       ].join('\n'),
-      false
+      { includeEmojiPrefix: false }
     );
   }
 
