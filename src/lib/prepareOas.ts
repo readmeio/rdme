@@ -160,12 +160,13 @@ export default async function prepareOas(
   // And though `.validate()` will run `.load()` itself running `.load()` here will not have any
   // performance implications as `oas-normalizes` caches the result of `.load()` the first time you
   // run it.
-  const specType = await oas.load().then(schema => {
+  const { specType, definitionVersion } = await oas.load().then(async schema => {
     const type = getAPIDefinitionType(schema);
-    return capitalizeSpecType(type);
+    return {
+      specType: capitalizeSpecType(type),
+      definitionVersion: await oas.version(),
+    };
   });
-
-  const definitionVersion = await oas.version();
 
   // If we were supplied a Postman collection this will **always** convert it to OpenAPI 3.0.
   const api = await oas.validate({ convertToLatest: opts.convertToLatest }).catch((err: Error) => {

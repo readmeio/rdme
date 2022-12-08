@@ -264,9 +264,8 @@ export default class OpenAPIUsesCommand extends Command {
       throw err;
     });
 
-    spinner.succeed(`${spinner.text} done! ✅`);
-
     if (features?.length) {
+      spinner.succeed(`${spinner.text} done! ✅`);
       const { report, hasUnusedFeature } = this.buildFeaturesReport(analysis, features);
       if (hasUnusedFeature) {
         // If we have any unused features we should reject the command with a soft error so we
@@ -276,6 +275,8 @@ export default class OpenAPIUsesCommand extends Command {
 
       return Promise.resolve(report);
     }
+
+    spinner.stop();
 
     return Promise.resolve(this.buildFullReport(analysis));
   }
