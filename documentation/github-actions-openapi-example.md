@@ -49,7 +49,7 @@ Follow [these instructions](https://docs.readme.com/docs/openapi#file-upload) on
 Alternatively, you can obtain the API definition ID by running the following `rdme` CLI command on your local machine:
 
 ```sh
-rdme openapi [path-to-file.json]
+rdme openapi [url-or-local-path-to-file]
 ```
 
 Once you follow the prompts and upload your OpenAPI definition, you'll receive a confirmation message that looks something like this:
@@ -61,7 +61,7 @@ You've successfully updated an OpenAPI file on your ReadMe project!
 
 To update your OpenAPI definition, run the following:
 
-        rdme openapi [path-to-file.json] --key=<key> --id=API_DEFINITION_ID
+        rdme openapi [url-or-local-path-to-file] --key=<key> --id=API_DEFINITION_ID
 ```
 
 </details>
@@ -99,13 +99,13 @@ jobs:
       - name: Checkout this repo
         uses: actions/checkout@v3
 
-      # Run GitHub Action to sync OpenAPI file at [path-to-file.json]
+      # Run GitHub Action to sync OpenAPI file at ./path-to-file.json
       - name: GitHub Action
         # We recommend specifying a fixed version, i.e. @RDME_VERSION
         # Docs: https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#example-using-versioned-actions
         uses: readmeio/rdme@RDME_VERSION
         with:
-          rdme: openapi [path-to-file.json] --key=${{ secrets.README_API_KEY }} --id=API_DEFINITION_ID
+          rdme: openapi ./path-to-file.json --key=${{ secrets.README_API_KEY }} --id=API_DEFINITION_ID
 ```
 
 In the example above, every push to the `main` branch will sync the OpenAPI file located at `./path-to-file.json` to the API specification `API_DEFINITION_ID` in your ReadMe project.

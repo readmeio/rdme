@@ -151,7 +151,7 @@ To use sensitive information (like your ReadMe API key) in your `rdme` GitHub Ac
 ```yml
 - uses: readmeio/rdme@RDME_VERSION
   with:
-    rdme: openapi [path-to-file.json] --key=${{ secrets.README_API_KEY }} --id=API_DEFINITION_ID
+    rdme: openapi [url-or-local-path-to-file] --key=${{ secrets.README_API_KEY }} --id=API_DEFINITION_ID
 ```
 
 ### Manually Configuring a GitHub Actions Workflow
@@ -177,7 +177,7 @@ We recommend using the [quick start](#quick-start) to get started with GitHub Ac
 The command syntax in GitHub Actions is functionally equivalent to the CLI. For example, take the following CLI command:
 
 ```sh
-rdme validate [path-to-file.json]
+rdme validate [url-or-local-path-to-file]
 ```
 
 To execute this command via GitHub Actions, the step would look like this:
@@ -185,7 +185,7 @@ To execute this command via GitHub Actions, the step would look like this:
 ```yml
 - uses: readmeio/rdme@RDME_VERSION
   with:
-    rdme: validate [path-to-file.json]
+    rdme: validate [url-or-local-path-to-file]
 ```
 
 The following section has links to full GitHub Actions workflow file examples.
@@ -216,7 +216,7 @@ pipelines:
   default:
     - step:
         script:
-          - npx rdme@RDME_VERSION openapi [path-to-file.json] --key=$README_API_KEY --id=API_DEFINITION_ID
+          - npx rdme@RDME_VERSION openapi [url-or-local-path-to-file] --key=$README_API_KEY --id=API_DEFINITION_ID
 ```
 ```yml CircleCI (.circleci/config.yml)
 version: 2.1
@@ -228,7 +228,7 @@ jobs:
       - image: node:NODE_VERSION
     steps:
       - run:
-          command: npx rdme@RDME_VERSION openapi [path-to-file.json] --key=$README_API_KEY --id=API_DEFINITION_ID
+          command: npx rdme@RDME_VERSION openapi [url-or-local-path-to-file] --key=$README_API_KEY --id=API_DEFINITION_ID
 ```
 ```yml GitLab CI (rdme-sync.gitlab-ci.yml)
 # Official framework image. Look for the different tagged releases at:
@@ -237,7 +237,7 @@ image: node:NODE_VERSION
 
 sync-via-rdme:
   script:
-    - npx rdme@RDME_VERSION openapi [path-to-file.json] --key=$README_API_KEY --id=API_DEFINITION_ID
+    - npx rdme@RDME_VERSION openapi [url-or-local-path-to-file] --key=$README_API_KEY --id=API_DEFINITION_ID
 ```
 ```yml Travis CI (.travis.yml)
 # https://docs.travis-ci.com/user/languages/javascript-with-nodejs/#specifying-nodejs-versions
@@ -245,7 +245,7 @@ language: node_js
 node_js:
   - NODE_VERSION
 
-script: npx rdme@RDME_VERSION openapi [path-to-file.json] --key=$README_API_KEY --id=API_DEFINITION_ID
+script: npx rdme@RDME_VERSION openapi [url-or-local-path-to-file] --key=$README_API_KEY --id=API_DEFINITION_ID
 ```
 <!-- prettier-ignore-end -->
 
@@ -271,7 +271,7 @@ If you're working with the `docs` command specifically, we recommend using [dry 
 If you're troubleshooting issues with the CLI (or in some non-GitHub Actions environment), you can use the `DEBUG` environmental variable to print helpful debugging info to the console:
 
 ```sh
-DEBUG=rdme* rdme openapi [path-to-file.json]
+DEBUG=rdme* rdme openapi [url-or-local-path-to-file]
 ```
 
 Note that this should only be used for development/debugging purposes and should not be enabled in production environments.
