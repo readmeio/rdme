@@ -226,7 +226,7 @@ export default class OpenAPIUsesCommand extends Command {
     const { spec, workingDirectory, feature: features } = opts;
 
     // If we have features we should validate that they're supported.
-    if (features) {
+    if (features?.length) {
       const invalidFeatures = features.filter(feature => !getSupportedFeatures().includes(feature));
       if (invalidFeatures.length) {
         return Promise.reject(
@@ -248,7 +248,7 @@ export default class OpenAPIUsesCommand extends Command {
     const parsedBundledSpec = JSON.parse(bundledSpec);
 
     const spinner = ora({ ...oraOptions() });
-    if (features) {
+    if (features?.length) {
       spinner.start(
         `Analyzing your API definition for usage of ${new Intl.ListFormat('en').format(
           features.map(feature => (feature === 'readme' ? 'ReadMe extensions' : feature))
@@ -266,7 +266,7 @@ export default class OpenAPIUsesCommand extends Command {
 
     spinner.succeed(`${spinner.text} done! ✅`);
 
-    if (features) {
+    if (features?.length) {
       const { report, hasUnusedFeature } = this.buildFeaturesReport(analysis, features);
       if (hasUnusedFeature) {
         // If we have any unused features we should reject the command with a soft error so we
