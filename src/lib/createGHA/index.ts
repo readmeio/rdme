@@ -111,7 +111,11 @@ export async function getGitData() {
   if (rawRemotes) {
     const remote = rawRemotes.split('\n')[0];
     debug(`[getGitData] remote result: ${remote}`);
-    const rawRemote = await git.remote(['show', remote]);
+    const rawRemote = await git.remote(['show', remote]).catch(e => {
+      debug(`[getGitData] error accessing remote: ${e.message}`);
+      return '';
+    });
+
     debug(`[getGitData] rawRemote result: ${rawRemote}`);
     // Extract head branch from git output
     const rawHead = headLineRegEx.exec(rawRemote as string)?.[0];
@@ -155,6 +159,7 @@ export default async function createGHA(
   // if in a CI environment,
   // don't even bother running the git commands
   if (!opts.github && (isCI() || isNpmScript())) {
+    debug('not running GHA onboarding workflow in CI and/or npm script, exiting');
     return msg;
   }
 
@@ -183,10 +188,10 @@ export default async function createGHA(
     }
   }
 
-  if (msg) info(msg, false);
+  if (msg) info(msg, { includeEmojiPrefix: false });
 
   if (opts.github) {
-    info(chalk.bold("\n🚀 Let's get you set up with GitHub Actions! 🚀\n", false));
+    info(chalk.bold("\n🚀 Let's get you set up with GitHub Actions! 🚀\n"), { includeEmojiPrefix: false });
   } else {
     info(
       [
@@ -200,7 +205,7 @@ export default async function createGHA(
         `✨ This means it will run ${chalk.italic('automagically')} with every push to a branch of your choice!`,
         '',
       ].join('\n'),
-      false
+      { includeEmojiPrefix: false }
     );
   }
 

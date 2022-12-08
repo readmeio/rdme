@@ -19,6 +19,11 @@ export default function getGitRemoteMock(
     }
     // second call (used to grab default branch)
     if (arr.length === 2 && arr[0] === 'show' && arr[1] === remote) {
+      if (remote === 'bad-remote') {
+        return Promise.reject(
+          new Error(`fatal: unable to access '${remoteUrl}': Could not resolve host: ${remoteUrl}`)
+        ) as unknown as Response<string>;
+      }
       if (!defaultBranch) return Promise.reject(new Error('Bad mock uh oh')) as unknown as Response<string>;
       return Promise.resolve(`* remote origin
   Fetch URL: ${remoteUrl}

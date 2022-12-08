@@ -102,7 +102,7 @@ export default class Command {
           )} is currently logged in, using the stored API key for this project: ${chalk.blue(
             configstore.get('project')
           )}`,
-          false
+          { includeEmojiPrefix: false }
         );
       }
 
@@ -110,9 +110,9 @@ export default class Command {
         if (isCI()) {
           throw new Error('No project API key provided. Please use `--key`.');
         }
-        info("Looks like you're missing a ReadMe API key, let's fix that! 🦉", false);
+        info("Looks like you're missing a ReadMe API key, let's fix that! 🦉", { includeEmojiPrefix: false });
         const result = await loginFlow();
-        info(result, false);
+        info(result, { includeEmojiPrefix: false });
         // eslint-disable-next-line no-param-reassign
         opts.key = configstore.get('apiKey');
       }

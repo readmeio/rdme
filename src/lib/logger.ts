@@ -31,14 +31,19 @@ function error(input: string) {
 
 /**
  * Wrapper for info/notice statements.
- * @param {Boolean} includeEmojiPrefix whether or not to prefix
- * the statement with this emoji: ℹ️
+
  */
-function info(input: string, includeEmojiPrefix = true) {
+function info(
+  input: string,
+  opts = {
+    /** whether or not to prefix * the statement with this emoji: ℹ️ */
+    includeEmojiPrefix: true,
+  }
+) {
   /* istanbul ignore next */
   if (isGHA() && !isTest()) return core.notice(input);
   /* istanbul ignore next */
-  if (!includeEmojiPrefix) return console.info(input); // eslint-disable-line no-console
+  if (!opts.includeEmojiPrefix) return console.info(input); // eslint-disable-line no-console
   // eslint-disable-next-line no-console
   return console.info(`ℹ️  ${input}`);
 }
