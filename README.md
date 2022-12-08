@@ -140,12 +140,13 @@ With `rdme`, you have access to a variety of tools to manage your API definition
 - [Syncing](#syncing-an-api-definition-to-readme) 🦉
 - [Validation](#validating-an-api-definition) ✅
 - [Reduction](#reducing-an-api-definition) 📉
+- [Inspection](#inspecting-an-api-definition) 🔍
 
 `rdme` supports [OpenAPI 3.1](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md), [OpenAPI 3.0](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md), and [Swagger 2.x](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/2.0.md).
 
 <!--alex ignore postman-postwoman-->
 
-You can also pass in [Postman Collections](https://www.postman.com/collection/). Postman Collections are converted to OpenAPI using [`postman-to-openapi`](https://github.com/joolfe/postman-to-openapi) prior to any syncing/validation/reduction.
+You can also pass in [Postman Collections](https://www.postman.com/collection/). Postman Collections are converted to OpenAPI using [`postman-to-openapi`](https://github.com/joolfe/postman-to-openapi) prior to any syncing/validation/etc.
 
 The following examples use JSON files, but `rdme` supports API Definitions that are written in either JSON or YAML.
 
@@ -261,6 +262,22 @@ Here's what the resulting command looks like:
 
 ```
 rdme openapi:reduce petstore.json --path /pet/{id} --method get --method put --out petstore-reduced.json
+```
+
+As with the `openapi` command, you can also [omit the file path](#omitting-the-file-path).
+
+#### Inspecting an API Definition
+
+This tool can also perform a comprehensive analysis (again, no ReadMe account required!) of your API definition to determine how it's utilizing aspects of [the OpenAPI Specification](https://spec.openapis.org/oas/v3.1.0.html) (such as circular references, polymorphism, etc.) and any [ReadMe-specific extensions](https://docs.readme.com/main/docs/openapi-extensions) you might be using.
+
+```sh
+rdme openapi:inspect [url-or-local-path-to-file]
+```
+
+This command contains a `--feature` flag so you can filter for one or several specific features. If you pass in one or more `--feature` flags, the command returns a `0` exit code if your definition contains all of the given features and a `1` exit code if your definition lacks any of the given features.
+
+```sh
+rdme openapi:inspect [url-or-local-path-to-file] --feature circularRefs --feature polymorphism
 ```
 
 As with the `openapi` command, you can also [omit the file path](#omitting-the-file-path).
