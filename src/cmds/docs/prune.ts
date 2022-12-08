@@ -13,11 +13,11 @@ import readdirRecursive from '../../lib/readdirRecursive';
 import readDoc from '../../lib/readDoc';
 import { getProjectVersion } from '../../lib/versionSelect';
 
-export type Options = {
+export interface Options {
   confirm?: boolean;
   dryRun?: boolean;
   folder?: string;
-};
+}
 
 function getSlug(filename: string): string {
   const { slug } = readDoc(filename);

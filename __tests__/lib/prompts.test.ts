@@ -1,4 +1,4 @@
-import type { VersionUpdateOptions } from '../../src/cmds/versions/update';
+import type { Options as VersionUpdateOptions } from '../../src/cmds/versions/update';
 import type { Response } from 'node-fetch';
 
 import prompts from 'prompts';

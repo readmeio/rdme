@@ -4,10 +4,10 @@ import Command, { CommandCategories } from '../lib/baseCommand';
 import supportsGHA from '../lib/decorators/supportsGHA';
 import syncDocsPath from '../lib/syncDocsPath';
 
-export type Options = {
+export interface Options {
   dryRun?: boolean;
   filePath?: string;
-};
+}
 
 @supportsGHA
 export default class ChangelogsCommand extends Command {

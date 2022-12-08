@@ -1,6 +1,6 @@
 import type { Version } from '../cmds/versions';
-import type { VersionCreateOptions } from 'cmds/versions/create';
-import type { VersionUpdateOptions } from 'cmds/versions/update';
+import type { Options as VersionCreateOptions } from 'cmds/versions/create';
+import type { Options as VersionUpdateOptions } from 'cmds/versions/update';
 import type { Response } from 'node-fetch';
 import type { Choice, PromptObject } from 'prompts';
 
@@ -9,12 +9,14 @@ import semver from 'semver';
 
 import promptTerminal from './promptWrapper';
 
-type SpecList = {
+interface Spec {
   _id: string;
   title: string;
-}[];
+}
 
-type ParsedDocs = {
+type SpecList = Spec[];
+
+interface ParsedDocs {
   next?: {
     page: number;
     url: string;
@@ -23,7 +25,7 @@ type ParsedDocs = {
     page: number;
     url: string;
   };
-};
+}
 
 function specOptions(specList: SpecList, parsedDocs: ParsedDocs, currPage: number, totalPages: number): Choice[] {
   const specs = specList.map(s => {

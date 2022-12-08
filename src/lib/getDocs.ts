@@ -4,14 +4,14 @@ import { Headers } from 'node-fetch';
 import fetch, { cleanHeaders, handleRes } from './fetch';
 import getCategories from './getCategories';
 
-type Document = {
+interface Document {
   _id: string;
   title: string;
   slug: string;
   order: number;
   hidden: boolean;
   children: Document[];
-};
+}
 
 function flatten(data: Document[][]): Document[] {
   return [].concat(...data);

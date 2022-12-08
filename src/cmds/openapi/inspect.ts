@@ -13,11 +13,11 @@ import { oraOptions } from '../../lib/logger';
 import prepareOas from '../../lib/prepareOas';
 import SoftError from '../../lib/softError';
 
-export type Options = {
+export interface Options {
   spec?: string;
   workingDirectory?: string;
   feature?: string[];
-};
+}
 
 export default class OpenAPIInspectCommand extends Command {
   definitionVersion: string;

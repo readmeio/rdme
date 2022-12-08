@@ -17,7 +17,7 @@ import promptTerminal from '../../lib/promptWrapper';
 import streamSpecToRegistry from '../../lib/streamSpecToRegistry';
 import { getProjectVersion } from '../../lib/versionSelect';
 
-export type Options = {
+export interface Options {
   id?: string;
   spec?: string;
   version?: string;
@@ -27,7 +27,7 @@ export type Options = {
   workingDirectory?: string;
   update?: boolean;
   dryRun?: boolean;
-};
+}
 
 export default class OpenAPICommand extends Command {
   constructor() {
