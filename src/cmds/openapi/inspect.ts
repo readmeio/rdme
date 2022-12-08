@@ -31,7 +31,6 @@ export default class OpenAPIInspectCommand extends Command {
     this.usage = 'openapi:inspect [file|url] [options]';
     this.description = 'Analyze an OpenAPI/Swagger definition for various OpenAPI and ReadMe feature usage.';
     this.cmdCategory = CommandCategories.APIS;
-    this.position = 4;
 
     this.hiddenArgs = ['spec'];
     this.args = [

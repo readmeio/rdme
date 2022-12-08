@@ -27,7 +27,6 @@ export default class CreateVersionCommand extends Command {
     this.usage = 'versions:create <version> [options]';
     this.description = 'Create a new version for your project.';
     this.cmdCategory = CommandCategories.VERSIONS;
-    this.position = 2;
 
     this.hiddenArgs = ['version'];
     this.args = [

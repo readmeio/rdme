@@ -10,7 +10,6 @@ export default class GuidesCommand extends DocsCommand {
     this.command = 'guides';
     this.usage = 'guides <path> [options]';
     this.description = 'Alias for `rdme docs`.';
-    this.position = 3;
   }
 
   async run(opts: CommandOptions<Options>) {

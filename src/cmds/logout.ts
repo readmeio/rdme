@@ -13,7 +13,6 @@ export default class LogoutCommand extends Command {
     this.usage = 'logout';
     this.description = 'Logs the currently authenticated user out of ReadMe.';
     this.cmdCategory = CommandCategories.ADMIN;
-    this.position = 2;
 
     this.args = [];
   }

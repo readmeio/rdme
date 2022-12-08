@@ -14,7 +14,6 @@ export default class ValidateAliasCommand extends OpenAPIValidateCommand {
     this.command = 'validate';
     this.usage = 'validate [file] [options]';
     this.description = 'Alias for `rdme openapi:validate` [deprecated].';
-    this.position = 5;
   }
 
   async run(opts: CommandOptions<Options>) {

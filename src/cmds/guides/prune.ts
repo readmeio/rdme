@@ -10,7 +10,6 @@ export default class GuidesPruneCommand extends DocsPruneCommand {
     this.command = 'guides:prune';
     this.usage = 'guides:prune <folder> [options]';
     this.description = 'Alias for `rdme docs:prune`.';
-    this.position = 4;
   }
 
   async run(opts: CommandOptions<Options>) {

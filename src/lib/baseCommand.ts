@@ -60,13 +60,6 @@ export default class Command {
   cmdCategory: CommandCategories;
 
   /**
-   * The order in which to display the command within the `cmdCategory`
-   *
-   * @example 1
-   */
-  position: number;
-
-  /**
    * Should the command be hidden from our `--help` screens?
    */
   hidden = false;

@@ -32,7 +32,6 @@ export default class OpenAPIReduceCommand extends Command {
     this.usage = 'openapi:reduce [file|url] [options]';
     this.description = 'Reduce an OpenAPI definition into a smaller subset.';
     this.cmdCategory = CommandCategories.APIS;
-    this.position = 2;
 
     this.hiddenArgs = ['spec'];
     this.args = [
