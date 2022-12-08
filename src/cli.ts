@@ -36,7 +36,15 @@ rdme(process.argv.slice(2))
       return core.setFailed(message);
     }
 
-    // eslint-disable-next-line no-console
-    console.error(chalk.red(`\n${message}\n`));
+    // If this is a soft error then we should output the result as a regular log but exit the CLI
+    // with an error status code.
+    if (err.name === 'SoftError') {
+      // eslint-disable-next-line no-console
+      console.log(err.message);
+    } else {
+      // eslint-disable-next-line no-console
+      console.error(chalk.red(`\n${message}\n`));
+    }
+
     return process.exit(1);
   });

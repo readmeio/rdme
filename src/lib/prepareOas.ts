@@ -33,7 +33,18 @@ const capitalizeSpecType = (type: string) =>
  * @param command The command context in which this is being run within (uploading a spec,
  *    validation, or reducing one).
  */
-export default async function prepareOas(path: string, command: 'openapi' | 'openapi:reduce' | 'openapi:validate') {
+export default async function prepareOas(
+  path: string,
+  command: 'openapi' | 'openapi:inspect' | 'openapi:reduce' | 'openapi:validate',
+  opts: {
+    /**
+     * Optionally convert the supplied or discovered API definition to the latest OpenAPI release.
+     */
+    convertToLatest?: boolean;
+  } = {
+    convertToLatest: false,
+  }
+) {
   let specPath = path;
 
   if (!specPath) {
@@ -54,13 +65,13 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
 
     const fileFindingSpinner = ora({ text: 'Looking for API definitions...', ...oraOptions() }).start();
 
-    let action: 'upload' | 'reduce' | 'validate';
+    let action: 'inspect' | 'reduce' | 'upload' | 'validate';
     switch (command) {
       case 'openapi':
         action = 'upload';
         break;
       default:
-        action = command.split(':')[1] as 'reduce' | 'validate';
+        action = command.split(':')[1] as 'inspect' | 'reduce' | 'validate';
     }
 
     const jsonAndYamlFiles = readdirRecursive('.', true).filter(
@@ -144,13 +155,16 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
   // And though `.validate()` will run `.load()` itself running `.load()` here will not have any
   // performance implications as `oas-normalizes` caches the result of `.load()` the first time you
   // run it.
-  const specType = await oas.load().then(schema => {
+  const { specType, definitionVersion } = await oas.load().then(async schema => {
     const type = getAPIDefinitionType(schema);
-    return capitalizeSpecType(type);
+    return {
+      specType: capitalizeSpecType(type),
+      definitionVersion: await oas.version(),
+    };
   });
 
   // If we were supplied a Postman collection this will **always** convert it to OpenAPI 3.0.
-  const api = await oas.validate({ convertToLatest: false }).catch((err: Error) => {
+  const api = await oas.validate({ convertToLatest: opts.convertToLatest }).catch((err: Error) => {
     spinner.fail();
     debug(`raw validation error object: ${JSON.stringify(err)}`);
     throw err;
@@ -168,7 +182,7 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
 
   let bundledSpec = '';
 
-  if (command === 'openapi' || command === 'openapi:reduce') {
+  if (['openapi', 'openapi:inspect', 'openapi:reduce'].includes(command)) {
     bundledSpec = await oas.bundle().then(res => {
       return JSON.stringify(res);
     });
@@ -187,5 +201,9 @@ export default async function prepareOas(path: string, command: 'openapi' | 'ope
      * (if they use the `useSpecVersion` flag)
      */
     specVersion,
+    /**
+     * This is the `openapi`, `swagger`, or `postman` specification version of their API definition.
+     */
+    definitionVersion,
   };
 }
