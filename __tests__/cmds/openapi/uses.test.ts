@@ -12,14 +12,18 @@ describe('rdme openapi:uses', () => {
     process.chdir(testWorkingDir);
   });
 
-  it('should analyze a given spec and generate a full report', async () => {
-    const spec = require.resolve('@readme/oas-examples/3.0/json/petstore.json');
-
-    await expect(
-      analyzer.run({
-        spec,
-      })
-    ).resolves.toMatchSnapshot();
+  describe('full reports', () => {
+    it.each([
+      '@readme/oas-examples/3.0/json/petstore.json',
+      '@readme/oas-examples/3.0/json/readme.json',
+      '@readme/oas-examples/3.0/json/readme-extensions.json',
+    ])('should generate a report for %s', async spec => {
+      await expect(
+        analyzer.run({
+          spec: require.resolve(spec),
+        })
+      ).resolves.toMatchSnapshot();
+    });
   });
 
   describe('feature reports', () => {
@@ -34,44 +38,52 @@ describe('rdme openapi:uses', () => {
       ).rejects.toThrow('Unknown features: reamde. See `rdme help openapi:uses` for help');
     });
 
-    it('should generate a report for only readme features', async () => {
-      const spec = require.resolve('@readme/oas-examples/3.0/json/readme-extensions.json');
+    const cases: { spec: string; feature: string[]; shouldSoftError?: true }[] = [
+      {
+        spec: '@readme/oas-examples/3.0/json/readme.json',
+        feature: ['polymorphism'],
+      },
+      {
+        spec: '@readme/oas-examples/3.0/json/schema-circular.json',
+        feature: ['additionalProperties', 'circularRefs'],
+      },
 
-      try {
-        await analyzer.run({
-          spec,
-          feature: ['readme'],
-        });
+      // Soft error cases where we may or may not contain the features we're querying for.
+      {
+        spec: '@readme/oas-examples/3.0/json/readme-extensions.json',
+        feature: ['readme'],
+        shouldSoftError: true,
+      },
+      {
+        spec: '@readme/oas-examples/3.0/json/schema-circular.json',
+        feature: ['additionalProperties', 'circularRefs', 'readme'],
+        shouldSoftError: true,
+      },
+      {
+        spec: '@readme/oas-examples/3.0/json/schema-circular.json',
+        feature: ['circularRefs', 'readme'],
+        shouldSoftError: true,
+      },
+    ];
 
-        assert.fail(
-          'A soft error should have been thrown for this test case as `x-default` is not used in the example spec.'
-        );
-      } catch (err) {
-        expect(err.name).toBe('SoftError');
-        expect(err.message).toMatchSnapshot();
+    it.each(cases)('should generate a report for $spec (w/ $feature)', async ({ spec, feature, shouldSoftError }) => {
+      if (!shouldSoftError) {
+        await expect(
+          analyzer.run({
+            spec: require.resolve(spec),
+            feature,
+          })
+        ).resolves.toMatchSnapshot();
+        return;
       }
-    });
 
-    it('should generate a report for some openapi features', async () => {
-      const spec = require.resolve('@readme/oas-examples/3.0/json/schema-circular.json');
-
-      await expect(
-        analyzer.run({
-          spec,
-          feature: ['additionalProperties', 'circularRefs'],
-        })
-      ).resolves.toMatchSnapshot();
-    });
-
-    it('should generate a report with mixed features', async () => {
-      const spec = require.resolve('@readme/oas-examples/3.0/json/schema-circular.json');
       try {
         await analyzer.run({
-          spec,
-          feature: ['additionalProperties', 'circularRefs', 'readme'],
+          spec: require.resolve(spec),
+          feature,
         });
 
-        assert.fail('A soft error should have been thrown for this test case no ReadMe features are used.');
+        assert.fail('A soft error should have been thrown for this test case.');
       } catch (err) {
         expect(err.name).toBe('SoftError');
         expect(err.message).toMatchSnapshot();

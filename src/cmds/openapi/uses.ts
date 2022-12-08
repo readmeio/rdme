@@ -93,6 +93,12 @@ export default class OpenAPIUsesCommand extends Command {
       if (feature in analysis.openapi) {
         const info = analysis.openapi[feature as keyof Analysis['openapi']];
         if (!info.present) {
+          // If our last report entry was an unused feature we should add an empty line in the
+          // report to give everything some room to breathe.
+          if (report.length && report[report.length - 1].length) {
+            report.push('');
+          }
+
           report.push(`${feature}: You do not use this.`);
           hasUnusedFeature = true;
         } else {
@@ -104,8 +110,9 @@ export default class OpenAPIUsesCommand extends Command {
     });
 
     if (features.includes('readme')) {
-      // Add some spacing between our OpenAPI and ReadMe extension reports.
-      if (features.length > 1) {
+      // Add some spacing between our OpenAPI and ReadMe extension reports (but only if our last
+      // entry wasn't an empty line).
+      if (features.length > 1 && report[report.length - 1].length) {
         report.push('');
       }
 
@@ -114,9 +121,9 @@ export default class OpenAPIUsesCommand extends Command {
           report.push(`${feature}: You do not use this.`);
           hasUnusedFeature = true;
         } else {
-          report.push('');
           report.push(`${feature}:`);
           report.push(...(info.locations as string[]).map(loc => ` · ${chalk.yellow(loc)}`));
+          report.push('');
         }
       });
     }
@@ -147,8 +154,11 @@ export default class OpenAPIUsesCommand extends Command {
       let msg: string;
 
       if (Array.isArray(info.found)) {
-        const highlightedData = info.found.map(d => chalk.yellow(d));
+        if (!info.found.length) {
+          return;
+        }
 
+        const highlightedData = info.found.map(d => chalk.yellow(d));
         if (info.found.length > 1) {
           msg = `You are using ${chalk.bold(info.found.length)} ${pluralize(
             info.name,
