@@ -182,7 +182,7 @@ export default class OpenAPIUsesCommand extends Command {
     // Build out a view of all OpenAPI and ReadMe features that we discovered.
     [
       { component: 'openapi', header: 'OpenAPI Features' },
-      { component: 'readme', header: 'ReadMe-specific Features and Extensions' },
+      { component: 'readme', header: 'ReadMe-Specific Features and Extensions' },
     ].forEach(({ component, header }: { component: 'openapi' | 'readme'; header: string }) => {
       const tableData: string[][] = [
         [chalk.bold.green('Feature'), chalk.bold.green('Used?'), chalk.bold.green('Description')],
