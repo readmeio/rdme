@@ -28,7 +28,7 @@ exports[`#analyzeOas should analyze an OpenAPI definition 1`] = `
     "additionalProperties": {
       "description": "additionalProperties allows you to document dictionaries where the keys are user-supplied strings.",
       "locations": [
-        "/paths/~1store~1inventory/get/responses/200/content/application~1json/schema/additionalProperties",
+        "#/paths/~1store~1inventory/get/responses/200/content/application~1json/schema/additionalProperties",
       ],
       "present": true,
       "url": {
@@ -106,20 +106,20 @@ exports[`#analyzeOas should analyze an OpenAPI definition 1`] = `
     "xml": {
       "description": "Any parameter and/or request body that accepts XML or responses that return XML payloads.",
       "locations": [
-        "/components/schemas/Category",
-        "/components/schemas/Order",
-        "/components/schemas/Pet",
-        "/components/schemas/Pet/properties/photoUrls",
-        "/components/schemas/Pet/properties/tags",
-        "/components/schemas/Tag",
-        "/components/schemas/User",
-        "/paths/~1pet~1findByStatus/get/responses/200/content/application~1xml",
-        "/paths/~1pet~1findByTags/get/responses/200/content/application~1xml",
-        "/paths/~1pet~1{petId}/get/responses/200/content/application~1xml",
-        "/paths/~1store~1order/post/responses/200/content/application~1xml",
-        "/paths/~1store~1order~1{orderId}/get/responses/200/content/application~1xml",
-        "/paths/~1user~1login/get/responses/200/content/application~1xml",
-        "/paths/~1user~1{username}/get/responses/200/content/application~1xml",
+        "#/components/schemas/Category",
+        "#/components/schemas/Order",
+        "#/components/schemas/Pet",
+        "#/components/schemas/Pet/properties/photoUrls",
+        "#/components/schemas/Pet/properties/tags",
+        "#/components/schemas/Tag",
+        "#/components/schemas/User",
+        "#/paths/~1pet~1findByStatus/get/responses/200/content/application~1xml",
+        "#/paths/~1pet~1findByTags/get/responses/200/content/application~1xml",
+        "#/paths/~1pet~1{petId}/get/responses/200/content/application~1xml",
+        "#/paths/~1store~1order/post/responses/200/content/application~1xml",
+        "#/paths/~1store~1order~1{orderId}/get/responses/200/content/application~1xml",
+        "#/paths/~1user~1login/get/responses/200/content/application~1xml",
+        "#/paths/~1user~1{username}/get/responses/200/content/application~1xml",
       ],
       "present": true,
       "url": {
@@ -129,9 +129,6 @@ exports[`#analyzeOas should analyze an OpenAPI definition 1`] = `
     },
   },
   "readme": {
-    "raw_body": {
-      "description": "The RAW_BODY property allows you to define that a request body should have its payload delivered as a raw string. This legacy feature is specific to our Manual API editor and we don't recommend you use it outside of that context, instead opting for a traditional \`type: string, format: blob\` schema definition.",
-    },
     "x-default": {
       "description": "The x-default extension allows you to define static authentication credential defaults for OAuth 2 and API Key security types.",
       "locations": [],
@@ -161,10 +158,6 @@ exports[`#analyzeOas should analyze an OpenAPI definition 1`] = `
       "locations": [],
       "present": false,
       "url": "https://docs.readme.com/main/docs/openapi-extensions#cors-proxy-enabled",
-    },
-    "x-readme.samples-enabled": {
-      "description": "The x-readme.samples-enabled extension allowed you to disable code samples on specific endpoints. It is no longer supported and can be safely removed from your API definition.",
-      "url": "https://docs.readme.com/main/docs/openapi-extensions#disable-code-examples",
     },
     "x-readme.samples-languages": {
       "description": "The x-readme.samples-languages extension allows you to toggle what languages are shown by default for code snippets in your API documentation.",

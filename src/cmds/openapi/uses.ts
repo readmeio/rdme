@@ -11,6 +11,7 @@ import analyzeOas, { getSupportedFeatures } from '../../lib/analyzeOas';
 import Command, { CommandCategories } from '../../lib/baseCommand';
 import { oraOptions } from '../../lib/logger';
 import prepareOas from '../../lib/prepareOas';
+import SoftError from '../../lib/softError';
 
 export type Options = {
   spec?: string;
@@ -47,7 +48,7 @@ export default class OpenAPIUsesCommand extends Command {
       {
         name: 'feature',
         type: String,
-        description: `A specific OpenAPI or ReadMe feature you wish to see detailed information on (if it exists). Available options: ${new Intl.ListFormat(
+        description: `A specific OpenAPI or ReadMe feature you wish to see detailed information on (if it exists). If any features supplied do not exist within the API definition an exit(1) code will be returned alongside the report.\n\nAvailable options: ${new Intl.ListFormat(
           'en',
           { style: 'narrow' }
         ).format(getSupportedFeatures())}`,
@@ -82,26 +83,36 @@ export default class OpenAPIUsesCommand extends Command {
 
   // eslint-disable-next-line class-methods-use-this
   buildFeaturesReport(analysis: Analysis, features: string[]) {
-    const report: string[] = [''];
+    let hasUnusedFeature = false;
+    const report: string[] = [
+      // Minor bit of padding between the top of our report and the "analyzing your spec" messaging.
+      '',
+    ];
 
     features.forEach(feature => {
       if (feature in analysis.openapi) {
         const info = analysis.openapi[feature as keyof Analysis['openapi']];
         if (!info.present) {
           report.push(`${feature}: You do not use this.`);
+          hasUnusedFeature = true;
         } else {
           report.push('');
           report.push(`${feature}:`);
           report.push(...(info.locations as string[]).map(loc => ` · ${chalk.yellow(loc)}`));
-          report.push('');
         }
       }
     });
 
     if (features.includes('readme')) {
+      // Add some spacing between our OpenAPI and ReadMe extension reports.
+      if (features.length > 1) {
+        report.push('');
+      }
+
       Object.entries(analysis.readme).forEach(([feature, info]) => {
         if (!info.present) {
           report.push(`${feature}: You do not use this.`);
+          hasUnusedFeature = true;
         } else {
           report.push('');
           report.push(`${feature}:`);
@@ -122,7 +133,10 @@ export default class OpenAPIUsesCommand extends Command {
       report.pop();
     }
 
-    return report.join('\n');
+    return {
+      report: report.join('\n'),
+      hasUnusedFeature,
+    };
   }
 
   buildFullReport(analysis: Analysis) {
@@ -243,7 +257,14 @@ export default class OpenAPIUsesCommand extends Command {
     spinner.succeed(`${spinner.text} done! ✅`);
 
     if (features) {
-      return Promise.resolve(this.buildFeaturesReport(analysis, features));
+      const { report, hasUnusedFeature } = this.buildFeaturesReport(analysis, features);
+      if (hasUnusedFeature) {
+        // If we have any unused features we should reject the command with a soft error so we
+        // output the report as normal but return a `exit(1)` status code.
+        return Promise.reject(new SoftError(report));
+      }
+
+      return Promise.resolve(report);
     }
 
     return Promise.resolve(this.buildFullReport(analysis));

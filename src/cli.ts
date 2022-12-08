@@ -18,6 +18,14 @@ rdme(process.argv.slice(2))
     return process.exit(0);
   })
   .catch((err: Error) => {
+    // If this is a soft error then we should output the result as a regular log but exit the CLI
+    // with an error status code.
+    if (err.name === 'SoftError') {
+      // eslint-disable-next-line no-console
+      console.log(err.message);
+      return process.exit(1);
+    }
+
     let message = `Yikes, something went wrong! Please try again and if the problem persists, get in touch with our support team at ${chalk.underline(
       'support@readme.io'
     )}.`;

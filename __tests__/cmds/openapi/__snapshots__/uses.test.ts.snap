@@ -1,0 +1,184 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`rdme openapi:uses feature reports should generate a report for only readme features 1`] = `
+"
+x-default: You do not use this.
+
+x-readme.code-samples:
+ · #/paths/~1x-code-samples/get/x-code-samples
+ · #/paths/~1x-code-samples/post/x-readme/code-samples
+
+x-readme.headers:
+ · #/paths/~1x-headers/patch/x-headers
+ · #/paths/~1x-headers/post/x-readme/headers
+
+x-readme.explorer-enabled:
+ · #/paths/~1x-explorer-enabled/patch
+ · #/paths/~1x-explorer-enabled/post
+
+x-readme.proxy-enabled:
+ · #/paths/~1x-proxy-enabled/patch
+ · #/paths/~1x-proxy-enabled/post
+
+x-readme.samples-languages:
+ · swift"
+`;
+
+exports[`rdme openapi:uses feature reports should generate a report for some openapi features 1`] = `
+"
+additionalProperties:
+ · #/components/schemas/BodyPart/properties/headers/additionalProperties
+ · #/components/schemas/BodyPart/properties/mediaType/properties/parameters/additionalProperties
+ · #/components/schemas/BodyPart/properties/parameterizedHeaders/additionalProperties
+ · #/components/schemas/ContentDisposition/properties/parameters/additionalProperties
+ · #/components/schemas/FormDataBodyPart/properties/headers/additionalProperties
+ · #/components/schemas/FormDataBodyPart/properties/mediaType/properties/parameters/additionalProperties
+ · #/components/schemas/FormDataBodyPart/properties/parameterizedHeaders/additionalProperties
+ · #/components/schemas/FormDataContentDisposition/properties/parameters/additionalProperties
+ · #/components/schemas/MultiPart/properties/headers/additionalProperties
+ · #/components/schemas/MultiPart/properties/mediaType/properties/parameters/additionalProperties
+ · #/components/schemas/MultiPart/properties/parameterizedHeaders/additionalProperties
+ · #/components/schemas/ParameterizedHeader/properties/parameters/additionalProperties
+
+circularRefs:
+ · #/components/schemas/MultiPart/properties/parent
+ · #/components/schemas/ZoneOffset/properties/rules"
+`;
+
+exports[`rdme openapi:uses feature reports should generate a report with mixed features 1`] = `
+"
+additionalProperties:
+ · #/components/schemas/BodyPart/properties/headers/additionalProperties
+ · #/components/schemas/BodyPart/properties/mediaType/properties/parameters/additionalProperties
+ · #/components/schemas/BodyPart/properties/parameterizedHeaders/additionalProperties
+ · #/components/schemas/ContentDisposition/properties/parameters/additionalProperties
+ · #/components/schemas/FormDataBodyPart/properties/headers/additionalProperties
+ · #/components/schemas/FormDataBodyPart/properties/mediaType/properties/parameters/additionalProperties
+ · #/components/schemas/FormDataBodyPart/properties/parameterizedHeaders/additionalProperties
+ · #/components/schemas/FormDataContentDisposition/properties/parameters/additionalProperties
+ · #/components/schemas/MultiPart/properties/headers/additionalProperties
+ · #/components/schemas/MultiPart/properties/mediaType/properties/parameters/additionalProperties
+ · #/components/schemas/MultiPart/properties/parameterizedHeaders/additionalProperties
+ · #/components/schemas/ParameterizedHeader/properties/parameters/additionalProperties
+
+circularRefs:
+ · #/components/schemas/MultiPart/properties/parent
+ · #/components/schemas/ZoneOffset/properties/rules
+
+x-default: You do not use this.
+x-readme.code-samples: You do not use this.
+x-readme.headers: You do not use this.
+x-readme.explorer-enabled: You do not use this.
+x-readme.proxy-enabled: You do not use this.
+x-readme.samples-languages: You do not use this."
+`;
+
+exports[`rdme openapi:uses should analyze a given spec and generate a full report 1`] = `
+"Here are some interesting things we found in your API defintion. 🕵️
+
+ · You are using 4 Media Types throughout your API: application/json, application/x-www-form-urlencoded, application/xml, and multipart/form-data
+ · You have a total of 20 Operations in your API.
+ · You are using 2 Security Types throughout your API: apiKey and oauth2
+
+OpenAPI Features
+┌──────────────────────┬───────┬──────────────────────────────────────────────────────────────────────────────────┐
+│ Feature              │ Used? │ Description                                                                      │
+├──────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
+│ additionalProperties │ ✅    │ additionalProperties allows you to document dictionaries where the keys are      │
+│                      │       │ user-supplied strings.                                                           │
+│                      │       │                                                                                  │
+│                      │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#schema- │
+│                      │       │ object                                                                           │
+├──────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
+│ callbacks            │       │ Callbacks are asynchronous, out-of-band requests that your service will send to  │
+│                      │       │ some other service in response to certain events.                                │
+│                      │       │                                                                                  │
+│                      │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.           │
+│                      │       │ md#callback-object                                                               │
+├──────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
+│ circularRefs         │       │ Circular references are $ref pointers that at some point in their lineage        │
+│                      │       │ reference themselves.                                                            │
+├──────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
+│ discriminators       │       │ With schemas that can be, or contain, different shapes, discriminators help you  │
+│                      │       │ assist your users in identifying and determining the kind of shape they can      │
+│                      │       │ supply or receive.                                                               │
+│                      │       │                                                                                  │
+│                      │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.           │
+│                      │       │ md#discriminator-object                                                          │
+├──────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
+│ links                │       │ Links allow you to define at call-time relationships to other operations within  │
+│                      │       │ your API.                                                                        │
+│                      │       │                                                                                  │
+│                      │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#link-   │
+│                      │       │ object                                                                           │
+├──────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
+│ style                │       │ Parameter serialization (style) allows you to describe how the parameter should  │
+│                      │       │ be sent to your API.                                                             │
+│                      │       │                                                                                  │
+│                      │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.           │
+│                      │       │ md#parameter-style                                                               │
+├──────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
+│ polymorphism         │       │ Polymorphism (allOf, oneOf, and anyOf) allow you to describe schemas that may    │
+│                      │       │ contain either many different shapes, or a single shape containing multiple      │
+│                      │       │ different schemas.                                                               │
+│                      │       │                                                                                  │
+│                      │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#schema- │
+│                      │       │ object                                                                           │
+├──────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
+│ serverVariables      │       │ Server variables allow to do user-supplied variable subsitituions within your    │
+│                      │       │ API server URL.                                                                  │
+│                      │       │                                                                                  │
+│                      │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#server- │
+│                      │       │ variable-object                                                                  │
+├──────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
+│ webhooks             │       │ Webhooks allow you to describe out of band requests that may be initiated by     │
+│                      │       │ your users.                                                                      │
+│                      │       │                                                                                  │
+│                      │       │ [object Object]                                                                  │
+├──────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
+│ xml                  │ ✅    │ Any parameter and/or request body that accepts XML or responses that return XML  │
+│                      │       │ payloads.                                                                        │
+│                      │       │                                                                                  │
+│                      │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#xml-    │
+│                      │       │ object                                                                           │
+└──────────────────────┴───────┴──────────────────────────────────────────────────────────────────────────────────┘
+
+
+ReadMe-specific Features and Extensions
+┌────────────────────────────┬───────┬──────────────────────────────────────────────────────────────────────────────────┐
+│ Feature                    │ Used? │ Description                                                                      │
+├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
+│ x-default                  │       │ The x-default extension allows you to define static authentication credential    │
+│                            │       │ defaults for OAuth 2 and API Key security types.                                 │
+│                            │       │                                                                                  │
+│                            │       │ https://docs.readme.com/main/docs/openapi-extensions#authentication-defaults     │
+├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
+│ x-readme.code-samples      │       │ The x-readme.code-samples extension allows you to custom, create static code     │
+│                            │       │ samples on your API documentation.                                               │
+│                            │       │                                                                                  │
+│                            │       │ https://docs.readme.com/main/docs/openapi-extensions#custom-code-samples         │
+├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
+│ x-readme.headers           │       │ The x-readme.headers extension allows you define headers that should always be   │
+│                            │       │ present on your API or a specific operation, as well as what its value should    │
+│                            │       │ be.                                                                              │
+│                            │       │                                                                                  │
+│                            │       │ https://docs.readme.com/main/docs/openapi-extensions#static-headers              │
+├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
+│ x-readme.explorer-enabled  │       │ The x-readme.explorer-enabled extension allows you to toggle your API            │
+│                            │       │ documentation being interactive or not.                                          │
+│                            │       │                                                                                  │
+│                            │       │ https://docs.readme.com/main/docs/openapi-extensions#disable-the-api-explorer    │
+├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
+│ x-readme.proxy-enabled     │       │ The x-readme.proxy-enabled extension allows you to toggle if API requests from   │
+│                            │       │ API documentation should be routed through ReadMe's CORS Proxy. You should only  │
+│                            │       │ need to use this if your API does not support CORS.                              │
+│                            │       │                                                                                  │
+│                            │       │ https://docs.readme.com/main/docs/openapi-extensions#cors-proxy-enabled          │
+├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
+│ x-readme.samples-languages │       │ The x-readme.samples-languages extension allows you to toggle what languages are │
+│                            │       │ shown by default for code snippets in your API documentation.                    │
+│                            │       │                                                                                  │
+│                            │       │ https://docs.readme.com/main/docs/openapi-extensions#code-sample-languages       │
+└────────────────────────────┴───────┴──────────────────────────────────────────────────────────────────────────────────┘
+"
+`;
