@@ -19,7 +19,7 @@ export type Options = {
   feature?: string[];
 };
 
-export default class OpenAPIUsesCommand extends Command {
+export default class OpenAPIInspectCommand extends Command {
   definitionVersion: string;
 
   tableBorder: Record<string, string>;
@@ -27,8 +27,8 @@ export default class OpenAPIUsesCommand extends Command {
   constructor() {
     super();
 
-    this.command = 'openapi:uses';
-    this.usage = 'openapi:uses [file|url] [options]';
+    this.command = 'openapi:inspect';
+    this.usage = 'openapi:inspect [file|url] [options]';
     this.description = 'Analyze an OpenAPI/Swagger definition for various OpenAPI and ReadMe feature usage.';
     this.cmdCategory = CommandCategories.APIS;
     this.position = 4;
@@ -243,7 +243,7 @@ export default class OpenAPIUsesCommand extends Command {
       process.chdir(workingDirectory);
     }
 
-    const { bundledSpec, definitionVersion } = await prepareOas(spec, 'openapi:uses', { convertToLatest: true });
+    const { bundledSpec, definitionVersion } = await prepareOas(spec, 'openapi:inspect', { convertToLatest: true });
     this.definitionVersion = definitionVersion.version;
     const parsedBundledSpec = JSON.parse(bundledSpec);
 

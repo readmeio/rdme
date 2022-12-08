@@ -34,6 +34,12 @@ exports[`utils #listByCategory should list commands by category 1`] = `
         "position": 1,
       },
       {
+        "description": "Analyze an OpenAPI/Swagger definition for various OpenAPI and ReadMe feature usage.",
+        "hidden": false,
+        "name": "openapi:inspect",
+        "position": 4,
+      },
+      {
         "description": "Reduce an OpenAPI definition into a smaller subset.",
         "hidden": false,
         "name": "openapi:reduce",
@@ -44,12 +50,6 @@ exports[`utils #listByCategory should list commands by category 1`] = `
         "hidden": false,
         "name": "openapi:validate",
         "position": 3,
-      },
-      {
-        "description": "Analyze an OpenAPI/Swagger definition for various OpenAPI and ReadMe feature usage.",
-        "hidden": false,
-        "name": "openapi:uses",
-        "position": 4,
       },
       {
         "description": "Alias for \`rdme openapi\`. [deprecated]",

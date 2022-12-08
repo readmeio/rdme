@@ -35,7 +35,7 @@ const capitalizeSpecType = (type: string) =>
  */
 export default async function prepareOas(
   path: string,
-  command: 'openapi' | 'openapi:reduce' | 'openapi:uses' | 'openapi:validate',
+  command: 'openapi' | 'openapi:inspect' | 'openapi:reduce' | 'openapi:validate',
   opts: {
     /**
      * Optionally convert the supplied or discovered API definition to the latest OpenAPI release.
@@ -69,11 +69,6 @@ export default async function prepareOas(
     switch (command) {
       case 'openapi':
         action = 'upload';
-        break;
-      case 'openapi:uses':
-        // With the messaging that this utility generates, referring to this action as `inspect`
-        // and not `uses` makes more sense.
-        action = 'inspect';
         break;
       default:
         action = command.split(':')[1] as 'inspect' | 'reduce' | 'validate';
@@ -187,7 +182,7 @@ export default async function prepareOas(
 
   let bundledSpec = '';
 
-  if (['openapi', 'openapi:reduce', 'openapi:uses'].includes(command)) {
+  if (['openapi', 'openapi:inspect', 'openapi:reduce'].includes(command)) {
     bundledSpec = await oas.bundle().then(res => {
       return JSON.stringify(res);
     });

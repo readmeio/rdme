@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`rdme openapi:uses feature reports should generate a report for @readme/oas-examples/3.0/json/readme.json (w/ ["polymorphism"]) 1`] = `
+exports[`rdme openapi:inspect feature reports should generate a report for @readme/oas-examples/3.0/json/readme.json (w/ ["polymorphism"]) 1`] = `
 "
 polymorphism:
  · #/components/responses/authForbidden/content/application~1json/schema
@@ -48,7 +48,7 @@ polymorphism:
  · #/paths/~1version/post/responses/400/content/application~1json/schema"
 `;
 
-exports[`rdme openapi:uses feature reports should generate a report for @readme/oas-examples/3.0/json/readme-extensions.json (w/ ["readme"]) 1`] = `
+exports[`rdme openapi:inspect feature reports should generate a report for @readme/oas-examples/3.0/json/readme-extensions.json (w/ ["readme"]) 1`] = `
 "
 x-default: You do not use this.
 x-readme.code-samples:
@@ -71,7 +71,7 @@ x-readme.samples-languages:
  · swift"
 `;
 
-exports[`rdme openapi:uses feature reports should generate a report for @readme/oas-examples/3.0/json/schema-circular.json (w/ ["additionalProperties", "circularRefs", "readme"]) 1`] = `
+exports[`rdme openapi:inspect feature reports should generate a report for @readme/oas-examples/3.0/json/schema-circular.json (w/ ["additionalProperties", "circularRefs", "readme"]) 1`] = `
 "
 additionalProperties:
  · #/components/schemas/BodyPart/properties/headers/additionalProperties
@@ -99,7 +99,7 @@ x-readme.proxy-enabled: You do not use this.
 x-readme.samples-languages: You do not use this."
 `;
 
-exports[`rdme openapi:uses feature reports should generate a report for @readme/oas-examples/3.0/json/schema-circular.json (w/ ["additionalProperties", "circularRefs"]) 1`] = `
+exports[`rdme openapi:inspect feature reports should generate a report for @readme/oas-examples/3.0/json/schema-circular.json (w/ ["additionalProperties", "circularRefs"]) 1`] = `
 "
 additionalProperties:
  · #/components/schemas/BodyPart/properties/headers/additionalProperties
@@ -120,7 +120,7 @@ circularRefs:
  · #/components/schemas/ZoneOffset/properties/rules"
 `;
 
-exports[`rdme openapi:uses feature reports should generate a report for @readme/oas-examples/3.0/json/schema-circular.json (w/ ["circularRefs", "readme"]) 1`] = `
+exports[`rdme openapi:inspect feature reports should generate a report for @readme/oas-examples/3.0/json/schema-circular.json (w/ ["circularRefs", "readme"]) 1`] = `
 "
 circularRefs:
  · #/components/schemas/MultiPart/properties/parent
@@ -134,7 +134,7 @@ x-readme.proxy-enabled: You do not use this.
 x-readme.samples-languages: You do not use this."
 `;
 
-exports[`rdme openapi:uses full reports should generate a report for @readme/oas-examples/3.0/json/petstore.json 1`] = `
+exports[`rdme openapi:inspect full reports should generate a report for @readme/oas-examples/3.0/json/petstore.json 1`] = `
 "Here are some interesting things we found in your API defintion. 🕵️
 
  · You are using 4 Media Types throughout your API: application/json, application/x-www-form-urlencoded, application/xml, and multipart/form-data
@@ -244,7 +244,7 @@ ReadMe-Specific Features and Extensions
 "
 `;
 
-exports[`rdme openapi:uses full reports should generate a report for @readme/oas-examples/3.0/json/readme.json 1`] = `
+exports[`rdme openapi:inspect full reports should generate a report for @readme/oas-examples/3.0/json/readme.json 1`] = `
 "Here are some interesting things we found in your API defintion. 🕵️
 
  · You are using 2 Media Types throughout your API: application/json and multipart/form-data
@@ -354,7 +354,7 @@ ReadMe-Specific Features and Extensions
 "
 `;
 
-exports[`rdme openapi:uses full reports should generate a report for @readme/oas-examples/3.0/json/readme-extensions.json 1`] = `
+exports[`rdme openapi:inspect full reports should generate a report for @readme/oas-examples/3.0/json/readme-extensions.json 1`] = `
 "Here are some interesting things we found in your API defintion. 🕵️
 
  · You are using a single Media Type throughout your API: application/json

@@ -1,13 +1,13 @@
 /* eslint-disable jest/no-conditional-expect */
 import assert from 'assert';
 
-import OpenAPIUsesCommand from '../../../src/cmds/openapi/uses';
+import OpenAPIInspectCommand from '../../../src/cmds/openapi/inspect';
 
-const analyzer = new OpenAPIUsesCommand();
+const analyzer = new OpenAPIInspectCommand();
 
 const testWorkingDir = process.cwd();
 
-describe('rdme openapi:uses', () => {
+describe('rdme openapi:inspect', () => {
   afterEach(() => {
     process.chdir(testWorkingDir);
   });
@@ -35,7 +35,7 @@ describe('rdme openapi:uses', () => {
           spec,
           feature: ['style', 'reamde'],
         })
-      ).rejects.toThrow('Unknown features: reamde. See `rdme help openapi:uses` for help');
+      ).rejects.toThrow('Unknown features: reamde. See `rdme help openapi:inspect` for help');
     });
 
     const cases: { spec: string; feature: string[]; shouldSoftError?: true }[] = [
