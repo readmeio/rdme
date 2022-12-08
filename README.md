@@ -175,16 +175,16 @@ rdme openapi
 
 ##### Uploading a New API Definition to ReadMe
 
-This will upload `path-to-openapi.json` to your project and return an ID and URL for you to later update your file, and view it in the client.
+This will upload the API definition at the given URL or path to your project and return an ID and URL for you to later update your file, and view it in the client.
 
 ```sh
-rdme openapi [path-to-file.json]
+rdme openapi [url-or-local-path-to-file]
 ```
 
 If you want to bypass the prompt to create or update an API definition, you can pass the `--create` flag:
 
 ```sh
-rdme openapi [path-to-file.json] --version={project-version} --create
+rdme openapi [url-or-local-path-to-file] --version={project-version} --create
 ```
 
 ##### Editing (Re-Syncing) an Existing API Definition
@@ -192,7 +192,7 @@ rdme openapi [path-to-file.json] --version={project-version} --create
 This will edit (re-sync) an existing API definition (identified by `--id`) within your ReadMe project. **This is the recommended approach for usage in CI environments.**
 
 ```sh
-rdme openapi [path-to-file.json] --id={existing-id}
+rdme openapi [url-or-local-path-to-file] --id={existing-id}
 ```
 
 ##### Uploading or Editing an API Definition in a Project Version
@@ -200,7 +200,7 @@ rdme openapi [path-to-file.json] --id={existing-id}
 You can additionally include a version flag, specifying the target version for your file's destination. This approach will provide you with CLI prompts, so we do not recommend this technique in CI environments.
 
 ```sh
-rdme openapi [path-to-file.json] --version={project-version}
+rdme openapi [url-or-local-path-to-file] --version={project-version}
 ```
 
 If you wish to use the version specified [in the `info.version` field of your API definition](https://spec.openapis.org/oas/v3.1.0#fixed-fields-0), you can pass the `--useSpecVersion` option. For example, say [the `info` object](https://spec.openapis.org/oas/v3.1.0#info-object) of your API definition looks like this:
@@ -216,13 +216,13 @@ If you wish to use the version specified [in the `info.version` field of your AP
 You can pass in the `--useSpecVersion` option, which would be equivalent to passing in `--version=1.2.3`:
 
 ```sh
-rdme openapi [path-to-file.json] --useSpecVersion
+rdme openapi [url-or-local-path-to-file] --useSpecVersion
 ```
 
 You can add `--update` to the command so if there's only one API definition for the given project version to update, it will select it without any prompts:
 
 ```sh
-rdme openapi [path-to-file.json] --version={project-version} --update
+rdme openapi [url-or-local-path-to-file] --version={project-version} --update
 ```
 
 ##### Override the Working Directory
@@ -238,7 +238,7 @@ rdme openapi petstore.json --workingDirectory=[path to directory]
 You can also perform a local validation of your API definition (no ReadMe account required!), which can be useful when constructing or editing your API definition.
 
 ```sh
-rdme openapi:validate [path-to-file.json]
+rdme openapi:validate [url-or-local-path-to-file]
 ```
 
 Similar to the `openapi` command, you can also [omit the file path](#omitting-the-file-path).
@@ -248,7 +248,7 @@ Similar to the `openapi` command, you can also [omit the file path](#omitting-th
 We also offer a tool that allows you to reduce a large API definition down to a specific set of tags or paths (again, no ReadMe account required!). This can be useful if you're debugging a problematic schema somewhere, or if you have a file that is too big to maintain.
 
 ```sh
-rdme openapi:reduce [path-to-file.json]
+rdme openapi:reduce [url-or-local-path-to-file]
 ```
 
 The command will ask you a couple questions about how you wish to reduce the file and then do so. If you wish to automate this command, you can pass in CLI arguments to bypass the prompts. Here's an example use case:
