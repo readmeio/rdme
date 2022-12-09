@@ -92,7 +92,7 @@ describe('cli', () => {
     await expect(cli([])).resolves.toContain('OpenAPI / Swagger');
   });
 
-  describe('stored API key', () => {
+  describe('stored API key via configstore', () => {
     let consoleInfoSpy;
     const key = '123456';
     const getCommandOutput = () => {
@@ -100,8 +100,8 @@ describe('cli', () => {
     };
 
     beforeEach(() => {
-      conf.set('email', 'owlbert@readme.io');
-      conf.set('project', 'project-owlbert');
+      conf.set('email', 'owlbert-store@readme.io');
+      conf.set('project', 'project-owlbert-store');
       conf.set('apiKey', key);
       consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
     });
@@ -134,7 +134,7 @@ describe('cli', () => {
       );
 
       expect(getCommandOutput()).toMatch(
-        'owlbert@readme.io is currently logged in, using the stored API key for this project: project-owlbert'
+        'owlbert-store@readme.io is currently logged in, using the stored API key for this project: project-owlbert-store'
       );
     });
 
