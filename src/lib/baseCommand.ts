@@ -5,6 +5,7 @@ import type { OptionDefinition } from 'command-line-usage';
 
 import chalk from 'chalk';
 
+import configstore from './configstore';
 import getStoredConfig from './getStoredConfig';
 import isCI from './isCI';
 import { debug, info, warn } from './logger';
@@ -89,7 +90,9 @@ export default class Command {
 
     if (this.args.some(arg => arg.name === 'key')) {
       const { apiKey, email, project } = getStoredConfig();
-      if (opts.key && apiKey === opts.key) {
+
+      // We only want to log this if the API key is stored in the configstore, **not** in an env var.
+      if (opts.key && configstore.get('apiKey') === opts.key) {
         info(
           `🔑 ${chalk.green(email)} is currently logged in, using the stored API key for this project: ${chalk.blue(
             project

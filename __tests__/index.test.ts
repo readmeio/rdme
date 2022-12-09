@@ -185,14 +185,12 @@ describe('cli', () => {
       versionMock.done();
     });
 
-    it('should inform a logged in user which project is being updated', async () => {
+    it('should not inform a logged in user which project is being updated', async () => {
       await expect(cli(['openapi', '--create', '--update'])).rejects.toThrow(
         'The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!'
       );
 
-      expect(getCommandOutput()).toMatch(
-        'owlbert-env@readme.io is currently logged in, using the stored API key for this project: project-owlbert-env'
-      );
+      expect(getCommandOutput()).toBe('');
     });
 
     it('should not inform a logged in user when they pass their own key', async () => {
