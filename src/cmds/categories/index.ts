@@ -12,7 +12,6 @@ export default class CategoriesCommand extends Command {
     this.usage = 'categories [options]';
     this.description = 'Get all categories in your ReadMe project.';
     this.cmdCategory = CommandCategories.CATEGORIES;
-    this.position = 1;
 
     this.args = [this.getKeyArg(), this.getVersionArg()];
   }

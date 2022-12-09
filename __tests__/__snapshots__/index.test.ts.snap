@@ -30,10 +30,10 @@ Options
 
 Related commands
 
-  $ rdme openapi:reduce     Reduce an OpenAPI definition into a smaller subset.                     
-  $ rdme openapi:validate   Validate your OpenAPI/Swagger definition.                               
   $ rdme openapi:inspect    Analyze an OpenAPI/Swagger definition for various OpenAPI and ReadMe    
                             feature usage.                                                          
+  $ rdme openapi:reduce     Reduce an OpenAPI definition into a smaller subset.                     
+  $ rdme openapi:validate   Validate your OpenAPI/Swagger definition.                               
 "
 `;
 
@@ -67,10 +67,10 @@ Options
 
 Related commands
 
-  $ rdme openapi:reduce     Reduce an OpenAPI definition into a smaller subset.                     
-  $ rdme openapi:validate   Validate your OpenAPI/Swagger definition.                               
   $ rdme openapi:inspect    Analyze an OpenAPI/Swagger definition for various OpenAPI and ReadMe    
                             feature usage.                                                          
+  $ rdme openapi:reduce     Reduce an OpenAPI definition into a smaller subset.                     
+  $ rdme openapi:validate   Validate your OpenAPI/Swagger definition.                               
 "
 `;
 
@@ -104,10 +104,10 @@ Options
 
 Related commands
 
-  $ rdme openapi:reduce     Reduce an OpenAPI definition into a smaller subset.                     
-  $ rdme openapi:validate   Validate your OpenAPI/Swagger definition.                               
   $ rdme openapi:inspect    Analyze an OpenAPI/Swagger definition for various OpenAPI and ReadMe    
                             feature usage.                                                          
+  $ rdme openapi:reduce     Reduce an OpenAPI definition into a smaller subset.                     
+  $ rdme openapi:validate   Validate your OpenAPI/Swagger definition.                               
 "
 `;
 
@@ -128,7 +128,7 @@ Options
 Related commands
 
   $ rdme versions:create   Create a new version for your project.                
-  $ rdme versions:update   Update an existing version for your project.          
   $ rdme versions:delete   Delete a version associated with your ReadMe project. 
+  $ rdme versions:update   Update an existing version for your project.          
 "
 `;

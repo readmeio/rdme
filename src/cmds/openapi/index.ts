@@ -37,7 +37,6 @@ export default class OpenAPICommand extends Command {
     this.usage = 'openapi [file|url] [options]';
     this.description = 'Upload, or resync, your OpenAPI/Swagger definition to ReadMe.';
     this.cmdCategory = CommandCategories.APIS;
-    this.position = 1;
 
     this.hiddenArgs = ['spec'];
     this.args = [

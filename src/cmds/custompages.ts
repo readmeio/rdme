@@ -19,7 +19,6 @@ export default class CustomPagesCommand extends Command {
     this.description =
       'Sync Markdown/HTML files to your ReadMe project as Custom Pages. Can either be a path to a directory or a single Markdown/HTML file.';
     this.cmdCategory = CommandCategories.CUSTOM_PAGES;
-    this.position = 1;
 
     this.hiddenArgs = ['filePath'];
     this.args = [

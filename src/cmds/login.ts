@@ -17,7 +17,6 @@ export default class LoginCommand extends Command {
     this.usage = 'login [options]';
     this.description = 'Login to a ReadMe project.';
     this.cmdCategory = CommandCategories.ADMIN;
-    this.position = 1;
 
     this.args = [
       {

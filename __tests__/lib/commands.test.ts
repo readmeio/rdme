@@ -22,7 +22,6 @@ describe('utils', () => {
           expect(cmd.usage).toStartWith(cmd.command);
           expect(cmd.description).not.toBeEmpty();
           expect(cmd.cmdCategory).not.toBeEmpty();
-          expect(cmd.position).toBeNumber();
           expect(cmd.args).toBeArray();
           expect(cmd.run).toBeFunction();
 
@@ -36,7 +35,7 @@ describe('utils', () => {
       });
 
       describe('cli standards', () => {
-        describe.each<[string, Command]>(commands.list().map(cmd => [cmd.command.command, cmd.command]))(
+        describe.each<[string, Command]>(commands.list().map(cmd => [cmd.command.command, cmd.command as Command]))(
           '%s',
           (_, command) => {
             it('should have a description that ends with punctuation', () => {
@@ -94,13 +93,11 @@ describe('utils', () => {
         {
           name: 'logout',
           description: 'Logs the currently authenticated user out of ReadMe.',
-          position: 2,
           hidden: false,
         },
         {
           name: 'whoami',
           description: 'Displays the current user and project authenticated with ReadMe.',
-          position: 3,
           hidden: false,
         },
       ]);

@@ -28,7 +28,6 @@ export default class CategoriesCreateCommand extends Command {
     this.usage = 'categories:create <title> [options]';
     this.description = 'Create a category with the specified title and guide in your ReadMe project.';
     this.cmdCategory = CommandCategories.CATEGORIES;
-    this.position = 2;
 
     this.hiddenArgs = ['title'];
     this.args = [

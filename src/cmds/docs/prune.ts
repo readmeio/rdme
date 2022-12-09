@@ -32,7 +32,6 @@ export default class DocsPruneCommand extends Command {
     this.usage = 'docs:prune <folder> [options]';
     this.description = 'Delete any docs from ReadMe if their slugs are not found in the target folder.';
     this.cmdCategory = CommandCategories.DOCS;
-    this.position = 2;
 
     this.hiddenArgs = ['folder'];
     this.args = [

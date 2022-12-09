@@ -19,7 +19,6 @@ export default class DocsCommand extends Command {
     this.description =
       'Sync Markdown files to your ReadMe project as Guides. Can either be a path to a directory or a single Markdown file.';
     this.cmdCategory = CommandCategories.DOCS;
-    this.position = 1;
 
     this.hiddenArgs = ['filePath'];
     this.args = [

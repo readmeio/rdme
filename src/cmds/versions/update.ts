@@ -24,7 +24,6 @@ export default class UpdateVersionCommand extends Command {
     this.usage = 'versions:update <version> [options]';
     this.description = 'Update an existing version for your project.';
     this.cmdCategory = CommandCategories.VERSIONS;
-    this.position = 3;
 
     this.hiddenArgs = ['version'];
     this.args = [

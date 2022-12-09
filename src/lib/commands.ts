@@ -9,7 +9,6 @@ export function getCategories(): Record<
     commands: {
       name: string;
       description: string;
-      position: number;
       hidden: boolean;
     }[];
   }
@@ -74,7 +73,6 @@ export function listByCategory() {
     categories[c.command.cmdCategory].commands.push({
       name: c.command.command,
       description: c.command.description,
-      position: c.command.position,
       hidden: c.command.hidden,
     });
   });

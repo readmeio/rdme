@@ -14,7 +14,6 @@ export default class WhoAmICommand extends Command {
     this.usage = 'whoami';
     this.description = 'Displays the current user and project authenticated with ReadMe.';
     this.cmdCategory = CommandCategories.ADMIN;
-    this.position = 3;
 
     this.args = [];
   }

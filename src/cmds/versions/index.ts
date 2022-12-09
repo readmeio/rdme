@@ -24,7 +24,6 @@ export default class VersionsCommand extends Command {
     this.usage = 'versions [options]';
     this.description = 'List versions available in your project or get a version by SemVer (https://semver.org/).';
     this.cmdCategory = CommandCategories.VERSIONS;
-    this.position = 1;
 
     this.args = [
       this.getKeyArg(),
