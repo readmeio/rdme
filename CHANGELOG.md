@@ -1,3 +1,12 @@
+## 8.3.0 (2022-12-09)
+
+* feat: ability to pass in API key via env vars (#709) ([16216d1](https://github.com/readmeio/rdme/commit/16216d1)), closes [#709](https://github.com/readmeio/rdme/issues/709) [/github.com/readmeio/rdme/pull/709#discussion_r1044732645](https://github.com//github.com/readmeio/rdme/pull/709/issues/discussion_r1044732645) [/github.com/readmeio/rdme/pull/709#discussion_r1044737648](https://github.com//github.com/readmeio/rdme/pull/709/issues/discussion_r1044737648)
+* feat: dropping our `position` system for ordering commands in `--help` (#707) ([75aaba2](https://github.com/readmeio/rdme/commit/75aaba2)), closes [#707](https://github.com/readmeio/rdme/issues/707)
+* feat(openapi): introduction of a new `openapi:inspect` command (#698) ([daa5346](https://github.com/readmeio/rdme/commit/daa5346)), closes [#698](https://github.com/readmeio/rdme/issues/698) [#706](https://github.com/readmeio/rdme/issues/706)
+* chore(deps-dev): bumping dev deps and resolving type -> interface conversions (#708) ([971316a](https://github.com/readmeio/rdme/commit/971316a)), closes [#708](https://github.com/readmeio/rdme/issues/708)
+
+
+
 ## <small>8.2.1 (2022-12-07)</small>
 
 * fix(createGHA): git remote connection errors (#705) ([18f5468](https://github.com/readmeio/rdme/commit/18f5468)), closes [#705](https://github.com/readmeio/rdme/issues/705) [/github.com/readmeio/rdme/pull/705#discussion_r1042466669](https://github.com//github.com/readmeio/rdme/pull/705/issues/discussion_r1042466669)
