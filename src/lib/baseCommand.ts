@@ -89,7 +89,7 @@ export default class Command {
     Command.debug(`opts: ${JSON.stringify(opts)}`);
 
     if (this.args.some(arg => arg.name === 'key')) {
-      const { email, project } = getStoredConfig();
+      const { apiKey, email, project } = getStoredConfig();
 
       // We only want to log this if the API key is stored in the configstore, **not** in an env var.
       if (opts.key && configstore.get('apiKey') === opts.key) {
@@ -108,9 +108,8 @@ export default class Command {
         info("Looks like you're missing a ReadMe API key, let's fix that! 🦉", { includeEmojiPrefix: false });
         const result = await loginFlow();
         info(result, { includeEmojiPrefix: false });
-        // if someone is logging in, we want to grab the value from the stored config, not the env
         // eslint-disable-next-line no-param-reassign
-        opts.key = configstore.get('apiKey');
+        opts.key = apiKey;
       }
     }
 
