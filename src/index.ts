@@ -21,12 +21,12 @@ process.env.NODE_CONFIG_DIR = configDir;
 import { version } from '../package.json';
 
 import * as commands from './lib/commands';
-import configStore from './lib/configstore';
 import * as help from './lib/help';
 import { debug } from './lib/logger';
 import createGHA from './lib/createGHA';
 import type Command from './lib/baseCommand';
 import type { CommandOptions } from './lib/baseCommand';
+import getCurrentConfig from './lib/getCurrentConfig';
 
 /**
  * @param {Array} processArgv - An array of arguments from the current process. Can be used to mock
@@ -117,7 +117,9 @@ export default function rdme(processArgv: NodeJS.Process['argv']) {
       cmdArgv = cliArgs(bin.args, { partial: true, argv: processArgv.slice(1) });
     }
 
-    cmdArgv = { key: configStore.get('apiKey'), ...cmdArgv };
+    const { apiKey: key } = getCurrentConfig();
+
+    cmdArgv = { key, ...cmdArgv };
 
     return bin.run(cmdArgv).then((msg: string) => {
       if (bin.supportsGHA) {

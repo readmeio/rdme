@@ -4,7 +4,7 @@ import chalk from 'chalk';
 import config from 'config';
 
 import Command, { CommandCategories } from '../lib/baseCommand';
-import configStore from '../lib/configstore';
+import getCurrentConfig from '../lib/getCurrentConfig';
 
 export default class WhoAmICommand extends Command {
   constructor() {
@@ -21,14 +21,14 @@ export default class WhoAmICommand extends Command {
   async run(opts: CommandOptions<{}>) {
     await super.run(opts);
 
-    if (!configStore.has('email') || !configStore.has('project')) {
+    const { email, project } = getCurrentConfig();
+
+    if (!email || !project) {
       return Promise.reject(new Error(`Please login using \`${config.get('cli')} login\`.`));
     }
 
     return Promise.resolve(
-      `You are currently logged in as ${chalk.green(configStore.get('email'))} to the ${chalk.blue(
-        configStore.get('project')
-      )} project.`
+      `You are currently logged in as ${chalk.green(email)} to the ${chalk.blue(project)} project.`
     );
   }
 }

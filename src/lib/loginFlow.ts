@@ -4,6 +4,7 @@ import isEmail from 'validator/lib/isEmail';
 
 import configStore from './configstore';
 import fetch, { handleRes } from './fetch';
+import getCurrentConfig from './getCurrentConfig';
 import { debug } from './logger';
 import promptTerminal from './promptWrapper';
 
@@ -29,12 +30,13 @@ function loginFetch(body: LoginBody) {
  * @returns A Promise-wrapped string with the logged-in user's credentials
  */
 export default async function loginFlow() {
+  const storedConfig = getCurrentConfig();
   const { email, password, project } = await promptTerminal([
     {
       type: 'text',
       name: 'email',
       message: 'What is your email address?',
-      initial: configStore.get('email'),
+      initial: storedConfig.email,
       validate(val) {
         return isEmail(val) ? true : 'Please provide a valid email address.';
       },
@@ -48,7 +50,7 @@ export default async function loginFlow() {
       type: 'text',
       name: 'project',
       message: 'What project are you logging into?',
-      initial: configStore.get('project'),
+      initial: storedConfig.project,
     },
   ]);
 
