@@ -4,7 +4,7 @@ import isEmail from 'validator/lib/isEmail';
 
 import configStore from './configstore';
 import fetch, { handleRes } from './fetch';
-import getStoredConfig from './getStoredConfig';
+import getCurrentConfig from './getCurrentConfig';
 import { debug } from './logger';
 import promptTerminal from './promptWrapper';
 
@@ -30,7 +30,7 @@ function loginFetch(body: LoginBody) {
  * @returns A Promise-wrapped string with the logged-in user's credentials
  */
 export default async function loginFlow() {
-  const storedConfig = getStoredConfig();
+  const storedConfig = getCurrentConfig();
   const { email, password, project } = await promptTerminal([
     {
       type: 'text',

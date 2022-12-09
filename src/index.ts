@@ -26,7 +26,7 @@ import { debug } from './lib/logger';
 import createGHA from './lib/createGHA';
 import type Command from './lib/baseCommand';
 import type { CommandOptions } from './lib/baseCommand';
-import getStoredConfig from './lib/getStoredConfig';
+import getCurrentConfig from './lib/getCurrentConfig';
 
 /**
  * @param {Array} processArgv - An array of arguments from the current process. Can be used to mock
@@ -117,7 +117,7 @@ export default function rdme(processArgv: NodeJS.Process['argv']) {
       cmdArgv = cliArgs(bin.args, { partial: true, argv: processArgv.slice(1) });
     }
 
-    const { apiKey: key } = getStoredConfig();
+    const { apiKey: key } = getCurrentConfig();
 
     cmdArgv = { key, ...cmdArgv };
 

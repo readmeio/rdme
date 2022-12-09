@@ -5,7 +5,7 @@ import config from 'config';
 import open from 'open';
 
 import Command, { CommandCategories } from '../lib/baseCommand';
-import getStoredConfig from '../lib/getStoredConfig';
+import getCurrentConfig from '../lib/getCurrentConfig';
 import { getProjectVersion } from '../lib/versionSelect';
 
 export interface Options {
@@ -35,7 +35,7 @@ export default class OpenCommand extends Command {
     await super.run(opts);
 
     const { dash } = opts;
-    const { apiKey, project } = getStoredConfig();
+    const { apiKey, project } = getCurrentConfig();
     Command.debug(`project: ${project}`);
 
     if (!project) {
