@@ -108,8 +108,9 @@ export default class Command {
         info("Looks like you're missing a ReadMe API key, let's fix that! 🦉", { includeEmojiPrefix: false });
         const result = await loginFlow();
         info(result, { includeEmojiPrefix: false });
+        // if someone is logging in, we want to grab the value from the stored config, not the env
         // eslint-disable-next-line no-param-reassign
-        opts.key = apiKey;
+        opts.key = configstore.get('apiKey');
       }
     }
 
