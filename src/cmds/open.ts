@@ -5,7 +5,7 @@ import config from 'config';
 import open from 'open';
 
 import Command, { CommandCategories } from '../lib/baseCommand';
-import configStore from '../lib/configstore';
+import getStoredConfig from '../lib/getStoredConfig';
 import { getProjectVersion } from '../lib/versionSelect';
 
 export interface Options {
@@ -35,7 +35,7 @@ export default class OpenCommand extends Command {
     await super.run(opts);
 
     const { dash } = opts;
-    const project = configStore.get('project');
+    const { apiKey, project } = getStoredConfig();
     Command.debug(`project: ${project}`);
 
     if (!project) {
@@ -45,7 +45,7 @@ export default class OpenCommand extends Command {
     let url: string;
 
     if (dash) {
-      const key = configStore.get('apiKey');
+      const key = apiKey;
       if (!key) {
         return Promise.reject(new Error(`Please login using \`${config.get('cli')} login\`.`));
       }

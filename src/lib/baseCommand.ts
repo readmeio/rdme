@@ -5,7 +5,7 @@ import type { OptionDefinition } from 'command-line-usage';
 
 import chalk from 'chalk';
 
-import configstore from './configstore';
+import getStoredConfig from './getStoredConfig';
 import isCI from './isCI';
 import { debug, info, warn } from './logger';
 import loginFlow from './loginFlow';
@@ -88,12 +88,11 @@ export default class Command {
     Command.debug(`opts: ${JSON.stringify(opts)}`);
 
     if (this.args.some(arg => arg.name === 'key')) {
-      if (opts.key && configstore.get('apiKey') === opts.key) {
+      const { apiKey, email, project } = getStoredConfig();
+      if (opts.key && apiKey === opts.key) {
         info(
-          `🔑 ${chalk.green(
-            configstore.get('email')
-          )} is currently logged in, using the stored API key for this project: ${chalk.blue(
-            configstore.get('project')
+          `🔑 ${chalk.green(email)} is currently logged in, using the stored API key for this project: ${chalk.blue(
+            project
           )}`,
           { includeEmojiPrefix: false }
         );
@@ -107,7 +106,7 @@ export default class Command {
         const result = await loginFlow();
         info(result, { includeEmojiPrefix: false });
         // eslint-disable-next-line no-param-reassign
-        opts.key = configstore.get('apiKey');
+        opts.key = apiKey;
       }
     }
 
