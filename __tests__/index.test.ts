@@ -147,6 +147,63 @@ describe('cli', () => {
     });
   });
 
+  describe('stored API key via env vars', () => {
+    let consoleInfoSpy;
+    const key = '123456-env';
+    const getCommandOutput = () => {
+      return [consoleInfoSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
+    };
+
+    beforeEach(() => {
+      process.env.RDME_API_KEY = key;
+      process.env.RDME_EMAIL = 'owlbert-env@readme.io';
+      process.env.RDME_PROJECT = 'project-owlbert-env';
+      consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+    });
+
+    afterEach(() => {
+      consoleInfoSpy.mockRestore();
+      delete process.env.RDME_API_KEY;
+      delete process.env.RDME_EMAIL;
+      delete process.env.RDME_PROJECT;
+    });
+
+    it('should add stored apiKey to opts', async () => {
+      expect.assertions(1);
+      const version = '1.0.0';
+
+      const versionMock = getAPIMock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version });
+
+      await expect(cli(['docs', `--version=${version}`])).rejects.toStrictEqual(
+        new Error('No path provided. Usage `rdme docs <path> [options]`.')
+      );
+
+      conf.clear();
+      versionMock.done();
+    });
+
+    it('should inform a logged in user which project is being updated', async () => {
+      await expect(cli(['openapi', '--create', '--update'])).rejects.toThrow(
+        'The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!'
+      );
+
+      expect(getCommandOutput()).toMatch(
+        'owlbert-env@readme.io is currently logged in, using the stored API key for this project: project-owlbert-env'
+      );
+    });
+
+    it('should not inform a logged in user when they pass their own key', async () => {
+      await expect(cli(['openapi', '--create', '--update', '--key=asdf'])).rejects.toThrow(
+        'The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!'
+      );
+
+      expect(getCommandOutput()).toBe('');
+    });
+  });
+
   it('should error with `rdme oas` arguments passed in', async () => {
     await expect(cli(['oas', 'endpoint'])).rejects.toThrow(/.*/);
   });
