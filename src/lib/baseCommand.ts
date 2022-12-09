@@ -89,7 +89,7 @@ export default class Command {
     Command.debug(`opts: ${JSON.stringify(opts)}`);
 
     if (this.args.some(arg => arg.name === 'key')) {
-      const { apiKey, email, project } = getStoredConfig();
+      const { email, project } = getStoredConfig();
 
       // We only want to log this if the API key is stored in the configstore, **not** in an env var.
       if (opts.key && configstore.get('apiKey') === opts.key) {
