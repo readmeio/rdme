@@ -92,113 +92,115 @@ describe('cli', () => {
     await expect(cli([])).resolves.toContain('OpenAPI / Swagger');
   });
 
-  describe('stored API key via configstore', () => {
-    let consoleInfoSpy;
-    const key = '123456';
-    const getCommandOutput = () => {
-      return [consoleInfoSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
-    };
+  describe('stored API key', () => {
+    describe('stored API key via configstore', () => {
+      let consoleInfoSpy;
+      const key = '123456';
+      const getCommandOutput = () => {
+        return [consoleInfoSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
+      };
 
-    beforeEach(() => {
-      conf.set('email', 'owlbert-store@readme.io');
-      conf.set('project', 'project-owlbert-store');
-      conf.set('apiKey', key);
-      consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+      beforeEach(() => {
+        conf.set('email', 'owlbert-store@readme.io');
+        conf.set('project', 'project-owlbert-store');
+        conf.set('apiKey', key);
+        consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+      });
+
+      afterEach(() => {
+        consoleInfoSpy.mockRestore();
+        conf.clear();
+      });
+
+      it('should add stored apiKey to opts', async () => {
+        expect.assertions(1);
+        const version = '1.0.0';
+
+        const versionMock = getAPIMock()
+          .get(`/api/v1/version/${version}`)
+          .basicAuth({ user: key })
+          .reply(200, { version });
+
+        await expect(cli(['docs', `--version=${version}`])).rejects.toStrictEqual(
+          new Error('No path provided. Usage `rdme docs <path> [options]`.')
+        );
+
+        conf.clear();
+        versionMock.done();
+      });
+
+      it('should inform a logged in user which project is being updated', async () => {
+        await expect(cli(['openapi', '--create', '--update'])).rejects.toThrow(
+          'The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!'
+        );
+
+        expect(getCommandOutput()).toMatch(
+          'owlbert-store@readme.io is currently logged in, using the stored API key for this project: project-owlbert-store'
+        );
+      });
+
+      it('should not inform a logged in user when they pass their own key', async () => {
+        await expect(cli(['openapi', '--create', '--update', '--key=asdf'])).rejects.toThrow(
+          'The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!'
+        );
+
+        expect(getCommandOutput()).toBe('');
+      });
     });
 
-    afterEach(() => {
-      consoleInfoSpy.mockRestore();
-      conf.clear();
-    });
+    describe('stored API key via env vars', () => {
+      let consoleInfoSpy;
+      const key = '123456-env';
+      const getCommandOutput = () => {
+        return [consoleInfoSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
+      };
 
-    it('should add stored apiKey to opts', async () => {
-      expect.assertions(1);
-      const version = '1.0.0';
+      beforeEach(() => {
+        process.env.RDME_API_KEY = key;
+        process.env.RDME_EMAIL = 'owlbert-env@readme.io';
+        process.env.RDME_PROJECT = 'project-owlbert-env';
+        consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+      });
 
-      const versionMock = getAPIMock()
-        .get(`/api/v1/version/${version}`)
-        .basicAuth({ user: key })
-        .reply(200, { version });
+      afterEach(() => {
+        consoleInfoSpy.mockRestore();
+        delete process.env.RDME_API_KEY;
+        delete process.env.RDME_EMAIL;
+        delete process.env.RDME_PROJECT;
+      });
 
-      await expect(cli(['docs', `--version=${version}`])).rejects.toStrictEqual(
-        new Error('No path provided. Usage `rdme docs <path> [options]`.')
-      );
+      it('should add stored apiKey to opts', async () => {
+        expect.assertions(1);
+        const version = '1.0.0';
 
-      conf.clear();
-      versionMock.done();
-    });
+        const versionMock = getAPIMock()
+          .get(`/api/v1/version/${version}`)
+          .basicAuth({ user: key })
+          .reply(200, { version });
 
-    it('should inform a logged in user which project is being updated', async () => {
-      await expect(cli(['openapi', '--create', '--update'])).rejects.toThrow(
-        'The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!'
-      );
+        await expect(cli(['docs', `--version=${version}`])).rejects.toStrictEqual(
+          new Error('No path provided. Usage `rdme docs <path> [options]`.')
+        );
 
-      expect(getCommandOutput()).toMatch(
-        'owlbert-store@readme.io is currently logged in, using the stored API key for this project: project-owlbert-store'
-      );
-    });
+        conf.clear();
+        versionMock.done();
+      });
 
-    it('should not inform a logged in user when they pass their own key', async () => {
-      await expect(cli(['openapi', '--create', '--update', '--key=asdf'])).rejects.toThrow(
-        'The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!'
-      );
+      it('should not inform a logged in user which project is being updated', async () => {
+        await expect(cli(['openapi', '--create', '--update'])).rejects.toThrow(
+          'The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!'
+        );
 
-      expect(getCommandOutput()).toBe('');
-    });
-  });
+        expect(getCommandOutput()).toBe('');
+      });
 
-  describe('stored API key via env vars', () => {
-    let consoleInfoSpy;
-    const key = '123456-env';
-    const getCommandOutput = () => {
-      return [consoleInfoSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
-    };
+      it('should not inform a logged in user when they pass their own key', async () => {
+        await expect(cli(['openapi', '--create', '--update', '--key=asdf'])).rejects.toThrow(
+          'The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!'
+        );
 
-    beforeEach(() => {
-      process.env.RDME_API_KEY = key;
-      process.env.RDME_EMAIL = 'owlbert-env@readme.io';
-      process.env.RDME_PROJECT = 'project-owlbert-env';
-      consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
-    });
-
-    afterEach(() => {
-      consoleInfoSpy.mockRestore();
-      delete process.env.RDME_API_KEY;
-      delete process.env.RDME_EMAIL;
-      delete process.env.RDME_PROJECT;
-    });
-
-    it('should add stored apiKey to opts', async () => {
-      expect.assertions(1);
-      const version = '1.0.0';
-
-      const versionMock = getAPIMock()
-        .get(`/api/v1/version/${version}`)
-        .basicAuth({ user: key })
-        .reply(200, { version });
-
-      await expect(cli(['docs', `--version=${version}`])).rejects.toStrictEqual(
-        new Error('No path provided. Usage `rdme docs <path> [options]`.')
-      );
-
-      conf.clear();
-      versionMock.done();
-    });
-
-    it('should not inform a logged in user which project is being updated', async () => {
-      await expect(cli(['openapi', '--create', '--update'])).rejects.toThrow(
-        'The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!'
-      );
-
-      expect(getCommandOutput()).toBe('');
-    });
-
-    it('should not inform a logged in user when they pass their own key', async () => {
-      await expect(cli(['openapi', '--create', '--update', '--key=asdf'])).rejects.toThrow(
-        'The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!'
-      );
-
-      expect(getCommandOutput()).toBe('');
+        expect(getCommandOutput()).toBe('');
+      });
     });
   });
 
