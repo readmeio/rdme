@@ -7,12 +7,12 @@ import fetch, { handleRes } from './fetch';
 import { debug } from './logger';
 import promptTerminal from './promptWrapper';
 
-type LoginBody = {
+interface LoginBody {
   email?: string;
   password?: string;
   project?: string;
   token?: string;
-};
+}
 
 function loginFetch(body: LoginBody) {
   return fetch(`${config.get('host')}/api/v1/login`, {

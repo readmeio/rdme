@@ -5,9 +5,9 @@ import prompts from 'prompts';
 import Command, { CommandCategories } from '../lib/baseCommand';
 import loginFlow from '../lib/loginFlow';
 
-export type Options = {
+export interface Options {
   project?: string;
-};
+}
 
 export default class LoginCommand extends Command {
   constructor() {

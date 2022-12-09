@@ -15,14 +15,14 @@ import { oraOptions } from '../../lib/logger';
 import prepareOas from '../../lib/prepareOas';
 import promptTerminal from '../../lib/promptWrapper';
 
-export type Options = {
+export interface Options {
   spec?: string;
   tag?: string[];
   path?: string[];
   method?: string[];
   out?: string;
   workingDirectory?: string;
-};
+}
 
 export default class OpenAPIReduceCommand extends Command {
   constructor() {

@@ -1,6 +1,6 @@
 import type { Version } from '.';
 import type { CommandOptions } from '../../lib/baseCommand';
-import type { VersionBaseOptions } from './create';
+import type { CommonOptions } from './create';
 
 import config from 'config';
 import { Headers } from 'node-fetch';
@@ -11,7 +11,10 @@ import * as promptHandler from '../../lib/prompts';
 import promptTerminal from '../../lib/promptWrapper';
 import { getProjectVersion } from '../../lib/versionSelect';
 
-export type VersionUpdateOptions = { deprecated?: 'true' | 'false'; newVersion?: string } & VersionBaseOptions;
+export interface Options extends CommonOptions {
+  deprecated?: 'true' | 'false';
+  newVersion?: string;
+}
 
 export default class UpdateVersionCommand extends Command {
   constructor() {
@@ -45,7 +48,7 @@ export default class UpdateVersionCommand extends Command {
     ];
   }
 
-  async run(opts: CommandOptions<VersionUpdateOptions>) {
+  async run(opts: CommandOptions<Options>) {
     await super.run(opts);
 
     const { key, version, newVersion, codename, main, beta, isPublic, deprecated } = opts;

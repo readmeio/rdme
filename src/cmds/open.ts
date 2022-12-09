@@ -8,10 +8,10 @@ import Command, { CommandCategories } from '../lib/baseCommand';
 import configStore from '../lib/configstore';
 import { getProjectVersion } from '../lib/versionSelect';
 
-export type Options = {
+export interface Options {
   mockOpen?: (url: string) => Promise<void>;
   dash?: boolean;
-};
+}
 
 export default class OpenCommand extends Command {
   constructor() {

@@ -18,10 +18,10 @@ const writeFile = promisify(fs.writeFile);
 const readFile = promisify(fs.readFile);
 const unlink = promisify(fs.unlink);
 
-export type Options = {
+export interface Options {
   mockEditor?: (filename: string, cb: () => void) => void;
   slug?: string;
-};
+}
 
 @isHidden
 export default class DocsEditCommand extends Command {

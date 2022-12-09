@@ -10,14 +10,16 @@ import fetch, { cleanHeaders, handleRes } from '../../lib/fetch';
 import * as promptHandler from '../../lib/prompts';
 import promptTerminal from '../../lib/promptWrapper';
 
-export type VersionCreateOptions = { fork?: string } & VersionBaseOptions;
+export interface Options extends CommonOptions {
+  fork?: string;
+}
 
-export type VersionBaseOptions = {
+export interface CommonOptions {
   beta?: 'true' | 'false';
   codename?: string;
   isPublic?: 'true' | 'false';
   main?: 'true' | 'false';
-};
+}
 
 export default class CreateVersionCommand extends Command {
   constructor() {
@@ -46,7 +48,7 @@ export default class CreateVersionCommand extends Command {
     ];
   }
 
-  async run(opts: CommandOptions<VersionCreateOptions>) {
+  async run(opts: CommandOptions<Options>) {
     await super.run(opts);
 
     let versionList;

@@ -5,10 +5,10 @@ import createGHA from '../../lib/createGHA';
 import syncDocsPath from '../../lib/syncDocsPath';
 import { getProjectVersion } from '../../lib/versionSelect';
 
-export type Options = {
+export interface Options {
   dryRun?: boolean;
   filePath?: string;
-};
+}
 
 export default class DocsCommand extends Command {
   constructor() {

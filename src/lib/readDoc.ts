@@ -6,7 +6,7 @@ import grayMatter from 'gray-matter';
 
 import { debug } from './logger';
 
-type ReadDocMetadata = {
+interface ReadDocMetadata {
   /** The contents of the file below the YAML front matter */
   content: string;
   /** A JSON object with the YAML front matter */
@@ -18,7 +18,7 @@ type ReadDocMetadata = {
   hash: string;
   /** The page slug */
   slug: string;
-};
+}
 
 /**
  * Returns the content, matter and slug of the specified Markdown or HTML file

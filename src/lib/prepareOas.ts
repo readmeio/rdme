@@ -7,7 +7,7 @@ import { debug, info, oraOptions } from './logger';
 import promptTerminal from './promptWrapper';
 import readdirRecursive from './readdirRecursive';
 
-type FoundSpecFile = {
+interface FoundSpecFile {
   /** path to the spec file */
   filePath: string;
   specType: 'OpenAPI' | 'Swagger' | 'Postman';
@@ -16,11 +16,11 @@ type FoundSpecFile = {
    * @example '3.1'
    */
   version: string;
-};
+}
 
-type FileSelection = {
+interface FileSelection {
   file: string;
-};
+}
 
 const capitalizeSpecType = (type: string) =>
   type === 'openapi' ? 'OpenAPI' : type.charAt(0).toUpperCase() + type.slice(1);

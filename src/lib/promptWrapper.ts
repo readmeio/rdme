@@ -45,8 +45,6 @@ export default async function promptTerminal<T extends string = string>(
     // eslint-disable-next-line no-param-reassign
     questions = questions.map(question => ({ onRender, ...question }));
   } else {
-    // @ts-expect-error onRender is not a documented type,
-    // but it definitely is a thing: https://github.com/terkelg/prompts#onrender
     // eslint-disable-next-line no-param-reassign
     questions.onRender = onRender;
   }

@@ -6,10 +6,10 @@ import Command, { CommandCategories } from '../../lib/baseCommand';
 import createGHA from '../../lib/createGHA';
 import prepareOas from '../../lib/prepareOas';
 
-export type Options = {
+export interface Options {
   spec?: string;
   workingDirectory?: string;
-};
+}
 
 export default class OpenAPIValidateCommand extends Command {
   constructor() {

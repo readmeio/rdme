@@ -14,11 +14,11 @@ interface Category {
   type: string;
 }
 
-export type Options = {
+export interface Options {
   categoryType?: 'guide' | 'reference';
   title?: string;
   preventDuplicates?: boolean;
-};
+}
 
 export default class CategoriesCreateCommand extends Command {
   constructor() {
