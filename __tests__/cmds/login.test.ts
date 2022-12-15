@@ -63,6 +63,34 @@ describe('rdme login', () => {
     expect(configStore.get('project')).toBe(project);
   });
 
+  it('should bypass prompts and post to /login on the API if passing in every opt', async () => {
+    const mock = getAPIMock().post('/api/v1/login', { email, password, project, token }).reply(200, { apiKey });
+
+    await expect(cmd.run({ email, password, project, otp: token })).resolves.toBe(
+      'Successfully logged in as user@example.com to the subdomain project.'
+    );
+
+    mock.done();
+
+    expect(configStore.get('apiKey')).toBe(apiKey);
+    expect(configStore.get('email')).toBe(email);
+    expect(configStore.get('project')).toBe(project);
+  });
+
+  it('should bypass prompts and post to /login on the API if passing in every opt (no 2FA)', async () => {
+    const mock = getAPIMock().post('/api/v1/login', { email, password, project }).reply(200, { apiKey });
+
+    await expect(cmd.run({ email, password, project })).resolves.toBe(
+      'Successfully logged in as user@example.com to the subdomain project.'
+    );
+
+    mock.done();
+
+    expect(configStore.get('apiKey')).toBe(apiKey);
+    expect(configStore.get('email')).toBe(email);
+    expect(configStore.get('project')).toBe(project);
+  });
+
   it('should error if invalid credentials are given', async () => {
     prompts.inject([email, password, project]);
     const errorResponse = {
