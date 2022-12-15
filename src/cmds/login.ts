@@ -6,6 +6,9 @@ import Command, { CommandCategories } from '../lib/baseCommand';
 import loginFlow from '../lib/loginFlow';
 
 export interface Options {
+  email?: string;
+  password?: string;
+  otp?: string;
   project?: string;
 }
 
@@ -20,9 +23,24 @@ export default class LoginCommand extends Command {
 
     this.args = [
       {
+        name: 'email',
+        type: String,
+        description: 'Your email address',
+      },
+      {
+        name: 'password',
+        type: String,
+        description: 'Your password',
+      },
+      {
+        name: 'otp',
+        type: String,
+        description: 'Your one-time password (if you have two-factor authentication enabled)',
+      },
+      {
         name: 'project',
         type: String,
-        description: 'Project subdomain',
+        description: 'The subdomain of the project you wish to log into',
       },
     ];
   }
@@ -32,6 +50,6 @@ export default class LoginCommand extends Command {
 
     prompts.override(opts);
 
-    return loginFlow();
+    return loginFlow(opts.otp);
   }
 }

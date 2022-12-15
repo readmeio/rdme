@@ -27,9 +27,11 @@ function loginFetch(body: LoginBody) {
  * The prompt flow for logging a user in and writing the credentials to
  * `configstore`. This is a separate lib function because we reuse it both
  * in the `login` command as well as any time a user omits an API key.
+ * @param otp an optional one-time passcode, if the user passes one in
+ * via a flag to the the `login` command
  * @returns A Promise-wrapped string with the logged-in user's credentials
  */
-export default async function loginFlow() {
+export default async function loginFlow(otp?: string) {
   const storedConfig = getCurrentConfig();
   const { email, password, project } = await promptTerminal([
     {
@@ -62,19 +64,24 @@ export default async function loginFlow() {
     return Promise.reject(new Error('You must provide a valid email address.'));
   }
 
-  return loginFetch({ email, password, project })
+  const payload: LoginBody = { email, password, project };
+
+  // if the user passed in a `otp` option, include that in the login payload
+  if (otp) payload.token = otp;
+
+  return loginFetch(payload)
     .then(handleRes)
     .catch(async err => {
       // if the user's login requires 2FA, let's prompt them for the token!
       if (err.code === 'LOGIN_TWOFACTOR') {
         debug('2FA error response, prompting for 2FA code');
-        const { token } = await promptTerminal({
+        const otpPrompt = await promptTerminal({
           type: 'text',
-          name: 'token',
+          name: 'otp',
           message: 'What is your 2FA token?',
         });
 
-        return loginFetch({ email, password, project, token }).then(handleRes);
+        return loginFetch({ email, password, project, token: otpPrompt.otp }).then(handleRes);
       }
       throw err;
     })
