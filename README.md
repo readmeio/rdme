@@ -5,10 +5,10 @@
 </p>
 
 <p align="center">
-  <a href="https://npm.im/rdme"><img src="https://img.shields.io/npm/v/rdme.svg?style=for-the-badge" alt="NPM Version"></a>
-  <a href="https://npm.im/rdme"><img src="https://img.shields.io/node/v/rdme.svg?style=for-the-badge" alt="Node Version"></a>
-  <a href="https://npm.im/rdme"><img src="https://img.shields.io/npm/l/rdme.svg?style=for-the-badge" alt="MIT License"></a>
-  <a href="https://github.com/readmeio/rdme"><img src="https://img.shields.io/github/workflow/status/readmeio/rdme/CI.svg?style=for-the-badge" alt="Build status"></a>
+  <a href="https://npm.im/rdme"><img src="https://img.shields.io/npm/v/rdme?style=for-the-badge" alt="NPM Version"></a>
+  <a href="https://npm.im/rdme"><img src="https://img.shields.io/node/v/rdme?style=for-the-badge" alt="Node Version"></a>
+  <a href="https://npm.im/rdme"><img src="https://img.shields.io/npm/l/rdme?style=for-the-badge" alt="MIT License"></a>
+  <a href="https://github.com/readmeio/rdme"><img src="https://img.shields.io/github/actions/workflow/status/readmeio/rdme/ci.yml?branch=main&style=for-the-badge" alt="Build status"></a>
 </p>
 
 <p align="center">
