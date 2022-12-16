@@ -14,7 +14,17 @@ interface Document {
 }
 
 function flatten(data: Document[][]): Document[] {
-  return [].concat(...data);
+  const allDocs: Document[] = [];
+  const docs: Document[] = [].concat(...data);
+  docs.forEach(doc => {
+    allDocs.push(doc);
+    if (doc.children) {
+      doc.children.forEach(child => {
+        allDocs.push(child);
+      });
+    }
+  });
+  return allDocs;
 }
 
 async function getCategoryDocs(key: string, selectedVersion: string, category: string): Promise<Document[]> {
