@@ -1,3 +1,9 @@
+## <small>8.3.1-beta.0 (2022-12-16)</small>
+
+* feat(login): opts (#712) ([dcd53ac](https://github.com/readmeio/rdme/commit/dcd53ac)), closes [#712](https://github.com/readmeio/rdme/issues/712)
+
+
+
 ## 8.3.0 (2022-12-09)
 
 * feat: ability to pass in API key via env vars (#709) ([16216d1](https://github.com/readmeio/rdme/commit/16216d1)), closes [#709](https://github.com/readmeio/rdme/issues/709) [/github.com/readmeio/rdme/pull/709#discussion_r1044732645](https://github.com//github.com/readmeio/rdme/pull/709/issues/discussion_r1044732645) [/github.com/readmeio/rdme/pull/709#discussion_r1044737648](https://github.com//github.com/readmeio/rdme/pull/709/issues/discussion_r1044737648)
