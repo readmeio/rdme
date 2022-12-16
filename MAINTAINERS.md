@@ -23,10 +23,13 @@ git push --tags -f # pushes the tags
 
 Once the code and tags are pushed to GitHub, [create a new release](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository#creating-a-release) so the latest tag is surfaced in [the GitHub Marketplace listing](https://github.com/marketplace/actions/rdme-sync-to-readme).
 
-> **Note**
-> When selecting the tag to associate the release with, use the one **without** the `v` prefix (e.g., `8.0.0`, not `v8.0.0`).
+Make sure you have the [GitHub CLI](https://cli.github.com) installed and then run the following:
 
-Auto-generating release notes is sufficient, but I like to summarize the changes and note any highlights in a blurb above those notes. These release links are nice for sharing with customers, on socials, etc.
+```sh
+npm run release:gh
+```
+
+This will create a draft release which you can enhance before publishing. I like to summarize the changes and note any highlights in a blurb above the auto-generated release notes. These release links are nice for sharing with customers, on socials, etc.
 
 ## Publishing to `npm` :rocket:
 
