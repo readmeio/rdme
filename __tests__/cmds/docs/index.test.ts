@@ -10,6 +10,7 @@ import prompts from 'prompts';
 import DocsCommand from '../../../src/cmds/docs';
 import GuidesCommand from '../../../src/cmds/guides';
 import APIError from '../../../src/lib/apiError';
+import configstore from '../../../src/lib/configstore';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock';
 import { after, before } from '../../helpers/get-gha-setup';
 import hashFileContents from '../../helpers/hash-file-contents';
@@ -37,6 +38,35 @@ describe('rdme docs', () => {
     prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
     await expect(docs.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
     consoleInfoSpy.mockRestore();
+  });
+
+  it('should successfully log in user via prompts if API key is not provided', async () => {
+    const email = 'owlbert@readme.io';
+    const password = 'pass123';
+    const project = 'proj1';
+
+    const consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+    const getCommandOutput = () => {
+      return [consoleInfoSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
+    };
+
+    prompts.inject([email, password, project]);
+
+    const mock = getAPIMock()
+      .post('/api/v1/login', { email, password, project })
+      .reply(200, { apiKey: key })
+      .get('/api/v1/version')
+      .basicAuth({ user: key })
+      .reply(200, [{ version }]);
+
+    await expect(docs.run({})).rejects.toStrictEqual(
+      new Error('No path provided. Usage `rdme docs <path> [options]`.')
+    );
+    expect(getCommandOutput()).toContain("Looks like you're missing a ReadMe API key, let's fix that! 🦉");
+    expect(getCommandOutput()).toContain('Successfully logged in as owlbert@readme.io to the proj1 project.');
+    mock.done();
+    configstore.clear();
+    jest.resetAllMocks();
   });
 
   it('should error in CI if no API key provided', async () => {
