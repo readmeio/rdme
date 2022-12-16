@@ -122,6 +122,42 @@ describe('rdme docs:prune', () => {
     versionMock.done();
   });
 
+  it('should delete doc and its child if they are missing', async () => {
+    prompts.inject([true]);
+
+    const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
+
+    const apiMocks = getAPIMockWithVersionHeader(version)
+      .get('/api/v1/categories?perPage=20&page=1')
+      .basicAuth({ user: key })
+      .reply(200, [{ slug: 'category1', type: 'guide' }], { 'x-total-count': '1' })
+      .get('/api/v1/categories/category1/docs')
+      .basicAuth({ user: key })
+      .reply(200, [
+        { slug: 'this-doc-should-be-missing-in-folder', children: [{ slug: 'this-child-is-also-missing' }] },
+        { slug: 'some-doc' },
+      ])
+      .delete('/api/v1/docs/this-doc-should-be-missing-in-folder')
+      .basicAuth({ user: key })
+      .reply(204, '')
+      .delete('/api/v1/docs/this-child-is-also-missing')
+      .basicAuth({ user: key })
+      .reply(204, '');
+
+    await expect(
+      docsPrune.run({
+        folder,
+        key,
+        version,
+      })
+    ).resolves.toBe(
+      '🗑️ successfully deleted `this-doc-should-be-missing-in-folder`.\n🗑️ successfully deleted `this-child-is-also-missing`.'
+    );
+
+    apiMocks.done();
+    versionMock.done();
+  });
+
   it('should return doc delete info for dry run', async () => {
     prompts.inject([true]);
 
