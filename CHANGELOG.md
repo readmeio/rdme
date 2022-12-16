@@ -1,3 +1,10 @@
+## <small>8.3.1 (2022-12-16)</small>
+
+* fix(`docs:prune`): prune child docs (#713) ([2b81439](https://github.com/readmeio/rdme/commit/2b81439)), closes [#713](https://github.com/readmeio/rdme/issues/713)
+* fix: broken badge, remove unnecessary `.svg` extension ([c90abb5](https://github.com/readmeio/rdme/commit/c90abb5)), closes [badges/shields#8671](https://github.com/badges/shields/issues/8671)
+
+
+
 ## <small>8.3.1-beta.0 (2022-12-16)</small>
 
 * feat(login): opts (#712) ([dcd53ac](https://github.com/readmeio/rdme/commit/dcd53ac)), closes [#712](https://github.com/readmeio/rdme/issues/712)
