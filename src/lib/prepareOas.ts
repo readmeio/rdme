@@ -1,4 +1,4 @@
-import type { OASDocument } from 'oas/dist/rmoas.types';
+import type { OpenAPI } from 'openapi-types';
 
 import chalk from 'chalk';
 import OASNormalize, { getAPIDefinitionType } from 'oas-normalize';
@@ -166,7 +166,7 @@ export default async function prepareOas(
   });
 
   // If we were supplied a Postman collection this will **always** convert it to OpenAPI 3.0.
-  const api: OASDocument = await oas.validate({ convertToLatest: opts.convertToLatest }).catch((err: Error) => {
+  let api: OpenAPI.Document = await oas.validate({ convertToLatest: opts.convertToLatest }).catch((err: Error) => {
     spinner.fail();
     debug(`raw validation error object: ${JSON.stringify(err)}`);
     throw err;
@@ -182,22 +182,14 @@ export default async function prepareOas(
   const specVersion: string = api.info.version;
   debug(`version in spec: ${specVersion}`);
 
-  let preparedSpec = '';
-
   if (['openapi', 'openapi:inspect', 'openapi:reduce'].includes(command)) {
-    preparedSpec = await oas.bundle().then(res => {
-      return JSON.stringify(res);
-    });
+    api = await oas.bundle();
 
     debug('spec bundled');
-  } else if (command === 'openapi:convert') {
-    // As `openapi:convert` is purely for converting a spec to OpenAPI we don't need to do any
-    // bundling work as those'll be handled in other commands.
-    preparedSpec = JSON.stringify(api);
   }
 
   return {
-    preparedSpec,
+    preparedSpec: JSON.stringify(api),
     specPath,
     specType,
     /**
