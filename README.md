@@ -254,6 +254,7 @@ Similar to the `openapi` command, you can also [omit the file path](#omitting-th
 #### Converting an API definition
 
 <!--alex ignore postman-postwoman-->
+
 You can also convert any Swagger or Postman Collection to an OpenAPI 3.0 definition.
 
 ```sh
