@@ -36,7 +36,7 @@ export default class OpenAPIConvertCommand extends Command {
       {
         name: 'out',
         type: String,
-        description: 'Output file path to write reduced file to',
+        description: 'Output file path to write converted file to',
       },
       {
         name: 'workingDirectory',
