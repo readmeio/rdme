@@ -1,4 +1,5 @@
 import type { CommandOptions } from '../../lib/baseCommand';
+import type { OASDocument } from 'oas/dist/rmoas.types';
 
 import fs from 'fs';
 import path from 'path';
@@ -52,7 +53,7 @@ export default class OpenAPIConvertCommand extends Command {
     }
 
     const { preparedSpec, specPath, specType } = await prepareOas(spec, 'openapi:convert', { convertToLatest: true });
-    const parsedPreparedSpec = JSON.parse(preparedSpec);
+    const parsedPreparedSpec: OASDocument = JSON.parse(preparedSpec);
 
     if (specType === 'OpenAPI') {
       throw new Error("Sorry, this API definition is already an OpenAPI definition and doesn't need to be converted.");

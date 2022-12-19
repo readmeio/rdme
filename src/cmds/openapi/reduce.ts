@@ -1,4 +1,5 @@
 import type { CommandOptions } from '../../lib/baseCommand';
+import type { OASDocument } from 'oas/dist/rmoas.types';
 
 import fs from 'fs';
 import path from 'path';
@@ -77,7 +78,7 @@ export default class OpenAPIReduceCommand extends Command {
     }
 
     const { preparedSpec, specPath, specType } = await prepareOas(spec, 'openapi:reduce');
-    const parsedPreparedSpec = JSON.parse(preparedSpec);
+    const parsedPreparedSpec: OASDocument = JSON.parse(preparedSpec);
 
     if (specType !== 'OpenAPI') {
       throw new Error('Sorry, this reducer feature in rdme only supports OpenAPI 3.0+ definitions.');
