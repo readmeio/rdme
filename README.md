@@ -145,9 +145,9 @@ With `rdme`, you have access to a variety of tools to manage your API definition
 
 - [Syncing](#syncing-an-api-definition-to-readme) 🦉
 - [Validation](#validating-an-api-definition) ✅
-- [Conversion](#converting-an-api-definition) ⏩
 - [Reduction](#reducing-an-api-definition) 📉
 - [Inspection](#inspecting-an-api-definition) 🔍
+- [Conversion](#converting-an-api-definition) ⏩
 
 `rdme` supports [OpenAPI 3.1](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md), [OpenAPI 3.0](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md), and [Swagger 2.x](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/2.0.md).
 
@@ -251,22 +251,6 @@ rdme openapi:validate [url-or-local-path-to-file]
 
 Similar to the `openapi` command, you can also [omit the file path](#omitting-the-file-path).
 
-#### Converting an API definition
-
-<!--alex ignore postman-postwoman-->
-
-You can also convert any Swagger or Postman Collection to an OpenAPI 3.0 definition.
-
-```sh
-rdme openapi:convert [url-or-local-path-to-file]
-```
-
-Similar to the `openapi` command, you can also [omit the file path](#omitting-the-file-path).
-
-> **Note:**
->
-> All of our OpenAPI commands already do this conversion automatically, but in case you need to utilize this exclusive functionality outside of the context of those, you can.
-
 #### Reducing an API Definition
 
 We also offer a tool that allows you to reduce a large API definition down to a specific set of tags or paths (again, no ReadMe account required!). This can be useful if you're debugging a problematic schema somewhere, or if you have a file that is too big to maintain.
@@ -304,6 +288,22 @@ rdme openapi:inspect [url-or-local-path-to-file] --feature circularRefs --featur
 ```
 
 As with the `openapi` command, you can also [omit the file path](#omitting-the-file-path).
+
+#### Converting an API definition
+
+<!--alex ignore postman-postwoman-->
+
+You can also convert any Swagger or Postman Collection to an OpenAPI 3.0 definition.
+
+```sh
+rdme openapi:convert [url-or-local-path-to-file]
+```
+
+Similar to the `openapi` command, you can also [omit the file path](#omitting-the-file-path).
+
+> **Note:**
+>
+> All of our OpenAPI commands already do this conversion automatically, but in case you need to utilize this exclusive functionality outside of the context of those, you can.
 
 ### Docs (a.k.a. Guides) 📖
 
