@@ -80,8 +80,8 @@ export default class OpenAPIReduceCommand extends Command {
       process.chdir(workingDirectory);
     }
 
-    const { bundledSpec, specPath, specType } = await prepareOas(spec, 'openapi:reduce');
-    const parsedBundledSpec = JSON.parse(bundledSpec);
+    const { preparedSpec, specPath, specType } = await prepareOas(spec, 'openapi:reduce');
+    const parsedPreparedSpec = JSON.parse(preparedSpec);
 
     if (specType !== 'OpenAPI') {
       throw new Error('Sorry, this reducer feature in rdme only supports OpenAPI 3.0+ definitions.');
@@ -117,7 +117,7 @@ export default class OpenAPIReduceCommand extends Command {
         choices: () => {
           const tags: string[] = JSONPath({
             path: '$..paths[*].tags',
-            json: parsedBundledSpec,
+            json: parsedPreparedSpec,
             resultType: 'value',
           }).flat();
 
@@ -133,7 +133,7 @@ export default class OpenAPIReduceCommand extends Command {
         message: 'Choose which paths to reduce by:',
         min: 1,
         choices: () => {
-          return Object.keys(parsedBundledSpec.paths).map(p => ({
+          return Object.keys(parsedPreparedSpec.paths).map(p => ({
             title: p,
             value: p,
           }));
@@ -147,7 +147,7 @@ export default class OpenAPIReduceCommand extends Command {
         choices: (prev, values) => {
           const paths: string[] = values.paths;
           let methods = paths
-            .map((p: string) => Object.keys(parsedBundledSpec.paths[p] || {}))
+            .map((p: string) => Object.keys(parsedPreparedSpec.paths[p] || {}))
             .flat()
             .filter((method: string) => method.toLowerCase() !== 'parameters');
 
@@ -173,7 +173,7 @@ export default class OpenAPIReduceCommand extends Command {
         message: 'Enter the path to save your reduced API definition to:',
         initial: () => {
           const extension = path.extname(specPath);
-          return `${path.basename(specPath).split(extension)[0]}-reduced${extension}`;
+          return `${path.basename(specPath).split(extension)[0]}.reduced${extension}`;
         },
         validate: value => checkFilePath(value),
       },
@@ -196,7 +196,7 @@ export default class OpenAPIReduceCommand extends Command {
     let reducedSpec;
 
     try {
-      reducedSpec = oasReducer(parsedBundledSpec, {
+      reducedSpec = oasReducer(parsedPreparedSpec, {
         tags: promptResults.tags || [],
         paths: (promptResults.paths || []).reduce((acc: Record<string, string[]>, p: string) => {
           acc[p] = promptResults.methods;

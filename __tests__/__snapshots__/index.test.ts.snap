@@ -30,6 +30,7 @@ Options
 
 Related commands
 
+  $ rdme openapi:convert    Convert a Swagger or Postman Collection to OpenAPI.                     
   $ rdme openapi:inspect    Analyze an OpenAPI/Swagger definition for various OpenAPI and ReadMe    
                             feature usage.                                                          
   $ rdme openapi:reduce     Reduce an OpenAPI definition into a smaller subset.                     
@@ -67,6 +68,7 @@ Options
 
 Related commands
 
+  $ rdme openapi:convert    Convert a Swagger or Postman Collection to OpenAPI.                     
   $ rdme openapi:inspect    Analyze an OpenAPI/Swagger definition for various OpenAPI and ReadMe    
                             feature usage.                                                          
   $ rdme openapi:reduce     Reduce an OpenAPI definition into a smaller subset.                     
@@ -104,6 +106,7 @@ Options
 
 Related commands
 
+  $ rdme openapi:convert    Convert a Swagger or Postman Collection to OpenAPI.                     
   $ rdme openapi:inspect    Analyze an OpenAPI/Swagger definition for various OpenAPI and ReadMe    
                             feature usage.                                                          
   $ rdme openapi:reduce     Reduce an OpenAPI definition into a smaller subset.                     

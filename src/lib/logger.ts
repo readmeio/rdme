@@ -13,9 +13,17 @@ const debugPackage = debugModule(config.get('cli'));
 /**
  * Wrapper for debug statements.
  */
-function debug(input: string) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function debug(input: any) {
   /* istanbul ignore next */
-  if (isGHA() && !isTest()) core.debug(`rdme: ${input}`);
+  if (isGHA() && !isTest()) {
+    if (typeof input === 'object') {
+      core.debug(`rdme: ${JSON.stringify(input)}`);
+    } else {
+      core.debug(`rdme: ${input}`);
+    }
+  }
+
   return debugPackage(input);
 }
 

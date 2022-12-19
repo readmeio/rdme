@@ -242,9 +242,9 @@ export default class OpenAPIInspectCommand extends Command {
       process.chdir(workingDirectory);
     }
 
-    const { bundledSpec, definitionVersion } = await prepareOas(spec, 'openapi:inspect', { convertToLatest: true });
+    const { preparedSpec, definitionVersion } = await prepareOas(spec, 'openapi:inspect', { convertToLatest: true });
     this.definitionVersion = definitionVersion.version;
-    const parsedBundledSpec = JSON.parse(bundledSpec);
+    const parsedPreparedSpec = JSON.parse(preparedSpec);
 
     const spinner = ora({ ...oraOptions() });
     if (features?.length) {
@@ -257,7 +257,7 @@ export default class OpenAPIInspectCommand extends Command {
       spinner.start('Analyzing your API definition for OpenAPI and ReadMe feature usage...');
     }
 
-    const analysis = await analyzeOas(parsedBundledSpec).catch(err => {
+    const analysis = await analyzeOas(parsedPreparedSpec).catch(err => {
       Command.debug(`analyzer err: ${err.message}`);
       spinner.fail();
       throw err;

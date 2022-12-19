@@ -12,6 +12,7 @@ import LogoutCommand from './logout';
 import OASCommand from './oas';
 import OpenCommand from './open';
 import OpenAPICommand from './openapi';
+import OpenAPIConvertCommand from './openapi/convert';
 import OpenAPIInspectCommand from './openapi/inspect';
 import OpenAPIReduceCommand from './openapi/reduce';
 import OpenAPIValidateCommand from './openapi/validate';
@@ -47,6 +48,7 @@ const commands = {
   open: OpenCommand,
 
   openapi: OpenAPICommand,
+  'openapi:convert': OpenAPIConvertCommand,
   'openapi:inspect': OpenAPIInspectCommand,
   'openapi:reduce': OpenAPIReduceCommand,
   'openapi:validate': OpenAPIValidateCommand,
