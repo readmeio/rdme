@@ -23,6 +23,7 @@ export interface Options {
   version?: string;
   create?: boolean;
   raw?: boolean;
+  title?: string;
   useSpecVersion?: boolean;
   workingDirectory?: string;
   update?: boolean;
@@ -77,6 +78,7 @@ export default class OpenAPICommand extends Command {
         description:
           "Automatically update an existing API definition in ReadMe if it's the only one associated with the current version.",
       },
+      this.getTitleArg(),
       {
         name: 'dryRun',
         type: Boolean,
@@ -88,7 +90,7 @@ export default class OpenAPICommand extends Command {
   async run(opts: CommandOptions<Options>) {
     await super.run(opts);
 
-    const { dryRun, key, id, spec, create, raw, useSpecVersion, version, workingDirectory, update } = opts;
+    const { dryRun, key, id, spec, create, raw, title, useSpecVersion, version, workingDirectory, update } = opts;
 
     let selectedVersion = version;
     let isUpdate: boolean;
@@ -131,7 +133,7 @@ export default class OpenAPICommand extends Command {
 
     // Reason we're hardcoding in command here is because `swagger` command
     // relies on this and we don't want to use `swagger` in this function
-    const { preparedSpec, specPath, specType, specVersion } = await prepareOas(spec, 'openapi');
+    const { preparedSpec, specPath, specType, specVersion } = await prepareOas(spec, 'openapi', { title });
 
     if (useSpecVersion) {
       Command.info(

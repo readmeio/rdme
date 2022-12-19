@@ -43,6 +43,11 @@ export default async function prepareOas(
      * Optionally convert the supplied or discovered API definition to the latest OpenAPI release.
      */
     convertToLatest?: boolean;
+    /**
+     * An optional title to replace the value in the `info.title` field.
+     * @see {@link https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#info-object}
+     */
+    title?: string;
   } = {
     convertToLatest: false,
   }
@@ -177,6 +182,11 @@ export default async function prepareOas(
   debug(api);
   debug('👆👆👆👆👆 finished logging spec 👆👆👆👆👆');
   debug(`spec type: ${specType}`);
+
+  if (opts.title) {
+    debug(`renaming title field to ${opts.title}`);
+    api.info.title = opts.title;
+  }
 
   // No need to optional chain here since `info.version` is required to pass validation
   const specVersion: string = api.info.version;

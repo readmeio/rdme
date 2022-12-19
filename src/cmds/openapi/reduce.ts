@@ -22,6 +22,7 @@ export interface Options {
   path?: string[];
   method?: string[];
   out?: string;
+  title?: string;
   workingDirectory?: string;
 }
 
@@ -64,6 +65,7 @@ export default class OpenAPIReduceCommand extends Command {
         type: String,
         description: 'Output file path to write reduced file to',
       },
+      this.getTitleArg(),
       this.getWorkingDirArg(),
     ];
   }
@@ -71,13 +73,13 @@ export default class OpenAPIReduceCommand extends Command {
   async run(opts: CommandOptions<Options>) {
     await super.run(opts);
 
-    const { spec, workingDirectory } = opts;
+    const { spec, title, workingDirectory } = opts;
 
     if (workingDirectory) {
       process.chdir(workingDirectory);
     }
 
-    const { preparedSpec, specPath, specType } = await prepareOas(spec, 'openapi:reduce');
+    const { preparedSpec, specPath, specType } = await prepareOas(spec, 'openapi:reduce', { title });
     const parsedPreparedSpec: OASDocument = JSON.parse(preparedSpec);
 
     if (specType !== 'OpenAPI') {

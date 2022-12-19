@@ -145,6 +145,17 @@ export default class Command {
   }
 
   /**
+   * Used in the `openapi` family of commands where `title` is an option.
+   */
+  getTitleArg(): OptionDefinition {
+    return {
+      name: 'title',
+      type: String,
+      description: 'An override value for the `info.title` field in the API definition',
+    };
+  }
+
+  /**
    * Used in any command where `version` is an option.
    */
   getVersionArg(): OptionDefinition {
