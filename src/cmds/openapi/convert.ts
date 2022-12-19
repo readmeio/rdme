@@ -55,8 +55,8 @@ export default class OpenAPIConvertCommand extends Command {
       process.chdir(workingDirectory);
     }
 
-    const { bundledSpec, specPath, specType } = await prepareOas(spec, 'openapi:convert', { convertToLatest: true });
-    const parsedBundledSpec = JSON.parse(bundledSpec);
+    const { preparedSpec, specPath, specType } = await prepareOas(spec, 'openapi:convert', { convertToLatest: true });
+    const parsedPreparedSpec = JSON.parse(preparedSpec);
 
     if (specType === 'OpenAPI') {
       throw new Error("Sorry, this API definition is already an OpenAPI definition and doesn't need to be converted.");
@@ -81,7 +81,7 @@ export default class OpenAPIConvertCommand extends Command {
 
     Command.debug(`saving converted spec to ${promptResults.outputPath}`);
 
-    fs.writeFileSync(promptResults.outputPath, JSON.stringify(parsedBundledSpec, null, 2));
+    fs.writeFileSync(promptResults.outputPath, JSON.stringify(parsedPreparedSpec, null, 2));
 
     Command.debug('converted spec saved');
 

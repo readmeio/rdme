@@ -182,10 +182,10 @@ export default async function prepareOas(
   const specVersion: string = api.info.version;
   debug(`version in spec: ${specVersion}`);
 
-  let bundledSpec = '';
+  let preparedSpec = '';
 
   if (['openapi', 'openapi:inspect', 'openapi:reduce'].includes(command)) {
-    bundledSpec = await oas.bundle().then(res => {
+    preparedSpec = await oas.bundle().then(res => {
       return JSON.stringify(res);
     });
 
@@ -193,11 +193,11 @@ export default async function prepareOas(
   } else if (command === 'openapi:convert') {
     // As `openapi:convert` is purely for converting a spec to OpenAPI we don't need to do any
     // bundling work as those'll be handled in other commands.
-    bundledSpec = JSON.stringify(api);
+    preparedSpec = JSON.stringify(api);
   }
 
   return {
-    bundledSpec,
+    preparedSpec,
     specPath,
     specType,
     /**

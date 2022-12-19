@@ -135,7 +135,7 @@ export default class OpenAPICommand extends Command {
 
     // Reason we're hardcoding in command here is because `swagger` command
     // relies on this and we don't want to use `swagger` in this function
-    const { bundledSpec, specPath, specType, specVersion } = await prepareOas(spec, 'openapi');
+    const { preparedSpec, specPath, specType, specVersion } = await prepareOas(spec, 'openapi');
 
     if (useSpecVersion) {
       Command.info(
@@ -218,7 +218,7 @@ export default class OpenAPICommand extends Command {
       });
     };
 
-    const registryUUID = await streamSpecToRegistry(bundledSpec);
+    const registryUUID = await streamSpecToRegistry(preparedSpec);
 
     const options: RequestInit = {
       headers: cleanHeaders(
