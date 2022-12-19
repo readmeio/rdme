@@ -173,7 +173,7 @@ export default class OpenAPIReduceCommand extends Command {
         message: 'Enter the path to save your reduced API definition to:',
         initial: () => {
           const extension = path.extname(specPath);
-          return `${path.basename(specPath).split(extension)[0]}-reduced${extension}`;
+          return `${path.basename(specPath).split(extension)[0]}.reduced${extension}`;
         },
         validate: value => checkFilePath(value),
       },

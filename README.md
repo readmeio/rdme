@@ -279,12 +279,12 @@ The command will ask you a couple questions about how you wish to reduce the fil
 
 - The input API definition is called `petstore.json`
 - The file is reduced to only the `/pet/{id}` path and the `GET` and `PUT` methods
-- The output file is called `petstore-reduced.json`
+- The output file is called `petstore.reduced.json`
 
 Here's what the resulting command looks like:
 
 ```
-rdme openapi:reduce petstore.json --path /pet/{id} --method get --method put --out petstore-reduced.json
+rdme openapi:reduce petstore.json --path /pet/{id} --method get --method put --out petstore.reduced.json
 ```
 
 As with the `openapi` command, you can also [omit the file path](#omitting-the-file-path).
