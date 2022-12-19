@@ -265,7 +265,7 @@ Similar to the `openapi` command, you can also [omit the file path](#omitting-th
 
 > **Note:**
 >
-> All of our OpenAPI commands already do this conversion automatically, but incase you need to utilize this exclusive functionality outside of the context of those you can.
+> All of our OpenAPI commands already do this conversion automatically, but in case you need to utilize this exclusive functionality outside of the context of those, you can.
 
 #### Reducing an API Definition
 
