@@ -5,7 +5,7 @@ import fs from 'fs';
 import path from 'path';
 
 import chalk from 'chalk';
-import { JSONPath } from 'jsonpath-plus';
+import Oas from 'oas';
 import oasReducer from 'oas/dist/lib/reducer';
 import ora from 'ora';
 import prompts from 'prompts';
@@ -112,13 +112,9 @@ export default class OpenAPIReduceCommand extends Command {
         message: 'Choose which tags to reduce by:',
         min: 1,
         choices: () => {
-          const tags: string[] = JSONPath({
-            path: '$..paths[*].tags',
-            json: parsedPreparedSpec,
-            resultType: 'value',
-          }).flat();
+          const tags = new Oas(parsedPreparedSpec).getTags();
 
-          return [...new Set(tags)].map(tag => ({
+          return tags.map(tag => ({
             title: tag,
             value: tag,
           }));
