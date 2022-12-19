@@ -159,7 +159,7 @@ export default class Command {
   /**
    * Used in the `versions:create` and `versions:update` commands.
    */
-  getVersionOpts() {
+  getVersionOpts(): OptionDefinition[] {
     return [
       {
         name: 'codename',
