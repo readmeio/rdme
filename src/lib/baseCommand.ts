@@ -187,7 +187,7 @@ export default class Command {
   }
 
   /**
-   * Used in any command where `workingDirectory` is an option.
+   * Used in the `openapi` family of commands where `workingDirectory` is an option.
    */
   getWorkingDirArg(): OptionDefinition {
     return {
