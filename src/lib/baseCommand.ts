@@ -186,6 +186,17 @@ export default class Command {
     ];
   }
 
+  /**
+   * Used in any command where `workingDirectory` is an option.
+   */
+  getWorkingDirArg(): OptionDefinition {
+    return {
+      name: 'workingDirectory',
+      type: String,
+      description: 'Working directory (for usage with relative external references)',
+    };
+  }
+
   static debug(msg: string) {
     debug(msg);
   }

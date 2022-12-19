@@ -63,11 +63,7 @@ export default class OpenAPIReduceCommand extends Command {
         type: String,
         description: 'Output file path to write reduced file to',
       },
-      {
-        name: 'workingDirectory',
-        type: String,
-        description: 'Working directory (for usage with relative external references)',
-      },
+      this.getWorkingDirArg(),
     ];
   }
 

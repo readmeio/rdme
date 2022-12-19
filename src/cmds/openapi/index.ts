@@ -53,11 +53,7 @@ export default class OpenAPICommand extends Command {
         type: String,
         defaultOption: true,
       },
-      {
-        name: 'workingDirectory',
-        type: String,
-        description: 'Working directory (for usage with relative external references)',
-      },
+      this.getWorkingDirArg(),
       {
         name: 'useSpecVersion',
         type: Boolean,
