@@ -1,3 +1,5 @@
+import type { OASDocument } from 'oas/dist/rmoas.types';
+
 import chalk from 'chalk';
 import OASNormalize, { getAPIDefinitionType } from 'oas-normalize';
 import ora from 'ora';
@@ -35,7 +37,7 @@ const capitalizeSpecType = (type: string) =>
  */
 export default async function prepareOas(
   path: string,
-  command: 'openapi' | 'openapi:inspect' | 'openapi:reduce' | 'openapi:validate',
+  command: 'openapi' | 'openapi:convert' | 'openapi:inspect' | 'openapi:reduce' | 'openapi:validate',
   opts: {
     /**
      * Optionally convert the supplied or discovered API definition to the latest OpenAPI release.
@@ -65,13 +67,13 @@ export default async function prepareOas(
 
     const fileFindingSpinner = ora({ text: 'Looking for API definitions...', ...oraOptions() }).start();
 
-    let action: 'inspect' | 'reduce' | 'upload' | 'validate';
+    let action: 'convert' | 'inspect' | 'reduce' | 'upload' | 'validate';
     switch (command) {
       case 'openapi':
         action = 'upload';
         break;
       default:
-        action = command.split(':')[1] as 'inspect' | 'reduce' | 'validate';
+        action = command.split(':')[1] as 'convert' | 'inspect' | 'reduce' | 'validate';
     }
 
     const jsonAndYamlFiles = readdirRecursive('.', true).filter(
@@ -164,7 +166,7 @@ export default async function prepareOas(
   });
 
   // If we were supplied a Postman collection this will **always** convert it to OpenAPI 3.0.
-  const api = await oas.validate({ convertToLatest: opts.convertToLatest }).catch((err: Error) => {
+  const api: OASDocument = await oas.validate({ convertToLatest: opts.convertToLatest }).catch((err: Error) => {
     spinner.fail();
     debug(`raw validation error object: ${JSON.stringify(err)}`);
     throw err;
@@ -188,6 +190,10 @@ export default async function prepareOas(
     });
 
     debug('spec bundled');
+  } else if (command === 'openapi:convert') {
+    // As `openapi:convert` is purely for converting a spec to OpenAPI we don't need to do any
+    // bundling work as those'll be handled in other commands.
+    bundledSpec = JSON.stringify(api);
   }
 
   return {

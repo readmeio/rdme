@@ -145,6 +145,7 @@ With `rdme`, you have access to a variety of tools to manage your API definition
 
 - [Syncing](#syncing-an-api-definition-to-readme) 🦉
 - [Validation](#validating-an-api-definition) ✅
+- [Conversion](#converting-an-api-definition) ⏩
 - [Reduction](#reducing-an-api-definition) 📉
 - [Inspection](#inspecting-an-api-definition) 🔍
 
@@ -249,6 +250,20 @@ rdme openapi:validate [url-or-local-path-to-file]
 ```
 
 Similar to the `openapi` command, you can also [omit the file path](#omitting-the-file-path).
+
+#### Converting an API definition
+
+You can also convert any Swagger or Postman Collection to an OpenAPI 3.0 definition.
+
+```sh
+rdme openapi:convert [url-or-local-path-to-file]
+```
+
+Similar to the `openapi` command, you can also [omit the file path](#omitting-the-file-path).
+
+> **Note:**
+>
+> All of our OpenAPI commands already do this conversion automatically, but incase you need to utilize this exclusive functionality outside of the context of those you can.
 
 #### Reducing an API Definition
 
