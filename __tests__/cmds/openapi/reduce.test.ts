@@ -167,6 +167,37 @@ describe('rdme openapi:reduce', () => {
         expect(Object.keys(reducedSpec.paths['/pet'])).toStrictEqual(['post']);
         expect(Object.keys(reducedSpec.paths['/pet/{petId}'])).toStrictEqual(['get']);
       });
+
+      it('should reduce and update title with no prompts via opts', async () => {
+        const spec = 'petstore.json';
+        const title = 'some alternative title';
+
+        let reducedSpec;
+        fs.writeFileSync = jest.fn((fileName, data) => {
+          reducedSpec = JSON.parse(data as string);
+        });
+
+        await expect(
+          reducer.run({
+            workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
+            path: ['/pet', '/pet/{petId}'],
+            method: ['get', 'post'],
+            title,
+            out: 'output.json',
+          })
+        ).resolves.toBe(successfulReduction());
+
+        expect(console.info).toHaveBeenCalledTimes(1);
+
+        const output = getCommandOutput();
+        expect(output).toBe(chalk.yellow(`ℹ️  We found ${spec} and are attempting to reduce it.`));
+
+        expect(fs.writeFileSync).toHaveBeenCalledWith('output.json', expect.any(String));
+        expect(Object.keys(reducedSpec.paths)).toStrictEqual(['/pet', '/pet/{petId}']);
+        expect(Object.keys(reducedSpec.paths['/pet'])).toStrictEqual(['post']);
+        expect(Object.keys(reducedSpec.paths['/pet/{petId}'])).toStrictEqual(['get']);
+        expect(reducedSpec.info.title).toBe(title);
+      });
     });
   });
 

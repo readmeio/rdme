@@ -1,10 +1,11 @@
 import type { CommandOptions } from '../../lib/baseCommand';
+import type { OASDocument } from 'oas/dist/rmoas.types';
 
 import fs from 'fs';
 import path from 'path';
 
 import chalk from 'chalk';
-import { JSONPath } from 'jsonpath-plus';
+import Oas from 'oas';
 import oasReducer from 'oas/dist/lib/reducer';
 import ora from 'ora';
 import prompts from 'prompts';
@@ -21,6 +22,7 @@ export interface Options {
   path?: string[];
   method?: string[];
   out?: string;
+  title?: string;
   workingDirectory?: string;
 }
 
@@ -63,25 +65,22 @@ export default class OpenAPIReduceCommand extends Command {
         type: String,
         description: 'Output file path to write reduced file to',
       },
-      {
-        name: 'workingDirectory',
-        type: String,
-        description: 'Working directory (for usage with relative external references)',
-      },
+      this.getTitleArg(),
+      this.getWorkingDirArg(),
     ];
   }
 
   async run(opts: CommandOptions<Options>) {
     await super.run(opts);
 
-    const { spec, workingDirectory } = opts;
+    const { spec, title, workingDirectory } = opts;
 
     if (workingDirectory) {
       process.chdir(workingDirectory);
     }
 
-    const { preparedSpec, specPath, specType } = await prepareOas(spec, 'openapi:reduce');
-    const parsedPreparedSpec = JSON.parse(preparedSpec);
+    const { preparedSpec, specPath, specType } = await prepareOas(spec, 'openapi:reduce', { title });
+    const parsedPreparedSpec: OASDocument = JSON.parse(preparedSpec);
 
     if (specType !== 'OpenAPI') {
       throw new Error('Sorry, this reducer feature in rdme only supports OpenAPI 3.0+ definitions.');
@@ -115,13 +114,9 @@ export default class OpenAPIReduceCommand extends Command {
         message: 'Choose which tags to reduce by:',
         min: 1,
         choices: () => {
-          const tags: string[] = JSONPath({
-            path: '$..paths[*].tags',
-            json: parsedPreparedSpec,
-            resultType: 'value',
-          }).flat();
+          const tags = new Oas(parsedPreparedSpec).getTags();
 
-          return [...new Set(tags)].map(tag => ({
+          return tags.map(tag => ({
             title: tag,
             value: tag,
           }));

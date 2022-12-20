@@ -145,6 +145,17 @@ export default class Command {
   }
 
   /**
+   * Used in the `openapi` family of commands where `title` is an option.
+   */
+  getTitleArg(): OptionDefinition {
+    return {
+      name: 'title',
+      type: String,
+      description: 'An override value for the `info.title` field in the API definition',
+    };
+  }
+
+  /**
    * Used in any command where `version` is an option.
    */
   getVersionArg(): OptionDefinition {
@@ -159,7 +170,7 @@ export default class Command {
   /**
    * Used in the `versions:create` and `versions:update` commands.
    */
-  getVersionOpts() {
+  getVersionOpts(): OptionDefinition[] {
     return [
       {
         name: 'codename',
@@ -184,6 +195,17 @@ export default class Command {
           "Would you like to make this version public? Any primary version must be public. (Must be 'true' or 'false')",
       },
     ];
+  }
+
+  /**
+   * Used in the `openapi` family of commands where `workingDirectory` is an option.
+   */
+  getWorkingDirArg(): OptionDefinition {
+    return {
+      name: 'workingDirectory',
+      type: String,
+      description: 'Working directory (for usage with relative external references)',
+    };
   }
 
   static debug(msg: string) {

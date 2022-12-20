@@ -24,6 +24,7 @@ Options
   --create                    Bypasses the create/update prompt and creates a new API definition.   
   --update                    Automatically update an existing API definition in ReadMe if it's the 
                               only one associated with the current version.                         
+  --title string              An override value for the \`info.title\` field in the API definition    
   --dryRun                    Runs the command without creating/updating any API Definitions in     
                               ReadMe. Useful for debugging.                                         
   -h, --help                  Display this usage guide                                              
@@ -62,6 +63,7 @@ Options
   --create                    Bypasses the create/update prompt and creates a new API definition.   
   --update                    Automatically update an existing API definition in ReadMe if it's the 
                               only one associated with the current version.                         
+  --title string              An override value for the \`info.title\` field in the API definition    
   --dryRun                    Runs the command without creating/updating any API Definitions in     
                               ReadMe. Useful for debugging.                                         
   -h, --help                  Display this usage guide                                              
@@ -100,6 +102,7 @@ Options
   --create                    Bypasses the create/update prompt and creates a new API definition.   
   --update                    Automatically update an existing API definition in ReadMe if it's the 
                               only one associated with the current version.                         
+  --title string              An override value for the \`info.title\` field in the API definition    
   --dryRun                    Runs the command without creating/updating any API Definitions in     
                               ReadMe. Useful for debugging.                                         
   -h, --help                  Display this usage guide                                              

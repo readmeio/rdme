@@ -1,5 +1,6 @@
 import type { Analysis, AnalyzedFeature } from '../../lib/analyzeOas';
 import type { CommandOptions } from '../../lib/baseCommand';
+import type { OASDocument } from 'oas/dist/rmoas.types';
 
 import chalk from 'chalk';
 import config from 'config';
@@ -39,11 +40,7 @@ export default class OpenAPIInspectCommand extends Command {
         type: String,
         defaultOption: true,
       },
-      {
-        name: 'workingDirectory',
-        type: String,
-        description: 'Working directory (for usage with relative external references)',
-      },
+      this.getWorkingDirArg(),
       {
         name: 'feature',
         type: String,
@@ -244,7 +241,7 @@ export default class OpenAPIInspectCommand extends Command {
 
     const { preparedSpec, definitionVersion } = await prepareOas(spec, 'openapi:inspect', { convertToLatest: true });
     this.definitionVersion = definitionVersion.version;
-    const parsedPreparedSpec = JSON.parse(preparedSpec);
+    const parsedPreparedSpec: OASDocument = JSON.parse(preparedSpec);
 
     const spinner = ora({ ...oraOptions() });
     if (features?.length) {
