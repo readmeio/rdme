@@ -23,6 +23,7 @@ function getProxy() {
 }
 
 /**
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Warning}
  * @see {@link https://www.rfc-editor.org/rfc/rfc7234#section-5.5}
  * @see {@link https://github.com/marcbachmann/warning-header-parser}
  */
@@ -41,6 +42,7 @@ function stripQuotes(s: string) {
 /**
  * Parses Warning header into an array of warning header objects
  * @param header raw `Warning` header
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Warning}
  * @see {@link https://www.rfc-editor.org/rfc/rfc7234#section-5.5}
  * @see {@link https://github.com/marcbachmann/warning-header-parser}
  */
