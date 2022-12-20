@@ -22,7 +22,11 @@ function getProxy() {
   return '';
 }
 
-interface WarningHeaderObject {
+/**
+ * @see {@link https://www.rfc-editor.org/rfc/rfc7234#section-5.5}
+ * @see {@link https://github.com/marcbachmann/warning-header-parser}
+ */
+interface WarningHeader {
   code: string;
   agent: string;
   message: string;
@@ -35,16 +39,16 @@ function stripQuotes(s: string) {
 }
 
 /**
- * Parses Warning header into actionable object
+ * Parses Warning header into an array of warning header objects
  * @param header raw `Warning` header
  * @see {@link https://www.rfc-editor.org/rfc/rfc7234#section-5.5}
  * @see {@link https://github.com/marcbachmann/warning-header-parser}
  */
-function parseWarningHeader(header: string): WarningHeaderObject[] {
+function parseWarningHeader(header: string): WarningHeader[] {
   try {
     const warnings = header.split(/([0-9]{3} [a-z0-9.@\-/]*) /g);
 
-    let previous: WarningHeaderObject;
+    let previous: WarningHeader;
 
     return warnings.reduce((all, w) => {
       // eslint-disable-next-line no-param-reassign
