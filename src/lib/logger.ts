@@ -68,12 +68,14 @@ function oraOptions() {
 
 /**
  * Wrapper for warn statements.
+ * @param prefix Text that precedes the warning.
+ * This is *not* used in the GitHub Actions-formatted warning.
  */
-function warn(input: string) {
+function warn(input: string, prefix = 'Warning!') {
   /* istanbul ignore next */
   if (isGHA() && !isTest()) return core.warning(input);
   // eslint-disable-next-line no-console
-  return console.warn(chalk.yellow(`⚠️  Warning! ${input}`));
+  return console.warn(chalk.yellow(`⚠️  ${prefix} ${input}`));
 }
 
 export { debug, error, info, oraOptions, warn };

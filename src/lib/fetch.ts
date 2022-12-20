@@ -8,7 +8,7 @@ import pkg from '../../package.json';
 
 import APIError from './apiError';
 import { isGHA } from './isCI';
-import { debug } from './logger';
+import { debug, warn } from './logger';
 
 const SUCCESS_NO_CONTENT = 204;
 
@@ -20,6 +20,58 @@ function getProxy() {
     return proxy.endsWith('/') ? proxy : `${proxy}/`;
   }
   return '';
+}
+
+/**
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Warning}
+ * @see {@link https://www.rfc-editor.org/rfc/rfc7234#section-5.5}
+ * @see {@link https://github.com/marcbachmann/warning-header-parser}
+ */
+interface WarningHeader {
+  code: string;
+  agent: string;
+  message: string;
+  date?: string;
+}
+
+function stripQuotes(s: string) {
+  if (!s) return '';
+  return s.replace(/(^"|[",]*$)/g, '');
+}
+
+/**
+ * Parses Warning header into an array of warning header objects
+ * @param header raw `Warning` header
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Warning}
+ * @see {@link https://www.rfc-editor.org/rfc/rfc7234#section-5.5}
+ * @see {@link https://github.com/marcbachmann/warning-header-parser}
+ */
+function parseWarningHeader(header: string): WarningHeader[] {
+  try {
+    const warnings = header.split(/([0-9]{3} [a-z0-9.@\-/]*) /g);
+
+    let previous: WarningHeader;
+
+    return warnings.reduce((all, w) => {
+      // eslint-disable-next-line no-param-reassign
+      w = w.trim();
+      const newError = w.match(/^([0-9]{3}) (.*)/);
+      if (newError) {
+        previous = { code: newError[1], agent: newError[2], message: '' };
+      } else if (w) {
+        const errorContent = w.split(/" "/);
+        if (errorContent) {
+          previous.message = stripQuotes(errorContent[0]);
+          previous.date = stripQuotes(errorContent[1]);
+          all.push(previous);
+        }
+      }
+      return all;
+    }, []);
+  } catch (e) {
+    debug(`error parsing warning header: ${e.message}`);
+    return [{ code: '199', agent: '-', message: header }];
+  }
 }
 
 /**
@@ -64,6 +116,16 @@ export default function fetch(url: string, options: RequestInit = { headers: new
   return nodeFetch(fullUrl, {
     ...options,
     headers,
+  }).then(res => {
+    const warningHeader = res.headers.get('Warning');
+    if (warningHeader) {
+      debug(`received warning header: ${warningHeader}`);
+      const warnings = parseWarningHeader(warningHeader);
+      warnings.forEach(warning => {
+        warn(warning.message, 'ReadMe API Warning:');
+      });
+    }
+    return res;
   });
 }
 
