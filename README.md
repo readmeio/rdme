@@ -301,8 +301,7 @@ rdme openapi:convert [url-or-local-path-to-file]
 
 Similar to the `openapi` command, you can also [omit the file path](#omitting-the-file-path).
 
-> **Note:**
->
+> **Note**
 > All of our OpenAPI commands already do this conversion automatically, but in case you need to utilize this exclusive functionality outside of the context of those, you can.
 
 ### Docs (a.k.a. Guides) 📖
