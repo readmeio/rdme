@@ -106,6 +106,80 @@ describe('#fetch()', () => {
     mock.done();
   });
 
+  describe('warning response header', () => {
+    let consoleWarnSpy;
+
+    const getWarningCommandOutput = () => {
+      return [consoleWarnSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
+    };
+
+    beforeEach(() => {
+      consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
+    });
+
+    afterEach(() => {
+      consoleWarnSpy.mockRestore();
+    });
+
+    it('should not log anything if no warning header was passed', async () => {
+      const mock = getAPIMock().get('/api/v1/some-warning').reply(200, undefined, {
+        Warning: '',
+      });
+
+      await fetch(`${config.get('host')}/api/v1/some-warning`);
+
+      // eslint-disable-next-line no-console
+      expect(console.warn).toHaveBeenCalledTimes(0);
+      expect(getWarningCommandOutput()).toBe('');
+
+      mock.done();
+    });
+
+    it('should surface a single warning header', async () => {
+      const mock = getAPIMock().get('/api/v1/some-warning').reply(200, undefined, {
+        Warning: '199 - "some error"',
+      });
+
+      await fetch(`${config.get('host')}/api/v1/some-warning`);
+
+      // eslint-disable-next-line no-console
+      expect(console.warn).toHaveBeenCalledTimes(1);
+      expect(getWarningCommandOutput()).toBe('⚠️  ReadMe API Warning: some error');
+
+      mock.done();
+    });
+
+    it('should surface multiple warning headers', async () => {
+      const mock = getAPIMock().get('/api/v1/some-warning').reply(200, undefined, {
+        Warning: '199 - "some error" 199 - "another error"',
+      });
+
+      await fetch(`${config.get('host')}/api/v1/some-warning`);
+
+      // eslint-disable-next-line no-console
+      expect(console.warn).toHaveBeenCalledTimes(2);
+      expect(getWarningCommandOutput()).toBe(
+        '⚠️  ReadMe API Warning: some error\n\n⚠️  ReadMe API Warning: another error'
+      );
+
+      mock.done();
+    });
+
+    it('should surface header content even if parsing fails', async () => {
+      const mock = getAPIMock().get('/api/v1/some-warning').reply(200, undefined, {
+        Warning: 'some garbage error',
+      });
+
+      await fetch(`${config.get('host')}/api/v1/some-warning`);
+
+      // eslint-disable-next-line no-console
+      expect(console.warn).toHaveBeenCalledTimes(1);
+      expect(getWarningCommandOutput()).toBe('⚠️  ReadMe API Warning: some garbage error');
+
+      mock.done();
+    });
+  });
+
   describe('proxies', () => {
     afterEach(() => {
       delete process.env.https_proxy;
