@@ -106,6 +106,14 @@ You can also pass in your API key via the `RDME_API_KEY` environmental variable.
 
 `rdme whoami` is also available to you to determine who is logged in, and to what project. You can clear your stored credentials with `rdme logout`.
 
+#### 1Password
+
+As a secure alternative to the `rdme login` approach to using the CLI locally, [1Password](https://1password.com/) users can set up the [ReadMe shell plugin](https://developer.1password.com/docs/cli/shell-plugins/readme/). With this approach, you can store your ReadMe API key in 1Password and securely pass it in your `rdme` commands using biometrics. See below for a demo of this behavior:
+
+https://user-images.githubusercontent.com/8854718/208739413-590aa265-072d-4800-bca1-27f281448017.mp4
+
+To set this up, check out [1Password's documentation on the ReadMe shell plugin](https://developer.1password.com/docs/cli/shell-plugins/readme/).
+
 ### Proxy
 
 `rdme` makes API requests to the ReadMe API, which is located at [dash.readme.com](https://dash.readme.com). If you need to configure a proxy for these requests, you can do so by setting the `HTTPS_PROXY` environmental variable.
