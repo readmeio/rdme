@@ -1,3 +1,16 @@
+## 8.4.0 (2022-12-21)
+
+* feat(api): surface `Warning` response headers (#721) ([a210754](https://github.com/readmeio/rdme/commit/a210754)), closes [#721](https://github.com/readmeio/rdme/issues/721)
+* feat(openapi): add ability to override title (#718) ([0c7584f](https://github.com/readmeio/rdme/commit/0c7584f)), closes [#718](https://github.com/readmeio/rdme/issues/718)
+* feat(openapi): exposing our spec conversion tooling to a new `:convert` command (#717) ([0482a1f](https://github.com/readmeio/rdme/commit/0482a1f)), closes [#717](https://github.com/readmeio/rdme/issues/717)
+* docs: add docs on 1password plugin (#720) ([9dc36c1](https://github.com/readmeio/rdme/commit/9dc36c1)), closes [#720](https://github.com/readmeio/rdme/issues/720)
+* docs: fixing an improperly styled callout in the `openapi:convert` docs ([a430c24](https://github.com/readmeio/rdme/commit/a430c24))
+* chore: bump deps (#715) ([b5c64c8](https://github.com/readmeio/rdme/commit/b5c64c8)), closes [#715](https://github.com/readmeio/rdme/issues/715)
+* chore(maintainers): add gh release script + docs ([d197242](https://github.com/readmeio/rdme/commit/d197242))
+* fix: login issue when user doesn't pass in API key (#714) ([9561f7c](https://github.com/readmeio/rdme/commit/9561f7c)), closes [#714](https://github.com/readmeio/rdme/issues/714)
+
+
+
 ## <small>8.3.1 (2022-12-16)</small>
 
 * fix(`docs:prune`): prune child docs (#713) ([2b81439](https://github.com/readmeio/rdme/commit/2b81439)), closes [#713](https://github.com/readmeio/rdme/issues/713)
