@@ -51,8 +51,12 @@ export default async function loginFlow(otp?: string) {
     {
       type: 'text',
       name: 'project',
-      message: 'What project are you logging into?',
+      message: 'What project subdomain are you logging into?',
       initial: storedConfig.project,
+      validate: value =>
+        // eslint-disable-next-line unicorn/no-unsafe-regex
+        /^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*$/.test(value) ||
+        'Project subdomain must contain only letters, numbers and dashes.',
     },
   ]);
 
