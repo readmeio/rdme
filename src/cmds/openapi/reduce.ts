@@ -11,10 +11,10 @@ import ora from 'ora';
 import prompts from 'prompts';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
-import { checkFilePath } from '../../lib/checkFile';
 import { oraOptions } from '../../lib/logger';
 import prepareOas from '../../lib/prepareOas';
 import promptTerminal from '../../lib/promptWrapper';
+import { validateFilePath } from '../../lib/validatePromptInput';
 
 export interface Options {
   spec?: string;
@@ -170,7 +170,7 @@ export default class OpenAPIReduceCommand extends Command {
           const extension = path.extname(specPath);
           return `${path.basename(specPath).split(extension)[0]}.reduced${extension}`;
         },
-        validate: value => checkFilePath(value),
+        validate: value => validateFilePath(value),
       },
     ]);
 

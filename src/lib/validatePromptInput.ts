@@ -16,7 +16,7 @@ export const cleanFileName = (input: string) => input.replace(/[^a-z0-9]/gi, '-'
  * @returns true if path is valid (i.e. is non-empty and doesn't already exist),
  * otherwise a string containing the error message
  */
-export function checkFilePath(value: string, getFullPath: (file: string) => string = file => file) {
+export function validateFilePath(value: string, getFullPath: (file: string) => string = file => file) {
   if (value.length) {
     const fullPath = getFullPath(value);
     if (!fs.existsSync(fullPath)) {
@@ -27,4 +27,17 @@ export function checkFilePath(value: string, getFullPath: (file: string) => stri
   }
 
   return 'An output path must be supplied.';
+}
+
+/**
+ * Validates that a project subdomain value is valid.
+ *
+ * @param value the terminal input
+ * @returns true if the subdomain value is valid, else an error message
+ */
+export function validateSubdomain(value: string) {
+  return (
+    // eslint-disable-next-line unicorn/no-unsafe-regex
+    /^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*$/.test(value) || 'Project subdomain must contain only letters, numbers and dashes.'
+  );
 }

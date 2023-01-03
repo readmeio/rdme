@@ -7,6 +7,7 @@ import fetch, { handleRes } from './fetch';
 import getCurrentConfig from './getCurrentConfig';
 import { debug } from './logger';
 import promptTerminal from './promptWrapper';
+import { validateSubdomain } from './validatePromptInput';
 
 interface LoginBody {
   email?: string;
@@ -51,8 +52,9 @@ export default async function loginFlow(otp?: string) {
     {
       type: 'text',
       name: 'project',
-      message: 'What project are you logging into?',
+      message: 'What project subdomain are you logging into?',
       initial: storedConfig.project,
+      validate: validateSubdomain,
     },
   ]);
 

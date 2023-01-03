@@ -9,12 +9,12 @@ import chalk from 'chalk';
 import prompts from 'prompts';
 import simpleGit from 'simple-git';
 
-import { checkFilePath, cleanFileName } from '../checkFile';
 import configstore from '../configstore';
 import { getMajorPkgVersion } from '../getPkgVersion';
 import isCI, { isNpmScript, isTest } from '../isCI';
 import { debug, info } from '../logger';
 import promptTerminal from '../promptWrapper';
+import { cleanFileName, validateFilePath } from '../validatePromptInput';
 
 import yamlBase from './baseFile';
 
@@ -234,7 +234,7 @@ export default async function createGHA(
           type: 'text',
           initial: cleanFileName(`rdme-${command}`),
           format: prev => getGHAFileName(prev),
-          validate: value => checkFilePath(value, getGHAFileName),
+          validate: value => validateFilePath(value, getGHAFileName),
         },
       ],
       {
