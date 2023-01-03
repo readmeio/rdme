@@ -7,6 +7,7 @@ import fetch, { handleRes } from './fetch';
 import getCurrentConfig from './getCurrentConfig';
 import { debug } from './logger';
 import promptTerminal from './promptWrapper';
+import { validateSubdomain } from './validatePromptInput';
 
 interface LoginBody {
   email?: string;
@@ -53,10 +54,7 @@ export default async function loginFlow(otp?: string) {
       name: 'project',
       message: 'What project subdomain are you logging into?',
       initial: storedConfig.project,
-      validate: value =>
-        // eslint-disable-next-line unicorn/no-unsafe-regex
-        /^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*$/.test(value) ||
-        'Project subdomain must contain only letters, numbers and dashes.',
+      validate: validateSubdomain,
     },
   ]);
 

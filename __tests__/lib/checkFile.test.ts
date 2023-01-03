@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-import { validateFilePath } from '../../src/lib/validatePromptInput';
+import { validateFilePath, validateSubdomain } from '../../src/lib/validatePromptInput';
 
 describe('#validateFilePath', () => {
   afterEach(() => {
@@ -29,5 +29,27 @@ describe('#validateFilePath', () => {
 
     expect(validateFilePath(testPath)).toBe(true);
     expect(fs.existsSync).toHaveBeenCalledWith(testPath);
+  });
+});
+
+describe('#validateSubdomain', () => {
+  it('should validate basic subdomain', () => {
+    expect(validateSubdomain('subdomain')).toBe(true);
+  });
+
+  it('should validate subdomain with other characters', () => {
+    expect(validateSubdomain('test-Subdomain123')).toBe(true);
+  });
+
+  it('should reject subdomain with spaces', () => {
+    expect(validateSubdomain('test subdomain')).toBe(
+      'Project subdomain must contain only letters, numbers and dashes.'
+    );
+  });
+
+  it('should reject subdomain with special characters', () => {
+    expect(validateSubdomain('test-subdomain!')).toBe(
+      'Project subdomain must contain only letters, numbers and dashes.'
+    );
   });
 });

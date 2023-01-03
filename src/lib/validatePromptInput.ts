@@ -28,3 +28,16 @@ export function validateFilePath(value: string, getFullPath: (file: string) => s
 
   return 'An output path must be supplied.';
 }
+
+/**
+ * Validates that a project subdomain value is valid.
+ *
+ * @param value the terminal input
+ * @returns true if the subdomain value is valid, else an error message
+ */
+export function validateSubdomain(value: string) {
+  return (
+    // eslint-disable-next-line unicorn/no-unsafe-regex
+    /^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*$/.test(value) || 'Project subdomain must contain only letters, numbers and dashes.'
+  );
+}
