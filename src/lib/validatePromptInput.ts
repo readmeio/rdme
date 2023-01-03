@@ -16,7 +16,7 @@ export const cleanFileName = (input: string) => input.replace(/[^a-z0-9]/gi, '-'
  * @returns true if path is valid (i.e. is non-empty and doesn't already exist),
  * otherwise a string containing the error message
  */
-export function checkFilePath(value: string, getFullPath: (file: string) => string = file => file) {
+export function validateFilePath(value: string, getFullPath: (file: string) => string = file => file) {
   if (value.length) {
     const fullPath = getFullPath(value);
     if (!fs.existsSync(fullPath)) {

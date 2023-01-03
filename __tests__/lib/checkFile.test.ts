@@ -1,14 +1,14 @@
 import fs from 'fs';
 
-import { checkFilePath } from '../../src/lib/checkFile';
+import { validateFilePath } from '../../src/lib/validatePromptInput';
 
-describe('#checkFilePath', () => {
+describe('#validateFilePath', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
 
   it('should return error for empty path value', () => {
-    return expect(checkFilePath('')).toBe('An output path must be supplied.');
+    return expect(validateFilePath('')).toBe('An output path must be supplied.');
   });
 
   it('should return error if path already exists', () => {
@@ -17,7 +17,7 @@ describe('#checkFilePath', () => {
 
     fs.existsSync = jest.fn(() => true);
 
-    expect(checkFilePath(testPath)).toBe('Specified output path already exists.');
+    expect(validateFilePath(testPath)).toBe('Specified output path already exists.');
     expect(fs.existsSync).toHaveBeenCalledWith(testPath);
   });
 
@@ -27,7 +27,7 @@ describe('#checkFilePath', () => {
 
     fs.existsSync = jest.fn(() => false);
 
-    expect(checkFilePath(testPath)).toBe(true);
+    expect(validateFilePath(testPath)).toBe(true);
     expect(fs.existsSync).toHaveBeenCalledWith(testPath);
   });
 });

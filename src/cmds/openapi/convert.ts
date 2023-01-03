@@ -8,7 +8,7 @@ import chalk from 'chalk';
 import prompts from 'prompts';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
-import { checkFilePath } from '../../lib/checkFile';
+import { validateFilePath } from '../../lib/validatePromptInput';
 import prepareOas from '../../lib/prepareOas';
 import promptTerminal from '../../lib/promptWrapper';
 
@@ -72,7 +72,7 @@ export default class OpenAPIConvertCommand extends Command {
           const extension = path.extname(specPath);
           return `${path.basename(specPath).split(extension)[0]}.openapi${extension}`;
         },
-        validate: value => checkFilePath(value),
+        validate: value => validateFilePath(value),
       },
     ]);
 
