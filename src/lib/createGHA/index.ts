@@ -9,12 +9,12 @@ import chalk from 'chalk';
 import prompts from 'prompts';
 import simpleGit from 'simple-git';
 
-import { validateFilePath, cleanFileName } from '../validatePromptInput';
 import configstore from '../configstore';
 import { getMajorPkgVersion } from '../getPkgVersion';
 import isCI, { isNpmScript, isTest } from '../isCI';
 import { debug, info } from '../logger';
 import promptTerminal from '../promptWrapper';
+import { validateFilePath, cleanFileName } from '../validatePromptInput';
 
 import yamlBase from './baseFile';
 

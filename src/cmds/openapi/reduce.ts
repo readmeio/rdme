@@ -11,10 +11,10 @@ import ora from 'ora';
 import prompts from 'prompts';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
-import { validateFilePath } from '../../lib/validatePromptInput';
 import { oraOptions } from '../../lib/logger';
 import prepareOas from '../../lib/prepareOas';
 import promptTerminal from '../../lib/promptWrapper';
+import { validateFilePath } from '../../lib/validatePromptInput';
 
 export interface Options {
   spec?: string;
