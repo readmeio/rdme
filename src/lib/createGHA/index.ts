@@ -14,7 +14,7 @@ import { getMajorPkgVersion } from '../getPkgVersion';
 import isCI, { isNpmScript, isTest } from '../isCI';
 import { debug, info } from '../logger';
 import promptTerminal from '../promptWrapper';
-import { validateFilePath, cleanFileName } from '../validatePromptInput';
+import { cleanFileName, validateFilePath } from '../validatePromptInput';
 
 import yamlBase from './baseFile';
 
