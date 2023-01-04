@@ -135,55 +135,23 @@ describe('rdme docs (single)', () => {
       versionMock.done();
     });
 
-    it('should fail if the doc is invalid', async () => {
-      const folder = 'failure-docs';
-      const slug = 'fail-doc';
-
-      const errorObject = {
-        error: 'DOC_INVALID',
-        message: "We couldn't save this doc (Path `category` is required.).",
-      };
-
-      const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/${folder}/${slug}.md`)));
-
-      const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/${folder}/${slug}.md`)));
-
-      const getMock = getAPIMockWithVersionHeader(version)
-        .get(`/api/v1/docs/${slug}`)
-        .basicAuth({ user: key })
-        .reply(404, {
-          error: 'DOC_NOTFOUND',
-          message: `The doc with the slug '${slug}' couldn't be found`,
-          suggestion: '...a suggestion to resolve the issue...',
-          help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
-        });
-
-      const postMock = getAPIMockWithVersionHeader(version)
-        .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
-        .basicAuth({ user: key })
-        .reply(400, errorObject);
-
+    it('should skip doc if it does not contain any frontmatter attributes', async () => {
       const versionMock = getAPIMock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      const filePath = `./__tests__/${fixturesBaseDir}/failure-docs/fail-doc.md`;
+      const filePath = `./__tests__/${fixturesBaseDir}/failure-docs/doc-sans-attributes.md`;
 
-      const formattedErrorObject = {
-        ...errorObject,
-        message: `Error uploading ${chalk.underline(`${filePath}`)}:\n\n${errorObject.message}`,
-      };
+      await expect(docs.run({ filePath, key, version })).resolves.toBe(
+        `⏭️  no frontmatter attributes found for ${filePath}, skipping`
+      );
 
-      await expect(docs.run({ filePath, key, version })).rejects.toStrictEqual(new APIError(formattedErrorObject));
-
-      getMock.done();
-      postMock.done();
       versionMock.done();
     });
 
     it('should fail if some other error when retrieving page slug', async () => {
-      const slug = 'fail-doc';
+      const slug = 'new-doc';
 
       const errorObject = {
         error: 'INTERNAL_ERROR',
@@ -202,7 +170,7 @@ describe('rdme docs (single)', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      const filePath = `./__tests__/${fixturesBaseDir}/failure-docs/fail-doc.md`;
+      const filePath = `./__tests__/${fixturesBaseDir}/failure-docs/${slug}.md`;
 
       const formattedErrorObject = {
         ...errorObject,
