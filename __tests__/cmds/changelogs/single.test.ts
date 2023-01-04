@@ -112,52 +112,16 @@ describe('rdme changelogs (single)', () => {
       getMock.done();
     });
 
-    it('should fail if the changelog is invalid', async () => {
-      const folder = 'failure-docs';
-      const slug = 'fail-doc';
+    it('should skip if it does not contain any frontmatter attributes', async () => {
+      const filePath = `./__tests__/${fixturesBaseDir}/failure-docs/doc-sans-attributes.md`;
 
-      const errorObject = {
-        error: 'CHANGELOG_INVALID',
-        message: "We couldn't save this changelog (Changelog title cannot be blank).",
-        suggestion: 'Make sure all the data is correct, and the body is valid Markdown.',
-        docs: 'fake-metrics-uuid',
-        help: "If you need help, email support@readme.io and include the following link to your API log: 'fake-metrics-uuid'.",
-      };
-
-      const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/${folder}/${slug}.md`)));
-
-      const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/${folder}/${slug}.md`)));
-
-      const getMock = getAPIMock()
-        .get(`/api/v1/changelogs/${slug}`)
-        .basicAuth({ user: key })
-        .reply(404, {
-          error: 'CHANGELOG_NOTFOUND',
-          message: `The changelog with the slug '${slug}' couldn't be found`,
-          suggestion: '...a suggestion to resolve the issue...',
-          help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
-        });
-
-      const postMock = getAPIMock()
-        .post('/api/v1/changelogs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
-        .basicAuth({ user: key })
-        .reply(400, errorObject);
-
-      const filePath = `./__tests__/${fixturesBaseDir}/failure-docs/fail-doc.md`;
-
-      const formattedErrorObject = {
-        ...errorObject,
-        message: `Error uploading ${chalk.underline(`${filePath}`)}:\n\n${errorObject.message}`,
-      };
-
-      await expect(changelogs.run({ filePath, key })).rejects.toStrictEqual(new APIError(formattedErrorObject));
-
-      getMock.done();
-      postMock.done();
+      await expect(changelogs.run({ filePath, key })).resolves.toBe(
+        `⏭️  no frontmatter attributes found for ${filePath}, skipping`
+      );
     });
 
     it('should fail if some other error when retrieving page slug', async () => {
-      const slug = 'fail-doc';
+      const slug = 'new-doc';
 
       const errorObject = {
         error: 'INTERNAL_ERROR',
@@ -168,7 +132,7 @@ describe('rdme changelogs (single)', () => {
 
       const getMock = getAPIMock().get(`/api/v1/changelogs/${slug}`).basicAuth({ user: key }).reply(500, errorObject);
 
-      const filePath = `./__tests__/${fixturesBaseDir}/failure-docs/fail-doc.md`;
+      const filePath = `./__tests__/${fixturesBaseDir}/failure-docs/${slug}.md`;
 
       const formattedErrorObject = {
         ...errorObject,
