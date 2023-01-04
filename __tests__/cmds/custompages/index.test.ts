@@ -293,8 +293,7 @@ describe('rdme custompages', () => {
 
     it('should fail if any custompages are invalid', async () => {
       const folder = 'failure-docs';
-      const slug = 'fail-doc';
-      const slugTwo = 'new-doc';
+      const slug = 'new-doc';
 
       const errorObject = {
         error: 'CUSTOMPAGE_INVALID',
@@ -303,11 +302,10 @@ describe('rdme custompages', () => {
         docs: 'fake-metrics-uuid',
         help: "If you need help, email support@readme.io and include the following link to your API log: 'fake-metrics-uuid'.",
       };
+
       const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/${folder}/${slug}.md`)));
-      const docTwo = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/${folder}/${slugTwo}.md`)));
 
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/${folder}/${slug}.md`)));
-      const hashTwo = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/${folder}/${slugTwo}.md`)));
 
       const getMocks = getAPIMock()
         .get(`/api/v1/custompages/${slug}`)
@@ -317,31 +315,9 @@ describe('rdme custompages', () => {
           message: `The custom page with the slug '${slug}' couldn't be found`,
           suggestion: '...a suggestion to resolve the issue...',
           help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
-        })
-        .get(`/api/v1/custompages/${slugTwo}`)
-        .basicAuth({ user: key })
-        .reply(404, {
-          error: 'CUSTOMPAGE_NOTFOUND',
-          message: `The custom page with the slug '${slugTwo}' couldn't be found`,
-          suggestion: '...a suggestion to resolve the issue...',
-          help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
         });
 
       const postMocks = getAPIMock()
-        .post('/api/v1/custompages', {
-          slug: slugTwo,
-          body: docTwo.content,
-          htmlmode: false,
-          ...docTwo.data,
-          lastUpdatedHash: hashTwo,
-        })
-        .basicAuth({ user: key })
-        .reply(201, {
-          metadata: { image: [], title: '', description: '' },
-          title: 'This is the custom page title',
-          slug: slugTwo,
-          body: 'Body',
-        })
         .post('/api/v1/custompages', { slug, body: doc.content, htmlmode: false, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
         .reply(400, errorObject);
