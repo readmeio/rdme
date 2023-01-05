@@ -67,7 +67,20 @@ category: 62056dee230e07007218be06
 If you're anything like us...
 ```
 
-The only required attributes are the `title` and `category`. To determine what your `category` value should be, you can use [the `Get all categories` endpoint](https://docs.readme.com/reference/getcategories) and grab the `id` value from the response.
+#### Required Attributes
+
+See below for a table detailing the required YAML frontmatter attributes:
+
+| Attribute  | Required for `changelogs`? | Required for `custompages`? | Required for `docs`? |
+| :--------- | :------------------------- | :-------------------------- | :------------------- |
+| `title`    | Yes                        | Yes                         | Yes                  |
+| `category` | No                         | No                          | Yes                  |
+
+To determine what your `category` value should be, you can use [the `Get all categories` endpoint](https://docs.readme.com/reference/getcategories) and grab the `id` value from the response.
+
+> 📘
+>
+> Any Markdown/HTML files that lack YAML frontmatter attributes will be skipped.
 
 #### Specifying Page Slugs
 
