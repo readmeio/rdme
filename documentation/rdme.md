@@ -69,7 +69,7 @@ If you're anything like us...
 
 #### Required Attributes
 
-See below for a table detailing the required YAML frontmatter attributes:
+See below for a table detailing the required YAML front matter attributes:
 
 | Attribute  | Required for `changelogs`? | Required for `custompages`? | Required for `docs`? |
 | :--------- | :------------------------- | :-------------------------- | :------------------- |
@@ -80,7 +80,7 @@ To determine what your `category` value should be, you can use [the `Get all cat
 
 > 📘
 >
-> Any Markdown/HTML files that lack YAML frontmatter attributes will be skipped.
+> Any Markdown/HTML files that lack YAML front matter attributes will be skipped.
 
 #### Specifying Page Slugs
 

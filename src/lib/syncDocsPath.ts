@@ -33,10 +33,10 @@ async function pushDoc(
   const { content, data, hash, slug } = readDoc(filepath);
 
   // TODO: ideally we should offer a zero-configuration approach that doesn't
-  // require YAML frontmatter, but that will have to be a breaking change
+  // require YAML front matter, but that will have to be a breaking change
   if (!Object.keys(data).length) {
-    debug(`No frontmatter attributes found for ${filepath}, not syncing`);
-    return `⏭️  no frontmatter attributes found for ${filepath}, skipping`;
+    debug(`No front matter attributes found for ${filepath}, not syncing`);
+    return `⏭️  no front matter attributes found for ${filepath}, skipping`;
   }
 
   let payload: {
