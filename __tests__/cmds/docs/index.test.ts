@@ -24,7 +24,6 @@ const fullFixturesDir = `${__dirname}./../../${fixturesBaseDir}`;
 const key = 'API_KEY';
 const version = '1.0.0';
 const category = 'CATEGORY_ID';
-const apiSetting = 'API_SETTING_ID';
 
 const testWorkingDir = process.cwd();
 
@@ -350,8 +349,7 @@ describe('rdme docs', () => {
 
     it('should fail if any docs are invalid', async () => {
       const folder = 'failure-docs';
-      const slug = 'fail-doc';
-      const slugTwo = 'new-doc';
+      const slug = 'new-doc';
 
       const errorObject = {
         error: 'DOC_INVALID',
@@ -359,10 +357,8 @@ describe('rdme docs', () => {
       };
 
       const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/${folder}/${slug}.md`)));
-      const docTwo = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/${folder}/${slugTwo}.md`)));
 
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/${folder}/${slug}.md`)));
-      const hashTwo = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/${folder}/${slugTwo}.md`)));
 
       const getMocks = getAPIMockWithVersionHeader(version)
         .get(`/api/v1/docs/${slug}`)
@@ -372,35 +368,9 @@ describe('rdme docs', () => {
           message: `The doc with the slug '${slug}' couldn't be found`,
           suggestion: '...a suggestion to resolve the issue...',
           help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
-        })
-        .get(`/api/v1/docs/${slugTwo}`)
-        .basicAuth({ user: key })
-        .reply(404, {
-          error: 'DOC_NOTFOUND',
-          message: `The doc with the slug '${slugTwo}' couldn't be found`,
-          suggestion: '...a suggestion to resolve the issue...',
-          help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
         });
 
       const postMocks = getAPIMockWithVersionHeader(version)
-        .post('/api/v1/docs', { slug: slugTwo, body: docTwo.content, ...docTwo.data, lastUpdatedHash: hashTwo })
-        .basicAuth({ user: key })
-        .reply(201, {
-          metadata: { image: [], title: '', description: '' },
-          api: {
-            method: 'post',
-            url: '',
-            auth: 'required',
-            params: [],
-            apiSetting,
-          },
-          title: 'This is the document title',
-          updates: [],
-          type: 'endpoint',
-          slug: slugTwo,
-          body: 'Body',
-          category,
-        })
         .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
         .reply(400, errorObject);

@@ -261,8 +261,7 @@ describe('rdme changelogs', () => {
 
     it('should fail if any changelogs are invalid', async () => {
       const folder = 'failure-docs';
-      const slug = 'fail-doc';
-      const slugTwo = 'new-doc';
+      const slug = 'new-doc';
 
       const errorObject = {
         error: 'CHANGELOG_INVALID',
@@ -271,11 +270,10 @@ describe('rdme changelogs', () => {
         docs: 'fake-metrics-uuid',
         help: "If you need help, email support@readme.io and include the following link to your API log: 'fake-metrics-uuid'.",
       };
+
       const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/${folder}/${slug}.md`)));
-      const docTwo = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/${folder}/${slugTwo}.md`)));
 
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/${folder}/${slug}.md`)));
-      const hashTwo = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/${folder}/${slugTwo}.md`)));
 
       const getMocks = getAPIMock()
         .get(`/api/v1/changelogs/${slug}`)
@@ -285,25 +283,9 @@ describe('rdme changelogs', () => {
           message: `The changelog with the slug '${slug}' couldn't be found`,
           suggestion: '...a suggestion to resolve the issue...',
           help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
-        })
-        .get(`/api/v1/changelogs/${slugTwo}`)
-        .basicAuth({ user: key })
-        .reply(404, {
-          error: 'CHANGELOG_NOTFOUND',
-          message: `The changelog with the slug '${slugTwo}' couldn't be found`,
-          suggestion: '...a suggestion to resolve the issue...',
-          help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
         });
 
       const postMocks = getAPIMock()
-        .post('/api/v1/changelogs', { slug: slugTwo, body: docTwo.content, ...docTwo.data, lastUpdatedHash: hashTwo })
-        .basicAuth({ user: key })
-        .reply(201, {
-          metadata: { image: [], title: '', description: '' },
-          title: 'This is the changelog title',
-          slug: slugTwo,
-          body: 'Body',
-        })
         .post('/api/v1/changelogs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
         .reply(400, errorObject);
