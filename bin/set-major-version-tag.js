@@ -1,4 +1,5 @@
 #! /usr/bin/env node
+/* eslint-disable no-console */
 const { exec } = require('child_process');
 
 const semverParse = require('semver/functions/parse');
@@ -14,18 +15,15 @@ async function setMajorVersionTag() {
   const parsedVersion = semverParse(pkg.version);
 
   if (parsedVersion.prerelease.length) {
-    // eslint-disable-next-line no-console
     console.warn('Pre-release version, not setting major version tag');
     return;
   }
 
   exec(`git tag v${parsedVersion.major} -f -m 'Top-level tag pointing to ${parsedVersion.version}'`, (err, stdout) => {
     if (err) {
-      // eslint-disable-next-line no-console
       console.error(err);
       process.exit(1);
     }
-    // eslint-disable-next-line no-console
     if (stdout) console.log(stdout);
   });
 }
