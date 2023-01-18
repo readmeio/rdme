@@ -1,6 +1,6 @@
 import type { Version } from '.';
-import type { CommandOptions } from '../../lib/baseCommand';
 import type { CommonOptions } from './create';
+import type { CommandOptions } from '../../lib/baseCommand';
 
 import config from 'config';
 import { Headers } from 'node-fetch';
