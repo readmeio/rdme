@@ -42,7 +42,7 @@ describe('#fetch()', () => {
       const mock = getAPIMock()
         .get('/api/v1')
         .basicAuth({ user: key })
-        .reply(200, function () {
+        .reply(200, function reply() {
           return this.req.headers;
         });
 
@@ -68,7 +68,7 @@ describe('#fetch()', () => {
     const mock = getAPIMock()
       .get('/api/v1')
       .basicAuth({ user: key })
-      .reply(200, function () {
+      .reply(200, function reply() {
         return this.req.headers;
       });
 
@@ -90,7 +90,7 @@ describe('#fetch()', () => {
   it('should make fetch call if no other request options are provided', async () => {
     const mock = getAPIMock()
       .get('/api/v1/doesnt-need-auth')
-      .reply(200, function () {
+      .reply(200, function reply() {
         return this.req.headers;
       });
 
