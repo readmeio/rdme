@@ -153,9 +153,7 @@ export default class OpenAPICommand extends Command {
         ? `You've successfully uploaded a new ${specType} file to your ReadMe project!`
         : `You've successfully updated an existing ${specType} file on your ReadMe project!`;
 
-      Command.debug(`successful ${data.status} response`);
-      const body = await data.json();
-      Command.debug(`successful response payload: ${JSON.stringify(body)}`);
+      const body = await handleRes(data, false);
 
       const output = {
         commandType: isUpdate ? 'update' : 'create',
@@ -300,8 +298,7 @@ export default class OpenAPICommand extends Command {
       Command.debug(`total pages: ${totalPages}`);
       Command.debug(`pagination result: ${JSON.stringify(parsedDocs)}`);
 
-      const apiSettingsBody = await apiSettings.json();
-      Command.debug(`api settings list response payload: ${JSON.stringify(apiSettingsBody)}`);
+      const apiSettingsBody = await handleRes(apiSettings);
       if (!apiSettingsBody.length) return createSpec();
 
       if (update) {

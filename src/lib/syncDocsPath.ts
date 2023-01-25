@@ -125,8 +125,7 @@ async function pushDoc(
     ),
   })
     .then(async res => {
-      const body = await res.json();
-      debug(`GET /${type}/:slug API response for ${slug}: ${JSON.stringify(body)}`);
+      const body = await handleRes(res, false);
       if (!res.ok) {
         if (res.status !== 404) return Promise.reject(new APIError(body));
         debug(`error retrieving data for ${slug}, creating doc`);
