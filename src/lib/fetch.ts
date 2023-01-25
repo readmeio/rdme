@@ -136,6 +136,10 @@ export default function fetch(url: string, options: RequestInit = { headers: new
  *
  * If we receive non-JSON responses, we consider them errors and throw them.
  *
+ * @param rejectOnJsonError if omitted (or set to true), the function will return
+ * an `APIError` if the JSON body contains an `error` property. If set to false,
+ * the function will return a resolved promise containing the JSON object.
+ *
  */
 async function handleRes(res: Response, rejectOnJsonError = true) {
   const contentType = res.headers.get('content-type');
