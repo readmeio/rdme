@@ -36,7 +36,7 @@ export default async function streamSpecToRegistry(spec: string) {
   };
 
   return fetch(`${config.get('host')}/api/v1/api-registry`, options)
-    .then(res => handleRes(res))
+    .then(handleRes)
     .then(body => {
       spinner.stop();
       return body.registryUUID;

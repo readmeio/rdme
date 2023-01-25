@@ -70,7 +70,7 @@ export default class DocsEditCommand extends Command {
           Accept: 'application/json',
         })
       ),
-    }).then(res => handleRes(res));
+    }).then(handleRes);
 
     await writeFile(filename, existingDoc.body);
 

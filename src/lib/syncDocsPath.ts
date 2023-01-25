@@ -76,7 +76,7 @@ async function pushDoc(
           ...payload,
         }),
       })
-        .then(res => handleRes(res))
+        .then(handleRes)
         // eslint-disable-next-line no-underscore-dangle
         .then(res => `🌱 successfully created '${res.slug}' (ID: ${res._id}) with contents from ${filepath}`)
     );
@@ -110,7 +110,7 @@ async function pushDoc(
         })
       ),
     })
-      .then(res => handleRes(res))
+      .then(handleRes)
       .then(res => `✏️ successfully updated '${res.slug}' with contents from ${filepath}`);
   }
 

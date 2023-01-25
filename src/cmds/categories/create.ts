@@ -102,7 +102,7 @@ export default class CategoriesCreateCommand extends Command {
           type: categoryType,
         }),
       })
-        .then(res => handleRes(res))
+        .then(handleRes)
         .then(res => `🌱 successfully created '${res.title}' with a type of '${res.type}' and an id of '${res.id}'`);
     }
 

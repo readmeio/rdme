@@ -47,7 +47,7 @@ export default async function getCategories(key: string, selectedVersion: string
               Accept: 'application/json',
             })
           ),
-        }).then(res => handleRes(res));
+        }).then(handleRes);
       })
     ))
   );
