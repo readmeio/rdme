@@ -87,6 +87,8 @@ function getUserAgent() {
 /**
  * Wrapper for the `fetch` API so we can add rdme-specific headers to all API requests.
  *
+ * @param filePath local path for the file that's being sent. We use this to construct
+ * a full URL that points to the file in version control systems.
  */
 export default function fetch(url: string, options: RequestInit = { headers: new Headers() }, filePath = '') {
   let source = 'cli';
