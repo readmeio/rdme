@@ -9,7 +9,8 @@ import getAPIMock from '../helpers/get-api-mock';
 
 describe('#fetch()', () => {
   describe('GitHub Actions environment', () => {
-    let spy: jest.SpyInstance;
+    let isGHASpy: jest.SpyInstance;
+    let ciNameSpy: jest.SpyInstance;
 
     // List of all GitHub Actions env variables:
     // https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables
@@ -23,8 +24,12 @@ describe('#fetch()', () => {
       process.env.GITHUB_SERVER_URL = 'https://github.com';
       process.env.GITHUB_SHA = 'ffac537e6cbbf934b08745a378932722df287a53';
       process.env.TEST_RDME_CI = 'true';
-      spy = jest.spyOn(isCI, 'isGHA');
-      spy.mockReturnValue(true);
+
+      isGHASpy = jest.spyOn(isCI, 'isGHA');
+      isGHASpy.mockReturnValue(true);
+
+      ciNameSpy = jest.spyOn(isCI, 'ciName');
+      ciNameSpy.mockReturnValue('GitHub Actions (test)');
     });
 
     afterEach(() => {
@@ -37,7 +42,7 @@ describe('#fetch()', () => {
       delete process.env.GITHUB_SERVER_URL;
       delete process.env.GITHUB_SHA;
       delete process.env.TEST_RDME_CI;
-      spy.mockReset();
+      jest.resetAllMocks();
     });
 
     it('should have correct headers for requests in GitHub Action env', async () => {
@@ -62,9 +67,7 @@ describe('#fetch()', () => {
       expect(headers['x-github-run-id'].shift()).toBe('1658821493');
       expect(headers['x-github-run-number'].shift()).toBe('3');
       expect(headers['x-github-sha'].shift()).toBe('ffac537e6cbbf934b08745a378932722df287a53');
-      // in reality this header value should be 'GitHub', but I'm
-      // having troubles mocking the `ci-info` package
-      expect(headers['x-rdme-ci'].shift()).toBe('n/a');
+      expect(headers['x-rdme-ci'].shift()).toBe('GitHub Actions (test)');
       mock.done();
     });
 

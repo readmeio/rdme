@@ -1,6 +1,5 @@
 import type { RequestInit, Response } from 'node-fetch';
 
-import { name } from 'ci-info';
 import mime from 'mime-types';
 // eslint-disable-next-line no-restricted-imports
 import nodeFetch, { Headers } from 'node-fetch';
@@ -8,7 +7,7 @@ import nodeFetch, { Headers } from 'node-fetch';
 import pkg from '../../package.json';
 
 import APIError from './apiError';
-import isCI, { isGHA } from './isCI';
+import isCI, { ciName, isGHA } from './isCI';
 import { debug, warn } from './logger';
 
 const SUCCESS_NO_CONTENT = 204;
@@ -121,7 +120,7 @@ export default function fetch(url: string, options: RequestInit = { headers: new
   }
 
   if (isCI()) {
-    headers.set('x-rdme-ci', name || 'n/a');
+    headers.set('x-rdme-ci', ciName());
   }
 
   headers.set('x-readme-source', source);

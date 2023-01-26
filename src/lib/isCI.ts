@@ -1,5 +1,9 @@
 import ci from 'ci-info';
 
+export function ciName() {
+  return ci.name || 'n/a';
+}
+
 /**
  * Small env check to determine if we're in a GitHub Actions environment.
  *
