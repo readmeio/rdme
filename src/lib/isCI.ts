@@ -1,5 +1,12 @@
 import ci from 'ci-info'; // eslint-disable-line no-restricted-imports
 
+/**
+ * Wrapper function that returns the name of the current CI environment
+ * (or "n/a" if it's not available).
+ *
+ * Full list of vendors available here:
+ * https://github.com/watson/ci-info#supported-ci-tools
+ */
 export function ciName() {
   return ci.name || 'n/a';
 }
