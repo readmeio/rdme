@@ -20,7 +20,9 @@ describe('#fetch()', () => {
       process.env.GITHUB_RUN_ATTEMPT = '3';
       process.env.GITHUB_RUN_ID = '1658821493';
       process.env.GITHUB_RUN_NUMBER = '3';
+      process.env.GITHUB_SERVER_URL = 'https://github.com';
       process.env.GITHUB_SHA = 'ffac537e6cbbf934b08745a378932722df287a53';
+      process.env.TEST_RDME_CI = 'true';
       spy = jest.spyOn(isCI, 'isGHA');
       spy.mockReturnValue(true);
     });
@@ -32,7 +34,9 @@ describe('#fetch()', () => {
       delete process.env.GITHUB_RUN_ATTEMPT;
       delete process.env.GITHUB_RUN_ID;
       delete process.env.GITHUB_RUN_NUMBER;
+      delete process.env.GITHUB_SERVER_URL;
       delete process.env.GITHUB_SHA;
+      delete process.env.TEST_RDME_CI;
       spy.mockReset();
     });
 
@@ -58,6 +62,34 @@ describe('#fetch()', () => {
       expect(headers['x-github-run-id'].shift()).toBe('1658821493');
       expect(headers['x-github-run-number'].shift()).toBe('3');
       expect(headers['x-github-sha'].shift()).toBe('ffac537e6cbbf934b08745a378932722df287a53');
+      // in reality this header value should be 'GitHub', but I'm
+      // having troubles mocking the `ci-info` package
+      expect(headers['x-rdme-ci'].shift()).toBe('n/a');
+      mock.done();
+    });
+
+    it('should include file URL header if applicable', async () => {
+      const key = 'API_KEY';
+
+      const mock = getAPIMock()
+        .get('/api/v1')
+        .basicAuth({ user: key })
+        .reply(200, function () {
+          return this.req.headers;
+        });
+
+      const headers = await fetch(
+        `${config.get('host')}/api/v1`,
+        {
+          method: 'get',
+          headers: cleanHeaders(key),
+        },
+        'openapi.json'
+      ).then(handleRes);
+
+      expect(headers['x-readme-source-url'].shift()).toBe(
+        'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/openapi.json'
+      );
       mock.done();
     });
   });

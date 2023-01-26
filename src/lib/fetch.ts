@@ -1,5 +1,6 @@
 import type { RequestInit, Response } from 'node-fetch';
 
+import { name } from 'ci-info';
 import mime from 'mime-types';
 // eslint-disable-next-line no-restricted-imports
 import nodeFetch, { Headers } from 'node-fetch';
@@ -7,7 +8,7 @@ import nodeFetch, { Headers } from 'node-fetch';
 import pkg from '../../package.json';
 
 import APIError from './apiError';
-import { isGHA } from './isCI';
+import isCI, { isGHA } from './isCI';
 import { debug, warn } from './logger';
 
 const SUCCESS_NO_CONTENT = 204;
@@ -88,7 +89,7 @@ function getUserAgent() {
  * Wrapper for the `fetch` API so we can add rdme-specific headers to all API requests.
  *
  */
-export default function fetch(url: string, options: RequestInit = { headers: new Headers() }) {
+export default function fetch(url: string, options: RequestInit = { headers: new Headers() }, filePath = '') {
   let source = 'cli';
   let headers = options.headers as Headers;
 
@@ -105,6 +106,22 @@ export default function fetch(url: string, options: RequestInit = { headers: new
     headers.set('x-github-run-id', process.env.GITHUB_RUN_ID);
     headers.set('x-github-run-number', process.env.GITHUB_RUN_NUMBER);
     headers.set('x-github-sha', process.env.GITHUB_SHA);
+
+    if (filePath) {
+      /**
+       * Constructs a full URL to the file using GitHub Actions runner variables
+       * @see {@link https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables}
+       * @example https://github.com/readmeio/rdme/blob/cb4129d5c7b51ff3b50f933a9c7d0c3d0d33d62c/documentation/rdme.md
+       */
+      headers.set(
+        'x-readme-source-url',
+        `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/blob/${process.env.GITHUB_SHA}/${filePath}`
+      );
+    }
+  }
+
+  if (isCI()) {
+    headers.set('x-rdme-ci', name || 'n/a');
   }
 
   headers.set('x-readme-source', source);

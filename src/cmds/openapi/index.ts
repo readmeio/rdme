@@ -235,7 +235,7 @@ export default class OpenAPICommand extends Command {
 
       options.method = 'post';
       spinner.start('Creating your API docs in ReadMe...');
-      return fetch(`${config.get('host')}/api/v1/api-specification`, options).then(res => {
+      return fetch(`${config.get('host')}/api/v1/api-specification`, options, specPath).then(res => {
         if (res.ok) {
           spinner.succeed(`${spinner.text} done! 🦉`);
           return success(res);
@@ -253,7 +253,7 @@ export default class OpenAPICommand extends Command {
       isUpdate = true;
       options.method = 'put';
       spinner.start('Updating your API docs in ReadMe...');
-      return fetch(`${config.get('host')}/api/v1/api-specification/${specId}`, options).then(res => {
+      return fetch(`${config.get('host')}/api/v1/api-specification/${specId}`, options, specPath).then(res => {
         if (res.ok) {
           spinner.succeed(`${spinner.text} done! 🦉`);
           return success(res);
