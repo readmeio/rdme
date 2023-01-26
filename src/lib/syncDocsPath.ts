@@ -76,7 +76,7 @@ async function pushDoc(
           ...payload,
         }),
       })
-        .then(res => handleRes(res))
+        .then(handleRes)
         // eslint-disable-next-line no-underscore-dangle
         .then(res => `🌱 successfully created '${res.slug}' (ID: ${res._id}) with contents from ${filepath}`)
     );
@@ -110,7 +110,7 @@ async function pushDoc(
         })
       ),
     })
-      .then(res => handleRes(res))
+      .then(handleRes)
       .then(res => `✏️ successfully updated '${res.slug}' with contents from ${filepath}`);
   }
 
@@ -125,8 +125,7 @@ async function pushDoc(
     ),
   })
     .then(async res => {
-      const body = await res.json();
-      debug(`GET /${type}/:slug API response for ${slug}: ${JSON.stringify(body)}`);
+      const body = await handleRes(res, false);
       if (!res.ok) {
         if (res.status !== 404) return Promise.reject(new APIError(body));
         debug(`error retrieving data for ${slug}, creating doc`);

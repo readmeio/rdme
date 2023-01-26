@@ -59,7 +59,7 @@ export default class UpdateVersionCommand extends Command {
     const foundVersion = await fetch(`${config.get('host')}/api/v1/version/${selectedVersion}`, {
       method: 'get',
       headers: cleanHeaders(key),
-    }).then(res => handleRes(res));
+    }).then(handleRes);
 
     const promptResponse = await promptTerminal(promptHandler.createVersionPrompt([], opts, foundVersion));
 

@@ -7,6 +7,7 @@ import type { Choice, PromptObject } from 'prompts';
 import parse from 'parse-link-header';
 import semver from 'semver';
 
+import { handleRes } from './fetch';
 import promptTerminal from './promptWrapper';
 
 interface Spec {
@@ -69,7 +70,7 @@ const updateOasPrompt = (
         try {
           const newSpecs = await getSpecs(`${parsedDocs.prev.url}`);
           const newParsedDocs = parse(newSpecs.headers.get('link'));
-          const newSpecList = await newSpecs.json();
+          const newSpecList = await handleRes(newSpecs);
           // @todo: figure out how to add a stricter type here, see:
           // https://github.com/readmeio/rdme/pull/570#discussion_r949715913
           const { specId } = await promptTerminal(
@@ -83,7 +84,7 @@ const updateOasPrompt = (
         try {
           const newSpecs = await getSpecs(`${parsedDocs.next.url}`);
           const newParsedDocs = parse(newSpecs.headers.get('link'));
-          const newSpecList = await newSpecs.json();
+          const newSpecList = await handleRes(newSpecs);
           // @todo: figure out how to add a stricter type here, see:
           // https://github.com/readmeio/rdme/pull/570#discussion_r949715913
           const { specId } = await promptTerminal(

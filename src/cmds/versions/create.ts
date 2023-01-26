@@ -63,7 +63,7 @@ export default class CreateVersionCommand extends Command {
       versionList = await fetch(`${config.get('host')}/api/v1/version`, {
         method: 'get',
         headers: cleanHeaders(key),
-      }).then(res => handleRes(res));
+      }).then(handleRes);
     }
 
     const versionPrompt = promptHandler.createVersionPrompt(versionList || [], {

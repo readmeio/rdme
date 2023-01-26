@@ -22,7 +22,7 @@ export async function getProjectVersion(versionFlag: string, key: string, return
         method: 'get',
         headers: cleanHeaders(key),
       })
-        .then(res => handleRes(res))
+        .then(handleRes)
         .then((res: Version) => res.version);
     }
 
@@ -34,7 +34,7 @@ export async function getProjectVersion(versionFlag: string, key: string, return
     const versionList: Version[] = await fetch(`${config.get('host')}/api/v1/version`, {
       method: 'get',
       headers: cleanHeaders(key),
-    }).then(res => handleRes(res));
+    }).then(handleRes);
 
     if (versionList.length === 1) {
       return versionList[0].version;

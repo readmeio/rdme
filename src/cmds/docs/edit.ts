@@ -70,7 +70,7 @@ export default class DocsEditCommand extends Command {
           Accept: 'application/json',
         })
       ),
-    }).then(res => handleRes(res));
+    }).then(handleRes);
 
     await writeFile(filename, existingDoc.body);
 
@@ -99,11 +99,9 @@ export default class DocsEditCommand extends Command {
             })
           ),
         })
-          .then(res => res.json())
+          .then(res => handleRes(res, false))
           .then(async res => {
-            Command.debug(`response from PUT request: ${res}`);
-            // The reason we aren't using our handleRes() function here is
-            // because we need to use the `reject` function from
+            // We need to use the `reject` function from
             // the Promise that's wrapping this function.
             if (res.error) {
               return reject(new APIError(res));
