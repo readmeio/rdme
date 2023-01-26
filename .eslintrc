@@ -55,6 +55,10 @@
             "name": "node-fetch",
             "importNames": ["default"],
             "message": "Avoid using `node-fetch` directly and instead use the fetch wrapper located in `lib/fetch.ts`. See CONTRIBUTING.md for more information."
+          },
+          {
+            "name": "ci-info",
+            "message": "The `ci-info` package is difficult to test because misleading results will appear when running tests in the GitHub Actions runner. Instead of importing this package directly, create a wrapper function in `lib/isCI.ts` and import that instead."
           }
         ]
       }

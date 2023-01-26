@@ -1,4 +1,4 @@
-import ci from 'ci-info';
+import ci from 'ci-info'; // eslint-disable-line no-restricted-imports
 
 export function ciName() {
   return ci.name || 'n/a';
