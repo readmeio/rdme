@@ -88,7 +88,7 @@ describe('rdme docs:prune', () => {
         confirm: true,
         version,
       })
-    ).resolves.toBe('🗑️ successfully deleted `this-doc-should-be-missing-in-folder`.');
+    ).resolves.toBe('🗑️  successfully deleted `this-doc-should-be-missing-in-folder`.');
 
     apiMocks.done();
     versionMock.done();
@@ -116,7 +116,7 @@ describe('rdme docs:prune', () => {
         key,
         version,
       })
-    ).resolves.toBe('🗑️ successfully deleted `this-doc-should-be-missing-in-folder`.');
+    ).resolves.toBe('🗑️  successfully deleted `this-doc-should-be-missing-in-folder`.');
 
     apiMocks.done();
     versionMock.done();
@@ -151,7 +151,7 @@ describe('rdme docs:prune', () => {
         version,
       })
     ).resolves.toBe(
-      '🗑️ successfully deleted `this-doc-should-be-missing-in-folder`.\n🗑️ successfully deleted `this-child-is-also-missing`.'
+      '🗑️  successfully deleted `this-doc-should-be-missing-in-folder`.\n🗑️  successfully deleted `this-child-is-also-missing`.'
     );
 
     apiMocks.done();
