@@ -21,7 +21,6 @@ describe('#fetch()', () => {
       process.env.GITHUB_RUN_ID = '1658821493';
       process.env.GITHUB_RUN_NUMBER = '3';
       process.env.GITHUB_SHA = 'ffac537e6cbbf934b08745a378932722df287a53';
-      process.env.TEST_RDME_CI = 'true';
       spy = jest.spyOn(isCI, 'isGHA');
       spy.mockReturnValue(true);
     });
@@ -34,7 +33,6 @@ describe('#fetch()', () => {
       delete process.env.GITHUB_RUN_ID;
       delete process.env.GITHUB_RUN_NUMBER;
       delete process.env.GITHUB_SHA;
-      delete process.env.TEST_RDME_CI;
       spy.mockReset();
     });
 
