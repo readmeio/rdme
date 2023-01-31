@@ -200,7 +200,9 @@ export default async function prepareOas(
 
   return {
     preparedSpec: JSON.stringify(api),
+    /** The path/URL to the spec file */
     specPath,
+    /** A string indicating whether the spec file is OpenAPI, Swagger, etc. */
     specType,
     /**
      * The `info.version` field, extracted from the normalized spec.
