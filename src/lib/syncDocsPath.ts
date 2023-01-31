@@ -19,7 +19,7 @@ import readDoc from './readDoc';
  * @param key the project API key
  * @param selectedVersion the project version
  * @param dryRun boolean indicating dry run mode
- * @param filepath path to file
+ * @param filePath path to file
  * @param type module within ReadMe to update (e.g. docs, changelogs, etc.)
  * @returns A promise-wrapped string with the result
  */
@@ -27,16 +27,16 @@ async function pushDoc(
   key: string,
   selectedVersion: string,
   dryRun: boolean,
-  filepath: string,
+  filePath: string,
   type: CommandCategories
 ) {
-  const { content, data, hash, slug } = readDoc(filepath);
+  const { content, data, hash, slug } = readDoc(filePath);
 
   // TODO: ideally we should offer a zero-configuration approach that doesn't
   // require YAML front matter, but that will have to be a breaking change
   if (!Object.keys(data).length) {
-    debug(`No front matter attributes found for ${filepath}, not syncing`);
-    return `⏭️  no front matter attributes found for ${filepath}, skipping`;
+    debug(`No front matter attributes found for ${filePath}, not syncing`);
+    return `⏭️  no front matter attributes found for ${filePath}, skipping`;
   }
 
   let payload: {
@@ -47,7 +47,7 @@ async function pushDoc(
   } = { body: content, ...data, lastUpdatedHash: hash };
 
   if (type === CommandCategories.CUSTOM_PAGES) {
-    if (filepath.endsWith('.html')) {
+    if (filePath.endsWith('.html')) {
       payload = { html: content, htmlmode: true, ...data, lastUpdatedHash: hash };
     } else {
       payload = { body: content, htmlmode: false, ...data, lastUpdatedHash: hash };
@@ -56,7 +56,7 @@ async function pushDoc(
 
   function createDoc() {
     if (dryRun) {
-      return `🎭 dry run! This will create '${slug}' with contents from ${filepath} with the following metadata: ${JSON.stringify(
+      return `🎭 dry run! This will create '${slug}' with contents from ${filePath} with the following metadata: ${JSON.stringify(
         data
       )}`;
     }
@@ -78,11 +78,11 @@ async function pushDoc(
             ...payload,
           }),
         },
-        filepath
+        filePath
       )
         .then(handleRes)
         // eslint-disable-next-line no-underscore-dangle
-        .then(res => `🌱 successfully created '${res.slug}' (ID: ${res._id}) with contents from ${filepath}`)
+        .then(res => `🌱 successfully created '${res.slug}' (ID: ${res._id}) with contents from ${filePath}`)
     );
   }
 
@@ -94,7 +94,7 @@ async function pushDoc(
     }
 
     if (dryRun) {
-      return `🎭 dry run! This will update '${slug}' with contents from ${filepath} with the following metadata: ${JSON.stringify(
+      return `🎭 dry run! This will update '${slug}' with contents from ${filePath} with the following metadata: ${JSON.stringify(
         data
       )}`;
     }
@@ -112,10 +112,10 @@ async function pushDoc(
         ),
         body: JSON.stringify(payload),
       },
-      filepath
+      filePath
     )
       .then(handleRes)
-      .then(res => `✏️ successfully updated '${res.slug}' with contents from ${filepath}`);
+      .then(res => `✏️ successfully updated '${res.slug}' with contents from ${filePath}`);
   }
 
   return fetch(`${config.get('host')}/api/v1/${type}/${slug}`, {
@@ -140,7 +140,7 @@ async function pushDoc(
     })
     .catch(err => {
       // eslint-disable-next-line no-param-reassign
-      err.message = `Error uploading ${chalk.underline(filepath)}:\n\n${err.message}`;
+      err.message = `Error uploading ${chalk.underline(filePath)}:\n\n${err.message}`;
       throw err;
     });
 }
