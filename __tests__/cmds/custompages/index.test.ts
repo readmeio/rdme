@@ -90,7 +90,6 @@ describe('rdme custompages', () => {
 
       const updateMocks = getAPIMock()
         .put('/api/v1/custompages/simple-doc', {
-          slug: simpleDoc.slug,
           body: simpleDoc.doc.content,
           htmlmode: false,
           lastUpdatedHash: simpleDoc.hash,
@@ -103,7 +102,6 @@ describe('rdme custompages', () => {
           body: simpleDoc.doc.content,
         })
         .put('/api/v1/custompages/another-doc', {
-          slug: anotherDoc.slug,
           body: anotherDoc.doc.content,
           htmlmode: false,
           lastUpdatedHash: anotherDoc.hash,
