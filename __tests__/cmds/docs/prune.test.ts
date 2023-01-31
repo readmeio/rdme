@@ -151,7 +151,7 @@ describe('rdme docs:prune', () => {
         version,
       })
     ).resolves.toBe(
-      '🗑️  successfully deleted `this-doc-should-be-missing-in-folder`.\n🗑️  successfully deleted `this-child-is-also-missing`.'
+      '🗑️  successfully deleted `this-child-is-also-missing`.\n🗑️  successfully deleted `this-doc-should-be-missing-in-folder`.'
     );
 
     apiMocks.done();
