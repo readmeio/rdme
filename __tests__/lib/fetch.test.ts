@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/ban-ts-comment, no-console */
 import config from 'config';
 import { Headers } from 'node-fetch';
 
@@ -131,7 +131,6 @@ describe('#fetch()', () => {
 
       await fetch(`${config.get('host')}/api/v1/some-warning`);
 
-      // eslint-disable-next-line no-console
       expect(console.warn).toHaveBeenCalledTimes(0);
       expect(getWarningCommandOutput()).toBe('');
 
@@ -145,7 +144,6 @@ describe('#fetch()', () => {
 
       await fetch(`${config.get('host')}/api/v1/some-warning`);
 
-      // eslint-disable-next-line no-console
       expect(console.warn).toHaveBeenCalledTimes(1);
       expect(getWarningCommandOutput()).toBe('⚠️  ReadMe API Warning: some error');
 
@@ -159,7 +157,6 @@ describe('#fetch()', () => {
 
       await fetch(`${config.get('host')}/api/v1/some-warning`);
 
-      // eslint-disable-next-line no-console
       expect(console.warn).toHaveBeenCalledTimes(2);
       expect(getWarningCommandOutput()).toBe(
         '⚠️  ReadMe API Warning: some error\n\n⚠️  ReadMe API Warning: another error'
@@ -175,7 +172,6 @@ describe('#fetch()', () => {
 
       await fetch(`${config.get('host')}/api/v1/some-warning`);
 
-      // eslint-disable-next-line no-console
       expect(console.warn).toHaveBeenCalledTimes(1);
       expect(getWarningCommandOutput()).toBe('⚠️  ReadMe API Warning: some garbage error');
 
