@@ -90,7 +90,6 @@ describe('rdme changelogs', () => {
 
       const updateMocks = getAPIMock()
         .put('/api/v1/changelogs/simple-doc', {
-          slug: simpleDoc.slug,
           body: simpleDoc.doc.content,
           lastUpdatedHash: simpleDoc.hash,
           ...simpleDoc.doc.data,
@@ -101,7 +100,6 @@ describe('rdme changelogs', () => {
           body: simpleDoc.doc.content,
         })
         .put('/api/v1/changelogs/another-doc', {
-          slug: anotherDoc.slug,
           body: anotherDoc.doc.content,
           lastUpdatedHash: anotherDoc.hash,
           ...anotherDoc.doc.data,

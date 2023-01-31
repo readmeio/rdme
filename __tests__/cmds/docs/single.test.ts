@@ -243,8 +243,6 @@ describe('rdme docs (single)', () => {
 
       const updateMock = getAPIMockWithVersionHeader(version)
         .put('/api/v1/docs/simple-doc', {
-          category,
-          slug: simpleDoc.slug,
           body: simpleDoc.doc.content,
           lastUpdatedHash: simpleDoc.hash,
           ...simpleDoc.doc.data,
