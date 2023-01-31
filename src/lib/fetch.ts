@@ -85,6 +85,15 @@ function getUserAgent() {
 }
 
 /**
+ * Sanitizes and stringifies the `Headers` object for logging purposes
+ */
+function sanitizeHeaders(headers: Headers) {
+  const raw = new Headers(headers).raw();
+  if (raw.Authorization) raw.Authorization = ['redacted'];
+  return JSON.stringify(raw);
+}
+
+/**
  * Wrapper for the `fetch` API so we can add rdme-specific headers to all API requests.
  *
  * @param filePath local path for the file that's being sent. We use this to construct
@@ -129,7 +138,9 @@ export default function fetch(url: string, options: RequestInit = { headers: new
 
   const fullUrl = `${getProxy()}${url}`;
 
-  debug(`making ${(options.method || 'get').toUpperCase()} request to ${fullUrl}`);
+  debug(
+    `making ${(options.method || 'get').toUpperCase()} request to ${fullUrl} with headers: ${sanitizeHeaders(headers)}`
+  );
 
   return nodeFetch(fullUrl, {
     ...options,
