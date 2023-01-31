@@ -110,11 +110,7 @@ async function pushDoc(
             'Content-Type': 'application/json',
           })
         ),
-        body: JSON.stringify(
-          Object.assign(existingDoc, {
-            ...payload,
-          })
-        ),
+        body: JSON.stringify(payload),
       },
       filepath
     )

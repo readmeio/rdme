@@ -198,7 +198,6 @@ describe('rdme changelogs (single)', () => {
 
       const updateMock = getAPIMock()
         .put('/api/v1/changelogs/simple-doc', {
-          slug: simpleDoc.slug,
           body: simpleDoc.doc.content,
           lastUpdatedHash: simpleDoc.hash,
           ...simpleDoc.doc.data,
