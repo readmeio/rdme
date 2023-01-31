@@ -24,6 +24,11 @@ function flatten(data: Document[][]): Document[] {
       });
     }
   });
+
+  // Docs with children cannot be deleted unless the children are deleted first,
+  // so move those parent docs to the back of the list
+  allDocs.sort(a => (a.children?.length ? 1 : -1));
+
   return allDocs;
 }
 
