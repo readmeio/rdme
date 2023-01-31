@@ -1,5 +1,5 @@
-import type { CommandOptions } from '../lib/baseCommand';
 import type { Options } from './openapi/validate';
+import type { CommandOptions } from '../lib/baseCommand';
 
 import Command from '../lib/baseCommand';
 import isHidden from '../lib/decorators/isHidden';

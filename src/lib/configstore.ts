@@ -2,7 +2,7 @@ import Configstore from 'configstore';
 
 import pkg from '../../package.json';
 
-export default new Configstore(
+const configstore = new Configstore(
   /**
    * The JEST_WORKER_ID is used here to ensure that our
    * configstore tests don't clash with one another
@@ -10,3 +10,5 @@ export default new Configstore(
    */
   `${pkg.name}-${process.env.NODE_ENV || 'production'}${process.env.JEST_WORKER_ID || ''}`
 );
+
+export default configstore;
