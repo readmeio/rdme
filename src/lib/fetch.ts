@@ -1,4 +1,7 @@
+import type { SpecFileType } from './prepareOas';
 import type { RequestInit, Response } from 'node-fetch';
+
+import path from 'path';
 
 import mime from 'mime-types';
 // eslint-disable-next-line no-restricted-imports
@@ -11,6 +14,17 @@ import isCI, { ciName, isGHA } from './isCI';
 import { debug, warn } from './logger';
 
 const SUCCESS_NO_CONTENT = 204;
+
+/**
+ * This contains a few pieces of information about a file so
+ * we can properly construct a source URL for it.
+ */
+interface FilePathDetails {
+  /** The URL or local file path */
+  filePath: string;
+  /** This is derived from the `oas-normalize` `type` property. */
+  fileType: SpecFileType;
+}
 
 function getProxy() {
   // this is something of an industry standard env var, hence the checks for different casings
@@ -85,6 +99,15 @@ function getUserAgent() {
 }
 
 /**
+ * Resolves relative path references for local paths,
+ * otherwise returns the path
+ */
+function normalizeFilePath(opts: FilePathDetails) {
+  if (opts.fileType === 'path') return path.relative('', opts.filePath);
+  return opts.filePath;
+}
+
+/**
  * Sanitizes and stringifies the `Headers` object for logging purposes
  */
 function sanitizeHeaders(headers: Headers) {
@@ -99,13 +122,19 @@ function sanitizeHeaders(headers: Headers) {
  * @param filePath local path for the file that's being sent. We use this to construct
  * a full URL that points to the file in version control systems.
  */
-export default function fetch(url: string, options: RequestInit = { headers: new Headers() }, filePath = '') {
+export default function fetch(
+  url: string,
+  options: RequestInit = { headers: new Headers() },
+  fileOpts: FilePathDetails = { filePath: '', fileType: false }
+) {
   let source = 'cli';
   let headers = options.headers as Headers;
 
   if (!(options.headers instanceof Headers)) {
     headers = new Headers(options.headers);
   }
+
+  const filePath = normalizeFilePath(fileOpts);
 
   headers.set('User-Agent', getUserAgent());
 
@@ -135,6 +164,10 @@ export default function fetch(url: string, options: RequestInit = { headers: new
   }
 
   headers.set('x-readme-source', source);
+
+  if (filePath && fileOpts.fileType === 'url') {
+    headers.set('x-readme-source-url', filePath);
+  }
 
   const fullUrl = `${getProxy()}${url}`;
 

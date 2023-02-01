@@ -78,7 +78,7 @@ async function pushDoc(
             ...payload,
           }),
         },
-        filePath
+        { filePath, fileType: 'path' }
       )
         .then(handleRes)
         // eslint-disable-next-line no-underscore-dangle
@@ -112,7 +112,7 @@ async function pushDoc(
         ),
         body: JSON.stringify(payload),
       },
-      filePath
+      { filePath, fileType: 'path' }
     )
       .then(handleRes)
       .then(res => `✏️ successfully updated '${res.slug}' with contents from ${filePath}`);

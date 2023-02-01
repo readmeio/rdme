@@ -9,6 +9,8 @@ import { debug, info, oraOptions } from './logger';
 import promptTerminal from './promptWrapper';
 import readdirRecursive from './readdirRecursive';
 
+export type SpecFileType = OASNormalize['type'];
+
 interface FoundSpecFile {
   /** path to the spec file */
   filePath: string;
@@ -188,6 +190,8 @@ export default async function prepareOas(
     api.info.title = opts.title;
   }
 
+  const specFileType = oas.type;
+
   // No need to optional chain here since `info.version` is required to pass validation
   const specVersion: string = api.info.version;
   debug(`version in spec: ${specVersion}`);
@@ -200,6 +204,8 @@ export default async function prepareOas(
 
   return {
     preparedSpec: JSON.stringify(api),
+    /** A string indicating whether the spec file is a local path, a URL, etc. */
+    specFileType,
     /** The path/URL to the spec file */
     specPath,
     /** A string indicating whether the spec file is OpenAPI, Swagger, etc. */
