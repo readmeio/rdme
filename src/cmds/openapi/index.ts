@@ -133,7 +133,9 @@ export default class OpenAPICommand extends Command {
 
     // Reason we're hardcoding in command here is because `swagger` command
     // relies on this and we don't want to use `swagger` in this function
-    const { preparedSpec, specPath, specType, specVersion } = await prepareOas(spec, 'openapi', { title });
+    const { preparedSpec, specFileType, specPath, specType, specVersion } = await prepareOas(spec, 'openapi', {
+      title,
+    });
 
     if (useSpecVersion) {
       Command.info(
@@ -235,7 +237,10 @@ export default class OpenAPICommand extends Command {
 
       options.method = 'post';
       spinner.start('Creating your API docs in ReadMe...');
-      return fetch(`${config.get('host')}/api/v1/api-specification`, options).then(res => {
+      return fetch(`${config.get('host')}/api/v1/api-specification`, options, {
+        filePath: specPath,
+        fileType: specFileType,
+      }).then(res => {
         if (res.ok) {
           spinner.succeed(`${spinner.text} done! 🦉`);
           return success(res);
@@ -253,7 +258,10 @@ export default class OpenAPICommand extends Command {
       isUpdate = true;
       options.method = 'put';
       spinner.start('Updating your API docs in ReadMe...');
-      return fetch(`${config.get('host')}/api/v1/api-specification/${specId}`, options).then(res => {
+      return fetch(`${config.get('host')}/api/v1/api-specification/${specId}`, options, {
+        filePath: specPath,
+        fileType: specFileType,
+      }).then(res => {
         if (res.ok) {
           spinner.succeed(`${spinner.text} done! 🦉`);
           return success(res);

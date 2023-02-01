@@ -10,6 +10,7 @@ import DocsCommand from '../../../src/cmds/docs';
 import APIError from '../../../src/lib/apiError';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock';
 import hashFileContents from '../../helpers/hash-file-contents';
+import { after as afterGHAEnv, before as beforeGHAEnv } from '../../helpers/setup-gha-env';
 
 const docs = new DocsCommand();
 
@@ -30,12 +31,6 @@ describe('rdme docs (single)', () => {
     prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
     await expect(docs.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
     consoleInfoSpy.mockRestore();
-  });
-
-  it('should error in CI if no API key provided', async () => {
-    process.env.TEST_RDME_CI = 'true';
-    await expect(docs.run({})).rejects.toStrictEqual(new Error('No project API key provided. Please use `--key`.'));
-    delete process.env.TEST_RDME_CI;
   });
 
   it('should error if no file path provided', async () => {
@@ -343,6 +338,109 @@ describe('rdme docs (single)', () => {
           expect(skippedDocs).toBe('🎭 dry run! `simple-doc` will not be updated because there were no changes.');
 
           getMock.done();
+          versionMock.done();
+        });
+    });
+  });
+
+  describe('command execution in GitHub Actions runner', () => {
+    beforeEach(beforeGHAEnv);
+
+    afterEach(afterGHAEnv);
+
+    it('should error in CI if no API key provided', () => {
+      return expect(docs.run({})).rejects.toStrictEqual(new Error('No project API key provided. Please use `--key`.'));
+    });
+
+    it('should sync new doc with correct headers', async () => {
+      const slug = 'new-doc';
+      const id = '1234';
+      const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
+      const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
+
+      const getMock = getAPIMockWithVersionHeader(version)
+        .get(`/api/v1/docs/${slug}`)
+        .basicAuth({ user: key })
+        .reply(404, {
+          error: 'DOC_NOTFOUND',
+          message: `The doc with the slug '${slug}' couldn't be found`,
+          suggestion: '...a suggestion to resolve the issue...',
+          help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
+        });
+
+      const postMock = getAPIMock({
+        'x-rdme-ci': 'GitHub Actions (test)',
+        'x-readme-source': 'cli-gh',
+        'x-readme-source-url':
+          'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/__tests__/__fixtures__/docs/new-docs/new-doc.md',
+        'x-readme-version': version,
+      })
+        .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
+        .basicAuth({ user: key })
+        .reply(201, { slug, _id: id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
+
+      const versionMock = getAPIMock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version });
+
+      await expect(
+        docs.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, key, version })
+      ).resolves.toBe(
+        `🌱 successfully created 'new-doc' (ID: 1234) with contents from ./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`
+      );
+
+      getMock.done();
+      postMock.done();
+      versionMock.done();
+    });
+
+    it('should sync existing doc with correct headers', () => {
+      const fileContents = fs.readFileSync(path.join(fullFixturesDir, '/existing-docs/simple-doc.md'));
+      const simpleDoc = {
+        slug: 'simple-doc',
+        doc: frontMatter(fileContents),
+        hash: hashFileContents(fileContents),
+      };
+
+      const getMock = getAPIMockWithVersionHeader(version)
+        .get('/api/v1/docs/simple-doc')
+        .basicAuth({ user: key })
+        .reply(200, { category, slug: simpleDoc.slug, lastUpdatedHash: 'anOldHash' });
+
+      const updateMock = getAPIMock({
+        'x-rdme-ci': 'GitHub Actions (test)',
+        'x-readme-source': 'cli-gh',
+        'x-readme-source-url':
+          'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/__tests__/__fixtures__/docs/existing-docs/simple-doc.md',
+        'x-readme-version': version,
+      })
+        .put('/api/v1/docs/simple-doc', {
+          body: simpleDoc.doc.content,
+          lastUpdatedHash: simpleDoc.hash,
+          ...simpleDoc.doc.data,
+        })
+        .basicAuth({ user: key })
+        .reply(200, {
+          category,
+          slug: simpleDoc.slug,
+          body: simpleDoc.doc.content,
+        });
+
+      const versionMock = getAPIMock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version });
+
+      return docs
+        .run({ filePath: `__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, key, version })
+        .then(updatedDocs => {
+          expect(updatedDocs).toBe(
+            `✏️ successfully updated 'simple-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`
+          );
+
+          getMock.done();
+          updateMock.done();
           versionMock.done();
         });
     });

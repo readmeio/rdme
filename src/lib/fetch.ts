@@ -1,4 +1,7 @@
+import type { SpecFileType } from './prepareOas';
 import type { RequestInit, Response } from 'node-fetch';
+
+import path from 'path';
 
 import mime from 'mime-types';
 // eslint-disable-next-line no-restricted-imports
@@ -7,10 +10,22 @@ import nodeFetch, { Headers } from 'node-fetch';
 import pkg from '../../package.json';
 
 import APIError from './apiError';
-import { isGHA } from './isCI';
+import { git } from './createGHA';
+import isCI, { ciName, isGHA } from './isCI';
 import { debug, warn } from './logger';
 
 const SUCCESS_NO_CONTENT = 204;
+
+/**
+ * This contains a few pieces of information about a file so
+ * we can properly construct a source URL for it.
+ */
+interface FilePathDetails {
+  /** The URL or local file path */
+  filePath: string;
+  /** This is derived from the `oas-normalize` `type` property. */
+  fileType: SpecFileType;
+}
 
 function getProxy() {
   // this is something of an industry standard env var, hence the checks for different casings
@@ -85,10 +100,41 @@ function getUserAgent() {
 }
 
 /**
+ * Creates a relative path for the file from the root of the repo,
+ * otherwise returns the path
+ */
+async function normalizeFilePath(opts: FilePathDetails) {
+  if (opts.fileType === 'path') {
+    const repoRoot = await git.revparse(['--show-toplevel']).catch(e => {
+      debug(`[fetch] error grabbing git root: ${e.message}`);
+      return '';
+    });
+
+    return path.relative(repoRoot, opts.filePath);
+  }
+  return opts.filePath;
+}
+
+/**
+ * Sanitizes and stringifies the `Headers` object for logging purposes
+ */
+function sanitizeHeaders(headers: Headers) {
+  const raw = new Headers(headers).raw();
+  if (raw.Authorization) raw.Authorization = ['redacted'];
+  return JSON.stringify(raw);
+}
+
+/**
  * Wrapper for the `fetch` API so we can add rdme-specific headers to all API requests.
  *
+ * @param fileOpts optional object containing information about the file being sent.
+ * We use this to construct a full source URL for the file.
  */
-export default function fetch(url: string, options: RequestInit = { headers: new Headers() }) {
+export default async function fetch(
+  url: string,
+  options: RequestInit = { headers: new Headers() },
+  fileOpts: FilePathDetails = { filePath: '', fileType: false }
+) {
   let source = 'cli';
   let headers = options.headers as Headers;
 
@@ -105,13 +151,37 @@ export default function fetch(url: string, options: RequestInit = { headers: new
     headers.set('x-github-run-id', process.env.GITHUB_RUN_ID);
     headers.set('x-github-run-number', process.env.GITHUB_RUN_NUMBER);
     headers.set('x-github-sha', process.env.GITHUB_SHA);
+
+    const filePath = await normalizeFilePath(fileOpts);
+
+    if (filePath) {
+      /**
+       * Constructs a full URL to the file using GitHub Actions runner variables
+       * @see {@link https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables}
+       * @example https://github.com/readmeio/rdme/blob/cb4129d5c7b51ff3b50f933a9c7d0c3d0d33d62c/documentation/rdme.md
+       */
+      headers.set(
+        'x-readme-source-url',
+        `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/blob/${process.env.GITHUB_SHA}/${filePath}`
+      );
+    }
+  }
+
+  if (isCI()) {
+    headers.set('x-rdme-ci', ciName());
   }
 
   headers.set('x-readme-source', source);
 
+  if (fileOpts.filePath && fileOpts.fileType === 'url') {
+    headers.set('x-readme-source-url', fileOpts.filePath);
+  }
+
   const fullUrl = `${getProxy()}${url}`;
 
-  debug(`making ${(options.method || 'get').toUpperCase()} request to ${fullUrl}`);
+  debug(
+    `making ${(options.method || 'get').toUpperCase()} request to ${fullUrl} with headers: ${sanitizeHeaders(headers)}`
+  );
 
   return nodeFetch(fullUrl, {
     ...options,

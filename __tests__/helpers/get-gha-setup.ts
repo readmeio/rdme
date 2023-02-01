@@ -11,7 +11,7 @@ import getGitRemoteMock from './get-git-mock';
 const testWorkingDir = process.cwd();
 
 /**
- *  A helper function for setting up tests for our GitHub Action onboarding.
+ * A helper function for setting up tests for our GitHub Action onboarding.
  *
  * @param writeFileSyncCb the mock function that should be called
  * in place of `fs.writeFileSync`

@@ -9,8 +9,10 @@ import prompts from 'prompts';
 import OpenAPICommand from '../../../src/cmds/openapi';
 import SwaggerCommand from '../../../src/cmds/swagger';
 import APIError from '../../../src/lib/apiError';
+import petstoreWeird from '../../__fixtures__/petstore-simple-weird-version.json';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock';
 import { after, before } from '../../helpers/get-gha-setup';
+import { after as afterGHAEnv, before as beforeGHAEnv } from '../../helpers/setup-gha-env';
 
 const openapi = new OpenAPICommand();
 const swagger = new SwaggerCommand();
@@ -446,25 +448,6 @@ describe('rdme openapi', () => {
       mockWithHeader.done();
       return mock.done();
     });
-
-    describe('CI spec selection', () => {
-      beforeEach(() => {
-        process.env.TEST_RDME_CI = 'true';
-      });
-
-      afterEach(() => {
-        delete process.env.TEST_RDME_CI;
-      });
-
-      it('should error out if multiple possible spec matches were found', () => {
-        return expect(
-          openapi.run({
-            key,
-            version,
-          })
-        ).rejects.toStrictEqual(new Error('Multiple API definitions found in current directory. Please specify file.'));
-      });
-    });
   });
 
   describe('updates / resyncs', () => {
@@ -883,14 +866,6 @@ describe('rdme openapi', () => {
     it('should prompt for login if no API key provided', () => {
       prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
       return expect(openapi.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
-    });
-
-    it('should error in CI if no API key provided', async () => {
-      process.env.TEST_RDME_CI = 'true';
-      await expect(openapi.run({})).rejects.toStrictEqual(
-        new Error('No project API key provided. Please use `--key`.')
-      );
-      delete process.env.TEST_RDME_CI;
     });
 
     it('should error if `--create` and `--update` flags are passed simultaneously', () => {
@@ -1476,6 +1451,136 @@ describe('rdme openapi', () => {
 
       mockWithHeader.done();
       return mock.done();
+    });
+  });
+
+  describe('command execution in GitHub Actions runner', () => {
+    beforeEach(beforeGHAEnv);
+
+    afterEach(afterGHAEnv);
+
+    it('should error in CI if no API key provided', () => {
+      return expect(openapi.run({})).rejects.toStrictEqual(
+        new Error('No project API key provided. Please use `--key`.')
+      );
+    });
+
+    it('should error out if multiple possible spec matches were found', () => {
+      return expect(
+        openapi.run({
+          key,
+          version,
+        })
+      ).rejects.toStrictEqual(new Error('Multiple API definitions found in current directory. Please specify file.'));
+    });
+
+    it('should send proper headers in GitHub Actions CI for local spec file', async () => {
+      const registryUUID = getRandomRegistryId();
+
+      const mock = getAPIMock()
+        .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+        .reply(201, { registryUUID });
+
+      const putMock = getAPIMock({
+        'x-rdme-ci': 'GitHub Actions (test)',
+        'x-readme-source': 'cli-gh',
+        'x-readme-source-url':
+          'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/__tests__/__fixtures__/ref-oas/petstore.json',
+        'x-readme-version': version,
+      })
+        .put(`/api/v1/api-specification/${id}`, { registryUUID })
+        .basicAuth({ user: key })
+        .reply(201, { _id: 1 }, { location: exampleRefLocation });
+
+      const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
+
+      await expect(
+        openapi.run({
+          spec,
+          key,
+          id,
+          version,
+        })
+      ).resolves.toBe(successfulUpdate(spec));
+
+      putMock.done();
+      return mock.done();
+    });
+
+    it('should send proper headers in GitHub Actions CI for spec hosted at URL', async () => {
+      const registryUUID = getRandomRegistryId();
+      const spec = 'https://example.com/openapi.json';
+
+      const mock = getAPIMock()
+        .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+        .reply(201, { registryUUID });
+
+      const exampleMock = nock('https://example.com').get('/openapi.json').reply(200, petstoreWeird);
+
+      const putMock = getAPIMock({
+        'x-rdme-ci': 'GitHub Actions (test)',
+        'x-readme-source': 'cli-gh',
+        'x-readme-source-url': spec,
+        'x-readme-version': version,
+      })
+        .put(`/api/v1/api-specification/${id}`, { registryUUID })
+        .basicAuth({ user: key })
+        .reply(201, { _id: 1 }, { location: exampleRefLocation });
+
+      await expect(
+        openapi.run({
+          spec,
+          key,
+          id,
+          version,
+        })
+      ).resolves.toBe(successfulUpdate(spec));
+
+      putMock.done();
+      exampleMock.done();
+      return mock.done();
+    });
+
+    it('should contain request header with correct URL with working directory', async () => {
+      const registryUUID = getRandomRegistryId();
+      const mock = getAPIMock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version: '1.0.0' })
+        .post('/api/v1/api-registry')
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
+
+      const getMock = getAPIMockWithVersionHeader(version)
+        .get('/api/v1/api-specification')
+        .basicAuth({ user: key })
+        .reply(200, []);
+
+      const postMock = getAPIMock({
+        'x-rdme-ci': 'GitHub Actions (test)',
+        'x-readme-source': 'cli-gh',
+        'x-readme-source-url':
+          'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/__tests__/__fixtures__/relative-ref-oas/petstore.json',
+        'x-readme-version': version,
+      })
+        .post('/api/v1/api-specification', { registryUUID })
+        .basicAuth({ user: key })
+        .reply(201, { _id: 1 }, { location: exampleRefLocation });
+
+      const spec = 'petstore.json';
+
+      await expect(
+        openapi.run({
+          spec,
+          key,
+          version,
+          workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
+        })
+      ).resolves.toBe(successfulUpload(spec));
+
+      getMock.done();
+      postMock.done();
+      mock.done();
+      return after();
     });
   });
 });
