@@ -2,7 +2,7 @@
 module.exports = {
   coverageDirectory: 'coverage',
   coveragePathIgnorePatterns: ['<rootDir>/dist', '<rootDir>/node_modules'],
-  coverageReporters: ['text-summary'],
+  coverageReporters: ['text'],
   coverageThreshold: {
     global: {
       branches: 80,
