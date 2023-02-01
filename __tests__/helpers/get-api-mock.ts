@@ -1,7 +1,7 @@
 import config from 'config';
 import nock from 'nock';
 
-import { getUserAgent } from '../../src/lib/fetch';
+import { getUserAgent } from '../../src/lib/readmeAPIFetch';
 
 /**
  * Nock wrapper that adds required `user-agent` request header

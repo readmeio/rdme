@@ -1,12 +1,11 @@
 import chalk from 'chalk';
-import config from 'config';
 import isEmail from 'validator/lib/isEmail';
 
 import configStore from './configstore';
-import fetch, { handleRes } from './fetch';
 import getCurrentConfig from './getCurrentConfig';
 import { debug } from './logger';
 import promptTerminal from './promptWrapper';
+import readmeAPIFetch, { handleRes } from './readmeAPIFetch';
 import { validateSubdomain } from './validatePromptInput';
 
 interface LoginBody {
@@ -17,7 +16,7 @@ interface LoginBody {
 }
 
 function loginFetch(body: LoginBody) {
-  return fetch(`${config.get('host')}/api/v1/login`, {
+  return readmeAPIFetch('/api/v1/login', {
     method: 'post',
     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
     body: JSON.stringify(body),

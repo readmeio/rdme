@@ -3,6 +3,7 @@ import type { RequestInit, Response } from 'node-fetch';
 
 import path from 'path';
 
+import config from 'config';
 import mime from 'mime-types';
 // eslint-disable-next-line no-restricted-imports
 import nodeFetch, { Headers } from 'node-fetch';
@@ -127,11 +128,12 @@ function sanitizeHeaders(headers: Headers) {
 /**
  * Wrapper for the `fetch` API so we can add rdme-specific headers to all API requests.
  *
+ * @param pathname the pathname to make the request to. Must have a leading slash.
  * @param fileOpts optional object containing information about the file being sent.
  * We use this to construct a full source URL for the file.
  */
-export default async function fetch(
-  url: string,
+export default async function readmeAPIFetch(
+  pathname: string,
   options: RequestInit = { headers: new Headers() },
   fileOpts: FilePathDetails = { filePath: '', fileType: false }
 ) {
@@ -177,7 +179,7 @@ export default async function fetch(
     headers.set('x-readme-source-url', fileOpts.filePath);
   }
 
-  const fullUrl = `${getProxy()}${url}`;
+  const fullUrl = `${getProxy()}${config.get('host')}${pathname}`;
 
   debug(
     `making ${(options.method || 'get').toUpperCase()} request to ${fullUrl} with headers: ${sanitizeHeaders(headers)}`

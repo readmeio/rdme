@@ -7,10 +7,10 @@ import { Headers } from 'node-fetch';
 
 import APIError from './apiError';
 import Command, { CommandCategories } from './baseCommand';
-import fetch, { cleanHeaders, handleRes } from './fetch';
 import { debug } from './logger';
 import readdirRecursive from './readdirRecursive';
 import readDoc from './readDoc';
+import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch';
 
 /**
  * Reads the contents of the specified Markdown or HTML file
@@ -62,8 +62,8 @@ async function pushDoc(
     }
 
     return (
-      fetch(
-        `${config.get('host')}/api/v1/${type}`,
+      readmeAPIFetch(
+        `/api/v1/${type}`,
         {
           method: 'post',
           headers: cleanHeaders(
@@ -99,8 +99,8 @@ async function pushDoc(
       )}`;
     }
 
-    return fetch(
-      `${config.get('host')}/api/v1/${type}/${slug}`,
+    return readmeAPIFetch(
+      `/api/v1/${type}/${slug}`,
       {
         method: 'put',
         headers: cleanHeaders(
@@ -118,7 +118,7 @@ async function pushDoc(
       .then(res => `✏️ successfully updated '${res.slug}' with contents from ${filePath}`);
   }
 
-  return fetch(`${config.get('host')}/api/v1/${type}/${slug}`, {
+  return readmeAPIFetch(`/api/v1/${type}/${slug}`, {
     method: 'get',
     headers: cleanHeaders(
       key,

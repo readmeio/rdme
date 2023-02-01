@@ -1,12 +1,11 @@
 import fs from 'fs';
 
-import config from 'config';
 import FormData from 'form-data';
 import ora from 'ora';
 import { file as tmpFile } from 'tmp-promise';
 
-import fetch, { handleRes } from './fetch';
 import { debug, oraOptions } from './logger';
+import readmeAPIFetch, { handleRes } from './readmeAPIFetch';
 
 /**
  * Uploads a spec to the API registry for usage in ReadMe
@@ -35,7 +34,7 @@ export default async function streamSpecToRegistry(spec: string) {
     method: 'POST',
   };
 
-  return fetch(`${config.get('host')}/api/v1/api-registry`, options)
+  return readmeAPIFetch('/api/v1/api-registry', options)
     .then(handleRes)
     .then(body => {
       spinner.stop();
