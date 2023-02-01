@@ -1,3 +1,22 @@
+## 8.5.0 (2023-02-01)
+
+* docs: update outdated file names ([52a8219](https://github.com/readmeio/rdme/commit/52a8219))
+* refactor(fetch): `readmeAPIFetch`, consolidate base URL (#742) ([452be3a](https://github.com/readmeio/rdme/commit/452be3a)), closes [#742](https://github.com/readmeio/rdme/issues/742)
+* feat(docs): skip markdown files that lack attributes (#729) ([cb4129d](https://github.com/readmeio/rdme/commit/cb4129d)), closes [#729](https://github.com/readmeio/rdme/issues/729)
+* feat(GHA): add req header containing file URL (#735) ([7574752](https://github.com/readmeio/rdme/commit/7574752)), closes [#735](https://github.com/readmeio/rdme/issues/735) [/github.com/readmeio/rdme/pull/735#discussion_r1092663989](https://github.com//github.com/readmeio/rdme/pull/735/issues/discussion_r1092663989) [/github.com/readmeio/rdme/pull/735#discussion_r1092643454](https://github.com//github.com/readmeio/rdme/pull/735/issues/discussion_r1092643454)
+* ci: fix code coverage in github actions (#741) ([968c653](https://github.com/readmeio/rdme/commit/968c653)), closes [#741](https://github.com/readmeio/rdme/issues/741)
+* ci: use var instead of secret (#733) ([579aaa0](https://github.com/readmeio/rdme/commit/579aaa0)), closes [#733](https://github.com/readmeio/rdme/issues/733)
+* fix: better logging of API responses (#734) ([ec81720](https://github.com/readmeio/rdme/commit/ec81720)), closes [#734](https://github.com/readmeio/rdme/issues/734)
+* fix: page deletion order in `docs:prune` (#737) ([848c63b](https://github.com/readmeio/rdme/commit/848c63b)), closes [#737](https://github.com/readmeio/rdme/issues/737)
+* fix(docs): don't merge payloads for PUT requests (#740) ([e3c7f22](https://github.com/readmeio/rdme/commit/e3c7f22)), closes [#740](https://github.com/readmeio/rdme/issues/740)
+* fix(login): better indicators to input project subdomain (#728) ([0318093](https://github.com/readmeio/rdme/commit/0318093)), closes [#728](https://github.com/readmeio/rdme/issues/728)
+* chore: bump deps (#730) ([f4fbf52](https://github.com/readmeio/rdme/commit/f4fbf52)), closes [#730](https://github.com/readmeio/rdme/issues/730)
+* chore(deps): bump (#739) ([d311af9](https://github.com/readmeio/rdme/commit/d311af9)), closes [#739](https://github.com/readmeio/rdme/issues/739)
+* chore(deps): bump a bunch of deps (#727) ([b8090fd](https://github.com/readmeio/rdme/commit/b8090fd)), closes [#727](https://github.com/readmeio/rdme/issues/727)
+* chore(deps): bump simple-git from 3.15.1 to 3.16.0 (#736) ([06da423](https://github.com/readmeio/rdme/commit/06da423)), closes [#736](https://github.com/readmeio/rdme/issues/736)
+
+
+
 ## 8.4.0 (2022-12-21)
 
 * feat(api): surface `Warning` response headers (#721) ([a210754](https://github.com/readmeio/rdme/commit/a210754)), closes [#721](https://github.com/readmeio/rdme/issues/721)
