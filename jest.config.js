@@ -1,6 +1,7 @@
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
-  coveragePathIgnorePatterns: ['/dist', '/node_modules'],
+  coverageDirectory: 'coverage',
+  coveragePathIgnorePatterns: ['<rootDir>/dist', '<rootDir>/node_modules'],
   coverageThreshold: {
     global: {
       branches: 80,
@@ -9,9 +10,8 @@ module.exports = {
       statements: 90,
     },
   },
-  modulePaths: ['<rootDir>'],
   modulePathIgnorePatterns: ['<rootDir>/dist/'],
-  roots: ['<rootDir>'],
+  rootDir: __dirname,
   setupFiles: ['./__tests__/setup'],
   setupFilesAfterEnv: ['jest-extended/all'],
   testPathIgnorePatterns: [
