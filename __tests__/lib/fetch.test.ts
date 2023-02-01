@@ -9,9 +9,9 @@ import { after, before } from '../helpers/setup-gha-env';
 
 describe('#fetch()', () => {
   describe('GitHub Actions environment', () => {
-    beforeEach(() => before());
+    beforeEach(before);
 
-    afterEach(() => after());
+    afterEach(after);
 
     it('should have correct headers for requests in GitHub Action env', async () => {
       const key = 'API_KEY';

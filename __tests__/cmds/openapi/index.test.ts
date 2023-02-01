@@ -1455,9 +1455,9 @@ describe('rdme openapi', () => {
   });
 
   describe('command execution in GitHub Actions runner', () => {
-    beforeEach(() => beforeGHAEnv());
+    beforeEach(beforeGHAEnv);
 
-    afterEach(() => afterGHAEnv());
+    afterEach(afterGHAEnv);
 
     it('should error in CI if no API key provided', () => {
       return expect(openapi.run({})).rejects.toStrictEqual(

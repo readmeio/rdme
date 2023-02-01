@@ -344,9 +344,9 @@ describe('rdme docs (single)', () => {
   });
 
   describe('command execution in GitHub Actions runner', () => {
-    beforeEach(() => beforeGHAEnv());
+    beforeEach(beforeGHAEnv);
 
-    afterEach(() => afterGHAEnv());
+    afterEach(afterGHAEnv);
 
     it('should error in CI if no API key provided', () => {
       return expect(docs.run({})).rejects.toStrictEqual(new Error('No project API key provided. Please use `--key`.'));
