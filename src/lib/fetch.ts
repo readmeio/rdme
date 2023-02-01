@@ -10,6 +10,7 @@ import nodeFetch, { Headers } from 'node-fetch';
 import pkg from '../../package.json';
 
 import APIError from './apiError';
+import { git } from './createGHA';
 import isCI, { ciName, isGHA } from './isCI';
 import { debug, warn } from './logger';
 
@@ -99,11 +100,18 @@ function getUserAgent() {
 }
 
 /**
- * Resolves relative path references for local paths,
+ * Creates a relative path for the file from the root of the repo,
  * otherwise returns the path
  */
-function normalizeFilePath(opts: FilePathDetails) {
-  if (opts.fileType === 'path') return path.relative('', opts.filePath);
+async function normalizeFilePath(opts: FilePathDetails) {
+  if (opts.fileType === 'path') {
+    const repoRoot = await git.revparse(['--show-toplevel']).catch(e => {
+      debug(`[fetch] error grabbing git root: ${e.message}`);
+      return '';
+    });
+
+    return path.relative(repoRoot, opts.filePath);
+  }
   return opts.filePath;
 }
 
@@ -122,7 +130,7 @@ function sanitizeHeaders(headers: Headers) {
  * @param filePath local path for the file that's being sent. We use this to construct
  * a full URL that points to the file in version control systems.
  */
-export default function fetch(
+export default async function fetch(
   url: string,
   options: RequestInit = { headers: new Headers() },
   fileOpts: FilePathDetails = { filePath: '', fileType: false }
@@ -134,8 +142,6 @@ export default function fetch(
     headers = new Headers(options.headers);
   }
 
-  const filePath = normalizeFilePath(fileOpts);
-
   headers.set('User-Agent', getUserAgent());
 
   if (isGHA()) {
@@ -145,6 +151,8 @@ export default function fetch(
     headers.set('x-github-run-id', process.env.GITHUB_RUN_ID);
     headers.set('x-github-run-number', process.env.GITHUB_RUN_NUMBER);
     headers.set('x-github-sha', process.env.GITHUB_SHA);
+
+    const filePath = await normalizeFilePath(fileOpts);
 
     if (filePath) {
       /**
@@ -165,8 +173,8 @@ export default function fetch(
 
   headers.set('x-readme-source', source);
 
-  if (filePath && fileOpts.fileType === 'url') {
-    headers.set('x-readme-source-url', filePath);
+  if (fileOpts.filePath && fileOpts.fileType === 'url') {
+    headers.set('x-readme-source-url', fileOpts.filePath);
   }
 
   const fullUrl = `${getProxy()}${url}`;

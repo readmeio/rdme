@@ -1540,6 +1540,48 @@ describe('rdme openapi', () => {
       exampleMock.done();
       return mock.done();
     });
+
+    it('should contain request header with correct URL with working directory', async () => {
+      const registryUUID = getRandomRegistryId();
+      const mock = getAPIMock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version: '1.0.0' })
+        .post('/api/v1/api-registry')
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
+
+      const getMock = getAPIMockWithVersionHeader(version)
+        .get('/api/v1/api-specification')
+        .basicAuth({ user: key })
+        .reply(200, []);
+
+      const postMock = getAPIMock({
+        'x-rdme-ci': 'GitHub Actions (test)',
+        'x-readme-source': 'cli-gh',
+        'x-readme-source-url':
+          'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/__tests__/__fixtures__/relative-ref-oas/petstore.json',
+        'x-readme-version': version,
+      })
+        .post('/api/v1/api-specification', { registryUUID })
+        .basicAuth({ user: key })
+        .reply(201, { _id: 1 }, { location: exampleRefLocation });
+
+      const spec = 'petstore.json';
+
+      await expect(
+        openapi.run({
+          spec,
+          key,
+          version,
+          workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
+        })
+      ).resolves.toBe(successfulUpload(spec));
+
+      getMock.done();
+      postMock.done();
+      mock.done();
+      return after();
+    });
   });
 });
 
