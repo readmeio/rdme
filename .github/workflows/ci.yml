@@ -32,6 +32,8 @@ jobs:
       - name: Build dist
         run: npm run build
 
+      - run: mkdir coverage/
+      - run: chmod -R 777 coverage/
       - name: Run tests
         run: npm test
 
