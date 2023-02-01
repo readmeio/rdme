@@ -33,7 +33,7 @@ jobs:
         run: npm run build
 
       - name: Run tests
-        run: sudo npm test
+        run: npm test
 
   action:
     name: GitHub Action Dry Run

@@ -1,6 +1,9 @@
 /** @type {import('ts-jest').JestConfigWithTsJest} */
+
 module.exports = {
+  coverageDirectory: 'coverage',
   coveragePathIgnorePatterns: ['<rootDir>/dist', '<rootDir>/node_modules'],
+  coverageReporters: ['text-summary'],
   coverageThreshold: {
     global: {
       branches: 80,
