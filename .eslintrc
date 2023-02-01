@@ -54,7 +54,7 @@
           {
             "name": "node-fetch",
             "importNames": ["default"],
-            "message": "Avoid using `node-fetch` directly and instead use the fetch wrapper located in `lib/fetch.ts`. See CONTRIBUTING.md for more information."
+            "message": "Avoid using `node-fetch` directly and instead use the fetch wrapper located in `lib/readmeAPIFetch.ts`. See CONTRIBUTING.md for more information."
           },
           {
             "name": "ci-info",

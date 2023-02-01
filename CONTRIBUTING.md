@@ -78,7 +78,7 @@ When writing command logic, avoid using `console` statements (and correspondingl
 
 ### Making `fetch` requests
 
-`fetch` requests are very common in this codebase. When sending `fetch` requests to the ReadMe API (i.e., [dash.readme.com](https://dash.readme.com)), make sure to use the `fetch` wrapper function located in [`src/lib/fetch.ts`](src/lib/fetch.ts). We have an ESLint rule to flag this.
+`fetch` requests are very common in this codebase. When sending `fetch` requests to the ReadMe API (i.e., [dash.readme.com](https://dash.readme.com)), make sure to use the `fetch` wrapper function located in [`src/lib/readmeAPIFetch.ts`](src/lib/readmeAPIFetch.ts). We have an ESLint rule to flag this.
 
 In that wrapper function, we set several important request headers and configure the proxy, if the user added one via `HTTPS_PROXY`.
 
