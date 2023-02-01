@@ -1,9 +1,12 @@
 import * as isCI from '../../src/lib/isCI';
 
+const env = process.env;
+
 /**
  * A helper function for setting up tests for simulating a GitHub Actions runner environment
  */
 export function before() {
+  jest.resetModules();
   // List of all GitHub Actions env variables:
   // https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables
   process.env.GITHUB_ACTION = '__repo-owner_name-of-action-repo';
@@ -27,14 +30,7 @@ export function before() {
  * A helper function for tearing down tests after simulating a GitHub Actions runner environment
  */
 export function after() {
-  delete process.env.GITHUB_ACTION;
-  delete process.env.GITHUB_ACTIONS;
-  delete process.env.GITHUB_REPOSITORY;
-  delete process.env.GITHUB_RUN_ATTEMPT;
-  delete process.env.GITHUB_RUN_ID;
-  delete process.env.GITHUB_RUN_NUMBER;
-  delete process.env.GITHUB_SERVER_URL;
-  delete process.env.GITHUB_SHA;
+  process.env = env;
   delete process.env.TEST_RDME_CI;
   jest.resetAllMocks();
 }
