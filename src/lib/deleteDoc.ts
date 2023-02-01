@@ -1,6 +1,5 @@
 import type { CommandCategories } from './baseCommand';
 
-import config from 'config';
 import { Headers } from 'node-fetch';
 
 import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch';
@@ -25,7 +24,7 @@ export default async function deleteDoc(
   if (dryRun) {
     return Promise.resolve(`🎭 dry run! This will delete \`${slug}\`.`);
   }
-  return readmeAPIFetch(`${config.get('host')}/api/v1/${type}/${slug}`, {
+  return readmeAPIFetch(`/api/v1/${type}/${slug}`, {
     method: 'delete',
     headers: cleanHeaders(
       key,

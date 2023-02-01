@@ -1,6 +1,5 @@
 import fs from 'fs';
 
-import config from 'config';
 import FormData from 'form-data';
 import ora from 'ora';
 import { file as tmpFile } from 'tmp-promise';
@@ -35,7 +34,7 @@ export default async function streamSpecToRegistry(spec: string) {
     method: 'POST',
   };
 
-  return readmeAPIFetch(`${config.get('host')}/api/v1/api-registry`, options)
+  return readmeAPIFetch('/api/v1/api-registry', options)
     .then(handleRes)
     .then(body => {
       spinner.stop();

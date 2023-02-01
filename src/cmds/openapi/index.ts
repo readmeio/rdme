@@ -2,7 +2,6 @@ import type { CommandOptions } from '../../lib/baseCommand';
 import type { RequestInit, Response } from 'node-fetch';
 
 import chalk from 'chalk';
-import config from 'config';
 import { Headers } from 'node-fetch';
 import ora from 'ora';
 import parse from 'parse-link-header';
@@ -237,7 +236,7 @@ export default class OpenAPICommand extends Command {
 
       options.method = 'post';
       spinner.start('Creating your API docs in ReadMe...');
-      return readmeAPIFetch(`${config.get('host')}/api/v1/api-specification`, options, {
+      return readmeAPIFetch('/api/v1/api-specification', options, {
         filePath: specPath,
         fileType: specFileType,
       }).then(res => {
@@ -258,7 +257,7 @@ export default class OpenAPICommand extends Command {
       isUpdate = true;
       options.method = 'put';
       spinner.start('Updating your API docs in ReadMe...');
-      return readmeAPIFetch(`${config.get('host')}/api/v1/api-specification/${specId}`, options, {
+      return readmeAPIFetch(`/api/v1/api-specification/${specId}`, options, {
         filePath: specPath,
         fileType: specFileType,
       }).then(res => {
@@ -280,7 +279,7 @@ export default class OpenAPICommand extends Command {
       */
 
     function getSpecs(url: string) {
-      return readmeAPIFetch(`${config.get('host')}${url}`, {
+      return readmeAPIFetch(url, {
         method: 'get',
         headers: cleanHeaders(
           key,

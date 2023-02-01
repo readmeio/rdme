@@ -60,7 +60,7 @@ export default class CreateVersionCommand extends Command {
     }
 
     if (!fork) {
-      versionList = await readmeAPIFetch(`${config.get('host')}/api/v1/version`, {
+      versionList = await readmeAPIFetch('/api/v1/version', {
         method: 'get',
         headers: cleanHeaders(key),
       }).then(handleRes);
@@ -82,7 +82,7 @@ export default class CreateVersionCommand extends Command {
       is_hidden: promptResponse.is_stable ? false : !(isPublic === 'true' || promptResponse.is_hidden),
     };
 
-    return readmeAPIFetch(`${config.get('host')}/api/v1/version`, {
+    return readmeAPIFetch('/api/v1/version', {
       method: 'post',
       headers: cleanHeaders(
         key,

@@ -1,7 +1,5 @@
 import type { Version } from '../cmds/versions';
 
-import config from 'config';
-
 import APIError from './apiError';
 import isCI from './isCI';
 import { warn } from './logger';
@@ -18,7 +16,7 @@ import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch';
 export async function getProjectVersion(versionFlag: string, key: string, returnStable = false): Promise<string> {
   try {
     if (versionFlag) {
-      return await readmeAPIFetch(`${config.get('host')}/api/v1/version/${versionFlag}`, {
+      return await readmeAPIFetch(`/api/v1/version/${versionFlag}`, {
         method: 'get',
         headers: cleanHeaders(key),
       })
@@ -31,7 +29,7 @@ export async function getProjectVersion(versionFlag: string, key: string, return
       return undefined;
     }
 
-    const versionList: Version[] = await readmeAPIFetch(`${config.get('host')}/api/v1/version`, {
+    const versionList: Version[] = await readmeAPIFetch('/api/v1/version', {
       method: 'get',
       headers: cleanHeaders(key),
     }).then(handleRes);

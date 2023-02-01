@@ -1,4 +1,3 @@
-import config from 'config';
 import { Headers } from 'node-fetch';
 
 import getCategories from './getCategories';
@@ -33,7 +32,7 @@ function flatten(data: Document[][]): Document[] {
 }
 
 async function getCategoryDocs(key: string, selectedVersion: string, category: string): Promise<Document[]> {
-  return readmeAPIFetch(`${config.get('host')}/api/v1/categories/${category}/docs`, {
+  return readmeAPIFetch(`/api/v1/categories/${category}/docs`, {
     method: 'get',
     headers: cleanHeaders(
       key,

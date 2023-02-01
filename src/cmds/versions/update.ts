@@ -2,7 +2,6 @@ import type { Version } from '.';
 import type { CommonOptions } from './create';
 import type { CommandOptions } from '../../lib/baseCommand';
 
-import config from 'config';
 import { Headers } from 'node-fetch';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
@@ -56,7 +55,7 @@ export default class UpdateVersionCommand extends Command {
 
     Command.debug(`selectedVersion: ${selectedVersion}`);
 
-    const foundVersion = await readmeAPIFetch(`${config.get('host')}/api/v1/version/${selectedVersion}`, {
+    const foundVersion = await readmeAPIFetch(`/api/v1/version/${selectedVersion}`, {
       method: 'get',
       headers: cleanHeaders(key),
     }).then(handleRes);
@@ -72,7 +71,7 @@ export default class UpdateVersionCommand extends Command {
       is_hidden: promptResponse.is_stable ? false : !(isPublic === 'true' || promptResponse.is_hidden),
     };
 
-    return readmeAPIFetch(`${config.get('host')}/api/v1/version/${selectedVersion}`, {
+    return readmeAPIFetch(`/api/v1/version/${selectedVersion}`, {
       method: 'put',
       headers: cleanHeaders(
         key,

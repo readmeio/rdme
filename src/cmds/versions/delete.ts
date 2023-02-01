@@ -1,7 +1,5 @@
 import type { CommandOptions } from '../../lib/baseCommand';
 
-import config from 'config';
-
 import Command, { CommandCategories } from '../../lib/baseCommand';
 import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch';
 import { getProjectVersion } from '../../lib/versionSelect';
@@ -35,7 +33,7 @@ export default class DeleteVersionCommand extends Command {
 
     Command.debug(`selectedVersion: ${selectedVersion}`);
 
-    return readmeAPIFetch(`${config.get('host')}/api/v1/version/${selectedVersion}`, {
+    return readmeAPIFetch(`/api/v1/version/${selectedVersion}`, {
       method: 'delete',
       headers: cleanHeaders(key),
     })

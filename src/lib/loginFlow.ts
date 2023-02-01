@@ -1,5 +1,4 @@
 import chalk from 'chalk';
-import config from 'config';
 import isEmail from 'validator/lib/isEmail';
 
 import configStore from './configstore';
@@ -17,7 +16,7 @@ interface LoginBody {
 }
 
 function loginFetch(body: LoginBody) {
-  return readmeAPIFetch(`${config.get('host')}/api/v1/login`, {
+  return readmeAPIFetch('/api/v1/login', {
     method: 'post',
     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
     body: JSON.stringify(body),

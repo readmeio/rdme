@@ -88,7 +88,7 @@ export default class CategoriesCreateCommand extends Command {
           );
         }
       }
-      return readmeAPIFetch(`${config.get('host')}/api/v1/categories`, {
+      return readmeAPIFetch('/api/v1/categories', {
         method: 'post',
         headers: cleanHeaders(
           key,

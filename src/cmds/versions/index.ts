@@ -1,7 +1,5 @@
 import type { CommandOptions } from '../../lib/baseCommand';
 
-import config from 'config';
-
 import Command, { CommandCategories } from '../../lib/baseCommand';
 import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch';
 
@@ -40,7 +38,7 @@ export default class VersionsCommand extends Command {
 
     const { key, version } = opts;
 
-    const uri = version ? `${config.get('host')}/api/v1/version/${version}` : `${config.get('host')}/api/v1/version`;
+    const uri = version ? `/api/v1/version/${version}` : '/api/v1/version';
 
     return readmeAPIFetch(uri, {
       method: 'get',

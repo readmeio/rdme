@@ -1,4 +1,3 @@
-import config from 'config';
 import { Headers } from 'node-fetch';
 
 import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch';
@@ -13,7 +12,7 @@ import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch';
 export default async function getCategories(key: string, selectedVersion: string) {
   function getNumberOfPages() {
     let totalCount = 0;
-    return readmeAPIFetch(`${config.get('host')}/api/v1/categories?perPage=20&page=1`, {
+    return readmeAPIFetch('/api/v1/categories?perPage=20&page=1', {
       method: 'get',
       headers: cleanHeaders(
         key,
@@ -38,7 +37,7 @@ export default async function getCategories(key: string, selectedVersion: string
     ...(await Promise.all(
       // retrieves all categories beyond first page
       [...new Array(totalCount + 1).keys()].slice(2).map(async page => {
-        return readmeAPIFetch(`${config.get('host')}/api/v1/categories?perPage=20&page=${page}`, {
+        return readmeAPIFetch(`/api/v1/categories?perPage=20&page=${page}`, {
           method: 'get',
           headers: cleanHeaders(
             key,

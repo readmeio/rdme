@@ -63,7 +63,7 @@ async function pushDoc(
 
     return (
       readmeAPIFetch(
-        `${config.get('host')}/api/v1/${type}`,
+        `/api/v1/${type}`,
         {
           method: 'post',
           headers: cleanHeaders(
@@ -100,7 +100,7 @@ async function pushDoc(
     }
 
     return readmeAPIFetch(
-      `${config.get('host')}/api/v1/${type}/${slug}`,
+      `/api/v1/${type}/${slug}`,
       {
         method: 'put',
         headers: cleanHeaders(
@@ -118,7 +118,7 @@ async function pushDoc(
       .then(res => `✏️ successfully updated '${res.slug}' with contents from ${filePath}`);
   }
 
-  return readmeAPIFetch(`${config.get('host')}/api/v1/${type}/${slug}`, {
+  return readmeAPIFetch(`/api/v1/${type}/${slug}`, {
     method: 'get',
     headers: cleanHeaders(
       key,
