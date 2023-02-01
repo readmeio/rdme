@@ -127,8 +127,8 @@ function sanitizeHeaders(headers: Headers) {
 /**
  * Wrapper for the `fetch` API so we can add rdme-specific headers to all API requests.
  *
- * @param filePath local path for the file that's being sent. We use this to construct
- * a full URL that points to the file in version control systems.
+ * @param fileOpts optional object containing information about the file being sent.
+ * We use this to construct a full source URL for the file.
  */
 export default async function fetch(
   url: string,
