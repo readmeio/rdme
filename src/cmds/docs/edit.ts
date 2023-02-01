@@ -11,7 +11,7 @@ import editor from 'editor';
 import APIError from '../../lib/apiError';
 import Command, { CommandCategories } from '../../lib/baseCommand';
 import isHidden from '../../lib/decorators/isHidden';
-import fetch, { cleanHeaders, handleRes } from '../../lib/fetch';
+import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch';
 import { getProjectVersion } from '../../lib/versionSelect';
 
 const writeFile = promisify(fs.writeFile);
@@ -61,7 +61,7 @@ export default class DocsEditCommand extends Command {
 
     const filename = `${slug}.md`;
 
-    const existingDoc = await fetch(`${config.get('host')}/api/v1/docs/${slug}`, {
+    const existingDoc = await readmeAPIFetch(`${config.get('host')}/api/v1/docs/${slug}`, {
       method: 'get',
       headers: cleanHeaders(
         key,
@@ -84,7 +84,7 @@ export default class DocsEditCommand extends Command {
 
         Command.debug(`read edited contents of ${filename}, sending to ReadMe`);
 
-        return fetch(`${config.get('host')}/api/v1/docs/${slug}`, {
+        return readmeAPIFetch(`${config.get('host')}/api/v1/docs/${slug}`, {
           method: 'put',
           headers: cleanHeaders(
             key,

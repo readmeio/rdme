@@ -3,7 +3,7 @@ import config from 'config';
 import { Headers } from 'node-fetch';
 
 import pkg from '../../package.json';
-import fetch, { cleanHeaders, handleRes } from '../../src/lib/fetch';
+import readmeAPIFetch, { cleanHeaders, handleRes } from '../../src/lib/readmeAPIFetch';
 import getAPIMock from '../helpers/get-api-mock';
 import { after, before } from '../helpers/setup-gha-env';
 
@@ -23,7 +23,7 @@ describe('#fetch()', () => {
           return this.req.headers;
         });
 
-      const headers = await fetch(`${config.get('host')}/api/v1`, {
+      const headers = await readmeAPIFetch(`${config.get('host')}/api/v1`, {
         method: 'get',
         headers: cleanHeaders(key),
       }).then(handleRes);
@@ -50,7 +50,7 @@ describe('#fetch()', () => {
             return this.req.headers;
           });
 
-        const headers = await fetch(
+        const headers = await readmeAPIFetch(
           `${config.get('host')}/api/v1`,
           {
             method: 'get',
@@ -75,7 +75,7 @@ describe('#fetch()', () => {
             return this.req.headers;
           });
 
-        const headers = await fetch(
+        const headers = await readmeAPIFetch(
           `${config.get('host')}/api/v1`,
           {
             method: 'get',
@@ -101,7 +101,7 @@ describe('#fetch()', () => {
             return this.req.headers;
           });
 
-        const headers = await fetch(
+        const headers = await readmeAPIFetch(
           `${config.get('host')}/api/v1`,
           {
             method: 'get',
@@ -126,7 +126,7 @@ describe('#fetch()', () => {
         return this.req.headers;
       });
 
-    const headers = await fetch(`${config.get('host')}/api/v1`, {
+    const headers = await readmeAPIFetch(`${config.get('host')}/api/v1`, {
       method: 'get',
       headers: cleanHeaders(key),
     }).then(handleRes);
@@ -148,7 +148,7 @@ describe('#fetch()', () => {
         return this.req.headers;
       });
 
-    const headers = await fetch(`${config.get('host')}/api/v1/doesnt-need-auth`).then(handleRes);
+    const headers = await readmeAPIFetch(`${config.get('host')}/api/v1/doesnt-need-auth`).then(handleRes);
 
     expect(headers['user-agent'].shift()).toBe(`rdme/${pkg.version}`);
     expect(headers['x-readme-source'].shift()).toBe('cli');
@@ -180,7 +180,7 @@ describe('#fetch()', () => {
         Warning: '',
       });
 
-      await fetch(`${config.get('host')}/api/v1/some-warning`);
+      await readmeAPIFetch(`${config.get('host')}/api/v1/some-warning`);
 
       expect(console.warn).toHaveBeenCalledTimes(0);
       expect(getWarningCommandOutput()).toBe('');
@@ -193,7 +193,7 @@ describe('#fetch()', () => {
         Warning: '199 - "some error"',
       });
 
-      await fetch(`${config.get('host')}/api/v1/some-warning`);
+      await readmeAPIFetch(`${config.get('host')}/api/v1/some-warning`);
 
       expect(console.warn).toHaveBeenCalledTimes(1);
       expect(getWarningCommandOutput()).toBe('⚠️  ReadMe API Warning: some error');
@@ -206,7 +206,7 @@ describe('#fetch()', () => {
         Warning: '199 - "some error" 199 - "another error"',
       });
 
-      await fetch(`${config.get('host')}/api/v1/some-warning`);
+      await readmeAPIFetch(`${config.get('host')}/api/v1/some-warning`);
 
       expect(console.warn).toHaveBeenCalledTimes(2);
       expect(getWarningCommandOutput()).toBe(
@@ -221,7 +221,7 @@ describe('#fetch()', () => {
         Warning: 'some garbage error',
       });
 
-      await fetch(`${config.get('host')}/api/v1/some-warning`);
+      await readmeAPIFetch(`${config.get('host')}/api/v1/some-warning`);
 
       expect(console.warn).toHaveBeenCalledTimes(1);
       expect(getWarningCommandOutput()).toBe('⚠️  ReadMe API Warning: some garbage error');
@@ -243,7 +243,7 @@ describe('#fetch()', () => {
 
       const mock = getAPIMock({}, `${proxy}/`).get('/api/v1/proxy').reply(200);
 
-      await fetch(`${config.get('host')}/api/v1/proxy`);
+      await readmeAPIFetch(`${config.get('host')}/api/v1/proxy`);
 
       expect(mock.isDone()).toBe(true);
     });
@@ -255,7 +255,7 @@ describe('#fetch()', () => {
 
       const mock = getAPIMock({}, `${proxy}/`).get('/api/v1/proxy').reply(200);
 
-      await fetch(`${config.get('host')}/api/v1/proxy`);
+      await readmeAPIFetch(`${config.get('host')}/api/v1/proxy`);
 
       expect(mock.isDone()).toBe(true);
     });
@@ -267,7 +267,7 @@ describe('#fetch()', () => {
 
       const mock = getAPIMock({}, proxy).get('/api/v1/proxy').reply(200);
 
-      await fetch(`${config.get('host')}/api/v1/proxy`);
+      await readmeAPIFetch(`${config.get('host')}/api/v1/proxy`);
 
       expect(mock.isDone()).toBe(true);
     });

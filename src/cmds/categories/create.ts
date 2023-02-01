@@ -5,8 +5,8 @@ import config from 'config';
 import { Headers } from 'node-fetch';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
-import fetch, { cleanHeaders, handleRes } from '../../lib/fetch';
 import getCategories from '../../lib/getCategories';
+import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch';
 import { getProjectVersion } from '../../lib/versionSelect';
 
 interface Category {
@@ -88,7 +88,7 @@ export default class CategoriesCreateCommand extends Command {
           );
         }
       }
-      return fetch(`${config.get('host')}/api/v1/categories`, {
+      return readmeAPIFetch(`${config.get('host')}/api/v1/categories`, {
         method: 'post',
         headers: cleanHeaders(
           key,

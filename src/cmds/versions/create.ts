@@ -6,9 +6,9 @@ import { Headers } from 'node-fetch';
 import semver from 'semver';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
-import fetch, { cleanHeaders, handleRes } from '../../lib/fetch';
 import * as promptHandler from '../../lib/prompts';
 import promptTerminal from '../../lib/promptWrapper';
+import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch';
 
 export interface Options extends CommonOptions {
   fork?: string;
@@ -60,7 +60,7 @@ export default class CreateVersionCommand extends Command {
     }
 
     if (!fork) {
-      versionList = await fetch(`${config.get('host')}/api/v1/version`, {
+      versionList = await readmeAPIFetch(`${config.get('host')}/api/v1/version`, {
         method: 'get',
         headers: cleanHeaders(key),
       }).then(handleRes);
@@ -82,7 +82,7 @@ export default class CreateVersionCommand extends Command {
       is_hidden: promptResponse.is_stable ? false : !(isPublic === 'true' || promptResponse.is_hidden),
     };
 
-    return fetch(`${config.get('host')}/api/v1/version`, {
+    return readmeAPIFetch(`${config.get('host')}/api/v1/version`, {
       method: 'post',
       headers: cleanHeaders(
         key,

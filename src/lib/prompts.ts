@@ -7,8 +7,8 @@ import type { Choice, PromptObject } from 'prompts';
 import parse from 'parse-link-header';
 import semver from 'semver';
 
-import { handleRes } from './fetch';
 import promptTerminal from './promptWrapper';
+import { handleRes } from './readmeAPIFetch';
 
 interface Spec {
   _id: string;

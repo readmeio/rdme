@@ -3,7 +3,7 @@ import type { CommandCategories } from './baseCommand';
 import config from 'config';
 import { Headers } from 'node-fetch';
 
-import fetch, { cleanHeaders, handleRes } from './fetch';
+import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch';
 
 /**
  * Delete a document from ReadMe
@@ -25,7 +25,7 @@ export default async function deleteDoc(
   if (dryRun) {
     return Promise.resolve(`🎭 dry run! This will delete \`${slug}\`.`);
   }
-  return fetch(`${config.get('host')}/api/v1/${type}/${slug}`, {
+  return readmeAPIFetch(`${config.get('host')}/api/v1/${type}/${slug}`, {
     method: 'delete',
     headers: cleanHeaders(
       key,

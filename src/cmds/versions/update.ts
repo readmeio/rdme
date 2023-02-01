@@ -6,9 +6,9 @@ import config from 'config';
 import { Headers } from 'node-fetch';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
-import fetch, { cleanHeaders, handleRes } from '../../lib/fetch';
 import * as promptHandler from '../../lib/prompts';
 import promptTerminal from '../../lib/promptWrapper';
+import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch';
 import { getProjectVersion } from '../../lib/versionSelect';
 
 export interface Options extends CommonOptions {
@@ -56,7 +56,7 @@ export default class UpdateVersionCommand extends Command {
 
     Command.debug(`selectedVersion: ${selectedVersion}`);
 
-    const foundVersion = await fetch(`${config.get('host')}/api/v1/version/${selectedVersion}`, {
+    const foundVersion = await readmeAPIFetch(`${config.get('host')}/api/v1/version/${selectedVersion}`, {
       method: 'get',
       headers: cleanHeaders(key),
     }).then(handleRes);
@@ -72,7 +72,7 @@ export default class UpdateVersionCommand extends Command {
       is_hidden: promptResponse.is_stable ? false : !(isPublic === 'true' || promptResponse.is_hidden),
     };
 
-    return fetch(`${config.get('host')}/api/v1/version/${selectedVersion}`, {
+    return readmeAPIFetch(`${config.get('host')}/api/v1/version/${selectedVersion}`, {
       method: 'put',
       headers: cleanHeaders(
         key,

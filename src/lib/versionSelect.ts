@@ -3,10 +3,10 @@ import type { Version } from '../cmds/versions';
 import config from 'config';
 
 import APIError from './apiError';
-import fetch, { cleanHeaders, handleRes } from './fetch';
 import isCI from './isCI';
 import { warn } from './logger';
 import promptTerminal from './promptWrapper';
+import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch';
 
 /**
  * Validates and returns a project version.
@@ -18,7 +18,7 @@ import promptTerminal from './promptWrapper';
 export async function getProjectVersion(versionFlag: string, key: string, returnStable = false): Promise<string> {
   try {
     if (versionFlag) {
-      return await fetch(`${config.get('host')}/api/v1/version/${versionFlag}`, {
+      return await readmeAPIFetch(`${config.get('host')}/api/v1/version/${versionFlag}`, {
         method: 'get',
         headers: cleanHeaders(key),
       })
@@ -31,7 +31,7 @@ export async function getProjectVersion(versionFlag: string, key: string, return
       return undefined;
     }
 
-    const versionList: Version[] = await fetch(`${config.get('host')}/api/v1/version`, {
+    const versionList: Version[] = await readmeAPIFetch(`${config.get('host')}/api/v1/version`, {
       method: 'get',
       headers: cleanHeaders(key),
     }).then(handleRes);
