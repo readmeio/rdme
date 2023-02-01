@@ -762,6 +762,45 @@ describe('rdme openapi', () => {
       return mock.done();
     });
 
+    describe('CI version handling', () => {
+      beforeEach(() => {
+        process.env.TEST_RDME_CI = 'true';
+      });
+
+      afterEach(() => {
+        delete process.env.TEST_RDME_CI;
+      });
+
+      it('should omit version header in CI environment', async () => {
+        expect.assertions(2);
+        let requestBody = '';
+        const registryUUID = getRandomRegistryId();
+        const mock = getAPIMock()
+          .post('/api/v1/api-registry', body => {
+            requestBody = body.substring(body.indexOf('{'), body.lastIndexOf('}') + 1);
+            requestBody = JSON.parse(requestBody);
+
+            return body.match('form-data; name="spec"');
+          })
+          .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+          .get('/api/v1/api-specification')
+          .basicAuth({ user: key })
+          .reply(200, [])
+          .post('/api/v1/api-specification', { registryUUID })
+          .basicAuth({ user: key })
+          .reply(function (uri, rBody, cb) {
+            expect(this.req.headers['x-readme-version']).toBeUndefined();
+            return cb(null, [201, { _id: 1 }, { location: exampleRefLocation }]);
+          });
+
+        const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
+
+        await expect(openapi.run({ spec, key })).resolves.toBe(successfulUpload(spec));
+
+        return mock.done();
+      });
+    });
+
     it('should error if version flag sent to API returns a 404', async () => {
       const invalidVersion = 'v1000';
 
@@ -1433,35 +1472,6 @@ describe('rdme openapi', () => {
           version,
         })
       ).rejects.toStrictEqual(new Error('Multiple API definitions found in current directory. Please specify file.'));
-    });
-
-    it('should omit version header in CI environment', async () => {
-      expect.assertions(2);
-      let requestBody = '';
-      const registryUUID = getRandomRegistryId();
-      const mock = getAPIMock()
-        .post('/api/v1/api-registry', body => {
-          requestBody = body.substring(body.indexOf('{'), body.lastIndexOf('}') + 1);
-          requestBody = JSON.parse(requestBody);
-
-          return body.match('form-data; name="spec"');
-        })
-        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
-        .get('/api/v1/api-specification')
-        .basicAuth({ user: key })
-        .reply(200, [])
-        .post('/api/v1/api-specification', { registryUUID })
-        .basicAuth({ user: key })
-        .reply(function (uri, rBody, cb) {
-          expect(this.req.headers['x-readme-version']).toBeUndefined();
-          return cb(null, [201, { _id: 1 }, { location: exampleRefLocation }]);
-        });
-
-      const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
-
-      await expect(openapi.run({ spec, key })).resolves.toBe(successfulUpload(spec));
-
-      return mock.done();
     });
 
     it('should send proper headers in GitHub Actions CI for local spec file', async () => {
