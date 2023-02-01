@@ -39,29 +39,80 @@ describe('#fetch()', () => {
       mock.done();
     });
 
-    it('should include file URL header if applicable', async () => {
-      const key = 'API_KEY';
+    describe('source URL header', () => {
+      it('should include source URL header with simple path', async () => {
+        const key = 'API_KEY';
 
-      const mock = getAPIMock()
-        .get('/api/v1')
-        .basicAuth({ user: key })
-        .reply(200, function () {
-          return this.req.headers;
-        });
+        const mock = getAPIMock()
+          .get('/api/v1')
+          .basicAuth({ user: key })
+          .reply(200, function () {
+            return this.req.headers;
+          });
 
-      const headers = await fetch(
-        `${config.get('host')}/api/v1`,
-        {
-          method: 'get',
-          headers: cleanHeaders(key),
-        },
-        'openapi.json'
-      ).then(handleRes);
+        const headers = await fetch(
+          `${config.get('host')}/api/v1`,
+          {
+            method: 'get',
+            headers: cleanHeaders(key),
+          },
+          { filePath: 'openapi.json', fileType: 'path' }
+        ).then(handleRes);
 
-      expect(headers['x-readme-source-url'].shift()).toBe(
-        'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/openapi.json'
-      );
-      mock.done();
+        expect(headers['x-readme-source-url'].shift()).toBe(
+          'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/openapi.json'
+        );
+        mock.done();
+      });
+
+      it('should include source URL header with relative path', async () => {
+        const key = 'API_KEY';
+
+        const mock = getAPIMock()
+          .get('/api/v1')
+          .basicAuth({ user: key })
+          .reply(200, function () {
+            return this.req.headers;
+          });
+
+        const headers = await fetch(
+          `${config.get('host')}/api/v1`,
+          {
+            method: 'get',
+            headers: cleanHeaders(key),
+          },
+          { filePath: './openapi.json', fileType: 'path' }
+        ).then(handleRes);
+
+        expect(headers['x-readme-source-url'].shift()).toBe(
+          'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/openapi.json'
+        );
+        mock.done();
+      });
+
+      it('should include source URL header with URL path', async () => {
+        const key = 'API_KEY';
+        const filePath = 'https://example.com/openapi.json';
+
+        const mock = getAPIMock()
+          .get('/api/v1')
+          .basicAuth({ user: key })
+          .reply(200, function () {
+            return this.req.headers;
+          });
+
+        const headers = await fetch(
+          `${config.get('host')}/api/v1`,
+          {
+            method: 'get',
+            headers: cleanHeaders(key),
+          },
+          { filePath, fileType: 'url' }
+        ).then(handleRes);
+
+        expect(headers['x-readme-source-url'].shift()).toBe(filePath);
+        mock.done();
+      });
     });
   });
 
