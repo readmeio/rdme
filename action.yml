@@ -12,5 +12,5 @@ runs:
   using: docker
   image: Dockerfile
   args:
-    - ${{ github.action_path }}/bin/rdme
+    - bin/rdme
     - ${{ inputs.rdme }}
