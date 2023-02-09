@@ -3,7 +3,9 @@
 # so we can run it in any environment (i.e. a local env using `act`)
 name: GitHub Action Simple Example
 
-on: workflow_dispatch
+on:
+  - workflow_dispatch
+  - push
 
 jobs:
   simple:
