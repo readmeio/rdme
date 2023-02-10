@@ -1,3 +1,10 @@
+# [8.6.0-next.2](https://github.com/readmeio/rdme/compare/v8.6.0-next.1...v8.6.0-next.2) (2023-02-10)
+
+
+### Features
+
+* add git + changelog plugins ([85e4bfd](https://github.com/readmeio/rdme/commit/85e4bfd982d1b9d9193ccf2c5441eb6aa016b725))
+
 ## 8.5.0 (2023-02-01)
 
 * docs: update outdated file names ([52a8219](https://github.com/readmeio/rdme/commit/52a8219))
@@ -1435,6 +1442,3 @@ Alongside this change, this release includes major documentation updates and sup
 * version 0.1.2 ([349ba96](https://github.com/readmeio/rdme/commit/349ba96))
 * Weight help items ([fffc107](https://github.com/readmeio/rdme/commit/fffc107))
 * Whoops, fixing up api url and making it work ([da021fd](https://github.com/readmeio/rdme/commit/da021fd))
-
-
-
