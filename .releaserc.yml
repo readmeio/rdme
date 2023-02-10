@@ -1,0 +1,7 @@
+branches:
+  - name: main
+  - name: semantic-release # TODO: remove this
+    prerelease: true
+  - name: next
+    prerelease: true
+dryRun: true # TODO: remove this
