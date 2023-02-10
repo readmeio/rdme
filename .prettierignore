@@ -1,4 +1,4 @@
-__tests__/__fixtures__/**/*.md
+__tests__/__fixtures__/invalid-json/yikes.json
 CHANGELOG.md
 coverage/
 dist/
