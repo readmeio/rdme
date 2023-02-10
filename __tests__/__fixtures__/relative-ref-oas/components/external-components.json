@@ -40,11 +40,7 @@
         "status": {
           "type": "string",
           "description": "Order Status",
-          "enum": [
-            "placed",
-            "approved",
-            "delivered"
-          ]
+          "enum": ["placed", "approved", "delivered"]
         },
         "complete": {
           "type": "boolean",
@@ -122,10 +118,7 @@
     },
     "Pet": {
       "type": "object",
-      "required": [
-        "name",
-        "photoUrls"
-      ],
+      "required": ["name", "photoUrls"],
       "properties": {
         "id": {
           "type": "integer",
@@ -164,11 +157,7 @@
         "status": {
           "type": "string",
           "description": "pet status in the store",
-          "enum": [
-            "available",
-            "pending",
-            "sold"
-          ]
+          "enum": ["available", "pending", "sold"]
         }
       },
       "xml": {

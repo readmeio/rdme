@@ -25,26 +25,16 @@
       }
     }
   ],
-  "schemes": [
-    "http"
-  ],
+  "schemes": ["http"],
   "paths": {
     "/pet": {
       "post": {
-        "tags": [
-          "pet"
-        ],
+        "tags": ["pet"],
         "summary": "Add a new pet to the store",
         "description": "",
         "operationId": "addPet",
-        "consumes": [
-          "application/json",
-          "application/xml"
-        ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
+        "consumes": ["application/json", "application/xml"],
+        "produces": ["application/xml", "application/json"],
         "parameters": [
           {
             "in": "body",
@@ -63,10 +53,7 @@
         },
         "security": [
           {
-            "petstore_auth": [
-              "write:pets",
-              "read:pets"
-            ]
+            "petstore_auth": ["write:pets", "read:pets"]
           }
         ]
       }
@@ -121,10 +108,7 @@
     },
     "Pet": {
       "type": "object",
-      "required": [
-        "name",
-        "photoUrls"
-      ],
+      "required": ["name", "photoUrls"],
       "properties": {
         "id": {
           "type": "integer",
@@ -160,11 +144,7 @@
         "status": {
           "type": "string",
           "description": "pet status in the store",
-          "enum": [
-            "available",
-            "pending",
-            "sold"
-          ]
+          "enum": ["available", "pending", "sold"]
         }
       },
       "xml": {
