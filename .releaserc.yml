@@ -4,4 +4,4 @@ branches:
     prerelease: true
   - name: next
     prerelease: true
-dryRun: true # TODO: remove this
+# dryRun: true # TODO: remove this
