@@ -69,6 +69,8 @@
     "@readme/better-ajv-errors": "^1.5.0",
     "@readme/eslint-config": "^10.3.1",
     "@readme/oas-examples": "^5.3.0",
+    "@semantic-release/changelog": "^6.0.2",
+    "@semantic-release/git": "^10.0.1",
     "@types/command-line-args": "^5.2.0",
     "@types/command-line-usage": "^5.0.2",
     "@types/config": "^3.3.0",

@@ -5,4 +5,14 @@ branches:
     channel: next
   # - name: next
   #   prerelease: true
+plugins:
+  - '@semantic-release/commit-analyzer'
+  - '@semantic-release/release-notes-generator'
+  - '@semantic-release/changelog'
+  - '@semantic-release/npm'
+  - '@semantic-release/github'
+  - [
+      '@semantic-release/git',
+      { message: "build(release): 🚀 v${nextRelease.version} release 🦉\n\n${nextRelease.notes}\n[skip ci]" },
+    ]
 dryRun: true # TODO: remove this
