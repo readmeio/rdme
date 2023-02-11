@@ -1,3 +1,10 @@
+## What's Changed in 8.6.0-next.3
+
+### Bug Fixes
+
+* rebuild prior to npm publish ([29b9ec6](https://github.com/readmeio/rdme/commit/29b9ec6a38212882de22f9c3c4f35e5ce295f267))
+* reformat github release header ([38c5625](https://github.com/readmeio/rdme/commit/38c5625bb2a22506953943a389f05ff70b39d659))
+
 # [8.6.0-next.2](https://github.com/readmeio/rdme/compare/v8.6.0-next.1...v8.6.0-next.2) (2023-02-10)
 
 
