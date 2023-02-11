@@ -9,7 +9,7 @@ plugins:
   - '@semantic-release/commit-analyzer'
   - [
       '@semantic-release/release-notes-generator',
-      { 'writerOpts': { 'commitsSort': ['subject', 'scope'], 'headerPartial': "## What's Changed in {{version}}" } },
+      { 'writerOpts': { 'commitsSort': ['subject', 'scope'], 'headerPartial': "## What's Changed" } },
     ]
   - '@semantic-release/changelog'
   - '@semantic-release/npm'
