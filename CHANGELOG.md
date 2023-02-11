@@ -1,3 +1,14 @@
+## What's Changed
+
+### Bug Fixes
+
+* reformat header again ([bd2e1a2](https://github.com/readmeio/rdme/commit/bd2e1a24122a2e40e0944eae638d02f205165fd9))
+
+
+### Features
+
+* drop duplicative tag ([4c34207](https://github.com/readmeio/rdme/commit/4c34207be6acf3b30b6f0b9e3b70722047f52403))
+
 ## What's Changed in 8.6.0-next.3
 
 ### Bug Fixes
