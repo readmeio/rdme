@@ -11,7 +11,7 @@ plugins:
   - '@semantic-release/changelog'
   - [
       '@semantic-release/git',
-      { message: "build(release): 🚀 v${nextRelease.version} 🦉\n\n${nextRelease.notes}\n[skip ci]" },
+      { message: "build(release): 🚀 v${nextRelease.version} 🦉\n\n${nextRelease.notes}\n[skip release ci]" },
     ]
   # `npm` must be after `git` because we need the `prepare`step of the
   # `git` plugin to go first so it can create the build commit
