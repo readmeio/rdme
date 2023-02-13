@@ -2,6 +2,17 @@
 
 ### Bug Fixes
 
+* try rearranging steps like this ([cac0c1d](https://github.com/readmeio/rdme/commit/cac0c1df2b71d6e15b7c418628708d2490cc1986))
+
+
+### Reverts
+
+* Revert "feat: drop duplicative tag" ([f9fe6c6](https://github.com/readmeio/rdme/commit/f9fe6c6cf92cb944ac284b4bed4077e9d63662cc))
+
+## What's Changed
+
+### Bug Fixes
+
 * reformat header again ([bd2e1a2](https://github.com/readmeio/rdme/commit/bd2e1a24122a2e40e0944eae638d02f205165fd9))
 
 
