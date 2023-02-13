@@ -4,7 +4,7 @@ branches:
     prerelease: true
 plugins:
   - '@semantic-release/commit-analyzer'
-  - ['@semantic-release/release-notes-generator', { 'writerOpts': { 'commitsSort': ['subject', 'scope'] } }]
+  - '@semantic-release/release-notes-generator'
   - '@semantic-release/changelog'
   # `npm` must be before `git` so the `npm` command can properly bump
   # the package*.json files before we commit the changes
