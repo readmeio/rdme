@@ -1,3 +1,16 @@
+# [8.6.0-next.7](https://github.com/readmeio/rdme/compare/v8.6.0-next.6...v8.6.0-next.7) (2023-02-13)
+
+
+### Bug Fixes
+
+* try this approach to lifecycle events ([4e5ecff](https://github.com/readmeio/rdme/commit/4e5ecff0b2ebf7bf03d7e977fd2d0564bc255695))
+* turns out these rules weren't redundant ([f9f82f1](https://github.com/readmeio/rdme/commit/f9f82f1b71a5182a9205ae807d92ae0ca2f6d25f))
+
+
+### Reverts
+
+* ugh here we go again ([0b1e429](https://github.com/readmeio/rdme/commit/0b1e42935011cb149fca89bc9ec096636628f6e8))
+
 # [8.6.0-next.6](https://github.com/readmeio/rdme/compare/v8.6.0-next.5...v8.6.0-next.6) (2023-02-13)
 
 
