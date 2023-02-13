@@ -22,5 +22,6 @@ plugins:
   # `npm` must be after `git` because we need the `prepare`step of the
   # `git` plugin to go first so it can create the build commit
   - '@semantic-release/npm'
-  - ['@semantic-release/exec', { 'publishCmd': 'npm run release:gh' }]
+  # Lightweight alternative to `@semantic-release/github` that just creates a draft release
+  - ['@semantic-release/exec', { 'publishCmd': 'gh release create ${nextRelease.version} --draft --generate-notes' }]
 # dryRun: true # TODO: remove this
