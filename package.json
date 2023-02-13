@@ -105,7 +105,7 @@
     "bump": "npm version -m 'build: %s release'",
     "debug": "ts-node src/cli.ts",
     "lint": "eslint . bin/rdme --ext .js,.ts",
-    "postversion": "./bin/set-major-version-tag.js",
+    "postversion": "git tag $npm_package_version && ./bin/set-major-version-tag.js",
     "prebuild": "rm -rf dist/",
     "prepack": "npm run build",
     "prepare": "husky install",
