@@ -23,6 +23,6 @@ plugins:
   # to execute first so it can create the build commit since we do some add'l tagging
   # in the `postversion` npm hook
   - '@semantic-release/npm'
-  # Lightweight alternative to `@semantic-release/github` that just creates a draft release
+  # Lightweight alternative to `@semantic-release/github` that creates a draft release
   - ['@semantic-release/exec', { 'publishCmd': 'gh release create ${nextRelease.version} --draft --generate-notes' }]
 # dryRun: true # TODO: remove this
