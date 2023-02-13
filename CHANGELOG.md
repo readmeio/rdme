@@ -1,3 +1,10 @@
+# [8.6.0-next.8](https://github.com/readmeio/rdme/compare/v8.6.0-next.7...v8.6.0-next.8) (2023-02-13)
+
+
+### Bug Fixes
+
+* does this work? ([c81e432](https://github.com/readmeio/rdme/commit/c81e43255e7208b2c6851e1c5702714256e5ec66))
+
 # [8.6.0-next.7](https://github.com/readmeio/rdme/compare/v8.6.0-next.6...v8.6.0-next.7) (2023-02-13)
 
 
