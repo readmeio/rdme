@@ -115,7 +115,24 @@
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
-    ]
+    ],
+    "rules": {
+      "body-max-line-length": [
+        0,
+        "always",
+        "Infinity"
+      ],
+      "footer-max-line-length": [
+        0,
+        "always",
+        "Infinity"
+      ],
+      "scope-case": [
+        2,
+        "never",
+        "upper-case"
+      ]
+    }
   },
   "prettier": "@readme/eslint-config/prettier"
 }
