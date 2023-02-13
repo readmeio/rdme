@@ -1,3 +1,17 @@
+# [8.6.0-next.6](https://github.com/readmeio/rdme/compare/v8.6.0-next.5...v8.6.0-next.6) (2023-02-13)
+
+
+### Bug Fixes
+
+* run tests but NOT release workflow on release commits ([24f885e](https://github.com/readmeio/rdme/commit/24f885e00cf966d32cca013ca59aea903f9c3807))
+* try this as an alternative to @semantic-release/github ([8c343a0](https://github.com/readmeio/rdme/commit/8c343a09bbfa62e2410705d480b91837ec2af854))
+
+
+### Reverts
+
+* Revert "chore: remove github release npm script" ([e77b67a](https://github.com/readmeio/rdme/commit/e77b67a0c03075e5a78de464ceb4873e1354579d))
+* don't set header for changelog ([194489e](https://github.com/readmeio/rdme/commit/194489ee5382c0366606c7d62b45262783b91394))
+
 ## What's Changed
 
 ### Bug Fixes
