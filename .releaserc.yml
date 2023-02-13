@@ -12,10 +12,10 @@ plugins:
       { 'writerOpts': { 'commitsSort': ['subject', 'scope'], 'headerPartial': "## What's Changed" } },
     ]
   - '@semantic-release/changelog'
-  - '@semantic-release/npm'
-  - '@semantic-release/github'
   - [
       '@semantic-release/git',
       { message: "build(release): 🚀 v${nextRelease.version} 🦉\n\n${nextRelease.notes}\n[skip ci]" },
     ]
+  - '@semantic-release/npm'
+  - '@semantic-release/github'
 # dryRun: true # TODO: remove this
