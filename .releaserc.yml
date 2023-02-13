@@ -19,7 +19,7 @@ plugins:
         # since we're also updating the action.yml file with every release!
         # Uncomment this line below once those changes are live:
         # assets: ['action.yml', 'CHANGELOG.md', 'package.json', 'package-lock.json'],
-        message: "build(release): 🚀 v${nextRelease.version} 🦉\n\n${nextRelease.notes}\n[skip release]",
+        message: "build(release): 🚀 v${nextRelease.version} 🦉\n\n${nextRelease.notes}\n[skip ci]",
       },
     ]
   - [
