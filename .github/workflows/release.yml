@@ -4,6 +4,7 @@ on:
     branches:
       - main
       - next
+      - semantic-release # TODO: remove this
 
 jobs:
   release:
