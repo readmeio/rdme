@@ -9,6 +9,9 @@ plugins:
   - '@semantic-release/commit-analyzer'
   - ['@semantic-release/release-notes-generator', { 'writerOpts': { 'commitsSort': ['subject', 'scope'] } }]
   - '@semantic-release/changelog'
+  # `npm` must be before `git` so the `npm` command can properly bump
+  # the package*.json files before we commit the changes
+  - '@semantic-release/npm'
   - [
       '@semantic-release/git',
       {
@@ -19,10 +22,13 @@ plugins:
         message: "build(release): 🚀 v${nextRelease.version} 🦉\n\n${nextRelease.notes}\n[skip release ci]",
       },
     ]
-  # `npm` must be after `git` because we need the `prepare`step of the `git` plugin
-  # to execute first so it can create the build commit since we do some add'l tagging
-  # in the `postversion` npm hook
-  - '@semantic-release/npm'
-  # Lightweight alternative to `@semantic-release/github` that creates a draft release
-  - ['@semantic-release/exec', { 'publishCmd': 'gh release create ${nextRelease.version} --draft --generate-notes' }]
+  - [
+      '@semantic-release/exec',
+      {
+        # Adds a couple extra tags as aliases for our GitHub Actions users
+        'prepareCmd': 'git tag ${nextRelease.version} && ./bin/set-major-version-tag.js',
+        # Lightweight alternative to `@semantic-release/github` that creates a draft release
+        'publishCmd': 'gh release create ${nextRelease.version} --draft --generate-notes',
+      },
+    ]
 # dryRun: true # TODO: remove this
