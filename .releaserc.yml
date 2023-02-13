@@ -1,10 +1,4 @@
-branches:
-  - name: main
-  - name: semantic-release # TODO: remove this
-    prerelease: next
-    channel: next
-  # - name: next
-  #   prerelease: true
+branches: [main, next]
 plugins:
   - '@semantic-release/commit-analyzer'
   - ['@semantic-release/release-notes-generator', { 'writerOpts': { 'commitsSort': ['subject', 'scope'] } }]
@@ -25,4 +19,3 @@ plugins:
   - '@semantic-release/npm'
   # Lightweight alternative to `@semantic-release/github` that creates a draft release
   - ['@semantic-release/exec', { 'publishCmd': 'gh release create ${nextRelease.version} --draft --generate-notes' }]
-# dryRun: true # TODO: remove this
