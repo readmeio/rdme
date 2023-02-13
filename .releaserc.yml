@@ -1,10 +1,7 @@
 branches:
   - name: main
-  - name: semantic-release # TODO: remove this
-    prerelease: next
-    channel: next
-  # - name: next
-  #   prerelease: true
+  - name: next
+    prerelease: true
 plugins:
   - '@semantic-release/commit-analyzer'
   - ['@semantic-release/release-notes-generator', { 'writerOpts': { 'commitsSort': ['subject', 'scope'] } }]
@@ -31,4 +28,3 @@ plugins:
         'publishCmd': 'gh release create ${nextRelease.version} --draft --generate-notes',
       },
     ]
-# dryRun: true # TODO: remove this
