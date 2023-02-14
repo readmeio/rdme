@@ -1,7 +1,7 @@
 FROM node:16
 
-COPY . /
+COPY . /rdme-docker
 
-RUN npm ci && npm run build
+RUN cd /rdme-docker && npm ci && npm run build
 
-CMD ["sh", "-c", "/bin/rdme $INPUT_RDME"]
+CMD ["sh", "-c", "/rdme-docker/bin/rdme $INPUT_RDME"]
