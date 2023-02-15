@@ -108,7 +108,7 @@
     "prebuild": "rm -rf dist/",
     "prepack": "npm run build",
     "prepare": "husky install",
-    "pretest": "npx alex . && npm run lint && npm run prettier",
+    "pretest": "npx alex . && npm run lint && npm run prettier && npm run schemas:check",
     "prettier": "prettier --check .",
     "schemas:check": "./bin/json-schema-store.js",
     "schemas:write": "./bin/json-schema-store.js --update",
