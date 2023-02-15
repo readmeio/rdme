@@ -1,9 +1,6 @@
 name: Release
 on:
-  push:
-    branches:
-      - main
-      - next
+  workflow_dispatch
 
 jobs:
   release:
