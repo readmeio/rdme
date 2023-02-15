@@ -1,6 +1,6 @@
 {
   "name": "rdme",
-  "version": "8.5.0",
+  "version": "8.6.0-next.8",
   "description": "ReadMe's official CLI and GitHub Action.",
   "license": "MIT",
   "author": "ReadMe <support@readme.io> (https://readme.com)",
@@ -29,7 +29,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/readmeio/rdme.git"
+    "url": "https://github.com/readmeio/rdme.git"
   },
   "bugs": {
     "url": "https://github.com/readmeio/rdme/issues"
@@ -64,9 +64,14 @@
     "validator": "^13.7.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.4.2",
+    "@commitlint/config-conventional": "^17.4.2",
     "@readme/better-ajv-errors": "^1.5.0",
     "@readme/eslint-config": "^10.3.1",
     "@readme/oas-examples": "^5.3.0",
+    "@semantic-release/changelog": "^6.0.2",
+    "@semantic-release/exec": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
     "@types/command-line-args": "^5.2.0",
     "@types/command-line-usage": "^5.0.2",
     "@types/config": "^3.3.0",
@@ -84,11 +89,13 @@
     "@types/validator": "^13.7.6",
     "ajv": "^8.11.0",
     "eslint": "^8.29.0",
+    "husky": "^8.0.0",
     "jest": "^29.0.3",
     "jest-extended": "^3.0.0",
     "js-yaml": "^4.1.0",
     "nock": "^13.2.7",
     "prettier": "^2.8.1",
+    "semantic-release": "^19",
     "ts-jest": "^29.0.0",
     "ts-node": "^10.9.1",
     "type-fest": "^3.0.0",
@@ -96,21 +103,38 @@
   },
   "scripts": {
     "build": "tsc",
-    "bump": "npm version -m 'build: %s release'",
     "debug": "ts-node src/cli.ts",
     "lint": "eslint . bin/rdme --ext .js,.ts",
-    "postversion": "git tag $npm_package_version && ./bin/set-major-version-tag.js",
     "prebuild": "rm -rf dist/",
     "prepack": "npm run build",
+    "prepare": "husky install",
     "pretest": "npx alex . && npm run lint && npm run prettier && npm run schemas:check",
     "prettier": "prettier --check .",
-    "preversion": "npm ci && npm run build",
-    "release": "npx conventional-changelog-cli -i CHANGELOG.md -s",
-    "release:gh": "gh release create $npm_package_version --draft --generate-notes",
     "schemas:check": "./bin/json-schema-store.js",
     "schemas:write": "./bin/json-schema-store.js --update",
-    "test": "jest --coverage",
-    "version": "npm run release && git add CHANGELOG.md"
+    "test": "jest --coverage"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ],
+    "rules": {
+      "body-max-line-length": [
+        0,
+        "always",
+        "Infinity"
+      ],
+      "footer-max-line-length": [
+        0,
+        "always",
+        "Infinity"
+      ],
+      "scope-case": [
+        2,
+        "never",
+        "upper-case"
+      ]
+    }
   },
   "prettier": "@readme/eslint-config/prettier"
 }
