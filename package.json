@@ -110,6 +110,8 @@
     "prepare": "husky install",
     "pretest": "npx alex . && npm run lint && npm run prettier",
     "prettier": "prettier --check .",
+    "schemas:check": "./bin/json-schema-store.js",
+    "schemas:write": "./bin/json-schema-store.js --update",
     "test": "jest --coverage"
   },
   "commitlint": {
