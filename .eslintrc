@@ -6,7 +6,7 @@
   },
   "overrides": [
     {
-      "files": ["bin/set-version-output.js", "bin/set-major-version-tag.js", "config/*.js"],
+      "files": ["bin/*.js", "config/*.js"],
       "rules": {
         "@typescript-eslint/no-var-requires": "off"
       }
