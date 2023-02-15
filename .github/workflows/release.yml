@@ -12,6 +12,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          token: ${{ secrets.RELEASE_GH_TOKEN }}
       - uses: actions/setup-node@v3
         with:
           node-version: 16
@@ -20,6 +21,7 @@ jobs:
         run: npm ci && npm run build
       - name: Run semantic-release workflow
         env:
+          GH_TOKEN: ${{ secrets.RELEASE_GH_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npx semantic-release
