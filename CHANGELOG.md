@@ -1,3 +1,10 @@
+# [8.6.0-next.11](https://github.com/readmeio/rdme/compare/v8.6.0-next.10...v8.6.0-next.11) (2023-02-15)
+
+
+### Bug Fixes
+
+* try this to see if branch protections work ([f314c3f](https://github.com/readmeio/rdme/commit/f314c3fd406e6bde863a077e1b98fe3eb2acce8d))
+
 # [8.6.0-next.10](https://github.com/readmeio/rdme/compare/v8.6.0-next.9...v8.6.0-next.10) (2023-02-15)
 
 
