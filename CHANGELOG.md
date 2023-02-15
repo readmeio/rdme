@@ -1,3 +1,10 @@
+# [8.6.0-next.10](https://github.com/readmeio/rdme/compare/v8.6.0-next.9...v8.6.0-next.10) (2023-02-15)
+
+
+### Features
+
+* docker (again) ([#763](https://github.com/readmeio/rdme/issues/763)) ([2144572](https://github.com/readmeio/rdme/commit/2144572f8e179de91483c42698f4b4172ffdd026)), closes [#746](https://github.com/readmeio/rdme/issues/746)
+
 # [8.6.0-next.9](https://github.com/readmeio/rdme/compare/v8.6.0-next.8...v8.6.0-next.9) (2023-02-15)
 
 
