@@ -2,7 +2,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const fs = require('fs/promises');
 
-const prettierConfig = require('@readme/eslint-config/prettier');
 const fetch = require('node-fetch');
 const prettier = require('prettier');
 
@@ -22,6 +21,7 @@ const files = [
  */
 async function refreshSchemas() {
   const isUpdate = process.argv.includes('--update');
+  const prettierConfig = await prettier.resolveConfig();
   try {
     await Promise.all(
       files.map(async file => {
