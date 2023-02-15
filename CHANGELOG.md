@@ -1,3 +1,23 @@
+# [8.6.0-next.9](https://github.com/readmeio/rdme/compare/v8.6.0-next.8...v8.6.0-next.9) (2023-02-15)
+
+
+### Bug Fixes
+
+* bad merge ([e15c574](https://github.com/readmeio/rdme/commit/e15c574d57b5b9a989b456f7dbc37ccecde6dcfd))
+* remove unnecessary config ([c22889c](https://github.com/readmeio/rdme/commit/c22889c543f0e866cb8fc7b015390a0b98fd8116))
+* temporarily disable release workflow ([a935268](https://github.com/readmeio/rdme/commit/a935268ff2e0203f08902e99ac4f46513e66f529))
+
+
+### Features
+
+* empty commit to trigger release ([3e3c112](https://github.com/readmeio/rdme/commit/3e3c112e4075509857a807e5d740ad733182af1e))
+
+
+### Reverts
+
+* bring workflow name back ([c07495a](https://github.com/readmeio/rdme/commit/c07495afadb6b5b7761bbde4d5e2741335039c17))
+* restore release workflow ([9f6bbc9](https://github.com/readmeio/rdme/commit/9f6bbc9ab794e9d1d4eb98f5991bde6462cb3d02))
+
 # [8.6.0-next.8](https://github.com/readmeio/rdme/compare/v8.6.0-next.7...v8.6.0-next.8) (2023-02-13)
 
 
