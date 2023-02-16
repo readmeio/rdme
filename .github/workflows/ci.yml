@@ -52,12 +52,12 @@ jobs:
           repository: readmeio/oas-examples
 
       - name: Run `openapi:validate` command
-        uses: ./rdme-repo/
+        uses: readmeio/rdme@3451930af4b84e11227fa356fc990ea81ca33c79
         with:
           rdme: openapi:validate oas-examples-repo/3.1/json/petstore.json
 
       # Docs: https://rdme-test.readme.io
       - name: Run `openapi` command
-        uses: ./rdme-repo/
+        uses: readmeio/rdme@3451930af4b84e11227fa356fc990ea81ca33c79
         with:
           rdme: openapi oas-examples-repo/3.1/json/petstore.json --key=${{ secrets.RDME_TEST_PROJECT_API_KEY }} --id=${{ secrets.RDME_TEST_PROJECT_API_SETTING }}
