@@ -1,3 +1,107 @@
+# [8.6.0-next.11](https://github.com/readmeio/rdme/compare/v8.6.0-next.10...v8.6.0-next.11) (2023-02-15)
+
+
+### Bug Fixes
+
+* try this to see if branch protections work ([f314c3f](https://github.com/readmeio/rdme/commit/f314c3fd406e6bde863a077e1b98fe3eb2acce8d))
+
+# [8.6.0-next.10](https://github.com/readmeio/rdme/compare/v8.6.0-next.9...v8.6.0-next.10) (2023-02-15)
+
+
+### Features
+
+* docker (again) ([#763](https://github.com/readmeio/rdme/issues/763)) ([2144572](https://github.com/readmeio/rdme/commit/2144572f8e179de91483c42698f4b4172ffdd026)), closes [#746](https://github.com/readmeio/rdme/issues/746)
+
+# [8.6.0-next.9](https://github.com/readmeio/rdme/compare/v8.6.0-next.8...v8.6.0-next.9) (2023-02-15)
+
+
+### Bug Fixes
+
+* bad merge ([e15c574](https://github.com/readmeio/rdme/commit/e15c574d57b5b9a989b456f7dbc37ccecde6dcfd))
+* remove unnecessary config ([c22889c](https://github.com/readmeio/rdme/commit/c22889c543f0e866cb8fc7b015390a0b98fd8116))
+* temporarily disable release workflow ([a935268](https://github.com/readmeio/rdme/commit/a935268ff2e0203f08902e99ac4f46513e66f529))
+
+
+### Features
+
+* empty commit to trigger release ([3e3c112](https://github.com/readmeio/rdme/commit/3e3c112e4075509857a807e5d740ad733182af1e))
+
+
+### Reverts
+
+* bring workflow name back ([c07495a](https://github.com/readmeio/rdme/commit/c07495afadb6b5b7761bbde4d5e2741335039c17))
+* restore release workflow ([9f6bbc9](https://github.com/readmeio/rdme/commit/9f6bbc9ab794e9d1d4eb98f5991bde6462cb3d02))
+
+# [8.6.0-next.8](https://github.com/readmeio/rdme/compare/v8.6.0-next.7...v8.6.0-next.8) (2023-02-13)
+
+
+### Bug Fixes
+
+* does this work? ([c81e432](https://github.com/readmeio/rdme/commit/c81e43255e7208b2c6851e1c5702714256e5ec66))
+
+# [8.6.0-next.7](https://github.com/readmeio/rdme/compare/v8.6.0-next.6...v8.6.0-next.7) (2023-02-13)
+
+
+### Bug Fixes
+
+* try this approach to lifecycle events ([4e5ecff](https://github.com/readmeio/rdme/commit/4e5ecff0b2ebf7bf03d7e977fd2d0564bc255695))
+* turns out these rules weren't redundant ([f9f82f1](https://github.com/readmeio/rdme/commit/f9f82f1b71a5182a9205ae807d92ae0ca2f6d25f))
+
+
+### Reverts
+
+* ugh here we go again ([0b1e429](https://github.com/readmeio/rdme/commit/0b1e42935011cb149fca89bc9ec096636628f6e8))
+
+# [8.6.0-next.6](https://github.com/readmeio/rdme/compare/v8.6.0-next.5...v8.6.0-next.6) (2023-02-13)
+
+
+### Bug Fixes
+
+* run tests but NOT release workflow on release commits ([24f885e](https://github.com/readmeio/rdme/commit/24f885e00cf966d32cca013ca59aea903f9c3807))
+* try this as an alternative to @semantic-release/github ([8c343a0](https://github.com/readmeio/rdme/commit/8c343a09bbfa62e2410705d480b91837ec2af854))
+
+
+### Reverts
+
+* Revert "chore: remove github release npm script" ([e77b67a](https://github.com/readmeio/rdme/commit/e77b67a0c03075e5a78de464ceb4873e1354579d))
+* don't set header for changelog ([194489e](https://github.com/readmeio/rdme/commit/194489ee5382c0366606c7d62b45262783b91394))
+
+## What's Changed
+
+### Bug Fixes
+
+* try rearranging steps like this ([cac0c1d](https://github.com/readmeio/rdme/commit/cac0c1df2b71d6e15b7c418628708d2490cc1986))
+
+
+### Reverts
+
+* Revert "feat: drop duplicative tag" ([f9fe6c6](https://github.com/readmeio/rdme/commit/f9fe6c6cf92cb944ac284b4bed4077e9d63662cc))
+
+## What's Changed
+
+### Bug Fixes
+
+* reformat header again ([bd2e1a2](https://github.com/readmeio/rdme/commit/bd2e1a24122a2e40e0944eae638d02f205165fd9))
+
+
+### Features
+
+* drop duplicative tag ([4c34207](https://github.com/readmeio/rdme/commit/4c34207be6acf3b30b6f0b9e3b70722047f52403))
+
+## What's Changed in 8.6.0-next.3
+
+### Bug Fixes
+
+* rebuild prior to npm publish ([29b9ec6](https://github.com/readmeio/rdme/commit/29b9ec6a38212882de22f9c3c4f35e5ce295f267))
+* reformat github release header ([38c5625](https://github.com/readmeio/rdme/commit/38c5625bb2a22506953943a389f05ff70b39d659))
+
+# [8.6.0-next.2](https://github.com/readmeio/rdme/compare/v8.6.0-next.1...v8.6.0-next.2) (2023-02-10)
+
+
+### Features
+
+* add git + changelog plugins ([85e4bfd](https://github.com/readmeio/rdme/commit/85e4bfd982d1b9d9193ccf2c5441eb6aa016b725))
+
 ## 8.5.0 (2023-02-01)
 
 * docs: update outdated file names ([52a8219](https://github.com/readmeio/rdme/commit/52a8219))
@@ -1435,6 +1539,3 @@ Alongside this change, this release includes major documentation updates and sup
 * version 0.1.2 ([349ba96](https://github.com/readmeio/rdme/commit/349ba96))
 * Weight help items ([fffc107](https://github.com/readmeio/rdme/commit/fffc107))
 * Whoops, fixing up api url and making it work ([da021fd](https://github.com/readmeio/rdme/commit/da021fd))
-
-
-

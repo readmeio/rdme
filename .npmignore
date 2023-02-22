@@ -1,4 +1,5 @@
 __tests__/
+.env
 .eslint*
 .github/
 .prettier*

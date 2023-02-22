@@ -25,7 +25,7 @@ jobs:
 
       # Next, we use this output to do a few find/replaces!
       - name: Find and replace Node.js version placeholders
-        uses: jacobtomlinson/gha-find-replace@v2
+        uses: jacobtomlinson/gha-find-replace@v3
         with:
           find: 'NODE_VERSION'
           replace: ${{ steps.rdme-version.outputs.NODE_VERSION }}
@@ -33,7 +33,7 @@ jobs:
           include: documentation/*
 
       - name: Find and replace `rdme` version placeholders
-        uses: jacobtomlinson/gha-find-replace@v2
+        uses: jacobtomlinson/gha-find-replace@v3
         with:
           find: 'RDME_VERSION'
           replace: ${{ steps.rdme-version.outputs.RDME_VERSION }}

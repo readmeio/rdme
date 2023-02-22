@@ -9,12 +9,5 @@ inputs:
     description: Command to pass into rdme
     required: true
 runs:
-  using: composite
-  steps:
-    - name: Set up rdme
-      run: npm install --silent --no-save && npm run build --silent
-      shell: bash
-      working-directory: ${{ github.action_path }}
-    - name: Execute rdme command
-      run: ${{ github.action_path }}/bin/rdme ${{ inputs.rdme }}
-      shell: bash
+  using: docker
+  image: Dockerfile

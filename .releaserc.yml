@@ -1,0 +1,30 @@
+branches:
+  - name: main
+  - name: next
+    prerelease: true
+plugins:
+  - '@semantic-release/commit-analyzer'
+  - '@semantic-release/release-notes-generator'
+  - '@semantic-release/changelog'
+  # `npm` must be before `git` so the `npm` command can properly bump
+  # the package*.json files before we commit the changes
+  - '@semantic-release/npm'
+  - [
+      '@semantic-release/git',
+      {
+        # TODO: once docker builds are a thing, we're going to have to manually add the assets
+        # since we're also updating the action.yml file with every release!
+        # Uncomment this line below once those changes are live:
+        # assets: ['action.yml', 'CHANGELOG.md', 'package.json', 'package-lock.json'],
+        message: "build(release): 🚀 v${nextRelease.version} 🦉\n\n${nextRelease.notes}\n[skip ci]",
+      },
+    ]
+  - [
+      '@semantic-release/exec',
+      {
+        # Adds a couple extra tags as aliases for our GitHub Actions users
+        'prepareCmd': 'git tag ${nextRelease.version} && ./bin/set-major-version-tag.js',
+        # Lightweight alternative to `@semantic-release/github` that creates a draft release
+        'publishCmd': 'gh release create ${nextRelease.version} --draft --generate-notes',
+      },
+    ]
