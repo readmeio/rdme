@@ -1,3 +1,10 @@
+# [8.6.0-next.12](https://github.com/readmeio/rdme/compare/v8.6.0-next.11...v8.6.0-next.12) (2023-03-03)
+
+
+### Bug Fixes
+
+* upgrading `oas-normalize` to move to our `postman-to-openapi` fork ([#776](https://github.com/readmeio/rdme/issues/776)) ([ee8ce0a](https://github.com/readmeio/rdme/commit/ee8ce0a8aa6bccb8273b4fa653dbe9a3b2fcbb20))
+
 # [8.6.0-next.11](https://github.com/readmeio/rdme/compare/v8.6.0-next.10...v8.6.0-next.11) (2023-02-15)
 
 
