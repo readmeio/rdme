@@ -136,5 +136,8 @@
       ]
     }
   },
+  "pkg": {
+    "assets": "dist/config/**/*"
+  },
   "prettier": "@readme/eslint-config/prettier"
 }

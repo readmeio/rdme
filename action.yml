@@ -10,4 +10,4 @@ inputs:
     required: true
 runs:
   using: docker
-  image: 'docker://ghcr.io/readmeio/rdme:next'
+  image: Dockerfile
