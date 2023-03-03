@@ -7,7 +7,7 @@ RUN cd /rdme && npm ci && npm run build && npx pkg . --target host --out-path ex
 # # A distroless container image with some basics like SSL certificates
 # # https://github.com/GoogleContainerTools/distroless
 # FROM node:16-alpine
-FROM gcr.io/distroless/base-debian11
+FROM gcr.io/distroless/cc-debian11
 
 COPY --from=builder /rdme/exe /exe
 
