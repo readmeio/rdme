@@ -19,6 +19,8 @@ jobs:
           cache: 'npm'
       - name: Install dependencies and build TS
         run: npm ci && npm run build
+      - name: Install semantic-release and friends
+        run: npm i --no-save semantic-release@19 @semantic-release/changelog@6 @semantic-release/exec@6 @semantic-release/git@10
       - name: Run semantic-release workflow
         env:
           GH_TOKEN: ${{ secrets.RELEASE_GH_TOKEN }}
