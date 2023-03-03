@@ -48,7 +48,7 @@ jobs:
       # First we're going to perform a dry run of syncing process.
       # We do this on every push to ensure that an actual sync will work properly
       - name: Sync docs to ReadMe (dry run)
-        uses: readmeio/rdme@3451930af4b84e11227fa356fc990ea81ca33c79
+        uses: ./
         with:
           rdme: docs ./documentation --key=${{ secrets.README_DEVELOPERS_API_KEY }} --version=${{ vars.README_DEVELOPERS_MAIN_VERSION }} --dryRun
 
