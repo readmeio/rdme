@@ -11,4 +11,4 @@ FROM gcr.io/distroless/static-debian11
 
 COPY --from=builder /rdme/exe /exe
 
-ENTRYPOINT ["/exe/rdme $INPUT_RDME"]
+ENTRYPOINT ["/exe/rdme", "$INPUT_RDME"]
