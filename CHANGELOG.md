@@ -1,3 +1,10 @@
+# [8.6.0-next.13](https://github.com/readmeio/rdme/compare/v8.6.0-next.12...v8.6.0-next.13) (2023-03-04)
+
+
+### Performance Improvements
+
+* **docker:** build executable ([#764](https://github.com/readmeio/rdme/issues/764)) ([af2dbce](https://github.com/readmeio/rdme/commit/af2dbcee6672a06baadc875aa95245d3c4036a2c))
+
 # [8.6.0-next.12](https://github.com/readmeio/rdme/compare/v8.6.0-next.11...v8.6.0-next.12) (2023-03-03)
 
 
