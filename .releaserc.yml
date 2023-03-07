@@ -28,6 +28,8 @@ plugins:
   - [
       '@semantic-release/exec',
       {
+        # Verify existence of gh and docker CLIs
+        'verifyConditionsCmd': './bin/verify-clis.sh',
         # Sets the next version as a GitHub Actions output parameter for usage in subsequent workflow steps
         # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter
         'verifyReleaseCmd': 'echo nextVersion=${nextRelease.version} >> $GITHUB_OUTPUT',
