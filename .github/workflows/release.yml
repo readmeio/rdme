@@ -60,7 +60,6 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=semver,pattern={{version}},value=${{ steps.release.outputs.newVersion }}
-            type=ref,event=branch
             type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
 
       - name: Build (but do NOT push)
@@ -68,4 +67,5 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           labels: ${{ steps.meta.outputs.labels }}
+          push: true
           tags: ${{ steps.meta.outputs.tags }}
