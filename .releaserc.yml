@@ -1,7 +1,8 @@
 branches:
   - name: main
-  - name: next
+  - name: container-registry-v2
     prerelease: true
+    channel: next
 plugins:
   - '@semantic-release/commit-analyzer'
   - '@semantic-release/release-notes-generator'
