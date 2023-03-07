@@ -5,11 +5,11 @@
 set -e
 if ! command -v docker &> /dev/null
 then
-    echo "docker could not be found"
+    echo "docker CLI could not be found"
     exit 1
 fi
 if ! command -v gh &> /dev/null
 then
-    echo "gh could not be found"
+    echo "gh CLI could not be found"
     exit 1
 fi
