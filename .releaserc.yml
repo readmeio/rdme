@@ -10,6 +10,13 @@ plugins:
   # the package*.json files before we commit the changes
   - '@semantic-release/npm'
   - [
+      '@semantic-release/exec',
+      {
+        # Updates our action.yml file to reflect current Docker image version
+        'prepareCmd': './bin/set-action-image.js ${nextRelease.version}',
+      },
+    ]
+  - [
       '@semantic-release/git',
       {
         # TODO: once docker builds are a thing, we're going to have to manually add the assets
