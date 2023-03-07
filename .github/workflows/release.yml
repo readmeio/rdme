@@ -61,9 +61,6 @@ jobs:
             type=ref,event=branch
             type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
 
-      - name: log metadata
-        run: echo $DOCKER_METADATA_OUTPUT_JSON
-
       - name: Build (but do NOT push)
         uses: docker/build-push-action@v4
         with:
