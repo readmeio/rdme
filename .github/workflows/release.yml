@@ -35,9 +35,6 @@ jobs:
         run: npx semantic-release --dry-run
         id: release
 
-      # TODO: remove this! just seeing if docker is a thing in GHA runners
-      - run: docker -v
-
       - name: Log in to the Container registry
         uses: docker/login-action@v2
         with:
