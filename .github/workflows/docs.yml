@@ -40,6 +40,18 @@ jobs:
           regex: false
           include: documentation/*
 
+      # For every GitHub Action release, we deploy our Docker images
+      # to the GitHub Container Registry for performance reasons.
+      # Instead of testing against the pre-built image, we can build
+      # an image from the currently checked-out repo contents by doing a
+      # li'l update in the action.yml file to point to the current Dockerfile.
+      - name: Replace Docker image value in action.yml
+        uses: jacobtomlinson/gha-find-replace@v3
+        with:
+          find: 'image:.*'
+          replace: "image: 'Dockerfile'"
+          include: action.yml
+
       # And finally, with our updated documentation,
       # we run the `rdme` GitHub Action to sync the Markdown file
       # in the `documentation` directory.
