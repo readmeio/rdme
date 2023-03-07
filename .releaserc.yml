@@ -19,10 +19,7 @@ plugins:
   - [
       '@semantic-release/git',
       {
-        # TODO: once docker builds are a thing, we're going to have to manually add the assets
-        # since we're also updating the action.yml file with every release!
-        # Uncomment this line below once those changes are live:
-        # assets: ['action.yml', 'CHANGELOG.md', 'package.json', 'package-lock.json'],
+        assets: ['action.yml', 'CHANGELOG.md', 'package.json', 'package-lock.json'],
         message: "build(release): 🚀 v${nextRelease.version} 🦉\n\n${nextRelease.notes}\n[skip ci]",
       },
     ]
