@@ -29,8 +29,9 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build (but do NOT push)
-        uses: docker/build-push-action@v4
+      - name: Get current package version
+        id: rdme-version
+        run: ./bin/set-version-output.js
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
@@ -39,13 +40,18 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=semver,pattern={{version}},value=8.6.0-next.13
+            type=semver,pattern={{version}},value=${{ steps.rdme-version.outputs.RDME_PKG_VERSION }}
             type=ref,event=branch
+            type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
 
       - name: log metadata
         run: echo $DOCKER_METADATA_OUTPUT_JSON
-      - name: log actor
-        run: echo ${{ github.actor }}
+
+      - name: Build (but do NOT push)
+        uses: docker/build-push-action@v4
+        with:
+          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.meta.outputs.tags }}
 
       # - uses: actions/setup-node@v3
       #   with:

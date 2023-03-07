@@ -36,7 +36,7 @@ jobs:
         uses: jacobtomlinson/gha-find-replace@v3
         with:
           find: 'RDME_VERSION'
-          replace: ${{ steps.rdme-version.outputs.RDME_VERSION }}
+          replace: ${{ steps.rdme-version.outputs.RDME_LATEST_MAJOR_VERSION }}
           regex: false
           include: documentation/*
 
