@@ -1,9 +1,9 @@
 name: Release
 on:
   push:
-    branches:
-      - main
-      - next
+    # branches:
+    #   - main
+    #   - next
 
 env:
   REGISTRY: ghcr.io
@@ -12,9 +12,9 @@ env:
 jobs:
   release:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
+    # permissions:
+    #   contents: read
+    #   packages: write
 
     steps:
       - uses: actions/checkout@v3
@@ -60,7 +60,6 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=semver,pattern={{version}},value=${{ steps.release.outputs.newVersion }}
-            type=ref,event=branch
             type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
 
       - name: Build (but do NOT push)
@@ -69,3 +68,4 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           labels: ${{ steps.meta.outputs.labels }}
           tags: ${{ steps.meta.outputs.tags }}
+          push: true
