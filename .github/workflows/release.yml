@@ -1,9 +1,9 @@
 name: Release
 on:
   push:
-    branches:
-      - main
-      - next
+    # branches:
+    #   - main
+    #   - next
 
 env:
   REGISTRY: ghcr.io
