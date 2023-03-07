@@ -29,17 +29,11 @@ jobs:
       - name: Install semantic-release and friends
         run: npm i --no-save semantic-release@19 @semantic-release/changelog@6 @semantic-release/exec@6 @semantic-release/git@10
 
-      - name: Run semantic-release workflow
-        env:
-          GH_TOKEN: ${{ secrets.RELEASE_GH_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npx semantic-release
-
-      # TODO: Remove this step and set the previous step id to `release`
-      - name: Temporarily set version output
+      # We do a dry run here to analyze the commits and grab the next version
+      # for usage in the Docker metadata action
+      - name: Dry run of semantic-release workflow
+        run: npx semantic-release --dry-run
         id: release
-        run: ./bin/set-action-image.js 8.6.0-next.13
 
       - name: Log in to the Container registry
         uses: docker/login-action@v2
@@ -59,9 +53,16 @@ jobs:
           # 2. A branch tag (e.g., next, main)
           # 3. A `latest` tag (only on the main branch)
           tags: |
-            type=semver,pattern={{version}},value=${{ steps.release.outputs.newVersion }}
+            type=semver,pattern={{version}},value=${{ steps.release.outputs.nextVersion }}
             type=ref,event=branch
             type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
+
+      - name: Run semantic-release workflow
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npx semantic-release
 
       - name: Build (but do NOT push)
         uses: docker/build-push-action@v4

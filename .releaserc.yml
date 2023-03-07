@@ -12,6 +12,10 @@ plugins:
   - [
       '@semantic-release/exec',
       {
+        # Sets the next version as a GitHub Actions output parameter
+        # for usage in subsequent workflow steps
+        # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter
+        'verifyReleaseCmd': 'echo nextVersion=${nextRelease.version} >> $GITHUB_OUTPUT',
         # Updates our action.yml file to reflect current Docker image version
         'prepareCmd': './bin/set-action-image.js ${nextRelease.version}',
       },
