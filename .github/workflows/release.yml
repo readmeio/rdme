@@ -1,9 +1,9 @@
 name: Release
 on:
   push:
-    # branches:
-    #   - main
-    #   - next
+    branches:
+      - main
+      - next
 
 env:
   REGISTRY: ghcr.io
@@ -60,6 +60,7 @@ jobs:
           # 3. A `latest` tag (only on the main branch)
           tags: |
             type=semver,pattern={{version}},value=${{ steps.release.outputs.newVersion }}
+            type=ref,event=branch
             type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
 
       - name: Build (but do NOT push)
@@ -67,4 +68,3 @@ jobs:
         with:
           labels: ${{ steps.meta.outputs.labels }}
           tags: ${{ steps.meta.outputs.tags }}
-          push: true
