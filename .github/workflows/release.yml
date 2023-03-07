@@ -34,12 +34,16 @@ jobs:
         run: npm i --no-save semantic-release@19 @semantic-release/changelog@6 @semantic-release/exec@6 @semantic-release/git@10
 
       - name: Run semantic-release workflow
-        id: release
         env:
           GH_TOKEN: ${{ secrets.RELEASE_GH_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npx semantic-release
+
+      # TODO: Remove this step and set the previous step id to `release`
+      - name: Temporarily set version output
+        id: release
+        run: ./bin/set-action-image.js 8.6.0-next.13
 
       - name: Log in to the Container registry
         uses: docker/login-action@v2
@@ -48,10 +52,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Get current package version
-        id: rdme-version
-        run: ./bin/set-version-output.js
-
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v4
@@ -59,7 +59,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=semver,pattern={{version}},value=${{ steps.rdme-version.outputs.RDME_PKG_VERSION }}
+            type=semver,pattern={{version}},value=${{ steps.release.outputs.newVersion }}
             type=ref,event=branch
             type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
 
