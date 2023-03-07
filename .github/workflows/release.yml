@@ -38,6 +38,8 @@ jobs:
 
       - name: log metadata
         run: echo $DOCKER_METADATA_OUTPUT_JSON
+      - name: log actor
+        run: echo ${{ github.actor }}
 
       # - uses: actions/setup-node@v3
       #   with:
