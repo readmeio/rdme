@@ -64,5 +64,6 @@ jobs:
       - name: Build (but do NOT push)
         uses: docker/build-push-action@v4
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           labels: ${{ steps.meta.outputs.labels }}
           tags: ${{ steps.meta.outputs.tags }}
