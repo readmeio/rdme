@@ -3,7 +3,7 @@
 # Verify existence of gh and docker CLIs
 # https://stackoverflow.com/a/677212
 set -e
-if ! command -v dockerasdf &> /dev/null
+if ! command -v docker &> /dev/null
 then
     echo "docker could not be found"
     exit 1
