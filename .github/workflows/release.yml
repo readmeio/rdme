@@ -54,6 +54,10 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          # For every release we had 2-3 tags to the docker build:
+          # 1. A semver tag (e.g., 8.0.0, 8.0.0-next.0)
+          # 2. A branch tag (e.g., next, main)
+          # 3. A `latest` tag (only on the main branch)
           tags: |
             type=semver,pattern={{version}},value=${{ steps.release.outputs.newVersion }}
             type=ref,event=branch
