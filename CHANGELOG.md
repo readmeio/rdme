@@ -1,3 +1,17 @@
+# [8.6.0-next.15](https://github.com/readmeio/rdme/compare/v8.6.0-next.14...v8.6.0-next.15) (2023-03-21)
+
+
+### Bug Fixes
+
+* bump node version in release workflow ([7f3158f](https://github.com/readmeio/rdme/commit/7f3158fce1ce724b50e521051621af904232dd3d))
+
+# [8.6.0-next.14](https://github.com/readmeio/rdme/compare/v8.6.0-next.13...v8.6.0-next.14) (2023-03-20)
+
+
+### Bug Fixes
+
+* **openapi:** yaml strings would be improperly parsed as Date objects ([#779](https://github.com/readmeio/rdme/issues/779)) ([72e75cb](https://github.com/readmeio/rdme/commit/72e75cb4e2e41b67e5e20bee9a64e799ce9e268d))
+
 # [8.6.0-next.13](https://github.com/readmeio/rdme/compare/v8.6.0-next.12...v8.6.0-next.13) (2023-03-04)
 
 
