@@ -15,7 +15,7 @@ plugins:
       {
         # Updates our action.yml file to reflect current Docker image version.
         # This needs to happen before `git` so we can to commit this file
-        'prepareCmd': './bin/set-action-image.js ${nextRelease.version}',
+        'prepareCmd': './bin/set-action-image.js',
       },
     ]
   - [
