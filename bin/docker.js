@@ -44,8 +44,6 @@ async function runCmd(cmd) {
 
   if (stdout) console.log(stdout);
   if (stderr) console.error(stdout);
-
-  return Promise.resolve();
 }
 
 /**
@@ -53,36 +51,42 @@ async function runCmd(cmd) {
  */
 async function run() {
   const metadata = getMetadata();
-  // start constructing build command
-  let buildCmd = 'docker build --platform linux/amd64';
-  // add labels
-  Object.keys(metadata.labels).forEach(label => {
-    buildCmd += ` --label "${label}=${metadata.labels[label]}"`;
-  });
-  // add tags
-  metadata.tags.forEach(tag => {
-    buildCmd += ` --tag ${tag}`;
-  });
-  // point to local Dockerfile
-  buildCmd += ' .';
+  try {
+    // start constructing build command
+    let buildCmd = 'docker build --platform linux/amd64';
+    // add labels
+    Object.keys(metadata.labels).forEach(label => {
+      buildCmd += ` --label "${label}=${metadata.labels[label]}"`;
+    });
+    // add tags
+    metadata.tags.forEach(tag => {
+      buildCmd += ` --tag ${tag}`;
+    });
+    // point to local Dockerfile
+    buildCmd += ' .';
 
-  // Strips tag from image so we can use the --all-tags flag in the push command
-  const imageWithoutTag = metadata.tags[0]?.split(':')?.[0];
+    // Strips tag from image so we can use the --all-tags flag in the push command
+    const imageWithoutTag = metadata.tags[0]?.split(':')?.[0];
 
-  if (!imageWithoutTag) {
-    console.error(`Unable to separate image name from tag: ${metadata.tags[0]}`);
+    if (!imageWithoutTag) {
+      console.error(`Unable to separate image name from tag: ${metadata.tags[0]}`);
+      return process.exit(1);
+    }
+
+    const pushCmd = `docker push --all-tags ${imageWithoutTag}`;
+
+    console.log(`🐳 🛠️ Running docker build command: ${buildCmd}`);
+
+    await runCmd(buildCmd);
+
+    console.log(`🐳 📌 Running docker push command: ${pushCmd}`);
+
+    await runCmd(pushCmd);
+  } catch (e) {
+    console.error('Error running Docker script!');
+    console.error(e);
     return process.exit(1);
   }
-
-  const pushCmd = `docker push --all-tags ${imageWithoutTag}`;
-
-  console.log(`🐳 🛠️ Running docker build command: ${buildCmd}`);
-
-  await runCmd(buildCmd);
-
-  console.log(`🐳 📌 Running docker push command: ${pushCmd}`);
-
-  await runCmd(pushCmd);
 
   console.log('🐳 All done!');
   return process.exit(0);
