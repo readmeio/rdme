@@ -14,8 +14,9 @@ plugins:
       '@semantic-release/exec',
       {
         # Updates our action.yml file to reflect current Docker image version.
-        # This needs to happen before `git` so we can to commit this file
-        'prepareCmd': './bin/set-action-image.js',
+        # This needs to happen before `git` so we can to commit this file.
+        # The second command builds the Docker image
+        'prepareCmd': './bin/set-action-image.js && ./bin/docker.js build',
       },
     ]
   - [
@@ -36,6 +37,7 @@ plugins:
         # Adds a couple extra tags as aliases for our GitHub Actions users
         'prepareCmd': 'git tag ${nextRelease.version} && ./bin/set-major-version-tag.js',
         # Lightweight alternative to `@semantic-release/github` that creates a draft release
-        'publishCmd': 'gh release create ${nextRelease.version} --draft --generate-notes',
+        # The second command pushes the docker image to the registry
+        'publishCmd': 'gh release create ${nextRelease.version} --draft --generate-notes && ./bin/docker.js push',
       },
     ]
