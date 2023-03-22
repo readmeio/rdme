@@ -1,9 +1,9 @@
 name: Release
 on:
   push:
-    # branches:
-    #   - main
-    #   - next
+    branches:
+      - main
+      - next
 
 env:
   REGISTRY: ghcr.io
@@ -64,4 +64,4 @@ jobs:
           GH_TOKEN: ${{ secrets.RELEASE_GH_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npx semantic-release -d
+        run: npx semantic-release
