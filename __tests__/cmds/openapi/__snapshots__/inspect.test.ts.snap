@@ -5,6 +5,7 @@ exports[`rdme openapi:inspect feature reports should generate a report for @read
 polymorphism:
  · #/components/responses/authForbidden/content/application~1json/schema
  · #/components/responses/authUnauthorized/content/application~1json/schema
+ · #/components/schemas/docSchemaPost
  · #/components/schemas/error_APIKEY_EMPTY
  · #/components/schemas/error_APIKEY_MISMATCH
  · #/components/schemas/error_APIKEY_NOTFOUND
@@ -23,6 +24,7 @@ polymorphism:
  · #/components/schemas/error_INTERNAL_ERROR
  · #/components/schemas/error_PROJECT_NEEDSSTAGING
  · #/components/schemas/error_PROJECT_NOTFOUND
+ · #/components/schemas/error_RATE_LIMITED
  · #/components/schemas/error_REGISTRY_INVALID
  · #/components/schemas/error_REGISTRY_NOTFOUND
  · #/components/schemas/error_SPEC_FILE_EMPTY
@@ -255,7 +257,7 @@ OpenAPI Features
 ┌──────────────────────┬───────┬──────────────────────────────────────────────────────────────────────────────────┐
 │ Feature              │ Used? │ Description                                                                      │
 ├──────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ additionalProperties │       │ additionalProperties allows you to document dictionaries where the keys are      │
+│ additionalProperties │ ✅    │ additionalProperties allows you to document dictionaries where the keys are      │
 │                      │       │ user-supplied strings.                                                           │
 │                      │       │                                                                                  │
 │                      │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#schema- │
