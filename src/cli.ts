@@ -13,8 +13,13 @@ updateNotifier({ pkg }).notify();
 
 rdme(process.argv.slice(2))
   .then((msg: string) => {
-    // eslint-disable-next-line no-console
-    if (msg) console.log(msg);
+    if (msg) {
+      // eslint-disable-next-line no-console
+      console.log(msg);
+      if (isGHA()) {
+        core.setOutput('rdme', msg);
+      }
+    }
     return process.exit(0);
   })
   .catch((err: Error) => {
