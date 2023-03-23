@@ -6,9 +6,11 @@ const execFile = util.promisify(require('child_process').execFile);
 /**
  * Retrieves and parses the docker image metadata
  * @see {@link https://github.com/docker/metadata-action}
+ * @see {@link https://gist.github.com/kanadgupta/801c8335e7e2e3d80463c34bdd41c7e6}
  */
 function getMetadata() {
   try {
+    // See here for an example JSON output: https://gist.github.com/kanadgupta/801c8335e7e2e3d80463c34bdd41c7e6
     const raw = process.env.DOCKER_METADATA_OUTPUT_JSON;
     const metadata = JSON.parse(raw);
     if (!Object.keys(metadata.labels || {})?.length) {
