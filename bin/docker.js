@@ -77,11 +77,11 @@ async function run() {
 
     const pushArgs = ['push', '--all-tags', imageWithoutTag];
 
-    console.log(`🐳 🛠️ Running docker build command: ${buildArgs}`);
+    console.log(`🐳 🛠️  Running docker build command: docker ${buildArgs.join(' ')}`);
 
     await runDockerCmd(buildArgs);
 
-    console.log(`🐳 📌 Running docker push command: ${pushArgs}`);
+    console.log(`🐳 📌 Running docker push command: docker ${pushArgs.join(' ')}`);
 
     await runDockerCmd(pushArgs);
   } catch (e) {
