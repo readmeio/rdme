@@ -40,3 +40,6 @@ updates:
       - dependency-name: ora
         versions:
           - '>= 6'
+      - dependency-name: open
+        versions:
+          - '>= 9'
