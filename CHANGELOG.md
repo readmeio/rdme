@@ -1,3 +1,10 @@
+# [8.6.0-next.16](https://github.com/readmeio/rdme/compare/v8.6.0-next.15...v8.6.0-next.16) (2023-03-23)
+
+
+### Features
+
+* container registry ([#777](https://github.com/readmeio/rdme/issues/777)) ([d193416](https://github.com/readmeio/rdme/commit/d193416351d8572d05d0691105f0628c7827e0eb)), closes [/github.com/readmeio/rdme/pull/777#discussion_r1145516673](https://github.com//github.com/readmeio/rdme/pull/777/issues/discussion_r1145516673) [/github.com/readmeio/rdme/pull/777#discussion_r1145528308](https://github.com//github.com/readmeio/rdme/pull/777/issues/discussion_r1145528308)
+
 # [8.6.0-next.15](https://github.com/readmeio/rdme/compare/v8.6.0-next.14...v8.6.0-next.15) (2023-03-21)
 
 
