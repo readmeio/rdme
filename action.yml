@@ -13,4 +13,4 @@ outputs:
     description: The rdme command result output
 runs:
   using: docker
-  image: docker://ghcr.io/readmeio/rdme:8.6.0-next.16
+  image: docker://ghcr.io/readmeio/rdme:8.6.0-next.17

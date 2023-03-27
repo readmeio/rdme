@@ -1,3 +1,10 @@
+# [8.6.0-next.17](https://github.com/readmeio/rdme/compare/v8.6.0-next.16...v8.6.0-next.17) (2023-03-27)
+
+
+### Bug Fixes
+
+* memory leak in large file handling within openapi-parser ([#784](https://github.com/readmeio/rdme/issues/784)) ([1b1cc00](https://github.com/readmeio/rdme/commit/1b1cc0092db8201c90ab4e02be5b0adc343c9b15))
+
 # [8.6.0-next.16](https://github.com/readmeio/rdme/compare/v8.6.0-next.15...v8.6.0-next.16) (2023-03-23)
 
 
