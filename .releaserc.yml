@@ -19,6 +19,9 @@ plugins:
         #   This needs to happen before `@semantic-release/git` so we can commit this file.
         # 2. Builds and pushes the Docker image
         'prepareCmd': './bin/set-action-image.js && ./bin/docker.js',
+        # Adds a major version git tag (e.g., v8) as a convenience for GitHub Actions users
+        # We need to run this in the publish phase so it can be force-pushed separately from the other tags
+        'publishCmd': './bin/set-major-version-tag.js push',
       },
     ]
   - [
@@ -36,8 +39,8 @@ plugins:
         # Sets the next version as a GitHub Actions output parameter for usage in subsequent workflow steps
         # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter
         'verifyReleaseCmd': 'echo nextVersion=${nextRelease.version} >> $GITHUB_OUTPUT',
-        # Adds a couple extra tags as aliases for our GitHub Actions users
-        'prepareCmd': 'git tag ${nextRelease.version} && ./bin/set-major-version-tag.js',
+        # Adds an additional git tag without the `v` prefix as a convenience for GitHub Actions users
+        'prepareCmd': 'git tag ${nextRelease.version}',
         # Lightweight alternative to `@semantic-release/github` that creates a draft GitHub release
         'publishCmd': 'gh release create ${nextRelease.version} --draft --generate-notes',
       },
