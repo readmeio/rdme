@@ -1,3 +1,51 @@
+# [8.6.0](https://github.com/readmeio/rdme/compare/v8.5.0...v8.6.0) (2023-03-29)
+
+
+### Bug Fixes
+
+* bad merge ([e15c574](https://github.com/readmeio/rdme/commit/e15c574d57b5b9a989b456f7dbc37ccecde6dcfd))
+* bump node version in release workflow ([7f3158f](https://github.com/readmeio/rdme/commit/7f3158fce1ce724b50e521051621af904232dd3d))
+* does this work? ([c81e432](https://github.com/readmeio/rdme/commit/c81e43255e7208b2c6851e1c5702714256e5ec66))
+* memory leak in large file handling within openapi-parser ([#784](https://github.com/readmeio/rdme/issues/784)) ([1b1cc00](https://github.com/readmeio/rdme/commit/1b1cc0092db8201c90ab4e02be5b0adc343c9b15))
+* next channel ([ce4e494](https://github.com/readmeio/rdme/commit/ce4e4943849f9f7d4ab27cd456cc9c82e551bac6))
+* **openapi:** yaml strings would be improperly parsed as Date objects ([#779](https://github.com/readmeio/rdme/issues/779)) ([72e75cb](https://github.com/readmeio/rdme/commit/72e75cb4e2e41b67e5e20bee9a64e799ce9e268d))
+* rebuild prior to npm publish ([29b9ec6](https://github.com/readmeio/rdme/commit/29b9ec6a38212882de22f9c3c4f35e5ce295f267))
+* reformat github release header ([38c5625](https://github.com/readmeio/rdme/commit/38c5625bb2a22506953943a389f05ff70b39d659))
+* reformat header again ([bd2e1a2](https://github.com/readmeio/rdme/commit/bd2e1a24122a2e40e0944eae638d02f205165fd9))
+* remove some of the package scripts ([3eb52fd](https://github.com/readmeio/rdme/commit/3eb52fdc868b88edca6b22e2011728d1bcdd2e04))
+* remove unnecessary config ([c22889c](https://github.com/readmeio/rdme/commit/c22889c543f0e866cb8fc7b015390a0b98fd8116))
+* run tests but NOT release workflow on release commits ([24f885e](https://github.com/readmeio/rdme/commit/24f885e00cf966d32cca013ca59aea903f9c3807))
+* temporarily disable release workflow ([a935268](https://github.com/readmeio/rdme/commit/a935268ff2e0203f08902e99ac4f46513e66f529))
+* try rearranging steps like this ([cac0c1d](https://github.com/readmeio/rdme/commit/cac0c1df2b71d6e15b7c418628708d2490cc1986))
+* try this approach to lifecycle events ([4e5ecff](https://github.com/readmeio/rdme/commit/4e5ecff0b2ebf7bf03d7e977fd2d0564bc255695))
+* try this as an alternative to @semantic-release/github ([8c343a0](https://github.com/readmeio/rdme/commit/8c343a09bbfa62e2410705d480b91837ec2af854))
+* try this to see if branch protections work ([f314c3f](https://github.com/readmeio/rdme/commit/f314c3fd406e6bde863a077e1b98fe3eb2acce8d))
+* turns out these rules weren't redundant ([f9f82f1](https://github.com/readmeio/rdme/commit/f9f82f1b71a5182a9205ae807d92ae0ca2f6d25f))
+* upgrading `oas-normalize` to move to our `postman-to-openapi` fork ([#776](https://github.com/readmeio/rdme/issues/776)) ([ee8ce0a](https://github.com/readmeio/rdme/commit/ee8ce0a8aa6bccb8273b4fa653dbe9a3b2fcbb20))
+
+
+### Features
+
+* add git + changelog plugins ([85e4bfd](https://github.com/readmeio/rdme/commit/85e4bfd982d1b9d9193ccf2c5441eb6aa016b725))
+* container registry ([#777](https://github.com/readmeio/rdme/issues/777)) ([d193416](https://github.com/readmeio/rdme/commit/d193416351d8572d05d0691105f0628c7827e0eb)), closes [/github.com/readmeio/rdme/pull/777#discussion_r1145516673](https://github.com//github.com/readmeio/rdme/pull/777/issues/discussion_r1145516673) [/github.com/readmeio/rdme/pull/777#discussion_r1145528308](https://github.com//github.com/readmeio/rdme/pull/777/issues/discussion_r1145528308)
+* docker (again) ([#763](https://github.com/readmeio/rdme/issues/763)) ([2144572](https://github.com/readmeio/rdme/commit/2144572f8e179de91483c42698f4b4172ffdd026)), closes [#746](https://github.com/readmeio/rdme/issues/746)
+* empty commit to trigger release ([3e3c112](https://github.com/readmeio/rdme/commit/3e3c112e4075509857a807e5d740ad733182af1e))
+* fix comment ([076cfbf](https://github.com/readmeio/rdme/commit/076cfbf22730d2dda9479dcf98695163426ae741))
+
+
+### Performance Improvements
+
+* **docker:** build executable ([#764](https://github.com/readmeio/rdme/issues/764)) ([af2dbce](https://github.com/readmeio/rdme/commit/af2dbcee6672a06baadc875aa95245d3c4036a2c))
+
+
+### Reverts
+
+* Revert "feat: drop duplicative tag" ([f9fe6c6](https://github.com/readmeio/rdme/commit/f9fe6c6cf92cb944ac284b4bed4077e9d63662cc))
+* bring workflow name back ([c07495a](https://github.com/readmeio/rdme/commit/c07495afadb6b5b7761bbde4d5e2741335039c17))
+* don't set header for changelog ([194489e](https://github.com/readmeio/rdme/commit/194489ee5382c0366606c7d62b45262783b91394))
+* restore release workflow ([9f6bbc9](https://github.com/readmeio/rdme/commit/9f6bbc9ab794e9d1d4eb98f5991bde6462cb3d02))
+* ugh here we go again ([0b1e429](https://github.com/readmeio/rdme/commit/0b1e42935011cb149fca89bc9ec096636628f6e8))
+
 # [8.6.0-next.17](https://github.com/readmeio/rdme/compare/v8.6.0-next.16...v8.6.0-next.17) (2023-03-27)
 
 
