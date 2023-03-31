@@ -8,4 +8,4 @@ FROM alpine:3.14
 
 COPY --from=builder /rdme/exe /exe
 
-ENTRYPOINT ["sh", "-c", "/exe/rdme $INPUT_RDME"]
+ENTRYPOINT ["sh", "-c", "/exe/rdme", "$INPUT_RDME"]
