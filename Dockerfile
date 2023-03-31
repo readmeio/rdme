@@ -6,6 +6,7 @@ RUN cd /rdme && npm ci && npm run build && npx pkg@5 . --target host --out-path 
 
 FROM alpine:3.14
 
-COPY --from=builder /rdme/bin/docker /app
+COPY --from=builder /rdme/bin/docker/rdme /app/rdme
+COPY --from=builder /rdme/bin/docker/entrypoint.sh /app/entrypoint.sh
 
 ENTRYPOINT ["/app/entrypoint.sh"]
