@@ -63,21 +63,6 @@ jobs:
           replace: "image: 'Dockerfile'"
           include: rdme-repo/action.yml
 
-      - name: Log in to the Container registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: build docker image
-        run: docker build --platform linux/amd64 --tag ghcr.io/readmeio/rdme:kanad-dev .
-        working-directory: ./rdme-repo/
-
-      - name: push docker image
-        run: docker push ghcr.io/readmeio/rdme:kanad-dev
-        working-directory: ./rdme-repo/
-
       - name: Run `openapi:validate` command
         uses: ./rdme-repo/
         with:
