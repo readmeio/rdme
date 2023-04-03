@@ -68,8 +68,8 @@ jobs:
         with:
           rdme: openapi:validate "oas-examples-repo/3.1/json/petstore.json"
 
-      # # Docs: https://rdme-test.readme.io
-      # - name: Run `openapi` command
-      #   uses: ./rdme-repo/
-      #   with:
-      #     rdme: openapi oas-examples-repo/3.1/json/petstore.json --key=${{ secrets.RDME_TEST_PROJECT_API_KEY }} --id=${{ secrets.RDME_TEST_PROJECT_API_SETTING }}
+      # Docs: https://rdme-test.readme.io
+      - name: Run `openapi` command
+        uses: ./rdme-repo/
+        with:
+          rdme: openapi oas-examples-repo/3.1/json/petstore.json --key=${{ secrets.RDME_TEST_PROJECT_API_KEY }} --id=${{ secrets.RDME_TEST_PROJECT_API_SETTING }}
