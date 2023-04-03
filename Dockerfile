@@ -8,4 +8,4 @@ FROM alpine:3.14
 
 COPY --from=builder /rdme/bin/docker .
 
-ENTRYPOINT ["entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
