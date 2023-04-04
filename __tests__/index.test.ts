@@ -6,6 +6,7 @@ import conf from '../src/lib/configstore';
 
 import getAPIMock from './helpers/get-api-mock';
 import { after, before } from './helpers/get-gha-setup';
+import { after as afterGHAEnv, before as beforeGHAEnv } from './helpers/setup-gha-env';
 
 describe('cli', () => {
   it('command not found', () => {
@@ -33,6 +34,32 @@ describe('cli', () => {
         // This can be ignored as it's just going to be a command not found error
         new Error('Command not found.\n\nType `rdme help` to see all commands')
       );
+    });
+  });
+
+  describe('args parsing in GitHub Actions runners', () => {
+    beforeEach(beforeGHAEnv);
+
+    afterEach(afterGHAEnv);
+
+    it('should return version from package.json for help command (standard argv)', () => {
+      return expect(cli(['help', '--version'])).resolves.toBe(pkgVersion);
+    });
+
+    it('should return version from package.json for help command (single string argv)', () => {
+      return expect(cli(['help --version'])).resolves.toBe(pkgVersion);
+    });
+
+    it('should validate file (standard argv)', () => {
+      return expect(
+        cli(['openapi:validate', '__tests__/__fixtures__/petstore-simple-weird-version.json'])
+      ).resolves.toBe('__tests__/__fixtures__/petstore-simple-weird-version.json is a valid OpenAPI API definition!');
+    });
+
+    it('should validate file (single string with file name in quotes)', () => {
+      return expect(
+        cli(['openapi:validate "__tests__/__fixtures__/petstore-simple-weird-version.json"'])
+      ).resolves.toBe('__tests__/__fixtures__/petstore-simple-weird-version.json is a valid OpenAPI API definition!');
     });
   });
 
