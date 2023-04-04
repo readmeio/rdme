@@ -27,7 +27,6 @@ import createGHA from './lib/createGHA';
 import type Command from './lib/baseCommand';
 import type { CommandOptions } from './lib/baseCommand';
 import getCurrentConfig from './lib/getCurrentConfig';
-import { isGHA } from './lib/isCI';
 
 /**
  * @param {Array} processArgv - An array of arguments from the current process. Can be used to mock
