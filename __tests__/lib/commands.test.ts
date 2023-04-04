@@ -9,7 +9,7 @@ import * as commands from '../../src/lib/commands';
 describe('utils', () => {
   describe('#list', () => {
     it('should have commands returned', () => {
-      expect(commands.list()).not.toHaveLength(0);
+      return expect(commands.list()).not.toHaveLength(0);
     });
 
     describe('commands', () => {
@@ -40,7 +40,7 @@ describe('utils', () => {
           (_, command) => {
             it('should have a description that ends with punctuation', () => {
               const description = command.description.replace('[inactive]', '').replace('[deprecated]', '').trim();
-              expect(description).toEndWith('.');
+              return expect(description).toEndWith('.');
             });
 
             it('should have standardized argument constructs', () => {
@@ -70,11 +70,11 @@ describe('utils', () => {
 
   describe('#load', () => {
     it('should load a valid command', () => {
-      expect(commands.load('docs')).toBeInstanceOf(DocsCommand);
+      return expect(commands.load('docs')).toBeInstanceOf(DocsCommand);
     });
 
     it('should throw an error on an invalid command', () => {
-      expect(() => {
+      return expect(() => {
         // @ts-expect-error Testing a valid failure case.
         commands.load('buster');
       }).toThrow('Command not found');
@@ -83,13 +83,13 @@ describe('utils', () => {
 
   describe('#listByCategory', () => {
     it('should list commands by category', () => {
-      expect(commands.listByCategory()).toMatchSnapshot();
+      return expect(commands.listByCategory()).toMatchSnapshot();
     });
   });
 
   describe('#getSimilar', () => {
     it('should pull similar commands', () => {
-      expect(commands.getSimilar(CommandCategories.ADMIN, 'login')).toStrictEqual([
+      return expect(commands.getSimilar(CommandCategories.ADMIN, 'login')).toStrictEqual([
         {
           name: 'logout',
           description: 'Logs the currently authenticated user out of ReadMe.',

@@ -900,8 +900,10 @@ describe('rdme openapi', () => {
     });
 
     it('should error if no file was provided or able to be discovered', () => {
-      return expect(openapi.run({ key, version, workingDirectory: 'config' })).rejects.toThrow(
-        /We couldn't find an OpenAPI or Swagger definition./
+      return expect(openapi.run({ key, version, workingDirectory: 'config' })).rejects.toStrictEqual(
+        new Error(
+          "We couldn't find an OpenAPI or Swagger definition.\n\nPlease specify the path to your definition with `rdme openapi ./path/to/api/definition`."
+        )
       );
     });
 
