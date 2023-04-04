@@ -14,5 +14,3 @@ outputs:
 runs:
   using: docker
   image: docker://ghcr.io/readmeio/rdme:8.6.0
-  args:
-    - ${{ inputs.rdme }}
