@@ -28,7 +28,7 @@ describe('cli', () => {
     });
 
     // This is necessary because we use --version for other commands like `docs`
-    it('should only return version if no command', () => {
+    it('should error if command does not exist', () => {
       return expect(cli(['no-such-command', '--version'])).rejects.toStrictEqual(
         // This can be ignored as it's just going to be a command not found error
         new Error('Command not found.\n\nType `rdme help` to see all commands')
