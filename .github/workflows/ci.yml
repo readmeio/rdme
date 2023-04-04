@@ -66,6 +66,11 @@ jobs:
       - name: Run `openapi:validate` command
         uses: ./rdme-repo/
         with:
+          rdme: openapi:validate oas-examples-repo/3.1/json/petstore.json
+
+      - name: Run `openapi:validate` with filename in quotes
+        uses: ./rdme-repo/
+        with:
           rdme: openapi:validate "oas-examples-repo/3.1/json/petstore.json"
 
       # Docs: https://rdme-test.readme.io
