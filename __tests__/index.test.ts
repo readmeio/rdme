@@ -37,28 +37,6 @@ describe('cli', () => {
   });
 
   describe('--help', () => {
-    beforeEach(() => {
-      // The `table-layout` dependency within `command-line-usage` has a quirk in the 1.x family where if it's being
-      // run within a Jest environment it won't always use the same amount of columns for tables, resulting in cases
-      // where Jest snapshots will randomly return back different results.
-      //
-      // This issue has been fixed in later versions of `table-layout` but `command-line-usage` is still targeting the
-      // 1.x series.
-      //
-      // See https://github.com/75lb/table-layout/issues/9 for more information.
-      process.stdout.columns = 100;
-      process.stderr.columns = 100;
-    });
-
-    /* eslint-disable @typescript-eslint/ban-ts-comment */
-    afterEach(() => {
-      // @ts-ignore This is the only way we can disable columns within the `table-layout` library.
-      process.stdout.columns = undefined;
-      // @ts-ignore
-      process.stderr.columns = undefined;
-    });
-    /* eslint-enable @typescript-eslint/ban-ts-comment */
-
     it('should print help', () => {
       return expect(cli(['--help'])).resolves.toContain('a utility for interacting with ReadMe');
     });
