@@ -27,13 +27,14 @@ import createGHA from './lib/createGHA';
 import type Command from './lib/baseCommand';
 import type { CommandOptions } from './lib/baseCommand';
 import getCurrentConfig from './lib/getCurrentConfig';
+import { isGHA } from './lib/isCI';
 
 /**
  * @param {Array} processArgv - An array of arguments from the current process. Can be used to mock
  *    fake CLI calls.
  * @return {Promise}
  */
-export default function rdme(processArgv: NodeJS.Process['argv']) {
+export default function rdme(rawProcessArgv: NodeJS.Process['argv']) {
   const mainArgs = [
     { name: 'help', alias: 'h', type: Boolean, description: 'Display this usage guide' },
     {
@@ -45,9 +46,17 @@ export default function rdme(processArgv: NodeJS.Process['argv']) {
     { name: 'command', type: String, defaultOption: true },
   ];
 
-  console.log('processArgv:', processArgv);
+  let processArgv = rawProcessArgv;
 
-  console.log('process.env:', process.env);
+  if (isGHA() && rawProcessArgv.length === 1 && rawProcessArgv?.[0]?.split(' ')?.length > 1) {
+    processArgv = rawProcessArgv[0].split(' ').map(arg => {
+      try {
+        return JSON.parse(arg);
+      } catch (e) {
+        return arg;
+      }
+    });
+  }
 
   const argv = cliArgs(mainArgs, { partial: true, argv: processArgv });
   const cmd = argv.command || false;
