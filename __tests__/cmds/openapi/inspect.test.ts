@@ -17,8 +17,8 @@ describe('rdme openapi:inspect', () => {
       '@readme/oas-examples/3.0/json/petstore.json',
       '@readme/oas-examples/3.0/json/readme.json',
       '@readme/oas-examples/3.0/json/readme-extensions.json',
-    ])('should generate a report for %s', async spec => {
-      await expect(
+    ])('should generate a report for %s', spec => {
+      return expect(
         analyzer.run({
           spec: require.resolve(spec),
         })
@@ -27,15 +27,15 @@ describe('rdme openapi:inspect', () => {
   });
 
   describe('feature reports', () => {
-    it('should throw an error if an invalid feature is supplied', async () => {
+    it('should throw an error if an invalid feature is supplied', () => {
       const spec = require.resolve('@readme/oas-examples/3.0/json/readme-extensions.json');
 
-      await expect(
+      return expect(
         analyzer.run({
           spec,
           feature: ['style', 'reamde'],
         })
-      ).rejects.toThrow('Unknown features: reamde. See `rdme help openapi:inspect` for help');
+      ).rejects.toStrictEqual(new Error('Unknown features: reamde. See `rdme help openapi:inspect` for help.'));
     });
 
     const cases: { spec: string; feature: string[]; shouldSoftError?: true }[] = [
