@@ -8,28 +8,30 @@ import getAPIMock from './helpers/get-api-mock';
 import { after, before } from './helpers/get-gha-setup';
 
 describe('cli', () => {
-  it('command not found', async () => {
-    await expect(cli(['no-such-command'])).rejects.toThrow('Command not found');
+  it('command not found', () => {
+    return expect(cli(['no-such-command'])).rejects.toStrictEqual(
+      new Error('Command not found.\n\nType `rdme help` to see all commands')
+    );
   });
 
   describe('--version', () => {
-    it('should return version from package.json', async () => {
-      await expect(cli(['--version'])).resolves.toBe(pkgVersion);
+    it('should return version from package.json', () => {
+      return expect(cli(['--version'])).resolves.toBe(pkgVersion);
     });
 
-    it('should return version if the `-V` alias is supplied', async () => {
-      await expect(cli(['-V'])).resolves.toBe(pkgVersion);
+    it('should return version if the `-V` alias is supplied', () => {
+      return expect(cli(['-V'])).resolves.toBe(pkgVersion);
     });
 
-    it('should return version from package.json for help command', async () => {
-      await expect(cli(['help', '--version'])).resolves.toBe(pkgVersion);
+    it('should return version from package.json for help command', () => {
+      return expect(cli(['help', '--version'])).resolves.toBe(pkgVersion);
     });
 
     // This is necessary because we use --version for other commands like `docs`
-    it('should only return version if no command', async () => {
-      await expect(cli(['no-such-command', '--version'])).rejects.toThrow(
+    it('should only return version if no command', () => {
+      return expect(cli(['no-such-command', '--version'])).rejects.toStrictEqual(
         // This can be ignored as it's just going to be a command not found error
-        'Command not found.'
+        new Error('Command not found.\n\nType `rdme help` to see all commands')
       );
     });
   });
@@ -57,39 +59,41 @@ describe('cli', () => {
     });
     /* eslint-enable @typescript-eslint/ban-ts-comment */
 
-    it('should print help', async () => {
-      await expect(cli(['--help'])).resolves.toContain('a utility for interacting with ReadMe');
+    it('should print help', () => {
+      return expect(cli(['--help'])).resolves.toContain('a utility for interacting with ReadMe');
     });
 
-    it('should print help for the `-H` alias', async () => {
-      await expect(cli(['-H'])).resolves.toContain('a utility for interacting with ReadMe');
+    it('should print help for the `-H` alias', () => {
+      return expect(cli(['-H'])).resolves.toContain('a utility for interacting with ReadMe');
     });
 
-    it('should print usage for a given command', async () => {
-      await expect(cli(['openapi', '--help'])).resolves.toMatchSnapshot();
+    it('should print usage for a given command', () => {
+      return expect(cli(['openapi', '--help'])).resolves.toMatchSnapshot();
     });
 
-    it('should print usage for a given command if supplied as `help <command>`', async () => {
-      await expect(cli(['help', 'openapi'])).resolves.toMatchSnapshot();
+    it('should print usage for a given command if supplied as `help <command>`', () => {
+      return expect(cli(['help', 'openapi'])).resolves.toMatchSnapshot();
     });
 
-    it('should not surface args that are designated as hidden', async () => {
-      await expect(cli(['openapi', '--help'])).resolves.toMatchSnapshot();
+    it('should not surface args that are designated as hidden', () => {
+      return expect(cli(['openapi', '--help'])).resolves.toMatchSnapshot();
     });
 
-    it('should show related commands for a subcommands help menu', async () => {
-      await expect(cli(['versions', '--help'])).resolves.toMatchSnapshot();
+    it('should show related commands for a subcommands help menu', () => {
+      return expect(cli(['versions', '--help'])).resolves.toMatchSnapshot();
     });
   });
 
   describe('subcommands', () => {
-    it('should load subcommands from the folder', async () => {
-      await expect(cli(['openapi:validate', 'package.json'])).rejects.not.toThrow('Command not found.');
+    it('should load subcommands from the folder', () => {
+      return expect(
+        cli(['openapi:validate', '__tests__/__fixtures__/petstore-simple-weird-version.json'])
+      ).resolves.toBe('__tests__/__fixtures__/petstore-simple-weird-version.json is a valid OpenAPI API definition!');
     });
   });
 
-  it('should not error with undefined cmd', async () => {
-    await expect(cli([])).resolves.toContain('OpenAPI / Swagger');
+  it('should not error with undefined cmd', () => {
+    return expect(cli([])).resolves.toContain('a utility for interacting with ReadMe');
   });
 
   describe('stored API key', () => {
@@ -130,8 +134,8 @@ describe('cli', () => {
       });
 
       it('should inform a logged in user which project is being updated', async () => {
-        await expect(cli(['openapi', '--create', '--update'])).rejects.toThrow(
-          'The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!'
+        await expect(cli(['openapi', '--create', '--update'])).rejects.toStrictEqual(
+          new Error('The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!')
         );
 
         expect(getCommandOutput()).toMatch(
@@ -140,8 +144,8 @@ describe('cli', () => {
       });
 
       it('should not inform a logged in user when they pass their own key', async () => {
-        await expect(cli(['openapi', '--create', '--update', '--key=asdf'])).rejects.toThrow(
-          'The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!'
+        await expect(cli(['openapi', '--create', '--update', '--key=asdf'])).rejects.toStrictEqual(
+          new Error('The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!')
         );
 
         expect(getCommandOutput()).toBe('');
@@ -187,16 +191,16 @@ describe('cli', () => {
       });
 
       it('should not inform a logged in user which project is being updated', async () => {
-        await expect(cli(['openapi', '--create', '--update'])).rejects.toThrow(
-          'The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!'
+        await expect(cli(['openapi', '--create', '--update'])).rejects.toStrictEqual(
+          new Error('The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!')
         );
 
         expect(getCommandOutput()).toBe('');
       });
 
       it('should not inform a logged in user when they pass their own key', async () => {
-        await expect(cli(['openapi', '--create', '--update', '--key=asdf'])).rejects.toThrow(
-          'The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!'
+        await expect(cli(['openapi', '--create', '--update', '--key=asdf'])).rejects.toStrictEqual(
+          new Error('The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!')
         );
 
         expect(getCommandOutput()).toBe('');
@@ -204,8 +208,12 @@ describe('cli', () => {
     });
   });
 
-  it('should error with `rdme oas` arguments passed in', async () => {
-    await expect(cli(['oas', 'endpoint'])).rejects.toThrow(/.*/);
+  it('should error with `rdme oas` arguments passed in', () => {
+    return expect(cli(['oas', 'endpoint'])).rejects.toStrictEqual(
+      new Error(
+        "This `oas` integration is now inactive.\n\nIf you're looking to create an OpenAPI definition, we recommend https://npm.im/swagger-inline"
+      )
+    );
   });
 
   describe('GHA onboarding via @supportsGHA decorator', () => {
