@@ -13,6 +13,6 @@ outputs:
     description: The rdme command result output
 runs:
   using: docker
-  image: Dockerfile
+  image: docker://ghcr.io/readmeio/rdme:8.6.0
   args:
     - ${{ inputs.rdme }}
