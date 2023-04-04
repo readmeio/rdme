@@ -53,22 +53,20 @@ export default function rdme(rawProcessArgv: NodeJS.Process['argv']) {
    * will pass all of the `rdme` arguments as a single string with escaped quotes,
    * as opposed to the usual array of strings that we typically expect with `process.argv`.
    *
-   * For example, say the user sends us `rdme openapi "petstore.json"`. Instead of `process.argv` being this:
+   * For example, say the user sends us `rdme openapi "petstore.json"`.
+   * Instead of `process.argv` being this (i.e., when running the command via CLI):
    * ['openapi', 'petstore.json']
    *
-   * GitHub Actions will send us this:
+   * The GitHub Actions runner will send this to the `rdme` Docker image:
    * ['openapi "petstore.json"']
    *
-   * This logic will ensure that we can handle both types of arguments safely.
+   * To distinguish these, we have a hidden `docker-gha` argument which we check for to indicate
+   * when arguments are coming from the GitHub Actions runner.
+   * This logic checks for that `docker-gha` argument and parses the second string
+   * into the arguments array that `command-line-args` is expecting.
    */
-  if (
-    isGHA() &&
-    rawProcessArgv.length === 1 &&
-    // If `process.argv`'s only entry contains spaces, it's likely
-    // this weird case that we should parse out properly.
-    rawProcessArgv?.[0]?.split(' ')?.length > 1
-  ) {
-    processArgv = rawProcessArgv[0].split(' ').map(arg => {
+  if (rawProcessArgv.length === 2 && rawProcessArgv[0] === 'docker-gha') {
+    processArgv = rawProcessArgv[1].split(' ').map(arg => {
       // This `JSON.parse` will ensure that we're handling escaped quotation marks properly.
       try {
         return JSON.parse(arg);

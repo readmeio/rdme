@@ -6,7 +6,6 @@ import conf from '../src/lib/configstore';
 
 import getAPIMock from './helpers/get-api-mock';
 import { after, before } from './helpers/get-gha-setup';
-import { after as afterGHAEnv, before as beforeGHAEnv } from './helpers/setup-gha-env';
 
 describe('cli', () => {
   it('command not found', () => {
@@ -38,16 +37,12 @@ describe('cli', () => {
   });
 
   describe('args parsing in GitHub Actions runners', () => {
-    beforeEach(beforeGHAEnv);
-
-    afterEach(afterGHAEnv);
-
     it('should return version from package.json for help command (standard argv)', () => {
       return expect(cli(['help', '--version'])).resolves.toBe(pkgVersion);
     });
 
     it('should return version from package.json for help command (single string argv)', () => {
-      return expect(cli(['help --version'])).resolves.toBe(pkgVersion);
+      return expect(cli(['docker-gha', 'help --version'])).resolves.toBe(pkgVersion);
     });
 
     it('should validate file (standard argv)', () => {
@@ -58,7 +53,7 @@ describe('cli', () => {
 
     it('should validate file (single string with file name in quotes)', () => {
       return expect(
-        cli(['openapi:validate "__tests__/__fixtures__/petstore-simple-weird-version.json"'])
+        cli(['docker-gha', 'openapi:validate "__tests__/__fixtures__/petstore-simple-weird-version.json"'])
       ).resolves.toBe('__tests__/__fixtures__/petstore-simple-weird-version.json is a valid OpenAPI API definition!');
     });
   });
