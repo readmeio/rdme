@@ -45,6 +45,10 @@ export default function rdme(processArgv: NodeJS.Process['argv']) {
     { name: 'command', type: String, defaultOption: true },
   ];
 
+  console.log('processArgv:', processArgv);
+
+  console.log('process.env:', process.env);
+
   const argv = cliArgs(mainArgs, { partial: true, argv: processArgv });
   const cmd = argv.command || false;
 
