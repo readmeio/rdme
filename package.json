@@ -58,6 +58,7 @@
     "prompts": "^2.4.2",
     "semver": "^7.0.0",
     "simple-git": "^3.13.0",
+    "string-argv": "^0.3.1",
     "table": "^6.8.1",
     "tmp-promise": "^3.0.2",
     "update-notifier-cjs": "^5.1.5",

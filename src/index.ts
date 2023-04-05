@@ -3,6 +3,7 @@ import path from 'path';
 
 import chalk from 'chalk';
 import cliArgs from 'command-line-args';
+import parseArgsStringToArgv from 'string-argv';
 
 // We have to do this otherwise `require('config')` loads
 // from the cwd where the user is running `rdme` which
@@ -33,7 +34,7 @@ import getCurrentConfig from './lib/getCurrentConfig';
  *    fake CLI calls.
  * @return {Promise}
  */
-export default function rdme(processArgv: NodeJS.Process['argv']) {
+export default function rdme(rawProcessArgv: NodeJS.Process['argv']) {
   const mainArgs = [
     { name: 'help', alias: 'h', type: Boolean, description: 'Display this usage guide' },
     {
@@ -44,6 +45,32 @@ export default function rdme(processArgv: NodeJS.Process['argv']) {
     },
     { name: 'command', type: String, defaultOption: true },
   ];
+
+  let processArgv = rawProcessArgv;
+
+  debug(`raw process.argv: ${JSON.stringify(rawProcessArgv)}`);
+
+  /**
+   * We have a weird edge case with our Docker image version of `rdme` where GitHub Actions
+   * will pass all of the `rdme` arguments as a single string with escaped quotes,
+   * as opposed to the usual array of strings that we typically expect with `process.argv`.
+   *
+   * For example, say the user sends us `rdme openapi "petstore.json"`.
+   * Instead of `process.argv` being this (i.e., when running the command via CLI):
+   * ['openapi', 'petstore.json']
+   *
+   * The GitHub Actions runner will send this to the `rdme` Docker image:
+   * ['openapi "petstore.json"']
+   *
+   * To distinguish these, we have a hidden `docker-gha` argument which we check for to indicate
+   * when arguments are coming from the GitHub Actions runner.
+   * This logic checks for that `docker-gha` argument and parses the second string
+   * into the arguments array that `command-line-args` is expecting.
+   */
+  if (rawProcessArgv.length === 2 && rawProcessArgv[0] === 'docker-gha') {
+    processArgv = parseArgsStringToArgv(rawProcessArgv[1]);
+    debug(`parsing arg string into argv: ${JSON.stringify(processArgv)}`);
+  }
 
   const argv = cliArgs(mainArgs, { partial: true, argv: processArgv });
   const cmd = argv.command || false;
