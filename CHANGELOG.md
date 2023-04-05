@@ -1,3 +1,10 @@
+## [8.6.1](https://github.com/readmeio/rdme/compare/v8.6.0...v8.6.1) (2023-04-05)
+
+
+### Bug Fixes
+
+* **docker:** safer argument parsing for GitHub Actions ([#788](https://github.com/readmeio/rdme/issues/788)) ([8328388](https://github.com/readmeio/rdme/commit/83283882f84054159652bc56af66f5436709d08f))
+
 ## [8.6.1-next.1](https://github.com/readmeio/rdme/compare/v8.6.0...v8.6.1-next.1) (2023-04-05)
 
 
