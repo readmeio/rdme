@@ -3,6 +3,7 @@ import path from 'path';
 
 import chalk from 'chalk';
 import cliArgs from 'command-line-args';
+import parseArgsStringToArgv from 'string-argv';
 
 // We have to do this otherwise `require('config')` loads
 // from the cwd where the user is running `rdme` which
@@ -65,14 +66,7 @@ export default function rdme(rawProcessArgv: NodeJS.Process['argv']) {
    * into the arguments array that `command-line-args` is expecting.
    */
   if (rawProcessArgv.length === 2 && rawProcessArgv[0] === 'docker-gha') {
-    processArgv = rawProcessArgv[1].split(' ').map(arg => {
-      // This `JSON.parse` will ensure that we're handling escaped quotation marks properly.
-      try {
-        return JSON.parse(arg);
-      } catch (e) {
-        return arg;
-      }
-    });
+    processArgv = parseArgsStringToArgv(rawProcessArgv[1]);
   }
 
   const argv = cliArgs(mainArgs, { partial: true, argv: processArgv });
