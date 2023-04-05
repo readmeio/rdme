@@ -51,10 +51,16 @@ describe('cli', () => {
       ).resolves.toBe('__tests__/__fixtures__/petstore-simple-weird-version.json is a valid OpenAPI API definition!');
     });
 
-    it('should validate file (single string with file name in quotes)', () => {
+    it('should validate file (single string with file path in quotes)', () => {
       return expect(
         cli(['docker-gha', 'openapi:validate "__tests__/__fixtures__/petstore-simple-weird-version.json"'])
       ).resolves.toBe('__tests__/__fixtures__/petstore-simple-weird-version.json is a valid OpenAPI API definition!');
+    });
+
+    it('should attempt to validate file (single string with file path with spaces)', () => {
+      return expect(cli(['docker-gha', 'openapi:validate "a non-existent directory/petstore.json"'])).rejects.toThrow(
+        "ENOENT: no such file or directory, open 'a non-existent directory/petstore.json"
+      );
     });
   });
 
