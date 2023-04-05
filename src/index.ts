@@ -48,6 +48,8 @@ export default function rdme(rawProcessArgv: NodeJS.Process['argv']) {
 
   let processArgv = rawProcessArgv;
 
+  debug(`raw process.argv: ${JSON.stringify(rawProcessArgv)}`);
+
   /**
    * We have a weird edge case with our Docker image version of `rdme` where GitHub Actions
    * will pass all of the `rdme` arguments as a single string with escaped quotes,
@@ -67,6 +69,7 @@ export default function rdme(rawProcessArgv: NodeJS.Process['argv']) {
    */
   if (rawProcessArgv.length === 2 && rawProcessArgv[0] === 'docker-gha') {
     processArgv = parseArgsStringToArgv(rawProcessArgv[1]);
+    debug(`parsing arg string into argv: ${JSON.stringify(processArgv)}`);
   }
 
   const argv = cliArgs(mainArgs, { partial: true, argv: processArgv });
