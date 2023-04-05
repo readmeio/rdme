@@ -36,28 +36,18 @@ describe('cli', () => {
     });
   });
 
-  describe('args parsing in GitHub Actions runners', () => {
-    it('should return version from package.json for help command (standard argv)', () => {
-      return expect(cli(['help', '--version'])).resolves.toBe(pkgVersion);
-    });
-
-    it('should return version from package.json for help command (single string argv)', () => {
+  describe('single arg string from GitHub Actions runner', () => {
+    it('should return version from package.json for help command', () => {
       return expect(cli(['docker-gha', 'help --version'])).resolves.toBe(pkgVersion);
     });
 
-    it('should validate file (standard argv)', () => {
-      return expect(
-        cli(['openapi:validate', '__tests__/__fixtures__/petstore-simple-weird-version.json'])
-      ).resolves.toBe('__tests__/__fixtures__/petstore-simple-weird-version.json is a valid OpenAPI API definition!');
-    });
-
-    it('should validate file (single string with file path in quotes)', () => {
+    it('should validate file (file path in quotes)', () => {
       return expect(
         cli(['docker-gha', 'openapi:validate "__tests__/__fixtures__/petstore-simple-weird-version.json"'])
       ).resolves.toBe('__tests__/__fixtures__/petstore-simple-weird-version.json is a valid OpenAPI API definition!');
     });
 
-    it('should attempt to validate file (single string with file path with spaces)', () => {
+    it('should attempt to validate file (file path contains spaces)', () => {
       return expect(cli(['docker-gha', 'openapi:validate "a non-existent directory/petstore.json"'])).rejects.toThrow(
         "ENOENT: no such file or directory, open 'a non-existent directory/petstore.json"
       );
