@@ -116,6 +116,9 @@ export default function rdme(rawProcessArgv: NodeJS.Process['argv']) {
         return Promise.resolve(help.globalUsage(mainArgs));
       }
 
+
+      
+
       bin = commands.load(cmdArgv.subcommand);
       return Promise.resolve(help.commandUsage(bin));
     }
