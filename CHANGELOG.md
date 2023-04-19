@@ -1,3 +1,14 @@
+## [8.6.2](https://github.com/readmeio/rdme/compare/v8.6.1...v8.6.2) (2023-04-19)
+
+
+### Bug Fixes
+
+* **deps:** bump `oas` (and others) ([#802](https://github.com/readmeio/rdme/issues/802)) ([4dbc5f4](https://github.com/readmeio/rdme/commit/4dbc5f4864b1213d6035dd57760598a2ab3e8c92))
+* **npm:** generate provenance statements ([6834f75](https://github.com/readmeio/rdme/commit/6834f753bbbd5370d06768b0a3abffa79a7a02a5))
+* **npm:** use shrinkwrap instead of lockfile ([#803](https://github.com/readmeio/rdme/issues/803)) ([4ec3fa7](https://github.com/readmeio/rdme/commit/4ec3fa7f425b0e5da27214255cd4e4c1a99f4e93))
+* packages permission issue ([f0fb7dc](https://github.com/readmeio/rdme/commit/f0fb7dc633eb733256a98e6404cbae2a116c1b78))
+* **semantic-release:** bump to v21 ([f53c1a4](https://github.com/readmeio/rdme/commit/f53c1a4852dfb234c2bd05a20302d25e9d896d39))
+
 ## [8.6.2-next.4](https://github.com/readmeio/rdme/compare/v8.6.2-next.3...v8.6.2-next.4) (2023-04-19)
 
 
