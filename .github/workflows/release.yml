@@ -67,7 +67,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.RELEASE_GH_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           # See provenance docs: https://docs.npmjs.com/generating-provenance-statements#publishing-packages-with-provenance-via-github-actions
           NPM_CONFIG_PROVENANCE: 'true'
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npx semantic-release
