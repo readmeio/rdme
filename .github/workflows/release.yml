@@ -15,6 +15,7 @@ jobs:
     permissions:
       # See provenance docs: https://docs.npmjs.com/generating-provenance-statements#publishing-packages-with-provenance-via-github-actions
       id-token: write
+      packages: write
     steps:
       - uses: actions/checkout@v3
         with:
