@@ -1,3 +1,10 @@
+## [8.6.2-next.1](https://github.com/readmeio/rdme/compare/v8.6.1...v8.6.2-next.1) (2023-04-19)
+
+
+### Bug Fixes
+
+* **deps:** bump `oas` (and others) ([#802](https://github.com/readmeio/rdme/issues/802)) ([4dbc5f4](https://github.com/readmeio/rdme/commit/4dbc5f4864b1213d6035dd57760598a2ab3e8c92))
+
 ## [8.6.1](https://github.com/readmeio/rdme/compare/v8.6.0...v8.6.1) (2023-04-05)
 
 
