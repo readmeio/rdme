@@ -27,7 +27,7 @@ plugins:
   - [
       '@semantic-release/git',
       {
-        assets: ['action.yml', 'CHANGELOG.md', 'package.json', 'package-lock.json'],
+        assets: ['action.yml', 'CHANGELOG.md', 'package.json', 'npm-shrinkwrap.json'],
         message: "build(release): 🚀 v${nextRelease.version} 🦉\n\n${nextRelease.notes}\n[skip ci]",
       },
     ]
