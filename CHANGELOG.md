@@ -1,3 +1,10 @@
+## [8.6.2-next.2](https://github.com/readmeio/rdme/compare/v8.6.2-next.1...v8.6.2-next.2) (2023-04-19)
+
+
+### Bug Fixes
+
+* **npm:** use shrinkwrap instead of lockfile ([#803](https://github.com/readmeio/rdme/issues/803)) ([4ec3fa7](https://github.com/readmeio/rdme/commit/4ec3fa7f425b0e5da27214255cd4e4c1a99f4e93))
+
 ## [8.6.2-next.1](https://github.com/readmeio/rdme/compare/v8.6.1...v8.6.2-next.1) (2023-04-19)
 
 
