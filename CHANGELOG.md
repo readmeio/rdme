@@ -1,3 +1,10 @@
+## [8.6.2-next.4](https://github.com/readmeio/rdme/compare/v8.6.2-next.3...v8.6.2-next.4) (2023-04-19)
+
+
+### Bug Fixes
+
+* **semantic-release:** bump to v21 ([f53c1a4](https://github.com/readmeio/rdme/commit/f53c1a4852dfb234c2bd05a20302d25e9d896d39))
+
 ## [8.6.2-next.3](https://github.com/readmeio/rdme/compare/v8.6.2-next.2...v8.6.2-next.3) (2023-04-19)
 
 
