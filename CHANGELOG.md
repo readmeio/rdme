@@ -1,3 +1,11 @@
+## [8.6.2-next.3](https://github.com/readmeio/rdme/compare/v8.6.2-next.2...v8.6.2-next.3) (2023-04-19)
+
+
+### Bug Fixes
+
+* **npm:** generate provenance statements ([6834f75](https://github.com/readmeio/rdme/commit/6834f753bbbd5370d06768b0a3abffa79a7a02a5))
+* packages permission issue ([f0fb7dc](https://github.com/readmeio/rdme/commit/f0fb7dc633eb733256a98e6404cbae2a116c1b78))
+
 ## [8.6.2-next.2](https://github.com/readmeio/rdme/compare/v8.6.2-next.1...v8.6.2-next.2) (2023-04-19)
 
 
