@@ -12,6 +12,9 @@ env:
 jobs:
   release:
     runs-on: ubuntu-latest
+    permissions:
+      # See provenance docs: https://docs.npmjs.com/generating-provenance-statements#publishing-packages-with-provenance-via-github-actions
+      id-token: write
     steps:
       - uses: actions/checkout@v3
         with:
@@ -64,4 +67,6 @@ jobs:
           GH_TOKEN: ${{ secrets.RELEASE_GH_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # See provenance docs: https://docs.npmjs.com/generating-provenance-statements#publishing-packages-with-provenance-via-github-actions
+          NPM_CONFIG_PROVENANCE: 'true'
         run: npx semantic-release
