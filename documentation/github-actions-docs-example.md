@@ -26,7 +26,7 @@ To set up a GitHub Actions workflow for syncing a directory of Markdown docs, th
 rdme docs [path-to-directory-of-markdown] --github
 ```
 
-This will scan the directory for Markdown files, sync them to ReadMe, and then create your GitHub Actions workflow file. Once that's done, create your [repository secret](url), push your workflow file to GitHub, and get syncing! 🎊
+This will scan the directory for Markdown files, sync them to ReadMe, and then create your GitHub Actions workflow file. Once that's done, create your [repository secret](https://docs.github.com/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository), push your workflow file to GitHub, and get syncing! 🎊
 
 ## Constructing a GitHub Actions Workflow File By Hand
 

@@ -25,7 +25,7 @@ To set up a GitHub Actions workflow for syncing an OpenAPI or Swagger definition
 rdme openapi --github
 ```
 
-This will locate your OpenAPI definition, sync it to ReadMe, and then create your GitHub Actions workflow file. Once that's done, create your [repository secret](url), push your workflow file to GitHub, and get syncing! 🎊
+This will locate your OpenAPI definition, sync it to ReadMe, and then create your GitHub Actions workflow file. Once that's done, create your [repository secret](https://docs.github.com/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository), push your workflow file to GitHub, and get syncing! 🎊
 
 ## Constructing a GitHub Actions Workflow File By Hand
 
