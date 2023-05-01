@@ -1,12 +1,12 @@
 {
   "name": "rdme",
-  "version": "8.6.2",
+  "version": "8.6.3-next.1",
   "lockfileVersion": 2,
   "requires": true,
   "packages": {
     "": {
       "name": "rdme",
-      "version": "8.6.2",
+      "version": "8.6.3-next.1",
       "license": "MIT",
       "dependencies": {
         "@actions/core": "^1.6.0",
