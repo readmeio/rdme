@@ -1,3 +1,10 @@
+## [8.6.3](https://github.com/readmeio/rdme/compare/v8.6.2...v8.6.3) (2023-05-01)
+
+
+### Bug Fixes
+
+* **openapi:** postman responses without a response now get one ([#812](https://github.com/readmeio/rdme/issues/812)) ([8fa90e1](https://github.com/readmeio/rdme/commit/8fa90e1a853b703c41d0d1ddf6eac164017c984e))
+
 ## [8.6.3-next.1](https://github.com/readmeio/rdme/compare/v8.6.2...v8.6.3-next.1) (2023-05-01)
 
 
