@@ -7618,9 +7618,9 @@
       }
     },
     "node_modules/oas": {
-      "version": "20.6.1",
-      "resolved": "https://registry.npmjs.org/oas/-/oas-20.6.1.tgz",
-      "integrity": "sha512-tKa/M5sKnEbn09WLwT3/pVhgKbtgovrETk7yBko24b+TaA/RuIToOV+gz0WWtHBc1xDO0FVrKn9y0Gp+WNnRTA==",
+      "version": "20.6.2",
+      "resolved": "https://registry.npmjs.org/oas/-/oas-20.6.2.tgz",
+      "integrity": "sha512-HwBVBZJCIEQokMALNyfugiAPRqbS/DRbt69MMCM+pjnP+2yiZu7yLktFmd5xfJDsj/OJwIeP4bf1giqLaGmoGQ==",
       "dependencies": {
         "@readme/json-schema-ref-parser": "^1.2.0",
         "@types/json-schema": "^7.0.11",
@@ -15842,9 +15842,9 @@
       }
     },
     "oas": {
-      "version": "20.6.1",
-      "resolved": "https://registry.npmjs.org/oas/-/oas-20.6.1.tgz",
-      "integrity": "sha512-tKa/M5sKnEbn09WLwT3/pVhgKbtgovrETk7yBko24b+TaA/RuIToOV+gz0WWtHBc1xDO0FVrKn9y0Gp+WNnRTA==",
+      "version": "20.6.2",
+      "resolved": "https://registry.npmjs.org/oas/-/oas-20.6.2.tgz",
+      "integrity": "sha512-HwBVBZJCIEQokMALNyfugiAPRqbS/DRbt69MMCM+pjnP+2yiZu7yLktFmd5xfJDsj/OJwIeP4bf1giqLaGmoGQ==",
       "requires": {
         "@readme/json-schema-ref-parser": "^1.2.0",
         "@types/json-schema": "^7.0.11",
