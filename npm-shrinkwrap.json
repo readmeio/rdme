@@ -24,7 +24,7 @@
         "mime-types": "^2.1.35",
         "node-fetch": "^2.6.1",
         "oas": "^20.2.0",
-        "oas-normalize": "^8.4.0",
+        "oas-normalize": "^8.4.1",
         "open": "^8.2.1",
         "ora": "^5.4.1",
         "parse-link-header": "^2.0.0",
@@ -1791,6 +1791,11 @@
         "prettier": "^2.0.2"
       }
     },
+    "node_modules/@readme/http-status-codes": {
+      "version": "7.2.0",
+      "resolved": "https://registry.npmjs.org/@readme/http-status-codes/-/http-status-codes-7.2.0.tgz",
+      "integrity": "sha512-/dBh9qw3QhJYqlGwt2I+KUP/lQ6nytdCx3aq+GpMUhibLHF3O7fwoowNcTwlbnwtyJ+TJYTIIrp3oVUlRNx3fA=="
+    },
     "node_modules/@readme/json-schema-ref-parser": {
       "version": "1.2.0",
       "resolved": "https://registry.npmjs.org/@readme/json-schema-ref-parser/-/json-schema-ref-parser-1.2.0.tgz",
@@ -1830,14 +1835,15 @@
       }
     },
     "node_modules/@readme/postman-to-openapi": {
-      "version": "4.0.0",
-      "resolved": "https://registry.npmjs.org/@readme/postman-to-openapi/-/postman-to-openapi-4.0.0.tgz",
-      "integrity": "sha512-LOwlzby87Njj6k6OofCmWSsl+EcnZjKp/wBQe/Loqxi+2m4TGnpALRP62zFjHw23ZUTVZvst8PIF6LMsK8xUHw==",
+      "version": "4.1.0",
+      "resolved": "https://registry.npmjs.org/@readme/postman-to-openapi/-/postman-to-openapi-4.1.0.tgz",
+      "integrity": "sha512-VvV2Hzjskz01m8doSn7Ypt6cSZzgjnypVqXy1ipThbyYD6SGiM74VSePXykOODj/43Y2m6zeYedPk/ZLts/HvQ==",
       "dependencies": {
+        "@readme/http-status-codes": "^7.2.0",
         "js-yaml": "^4.1.0",
         "jsonc-parser": "3.2.0",
         "lodash.camelcase": "^4.3.0",
-        "marked": "^4.2.12",
+        "marked": "^4.3.0",
         "mustache": "^4.2.0"
       },
       "engines": {
@@ -7659,12 +7665,12 @@
       }
     },
     "node_modules/oas-normalize": {
-      "version": "8.4.0",
-      "resolved": "https://registry.npmjs.org/oas-normalize/-/oas-normalize-8.4.0.tgz",
-      "integrity": "sha512-ulFDPcnyrYR34RtprcTZ3dq6eek7wc0fwPmMDhgW82471VW32TRzv9AcO9+bC0Th0KMupkJeTV0fXm+uwgERhg==",
+      "version": "8.4.1",
+      "resolved": "https://registry.npmjs.org/oas-normalize/-/oas-normalize-8.4.1.tgz",
+      "integrity": "sha512-cGODg+AntZteJRHBiYDWKtcO2svWGMXuFWYu2I8b4hOrNiwB3hgDs/ScX3O9mYm6RpLsUIftt6rDHGc8eYG8aA==",
       "dependencies": {
         "@readme/openapi-parser": "^2.5.0",
-        "@readme/postman-to-openapi": "^4.0.0",
+        "@readme/postman-to-openapi": "^4.1.0",
         "js-yaml": "^4.1.0",
         "node-fetch": "^2.6.1",
         "openapi-types": "^12.1.0",
@@ -11530,6 +11536,11 @@
         "eslint-plugin-you-dont-need-lodash-underscore": "^6.12.0"
       }
     },
+    "@readme/http-status-codes": {
+      "version": "7.2.0",
+      "resolved": "https://registry.npmjs.org/@readme/http-status-codes/-/http-status-codes-7.2.0.tgz",
+      "integrity": "sha512-/dBh9qw3QhJYqlGwt2I+KUP/lQ6nytdCx3aq+GpMUhibLHF3O7fwoowNcTwlbnwtyJ+TJYTIIrp3oVUlRNx3fA=="
+    },
     "@readme/json-schema-ref-parser": {
       "version": "1.2.0",
       "resolved": "https://registry.npmjs.org/@readme/json-schema-ref-parser/-/json-schema-ref-parser-1.2.0.tgz",
@@ -11563,14 +11574,15 @@
       }
     },
     "@readme/postman-to-openapi": {
-      "version": "4.0.0",
-      "resolved": "https://registry.npmjs.org/@readme/postman-to-openapi/-/postman-to-openapi-4.0.0.tgz",
-      "integrity": "sha512-LOwlzby87Njj6k6OofCmWSsl+EcnZjKp/wBQe/Loqxi+2m4TGnpALRP62zFjHw23ZUTVZvst8PIF6LMsK8xUHw==",
+      "version": "4.1.0",
+      "resolved": "https://registry.npmjs.org/@readme/postman-to-openapi/-/postman-to-openapi-4.1.0.tgz",
+      "integrity": "sha512-VvV2Hzjskz01m8doSn7Ypt6cSZzgjnypVqXy1ipThbyYD6SGiM74VSePXykOODj/43Y2m6zeYedPk/ZLts/HvQ==",
       "requires": {
+        "@readme/http-status-codes": "^7.2.0",
         "js-yaml": "^4.1.0",
         "jsonc-parser": "3.2.0",
         "lodash.camelcase": "^4.3.0",
-        "marked": "^4.2.12",
+        "marked": "^4.3.0",
         "mustache": "^4.2.0"
       }
     },
@@ -15878,12 +15890,12 @@
       }
     },
     "oas-normalize": {
-      "version": "8.4.0",
-      "resolved": "https://registry.npmjs.org/oas-normalize/-/oas-normalize-8.4.0.tgz",
-      "integrity": "sha512-ulFDPcnyrYR34RtprcTZ3dq6eek7wc0fwPmMDhgW82471VW32TRzv9AcO9+bC0Th0KMupkJeTV0fXm+uwgERhg==",
+      "version": "8.4.1",
+      "resolved": "https://registry.npmjs.org/oas-normalize/-/oas-normalize-8.4.1.tgz",
+      "integrity": "sha512-cGODg+AntZteJRHBiYDWKtcO2svWGMXuFWYu2I8b4hOrNiwB3hgDs/ScX3O9mYm6RpLsUIftt6rDHGc8eYG8aA==",
       "requires": {
         "@readme/openapi-parser": "^2.5.0",
-        "@readme/postman-to-openapi": "^4.0.0",
+        "@readme/postman-to-openapi": "^4.1.0",
         "js-yaml": "^4.1.0",
         "node-fetch": "^2.6.1",
         "openapi-types": "^12.1.0",
