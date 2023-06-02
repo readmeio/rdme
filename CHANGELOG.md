@@ -1,3 +1,10 @@
+## [8.6.4-next.2](https://github.com/readmeio/rdme/compare/v8.6.4-next.1...v8.6.4-next.2) (2023-06-02)
+
+
+### Bug Fixes
+
+* **fetch:** encode parameters in source URL ([#817](https://github.com/readmeio/rdme/issues/817)) ([ff86384](https://github.com/readmeio/rdme/commit/ff86384c1ab2739c7401027c47b22d4541a2e52a))
+
 ## [8.6.4-next.1](https://github.com/readmeio/rdme/compare/v8.6.3...v8.6.4-next.1) (2023-05-31)
 
 
