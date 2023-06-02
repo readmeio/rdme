@@ -84,7 +84,7 @@ describe('#fetch()', () => {
         ).then(handleRes);
 
         expect(headers['x-readme-source-url'].shift()).toBe(
-          'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/%F0%9F%93%88%20Dashboard%20&%20Metrics/openapi.json'
+          'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/%F0%9F%93%88%20Dashboard%20%26%20Metrics%2Fopenapi.json'
         );
         mock.done();
       });
