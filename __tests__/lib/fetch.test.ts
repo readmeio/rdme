@@ -64,7 +64,7 @@ describe('#fetch()', () => {
         mock.done();
       });
 
-      it('should include source URL header with path that contains spaces', async () => {
+      it('should include source URL header with path that contains weird characters', async () => {
         const key = 'API_KEY';
 
         const mock = getAPIMock()
