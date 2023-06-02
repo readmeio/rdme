@@ -64,6 +64,31 @@ describe('#fetch()', () => {
         mock.done();
       });
 
+      it('should include source URL header with path that contains spaces', async () => {
+        const key = 'API_KEY';
+
+        const mock = getAPIMock()
+          .get('/api/v1')
+          .basicAuth({ user: key })
+          .reply(200, function () {
+            return this.req.headers;
+          });
+
+        const headers = await readmeAPIFetch(
+          '/api/v1',
+          {
+            method: 'get',
+            headers: cleanHeaders(key),
+          },
+          { filePath: './📈 Dashboard & Metrics/openapi.json', fileType: 'path' }
+        ).then(handleRes);
+
+        expect(headers['x-readme-source-url'].shift()).toBe(
+          'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/%F0%9F%93%88%20Dashboard%20&%20Metrics/openapi.json'
+        );
+        mock.done();
+      });
+
       it('should include source URL header with relative path', async () => {
         const key = 'API_KEY';
 
