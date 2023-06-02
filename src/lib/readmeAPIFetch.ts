@@ -164,9 +164,9 @@ export default async function readmeAPIFetch(
        */
       headers.set(
         'x-readme-source-url',
-        `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/blob/${
-          process.env.GITHUB_SHA
-        }/${encodeURIComponent(filePath)}`
+        encodeURI(
+          `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/blob/${process.env.GITHUB_SHA}/${filePath}`
+        )
       );
     }
   }
