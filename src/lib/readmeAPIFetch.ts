@@ -162,12 +162,14 @@ export default async function readmeAPIFetch(
        * @see {@link https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables}
        * @example https://github.com/readmeio/rdme/blob/cb4129d5c7b51ff3b50f933a9c7d0c3d0d33d62c/documentation/rdme.md
        */
-      headers.set(
-        'x-readme-source-url',
-        encodeURI(
+      try {
+        const sourceUrl = new URL(
           `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/blob/${process.env.GITHUB_SHA}/${filePath}`
-        )
-      );
+        ).href;
+        headers.set('x-readme-source-url', sourceUrl);
+      } catch (e) {
+        debug(`error constructing github source url: ${e.message}`);
+      }
     }
   }
 

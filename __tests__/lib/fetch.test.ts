@@ -89,6 +89,30 @@ describe('#fetch()', () => {
         mock.done();
       });
 
+      it('should omit source URL header if URL is invalid', async () => {
+        const key = 'API_KEY';
+        delete process.env.GITHUB_SERVER_URL;
+
+        const mock = getAPIMock()
+          .get('/api/v1')
+          .basicAuth({ user: key })
+          .reply(200, function () {
+            return this.req.headers;
+          });
+
+        const headers = await readmeAPIFetch(
+          '/api/v1',
+          {
+            method: 'get',
+            headers: cleanHeaders(key),
+          },
+          { filePath: './📈 Dashboard & Metrics/openapi.json', fileType: 'path' }
+        ).then(handleRes);
+
+        expect(headers['x-readme-source-url']).toBeUndefined();
+        mock.done();
+      });
+
       it('should include source URL header with relative path', async () => {
         const key = 'API_KEY';
 
