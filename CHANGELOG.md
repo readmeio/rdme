@@ -1,3 +1,10 @@
+## [8.6.4-next.3](https://github.com/readmeio/rdme/compare/v8.6.4-next.2...v8.6.4-next.3) (2023-06-05)
+
+
+### Bug Fixes
+
+* **fetch:** stricter source URL type-checking ([#818](https://github.com/readmeio/rdme/issues/818)) ([d082473](https://github.com/readmeio/rdme/commit/d0824735f3a130dbce0f26ca315e1f30754efaa7))
+
 ## [8.6.4-next.2](https://github.com/readmeio/rdme/compare/v8.6.4-next.1...v8.6.4-next.2) (2023-06-02)
 
 
