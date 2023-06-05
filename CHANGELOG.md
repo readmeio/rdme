@@ -1,3 +1,12 @@
+## [8.6.4](https://github.com/readmeio/rdme/compare/v8.6.3...v8.6.4) (2023-06-05)
+
+
+### Bug Fixes
+
+* empty commit to trigger patch release ([71cf84b](https://github.com/readmeio/rdme/commit/71cf84be8fe0b12a61c3e273822009a16bdd17bd))
+* **fetch:** encode parameters in source URL ([#817](https://github.com/readmeio/rdme/issues/817)) ([ff86384](https://github.com/readmeio/rdme/commit/ff86384c1ab2739c7401027c47b22d4541a2e52a))
+* **fetch:** stricter source URL type-checking ([#818](https://github.com/readmeio/rdme/issues/818)) ([d082473](https://github.com/readmeio/rdme/commit/d0824735f3a130dbce0f26ca315e1f30754efaa7))
+
 ## [8.6.4-next.3](https://github.com/readmeio/rdme/compare/v8.6.4-next.2...v8.6.4-next.3) (2023-06-05)
 
 
