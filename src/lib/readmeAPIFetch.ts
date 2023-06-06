@@ -5,8 +5,7 @@ import path from 'path';
 
 import config from 'config';
 import mime from 'mime-types';
-// eslint-disable-next-line no-restricted-imports
-import nodeFetch, { Headers } from 'node-fetch';
+import nodeFetch, { Headers } from 'node-fetch'; // eslint-disable-line no-restricted-imports
 
 import pkg from '../../package.json';
 
@@ -44,10 +43,10 @@ function getProxy() {
  * @see {@link https://github.com/marcbachmann/warning-header-parser}
  */
 interface WarningHeader {
-  code: string;
   agent: string;
-  message: string;
+  code: string;
   date?: string;
+  message: string;
 }
 
 function stripQuotes(s: string) {

@@ -7,8 +7,8 @@ import loginFlow from '../lib/loginFlow';
 
 export interface Options {
   email?: string;
-  password?: string;
   otp?: string;
+  password?: string;
   project?: string;
 }
 

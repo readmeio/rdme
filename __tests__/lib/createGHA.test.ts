@@ -48,8 +48,8 @@ describe('#createGHA', () => {
 
   describe('command inputs', () => {
     describe.each<{
-      cmd: keyof typeof commands;
       CmdClass: typeof Command;
+      cmd: keyof typeof commands;
       /** used to differentiate describe blocks */
       label: string;
       opts: CommandOptions<Record<string, string>>;

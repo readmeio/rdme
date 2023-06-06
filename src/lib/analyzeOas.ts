@@ -23,30 +23,30 @@ export interface Analysis extends OASAnalysis {
     circularRefs: AnalyzedFeature;
     discriminators: AnalyzedFeature;
     links: AnalyzedFeature;
-    style: AnalyzedFeature;
     polymorphism: AnalyzedFeature;
     serverVariables: AnalyzedFeature;
+    style: AnalyzedFeature;
     webhooks: AnalyzedFeature;
     xml: AnalyzedFeature;
   };
   readme: {
-    'x-default': AnalyzedFeature;
-    'x-readme.headers': AnalyzedFeature;
-    'x-readme.proxy-enabled': AnalyzedFeature;
-    'x-readme.samples-languages'?: AnalyzedFeature;
-    'x-readme.code-samples': AnalyzedFeature;
-    'x-readme.explorer-enabled': AnalyzedFeature;
-
-    /**
-     * This extension is deprecated.
-     */
-    'x-readme.samples-enabled'?: AnalyzedFeature;
-
     /**
      * RAW_BODY is specific to our Manual API editor and we don't recommend anyone writing their
      * own API definition should use it so this is considered deprecated.
      */
     raw_body?: AnalyzedFeature;
+
+    'x-default': AnalyzedFeature;
+    'x-readme.code-samples': AnalyzedFeature;
+    'x-readme.explorer-enabled': AnalyzedFeature;
+    'x-readme.headers': AnalyzedFeature;
+    'x-readme.proxy-enabled': AnalyzedFeature;
+
+    /**
+     * @deprecated `samples-enabled` is deprecated.
+     */
+    'x-readme.samples-enabled'?: AnalyzedFeature;
+    'x-readme.samples-languages'?: AnalyzedFeature;
   };
 }
 

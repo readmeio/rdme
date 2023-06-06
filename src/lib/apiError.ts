@@ -1,10 +1,10 @@
 interface APIErrorResponse {
-  error: string;
-  message: string;
-  suggestion?: string;
   docs?: string;
+  error: string;
   help?: string;
+  message: string;
   poem?: string[];
+  suggestion?: string;
 }
 
 export default class APIError extends Error {

@@ -9,8 +9,8 @@ import getCurrentConfig from '../lib/getCurrentConfig';
 import { getProjectVersion } from '../lib/versionSelect';
 
 export interface Options {
-  mockOpen?: (url: string) => Promise<void>;
   dash?: boolean;
+  mockOpen?: (url: string) => Promise<void>;
 }
 
 export default class OpenCommand extends Command {

@@ -5,11 +5,11 @@ import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch';
 
 interface Document {
   _id: string;
-  title: string;
-  slug: string;
-  order: number;
-  hidden: boolean;
   children: Document[];
+  hidden: boolean;
+  order: number;
+  slug: string;
+  title: string;
 }
 
 function flatten(data: Document[][]): Document[] {

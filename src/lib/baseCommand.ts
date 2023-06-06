@@ -12,9 +12,9 @@ import { debug, info, warn } from './logger';
 import loginFlow from './loginFlow';
 
 export type CommandOptions<T> = T & {
+  github?: boolean;
   key?: string;
   version?: string;
-  github?: boolean;
 } & CommandLineOptions;
 
 export enum CommandCategories {
