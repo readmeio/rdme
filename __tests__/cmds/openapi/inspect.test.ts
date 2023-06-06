@@ -38,7 +38,7 @@ describe('rdme openapi:inspect', () => {
       ).rejects.toStrictEqual(new Error('Unknown features: reamde. See `rdme help openapi:inspect` for help.'));
     });
 
-    const cases: { spec: string; feature: string[]; shouldSoftError?: true }[] = [
+    const cases: { feature: string[]; shouldSoftError?: true; spec: string }[] = [
       {
         spec: '@readme/oas-examples/3.0/json/readme.json',
         feature: ['polymorphism'],

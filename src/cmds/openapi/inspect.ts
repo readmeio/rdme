@@ -15,9 +15,9 @@ import prepareOas from '../../lib/prepareOas';
 import SoftError from '../../lib/softError';
 
 export interface Options {
+  feature?: string[];
   spec?: string;
   workingDirectory?: string;
-  feature?: string[];
 }
 
 export default class OpenAPIInspectCommand extends Command {

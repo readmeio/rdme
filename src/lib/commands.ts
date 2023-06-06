@@ -5,12 +5,12 @@ import commands from '../cmds';
 export function getCategories(): Record<
   string,
   {
-    description: string;
     commands: {
-      name: string;
       description: string;
       hidden: boolean;
+      name: string;
     }[];
+    description: string;
   }
 > {
   return {

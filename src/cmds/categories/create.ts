@@ -16,8 +16,8 @@ interface Category {
 
 export interface Options {
   categoryType?: 'guide' | 'reference';
-  title?: string;
   preventDuplicates?: boolean;
+  title?: string;
 }
 
 export default class CategoriesCreateCommand extends Command {

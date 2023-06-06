@@ -7,7 +7,7 @@ import config from 'config';
 
 import * as commands from './commands';
 
-function formatCommands(cmds: { name: string; description: string; hidden: boolean }[]) {
+function formatCommands(cmds: { description: string; hidden: boolean; name: string }[]) {
   return cmds
     .sort((a, b) => (a.name > b.name ? 1 : -1))
     .filter(command => !command.hidden)

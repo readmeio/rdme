@@ -13,8 +13,8 @@ import promptTerminal from '../../lib/promptWrapper';
 import { validateFilePath } from '../../lib/validatePromptInput';
 
 export interface Options {
-  spec?: string;
   out?: string;
+  spec?: string;
   workingDirectory?: string;
 }
 

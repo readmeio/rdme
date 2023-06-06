@@ -17,11 +17,11 @@ import promptTerminal from '../../lib/promptWrapper';
 import { validateFilePath } from '../../lib/validatePromptInput';
 
 export interface Options {
-  spec?: string;
-  tag?: string[];
-  path?: string[];
   method?: string[];
   out?: string;
+  path?: string[];
+  spec?: string;
+  tag?: string[];
   title?: string;
   workingDirectory?: string;
 }

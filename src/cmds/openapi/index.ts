@@ -17,16 +17,16 @@ import streamSpecToRegistry from '../../lib/streamSpecToRegistry';
 import { getProjectVersion } from '../../lib/versionSelect';
 
 export interface Options {
-  id?: string;
-  spec?: string;
-  version?: string;
   create?: boolean;
-  raw?: boolean;
-  title?: string;
-  useSpecVersion?: boolean;
-  workingDirectory?: string;
-  update?: boolean;
   dryRun?: boolean;
+  id?: string;
+  raw?: boolean;
+  spec?: string;
+  title?: string;
+  update?: boolean;
+  useSpecVersion?: boolean;
+  version?: string;
+  workingDirectory?: string;
 }
 
 export default class OpenAPICommand extends Command {
