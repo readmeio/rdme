@@ -1149,8 +1149,9 @@
                         },
                         "type": {
                           "description": "A string representing the type of the input.",
+                          "$comment": "https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#onworkflow_dispatchinputsinput_idtype",
                           "type": "string",
-                          "enum": ["string", "choice", "boolean", "environment"]
+                          "enum": ["string", "choice", "boolean", "number"]
                         },
                         "options": {
                           "$comment": "https://github.blog/changelog/2021-11-10-github-actions-input-types-for-manual-workflows",
@@ -1162,9 +1163,16 @@
                       },
                       "allOf": [
                         {
+                          "if": { "properties": { "type": { "const": "string" } }, "required": ["type"] },
+                          "then": { "properties": { "default": { "type": "string" } } }
+                        },
+                        {
                           "if": { "properties": { "type": { "const": "boolean" } }, "required": ["type"] },
-                          "then": { "properties": { "default": { "type": "boolean" } } },
-                          "else": { "properties": { "default": { "type": "string" } } }
+                          "then": { "properties": { "default": { "type": "boolean" } } }
+                        },
+                        {
+                          "if": { "properties": { "type": { "const": "number" } }, "required": ["type"] },
+                          "then": { "properties": { "default": { "type": "number" } } }
                         },
                         {
                           "if": { "properties": { "type": { "const": "choice" } }, "required": ["type"] },
