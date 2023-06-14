@@ -1,3 +1,10 @@
+## [8.6.5-next.1](https://github.com/readmeio/rdme/compare/v8.6.4...v8.6.5-next.1) (2023-06-14)
+
+
+### Bug Fixes
+
+* **npm:** revert shrinkwrap changes ([#824](https://github.com/readmeio/rdme/issues/824)) ([f96e6dc](https://github.com/readmeio/rdme/commit/f96e6dc33813e9a2db0474c1bac652cfca3c0e54))
+
 ## [8.6.4](https://github.com/readmeio/rdme/compare/v8.6.3...v8.6.4) (2023-06-05)
 
 
