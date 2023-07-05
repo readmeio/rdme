@@ -28,10 +28,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: npm
 
-      - name: Install npm@7 for Node 14
-        if: ${{ matrix.node-version }} == 14
-        run: npm i -g npm@7
-
       - name: Install deps
         run: npm ci
 

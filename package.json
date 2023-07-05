@@ -70,6 +70,7 @@
     "@readme/better-ajv-errors": "^1.5.0",
     "@readme/eslint-config": "^10.6.1",
     "@readme/oas-examples": "^5.10.0",
+    "@testing-library/dom": "^9.3.1",
     "@types/command-line-args": "^5.2.0",
     "@types/command-line-usage": "^5.0.2",
     "@types/config": "^3.3.0",
