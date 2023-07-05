@@ -1,3 +1,10 @@
+## [8.6.5-next.2](https://github.com/readmeio/rdme/compare/v8.6.5-next.1...v8.6.5-next.2) (2023-07-05)
+
+
+### Bug Fixes
+
+* **deps:** upgrading out of date deps ([#836](https://github.com/readmeio/rdme/issues/836)) ([8600554](https://github.com/readmeio/rdme/commit/86005541815b1810f2483f15a2bd579e14b82619))
+
 ## [8.6.5-next.1](https://github.com/readmeio/rdme/compare/v8.6.4...v8.6.5-next.1) (2023-06-14)
 
 
