@@ -58,7 +58,7 @@ https://github.com/jonschlinkert/markdown-toc/issues/119
 
 ### Setup
 
-> **Note**
+> [!NOTE]
 > These setup instructions are for CLI usage only. For usage in GitHub Actions, see [GitHub Actions Configuration](#github-actions-configuration) below.
 
 <img align="right" src="https://img.shields.io/node/v/rdme.svg?style=for-the-badge&label=" alt="Node Version">
@@ -95,7 +95,7 @@ To ensure you're getting the latest features and security updates, we recommend 
 
 For local CLI usage with a single project, you can authenticate `rdme` to your ReadMe project using `rdme login`. Once you follow the prompts and are successfully authenticated, your API key will be saved to a local configuration file (`~/.config/configstore/rdme-production.json`) and you won't have to provide the `--key` option to commands that require it.
 
-> **Warning**
+> [!WARNING]
 > For security reasons, we strongly recommend providing a project API key via the `--key` option in automations or CI environments (GitHub Actions, CircleCI, Travis CI, etc.). It's also recommended if you're working with multiple ReadMe projects to avoid accidentally overwriting existing data.
 
 You can also pass in your API key via the `RDME_API_KEY` environmental variable. Here is the order of precedence when passing your API key into `rdme`:
@@ -125,7 +125,7 @@ rdme openapi
 
 ## GitHub Actions Configuration
 
-> **Note**
+> [!NOTE]
 > For a full GitHub Workflow file example and additional information on GitHub Actions usage, check out [our docs](https://docs.readme.com/docs/rdme#github-actions-usage).
 
 For usage in [GitHub Actions](https://docs.github.com/actions), you can create a new GitHub Actions workflow file by including the `--github` flag with the command you wish to run in GitHub Actions. For example:
@@ -169,7 +169,7 @@ The following examples use JSON files, but `rdme` supports API Definitions that 
 
 `rdme openapi` locates your API definition (if [you don't supply one](#omitting-the-file-path)), validates it, and then syncs it to your API reference on ReadMe.
 
-> **Note**
+> [!NOTE]
 > The `rdme openapi` command supports both OpenAPI and Swagger API definitions. The `rdme swagger` command is an alias for `rdme openapi` and is deprecated.
 
 If you wish to programmatically access any of this script's results (such as the API defintion ID or the link to the corresponding docs in your dashboard), supply the `--raw` flag and the command will return a JSON output.
@@ -180,7 +180,7 @@ This command also has a dry run mode, which can be useful for initial setup and 
 
 If you run `rdme` within a directory that contains your OpenAPI or Swagger definition, you can omit the file path. `rdme` will then look for JSON or YAML files (including in sub-directories) that contain a top-level [`openapi`](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#fixed-fields) or [`swagger`](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/2.0.md#fixed-fields) property.
 
-> **Note** `rdme` will not scan anything in the following:
+> [!NOTE] `rdme` will not scan anything in the following:
 >
 > - Any `.git/` directories (if they exist)
 > - Any files/directories specified in `.gitignore` files (including any `.gitignore` files in subdirectories, if they exist)
@@ -309,7 +309,7 @@ rdme openapi:convert [url-or-local-path-to-file]
 
 Similar to the `openapi` command, you can also [omit the file path](#omitting-the-file-path).
 
-> **Note**
+> [!NOTE]
 > All of our OpenAPI commands already do this conversion automatically, but in case you need to utilize this exclusive functionality outside of the context of those, you can.
 
 ### Docs (a.k.a. Guides) 📖
