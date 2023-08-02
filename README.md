@@ -172,7 +172,7 @@ The following examples use JSON files, but `rdme` supports API Definitions that 
 > [!NOTE]
 > The `rdme openapi` command supports both OpenAPI and Swagger API definitions. The `rdme swagger` command is an alias for `rdme openapi` and is deprecated.
 
-If you wish to programmatically access any of this script's results (such as the API defintion ID or the link to the corresponding docs in your dashboard), supply the `--raw` flag and the command will return a JSON output.
+If you wish to programmatically access any of this script's results (such as the API definition ID or the link to the corresponding docs in your dashboard), supply the `--raw` flag and the command will return a JSON output.
 
 This command also has a dry run mode, which can be useful for initial setup and debugging. You can perform a dry run by supplying the `--dryRun` flag.
 
