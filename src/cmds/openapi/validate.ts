@@ -41,7 +41,14 @@ export default class OpenAPIValidateCommand extends Command {
       process.chdir(workingDirectory);
     }
 
+  
     const { specPath, specType } = await prepareOas(spec, 'openapi:validate');
+
+    //Creates a warning when a user attempts to validate a Postman Collection
+    if(specType === "Postman"){
+      console.log(chalk.yellow(`WARNING! You're attempting to upload a Postman collection. This feature is currently a work in progress.`))
+    }
+
     return Promise.resolve(chalk.green(`${specPath} is a valid ${specType} API definition!`)).then(msg =>
       createGHA(msg, this.command, this.args, { ...opts, spec: specPath } as CommandOptions<Options>)
     );

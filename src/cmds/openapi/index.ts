@@ -230,6 +230,11 @@ export default class OpenAPICommand extends Command {
     };
 
     function createSpec() {
+      // Creates a warning when a user attempts to upload a Postman Collection
+      if (specType === 'Postman') {
+        Command.warn("You're attempting to upload a Postman collection. This feature is currently experimental.");
+      }
+
       if (dryRun) {
         return `🎭 dry run! The API Definition located at ${specPath} will be created for this project version: ${selectedVersion}`;
       }
