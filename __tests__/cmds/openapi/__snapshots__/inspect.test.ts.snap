@@ -196,8 +196,6 @@ OpenAPI Features
 ├──────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
 │ webhooks             │       │ Webhooks allow you to describe out of band requests that may be initiated by     │
 │                      │       │ your users.                                                                      │
-│                      │       │                                                                                  │
-│                      │       │ [object Object]                                                                  │
 ├──────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
 │ xml                  │ ✅    │ Any parameter and/or request body that accepts XML or responses that return XML  │
 │                      │       │ payloads.                                                                        │
@@ -306,8 +304,6 @@ OpenAPI Features
 ├──────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
 │ webhooks             │       │ Webhooks allow you to describe out of band requests that may be initiated by     │
 │                      │       │ your users.                                                                      │
-│                      │       │                                                                                  │
-│                      │       │ [object Object]                                                                  │
 ├──────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
 │ xml                  │       │ Any parameter and/or request body that accepts XML or responses that return XML  │
 │                      │       │ payloads.                                                                        │
@@ -416,8 +412,6 @@ OpenAPI Features
 ├──────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
 │ webhooks             │       │ Webhooks allow you to describe out of band requests that may be initiated by     │
 │                      │       │ your users.                                                                      │
-│                      │       │                                                                                  │
-│                      │       │ [object Object]                                                                  │
 ├──────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
 │ xml                  │       │ Any parameter and/or request body that accepts XML or responses that return XML  │
 │                      │       │ payloads.                                                                        │
