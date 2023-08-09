@@ -37,7 +37,7 @@
      * console.log() calls, hurting our ability to write resilient tests and easily debug issues.
      *
      * We should be returning Promise-wrapped values in our main command functions
-     * so we can write robust tests and take advantage of `bin/rdme`,
+     * so we can write robust tests and take advantage of `bin/rdme.js`,
      * which we use for printing function outputs and returning correct exit codes.
      *
      * Furthermore, we should also be using our custom loggers (see src/lib/logger.js)

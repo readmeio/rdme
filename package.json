@@ -8,7 +8,7 @@
     "node": ">=14"
   },
   "bin": {
-    "rdme": "bin/rdme"
+    "rdme": "bin/rdme.js"
   },
   "keywords": [
     "api",
@@ -103,7 +103,7 @@
   "scripts": {
     "build": "tsc",
     "debug": "ts-node src/cli.ts",
-    "lint": "eslint . bin/rdme --ext .js,.ts",
+    "lint": "eslint . --ext .js,.ts,.cjs,.mjs",
     "prebuild": "rm -rf dist/",
     "prepack": "npm run build",
     "prepare": "husky install",

@@ -1,4 +1,6 @@
 #! /usr/bin/env node
+/* eslint-disable import/no-commonjs */
+/* eslint-disable @typescript-eslint/no-var-requires */
 const core = require('@actions/core');
 
 const { getNodeVersion, getMajorPkgVersion } = require('../dist/src/lib/getPkgVersion');

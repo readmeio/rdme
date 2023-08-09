@@ -1,4 +1,6 @@
 #! /usr/bin/env node
+/* eslint-disable import/no-commonjs */
+/* eslint-disable @typescript-eslint/no-var-requires */
 const fs = require('fs/promises');
 
 // eslint-disable-next-line import/no-extraneous-dependencies

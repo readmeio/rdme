@@ -1,4 +1,6 @@
 #! /usr/bin/env node
+/* eslint-disable import/no-commonjs */
+/* eslint-disable @typescript-eslint/no-var-requires */
 const util = require('util'); // eslint-disable-line unicorn/import-style
 const execFile = util.promisify(require('child_process').execFile);
 

@@ -5,7 +5,7 @@ describe('bin', () => {
     expect.assertions(1);
 
     await new Promise(resolve => {
-      exec(`node ${__dirname}/../bin/rdme`, (error, stdout) => {
+      exec(`node ${__dirname}/../bin/rdme.js`, (error, stdout) => {
         expect(stdout).toContain('a utility for interacting with ReadMe');
         resolve(true);
       });
