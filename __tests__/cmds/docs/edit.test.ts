@@ -3,8 +3,8 @@ import fs from 'fs';
 import nock from 'nock';
 import prompts from 'prompts';
 
-import DocsEditCommand from '../../../src/cmds/docs/edit';
-import APIError from '../../../src/lib/apiError';
+import DocsEditCommand from '../../../src/cmds/docs/edit.js';
+import APIError from '../../../src/lib/apiError.js';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock';
 
 const docsEdit = new DocsEditCommand();

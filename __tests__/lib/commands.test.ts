@@ -1,10 +1,10 @@
 /// <reference types="jest-extended" />
 /* eslint-disable jest/no-conditional-expect, jest/no-if */
-import type Command from '../../src/lib/baseCommand';
+import type Command from '../../src/lib/baseCommand.js';
 
-import DocsCommand from '../../src/cmds/docs';
-import { CommandCategories } from '../../src/lib/baseCommand';
-import * as commands from '../../src/lib/commands';
+import DocsCommand from '../../src/cmds/docs/index.js';
+import { CommandCategories } from '../../src/lib/baseCommand.js';
+import * as commands from '../../src/lib/commands.js';
 
 describe('utils', () => {
   describe('#list', () => {

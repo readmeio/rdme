@@ -1,15 +1,17 @@
 import type { OpenAPI } from 'openapi-types';
 
 import chalk from 'chalk';
-import OASNormalize, { getAPIDefinitionType } from 'oas-normalize';
+import OASNormalizeImport, { getAPIDefinitionType } from 'oas-normalize';
 import ora from 'ora';
 
-import isCI from './isCI';
-import { debug, info, oraOptions } from './logger';
-import promptTerminal from './promptWrapper';
-import readdirRecursive from './readdirRecursive';
+import isCI from './isCI.js';
+import { debug, info, oraOptions } from './logger.js';
+import promptTerminal from './promptWrapper.js';
+import readdirRecursive from './readdirRecursive.js';
 
-export type SpecFileType = OASNormalize['type'];
+export type SpecFileType = OASNormalizeImport.default['type'];
+
+const OASNormalize = OASNormalizeImport.default;
 
 interface FoundSpecFile {
   /** path to the spec file */

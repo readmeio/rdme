@@ -5,12 +5,12 @@ import chalk from 'chalk';
 import config from 'config';
 import { Headers } from 'node-fetch';
 
-import APIError from './apiError';
-import Command, { CommandCategories } from './baseCommand';
-import { debug } from './logger';
-import readdirRecursive from './readdirRecursive';
-import readDoc from './readDoc';
-import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch';
+import APIError from './apiError.js';
+import Command, { CommandCategories } from './baseCommand.js';
+import { debug } from './logger.js';
+import readdirRecursive from './readdirRecursive.js';
+import readDoc from './readDoc.js';
+import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch.js';
 
 /**
  * Reads the contents of the specified Markdown or HTML file

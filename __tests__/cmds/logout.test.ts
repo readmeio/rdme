@@ -1,7 +1,7 @@
 import config from 'config';
 
-import Command from '../../src/cmds/logout';
-import configStore from '../../src/lib/configstore';
+import Command from '../../src/cmds/logout.js';
+import configStore from '../../src/lib/configstore.js';
 
 const cmd = new Command();
 

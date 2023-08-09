@@ -6,10 +6,10 @@ import frontMatter from 'gray-matter';
 import nock from 'nock';
 import prompts from 'prompts';
 
-import ChangelogsCommand from '../../../src/cmds/changelogs';
-import APIError from '../../../src/lib/apiError';
-import getAPIMock from '../../helpers/get-api-mock';
-import hashFileContents from '../../helpers/hash-file-contents';
+import ChangelogsCommand from '../../../src/cmds/changelogs.js';
+import APIError from '../../../src/lib/apiError.js';
+import getAPIMock from '../../helpers/get-api-mock.js';
+import hashFileContents from '../../helpers/hash-file-contents.js';
 
 const changelogs = new ChangelogsCommand();
 

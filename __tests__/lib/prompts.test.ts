@@ -1,10 +1,10 @@
-import type { Options as VersionUpdateOptions } from '../../src/cmds/versions/update';
+import type { Options as VersionUpdateOptions } from '../../src/cmds/versions/update.js';
 import type { Response } from 'node-fetch';
 
 import prompts from 'prompts';
 
-import * as promptHandler from '../../src/lib/prompts';
-import promptTerminal from '../../src/lib/promptWrapper';
+import * as promptHandler from '../../src/lib/prompts.js';
+import promptTerminal from '../../src/lib/promptWrapper.js';
 
 const versionlist = [
   {

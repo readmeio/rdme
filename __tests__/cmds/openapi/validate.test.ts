@@ -4,9 +4,9 @@ import fs from 'fs';
 import chalk from 'chalk';
 import prompts from 'prompts';
 
-import OpenAPIValidateCommand from '../../../src/cmds/openapi/validate';
-import ValidateAliasCommand from '../../../src/cmds/validate';
-import { after, before } from '../../helpers/get-gha-setup';
+import OpenAPIValidateCommand from '../../../src/cmds/openapi/validate.js';
+import ValidateAliasCommand from '../../../src/cmds/validate.js';
+import { after, before } from '../../helpers/get-gha-setup.js';
 
 const testWorkingDir = process.cwd();
 

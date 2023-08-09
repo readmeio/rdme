@@ -1,14 +1,14 @@
-import type { Version } from '../cmds/versions';
-import type { Options as VersionCreateOptions } from 'cmds/versions/create';
-import type { Options as VersionUpdateOptions } from 'cmds/versions/update';
+import type { Version } from '../cmds/versions/index.js';
+import type { Options as VersionCreateOptions } from 'cmds/versions/create.js';
+import type { Options as VersionUpdateOptions } from 'cmds/versions/update.js';
 import type { Response } from 'node-fetch';
 import type { Choice, PromptObject } from 'prompts';
 
 import parse from 'parse-link-header';
 import semver from 'semver';
 
-import promptTerminal from './promptWrapper';
-import { handleRes } from './readmeAPIFetch';
+import promptTerminal from './promptWrapper.js';
+import { handleRes } from './readmeAPIFetch.js';
 
 interface Spec {
   _id: string;

@@ -1,9 +1,9 @@
-import type { CommandOptions } from '../../lib/baseCommand';
+import type { CommandOptions } from '../../lib/baseCommand.js';
 
-import Command, { CommandCategories } from '../../lib/baseCommand';
-import createGHA from '../../lib/createGHA';
-import syncDocsPath from '../../lib/syncDocsPath';
-import { getProjectVersion } from '../../lib/versionSelect';
+import Command, { CommandCategories } from '../../lib/baseCommand.js';
+import createGHA from '../../lib/createGHA/index.js';
+import syncDocsPath from '../../lib/syncDocsPath.js';
+import { getProjectVersion } from '../../lib/versionSelect.js';
 
 export interface Options {
   dryRun?: boolean;

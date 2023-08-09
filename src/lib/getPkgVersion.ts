@@ -4,7 +4,7 @@ import semver from 'semver';
 
 import pkg from '../../package.json';
 
-import { error } from './logger';
+import { error } from './logger.js';
 
 const registryUrl = 'https://registry.npmjs.com/rdme';
 
@@ -35,7 +35,8 @@ export function getNodeVersion() {
  */
 export async function getPkgVersion(npmDistTag?: npmDistTag): Promise<string> {
   if (npmDistTag) {
-    return fetch(registryUrl)
+    return fetch
+      .default(registryUrl)
       .then(res => res.json())
       .then(body => body['dist-tags'][npmDistTag])
       .catch(err => {

@@ -1,4 +1,4 @@
-import * as isCI from '../../src/lib/isCI';
+import * as isCI from '../../src/lib/isCI.js';
 
 const env = process.env;
 

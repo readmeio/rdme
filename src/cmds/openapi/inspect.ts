@@ -1,6 +1,6 @@
-import type { Analysis, AnalyzedFeature } from '../../lib/analyzeOas';
-import type { CommandOptions } from '../../lib/baseCommand';
-import type { OASDocument } from 'oas/dist/rmoas.types';
+import type { Analysis, AnalyzedFeature } from '../../lib/analyzeOas.js';
+import type { CommandOptions } from '../../lib/baseCommand.js';
+import type { OASDocument } from 'oas/dist/rmoas.types.js';
 
 import chalk from 'chalk';
 import config from 'config';
@@ -8,11 +8,11 @@ import ora from 'ora';
 import pluralize from 'pluralize';
 import { getBorderCharacters, table } from 'table';
 
-import analyzeOas, { getSupportedFeatures } from '../../lib/analyzeOas';
-import Command, { CommandCategories } from '../../lib/baseCommand';
-import { oraOptions } from '../../lib/logger';
-import prepareOas from '../../lib/prepareOas';
-import SoftError from '../../lib/softError';
+import analyzeOas, { getSupportedFeatures } from '../../lib/analyzeOas.js';
+import Command, { CommandCategories } from '../../lib/baseCommand.js';
+import { oraOptions } from '../../lib/logger.js';
+import prepareOas from '../../lib/prepareOas.js';
+import SoftError from '../../lib/softError.js';
 
 export interface Options {
   feature?: string[];

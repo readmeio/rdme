@@ -1,7 +1,7 @@
 /* eslint-disable jest/no-conditional-expect */
 import assert from 'assert';
 
-import OpenAPIInspectCommand from '../../../src/cmds/openapi/inspect';
+import OpenAPIInspectCommand from '../../../src/cmds/openapi/inspect.js';
 
 const analyzer = new OpenAPIInspectCommand();
 

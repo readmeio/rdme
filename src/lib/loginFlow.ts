@@ -1,12 +1,12 @@
 import chalk from 'chalk';
-import isEmail from 'validator/lib/isEmail';
+import isEmail from 'validator/lib/isEmail.js';
 
-import configStore from './configstore';
-import getCurrentConfig from './getCurrentConfig';
-import { debug } from './logger';
-import promptTerminal from './promptWrapper';
-import readmeAPIFetch, { handleRes } from './readmeAPIFetch';
-import { validateSubdomain } from './validatePromptInput';
+import configStore from './configstore.js';
+import getCurrentConfig from './getCurrentConfig.js';
+import { debug } from './logger.js';
+import promptTerminal from './promptWrapper.js';
+import readmeAPIFetch, { handleRes } from './readmeAPIFetch.js';
+import { validateSubdomain } from './validatePromptInput.js';
 
 interface LoginBody {
   email?: string;
@@ -40,7 +40,7 @@ export default async function loginFlow(otp?: string) {
       message: 'What is your email address?',
       initial: storedConfig.email,
       validate(val) {
-        return isEmail(val) ? true : 'Please provide a valid email address.';
+        return isEmail.default(val) ? true : 'Please provide a valid email address.';
       },
     },
     {
@@ -61,7 +61,7 @@ export default async function loginFlow(otp?: string) {
     return Promise.reject(new Error('No project subdomain provided. Please use `--project`.'));
   }
 
-  if (!isEmail(email)) {
+  if (!isEmail.default(email)) {
     return Promise.reject(new Error('You must provide a valid email address.'));
   }
 

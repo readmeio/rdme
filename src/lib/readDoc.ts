@@ -4,7 +4,7 @@ import path from 'path';
 
 import grayMatter from 'gray-matter';
 
-import { debug } from './logger';
+import { debug } from './logger.js';
 
 interface ReadDocMetadata {
   /** The contents of the file below the YAML front matter */

@@ -1,9 +1,9 @@
-import type { CommandOptions } from '../lib/baseCommand';
+import type { CommandOptions } from '../lib/baseCommand.js';
 
 import prompts from 'prompts';
 
-import Command, { CommandCategories } from '../lib/baseCommand';
-import loginFlow from '../lib/loginFlow';
+import Command, { CommandCategories } from '../lib/baseCommand.js';
+import loginFlow from '../lib/loginFlow.js';
 
 export interface Options {
   email?: string;

@@ -1,7 +1,7 @@
 import type { OASAnalysis, OASAnalysisFeature } from 'oas/dist/analyzer';
-import type { OASDocument } from 'oas/dist/rmoas.types';
+import type { OASDocument } from 'oas/dist/rmoas.types.js';
 
-import analyzer from 'oas/dist/analyzer';
+import analyzer from 'oas/dist/analyzer/index.js';
 
 export interface AnalyzedFeature extends OASAnalysisFeature {
   description: string;
@@ -169,7 +169,7 @@ const README_FEATURE_DOCS: Record<keyof Analysis['readme'], Pick<AnalyzedFeature
  *
  */
 async function analyzeOas(definition: OASDocument) {
-  return analyzer(definition).then((analysis: Analysis) => {
+  return analyzer.default(definition).then((analysis: Analysis) => {
     if (analysis.openapi) {
       Object.entries(OPENAPI_FEATURE_DOCS).forEach(([feature, docs]: [keyof Analysis['openapi'], AnalyzedFeature]) => {
         // eslint-disable-next-line no-param-reassign

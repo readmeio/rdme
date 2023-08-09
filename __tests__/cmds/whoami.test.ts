@@ -1,7 +1,7 @@
 import config from 'config';
 
-import Command from '../../src/cmds/whoami';
-import configStore from '../../src/lib/configstore';
+import Command from '../../src/cmds/whoami.js';
+import configStore from '../../src/lib/configstore.js';
 
 const cmd = new Command();
 

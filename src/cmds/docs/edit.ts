@@ -1,4 +1,4 @@
-import type { CommandOptions } from '../../lib/baseCommand';
+import type { CommandOptions } from '../../lib/baseCommand.js';
 
 import fs from 'fs';
 import { promisify } from 'util';
@@ -8,11 +8,11 @@ import { Headers } from 'node-fetch';
 
 import editor from 'editor';
 
-import APIError from '../../lib/apiError';
-import Command, { CommandCategories } from '../../lib/baseCommand';
-import isHidden from '../../lib/decorators/isHidden';
-import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch';
-import { getProjectVersion } from '../../lib/versionSelect';
+import APIError from '../../lib/apiError.js';
+import Command, { CommandCategories } from '../../lib/baseCommand.js';
+import isHidden from '../../lib/decorators/isHidden.js';
+import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch.js';
+import { getProjectVersion } from '../../lib/versionSelect.js';
 
 const writeFile = promisify(fs.writeFile);
 const readFile = promisify(fs.readFile);

@@ -5,9 +5,9 @@ import updateNotifier from 'update-notifier-cjs';
 
 import pkg from '../package.json';
 
-import { isGHA } from './lib/isCI';
+import { isGHA } from './lib/isCI.js';
 
-import rdme from '.';
+import rdme from './index.js';
 
 updateNotifier({ pkg }).notify();
 

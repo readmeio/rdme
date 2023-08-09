@@ -2,7 +2,7 @@ import nock from 'nock';
 import semver from 'semver';
 
 import pkg from '../../package.json';
-import { getNodeVersion, getPkgVersion } from '../../src/lib/getPkgVersion';
+import { getNodeVersion, getPkgVersion } from '../../src/lib/getPkgVersion.js';
 
 describe('#getNodeVersion()', () => {
   it('should extract version that matches range in package.json', () => {

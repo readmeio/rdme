@@ -1,10 +1,10 @@
-import type { Options } from './openapi/validate';
-import type { CommandOptions } from '../lib/baseCommand';
+import type { Options } from './openapi/validate.js';
+import type { CommandOptions } from '../lib/baseCommand.js';
 
-import Command from '../lib/baseCommand';
-import isHidden from '../lib/decorators/isHidden';
+import Command from '../lib/baseCommand.js';
+import isHidden from '../lib/decorators/isHidden.js';
 
-import OpenAPIValidateCommand from './openapi/validate';
+import OpenAPIValidateCommand from './openapi/validate.js';
 
 @isHidden
 export default class ValidateAliasCommand extends OpenAPIValidateCommand {

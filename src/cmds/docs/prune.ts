@@ -1,17 +1,17 @@
-import type { CommandOptions } from '../../lib/baseCommand';
+import type { CommandOptions } from '../../lib/baseCommand.js';
 
 import chalk from 'chalk';
 import config from 'config';
 import prompts from 'prompts';
 
-import Command, { CommandCategories } from '../../lib/baseCommand';
-import createGHA from '../../lib/createGHA';
-import deleteDoc from '../../lib/deleteDoc';
-import getDocs from '../../lib/getDocs';
-import promptTerminal from '../../lib/promptWrapper';
-import readdirRecursive from '../../lib/readdirRecursive';
-import readDoc from '../../lib/readDoc';
-import { getProjectVersion } from '../../lib/versionSelect';
+import Command, { CommandCategories } from '../../lib/baseCommand.js';
+import createGHA from '../../lib/createGHA/index.js';
+import deleteDoc from '../../lib/deleteDoc.js';
+import getDocs from '../../lib/getDocs.js';
+import promptTerminal from '../../lib/promptWrapper.js';
+import readdirRecursive from '../../lib/readdirRecursive.js';
+import readDoc from '../../lib/readDoc.js';
+import { getProjectVersion } from '../../lib/versionSelect.js';
 
 export interface Options {
   confirm?: boolean;

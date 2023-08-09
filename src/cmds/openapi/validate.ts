@@ -1,10 +1,10 @@
-import type { CommandOptions } from '../../lib/baseCommand';
+import type { CommandOptions } from '../../lib/baseCommand.js';
 
 import chalk from 'chalk';
 
-import Command, { CommandCategories } from '../../lib/baseCommand';
-import createGHA from '../../lib/createGHA';
-import prepareOas from '../../lib/prepareOas';
+import Command, { CommandCategories } from '../../lib/baseCommand.js';
+import createGHA from '../../lib/createGHA/index.js';
+import prepareOas from '../../lib/prepareOas.js';
 
 export interface Options {
   spec?: string;

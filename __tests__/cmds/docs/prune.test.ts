@@ -1,8 +1,8 @@
 import nock from 'nock';
 import prompts from 'prompts';
 
-import DocsPruneCommand from '../../../src/cmds/docs/prune';
-import GuidesPruneCommand from '../../../src/cmds/guides/prune';
+import DocsPruneCommand from '../../../src/cmds/docs/prune.js';
+import GuidesPruneCommand from '../../../src/cmds/guides/prune.js';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock';
 
 const docsPrune = new DocsPruneCommand();

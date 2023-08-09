@@ -1,5 +1,5 @@
-import type commands from '../../cmds';
-import type { CommandOptions } from '../baseCommand';
+import type commands from '../../cmds/index.js';
+import type { CommandOptions } from '../baseCommand.js';
 import type { OptionDefinition } from 'command-line-usage';
 
 import fs from 'fs';
@@ -9,14 +9,14 @@ import chalk from 'chalk';
 import prompts from 'prompts';
 import simpleGit from 'simple-git';
 
-import configstore from '../configstore';
-import { getMajorPkgVersion } from '../getPkgVersion';
-import isCI, { isNpmScript, isTest } from '../isCI';
-import { debug, info } from '../logger';
-import promptTerminal from '../promptWrapper';
-import { cleanFileName, validateFilePath } from '../validatePromptInput';
+import configstore from '../configstore.js';
+import { getMajorPkgVersion } from '../getPkgVersion.js';
+import isCI, { isNpmScript, isTest } from '../isCI.js';
+import { debug, info } from '../logger.js';
+import promptTerminal from '../promptWrapper.js';
+import { cleanFileName, validateFilePath } from '../validatePromptInput.js';
 
-import yamlBase from './baseFile';
+import yamlBase from './baseFile.js';
 
 /**
  * Generates the key for storing info in `configstore` object.
@@ -33,7 +33,7 @@ export const getConfigStoreKey = (repoRoot: string) => `createGHA.${repoRoot}`;
 const GITHUB_WORKFLOW_DIR = '.github/workflows';
 const GITHUB_SECRET_NAME = 'README_API_KEY';
 
-export const git = simpleGit();
+export const git = simpleGit.default();
 
 /**
  * Removes any non-file-friendly characters and adds

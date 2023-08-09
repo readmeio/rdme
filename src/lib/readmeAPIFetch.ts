@@ -1,4 +1,4 @@
-import type { SpecFileType } from './prepareOas';
+import type { SpecFileType } from './prepareOas.js';
 import type { RequestInit, Response } from 'node-fetch';
 
 import path from 'path';
@@ -9,10 +9,10 @@ import nodeFetch, { Headers } from 'node-fetch'; // eslint-disable-line no-restr
 
 import pkg from '../../package.json';
 
-import APIError from './apiError';
-import { git } from './createGHA';
-import isCI, { ciName, isGHA } from './isCI';
-import { debug, warn } from './logger';
+import APIError from './apiError.js';
+import { git } from './createGHA/index.js';
+import isCI, { ciName, isGHA } from './isCI.js';
+import { debug, warn } from './logger.js';
 
 const SUCCESS_NO_CONTENT = 204;
 
@@ -188,20 +188,22 @@ export default async function readmeAPIFetch(
     `making ${(options.method || 'get').toUpperCase()} request to ${fullUrl} with headers: ${sanitizeHeaders(headers)}`
   );
 
-  return nodeFetch(fullUrl, {
-    ...options,
-    headers,
-  }).then(res => {
-    const warningHeader = res.headers.get('Warning');
-    if (warningHeader) {
-      debug(`received warning header: ${warningHeader}`);
-      const warnings = parseWarningHeader(warningHeader);
-      warnings.forEach(warning => {
-        warn(warning.message, 'ReadMe API Warning:');
-      });
-    }
-    return res;
-  });
+  return nodeFetch
+    .default(fullUrl, {
+      ...options,
+      headers,
+    })
+    .then(res => {
+      const warningHeader = res.headers.get('Warning');
+      if (warningHeader) {
+        debug(`received warning header: ${warningHeader}`);
+        const warnings = parseWarningHeader(warningHeader);
+        warnings.forEach(warning => {
+          warn(warning.message, 'ReadMe API Warning:');
+        });
+      }
+      return res;
+    });
 }
 
 /**

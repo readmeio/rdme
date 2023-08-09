@@ -4,8 +4,8 @@ import FormData from 'form-data';
 import ora from 'ora';
 import { file as tmpFile } from 'tmp-promise';
 
-import { debug, oraOptions } from './logger';
-import readmeAPIFetch, { handleRes } from './readmeAPIFetch';
+import { debug, oraOptions } from './logger.js';
+import readmeAPIFetch, { handleRes } from './readmeAPIFetch.js';
 
 /**
  * Uploads a spec to the API registry for usage in ReadMe

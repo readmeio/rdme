@@ -1,9 +1,9 @@
 import nock from 'nock';
 import prompts from 'prompts';
 
-import DeleteVersionCommand from '../../../src/cmds/versions/delete';
-import APIError from '../../../src/lib/apiError';
-import getAPIMock from '../../helpers/get-api-mock';
+import DeleteVersionCommand from '../../../src/cmds/versions/delete.js';
+import APIError from '../../../src/lib/apiError.js';
+import getAPIMock from '../../helpers/get-api-mock.js';
 
 const key = 'API_KEY';
 const version = '1.0.0';

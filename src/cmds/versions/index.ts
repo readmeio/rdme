@@ -1,7 +1,7 @@
-import type { CommandOptions } from '../../lib/baseCommand';
+import type { CommandOptions } from '../../lib/baseCommand.js';
 
-import Command, { CommandCategories } from '../../lib/baseCommand';
-import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch';
+import Command, { CommandCategories } from '../../lib/baseCommand.js';
+import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch.js';
 
 export interface Version {
   codename?: string;

@@ -21,13 +21,13 @@ process.env.NODE_CONFIG_DIR = configDir;
 
 import { version } from '../package.json';
 
-import * as commands from './lib/commands';
-import * as help from './lib/help';
-import { debug } from './lib/logger';
-import createGHA from './lib/createGHA';
-import type Command from './lib/baseCommand';
-import type { CommandOptions } from './lib/baseCommand';
-import getCurrentConfig from './lib/getCurrentConfig';
+import * as commands from './lib/commands.js';
+import * as help from './lib/help.js';
+import { debug } from './lib/logger.js';
+import createGHA from './lib/createGHA/index.js';
+import type Command from './lib/baseCommand.js';
+import type { CommandOptions } from './lib/baseCommand.js';
+import getCurrentConfig from './lib/getCurrentConfig.js';
 
 /**
  * @param {Array} processArgv - An array of arguments from the current process. Can be used to mock

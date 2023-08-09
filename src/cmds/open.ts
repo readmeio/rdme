@@ -1,12 +1,12 @@
-import type { CommandOptions } from '../lib/baseCommand';
+import type { CommandOptions } from '../lib/baseCommand.js';
 
 import chalk from 'chalk';
 import config from 'config';
 import open from 'open';
 
-import Command, { CommandCategories } from '../lib/baseCommand';
-import getCurrentConfig from '../lib/getCurrentConfig';
-import { getProjectVersion } from '../lib/versionSelect';
+import Command, { CommandCategories } from '../lib/baseCommand.js';
+import getCurrentConfig from '../lib/getCurrentConfig.js';
+import { getProjectVersion } from '../lib/versionSelect.js';
 
 export interface Options {
   dash?: boolean;

@@ -1,7 +1,7 @@
 import { Headers } from 'node-fetch';
 
-import getCategories from './getCategories';
-import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch';
+import getCategories from './getCategories.js';
+import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch.js';
 
 interface Document {
   _id: string;

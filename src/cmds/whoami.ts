@@ -1,10 +1,10 @@
-import type { CommandOptions } from '../lib/baseCommand';
+import type { CommandOptions } from '../lib/baseCommand.js';
 
 import chalk from 'chalk';
 import config from 'config';
 
-import Command, { CommandCategories } from '../lib/baseCommand';
-import getCurrentConfig from '../lib/getCurrentConfig';
+import Command, { CommandCategories } from '../lib/baseCommand.js';
+import getCurrentConfig from '../lib/getCurrentConfig.js';
 
 export default class WhoAmICommand extends Command {
   constructor() {

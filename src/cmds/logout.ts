@@ -1,9 +1,9 @@
-import type { CommandOptions } from '../lib/baseCommand';
+import type { CommandOptions } from '../lib/baseCommand.js';
 
 import config from 'config';
 
-import Command, { CommandCategories } from '../lib/baseCommand';
-import configStore from '../lib/configstore';
+import Command, { CommandCategories } from '../lib/baseCommand.js';
+import configStore from '../lib/configstore.js';
 
 export default class LogoutCommand extends Command {
   constructor() {

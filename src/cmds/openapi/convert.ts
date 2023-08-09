@@ -1,5 +1,5 @@
-import type { CommandOptions } from '../../lib/baseCommand';
-import type { OASDocument } from 'oas/dist/rmoas.types';
+import type { CommandOptions } from '../../lib/baseCommand.js';
+import type { OASDocument } from 'oas/dist/rmoas.types.js';
 
 import fs from 'fs';
 import path from 'path';
@@ -7,10 +7,10 @@ import path from 'path';
 import chalk from 'chalk';
 import prompts from 'prompts';
 
-import Command, { CommandCategories } from '../../lib/baseCommand';
-import prepareOas from '../../lib/prepareOas';
-import promptTerminal from '../../lib/promptWrapper';
-import { validateFilePath } from '../../lib/validatePromptInput';
+import Command, { CommandCategories } from '../../lib/baseCommand.js';
+import prepareOas from '../../lib/prepareOas.js';
+import promptTerminal from '../../lib/promptWrapper.js';
+import { validateFilePath } from '../../lib/validatePromptInput.js';
 
 export interface Options {
   out?: string;

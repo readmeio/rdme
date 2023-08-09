@@ -1,9 +1,9 @@
 import nock from 'nock';
 import prompts from 'prompts';
 
-import CreateVersionCommand from '../../../src/cmds/versions/create';
-import APIError from '../../../src/lib/apiError';
-import getAPIMock from '../../helpers/get-api-mock';
+import CreateVersionCommand from '../../../src/cmds/versions/create.js';
+import APIError from '../../../src/lib/apiError.js';
+import getAPIMock from '../../helpers/get-api-mock.js';
 
 const key = 'API_KEY';
 const version = '1.0.0';

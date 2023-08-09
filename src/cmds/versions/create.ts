@@ -1,14 +1,14 @@
-import type { Version } from '.';
-import type { CommandOptions } from '../../lib/baseCommand';
+import type { Version } from './index.js';
+import type { CommandOptions } from '../../lib/baseCommand.js';
 
 import config from 'config';
 import { Headers } from 'node-fetch';
 import semver from 'semver';
 
-import Command, { CommandCategories } from '../../lib/baseCommand';
-import * as promptHandler from '../../lib/prompts';
-import promptTerminal from '../../lib/promptWrapper';
-import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch';
+import Command, { CommandCategories } from '../../lib/baseCommand.js';
+import * as promptHandler from '../../lib/prompts.js';
+import promptTerminal from '../../lib/promptWrapper.js';
+import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch.js';
 
 export interface Options extends CommonOptions {
   fork?: string;

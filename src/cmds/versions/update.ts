@@ -1,14 +1,14 @@
-import type { Version } from '.';
-import type { CommonOptions } from './create';
-import type { CommandOptions } from '../../lib/baseCommand';
+import type { CommonOptions } from './create.js';
+import type { Version } from './index.js';
+import type { CommandOptions } from '../../lib/baseCommand.js';
 
 import { Headers } from 'node-fetch';
 
-import Command, { CommandCategories } from '../../lib/baseCommand';
-import * as promptHandler from '../../lib/prompts';
-import promptTerminal from '../../lib/promptWrapper';
-import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch';
-import { getProjectVersion } from '../../lib/versionSelect';
+import Command, { CommandCategories } from '../../lib/baseCommand.js';
+import * as promptHandler from '../../lib/prompts.js';
+import promptTerminal from '../../lib/promptWrapper.js';
+import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch.js';
+import { getProjectVersion } from '../../lib/versionSelect.js';
 
 export interface Options extends CommonOptions {
   deprecated?: 'true' | 'false';

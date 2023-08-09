@@ -2,7 +2,7 @@ import fs from 'fs';
 
 import prompts from 'prompts';
 
-import OpenAPIConvertCommand from '../../../src/cmds/openapi/convert';
+import OpenAPIConvertCommand from '../../../src/cmds/openapi/convert.js';
 
 const convert = new OpenAPIConvertCommand();
 

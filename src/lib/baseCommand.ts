@@ -1,15 +1,15 @@
 /* eslint-disable class-methods-use-this */
-import type commands from '../cmds';
+import type commands from '../cmds/index.js';
 import type { CommandLineOptions } from 'command-line-args';
 import type { OptionDefinition } from 'command-line-usage';
 
 import chalk from 'chalk';
 
-import configstore from './configstore';
-import getCurrentConfig from './getCurrentConfig';
-import isCI from './isCI';
-import { debug, info, warn } from './logger';
-import loginFlow from './loginFlow';
+import configstore from './configstore.js';
+import getCurrentConfig from './getCurrentConfig.js';
+import isCI from './isCI.js';
+import { debug, info, warn } from './logger.js';
+import loginFlow from './loginFlow.js';
 
 export type CommandOptions<T> = T & {
   github?: boolean;

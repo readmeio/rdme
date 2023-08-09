@@ -1,20 +1,22 @@
-import type { CommandOptions } from '../../lib/baseCommand';
-import type { OASDocument } from 'oas/dist/rmoas.types';
+import type { CommandOptions } from '../../lib/baseCommand.js';
+import type { OASDocument } from 'oas/dist/rmoas.types.js';
 
 import fs from 'fs';
 import path from 'path';
 
 import chalk from 'chalk';
-import Oas from 'oas';
-import oasReducer from 'oas/dist/lib/reducer';
+import OasImport from 'oas';
+import oasReducer from 'oas/dist/lib/reducer.js';
 import ora from 'ora';
 import prompts from 'prompts';
 
-import Command, { CommandCategories } from '../../lib/baseCommand';
-import { oraOptions } from '../../lib/logger';
-import prepareOas from '../../lib/prepareOas';
-import promptTerminal from '../../lib/promptWrapper';
-import { validateFilePath } from '../../lib/validatePromptInput';
+import Command, { CommandCategories } from '../../lib/baseCommand.js';
+import { oraOptions } from '../../lib/logger.js';
+import prepareOas from '../../lib/prepareOas.js';
+import promptTerminal from '../../lib/promptWrapper.js';
+import { validateFilePath } from '../../lib/validatePromptInput.js';
+
+const Oas = OasImport.default;
 
 export interface Options {
   method?: string[];
@@ -191,7 +193,7 @@ export default class OpenAPIReduceCommand extends Command {
     let reducedSpec;
 
     try {
-      reducedSpec = oasReducer(parsedPreparedSpec, {
+      reducedSpec = oasReducer.default(parsedPreparedSpec, {
         tags: promptResults.tags || [],
         paths: (promptResults.paths || []).reduce((acc: Record<string, string[]>, p: string) => {
           acc[p] = promptResults.methods;

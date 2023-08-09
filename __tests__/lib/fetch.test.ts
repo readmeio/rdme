@@ -2,9 +2,9 @@
 import { Headers } from 'node-fetch';
 
 import pkg from '../../package.json';
-import readmeAPIFetch, { cleanHeaders, handleRes } from '../../src/lib/readmeAPIFetch';
-import getAPIMock from '../helpers/get-api-mock';
-import { after, before } from '../helpers/setup-gha-env';
+import readmeAPIFetch, { cleanHeaders, handleRes } from '../../src/lib/readmeAPIFetch.js';
+import getAPIMock from '../helpers/get-api-mock.js';
+import { after, before } from '../helpers/setup-gha-env.js';
 
 describe('#fetch()', () => {
   describe('GitHub Actions environment', () => {

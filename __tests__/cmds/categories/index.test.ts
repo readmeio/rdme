@@ -1,7 +1,7 @@
 import nock from 'nock';
 import prompts from 'prompts';
 
-import CategoriesCommand from '../../../src/cmds/categories';
+import CategoriesCommand from '../../../src/cmds/categories/index.js';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock';
 
 const categories = new CategoriesCommand();

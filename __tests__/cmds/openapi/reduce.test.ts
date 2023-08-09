@@ -4,7 +4,7 @@ import fs from 'fs';
 import chalk from 'chalk';
 import prompts from 'prompts';
 
-import OpenAPIReduceCommand from '../../../src/cmds/openapi/reduce';
+import OpenAPIReduceCommand from '../../../src/cmds/openapi/reduce.js';
 
 const reducer = new OpenAPIReduceCommand();
 

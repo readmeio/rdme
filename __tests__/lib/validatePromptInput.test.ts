@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-import { validateFilePath, validateSubdomain } from '../../src/lib/validatePromptInput';
+import { validateFilePath, validateSubdomain } from '../../src/lib/validatePromptInput.js';
 
 describe('#validateFilePath', () => {
   afterEach(() => {
