@@ -22,11 +22,6 @@ module.exports = {
   ],
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.(js?|ts?)$',
   transform: {
-    '^.+\\.[tj]s$': [
-      'ts-jest',
-      {
-        tsconfig: '__tests__/tsconfig.json',
-      },
-    ],
+    '^.+\\.[tj]s$': ['ts-jest'],
   },
 };
