@@ -1,11 +1,13 @@
 import prompts from 'prompts';
 
-import { version as pkgVersion } from '../package.json';
+import pkg from '../package.json' assert { type: 'json' };
 import cli from '../src/index.js';
 import conf from '../src/lib/configstore.js';
 
 import getAPIMock from './helpers/get-api-mock.js';
 import { after, before } from './helpers/get-gha-setup.js';
+
+const { version: pkgVersion } = pkg;
 
 describe('cli', () => {
   it('command not found', () => {

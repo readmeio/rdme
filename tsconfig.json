@@ -7,7 +7,7 @@
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "lib": ["ES2020", "ES2021.Intl"],
-    "module": "Node16",
+    "module": "NodeNext",
     "moduleResolution": "Node16",
     "outDir": "dist/",
     "paths": {

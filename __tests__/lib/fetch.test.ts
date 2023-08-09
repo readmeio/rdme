@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment, no-console */
 import { Headers } from 'node-fetch';
 
-import pkg from '../../package.json';
+import pkg from '../../package.json' assert { type: 'json' };
 import readmeAPIFetch, { cleanHeaders, handleRes } from '../../src/lib/readmeAPIFetch.js';
 import getAPIMock from '../helpers/get-api-mock.js';
 import { after, before } from '../helpers/setup-gha-env.js';

@@ -19,7 +19,9 @@ import config from 'config';
 
 process.env.NODE_CONFIG_DIR = configDir;
 
-import { version } from '../package.json';
+import pkg from '../package.json' assert { type: 'json' };
+
+const { version } = pkg;
 
 import * as commands from './lib/commands.js';
 import * as help from './lib/help.js';

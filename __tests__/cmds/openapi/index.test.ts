@@ -9,7 +9,7 @@ import prompts from 'prompts';
 import OpenAPICommand from '../../../src/cmds/openapi/index.js';
 import SwaggerCommand from '../../../src/cmds/swagger.js';
 import APIError from '../../../src/lib/apiError.js';
-import petstoreWeird from '../../__fixtures__/petstore-simple-weird-version.json';
+import petstoreWeird from '../../__fixtures__/petstore-simple-weird-version.json' assert { type: 'json' };
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock';
 import { after, before } from '../../helpers/get-gha-setup.js';
 import { after as afterGHAEnv, before as beforeGHAEnv } from '../../helpers/setup-gha-env.js';

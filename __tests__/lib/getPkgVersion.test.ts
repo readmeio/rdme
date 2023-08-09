@@ -1,7 +1,7 @@
 import nock from 'nock';
 import semver from 'semver';
 
-import pkg from '../../package.json';
+import pkg from '../../package.json' assert { type: 'json' };
 import { getNodeVersion, getPkgVersion } from '../../src/lib/getPkgVersion.js';
 
 describe('#getNodeVersion()', () => {
