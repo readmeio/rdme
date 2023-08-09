@@ -57,7 +57,7 @@ export default class OpenAPIInspectCommand extends Command {
       .reduce((prev, next) => Object.assign(prev, next));
   }
 
-  getFeatureDocsURL(feature: AnalyzedFeature) {
+  getFeatureDocsURL(feature: AnalyzedFeature): string {
     if (!feature.url) {
       return undefined;
     }
@@ -66,12 +66,11 @@ export default class OpenAPIInspectCommand extends Command {
       // We don't need to do any Swagger or Postman determination here because this command
       // always converts their spec to OpenAPI 3.0.
       if (this.definitionVersion.startsWith('3.0')) {
-        if (feature.url?.['3.0']) {
-          return feature.url['3.0'];
-        }
-      } else {
-        return feature.url['3.1'];
+        return feature.url?.['3.0'];
+      } else if (this.definitionVersion.startsWith('3.1')) {
+        return feature.url?.['3.1'];
       }
+      return '';
     }
 
     return feature.url;
