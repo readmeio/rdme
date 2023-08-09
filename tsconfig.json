@@ -6,7 +6,6 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "lib": ["es2020", "ES2021.Intl"],
-    "noImplicitAny": true,
     "outDir": "dist/",
     "paths": {
       "editor": [".sink.d.ts"]
