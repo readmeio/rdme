@@ -1,3 +1,5 @@
+/* eslint-disable import/no-commonjs */
+/* eslint-disable @typescript-eslint/no-var-requires */
 module.exports = {
   // eslint-disable-next-line global-require
   cli: require('../package.json').name,
