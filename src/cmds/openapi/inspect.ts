@@ -66,9 +66,9 @@ export default class OpenAPIInspectCommand extends Command {
       // We don't need to do any Swagger or Postman determination here because this command
       // always converts their spec to OpenAPI 3.0.
       if (this.definitionVersion.startsWith('3.0')) {
-        return feature.url?.['3.0'];
+        return feature.url?.['3.0'] || 'This feature is not available on OpenAPI v3.0.';
       } else if (this.definitionVersion.startsWith('3.1')) {
-        return feature.url?.['3.1'];
+        return feature.url?.['3.1'] || 'This feature is not available on OpenAPI v3.1.';
       }
       return '';
     }
