@@ -2,7 +2,9 @@ __tests__/
 .env
 .eslint*
 .github/
+.husky/
 .prettier*
+bin/*.js
 coverage/
 jest.*.js
 packages/

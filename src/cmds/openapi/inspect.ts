@@ -143,7 +143,7 @@ export default class OpenAPIInspectCommand extends Command {
   }
 
   buildFullReport(analysis: Analysis) {
-    const report: string[] = ['Here are some interesting things we found in your API defintion. 🕵️', ''];
+    const report: string[] = ['Here are some interesting things we found in your API definition. 🕵️', ''];
 
     // General API definition statistics
     Object.entries(analysis.general).forEach(([, info]) => {

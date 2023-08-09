@@ -1,3 +1,17 @@
+## [8.6.5-next.4](https://github.com/readmeio/rdme/compare/v8.6.5-next.3...v8.6.5-next.4) (2023-08-02)
+
+
+### Bug Fixes
+
+* typo ([#852](https://github.com/readmeio/rdme/issues/852)) ([26c10e5](https://github.com/readmeio/rdme/commit/26c10e59415afbd32dc13f5438c8fd5a1747e22e))
+
+## [8.6.5-next.3](https://github.com/readmeio/rdme/compare/v8.6.5-next.2...v8.6.5-next.3) (2023-08-01)
+
+
+### Bug Fixes
+
+* **security:** don't publish certain files to npm ([a83fe1c](https://github.com/readmeio/rdme/commit/a83fe1cb94765f0e333374b0e6799f28c3268167)), closes [/socket.dev/npm/package/rdme/files/8.6.5-next.2/bin/docker.js#T167-182](https://github.com//socket.dev/npm/package/rdme/files/8.6.5-next.2/bin/docker.js/issues/T167-182)
+
 ## [8.6.5-next.2](https://github.com/readmeio/rdme/compare/v8.6.5-next.1...v8.6.5-next.2) (2023-07-05)
 
 

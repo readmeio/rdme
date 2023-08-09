@@ -6,7 +6,7 @@ This doc describes how releases are published to GitHub and `npm`.
 
 Nearly all of our release process is automated. In this section, we discuss everything that takes place!
 
-> **Note**
+> [!NOTE]
 > You don't _need_ to know everything that takes place here, this is mostly for my own documentation purposes! But if you are tagging an actual release, there are a couple of outstanding steps that are described in [the next section](#one-more-thing-☝️) 👇
 
 When code is merged into the `main` or `next` branches, a release workflow (powered by [`semantic-release`](https://github.com/semantic-release/semantic-release)) automatically kicks off that does the following:
@@ -26,7 +26,7 @@ When code is merged into the `main` or `next` branches, a release workflow (powe
 
 ## One more thing ☝️
 
-> **Note**
+> [!NOTE]
 > The steps in this section are only required if you're building an actual release and not a prelease (i.e., changes are being merged into the `main` branch).
 
 While nearly all of our release process is automated, there are a couple quick steps remaining:

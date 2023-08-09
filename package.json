@@ -1,6 +1,6 @@
 {
   "name": "rdme",
-  "version": "8.6.5-next.2",
+  "version": "8.6.5-next.4",
   "description": "ReadMe's official CLI and GitHub Action.",
   "license": "MIT",
   "author": "ReadMe <support@readme.io> (https://readme.com)",
@@ -81,7 +81,7 @@
     "@types/mime-types": "^2.1.1",
     "@types/node-fetch": "^2.6.2",
     "@types/parse-link-header": "^2.0.0",
-    "@types/pluralize": "^0.0.29",
+    "@types/pluralize": "^0.0.30",
     "@types/prompts": "^2.4.2",
     "@types/semver": "^7.3.12",
     "@types/tmp": "^0.2.3",
