@@ -1,9 +1,10 @@
 #! /usr/bin/env node
 /* eslint-disable import/no-extraneous-dependencies */
-const fs = require('fs/promises');
+import fs from 'fs/promises';
 
-const fetch = require('node-fetch');
-const prettier = require('prettier');
+// eslint-disable-next-line no-restricted-imports
+import fetch from 'node-fetch';
+import prettier from 'prettier';
 
 const files = [
   {
