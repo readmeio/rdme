@@ -30,7 +30,7 @@ async function refreshSchemas() {
           return res.json();
         });
 
-        const formattedFile = prettier.format(JSON.stringify(rawFile), { parser: 'json', ...prettierConfig });
+        const formattedFile = await prettier.format(JSON.stringify(rawFile), { parser: 'json', ...prettierConfig });
 
         if (isUpdate) {
           await fs.writeFile(file.filePath, formattedFile);
