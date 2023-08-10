@@ -2,6 +2,7 @@ import type { Options as VersionUpdateOptions } from '../../src/cmds/versions/up
 import type { Response } from 'node-fetch';
 
 import prompts from 'prompts';
+import { describe, it, expect } from 'vitest';
 
 import * as promptHandler from '../../src/lib/prompts';
 import promptTerminal from '../../src/lib/promptWrapper';
@@ -54,8 +55,8 @@ describe('prompt test bed', () => {
           ],
           {},
           1,
-          null
-        )
+          null,
+        ),
       );
 
       expect(answer).toStrictEqual({ option: 'create' });

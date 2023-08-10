@@ -1,3 +1,5 @@
+import { vi } from 'vitest';
+
 import * as isCI from '../../src/lib/isCI';
 
 const env = process.env;
@@ -6,7 +8,8 @@ const env = process.env;
  * A helper function for setting up tests for simulating a GitHub Actions runner environment
  */
 export function before() {
-  jest.resetModules();
+  vi.resetModules();
+
   // List of all GitHub Actions env variables:
   // https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables
   process.env.GITHUB_ACTION = '__repo-owner_name-of-action-repo';
@@ -19,10 +22,10 @@ export function before() {
   process.env.GITHUB_SHA = 'ffac537e6cbbf934b08745a378932722df287a53';
   process.env.TEST_RDME_CI = 'true';
 
-  const isGHASpy = jest.spyOn(isCI, 'isGHA');
+  const isGHASpy = vi.spyOn(isCI, 'isGHA');
   isGHASpy.mockReturnValue(true);
 
-  const ciNameSpy = jest.spyOn(isCI, 'ciName');
+  const ciNameSpy = vi.spyOn(isCI, 'ciName');
   ciNameSpy.mockReturnValue('GitHub Actions (test)');
 }
 
@@ -32,5 +35,5 @@ export function before() {
 export function after() {
   process.env = env;
   delete process.env.TEST_RDME_CI;
-  jest.resetAllMocks();
+  vi.resetAllMocks();
 }

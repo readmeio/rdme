@@ -1,3 +1,5 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`rdme whoami > should return the authenticated user 1`] = `"You are currently logged in as email@example.com to the subdomain project."`;
 
 exports[`rdme whoami should return the authenticated user 1`] = `"You are currently logged in as email@example.com to the subdomain project."`;

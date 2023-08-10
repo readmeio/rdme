@@ -2,6 +2,7 @@ import type { Version } from '../../src/cmds/versions';
 
 import chalk from 'chalk';
 import config from 'config';
+import { describe, afterEach, it, expect } from 'vitest';
 
 import Command from '../../src/cmds/open';
 import configStore from '../../src/lib/configstore';
@@ -65,7 +66,7 @@ describe('rdme open', () => {
       }
 
       await expect(cmd.run({ mockOpen, dash: true, key: '12345' })).resolves.toBe(
-        `Opening ${chalk.green(dashUrl)} in your browser...`
+        `Opening ${chalk.green(dashUrl)} in your browser...`,
       );
       mockRequest.done();
     });
@@ -81,7 +82,7 @@ describe('rdme open', () => {
       }
 
       return expect(cmd.run({ mockOpen, dash: true, key: '12345' })).rejects.toStrictEqual(
-        new Error(`Please login using \`${config.get('cli')} login\`.`)
+        new Error(`Please login using \`${config.get('cli')} login\`.`),
       );
     });
   });

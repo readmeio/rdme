@@ -1,5 +1,6 @@
 import nock from 'nock';
 import prompts from 'prompts';
+import { describe, beforeAll, afterEach, it, expect, vi } from 'vitest';
 
 import CategoriesCreateCommand from '../../../src/cmds/categories/create';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock';
@@ -15,7 +16,7 @@ describe('rdme categories:create', () => {
   afterEach(() => nock.cleanAll());
 
   it('should prompt for login if no API key provided', async () => {
-    const consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+    const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
     await expect(categoriesCreate.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
     consoleInfoSpy.mockRestore();
@@ -24,27 +25,27 @@ describe('rdme categories:create', () => {
   it('should error in CI if no API key provided', async () => {
     process.env.TEST_RDME_CI = 'true';
     await expect(categoriesCreate.run({})).rejects.toStrictEqual(
-      new Error('No project API key provided. Please use `--key`.')
+      new Error('No project API key provided. Please use `--key`.'),
     );
     delete process.env.TEST_RDME_CI;
   });
 
   it('should error if no title provided', () => {
     return expect(categoriesCreate.run({ key: '123' })).rejects.toStrictEqual(
-      new Error('No title provided. Usage `rdme categories:create <title> [options]`.')
+      new Error('No title provided. Usage `rdme categories:create <title> [options]`.'),
     );
   });
 
   it('should error if categoryType is blank', () => {
     return expect(categoriesCreate.run({ key: '123', title: 'Test Title' })).rejects.toStrictEqual(
-      new Error('`categoryType` must be `guide` or `reference`.')
+      new Error('`categoryType` must be `guide` or `reference`.'),
     );
   });
 
   it('should error if categoryType is not `guide` or `reference`', () => {
     return expect(
       // @ts-expect-error Testing a CLI arg failure case.
-      categoriesCreate.run({ key: '123', title: 'Test Title', categoryType: 'test' })
+      categoriesCreate.run({ key: '123', title: 'Test Title', categoryType: 'test' }),
     ).rejects.toStrictEqual(new Error('`categoryType` must be `guide` or `reference`.'));
   });
 
@@ -71,7 +72,7 @@ describe('rdme categories:create', () => {
         key,
         version: '1.0.0',
         preventDuplicates: true,
-      })
+      }),
     ).resolves.toBe("🌱 successfully created 'New Category' with a type of 'guide' and an id of '123'");
 
     getMock.done();
@@ -102,7 +103,7 @@ describe('rdme categories:create', () => {
         key,
         version: '1.0.0',
         preventDuplicates: true,
-      })
+      }),
     ).resolves.toBe("🌱 successfully created 'Category' with a type of 'reference' and an id of '123'");
 
     getMock.done();
@@ -124,7 +125,7 @@ describe('rdme categories:create', () => {
         categoryType: 'guide',
         key,
         version: '1.0.0',
-      })
+      }),
     ).resolves.toBe("🌱 successfully created 'Category' with a type of 'reference' and an id of '123'");
 
     postMock.done();
@@ -149,11 +150,11 @@ describe('rdme categories:create', () => {
         key,
         version: '1.0.0',
         preventDuplicates: true,
-      })
+      }),
     ).rejects.toStrictEqual(
       new Error(
-        "The 'Category' category with a type of 'guide' already exists with an id of '123'. A new category was not created."
-      )
+        "The 'Category' category with a type of 'guide' already exists with an id of '123'. A new category was not created.",
+      ),
     );
 
     getMock.done();
@@ -178,11 +179,11 @@ describe('rdme categories:create', () => {
         key,
         version: '1.0.0',
         preventDuplicates: true,
-      })
+      }),
     ).rejects.toStrictEqual(
       new Error(
-        "The 'Category' category with a type of 'guide' already exists with an id of '123'. A new category was not created."
-      )
+        "The 'Category' category with a type of 'guide' already exists with an id of '123'. A new category was not created.",
+      ),
     );
 
     getMock.done();

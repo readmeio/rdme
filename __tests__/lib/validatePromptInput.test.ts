@@ -1,10 +1,12 @@
 import fs from 'fs';
 
+import { describe, afterEach, it, expect, vi } from 'vitest';
+
 import { validateFilePath, validateSubdomain } from '../../src/lib/validatePromptInput';
 
 describe('#validateFilePath', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should return error for empty path value', () => {
@@ -15,7 +17,7 @@ describe('#validateFilePath', () => {
     expect.assertions(2);
     const testPath = 'path-that-already-exists';
 
-    fs.existsSync = jest.fn(() => true);
+    fs.existsSync = vi.fn(() => true);
 
     expect(validateFilePath(testPath)).toBe('Specified output path already exists.');
     expect(fs.existsSync).toHaveBeenCalledWith(testPath);
@@ -25,7 +27,7 @@ describe('#validateFilePath', () => {
     expect.assertions(2);
     const testPath = 'path-that-does-not-exist';
 
-    fs.existsSync = jest.fn(() => false);
+    fs.existsSync = vi.fn(() => false);
 
     expect(validateFilePath(testPath)).toBe(true);
     expect(fs.existsSync).toHaveBeenCalledWith(testPath);
@@ -43,13 +45,13 @@ describe('#validateSubdomain', () => {
 
   it('should reject subdomain with spaces', () => {
     expect(validateSubdomain('test subdomain')).toBe(
-      'Project subdomain must contain only letters, numbers and dashes.'
+      'Project subdomain must contain only letters, numbers and dashes.',
     );
   });
 
   it('should reject subdomain with special characters', () => {
     expect(validateSubdomain('test-subdomain!')).toBe(
-      'Project subdomain must contain only letters, numbers and dashes.'
+      'Project subdomain must contain only letters, numbers and dashes.',
     );
   });
 });

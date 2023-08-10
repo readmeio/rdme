@@ -1,5 +1,6 @@
 import nock from 'nock';
 import prompts from 'prompts';
+import { describe, beforeAll, afterEach, it, expect, vi } from 'vitest';
 
 import UpdateVersionCommand from '../../../src/cmds/versions/update';
 import APIError from '../../../src/lib/apiError';
@@ -16,7 +17,7 @@ describe('rdme versions:update', () => {
   afterEach(() => nock.cleanAll());
 
   it('should prompt for login if no API key provided', async () => {
-    const consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+    const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
     await expect(updateVersion.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
     consoleInfoSpy.mockRestore();
@@ -25,7 +26,7 @@ describe('rdme versions:update', () => {
   it('should error in CI if no API key provided', async () => {
     process.env.TEST_RDME_CI = 'true';
     await expect(updateVersion.run({})).rejects.toStrictEqual(
-      new Error('No project API key provided. Please use `--key`.')
+      new Error('No project API key provided. Please use `--key`.'),
     );
     delete process.env.TEST_RDME_CI;
   });
@@ -90,7 +91,7 @@ describe('rdme versions:update', () => {
         main: 'false',
         codename: 'updated-test',
         isPublic: 'true',
-      })
+      }),
     ).resolves.toBe(`Version ${versionToChange} updated successfully.`);
     mockRequest.done();
   });

@@ -3,6 +3,7 @@ import fs from 'fs';
 
 import chalk from 'chalk';
 import prompts from 'prompts';
+import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
 import OpenAPIReduceCommand from '../../../src/cmds/openapi/reduce';
 
@@ -17,7 +18,7 @@ const getCommandOutput = () => consoleInfoSpy.mock.calls.join('\n\n');
 
 describe('rdme openapi:reduce', () => {
   beforeEach(() => {
-    consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+    consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
   });
 
   afterEach(() => {
@@ -25,7 +26,7 @@ describe('rdme openapi:reduce', () => {
 
     process.chdir(testWorkingDir);
 
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('reducing', () => {
@@ -39,7 +40,7 @@ describe('rdme openapi:reduce', () => {
         const spec = require.resolve(`@readme/oas-examples/${specVersion}/${format}/petstore.${format}`);
 
         let reducedSpec;
-        fs.writeFileSync = jest.fn((fileName, data) => {
+        fs.writeFileSync = vi.fn((fileName, data) => {
           reducedSpec = JSON.parse(data as string);
         });
 
@@ -48,7 +49,7 @@ describe('rdme openapi:reduce', () => {
         await expect(
           reducer.run({
             spec,
-          })
+          }),
         ).resolves.toBe(successfulReduction());
 
         expect(fs.writeFileSync).toHaveBeenCalledWith('output.json', expect.any(String));
@@ -66,7 +67,7 @@ describe('rdme openapi:reduce', () => {
         const spec = 'petstore.json';
 
         let reducedSpec;
-        fs.writeFileSync = jest.fn((fileName, data) => {
+        fs.writeFileSync = vi.fn((fileName, data) => {
           reducedSpec = JSON.parse(data as string);
         });
 
@@ -75,7 +76,7 @@ describe('rdme openapi:reduce', () => {
         await expect(
           reducer.run({
             workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-          })
+          }),
         ).resolves.toBe(successfulReduction());
 
         expect(console.info).toHaveBeenCalledTimes(1);
@@ -90,7 +91,7 @@ describe('rdme openapi:reduce', () => {
         const spec = 'petstore.json';
 
         let reducedSpec;
-        fs.writeFileSync = jest.fn((fileName, data) => {
+        fs.writeFileSync = vi.fn((fileName, data) => {
           reducedSpec = JSON.parse(data as string);
         });
 
@@ -99,7 +100,7 @@ describe('rdme openapi:reduce', () => {
             workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
             tag: ['user'],
             out: 'output.json',
-          })
+          }),
         ).resolves.toBe(successfulReduction());
 
         expect(console.info).toHaveBeenCalledTimes(1);
@@ -121,7 +122,7 @@ describe('rdme openapi:reduce', () => {
         const spec = require.resolve(`@readme/oas-examples/${specVersion}/${format}/petstore.${format}`);
 
         let reducedSpec;
-        fs.writeFileSync = jest.fn((fileName, data) => {
+        fs.writeFileSync = vi.fn((fileName, data) => {
           reducedSpec = JSON.parse(data as string);
         });
 
@@ -130,7 +131,7 @@ describe('rdme openapi:reduce', () => {
         await expect(
           reducer.run({
             spec,
-          })
+          }),
         ).resolves.toBe(successfulReduction());
 
         expect(fs.writeFileSync).toHaveBeenCalledWith('output.json', expect.any(String));
@@ -144,7 +145,7 @@ describe('rdme openapi:reduce', () => {
         const spec = 'petstore.json';
 
         let reducedSpec;
-        fs.writeFileSync = jest.fn((fileName, data) => {
+        fs.writeFileSync = vi.fn((fileName, data) => {
           reducedSpec = JSON.parse(data as string);
         });
 
@@ -154,7 +155,7 @@ describe('rdme openapi:reduce', () => {
             path: ['/pet', '/pet/{petId}'],
             method: ['get', 'post'],
             out: 'output.json',
-          })
+          }),
         ).resolves.toBe(successfulReduction());
 
         expect(console.info).toHaveBeenCalledTimes(1);
@@ -173,7 +174,7 @@ describe('rdme openapi:reduce', () => {
         const title = 'some alternative title';
 
         let reducedSpec;
-        fs.writeFileSync = jest.fn((fileName, data) => {
+        fs.writeFileSync = vi.fn((fileName, data) => {
           reducedSpec = JSON.parse(data as string);
         });
 
@@ -184,7 +185,7 @@ describe('rdme openapi:reduce', () => {
             method: ['get', 'post'],
             title,
             out: 'output.json',
-          })
+          }),
         ).resolves.toBe(successfulReduction());
 
         expect(console.info).toHaveBeenCalledTimes(1);
@@ -208,7 +209,7 @@ describe('rdme openapi:reduce', () => {
       await expect(
         reducer.run({
           spec,
-        })
+        }),
       ).rejects.toStrictEqual(new Error('Sorry, this reducer feature in rdme only supports OpenAPI 3.0+ definitions.'));
     });
 
@@ -220,9 +221,9 @@ describe('rdme openapi:reduce', () => {
       await expect(
         reducer.run({
           spec,
-        })
+        }),
       ).rejects.toStrictEqual(
-        new Error('All paths in the API definition were removed. Did you supply the right path name to reduce by?')
+        new Error('All paths in the API definition were removed. Did you supply the right path name to reduce by?'),
       );
     });
 
@@ -234,9 +235,9 @@ describe('rdme openapi:reduce', () => {
       await expect(
         reducer.run({
           spec,
-        })
+        }),
       ).rejects.toStrictEqual(
-        new Error('All paths in the API definition were removed. Did you supply the right path name to reduce by?')
+        new Error('All paths in the API definition were removed. Did you supply the right path name to reduce by?'),
       );
     });
 
@@ -248,7 +249,7 @@ describe('rdme openapi:reduce', () => {
           spec,
           tag: ['tag1', 'tag2'],
           path: ['/path'],
-        })
+        }),
       ).rejects.toStrictEqual(new Error('You can pass in either tags or paths/methods, but not both.'));
     });
 
@@ -260,7 +261,7 @@ describe('rdme openapi:reduce', () => {
           spec,
           tag: ['tag1', 'tag2'],
           method: ['get'],
-        })
+        }),
       ).rejects.toStrictEqual(new Error('You can pass in either tags or paths/methods, but not both.'));
     });
 
@@ -271,9 +272,9 @@ describe('rdme openapi:reduce', () => {
         reducer.run({
           spec,
           path: ['unknown-path'],
-        })
+        }),
       ).rejects.toStrictEqual(
-        new Error('All paths in the API definition were removed. Did you supply the right path name to reduce by?')
+        new Error('All paths in the API definition were removed. Did you supply the right path name to reduce by?'),
       );
     });
   });

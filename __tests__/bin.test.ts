@@ -1,5 +1,7 @@
 import { exec } from 'child_process';
 
+import { describe, it, expect } from 'vitest';
+
 describe('bin', () => {
   it('should show our help screen', async () => {
     expect.assertions(1);

@@ -1,5 +1,6 @@
 import nock from 'nock';
 import prompts from 'prompts';
+import { describe, beforeAll, afterEach, it, expect, vi } from 'vitest';
 
 import CategoriesCommand from '../../../src/cmds/categories';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock';
@@ -15,7 +16,7 @@ describe('rdme categories', () => {
   afterEach(() => nock.cleanAll());
 
   it('should prompt for login if no API key provided', async () => {
-    const consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+    const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
     await expect(categories.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
     consoleInfoSpy.mockRestore();
@@ -24,7 +25,7 @@ describe('rdme categories', () => {
   it('should error in CI if no API key provided', async () => {
     process.env.TEST_RDME_CI = 'true';
     await expect(categories.run({})).rejects.toStrictEqual(
-      new Error('No project API key provided. Please use `--key`.')
+      new Error('No project API key provided. Please use `--key`.'),
     );
     delete process.env.TEST_RDME_CI;
   });
@@ -41,7 +42,7 @@ describe('rdme categories', () => {
     const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
     await expect(categories.run({ key, version: '1.0.0' })).resolves.toBe(
-      JSON.stringify([{ title: 'One Category', slug: 'one-category', type: 'guide' }], null, 2)
+      JSON.stringify([{ title: 'One Category', slug: 'one-category', type: 'guide' }], null, 2),
     );
 
     getMock.done();
@@ -71,8 +72,8 @@ describe('rdme categories', () => {
           { title: 'Another Category', slug: 'another-category', type: 'guide' },
         ],
         null,
-        2
-      )
+        2,
+      ),
     );
 
     getMock.done();

@@ -1,5 +1,6 @@
 import nock from 'nock';
 import prompts from 'prompts';
+import { describe, beforeAll, afterEach, it, expect, vi } from 'vitest';
 
 import CreateVersionCommand from '../../../src/cmds/versions/create';
 import APIError from '../../../src/lib/apiError';
@@ -16,7 +17,7 @@ describe('rdme versions:create', () => {
   afterEach(() => nock.cleanAll());
 
   it('should prompt for login if no API key provided', async () => {
-    const consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+    const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
     await expect(createVersion.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
     consoleInfoSpy.mockRestore();
@@ -25,20 +26,20 @@ describe('rdme versions:create', () => {
   it('should error in CI if no API key provided', async () => {
     process.env.TEST_RDME_CI = 'true';
     await expect(createVersion.run({})).rejects.toStrictEqual(
-      new Error('No project API key provided. Please use `--key`.')
+      new Error('No project API key provided. Please use `--key`.'),
     );
     delete process.env.TEST_RDME_CI;
   });
 
   it('should error if no version provided', () => {
     return expect(createVersion.run({ key })).rejects.toStrictEqual(
-      new Error('Please specify a semantic version. See `rdme help versions:create` for help.')
+      new Error('Please specify a semantic version. See `rdme help versions:create` for help.'),
     );
   });
 
   it('should error if invaild version provided', () => {
     return expect(createVersion.run({ key, version: 'test' })).rejects.toStrictEqual(
-      new Error('Please specify a semantic version. See `rdme help versions:create` for help.')
+      new Error('Please specify a semantic version. See `rdme help versions:create` for help.'),
     );
   });
 
@@ -62,7 +63,7 @@ describe('rdme versions:create', () => {
       .reply(201, { version: newVersion });
 
     await expect(createVersion.run({ key, version: newVersion })).resolves.toBe(
-      `Version ${newVersion} created successfully.`
+      `Version ${newVersion} created successfully.`,
     );
     mockRequest.done();
   });
@@ -89,7 +90,7 @@ describe('rdme versions:create', () => {
         main: 'false',
         codename: 'test',
         isPublic: 'true',
-      })
+      }),
     ).resolves.toBe(`Version ${newVersion} created successfully.`);
 
     mockRequest.done();

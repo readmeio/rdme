@@ -6,6 +6,7 @@ import chalk from 'chalk';
 import frontMatter from 'gray-matter';
 import nock from 'nock';
 import prompts from 'prompts';
+import { describe, beforeAll, afterAll, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
 import DocsCommand from '../../../src/cmds/docs';
 import GuidesCommand from '../../../src/cmds/guides';
@@ -34,7 +35,7 @@ describe('rdme docs', () => {
   afterAll(() => nock.cleanAll());
 
   it('should prompt for login if no API key provided', async () => {
-    const consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+    const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
     await expect(docs.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
     consoleInfoSpy.mockRestore();
@@ -45,7 +46,7 @@ describe('rdme docs', () => {
     const password = 'pass123';
     const project = 'proj1';
 
-    const consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+    const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     const getCommandOutput = () => {
       return [consoleInfoSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
     };
@@ -60,20 +61,20 @@ describe('rdme docs', () => {
       .reply(200, [{ version }]);
 
     await expect(docs.run({})).rejects.toStrictEqual(
-      new Error('No path provided. Usage `rdme docs <path> [options]`.')
+      new Error('No path provided. Usage `rdme docs <path> [options]`.'),
     );
     expect(getCommandOutput()).toContain("Looks like you're missing a ReadMe API key, let's fix that! 🦉");
     expect(getCommandOutput()).toContain('Successfully logged in as owlbert@readme.io to the proj1 project.');
     mock.done();
     configstore.clear();
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   it('should error if no path provided', async () => {
     const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
     await expect(docs.run({ key, version: '1.0.0' })).rejects.toStrictEqual(
-      new Error('No path provided. Usage `rdme docs <path> [options]`.')
+      new Error('No path provided. Usage `rdme docs <path> [options]`.'),
     );
 
     versionMock.done();
@@ -83,7 +84,7 @@ describe('rdme docs', () => {
     const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
     await expect(docs.run({ key, version: '1.0.0', filePath: 'not-a-folder' })).rejects.toStrictEqual(
-      new Error("Oops! We couldn't locate a file or directory at the path you provided.")
+      new Error("Oops! We couldn't locate a file or directory at the path you provided."),
     );
 
     versionMock.done();
@@ -94,8 +95,8 @@ describe('rdme docs', () => {
 
     await expect(docs.run({ key, version: '1.0.0', filePath: '.github/workflows' })).rejects.toStrictEqual(
       new Error(
-        "The directory you provided (.github/workflows) doesn't contain any of the following required files: .markdown, .md."
-      )
+        "The directory you provided (.github/workflows) doesn't contain any of the following required files: .markdown, .md.",
+      ),
     );
 
     versionMock.done();
@@ -164,7 +165,7 @@ describe('rdme docs', () => {
           [
             `✏️ successfully updated 'simple-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`,
             `✏️ successfully updated 'another-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/subdir/another-doc.md`,
-          ].join('\n')
+          ].join('\n'),
         );
 
         getMocks.done();
@@ -197,12 +198,12 @@ describe('rdme docs', () => {
           expect(updatedDocs).toBe(
             [
               `🎭 dry run! This will update 'simple-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/simple-doc.md with the following metadata: ${JSON.stringify(
-                simpleDoc.doc.data
+                simpleDoc.doc.data,
               )}`,
               `🎭 dry run! This will update 'another-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/subdir/another-doc.md with the following metadata: ${JSON.stringify(
-                anotherDoc.doc.data
+                anotherDoc.doc.data,
               )}`,
-            ].join('\n')
+            ].join('\n'),
           );
 
           getMocks.done();
@@ -231,7 +232,7 @@ describe('rdme docs', () => {
           [
             '`simple-doc` was not updated because there were no changes.',
             '`another-doc` was not updated because there were no changes.',
-          ].join('\n')
+          ].join('\n'),
         );
 
         getMocks.done();
@@ -262,7 +263,7 @@ describe('rdme docs', () => {
             [
               '🎭 dry run! `simple-doc` will not be updated because there were no changes.',
               '🎭 dry run! `another-doc` will not be updated because there were no changes.',
-            ].join('\n')
+            ].join('\n'),
           );
 
           getMocks.done();
@@ -299,7 +300,7 @@ describe('rdme docs', () => {
         .reply(200, { version });
 
       await expect(docs.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs`, key, version })).resolves.toBe(
-        `🌱 successfully created 'new-doc' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/new-docs/new-doc.md`
+        `🌱 successfully created 'new-doc' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/new-docs/new-doc.md`,
       );
 
       getMock.done();
@@ -327,11 +328,11 @@ describe('rdme docs', () => {
         .reply(200, { version });
 
       await expect(
-        docs.run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/new-docs`, key, version })
+        docs.run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/new-docs`, key, version }),
       ).resolves.toBe(
         `🎭 dry run! This will create 'new-doc' with contents from __tests__/${fixturesBaseDir}/new-docs/new-doc.md with the following metadata: ${JSON.stringify(
-          doc.data
-        )}`
+          doc.data,
+        )}`,
       );
 
       getMock.done();
@@ -379,7 +380,7 @@ describe('rdme docs', () => {
       };
 
       await expect(docs.run({ filePath: `./${fullDirectory}`, key, version })).rejects.toStrictEqual(
-        new APIError(formattedErrorObject)
+        new APIError(formattedErrorObject),
       );
 
       getMocks.done();
@@ -416,7 +417,7 @@ describe('rdme docs', () => {
         .reply(200, { version });
 
       await expect(docs.run({ filePath: `./__tests__/${fixturesBaseDir}/slug-docs`, key, version })).resolves.toBe(
-        `🌱 successfully created 'marc-actually-wrote-a-test' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`
+        `🌱 successfully created 'marc-actually-wrote-a-test' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`,
       );
 
       getMock.done();
@@ -434,7 +435,7 @@ describe('rdme docs', () => {
     };
 
     beforeEach(() => {
-      consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+      consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
 
       before((fileName, data) => {
         yamlOutput = data;
@@ -525,7 +526,7 @@ describe('rdme docs', () => {
       prompts.inject([true, 'docs-test-branch', fileName]);
 
       await expect(
-        docs.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs`, key, version })
+        docs.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs`, key, version }),
       ).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();
@@ -567,7 +568,7 @@ describe('rdme docs', () => {
       prompts.inject(['docs-test-branch-github-flag', fileName]);
 
       await expect(
-        docs.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs`, github: true, key, version })
+        docs.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs`, github: true, key, version }),
       ).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();
@@ -606,11 +607,11 @@ describe('rdme docs', () => {
       prompts.inject([false]);
 
       await expect(
-        docs.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs`, key, version })
+        docs.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs`, key, version }),
       ).rejects.toStrictEqual(
         new Error(
-          'GitHub Actions workflow creation cancelled. If you ever change your mind, you can run this command again with the `--github` flag.'
-        )
+          'GitHub Actions workflow creation cancelled. If you ever change your mind, you can run this command again with the `--github` flag.',
+        ),
       );
 
       getMock.done();
@@ -661,7 +662,7 @@ describe('rdme docs', () => {
         .reply(200, { version });
 
       await expect(docs.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs`, key, version })).resolves.toBe(
-        `🌱 successfully created 'new-doc' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/new-docs/new-doc.md`
+        `🌱 successfully created 'new-doc' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/new-docs/new-doc.md`,
       );
 
       getMock.done();
@@ -740,7 +741,7 @@ describe('rdme docs', () => {
           [
             `✏️ successfully updated 'simple-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`,
             `✏️ successfully updated 'another-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/subdir/another-doc.md`,
-          ].join('\n')
+          ].join('\n'),
         );
 
         getMocks.done();
@@ -761,7 +762,7 @@ describe('rdme guides', () => {
     const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
     await expect(guides.run({ key, version: '1.0.0' })).rejects.toStrictEqual(
-      new Error('No path provided. Usage `rdme guides <path> [options]`.')
+      new Error('No path provided. Usage `rdme guides <path> [options]`.'),
     );
 
     versionMock.done();

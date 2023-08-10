@@ -1,4 +1,5 @@
 import config from 'config';
+import { describe, afterEach, it, expect } from 'vitest';
 
 import Command from '../../src/cmds/whoami';
 import configStore from '../../src/lib/configstore';

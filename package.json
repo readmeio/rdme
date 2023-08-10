@@ -68,15 +68,13 @@
     "@commitlint/cli": "^17.6.6",
     "@commitlint/config-conventional": "^17.6.6",
     "@readme/better-ajv-errors": "^1.5.0",
-    "@readme/eslint-config": "^10.6.1",
+    "@readme/eslint-config": "^12.0.0",
     "@readme/oas-examples": "^5.10.0",
-    "@testing-library/dom": "^9.3.1",
     "@types/command-line-args": "^5.2.0",
     "@types/command-line-usage": "^5.0.2",
     "@types/config": "^3.3.0",
     "@types/configstore": "^6.0.0",
     "@types/debug": "^4.1.7",
-    "@types/jest": "^29.2.4",
     "@types/js-yaml": "^4.0.5",
     "@types/mime-types": "^2.1.1",
     "@types/node-fetch": "^2.6.2",
@@ -89,15 +87,13 @@
     "ajv": "^8.11.0",
     "eslint": "^8.44.0",
     "husky": "^8.0.0",
-    "jest": "^29.0.3",
-    "jest-extended": "^4.0.0",
     "js-yaml": "^4.1.0",
     "nock": "^13.2.7",
-    "prettier": "^2.8.1",
-    "ts-jest": "^29.1.1",
+    "prettier": "^3.0.1",
     "ts-node": "^10.9.1",
     "type-fest": "^3.12.0",
-    "typescript": "^5.1.6"
+    "typescript": "^5.1.6",
+    "vitest": "^0.34.1"
   },
   "scripts": {
     "build": "tsc",
@@ -110,7 +106,7 @@
     "prettier": "prettier --check .",
     "schemas:check": "./bin/json-schema-store.js",
     "schemas:write": "./bin/json-schema-store.js --update",
-    "test": "jest --coverage"
+    "test": "vitest run --coverage"
   },
   "commitlint": {
     "extends": [

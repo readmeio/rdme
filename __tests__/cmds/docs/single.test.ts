@@ -5,6 +5,7 @@ import chalk from 'chalk';
 import frontMatter from 'gray-matter';
 import nock from 'nock';
 import prompts from 'prompts';
+import { describe, beforeAll, afterAll, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
 import DocsCommand from '../../../src/cmds/docs';
 import APIError from '../../../src/lib/apiError';
@@ -27,7 +28,7 @@ describe('rdme docs (single)', () => {
   afterAll(() => nock.cleanAll());
 
   it('should prompt for login if no API key provided', async () => {
-    const consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+    const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
     await expect(docs.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
     consoleInfoSpy.mockRestore();
@@ -37,7 +38,7 @@ describe('rdme docs (single)', () => {
     const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
     await expect(docs.run({ key, version })).rejects.toStrictEqual(
-      new Error('No path provided. Usage `rdme docs <path> [options]`.')
+      new Error('No path provided. Usage `rdme docs <path> [options]`.'),
     );
 
     versionMock.done();
@@ -47,7 +48,7 @@ describe('rdme docs (single)', () => {
     const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
     await expect(docs.run({ key, version, filePath: 'not-a-markdown-file' })).rejects.toStrictEqual(
-      new Error("Oops! We couldn't locate a file or directory at the path you provided.")
+      new Error("Oops! We couldn't locate a file or directory at the path you provided."),
     );
 
     versionMock.done();
@@ -56,7 +57,7 @@ describe('rdme docs (single)', () => {
   it('should support .markdown files but error if file path cannot be found', async () => {
     const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
     await expect(docs.run({ key, version, filePath: 'non-existent-file.markdown' })).rejects.toStrictEqual(
-      new Error("Oops! We couldn't locate a file or directory at the path you provided.")
+      new Error("Oops! We couldn't locate a file or directory at the path you provided."),
     );
     versionMock.done();
   });
@@ -89,9 +90,9 @@ describe('rdme docs (single)', () => {
         .reply(200, { version });
 
       await expect(
-        docs.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, key, version })
+        docs.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, key, version }),
       ).resolves.toBe(
-        `🌱 successfully created 'new-doc' (ID: 1234) with contents from ./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`
+        `🌱 successfully created 'new-doc' (ID: 1234) with contents from ./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`,
       );
 
       getMock.done();
@@ -119,11 +120,11 @@ describe('rdme docs (single)', () => {
         .reply(200, { version });
 
       await expect(
-        docs.run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, key, version })
+        docs.run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, key, version }),
       ).resolves.toBe(
         `🎭 dry run! This will create 'new-doc' with contents from ./__tests__/${fixturesBaseDir}/new-docs/new-doc.md with the following metadata: ${JSON.stringify(
-          doc.data
-        )}`
+          doc.data,
+        )}`,
       );
 
       getMock.done();
@@ -139,7 +140,7 @@ describe('rdme docs (single)', () => {
       const filePath = `./__tests__/${fixturesBaseDir}/failure-docs/doc-sans-attributes.md`;
 
       await expect(docs.run({ filePath, key, version })).resolves.toBe(
-        `⏭️  no front matter attributes found for ${filePath}, skipping`
+        `⏭️  no front matter attributes found for ${filePath}, skipping`,
       );
 
       versionMock.done();
@@ -207,9 +208,9 @@ describe('rdme docs (single)', () => {
         .reply(200, { version });
 
       await expect(
-        docs.run({ filePath: `./__tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`, key, version })
+        docs.run({ filePath: `./__tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`, key, version }),
       ).resolves.toBe(
-        `🌱 successfully created 'marc-actually-wrote-a-test' (ID: 1234) with contents from ./__tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`
+        `🌱 successfully created 'marc-actually-wrote-a-test' (ID: 1234) with contents from ./__tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`,
       );
 
       getMock.done();
@@ -258,7 +259,7 @@ describe('rdme docs (single)', () => {
         .run({ filePath: `./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, key, version })
         .then(updatedDocs => {
           expect(updatedDocs).toBe(
-            `✏️ successfully updated 'simple-doc' with contents from ./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`
+            `✏️ successfully updated 'simple-doc' with contents from ./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`,
           );
 
           getMock.done();
@@ -288,9 +289,9 @@ describe('rdme docs (single)', () => {
           expect(updatedDocs).toBe(
             [
               `🎭 dry run! This will update 'simple-doc' with contents from ./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md with the following metadata: ${JSON.stringify(
-                simpleDoc.doc.data
+                simpleDoc.doc.data,
               )}`,
-            ].join('\n')
+            ].join('\n'),
           );
 
           getMock.done();
@@ -385,9 +386,9 @@ describe('rdme docs (single)', () => {
         .reply(200, { version });
 
       await expect(
-        docs.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, key, version })
+        docs.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, key, version }),
       ).resolves.toBe(
-        `🌱 successfully created 'new-doc' (ID: 1234) with contents from ./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`
+        `🌱 successfully created 'new-doc' (ID: 1234) with contents from ./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`,
       );
 
       getMock.done();
@@ -436,7 +437,7 @@ describe('rdme docs (single)', () => {
         .run({ filePath: `__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, key, version })
         .then(updatedDocs => {
           expect(updatedDocs).toBe(
-            `✏️ successfully updated 'simple-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`
+            `✏️ successfully updated 'simple-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`,
           );
 
           getMock.done();

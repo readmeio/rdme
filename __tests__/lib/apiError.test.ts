@@ -1,3 +1,5 @@
+import { describe, it, expect } from 'vitest';
+
 import APIError from '../../src/lib/apiError';
 
 const response = {
@@ -20,7 +22,7 @@ describe('APIError', () => {
 
     expect(error.code).toBe(response.error);
     expect(error.message).toBe(
-      'New versions need to be forked from an existing version.\n\nIf you need help, email support@readme.io and mention log "fake-metrics-uuid".'
+      'New versions need to be forked from an existing version.\n\nIf you need help, email support@readme.io and mention log "fake-metrics-uuid".',
     );
   });
 

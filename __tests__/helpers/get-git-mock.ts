@@ -1,7 +1,10 @@
 import type { Response } from 'simple-git';
 
+import { vi } from 'vitest';
+
 /**
- * Creates a Jest mock function for testing `git.remote`
+ * Creates a mock function for testing `git.remote`.
+ *
  * @param remote remote to return (usually `origin`)
  * @param remoteUrl git URL for the given remote
  * @param defaultBranch the HEAD branch
@@ -9,9 +12,9 @@ import type { Response } from 'simple-git';
 export default function getGitRemoteMock(
   remote = 'origin',
   remoteUrl = 'https://github.com/readmeio/rdme.git',
-  defaultBranch = 'main'
+  defaultBranch = 'main',
 ) {
-  return jest.fn(arr => {
+  return vi.fn(arr => {
     // first call (used to grab remote for usage in subsequent commands)
     if (!arr.length) {
       if (!remote) return Promise.reject(new Error('Bad mock uh oh')) as unknown as Response<string>;
@@ -21,7 +24,7 @@ export default function getGitRemoteMock(
     if (arr.length === 2 && arr[0] === 'show' && arr[1] === remote) {
       if (remote === 'bad-remote') {
         return Promise.reject(
-          new Error(`fatal: unable to access '${remoteUrl}': Could not resolve host: ${remoteUrl}`)
+          new Error(`fatal: unable to access '${remoteUrl}': Could not resolve host: ${remoteUrl}`),
         ) as unknown as Response<string>;
       }
       if (!defaultBranch) return Promise.reject(new Error('Bad mock uh oh')) as unknown as Response<string>;

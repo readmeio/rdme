@@ -6,5 +6,5 @@ __tests__/
 .prettier*
 bin/*.js
 coverage/
-jest.*.js
 packages/
+vitest.*

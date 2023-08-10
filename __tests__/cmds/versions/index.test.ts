@@ -2,6 +2,7 @@ import type { Version } from '../../../src/cmds/versions';
 
 import nock from 'nock';
 import prompts from 'prompts';
+import { describe, beforeAll, afterEach, it, expect, vi } from 'vitest';
 
 import VersionsCommand from '../../../src/cmds/versions';
 import getAPIMock from '../../helpers/get-api-mock';
@@ -38,7 +39,7 @@ describe('rdme versions', () => {
   afterEach(() => nock.cleanAll());
 
   it('should prompt for login if no API key provided', async () => {
-    const consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+    const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
     await expect(versions.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
     consoleInfoSpy.mockRestore();
