@@ -1,9 +1,7 @@
 #! /usr/bin/env node
-/* eslint-disable import/no-commonjs */
-/* eslint-disable @typescript-eslint/no-var-requires */
-const core = require('@actions/core');
+import * as core from '@actions/core';
 
-const { getNodeVersion, getMajorPkgVersion } = require('../dist/src/lib/getPkgVersion');
+import { getNodeVersion, getMajorPkgVersion } from '../dist/src/lib/getPkgVersion.js';
 
 /**
  * Sets output parameters for GitHub Actions workflow so we can do
