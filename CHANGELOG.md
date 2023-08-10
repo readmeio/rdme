@@ -1,3 +1,10 @@
+## [8.6.5-next.5](https://github.com/readmeio/rdme/compare/v8.6.5-next.4...v8.6.5-next.5) (2023-08-10)
+
+
+### Bug Fixes
+
+* **openapi/inspect:** small url formatting error ([#855](https://github.com/readmeio/rdme/issues/855)) ([c54e289](https://github.com/readmeio/rdme/commit/c54e2896f253004563a29c3b42bde1f201f1e180))
+
 ## [8.6.5-next.4](https://github.com/readmeio/rdme/compare/v8.6.5-next.3...v8.6.5-next.4) (2023-08-02)
 
 
