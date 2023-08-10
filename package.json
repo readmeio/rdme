@@ -111,7 +111,7 @@
     "prettier": "prettier --check .",
     "schemas:check": "./bin/json-schema-store.js",
     "schemas:write": "./bin/json-schema-store.js --update",
-    "test": "jest --coverage"
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest --coverage"
   },
   "commitlint": {
     "extends": [
