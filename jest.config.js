@@ -11,8 +11,7 @@ const config = {
     },
   },
   modulePathIgnorePatterns: ['<rootDir>/dist/'],
-  rootDir: __dirname,
-  setupFiles: ['./__tests__/setup'],
+  setupFiles: ['./__tests__/setup.cjs'],
   setupFilesAfterEnv: ['jest-extended/all'],
   testPathIgnorePatterns: [
     '<rootDir>/dist/',
