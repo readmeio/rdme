@@ -77,7 +77,7 @@ describe('#createGHA', () => {
         label: ' (single)',
         opts: { key, filePath: './custompages/rdme.md' },
       },
-    ])('$cmd$label', ({ cmd, CmdClass, opts }) => {
+    ])('$cmd $label', ({ cmd, CmdClass, opts }) => {
       let command;
 
       beforeEach(() => {

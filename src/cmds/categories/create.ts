@@ -83,8 +83,8 @@ export default class CategoriesCreateCommand extends Command {
         if (typeof matchedCategory !== 'undefined') {
           return Promise.reject(
             new Error(
-              `The '${matchedCategory.title}' category with a type of '${matchedCategory.type}' already exists with an id of '${matchedCategory.id}'. A new category was not created.`
-            )
+              `The '${matchedCategory.title}' category with a type of '${matchedCategory.type}' already exists with an id of '${matchedCategory.id}'. A new category was not created.`,
+            ),
           );
         }
       }
@@ -95,7 +95,7 @@ export default class CategoriesCreateCommand extends Command {
           new Headers({
             'x-readme-version': selectedVersion,
             'Content-Type': 'application/json',
-          })
+          }),
         ),
         body: JSON.stringify({
           title,

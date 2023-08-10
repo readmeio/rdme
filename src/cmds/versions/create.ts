@@ -55,7 +55,7 @@ export default class CreateVersionCommand extends Command {
 
     if (!version || !semver.valid(semver.coerce(version))) {
       return Promise.reject(
-        new Error(`Please specify a semantic version. See \`${config.get('cli')} help ${this.command}\` for help.`)
+        new Error(`Please specify a semantic version. See \`${config.get('cli')} help ${this.command}\` for help.`),
       );
     }
 
@@ -89,7 +89,7 @@ export default class CreateVersionCommand extends Command {
         new Headers({
           Accept: 'application/json',
           'Content-Type': 'application/json',
-        })
+        }),
       ),
       body: JSON.stringify(body),
     })

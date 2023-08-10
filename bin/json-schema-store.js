@@ -40,7 +40,7 @@ async function refreshSchemas() {
             throw new Error(`${file.filePath} is outdated! Run \`npm run schemas:write\` to update.`);
           }
         }
-      })
+      }),
     );
     // eslint-disable-next-line no-console
     console.log(isUpdate ? 'JSON Schema files updated!' : 'JSON Schema files are up-to-date!');

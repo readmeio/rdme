@@ -36,7 +36,7 @@ export function before(writeFileSyncCb) {
   process.env.TEST_RDME_CREATEGHA = 'true';
 
   const spy = vi.spyOn(getPkgVersion, 'getMajorPkgVersion');
-  spy.mockReturnValue(Promise.resolve(7));
+  spy.mockResolvedValue(7);
 }
 
 /**
