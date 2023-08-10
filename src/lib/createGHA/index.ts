@@ -7,7 +7,7 @@ import path from 'path';
 
 import chalk from 'chalk';
 import prompts from 'prompts';
-import simpleGit from 'simple-git';
+import { simpleGit } from 'simple-git';
 
 import configstore from '../configstore.js';
 import { getMajorPkgVersion } from '../getPkgVersion.js';
@@ -33,7 +33,7 @@ export const getConfigStoreKey = (repoRoot: string) => `createGHA.${repoRoot}`;
 const GITHUB_WORKFLOW_DIR = '.github/workflows';
 const GITHUB_SECRET_NAME = 'README_API_KEY';
 
-export const git = simpleGit.default();
+export const git = simpleGit();
 
 /**
  * Removes any non-file-friendly characters and adds

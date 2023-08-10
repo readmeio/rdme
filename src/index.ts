@@ -13,6 +13,7 @@ import parseArgsStringToArgv from 'string-argv';
 // but since this is only supposed to be a cli and not
 // requireable, i think this is okay
 const configDir = process.env.NODE_CONFIG_DIR;
+const __dirname = new URL('.', import.meta.url).pathname;
 process.env.NODE_CONFIG_DIR = path.join(__dirname, '../config');
 
 import config from 'config';
