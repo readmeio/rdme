@@ -74,6 +74,24 @@ jobs:
         with:
           rdme: openapi:validate "oas-examples-repo/3.1/json/petstore.json"
 
+      # TODO: Maybe remove this
+      - name: Run `openapi:validate` on file in rdme repo (take 1)
+        uses: ./rdme-repo/
+        with:
+          rdme: openapi:validate rdme-repo/__tests__/__fixtures__/petstore-simple-weird-version.json
+
+      # TODO: Maybe remove this
+      - name: Run `openapi:validate` on file in rdme repo (take 2)
+        uses: ./rdme-repo/
+        with:
+          rdme: openapi:validate ${{ github.workspace }}/rdme-repo/__tests__/__fixtures__/petstore-simple-weird-version.json
+
+      # TODO: Maybe remove this
+      - name: Run `openapi:validate` on file in rdme repo (take 3)
+        uses: ./rdme-repo/
+        with:
+          rdme: openapi:validate ${{ github.workspace }}/./rdme-repo/__tests__/__fixtures__/petstore-simple-weird-version.json
+
       - name: Run `openapi:validate` on file with refs
         uses: ./rdme-repo/
         with:
