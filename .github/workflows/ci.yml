@@ -94,6 +94,7 @@ jobs:
 
       - name: Run `openapi:validate` on file with relative refs (take 1)
         uses: ./rdme-repo/
+        continue-on-error: true
         with:
           rdme: openapi:validate rdme-repo/__tests__/__fixtures__/relative-ref-oas/petstore.json --workingDirectory __tests__/__fixtures__/relative-ref-oas
 
