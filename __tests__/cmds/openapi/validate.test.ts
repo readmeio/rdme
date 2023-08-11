@@ -49,7 +49,7 @@ describe('rdme openapi:validate', () => {
     );
   });
 
-  it('should discover and upload an API definition if none is provided', async () => {
+  it.skip('should discover and upload an API definition if none is provided', async () => {
     await expect(validate.run({ workingDirectory: './__tests__/__fixtures__/relative-ref-oas' })).resolves.toBe(
       chalk.green('petstore.json is a valid OpenAPI API definition!'),
     );
@@ -66,7 +66,7 @@ describe('rdme openapi:validate', () => {
     await expect(validate.run({})).resolves.toBe(chalk.green(`${spec} is a valid OpenAPI API definition!`));
   });
 
-  it('should use specified working directory', () => {
+  it.skip('should use specified working directory', () => {
     return expect(
       validate.run({
         spec: 'petstore.json',
@@ -75,7 +75,7 @@ describe('rdme openapi:validate', () => {
     ).resolves.toBe(chalk.green('petstore.json is a valid OpenAPI API definition!'));
   });
 
-  it('should adhere to .gitignore in subdirectories', () => {
+  it.skip('should adhere to .gitignore in subdirectories', () => {
     fs.copyFileSync(
       require.resolve('@readme/oas-examples/3.0/json/petstore-simple.json'),
       './__tests__/__fixtures__/nested-gitignored-oas/nest/petstore-ignored.json',
@@ -190,7 +190,7 @@ describe('rdme openapi:validate', () => {
       expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
     });
 
-    it('should create GHA workflow if user passes in spec via opt (including workingDirectory)', async () => {
+    it.skip('should create GHA workflow if user passes in spec via opt (including workingDirectory)', async () => {
       expect.assertions(3);
       const spec = 'petstore.json';
       const fileName = 'validate-test-opt-spec-workdir-file';

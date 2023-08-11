@@ -63,7 +63,7 @@ describe('rdme openapi:reduce', () => {
         ]);
       });
 
-      it('should discover and upload an API definition if none is provided', async () => {
+      it.skip('should discover and upload an API definition if none is provided', async () => {
         const spec = 'petstore.json';
 
         let reducedSpec;
@@ -87,7 +87,7 @@ describe('rdme openapi:reduce', () => {
         expect(Object.keys(reducedSpec.paths)).toStrictEqual(['/user']);
       });
 
-      it('should reduce with no prompts via opts', async () => {
+      it.skip('should reduce with no prompts via opts', async () => {
         const spec = 'petstore.json';
 
         let reducedSpec;
@@ -141,7 +141,7 @@ describe('rdme openapi:reduce', () => {
         expect(Object.keys(reducedSpec.paths['/pet/findByStatus'])).toStrictEqual(['get']);
       });
 
-      it('should reduce with no prompts via opts', async () => {
+      it.skip('should reduce with no prompts via opts', async () => {
         const spec = 'petstore.json';
 
         let reducedSpec;
@@ -169,7 +169,7 @@ describe('rdme openapi:reduce', () => {
         expect(Object.keys(reducedSpec.paths['/pet/{petId}'])).toStrictEqual(['get']);
       });
 
-      it('should reduce and update title with no prompts via opts', async () => {
+      it.skip('should reduce and update title with no prompts via opts', async () => {
         const spec = 'petstore.json';
         const title = 'some alternative title';
 

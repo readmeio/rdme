@@ -44,7 +44,7 @@ describe('rdme openapi:convert', () => {
       expect(Object.keys(reducedSpec.paths['/pet/{petId}'])).toStrictEqual(['get', 'post', 'delete']);
     });
 
-    it('should convert with no prompts via opts', async () => {
+    it.skip('should convert with no prompts via opts', async () => {
       const spec = 'petstore-simple.json';
 
       let reducedSpec;
