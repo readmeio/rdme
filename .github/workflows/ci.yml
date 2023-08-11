@@ -74,6 +74,17 @@ jobs:
         with:
           rdme: openapi:validate "oas-examples-repo/3.1/json/petstore.json"
 
+      - name: Run `openapi:validate` on file with refs
+        uses: ./rdme-repo/
+        with:
+          rdme: openapi:validate rdme-repo/__tests__/__fixtures__/ref-oas/petstore.json
+
+      - name: Run `openapi:validate` on file with relative refs
+        uses: ./rdme-repo/
+        with:
+          # TODO: this will need a workingDirectory parameter
+          rdme: openapi:validate rdme-repo/__tests__/__fixtures__/relative-ref-oas/petstore.json
+
       # Docs: https://rdme-test.readme.io
       - name: Run `openapi` command
         uses: ./rdme-repo/
