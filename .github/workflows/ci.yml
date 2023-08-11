@@ -77,13 +77,13 @@ jobs:
       - name: Run `openapi:validate` on file with refs
         uses: ./rdme-repo/
         with:
-          rdme: openapi:validate ${{ github.workspace }}/rdme-repo/__tests__/__fixtures__/ref-oas/petstore.json
+          rdme: openapi:validate ${{ github.workspace }}/rdme-repo/__tests__/__fixtures__/ref-oas/petstore.json --workingDirectory ${{ github.workspace }}/rdme-repo
 
       - name: Run `openapi:validate` on file with relative refs
         uses: ./rdme-repo/
         with:
           # TODO: this will need a workingDirectory parameter
-          rdme: openapi:validate ${{ github.workspace }}/rdme-repo/__tests__/__fixtures__/relative-ref-oas/petstore.json
+          rdme: openapi:validate ${{ github.workspace }}/rdme-repo/__tests__/__fixtures__/relative-ref-oas/petstore.json --workingDirectory ${{ github.workspace }}/rdme-repo/__tests__/__fixtures__/relative-ref-oas
 
       # Docs: https://rdme-test.readme.io
       - name: Run `openapi` command
