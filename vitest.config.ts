@@ -16,7 +16,7 @@ export default defineConfig({
     setupFiles: ['./__tests__/helpers/vitest.matchers.ts'],
 
     /**
-     * We can't run tests with `threads` on because we use `process.chrdir()` in some tests and
+     * We can't run tests with `threads` on because we use `process.chdir()` in some tests and
      * that isn't available in worker threads, and it's way too much work to mock out an entire
      * filesystem and `fs` calls for the tests that use it.
      *
