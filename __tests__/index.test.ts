@@ -161,17 +161,15 @@ describe('cli', () => {
       };
 
       beforeEach(() => {
-        process.env.RDME_API_KEY = key;
-        process.env.RDME_EMAIL = 'owlbert-env@readme.io';
-        process.env.RDME_PROJECT = 'project-owlbert-env';
+        vi.stubEnv('RDME_API_KEY', key);
+        vi.stubEnv('RDME_EMAIL', 'owlbert-env@readme.io');
+        vi.stubEnv('RDME_PROJECT', 'project-owlbert-env');
         consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
       });
 
       afterEach(() => {
         consoleInfoSpy.mockRestore();
-        delete process.env.RDME_API_KEY;
-        delete process.env.RDME_EMAIL;
-        delete process.env.RDME_PROJECT;
+        vi.unstubAllEnvs();
       });
 
       it('should add stored apiKey to opts', async () => {
