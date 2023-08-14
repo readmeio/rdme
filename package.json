@@ -68,7 +68,7 @@
     "@commitlint/cli": "^17.6.6",
     "@commitlint/config-conventional": "^17.6.6",
     "@readme/better-ajv-errors": "^1.5.0",
-    "@readme/eslint-config": "^12.0.1",
+    "@readme/eslint-config": "^12.0.3",
     "@readme/oas-examples": "^5.10.0",
     "@types/command-line-args": "^5.2.0",
     "@types/command-line-usage": "^5.0.2",
