@@ -347,7 +347,9 @@ describe('rdme docs (single)', () => {
   });
 
   describe('command execution in GitHub Actions runner', () => {
-    beforeEach(beforeGHAEnv);
+    beforeEach(() => {
+      beforeGHAEnv();
+    });
 
     afterEach(afterGHAEnv);
 

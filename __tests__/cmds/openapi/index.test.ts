@@ -1460,7 +1460,9 @@ describe('rdme openapi', () => {
   });
 
   describe('command execution in GitHub Actions runner', () => {
-    beforeEach(beforeGHAEnv);
+    beforeEach(() => {
+      beforeGHAEnv();
+    });
 
     afterEach(afterGHAEnv);
 
