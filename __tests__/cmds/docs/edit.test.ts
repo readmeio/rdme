@@ -21,7 +21,9 @@ describe('rdme docs:edit', () => {
     return [consoleWarnSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
   }
 
-  beforeAll(() => nock.disableNetConnect());
+  beforeAll(() => {
+    nock.disableNetConnect();
+  });
 
   beforeEach(() => {
     consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});

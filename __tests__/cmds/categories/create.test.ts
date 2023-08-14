@@ -11,7 +11,9 @@ const key = 'API_KEY';
 const version = '1.0.0';
 
 describe('rdme categories:create', () => {
-  beforeAll(() => nock.disableNetConnect());
+  beforeAll(() => {
+    nock.disableNetConnect();
+  });
 
   afterEach(() => nock.cleanAll());
 

@@ -19,7 +19,9 @@ const fullFixturesDir = `${__dirname}./../../${fixturesBaseDir}`;
 const key = 'API_KEY';
 
 describe('rdme custompages (single)', () => {
-  beforeAll(() => nock.disableNetConnect());
+  beforeAll(() => {
+    nock.disableNetConnect();
+  });
 
   afterAll(() => nock.cleanAll());
 

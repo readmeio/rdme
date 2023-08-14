@@ -30,7 +30,9 @@ const category = 'CATEGORY_ID';
 const testWorkingDir = process.cwd();
 
 describe('rdme docs', () => {
-  beforeAll(() => nock.disableNetConnect());
+  beforeAll(() => {
+    nock.disableNetConnect();
+  });
 
   afterAll(() => nock.cleanAll());
 
@@ -754,7 +756,9 @@ describe('rdme docs', () => {
 });
 
 describe('rdme guides', () => {
-  beforeAll(() => nock.disableNetConnect());
+  beforeAll(() => {
+    nock.disableNetConnect();
+  });
 
   afterAll(() => nock.cleanAll());
 

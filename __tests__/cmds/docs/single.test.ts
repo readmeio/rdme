@@ -23,7 +23,9 @@ const version = '1.0.0';
 const category = 'CATEGORY_ID';
 
 describe('rdme docs (single)', () => {
-  beforeAll(() => nock.disableNetConnect());
+  beforeAll(() => {
+    nock.disableNetConnect();
+  });
 
   afterAll(() => nock.cleanAll());
 

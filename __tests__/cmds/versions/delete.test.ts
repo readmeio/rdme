@@ -12,7 +12,9 @@ const version = '1.0.0';
 const deleteVersion = new DeleteVersionCommand();
 
 describe('rdme versions:delete', () => {
-  beforeAll(() => nock.disableNetConnect());
+  beforeAll(() => {
+    nock.disableNetConnect();
+  });
 
   afterEach(() => nock.cleanAll());
 

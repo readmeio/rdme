@@ -12,7 +12,9 @@ const version = '1.0.0';
 const updateVersion = new UpdateVersionCommand();
 
 describe('rdme versions:update', () => {
-  beforeAll(() => nock.disableNetConnect());
+  beforeAll(() => {
+    nock.disableNetConnect();
+  });
 
   afterEach(() => nock.cleanAll());
 

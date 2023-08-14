@@ -17,7 +17,9 @@ const version = '1.0.0';
 describe('rdme docs:prune', () => {
   const folder = `./__tests__/${fixturesBaseDir}/delete-docs`;
 
-  beforeAll(() => nock.disableNetConnect());
+  beforeAll(() => {
+    nock.disableNetConnect();
+  });
 
   afterAll(() => nock.cleanAll());
 
@@ -186,7 +188,9 @@ describe('rdme docs:prune', () => {
 });
 
 describe('rdme guides:prune', () => {
-  beforeAll(() => nock.disableNetConnect());
+  beforeAll(() => {
+    nock.disableNetConnect();
+  });
 
   afterAll(() => nock.cleanAll());
 

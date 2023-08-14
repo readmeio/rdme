@@ -54,7 +54,9 @@ const getCommandOutput = () => {
 const getRandomRegistryId = () => Math.random().toString(36).substring(2);
 
 describe('rdme openapi', () => {
-  beforeAll(() => nock.disableNetConnect());
+  beforeAll(() => {
+    nock.disableNetConnect();
+  });
 
   beforeEach(() => {
     consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});

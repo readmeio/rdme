@@ -34,7 +34,9 @@ const version2Payload: Version = {
 const versions = new VersionsCommand();
 
 describe('rdme versions', () => {
-  beforeAll(() => nock.disableNetConnect());
+  beforeAll(() => {
+    nock.disableNetConnect();
+  });
 
   afterEach(() => nock.cleanAll());
 

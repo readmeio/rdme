@@ -16,7 +16,9 @@ const project = 'subdomain';
 const token = '123456';
 
 describe('rdme login', () => {
-  beforeAll(() => nock.disableNetConnect());
+  beforeAll(() => {
+    nock.disableNetConnect();
+  });
 
   afterEach(() => configStore.clear());
 
