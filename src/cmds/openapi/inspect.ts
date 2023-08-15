@@ -14,7 +14,7 @@ import { oraOptions } from '../../lib/logger';
 import prepareOas from '../../lib/prepareOas';
 import SoftError from '../../lib/softError';
 
-export interface Options {
+interface Options {
   feature?: string[];
   spec?: string;
   workingDirectory?: string;
