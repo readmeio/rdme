@@ -52,7 +52,6 @@ describe('rdme versions:create', () => {
       .reply(200, [{ version }, { version: '1.1.0' }])
       .post('/api/v1/version', {
         version: newVersion,
-        codename: '',
         is_stable: false,
         is_beta: true,
         from: '1.0.0',
@@ -75,7 +74,10 @@ describe('rdme versions:create', () => {
         version: newVersion,
         codename: 'test',
         from: '1.0.0',
+        is_beta: false,
+        is_deprecated: false,
         is_hidden: false,
+        is_stable: false,
       })
       .basicAuth({ user: key })
       .reply(201, { version: newVersion });
@@ -86,6 +88,7 @@ describe('rdme versions:create', () => {
         version: newVersion,
         fork: version,
         beta: 'false',
+        deprecated: 'false',
         main: 'false',
         codename: 'test',
         isPublic: 'true',
@@ -107,5 +110,63 @@ describe('rdme versions:create', () => {
 
     await expect(createVersion.run({ key, version, fork: '0.0.5' })).rejects.toStrictEqual(new APIError(errorResponse));
     mockRequest.done();
+  });
+
+  describe('bad flag values', () => {
+    it('should throw if non-boolean `beta` flag is passed', () => {
+      const newVersion = '1.0.1';
+
+      return expect(
+        createVersion.run({
+          key,
+          version: newVersion,
+          fork: version,
+          // @ts-expect-error deliberately passing a bad value here
+          beta: 'test',
+        })
+      ).rejects.toStrictEqual(new Error("Invalid option passed for 'beta'. Must be 'true' or 'false'."));
+    });
+
+    it('should throw if non-boolean `deprecated` flag is passed', () => {
+      const newVersion = '1.0.1';
+
+      return expect(
+        createVersion.run({
+          key,
+          version: newVersion,
+          fork: version,
+          // @ts-expect-error deliberately passing a bad value here
+          deprecated: 'test',
+        })
+      ).rejects.toStrictEqual(new Error("Invalid option passed for 'deprecated'. Must be 'true' or 'false'."));
+    });
+
+    it('should throw if non-boolean `isPublic` flag is passed', () => {
+      const newVersion = '1.0.1';
+
+      return expect(
+        createVersion.run({
+          key,
+          version: newVersion,
+          fork: version,
+          // @ts-expect-error deliberately passing a bad value here
+          isPublic: 'test',
+        })
+      ).rejects.toStrictEqual(new Error("Invalid option passed for 'isPublic'. Must be 'true' or 'false'."));
+    });
+
+    it('should throw if non-boolean `main` flag is passed', () => {
+      const newVersion = '1.0.1';
+
+      return expect(
+        createVersion.run({
+          key,
+          version: newVersion,
+          fork: version,
+          // @ts-expect-error deliberately passing a bad value here
+          main: 'test',
+        })
+      ).rejects.toStrictEqual(new Error("Invalid option passed for 'main'. Must be 'true' or 'false'."));
+    });
   });
 });

@@ -1,6 +1,4 @@
 import type { Version } from '../cmds/versions';
-import type { Options as VersionCreateOptions } from 'cmds/versions/create';
-import type { Options as VersionUpdateOptions } from 'cmds/versions/update';
 import type { Response } from 'node-fetch';
 import type { Choice, PromptObject } from 'prompts';
 
@@ -130,16 +128,22 @@ export function createOasPrompt(
   ];
 }
 
-export function createVersionPrompt(
+/**
+ * Series of prompts to construct a version object,
+ * used in our `versions:create` and `versions:update` commands
+ */
+export function versionPrompt(
+  /** list of versions, used for prompt about which version to fork */
   versionList: Version[],
-  opts: VersionCreateOptions & VersionUpdateOptions,
+  /** existing version if we're performing an update */
   isUpdate?: {
     is_stable: boolean;
   }
 ): PromptObject[] {
   return [
     {
-      type: opts.fork || isUpdate ? null : 'select',
+      // only runs for versions:create command
+      type: isUpdate ? null : 'select',
       name: 'from',
       message: 'Which version would you like to fork from?',
       choices: versionList.map(v => {
@@ -150,35 +154,43 @@ export function createVersionPrompt(
       }),
     },
     {
-      type: opts.newVersion || !isUpdate ? null : 'text',
+      // only runs for versions:update command
+      type: !isUpdate ? null : 'text',
       name: 'newVersion',
       message: 'What should the version be renamed to?',
-      initial: opts.newVersion || false,
       hint: '1.0.0',
       validate(val: string) {
+        // allow empty string, in which case the version won't be renamed
+        if (!val) return true;
         return semver.valid(semver.coerce(val)) ? true : 'Please specify a semantic version.';
       },
     },
     {
-      type: opts.main || isUpdate?.is_stable ? null : 'confirm',
+      // if the existing version being updated is already the main version,
+      // we can't switch that so we skip this question
+      type: isUpdate?.is_stable ? null : 'confirm',
       name: 'is_stable',
       message: 'Would you like to make this version the main version for this project?',
     },
     {
-      type: opts.beta ? null : 'confirm',
+      type: 'confirm',
       name: 'is_beta',
       message: 'Should this version be in beta?',
     },
     {
       type: (prev, values) => {
-        return opts.isPublic || opts.main || values.is_stable ? null : 'confirm';
+        // if user previously wanted this version to be the main version
+        // it can't also be hidden.
+        return values.is_stable ? null : 'confirm';
       },
-      name: 'is_hidden',
+      name: 'is_public',
       message: 'Would you like to make this version public?',
     },
     {
       type: (prev, values) => {
-        return opts.deprecated || opts.main || !isUpdate || values.is_stable ? null : 'confirm';
+        // if user previously wanted this version to be the main version
+        // it can't also be deprecated.
+        return values.is_stable ? null : 'confirm';
       },
       name: 'is_deprecated',
       message: 'Would you like to deprecate this version?',
