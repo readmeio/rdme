@@ -1,3 +1,10 @@
+## [8.6.5-next.6](https://github.com/readmeio/rdme/compare/v8.6.5-next.5...v8.6.5-next.6) (2023-08-18)
+
+
+### Bug Fixes
+
+* **versions:** general refactors to handle flag edge cases ([#861](https://github.com/readmeio/rdme/issues/861)) ([e316139](https://github.com/readmeio/rdme/commit/e31613915aaa383e49e949c6aac40b950f7bf9cf))
+
 ## [8.6.5-next.5](https://github.com/readmeio/rdme/compare/v8.6.5-next.4...v8.6.5-next.5) (2023-08-10)
 
 
