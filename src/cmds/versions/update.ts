@@ -80,7 +80,7 @@ export default class UpdateVersionCommand extends Command {
         new Headers({
           Accept: 'application/json',
           'Content-Type': 'application/json',
-        })
+        }),
       ),
       body: JSON.stringify(body),
     })

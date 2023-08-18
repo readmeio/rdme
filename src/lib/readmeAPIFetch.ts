@@ -134,7 +134,7 @@ function sanitizeHeaders(headers: Headers) {
 export default async function readmeAPIFetch(
   pathname: string,
   options: RequestInit = { headers: new Headers() },
-  fileOpts: FilePathDetails = { filePath: '', fileType: false }
+  fileOpts: FilePathDetails = { filePath: '', fileType: false },
 ) {
   let source = 'cli';
   let headers = options.headers as Headers;
@@ -163,7 +163,7 @@ export default async function readmeAPIFetch(
        */
       try {
         const sourceUrl = new URL(
-          `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/blob/${process.env.GITHUB_SHA}/${filePath}`
+          `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/blob/${process.env.GITHUB_SHA}/${filePath}`,
         ).href;
         headers.set('x-readme-source-url', sourceUrl);
       } catch (e) {
@@ -185,7 +185,7 @@ export default async function readmeAPIFetch(
   const fullUrl = `${getProxy()}${config.get('host')}${pathname}`;
 
   debug(
-    `making ${(options.method || 'get').toUpperCase()} request to ${fullUrl} with headers: ${sanitizeHeaders(headers)}`
+    `making ${(options.method || 'get').toUpperCase()} request to ${fullUrl} with headers: ${sanitizeHeaders(headers)}`,
   );
 
   return nodeFetch(fullUrl, {
