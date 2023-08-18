@@ -46,7 +46,7 @@ export default class UpdateVersionCommand extends Command {
 
     Command.debug(`selectedVersion: ${selectedVersion}`);
 
-    // TODO: I think this is fetch here is unnecessary but
+    // TODO: I think this fetch here is unnecessary but
     // it will require a bigger refactor of getProjectVersion
     const foundVersion = await readmeAPIFetch(`/api/v1/version/${selectedVersion}`, {
       method: 'get',
