@@ -14,7 +14,6 @@ interface CustomMatchers<R = unknown> {
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace jest {
-    // eslint-disable-next-line @typescript-eslint/no-empty-interface
     interface Matchers<R> extends CustomMatchers<R> {}
   }
 }
@@ -24,7 +23,7 @@ export default function toBeValidSchema(
   /** The input YAML, as a string */
   yaml: string,
   /** The JSON schema file */
-  schema: AnySchema
+  schema: AnySchema,
 ): { message: () => string; pass: boolean } {
   const ajv = new Ajv({ strictTypes: false, strictTuples: false });
 

@@ -46,7 +46,7 @@ export default class OpenAPIInspectCommand extends Command {
         type: String,
         description: `A specific OpenAPI or ReadMe feature you wish to see detailed information on (if it exists). If any features supplied do not exist within the API definition an exit(1) code will be returned alongside the report.\n\nAvailable options: ${new Intl.ListFormat(
           'en',
-          { style: 'narrow' }
+          { style: 'narrow' },
         ).format(getSupportedFeatures())}`,
         multiple: true,
       },
@@ -157,7 +157,7 @@ export default class OpenAPIInspectCommand extends Command {
         if (info.found.length > 1) {
           msg = `You are using ${chalk.bold(info.found.length)} ${pluralize(
             info.name,
-            info.found.length
+            info.found.length,
           )} throughout your API: ${new Intl.ListFormat('en').format(highlightedData)}`;
         } else {
           msg = `You are using a single ${info.name} throughout your API: ${highlightedData[0]}`;
@@ -208,7 +208,7 @@ export default class OpenAPIInspectCommand extends Command {
               wrapWord: true,
             },
           },
-        })
+        }),
       );
     });
 
@@ -228,8 +228,8 @@ export default class OpenAPIInspectCommand extends Command {
           new Error(
             `Unknown features: ${invalidFeatures.join(', ')}. See \`${config.get('cli')} help ${
               this.command
-            }\` for help.`
-          )
+            }\` for help.`,
+          ),
         );
       }
     }
@@ -246,8 +246,8 @@ export default class OpenAPIInspectCommand extends Command {
     if (features?.length) {
       spinner.start(
         `Analyzing your API definition for usage of ${new Intl.ListFormat('en').format(
-          features.map(feature => (feature === 'readme' ? 'ReadMe extensions' : feature))
-        )}...`
+          features.map(feature => (feature === 'readme' ? 'ReadMe extensions' : feature)),
+        )}...`,
       );
     } else {
       spinner.start('Analyzing your API definition for OpenAPI and ReadMe feature usage...');

@@ -43,13 +43,13 @@ describe('#validateSubdomain', () => {
 
   it('should reject subdomain with spaces', () => {
     expect(validateSubdomain('test subdomain')).toBe(
-      'Project subdomain must contain only letters, numbers and dashes.'
+      'Project subdomain must contain only letters, numbers and dashes.',
     );
   });
 
   it('should reject subdomain with special characters', () => {
     expect(validateSubdomain('test-subdomain!')).toBe(
-      'Project subdomain must contain only letters, numbers and dashes.'
+      'Project subdomain must contain only letters, numbers and dashes.',
     );
   });
 });

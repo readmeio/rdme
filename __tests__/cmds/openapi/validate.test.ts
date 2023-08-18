@@ -42,15 +42,15 @@ describe('rdme openapi:validate', () => {
     return expect(
       validate.run({
         spec: require.resolve(`@readme/oas-examples/${specVersion}/${format}/petstore.${format}`),
-      })
+      }),
     ).resolves.toContain(
-      `petstore.${format} is a valid ${specVersion === '2.0' ? 'Swagger' : 'OpenAPI'} API definition!`
+      `petstore.${format} is a valid ${specVersion === '2.0' ? 'Swagger' : 'OpenAPI'} API definition!`,
     );
   });
 
   it('should discover and upload an API definition if none is provided', async () => {
     await expect(validate.run({ workingDirectory: './__tests__/__fixtures__/relative-ref-oas' })).resolves.toBe(
-      chalk.green('petstore.json is a valid OpenAPI API definition!')
+      chalk.green('petstore.json is a valid OpenAPI API definition!'),
     );
 
     expect(console.info).toHaveBeenCalledTimes(1);
@@ -70,33 +70,33 @@ describe('rdme openapi:validate', () => {
       validate.run({
         spec: 'petstore.json',
         workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-      })
+      }),
     ).resolves.toBe(chalk.green('petstore.json is a valid OpenAPI API definition!'));
   });
 
   it('should adhere to .gitignore in subdirectories', () => {
     fs.copyFileSync(
       require.resolve('@readme/oas-examples/3.0/json/petstore-simple.json'),
-      './__tests__/__fixtures__/nested-gitignored-oas/nest/petstore-ignored.json'
+      './__tests__/__fixtures__/nested-gitignored-oas/nest/petstore-ignored.json',
     );
 
     return expect(
       validate.run({
         workingDirectory: './__tests__/__fixtures__/nested-gitignored-oas',
-      })
+      }),
     ).resolves.toBe(chalk.green('nest/petstore.json is a valid OpenAPI API definition!'));
   });
 
   describe('error handling', () => {
     it('should throw an error if invalid JSON is supplied', () => {
       return expect(validate.run({ spec: './__tests__/__fixtures__/invalid-json/yikes.json' })).rejects.toStrictEqual(
-        new SyntaxError('Unexpected end of JSON input')
+        new SyntaxError('Unexpected end of JSON input'),
       );
     });
 
     it('should throw an error if an invalid OpenAPI 3.0 definition is supplied', () => {
       return expect(validate.run({ spec: './__tests__/__fixtures__/invalid-oas.json' })).rejects.toThrow(
-        'Token "Error" does not exist.'
+        'Token "Error" does not exist.',
       );
     });
 
@@ -131,7 +131,7 @@ describe('rdme openapi:validate', () => {
 
     it('should fail if user attempts to pass `--github` flag in CI environment', () => {
       return expect(
-        validate.run({ github: true, spec: '__tests__/__fixtures__/petstore-simple-weird-version.json' })
+        validate.run({ github: true, spec: '__tests__/__fixtures__/petstore-simple-weird-version.json' }),
       ).rejects.toStrictEqual(new Error('The `--github` flag is only for usage in non-CI environments.'));
     });
   });
@@ -196,7 +196,7 @@ describe('rdme openapi:validate', () => {
       prompts.inject([true, 'validate-test-opt-spec-github-branch', fileName]);
 
       await expect(
-        validate.run({ spec, workingDirectory: './__tests__/__fixtures__/relative-ref-oas' })
+        validate.run({ spec, workingDirectory: './__tests__/__fixtures__/relative-ref-oas' }),
       ).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();
@@ -208,8 +208,8 @@ describe('rdme openapi:validate', () => {
       prompts.inject([spec, false]);
       return expect(validate.run({})).rejects.toStrictEqual(
         new Error(
-          'GitHub Actions workflow creation cancelled. If you ever change your mind, you can run this command again with the `--github` flag.'
-        )
+          'GitHub Actions workflow creation cancelled. If you ever change your mind, you can run this command again with the `--github` flag.',
+        ),
       );
     });
   });
@@ -234,14 +234,14 @@ describe('rdme validate', () => {
     await expect(
       validateAlias.run({
         spec: require.resolve('@readme/oas-examples/3.0/json/petstore.json'),
-      })
+      }),
     ).resolves.toContain(chalk.green('petstore.json is a valid OpenAPI API definition!'));
 
     expect(console.warn).toHaveBeenCalledTimes(1);
 
     const output = getWarningCommandOutput();
     expect(output).toBe(
-      chalk.yellow('⚠️  Warning! `rdme validate` has been deprecated. Please use `rdme openapi:validate` instead.')
+      chalk.yellow('⚠️  Warning! `rdme validate` has been deprecated. Please use `rdme openapi:validate` instead.'),
     );
   });
 });

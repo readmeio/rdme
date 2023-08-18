@@ -28,7 +28,7 @@ async function pushDoc(
   selectedVersion: string,
   dryRun: boolean,
   filePath: string,
-  type: CommandCategories
+  type: CommandCategories,
 ) {
   const { content, data, hash, slug } = readDoc(filePath);
 
@@ -57,7 +57,7 @@ async function pushDoc(
   function createDoc() {
     if (dryRun) {
       return `🎭 dry run! This will create '${slug}' with contents from ${filePath} with the following metadata: ${JSON.stringify(
-        data
+        data,
       )}`;
     }
 
@@ -71,14 +71,14 @@ async function pushDoc(
             new Headers({
               'x-readme-version': selectedVersion,
               'Content-Type': 'application/json',
-            })
+            }),
           ),
           body: JSON.stringify({
             slug,
             ...payload,
           }),
         },
-        { filePath, fileType: 'path' }
+        { filePath, fileType: 'path' },
       )
         .then(handleRes)
         // eslint-disable-next-line no-underscore-dangle
@@ -95,7 +95,7 @@ async function pushDoc(
 
     if (dryRun) {
       return `🎭 dry run! This will update '${slug}' with contents from ${filePath} with the following metadata: ${JSON.stringify(
-        data
+        data,
       )}`;
     }
 
@@ -108,11 +108,11 @@ async function pushDoc(
           new Headers({
             'x-readme-version': selectedVersion,
             'Content-Type': 'application/json',
-          })
+          }),
         ),
         body: JSON.stringify(payload),
       },
-      { filePath, fileType: 'path' }
+      { filePath, fileType: 'path' },
     )
       .then(handleRes)
       .then(res => `✏️ successfully updated '${res.slug}' with contents from ${filePath}`);
@@ -125,7 +125,7 @@ async function pushDoc(
       new Headers({
         'x-readme-version': selectedVersion,
         Accept: 'application/json',
-      })
+      }),
     ),
   })
     .then(async res => {
@@ -164,7 +164,7 @@ export default async function syncDocsPath(
   /** boolean indicating dry run mode */
   dryRun: boolean,
   /** array of allowed file extensions */
-  allowedFileExtensions = ['.markdown', '.md']
+  allowedFileExtensions = ['.markdown', '.md'],
 ) {
   if (!pathInput) {
     return Promise.reject(new Error(`No path provided. Usage \`${config.get('cli')} ${usage}\`.`));
@@ -182,7 +182,7 @@ export default async function syncDocsPath(
   if (stat.isDirectory()) {
     // Filter out any files that don't match allowedFileExtensions
     const files = readdirRecursive(pathInput).filter(file =>
-      allowedFileExtensions.includes(path.extname(file).toLowerCase())
+      allowedFileExtensions.includes(path.extname(file).toLowerCase()),
     );
 
     Command.debug(`number of files: ${files.length}`);
@@ -191,9 +191,9 @@ export default async function syncDocsPath(
       return Promise.reject(
         new Error(
           `The directory you provided (${pathInput}) doesn't contain any of the following required files: ${allowedFileExtensions.join(
-            ', '
-          )}.`
-        )
+            ', ',
+          )}.`,
+        ),
       );
     }
 
@@ -201,7 +201,7 @@ export default async function syncDocsPath(
       await Promise.all(
         files.map(async filename => {
           return pushDoc(key, selectedVersion, dryRun, filename, cmdType);
-        })
+        }),
       )
     ).join('\n');
   } else {
@@ -209,8 +209,10 @@ export default async function syncDocsPath(
     if (!allowedFileExtensions.includes(fileExtension)) {
       return Promise.reject(
         new Error(
-          `Invalid file extension (${fileExtension}). Must be one of the following: ${allowedFileExtensions.join(', ')}`
-        )
+          `Invalid file extension (${fileExtension}). Must be one of the following: ${allowedFileExtensions.join(
+            ', ',
+          )}`,
+        ),
       );
     }
     output = await pushDoc(key, selectedVersion, dryRun, pathInput, cmdType);

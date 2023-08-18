@@ -19,7 +19,7 @@ export default async function getCategories(key: string, selectedVersion: string
         new Headers({
           'x-readme-version': selectedVersion,
           Accept: 'application/json',
-        })
+        }),
       ),
     })
       .then(res => {
@@ -44,11 +44,11 @@ export default async function getCategories(key: string, selectedVersion: string
             new Headers({
               'x-readme-version': selectedVersion,
               Accept: 'application/json',
-            })
+            }),
           ),
         }).then(handleRes);
-      })
-    ))
+      }),
+    )),
   );
 
   return allCategories;

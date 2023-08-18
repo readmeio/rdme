@@ -25,20 +25,20 @@ describe('rdme versions:create', () => {
   it('should error in CI if no API key provided', async () => {
     process.env.TEST_RDME_CI = 'true';
     await expect(createVersion.run({})).rejects.toStrictEqual(
-      new Error('No project API key provided. Please use `--key`.')
+      new Error('No project API key provided. Please use `--key`.'),
     );
     delete process.env.TEST_RDME_CI;
   });
 
   it('should error if no version provided', () => {
     return expect(createVersion.run({ key })).rejects.toStrictEqual(
-      new Error('Please specify a semantic version. See `rdme help versions:create` for help.')
+      new Error('Please specify a semantic version. See `rdme help versions:create` for help.'),
     );
   });
 
   it('should error if invaild version provided', () => {
     return expect(createVersion.run({ key, version: 'test' })).rejects.toStrictEqual(
-      new Error('Please specify a semantic version. See `rdme help versions:create` for help.')
+      new Error('Please specify a semantic version. See `rdme help versions:create` for help.'),
     );
   });
 
@@ -52,7 +52,6 @@ describe('rdme versions:create', () => {
       .reply(200, [{ version }, { version: '1.1.0' }])
       .post('/api/v1/version', {
         version: newVersion,
-        codename: '',
         is_stable: false,
         is_beta: true,
         from: '1.0.0',
@@ -62,7 +61,7 @@ describe('rdme versions:create', () => {
       .reply(201, { version: newVersion });
 
     await expect(createVersion.run({ key, version: newVersion })).resolves.toBe(
-      `Version ${newVersion} created successfully.`
+      `Version ${newVersion} created successfully.`,
     );
     mockRequest.done();
   });
@@ -75,7 +74,10 @@ describe('rdme versions:create', () => {
         version: newVersion,
         codename: 'test',
         from: '1.0.0',
+        is_beta: false,
+        is_deprecated: false,
         is_hidden: false,
+        is_stable: false,
       })
       .basicAuth({ user: key })
       .reply(201, { version: newVersion });
@@ -86,10 +88,11 @@ describe('rdme versions:create', () => {
         version: newVersion,
         fork: version,
         beta: 'false',
+        deprecated: 'false',
         main: 'false',
         codename: 'test',
         isPublic: 'true',
-      })
+      }),
     ).resolves.toBe(`Version ${newVersion} created successfully.`);
 
     mockRequest.done();
@@ -107,5 +110,63 @@ describe('rdme versions:create', () => {
 
     await expect(createVersion.run({ key, version, fork: '0.0.5' })).rejects.toStrictEqual(new APIError(errorResponse));
     mockRequest.done();
+  });
+
+  describe('bad flag values', () => {
+    it('should throw if non-boolean `beta` flag is passed', () => {
+      const newVersion = '1.0.1';
+
+      return expect(
+        createVersion.run({
+          key,
+          version: newVersion,
+          fork: version,
+          // @ts-expect-error deliberately passing a bad value here
+          beta: 'test',
+        }),
+      ).rejects.toStrictEqual(new Error("Invalid option passed for 'beta'. Must be 'true' or 'false'."));
+    });
+
+    it('should throw if non-boolean `deprecated` flag is passed', () => {
+      const newVersion = '1.0.1';
+
+      return expect(
+        createVersion.run({
+          key,
+          version: newVersion,
+          fork: version,
+          // @ts-expect-error deliberately passing a bad value here
+          deprecated: 'test',
+        }),
+      ).rejects.toStrictEqual(new Error("Invalid option passed for 'deprecated'. Must be 'true' or 'false'."));
+    });
+
+    it('should throw if non-boolean `isPublic` flag is passed', () => {
+      const newVersion = '1.0.1';
+
+      return expect(
+        createVersion.run({
+          key,
+          version: newVersion,
+          fork: version,
+          // @ts-expect-error deliberately passing a bad value here
+          isPublic: 'test',
+        }),
+      ).rejects.toStrictEqual(new Error("Invalid option passed for 'isPublic'. Must be 'true' or 'false'."));
+    });
+
+    it('should throw if non-boolean `main` flag is passed', () => {
+      const newVersion = '1.0.1';
+
+      return expect(
+        createVersion.run({
+          key,
+          version: newVersion,
+          fork: version,
+          // @ts-expect-error deliberately passing a bad value here
+          main: 'test',
+        }),
+      ).rejects.toStrictEqual(new Error("Invalid option passed for 'main'. Must be 'true' or 'false'."));
+    });
   });
 });

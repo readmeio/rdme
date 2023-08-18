@@ -74,7 +74,7 @@ export default class DocsPruneCommand extends Command {
 
     // Strip out non-markdown files
     const files = readdirRecursive(folder).filter(
-      file => file.toLowerCase().endsWith('.md') || file.toLowerCase().endsWith('.markdown')
+      file => file.toLowerCase().endsWith('.md') || file.toLowerCase().endsWith('.markdown'),
     );
 
     Command.debug(`number of files: ${files.length}`);
@@ -96,11 +96,11 @@ export default class DocsPruneCommand extends Command {
     const fileSlugs = new Set(files.map(getSlug));
     const slugsToDelete = docSlugs.filter((slug: string) => !fileSlugs.has(slug));
     const deletedDocs = await Promise.all(
-      slugsToDelete.map((slug: string) => deleteDoc(key, selectedVersion, dryRun, slug, this.cmdCategory))
+      slugsToDelete.map((slug: string) => deleteDoc(key, selectedVersion, dryRun, slug, this.cmdCategory)),
     );
 
     return Promise.resolve(chalk.green(deletedDocs.join('\n'))).then(msg =>
-      createGHA(msg, this.command, this.args, { ...opts, version: selectedVersion })
+      createGHA(msg, this.command, this.args, { ...opts, version: selectedVersion }),
     );
   }
 }

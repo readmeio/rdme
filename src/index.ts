@@ -157,7 +157,7 @@ export default function rdme(rawProcessArgv: NodeJS.Process['argv']) {
   } catch (e) {
     if (e.message === 'Command not found.') {
       e.message = `${e.message}\n\nType \`${chalk.yellow(`${config.get('cli')} help`)}\` ${chalk.red(
-        'to see all commands'
+        'to see all commands',
       )}`;
     }
 
