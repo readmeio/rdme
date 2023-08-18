@@ -75,6 +75,7 @@ describe('rdme versions:create', () => {
         codename: 'test',
         from: '1.0.0',
         is_beta: false,
+        is_deprecated: false,
         is_hidden: false,
         is_stable: false,
       })
@@ -87,6 +88,7 @@ describe('rdme versions:create', () => {
         version: newVersion,
         fork: version,
         beta: 'false',
+        deprecated: 'false',
         main: 'false',
         codename: 'test',
         isPublic: 'true',
@@ -111,10 +113,10 @@ describe('rdme versions:create', () => {
   });
 
   describe('bad flag values', () => {
-    it('should throw if non-boolean `beta` flag is passed', async () => {
+    it('should throw if non-boolean `beta` flag is passed', () => {
       const newVersion = '1.0.1';
 
-      await expect(
+      return expect(
         createVersion.run({
           key,
           version: newVersion,
@@ -125,10 +127,24 @@ describe('rdme versions:create', () => {
       ).rejects.toStrictEqual(new Error("Invalid option passed for 'beta'. Must be 'true' or 'false'."));
     });
 
-    it('should throw if non-boolean `isPublic` flag is passed', async () => {
+    it('should throw if non-boolean `deprecated` flag is passed', () => {
       const newVersion = '1.0.1';
 
-      await expect(
+      return expect(
+        createVersion.run({
+          key,
+          version: newVersion,
+          fork: version,
+          // @ts-expect-error deliberately passing a bad value here
+          deprecated: 'test',
+        })
+      ).rejects.toStrictEqual(new Error("Invalid option passed for 'deprecated'. Must be 'true' or 'false'."));
+    });
+
+    it('should throw if non-boolean `isPublic` flag is passed', () => {
+      const newVersion = '1.0.1';
+
+      return expect(
         createVersion.run({
           key,
           version: newVersion,
@@ -139,10 +155,10 @@ describe('rdme versions:create', () => {
       ).rejects.toStrictEqual(new Error("Invalid option passed for 'isPublic'. Must be 'true' or 'false'."));
     });
 
-    it('should throw if non-boolean `main` flag is passed', async () => {
+    it('should throw if non-boolean `main` flag is passed', () => {
       const newVersion = '1.0.1';
 
-      await expect(
+      return expect(
         createVersion.run({
           key,
           version: newVersion,

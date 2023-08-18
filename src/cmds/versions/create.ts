@@ -19,6 +19,7 @@ export interface Options extends CommonOptions {
 export interface CommonOptions {
   beta?: 'true' | 'false';
   codename?: string;
+  deprecated?: 'true' | 'false';
   isPublic?: 'true' | 'false';
   main?: 'true' | 'false';
 }
@@ -53,7 +54,7 @@ export default class CreateVersionCommand extends Command {
     await super.run(opts);
 
     let versionList;
-    const { key, version, fork, codename, main, beta, isPublic } = opts;
+    const { key, version, fork, codename, main, beta, deprecated, isPublic } = opts;
 
     if (!version || !semver.valid(semver.coerce(version))) {
       return Promise.reject(
@@ -73,6 +74,7 @@ export default class CreateVersionCommand extends Command {
     prompts.override({
       from: fork,
       is_beta: castStringOptToBool(beta, 'beta'),
+      is_deprecated: castStringOptToBool(deprecated, 'deprecated'),
       is_public: castStringOptToBool(isPublic, 'isPublic'),
       is_stable: castStringOptToBool(main, 'main'),
     });
@@ -84,6 +86,7 @@ export default class CreateVersionCommand extends Command {
       version,
       from: promptResponse.from,
       is_beta: promptResponse.is_beta,
+      is_deprecated: promptResponse.is_deprecated,
       is_hidden: !promptResponse.is_public,
       is_stable: promptResponse.is_stable,
     };

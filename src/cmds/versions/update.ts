@@ -13,7 +13,6 @@ import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetc
 import { getProjectVersion } from '../../lib/versionSelect';
 
 export interface Options extends CommonOptions {
-  deprecated?: 'true' | 'false';
   newVersion?: string;
 }
 
