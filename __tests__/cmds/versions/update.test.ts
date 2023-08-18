@@ -25,7 +25,7 @@ describe('rdme versions:update', () => {
   it('should error in CI if no API key provided', async () => {
     process.env.TEST_RDME_CI = 'true';
     await expect(updateVersion.run({})).rejects.toStrictEqual(
-      new Error('No project API key provided. Please use `--key`.')
+      new Error('No project API key provided. Please use `--key`.'),
     );
     delete process.env.TEST_RDME_CI;
   });
@@ -92,7 +92,7 @@ describe('rdme versions:update', () => {
         main: 'false',
         codename: 'updated-test',
         isPublic: 'true',
-      })
+      }),
     ).resolves.toBe(`Version ${versionToChange} updated successfully.`);
     mockRequest.done();
   });
@@ -131,7 +131,7 @@ describe('rdme versions:update', () => {
         main: 'false',
         codename: 'updated-test',
         isPublic: 'true',
-      })
+      }),
     ).resolves.toBe(`Version ${versionToChange} updated successfully.`);
     mockRequest.done();
   });
@@ -169,7 +169,7 @@ describe('rdme versions:update', () => {
         main: 'false',
         codename: 'updated-test',
         isPublic: 'true',
-      })
+      }),
     ).resolves.toBe(`Version ${versionToChange} updated successfully.`);
     mockRequest.done();
   });
@@ -206,7 +206,7 @@ describe('rdme versions:update', () => {
         main: 'false',
         codename: 'updated-test',
         isPublic: 'true',
-      })
+      }),
     ).resolves.toBe(`Version ${versionToChange} updated successfully.`);
     mockRequest.done();
   });
@@ -268,7 +268,7 @@ describe('rdme versions:update', () => {
           version: versionToChange,
           // @ts-expect-error deliberately passing a bad value here
           beta: 'hi',
-        })
+        }),
       ).rejects.toStrictEqual(new Error("Invalid option passed for 'beta'. Must be 'true' or 'false'."));
       mockRequest.done();
     });
@@ -290,7 +290,7 @@ describe('rdme versions:update', () => {
           version: versionToChange,
           // @ts-expect-error deliberately passing a bad value here
           deprecated: 'hi',
-        })
+        }),
       ).rejects.toStrictEqual(new Error("Invalid option passed for 'deprecated'. Must be 'true' or 'false'."));
       mockRequest.done();
     });
@@ -312,7 +312,7 @@ describe('rdme versions:update', () => {
           version: versionToChange,
           // @ts-expect-error deliberately passing a bad value here
           isPublic: 'hi',
-        })
+        }),
       ).rejects.toStrictEqual(new Error("Invalid option passed for 'isPublic'. Must be 'true' or 'false'."));
       mockRequest.done();
     });
@@ -334,7 +334,7 @@ describe('rdme versions:update', () => {
           version: versionToChange,
           // @ts-expect-error deliberately passing a bad value here
           main: 'hi',
-        })
+        }),
       ).rejects.toStrictEqual(new Error("Invalid option passed for 'main'. Must be 'true' or 'false'."));
       mockRequest.done();
     });

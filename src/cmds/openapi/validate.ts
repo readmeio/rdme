@@ -43,7 +43,7 @@ export default class OpenAPIValidateCommand extends Command {
 
     const { specPath, specType } = await prepareOas(spec, 'openapi:validate');
     return Promise.resolve(chalk.green(`${specPath} is a valid ${specType} API definition!`)).then(msg =>
-      createGHA(msg, this.command, this.args, { ...opts, spec: specPath } as CommandOptions<Options>)
+      createGHA(msg, this.command, this.args, { ...opts, spec: specPath } as CommandOptions<Options>),
     );
   }
 }

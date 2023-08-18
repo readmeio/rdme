@@ -68,7 +68,7 @@ export default class DocsEditCommand extends Command {
         new Headers({
           'x-readme-version': selectedVersion,
           Accept: 'application/json',
-        })
+        }),
       ),
     }).then(handleRes);
 
@@ -91,12 +91,12 @@ export default class DocsEditCommand extends Command {
             new Headers({
               'x-readme-version': selectedVersion,
               'Content-Type': 'application/json',
-            })
+            }),
           ),
           body: JSON.stringify(
             Object.assign(existingDoc, {
               body: updatedDoc,
-            })
+            }),
           ),
         })
           .then(res => handleRes(res, false))

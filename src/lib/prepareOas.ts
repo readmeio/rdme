@@ -52,7 +52,7 @@ export default async function prepareOas(
     title?: string;
   } = {
     convertToLatest: false,
-  }
+  },
 ) {
   let specPath = path;
 
@@ -87,7 +87,7 @@ export default async function prepareOas(
       file =>
         file.toLowerCase().endsWith('.json') ||
         file.toLowerCase().endsWith('.yaml') ||
-        file.toLowerCase().endsWith('.yml')
+        file.toLowerCase().endsWith('.yml'),
     );
 
     debug(`number of JSON or YAML files found: ${jsonAndYamlFiles.length}`);
@@ -110,7 +110,7 @@ export default async function prepareOas(
               debug(`error extracting API definition specification version for ${file}: ${e.message}`);
               return null;
             });
-        })
+        }),
       )
     ).filter(Boolean);
 
@@ -119,7 +119,7 @@ export default async function prepareOas(
     if (!possibleSpecFiles.length) {
       fileFindingSpinner.fail();
       throw new Error(
-        `We couldn't find an OpenAPI or Swagger definition.\n\nPlease specify the path to your definition with \`rdme ${command} ./path/to/api/definition\`.`
+        `We couldn't find an OpenAPI or Swagger definition.\n\nPlease specify the path to your definition with \`rdme ${command} ./path/to/api/definition\`.`,
       );
     }
 

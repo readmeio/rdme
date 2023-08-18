@@ -95,9 +95,9 @@ export default class Command {
       if (opts.key && configstore.get('apiKey') === opts.key) {
         info(
           `🔑 ${chalk.green(email)} is currently logged in, using the stored API key for this project: ${chalk.blue(
-            project
+            project,
           )}`,
-          { includeEmojiPrefix: false }
+          { includeEmojiPrefix: false },
         );
       }
 
