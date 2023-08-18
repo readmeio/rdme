@@ -37,9 +37,9 @@ updates:
       - dependency-name: node-fetch
         versions:
           - '>= 3'
-      - dependency-name: ora
-        versions:
-          - '>= 6'
       - dependency-name: open
         versions:
           - '>= 9'
+      - dependency-name: ora
+        versions:
+          - '>= 6'
