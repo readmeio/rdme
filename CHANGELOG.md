@@ -1,3 +1,10 @@
+## [8.6.5-next.7](https://github.com/readmeio/rdme/compare/v8.6.5-next.6...v8.6.5-next.7) (2023-08-18)
+
+
+### Bug Fixes
+
+* **reducer:** quirk with security schemes sometimes getting removed ([#867](https://github.com/readmeio/rdme/issues/867)) ([be2e037](https://github.com/readmeio/rdme/commit/be2e0370ce9fb29e6b56d6739a37449ecf0af8a7))
+
 ## [8.6.5-next.6](https://github.com/readmeio/rdme/compare/v8.6.5-next.5...v8.6.5-next.6) (2023-08-18)
 
 
