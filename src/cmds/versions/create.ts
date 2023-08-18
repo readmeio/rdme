@@ -68,7 +68,7 @@ export default class CreateVersionCommand extends Command {
       }).then(handleRes);
     }
 
-    const versionPrompt = promptHandler.createVersionPrompt(versionList || []);
+    const versionPrompt = promptHandler.versionPrompt(versionList || []);
 
     prompts.override({
       from: fork,

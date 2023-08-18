@@ -72,7 +72,7 @@ export default class UpdateVersionCommand extends Command {
       newVersion,
     });
 
-    const promptResponse = await promptTerminal(promptHandler.createVersionPrompt([], foundVersion));
+    const promptResponse = await promptTerminal(promptHandler.versionPrompt([], foundVersion));
 
     const body: Version = {
       codename,

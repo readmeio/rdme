@@ -128,7 +128,11 @@ export function createOasPrompt(
   ];
 }
 
-export function createVersionPrompt(
+/**
+ * Series of prompts to construct a version object,
+ * used in our `versions:create` and `versions:update` commands
+ */
+export function versionPrompt(
   /** list of versions, used for prompt about which version to fork */
   versionList: Version[],
   /** existing version if we're performing an update */
