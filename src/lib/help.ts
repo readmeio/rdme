@@ -126,7 +126,7 @@ async function globalUsage(args: Command['args']) {
     {
       content: 'To get more help with ReadMe, check out our docs at https://docs.readme.com.',
       raw: true,
-    }
+    },
   );
 
   return usage(helpContent);

@@ -24,7 +24,7 @@ export default function toBeValidSchema(
   /** The input YAML, as a string */
   yaml: string,
   /** The JSON schema file */
-  schema: AnySchema
+  schema: AnySchema,
 ): { message: () => string; pass: boolean } {
   const ajv = new Ajv({ strictTypes: false, strictTuples: false });
 

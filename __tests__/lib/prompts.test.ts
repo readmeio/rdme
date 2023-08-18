@@ -53,8 +53,8 @@ describe('prompt test bed', () => {
           ],
           {},
           1,
-          null
-        )
+          null,
+        ),
       );
 
       expect(answer).toStrictEqual({ option: 'create' });

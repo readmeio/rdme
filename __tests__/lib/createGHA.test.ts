@@ -141,7 +141,7 @@ describe('#createGHA', () => {
         configstore.set(getConfigStoreKey(repoRoot), (await getMajorPkgVersion()) - 1);
 
         return expect(createGHA('', cmd, command.args, opts)).resolves.toMatch(
-          'Your GitHub Actions workflow file has been created!'
+          'Your GitHub Actions workflow file has been created!',
         );
       });
 
@@ -157,8 +157,8 @@ describe('#createGHA', () => {
 
         await expect(createGHA('', cmd, command.args, opts)).rejects.toStrictEqual(
           new Error(
-            'GitHub Actions workflow creation cancelled. If you ever change your mind, you can run this command again with the `--github` flag.'
-          )
+            'GitHub Actions workflow creation cancelled. If you ever change your mind, you can run this command again with the `--github` flag.',
+          ),
         );
 
         expect(configstore.get(getConfigStoreKey(repoRoot))).toBe(await getMajorPkgVersion());

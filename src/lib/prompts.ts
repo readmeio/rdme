@@ -56,7 +56,7 @@ const updateOasPrompt = (
   parsedDocs: ParsedDocs,
   currPage: number,
   totalPages: number,
-  getSpecs: (url: string) => Promise<Response>
+  getSpecs: (url: string) => Promise<Response>,
 ): PromptObject[] => [
   {
     type: 'select',
@@ -72,7 +72,7 @@ const updateOasPrompt = (
           // @todo: figure out how to add a stricter type here, see:
           // https://github.com/readmeio/rdme/pull/570#discussion_r949715913
           const { specId } = await promptTerminal(
-            updateOasPrompt(newSpecList, newParsedDocs, currPage - 1, totalPages, getSpecs)
+            updateOasPrompt(newSpecList, newParsedDocs, currPage - 1, totalPages, getSpecs),
           );
           return specId;
         } catch (e) {
@@ -86,7 +86,7 @@ const updateOasPrompt = (
           // @todo: figure out how to add a stricter type here, see:
           // https://github.com/readmeio/rdme/pull/570#discussion_r949715913
           const { specId } = await promptTerminal(
-            updateOasPrompt(newSpecList, newParsedDocs, currPage + 1, totalPages, getSpecs)
+            updateOasPrompt(newSpecList, newParsedDocs, currPage + 1, totalPages, getSpecs),
           );
           return specId;
         } catch (e) {
@@ -103,7 +103,7 @@ export function createOasPrompt(
   specList: SpecList,
   parsedDocs: ParsedDocs,
   totalPages: number,
-  getSpecs: ((url: string) => Promise<Response>) | null
+  getSpecs: ((url: string) => Promise<Response>) | null,
 ): PromptObject[] {
   return [
     {
@@ -138,7 +138,7 @@ export function versionPrompt(
   /** existing version if we're performing an update */
   isUpdate?: {
     is_stable: boolean;
-  }
+  },
 ): PromptObject[] {
   return [
     {
