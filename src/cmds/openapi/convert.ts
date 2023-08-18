@@ -12,7 +12,7 @@ import prepareOas from '../../lib/prepareOas';
 import promptTerminal from '../../lib/promptWrapper';
 import { validateFilePath } from '../../lib/validatePromptInput';
 
-export interface Options {
+interface Options {
   out?: string;
   spec?: string;
   workingDirectory?: string;

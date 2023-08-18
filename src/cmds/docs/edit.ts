@@ -18,7 +18,7 @@ const writeFile = promisify(fs.writeFile);
 const readFile = promisify(fs.readFile);
 const unlink = promisify(fs.unlink);
 
-export interface Options {
+interface Options {
   mockEditor?: (filename: string, cb: () => void) => void;
   slug?: string;
 }

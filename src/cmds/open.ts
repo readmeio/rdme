@@ -8,7 +8,7 @@ import Command, { CommandCategories } from '../lib/baseCommand';
 import getCurrentConfig from '../lib/getCurrentConfig';
 import { getProjectVersion } from '../lib/versionSelect';
 
-export interface Options {
+interface Options {
   dash?: boolean;
   mockOpen?: (url: string) => Promise<void>;
 }

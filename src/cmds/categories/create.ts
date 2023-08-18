@@ -14,7 +14,7 @@ interface Category {
   type: string;
 }
 
-export interface Options {
+interface Options {
   categoryType?: 'guide' | 'reference';
   preventDuplicates?: boolean;
   title?: string;
