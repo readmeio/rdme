@@ -190,7 +190,11 @@ export function versionPrompt(
       type: (prev, values) => {
         // if user previously wanted this version to be the main version
         // it can't also be deprecated.
-        return values.is_stable ? null : 'confirm';
+        //
+        // we also only allow the setting of this flag in the versions:update command
+        // it technically could run in versions:create but that might be considered
+        // a breaking change
+        return values.is_stable || !isUpdate ? null : 'confirm';
       },
       name: 'is_deprecated',
       message: 'Would you like to deprecate this version?',
