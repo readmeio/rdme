@@ -37,6 +37,22 @@ jobs:
       - name: Run tests
         run: npm test
 
+  lint:
+    name: Test Suite
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Build dist
+        run: npm run build
+
+      - name: Run tests
+        run: npm run lint
+
   action:
     name: GitHub Action Dry Run
     runs-on: ubuntu-latest
