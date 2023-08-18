@@ -235,7 +235,9 @@ export default class OpenAPIInspectCommand extends Command {
     }
 
     if (workingDirectory) {
+      const previousWorkingDirectory = process.cwd();
       process.chdir(workingDirectory);
+      Command.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
     }
 
     const { preparedSpec, definitionVersion } = await prepareOas(spec, 'openapi:inspect', { convertToLatest: true });
