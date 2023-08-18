@@ -37,11 +37,6 @@ export default class CreateVersionCommand extends Command {
     this.args = [
       this.getKeyArg(),
       {
-        name: 'version',
-        type: String,
-        defaultOption: true,
-      },
-      {
         name: 'fork',
         type: String,
         description: "The semantic version which you'd like to fork from.",

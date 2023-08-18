@@ -29,21 +29,11 @@ export default class UpdateVersionCommand extends Command {
     this.args = [
       this.getKeyArg(),
       {
-        name: 'version',
-        type: String,
-        defaultOption: true,
-      },
-      {
         name: 'newVersion',
         type: String,
         description: 'What should the version be renamed to?',
       },
       ...this.getVersionOpts(),
-      {
-        name: 'deprecated',
-        type: String,
-        description: "Would you like to deprecate this version? (Must be 'true' or 'false')",
-      },
     ];
   }
 
