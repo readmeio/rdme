@@ -65,7 +65,8 @@ export default class UpdateVersionCommand extends Command {
 
     const body: Version = {
       codename,
-      version: promptResponse.newVersion,
+      // fall back to current version if user didn't enter one
+      version: promptResponse.newVersion || version,
       is_beta: promptResponse.is_beta,
       is_deprecated: promptResponse.is_deprecated,
       is_hidden: !promptResponse.is_public,
