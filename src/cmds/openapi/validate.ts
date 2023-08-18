@@ -38,7 +38,9 @@ export default class OpenAPIValidateCommand extends Command {
     const { spec, workingDirectory } = opts;
 
     if (workingDirectory) {
+      const previousWorkingDirectory = process.cwd();
       process.chdir(workingDirectory);
+      Command.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
     }
 
     const { specPath, specType } = await prepareOas(spec, 'openapi:validate');
