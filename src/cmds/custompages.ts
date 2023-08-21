@@ -4,7 +4,7 @@ import Command, { CommandCategories } from '../lib/baseCommand';
 import supportsGHA from '../lib/decorators/supportsGHA';
 import syncDocsPath from '../lib/syncDocsPath';
 
-export interface Options {
+interface Options {
   dryRun?: boolean;
   filePath?: string;
 }

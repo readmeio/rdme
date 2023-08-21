@@ -16,7 +16,7 @@ import prepareOas from '../../lib/prepareOas';
 import promptTerminal from '../../lib/promptWrapper';
 import { validateFilePath } from '../../lib/validatePromptInput';
 
-export interface Options {
+interface Options {
   method?: string[];
   out?: string;
   path?: string[];
@@ -76,7 +76,9 @@ export default class OpenAPIReduceCommand extends Command {
     const { spec, title, workingDirectory } = opts;
 
     if (workingDirectory) {
+      const previousWorkingDirectory = process.cwd();
       process.chdir(workingDirectory);
+      Command.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
     }
 
     const { preparedSpec, specPath, specType } = await prepareOas(spec, 'openapi:reduce', { title });

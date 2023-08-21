@@ -1,4 +1,3 @@
-import type { Options as VersionUpdateOptions } from '../../src/cmds/versions/update';
 import type { Response } from 'node-fetch';
 
 import prompts from 'prompts';
@@ -82,25 +81,23 @@ describe('prompt test bed', () => {
     });
   });
 
-  describe('createVersionPrompt()', () => {
+  describe('versionPrompt()', () => {
     it('should allow user to choose a fork if flag is not passed (creating version)', async () => {
-      const opts: VersionUpdateOptions = { newVersion: '1.2.1' };
-
       prompts.inject(['1', true, true]);
 
-      const answer = await promptTerminal(promptHandler.createVersionPrompt(versionlist, opts));
+      const answer = await promptTerminal(promptHandler.versionPrompt(versionlist));
       expect(answer).toStrictEqual({ from: '1', is_stable: true, is_beta: true });
     });
 
     it('should skip fork prompt if value passed (updating version)', async () => {
       prompts.inject(['1.2.1', false, true, true, false]);
 
-      const answer = await promptTerminal(promptHandler.createVersionPrompt(versionlist, {}, { is_stable: false }));
+      const answer = await promptTerminal(promptHandler.versionPrompt(versionlist, { is_stable: false }));
       expect(answer).toStrictEqual({
         newVersion: '1.2.1',
         is_stable: false,
         is_beta: true,
-        is_hidden: true,
+        is_public: true,
         is_deprecated: false,
       });
     });

@@ -1,3 +1,24 @@
+## [8.6.5-next.7](https://github.com/readmeio/rdme/compare/v8.6.5-next.6...v8.6.5-next.7) (2023-08-18)
+
+
+### Bug Fixes
+
+* **reducer:** quirk with security schemes sometimes getting removed ([#867](https://github.com/readmeio/rdme/issues/867)) ([be2e037](https://github.com/readmeio/rdme/commit/be2e0370ce9fb29e6b56d6739a37449ecf0af8a7))
+
+## [8.6.5-next.6](https://github.com/readmeio/rdme/compare/v8.6.5-next.5...v8.6.5-next.6) (2023-08-18)
+
+
+### Bug Fixes
+
+* **versions:** general refactors to handle flag edge cases ([#861](https://github.com/readmeio/rdme/issues/861)) ([e316139](https://github.com/readmeio/rdme/commit/e31613915aaa383e49e949c6aac40b950f7bf9cf))
+
+## [8.6.5-next.5](https://github.com/readmeio/rdme/compare/v8.6.5-next.4...v8.6.5-next.5) (2023-08-10)
+
+
+### Bug Fixes
+
+* **openapi/inspect:** small url formatting error ([#855](https://github.com/readmeio/rdme/issues/855)) ([c54e289](https://github.com/readmeio/rdme/commit/c54e2896f253004563a29c3b42bde1f201f1e180))
+
 ## [8.6.5-next.4](https://github.com/readmeio/rdme/compare/v8.6.5-next.3...v8.6.5-next.4) (2023-08-02)
 
 

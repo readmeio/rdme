@@ -209,7 +209,11 @@ export default async function createGHA(
     );
   }
 
-  if (repoRoot) process.chdir(repoRoot);
+  if (repoRoot) {
+    const previousWorkingDirectory = process.cwd();
+    process.chdir(repoRoot);
+    debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
+  }
 
   prompts.override({ shouldCreateGHA: opts.github });
 

@@ -5,7 +5,7 @@ import prompts from 'prompts';
 import Command, { CommandCategories } from '../lib/baseCommand';
 import loginFlow from '../lib/loginFlow';
 
-export interface Options {
+interface Options {
   email?: string;
   otp?: string;
   password?: string;
