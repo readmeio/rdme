@@ -226,7 +226,7 @@ export default async function prepareOas(
         );
         break;
       default:
-        debug(`Type ${chalk.yellow('rdme help"')} to see all commands`);
+        debug(`Type ${chalk.yellow('rdme help')} to see all commands`);
     }
   }
 
