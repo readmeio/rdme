@@ -202,7 +202,7 @@ export default async function prepareOas(
     debug('spec bundled');
   }
 
-  // Checks to see if the selected file is a postman collection and throws a waring in the console.
+  // Checks to see if the selected file is a postman collection and throws a warning in the console depending on the command.
   if (definitionVersion.specification === 'postman') {
     switch (command) {
       case 'openapi':
