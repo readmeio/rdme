@@ -207,22 +207,22 @@ export default async function prepareOas(
     switch (command) {
       case 'openapi':
         warn(
-          "You're attempting to upload a Postman collection. This feature is currently experimental. For more information visit our docs here: https://docs.readme.com/main/docs/openapi#the-api-reference"
+          'You are attempting to upload a Postman collection. This feature is currently experimental. For more information, visit our docs here: https://docs.readme.com/main/docs/openapi#the-api-reference'
         );
         break;
       case 'openapi:validate':
         warn(
-          "You're attempting to validate a Postman collection. This feature is currently experimental. For more information visit our docs here: https://docs.readme.com/main/docs/openapi#the-api-reference"
+          'You are attempting to validate a Postman collection. This feature is currently experimental. For more information, visit our docs here: https://docs.readme.com/main/docs/openapi#the-api-reference'
         );
         break;
       case 'openapi:inspect':
         warn(
-          "You're inspecting a Postman collection. This feature is currently experimental. For more information visit our docs here: https://docs.readme.com/main/docs/openapi#the-api-reference"
+          'You are inspecting a Postman collection. This feature is currently experimental. For more information, visit our docs here: https://docs.readme.com/main/docs/openapi#the-api-reference'
         );
         break;
       case 'openapi:convert':
         warn(
-          "You're attempting to convert a Postman collection to an OpenAPI file. This feature is currently experimental. For more information visit our docs here: https://docs.readme.com/main/docs/openapi#the-api-reference"
+          'You are attempting to convert a Postman collection to an OpenAPI file. This feature is currently experimental. For more information, visit our docs here: https://docs.readme.com/main/docs/openapi#the-api-reference'
         );
         break;
       default:
