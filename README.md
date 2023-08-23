@@ -390,12 +390,12 @@ rdme versions --version={project-version}
 rdme versions:create <version>
 ```
 
-If you wish to automate the process of creating a new project version, and not have the CLI prompt you for input, you can do so by supplying the necessary flags to `versions:create`.
+If you wish to automate the process of creating a new project version, and not have the CLI prompt you for input, you can do so by supplying the necessary flags to `versions:create`. The best way to ensure that you have supplied all the necessary flags is by running the command locally and verifying that the CLI does not prompt you.
 
-For example:
+For example, the following command contains all the flags to bypass the CLI prompts:
 
 ```sh
-rdme versions:create <version> --fork={version-fork} --main={true|false} --beta={true|false} --isPublic={true|false}
+rdme versions:create <version> --fork={version-fork} --main={true|false} --beta={true|false} --deprecated={true|false} --isPublic={true|false}
 ```
 
 See `rdme versions:create --help` for a full list of flags.
@@ -406,7 +406,7 @@ See `rdme versions:create --help` for a full list of flags.
 rdme versions:update <version>
 ```
 
-Like `versions:create`, if you wish to automate this process and not be blocked by CLI input, you can supply the necessary flags to this command. See `rdme versions:update --help` for more information.
+Like `versions:create`, if you wish to automate this process and not be blocked by CLI input, you can supply the necessary flags to this command. See `rdme versions:update --help` for a full list of flags.
 
 #### Delete a Version
 
