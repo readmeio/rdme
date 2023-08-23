@@ -1,3 +1,16 @@
+## [8.6.5](https://github.com/readmeio/rdme/compare/v8.6.4...v8.6.5) (2023-08-21)
+
+
+### Bug Fixes
+
+* **deps:** upgrading out of date deps ([#836](https://github.com/readmeio/rdme/issues/836)) ([8600554](https://github.com/readmeio/rdme/commit/86005541815b1810f2483f15a2bd579e14b82619))
+* **npm:** revert shrinkwrap changes ([#824](https://github.com/readmeio/rdme/issues/824)) ([f96e6dc](https://github.com/readmeio/rdme/commit/f96e6dc33813e9a2db0474c1bac652cfca3c0e54))
+* **openapi/inspect:** small url formatting error ([#855](https://github.com/readmeio/rdme/issues/855)) ([c54e289](https://github.com/readmeio/rdme/commit/c54e2896f253004563a29c3b42bde1f201f1e180))
+* **reducer:** quirk with security schemes sometimes getting removed ([#867](https://github.com/readmeio/rdme/issues/867)) ([be2e037](https://github.com/readmeio/rdme/commit/be2e0370ce9fb29e6b56d6739a37449ecf0af8a7))
+* **security:** don't publish certain files to npm ([a83fe1c](https://github.com/readmeio/rdme/commit/a83fe1cb94765f0e333374b0e6799f28c3268167)), closes [/socket.dev/npm/package/rdme/files/8.6.5-next.2/bin/docker.js#T167-182](https://github.com//socket.dev/npm/package/rdme/files/8.6.5-next.2/bin/docker.js/issues/T167-182)
+* typo ([#852](https://github.com/readmeio/rdme/issues/852)) ([26c10e5](https://github.com/readmeio/rdme/commit/26c10e59415afbd32dc13f5438c8fd5a1747e22e))
+* **versions:** general refactors to handle flag edge cases ([#861](https://github.com/readmeio/rdme/issues/861)) ([e316139](https://github.com/readmeio/rdme/commit/e31613915aaa383e49e949c6aac40b950f7bf9cf))
+
 ## [8.6.5-next.7](https://github.com/readmeio/rdme/compare/v8.6.5-next.6...v8.6.5-next.7) (2023-08-18)
 
 
