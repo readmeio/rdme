@@ -38,7 +38,7 @@ jobs:
         run: npm test
 
       - name: Run tests (single-threaded)
-        run: npm test:single
+        run: npm run test:single
 
   lint:
     runs-on: ubuntu-latest
