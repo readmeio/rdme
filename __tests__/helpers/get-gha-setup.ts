@@ -10,7 +10,7 @@ import * as getPkgVersion from '../../src/lib/getPkgVersion';
 
 import getGitRemoteMock from './get-git-mock';
 
-const testWorkingDir = process.cwd();
+// const testWorkingDir = process.cwd();
 
 /**
  * A helper function for setting up tests for our GitHub Action onboarding.
@@ -50,5 +50,4 @@ export function after() {
   configstore.clear();
   delete process.env.TEST_RDME_CREATEGHA;
   vi.clearAllMocks();
-  process.chdir(testWorkingDir);
 }

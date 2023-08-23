@@ -109,7 +109,8 @@
     "prettier": "prettier --check .",
     "schemas:check": "./bin/json-schema-store.js",
     "schemas:write": "./bin/json-schema-store.js --update",
-    "test": "vitest run --coverage"
+    "test": "vitest run --coverage",
+    "test:single": "vitest run --coverage --config vitest.single-threaded.config.ts"
   },
   "commitlint": {
     "extends": [
