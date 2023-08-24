@@ -1,3 +1,10 @@
+## [8.6.6-next.1](https://github.com/readmeio/rdme/compare/v8.6.5...v8.6.6-next.1) (2023-08-24)
+
+
+### Bug Fixes
+
+* **versions:** fix ability to set main version ([#872](https://github.com/readmeio/rdme/issues/872)) ([ba7ea03](https://github.com/readmeio/rdme/commit/ba7ea03a8eb63eab09ab40ad46352504a7dc0134))
+
 ## [8.6.5](https://github.com/readmeio/rdme/compare/v8.6.4...v8.6.5) (2023-08-21)
 
 
