@@ -20,10 +20,8 @@ jobs:
           - 18
           - 20
         thread:
-          - name: single
-            command: npm test
-          - name: multi
-            command: npm run test:single
+          - multi
+          - single
 
     steps:
       - uses: actions/checkout@v3
@@ -40,8 +38,8 @@ jobs:
       - name: Build dist
         run: npm run build
 
-      - name: Run tests (${{ matrix.thread.name }} threaded)
-        run: ${{ matrix.thread.command }}
+      - name: Run tests (${{ matrix.thread }}-threaded)
+        run: npm run test:${{ matrix.thread }}
 
   lint:
     runs-on: ubuntu-latest
