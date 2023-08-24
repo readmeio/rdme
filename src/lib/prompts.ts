@@ -179,7 +179,7 @@ export function versionPrompt(
     },
     {
       type: (prev, values) => {
-        // if user previously wanted this version to be the main version
+        // if user wants this version to be the main version
         // it can't also be hidden.
         return values.is_stable ? null : 'confirm';
       },
@@ -188,7 +188,7 @@ export function versionPrompt(
     },
     {
       type: (prev, values) => {
-        // if user previously wanted this version to be the main version
+        // if user wants this version to be the main version
         // it can't also be deprecated.
         return values.is_stable ? null : 'confirm';
       },

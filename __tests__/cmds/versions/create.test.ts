@@ -98,6 +98,34 @@ describe('rdme versions:create', () => {
     mockRequest.done();
   });
 
+  it('should create successfully a main version', async () => {
+    const newVersion = '1.0.1';
+
+    const mockRequest = getAPIMock()
+      .post('/api/v1/version', {
+        version: newVersion,
+        from: '1.0.0',
+        is_beta: false,
+        is_stable: true,
+      })
+      .basicAuth({ user: key })
+      .reply(201, { version: newVersion });
+
+    await expect(
+      createVersion.run({
+        key,
+        version: newVersion,
+        fork: version,
+        beta: 'false',
+        main: 'true',
+        isPublic: 'false',
+        deprecated: 'true',
+      }),
+    ).resolves.toBe(`Version ${newVersion} created successfully.`);
+
+    mockRequest.done();
+  });
+
   it('should catch any post request errors', async () => {
     const errorResponse = {
       error: 'VERSION_EMPTY',

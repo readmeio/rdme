@@ -82,7 +82,8 @@ export default class CreateVersionCommand extends Command {
       from: promptResponse.from,
       is_beta: promptResponse.is_beta,
       is_deprecated: promptResponse.is_deprecated,
-      is_hidden: !promptResponse.is_public,
+      // if the "is public" question was never asked, we should omit that from the payload
+      is_hidden: typeof promptResponse.is_public === 'undefined' ? undefined : !promptResponse.is_public,
       is_stable: promptResponse.is_stable,
     };
 
