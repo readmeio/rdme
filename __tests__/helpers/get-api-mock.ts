@@ -47,6 +47,6 @@ export function getAPIMockMSW(
     if (doHeadersMatch(req.headers)) {
       return res(ctx.status(status), ctx.json(response.json));
     }
-    return res(ctx.status(500));
+    return res(ctx.status(500), ctx.json({ error: 'MSW error' }));
   });
 }
