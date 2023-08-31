@@ -19,9 +19,6 @@ jobs:
           - 16
           - 18
           - 20
-        thread:
-          - multi
-          - single
 
     steps:
       - uses: actions/checkout@v3
@@ -32,14 +29,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: npm
 
-      - name: Install deps
-        run: npm ci
-
-      - name: Build dist
-        run: npm run build
-
-      - name: Run tests (${{ matrix.thread }}-threaded)
-        run: npm run test:${{ matrix.thread }}
+      - name: Build and run tests
+        run: npm cit
 
   lint:
     runs-on: ubuntu-latest
