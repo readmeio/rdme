@@ -1,5 +1,5 @@
-import type { Options as CreateOptions } from '../cmds/versions/create';
-import type { Options as UpdateOptions } from '../cmds/versions/update';
+import type { Options as CreateOptions } from '../cmds/versions/create.js';
+import type { Options as UpdateOptions } from '../cmds/versions/update.js';
 
 /**
  * Takes a CLI flag that is expected to be a 'true' or 'false' string
