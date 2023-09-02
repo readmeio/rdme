@@ -1,7 +1,7 @@
 import type { KnipConfig } from 'knip';
 
 const config: KnipConfig = {
-  ignore: ['bin/*.js', 'config/default.js'],
+  ignore: ['bin/*.cjs', 'bin/*.js', 'config/default.cjs'],
   ignoreBinaries: ['semantic-release'],
   ignoreDependencies: ['editor'],
 };
