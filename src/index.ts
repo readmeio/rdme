@@ -1,5 +1,5 @@
 /* eslint-disable import/first, import/order, no-underscore-dangle */
-import path from 'path';
+import path from 'node:path';
 
 import chalk from 'chalk';
 import cliArgs from 'command-line-args';

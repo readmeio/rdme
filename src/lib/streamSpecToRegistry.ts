@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from 'node:fs';
 
 import FormData from 'form-data';
 import ora from 'ora';

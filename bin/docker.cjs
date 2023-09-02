@@ -2,8 +2,8 @@
 /* eslint-disable no-console */
 /* eslint-disable import/no-commonjs */
 /* eslint-disable @typescript-eslint/no-var-requires */
-const util = require('util'); // eslint-disable-line unicorn/import-style
-const execFile = util.promisify(require('child_process').execFile);
+const util = require('node:util');
+const execFile = util.promisify(require('node:child_process').execFile);
 
 /**
  * Retrieves and parses the docker image metadata

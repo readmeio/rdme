@@ -1,8 +1,8 @@
 import type { CommandOptions } from '../../lib/baseCommand.js';
 import type { OASDocument } from 'oas/dist/rmoas.types.js';
 
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
 import chalk from 'chalk';
 import prompts from 'prompts';

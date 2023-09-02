@@ -1,7 +1,7 @@
 import type { Ignore } from 'ignore';
 
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
 import ignore from 'ignore';
 

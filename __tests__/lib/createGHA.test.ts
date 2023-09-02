@@ -4,7 +4,7 @@ import type { CommandOptions } from '../../src/lib/baseCommand.js';
 import type Command from '../../src/lib/baseCommand.js';
 import type { Response } from 'simple-git';
 
-import fs from 'fs';
+import fs from 'node:fs';
 
 import prompts from 'prompts';
 

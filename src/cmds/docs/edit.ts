@@ -1,7 +1,7 @@
 import type { CommandOptions } from '../../lib/baseCommand.js';
 
-import fs from 'fs';
-import { promisify } from 'util';
+import fs from 'node:fs';
+import { promisify } from 'node:util';
 
 import config from 'config';
 import { Headers } from 'node-fetch';

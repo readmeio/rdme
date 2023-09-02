@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from 'node:fs';
 
 /**
  * Removes any non-alphanumeric characters and replaces them with hyphens.

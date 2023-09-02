@@ -2,8 +2,8 @@ import type commands from '../../cmds/index.js';
 import type { CommandOptions } from '../baseCommand.js';
 import type { OptionDefinition } from 'command-line-usage';
 
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
 import chalk from 'chalk';
 import prompts from 'prompts';

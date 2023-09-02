@@ -1,5 +1,5 @@
 /* eslint-disable jest/no-conditional-expect */
-import assert from 'assert';
+import assert from 'node:assert';
 
 import OpenAPIInspectCommand from '../../../src/cmds/openapi/inspect.js';
 

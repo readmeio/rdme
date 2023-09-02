@@ -1,6 +1,6 @@
 import type { Response } from 'simple-git';
 
-import fs from 'fs';
+import fs from 'node:fs';
 
 import configstore from '../../src/lib/configstore.js';
 import { git } from '../../src/lib/createGHA/index.js';

@@ -1,6 +1,6 @@
 #! /usr/bin/env node
 /* eslint-disable import/no-extraneous-dependencies */
-import fs from 'fs/promises';
+import fs from 'node:fs/promises';
 
 // eslint-disable-next-line no-restricted-imports
 import fetch from 'node-fetch';

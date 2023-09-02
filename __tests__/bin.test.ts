@@ -1,4 +1,4 @@
-import { exec } from 'child_process';
+import { exec } from 'node:child_process';
 
 describe('bin', () => {
   it('should show our help screen', async () => {
