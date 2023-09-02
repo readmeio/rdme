@@ -11,7 +11,7 @@ import isCI from './isCI.js';
  */
 export default async function promptTerminal<T extends string = string>(
   questions: prompts.PromptObject<T> | prompts.PromptObject<T>[],
-  options?: prompts.Options
+  options?: prompts.Options,
 ): Promise<prompts.Answers<T>> {
   /**
    * The CTRL+C handler discussed above.
@@ -32,7 +32,7 @@ export default async function promptTerminal<T extends string = string>(
     if (isCI()) {
       process.stdout.write('\n');
       process.stdout.write(
-        'Yikes! Looks like we were about to prompt you for something in a CI environment. Are you missing an argument?'
+        'Yikes! Looks like we were about to prompt you for something in a CI environment. Are you missing an argument?',
       );
       process.stdout.write('\n\n');
       process.stdout.write('Try running `rdme <command> --help` or get in touch at support@readme.io.');

@@ -65,7 +65,7 @@ describe('rdme open', () => {
       }
 
       await expect(cmd.run({ mockOpen, dash: true, key: '12345' })).resolves.toBe(
-        `Opening ${chalk.green(dashUrl)} in your browser...`
+        `Opening ${chalk.green(dashUrl)} in your browser...`,
       );
       mockRequest.done();
     });
@@ -81,7 +81,7 @@ describe('rdme open', () => {
       }
 
       return expect(cmd.run({ mockOpen, dash: true, key: '12345' })).rejects.toStrictEqual(
-        new Error(`Please login using \`${config.get('cli')} login\`.`)
+        new Error(`Please login using \`${config.get('cli')} login\`.`),
       );
     });
   });

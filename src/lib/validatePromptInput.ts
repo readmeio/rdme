@@ -37,7 +37,6 @@ export function validateFilePath(value: string, getFullPath: (file: string) => s
  */
 export function validateSubdomain(value: string) {
   return (
-    // eslint-disable-next-line unicorn/no-unsafe-regex
     /^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*$/.test(value) || 'Project subdomain must contain only letters, numbers and dashes.'
   );
 }

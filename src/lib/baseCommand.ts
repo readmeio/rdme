@@ -95,9 +95,9 @@ export default class Command {
       if (opts.key && configstore.get('apiKey') === opts.key) {
         info(
           `🔑 ${chalk.green(email)} is currently logged in, using the stored API key for this project: ${chalk.blue(
-            project
+            project,
           )}`,
-          { includeEmojiPrefix: false }
+          { includeEmojiPrefix: false },
         );
       }
 
@@ -173,6 +173,11 @@ export default class Command {
   getVersionOpts(): OptionDefinition[] {
     return [
       {
+        name: 'version',
+        type: String,
+        defaultOption: true,
+      },
+      {
         name: 'codename',
         type: String,
         description: 'The codename, or nickname, for a particular version.',
@@ -187,6 +192,11 @@ export default class Command {
         name: 'beta',
         type: String,
         description: "Is this version in beta? (Must be 'true' or 'false')",
+      },
+      {
+        name: 'deprecated',
+        type: String,
+        description: "Would you like to deprecate this version? (Must be 'true' or 'false')",
       },
       {
         name: 'isPublic',

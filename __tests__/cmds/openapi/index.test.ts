@@ -111,7 +111,7 @@ describe('rdme openapi', () => {
           spec,
           key,
           version,
-        })
+        }),
       ).resolves.toBe(successfulUpload(spec, type));
 
       expect(console.info).toHaveBeenCalledTimes(0);
@@ -146,7 +146,7 @@ describe('rdme openapi', () => {
           key,
           version,
           workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-        })
+        }),
       ).resolves.toBe(successfulUpload(spec));
 
       expect(console.info).toHaveBeenCalledTimes(1);
@@ -185,7 +185,7 @@ describe('rdme openapi', () => {
           key,
           version,
           spec,
-        })
+        }),
       ).resolves.toBe(successfulUpload(spec));
 
       mockWithHeader.done();
@@ -216,7 +216,7 @@ describe('rdme openapi', () => {
           version,
           spec,
           create: true,
-        })
+        }),
       ).resolves.toBe(successfulUpload(spec));
 
       postMock.done();
@@ -247,7 +247,7 @@ describe('rdme openapi', () => {
           spec,
           id: 'some-id',
           create: true,
-        })
+        }),
       ).resolves.toBe(successfulUpload(spec));
 
       expect(console.warn).toHaveBeenCalledTimes(1);
@@ -403,7 +403,7 @@ describe('rdme openapi', () => {
           key,
           version,
           workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-        })
+        }),
       ).resolves.toBe(successfulUpload(spec));
 
       expect(console.info).toHaveBeenCalledTimes(0);
@@ -435,14 +435,14 @@ describe('rdme openapi', () => {
           version,
           dryRun: true,
           workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-        })
+        }),
       ).resolves.toMatch(
-        '🎭 dry run! The API Definition located at petstore.json will be created for this project version: 1.0.0'
+        '🎭 dry run! The API Definition located at petstore.json will be created for this project version: 1.0.0',
       );
 
       const output = getCommandOutput();
       expect(output).toMatch(
-        chalk.yellow('🎭 dry run option detected! No API definitions will be created or updated in ReadMe.')
+        chalk.yellow('🎭 dry run option detected! No API definitions will be created or updated in ReadMe.'),
       );
 
       mockWithHeader.done();
@@ -478,7 +478,7 @@ describe('rdme openapi', () => {
           key,
           id,
           version,
-        })
+        }),
       ).resolves.toBe(successfulUpdate(spec, type));
 
       putMock.done();
@@ -543,7 +543,7 @@ describe('rdme openapi', () => {
           key,
           version,
           spec,
-        })
+        }),
       ).resolves.toBe(successfulUpdate(spec));
 
       mockWithHeader.done();
@@ -577,7 +577,7 @@ describe('rdme openapi', () => {
           version,
           spec,
           dryRun: true,
-        })
+        }),
       ).resolves.toMatch(`dry run! The API Definition located at ${spec} will update this API Definition ID: spec2`);
 
       mockWithHeader.done();
@@ -612,7 +612,7 @@ describe('rdme openapi', () => {
             version,
             spec,
             update: true,
-          })
+          }),
         ).resolves.toBe(successfulUpdate(spec));
 
         mockWithHeader.done();
@@ -643,11 +643,11 @@ describe('rdme openapi', () => {
             version,
             spec,
             update: true,
-          })
+          }),
         ).rejects.toStrictEqual(
           new Error(
-            "The `--update` option cannot be used when there's more than one API definition available (found 2)."
-          )
+            "The `--update` option cannot be used when there's more than one API definition available (found 2).",
+          ),
         );
         return mock.done();
       });
@@ -675,7 +675,7 @@ describe('rdme openapi', () => {
             spec,
             update: true,
             id: 'spec1',
-          })
+          }),
         ).resolves.toBe(successfulUpdate(spec));
 
         expect(console.warn).toHaveBeenCalledTimes(1);
@@ -826,7 +826,7 @@ describe('rdme openapi', () => {
           spec: require.resolve('@readme/oas-examples/3.1/json/petstore.json'),
           key,
           version: invalidVersion,
-        })
+        }),
       ).rejects.toStrictEqual(new APIError(errorObject));
 
       return mock.done();
@@ -870,7 +870,7 @@ describe('rdme openapi', () => {
 
     it('should error if `--create` and `--update` flags are passed simultaneously', () => {
       return expect(openapi.run({ key, create: true, update: true })).rejects.toStrictEqual(
-        new Error('The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!')
+        new Error('The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!'),
       );
     });
 
@@ -893,7 +893,7 @@ describe('rdme openapi', () => {
       const mock = getAPIMock().get('/api/v1/version').reply(401, errorObject);
 
       await expect(
-        openapi.run({ key, spec: require.resolve('@readme/oas-examples/3.1/json/petstore.json') })
+        openapi.run({ key, spec: require.resolve('@readme/oas-examples/3.1/json/petstore.json') }),
       ).rejects.toStrictEqual(new APIError(errorObject));
 
       return mock.done();
@@ -902,26 +902,26 @@ describe('rdme openapi', () => {
     it('should error if no file was provided or able to be discovered', () => {
       return expect(openapi.run({ key, version, workingDirectory: 'config' })).rejects.toStrictEqual(
         new Error(
-          "We couldn't find an OpenAPI or Swagger definition.\n\nPlease specify the path to your definition with `rdme openapi ./path/to/api/definition`."
-        )
+          "We couldn't find an OpenAPI or Swagger definition.\n\nPlease specify the path to your definition with `rdme openapi ./path/to/api/definition`.",
+        ),
       );
     });
 
     it('should throw an error if an invalid OpenAPI 3.0 definition is supplied', () => {
       return expect(
-        openapi.run({ spec: './__tests__/__fixtures__/invalid-oas.json', key, id, version })
+        openapi.run({ spec: './__tests__/__fixtures__/invalid-oas.json', key, id, version }),
       ).rejects.toThrow('Token "Error" does not exist.');
     });
 
     it('should throw an error if an invalid OpenAPI 3.1 definition is supplied', () => {
       return expect(
-        openapi.run({ spec: './__tests__/__fixtures__/invalid-oas-3.1.json', key, id, version })
+        openapi.run({ spec: './__tests__/__fixtures__/invalid-oas-3.1.json', key, id, version }),
       ).rejects.toMatchSnapshot();
     });
 
     it('should throw an error if an invalid ref is supplied', () => {
       return expect(
-        openapi.run({ spec: './__tests__/__fixtures__/invalid-ref-oas/petstore.json', key, id, version })
+        openapi.run({ spec: './__tests__/__fixtures__/invalid-ref-oas/petstore.json', key, id, version }),
       ).rejects.toMatchSnapshot();
     });
 
@@ -956,7 +956,7 @@ describe('rdme openapi', () => {
           spec: './__tests__/__fixtures__/swagger-with-invalid-extensions.json',
           key,
           version,
-        })
+        }),
       ).rejects.toStrictEqual(new APIError(errorObject));
 
       mockWithHeader.done();
@@ -989,7 +989,7 @@ describe('rdme openapi', () => {
           id,
           key,
           version,
-        })
+        }),
       ).rejects.toStrictEqual(new APIError(errorObject));
 
       putMock.done();
@@ -1016,7 +1016,7 @@ describe('rdme openapi', () => {
           spec: './__tests__/__fixtures__/swagger-with-invalid-extensions.json',
           key,
           version,
-        })
+        }),
       ).rejects.toStrictEqual(new APIError(errorObject));
 
       return mock.done();
@@ -1050,7 +1050,7 @@ describe('rdme openapi', () => {
         .reply(400, errorObject);
 
       await expect(
-        openapi.run({ spec: require.resolve('@readme/oas-examples/2.0/json/petstore.json'), key, version })
+        openapi.run({ spec: require.resolve('@readme/oas-examples/2.0/json/petstore.json'), key, version }),
       ).rejects.toStrictEqual(new APIError(errorObject));
 
       mockWithHeader.done();
@@ -1077,11 +1077,11 @@ describe('rdme openapi', () => {
         .reply(400, 'some non-JSON upload error');
 
       await expect(
-        openapi.run({ spec: require.resolve('@readme/oas-examples/2.0/json/petstore.json'), key, version })
+        openapi.run({ spec: require.resolve('@readme/oas-examples/2.0/json/petstore.json'), key, version }),
       ).rejects.toStrictEqual(
         new Error(
-          'Yikes, something went wrong! Please try uploading your spec again and if the problem persists, get in touch with our support team at support@readme.io.'
-        )
+          'Yikes, something went wrong! Please try uploading your spec again and if the problem persists, get in touch with our support team at support@readme.io.',
+        ),
       );
 
       mockWithHeader.done();
@@ -1108,11 +1108,11 @@ describe('rdme openapi', () => {
         .reply(500, '<title>Application Error</title>');
 
       await expect(
-        openapi.run({ spec: require.resolve('@readme/oas-examples/2.0/json/petstore.json'), key, version })
+        openapi.run({ spec: require.resolve('@readme/oas-examples/2.0/json/petstore.json'), key, version }),
       ).rejects.toStrictEqual(
         new Error(
-          "We're sorry, your upload request timed out. Please try again or split your file up into smaller chunks."
-        )
+          "We're sorry, your upload request timed out. Please try again or split your file up into smaller chunks.",
+        ),
       );
 
       mockWithHeader.done();
@@ -1162,7 +1162,7 @@ describe('rdme openapi', () => {
           key,
           version,
           spec,
-        })
+        }),
       ).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();
@@ -1206,7 +1206,7 @@ describe('rdme openapi', () => {
           version,
           spec,
           github: true,
-        })
+        }),
       ).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();
@@ -1252,7 +1252,7 @@ describe('rdme openapi', () => {
           key,
           version,
           spec,
-        })
+        }),
       ).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();
@@ -1290,7 +1290,7 @@ describe('rdme openapi', () => {
           version: altVersion,
           spec,
           create: true,
-        })
+        }),
       ).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();
@@ -1327,7 +1327,7 @@ describe('rdme openapi', () => {
           spec,
           id: 'some-id',
           create: true,
-        })
+        }),
       ).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();
@@ -1367,7 +1367,7 @@ describe('rdme openapi', () => {
           version,
           spec,
           update: true,
-        })
+        }),
       ).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();
@@ -1406,7 +1406,7 @@ describe('rdme openapi', () => {
           key,
           version,
           workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-        })
+        }),
       ).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();
@@ -1444,11 +1444,11 @@ describe('rdme openapi', () => {
           key,
           version,
           spec,
-        })
+        }),
       ).rejects.toStrictEqual(
         new Error(
-          'GitHub Actions workflow creation cancelled. If you ever change your mind, you can run this command again with the `--github` flag.'
-        )
+          'GitHub Actions workflow creation cancelled. If you ever change your mind, you can run this command again with the `--github` flag.',
+        ),
       );
 
       mockWithHeader.done();
@@ -1463,7 +1463,7 @@ describe('rdme openapi', () => {
 
     it('should error in CI if no API key provided', () => {
       return expect(openapi.run({})).rejects.toStrictEqual(
-        new Error('No project API key provided. Please use `--key`.')
+        new Error('No project API key provided. Please use `--key`.'),
       );
     });
 
@@ -1472,7 +1472,7 @@ describe('rdme openapi', () => {
         openapi.run({
           key,
           version,
-        })
+        }),
       ).rejects.toStrictEqual(new Error('Multiple API definitions found in current directory. Please specify file.'));
     });
 
@@ -1502,7 +1502,7 @@ describe('rdme openapi', () => {
           key,
           id,
           version,
-        })
+        }),
       ).resolves.toBe(successfulUpdate(spec));
 
       putMock.done();
@@ -1535,7 +1535,7 @@ describe('rdme openapi', () => {
           key,
           id,
           version,
-        })
+        }),
       ).resolves.toBe(successfulUpdate(spec));
 
       putMock.done();
@@ -1576,7 +1576,7 @@ describe('rdme openapi', () => {
           key,
           version,
           workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-        })
+        }),
       ).resolves.toBe(successfulUpload(spec));
 
       getMock.done();
@@ -1598,7 +1598,7 @@ describe('rdme swagger', () => {
 
   it('should run `rdme openapi`', () => {
     return expect(swagger.run({ spec: 'some-non-existent-path', key, id, version })).rejects.toThrow(
-      "ENOENT: no such file or directory, open 'some-non-existent-path'"
+      "ENOENT: no such file or directory, open 'some-non-existent-path'",
     );
   });
 });

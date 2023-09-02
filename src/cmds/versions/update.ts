@@ -3,15 +3,16 @@ import type { Version } from './index.js';
 import type { CommandOptions } from '../../lib/baseCommand.js';
 
 import { Headers } from 'node-fetch';
+import prompts from 'prompts';
 
 import Command, { CommandCategories } from '../../lib/baseCommand.js';
+import castStringOptToBool from '../../lib/castStringOptToBool.js';
 import * as promptHandler from '../../lib/prompts.js';
 import promptTerminal from '../../lib/promptWrapper.js';
 import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch.js';
 import { getProjectVersion } from '../../lib/versionSelect.js';
 
 export interface Options extends CommonOptions {
-  deprecated?: 'true' | 'false';
   newVersion?: string;
 }
 
@@ -28,21 +29,11 @@ export default class UpdateVersionCommand extends Command {
     this.args = [
       this.getKeyArg(),
       {
-        name: 'version',
-        type: String,
-        defaultOption: true,
-      },
-      {
         name: 'newVersion',
         type: String,
         description: 'What should the version be renamed to?',
       },
       ...this.getVersionOpts(),
-      {
-        name: 'deprecated',
-        type: String,
-        description: "Would you like to deprecate this version? (Must be 'true' or 'false')",
-      },
     ];
   }
 
@@ -55,20 +46,32 @@ export default class UpdateVersionCommand extends Command {
 
     Command.debug(`selectedVersion: ${selectedVersion}`);
 
+    // TODO: I think this fetch here is unnecessary but
+    // it will require a bigger refactor of getProjectVersion
     const foundVersion = await readmeAPIFetch(`/api/v1/version/${selectedVersion}`, {
       method: 'get',
       headers: cleanHeaders(key),
     }).then(handleRes);
 
-    const promptResponse = await promptTerminal(promptHandler.createVersionPrompt([], opts, foundVersion));
+    prompts.override({
+      is_beta: castStringOptToBool(beta, 'beta'),
+      is_deprecated: castStringOptToBool(deprecated, 'deprecated'),
+      is_public: castStringOptToBool(isPublic, 'isPublic'),
+      is_stable: castStringOptToBool(main, 'main'),
+      newVersion,
+    });
+
+    const promptResponse = await promptTerminal(promptHandler.versionPrompt([], foundVersion));
 
     const body: Version = {
-      codename: codename || '',
-      version: newVersion || promptResponse.newVersion,
-      is_stable: foundVersion.is_stable || main === 'true' || promptResponse.is_stable,
-      is_beta: beta === 'true' || promptResponse.is_beta,
-      is_deprecated: deprecated === 'true' || promptResponse.is_deprecated,
-      is_hidden: promptResponse.is_stable ? false : !(isPublic === 'true' || promptResponse.is_hidden),
+      codename,
+      // fall back to current version if user didn't enter one
+      version: promptResponse.newVersion || version,
+      is_beta: promptResponse.is_beta,
+      is_deprecated: promptResponse.is_deprecated,
+      // if the "is public" question was never asked, we should omit that from the payload
+      is_hidden: typeof promptResponse.is_public === 'undefined' ? undefined : !promptResponse.is_public,
+      is_stable: promptResponse.is_stable,
     };
 
     return readmeAPIFetch(`/api/v1/version/${selectedVersion}`, {
@@ -78,7 +81,7 @@ export default class UpdateVersionCommand extends Command {
         new Headers({
           Accept: 'application/json',
           'Content-Type': 'application/json',
-        })
+        }),
       ),
       body: JSON.stringify(body),
     })

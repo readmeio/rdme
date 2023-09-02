@@ -24,27 +24,27 @@ describe('rdme categories:create', () => {
   it('should error in CI if no API key provided', async () => {
     process.env.TEST_RDME_CI = 'true';
     await expect(categoriesCreate.run({})).rejects.toStrictEqual(
-      new Error('No project API key provided. Please use `--key`.')
+      new Error('No project API key provided. Please use `--key`.'),
     );
     delete process.env.TEST_RDME_CI;
   });
 
   it('should error if no title provided', () => {
     return expect(categoriesCreate.run({ key: '123' })).rejects.toStrictEqual(
-      new Error('No title provided. Usage `rdme categories:create <title> [options]`.')
+      new Error('No title provided. Usage `rdme categories:create <title> [options]`.'),
     );
   });
 
   it('should error if categoryType is blank', () => {
     return expect(categoriesCreate.run({ key: '123', title: 'Test Title' })).rejects.toStrictEqual(
-      new Error('`categoryType` must be `guide` or `reference`.')
+      new Error('`categoryType` must be `guide` or `reference`.'),
     );
   });
 
   it('should error if categoryType is not `guide` or `reference`', () => {
     return expect(
       // @ts-expect-error Testing a CLI arg failure case.
-      categoriesCreate.run({ key: '123', title: 'Test Title', categoryType: 'test' })
+      categoriesCreate.run({ key: '123', title: 'Test Title', categoryType: 'test' }),
     ).rejects.toStrictEqual(new Error('`categoryType` must be `guide` or `reference`.'));
   });
 
@@ -71,7 +71,7 @@ describe('rdme categories:create', () => {
         key,
         version: '1.0.0',
         preventDuplicates: true,
-      })
+      }),
     ).resolves.toBe("🌱 successfully created 'New Category' with a type of 'guide' and an id of '123'");
 
     getMock.done();
@@ -102,7 +102,7 @@ describe('rdme categories:create', () => {
         key,
         version: '1.0.0',
         preventDuplicates: true,
-      })
+      }),
     ).resolves.toBe("🌱 successfully created 'Category' with a type of 'reference' and an id of '123'");
 
     getMock.done();
@@ -124,7 +124,7 @@ describe('rdme categories:create', () => {
         categoryType: 'guide',
         key,
         version: '1.0.0',
-      })
+      }),
     ).resolves.toBe("🌱 successfully created 'Category' with a type of 'reference' and an id of '123'");
 
     postMock.done();
@@ -149,11 +149,11 @@ describe('rdme categories:create', () => {
         key,
         version: '1.0.0',
         preventDuplicates: true,
-      })
+      }),
     ).rejects.toStrictEqual(
       new Error(
-        "The 'Category' category with a type of 'guide' already exists with an id of '123'. A new category was not created."
-      )
+        "The 'Category' category with a type of 'guide' already exists with an id of '123'. A new category was not created.",
+      ),
     );
 
     getMock.done();
@@ -178,11 +178,11 @@ describe('rdme categories:create', () => {
         key,
         version: '1.0.0',
         preventDuplicates: true,
-      })
+      }),
     ).rejects.toStrictEqual(
       new Error(
-        "The 'Category' category with a type of 'guide' already exists with an id of '123'. A new category was not created."
-      )
+        "The 'Category' category with a type of 'guide' already exists with an id of '123'. A new category was not created.",
+      ),
     );
 
     getMock.done();

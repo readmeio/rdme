@@ -3,9 +3,11 @@ import type { CommandOptions } from '../../lib/baseCommand.js';
 
 import config from 'config';
 import { Headers } from 'node-fetch';
+import prompts from 'prompts';
 import semver from 'semver';
 
 import Command, { CommandCategories } from '../../lib/baseCommand.js';
+import castStringOptToBool from '../../lib/castStringOptToBool.js';
 import * as promptHandler from '../../lib/prompts.js';
 import promptTerminal from '../../lib/promptWrapper.js';
 import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch.js';
@@ -17,6 +19,7 @@ export interface Options extends CommonOptions {
 export interface CommonOptions {
   beta?: 'true' | 'false';
   codename?: string;
+  deprecated?: 'true' | 'false';
   isPublic?: 'true' | 'false';
   main?: 'true' | 'false';
 }
@@ -34,11 +37,6 @@ export default class CreateVersionCommand extends Command {
     this.args = [
       this.getKeyArg(),
       {
-        name: 'version',
-        type: String,
-        defaultOption: true,
-      },
-      {
         name: 'fork',
         type: String,
         description: "The semantic version which you'd like to fork from.",
@@ -51,11 +49,11 @@ export default class CreateVersionCommand extends Command {
     await super.run(opts);
 
     let versionList;
-    const { key, version, fork, codename, main, beta, isPublic } = opts;
+    const { key, version, fork, codename, main, beta, deprecated, isPublic } = opts;
 
     if (!version || !semver.valid(semver.coerce(version))) {
       return Promise.reject(
-        new Error(`Please specify a semantic version. See \`${config.get('cli')} help ${this.command}\` for help.`)
+        new Error(`Please specify a semantic version. See \`${config.get('cli')} help ${this.command}\` for help.`),
       );
     }
 
@@ -66,20 +64,27 @@ export default class CreateVersionCommand extends Command {
       }).then(handleRes);
     }
 
-    const versionPrompt = promptHandler.createVersionPrompt(versionList || [], {
-      newVersion: version,
-      ...opts,
+    const versionPrompt = promptHandler.versionPrompt(versionList || []);
+
+    prompts.override({
+      from: fork,
+      is_beta: castStringOptToBool(beta, 'beta'),
+      is_deprecated: castStringOptToBool(deprecated, 'deprecated'),
+      is_public: castStringOptToBool(isPublic, 'isPublic'),
+      is_stable: castStringOptToBool(main, 'main'),
     });
 
     const promptResponse = await promptTerminal(versionPrompt);
 
     const body: Version = {
+      codename,
       version,
-      codename: codename || '',
-      is_stable: main === 'true' || promptResponse.is_stable,
-      is_beta: beta === 'true' || promptResponse.is_beta,
-      from: fork || promptResponse.from,
-      is_hidden: promptResponse.is_stable ? false : !(isPublic === 'true' || promptResponse.is_hidden),
+      from: promptResponse.from,
+      is_beta: promptResponse.is_beta,
+      is_deprecated: promptResponse.is_deprecated,
+      // if the "is public" question was never asked, we should omit that from the payload
+      is_hidden: typeof promptResponse.is_public === 'undefined' ? undefined : !promptResponse.is_public,
+      is_stable: promptResponse.is_stable,
     };
 
     return readmeAPIFetch('/api/v1/version', {
@@ -89,7 +94,7 @@ export default class CreateVersionCommand extends Command {
         new Headers({
           Accept: 'application/json',
           'Content-Type': 'application/json',
-        })
+        }),
       ),
       body: JSON.stringify(body),
     })

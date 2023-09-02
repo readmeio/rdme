@@ -4,7 +4,7 @@ import Command, { CommandCategories } from '../lib/baseCommand.js';
 import supportsGHA from '../lib/decorators/supportsGHA.js';
 import syncDocsPath from '../lib/syncDocsPath.js';
 
-export interface Options {
+interface Options {
   dryRun?: boolean;
   filePath?: string;
 }

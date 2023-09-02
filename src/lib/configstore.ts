@@ -8,7 +8,7 @@ const configstore = new Configstore(
    * configstore tests don't clash with one another
    * @see {@link https://jestjs.io/docs/environment-variables}
    */
-  `${pkg.name}-${process.env.NODE_ENV || 'production'}${process.env.JEST_WORKER_ID || ''}`
+  `${pkg.name}-${process.env.NODE_ENV || 'production'}${process.env.JEST_WORKER_ID || ''}`,
 );
 
 export default configstore;

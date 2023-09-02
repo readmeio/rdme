@@ -12,7 +12,7 @@ const { version: pkgVersion } = pkg;
 describe('cli', () => {
   it('command not found', () => {
     return expect(cli(['no-such-command'])).rejects.toStrictEqual(
-      new Error('Command not found.\n\nType `rdme help` to see all commands')
+      new Error('Command not found.\n\nType `rdme help` to see all commands'),
     );
   });
 
@@ -33,7 +33,7 @@ describe('cli', () => {
     it('should error if command does not exist', () => {
       return expect(cli(['no-such-command', '--version'])).rejects.toStrictEqual(
         // This can be ignored as it's just going to be a command not found error
-        new Error('Command not found.\n\nType `rdme help` to see all commands')
+        new Error('Command not found.\n\nType `rdme help` to see all commands'),
       );
     });
   });
@@ -45,13 +45,13 @@ describe('cli', () => {
 
     it('should validate file (file path in quotes)', () => {
       return expect(
-        cli(['docker-gha', 'openapi:validate "__tests__/__fixtures__/petstore-simple-weird-version.json"'])
+        cli(['docker-gha', 'openapi:validate "__tests__/__fixtures__/petstore-simple-weird-version.json"']),
       ).resolves.toBe('__tests__/__fixtures__/petstore-simple-weird-version.json is a valid OpenAPI API definition!');
     });
 
     it('should attempt to validate file (file path contains spaces)', () => {
       return expect(cli(['docker-gha', 'openapi:validate "a non-existent directory/petstore.json"'])).rejects.toThrow(
-        "ENOENT: no such file or directory, open 'a non-existent directory/petstore.json"
+        "ENOENT: no such file or directory, open 'a non-existent directory/petstore.json",
       );
     });
   });
@@ -85,7 +85,7 @@ describe('cli', () => {
   describe('subcommands', () => {
     it('should load subcommands from the folder', () => {
       return expect(
-        cli(['openapi:validate', '__tests__/__fixtures__/petstore-simple-weird-version.json'])
+        cli(['openapi:validate', '__tests__/__fixtures__/petstore-simple-weird-version.json']),
       ).resolves.toBe('__tests__/__fixtures__/petstore-simple-weird-version.json is a valid OpenAPI API definition!');
     });
   });
@@ -124,7 +124,7 @@ describe('cli', () => {
           .reply(200, { version });
 
         await expect(cli(['docs', `--version=${version}`])).rejects.toStrictEqual(
-          new Error('No path provided. Usage `rdme docs <path> [options]`.')
+          new Error('No path provided. Usage `rdme docs <path> [options]`.'),
         );
 
         conf.clear();
@@ -133,17 +133,21 @@ describe('cli', () => {
 
       it('should inform a logged in user which project is being updated', async () => {
         await expect(cli(['openapi', '--create', '--update'])).rejects.toStrictEqual(
-          new Error('The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!')
+          new Error(
+            'The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!',
+          ),
         );
 
         expect(getCommandOutput()).toMatch(
-          'owlbert-store@readme.io is currently logged in, using the stored API key for this project: project-owlbert-store'
+          'owlbert-store@readme.io is currently logged in, using the stored API key for this project: project-owlbert-store',
         );
       });
 
       it('should not inform a logged in user when they pass their own key', async () => {
         await expect(cli(['openapi', '--create', '--update', '--key=asdf'])).rejects.toStrictEqual(
-          new Error('The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!')
+          new Error(
+            'The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!',
+          ),
         );
 
         expect(getCommandOutput()).toBe('');
@@ -181,7 +185,7 @@ describe('cli', () => {
           .reply(200, { version });
 
         await expect(cli(['docs', `--version=${version}`])).rejects.toStrictEqual(
-          new Error('No path provided. Usage `rdme docs <path> [options]`.')
+          new Error('No path provided. Usage `rdme docs <path> [options]`.'),
         );
 
         conf.clear();
@@ -190,7 +194,9 @@ describe('cli', () => {
 
       it('should not inform a logged in user which project is being updated', async () => {
         await expect(cli(['openapi', '--create', '--update'])).rejects.toStrictEqual(
-          new Error('The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!')
+          new Error(
+            'The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!',
+          ),
         );
 
         expect(getCommandOutput()).toBe('');
@@ -198,7 +204,9 @@ describe('cli', () => {
 
       it('should not inform a logged in user when they pass their own key', async () => {
         await expect(cli(['openapi', '--create', '--update', '--key=asdf'])).rejects.toStrictEqual(
-          new Error('The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!')
+          new Error(
+            'The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!',
+          ),
         );
 
         expect(getCommandOutput()).toBe('');
@@ -209,8 +217,8 @@ describe('cli', () => {
   it('should error with `rdme oas` arguments passed in', () => {
     return expect(cli(['oas', 'endpoint'])).rejects.toStrictEqual(
       new Error(
-        "This `oas` integration is now inactive.\n\nIf you're looking to create an OpenAPI definition, we recommend https://npm.im/swagger-inline"
-      )
+        "This `oas` integration is now inactive.\n\nIf you're looking to create an OpenAPI definition, we recommend https://npm.im/swagger-inline",
+      ),
     );
   });
 
@@ -243,11 +251,11 @@ describe('cli', () => {
       const getMock = getAPIMock().get(`/api/v1/${type}/${slug}`).basicAuth({ user: key }).reply(404, {});
 
       await expect(
-        cli([cmd, '--dryRun', `--key=${key}`, `__tests__/__fixtures__/${type}/new-docs/${file}`])
+        cli([cmd, '--dryRun', `--key=${key}`, `__tests__/__fixtures__/${type}/new-docs/${file}`]),
       ).rejects.toStrictEqual(
         new Error(
-          'GitHub Actions workflow creation cancelled. If you ever change your mind, you can run this command again with the `--github` flag.'
-        )
+          'GitHub Actions workflow creation cancelled. If you ever change your mind, you can run this command again with the `--github` flag.',
+        ),
       );
 
       const output = getCommandOutput();

@@ -24,7 +24,7 @@ describe('rdme login', () => {
   it('should error if no project provided', () => {
     prompts.inject([email, password]);
     return expect(cmd.run({})).rejects.toStrictEqual(
-      new Error('No project subdomain provided. Please use `--project`.')
+      new Error('No project subdomain provided. Please use `--project`.'),
     );
   });
 
@@ -53,7 +53,7 @@ describe('rdme login', () => {
     const mock = getAPIMock().post('/api/v1/login', { email, password, project }).reply(200, { apiKey });
 
     await expect(cmd.run({ project })).resolves.toBe(
-      'Successfully logged in as user@example.com to the subdomain project.'
+      'Successfully logged in as user@example.com to the subdomain project.',
     );
 
     mock.done();
@@ -67,7 +67,7 @@ describe('rdme login', () => {
     const mock = getAPIMock().post('/api/v1/login', { email, password, project, token }).reply(200, { apiKey });
 
     await expect(cmd.run({ email, password, project, otp: token })).resolves.toBe(
-      'Successfully logged in as user@example.com to the subdomain project.'
+      'Successfully logged in as user@example.com to the subdomain project.',
     );
 
     mock.done();
@@ -81,7 +81,7 @@ describe('rdme login', () => {
     const mock = getAPIMock().post('/api/v1/login', { email, password, project }).reply(200, { apiKey });
 
     await expect(cmd.run({ email, password, project })).resolves.toBe(
-      'Successfully logged in as user@example.com to the subdomain project.'
+      'Successfully logged in as user@example.com to the subdomain project.',
     );
 
     mock.done();

@@ -46,7 +46,7 @@ function info(
   opts = {
     /** whether or not to prefix * the statement with this emoji: ℹ️ */
     includeEmojiPrefix: true,
-  }
+  },
 ) {
   /* istanbul ignore next */
   if (isGHA() && !isTest()) return core.notice(input);

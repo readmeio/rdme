@@ -34,7 +34,7 @@ describe('rdme openapi:convert', () => {
       await expect(
         convert.run({
           spec,
-        })
+        }),
       ).resolves.toBe(successfulConversion());
 
       expect(fs.writeFileSync).toHaveBeenCalledWith('output.json', expect.any(String));
@@ -56,7 +56,7 @@ describe('rdme openapi:convert', () => {
           spec,
           workingDirectory: require.resolve(`@readme/oas-examples/2.0/json/${spec}`).replace(spec, ''),
           out: 'output.json',
-        })
+        }),
       ).resolves.toBe(successfulConversion());
 
       expect(fs.writeFileSync).toHaveBeenCalledWith('output.json', expect.any(String));
@@ -72,9 +72,9 @@ describe('rdme openapi:convert', () => {
       await expect(
         convert.run({
           spec,
-        })
+        }),
       ).rejects.toStrictEqual(
-        new Error("Sorry, this API definition is already an OpenAPI definition and doesn't need to be converted.")
+        new Error("Sorry, this API definition is already an OpenAPI definition and doesn't need to be converted."),
       );
     });
   });

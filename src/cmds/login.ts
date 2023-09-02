@@ -5,7 +5,7 @@ import prompts from 'prompts';
 import Command, { CommandCategories } from '../lib/baseCommand.js';
 import loginFlow from '../lib/loginFlow.js';
 
-export interface Options {
+interface Options {
   email?: string;
   otp?: string;
   password?: string;

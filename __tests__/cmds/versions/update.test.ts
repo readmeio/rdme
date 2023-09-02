@@ -25,7 +25,7 @@ describe('rdme versions:update', () => {
   it('should error in CI if no API key provided', async () => {
     process.env.TEST_RDME_CI = 'true';
     await expect(updateVersion.run({})).rejects.toStrictEqual(
-      new Error('No project API key provided. Please use `--key`.')
+      new Error('No project API key provided. Please use `--key`.'),
     );
     delete process.env.TEST_RDME_CI;
   });
@@ -36,7 +36,6 @@ describe('rdme versions:update', () => {
     prompts.inject([versionToChange, renamedVersion, false, true, true, false]);
 
     const updatedVersionObject = {
-      codename: '',
       version: renamedVersion,
       is_stable: false,
       is_beta: true,
@@ -67,7 +66,9 @@ describe('rdme versions:update', () => {
       codename: 'updated-test',
       version: renamedVersion,
       is_beta: true,
+      is_deprecated: true,
       is_hidden: false,
+      is_stable: false,
     };
 
     const mockRequest = getAPIMock()
@@ -86,11 +87,161 @@ describe('rdme versions:update', () => {
         key,
         version: versionToChange,
         newVersion: renamedVersion,
+        deprecated: 'true',
         beta: 'true',
         main: 'false',
         codename: 'updated-test',
         isPublic: 'true',
-      })
+      }),
+    ).resolves.toBe(`Version ${versionToChange} updated successfully.`);
+    mockRequest.done();
+  });
+
+  it("should update a specific version object using flags that contain the string 'false'", async () => {
+    const versionToChange = '1.1.0';
+    const renamedVersion = '1.1.0-update';
+
+    const updatedVersionObject = {
+      codename: 'updated-test',
+      version: renamedVersion,
+      is_beta: false,
+      is_deprecated: false,
+      is_hidden: false,
+      is_stable: false,
+    };
+
+    const mockRequest = getAPIMock()
+      .get(`/api/v1/version/${versionToChange}`)
+      .basicAuth({ user: key })
+      .reply(200, { version: versionToChange })
+      .get(`/api/v1/version/${versionToChange}`)
+      .basicAuth({ user: key })
+      .reply(200, { version: versionToChange })
+      .put(`/api/v1/version/${versionToChange}`, updatedVersionObject)
+      .basicAuth({ user: key })
+      .reply(201, updatedVersionObject);
+
+    await expect(
+      updateVersion.run({
+        key,
+        version: versionToChange,
+        newVersion: renamedVersion,
+        beta: 'false',
+        deprecated: 'false',
+        main: 'false',
+        codename: 'updated-test',
+        isPublic: 'true',
+      }),
+    ).resolves.toBe(`Version ${versionToChange} updated successfully.`);
+    mockRequest.done();
+  });
+
+  it("should update a specific version object using flags that contain the string 'false' and a prompt", async () => {
+    const versionToChange = '1.1.0';
+    const renamedVersion = '1.1.0-update';
+    // prompt for beta flag
+    prompts.inject([false]);
+
+    const updatedVersionObject = {
+      codename: 'updated-test',
+      version: renamedVersion,
+      is_beta: false,
+      is_hidden: false,
+      is_stable: false,
+    };
+
+    const mockRequest = getAPIMock()
+      .get(`/api/v1/version/${versionToChange}`)
+      .basicAuth({ user: key })
+      .reply(200, { version: versionToChange })
+      .get(`/api/v1/version/${versionToChange}`)
+      .basicAuth({ user: key })
+      .reply(200, { version: versionToChange })
+      .put(`/api/v1/version/${versionToChange}`, updatedVersionObject)
+      .basicAuth({ user: key })
+      .reply(201, updatedVersionObject);
+
+    await expect(
+      updateVersion.run({
+        key,
+        version: versionToChange,
+        newVersion: renamedVersion,
+        main: 'false',
+        codename: 'updated-test',
+        isPublic: 'true',
+      }),
+    ).resolves.toBe(`Version ${versionToChange} updated successfully.`);
+    mockRequest.done();
+  });
+
+  it('should update a specific version object even if user bypasses prompt for new version name', async () => {
+    const versionToChange = '1.1.0';
+    // simulating user entering nothing for the prompt to enter a new version name
+    prompts.inject(['']);
+
+    const updatedVersionObject = {
+      codename: 'updated-test',
+      is_beta: false,
+      is_hidden: false,
+      is_stable: false,
+      version: versionToChange,
+    };
+
+    const mockRequest = getAPIMock()
+      .get(`/api/v1/version/${versionToChange}`)
+      .basicAuth({ user: key })
+      .reply(200, { version: versionToChange })
+      .get(`/api/v1/version/${versionToChange}`)
+      .basicAuth({ user: key })
+      .reply(200, { version: versionToChange })
+      .put(`/api/v1/version/${versionToChange}`, updatedVersionObject)
+      .basicAuth({ user: key })
+      .reply(201, updatedVersionObject);
+
+    await expect(
+      updateVersion.run({
+        key,
+        version: versionToChange,
+        beta: 'false',
+        main: 'false',
+        codename: 'updated-test',
+        isPublic: 'true',
+      }),
+    ).resolves.toBe(`Version ${versionToChange} updated successfully.`);
+    mockRequest.done();
+  });
+
+  it('should update a version to be the main one', async () => {
+    const versionToChange = '1.1.0';
+    const renamedVersion = '1.1.0-update';
+
+    const updatedVersionObject = {
+      version: renamedVersion,
+      is_beta: false,
+      is_stable: true,
+    };
+
+    const mockRequest = getAPIMock()
+      .get(`/api/v1/version/${versionToChange}`)
+      .basicAuth({ user: key })
+      .reply(200, { version: versionToChange })
+      .get(`/api/v1/version/${versionToChange}`)
+      .basicAuth({ user: key })
+      .reply(200, { version: versionToChange })
+      .put(`/api/v1/version/${versionToChange}`, updatedVersionObject)
+      .basicAuth({ user: key })
+      .reply(201, updatedVersionObject);
+
+    await expect(
+      updateVersion.run({
+        key,
+        version: versionToChange,
+        newVersion: renamedVersion,
+        deprecated: 'true',
+        beta: 'false',
+        main: 'true',
+        isPublic: 'false',
+      }),
     ).resolves.toBe(`Version ${versionToChange} updated successfully.`);
     mockRequest.done();
   });
@@ -104,13 +255,14 @@ describe('rdme versions:update', () => {
     const renamedVersion = '1.0.0-update';
 
     const updatedVersionObject = {
-      codename: '',
       version: renamedVersion,
       is_beta: true,
+      is_deprecated: true,
       is_hidden: true,
+      is_stable: false,
     };
 
-    prompts.inject([renamedVersion, true]);
+    prompts.inject([renamedVersion, true, false, true]);
 
     const errorResponse = {
       error: 'VERSION_CANT_DEMOTE_STABLE',
@@ -132,5 +284,95 @@ describe('rdme versions:update', () => {
 
     await expect(updateVersion.run({ key, version, main: 'false' })).rejects.toStrictEqual(new APIError(errorResponse));
     mockRequest.done();
+  });
+
+  describe('bad flag values', () => {
+    it('should throw if non-boolean `beta` flag is passed', async () => {
+      const versionToChange = '1.1.0';
+
+      const mockRequest = getAPIMock()
+        .get(`/api/v1/version/${versionToChange}`)
+        .basicAuth({ user: key })
+        .reply(200, { version: versionToChange })
+        .get(`/api/v1/version/${versionToChange}`)
+        .basicAuth({ user: key })
+        .reply(200, { version: versionToChange });
+
+      await expect(
+        updateVersion.run({
+          key,
+          version: versionToChange,
+          // @ts-expect-error deliberately passing a bad value here
+          beta: 'hi',
+        }),
+      ).rejects.toStrictEqual(new Error("Invalid option passed for 'beta'. Must be 'true' or 'false'."));
+      mockRequest.done();
+    });
+
+    it('should throw if non-boolean `deprecated` flag is passed', async () => {
+      const versionToChange = '1.1.0';
+
+      const mockRequest = getAPIMock()
+        .get(`/api/v1/version/${versionToChange}`)
+        .basicAuth({ user: key })
+        .reply(200, { version: versionToChange })
+        .get(`/api/v1/version/${versionToChange}`)
+        .basicAuth({ user: key })
+        .reply(200, { version: versionToChange });
+
+      await expect(
+        updateVersion.run({
+          key,
+          version: versionToChange,
+          // @ts-expect-error deliberately passing a bad value here
+          deprecated: 'hi',
+        }),
+      ).rejects.toStrictEqual(new Error("Invalid option passed for 'deprecated'. Must be 'true' or 'false'."));
+      mockRequest.done();
+    });
+
+    it('should throw if non-boolean `isPublic` flag is passed', async () => {
+      const versionToChange = '1.1.0';
+
+      const mockRequest = getAPIMock()
+        .get(`/api/v1/version/${versionToChange}`)
+        .basicAuth({ user: key })
+        .reply(200, { version: versionToChange })
+        .get(`/api/v1/version/${versionToChange}`)
+        .basicAuth({ user: key })
+        .reply(200, { version: versionToChange });
+
+      await expect(
+        updateVersion.run({
+          key,
+          version: versionToChange,
+          // @ts-expect-error deliberately passing a bad value here
+          isPublic: 'hi',
+        }),
+      ).rejects.toStrictEqual(new Error("Invalid option passed for 'isPublic'. Must be 'true' or 'false'."));
+      mockRequest.done();
+    });
+
+    it('should throw if non-boolean `main` flag is passed', async () => {
+      const versionToChange = '1.1.0';
+
+      const mockRequest = getAPIMock()
+        .get(`/api/v1/version/${versionToChange}`)
+        .basicAuth({ user: key })
+        .reply(200, { version: versionToChange })
+        .get(`/api/v1/version/${versionToChange}`)
+        .basicAuth({ user: key })
+        .reply(200, { version: versionToChange });
+
+      await expect(
+        updateVersion.run({
+          key,
+          version: versionToChange,
+          // @ts-expect-error deliberately passing a bad value here
+          main: 'hi',
+        }),
+      ).rejects.toStrictEqual(new Error("Invalid option passed for 'main'. Must be 'true' or 'false'."));
+      mockRequest.done();
+    });
   });
 });

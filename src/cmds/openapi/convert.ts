@@ -12,7 +12,7 @@ import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
 import { validateFilePath } from '../../lib/validatePromptInput.js';
 
-export interface Options {
+interface Options {
   out?: string;
   spec?: string;
   workingDirectory?: string;
@@ -49,7 +49,9 @@ export default class OpenAPIConvertCommand extends Command {
     const { spec, workingDirectory } = opts;
 
     if (workingDirectory) {
+      const previousWorkingDirectory = process.cwd();
       process.chdir(workingDirectory);
+      Command.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
     }
 
     const { preparedSpec, specPath, specType } = await prepareOas(spec, 'openapi:convert', { convertToLatest: true });

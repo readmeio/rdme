@@ -61,7 +61,7 @@ function getKey(args: OptionDefinition[], opts: CommandOptions<{}>): string | fa
 function constructCmdString(
   command: keyof typeof commands,
   args: OptionDefinition[],
-  opts: CommandOptions<Record<string, string | boolean | undefined>>
+  opts: CommandOptions<Record<string, string | boolean | undefined>>,
 ): string {
   const optsString = args
     .sort(arg => (arg.defaultOption ? -1 : 0))
@@ -151,7 +151,7 @@ export default async function createGHA(
   msg: string,
   command: keyof typeof commands,
   args: OptionDefinition[],
-  opts: CommandOptions<{}>
+  opts: CommandOptions<{}>,
 ) {
   debug(`running GHA onboarding for ${command} command`);
   debug(`opts used in createGHA: ${JSON.stringify(opts)}`);
@@ -199,17 +199,21 @@ export default async function createGHA(
         chalk.bold("🐙 Looks like you're running this command in a GitHub Repository! 🐙"),
         '',
         `🚀 With a few quick clicks, you can run this \`${command}\` command via GitHub Actions (${chalk.underline(
-          'https://github.com/features/actions'
+          'https://github.com/features/actions',
         )})`,
         '',
         `✨ This means it will run ${chalk.italic('automagically')} with every push to a branch of your choice!`,
         '',
       ].join('\n'),
-      { includeEmojiPrefix: false }
+      { includeEmojiPrefix: false },
     );
   }
 
-  if (repoRoot) process.chdir(repoRoot);
+  if (repoRoot) {
+    const previousWorkingDirectory = process.cwd();
+    process.chdir(repoRoot);
+    debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
+  }
 
   prompts.override({ shouldCreateGHA: opts.github });
 
@@ -242,7 +246,7 @@ export default async function createGHA(
         // despite TS insisting that it's an array.
         // link: https://github.com/terkelg/prompts#optionsonsubmit
         onSubmit: (p, a, answers: { shouldCreateGHA: boolean }) => !answers.shouldCreateGHA,
-      }
+      },
     );
 
   if (!shouldCreateGHA) {
@@ -250,7 +254,7 @@ export default async function createGHA(
     // for this repo and version of `rdme
     configstore.set(getConfigStoreKey(repoRoot), majorPkgVersion);
     throw new Error(
-      'GitHub Actions workflow creation cancelled. If you ever change your mind, you can run this command again with the `--github` flag.'
+      'GitHub Actions workflow creation cancelled. If you ever change your mind, you can run this command again with the `--github` flag.',
     );
   }
 
@@ -287,25 +291,25 @@ export default async function createGHA(
       chalk.bold('Almost done! Just a couple more steps:'),
       `1. Push your newly created file (${chalk.underline(filePath)}) to GitHub 🚀`,
       `2. Create a GitHub secret called ${chalk.bold(
-        GITHUB_SECRET_NAME
+        GITHUB_SECRET_NAME,
       )} and populate the value with your ReadMe API key (${key}) 🔑`,
       '',
       `🔐 Check out GitHub's docs for more info on creating encrypted secrets (${chalk.underline(
-        'https://docs.github.com/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository'
-      )})`
+        'https://docs.github.com/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository',
+      )})`,
     );
   } else {
     success.push(
       `${chalk.bold('Almost done!')} Push your newly created file (${chalk.underline(
-        filePath
-      )}) to GitHub and you're all set 🚀`
+        filePath,
+      )}) to GitHub and you're all set 🚀`,
     );
   }
 
   success.push(
     '',
     `🦉 If you have any more questions, feel free to drop us a line! ${chalk.underline('support@readme.io')}`,
-    ''
+    '',
   );
 
   return Promise.resolve(success.join('\n'));

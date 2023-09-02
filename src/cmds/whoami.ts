@@ -28,7 +28,7 @@ export default class WhoAmICommand extends Command {
     }
 
     return Promise.resolve(
-      `You are currently logged in as ${chalk.green(email)} to the ${chalk.blue(project)} project.`
+      `You are currently logged in as ${chalk.green(email)} to the ${chalk.blue(project)} project.`,
     );
   }
 }

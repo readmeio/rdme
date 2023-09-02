@@ -2,7 +2,7 @@ import type { CommandCategories } from './baseCommand.js';
 
 import commands from '../cmds/index.js';
 
-export function getCategories(): Record<
+function getCategories(): Record<
   string,
   {
     commands: {

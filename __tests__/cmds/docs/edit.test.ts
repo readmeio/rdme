@@ -54,7 +54,7 @@ describe('rdme docs:edit', () => {
 
   it('should error if no slug provided', () => {
     return expect(docsEdit.run({ key, version: '1.0.0' })).rejects.toStrictEqual(
-      new Error('No slug provided. Usage `rdme docs:edit <slug> [options]`.')
+      new Error('No slug provided. Usage `rdme docs:edit <slug> [options]`.'),
     );
   });
 
@@ -139,7 +139,7 @@ describe('rdme docs:edit', () => {
     }
 
     await expect(docsEdit.run({ slug, key, version: '1.0.0', mockEditor })).rejects.toStrictEqual(
-      new APIError(errorObject)
+      new APIError(errorObject),
     );
 
     getMock.done();
@@ -166,7 +166,7 @@ describe('rdme docs:edit', () => {
     }
 
     await expect(docsEdit.run({ slug, key, version: '1.0.0', mockEditor })).rejects.toStrictEqual(
-      new Error('Non zero exit code from $EDITOR')
+      new Error('Non zero exit code from $EDITOR'),
     );
 
     getMock.done();

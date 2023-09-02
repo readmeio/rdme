@@ -39,7 +39,7 @@ async function getCategoryDocs(key: string, selectedVersion: string, category: s
       new Headers({
         'x-readme-version': selectedVersion,
         'Content-Type': 'application/json',
-      })
+      }),
     ),
   }).then(handleRes);
 }

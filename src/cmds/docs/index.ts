@@ -49,7 +49,7 @@ export default class DocsCommand extends Command {
     const selectedVersion = await getProjectVersion(version, key);
 
     return syncDocsPath(key, selectedVersion, this.cmdCategory, this.usage, filePath, dryRun).then(msg =>
-      createGHA(msg, this.command, this.args, { ...opts, version: selectedVersion })
+      createGHA(msg, this.command, this.args, { ...opts, version: selectedVersion }),
     );
   }
 }

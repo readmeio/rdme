@@ -19,7 +19,7 @@ export default async function deleteDoc(
   selectedVersion: string,
   dryRun: boolean,
   slug: string,
-  type: CommandCategories
+  type: CommandCategories,
 ): Promise<string> {
   if (dryRun) {
     return Promise.resolve(`🎭 dry run! This will delete \`${slug}\`.`);
@@ -31,7 +31,7 @@ export default async function deleteDoc(
       new Headers({
         'x-readme-version': selectedVersion,
         'Content-Type': 'application/json',
-      })
+      }),
     ),
   })
     .then(handleRes)
