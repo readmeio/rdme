@@ -1,3 +1,4 @@
+import type { ExpectationResult } from '@vitest/expect';
 import type { AnySchema } from 'ajv';
 
 import betterAjvErrors from '@readme/better-ajv-errors';
@@ -6,6 +7,10 @@ import jsYaml from 'js-yaml';
 import { expect } from 'vitest';
 
 interface CustomMatchers<R = unknown> {
+  /**
+   * Ensures that the decoded Basic Auth header matches the expected API key.
+   */
+  toBeBasicAuthApiKey(expectedApiKey: string): R;
   /**
    * Ensures that the expected YAML conforms to the given JSON Schema.
    */
@@ -18,12 +23,30 @@ declare module 'vitest' {
   interface AsymmetricMatchersContaining extends CustomMatchers {}
 }
 
-export default function toBeValidSchema(
+function toBeBasicAuthApiKey(actualAuthorizationHeader: string, expectedApiKey: string): ExpectationResult {
+  const encodedApiKey = actualAuthorizationHeader.split(' ')[1];
+  const decodedApiKey = Buffer.from(encodedApiKey, 'base64').toString().replace(/:$/, '');
+  if (decodedApiKey !== expectedApiKey) {
+    return {
+      message: () => 'expected Basic Auth header to match API key',
+      pass: false,
+      actual: decodedApiKey,
+      expected: expectedApiKey,
+    };
+  }
+
+  return {
+    message: () => 'expected Basic Auth header to not match API key',
+    pass: true,
+  };
+}
+
+function toBeValidSchema(
   /** The input YAML, as a string */
   yaml: string,
   /** The JSON schema file */
   schema: AnySchema,
-): { message: () => string; pass: boolean } {
+): ExpectationResult {
   const ajv = new Ajv({ strictTypes: false, strictTuples: false });
 
   const data = jsYaml.load(yaml);
@@ -49,4 +72,4 @@ export default function toBeValidSchema(
   };
 }
 
-expect.extend({ toBeValidSchema });
+expect.extend({ toBeBasicAuthApiKey, toBeValidSchema });
