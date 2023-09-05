@@ -214,6 +214,41 @@ describe('rdme versions:update', () => {
     mockRequest.done();
   });
 
+  it('should update a version to be the main one', async () => {
+    const versionToChange = '1.1.0';
+    const renamedVersion = '1.1.0-update';
+
+    const updatedVersionObject = {
+      version: renamedVersion,
+      is_beta: false,
+      is_stable: true,
+    };
+
+    const mockRequest = getAPIMock()
+      .get(`/api/v1/version/${versionToChange}`)
+      .basicAuth({ user: key })
+      .reply(200, { version: versionToChange })
+      .get(`/api/v1/version/${versionToChange}`)
+      .basicAuth({ user: key })
+      .reply(200, { version: versionToChange })
+      .put(`/api/v1/version/${versionToChange}`, updatedVersionObject)
+      .basicAuth({ user: key })
+      .reply(201, updatedVersionObject);
+
+    await expect(
+      updateVersion.run({
+        key,
+        version: versionToChange,
+        newVersion: renamedVersion,
+        deprecated: 'true',
+        beta: 'false',
+        main: 'true',
+        isPublic: 'false',
+      }),
+    ).resolves.toBe(`Version ${versionToChange} updated successfully.`);
+    mockRequest.done();
+  });
+
   // Note: this test is a bit bizarre since the flag management
   // in our version commands is really confusing to follow.
   // I'm not sure if it's technically possible to demote a stable version
@@ -225,11 +260,12 @@ describe('rdme versions:update', () => {
     const updatedVersionObject = {
       version: renamedVersion,
       is_beta: true,
+      is_deprecated: true,
       is_hidden: true,
       is_stable: false,
     };
 
-    prompts.inject([renamedVersion, true]);
+    prompts.inject([renamedVersion, true, false, true]);
 
     const errorResponse = {
       error: 'VERSION_CANT_DEMOTE_STABLE',
