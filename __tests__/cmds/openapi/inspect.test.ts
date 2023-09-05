@@ -1,19 +1,13 @@
 /* eslint-disable vitest/no-conditional-expect */
 import assert from 'assert';
 
-import { describe, afterEach, it, expect } from 'vitest';
+import { describe, it, expect } from 'vitest';
 
 import OpenAPIInspectCommand from '../../../src/cmds/openapi/inspect';
 
 const analyzer = new OpenAPIInspectCommand();
 
-const testWorkingDir = process.cwd();
-
 describe('rdme openapi:inspect', () => {
-  afterEach(() => {
-    process.chdir(testWorkingDir);
-  });
-
   describe('full reports', () => {
     it.each([
       '@readme/oas-examples/3.0/json/petstore.json',

@@ -9,8 +9,6 @@ import OpenAPIValidateCommand from '../../../src/cmds/openapi/validate';
 import ValidateAliasCommand from '../../../src/cmds/validate';
 import { after, before } from '../../helpers/get-gha-setup';
 
-const testWorkingDir = process.cwd();
-
 const validate = new OpenAPIValidateCommand();
 const validateAlias = new ValidateAliasCommand();
 
@@ -27,8 +25,6 @@ describe('rdme openapi:validate', () => {
 
   afterEach(() => {
     consoleSpy.mockRestore();
-
-    process.chdir(testWorkingDir);
   });
 
   it.each([
@@ -47,45 +43,6 @@ describe('rdme openapi:validate', () => {
     ).resolves.toContain(
       `petstore.${format} is a valid ${specVersion === '2.0' ? 'Swagger' : 'OpenAPI'} API definition!`,
     );
-  });
-
-  it.skip('should discover and upload an API definition if none is provided', async () => {
-    await expect(validate.run({ workingDirectory: './__tests__/__fixtures__/relative-ref-oas' })).resolves.toBe(
-      chalk.green('petstore.json is a valid OpenAPI API definition!'),
-    );
-
-    expect(console.info).toHaveBeenCalledTimes(1);
-
-    const output = getCommandOutput();
-    expect(output).toBe(chalk.yellow('ℹ️  We found petstore.json and are attempting to validate it.'));
-  });
-
-  it('should select spec in prompt and validate it', async () => {
-    const spec = '__tests__/__fixtures__/petstore-simple-weird-version.json';
-    prompts.inject([spec]);
-    await expect(validate.run({})).resolves.toBe(chalk.green(`${spec} is a valid OpenAPI API definition!`));
-  });
-
-  it.skip('should use specified working directory', () => {
-    return expect(
-      validate.run({
-        spec: 'petstore.json',
-        workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-      }),
-    ).resolves.toBe(chalk.green('petstore.json is a valid OpenAPI API definition!'));
-  });
-
-  it.skip('should adhere to .gitignore in subdirectories', () => {
-    fs.copyFileSync(
-      require.resolve('@readme/oas-examples/3.0/json/petstore-simple.json'),
-      './__tests__/__fixtures__/nested-gitignored-oas/nest/petstore-ignored.json',
-    );
-
-    return expect(
-      validate.run({
-        workingDirectory: './__tests__/__fixtures__/nested-gitignored-oas',
-      }),
-    ).resolves.toBe(chalk.green('nest/petstore.json is a valid OpenAPI API definition!'));
   });
 
   describe('error handling', () => {
@@ -184,20 +141,6 @@ describe('rdme openapi:validate', () => {
       prompts.inject(['validate-test-opt-spec-github-branch', fileName]);
 
       await expect(validate.run({ spec, github: true })).resolves.toMatchSnapshot();
-
-      expect(yamlOutput).toMatchSnapshot();
-      expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
-    });
-
-    it.skip('should create GHA workflow if user passes in spec via opt (including workingDirectory)', async () => {
-      expect.assertions(3);
-      const spec = 'petstore.json';
-      const fileName = 'validate-test-opt-spec-workdir-file';
-      prompts.inject([true, 'validate-test-opt-spec-github-branch', fileName]);
-
-      await expect(
-        validate.run({ spec, workingDirectory: './__tests__/__fixtures__/relative-ref-oas' }),
-      ).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();
       expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));

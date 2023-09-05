@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
-import type commands from '../../src/cmds';
-import type { CommandOptions } from '../../src/lib/baseCommand';
-import type Command from '../../src/lib/baseCommand';
+import type commands from '../../../src/cmds';
+import type { CommandOptions } from '../../../src/lib/baseCommand';
+import type Command from '../../../src/lib/baseCommand';
 import type { Response } from 'simple-git';
 
 import fs from 'fs';
@@ -9,17 +9,17 @@ import fs from 'fs';
 import prompts from 'prompts';
 import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
-import ChangelogsCommand from '../../src/cmds/changelogs';
-import CustomPagesCommand from '../../src/cmds/custompages';
-import DocsCommand from '../../src/cmds/docs';
-import OpenAPICommand from '../../src/cmds/openapi';
-import OpenAPIValidateCommand from '../../src/cmds/openapi/validate';
-import configstore from '../../src/lib/configstore';
-import createGHA, { getConfigStoreKey, getGHAFileName, getGitData, git } from '../../src/lib/createGHA';
-import { getMajorPkgVersion } from '../../src/lib/getPkgVersion';
-import { after, before } from '../helpers/get-gha-setup';
-import getGitRemoteMock from '../helpers/get-git-mock';
-import ghaWorkflowSchema from '../helpers/github-workflow-schema.json';
+import ChangelogsCommand from '../../../src/cmds/changelogs';
+import CustomPagesCommand from '../../../src/cmds/custompages';
+import DocsCommand from '../../../src/cmds/docs';
+import OpenAPICommand from '../../../src/cmds/openapi';
+import OpenAPIValidateCommand from '../../../src/cmds/openapi/validate';
+import configstore from '../../../src/lib/configstore';
+import createGHA, { getConfigStoreKey, getGHAFileName, getGitData, git } from '../../../src/lib/createGHA';
+import { getMajorPkgVersion } from '../../../src/lib/getPkgVersion';
+import { after, before } from '../../helpers/get-gha-setup';
+import getGitRemoteMock from '../../helpers/get-git-mock';
+import ghaWorkflowSchema from '../../helpers/github-workflow-schema.json';
 
 const testWorkingDir = process.cwd();
 

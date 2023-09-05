@@ -27,8 +27,6 @@ const key = 'API_KEY';
 const version = '1.0.0';
 const category = 'CATEGORY_ID';
 
-const testWorkingDir = process.cwd();
-
 describe('rdme docs', () => {
   beforeAll(() => {
     nock.disableNetConnect();
@@ -448,7 +446,6 @@ describe('rdme docs', () => {
       after();
 
       consoleInfoSpy.mockRestore();
-      process.chdir(testWorkingDir);
     });
 
     it('should create GHA workflow with version passed in via prompt', async () => {
