@@ -26,16 +26,12 @@ export function getAPIMockWithVersionHeader(v: string) {
   });
 }
 
+// TODO: add ability to check for other headers
 function doHeadersMatch(headers: Headers) {
-  // const auth = headers.get('authorization');
-  // const decodedAuth = auth ? Buffer.from(auth.replace(/^Basic /, ''), 'base64').toString('ascii') : '';
   const userAgent = headers.get('user-agent');
   return userAgent === getUserAgent();
 }
 
-//   } = { method: 'get', path: '', status: 200, proxy: '' },
-
-// TODO: add ability to check for other headers
 export function getAPIMockMSW(
   path: string = '',
   method: keyof typeof rest = 'get',

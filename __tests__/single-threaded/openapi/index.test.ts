@@ -58,7 +58,6 @@ describe('rdme openapi (single-threaded)', () => {
     consoleInfoSpy.mockRestore();
     consoleWarnSpy.mockRestore();
 
-    // nock.cleanAll();
     server.resetHandlers();
 
     process.chdir(testWorkingDir);
@@ -70,22 +69,6 @@ describe('rdme openapi (single-threaded)', () => {
     it('should discover and upload an API definition if none is provided', async () => {
       expect.assertions(5);
       const registryUUID = getRandomRegistryId();
-
-      // const mock = getAPIMock()
-      //   .get(`/api/v1/version/${version}`)
-      //   .basicAuth({ user: key })
-      //   .reply(200, { version })
-      //   .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
-      //   .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
-
-      // const mockWithHeader = getAPIMockWithVersionHeader(version)
-      //   .get('/api/v1/api-specification')
-      //   .basicAuth({ user: key })
-      //   .reply(200, [])
-      //   .post('/api/v1/api-specification', { registryUUID })
-      //   .delayConnection(1000)
-      //   .basicAuth({ user: key })
-      //   .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
       server.use(
         ...[
@@ -128,26 +111,6 @@ describe('rdme openapi (single-threaded)', () => {
       let requestBody;
       const registryUUID = getRandomRegistryId();
 
-      // const mock = getAPIMock()
-      //   .get(`/api/v1/version/${version}`)
-      //   .basicAuth({ user: key })
-      //   .reply(200, { version: '1.0.0' })
-      //   .post('/api/v1/api-registry', body => {
-      //     requestBody = body.substring(body.indexOf('{'), body.lastIndexOf('}') + 1);
-      //     requestBody = JSON.parse(requestBody);
-
-      //     return body.match('form-data; name="spec"');
-      //   })
-      //   .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
-
-      // const mockWithHeader = getAPIMockWithVersionHeader(version)
-      //   .get('/api/v1/api-specification')
-      //   .basicAuth({ user: key })
-      //   .reply(200, [])
-      //   .post('/api/v1/api-specification', { registryUUID })
-      //   .basicAuth({ user: key })
-      //   .reply(201, { _id: 1 }, { location: exampleRefLocation });
-
       server.use(
         ...[
           // TODO: basic auth
@@ -189,18 +152,6 @@ describe('rdme openapi (single-threaded)', () => {
     it('should return spec create info for dry run', async () => {
       expect.assertions(3);
       const registryUUID = getRandomRegistryId();
-
-      // const mock = getAPIMock()
-      //   .get(`/api/v1/version/${version}`)
-      //   .basicAuth({ user: key })
-      //   .reply(200, { version })
-      //   .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
-      //   .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
-
-      // const mockWithHeader = getAPIMockWithVersionHeader(version)
-      //   .get('/api/v1/api-specification')
-      //   .basicAuth({ user: key })
-      //   .reply(200, []);
 
       server.use(
         ...[
@@ -263,21 +214,6 @@ describe('rdme openapi (single-threaded)', () => {
       prompts.inject([true, 'openapi-branch-workingdirectory', yamlFileName]);
       const registryUUID = getRandomRegistryId();
 
-      // const mock = getAPIMock()
-      //   .get(`/api/v1/version/${version}`)
-      //   .basicAuth({ user: key })
-      //   .reply(200, { version: '1.0.0' })
-      //   .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
-      //   .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
-
-      // const mockWithHeader = getAPIMockWithVersionHeader(version)
-      //   .get('/api/v1/api-specification')
-      //   .basicAuth({ user: key })
-      //   .reply(200, [])
-      //   .post('/api/v1/api-specification', { registryUUID })
-      //   .basicAuth({ user: key })
-      //   .reply(201, { _id: 1 }, { location: exampleRefLocation });
-
       server.use(
         ...[
           // TODO: basic auth
@@ -329,29 +265,6 @@ describe('rdme openapi (single-threaded)', () => {
     it('should contain request header with correct URL with working directory', async () => {
       expect.assertions(7);
       const registryUUID = getRandomRegistryId();
-      // const mock = getAPIMock()
-      //   .get(`/api/v1/version/${version}`)
-      //   .basicAuth({ user: key })
-      //   .reply(200, { version: '1.0.0' })
-      //   .post('/api/v1/api-registry')
-      //   .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
-
-      // const getMock = getAPIMockWithVersionHeader(version)
-      //   .get('/api/v1/api-specification')
-      //   .basicAuth({ user: key })
-      //   .reply(200, []);
-
-      // const postMock = getAPIMock({
-      //   'x-rdme-ci': 'GitHub Actions (test)',
-      //   'x-readme-source': 'cli-gh',
-      //   'x-readme-source-url':
-      //     'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/__tests__/__fixtures__/relative-ref-oas/petstore.json',
-      //   'x-readme-version': version,
-      // })
-      //   .post('/api/v1/api-specification', { registryUUID })
-      //   .basicAuth({ user: key })
-      //   .reply(201, { _id: 1 }, { location: exampleRefLocation });
-
       server.use(
         ...[
           // TODO: basic auth
@@ -389,9 +302,6 @@ describe('rdme openapi (single-threaded)', () => {
         }),
       ).resolves.toBe(successfulUpload(spec));
 
-      // getMock.done();
-      // postMock.done();
-      // mock.done();
       return after();
     });
   });
