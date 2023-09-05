@@ -29,8 +29,11 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: npm
 
-      - name: Build and run tests
-        run: npm cit
+      - name: Install deps
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
 
   lint:
     runs-on: ubuntu-latest
