@@ -2,7 +2,7 @@ import type { Response } from 'simple-git';
 
 import fs from 'fs';
 
-import { beforeEach, afterEach, vi } from 'vitest';
+import { vi } from 'vitest';
 
 import configstore from '../../src/lib/configstore';
 import { git } from '../../src/lib/createGHA';
@@ -23,9 +23,7 @@ export function before(writeFileSyncCb) {
     return Promise.resolve(true) as unknown as Response<boolean>;
   });
 
-  beforeEach(() => {
-    vi.useFakeTimers();
-  });
+  vi.useFakeTimers();
 
   git.remote = getGitRemoteMock();
 
@@ -41,11 +39,8 @@ export function before(writeFileSyncCb) {
  * A helper function for tearing down tests for our GitHub Action onboarding.
  */
 export function after() {
-  afterEach(() => {
-    vi.useRealTimers();
-  });
-
   configstore.clear();
   delete process.env.TEST_RDME_CREATEGHA;
   vi.clearAllMocks();
+  vi.useRealTimers();
 }
