@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import fs from 'fs';
+import fs from 'node:fs';
 
 import chalk from 'chalk';
 import config from 'config';

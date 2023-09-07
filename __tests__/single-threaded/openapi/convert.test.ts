@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from 'node:fs';
 
 import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 
