@@ -2,7 +2,7 @@ import fs from 'node:fs';
 
 import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 
-import OpenAPIConvertCommand from '../../../src/cmds/openapi/convert';
+import OpenAPIConvertCommand from '../../../src/cmds/openapi/convert.js';
 
 const convert = new OpenAPIConvertCommand();
 

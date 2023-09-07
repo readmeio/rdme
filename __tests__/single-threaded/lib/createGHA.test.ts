@@ -15,7 +15,7 @@ import DocsCommand from '../../../src/cmds/docs/index.js';
 import OpenAPICommand from '../../../src/cmds/openapi/index.js';
 import OpenAPIValidateCommand from '../../../src/cmds/openapi/validate.js';
 import configstore from '../../../src/lib/configstore.js';
-import createGHA, { getConfigStoreKey, getGHAFileName, getGitData, git } from '../../../src/lib/createGHA';
+import createGHA, { getConfigStoreKey, getGHAFileName, getGitData, git } from '../../../src/lib/createGHA/index.js';
 import { getMajorPkgVersion } from '../../../src/lib/getPkgVersion.js';
 import { after, before } from '../../helpers/get-gha-setup.js';
 import getGitRemoteMock from '../../helpers/get-git-mock.js';

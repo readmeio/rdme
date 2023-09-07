@@ -5,8 +5,8 @@ import chalk from 'chalk';
 import prompts from 'prompts';
 import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
-import OpenAPIValidateCommand from '../../../src/cmds/openapi/validate';
-import { after, before } from '../../helpers/get-gha-setup';
+import OpenAPIValidateCommand from '../../../src/cmds/openapi/validate.js';
+import { after, before } from '../../helpers/get-gha-setup.js';
 
 const validate = new OpenAPIValidateCommand();
 
