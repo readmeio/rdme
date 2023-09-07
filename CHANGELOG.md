@@ -1,3 +1,10 @@
+# [8.7.0-next.1](https://github.com/readmeio/rdme/compare/v8.6.6...v8.7.0-next.1) (2023-09-07)
+
+
+### Features
+
+* **test:** moving unit tests over to vitest ([#857](https://github.com/readmeio/rdme/issues/857)) ([36d561b](https://github.com/readmeio/rdme/commit/36d561bba08593fb54b8473b5782d12ad436b98e)), closes [#870](https://github.com/readmeio/rdme/issues/870)
+
 ## [8.6.6](https://github.com/readmeio/rdme/compare/v8.6.5...v8.6.6) (2023-08-24)
 
 
