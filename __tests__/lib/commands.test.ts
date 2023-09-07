@@ -1,10 +1,14 @@
-/// <reference types="jest-extended" />
-/* eslint-disable jest/no-conditional-expect, jest/no-if */
+/* eslint-disable vitest/no-conditional-expect */
 import type Command from '../../src/lib/baseCommand.js';
+
+import { describe, it, expect, expectTypeOf } from 'vitest';
 
 import DocsCommand from '../../src/cmds/docs/index.js';
 import { CommandCategories } from '../../src/lib/baseCommand.js';
 import * as commands from '../../src/lib/commands.js';
+
+/** @see {@link https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_isempty} */
+const isEmpty = obj => [Object, Array].includes((obj || {}).constructor) && !Object.entries(obj || {}).length;
 
 describe('utils', () => {
   describe('#list', () => {
@@ -17,18 +21,18 @@ describe('utils', () => {
         commands.list().forEach(c => {
           const cmd = c.command;
 
-          expect(cmd.command).not.toBeEmpty();
-          expect(cmd.usage).not.toBeEmpty();
-          expect(cmd.usage).toStartWith(cmd.command);
-          expect(cmd.description).not.toBeEmpty();
-          expect(cmd.cmdCategory).not.toBeEmpty();
-          expect(cmd.args).toBeArray();
-          expect(cmd.run).toBeFunction();
+          expect(cmd).not.toSatisfy(isEmpty);
+          expect(cmd.usage).not.toSatisfy(isEmpty);
+          expect(cmd.usage).toMatch(cmd.command);
+          expect(cmd.description).not.toSatisfy(isEmpty);
+          expect(cmd.cmdCategory).not.toSatisfy(isEmpty);
+          expectTypeOf(cmd.args).toBeArray();
+          expectTypeOf(cmd.run).toBeFunction();
 
           if (cmd.args.length > 0) {
             cmd.args.forEach(arg => {
-              expect(arg.name).not.toBeEmpty();
-              expect(arg.type).not.toBeEmpty();
+              expect(arg.name).not.toSatisfy(isEmpty);
+              expect(arg.type).not.toSatisfy(isEmpty);
             });
           }
         });
@@ -40,7 +44,7 @@ describe('utils', () => {
           (_, command) => {
             it('should have a description that ends with punctuation', () => {
               const description = command.description.replace('[inactive]', '').replace('[deprecated]', '').trim();
-              return expect(description).toEndWith('.');
+              return expect(description).toSatisfy((d: string) => d.endsWith('.'));
             });
 
             it('should have standardized argument constructs', () => {

@@ -2,6 +2,7 @@ import fs from 'node:fs';
 
 import nock from 'nock';
 import prompts from 'prompts';
+import { describe, beforeAll, afterAll, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
 import DocsEditCommand from '../../../src/cmds/docs/edit.js';
 import APIError from '../../../src/lib/apiError.js';
@@ -20,20 +21,22 @@ describe('rdme docs:edit', () => {
     return [consoleWarnSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
   }
 
+  beforeAll(() => {
+    nock.disableNetConnect();
+  });
+
   beforeEach(() => {
-    consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
+    consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
   });
 
   afterEach(() => {
     consoleWarnSpy.mockRestore();
   });
 
-  beforeAll(() => nock.disableNetConnect());
-
   afterAll(() => nock.cleanAll());
 
   it('should prompt for login if no API key provided', async () => {
-    const consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+    const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
     await expect(docsEdit.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
     consoleInfoSpy.mockRestore();
@@ -60,7 +63,7 @@ describe('rdme docs:edit', () => {
 
   it('should fetch the doc from the api', async () => {
     expect.assertions(5);
-    const consoleSpy = jest.spyOn(console, 'info').mockImplementation();
+    const consoleSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     const slug = 'getting-started';
     const body = 'abcdef';
     const edits = 'ghijkl';

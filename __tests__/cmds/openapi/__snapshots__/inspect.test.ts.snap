@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`rdme openapi:inspect feature reports should generate a report for @readme/oas-examples/3.0/json/readme.json (w/ ["polymorphism"]) 1`] = `
+exports[`rdme openapi:inspect > feature reports > should generate a report for '@readme/oas-examples/3.0/json/readme.json' (w/ [ 'polymorphism' ]) 1`] = `
 "
 polymorphism:
  · #/components/responses/authForbidden/content/application~1json/schema
@@ -50,7 +50,7 @@ polymorphism:
  · #/paths/~1version/post/responses/400/content/application~1json/schema"
 `;
 
-exports[`rdme openapi:inspect feature reports should generate a report for @readme/oas-examples/3.0/json/readme-extensions.json (w/ ["readme"]) 1`] = `
+exports[`rdme openapi:inspect > feature reports > should generate a report for '@readme/oas-examples/3.0/json/readme-extensions.json' (w/ [ 'readme' ]) 1`] = `
 "
 x-default: You do not use this.
 x-readme.code-samples:
@@ -73,22 +73,8 @@ x-readme.samples-languages:
  · swift"
 `;
 
-exports[`rdme openapi:inspect feature reports should generate a report for @readme/oas-examples/3.0/json/schema-circular.json (w/ ["additionalProperties", "circularRefs", "readme"]) 1`] = `
+exports[`rdme openapi:inspect > feature reports > should generate a report for '@readme/oas-examples/3.0/json/schema-circular.json' (w/ [ 'circularRefs', 'readme' ]) 1`] = `
 "
-additionalProperties:
- · #/components/schemas/BodyPart/properties/headers/additionalProperties
- · #/components/schemas/BodyPart/properties/mediaType/properties/parameters/additionalProperties
- · #/components/schemas/BodyPart/properties/parameterizedHeaders/additionalProperties
- · #/components/schemas/ContentDisposition/properties/parameters/additionalProperties
- · #/components/schemas/FormDataBodyPart/properties/headers/additionalProperties
- · #/components/schemas/FormDataBodyPart/properties/mediaType/properties/parameters/additionalProperties
- · #/components/schemas/FormDataBodyPart/properties/parameterizedHeaders/additionalProperties
- · #/components/schemas/FormDataContentDisposition/properties/parameters/additionalProperties
- · #/components/schemas/MultiPart/properties/headers/additionalProperties
- · #/components/schemas/MultiPart/properties/mediaType/properties/parameters/additionalProperties
- · #/components/schemas/MultiPart/properties/parameterizedHeaders/additionalProperties
- · #/components/schemas/ParameterizedHeader/properties/parameters/additionalProperties
-
 circularRefs:
  · #/components/schemas/MultiPart/properties/parent
  · #/components/schemas/ZoneOffset/properties/rules
@@ -101,7 +87,7 @@ x-readme.proxy-enabled: You do not use this.
 x-readme.samples-languages: You do not use this."
 `;
 
-exports[`rdme openapi:inspect feature reports should generate a report for @readme/oas-examples/3.0/json/schema-circular.json (w/ ["additionalProperties", "circularRefs"]) 1`] = `
+exports[`rdme openapi:inspect > feature reports > should generate a report for '@readme/oas-examples/3.0/json/schema-circular.json' (w/ [ Array(2) ]) 1`] = `
 "
 additionalProperties:
  · #/components/schemas/BodyPart/properties/headers/additionalProperties
@@ -122,8 +108,22 @@ circularRefs:
  · #/components/schemas/ZoneOffset/properties/rules"
 `;
 
-exports[`rdme openapi:inspect feature reports should generate a report for @readme/oas-examples/3.0/json/schema-circular.json (w/ ["circularRefs", "readme"]) 1`] = `
+exports[`rdme openapi:inspect > feature reports > should generate a report for '@readme/oas-examples/3.0/json/schema-circular.json' (w/ [ Array(3) ]) 1`] = `
 "
+additionalProperties:
+ · #/components/schemas/BodyPart/properties/headers/additionalProperties
+ · #/components/schemas/BodyPart/properties/mediaType/properties/parameters/additionalProperties
+ · #/components/schemas/BodyPart/properties/parameterizedHeaders/additionalProperties
+ · #/components/schemas/ContentDisposition/properties/parameters/additionalProperties
+ · #/components/schemas/FormDataBodyPart/properties/headers/additionalProperties
+ · #/components/schemas/FormDataBodyPart/properties/mediaType/properties/parameters/additionalProperties
+ · #/components/schemas/FormDataBodyPart/properties/parameterizedHeaders/additionalProperties
+ · #/components/schemas/FormDataContentDisposition/properties/parameters/additionalProperties
+ · #/components/schemas/MultiPart/properties/headers/additionalProperties
+ · #/components/schemas/MultiPart/properties/mediaType/properties/parameters/additionalProperties
+ · #/components/schemas/MultiPart/properties/parameterizedHeaders/additionalProperties
+ · #/components/schemas/ParameterizedHeader/properties/parameters/additionalProperties
+
 circularRefs:
  · #/components/schemas/MultiPart/properties/parent
  · #/components/schemas/ZoneOffset/properties/rules
@@ -136,7 +136,7 @@ x-readme.proxy-enabled: You do not use this.
 x-readme.samples-languages: You do not use this."
 `;
 
-exports[`rdme openapi:inspect full reports should generate a report for @readme/oas-examples/3.0/json/petstore.json 1`] = `
+exports[`rdme openapi:inspect > full reports > should generate a report for @readme/oas-examples/3.0/json/petstore.json 1`] = `
 "Here are some interesting things we found in your API definition. 🕵️
 
  · You are using 4 Media Types throughout your API: application/json, application/x-www-form-urlencoded, application/xml, and multipart/form-data
@@ -246,7 +246,7 @@ ReadMe-Specific Features and Extensions
 "
 `;
 
-exports[`rdme openapi:inspect full reports should generate a report for @readme/oas-examples/3.0/json/readme.json 1`] = `
+exports[`rdme openapi:inspect > full reports > should generate a report for @readme/oas-examples/3.0/json/readme.json 1`] = `
 "Here are some interesting things we found in your API definition. 🕵️
 
  · You are using 2 Media Types throughout your API: application/json and multipart/form-data
@@ -356,7 +356,7 @@ ReadMe-Specific Features and Extensions
 "
 `;
 
-exports[`rdme openapi:inspect full reports should generate a report for @readme/oas-examples/3.0/json/readme-extensions.json 1`] = `
+exports[`rdme openapi:inspect > full reports > should generate a report for @readme/oas-examples/3.0/json/readme-extensions.json 1`] = `
 "Here are some interesting things we found in your API definition. 🕵️
 
  · You are using a single Media Type throughout your API: application/json

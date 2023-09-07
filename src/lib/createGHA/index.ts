@@ -209,8 +209,8 @@ export default async function createGHA(
     );
   }
 
-  if (repoRoot) {
-    const previousWorkingDirectory = process.cwd();
+  const previousWorkingDirectory = process.cwd();
+  if (repoRoot && repoRoot !== previousWorkingDirectory) {
     process.chdir(repoRoot);
     debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
   }

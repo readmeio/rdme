@@ -1,5 +1,6 @@
 import nock from 'nock';
 import prompts from 'prompts';
+import { describe, beforeAll, afterAll, it, expect, vi } from 'vitest';
 
 import DocsPruneCommand from '../../../src/cmds/docs/prune.js';
 import GuidesPruneCommand from '../../../src/cmds/guides/prune.js';
@@ -16,12 +17,14 @@ const version = '1.0.0';
 describe('rdme docs:prune', () => {
   const folder = `./__tests__/${fixturesBaseDir}/delete-docs`;
 
-  beforeAll(() => nock.disableNetConnect());
+  beforeAll(() => {
+    nock.disableNetConnect();
+  });
 
   afterAll(() => nock.cleanAll());
 
   it('should prompt for login if no API key provided', async () => {
-    const consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+    const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
     await expect(docsPrune.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
     consoleInfoSpy.mockRestore();
@@ -185,7 +188,9 @@ describe('rdme docs:prune', () => {
 });
 
 describe('rdme guides:prune', () => {
-  beforeAll(() => nock.disableNetConnect());
+  beforeAll(() => {
+    nock.disableNetConnect();
+  });
 
   afterAll(() => nock.cleanAll());
 

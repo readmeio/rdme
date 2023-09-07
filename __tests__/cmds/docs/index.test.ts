@@ -6,6 +6,7 @@ import chalk from 'chalk';
 import frontMatter from 'gray-matter';
 import nock from 'nock';
 import prompts from 'prompts';
+import { describe, beforeAll, afterAll, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
 import DocsCommand from '../../../src/cmds/docs/index.js';
 import GuidesCommand from '../../../src/cmds/guides/index.js';
@@ -26,15 +27,15 @@ const key = 'API_KEY';
 const version = '1.0.0';
 const category = 'CATEGORY_ID';
 
-const testWorkingDir = process.cwd();
-
 describe('rdme docs', () => {
-  beforeAll(() => nock.disableNetConnect());
+  beforeAll(() => {
+    nock.disableNetConnect();
+  });
 
   afterAll(() => nock.cleanAll());
 
   it('should prompt for login if no API key provided', async () => {
-    const consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+    const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
     await expect(docs.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
     consoleInfoSpy.mockRestore();
@@ -45,7 +46,7 @@ describe('rdme docs', () => {
     const password = 'pass123';
     const project = 'proj1';
 
-    const consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+    const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     const getCommandOutput = () => {
       return [consoleInfoSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
     };
@@ -66,7 +67,7 @@ describe('rdme docs', () => {
     expect(getCommandOutput()).toContain('Successfully logged in as owlbert@readme.io to the proj1 project.');
     mock.done();
     configstore.clear();
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   it('should error if no path provided', async () => {
@@ -434,7 +435,7 @@ describe('rdme docs', () => {
     };
 
     beforeEach(() => {
-      consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+      consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
 
       before((fileName, data) => {
         yamlOutput = data;
@@ -445,7 +446,6 @@ describe('rdme docs', () => {
       after();
 
       consoleInfoSpy.mockRestore();
-      process.chdir(testWorkingDir);
     });
 
     it('should create GHA workflow with version passed in via prompt', async () => {
@@ -620,7 +620,9 @@ describe('rdme docs', () => {
   });
 
   describe('command execution in GitHub Actions runner', () => {
-    beforeEach(beforeGHAEnv);
+    beforeEach(() => {
+      beforeGHAEnv();
+    });
 
     afterEach(afterGHAEnv);
 
@@ -753,7 +755,9 @@ describe('rdme docs', () => {
 });
 
 describe('rdme guides', () => {
-  beforeAll(() => nock.disableNetConnect());
+  beforeAll(() => {
+    nock.disableNetConnect();
+  });
 
   afterAll(() => nock.cleanAll());
 

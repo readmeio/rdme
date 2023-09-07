@@ -1,5 +1,6 @@
 import nock from 'nock';
 import semver from 'semver';
+import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
 import pkg from '../../package.json' assert { type: 'json' };
 import { getNodeVersion, getPkgVersion } from '../../src/lib/getPkgVersion.js';
@@ -16,7 +17,7 @@ describe('#getPkgVersion()', () => {
   let consoleErrorSpy;
 
   beforeEach(() => {
-    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
+    consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   afterEach(() => {

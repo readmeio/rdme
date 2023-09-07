@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`cli --help should not surface args that are designated as hidden 1`] = `
+exports[`cli > --help > should not surface args that are designated as hidden 1`] = `
 "
 Upload, or resync, your OpenAPI/Swagger definition to ReadMe.
 
@@ -47,7 +47,7 @@ Related commands
 "
 `;
 
-exports[`cli --help should print usage for a given command 1`] = `
+exports[`cli > --help > should print usage for a given command 1`] = `
 "
 Upload, or resync, your OpenAPI/Swagger definition to ReadMe.
 
@@ -94,7 +94,7 @@ Related commands
 "
 `;
 
-exports[`cli --help should print usage for a given command if supplied as \`help <command>\` 1`] = `
+exports[`cli > --help > should print usage for a given command if supplied as \`help <command>\` 1`] = `
 "
 Upload, or resync, your OpenAPI/Swagger definition to ReadMe.
 
@@ -141,7 +141,7 @@ Related commands
 "
 `;
 
-exports[`cli --help should show related commands for a subcommands help menu 1`] = `
+exports[`cli > --help > should show related commands for a subcommands help menu 1`] = `
 "
 List versions available in your project or get a version by SemVer (https://semver.org/).
 

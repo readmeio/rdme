@@ -5,6 +5,7 @@ import chalk from 'chalk';
 import frontMatter from 'gray-matter';
 import nock from 'nock';
 import prompts from 'prompts';
+import { describe, beforeAll, afterAll, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
 import DocsCommand from '../../../src/cmds/docs/index.js';
 import APIError from '../../../src/lib/apiError.js';
@@ -22,12 +23,14 @@ const version = '1.0.0';
 const category = 'CATEGORY_ID';
 
 describe('rdme docs (single)', () => {
-  beforeAll(() => nock.disableNetConnect());
+  beforeAll(() => {
+    nock.disableNetConnect();
+  });
 
   afterAll(() => nock.cleanAll());
 
   it('should prompt for login if no API key provided', async () => {
-    const consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+    const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
     await expect(docs.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
     consoleInfoSpy.mockRestore();
@@ -344,7 +347,9 @@ describe('rdme docs (single)', () => {
   });
 
   describe('command execution in GitHub Actions runner', () => {
-    beforeEach(beforeGHAEnv);
+    beforeEach(() => {
+      beforeGHAEnv();
+    });
 
     afterEach(afterGHAEnv);
 

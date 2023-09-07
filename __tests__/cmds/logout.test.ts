@@ -1,4 +1,5 @@
 import config from 'config';
+import { describe, afterEach, it, expect } from 'vitest';
 
 import Command from '../../src/cmds/logout.js';
 import configStore from '../../src/lib/configstore.js';

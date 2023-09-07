@@ -1,5 +1,6 @@
 import nock from 'nock';
 import prompts from 'prompts';
+import { describe, beforeAll, afterAll, afterEach, it, expect } from 'vitest';
 
 import Command from '../../src/cmds/login.js';
 import APIError from '../../src/lib/apiError.js';
@@ -15,11 +16,13 @@ const project = 'subdomain';
 const token = '123456';
 
 describe('rdme login', () => {
-  beforeAll(() => nock.disableNetConnect());
-
-  afterAll(() => nock.cleanAll());
+  beforeAll(() => {
+    nock.disableNetConnect();
+  });
 
   afterEach(() => configStore.clear());
+
+  afterAll(() => nock.cleanAll());
 
   it('should error if no project provided', () => {
     prompts.inject([email, password]);
