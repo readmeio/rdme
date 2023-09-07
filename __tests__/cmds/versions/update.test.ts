@@ -1,5 +1,6 @@
 import nock from 'nock';
 import prompts from 'prompts';
+import { describe, beforeAll, afterEach, it, expect, vi } from 'vitest';
 
 import UpdateVersionCommand from '../../../src/cmds/versions/update';
 import APIError from '../../../src/lib/apiError';
@@ -11,12 +12,14 @@ const version = '1.0.0';
 const updateVersion = new UpdateVersionCommand();
 
 describe('rdme versions:update', () => {
-  beforeAll(() => nock.disableNetConnect());
+  beforeAll(() => {
+    nock.disableNetConnect();
+  });
 
   afterEach(() => nock.cleanAll());
 
   it('should prompt for login if no API key provided', async () => {
-    const consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+    const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
     await expect(updateVersion.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
     consoleInfoSpy.mockRestore();

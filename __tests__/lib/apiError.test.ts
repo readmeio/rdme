@@ -1,3 +1,5 @@
+import { describe, it, expect } from 'vitest';
+
 import APIError from '../../src/lib/apiError';
 
 const response = {

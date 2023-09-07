@@ -5,6 +5,7 @@ import chalk from 'chalk';
 import frontMatter from 'gray-matter';
 import nock from 'nock';
 import prompts from 'prompts';
+import { describe, beforeAll, afterAll, beforeEach, it, expect, vi } from 'vitest';
 
 import CustomPagesCommand from '../../../src/cmds/custompages';
 import APIError from '../../../src/lib/apiError';
@@ -18,12 +19,14 @@ const fullFixturesDir = `${__dirname}./../../${fixturesBaseDir}`;
 const key = 'API_KEY';
 
 describe('rdme custompages (single)', () => {
-  beforeAll(() => nock.disableNetConnect());
+  beforeAll(() => {
+    nock.disableNetConnect();
+  });
 
   afterAll(() => nock.cleanAll());
 
   it('should prompt for login if no API key provided', async () => {
-    const consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+    const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
     await expect(custompages.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
     consoleInfoSpy.mockRestore();

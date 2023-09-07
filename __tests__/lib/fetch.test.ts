@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment, no-console */
 import { Headers } from 'node-fetch';
+import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
 import pkg from '../../package.json';
 import readmeAPIFetch, { cleanHeaders, handleRes } from '../../src/lib/readmeAPIFetch';
@@ -91,7 +92,7 @@ describe('#fetch()', () => {
 
       it('should omit source URL header if URL is invalid', async () => {
         const key = 'API_KEY';
-        delete process.env.GITHUB_SERVER_URL;
+        vi.stubEnv('GITHUB_SERVER_URL', undefined);
 
         const mock = getAPIMock()
           .get('/api/v1')
@@ -216,7 +217,7 @@ describe('#fetch()', () => {
     };
 
     beforeEach(() => {
-      consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
+      consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     });
 
     afterEach(() => {
@@ -280,14 +281,13 @@ describe('#fetch()', () => {
 
   describe('proxies', () => {
     afterEach(() => {
-      delete process.env.https_proxy;
-      delete process.env.HTTPS_PROXY;
+      vi.unstubAllEnvs();
     });
 
     it('should support proxies via HTTPS_PROXY env variable', async () => {
       const proxy = 'https://proxy.example.com:5678';
 
-      process.env.HTTPS_PROXY = proxy;
+      vi.stubEnv('HTTPS_PROXY', proxy);
 
       const mock = getAPIMock({}, `${proxy}/`).get('/api/v1/proxy').reply(200);
 
@@ -299,7 +299,7 @@ describe('#fetch()', () => {
     it('should support proxies via https_proxy env variable', async () => {
       const proxy = 'https://proxy.example.com:5678';
 
-      process.env.https_proxy = proxy;
+      vi.stubEnv('https_proxy', proxy);
 
       const mock = getAPIMock({}, `${proxy}/`).get('/api/v1/proxy').reply(200);
 
@@ -311,7 +311,7 @@ describe('#fetch()', () => {
     it('should handle trailing slash in proxy URL', async () => {
       const proxy = 'https://proxy.example.com:5678/';
 
-      process.env.https_proxy = proxy;
+      vi.stubEnv('https_proxy', proxy);
 
       const mock = getAPIMock({}, proxy).get('/api/v1/proxy').reply(200);
 

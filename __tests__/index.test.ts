@@ -1,4 +1,5 @@
 import prompts from 'prompts';
+import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
 import { version as pkgVersion } from '../package.json';
 import cli from '../src';
@@ -104,7 +105,7 @@ describe('cli', () => {
         conf.set('email', 'owlbert-store@readme.io');
         conf.set('project', 'project-owlbert-store');
         conf.set('apiKey', key);
-        consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+        consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
       });
 
       afterEach(() => {
@@ -160,17 +161,15 @@ describe('cli', () => {
       };
 
       beforeEach(() => {
-        process.env.RDME_API_KEY = key;
-        process.env.RDME_EMAIL = 'owlbert-env@readme.io';
-        process.env.RDME_PROJECT = 'project-owlbert-env';
-        consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+        vi.stubEnv('RDME_API_KEY', key);
+        vi.stubEnv('RDME_EMAIL', 'owlbert-env@readme.io');
+        vi.stubEnv('RDME_PROJECT', 'project-owlbert-env');
+        consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
       });
 
       afterEach(() => {
         consoleInfoSpy.mockRestore();
-        delete process.env.RDME_API_KEY;
-        delete process.env.RDME_EMAIL;
-        delete process.env.RDME_PROJECT;
+        vi.unstubAllEnvs();
       });
 
       it('should add stored apiKey to opts', async () => {
@@ -227,7 +226,7 @@ describe('cli', () => {
 
     beforeEach(() => {
       before(() => true);
-      consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+      consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     });
 
     afterEach(() => {

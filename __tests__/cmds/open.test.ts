@@ -2,6 +2,7 @@ import type { Version } from '../../src/cmds/versions';
 
 import chalk from 'chalk';
 import config from 'config';
+import { describe, afterEach, it, expect } from 'vitest';
 
 import Command from '../../src/cmds/open';
 import configStore from '../../src/lib/configstore';
