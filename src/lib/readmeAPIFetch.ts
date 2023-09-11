@@ -67,7 +67,7 @@ function parseWarningHeader(header: string): WarningHeader[] {
 
     let previous: WarningHeader;
 
-    return warnings.reduce((all, w) => {
+    return warnings.reduce<WarningHeader[]>((all, w) => {
       // eslint-disable-next-line no-param-reassign
       w = w.trim();
       const newError = w.match(/^([0-9]{3}) (.*)/);
@@ -147,11 +147,11 @@ export default async function readmeAPIFetch(
 
   if (isGHA()) {
     source = 'cli-gh';
-    headers.set('x-github-repository', process.env.GITHUB_REPOSITORY);
-    headers.set('x-github-run-attempt', process.env.GITHUB_RUN_ATTEMPT);
-    headers.set('x-github-run-id', process.env.GITHUB_RUN_ID);
-    headers.set('x-github-run-number', process.env.GITHUB_RUN_NUMBER);
-    headers.set('x-github-sha', process.env.GITHUB_SHA);
+    if (process.env.GITHUB_REPOSITORY) headers.set('x-github-repository', process.env.GITHUB_REPOSITORY);
+    if (process.env.GITHUB_RUN_ATTEMPT) headers.set('x-github-run-attempt', process.env.GITHUB_RUN_ATTEMPT);
+    if (process.env.GITHUB_RUN_ID) headers.set('x-github-run-id', process.env.GITHUB_RUN_ID);
+    if (process.env.GITHUB_RUN_NUMBER) headers.set('x-github-run-number', process.env.GITHUB_RUN_NUMBER);
+    if (process.env.GITHUB_SHA) headers.set('x-github-sha', process.env.GITHUB_SHA);
 
     const filePath = await normalizeFilePath(fileOpts);
 
@@ -217,7 +217,8 @@ export default async function readmeAPIFetch(
  *
  */
 async function handleRes(res: Response, rejectOnJsonError = true) {
-  const contentType = res.headers.get('content-type');
+  // if the content-type header is missing, fallback to json
+  const contentType = res.headers.get('content-type') || 'application/json';
   const extension = mime.extension(contentType);
   if (extension === 'json') {
     const body = await res.json();
