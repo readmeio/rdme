@@ -25,7 +25,7 @@ import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch';
  */
 async function pushDoc(
   key: string,
-  selectedVersion: string,
+  selectedVersion: string | undefined,
   dryRun: boolean,
   filePath: string,
   type: CommandCategories,
@@ -136,7 +136,7 @@ export default async function syncDocsPath(
   /** Project API key */
   key: string,
   /** ReadMe project version */
-  selectedVersion: string,
+  selectedVersion: string | undefined,
   /** module within ReadMe to update (e.g. docs, changelogs, etc.) */
   cmdType: CommandCategories,
   /** Example command usage, used in error message */

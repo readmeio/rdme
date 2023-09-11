@@ -17,7 +17,7 @@ export default async function getCategories(key: string, selectedVersion: string
       headers: cleanHeaders(key, selectedVersion, new Headers({ Accept: 'application/json' })),
     })
       .then(res => {
-        totalCount = Math.ceil(parseInt(res.headers.get('x-total-count'), 10) / 20);
+        totalCount = Math.ceil(parseInt(res.headers.get('x-total-count') || '0', 10) / 20);
         return handleRes(res);
       })
       .then(res => {
