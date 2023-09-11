@@ -194,7 +194,8 @@ export default class OpenAPIReduceCommand extends Command {
     let reducedSpec;
 
     try {
-      reducedSpec = oasReducer.default(parsedPreparedSpec, {
+      // @ts-expect-error yikes why
+      reducedSpec = oasReducer(parsedPreparedSpec, {
         tags: promptResults.tags || [],
         paths: (promptResults.paths || []).reduce((acc: Record<string, string[]>, p: string) => {
           acc[p] = promptResults.methods;

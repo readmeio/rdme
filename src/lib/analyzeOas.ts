@@ -169,7 +169,8 @@ const README_FEATURE_DOCS: Record<keyof Analysis['readme'], Pick<AnalyzedFeature
  *
  */
 async function analyzeOas(definition: OASDocument) {
-  return analyzer.default(definition).then((analysis: Analysis) => {
+  // @ts-expect-error yikes why
+  return analyzer(definition).then((analysis: Analysis) => {
     if (analysis.openapi) {
       Object.entries(OPENAPI_FEATURE_DOCS).forEach(([feature, docs]: [keyof Analysis['openapi'], AnalyzedFeature]) => {
         // eslint-disable-next-line no-param-reassign
