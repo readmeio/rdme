@@ -116,6 +116,7 @@ export default class OpenAPIReduceCommand extends Command {
         message: 'Choose which tags to reduce by:',
         min: 1,
         choices: () => {
+          // @ts-expect-error yikes why
           const tags = new Oas(parsedPreparedSpec).getTags();
 
           return tags.map(tag => ({

@@ -96,6 +96,7 @@ export default async function prepareOas(
       await Promise.all(
         jsonAndYamlFiles.map(file => {
           debug(`attempting to oas-normalize ${file}`);
+          // @ts-expect-error yikes why
           const oas = new OASNormalize(file, { enablePaths: true });
           return oas
             .version()
@@ -154,6 +155,7 @@ export default async function prepareOas(
   const spinner = ora({ text: `Validating the API definition located at ${specPath}...`, ...oraOptions() }).start();
 
   debug(`about to normalize spec located at ${specPath}`);
+  // @ts-expect-error yikes why
   const oas = new OASNormalize(specPath, { colorizeErrors: true, enablePaths: true });
   debug('spec normalized');
 
