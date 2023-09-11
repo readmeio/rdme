@@ -1,4 +1,4 @@
-import type { CommandOptions } from '../../lib/baseCommand';
+import type { AuthenticatedCommandOptions } from '../../lib/baseCommand';
 
 import fs from 'fs';
 import { promisify } from 'util';
@@ -45,7 +45,8 @@ export default class DocsEditCommand extends Command {
     ];
   }
 
-  async run(opts: CommandOptions<Options>): Promise<undefined> {
+  // @ts-expect-error this command is weird in that it can return `undefined` but we plan on removing this command in a future release.
+  async run(opts: AuthenticatedCommandOptions<Options>): Promise<undefined> {
     Command.warn('`rdme docs:edit` is now deprecated and will be removed in a future release.');
     await super.run(opts);
 

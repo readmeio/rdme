@@ -1,4 +1,4 @@
-import type { CommandOptions } from '../../lib/baseCommand';
+import type { AuthenticatedCommandOptions } from '../../lib/baseCommand';
 
 import chalk from 'chalk';
 import config from 'config';
@@ -52,7 +52,7 @@ export default class CategoriesCreateCommand extends Command {
     ];
   }
 
-  async run(opts: CommandOptions<Options>) {
+  async run(opts: AuthenticatedCommandOptions<Options>) {
     await super.run(opts);
 
     const { categoryType, title, key, version, preventDuplicates } = opts;

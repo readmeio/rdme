@@ -13,9 +13,12 @@ import loginFlow from './loginFlow';
 
 export type CommandOptions<T> = T & {
   github?: boolean;
-  key?: string;
+} & CommandLineOptions & { key: never };
+
+export type AuthenticatedCommandOptions<T> = Omit<CommandOptions<T>, 'key'> & {
+  key: string;
   version?: string;
-} & CommandLineOptions;
+};
 
 export enum CommandCategories {
   ADMIN = 'admin',
@@ -34,21 +37,21 @@ export default class Command {
    *
    * @example openapi
    */
-  command: keyof typeof commands;
+  command!: keyof typeof commands;
 
   /**
    * Example command usage, used on invidivual command help screens
    *
    * @example openapi [file] [options]
    */
-  usage: string;
+  usage!: string;
 
   /**
    * The command description, used on help screens
    *
    * @example Upload, or resync, your OpenAPI/Swagger definition to ReadMe.
    */
-  description: string;
+  description!: string;
 
   /**
    * The category that the command belongs to, used on
@@ -58,7 +61,7 @@ export default class Command {
    *
    * @example CommandCategories.APIS
    */
-  cmdCategory: CommandCategories;
+  cmdCategory!: CommandCategories;
 
   /**
    * Should the command be hidden from our `--help` screens?
@@ -82,9 +85,9 @@ export default class Command {
   /**
    * All documented arguments for the command
    */
-  args: OptionDefinition[];
+  args!: OptionDefinition[];
 
-  async run(opts: CommandOptions<{}>): Promise<string> {
+  async run(opts: CommandOptions<{}> | AuthenticatedCommandOptions<{}>): Promise<string> {
     Command.debug(`command: ${this.command}`);
     Command.debug(`opts: ${JSON.stringify(opts)}`);
 

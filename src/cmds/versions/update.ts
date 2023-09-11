@@ -1,6 +1,6 @@
 import type { Version } from '.';
 import type { CommonOptions } from './create';
-import type { CommandOptions } from '../../lib/baseCommand';
+import type { AuthenticatedCommandOptions } from '../../lib/baseCommand';
 
 import { Headers } from 'node-fetch';
 import prompts from 'prompts';
@@ -37,7 +37,7 @@ export default class UpdateVersionCommand extends Command {
     ];
   }
 
-  async run(opts: CommandOptions<Options>) {
+  async run(opts: AuthenticatedCommandOptions<Options>) {
     await super.run(opts);
 
     const { key, version, newVersion, codename, main, beta, isPublic, deprecated } = opts;

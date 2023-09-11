@@ -1,5 +1,5 @@
 import type { Version } from '.';
-import type { CommandOptions } from '../../lib/baseCommand';
+import type { AuthenticatedCommandOptions } from '../../lib/baseCommand';
 
 import config from 'config';
 import { Headers } from 'node-fetch';
@@ -45,7 +45,7 @@ export default class CreateVersionCommand extends Command {
     ];
   }
 
-  async run(opts: CommandOptions<Options>) {
+  async run(opts: AuthenticatedCommandOptions<Options>) {
     await super.run(opts);
 
     let versionList;

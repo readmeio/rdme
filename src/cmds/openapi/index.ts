@@ -1,4 +1,4 @@
-import type { CommandOptions } from '../../lib/baseCommand';
+import type { AuthenticatedCommandOptions } from '../../lib/baseCommand';
 import type { RequestInit, Response } from 'node-fetch';
 
 import chalk from 'chalk';
@@ -86,7 +86,7 @@ export default class OpenAPICommand extends Command {
     ];
   }
 
-  async run(opts: CommandOptions<Options>) {
+  async run(opts: AuthenticatedCommandOptions<Options>) {
     await super.run(opts);
 
     const { dryRun, key, id, spec, create, raw, title, useSpecVersion, version, workingDirectory, update } = opts;
