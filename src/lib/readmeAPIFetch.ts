@@ -242,11 +242,20 @@ async function handleRes(res: Response, rejectOnJsonError = true) {
  * Returns the basic auth header and any other defined headers for use in `node-fetch` API calls.
  *
  */
-function cleanHeaders(key: string, inputHeaders: Headers = new Headers()) {
+function cleanHeaders(
+  key: string,
+  /** used for `x-readme-header` */
+  version?: string,
+  inputHeaders: Headers = new Headers(),
+) {
   const encodedKey = Buffer.from(`${key}:`).toString('base64');
   const headers = new Headers({
     Authorization: `Basic ${encodedKey}`,
   });
+
+  if (version) {
+    headers.set('x-readme-version', version);
+  }
 
   for (const header of inputHeaders.entries()) {
     // If you supply `undefined` or `null` to the `Headers` API it'll convert that those to a

@@ -78,10 +78,8 @@ export default class UpdateVersionCommand extends Command {
       method: 'put',
       headers: cleanHeaders(
         key,
-        new Headers({
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        }),
+        undefined,
+        new Headers({ Accept: 'application/json', 'Content-Type': 'application/json' }),
       ),
       body: JSON.stringify(body),
     })

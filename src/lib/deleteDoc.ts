@@ -26,13 +26,7 @@ export default async function deleteDoc(
   }
   return readmeAPIFetch(`/api/v1/${type}/${slug}`, {
     method: 'delete',
-    headers: cleanHeaders(
-      key,
-      new Headers({
-        'x-readme-version': selectedVersion,
-        'Content-Type': 'application/json',
-      }),
-    ),
+    headers: cleanHeaders(key, selectedVersion, new Headers({ 'Content-Type': 'application/json' })),
   })
     .then(handleRes)
     .then(() => `🗑️  successfully deleted \`${slug}\`.`);

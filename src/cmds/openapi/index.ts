@@ -222,11 +222,8 @@ export default class OpenAPICommand extends Command {
     const options: RequestInit = {
       headers: cleanHeaders(
         key,
-        new Headers({
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          'x-readme-version': selectedVersion,
-        }),
+        selectedVersion,
+        new Headers({ Accept: 'application/json', 'Content-Type': 'application/json' }),
       ),
       body: JSON.stringify({ registryUUID }),
     };
@@ -283,12 +280,7 @@ export default class OpenAPICommand extends Command {
     function getSpecs(url: string) {
       return readmeAPIFetch(url, {
         method: 'get',
-        headers: cleanHeaders(
-          key,
-          new Headers({
-            'x-readme-version': selectedVersion,
-          }),
-        ),
+        headers: cleanHeaders(key, selectedVersion),
       });
     }
 

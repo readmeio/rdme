@@ -64,13 +64,7 @@ export default class DocsEditCommand extends Command {
 
     const existingDoc = await readmeAPIFetch(`/api/v1/docs/${slug}`, {
       method: 'get',
-      headers: cleanHeaders(
-        key,
-        new Headers({
-          'x-readme-version': selectedVersion,
-          Accept: 'application/json',
-        }),
-      ),
+      headers: cleanHeaders(key, selectedVersion, new Headers({ Accept: 'application/json' })),
     }).then(handleRes);
 
     await writeFile(filename, existingDoc.body);
@@ -87,13 +81,7 @@ export default class DocsEditCommand extends Command {
 
         return readmeAPIFetch(`/api/v1/docs/${slug}`, {
           method: 'put',
-          headers: cleanHeaders(
-            key,
-            new Headers({
-              'x-readme-version': selectedVersion,
-              'Content-Type': 'application/json',
-            }),
-          ),
+          headers: cleanHeaders(key, selectedVersion, new Headers({ 'Content-Type': 'application/json' })),
           body: JSON.stringify(
             Object.assign(existingDoc, {
               body: updatedDoc,

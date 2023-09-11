@@ -34,13 +34,7 @@ function flatten(data: Document[][]): Document[] {
 async function getCategoryDocs(key: string, selectedVersion: string, category: string): Promise<Document[]> {
   return readmeAPIFetch(`/api/v1/categories/${category}/docs`, {
     method: 'get',
-    headers: cleanHeaders(
-      key,
-      new Headers({
-        'x-readme-version': selectedVersion,
-        'Content-Type': 'application/json',
-      }),
-    ),
+    headers: cleanHeaders(key, selectedVersion, new Headers({ 'Content-Type': 'application/json' })),
   }).then(handleRes);
 }
 

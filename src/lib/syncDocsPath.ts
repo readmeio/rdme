@@ -66,13 +66,7 @@ async function pushDoc(
         `/api/v1/${type}`,
         {
           method: 'post',
-          headers: cleanHeaders(
-            key,
-            new Headers({
-              'x-readme-version': selectedVersion,
-              'Content-Type': 'application/json',
-            }),
-          ),
+          headers: cleanHeaders(key, selectedVersion, new Headers({ 'Content-Type': 'application/json' })),
           body: JSON.stringify({
             slug,
             ...payload,
@@ -103,13 +97,7 @@ async function pushDoc(
       `/api/v1/${type}/${slug}`,
       {
         method: 'put',
-        headers: cleanHeaders(
-          key,
-          new Headers({
-            'x-readme-version': selectedVersion,
-            'Content-Type': 'application/json',
-          }),
-        ),
+        headers: cleanHeaders(key, selectedVersion, new Headers({ 'Content-Type': 'application/json' })),
         body: JSON.stringify(payload),
       },
       { filePath, fileType: 'path' },
@@ -120,13 +108,7 @@ async function pushDoc(
 
   return readmeAPIFetch(`/api/v1/${type}/${slug}`, {
     method: 'get',
-    headers: cleanHeaders(
-      key,
-      new Headers({
-        'x-readme-version': selectedVersion,
-        Accept: 'application/json',
-      }),
-    ),
+    headers: cleanHeaders(key, selectedVersion, new Headers({ Accept: 'application/json' })),
   })
     .then(async res => {
       const body = await handleRes(res, false);
