@@ -294,7 +294,7 @@ export default class OpenAPICommand extends Command {
       Command.debug('no id parameter, retrieving list of API specs');
       const apiSettings = await getSpecs('/api/v1/api-specification');
 
-      const totalPages = Math.ceil(parseInt(apiSettings.headers.get('x-total-count'), 10) / 10);
+      const totalPages = Math.ceil(parseInt(apiSettings.headers.get('x-total-count') || '0', 10) / 10);
       const parsedDocs = parse(apiSettings.headers.get('link'));
       Command.debug(`total pages: ${totalPages}`);
       Command.debug(`pagination result: ${JSON.stringify(parsedDocs)}`);

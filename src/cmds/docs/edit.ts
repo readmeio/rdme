@@ -45,8 +45,7 @@ export default class DocsEditCommand extends Command {
     ];
   }
 
-  // @ts-expect-error this command is weird in that it can return `undefined` but we plan on removing this command in a future release.
-  async run(opts: AuthenticatedCommandOptions<Options>): Promise<undefined> {
+  async run(opts: AuthenticatedCommandOptions<Options>): Promise<string> {
     Command.warn('`rdme docs:edit` is now deprecated and will be removed in a future release.');
     await super.run(opts);
 
@@ -104,7 +103,7 @@ export default class DocsEditCommand extends Command {
             // Normally we should resolve with a value that is logged to the console,
             // but since we need to wait for the temporary file to be removed,
             // it's okay to resolve the promise with no value.
-            return resolve(undefined);
+            return resolve('');
           });
       });
     });

@@ -50,7 +50,7 @@ export const getGHAFileName = (fileName: string) => {
  */
 function getKey(args: OptionDefinition[], opts: CommandOptions<{}> | AuthenticatedCommandOptions<{}>): string | false {
   if (args.some(arg => arg.name === 'key')) {
-    return `••••••••••••${opts.key.slice(-5)}`;
+    return `••••••••••••${opts.key?.slice(-5) || ''}`;
   }
   return false;
 }
@@ -271,8 +271,8 @@ export default async function createGHA(
 
   let output = yamlBase;
 
-  Object.keys(data).forEach((key: keyof typeof data) => {
-    output = output.replace(new RegExp(`{{${key}}}`, 'g'), data[key]);
+  Object.keys(data).forEach(key => {
+    output = output.replace(new RegExp(`{{${key}}}`, 'g'), data[key as keyof typeof data]);
   });
 
   if (!fs.existsSync(GITHUB_WORKFLOW_DIR)) {

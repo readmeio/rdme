@@ -26,7 +26,7 @@ import * as help from './lib/help';
 import { debug } from './lib/logger';
 import createGHA from './lib/createGHA';
 import type Command from './lib/baseCommand';
-import type { CommandOptions } from './lib/baseCommand';
+import type { AuthenticatedCommandOptions, CommandOptions } from './lib/baseCommand';
 import getCurrentConfig from './lib/getCurrentConfig';
 
 /**
@@ -96,7 +96,7 @@ export default function rdme(rawProcessArgv: NodeJS.Process['argv']) {
   }
 
   try {
-    let cmdArgv: CommandOptions<{}>;
+    let cmdArgv: CommandOptions<{}> | AuthenticatedCommandOptions<{}>;
     let bin: Command;
 
     // Handling for `rdme help` and `rdme help <command>` cases.
@@ -105,7 +105,7 @@ export default function rdme(rawProcessArgv: NodeJS.Process['argv']) {
         return Promise.resolve(help.globalUsage(mainArgs));
       }
 
-      if (argv._unknown.indexOf('-H') !== -1) {
+      if (argv._unknown?.indexOf('-H') !== -1) {
         return Promise.resolve(help.globalUsage(mainArgs));
       }
 

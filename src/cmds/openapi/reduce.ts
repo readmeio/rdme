@@ -130,7 +130,7 @@ export default class OpenAPIReduceCommand extends Command {
         message: 'Choose which paths to reduce by:',
         min: 1,
         choices: () => {
-          return Object.keys(parsedPreparedSpec.paths).map(p => ({
+          return Object.keys(parsedPreparedSpec.paths || []).map(p => ({
             title: p,
             value: p,
           }));
@@ -144,7 +144,7 @@ export default class OpenAPIReduceCommand extends Command {
         choices: (prev, values) => {
           const paths: string[] = values.paths;
           let methods = paths
-            .map((p: string) => Object.keys(parsedPreparedSpec.paths[p] || {}))
+            .map((p: string) => Object.keys(parsedPreparedSpec.paths?.[p] || {}))
             .flat()
             .filter((method: string) => method.toLowerCase() !== 'parameters');
 

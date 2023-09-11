@@ -13,7 +13,7 @@ import loginFlow from './loginFlow';
 
 export type CommandOptions<T> = T & {
   github?: boolean;
-} & CommandLineOptions & { key: never };
+} & CommandLineOptions & { key?: never };
 
 export type AuthenticatedCommandOptions<T> = Omit<CommandOptions<T>, 'key'> & {
   key: string;

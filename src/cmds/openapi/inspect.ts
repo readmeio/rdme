@@ -21,7 +21,7 @@ interface Options {
 }
 
 export default class OpenAPIInspectCommand extends Command {
-  definitionVersion: string;
+  definitionVersion!: string;
 
   tableBorder: Record<string, string>;
 
@@ -57,7 +57,7 @@ export default class OpenAPIInspectCommand extends Command {
       .reduce((prev, next) => Object.assign(prev, next));
   }
 
-  getFeatureDocsURL(feature: AnalyzedFeature): string {
+  getFeatureDocsURL(feature: AnalyzedFeature): string | undefined {
     if (!feature.url) {
       return undefined;
     }
@@ -178,12 +178,12 @@ export default class OpenAPIInspectCommand extends Command {
     [
       { component: 'openapi', header: 'OpenAPI Features' },
       { component: 'readme', header: 'ReadMe-Specific Features and Extensions' },
-    ].forEach(({ component, header }: { component: 'openapi' | 'readme'; header: string }) => {
+    ].forEach(({ component, header }: { component: string; header: string }) => {
       const tableData: string[][] = [
         [chalk.bold.green('Feature'), chalk.bold.green('Used?'), chalk.bold.green('Description')],
       ];
 
-      Object.entries(analysis[component]).forEach(([feature, info]) => {
+      Object.entries(analysis[component as 'openapi' | 'readme']).forEach(([feature, info]) => {
         const descriptions: string[] = [];
         if (info.description) {
           descriptions.push(info.description);
