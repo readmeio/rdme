@@ -1,6 +1,6 @@
 import type { Analysis, AnalyzedFeature } from '../../lib/analyzeOas.js';
 import type { CommandOptions } from '../../lib/baseCommand.js';
-import type { OASDocument } from 'oas/dist/rmoas.types.js';
+import type { OASDocument } from 'oas/rmoas.types';
 
 import chalk from 'chalk';
 import config from 'config';

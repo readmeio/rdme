@@ -1,12 +1,12 @@
 import type { CommandOptions } from '../../lib/baseCommand.js';
-import type { OASDocument } from 'oas/dist/rmoas.types.js';
+import type { OASDocument } from 'oas/rmoas.types';
 
 import fs from 'node:fs';
 import path from 'node:path';
 
 import chalk from 'chalk';
-import OasImport from 'oas';
-import oasReducer from 'oas/dist/lib/reducer.js';
+import Oas from 'oas';
+import oasReducer from 'oas/lib/reducer';
 import ora from 'ora';
 import prompts from 'prompts';
 
@@ -15,8 +15,6 @@ import { oraOptions } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
 import { validateFilePath } from '../../lib/validatePromptInput.js';
-
-const Oas = OasImport.default;
 
 interface Options {
   method?: string[];
