@@ -3,7 +3,7 @@ import prompts from 'prompts';
 import { describe, beforeAll, afterEach, it, expect, vi } from 'vitest';
 
 import CategoriesCreateCommand from '../../../src/cmds/categories/create.js';
-import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock';
+import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
 
 const categoriesCreate = new CategoriesCreateCommand();
 

@@ -6,7 +6,7 @@ import { describe, beforeAll, afterAll, beforeEach, afterEach, it, expect, vi } 
 
 import DocsEditCommand from '../../../src/cmds/docs/edit.js';
 import APIError from '../../../src/lib/apiError.js';
-import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock';
+import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
 
 const docsEdit = new DocsEditCommand();
 

@@ -9,7 +9,7 @@ import { describe, beforeAll, afterAll, beforeEach, afterEach, it, expect, vi } 
 
 import DocsCommand from '../../../src/cmds/docs/index.js';
 import APIError from '../../../src/lib/apiError.js';
-import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock';
+import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
 import hashFileContents from '../../helpers/hash-file-contents.js';
 import { after as afterGHAEnv, before as beforeGHAEnv } from '../../helpers/setup-gha-env.js';
 
