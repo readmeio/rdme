@@ -1,5 +1,5 @@
 import type commands from '../../cmds';
-import type { CommandOptions } from '../baseCommand';
+import type { AuthenticatedCommandOptions, CommandOptions } from '../baseCommand';
 import type { OptionDefinition } from 'command-line-usage';
 
 import fs from 'fs';
@@ -48,7 +48,7 @@ export const getGHAFileName = (fileName: string) => {
  * Returns a redacted `key` if the current command uses authentication.
  * Otherwise, returns `false`.
  */
-function getKey(args: OptionDefinition[], opts: CommandOptions<{}>): string | false {
+function getKey(args: OptionDefinition[], opts: CommandOptions<{}> | AuthenticatedCommandOptions<{}>): string | false {
   if (args.some(arg => arg.name === 'key')) {
     return `••••••••••••${opts.key.slice(-5)}`;
   }
@@ -61,7 +61,7 @@ function getKey(args: OptionDefinition[], opts: CommandOptions<{}>): string | fa
 function constructCmdString(
   command: keyof typeof commands,
   args: OptionDefinition[],
-  opts: CommandOptions<Record<string, string | boolean | undefined>>,
+  opts: CommandOptions<{}> | AuthenticatedCommandOptions<{}>,
 ): string {
   const optsString = args
     .sort(arg => (arg.defaultOption ? -1 : 0))
@@ -151,7 +151,7 @@ export default async function createGHA(
   msg: string,
   command: keyof typeof commands,
   args: OptionDefinition[],
-  opts: CommandOptions<{}>,
+  opts: CommandOptions<{}> | AuthenticatedCommandOptions<{}>,
 ) {
   debug(`running GHA onboarding for ${command} command`);
   debug(`opts used in createGHA: ${JSON.stringify(opts)}`);
