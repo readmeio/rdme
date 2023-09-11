@@ -71,3 +71,11 @@ jobs:
           NPM_CONFIG_PROVENANCE: 'true'
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npx semantic-release
+
+      - name: Sync changes back to next
+        if: ${{ github.ref }} == 'refs/heads/main'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.RELEASE_GH_TOKEN }}
+          branch: next
+        # continue-on-error: true
