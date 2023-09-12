@@ -8,7 +8,6 @@
     "forceConsistentCasingInFileNames": true,
     "lib": ["ES2020", "ES2021.Intl"],
     "module": "NodeNext",
-    "moduleResolution": "Node16",
     "outDir": "dist/",
     "paths": {
       "editor": [".sink.d.ts"]
