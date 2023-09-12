@@ -1,8 +1,7 @@
 import type { CommandOptions } from '../lib/baseCommand';
 
-import config from 'config';
-
 import Command, { CommandCategories } from '../lib/baseCommand';
+import config from '../lib/config';
 import configStore from '../lib/configstore';
 
 export default class LogoutCommand extends Command {
@@ -24,6 +23,6 @@ export default class LogoutCommand extends Command {
       configStore.clear();
     }
 
-    return Promise.resolve(`You have logged out of ReadMe. Please use \`${config.get('cli')} login\` to login again.`);
+    return Promise.resolve(`You have logged out of ReadMe. Please use \`${config.cli} login\` to login again.`);
   }
 }

@@ -40,7 +40,6 @@
     "ci-info": "^3.6.1",
     "command-line-args": "^5.2.0",
     "command-line-usage": "^7.0.1",
-    "config": "^3.1.0",
     "configstore": "^5.0.0",
     "debug": "^4.3.3",
     "editor": "^1.0.0",

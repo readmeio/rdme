@@ -1,10 +1,10 @@
 import type { CommandOptions } from '../../lib/baseCommand';
 
 import chalk from 'chalk';
-import config from 'config';
 import prompts from 'prompts';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
+import config from '../../lib/config';
 import createGHA from '../../lib/createGHA';
 import deleteDoc from '../../lib/deleteDoc';
 import getDocs from '../../lib/getDocs';
@@ -62,7 +62,7 @@ export default class DocsPruneCommand extends Command {
     const { dryRun, folder, key, version } = opts;
 
     if (!folder) {
-      return Promise.reject(new Error(`No folder provided. Usage \`${config.get('cli')} ${this.usage}\`.`));
+      return Promise.reject(new Error(`No folder provided. Usage \`${config.cli} ${this.usage}\`.`));
     }
 
     // TODO: should we allow version selection at all here?
