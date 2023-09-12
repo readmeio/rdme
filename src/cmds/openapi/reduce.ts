@@ -1,12 +1,12 @@
 import type { CommandOptions } from '../../lib/baseCommand';
-import type { OASDocument } from 'oas/dist/rmoas.types';
+import type { OASDocument } from 'oas/rmoas.types';
 
 import fs from 'fs';
 import path from 'path';
 
 import chalk from 'chalk';
 import Oas from 'oas';
-import oasReducer from 'oas/dist/lib/reducer';
+import oasReducer from 'oas/lib/reducer';
 import ora from 'ora';
 import prompts from 'prompts';
 

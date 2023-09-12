@@ -1,7 +1,7 @@
-import type { OASAnalysis, OASAnalysisFeature } from 'oas/dist/analyzer';
-import type { OASDocument } from 'oas/dist/rmoas.types';
+import type { OASAnalysis, OASAnalysisFeature } from 'oas/analyzer';
+import type { OASDocument } from 'oas/rmoas.types';
 
-import analyzer from 'oas/dist/analyzer';
+import analyzer from 'oas/analyzer';
 
 export interface AnalyzedFeature extends OASAnalysisFeature {
   description: string;
