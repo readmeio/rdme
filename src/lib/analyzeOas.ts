@@ -169,7 +169,6 @@ const README_FEATURE_DOCS: Record<keyof Analysis['readme'], Pick<AnalyzedFeature
  *
  */
 async function analyzeOas(definition: OASDocument) {
-  // @ts-expect-error yikes why
   return analyzer(definition).then((analysis: Analysis) => {
     if (analysis.openapi) {
       Object.entries(OPENAPI_FEATURE_DOCS).forEach(([feature, docs]: [keyof Analysis['openapi'], AnalyzedFeature]) => {
