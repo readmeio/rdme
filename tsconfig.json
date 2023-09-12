@@ -7,7 +7,7 @@
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "lib": ["ES2020", "ES2021.Intl"],
-    "module": "CommonJS",
+    "module": "NodeNext",
     "outDir": "dist/",
     "paths": {
       "editor": [".sink.d.ts"]
