@@ -3,6 +3,8 @@ import fs from 'node:fs';
 
 import chalk from 'chalk';
 import config from 'config';
+import { rest } from 'msw';
+import { setupServer } from 'msw/node';
 import nock from 'nock';
 import prompts from 'prompts';
 import { describe, beforeAll, beforeEach, afterEach, it, expect, vi } from 'vitest';
@@ -1347,27 +1349,38 @@ describe('rdme openapi', () => {
       return mock.done();
     });
 
-    // TODO: we should re-enable this test once we've migrated over to MSW
-    // eslint-disable-next-line vitest/no-disabled-tests
-    it.skip('should send proper headers in GitHub Actions CI for spec hosted at URL', async () => {
+    it('should send proper headers in GitHub Actions CI for spec hosted at URL', async () => {
+      expect.assertions(8);
       const registryUUID = getRandomRegistryId();
       const spec = 'https://example.com/openapi.json';
 
-      const mock = getAPIMock()
-        .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
-        .reply(201, { registryUUID });
+      // TODO: move all of this boilerplate to the top-level once we migrate everything over to MSW
+      const server = setupServer(...[]);
 
-      const exampleMock = nock('https://example.com').get('/openapi.json').reply(200, petstoreWeird);
+      server.listen({ onUnhandledRequest: 'error' });
 
-      const putMock = getAPIMock({
-        'x-rdme-ci': 'GitHub Actions (test)',
-        'x-readme-source': 'cli-gh',
-        'x-readme-source-url': spec,
-        'x-readme-version': version,
-      })
-        .put(`/api/v1/api-specification/${id}`, { registryUUID })
-        .basicAuth({ user: key })
-        .reply(201, { _id: 1 }, { location: exampleRefLocation });
+      server.use(
+        ...[
+          rest.post(`${config.get('host')}/api/v1/api-registry`, async (req, res, ctx) => {
+            const body = await req.text();
+            expect(body).toMatch('form-data; name="spec"');
+            return res(ctx.status(201), ctx.json({ registryUUID }));
+          }),
+          rest.get(spec, (req, res, ctx) => {
+            return res(ctx.status(200), ctx.json(petstoreWeird));
+          }),
+          rest.put(`${config.get('host')}/api/v1/api-specification/${id}`, async (req, res, ctx) => {
+            expect(req.headers.get('authorization')).toBeBasicAuthApiKey(key);
+            expect(req.headers.get('x-rdme-ci')).toBe('GitHub Actions (test)');
+            expect(req.headers.get('x-readme-source')).toBe('cli-gh');
+            expect(req.headers.get('x-readme-source-url')).toBe(spec);
+            expect(req.headers.get('x-readme-version')).toBe(version);
+            const body = await req.json();
+            expect(body).toStrictEqual({ registryUUID });
+            return res(ctx.status(201), ctx.set('location', exampleRefLocation), ctx.json({ _id: 1 }));
+          }),
+        ],
+      );
 
       await expect(
         openapi.run({
@@ -1378,9 +1391,7 @@ describe('rdme openapi', () => {
         }),
       ).resolves.toBe(successfulUpdate(spec));
 
-      putMock.done();
-      exampleMock.done();
-      return mock.done();
+      return server.resetHandlers();
     });
   });
 });
