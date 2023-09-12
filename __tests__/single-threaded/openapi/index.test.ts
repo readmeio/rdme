@@ -180,7 +180,7 @@ describe('rdme openapi (single-threaded)', () => {
   });
 
   describe('error handling', () => {
-    it.only('should error if no file was provided or able to be discovered', () => {
+    it('should error if no file was provided or able to be discovered', () => {
       return expect(openapi.run({ key, version, workingDirectory: 'bin' })).rejects.toStrictEqual(
         new Error(
           "We couldn't find an OpenAPI or Swagger definition.\n\nPlease specify the path to your definition with `rdme openapi ./path/to/api/definition`.",
