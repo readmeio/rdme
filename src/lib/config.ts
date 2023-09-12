@@ -1,5 +1,7 @@
+import pkg from '../../package.json';
+
 const config = {
-  cli: 'rdme',
+  cli: pkg.name,
   host: 'https://dash.readme.com',
   hub: 'https://{project}.readme.io', // this is only used for the `open` command
 } as const;
