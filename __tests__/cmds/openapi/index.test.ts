@@ -1347,7 +1347,9 @@ describe('rdme openapi', () => {
       return mock.done();
     });
 
-    it('should send proper headers in GitHub Actions CI for spec hosted at URL', async () => {
+    // TODO: we should re-enable this test once we've migrated over to MSW
+    // eslint-disable-next-line vitest/no-disabled-tests
+    it.skip('should send proper headers in GitHub Actions CI for spec hosted at URL', async () => {
       const registryUUID = getRandomRegistryId();
       const spec = 'https://example.com/openapi.json';
 
