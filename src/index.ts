@@ -1,4 +1,5 @@
 /* eslint-disable import/first, import/order, no-underscore-dangle */
+import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 
 import chalk from 'chalk';
@@ -20,7 +21,7 @@ import config from 'config';
 
 process.env.NODE_CONFIG_DIR = configDir;
 
-import pkg from '../package.json' assert { type: 'json' };
+const pkg = JSON.parse(await readFile(new URL('../../package.json', import.meta.url), { encoding: 'utf-8' }));
 
 const { version } = pkg;
 

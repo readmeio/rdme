@@ -1,6 +1,8 @@
+import { readFile } from 'node:fs/promises';
+
 import Configstore from 'configstore';
 
-import pkg from '../../package.json' assert { type: 'json' };
+const pkg = JSON.parse(await readFile(new URL('../../package.json', import.meta.url), { encoding: 'utf-8' }));
 
 const configstore = new Configstore(
   /**

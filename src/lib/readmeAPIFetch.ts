@@ -1,18 +1,19 @@
 import type { SpecFileType } from './prepareOas.js';
 import type { RequestInit, Response } from 'node-fetch';
 
+import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 
 import config from 'config';
 import mime from 'mime-types';
 import nodeFetch, { Headers } from 'node-fetch'; // eslint-disable-line no-restricted-imports
 
-import pkg from '../../package.json' assert { type: 'json' };
-
 import APIError from './apiError.js';
 import { git } from './createGHA/index.js';
 import isCI, { ciName, isGHA } from './isCI.js';
 import { debug, warn } from './logger.js';
+
+const pkg = JSON.parse(await readFile(new URL('../../package.json', import.meta.url), { encoding: 'utf-8' }));
 
 const SUCCESS_NO_CONTENT = 204;
 

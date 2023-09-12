@@ -1,10 +1,12 @@
+import { readFile } from 'node:fs/promises';
+
 // eslint-disable-next-line no-restricted-imports
 import fetch from 'node-fetch';
 import semver from 'semver';
 
-import pkg from '../../package.json' assert { type: 'json' };
-
 import { error } from './logger.js';
+
+const pkg = JSON.parse(await readFile(new URL('../../package.json', import.meta.url), { encoding: 'utf-8' }));
 
 const registryUrl = 'https://registry.npmjs.com/rdme';
 
