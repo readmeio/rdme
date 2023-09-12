@@ -15,5 +15,5 @@
     "resolveJsonModule": true,
     "target": "ES2020"
   },
-  "include": ["./config/*.js", "./config/*.json", "./src/**/*"]
+  "include": ["./src/**/*"]
 }
