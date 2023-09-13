@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 import * as core from '@actions/core';
 import chalk from 'chalk';
-import updateNotifier from 'update-notifier-cjs';
+import updateNotifier from 'update-notifier';
 
 import pkg from '../package.json' assert { type: 'json' };
 
