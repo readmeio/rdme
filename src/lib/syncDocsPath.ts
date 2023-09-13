@@ -2,11 +2,11 @@ import fs from 'fs/promises';
 import path from 'path';
 
 import chalk from 'chalk';
-import config from 'config';
 import { Headers } from 'node-fetch';
 
 import APIError from './apiError';
 import Command, { CommandCategories } from './baseCommand';
+import config from './config';
 import { debug } from './logger';
 import readdirRecursive from './readdirRecursive';
 import readDoc from './readDoc';
@@ -149,7 +149,7 @@ export default async function syncDocsPath(
   allowedFileExtensions = ['.markdown', '.md'],
 ) {
   if (!pathInput) {
-    return Promise.reject(new Error(`No path provided. Usage \`${config.get('cli')} ${usage}\`.`));
+    return Promise.reject(new Error(`No path provided. Usage \`${config.cli} ${usage}\`.`));
   }
 
   const stat = await fs.stat(pathInput).catch(err => {

@@ -1,33 +1,19 @@
-/* eslint-disable import/first, import/order, no-underscore-dangle */
-import path from 'path';
+/* eslint-disable no-underscore-dangle */
+import type Command from './lib/baseCommand';
+import type { CommandOptions, AuthenticatedCommandOptions } from './lib/baseCommand';
 
 import chalk from 'chalk';
 import cliArgs from 'command-line-args';
 import parseArgsStringToArgv from 'string-argv';
 
-// We have to do this otherwise `require('config')` loads
-// from the cwd where the user is running `rdme` which
-// wont be what we want
-//
-// This is a little sketchy overwriting environment variables
-// but since this is only supposed to be a cli and not
-// requireable, i think this is okay
-const configDir = process.env.NODE_CONFIG_DIR;
-process.env.NODE_CONFIG_DIR = path.join(__dirname, '../config');
-
-import config from 'config';
-
-process.env.NODE_CONFIG_DIR = configDir;
-
 import { version } from '../package.json';
 
 import * as commands from './lib/commands';
+import config from './lib/config';
+import createGHA from './lib/createGHA';
+import getCurrentConfig from './lib/getCurrentConfig';
 import * as help from './lib/help';
 import { debug } from './lib/logger';
-import createGHA from './lib/createGHA';
-import type Command from './lib/baseCommand';
-import type { AuthenticatedCommandOptions, CommandOptions } from './lib/baseCommand';
-import getCurrentConfig from './lib/getCurrentConfig';
 
 /**
  * @param {Array} processArgv - An array of arguments from the current process. Can be used to mock
@@ -41,7 +27,7 @@ export default function rdme(rawProcessArgv: NodeJS.Process['argv']) {
       name: 'version',
       alias: 'v',
       type: Boolean,
-      description: `Show the current ${config.get('cli')} version (v${version})`,
+      description: `Show the current ${config.cli} version (v${version})`,
     },
     { name: 'command', type: String, defaultOption: true },
   ];
@@ -156,9 +142,7 @@ export default function rdme(rawProcessArgv: NodeJS.Process['argv']) {
     });
   } catch (e) {
     if (e.message === 'Command not found.') {
-      e.message = `${e.message}\n\nType \`${chalk.yellow(`${config.get('cli')} help`)}\` ${chalk.red(
-        'to see all commands',
-      )}`;
+      e.message = `${e.message}\n\nType \`${chalk.yellow(`${config.cli} help`)}\` ${chalk.red('to see all commands')}`;
     }
 
     return Promise.reject(e);

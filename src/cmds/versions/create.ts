@@ -1,13 +1,13 @@
 import type { Version } from '.';
 import type { AuthenticatedCommandOptions } from '../../lib/baseCommand';
 
-import config from 'config';
 import { Headers } from 'node-fetch';
 import prompts from 'prompts';
 import semver from 'semver';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
 import castStringOptToBool from '../../lib/castStringOptToBool';
+import config from '../../lib/config';
 import * as promptHandler from '../../lib/prompts';
 import promptTerminal from '../../lib/promptWrapper';
 import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch';
@@ -53,7 +53,7 @@ export default class CreateVersionCommand extends Command {
 
     if (!version || !semver.valid(semver.coerce(version))) {
       return Promise.reject(
-        new Error(`Please specify a semantic version. See \`${config.get('cli')} help ${this.command}\` for help.`),
+        new Error(`Please specify a semantic version. See \`${config.cli} help ${this.command}\` for help.`),
       );
     }
 

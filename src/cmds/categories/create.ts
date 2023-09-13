@@ -1,10 +1,10 @@
 import type { AuthenticatedCommandOptions } from '../../lib/baseCommand';
 
 import chalk from 'chalk';
-import config from 'config';
 import { Headers } from 'node-fetch';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
+import config from '../../lib/config';
 import getCategories from '../../lib/getCategories';
 import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch';
 import { getProjectVersion } from '../../lib/versionSelect';
@@ -58,7 +58,7 @@ export default class CategoriesCreateCommand extends Command {
     const { categoryType, title, key, version, preventDuplicates } = opts;
 
     if (!title) {
-      return Promise.reject(new Error(`No title provided. Usage \`${config.get('cli')} ${this.usage}\`.`));
+      return Promise.reject(new Error(`No title provided. Usage \`${config.cli} ${this.usage}\`.`));
     }
 
     if (categoryType !== 'guide' && categoryType !== 'reference') {
