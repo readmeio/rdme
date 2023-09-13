@@ -1,6 +1,6 @@
 import type { OpenAPI } from 'openapi-types';
 
-import chalk, { supportsColor } from 'chalk';
+import chalk from 'chalk';
 import OASNormalize, { getAPIDefinitionType } from 'oas-normalize';
 import ora from 'ora';
 
@@ -150,8 +150,6 @@ export default async function prepareOas(
       specPath = selection.file;
     }
   }
-
-  console.log('supportsColor:', supportsColor);
 
   const spinner = ora({ text: `Validating the API definition located at ${specPath}...`, ...oraOptions() }).start();
 
