@@ -78,4 +78,3 @@ jobs:
         with:
           github_token: ${{ secrets.RELEASE_GH_TOKEN }}
           branch: next
-        # continue-on-error: true
