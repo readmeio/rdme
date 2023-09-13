@@ -3,12 +3,12 @@ import type { Writable } from 'type-fest';
 
 import * as core from '@actions/core';
 import chalk from 'chalk';
-import config from 'config';
 import debugModule from 'debug';
 
+import config from './config.js';
 import { isGHA, isTest } from './isCI.js';
 
-const debugPackage = debugModule(config.get('cli'));
+const debugPackage = debugModule(config.cli);
 
 /**
  * Wrapper for debug statements.

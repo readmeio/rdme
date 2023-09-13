@@ -1,10 +1,10 @@
 import type { Headers } from 'headers-polyfill';
 import type { ResponseTransformer } from 'msw';
 
-import config from 'config';
 import { rest } from 'msw';
 import nock from 'nock';
 
+import config from '../../src/lib/config.js';
 import { getUserAgent } from '../../src/lib/readmeAPIFetch.js';
 
 /**
@@ -20,7 +20,7 @@ type ReqHeaders = Record<string, unknown>;
  * @param proxy Optional proxy URL. Must contain trailing slash.
  */
 export default function getAPIMock(reqHeaders = {}, proxy = '') {
-  return nock(`${proxy}${config.get('host')}`, {
+  return nock(`${proxy}${config.host}`, {
     reqheaders: {
       'User-Agent': getUserAgent(),
       ...reqHeaders,
@@ -76,7 +76,7 @@ export function getAPIMockMSW(
   expectedReqHeaders: ReqHeaders = {},
   proxy = '',
 ) {
-  return rest.get(`${proxy}${config.get('host')}${path}`, (req, res, ctx) => {
+  return rest.get(`${proxy}${config.host}${path}`, (req, res, ctx) => {
     try {
       validateHeaders(req.headers, basicAuthUser, expectedReqHeaders);
       let responseTransformer: ResponseTransformer;

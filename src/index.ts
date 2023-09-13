@@ -1,37 +1,23 @@
-/* eslint-disable import/first, import/order, no-underscore-dangle */
+import type { CommandOptions } from './lib/baseCommand.js';
+import type Command from './lib/baseCommand.js';
+
 import { readFile } from 'node:fs/promises';
-import path from 'node:path';
+/* eslint-disable no-underscore-dangle */
 
 import chalk from 'chalk';
 import cliArgs from 'command-line-args';
 import parseArgsStringToArgv from 'string-argv';
 
-// We have to do this otherwise `require('config')` loads
-// from the cwd where the user is running `rdme` which
-// wont be what we want
-//
-// This is a little sketchy overwriting environment variables
-// but since this is only supposed to be a cli and not
-// requireable, i think this is okay
-const configDir = process.env.NODE_CONFIG_DIR;
-const __dirname = new URL('.', import.meta.url).pathname;
-process.env.NODE_CONFIG_DIR = path.join(__dirname, '../config');
-
-import config from 'config';
-
-process.env.NODE_CONFIG_DIR = configDir;
+import * as commands from './lib/commands.js';
+import config from './lib/config.js';
+import createGHA from './lib/createGHA/index.js';
+import getCurrentConfig from './lib/getCurrentConfig.js';
+import * as help from './lib/help.js';
+import { debug } from './lib/logger.js';
 
 const pkg = JSON.parse(await readFile(new URL('../../package.json', import.meta.url), { encoding: 'utf-8' }));
 
 const { version } = pkg;
-
-import * as commands from './lib/commands.js';
-import * as help from './lib/help.js';
-import { debug } from './lib/logger.js';
-import createGHA from './lib/createGHA/index.js';
-import type Command from './lib/baseCommand.js';
-import type { CommandOptions } from './lib/baseCommand.js';
-import getCurrentConfig from './lib/getCurrentConfig.js';
 
 /**
  * @param {Array} processArgv - An array of arguments from the current process. Can be used to mock
@@ -45,7 +31,7 @@ export default function rdme(rawProcessArgv: NodeJS.Process['argv']) {
       name: 'version',
       alias: 'v',
       type: Boolean,
-      description: `Show the current ${config.get('cli')} version (v${version})`,
+      description: `Show the current ${config.cli} version (v${version})`,
     },
     { name: 'command', type: String, defaultOption: true },
   ];
@@ -160,9 +146,7 @@ export default function rdme(rawProcessArgv: NodeJS.Process['argv']) {
     });
   } catch (e) {
     if (e.message === 'Command not found.') {
-      e.message = `${e.message}\n\nType \`${chalk.yellow(`${config.get('cli')} help`)}\` ${chalk.red(
-        'to see all commands',
-      )}`;
+      e.message = `${e.message}\n\nType \`${chalk.yellow(`${config.cli} help`)}\` ${chalk.red('to see all commands')}`;
     }
 
     return Promise.reject(e);

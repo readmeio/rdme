@@ -3,13 +3,13 @@ import type { CommandOptions } from '../../lib/baseCommand.js';
 import type { OASDocument } from 'oas/rmoas.types';
 
 import chalk from 'chalk';
-import config from 'config';
 import ora from 'ora';
 import pluralize from 'pluralize';
 import { getBorderCharacters, table } from 'table';
 
 import analyzeOas, { getSupportedFeatures } from '../../lib/analyzeOas.js';
 import Command, { CommandCategories } from '../../lib/baseCommand.js';
+import config from '../../lib/config.js';
 import { oraOptions } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
 import SoftError from '../../lib/softError.js';
@@ -226,9 +226,7 @@ export default class OpenAPIInspectCommand extends Command {
       if (invalidFeatures.length) {
         return Promise.reject(
           new Error(
-            `Unknown features: ${invalidFeatures.join(', ')}. See \`${config.get('cli')} help ${
-              this.command
-            }\` for help.`,
+            `Unknown features: ${invalidFeatures.join(', ')}. See \`${config.cli} help ${this.command}\` for help.`,
           ),
         );
       }

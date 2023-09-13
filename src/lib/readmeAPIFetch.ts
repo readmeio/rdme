@@ -4,11 +4,11 @@ import type { RequestInit, Response } from 'node-fetch';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 
-import config from 'config';
 import mime from 'mime-types';
 import nodeFetch, { Headers } from 'node-fetch'; // eslint-disable-line no-restricted-imports
 
 import APIError from './apiError.js';
+import config from './config.js';
 import { git } from './createGHA/index.js';
 import isCI, { ciName, isGHA } from './isCI.js';
 import { debug, warn } from './logger.js';
@@ -183,7 +183,7 @@ export default async function readmeAPIFetch(
     headers.set('x-readme-source-url', fileOpts.filePath);
   }
 
-  const fullUrl = `${getProxy()}${config.get('host')}${pathname}`;
+  const fullUrl = `${getProxy()}${config.host}${pathname}`;
 
   debug(
     `making ${(options.method || 'get').toUpperCase()} request to ${fullUrl} with headers: ${sanitizeHeaders(headers)}`,

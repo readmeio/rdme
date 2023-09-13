@@ -1,10 +1,10 @@
 import type { Version } from '../../src/cmds/versions/index.js';
 
 import chalk from 'chalk';
-import config from 'config';
 import { describe, afterEach, it, expect } from 'vitest';
 
 import Command from '../../src/cmds/open.js';
+import config from '../../src/lib/config.js';
 import configStore from '../../src/lib/configstore.js';
 import getAPIMock from '../helpers/get-api-mock.js';
 
@@ -18,7 +18,7 @@ describe('rdme open', () => {
   it('should error if no project provided', () => {
     configStore.delete('project');
 
-    return expect(cmd.run({})).rejects.toStrictEqual(new Error(`Please login using \`${config.get('cli')} login\`.`));
+    return expect(cmd.run({})).rejects.toStrictEqual(new Error(`Please login using \`${config.cli} login\`.`));
   });
 
   it('should open the project', () => {
@@ -82,7 +82,7 @@ describe('rdme open', () => {
       }
 
       return expect(cmd.run({ mockOpen, dash: true, key: '12345' })).rejects.toStrictEqual(
-        new Error(`Please login using \`${config.get('cli')} login\`.`),
+        new Error(`Please login using \`${config.cli} login\`.`),
       );
     });
   });

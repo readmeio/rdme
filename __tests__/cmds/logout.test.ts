@@ -1,7 +1,7 @@
-import config from 'config';
 import { describe, afterEach, it, expect } from 'vitest';
 
 import Command from '../../src/cmds/logout.js';
+import config from '../../src/lib/config.js';
 import configStore from '../../src/lib/configstore.js';
 
 const cmd = new Command();
@@ -16,7 +16,7 @@ describe('rdme logout', () => {
     configStore.delete('project');
 
     return expect(cmd.run({})).resolves.toBe(
-      `You have logged out of ReadMe. Please use \`${config.get('cli')} login\` to login again.`,
+      `You have logged out of ReadMe. Please use \`${config.cli} login\` to login again.`,
     );
   });
 
@@ -25,7 +25,7 @@ describe('rdme logout', () => {
     configStore.set('project', 'subdomain');
 
     await expect(cmd.run({})).resolves.toBe(
-      `You have logged out of ReadMe. Please use \`${config.get('cli')} login\` to login again.`,
+      `You have logged out of ReadMe. Please use \`${config.cli} login\` to login again.`,
     );
 
     expect(configStore.get('email')).toBeUndefined();

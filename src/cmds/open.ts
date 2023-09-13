@@ -1,10 +1,10 @@
 import type { CommandOptions } from '../lib/baseCommand.js';
 
 import chalk from 'chalk';
-import config from 'config';
 import open from 'open';
 
 import Command, { CommandCategories } from '../lib/baseCommand.js';
+import config from '../lib/config.js';
 import getCurrentConfig from '../lib/getCurrentConfig.js';
 import { getProjectVersion } from '../lib/versionSelect.js';
 
@@ -39,21 +39,21 @@ export default class OpenCommand extends Command {
     Command.debug(`project: ${project}`);
 
     if (!project) {
-      return Promise.reject(new Error(`Please login using \`${config.get('cli')} login\`.`));
+      return Promise.reject(new Error(`Please login using \`${config.cli} login\`.`));
     }
 
     let url: string;
 
     if (dash) {
       if (!apiKey) {
-        return Promise.reject(new Error(`Please login using \`${config.get('cli')} login\`.`));
+        return Promise.reject(new Error(`Please login using \`${config.cli} login\`.`));
       }
 
       const selectedVersion = await getProjectVersion(undefined, apiKey, true);
-      const dashURL: string = config.get('host');
+      const dashURL: string = config.host;
       url = `${dashURL}/project/${project}/v${selectedVersion}/overview`;
     } else {
-      const hubURL: string = config.get('hub');
+      const hubURL: string = config.hub;
       url = hubURL.replace('{project}', project);
     }
 

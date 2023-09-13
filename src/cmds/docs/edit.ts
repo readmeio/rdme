@@ -3,13 +3,13 @@ import type { CommandOptions } from '../../lib/baseCommand.js';
 import fs from 'node:fs';
 import { promisify } from 'node:util';
 
-import config from 'config';
 import { Headers } from 'node-fetch';
 
 import editor from 'editor';
 
 import APIError from '../../lib/apiError.js';
 import Command, { CommandCategories } from '../../lib/baseCommand.js';
+import config from '../../lib/config.js';
 import isHidden from '../../lib/decorators/isHidden.js';
 import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch.js';
 import { getProjectVersion } from '../../lib/versionSelect.js';
@@ -52,7 +52,7 @@ export default class DocsEditCommand extends Command {
     const { slug, key, version } = opts;
 
     if (!slug) {
-      return Promise.reject(new Error(`No slug provided. Usage \`${config.get('cli')} ${this.usage}\`.`));
+      return Promise.reject(new Error(`No slug provided. Usage \`${config.cli} ${this.usage}\`.`));
     }
 
     const selectedVersion = await getProjectVersion(version, key);
