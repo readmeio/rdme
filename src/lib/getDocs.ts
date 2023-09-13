@@ -31,7 +31,11 @@ function flatten(data: Document[][]): Document[] {
   return allDocs;
 }
 
-async function getCategoryDocs(key: string, selectedVersion: string, category: string): Promise<Document[]> {
+async function getCategoryDocs(
+  key: string,
+  selectedVersion: string | undefined,
+  category: string,
+): Promise<Document[]> {
   return readmeAPIFetch(`/api/v1/categories/${category}/docs`, {
     method: 'get',
     headers: cleanHeaders(key, selectedVersion, new Headers({ 'Content-Type': 'application/json' })),
@@ -45,7 +49,7 @@ async function getCategoryDocs(key: string, selectedVersion: string, category: s
  * @param {String} selectedVersion the project version
  * @returns {Promise<Array<Document>>} an array containing the docs
  */
-export default async function getDocs(key: string, selectedVersion: string): Promise<Document[]> {
+export default async function getDocs(key: string, selectedVersion: string | undefined): Promise<Document[]> {
   return getCategories(key, selectedVersion)
     .then(categories => categories.filter(({ type }: { type: string }) => type === 'guide'))
     .then(categories => categories.map(({ slug }: { slug: string }) => getCategoryDocs(key, selectedVersion, slug)))

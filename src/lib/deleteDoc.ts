@@ -16,7 +16,7 @@ import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch';
  */
 export default async function deleteDoc(
   key: string,
-  selectedVersion: string,
+  selectedVersion: string | undefined,
   dryRun: boolean,
   slug: string,
   type: CommandCategories,
