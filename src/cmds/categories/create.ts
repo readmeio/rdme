@@ -1,10 +1,10 @@
 import type { CommandOptions } from '../../lib/baseCommand';
 
 import chalk from 'chalk';
-import config from 'config';
 import { Headers } from 'node-fetch';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
+import config from '../../lib/config';
 import getCategories from '../../lib/getCategories';
 import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch';
 import { getProjectVersion } from '../../lib/versionSelect';
@@ -14,7 +14,7 @@ interface Category {
   type: string;
 }
 
-export interface Options {
+interface Options {
   categoryType?: 'guide' | 'reference';
   preventDuplicates?: boolean;
   title?: string;
@@ -58,7 +58,7 @@ export default class CategoriesCreateCommand extends Command {
     const { categoryType, title, key, version, preventDuplicates } = opts;
 
     if (!title) {
-      return Promise.reject(new Error(`No title provided. Usage \`${config.get('cli')} ${this.usage}\`.`));
+      return Promise.reject(new Error(`No title provided. Usage \`${config.cli} ${this.usage}\`.`));
     }
 
     if (categoryType !== 'guide' && categoryType !== 'reference') {
@@ -83,8 +83,8 @@ export default class CategoriesCreateCommand extends Command {
         if (typeof matchedCategory !== 'undefined') {
           return Promise.reject(
             new Error(
-              `The '${matchedCategory.title}' category with a type of '${matchedCategory.type}' already exists with an id of '${matchedCategory.id}'. A new category was not created.`
-            )
+              `The '${matchedCategory.title}' category with a type of '${matchedCategory.type}' already exists with an id of '${matchedCategory.id}'. A new category was not created.`,
+            ),
           );
         }
       }
@@ -95,7 +95,7 @@ export default class CategoriesCreateCommand extends Command {
           new Headers({
             'x-readme-version': selectedVersion,
             'Content-Type': 'application/json',
-          })
+          }),
         ),
         body: JSON.stringify({
           title,

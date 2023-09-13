@@ -3,18 +3,18 @@ import type { CommandOptions } from '../../lib/baseCommand';
 import type { OASDocument } from 'oas/dist/rmoas.types';
 
 import chalk from 'chalk';
-import config from 'config';
 import ora from 'ora';
 import pluralize from 'pluralize';
 import { getBorderCharacters, table } from 'table';
 
 import analyzeOas, { getSupportedFeatures } from '../../lib/analyzeOas';
 import Command, { CommandCategories } from '../../lib/baseCommand';
+import config from '../../lib/config';
 import { oraOptions } from '../../lib/logger';
 import prepareOas from '../../lib/prepareOas';
 import SoftError from '../../lib/softError';
 
-export interface Options {
+interface Options {
   feature?: string[];
   spec?: string;
   workingDirectory?: string;
@@ -46,7 +46,7 @@ export default class OpenAPIInspectCommand extends Command {
         type: String,
         description: `A specific OpenAPI or ReadMe feature you wish to see detailed information on (if it exists). If any features supplied do not exist within the API definition an exit(1) code will be returned alongside the report.\n\nAvailable options: ${new Intl.ListFormat(
           'en',
-          { style: 'narrow' }
+          { style: 'narrow' },
         ).format(getSupportedFeatures())}`,
         multiple: true,
       },
@@ -57,7 +57,7 @@ export default class OpenAPIInspectCommand extends Command {
       .reduce((prev, next) => Object.assign(prev, next));
   }
 
-  getFeatureDocsURL(feature: AnalyzedFeature) {
+  getFeatureDocsURL(feature: AnalyzedFeature): string {
     if (!feature.url) {
       return undefined;
     }
@@ -66,12 +66,11 @@ export default class OpenAPIInspectCommand extends Command {
       // We don't need to do any Swagger or Postman determination here because this command
       // always converts their spec to OpenAPI 3.0.
       if (this.definitionVersion.startsWith('3.0')) {
-        if (feature.url?.['3.0']) {
-          return feature.url['3.0'];
-        }
-      } else {
-        return feature.url['3.1'];
+        return feature.url?.['3.0'] || 'This feature is not available on OpenAPI v3.0.';
+      } else if (this.definitionVersion.startsWith('3.1')) {
+        return feature.url?.['3.1'] || 'This feature is not available on OpenAPI v3.1.';
       }
+      return '';
     }
 
     return feature.url;
@@ -143,7 +142,7 @@ export default class OpenAPIInspectCommand extends Command {
   }
 
   buildFullReport(analysis: Analysis) {
-    const report: string[] = ['Here are some interesting things we found in your API defintion. 🕵️', ''];
+    const report: string[] = ['Here are some interesting things we found in your API definition. 🕵️', ''];
 
     // General API definition statistics
     Object.entries(analysis.general).forEach(([, info]) => {
@@ -158,7 +157,7 @@ export default class OpenAPIInspectCommand extends Command {
         if (info.found.length > 1) {
           msg = `You are using ${chalk.bold(info.found.length)} ${pluralize(
             info.name,
-            info.found.length
+            info.found.length,
           )} throughout your API: ${new Intl.ListFormat('en').format(highlightedData)}`;
         } else {
           msg = `You are using a single ${info.name} throughout your API: ${highlightedData[0]}`;
@@ -209,7 +208,7 @@ export default class OpenAPIInspectCommand extends Command {
               wrapWord: true,
             },
           },
-        })
+        }),
       );
     });
 
@@ -227,16 +226,16 @@ export default class OpenAPIInspectCommand extends Command {
       if (invalidFeatures.length) {
         return Promise.reject(
           new Error(
-            `Unknown features: ${invalidFeatures.join(', ')}. See \`${config.get('cli')} help ${
-              this.command
-            }\` for help.`
-          )
+            `Unknown features: ${invalidFeatures.join(', ')}. See \`${config.cli} help ${this.command}\` for help.`,
+          ),
         );
       }
     }
 
     if (workingDirectory) {
+      const previousWorkingDirectory = process.cwd();
       process.chdir(workingDirectory);
+      Command.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
     }
 
     const { preparedSpec, definitionVersion } = await prepareOas(spec, 'openapi:inspect', { convertToLatest: true });
@@ -247,8 +246,8 @@ export default class OpenAPIInspectCommand extends Command {
     if (features?.length) {
       spinner.start(
         `Analyzing your API definition for usage of ${new Intl.ListFormat('en').format(
-          features.map(feature => (feature === 'readme' ? 'ReadMe extensions' : feature))
-        )}...`
+          features.map(feature => (feature === 'readme' ? 'ReadMe extensions' : feature)),
+        )}...`,
       );
     } else {
       spinner.start('Analyzing your API definition for OpenAPI and ReadMe feature usage...');

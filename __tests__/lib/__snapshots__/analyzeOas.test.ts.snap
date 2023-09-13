@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`#analyzeOas should analyze an OpenAPI definition 1`] = `
+exports[`#analyzeOas > should analyze an OpenAPI definition 1`] = `
 {
   "general": {
     "mediaTypes": {

@@ -1,17 +1,13 @@
-/* eslint-disable jest/no-conditional-expect */
+/* eslint-disable vitest/no-conditional-expect */
 import assert from 'assert';
+
+import { describe, it, expect } from 'vitest';
 
 import OpenAPIInspectCommand from '../../../src/cmds/openapi/inspect';
 
 const analyzer = new OpenAPIInspectCommand();
 
-const testWorkingDir = process.cwd();
-
 describe('rdme openapi:inspect', () => {
-  afterEach(() => {
-    process.chdir(testWorkingDir);
-  });
-
   describe('full reports', () => {
     it.each([
       '@readme/oas-examples/3.0/json/petstore.json',
@@ -21,7 +17,7 @@ describe('rdme openapi:inspect', () => {
       return expect(
         analyzer.run({
           spec: require.resolve(spec),
-        })
+        }),
       ).resolves.toMatchSnapshot();
     });
   });
@@ -34,7 +30,7 @@ describe('rdme openapi:inspect', () => {
         analyzer.run({
           spec,
           feature: ['style', 'reamde'],
-        })
+        }),
       ).rejects.toStrictEqual(new Error('Unknown features: reamde. See `rdme help openapi:inspect` for help.'));
     });
 
@@ -72,7 +68,7 @@ describe('rdme openapi:inspect', () => {
           analyzer.run({
             spec: require.resolve(spec),
             feature,
-          })
+          }),
         ).resolves.toMatchSnapshot();
         return;
       }

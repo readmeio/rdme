@@ -5,6 +5,7 @@ import chalk from 'chalk';
 import frontMatter from 'gray-matter';
 import nock from 'nock';
 import prompts from 'prompts';
+import { describe, beforeAll, afterAll, beforeEach, it, expect, vi } from 'vitest';
 
 import CustomPagesCommand from '../../../src/cmds/custompages';
 import APIError from '../../../src/lib/apiError';
@@ -18,12 +19,14 @@ const fullFixturesDir = `${__dirname}./../../${fixturesBaseDir}`;
 const key = 'API_KEY';
 
 describe('rdme custompages', () => {
-  beforeAll(() => nock.disableNetConnect());
+  beforeAll(() => {
+    nock.disableNetConnect();
+  });
 
   afterAll(() => nock.cleanAll());
 
   it('should prompt for login if no API key provided', async () => {
-    const consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+    const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
     await expect(custompages.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
     consoleInfoSpy.mockRestore();
@@ -32,28 +35,28 @@ describe('rdme custompages', () => {
   it('should error in CI if no API key provided', async () => {
     process.env.TEST_RDME_CI = 'true';
     await expect(custompages.run({})).rejects.toStrictEqual(
-      new Error('No project API key provided. Please use `--key`.')
+      new Error('No project API key provided. Please use `--key`.'),
     );
     delete process.env.TEST_RDME_CI;
   });
 
   it('should error if no path provided', () => {
     return expect(custompages.run({ key })).rejects.toStrictEqual(
-      new Error('No path provided. Usage `rdme custompages <path> [options]`.')
+      new Error('No path provided. Usage `rdme custompages <path> [options]`.'),
     );
   });
 
   it('should error if the argument is not a folder', () => {
     return expect(custompages.run({ key, filePath: 'not-a-folder' })).rejects.toStrictEqual(
-      new Error("Oops! We couldn't locate a file or directory at the path you provided.")
+      new Error("Oops! We couldn't locate a file or directory at the path you provided."),
     );
   });
 
   it('should error if the folder contains no markdown nor HTML files', () => {
     return expect(custompages.run({ key, filePath: '.github/workflows' })).rejects.toStrictEqual(
       new Error(
-        "The directory you provided (.github/workflows) doesn't contain any of the following required files: .html, .markdown, .md."
-      )
+        "The directory you provided (.github/workflows) doesn't contain any of the following required files: .html, .markdown, .md.",
+      ),
     );
   });
 
@@ -117,7 +120,7 @@ describe('rdme custompages', () => {
           [
             `✏️ successfully updated 'simple-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`,
             `✏️ successfully updated 'another-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/subdir/another-doc.md`,
-          ].join('\n')
+          ].join('\n'),
         );
 
         getMocks.done();
@@ -144,12 +147,12 @@ describe('rdme custompages', () => {
           expect(updatedDocs).toBe(
             [
               `🎭 dry run! This will update 'simple-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/simple-doc.md with the following metadata: ${JSON.stringify(
-                simpleDoc.doc.data
+                simpleDoc.doc.data,
               )}`,
               `🎭 dry run! This will update 'another-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/subdir/another-doc.md with the following metadata: ${JSON.stringify(
-                anotherDoc.doc.data
+                anotherDoc.doc.data,
               )}`,
-            ].join('\n')
+            ].join('\n'),
           );
 
           getMocks.done();
@@ -172,7 +175,7 @@ describe('rdme custompages', () => {
           [
             '`simple-doc` was not updated because there were no changes.',
             '`another-doc` was not updated because there were no changes.',
-          ].join('\n')
+          ].join('\n'),
         );
 
         getMocks.done();
@@ -197,7 +200,7 @@ describe('rdme custompages', () => {
             [
               '🎭 dry run! `simple-doc` will not be updated because there were no changes.',
               '🎭 dry run! `another-doc` will not be updated because there were no changes.',
-            ].join('\n')
+            ].join('\n'),
           );
 
           getMocks.done();
@@ -228,7 +231,7 @@ describe('rdme custompages', () => {
         .reply(201, { slug, _id: id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
       await expect(custompages.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs`, key })).resolves.toBe(
-        `🌱 successfully created 'new-doc' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/new-docs/new-doc.md`
+        `🌱 successfully created 'new-doc' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/new-docs/new-doc.md`,
       );
 
       getMock.done();
@@ -257,7 +260,7 @@ describe('rdme custompages', () => {
         .reply(201, { slug, _id: id, html: doc.content, htmlmode: true, ...doc.data, lastUpdatedHash: hash });
 
       await expect(custompages.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs-html`, key })).resolves.toBe(
-        `🌱 successfully created 'new-doc' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/new-docs-html/new-doc.html`
+        `🌱 successfully created 'new-doc' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/new-docs-html/new-doc.html`,
       );
 
       getMock.done();
@@ -279,11 +282,11 @@ describe('rdme custompages', () => {
         });
 
       await expect(
-        custompages.run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/new-docs`, key })
+        custompages.run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/new-docs`, key }),
       ).resolves.toBe(
         `🎭 dry run! This will create 'new-doc' with contents from __tests__/${fixturesBaseDir}/new-docs/new-doc.md with the following metadata: ${JSON.stringify(
-          doc.data
-        )}`
+          doc.data,
+        )}`,
       );
 
       getMock.done();
@@ -328,7 +331,7 @@ describe('rdme custompages', () => {
       };
 
       await expect(custompages.run({ filePath: `./${fullDirectory}`, key })).rejects.toStrictEqual(
-        new APIError(formattedErrorObject)
+        new APIError(formattedErrorObject),
       );
 
       getMocks.done();
@@ -359,7 +362,7 @@ describe('rdme custompages', () => {
         .reply(201, { slug: doc.data.slug, _id: id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
       await expect(custompages.run({ filePath: `./__tests__/${fixturesBaseDir}/slug-docs`, key })).resolves.toBe(
-        `🌱 successfully created 'marc-actually-wrote-a-test' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`
+        `🌱 successfully created 'marc-actually-wrote-a-test' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`,
       );
 
       getMock.done();

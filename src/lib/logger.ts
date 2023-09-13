@@ -3,12 +3,12 @@ import type { Writable } from 'type-fest';
 
 import * as core from '@actions/core';
 import chalk from 'chalk';
-import config from 'config';
 import debugModule from 'debug';
 
+import config from './config';
 import { isGHA, isTest } from './isCI';
 
-const debugPackage = debugModule(config.get('cli'));
+const debugPackage = debugModule(config.cli);
 
 /**
  * Wrapper for debug statements.
@@ -46,7 +46,7 @@ function info(
   opts = {
     /** whether or not to prefix * the statement with this emoji: ℹ️ */
     includeEmojiPrefix: true,
-  }
+  },
 ) {
   /* istanbul ignore next */
   if (isGHA() && !isTest()) return core.notice(input);

@@ -1,25 +1,25 @@
 /* eslint-disable no-console */
-import type commands from '../../src/cmds';
-import type { CommandOptions } from '../../src/lib/baseCommand';
-import type Command from '../../src/lib/baseCommand';
+import type commands from '../../../src/cmds';
+import type { CommandOptions } from '../../../src/lib/baseCommand';
+import type Command from '../../../src/lib/baseCommand';
 import type { Response } from 'simple-git';
 
 import fs from 'fs';
 
 import prompts from 'prompts';
+import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
-import ChangelogsCommand from '../../src/cmds/changelogs';
-import CustomPagesCommand from '../../src/cmds/custompages';
-import DocsCommand from '../../src/cmds/docs';
-import OpenAPICommand from '../../src/cmds/openapi';
-import OpenAPIValidateCommand from '../../src/cmds/openapi/validate';
-import configstore from '../../src/lib/configstore';
-import createGHA, { getConfigStoreKey, getGHAFileName, getGitData, git } from '../../src/lib/createGHA';
-import { getMajorPkgVersion } from '../../src/lib/getPkgVersion';
-import { after, before } from '../helpers/get-gha-setup';
-import getGitRemoteMock from '../helpers/get-git-mock';
-import ghaWorkflowSchema from '../helpers/github-workflow-schema.json';
-import '../helpers/jest.matchers';
+import ChangelogsCommand from '../../../src/cmds/changelogs';
+import CustomPagesCommand from '../../../src/cmds/custompages';
+import DocsCommand from '../../../src/cmds/docs';
+import OpenAPICommand from '../../../src/cmds/openapi';
+import OpenAPIValidateCommand from '../../../src/cmds/openapi/validate';
+import configstore from '../../../src/lib/configstore';
+import createGHA, { getConfigStoreKey, getGHAFileName, getGitData, git } from '../../../src/lib/createGHA';
+import { getMajorPkgVersion } from '../../../src/lib/getPkgVersion';
+import { after, before } from '../../helpers/get-gha-setup';
+import getGitRemoteMock from '../../helpers/get-git-mock';
+import ghaWorkflowSchema from '../../helpers/github-workflow-schema.json';
 
 const testWorkingDir = process.cwd();
 
@@ -32,7 +32,7 @@ describe('#createGHA', () => {
   let yamlOutput;
 
   beforeEach(() => {
-    consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+    consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
 
     before((fileName, data) => {
       yamlOutput = data;
@@ -77,7 +77,7 @@ describe('#createGHA', () => {
         label: ' (single)',
         opts: { key, filePath: './custompages/rdme.md' },
       },
-    ])('$cmd$label', ({ cmd, CmdClass, opts }) => {
+    ])('$cmd $label', ({ cmd, CmdClass, opts }) => {
       let command;
 
       beforeEach(() => {
@@ -115,14 +115,14 @@ describe('#createGHA', () => {
         expect.assertions(3);
         const repoRoot = '__tests__/__fixtures__';
 
-        git.revparse = jest.fn(() => {
+        git.revparse = vi.fn(() => {
           return Promise.resolve(repoRoot) as unknown as Response<string>;
         });
 
         const fileName = `rdme-${cmd}`;
         prompts.inject([true, 'some-branch', fileName]);
 
-        fs.mkdirSync = jest.fn(() => {
+        fs.mkdirSync = vi.fn(() => {
           return '';
         });
 
@@ -141,7 +141,7 @@ describe('#createGHA', () => {
         configstore.set(getConfigStoreKey(repoRoot), (await getMajorPkgVersion()) - 1);
 
         return expect(createGHA('', cmd, command.args, opts)).resolves.toMatch(
-          'Your GitHub Actions workflow file has been created!'
+          'Your GitHub Actions workflow file has been created!',
         );
       });
 
@@ -151,21 +151,21 @@ describe('#createGHA', () => {
 
         const repoRoot = process.cwd();
 
-        git.revparse = jest.fn(() => {
+        git.revparse = vi.fn(() => {
           return Promise.resolve(repoRoot) as unknown as Response<string>;
         });
 
         await expect(createGHA('', cmd, command.args, opts)).rejects.toStrictEqual(
           new Error(
-            'GitHub Actions workflow creation cancelled. If you ever change your mind, you can run this command again with the `--github` flag.'
-          )
+            'GitHub Actions workflow creation cancelled. If you ever change your mind, you can run this command again with the `--github` flag.',
+          ),
         );
 
         expect(configstore.get(getConfigStoreKey(repoRoot))).toBe(await getMajorPkgVersion());
       });
 
       it('should not run if not a repo', () => {
-        git.checkIsRepo = jest.fn(() => {
+        git.checkIsRepo = vi.fn(() => {
           return Promise.reject(new Error('not a repo')) as unknown as Response<boolean>;
         });
 
@@ -223,7 +223,7 @@ describe('#createGHA', () => {
       it('should return correct data in default case', () => {
         const repoRoot = '/someroot';
 
-        git.revparse = jest.fn(() => {
+        git.revparse = vi.fn(() => {
           return Promise.resolve(repoRoot) as unknown as Response<string>;
         });
 
@@ -236,7 +236,7 @@ describe('#createGHA', () => {
       });
 
       it('should return empty repoRoot if function fails', () => {
-        git.revparse = jest.fn(() => {
+        git.revparse = vi.fn(() => {
           return Promise.reject(new Error('some error')) as unknown as Response<string>;
         });
 
@@ -251,11 +251,11 @@ describe('#createGHA', () => {
       it('should still return values if every git check fails', () => {
         git.remote = getGitRemoteMock('', '', '');
 
-        git.checkIsRepo = jest.fn(() => {
+        git.checkIsRepo = vi.fn(() => {
           return Promise.reject(new Error('some error')) as unknown as Response<boolean>;
         });
 
-        git.revparse = jest.fn(() => {
+        git.revparse = vi.fn(() => {
           return Promise.reject(new Error('some error')) as unknown as Response<string>;
         });
 

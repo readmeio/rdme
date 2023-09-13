@@ -172,7 +172,7 @@ The following examples use JSON files, but `rdme` supports API Definitions that 
 > [!NOTE]
 > The `rdme openapi` command supports both OpenAPI and Swagger API definitions. The `rdme swagger` command is an alias for `rdme openapi` and is deprecated.
 
-If you wish to programmatically access any of this script's results (such as the API defintion ID or the link to the corresponding docs in your dashboard), supply the `--raw` flag and the command will return a JSON output.
+If you wish to programmatically access any of this script's results (such as the API definition ID or the link to the corresponding docs in your dashboard), supply the `--raw` flag and the command will return a JSON output.
 
 This command also has a dry run mode, which can be useful for initial setup and debugging. You can perform a dry run by supplying the `--dryRun` flag.
 
@@ -390,12 +390,12 @@ rdme versions --version={project-version}
 rdme versions:create <version>
 ```
 
-If you wish to automate the process of creating a new project version, and not have the CLI prompt you for input, you can do so by supplying the necessary flags to `versions:create`.
+If you wish to automate the process of creating a new project version, and not have the CLI prompt you for input, you can do so by supplying the necessary flags to `versions:create`. The best way to ensure that you have supplied all the necessary flags is by running the command locally and verifying that the CLI does not prompt you.
 
-For example:
+For example, the following command contains all the flags to bypass the CLI prompts:
 
 ```sh
-rdme versions:create <version> --fork={version-fork} --main={true|false} --beta={true|false} --isPublic={true|false}
+rdme versions:create <version> --fork={version-fork} --main={true|false} --beta={true|false} --deprecated={true|false} --isPublic={true|false}
 ```
 
 See `rdme versions:create --help` for a full list of flags.
@@ -406,7 +406,7 @@ See `rdme versions:create --help` for a full list of flags.
 rdme versions:update <version>
 ```
 
-Like `versions:create`, if you wish to automate this process and not be blocked by CLI input, you can supply the necessary flags to this command. See `rdme versions:update --help` for more information.
+Like `versions:create`, if you wish to automate this process and not be blocked by CLI input, you can supply the necessary flags to this command. See `rdme versions:update --help` for a full list of flags.
 
 #### Delete a Version
 

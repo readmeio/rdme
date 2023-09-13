@@ -3,9 +3,9 @@ import type { Section } from 'command-line-usage';
 
 import chalk from 'chalk';
 import usage from 'command-line-usage';
-import config from 'config';
 
 import * as commands from './commands';
+import config from './config';
 
 function formatCommands(cmds: { description: string; hidden: boolean; name: string }[]) {
   return cmds
@@ -13,7 +13,7 @@ function formatCommands(cmds: { description: string; hidden: boolean; name: stri
     .filter(command => !command.hidden)
     .map(command => {
       return {
-        name: `${chalk.grey('$')} ${config.get('cli')} ${command.name}`,
+        name: `${chalk.grey('$')} ${config.cli} ${command.name}`,
         summary: command.description,
       };
     });
@@ -21,7 +21,7 @@ function formatCommands(cmds: { description: string; hidden: boolean; name: stri
 
 const owlbert = () => {
   // http://asciiart.club
-  return `                  📖 ${chalk.blue.bold(config.get('cli'))}
+  return `                  📖 ${chalk.blue.bold(config.cli)}
 
     ${chalk.bold('a utility for interacting with ReadMe')}
        .
@@ -63,7 +63,7 @@ function commandUsage(cmd: Command) {
     },
     {
       header: 'Usage',
-      content: `${config.get('cli')} ${cmd.usage}`,
+      content: `${config.cli} ${cmd.usage}`,
     },
     {
       header: 'Options',
@@ -98,7 +98,7 @@ async function globalUsage(args: Command['args']) {
     },
     {
       header: 'Usage',
-      content: `${config.get('cli')} <command> [arguments]`,
+      content: `${config.cli} <command> [arguments]`,
     },
     {
       header: 'Options',
@@ -120,13 +120,13 @@ async function globalUsage(args: Command['args']) {
 
   helpContent.push(
     {
-      content: `Run ${chalk.dim(`${config.get('cli')} help <command>`)} for help with a specific command.`,
+      content: `Run ${chalk.dim(`${config.cli} help <command>`)} for help with a specific command.`,
       raw: true,
     },
     {
       content: 'To get more help with ReadMe, check out our docs at https://docs.readme.com.',
       raw: true,
-    }
+    },
   );
 
   return usage(helpContent);

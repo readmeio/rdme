@@ -1,10 +1,10 @@
 import type { CommandOptions } from '../../lib/baseCommand';
 
 import chalk from 'chalk';
-import config from 'config';
 import prompts from 'prompts';
 
 import Command, { CommandCategories } from '../../lib/baseCommand';
+import config from '../../lib/config';
 import createGHA from '../../lib/createGHA';
 import deleteDoc from '../../lib/deleteDoc';
 import getDocs from '../../lib/getDocs';
@@ -62,7 +62,7 @@ export default class DocsPruneCommand extends Command {
     const { dryRun, folder, key, version } = opts;
 
     if (!folder) {
-      return Promise.reject(new Error(`No folder provided. Usage \`${config.get('cli')} ${this.usage}\`.`));
+      return Promise.reject(new Error(`No folder provided. Usage \`${config.cli} ${this.usage}\`.`));
     }
 
     // TODO: should we allow version selection at all here?
@@ -74,7 +74,7 @@ export default class DocsPruneCommand extends Command {
 
     // Strip out non-markdown files
     const files = readdirRecursive(folder).filter(
-      file => file.toLowerCase().endsWith('.md') || file.toLowerCase().endsWith('.markdown')
+      file => file.toLowerCase().endsWith('.md') || file.toLowerCase().endsWith('.markdown'),
     );
 
     Command.debug(`number of files: ${files.length}`);
@@ -96,11 +96,11 @@ export default class DocsPruneCommand extends Command {
     const fileSlugs = new Set(files.map(getSlug));
     const slugsToDelete = docSlugs.filter((slug: string) => !fileSlugs.has(slug));
     const deletedDocs = await Promise.all(
-      slugsToDelete.map((slug: string) => deleteDoc(key, selectedVersion, dryRun, slug, this.cmdCategory))
+      slugsToDelete.map((slug: string) => deleteDoc(key, selectedVersion, dryRun, slug, this.cmdCategory)),
     );
 
     return Promise.resolve(chalk.green(deletedDocs.join('\n'))).then(msg =>
-      createGHA(msg, this.command, this.args, { ...opts, version: selectedVersion })
+      createGHA(msg, this.command, this.args, { ...opts, version: selectedVersion }),
     );
   }
 }

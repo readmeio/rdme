@@ -24,7 +24,7 @@ rdme(process.argv.slice(2))
   })
   .catch((err: Error) => {
     let message = `Yikes, something went wrong! Please try again and if the problem persists, get in touch with our support team at ${chalk.underline(
-      'support@readme.io'
+      'support@readme.io',
     )}.`;
 
     if (err.message) {

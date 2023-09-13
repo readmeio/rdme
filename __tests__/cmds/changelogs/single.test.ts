@@ -5,6 +5,7 @@ import chalk from 'chalk';
 import frontMatter from 'gray-matter';
 import nock from 'nock';
 import prompts from 'prompts';
+import { describe, beforeAll, afterAll, beforeEach, it, expect, vi } from 'vitest';
 
 import ChangelogsCommand from '../../../src/cmds/changelogs';
 import APIError from '../../../src/lib/apiError';
@@ -18,12 +19,14 @@ const fullFixturesDir = `${__dirname}./../../${fixturesBaseDir}`;
 const key = 'API_KEY';
 
 describe('rdme changelogs (single)', () => {
-  beforeAll(() => nock.disableNetConnect());
+  beforeAll(() => {
+    nock.disableNetConnect();
+  });
 
   afterAll(() => nock.cleanAll());
 
   it('should prompt for login if no API key provided', async () => {
-    const consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+    const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
     await expect(changelogs.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
     consoleInfoSpy.mockRestore();
@@ -32,26 +35,26 @@ describe('rdme changelogs (single)', () => {
   it('should error in CI if no API key provided', async () => {
     process.env.TEST_RDME_CI = 'true';
     await expect(changelogs.run({})).rejects.toStrictEqual(
-      new Error('No project API key provided. Please use `--key`.')
+      new Error('No project API key provided. Please use `--key`.'),
     );
     delete process.env.TEST_RDME_CI;
   });
 
   it('should error if no file path provided', () => {
     return expect(changelogs.run({ key })).rejects.toStrictEqual(
-      new Error('No path provided. Usage `rdme changelogs <path> [options]`.')
+      new Error('No path provided. Usage `rdme changelogs <path> [options]`.'),
     );
   });
 
   it('should error if the argument is not a Markdown file', () => {
     return expect(changelogs.run({ key, filePath: 'package.json' })).rejects.toStrictEqual(
-      new Error('Invalid file extension (.json). Must be one of the following: .markdown, .md')
+      new Error('Invalid file extension (.json). Must be one of the following: .markdown, .md'),
     );
   });
 
   it('should support .markdown files but error if file path cannot be found', () => {
     return expect(changelogs.run({ key, filePath: 'non-existent-file.markdown' })).rejects.toStrictEqual(
-      new Error("Oops! We couldn't locate a file or directory at the path you provided.")
+      new Error("Oops! We couldn't locate a file or directory at the path you provided."),
     );
   });
 
@@ -78,9 +81,9 @@ describe('rdme changelogs (single)', () => {
         .reply(201, { slug, _id: id, body: doc.content, ...doc.data });
 
       await expect(
-        changelogs.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, key })
+        changelogs.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, key }),
       ).resolves.toBe(
-        `🌱 successfully created 'new-doc' (ID: 1234) with contents from ./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`
+        `🌱 successfully created 'new-doc' (ID: 1234) with contents from ./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`,
       );
 
       getMock.done();
@@ -102,11 +105,11 @@ describe('rdme changelogs (single)', () => {
         });
 
       await expect(
-        changelogs.run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, key })
+        changelogs.run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, key }),
       ).resolves.toBe(
         `🎭 dry run! This will create 'new-doc' with contents from ./__tests__/${fixturesBaseDir}/new-docs/new-doc.md with the following metadata: ${JSON.stringify(
-          doc.data
-        )}`
+          doc.data,
+        )}`,
       );
 
       getMock.done();
@@ -116,7 +119,7 @@ describe('rdme changelogs (single)', () => {
       const filePath = `./__tests__/${fixturesBaseDir}/failure-docs/doc-sans-attributes.md`;
 
       await expect(changelogs.run({ filePath, key })).resolves.toBe(
-        `⏭️  no front matter attributes found for ${filePath}, skipping`
+        `⏭️  no front matter attributes found for ${filePath}, skipping`,
       );
     });
 
@@ -168,9 +171,9 @@ describe('rdme changelogs (single)', () => {
         .reply(201, { slug: doc.data.slug, _id: id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
       await expect(
-        changelogs.run({ filePath: `./__tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`, key })
+        changelogs.run({ filePath: `./__tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`, key }),
       ).resolves.toBe(
-        `🌱 successfully created 'marc-actually-wrote-a-test' (ID: 1234) with contents from ./__tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`
+        `🌱 successfully created 'marc-actually-wrote-a-test' (ID: 1234) with contents from ./__tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`,
       );
 
       getMock.done();
@@ -212,7 +215,7 @@ describe('rdme changelogs (single)', () => {
         .run({ filePath: `./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, key })
         .then(updatedDocs => {
           expect(updatedDocs).toBe(
-            `✏️ successfully updated 'simple-doc' with contents from ./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`
+            `✏️ successfully updated 'simple-doc' with contents from ./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`,
           );
 
           getMock.done();
@@ -236,9 +239,9 @@ describe('rdme changelogs (single)', () => {
           expect(updatedDocs).toBe(
             [
               `🎭 dry run! This will update 'simple-doc' with contents from ./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md with the following metadata: ${JSON.stringify(
-                simpleDoc.doc.data
+                simpleDoc.doc.data,
               )}`,
-            ].join('\n')
+            ].join('\n'),
           );
 
           getMock.done();

@@ -12,6 +12,7 @@ jobs:
     name: Test Suite
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         node-version:
           - 14
@@ -20,13 +21,22 @@ jobs:
           - 20
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: npm
+
+      - name: Build and run tests
+        run: npm cit
+
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
 
       - name: Install deps
         run: npm ci
@@ -35,19 +45,19 @@ jobs:
         run: npm run build
 
       - name: Run tests
-        run: npm test
+        run: npm run lint
 
   action:
     name: GitHub Action Dry Run
     runs-on: ubuntu-latest
     steps:
       - name: Checkout GitHub Action
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: rdme-repo
 
       - name: Checkout external repo containing OpenAPI file
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: oas-examples-repo
           repository: readmeio/oas-examples

@@ -2,7 +2,7 @@ import type { CommandCategories } from './baseCommand';
 
 import commands from '../cmds';
 
-export function getCategories(): Record<
+function getCategories(): Record<
   string,
   {
     commands: {

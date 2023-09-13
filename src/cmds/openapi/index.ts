@@ -106,17 +106,19 @@ export default class OpenAPICommand extends Command {
 
     if (create && update) {
       throw new Error(
-        'The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!'
+        'The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!',
       );
     }
 
     if (workingDirectory) {
+      const previousWorkingDirectory = process.cwd();
       process.chdir(workingDirectory);
+      Command.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
     }
 
     if (version && id) {
       Command.warn(
-        "We'll be using the version associated with the `--id` option, so the `--version` option will be ignored."
+        "We'll be using the version associated with the `--id` option, so the `--version` option will be ignored.",
       );
     }
 
@@ -126,7 +128,7 @@ export default class OpenAPICommand extends Command {
 
     if (update && id) {
       Command.warn(
-        "We'll be updating the API definition associated with the `--id` parameter, so the `--update` parameter will be ignored."
+        "We'll be updating the API definition associated with the `--id` parameter, so the `--update` parameter will be ignored.",
       );
     }
 
@@ -138,7 +140,7 @@ export default class OpenAPICommand extends Command {
 
     if (useSpecVersion) {
       Command.info(
-        `Using the version specified in your API definition for your ReadMe project version (${specVersion})`
+        `Using the version specified in your API definition for your ReadMe project version (${specVersion})`,
       );
       selectedVersion = specVersion;
     }
@@ -184,7 +186,7 @@ export default class OpenAPICommand extends Command {
           id: body._id,
           version: selectedVersion,
           ...ignoredGHAParameters,
-        })
+        }),
       );
     };
 
@@ -202,15 +204,15 @@ export default class OpenAPICommand extends Command {
             err.includes('520: Web server is returning an unknown error</title>')) // Cloudflare error
         ) {
           throw new Error(
-            "We're sorry, your upload request timed out. Please try again or split your file up into smaller chunks."
+            "We're sorry, your upload request timed out. Please try again or split your file up into smaller chunks.",
           );
         }
 
         // As a fallback, we throw a more generic error.
         throw new Error(
           `Yikes, something went wrong! Please try uploading your spec again and if the problem persists, get in touch with our support team at ${chalk.underline(
-            'support@readme.io'
-          )}.`
+            'support@readme.io',
+          )}.`,
         );
       });
     };
@@ -224,7 +226,7 @@ export default class OpenAPICommand extends Command {
           Accept: 'application/json',
           'Content-Type': 'application/json',
           'x-readme-version': selectedVersion,
-        })
+        }),
       ),
       body: JSON.stringify({ registryUUID }),
     };
@@ -285,7 +287,7 @@ export default class OpenAPICommand extends Command {
           key,
           new Headers({
             'x-readme-version': selectedVersion,
-          })
+          }),
         ),
       });
     }
@@ -311,7 +313,7 @@ export default class OpenAPICommand extends Command {
       if (update) {
         if (apiSettingsBody.length > 1) {
           throw new Error(
-            `The \`--update\` option cannot be used when there's more than one API definition available (found ${apiSettingsBody.length}).`
+            `The \`--update\` option cannot be used when there's more than one API definition available (found ${apiSettingsBody.length}).`,
           );
         }
         const { _id: specId } = apiSettingsBody[0];
@@ -321,7 +323,7 @@ export default class OpenAPICommand extends Command {
       // @todo: figure out how to add a stricter type here, see:
       // https://github.com/readmeio/rdme/pull/570#discussion_r949715913
       const { option } = await promptTerminal(
-        promptHandler.createOasPrompt(apiSettingsBody, parsedDocs, totalPages, getSpecs)
+        promptHandler.createOasPrompt(apiSettingsBody, parsedDocs, totalPages, getSpecs),
       );
       Command.debug(`selection result: ${option}`);
 

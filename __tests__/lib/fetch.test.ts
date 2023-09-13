@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment, no-console */
 import { Headers } from 'node-fetch';
+import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
 import pkg from '../../package.json';
 import readmeAPIFetch, { cleanHeaders, handleRes } from '../../src/lib/readmeAPIFetch';
@@ -55,11 +56,11 @@ describe('#fetch()', () => {
             method: 'get',
             headers: cleanHeaders(key),
           },
-          { filePath: 'openapi.json', fileType: 'path' }
+          { filePath: 'openapi.json', fileType: 'path' },
         ).then(handleRes);
 
         expect(headers['x-readme-source-url'].shift()).toBe(
-          'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/openapi.json'
+          'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/openapi.json',
         );
         mock.done();
       });
@@ -80,18 +81,18 @@ describe('#fetch()', () => {
             method: 'get',
             headers: cleanHeaders(key),
           },
-          { filePath: './📈 Dashboard & Metrics/openapi.json', fileType: 'path' }
+          { filePath: './📈 Dashboard & Metrics/openapi.json', fileType: 'path' },
         ).then(handleRes);
 
         expect(headers['x-readme-source-url'].shift()).toBe(
-          'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/%F0%9F%93%88%20Dashboard%20&%20Metrics/openapi.json'
+          'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/%F0%9F%93%88%20Dashboard%20&%20Metrics/openapi.json',
         );
         mock.done();
       });
 
       it('should omit source URL header if URL is invalid', async () => {
         const key = 'API_KEY';
-        delete process.env.GITHUB_SERVER_URL;
+        vi.stubEnv('GITHUB_SERVER_URL', undefined);
 
         const mock = getAPIMock()
           .get('/api/v1')
@@ -106,7 +107,7 @@ describe('#fetch()', () => {
             method: 'get',
             headers: cleanHeaders(key),
           },
-          { filePath: './📈 Dashboard & Metrics/openapi.json', fileType: 'path' }
+          { filePath: './📈 Dashboard & Metrics/openapi.json', fileType: 'path' },
         ).then(handleRes);
 
         expect(headers['x-readme-source-url']).toBeUndefined();
@@ -129,11 +130,11 @@ describe('#fetch()', () => {
             method: 'get',
             headers: cleanHeaders(key),
           },
-          { filePath: './openapi.json', fileType: 'path' }
+          { filePath: './openapi.json', fileType: 'path' },
         ).then(handleRes);
 
         expect(headers['x-readme-source-url'].shift()).toBe(
-          'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/openapi.json'
+          'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/openapi.json',
         );
         mock.done();
       });
@@ -155,7 +156,7 @@ describe('#fetch()', () => {
             method: 'get',
             headers: cleanHeaders(key),
           },
-          { filePath, fileType: 'url' }
+          { filePath, fileType: 'url' },
         ).then(handleRes);
 
         expect(headers['x-readme-source-url'].shift()).toBe(filePath);
@@ -216,7 +217,7 @@ describe('#fetch()', () => {
     };
 
     beforeEach(() => {
-      consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
+      consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     });
 
     afterEach(() => {
@@ -258,7 +259,7 @@ describe('#fetch()', () => {
 
       expect(console.warn).toHaveBeenCalledTimes(2);
       expect(getWarningCommandOutput()).toBe(
-        '⚠️  ReadMe API Warning: some error\n\n⚠️  ReadMe API Warning: another error'
+        '⚠️  ReadMe API Warning: some error\n\n⚠️  ReadMe API Warning: another error',
       );
 
       mock.done();
@@ -280,14 +281,13 @@ describe('#fetch()', () => {
 
   describe('proxies', () => {
     afterEach(() => {
-      delete process.env.https_proxy;
-      delete process.env.HTTPS_PROXY;
+      vi.unstubAllEnvs();
     });
 
     it('should support proxies via HTTPS_PROXY env variable', async () => {
       const proxy = 'https://proxy.example.com:5678';
 
-      process.env.HTTPS_PROXY = proxy;
+      vi.stubEnv('HTTPS_PROXY', proxy);
 
       const mock = getAPIMock({}, `${proxy}/`).get('/api/v1/proxy').reply(200);
 
@@ -299,7 +299,7 @@ describe('#fetch()', () => {
     it('should support proxies via https_proxy env variable', async () => {
       const proxy = 'https://proxy.example.com:5678';
 
-      process.env.https_proxy = proxy;
+      vi.stubEnv('https_proxy', proxy);
 
       const mock = getAPIMock({}, `${proxy}/`).get('/api/v1/proxy').reply(200);
 
@@ -311,7 +311,7 @@ describe('#fetch()', () => {
     it('should handle trailing slash in proxy URL', async () => {
       const proxy = 'https://proxy.example.com:5678/';
 
-      process.env.https_proxy = proxy;
+      vi.stubEnv('https_proxy', proxy);
 
       const mock = getAPIMock({}, proxy).get('/api/v1/proxy').reply(200);
 
@@ -330,14 +330,14 @@ describe('#cleanHeaders()', () => {
   it('should filter out undefined headers', () => {
     expect(
       // @ts-ignore Testing a quirk of `node-fetch`.
-      Array.from(cleanHeaders('test', new Headers({ 'x-readme-version': undefined })))
+      Array.from(cleanHeaders('test', new Headers({ 'x-readme-version': undefined }))),
     ).toStrictEqual([['authorization', 'Basic dGVzdDo=']]);
   });
 
   it('should filter out null headers', () => {
     expect(
       // @ts-ignore Testing a quirk of `node-fetch`.
-      Array.from(cleanHeaders('test', new Headers({ 'x-readme-version': '1234', Accept: null })))
+      Array.from(cleanHeaders('test', new Headers({ 'x-readme-version': '1234', Accept: null }))),
     ).toStrictEqual([
       ['authorization', 'Basic dGVzdDo='],
       ['x-readme-version', '1234'],

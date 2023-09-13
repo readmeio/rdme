@@ -3,13 +3,13 @@ import type { CommandOptions } from '../../lib/baseCommand';
 import fs from 'fs';
 import { promisify } from 'util';
 
-import config from 'config';
 import { Headers } from 'node-fetch';
 
 import editor from 'editor';
 
 import APIError from '../../lib/apiError';
 import Command, { CommandCategories } from '../../lib/baseCommand';
+import config from '../../lib/config';
 import isHidden from '../../lib/decorators/isHidden';
 import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch';
 import { getProjectVersion } from '../../lib/versionSelect';
@@ -18,7 +18,7 @@ const writeFile = promisify(fs.writeFile);
 const readFile = promisify(fs.readFile);
 const unlink = promisify(fs.unlink);
 
-export interface Options {
+interface Options {
   mockEditor?: (filename: string, cb: () => void) => void;
   slug?: string;
 }
@@ -52,7 +52,7 @@ export default class DocsEditCommand extends Command {
     const { slug, key, version } = opts;
 
     if (!slug) {
-      return Promise.reject(new Error(`No slug provided. Usage \`${config.get('cli')} ${this.usage}\`.`));
+      return Promise.reject(new Error(`No slug provided. Usage \`${config.cli} ${this.usage}\`.`));
     }
 
     const selectedVersion = await getProjectVersion(version, key);
@@ -68,7 +68,7 @@ export default class DocsEditCommand extends Command {
         new Headers({
           'x-readme-version': selectedVersion,
           Accept: 'application/json',
-        })
+        }),
       ),
     }).then(handleRes);
 
@@ -91,12 +91,12 @@ export default class DocsEditCommand extends Command {
             new Headers({
               'x-readme-version': selectedVersion,
               'Content-Type': 'application/json',
-            })
+            }),
           ),
           body: JSON.stringify(
             Object.assign(existingDoc, {
               body: updatedDoc,
-            })
+            }),
           ),
         })
           .then(res => handleRes(res, false))
