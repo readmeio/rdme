@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repo 📚
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Run \`{{command}}\` command 🚀
         uses: readmeio/rdme@{{rdmeVersion}}
