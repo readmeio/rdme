@@ -2,7 +2,6 @@
 import fs from 'fs';
 
 import chalk from 'chalk';
-import config from 'config';
 import nock from 'nock';
 import prompts from 'prompts';
 import { describe, beforeAll, beforeEach, afterEach, it, expect, vi } from 'vitest';
@@ -10,6 +9,7 @@ import { describe, beforeAll, beforeEach, afterEach, it, expect, vi } from 'vite
 import OpenAPICommand from '../../../src/cmds/openapi';
 import SwaggerCommand from '../../../src/cmds/swagger';
 import APIError from '../../../src/lib/apiError';
+import config from '../../../src/lib/config';
 import petstoreWeird from '../../__fixtures__/petstore-simple-weird-version.json';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock';
 import { after, before } from '../../helpers/get-gha-setup';
@@ -24,7 +24,7 @@ let consoleWarnSpy;
 const key = 'API_KEY';
 const id = '5aa0409b7cf527a93bfb44df';
 const version = '1.0.0';
-const exampleRefLocation = `${config.get('host')}/project/example-project/1.0.1/refs/ex`;
+const exampleRefLocation = `${config.host}/project/example-project/1.0.1/refs/ex`;
 const successfulMessageBase = (specPath, specType) => [
   '',
   `\t${chalk.green(exampleRefLocation)}`,

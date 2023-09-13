@@ -1,9 +1,9 @@
 import type { CommandOptions } from '../lib/baseCommand';
 
 import chalk from 'chalk';
-import config from 'config';
 
 import Command, { CommandCategories } from '../lib/baseCommand';
+import config from '../lib/config';
 import getCurrentConfig from '../lib/getCurrentConfig';
 
 export default class WhoAmICommand extends Command {
@@ -24,7 +24,7 @@ export default class WhoAmICommand extends Command {
     const { email, project } = getCurrentConfig();
 
     if (!email || !project) {
-      return Promise.reject(new Error(`Please login using \`${config.get('cli')} login\`.`));
+      return Promise.reject(new Error(`Please login using \`${config.cli} login\`.`));
     }
 
     return Promise.resolve(
