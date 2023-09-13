@@ -1,6 +1,7 @@
 #! /usr/bin/env node
 import * as core from '@actions/core';
 
+// eslint-disable-next-line import/extensions
 import { getNodeVersion, getMajorPkgVersion } from '../dist/src/lib/getPkgVersion.js';
 
 /**

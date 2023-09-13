@@ -1,9 +1,10 @@
 #! /usr/bin/env node
 /* eslint-disable no-console */
-/* eslint-disable import/no-commonjs */
-/* eslint-disable @typescript-eslint/no-var-requires */
-const util = require('node:util');
-const execFile = util.promisify(require('node:child_process').execFile);
+
+import { execFile as unpromisifiedExecFile } from 'node:child_process';
+import util from 'node:util';
+
+const execFile = util.promisify(unpromisifiedExecFile);
 
 /**
  * Retrieves and parses the docker image metadata
