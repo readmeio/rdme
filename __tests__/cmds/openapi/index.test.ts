@@ -1361,7 +1361,7 @@ describe('rdme openapi', () => {
 
       server.use(
         ...[
-          rest.post(`${config.get('host')}/api/v1/api-registry`, async (req, res, ctx) => {
+          rest.post(`${config.host}/api/v1/api-registry`, async (req, res, ctx) => {
             const body = await req.text();
             expect(body).toMatch('form-data; name="spec"');
             return res(ctx.status(201), ctx.json({ registryUUID }));
@@ -1369,7 +1369,7 @@ describe('rdme openapi', () => {
           rest.get(spec, (req, res, ctx) => {
             return res(ctx.status(200), ctx.json(petstoreWeird));
           }),
-          rest.put(`${config.get('host')}/api/v1/api-specification/${id}`, async (req, res, ctx) => {
+          rest.put(`${config.host}/api/v1/api-specification/${id}`, async (req, res, ctx) => {
             expect(req.headers.get('authorization')).toBeBasicAuthApiKey(key);
             expect(req.headers.get('x-rdme-ci')).toBe('GitHub Actions (test)');
             expect(req.headers.get('x-readme-source')).toBe('cli-gh');
