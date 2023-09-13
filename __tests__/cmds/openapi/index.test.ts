@@ -600,7 +600,7 @@ describe('rdme openapi', () => {
         .post('/api/v1/api-specification', { registryUUID })
         .basicAuth({ user: key })
         .reply(function (uri, rBody, cb) {
-          expect(this.req.headers['x-readme-version'][0]).toBe(version);
+          expect(this.req.headers['x-readme-version']).toBe(version);
           return cb(null, [201, { _id: 1 }, { location: exampleRefLocation }]);
         });
 
@@ -636,7 +636,7 @@ describe('rdme openapi', () => {
         .post('/api/v1/api-specification', { registryUUID })
         .basicAuth({ user: key })
         .reply(function (uri, rBody, cb) {
-          expect(this.req.headers['x-readme-version'][0]).toBe(specVersion);
+          expect(this.req.headers['x-readme-version']).toBe(specVersion);
           return cb(null, [201, { _id: 1 }, { location: exampleRefLocation }]);
         });
 
