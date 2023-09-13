@@ -35,8 +35,7 @@ export function getNodeVersion() {
  */
 export async function getPkgVersion(npmDistTag?: npmDistTag): Promise<string> {
   if (npmDistTag) {
-    return fetch
-      .default(registryUrl)
+    return fetch(registryUrl)
       .then(res => res.json())
       .then(body => body['dist-tags'][npmDistTag])
       .catch(err => {

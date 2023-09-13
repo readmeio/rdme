@@ -188,22 +188,20 @@ export default async function readmeAPIFetch(
     `making ${(options.method || 'get').toUpperCase()} request to ${fullUrl} with headers: ${sanitizeHeaders(headers)}`,
   );
 
-  return nodeFetch
-    .default(fullUrl, {
-      ...options,
-      headers,
-    })
-    .then(res => {
-      const warningHeader = res.headers.get('Warning');
-      if (warningHeader) {
-        debug(`received warning header: ${warningHeader}`);
-        const warnings = parseWarningHeader(warningHeader);
-        warnings.forEach(warning => {
-          warn(warning.message, 'ReadMe API Warning:');
-        });
-      }
-      return res;
-    });
+  return nodeFetch(fullUrl, {
+    ...options,
+    headers,
+  }).then(res => {
+    const warningHeader = res.headers.get('Warning');
+    if (warningHeader) {
+      debug(`received warning header: ${warningHeader}`);
+      const warnings = parseWarningHeader(warningHeader);
+      warnings.forEach(warning => {
+        warn(warning.message, 'ReadMe API Warning:');
+      });
+    }
+    return res;
+  });
 }
 
 /**
@@ -222,7 +220,7 @@ async function handleRes(res: Response, rejectOnJsonError = true) {
   const contentType = res.headers.get('content-type');
   const extension = mime.extension(contentType);
   if (extension === 'json') {
-    const body = await res.json();
+    const body = await res.json() as any;
     debug(`received status code ${res.status} from ${res.url} with JSON response: ${JSON.stringify(body)}`);
     if (body.error && rejectOnJsonError) {
       return Promise.reject(new APIError(body));

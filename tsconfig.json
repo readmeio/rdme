@@ -13,6 +13,7 @@
       "editor": [".sink.d.ts"]
     },
     "resolveJsonModule": true,
+    "skipLibCheck": true,
     "target": "ES2020"
   },
   "include": ["./src/**/*"]
