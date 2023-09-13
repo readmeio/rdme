@@ -6,6 +6,7 @@ import { Headers } from 'node-fetch';
 
 import APIError from './apiError.js';
 import Command, { CommandCategories } from './baseCommand.js';
+import config from './config.js';
 import { debug } from './logger.js';
 import readdirRecursive from './readdirRecursive.js';
 import readDoc from './readDoc.js';

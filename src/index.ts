@@ -1,8 +1,8 @@
+/* eslint-disable no-underscore-dangle */
 import type { CommandOptions } from './lib/baseCommand.js';
 import type Command from './lib/baseCommand.js';
 
 import { readFile } from 'node:fs/promises';
-/* eslint-disable no-underscore-dangle */
 
 import chalk from 'chalk';
 import cliArgs from 'command-line-args';
