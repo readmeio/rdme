@@ -1,6 +1,5 @@
 #! /usr/bin/env node
 /* eslint-disable no-console */
-
 import { execFile as unpromisifiedExecFile } from 'node:child_process';
 import util from 'node:util';
 
