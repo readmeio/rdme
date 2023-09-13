@@ -1,3 +1,4 @@
+rdme-rollup.cjs
 coverage/
 dist/
-!.alexrc.js
+exe/

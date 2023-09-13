@@ -1,4 +1,6 @@
+.env
+rdme-rollup.cjs
 coverage/
 dist/
-.env
+exe/
 node_modules/
