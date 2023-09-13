@@ -2,11 +2,11 @@
 import type { CommandOptions } from './lib/baseCommand.js';
 import type Command from './lib/baseCommand.js';
 
-import { readFile } from 'node:fs/promises';
-
 import chalk from 'chalk';
 import cliArgs from 'command-line-args';
 import parseArgsStringToArgv from 'string-argv';
+
+import pkg from '../package.json' assert { type: 'json' };
 
 import * as commands from './lib/commands.js';
 import config from './lib/config.js';
@@ -14,8 +14,6 @@ import createGHA from './lib/createGHA/index.js';
 import getCurrentConfig from './lib/getCurrentConfig.js';
 import * as help from './lib/help.js';
 import { debug } from './lib/logger.js';
-
-const pkg = JSON.parse(await readFile(new URL('../../package.json', import.meta.url), { encoding: 'utf-8' }));
 
 const { version } = pkg;
 

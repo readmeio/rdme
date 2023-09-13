@@ -1,15 +1,13 @@
 #! /usr/bin/env node
-import { readFile } from 'node:fs/promises';
-
 import * as core from '@actions/core';
 import chalk from 'chalk';
 import updateNotifier from 'update-notifier-cjs';
 
+import pkg from '../package.json' assert { type: 'json' };
+
 import { isGHA } from './lib/isCI.js';
 
 import rdme from './index.js';
-
-const pkg = JSON.parse(await readFile(new URL('../../package.json', import.meta.url), { encoding: 'utf-8' }));
 
 updateNotifier({ pkg }).notify();
 
