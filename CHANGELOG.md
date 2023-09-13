@@ -1,3 +1,10 @@
+# [8.7.0-next.2](https://github.com/readmeio/rdme/compare/v8.7.0-next.1...v8.7.0-next.2) (2023-09-13)
+
+
+### Features
+
+* use `actions/checkout@v4` everywhere ([#895](https://github.com/readmeio/rdme/issues/895)) ([d30b71c](https://github.com/readmeio/rdme/commit/d30b71cf39caa30da9ba94822f55e828f1a2bdc3))
+
 # [8.7.0-next.1](https://github.com/readmeio/rdme/compare/v8.6.6...v8.7.0-next.1) (2023-09-07)
 
 

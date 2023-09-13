@@ -6,7 +6,7 @@
   },
   "overrides": [
     {
-      "files": ["bin/*.js", "config/*.js"],
+      "files": ["bin/*.js"],
       "rules": {
         "@typescript-eslint/no-var-requires": "off"
       }

@@ -2,13 +2,13 @@
 import fs from 'fs';
 
 import chalk from 'chalk';
-import config from 'config';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import prompts from 'prompts';
 import { describe, beforeAll, beforeEach, afterEach, it, expect, vi, afterAll } from 'vitest';
 
 import OpenAPICommand from '../../../src/cmds/openapi';
+import config from '../../../src/lib/config';
 import { getAPIMockMSW } from '../../helpers/get-api-mock';
 import { after, before } from '../../helpers/get-gha-setup';
 import { after as afterGHAEnv, before as beforeGHAEnv } from '../../helpers/setup-gha-env';
@@ -20,7 +20,7 @@ let consoleWarnSpy;
 
 const key = 'API_KEY';
 const version = '1.0.0';
-const exampleRefLocation = `${config.get('host')}/project/example-project/1.0.1/refs/ex`;
+const exampleRefLocation = `${config.host}/project/example-project/1.0.1/refs/ex`;
 const successfulMessageBase = (specPath, specType) => [
   '',
   `\t${chalk.green(exampleRefLocation)}`,
@@ -73,13 +73,13 @@ describe('rdme openapi (single-threaded)', () => {
       server.use(
         ...[
           getAPIMockMSW(`/api/v1/version/${version}`, 200, { json: { version } }, key),
-          rest.post(`${config.get('host')}/api/v1/api-registry`, async (req, res, ctx) => {
+          rest.post(`${config.host}/api/v1/api-registry`, async (req, res, ctx) => {
             const body = await req.text();
             expect(body).toMatch('form-data; name="spec"');
             return res(ctx.status(201), ctx.json({ registryUUID, spec: { openapi: '3.0.0' } }));
           }),
           getAPIMockMSW('/api/v1/api-specification', 200, { json: [] }, key, { 'x-readme-version': version }),
-          rest.post(`${config.get('host')}/api/v1/api-specification`, async (req, res, ctx) => {
+          rest.post(`${config.host}/api/v1/api-specification`, async (req, res, ctx) => {
             const body = await req.json();
             expect(body).toStrictEqual({ registryUUID });
             expect(req.headers.get('authorization')).toBeBasicAuthApiKey(key);
@@ -112,7 +112,7 @@ describe('rdme openapi (single-threaded)', () => {
       server.use(
         ...[
           getAPIMockMSW(`/api/v1/version/${version}`, 200, { json: { version } }, key),
-          rest.post(`${config.get('host')}/api/v1/api-registry`, async (req, res, ctx) => {
+          rest.post(`${config.host}/api/v1/api-registry`, async (req, res, ctx) => {
             const body = await req.text();
             requestBody = body.substring(body.indexOf('{'), body.lastIndexOf('}') + 1);
             requestBody = JSON.parse(requestBody);
@@ -120,7 +120,7 @@ describe('rdme openapi (single-threaded)', () => {
             return res(ctx.status(201), ctx.json({ registryUUID, spec: { openapi: '3.0.0' } }));
           }),
           getAPIMockMSW('/api/v1/api-specification', 200, { json: [] }, key, { 'x-readme-version': version }),
-          rest.post(`${config.get('host')}/api/v1/api-specification`, async (req, res, ctx) => {
+          rest.post(`${config.host}/api/v1/api-specification`, async (req, res, ctx) => {
             const body = await req.json();
             expect(body).toStrictEqual({ registryUUID });
             expect(req.headers.get('authorization')).toBeBasicAuthApiKey(key);
@@ -152,7 +152,7 @@ describe('rdme openapi (single-threaded)', () => {
       server.use(
         ...[
           getAPIMockMSW(`/api/v1/version/${version}`, 200, { json: { version } }, key),
-          rest.post(`${config.get('host')}/api/v1/api-registry`, async (req, res, ctx) => {
+          rest.post(`${config.host}/api/v1/api-registry`, async (req, res, ctx) => {
             const body = await req.text();
             expect(body).toMatch('form-data; name="spec"');
             return res(ctx.status(201), ctx.json({ registryUUID, spec: { openapi: '3.0.0' } }));
@@ -181,7 +181,7 @@ describe('rdme openapi (single-threaded)', () => {
 
   describe('error handling', () => {
     it('should error if no file was provided or able to be discovered', () => {
-      return expect(openapi.run({ key, version, workingDirectory: 'config' })).rejects.toStrictEqual(
+      return expect(openapi.run({ key, version, workingDirectory: 'bin' })).rejects.toStrictEqual(
         new Error(
           "We couldn't find an OpenAPI or Swagger definition.\n\nPlease specify the path to your definition with `rdme openapi ./path/to/api/definition`.",
         ),
@@ -211,13 +211,13 @@ describe('rdme openapi (single-threaded)', () => {
       server.use(
         ...[
           getAPIMockMSW(`/api/v1/version/${version}`, 200, { json: { version } }, key),
-          rest.post(`${config.get('host')}/api/v1/api-registry`, async (req, res, ctx) => {
+          rest.post(`${config.host}/api/v1/api-registry`, async (req, res, ctx) => {
             const body = await req.text();
             expect(body).toMatch('form-data; name="spec"');
             return res(ctx.status(201), ctx.json({ registryUUID, spec: { openapi: '3.0.0' } }));
           }),
           getAPIMockMSW('/api/v1/api-specification', 200, { json: [] }, key, { 'x-readme-version': version }),
-          rest.post(`${config.get('host')}/api/v1/api-specification`, async (req, res, ctx) => {
+          rest.post(`${config.host}/api/v1/api-specification`, async (req, res, ctx) => {
             expect(req.headers.get('authorization')).toBeBasicAuthApiKey(key);
             const body = await req.json();
             expect(body).toStrictEqual({ registryUUID });
@@ -260,13 +260,13 @@ describe('rdme openapi (single-threaded)', () => {
       server.use(
         ...[
           getAPIMockMSW(`/api/v1/version/${version}`, 200, { json: { version } }, key),
-          rest.post(`${config.get('host')}/api/v1/api-registry`, async (req, res, ctx) => {
+          rest.post(`${config.host}/api/v1/api-registry`, async (req, res, ctx) => {
             const body = await req.text();
             expect(body).toMatch('form-data; name="spec"');
             return res(ctx.status(201), ctx.json({ registryUUID, spec: { openapi: '3.0.0' } }));
           }),
           getAPIMockMSW('/api/v1/api-specification', 200, { json: [] }, key, { 'x-readme-version': version }),
-          rest.post(`${config.get('host')}/api/v1/api-specification`, async (req, res, ctx) => {
+          rest.post(`${config.host}/api/v1/api-specification`, async (req, res, ctx) => {
             expect(req.headers.get('authorization')).toBeBasicAuthApiKey(key);
             expect(req.headers.get('x-rdme-ci')).toBe('GitHub Actions (test)');
             expect(req.headers.get('x-readme-source')).toBe('cli-gh');

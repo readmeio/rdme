@@ -17,7 +17,7 @@ jobs:
       id-token: write
       packages: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.RELEASE_GH_TOKEN }}

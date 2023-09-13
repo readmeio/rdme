@@ -179,7 +179,7 @@ We recommend using the [quick start](#quick-start) to get started with GitHub Ac
 
 ```yml
 # Required in order for the GitHub Action to access your repo's contents
-- uses: actions/checkout@v3
+- uses: actions/checkout@v4
 
 # Runs the `rdme` command on your repo's contents
 - uses: readmeio/rdme@RDME_VERSION

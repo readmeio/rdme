@@ -74,7 +74,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: readmeio/github-readme-sync@v2
         with:
           readme-oas-key: 'unique-key-from-dashboard'
