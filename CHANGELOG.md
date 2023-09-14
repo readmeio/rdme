@@ -1,3 +1,10 @@
+# [9.0.0-next.2](https://github.com/readmeio/rdme/compare/v9.0.0-next.1...v9.0.0-next.2) (2023-09-14)
+
+
+### Bug Fixes
+
+* hide `ExperimentalWarning` ([#901](https://github.com/readmeio/rdme/issues/901)) ([f9b5679](https://github.com/readmeio/rdme/commit/f9b56798ca4e30b18db932051ddab5dce35c49b5))
+
 # [9.0.0-next.1](https://github.com/readmeio/rdme/compare/v8.7.0-next.3...v9.0.0-next.1) (2023-09-14)
 
 
