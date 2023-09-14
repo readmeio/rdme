@@ -142,9 +142,9 @@ export default async function syncDocsPath(
   /** Example command usage, used in error message */
   usage: string,
   /** Path input, can either be a directory or a single file */
-  pathInput: string,
+  pathInput: string | undefined,
   /** boolean indicating dry run mode */
-  dryRun: boolean,
+  dryRun: boolean = false,
   /** array of allowed file extensions */
   allowedFileExtensions = ['.markdown', '.md'],
 ) {

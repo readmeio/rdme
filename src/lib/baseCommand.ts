@@ -1,6 +1,5 @@
 /* eslint-disable class-methods-use-this */
 import type commands from '../cmds';
-import type { CommandLineOptions } from 'command-line-args';
 import type { OptionDefinition } from 'command-line-usage';
 
 import chalk from 'chalk';
@@ -13,7 +12,7 @@ import loginFlow from './loginFlow';
 
 export type CommandOptions<T> = T & {
   github?: boolean;
-} & CommandLineOptions & { key?: never };
+} & { key?: never };
 
 export type AuthenticatedCommandOptions<T> = Omit<CommandOptions<T>, 'key'> & {
   key: string;
