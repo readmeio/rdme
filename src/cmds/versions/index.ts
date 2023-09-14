@@ -1,7 +1,7 @@
-import type { CommandOptions } from '../../lib/baseCommand.js';
+import type { AuthenticatedCommandOptions } from '../../lib/baseCommand';
 
-import Command, { CommandCategories } from '../../lib/baseCommand.js';
-import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch.js';
+import Command, { CommandCategories } from '../../lib/baseCommand';
+import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch';
 
 export interface Version {
   codename?: string;
@@ -33,7 +33,7 @@ export default class VersionsCommand extends Command {
     ];
   }
 
-  async run(opts: CommandOptions<{}>) {
+  async run(opts: AuthenticatedCommandOptions) {
     await super.run(opts);
 
     const { key, version } = opts;

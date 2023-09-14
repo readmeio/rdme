@@ -1,16 +1,16 @@
-import type { Version } from './index.js';
-import type { CommandOptions } from '../../lib/baseCommand.js';
+import type { Version } from '.';
+import type { AuthenticatedCommandOptions } from '../../lib/baseCommand';
 
 import { Headers } from 'node-fetch';
 import prompts from 'prompts';
 import semver from 'semver';
 
-import Command, { CommandCategories } from '../../lib/baseCommand.js';
-import castStringOptToBool from '../../lib/castStringOptToBool.js';
-import config from '../../lib/config.js';
-import * as promptHandler from '../../lib/prompts.js';
-import promptTerminal from '../../lib/promptWrapper.js';
-import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch.js';
+import Command, { CommandCategories } from '../../lib/baseCommand';
+import castStringOptToBool from '../../lib/castStringOptToBool';
+import config from '../../lib/config';
+import * as promptHandler from '../../lib/prompts';
+import promptTerminal from '../../lib/promptWrapper';
+import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch';
 
 export interface Options extends CommonOptions {
   fork?: string;
@@ -45,7 +45,7 @@ export default class CreateVersionCommand extends Command {
     ];
   }
 
-  async run(opts: CommandOptions<Options>) {
+  async run(opts: AuthenticatedCommandOptions<Options>) {
     await super.run(opts);
 
     let versionList;
@@ -91,10 +91,8 @@ export default class CreateVersionCommand extends Command {
       method: 'post',
       headers: cleanHeaders(
         key,
-        new Headers({
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        }),
+        undefined,
+        new Headers({ Accept: 'application/json', 'Content-Type': 'application/json' }),
       ),
       body: JSON.stringify(body),
     })

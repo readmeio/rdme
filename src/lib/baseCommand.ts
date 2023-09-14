@@ -1,6 +1,5 @@
 /* eslint-disable class-methods-use-this */
 import type commands from '../cmds/index.js';
-import type { CommandLineOptions } from 'command-line-args';
 import type { OptionDefinition } from 'command-line-usage';
 
 import chalk from 'chalk';
@@ -11,11 +10,16 @@ import isCI from './isCI.js';
 import { debug, info, warn } from './logger.js';
 import loginFlow from './loginFlow.js';
 
-export type CommandOptions<T> = T & {
-  github?: boolean;
-  key?: string;
+export type CommandOptions<T = {}> = ZeroAuthCommandOptions<T> | AuthenticatedCommandOptions<T>;
+
+export type AuthenticatedCommandOptions<T = {}> = Omit<ZeroAuthCommandOptions<T>, 'key'> & {
+  key: string;
   version?: string;
-} & CommandLineOptions;
+};
+
+export type ZeroAuthCommandOptions<T = {}> = T & {
+  github?: boolean;
+} & { key?: never };
 
 export enum CommandCategories {
   ADMIN = 'admin',
@@ -34,21 +38,21 @@ export default class Command {
    *
    * @example openapi
    */
-  command: keyof typeof commands;
+  command!: keyof typeof commands;
 
   /**
    * Example command usage, used on invidivual command help screens
    *
    * @example openapi [file] [options]
    */
-  usage: string;
+  usage!: string;
 
   /**
    * The command description, used on help screens
    *
    * @example Upload, or resync, your OpenAPI/Swagger definition to ReadMe.
    */
-  description: string;
+  description!: string;
 
   /**
    * The category that the command belongs to, used on
@@ -58,7 +62,7 @@ export default class Command {
    *
    * @example CommandCategories.APIS
    */
-  cmdCategory: CommandCategories;
+  cmdCategory!: CommandCategories;
 
   /**
    * Should the command be hidden from our `--help` screens?
@@ -82,9 +86,9 @@ export default class Command {
   /**
    * All documented arguments for the command
    */
-  args: OptionDefinition[];
+  args!: OptionDefinition[];
 
-  async run(opts: CommandOptions<{}>): Promise<string> {
+  async run(opts: CommandOptions): Promise<string> {
     Command.debug(`command: ${this.command}`);
     Command.debug(`opts: ${JSON.stringify(opts)}`);
 

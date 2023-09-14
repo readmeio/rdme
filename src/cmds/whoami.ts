@@ -1,10 +1,10 @@
-import type { CommandOptions } from '../lib/baseCommand.js';
+import type { ZeroAuthCommandOptions } from '../lib/baseCommand';
 
 import chalk from 'chalk';
 
-import Command, { CommandCategories } from '../lib/baseCommand.js';
-import config from '../lib/config.js';
-import getCurrentConfig from '../lib/getCurrentConfig.js';
+import Command, { CommandCategories } from '../lib/baseCommand';
+import config from '../lib/config';
+import getCurrentConfig from '../lib/getCurrentConfig';
 
 export default class WhoAmICommand extends Command {
   constructor() {
@@ -18,7 +18,7 @@ export default class WhoAmICommand extends Command {
     this.args = [];
   }
 
-  async run(opts: CommandOptions<{}>) {
+  async run(opts: ZeroAuthCommandOptions) {
     await super.run(opts);
 
     const { email, project } = getCurrentConfig();

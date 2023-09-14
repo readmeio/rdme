@@ -1,4 +1,5 @@
-import type { CommandOptions } from '../../lib/baseCommand.js';
+import type { AuthenticatedCommandOptions } from '../../lib/baseCommand';
+import type { OpenAPIPromptOptions } from '../../lib/prompts';
 import type { RequestInit, Response } from 'node-fetch';
 
 import chalk from 'chalk';
@@ -6,15 +7,15 @@ import { Headers } from 'node-fetch';
 import ora from 'ora';
 import parse from 'parse-link-header';
 
-import Command, { CommandCategories } from '../../lib/baseCommand.js';
-import createGHA from '../../lib/createGHA/index.js';
-import { oraOptions } from '../../lib/logger.js';
-import prepareOas from '../../lib/prepareOas.js';
-import * as promptHandler from '../../lib/prompts.js';
-import promptTerminal from '../../lib/promptWrapper.js';
-import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch.js';
-import streamSpecToRegistry from '../../lib/streamSpecToRegistry.js';
-import { getProjectVersion } from '../../lib/versionSelect.js';
+import Command, { CommandCategories } from '../../lib/baseCommand';
+import createGHA from '../../lib/createGHA';
+import { oraOptions } from '../../lib/logger';
+import prepareOas from '../../lib/prepareOas';
+import * as promptHandler from '../../lib/prompts';
+import promptTerminal from '../../lib/promptWrapper';
+import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch';
+import streamSpecToRegistry from '../../lib/streamSpecToRegistry';
+import { getProjectVersion } from '../../lib/versionSelect';
 
 export interface Options {
   create?: boolean;
@@ -86,7 +87,7 @@ export default class OpenAPICommand extends Command {
     ];
   }
 
-  async run(opts: CommandOptions<Options>) {
+  async run(opts: AuthenticatedCommandOptions<Options>) {
     await super.run(opts);
 
     const { dryRun, key, id, spec, create, raw, title, useSpecVersion, version, workingDirectory, update } = opts;
@@ -222,11 +223,8 @@ export default class OpenAPICommand extends Command {
     const options: RequestInit = {
       headers: cleanHeaders(
         key,
-        new Headers({
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          'x-readme-version': selectedVersion,
-        }),
+        selectedVersion,
+        new Headers({ Accept: 'application/json', 'Content-Type': 'application/json' }),
       ),
       body: JSON.stringify({ registryUUID }),
     };
@@ -281,15 +279,16 @@ export default class OpenAPICommand extends Command {
       */
 
     function getSpecs(url: string) {
-      return readmeAPIFetch(url, {
-        method: 'get',
-        headers: cleanHeaders(
-          key,
-          new Headers({
-            'x-readme-version': selectedVersion,
-          }),
-        ),
-      });
+      if (url) {
+        return readmeAPIFetch(url, {
+          method: 'get',
+          headers: cleanHeaders(key, selectedVersion),
+        });
+      }
+
+      throw new Error(
+        'There was an error retrieving your list of API definitions. Please get in touch with us at support@readme.io',
+      );
     }
 
     if (create) {
@@ -302,7 +301,7 @@ export default class OpenAPICommand extends Command {
       Command.debug('no id parameter, retrieving list of API specs');
       const apiSettings = await getSpecs('/api/v1/api-specification');
 
-      const totalPages = Math.ceil(parseInt(apiSettings.headers.get('x-total-count'), 10) / 10);
+      const totalPages = Math.ceil(parseInt(apiSettings.headers.get('x-total-count') || '0', 10) / 10);
       const parsedDocs = parse(apiSettings.headers.get('link'));
       Command.debug(`total pages: ${totalPages}`);
       Command.debug(`pagination result: ${JSON.stringify(parsedDocs)}`);
@@ -320,9 +319,7 @@ export default class OpenAPICommand extends Command {
         return updateSpec(specId);
       }
 
-      // @todo: figure out how to add a stricter type here, see:
-      // https://github.com/readmeio/rdme/pull/570#discussion_r949715913
-      const { option } = await promptTerminal(
+      const { option }: { option: OpenAPIPromptOptions } = await promptTerminal(
         promptHandler.createOasPrompt(apiSettingsBody, parsedDocs, totalPages, getSpecs),
       );
       Command.debug(`selection result: ${option}`);

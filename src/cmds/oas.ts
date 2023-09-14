@@ -1,7 +1,7 @@
-import type { CommandOptions } from '../lib/baseCommand.js';
+import type { ZeroAuthCommandOptions } from '../lib/baseCommand';
 
-import Command, { CommandCategories } from '../lib/baseCommand.js';
-import isHidden from '../lib/decorators/isHidden.js';
+import Command, { CommandCategories } from '../lib/baseCommand';
+import isHidden from '../lib/decorators/isHidden';
 
 @isHidden
 export default class OASCommand extends Command {
@@ -16,7 +16,7 @@ export default class OASCommand extends Command {
     this.args = [];
   }
 
-  async run(opts: CommandOptions<{}>) {
+  async run(opts: ZeroAuthCommandOptions) {
     await super.run(opts);
 
     const message = [

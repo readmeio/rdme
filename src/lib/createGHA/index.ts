@@ -48,9 +48,9 @@ export const getGHAFileName = (fileName: string) => {
  * Returns a redacted `key` if the current command uses authentication.
  * Otherwise, returns `false`.
  */
-function getKey(args: OptionDefinition[], opts: CommandOptions<{}>): string | false {
+function getKey(args: OptionDefinition[], opts: CommandOptions): string | false {
   if (args.some(arg => arg.name === 'key')) {
-    return `••••••••••••${opts.key.slice(-5)}`;
+    return `••••••••••••${opts.key?.slice(-5) || ''}`;
   }
   return false;
 }
@@ -58,14 +58,12 @@ function getKey(args: OptionDefinition[], opts: CommandOptions<{}>): string | fa
 /**
  * Constructs the command string that we pass into the workflow file.
  */
-function constructCmdString(
-  command: keyof typeof commands,
-  args: OptionDefinition[],
-  opts: CommandOptions<Record<string, string | boolean | undefined>>,
-): string {
+function constructCmdString(command: keyof typeof commands, args: OptionDefinition[], opts: CommandOptions): string {
   const optsString = args
     .sort(arg => (arg.defaultOption ? -1 : 0))
     .map(arg => {
+      // @ts-expect-error by this point it's safe to assume that
+      // the argument names match the opts object.
       const val = opts[arg.name];
       // if default option, return the value
       if (arg.defaultOption) return val;
@@ -151,7 +149,7 @@ export default async function createGHA(
   msg: string,
   command: keyof typeof commands,
   args: OptionDefinition[],
-  opts: CommandOptions<{}>,
+  opts: CommandOptions,
 ) {
   debug(`running GHA onboarding for ${command} command`);
   debug(`opts used in createGHA: ${JSON.stringify(opts)}`);
@@ -271,8 +269,8 @@ export default async function createGHA(
 
   let output = yamlBase;
 
-  Object.keys(data).forEach((key: keyof typeof data) => {
-    output = output.replace(new RegExp(`{{${key}}}`, 'g'), data[key]);
+  Object.keys(data).forEach(key => {
+    output = output.replace(new RegExp(`{{${key}}}`, 'g'), data[key as keyof typeof data]);
   });
 
   if (!fs.existsSync(GITHUB_WORKFLOW_DIR)) {

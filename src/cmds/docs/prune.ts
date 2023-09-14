@@ -1,4 +1,4 @@
-import type { CommandOptions } from '../../lib/baseCommand.js';
+import type { AuthenticatedCommandOptions } from '../../lib/baseCommand.js';
 
 import chalk from 'chalk';
 import prompts from 'prompts';
@@ -56,7 +56,7 @@ export default class DocsPruneCommand extends Command {
     ];
   }
 
-  async run(opts: CommandOptions<Options>) {
+  async run(opts: AuthenticatedCommandOptions<Options>) {
     await super.run(opts);
 
     const { dryRun, folder, key, version } = opts;

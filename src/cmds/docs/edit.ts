@@ -1,4 +1,4 @@
-import type { CommandOptions } from '../../lib/baseCommand.js';
+import type { AuthenticatedCommandOptions } from '../../lib/baseCommand.js';
 
 import fs from 'node:fs';
 import { promisify } from 'node:util';
@@ -45,7 +45,7 @@ export default class DocsEditCommand extends Command {
     ];
   }
 
-  async run(opts: CommandOptions<Options>): Promise<undefined> {
+  async run(opts: AuthenticatedCommandOptions<Options>): Promise<string> {
     Command.warn('`rdme docs:edit` is now deprecated and will be removed in a future release.');
     await super.run(opts);
 
@@ -63,13 +63,7 @@ export default class DocsEditCommand extends Command {
 
     const existingDoc = await readmeAPIFetch(`/api/v1/docs/${slug}`, {
       method: 'get',
-      headers: cleanHeaders(
-        key,
-        new Headers({
-          'x-readme-version': selectedVersion,
-          Accept: 'application/json',
-        }),
-      ),
+      headers: cleanHeaders(key, selectedVersion, new Headers({ Accept: 'application/json' })),
     }).then(handleRes);
 
     await writeFile(filename, existingDoc.body);
@@ -86,13 +80,7 @@ export default class DocsEditCommand extends Command {
 
         return readmeAPIFetch(`/api/v1/docs/${slug}`, {
           method: 'put',
-          headers: cleanHeaders(
-            key,
-            new Headers({
-              'x-readme-version': selectedVersion,
-              'Content-Type': 'application/json',
-            }),
-          ),
+          headers: cleanHeaders(key, selectedVersion, new Headers({ 'Content-Type': 'application/json' })),
           body: JSON.stringify(
             Object.assign(existingDoc, {
               body: updatedDoc,
@@ -115,7 +103,7 @@ export default class DocsEditCommand extends Command {
             // Normally we should resolve with a value that is logged to the console,
             // but since we need to wait for the temporary file to be removed,
             // it's okay to resolve the promise with no value.
-            return resolve(undefined);
+            return resolve('');
           });
       });
     });

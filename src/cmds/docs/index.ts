@@ -1,4 +1,4 @@
-import type { CommandOptions } from '../../lib/baseCommand.js';
+import type { AuthenticatedCommandOptions } from '../../lib/baseCommand.js';
 
 import Command, { CommandCategories } from '../../lib/baseCommand.js';
 import createGHA from '../../lib/createGHA/index.js';
@@ -38,7 +38,7 @@ export default class DocsCommand extends Command {
     ];
   }
 
-  async run(opts: CommandOptions<Options>) {
+  async run(opts: AuthenticatedCommandOptions<Options>) {
     await super.run(opts);
 
     const { dryRun, filePath, key, version } = opts;

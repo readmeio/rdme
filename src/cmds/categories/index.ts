@@ -1,4 +1,4 @@
-import type { CommandOptions } from '../../lib/baseCommand.js';
+import type { AuthenticatedCommandOptions } from '../../lib/baseCommand.js';
 
 import Command, { CommandCategories } from '../../lib/baseCommand.js';
 import getCategories from '../../lib/getCategories.js';
@@ -16,7 +16,7 @@ export default class CategoriesCommand extends Command {
     this.args = [this.getKeyArg(), this.getVersionArg()];
   }
 
-  async run(opts: CommandOptions<{}>) {
+  async run(opts: AuthenticatedCommandOptions) {
     await super.run(opts);
 
     const { key, version } = opts;

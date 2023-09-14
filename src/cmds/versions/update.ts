@@ -1,16 +1,16 @@
-import type { CommonOptions } from './create.js';
-import type { Version } from './index.js';
-import type { CommandOptions } from '../../lib/baseCommand.js';
+import type { Version } from '.';
+import type { CommonOptions } from './create';
+import type { AuthenticatedCommandOptions } from '../../lib/baseCommand';
 
 import { Headers } from 'node-fetch';
 import prompts from 'prompts';
 
-import Command, { CommandCategories } from '../../lib/baseCommand.js';
-import castStringOptToBool from '../../lib/castStringOptToBool.js';
-import * as promptHandler from '../../lib/prompts.js';
-import promptTerminal from '../../lib/promptWrapper.js';
-import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch.js';
-import { getProjectVersion } from '../../lib/versionSelect.js';
+import Command, { CommandCategories } from '../../lib/baseCommand';
+import castStringOptToBool from '../../lib/castStringOptToBool';
+import * as promptHandler from '../../lib/prompts';
+import promptTerminal from '../../lib/promptWrapper';
+import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch';
+import { getProjectVersion } from '../../lib/versionSelect';
 
 export interface Options extends CommonOptions {
   newVersion?: string;
@@ -37,7 +37,7 @@ export default class UpdateVersionCommand extends Command {
     ];
   }
 
-  async run(opts: CommandOptions<Options>) {
+  async run(opts: AuthenticatedCommandOptions<Options>) {
     await super.run(opts);
 
     const { key, version, newVersion, codename, main, beta, isPublic, deprecated } = opts;
@@ -78,10 +78,8 @@ export default class UpdateVersionCommand extends Command {
       method: 'put',
       headers: cleanHeaders(
         key,
-        new Headers({
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        }),
+        undefined,
+        new Headers({ Accept: 'application/json', 'Content-Type': 'application/json' }),
       ),
       body: JSON.stringify(body),
     })

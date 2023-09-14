@@ -13,6 +13,8 @@ interface Spec {
   title: string;
 }
 
+export type OpenAPIPromptOptions = 'create' | 'update';
+
 type SpecList = Spec[];
 
 interface ParsedDocs {
@@ -26,7 +28,12 @@ interface ParsedDocs {
   };
 }
 
-function specOptions(specList: SpecList, parsedDocs: ParsedDocs, currPage: number, totalPages: number): Choice[] {
+function specOptions(
+  specList: SpecList,
+  parsedDocs: ParsedDocs | null,
+  currPage: number,
+  totalPages: number,
+): Choice[] {
   const specs = specList.map(s => {
     return {
       description: `API Definition ID: ${s._id}`, // eslint-disable-line no-underscore-dangle
@@ -53,11 +60,11 @@ function specOptions(specList: SpecList, parsedDocs: ParsedDocs, currPage: numbe
 
 const updateOasPrompt = (
   specList: SpecList,
-  parsedDocs: ParsedDocs,
+  parsedDocs: ParsedDocs | null,
   currPage: number,
   totalPages: number,
   getSpecs: (url: string) => Promise<Response>,
-): PromptObject[] => [
+): PromptObject<'specId'>[] => [
   {
     type: 'select',
     name: 'specId',
@@ -66,12 +73,10 @@ const updateOasPrompt = (
     async format(spec: string) {
       if (spec === 'prev') {
         try {
-          const newSpecs = await getSpecs(`${parsedDocs.prev.url}`);
+          const newSpecs = await getSpecs(`${parsedDocs?.prev?.url || ''}`);
           const newParsedDocs = parse(newSpecs.headers.get('link'));
           const newSpecList = await handleRes(newSpecs);
-          // @todo: figure out how to add a stricter type here, see:
-          // https://github.com/readmeio/rdme/pull/570#discussion_r949715913
-          const { specId } = await promptTerminal(
+          const { specId }: { specId: string } = await promptTerminal(
             updateOasPrompt(newSpecList, newParsedDocs, currPage - 1, totalPages, getSpecs),
           );
           return specId;
@@ -80,12 +85,10 @@ const updateOasPrompt = (
         }
       } else if (spec === 'next') {
         try {
-          const newSpecs = await getSpecs(`${parsedDocs.next.url}`);
+          const newSpecs = await getSpecs(`${parsedDocs?.next?.url || ''}`);
           const newParsedDocs = parse(newSpecs.headers.get('link'));
           const newSpecList = await handleRes(newSpecs);
-          // @todo: figure out how to add a stricter type here, see:
-          // https://github.com/readmeio/rdme/pull/570#discussion_r949715913
-          const { specId } = await promptTerminal(
+          const { specId }: { specId: string } = await promptTerminal(
             updateOasPrompt(newSpecList, newParsedDocs, currPage + 1, totalPages, getSpecs),
           );
           return specId;
@@ -101,10 +104,10 @@ const updateOasPrompt = (
 
 export function createOasPrompt(
   specList: SpecList,
-  parsedDocs: ParsedDocs,
+  parsedDocs: ParsedDocs | null,
   totalPages: number,
-  getSpecs: ((url: string) => Promise<Response>) | null,
-): PromptObject[] {
+  getSpecs: (url: string) => Promise<Response>,
+): PromptObject<'option'>[] {
   return [
     {
       type: 'select',
@@ -114,11 +117,11 @@ export function createOasPrompt(
         { title: 'Update existing', value: 'update' },
         { title: 'Create a new spec', value: 'create' },
       ],
-      async format(picked: 'update' | 'create') {
+      async format(picked: OpenAPIPromptOptions) {
         if (picked === 'update') {
-          // @todo: figure out how to add a stricter type here, see:
-          // https://github.com/readmeio/rdme/pull/570#discussion_r949715913
-          const { specId } = await promptTerminal(updateOasPrompt(specList, parsedDocs, 1, totalPages, getSpecs));
+          const { specId }: { specId: string } = await promptTerminal(
+            updateOasPrompt(specList, parsedDocs, 1, totalPages, getSpecs),
+          );
           return specId;
         }
 

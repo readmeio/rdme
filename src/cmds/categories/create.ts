@@ -1,4 +1,4 @@
-import type { CommandOptions } from '../../lib/baseCommand.js';
+import type { AuthenticatedCommandOptions } from '../../lib/baseCommand.js';
 
 import chalk from 'chalk';
 import { Headers } from 'node-fetch';
@@ -52,7 +52,7 @@ export default class CategoriesCreateCommand extends Command {
     ];
   }
 
-  async run(opts: CommandOptions<Options>) {
+  async run(opts: AuthenticatedCommandOptions<Options>) {
     await super.run(opts);
 
     const { categoryType, title, key, version, preventDuplicates } = opts;
@@ -69,45 +69,33 @@ export default class CategoriesCreateCommand extends Command {
 
     Command.debug(`selectedVersion: ${selectedVersion}`);
 
-    async function matchCategory() {
+    if (preventDuplicates) {
       const allCategories = await getCategories(key, selectedVersion);
 
-      return allCategories.find((category: Category) => {
+      const matchedCategory = allCategories.find((category: Category) => {
         return category.title.trim().toLowerCase() === title.trim().toLowerCase() && category.type === categoryType;
       });
-    }
 
-    async function createCategory() {
-      if (preventDuplicates) {
-        const matchedCategory = await matchCategory();
-        if (typeof matchedCategory !== 'undefined') {
-          return Promise.reject(
-            new Error(
-              `The '${matchedCategory.title}' category with a type of '${matchedCategory.type}' already exists with an id of '${matchedCategory.id}'. A new category was not created.`,
-            ),
-          );
-        }
+      if (typeof matchedCategory !== 'undefined') {
+        return Promise.reject(
+          new Error(
+            `The '${matchedCategory.title}' category with a type of '${matchedCategory.type}' already exists with an id of '${matchedCategory.id}'. A new category was not created.`,
+          ),
+        );
       }
-      return readmeAPIFetch('/api/v1/categories', {
-        method: 'post',
-        headers: cleanHeaders(
-          key,
-          new Headers({
-            'x-readme-version': selectedVersion,
-            'Content-Type': 'application/json',
-          }),
-        ),
-        body: JSON.stringify({
-          title,
-          type: categoryType,
-        }),
-      })
-        .then(handleRes)
-        .then(res => `🌱 successfully created '${res.title}' with a type of '${res.type}' and an id of '${res.id}'`);
     }
 
-    const createdCategory = chalk.green(await createCategory());
+    const createdCategory = await readmeAPIFetch('/api/v1/categories', {
+      method: 'post',
+      headers: cleanHeaders(key, selectedVersion, new Headers({ 'Content-Type': 'application/json' })),
+      body: JSON.stringify({
+        title,
+        type: categoryType,
+      }),
+    })
+      .then(handleRes)
+      .then(res => `🌱 successfully created '${res.title}' with a type of '${res.type}' and an id of '${res.id}'`);
 
-    return Promise.resolve(createdCategory);
+    return Promise.resolve(chalk.green(createdCategory));
   }
 }

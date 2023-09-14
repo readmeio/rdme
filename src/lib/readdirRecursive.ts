@@ -45,7 +45,7 @@ export default function readdirRecursive(folderToSearch: string, ignoreGit = fal
 
   const folders = filesInFolder.filter(fileHandle => fileHandle.isDirectory());
 
-  const subFiles = [].concat(
+  const subFiles = (<string[]>[]).concat(
     ...folders.map(fileHandle => readdirRecursive(path.join(folderToSearch, fileHandle.name), ignoreGit)),
   );
 

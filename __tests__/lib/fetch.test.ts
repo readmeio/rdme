@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment, no-console */
+/* eslint-disable no-console */
 import { Headers } from 'node-fetch';
 import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
@@ -328,19 +328,17 @@ describe('#cleanHeaders()', () => {
   });
 
   it('should filter out undefined headers', () => {
-    expect(
-      // @ts-ignore Testing a quirk of `node-fetch`.
-      Array.from(cleanHeaders('test', new Headers({ 'x-readme-version': undefined }))),
-    ).toStrictEqual([['authorization', 'Basic dGVzdDo=']]);
+    expect(Array.from(cleanHeaders('test', undefined, new Headers({ 'x-something': undefined })))).toStrictEqual([
+      ['authorization', 'Basic dGVzdDo='],
+    ]);
   });
 
   it('should filter out null headers', () => {
     expect(
-      // @ts-ignore Testing a quirk of `node-fetch`.
-      Array.from(cleanHeaders('test', new Headers({ 'x-readme-version': '1234', Accept: null }))),
+      Array.from(cleanHeaders('test', undefined, new Headers({ 'x-something': '1234', Accept: null }))),
     ).toStrictEqual([
       ['authorization', 'Basic dGVzdDo='],
-      ['x-readme-version', '1234'],
+      ['x-something', '1234'],
     ]);
   });
 
@@ -351,7 +349,7 @@ describe('#cleanHeaders()', () => {
       'Content-Type': 'application/json',
     });
 
-    expect(Array.from(cleanHeaders('test', headers))).toStrictEqual([
+    expect(Array.from(cleanHeaders('test', undefined, headers))).toStrictEqual([
       ['accept', 'text/plain'],
       ['authorization', 'Basic dGVzdDo='],
       ['content-type', 'application/json'],

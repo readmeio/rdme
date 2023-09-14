@@ -1,9 +1,9 @@
-import type { CommandOptions } from '../lib/baseCommand.js';
+import type { ZeroAuthCommandOptions } from '../lib/baseCommand';
 
 import prompts from 'prompts';
 
-import Command, { CommandCategories } from '../lib/baseCommand.js';
-import loginFlow from '../lib/loginFlow.js';
+import Command, { CommandCategories } from '../lib/baseCommand';
+import loginFlow from '../lib/loginFlow';
 
 interface Options {
   email?: string;
@@ -45,7 +45,7 @@ export default class LoginCommand extends Command {
     ];
   }
 
-  async run(opts: CommandOptions<Options>) {
+  async run(opts: ZeroAuthCommandOptions<Options>) {
     await super.run(opts);
 
     prompts.override(opts);

@@ -1,10 +1,10 @@
-import type { CommandOptions } from '../../lib/baseCommand.js';
+import type { ZeroAuthCommandOptions } from '../../lib/baseCommand';
 
 import chalk from 'chalk';
 
-import Command, { CommandCategories } from '../../lib/baseCommand.js';
-import createGHA from '../../lib/createGHA/index.js';
-import prepareOas from '../../lib/prepareOas.js';
+import Command, { CommandCategories } from '../../lib/baseCommand';
+import createGHA from '../../lib/createGHA';
+import prepareOas from '../../lib/prepareOas';
 
 export interface Options {
   spec?: string;
@@ -32,7 +32,7 @@ export default class OpenAPIValidateCommand extends Command {
     ];
   }
 
-  async run(opts: CommandOptions<Options>) {
+  async run(opts: ZeroAuthCommandOptions<Options>) {
     await super.run(opts);
 
     const { spec, workingDirectory } = opts;
@@ -45,7 +45,7 @@ export default class OpenAPIValidateCommand extends Command {
 
     const { specPath, specType } = await prepareOas(spec, 'openapi:validate');
     return Promise.resolve(chalk.green(`${specPath} is a valid ${specType} API definition!`)).then(msg =>
-      createGHA(msg, this.command, this.args, { ...opts, spec: specPath } as CommandOptions<Options>),
+      createGHA(msg, this.command, this.args, { ...opts, spec: specPath } as ZeroAuthCommandOptions<Options>),
     );
   }
 }

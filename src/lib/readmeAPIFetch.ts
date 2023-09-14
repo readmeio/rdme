@@ -67,7 +67,7 @@ function parseWarningHeader(header: string): WarningHeader[] {
 
     let previous: WarningHeader;
 
-    return warnings.reduce((all, w) => {
+    return warnings.reduce<WarningHeader[]>((all, w) => {
       // eslint-disable-next-line no-param-reassign
       w = w.trim();
       const newError = w.match(/^([0-9]{3}) (.*)/);
@@ -147,11 +147,11 @@ export default async function readmeAPIFetch(
 
   if (isGHA()) {
     source = 'cli-gh';
-    headers.set('x-github-repository', process.env.GITHUB_REPOSITORY);
-    headers.set('x-github-run-attempt', process.env.GITHUB_RUN_ATTEMPT);
-    headers.set('x-github-run-id', process.env.GITHUB_RUN_ID);
-    headers.set('x-github-run-number', process.env.GITHUB_RUN_NUMBER);
-    headers.set('x-github-sha', process.env.GITHUB_SHA);
+    if (process.env.GITHUB_REPOSITORY) headers.set('x-github-repository', process.env.GITHUB_REPOSITORY);
+    if (process.env.GITHUB_RUN_ATTEMPT) headers.set('x-github-run-attempt', process.env.GITHUB_RUN_ATTEMPT);
+    if (process.env.GITHUB_RUN_ID) headers.set('x-github-run-id', process.env.GITHUB_RUN_ID);
+    if (process.env.GITHUB_RUN_NUMBER) headers.set('x-github-run-number', process.env.GITHUB_RUN_NUMBER);
+    if (process.env.GITHUB_SHA) headers.set('x-github-sha', process.env.GITHUB_SHA);
 
     const filePath = await normalizeFilePath(fileOpts);
 
@@ -217,7 +217,7 @@ export default async function readmeAPIFetch(
  *
  */
 async function handleRes(res: Response, rejectOnJsonError = true) {
-  const contentType = res.headers.get('content-type');
+  const contentType = res.headers.get('content-type') || '';
   const extension = mime.extension(contentType);
   if (extension === 'json') {
     // TODO: type this better
@@ -244,11 +244,20 @@ async function handleRes(res: Response, rejectOnJsonError = true) {
  * Returns the basic auth header and any other defined headers for use in `node-fetch` API calls.
  *
  */
-function cleanHeaders(key: string, inputHeaders: Headers = new Headers()) {
+function cleanHeaders(
+  key: string,
+  /** used for `x-readme-header` */
+  version?: string,
+  inputHeaders: Headers = new Headers(),
+) {
   const encodedKey = Buffer.from(`${key}:`).toString('base64');
   const headers = new Headers({
     Authorization: `Basic ${encodedKey}`,
   });
+
+  if (version) {
+    headers.set('x-readme-version', version);
+  }
 
   for (const header of inputHeaders.entries()) {
     // If you supply `undefined` or `null` to the `Headers` API it'll convert that those to a

@@ -1,8 +1,8 @@
-import type { CommandOptions } from '../lib/baseCommand.js';
+import type { ZeroAuthCommandOptions } from '../lib/baseCommand';
 
-import Command, { CommandCategories } from '../lib/baseCommand.js';
-import config from '../lib/config.js';
-import configStore from '../lib/configstore.js';
+import Command, { CommandCategories } from '../lib/baseCommand';
+import config from '../lib/config';
+import configStore from '../lib/configstore';
 
 export default class LogoutCommand extends Command {
   constructor() {
@@ -16,7 +16,7 @@ export default class LogoutCommand extends Command {
     this.args = [];
   }
 
-  async run(opts: CommandOptions<{}>) {
+  async run(opts: ZeroAuthCommandOptions) {
     await super.run(opts);
 
     if (configStore.has('email') && configStore.has('project')) {

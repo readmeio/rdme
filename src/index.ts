@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
-import type { CommandOptions } from './lib/baseCommand.js';
 import type Command from './lib/baseCommand.js';
+import type { CommandOptions } from './lib/baseCommand.js';
+import type { CommandLineOptions } from 'command-line-args';
 
 import chalk from 'chalk';
 import cliArgs from 'command-line-args';
@@ -84,7 +85,7 @@ export default function rdme(rawProcessArgv: NodeJS.Process['argv']) {
   }
 
   try {
-    let cmdArgv: CommandOptions<{}>;
+    let cmdArgv: CommandOptions | CommandLineOptions;
     let bin: Command;
 
     // Handling for `rdme help` and `rdme help <command>` cases.
@@ -93,7 +94,7 @@ export default function rdme(rawProcessArgv: NodeJS.Process['argv']) {
         return Promise.resolve(help.globalUsage(mainArgs));
       }
 
-      if (argv._unknown.indexOf('-H') !== -1) {
+      if (argv._unknown?.indexOf('-H') !== -1) {
         return Promise.resolve(help.globalUsage(mainArgs));
       }
 
@@ -136,9 +137,9 @@ export default function rdme(rawProcessArgv: NodeJS.Process['argv']) {
 
     cmdArgv = { key, ...cmdArgv };
 
-    return bin.run(cmdArgv).then((msg: string) => {
+    return bin.run(cmdArgv as CommandOptions).then((msg: string) => {
       if (bin.supportsGHA) {
-        return createGHA(msg, bin.command, bin.args, cmdArgv);
+        return createGHA(msg, bin.command, bin.args, cmdArgv as CommandOptions);
       }
       return msg;
     });

@@ -1,4 +1,4 @@
-import type { CommandOptions } from '../../lib/baseCommand.js';
+import type { AuthenticatedCommandOptions } from '../../lib/baseCommand';
 
 import Command, { CommandCategories } from '../../lib/baseCommand.js';
 import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch.js';
@@ -24,7 +24,7 @@ export default class DeleteVersionCommand extends Command {
     ];
   }
 
-  async run(opts: CommandOptions<{}>) {
+  async run(opts: AuthenticatedCommandOptions) {
     await super.run(opts);
 
     const { key, version } = opts;
