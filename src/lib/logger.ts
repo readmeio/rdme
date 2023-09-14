@@ -13,8 +13,7 @@ const debugPackage = debugModule(config.cli);
 /**
  * Wrapper for debug statements.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function debug(input: any) {
+function debug(input: unknown) {
   /* istanbul ignore next */
   if (isGHA() && !isTest()) {
     if (typeof input === 'object') {

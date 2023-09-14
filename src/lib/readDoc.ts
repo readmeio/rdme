@@ -10,8 +10,7 @@ interface ReadDocMetadata {
   /** The contents of the file below the YAML front matter */
   content: string;
   /** A JSON object with the YAML front matter */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   /**
    * A hash of the file contents (including the front matter)
    */
