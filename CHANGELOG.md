@@ -1,3 +1,15 @@
+# [9.0.0-next.3](https://github.com/readmeio/rdme/compare/v9.0.0-next.2...v9.0.0-next.3) (2023-09-14)
+
+
+### Code Refactoring
+
+* remove `oas`, `swagger`, `docs:edit` ([#902](https://github.com/readmeio/rdme/issues/902)) ([9107d15](https://github.com/readmeio/rdme/commit/9107d15770532de98156b7407c7f274ba7ea28cf))
+
+
+### BREAKING CHANGES
+
+* removes several deprecated commands
+
 # [9.0.0-next.2](https://github.com/readmeio/rdme/compare/v9.0.0-next.1...v9.0.0-next.2) (2023-09-14)
 
 
