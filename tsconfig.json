@@ -13,7 +13,6 @@
       "editor": [".sink.d.ts"]
     },
     "resolveJsonModule": true,
-    "skipLibCheck": true,
     "strict": true,
     "target": "ES2020",
     "useUnknownInCatchVariables": false
