@@ -1,4 +1,4 @@
-import type { AuthenticatedCommandOptions } from '../../lib/baseCommand';
+import type { AuthenticatedCommandOptions } from '../../lib/baseCommand.js';
 
 import Command, { CommandCategories } from '../../lib/baseCommand.js';
 import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch.js';

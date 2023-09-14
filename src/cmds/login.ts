@@ -1,9 +1,9 @@
-import type { ZeroAuthCommandOptions } from '../lib/baseCommand';
+import type { ZeroAuthCommandOptions } from '../lib/baseCommand.js';
 
 import prompts from 'prompts';
 
-import Command, { CommandCategories } from '../lib/baseCommand';
-import loginFlow from '../lib/loginFlow';
+import Command, { CommandCategories } from '../lib/baseCommand.js';
+import loginFlow from '../lib/loginFlow.js';
 
 interface Options {
   email?: string;

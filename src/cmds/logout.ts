@@ -1,8 +1,8 @@
-import type { ZeroAuthCommandOptions } from '../lib/baseCommand';
+import type { ZeroAuthCommandOptions } from '../lib/baseCommand.js';
 
-import Command, { CommandCategories } from '../lib/baseCommand';
-import config from '../lib/config';
-import configStore from '../lib/configstore';
+import Command, { CommandCategories } from '../lib/baseCommand.js';
+import config from '../lib/config.js';
+import configStore from '../lib/configstore.js';
 
 export default class LogoutCommand extends Command {
   constructor() {

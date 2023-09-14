@@ -1,10 +1,10 @@
-import type { Options } from './openapi';
-import type { AuthenticatedCommandOptions } from '../lib/baseCommand';
+import type { Options } from './openapi/index.js';
+import type { AuthenticatedCommandOptions } from '../lib/baseCommand.js';
 
-import Command from '../lib/baseCommand';
-import isHidden from '../lib/decorators/isHidden';
+import Command from '../lib/baseCommand.js';
+import isHidden from '../lib/decorators/isHidden.js';
 
-import OpenAPICommand from './openapi';
+import OpenAPICommand from './openapi/index.js';
 
 @isHidden
 export default class SwaggerCommand extends OpenAPICommand {

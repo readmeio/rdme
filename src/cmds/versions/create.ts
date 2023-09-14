@@ -1,16 +1,16 @@
-import type { Version } from '.';
-import type { AuthenticatedCommandOptions } from '../../lib/baseCommand';
+import type { Version } from './index.js';
+import type { AuthenticatedCommandOptions } from '../../lib/baseCommand.js';
 
 import { Headers } from 'node-fetch';
 import prompts from 'prompts';
 import semver from 'semver';
 
-import Command, { CommandCategories } from '../../lib/baseCommand';
-import castStringOptToBool from '../../lib/castStringOptToBool';
-import config from '../../lib/config';
-import * as promptHandler from '../../lib/prompts';
-import promptTerminal from '../../lib/promptWrapper';
-import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch';
+import Command, { CommandCategories } from '../../lib/baseCommand.js';
+import castStringOptToBool from '../../lib/castStringOptToBool.js';
+import config from '../../lib/config.js';
+import * as promptHandler from '../../lib/prompts.js';
+import promptTerminal from '../../lib/promptWrapper.js';
+import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch.js';
 
 export interface Options extends CommonOptions {
   fork?: string;
