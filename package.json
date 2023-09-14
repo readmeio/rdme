@@ -5,7 +5,7 @@
   "license": "MIT",
   "author": "ReadMe <support@readme.io> (https://readme.com)",
   "engines": {
-    "node": ">=14"
+    "node": ">=18"
   },
   "bin": {
     "rdme": "bin/rdme.js"
