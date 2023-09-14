@@ -1,3 +1,15 @@
+# [9.0.0-next.1](https://github.com/readmeio/rdme/compare/v8.7.0-next.3...v9.0.0-next.1) (2023-09-14)
+
+
+### Features
+
+* support node 18 and up ([#900](https://github.com/readmeio/rdme/issues/900)) ([a217904](https://github.com/readmeio/rdme/commit/a2179048bd7d76d9177df0848b56c524eff50b13))
+
+
+### BREAKING CHANGES
+
+* Node.js >= 18 required
+
 # [8.7.0-next.3](https://github.com/readmeio/rdme/compare/v8.7.0-next.2...v8.7.0-next.3) (2023-09-14)
 
 
