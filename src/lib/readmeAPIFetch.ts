@@ -217,8 +217,7 @@ export default async function readmeAPIFetch(
  *
  */
 async function handleRes(res: Response, rejectOnJsonError = true) {
-  // if the content-type header is missing, fallback to json
-  const contentType = res.headers.get('content-type') || 'application/json';
+  const contentType = res.headers.get('content-type') || '';
   const extension = mime.extension(contentType);
   if (extension === 'json') {
     const body = await res.json();
