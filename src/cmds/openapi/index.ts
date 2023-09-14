@@ -17,7 +17,7 @@ import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetc
 import streamSpecToRegistry from '../../lib/streamSpecToRegistry.js';
 import { getProjectVersion } from '../../lib/versionSelect.js';
 
-export interface Options {
+interface Options {
   create?: boolean;
   dryRun?: boolean;
   id?: string;
