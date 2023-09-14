@@ -1,12 +1,14 @@
 import prompts from 'prompts';
 import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
-import { version as pkgVersion } from '../package.json';
-import cli from '../src';
-import conf from '../src/lib/configstore';
+import pkg from '../package.json' assert { type: 'json' };
+import cli from '../src/index.js';
+import conf from '../src/lib/configstore.js';
 
-import getAPIMock from './helpers/get-api-mock';
-import { after, before } from './helpers/get-gha-setup';
+import getAPIMock from './helpers/get-api-mock.js';
+import { after, before } from './helpers/get-gha-setup.js';
+
+const { version: pkgVersion } = pkg;
 
 describe('cli', () => {
   it('command not found', () => {

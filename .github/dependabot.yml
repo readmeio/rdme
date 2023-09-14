@@ -33,19 +33,7 @@ updates:
       prefix: chore(deps)
       prefix-development: chore(deps-dev)
     ignore:
-      # All of these packages are now ESM-only and can't be used here without a rewrite.
-      - dependency-name: chalk
-        versions:
-          - '>= 5'
-      - dependency-name: configstore
-        versions:
-          - '>= 6'
-      - dependency-name: node-fetch
-        versions:
-          - '>= 3'
-      - dependency-name: open
-        versions:
-          - '>= 9'
+      # See https://github.com/sindresorhus/ora/issues/229
       - dependency-name: ora
         versions:
-          - '>= 6'
+          - '>= 7'

@@ -4,7 +4,7 @@ __tests__/
 .github/
 .husky/
 .prettier*
-bin/*.js
+bin/**
 coverage/
 packages/
 vitest.*

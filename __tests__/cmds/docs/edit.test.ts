@@ -1,12 +1,12 @@
-import fs from 'fs';
+import fs from 'node:fs';
 
 import nock from 'nock';
 import prompts from 'prompts';
 import { describe, beforeAll, afterAll, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
-import DocsEditCommand from '../../../src/cmds/docs/edit';
-import APIError from '../../../src/lib/apiError';
-import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock';
+import DocsEditCommand from '../../../src/cmds/docs/edit.js';
+import APIError from '../../../src/lib/apiError.js';
+import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
 
 const docsEdit = new DocsEditCommand();
 

@@ -1,10 +1,10 @@
-import crypto from 'crypto';
-import fs from 'fs';
-import path from 'path';
+import crypto from 'node:crypto';
+import fs from 'node:fs';
+import path from 'node:path';
 
 import grayMatter from 'gray-matter';
 
-import { debug } from './logger';
+import { debug } from './logger.js';
 
 interface ReadDocMetadata {
   /** The contents of the file below the YAML front matter */

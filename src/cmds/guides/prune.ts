@@ -1,7 +1,7 @@
-import type { AuthenticatedCommandOptions } from '../../lib/baseCommand';
-import type { Options } from '../docs/prune';
+import type { AuthenticatedCommandOptions } from '../../lib/baseCommand.js';
+import type { Options } from '../docs/prune.js';
 
-import DocsPruneCommand from '../docs/prune';
+import DocsPruneCommand from '../docs/prune.js';
 
 export default class GuidesPruneCommand extends DocsPruneCommand {
   constructor() {

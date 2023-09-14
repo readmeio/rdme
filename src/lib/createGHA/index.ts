@@ -1,22 +1,22 @@
-import type commands from '../../cmds';
-import type { CommandOptions } from '../baseCommand';
+import type commands from '../../cmds/index.js';
+import type { CommandOptions } from '../baseCommand.js';
 import type { OptionDefinition } from 'command-line-usage';
 
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
 import chalk from 'chalk';
 import prompts from 'prompts';
-import simpleGit from 'simple-git';
+import { simpleGit } from 'simple-git';
 
-import configstore from '../configstore';
-import { getMajorPkgVersion } from '../getPkgVersion';
-import isCI, { isNpmScript, isTest } from '../isCI';
-import { debug, info } from '../logger';
-import promptTerminal from '../promptWrapper';
-import { cleanFileName, validateFilePath } from '../validatePromptInput';
+import configstore from '../configstore.js';
+import { getMajorPkgVersion } from '../getPkgVersion.js';
+import isCI, { isNpmScript, isTest } from '../isCI.js';
+import { debug, info } from '../logger.js';
+import promptTerminal from '../promptWrapper.js';
+import { cleanFileName, validateFilePath } from '../validatePromptInput.js';
 
-import yamlBase from './baseFile';
+import yamlBase from './baseFile.js';
 
 /**
  * Generates the key for storing info in `configstore` object.

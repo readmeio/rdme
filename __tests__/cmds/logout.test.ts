@@ -1,8 +1,8 @@
 import { describe, afterEach, it, expect } from 'vitest';
 
-import Command from '../../src/cmds/logout';
-import config from '../../src/lib/config';
-import configStore from '../../src/lib/configstore';
+import Command from '../../src/cmds/logout.js';
+import config from '../../src/lib/config.js';
+import configStore from '../../src/lib/configstore.js';
 
 const cmd = new Command();
 

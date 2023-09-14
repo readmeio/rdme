@@ -1,8 +1,8 @@
-import type { AuthenticatedCommandOptions } from '../../lib/baseCommand';
+import type { AuthenticatedCommandOptions } from '../../lib/baseCommand.js';
 
-import Command, { CommandCategories } from '../../lib/baseCommand';
-import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch';
-import { getProjectVersion } from '../../lib/versionSelect';
+import Command, { CommandCategories } from '../../lib/baseCommand.js';
+import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch.js';
+import { getProjectVersion } from '../../lib/versionSelect.js';
 
 export default class DeleteVersionCommand extends Command {
   constructor() {

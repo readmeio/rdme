@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
 import chalk from 'chalk';
 import frontMatter from 'gray-matter';
@@ -7,11 +7,11 @@ import nock from 'nock';
 import prompts from 'prompts';
 import { describe, beforeAll, afterAll, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
-import DocsCommand from '../../../src/cmds/docs';
-import APIError from '../../../src/lib/apiError';
-import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock';
-import hashFileContents from '../../helpers/hash-file-contents';
-import { after as afterGHAEnv, before as beforeGHAEnv } from '../../helpers/setup-gha-env';
+import DocsCommand from '../../../src/cmds/docs/index.js';
+import APIError from '../../../src/lib/apiError.js';
+import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
+import hashFileContents from '../../helpers/hash-file-contents.js';
+import { after as afterGHAEnv, before as beforeGHAEnv } from '../../helpers/setup-gha-env.js';
 
 const docs = new DocsCommand();
 

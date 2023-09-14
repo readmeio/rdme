@@ -2,10 +2,10 @@ import nock from 'nock';
 import prompts from 'prompts';
 import { describe, beforeAll, afterAll, afterEach, it, expect } from 'vitest';
 
-import Command from '../../src/cmds/login';
-import APIError from '../../src/lib/apiError';
-import configStore from '../../src/lib/configstore';
-import getAPIMock from '../helpers/get-api-mock';
+import Command from '../../src/cmds/login.js';
+import APIError from '../../src/lib/apiError.js';
+import configStore from '../../src/lib/configstore.js';
+import getAPIMock from '../helpers/get-api-mock.js';
 
 const cmd = new Command();
 

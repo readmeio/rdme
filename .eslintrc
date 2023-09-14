@@ -1,9 +1,6 @@
 {
-  "extends": ["@readme/eslint-config", "@readme/eslint-config/typescript"],
+  "extends": ["@readme/eslint-config", "@readme/eslint-config/typescript", "@readme/eslint-config/esm"],
   "root": true,
-  "parserOptions": {
-    "ecmaVersion": 2020
-  },
   "overrides": [
     {
       "files": ["bin/*.js"],
@@ -12,6 +9,13 @@
       }
     }
   ],
+  "env": {
+    "es2021": true,
+    "node": true
+  },
+  "parserOptions": {
+    "sourceType": "module"
+  },
   "rules": {
     "@typescript-eslint/ban-types": [
       "error",
@@ -37,7 +41,7 @@
      * console.log() calls, hurting our ability to write resilient tests and easily debug issues.
      *
      * We should be returning Promise-wrapped values in our main command functions
-     * so we can write robust tests and take advantage of `bin/rdme`,
+     * so we can write robust tests and take advantage of `bin/rdme.js`,
      * which we use for printing function outputs and returning correct exit codes.
      *
      * Furthermore, we should also be using our custom loggers (see src/lib/logger.js)

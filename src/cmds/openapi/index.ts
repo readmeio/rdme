@@ -1,5 +1,5 @@
-import type { AuthenticatedCommandOptions } from '../../lib/baseCommand';
-import type { OpenAPIPromptOptions } from '../../lib/prompts';
+import type { AuthenticatedCommandOptions } from '../../lib/baseCommand.js';
+import type { OpenAPIPromptOptions } from '../../lib/prompts.js';
 import type { RequestInit, Response } from 'node-fetch';
 
 import chalk from 'chalk';
@@ -7,15 +7,15 @@ import { Headers } from 'node-fetch';
 import ora from 'ora';
 import parse from 'parse-link-header';
 
-import Command, { CommandCategories } from '../../lib/baseCommand';
-import createGHA from '../../lib/createGHA';
-import { oraOptions } from '../../lib/logger';
-import prepareOas from '../../lib/prepareOas';
-import * as promptHandler from '../../lib/prompts';
-import promptTerminal from '../../lib/promptWrapper';
-import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch';
-import streamSpecToRegistry from '../../lib/streamSpecToRegistry';
-import { getProjectVersion } from '../../lib/versionSelect';
+import Command, { CommandCategories } from '../../lib/baseCommand.js';
+import createGHA from '../../lib/createGHA/index.js';
+import { oraOptions } from '../../lib/logger.js';
+import prepareOas from '../../lib/prepareOas.js';
+import * as promptHandler from '../../lib/prompts.js';
+import promptTerminal from '../../lib/promptWrapper.js';
+import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch.js';
+import streamSpecToRegistry from '../../lib/streamSpecToRegistry.js';
+import { getProjectVersion } from '../../lib/versionSelect.js';
 
 export interface Options {
   create?: boolean;

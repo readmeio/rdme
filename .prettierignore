@@ -2,3 +2,4 @@ __tests__/__fixtures__/invalid-json/yikes.json
 CHANGELOG.md
 coverage/
 dist/
+exe/

@@ -1,6 +1,6 @@
 import { Headers } from 'node-fetch';
 
-import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch';
+import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch.js';
 
 /**
  * Returns all categories for a given project and version

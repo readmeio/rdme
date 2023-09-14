@@ -1,9 +1,9 @@
 /* eslint-disable vitest/no-conditional-expect */
-import assert from 'assert';
+import assert from 'node:assert';
 
 import { describe, it, expect } from 'vitest';
 
-import OpenAPIInspectCommand from '../../../src/cmds/openapi/inspect';
+import OpenAPIInspectCommand from '../../../src/cmds/openapi/inspect.js';
 
 const analyzer = new OpenAPIInspectCommand();
 

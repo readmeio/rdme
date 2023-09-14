@@ -1,13 +1,13 @@
-import type { AuthenticatedCommandOptions } from '../../lib/baseCommand';
+import type { AuthenticatedCommandOptions } from '../../lib/baseCommand.js';
 
 import chalk from 'chalk';
 import { Headers } from 'node-fetch';
 
-import Command, { CommandCategories } from '../../lib/baseCommand';
-import config from '../../lib/config';
-import getCategories from '../../lib/getCategories';
-import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch';
-import { getProjectVersion } from '../../lib/versionSelect';
+import Command, { CommandCategories } from '../../lib/baseCommand.js';
+import config from '../../lib/config.js';
+import getCategories from '../../lib/getCategories.js';
+import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch.js';
+import { getProjectVersion } from '../../lib/versionSelect.js';
 
 interface Category {
   title: string;

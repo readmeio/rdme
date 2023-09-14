@@ -1,4 +1,4 @@
-import configstore from './configstore';
+import configstore from './configstore.js';
 
 /**
  * Retrieves stored user data values from env variables or configstore,

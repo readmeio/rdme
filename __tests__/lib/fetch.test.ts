@@ -2,10 +2,10 @@
 import { Headers } from 'node-fetch';
 import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
-import pkg from '../../package.json';
-import readmeAPIFetch, { cleanHeaders, handleRes } from '../../src/lib/readmeAPIFetch';
-import getAPIMock from '../helpers/get-api-mock';
-import { after, before } from '../helpers/setup-gha-env';
+import pkg from '../../package.json' assert { type: 'json' };
+import readmeAPIFetch, { cleanHeaders, handleRes } from '../../src/lib/readmeAPIFetch.js';
+import getAPIMock from '../helpers/get-api-mock.js';
+import { after, before } from '../helpers/setup-gha-env.js';
 
 describe('#fetch()', () => {
   describe('GitHub Actions environment', () => {
@@ -28,14 +28,14 @@ describe('#fetch()', () => {
         headers: cleanHeaders(key),
       }).then(handleRes);
 
-      expect(headers['user-agent'].shift()).toBe(`rdme-github/${pkg.version}`);
-      expect(headers['x-readme-source'].shift()).toBe('cli-gh');
-      expect(headers['x-github-repository'].shift()).toBe('octocat/Hello-World');
-      expect(headers['x-github-run-attempt'].shift()).toBe('3');
-      expect(headers['x-github-run-id'].shift()).toBe('1658821493');
-      expect(headers['x-github-run-number'].shift()).toBe('3');
-      expect(headers['x-github-sha'].shift()).toBe('ffac537e6cbbf934b08745a378932722df287a53');
-      expect(headers['x-rdme-ci'].shift()).toBe('GitHub Actions (test)');
+      expect(headers['user-agent']).toBe(`rdme-github/${pkg.version}`);
+      expect(headers['x-readme-source']).toBe('cli-gh');
+      expect(headers['x-github-repository']).toBe('octocat/Hello-World');
+      expect(headers['x-github-run-attempt']).toBe('3');
+      expect(headers['x-github-run-id']).toBe('1658821493');
+      expect(headers['x-github-run-number']).toBe('3');
+      expect(headers['x-github-sha']).toBe('ffac537e6cbbf934b08745a378932722df287a53');
+      expect(headers['x-rdme-ci']).toBe('GitHub Actions (test)');
       mock.done();
     });
 
@@ -59,7 +59,7 @@ describe('#fetch()', () => {
           { filePath: 'openapi.json', fileType: 'path' },
         ).then(handleRes);
 
-        expect(headers['x-readme-source-url'].shift()).toBe(
+        expect(headers['x-readme-source-url']).toBe(
           'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/openapi.json',
         );
         mock.done();
@@ -84,7 +84,7 @@ describe('#fetch()', () => {
           { filePath: './📈 Dashboard & Metrics/openapi.json', fileType: 'path' },
         ).then(handleRes);
 
-        expect(headers['x-readme-source-url'].shift()).toBe(
+        expect(headers['x-readme-source-url']).toBe(
           'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/%F0%9F%93%88%20Dashboard%20&%20Metrics/openapi.json',
         );
         mock.done();
@@ -133,7 +133,7 @@ describe('#fetch()', () => {
           { filePath: './openapi.json', fileType: 'path' },
         ).then(handleRes);
 
-        expect(headers['x-readme-source-url'].shift()).toBe(
+        expect(headers['x-readme-source-url']).toBe(
           'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/openapi.json',
         );
         mock.done();
@@ -159,7 +159,7 @@ describe('#fetch()', () => {
           { filePath, fileType: 'url' },
         ).then(handleRes);
 
-        expect(headers['x-readme-source-url'].shift()).toBe(filePath);
+        expect(headers['x-readme-source-url']).toBe(filePath);
         mock.done();
       });
     });
@@ -180,8 +180,8 @@ describe('#fetch()', () => {
       headers: cleanHeaders(key),
     }).then(handleRes);
 
-    expect(headers['user-agent'].shift()).toBe(`rdme/${pkg.version}`);
-    expect(headers['x-readme-source'].shift()).toBe('cli');
+    expect(headers['user-agent']).toBe(`rdme/${pkg.version}`);
+    expect(headers['x-readme-source']).toBe('cli');
     expect(headers['x-github-repository']).toBeUndefined();
     expect(headers['x-github-run-attempt']).toBeUndefined();
     expect(headers['x-github-run-id']).toBeUndefined();
@@ -199,8 +199,8 @@ describe('#fetch()', () => {
 
     const headers = await readmeAPIFetch('/api/v1/doesnt-need-auth').then(handleRes);
 
-    expect(headers['user-agent'].shift()).toBe(`rdme/${pkg.version}`);
-    expect(headers['x-readme-source'].shift()).toBe('cli');
+    expect(headers['user-agent']).toBe(`rdme/${pkg.version}`);
+    expect(headers['x-readme-source']).toBe('cli');
     expect(headers['x-github-repository']).toBeUndefined();
     expect(headers['x-github-run-attempt']).toBeUndefined();
     expect(headers['x-github-run-id']).toBeUndefined();
@@ -350,8 +350,8 @@ describe('#cleanHeaders()', () => {
     });
 
     expect(Array.from(cleanHeaders('test', undefined, headers))).toStrictEqual([
-      ['authorization', 'Basic dGVzdDo='],
       ['accept', 'text/plain'],
+      ['authorization', 'Basic dGVzdDo='],
       ['content-type', 'application/json'],
       ['x-readme-version', '1234'],
     ]);

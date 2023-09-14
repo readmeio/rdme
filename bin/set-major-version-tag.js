@@ -1,10 +1,12 @@
 #! /usr/bin/env node
-const util = require('util'); // eslint-disable-line unicorn/import-style
-const execFile = util.promisify(require('child_process').execFile);
+import { execFile as unpromisifiedExecFile } from 'node:child_process';
+import util from 'node:util';
 
-const semverParse = require('semver/functions/parse');
+import { parse } from 'semver';
 
-const pkg = require('../package.json');
+import pkg from '../package.json' assert { type: 'json' };
+
+const execFile = util.promisify(unpromisifiedExecFile);
 
 /**
  * Runs command and logs all output
@@ -34,7 +36,7 @@ async function runGitCmd(args) {
  */
 async function setMajorVersionTag() {
   try {
-    const parsedVersion = semverParse(pkg.version);
+    const parsedVersion = parse(pkg.version);
 
     if (parsedVersion.prerelease.length) {
       // eslint-disable-next-line no-console

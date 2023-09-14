@@ -1,11 +1,11 @@
-import type { APIErrorResponse } from './apiError';
-import type { Version } from '../cmds/versions';
+import type { APIErrorResponse } from './apiError.js';
+import type { Version } from '../cmds/versions/index.js';
 
-import APIError from './apiError';
-import isCI from './isCI';
-import { warn } from './logger';
-import promptTerminal from './promptWrapper';
-import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch';
+import APIError from './apiError.js';
+import isCI from './isCI.js';
+import { warn } from './logger.js';
+import promptTerminal from './promptWrapper.js';
+import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch.js';
 
 /**
  * Validates and returns a project version.

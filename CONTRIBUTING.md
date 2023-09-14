@@ -2,11 +2,11 @@
 
 ## Running Shell Commands Locally 🐚
 
-To run test commands from within the repository, run the build and then run your commands from the root of the repository and use `./bin/rdme` instead of `rdme` so it properly points to the command executable, like so:
+To run test commands from within the repository, run the build and then run your commands from the root of the repository and use `./bin/rdme.js` instead of `rdme` so it properly points to the command executable, like so:
 
 ```sh
 npm run build
-./bin/rdme openapi:validate __tests__/__fixtures__/ref-oas/petstore.json
+./bin/rdme.js openapi:validate __tests__/__fixtures__/ref-oas/petstore.json
 ```
 
 If you need to debug commands quicker and re-building TS everytime is becoming cumbersome, you can use the debug command, like so:
@@ -70,7 +70,7 @@ act -j simple
 
 ### Usage of `console`
 
-As you'll learn in our commands logic (see [`bin/rdme`](bin/rdme) and the [`src/cmds`](src/cmds) directory), we wrap our command outputs in resolved/rejected [`Promise` objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) and use [`bin/rdme`](bin/rdme) file to log the results to the console and return the correct status code. This is so we can write more resilient tests, ensure that the proper exit codes are being returned, and make debugging easier.
+As you'll learn in our commands logic (see [`bin/rdme.js`](bin/rdme.js) and the [`src/cmds`](src/cmds) directory), we wrap our command outputs in resolved/rejected [`Promise` objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) and use [`bin/rdme.js`](bin/rdme.js) file to log the results to the console and return the correct status code. This is so we can write more resilient tests, ensure that the proper exit codes are being returned, and make debugging easier.
 
 When writing command logic, avoid using `console` statements (and correspondingly, avoid mocking `console` statements in tests) when possible.
 

@@ -1,8 +1,8 @@
-import type { AuthenticatedCommandOptions } from '../../lib/baseCommand';
+import type { AuthenticatedCommandOptions } from '../../lib/baseCommand.js';
 
-import Command, { CommandCategories } from '../../lib/baseCommand';
-import getCategories from '../../lib/getCategories';
-import { getProjectVersion } from '../../lib/versionSelect';
+import Command, { CommandCategories } from '../../lib/baseCommand.js';
+import getCategories from '../../lib/getCategories.js';
+import { getProjectVersion } from '../../lib/versionSelect.js';
 
 export default class CategoriesCommand extends Command {
   constructor() {

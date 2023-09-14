@@ -1,7 +1,7 @@
-import type { ZeroAuthCommandOptions } from '../lib/baseCommand';
+import type { ZeroAuthCommandOptions } from '../lib/baseCommand.js';
 
-import Command, { CommandCategories } from '../lib/baseCommand';
-import isHidden from '../lib/decorators/isHidden';
+import Command, { CommandCategories } from '../lib/baseCommand.js';
+import isHidden from '../lib/decorators/isHidden.js';
 
 @isHidden
 export default class OASCommand extends Command {

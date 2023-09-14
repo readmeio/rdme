@@ -1,7 +1,9 @@
 #! /usr/bin/env node
 /* eslint-disable no-console */
-const util = require('util'); // eslint-disable-line unicorn/import-style
-const execFile = util.promisify(require('child_process').execFile);
+import { execFile as unpromisifiedExecFile } from 'node:child_process';
+import util from 'node:util';
+
+const execFile = util.promisify(unpromisifiedExecFile);
 
 /**
  * Retrieves and parses the docker image metadata

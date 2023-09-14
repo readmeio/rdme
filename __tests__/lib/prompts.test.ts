@@ -3,8 +3,8 @@ import type { Response } from 'node-fetch';
 import prompts from 'prompts';
 import { describe, it, expect } from 'vitest';
 
-import * as promptHandler from '../../src/lib/prompts';
-import promptTerminal from '../../src/lib/promptWrapper';
+import * as promptHandler from '../../src/lib/prompts.js';
+import promptTerminal from '../../src/lib/promptWrapper.js';
 
 const versionlist = [
   {

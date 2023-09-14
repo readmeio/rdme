@@ -1,18 +1,18 @@
-import type { SpecFileType } from './prepareOas';
+import type { SpecFileType } from './prepareOas.js';
 import type { RequestInit, Response } from 'node-fetch';
 
-import path from 'path';
+import path from 'node:path';
 
 import mime from 'mime-types';
 import nodeFetch, { Headers } from 'node-fetch'; // eslint-disable-line no-restricted-imports
 
-import pkg from '../../package.json';
+import pkg from '../../package.json' assert { type: 'json' };
 
-import APIError from './apiError';
-import config from './config';
-import { git } from './createGHA';
-import isCI, { ciName, isGHA } from './isCI';
-import { debug, warn } from './logger';
+import APIError from './apiError.js';
+import config from './config.js';
+import { git } from './createGHA/index.js';
+import isCI, { ciName, isGHA } from './isCI.js';
+import { debug, warn } from './logger.js';
 
 const SUCCESS_NO_CONTENT = 204;
 
@@ -220,7 +220,9 @@ async function handleRes(res: Response, rejectOnJsonError = true) {
   const contentType = res.headers.get('content-type') || '';
   const extension = mime.extension(contentType);
   if (extension === 'json') {
-    const body = await res.json();
+    // TODO: type this better
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const body = (await res.json()) as any;
     debug(`received status code ${res.status} from ${res.url} with JSON response: ${JSON.stringify(body)}`);
     if (body.error && rejectOnJsonError) {
       return Promise.reject(new APIError(body));

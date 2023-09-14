@@ -1,20 +1,22 @@
 /* eslint-disable no-underscore-dangle */
-import type Command from './lib/baseCommand';
-import type { CommandOptions } from './lib/baseCommand';
+import type Command from './lib/baseCommand.js';
+import type { CommandOptions } from './lib/baseCommand.js';
 import type { CommandLineOptions } from 'command-line-args';
 
 import chalk from 'chalk';
 import cliArgs from 'command-line-args';
 import parseArgsStringToArgv from 'string-argv';
 
-import { version } from '../package.json';
+import pkg from '../package.json' assert { type: 'json' };
 
-import * as commands from './lib/commands';
-import config from './lib/config';
-import createGHA from './lib/createGHA';
-import getCurrentConfig from './lib/getCurrentConfig';
-import * as help from './lib/help';
-import { debug } from './lib/logger';
+import * as commands from './lib/commands.js';
+import config from './lib/config.js';
+import createGHA from './lib/createGHA/index.js';
+import getCurrentConfig from './lib/getCurrentConfig.js';
+import * as help from './lib/help.js';
+import { debug } from './lib/logger.js';
+
+const { version } = pkg;
 
 /**
  * @param {Array} processArgv - An array of arguments from the current process. Can be used to mock

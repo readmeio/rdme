@@ -1,4 +1,5 @@
+.env
 coverage/
 dist/
-.env
+exe/
 node_modules/

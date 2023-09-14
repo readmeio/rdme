@@ -1,9 +1,9 @@
-import fs from 'fs';
+import fs from 'node:fs';
 
 import prompts from 'prompts';
 import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
-import OpenAPIReduceCommand from '../../../src/cmds/openapi/reduce';
+import OpenAPIReduceCommand from '../../../src/cmds/openapi/reduce.js';
 
 const reducer = new OpenAPIReduceCommand();
 

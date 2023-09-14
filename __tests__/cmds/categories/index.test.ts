@@ -2,8 +2,8 @@ import nock from 'nock';
 import prompts from 'prompts';
 import { describe, beforeAll, afterEach, it, expect, vi } from 'vitest';
 
-import CategoriesCommand from '../../../src/cmds/categories';
-import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock';
+import CategoriesCommand from '../../../src/cmds/categories/index.js';
+import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
 
 const categories = new CategoriesCommand();
 

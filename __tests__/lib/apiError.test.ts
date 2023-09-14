@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 
-import APIError from '../../src/lib/apiError';
+import APIError from '../../src/lib/apiError.js';
 
 const response = {
   error: 'VERSION_FORK_EMPTY',

@@ -1,11 +1,11 @@
-import type Command from './baseCommand';
+import type Command from './baseCommand.js';
 import type { Section } from 'command-line-usage';
 
 import chalk from 'chalk';
 import usage from 'command-line-usage';
 
-import * as commands from './commands';
-import config from './config';
+import * as commands from './commands.js';
+import config from './config.js';
 
 function formatCommands(cmds: { description: string; hidden: boolean; name: string }[]) {
   return cmds

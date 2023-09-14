@@ -1,11 +1,11 @@
-import type { Version } from '../../../src/cmds/versions';
+import type { Version } from '../../../src/cmds/versions/index.js';
 
 import nock from 'nock';
 import prompts from 'prompts';
 import { describe, beforeAll, afterEach, it, expect, vi } from 'vitest';
 
-import VersionsCommand from '../../../src/cmds/versions';
-import getAPIMock from '../../helpers/get-api-mock';
+import VersionsCommand from '../../../src/cmds/versions/index.js';
+import getAPIMock from '../../helpers/get-api-mock.js';
 
 const key = 'API_KEY';
 const version = '1.0.0';

@@ -1,7 +1,7 @@
-import type { AuthenticatedCommandOptions } from '../../lib/baseCommand';
-import type { Options } from '../docs';
+import type { AuthenticatedCommandOptions } from '../../lib/baseCommand.js';
+import type { Options } from '../docs/index.js';
 
-import DocsCommand from '../docs';
+import DocsCommand from '../docs/index.js';
 
 export default class GuidesCommand extends DocsCommand {
   constructor() {

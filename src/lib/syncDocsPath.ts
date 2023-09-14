@@ -1,16 +1,16 @@
-import fs from 'fs/promises';
-import path from 'path';
+import fs from 'node:fs/promises';
+import path from 'node:path';
 
 import chalk from 'chalk';
 import { Headers } from 'node-fetch';
 
-import APIError from './apiError';
-import Command, { CommandCategories } from './baseCommand';
-import config from './config';
-import { debug } from './logger';
-import readdirRecursive from './readdirRecursive';
-import readDoc from './readDoc';
-import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch';
+import APIError from './apiError.js';
+import Command, { CommandCategories } from './baseCommand.js';
+import config from './config.js';
+import { debug } from './logger.js';
+import readdirRecursive from './readdirRecursive.js';
+import readDoc from './readDoc.js';
+import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch.js';
 
 /**
  * Reads the contents of the specified Markdown or HTML file

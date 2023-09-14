@@ -1,9 +1,9 @@
-import fs from 'fs';
+import fs from 'node:fs';
 
 import prompts from 'prompts';
 import { describe, it, expect, vi } from 'vitest';
 
-import OpenAPIConvertCommand from '../../../src/cmds/openapi/convert';
+import OpenAPIConvertCommand from '../../../src/cmds/openapi/convert.js';
 
 const convert = new OpenAPIConvertCommand();
 

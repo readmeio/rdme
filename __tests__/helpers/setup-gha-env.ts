@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import * as isCI from '../../src/lib/isCI';
+import * as isCI from '../../src/lib/isCI.js';
 
 /**
  * A helper function for setting up tests for simulating a GitHub Actions runner environment

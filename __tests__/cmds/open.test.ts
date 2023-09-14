@@ -1,12 +1,12 @@
-import type { Version } from '../../src/cmds/versions';
+import type { Version } from '../../src/cmds/versions/index.js';
 
 import chalk from 'chalk';
 import { describe, afterEach, it, expect } from 'vitest';
 
-import Command from '../../src/cmds/open';
-import config from '../../src/lib/config';
-import configStore from '../../src/lib/configstore';
-import getAPIMock from '../helpers/get-api-mock';
+import Command from '../../src/cmds/open.js';
+import config from '../../src/lib/config.js';
+import configStore from '../../src/lib/configstore.js';
+import getAPIMock from '../helpers/get-api-mock.js';
 
 const cmd = new Command();
 
