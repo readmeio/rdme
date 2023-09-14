@@ -1,5 +1,5 @@
-import type { Headers } from 'headers-polyfill';
 import type { ResponseTransformer } from 'msw';
+import type { Headers } from 'node-fetch';
 
 import { rest } from 'msw';
 import nock from 'nock';
@@ -80,9 +80,9 @@ export function getAPIMockMSW(
     try {
       validateHeaders(req.headers, basicAuthUser, expectedReqHeaders);
       let responseTransformer: ResponseTransformer;
-      if (response.json) {
+      if (response?.json) {
         responseTransformer = ctx.json(response.json);
-      } else if (response.text) {
+      } else if (response?.text) {
         responseTransformer = ctx.text(response.text);
       }
       return res(ctx.status(status), responseTransformer);
