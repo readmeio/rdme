@@ -107,7 +107,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "build:exe": "npm run build && rollup -c && pkg rdme-rollup.cjs --target host --output exe/rdme --debug",
+    "build:exe": "npm run build && rollup -c && pkg dist/rollup-output.cjs --target host --output exe/rdme --debug",
     "debug": "ts-node src/cli.ts",
     "lint": "alex . && knip && npm run lint:ts && npm run prettier && npm run schemas:check",
     "lint:ts": "eslint . --ext .js,.ts",
