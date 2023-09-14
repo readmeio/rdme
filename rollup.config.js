@@ -6,7 +6,13 @@ import { defineConfig } from 'rollup';
 
 export default defineConfig({
   input: 'bin/rdme.js',
-  output: { file: 'rollup-output.cjs', format: 'cjs', inlineDynamicImports: true },
+  output: {
+    compact: true,
+    file: 'rollup-output.cjs',
+    format: 'cjs',
+    inlineDynamicImports: true,
+    minifyInternalExports: true,
+  },
   plugins: [
     commonjs(),
     json(),
