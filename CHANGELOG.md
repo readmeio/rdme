@@ -1,3 +1,10 @@
+# [8.7.0-next.3](https://github.com/readmeio/rdme/compare/v8.7.0-next.2...v8.7.0-next.3) (2023-09-14)
+
+
+### Features
+
+* convert to ESM (breaking change) ([#856](https://github.com/readmeio/rdme/issues/856)) ([84b8571](https://github.com/readmeio/rdme/commit/84b8571a31c442288d47c07c57524eae643f9f13)), closes [/www.stefanjudis.com/snippets/how-to-import-json-files-in-es-modules-node-js/#option-1](https://github.com//www.stefanjudis.com/snippets/how-to-import-json-files-in-es-modules-node-js//issues/option-1) [1#L228](https://github.com/1/issues/L228)
+
 # [8.7.0-next.2](https://github.com/readmeio/rdme/compare/v8.7.0-next.1...v8.7.0-next.2) (2023-09-13)
 
 
