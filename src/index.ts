@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import type Command from './lib/baseCommand';
-import type { CommandOptions, AuthenticatedCommandOptions } from './lib/baseCommand';
+import type { CommandOptions } from './lib/baseCommand';
 import type { CommandLineOptions } from 'command-line-args';
 
 import chalk from 'chalk';
@@ -83,7 +83,7 @@ export default function rdme(rawProcessArgv: NodeJS.Process['argv']) {
   }
 
   try {
-    let cmdArgv: CommandOptions<{}> | AuthenticatedCommandOptions<{}> | CommandLineOptions;
+    let cmdArgv: CommandOptions<{}> | CommandLineOptions;
     let bin: Command;
 
     // Handling for `rdme help` and `rdme help <command>` cases.
@@ -135,9 +135,9 @@ export default function rdme(rawProcessArgv: NodeJS.Process['argv']) {
 
     cmdArgv = { key, ...cmdArgv };
 
-    return bin.run(cmdArgv as CommandOptions<{}> | AuthenticatedCommandOptions<{}>).then((msg: string) => {
+    return bin.run(cmdArgv as CommandOptions<{}>).then((msg: string) => {
       if (bin.supportsGHA) {
-        return createGHA(msg, bin.command, bin.args, cmdArgv as CommandOptions<{}> | AuthenticatedCommandOptions<{}>);
+        return createGHA(msg, bin.command, bin.args, cmdArgv as CommandOptions<{}>);
       }
       return msg;
     });

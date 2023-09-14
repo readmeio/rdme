@@ -10,14 +10,16 @@ import isCI from './isCI';
 import { debug, info, warn } from './logger';
 import loginFlow from './loginFlow';
 
-export type CommandOptions<T> = T & {
-  github?: boolean;
-} & { key?: never };
+export type CommandOptions<T> = ZeroAuthCommandOptions<T> | AuthenticatedCommandOptions<T>;
 
-export type AuthenticatedCommandOptions<T> = Omit<CommandOptions<T>, 'key'> & {
+export type AuthenticatedCommandOptions<T> = Omit<ZeroAuthCommandOptions<T>, 'key'> & {
   key: string;
   version?: string;
 };
+
+export type ZeroAuthCommandOptions<T> = T & {
+  github?: boolean;
+} & { key?: never };
 
 export enum CommandCategories {
   ADMIN = 'admin',
@@ -86,7 +88,7 @@ export default class Command {
    */
   args!: OptionDefinition[];
 
-  async run(opts: CommandOptions<{}> | AuthenticatedCommandOptions<{}>): Promise<string> {
+  async run(opts: CommandOptions<{}>): Promise<string> {
     Command.debug(`command: ${this.command}`);
     Command.debug(`opts: ${JSON.stringify(opts)}`);
 

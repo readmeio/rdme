@@ -1,4 +1,4 @@
-import type { CommandOptions } from '../../lib/baseCommand';
+import type { ZeroAuthCommandOptions } from '../../lib/baseCommand';
 import type { OASDocument } from 'oas/dist/rmoas.types';
 
 import fs from 'fs';
@@ -70,7 +70,7 @@ export default class OpenAPIReduceCommand extends Command {
     ];
   }
 
-  async run(opts: CommandOptions<Options>) {
+  async run(opts: ZeroAuthCommandOptions<Options>) {
     await super.run(opts);
 
     const { spec, title, workingDirectory } = opts;
