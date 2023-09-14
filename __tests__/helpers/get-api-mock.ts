@@ -78,6 +78,7 @@ export function getAPIMockMSW(
 ) {
   return rest.get(`${proxy}${config.host}${path}`, (req, res, ctx) => {
     try {
+      // @ts-expect-error once we move off node-fetch, we can make these types consistent
       validateHeaders(req.headers, basicAuthUser, expectedReqHeaders);
       let responseTransformer: ResponseTransformer;
       if (response?.json) {

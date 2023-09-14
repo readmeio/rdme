@@ -37,6 +37,7 @@ describe('rdme docs', () => {
   it('should prompt for login if no API key provided', async () => {
     const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
+    // @ts-expect-error deliberately passing in bad data
     await expect(docs.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
     consoleInfoSpy.mockRestore();
   });
@@ -60,6 +61,7 @@ describe('rdme docs', () => {
       .basicAuth({ user: key })
       .reply(200, [{ version }]);
 
+    // @ts-expect-error deliberately passing in bad data
     await expect(docs.run({})).rejects.toStrictEqual(
       new Error('No path provided. Usage `rdme docs <path> [options]`.'),
     );
@@ -627,6 +629,7 @@ describe('rdme docs', () => {
     afterEach(afterGHAEnv);
 
     it('should error in CI if no API key provided', () => {
+      // @ts-expect-error deliberately passing in bad data
       return expect(docs.run({})).rejects.toStrictEqual(new Error('No project API key provided. Please use `--key`.'));
     });
 
