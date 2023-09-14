@@ -40,7 +40,7 @@ export function getNodeVersion() {
 export async function getPkgVersion(npmDistTag?: npmDistTag): Promise<string> {
   if (npmDistTag) {
     return fetch(registryUrl)
-      .then(res => res.json())
+      .then(res => res.json() as Promise<{ 'dist-tags': Record<string, string> }>)
       .then(body => body['dist-tags'][npmDistTag])
       .catch(err => {
         error(`error fetching version from npm registry: ${err.message}`);
