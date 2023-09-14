@@ -1,4 +1,4 @@
-import type { CommandOptions } from '../lib/baseCommand';
+import type { ZeroAuthCommandOptions } from '../lib/baseCommand';
 
 import chalk from 'chalk';
 import open from 'open';
@@ -31,7 +31,7 @@ export default class OpenCommand extends Command {
     ];
   }
 
-  async run(opts: CommandOptions<Options>) {
+  async run(opts: ZeroAuthCommandOptions<Options>) {
     await super.run(opts);
 
     const { dash } = opts;

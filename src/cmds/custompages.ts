@@ -1,4 +1,4 @@
-import type { CommandOptions } from '../lib/baseCommand';
+import type { AuthenticatedCommandOptions } from '../lib/baseCommand';
 
 import Command, { CommandCategories } from '../lib/baseCommand';
 import supportsGHA from '../lib/decorators/supportsGHA';
@@ -37,7 +37,7 @@ export default class CustomPagesCommand extends Command {
     ];
   }
 
-  async run(opts: CommandOptions<Options>) {
+  async run(opts: AuthenticatedCommandOptions<Options>) {
     await super.run(opts);
 
     const { dryRun, filePath, key } = opts;

@@ -1,4 +1,4 @@
-import type { CommandOptions } from '../lib/baseCommand';
+import type { ZeroAuthCommandOptions } from '../lib/baseCommand';
 
 import prompts from 'prompts';
 
@@ -45,7 +45,7 @@ export default class LoginCommand extends Command {
     ];
   }
 
-  async run(opts: CommandOptions<Options>) {
+  async run(opts: ZeroAuthCommandOptions<Options>) {
     await super.run(opts);
 
     prompts.override(opts);

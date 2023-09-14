@@ -1,5 +1,5 @@
 import type { Options } from './openapi';
-import type { CommandOptions } from '../lib/baseCommand';
+import type { AuthenticatedCommandOptions } from '../lib/baseCommand';
 
 import Command from '../lib/baseCommand';
 import isHidden from '../lib/decorators/isHidden';
@@ -16,7 +16,7 @@ export default class SwaggerCommand extends OpenAPICommand {
     this.description = 'Alias for `rdme openapi`. [deprecated]';
   }
 
-  async run(opts: CommandOptions<Options>) {
+  async run(opts: AuthenticatedCommandOptions<Options>) {
     Command.warn('`rdme swagger` has been deprecated. Please use `rdme openapi` instead.');
     return super.run(opts);
   }

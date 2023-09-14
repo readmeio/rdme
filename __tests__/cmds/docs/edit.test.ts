@@ -90,7 +90,7 @@ describe('rdme docs:edit', () => {
       fs.appendFile(filename, edits, cb.bind(null, 0));
     }
 
-    await expect(docsEdit.run({ slug, key, version: '1.0.0', mockEditor })).resolves.toBeUndefined();
+    await expect(docsEdit.run({ slug, key, version: '1.0.0', mockEditor })).resolves.toBe('');
 
     getMock.done();
     putMock.done();

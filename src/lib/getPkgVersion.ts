@@ -20,7 +20,11 @@ type npmDistTag = 'latest';
  */
 export function getNodeVersion() {
   const { node } = pkg.engines;
-  return semver.minVersion(node).major;
+  const parsedVersion = semver.minVersion(node);
+  if (!parsedVersion) {
+    throw new Error('`version` value in package.json is invalid');
+  }
+  return parsedVersion.major;
 }
 
 /**

@@ -1,4 +1,4 @@
-import type { CommandOptions } from '../../lib/baseCommand';
+import type { AuthenticatedCommandOptions } from '../../lib/baseCommand';
 import type { Options } from '../docs';
 
 import DocsCommand from '../docs';
@@ -12,7 +12,7 @@ export default class GuidesCommand extends DocsCommand {
     this.description = 'Alias for `rdme docs`.';
   }
 
-  async run(opts: CommandOptions<Options>) {
+  async run(opts: AuthenticatedCommandOptions<Options>) {
     return super.run(opts);
   }
 }

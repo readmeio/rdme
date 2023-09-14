@@ -1,4 +1,4 @@
-import type { CommandOptions } from '../../lib/baseCommand';
+import type { ZeroAuthCommandOptions } from '../../lib/baseCommand';
 import type { OASDocument } from 'oas/dist/rmoas.types';
 
 import fs from 'fs';
@@ -70,7 +70,7 @@ export default class OpenAPIReduceCommand extends Command {
     ];
   }
 
-  async run(opts: CommandOptions<Options>) {
+  async run(opts: ZeroAuthCommandOptions<Options>) {
     await super.run(opts);
 
     const { spec, title, workingDirectory } = opts;
@@ -130,7 +130,7 @@ export default class OpenAPIReduceCommand extends Command {
         message: 'Choose which paths to reduce by:',
         min: 1,
         choices: () => {
-          return Object.keys(parsedPreparedSpec.paths).map(p => ({
+          return Object.keys(parsedPreparedSpec.paths || []).map(p => ({
             title: p,
             value: p,
           }));
@@ -144,7 +144,7 @@ export default class OpenAPIReduceCommand extends Command {
         choices: (prev, values) => {
           const paths: string[] = values.paths;
           let methods = paths
-            .map((p: string) => Object.keys(parsedPreparedSpec.paths[p] || {}))
+            .map((p: string) => Object.keys(parsedPreparedSpec.paths?.[p] || {}))
             .flat()
             .filter((method: string) => method.toLowerCase() !== 'parameters');
 
