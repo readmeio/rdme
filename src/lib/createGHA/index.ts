@@ -58,11 +58,7 @@ function getKey(args: OptionDefinition[], opts: CommandOptions): string | false 
 /**
  * Constructs the command string that we pass into the workflow file.
  */
-function constructCmdString(
-  command: keyof typeof commands,
-  args: OptionDefinition[],
-  opts: CommandOptions,
-): string {
+function constructCmdString(command: keyof typeof commands, args: OptionDefinition[], opts: CommandOptions): string {
   const optsString = args
     .sort(arg => (arg.defaultOption ? -1 : 0))
     .map(arg => {
