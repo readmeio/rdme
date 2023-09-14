@@ -170,7 +170,7 @@ The following examples use JSON files, but `rdme` supports API Definitions that 
 `rdme openapi` locates your API definition (if [you don't supply one](#omitting-the-file-path)), validates it, and then syncs it to your API reference on ReadMe.
 
 > [!NOTE]
-> The `rdme openapi` command supports both OpenAPI and Swagger API definitions. The `rdme swagger` command is an alias for `rdme openapi` and is deprecated.
+> The `rdme openapi` command supports both OpenAPI and Swagger API definitions.
 
 If you wish to programmatically access any of this script's results (such as the API definition ID or the link to the corresponding docs in your dashboard), supply the `--raw` flag and the command will return a JSON output.
 

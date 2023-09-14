@@ -213,14 +213,6 @@ describe('cli', () => {
     });
   });
 
-  it('should error with `rdme oas` arguments passed in', () => {
-    return expect(cli(['oas', 'endpoint'])).rejects.toStrictEqual(
-      new Error(
-        "This `oas` integration is now inactive.\n\nIf you're looking to create an OpenAPI definition, we recommend https://npm.im/swagger-inline",
-      ),
-    );
-  });
-
   describe('GHA onboarding via @supportsGHA decorator', () => {
     let consoleInfoSpy;
     const key = '123';

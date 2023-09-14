@@ -9,7 +9,6 @@ import prompts from 'prompts';
 import { describe, beforeAll, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
 import OpenAPICommand from '../../../src/cmds/openapi/index.js';
-import SwaggerCommand from '../../../src/cmds/swagger.js';
 import APIError from '../../../src/lib/apiError.js';
 import config from '../../../src/lib/config.js';
 import petstoreWeird from '../../__fixtures__/petstore-simple-weird-version.json' assert { type: 'json' };
@@ -18,7 +17,6 @@ import { after, before } from '../../helpers/get-gha-setup.js';
 import { after as afterGHAEnv, before as beforeGHAEnv } from '../../helpers/setup-gha-env.js';
 
 const openapi = new OpenAPICommand();
-const swagger = new SwaggerCommand();
 
 let consoleInfoSpy;
 let consoleWarnSpy;
@@ -1393,21 +1391,5 @@ describe('rdme openapi', () => {
 
       return server.resetHandlers();
     });
-  });
-});
-
-describe('rdme swagger', () => {
-  beforeEach(() => {
-    consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-  });
-
-  afterEach(() => {
-    consoleWarnSpy.mockRestore();
-  });
-
-  it('should run `rdme openapi`', () => {
-    return expect(swagger.run({ spec: 'some-non-existent-path', key, id, version })).rejects.toThrow(
-      "ENOENT: no such file or directory, open 'some-non-existent-path'",
-    );
   });
 });
