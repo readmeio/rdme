@@ -65,12 +65,12 @@ jobs:
       # Instead of testing against the pre-built image, we can build
       # an image from the currently checked-out repo contents by doing a
       # li'l update in the action.yml file to point to the current Dockerfile.
-      - name: Replace Docker image value in action.yml
-        uses: jacobtomlinson/gha-find-replace@v3
-        with:
-          find: 'image:.*'
-          replace: "image: 'Dockerfile'"
-          include: rdme-repo/action.yml
+      # - name: Replace Docker image value in action.yml
+      #   uses: jacobtomlinson/gha-find-replace@v3
+      #   with:
+      #     find: 'image:.*'
+      #     replace: "image: 'Dockerfile'"
+      #     include: rdme-repo/action.yml
 
       - name: Run `openapi:validate` command
         uses: ./rdme-repo/

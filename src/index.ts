@@ -60,6 +60,11 @@ export default function rdme(rawProcessArgv: NodeJS.Process['argv']) {
     debug(`parsing arg string into argv: ${JSON.stringify(processArgv)}`);
   }
 
+  if (process.env.INPUT_RDME) {
+    processArgv = parseArgsStringToArgv(process.env.INPUT_RDME);
+    debug(`parsing arg string for GHA into argv: ${JSON.stringify(processArgv)}`);
+  }
+
   const argv = cliArgs(mainArgs, { partial: true, argv: processArgv });
   const cmd = argv.command || false;
 
