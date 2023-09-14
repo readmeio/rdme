@@ -83,7 +83,7 @@ export default function rdme(rawProcessArgv: NodeJS.Process['argv']) {
   }
 
   try {
-    let cmdArgv: CommandOptions<{}> | CommandLineOptions;
+    let cmdArgv: CommandOptions | CommandLineOptions;
     let bin: Command;
 
     // Handling for `rdme help` and `rdme help <command>` cases.
@@ -135,9 +135,9 @@ export default function rdme(rawProcessArgv: NodeJS.Process['argv']) {
 
     cmdArgv = { key, ...cmdArgv };
 
-    return bin.run(cmdArgv as CommandOptions<{}>).then((msg: string) => {
+    return bin.run(cmdArgv as CommandOptions).then((msg: string) => {
       if (bin.supportsGHA) {
-        return createGHA(msg, bin.command, bin.args, cmdArgv as CommandOptions<{}>);
+        return createGHA(msg, bin.command, bin.args, cmdArgv as CommandOptions);
       }
       return msg;
     });

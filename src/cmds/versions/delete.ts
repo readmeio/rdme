@@ -24,7 +24,7 @@ export default class DeleteVersionCommand extends Command {
     ];
   }
 
-  async run(opts: AuthenticatedCommandOptions<{}>) {
+  async run(opts: AuthenticatedCommandOptions) {
     await super.run(opts);
 
     const { key, version } = opts;

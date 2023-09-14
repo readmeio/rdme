@@ -16,7 +16,7 @@ export default class LogoutCommand extends Command {
     this.args = [];
   }
 
-  async run(opts: ZeroAuthCommandOptions<{}>) {
+  async run(opts: ZeroAuthCommandOptions) {
     await super.run(opts);
 
     if (configStore.has('email') && configStore.has('project')) {

@@ -48,7 +48,7 @@ export const getGHAFileName = (fileName: string) => {
  * Returns a redacted `key` if the current command uses authentication.
  * Otherwise, returns `false`.
  */
-function getKey(args: OptionDefinition[], opts: CommandOptions<{}>): string | false {
+function getKey(args: OptionDefinition[], opts: CommandOptions): string | false {
   if (args.some(arg => arg.name === 'key')) {
     return `••••••••••••${opts.key?.slice(-5) || ''}`;
   }
@@ -61,7 +61,7 @@ function getKey(args: OptionDefinition[], opts: CommandOptions<{}>): string | fa
 function constructCmdString(
   command: keyof typeof commands,
   args: OptionDefinition[],
-  opts: CommandOptions<{}>,
+  opts: CommandOptions,
 ): string {
   const optsString = args
     .sort(arg => (arg.defaultOption ? -1 : 0))
@@ -153,7 +153,7 @@ export default async function createGHA(
   msg: string,
   command: keyof typeof commands,
   args: OptionDefinition[],
-  opts: CommandOptions<{}>,
+  opts: CommandOptions,
 ) {
   debug(`running GHA onboarding for ${command} command`);
   debug(`opts used in createGHA: ${JSON.stringify(opts)}`);

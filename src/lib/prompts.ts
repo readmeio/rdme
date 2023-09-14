@@ -13,7 +13,7 @@ interface Spec {
   title: string;
 }
 
-export type OpenapiPromptOptions = 'create' | 'update';
+export type OpenAPIPromptOptions = 'create' | 'update';
 
 type SpecList = Spec[];
 
@@ -117,7 +117,7 @@ export function createOasPrompt(
         { title: 'Update existing', value: 'update' },
         { title: 'Create a new spec', value: 'create' },
       ],
-      async format(picked: OpenapiPromptOptions) {
+      async format(picked: OpenAPIPromptOptions) {
         if (picked === 'update') {
           const { specId }: { specId: string } = await promptTerminal(
             updateOasPrompt(specList, parsedDocs, 1, totalPages, getSpecs),

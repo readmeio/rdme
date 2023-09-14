@@ -16,7 +16,7 @@ export default class CategoriesCommand extends Command {
     this.args = [this.getKeyArg(), this.getVersionArg()];
   }
 
-  async run(opts: AuthenticatedCommandOptions<{}>) {
+  async run(opts: AuthenticatedCommandOptions) {
     await super.run(opts);
 
     const { key, version } = opts;

@@ -33,7 +33,7 @@ export default class VersionsCommand extends Command {
     ];
   }
 
-  async run(opts: AuthenticatedCommandOptions<{}>) {
+  async run(opts: AuthenticatedCommandOptions) {
     await super.run(opts);
 
     const { key, version } = opts;

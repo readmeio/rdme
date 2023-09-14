@@ -18,7 +18,7 @@ export default class WhoAmICommand extends Command {
     this.args = [];
   }
 
-  async run(opts: ZeroAuthCommandOptions<{}>) {
+  async run(opts: ZeroAuthCommandOptions) {
     await super.run(opts);
 
     const { email, project } = getCurrentConfig();

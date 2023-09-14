@@ -16,7 +16,7 @@ export default class OASCommand extends Command {
     this.args = [];
   }
 
-  async run(opts: ZeroAuthCommandOptions<{}>) {
+  async run(opts: ZeroAuthCommandOptions) {
     await super.run(opts);
 
     const message = [

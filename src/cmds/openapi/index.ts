@@ -1,5 +1,5 @@
 import type { AuthenticatedCommandOptions } from '../../lib/baseCommand';
-import type { OpenapiPromptOptions } from '../../lib/prompts';
+import type { OpenAPIPromptOptions } from '../../lib/prompts';
 import type { RequestInit, Response } from 'node-fetch';
 
 import chalk from 'chalk';
@@ -319,7 +319,7 @@ export default class OpenAPICommand extends Command {
         return updateSpec(specId);
       }
 
-      const { option }: { option: OpenapiPromptOptions } = await promptTerminal(
+      const { option }: { option: OpenAPIPromptOptions } = await promptTerminal(
         promptHandler.createOasPrompt(apiSettingsBody, parsedDocs, totalPages, getSpecs),
       );
       Command.debug(`selection result: ${option}`);
