@@ -16,6 +16,8 @@ export default defineConfig({
       exportConditions: ['node'],
       preferBuiltins: true,
     }),
+    // this disgusting workaround is required to prevent runtime errors,
+    // see https://github.com/JS-DevTools/ono/issues/19
     replace({
       delimiters: ['', ''],
       preventAssignment: true,
