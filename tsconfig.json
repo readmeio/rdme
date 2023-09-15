@@ -2,20 +2,14 @@
   "compilerOptions": {
     "allowJs": true,
     "baseUrl": "./src",
-    "downlevelIteration": true,
-    "esModuleInterop": true,
     "experimentalDecorators": true,
-    "forceConsistentCasingInFileNames": true,
-    "lib": ["ES2020", "ES2021.Intl"],
+    "lib": ["ES2022"],
     "module": "NodeNext",
     "outDir": "dist/",
-    "paths": {
-      "editor": [".sink.d.ts"]
-    },
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "ES2020",
+    "target": "ES2022",
     "useUnknownInCatchVariables": false
   },
   "include": ["./src/**/*"]
