@@ -241,14 +241,6 @@ You can add `--update` to the command so if there's only one API definition for 
 rdme openapi [url-or-local-path-to-file] --version={project-version} --update
 ```
 
-##### Override the Working Directory
-
-By default, `rdme` bundles all [references](https://swagger.io/docs/specification/using-ref/) with paths based on the directory that `rdme` is being run in. You can override the working directory using the `--workingDirectory` option, which can be helpful for bundling certain external references (see [here](__tests__/__fixtures__/relative-ref-oas/petstore.json) for an example file).
-
-```sh
-rdme openapi petstore.json --workingDirectory=[path to directory]
-```
-
 #### Validating an API Definition
 
 You can also perform a local validation of your API definition (no ReadMe account required!), which can be useful when constructing or editing your API definition.
