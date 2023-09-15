@@ -139,14 +139,14 @@ export function versionPrompt(
   /** list of versions, used for prompt about which version to fork */
   versionList: Version[],
   /** existing version if we're performing an update */
-  isUpdate?: {
+  existingVersion?: {
     is_stable: boolean;
   },
 ): PromptObject[] {
   return [
     {
       // only runs for versions:create command
-      type: isUpdate ? null : 'select',
+      type: existingVersion ? null : 'select',
       name: 'from',
       message: 'Which version would you like to fork from?',
       choices: versionList.map(v => {
@@ -158,7 +158,7 @@ export function versionPrompt(
     },
     {
       // only runs for versions:update command
-      type: !isUpdate ? null : 'text',
+      type: !existingVersion ? null : 'text',
       name: 'newVersion',
       message: 'What should the version be renamed to?',
       hint: '1.0.0',
@@ -169,11 +169,11 @@ export function versionPrompt(
       },
     },
     {
-      // if the existing version being updated is already the main version,
-      // we can't switch that so we skip this question
-      type: isUpdate?.is_stable ? null : 'confirm',
+      // if the user is already updating the main version
+      // we skip this question since it must remain the main version
+      type: existingVersion?.is_stable ? null : 'confirm',
       name: 'is_stable',
-      message: 'Would you like to make this version the main version for this project?',
+      message: 'Should this be the main version for your project?',
     },
     {
       type: 'confirm',
@@ -186,8 +186,8 @@ export function versionPrompt(
         // it can't also be hidden.
         return values.is_stable ? null : 'confirm';
       },
-      name: 'is_public',
-      message: 'Would you like to make this version public?',
+      name: 'is_hidden',
+      message: 'Should this version be hidden?',
     },
     {
       type: (prev, values) => {
@@ -196,7 +196,7 @@ export function versionPrompt(
         return values.is_stable ? null : 'confirm';
       },
       name: 'is_deprecated',
-      message: 'Would you like to deprecate this version?',
+      message: 'Should this version be deprecated?',
     },
   ];
 }

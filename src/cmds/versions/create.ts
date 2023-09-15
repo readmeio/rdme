@@ -20,7 +20,7 @@ export interface CommonOptions {
   beta?: 'true' | 'false';
   codename?: string;
   deprecated?: 'true' | 'false';
-  isPublic?: 'true' | 'false';
+  hidden?: 'true' | 'false';
   main?: 'true' | 'false';
 }
 
@@ -49,7 +49,7 @@ export default class CreateVersionCommand extends Command {
     await super.run(opts);
 
     let versionList;
-    const { key, version, fork, codename, main, beta, deprecated, isPublic } = opts;
+    const { key, version, fork, codename, main, beta, deprecated, hidden } = opts;
 
     if (!version || !semver.valid(semver.coerce(version))) {
       return Promise.reject(
@@ -64,17 +64,15 @@ export default class CreateVersionCommand extends Command {
       }).then(handleRes);
     }
 
-    const versionPrompt = promptHandler.versionPrompt(versionList || []);
-
     prompts.override({
       from: fork,
       is_beta: castStringOptToBool(beta, 'beta'),
       is_deprecated: castStringOptToBool(deprecated, 'deprecated'),
-      is_public: castStringOptToBool(isPublic, 'isPublic'),
+      is_hidden: castStringOptToBool(hidden, 'hidden'),
       is_stable: castStringOptToBool(main, 'main'),
     });
 
-    const promptResponse = await promptTerminal(versionPrompt);
+    const promptResponse = await promptTerminal(promptHandler.versionPrompt(versionList || []));
 
     const body: Version = {
       codename,
@@ -82,8 +80,7 @@ export default class CreateVersionCommand extends Command {
       from: promptResponse.from,
       is_beta: promptResponse.is_beta,
       is_deprecated: promptResponse.is_deprecated,
-      // if the "is public" question was never asked, we should omit that from the payload
-      is_hidden: typeof promptResponse.is_public === 'undefined' ? undefined : !promptResponse.is_public,
+      is_hidden: promptResponse.is_hidden,
       is_stable: promptResponse.is_stable,
     };
 

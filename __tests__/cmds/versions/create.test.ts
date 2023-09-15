@@ -48,7 +48,7 @@ describe('rdme versions:create', () => {
   });
 
   it('should create a specific version', async () => {
-    prompts.inject([version, false, true, true]);
+    prompts.inject([version, false, true, true, false]);
     const newVersion = '1.0.1';
 
     const mockRequest = getAPIMock()
@@ -60,7 +60,8 @@ describe('rdme versions:create', () => {
         is_stable: false,
         is_beta: true,
         from: '1.0.0',
-        is_hidden: false,
+        is_hidden: true,
+        is_deprecated: false,
       })
       .basicAuth({ user: key })
       .reply(201, { version: newVersion });
@@ -96,7 +97,7 @@ describe('rdme versions:create', () => {
         deprecated: 'false',
         main: 'false',
         codename: 'test',
-        isPublic: 'true',
+        hidden: 'false',
       }),
     ).resolves.toBe(`Version ${newVersion} created successfully.`);
 
@@ -123,7 +124,7 @@ describe('rdme versions:create', () => {
         fork: version,
         beta: 'false',
         main: 'true',
-        isPublic: 'false',
+        hidden: 'true',
         deprecated: 'true',
       }),
     ).resolves.toBe(`Version ${newVersion} created successfully.`);
@@ -174,7 +175,7 @@ describe('rdme versions:create', () => {
       ).rejects.toStrictEqual(new Error("Invalid option passed for 'deprecated'. Must be 'true' or 'false'."));
     });
 
-    it('should throw if non-boolean `isPublic` flag is passed', () => {
+    it('should throw if non-boolean `hidden` flag is passed', () => {
       const newVersion = '1.0.1';
 
       return expect(
@@ -183,9 +184,9 @@ describe('rdme versions:create', () => {
           version: newVersion,
           fork: version,
           // @ts-expect-error deliberately passing a bad value here
-          isPublic: 'test',
+          hidden: 'test',
         }),
-      ).rejects.toStrictEqual(new Error("Invalid option passed for 'isPublic'. Must be 'true' or 'false'."));
+      ).rejects.toStrictEqual(new Error("Invalid option passed for 'hidden'. Must be 'true' or 'false'."));
     });
 
     it('should throw if non-boolean `main` flag is passed', () => {

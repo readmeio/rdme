@@ -38,7 +38,7 @@ describe('rdme versions:update', () => {
   it('should update a specific version object', async () => {
     const versionToChange = '1.1.0';
     const renamedVersion = '1.1.0-update';
-    prompts.inject([versionToChange, renamedVersion, false, true, true, false]);
+    prompts.inject([versionToChange, renamedVersion, false, true, false, false]);
 
     const updatedVersionObject = {
       version: renamedVersion,
@@ -96,7 +96,7 @@ describe('rdme versions:update', () => {
         beta: 'true',
         main: 'false',
         codename: 'updated-test',
-        isPublic: 'true',
+        hidden: 'false',
       }),
     ).resolves.toBe(`Version ${versionToChange} updated successfully.`);
     mockRequest.done();
@@ -111,7 +111,7 @@ describe('rdme versions:update', () => {
       version: renamedVersion,
       is_beta: false,
       is_deprecated: false,
-      is_hidden: false,
+      is_hidden: true,
       is_stable: false,
     };
 
@@ -135,7 +135,7 @@ describe('rdme versions:update', () => {
         deprecated: 'false',
         main: 'false',
         codename: 'updated-test',
-        isPublic: 'true',
+        hidden: 'true',
       }),
     ).resolves.toBe(`Version ${versionToChange} updated successfully.`);
     mockRequest.done();
@@ -173,7 +173,7 @@ describe('rdme versions:update', () => {
         newVersion: renamedVersion,
         main: 'false',
         codename: 'updated-test',
-        isPublic: 'true',
+        hidden: 'false',
       }),
     ).resolves.toBe(`Version ${versionToChange} updated successfully.`);
     mockRequest.done();
@@ -210,7 +210,7 @@ describe('rdme versions:update', () => {
         beta: 'false',
         main: 'false',
         codename: 'updated-test',
-        isPublic: 'true',
+        hidden: 'false',
       }),
     ).resolves.toBe(`Version ${versionToChange} updated successfully.`);
     mockRequest.done();
@@ -245,17 +245,12 @@ describe('rdme versions:update', () => {
         deprecated: 'true',
         beta: 'false',
         main: 'true',
-        isPublic: 'false',
+        hidden: 'true',
       }),
     ).resolves.toBe(`Version ${versionToChange} updated successfully.`);
     mockRequest.done();
   });
 
-  // Note: this test is a bit bizarre since the flag management
-  // in our version commands is really confusing to follow.
-  // I'm not sure if it's technically possible to demote a stable version
-  // with our current prompt/flag management flow, but that's not
-  // really the purpose of this test so I think it's fine as is.
   it('should catch any put request errors', async () => {
     const renamedVersion = '1.0.0-update';
 
@@ -263,15 +258,15 @@ describe('rdme versions:update', () => {
       version: renamedVersion,
       is_beta: true,
       is_deprecated: true,
-      is_hidden: true,
+      is_hidden: false,
       is_stable: false,
     };
 
-    prompts.inject([renamedVersion, true, false, true]);
+    prompts.inject([renamedVersion, false, true, false, true]);
 
     const errorResponse = {
-      error: 'VERSION_CANT_DEMOTE_STABLE',
-      message: "You can't make a stable version non-stable",
+      error: 'VERSION_DUPLICATE',
+      message: 'The version already exists.',
       suggestion: '...a suggestion to resolve the issue...',
       help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
     };
@@ -287,7 +282,7 @@ describe('rdme versions:update', () => {
       .basicAuth({ user: key })
       .reply(400, errorResponse);
 
-    await expect(updateVersion.run({ key, version, main: 'false' })).rejects.toStrictEqual(new APIError(errorResponse));
+    await expect(updateVersion.run({ key, version })).rejects.toStrictEqual(new APIError(errorResponse));
     mockRequest.done();
   });
 
@@ -336,7 +331,7 @@ describe('rdme versions:update', () => {
       mockRequest.done();
     });
 
-    it('should throw if non-boolean `isPublic` flag is passed', async () => {
+    it('should throw if non-boolean `hidden` flag is passed', async () => {
       const versionToChange = '1.1.0';
 
       const mockRequest = getAPIMock()
@@ -352,9 +347,9 @@ describe('rdme versions:update', () => {
           key,
           version: versionToChange,
           // @ts-expect-error deliberately passing a bad value here
-          isPublic: 'hi',
+          hidden: 'hi',
         }),
-      ).rejects.toStrictEqual(new Error("Invalid option passed for 'isPublic'. Must be 'true' or 'false'."));
+      ).rejects.toStrictEqual(new Error("Invalid option passed for 'hidden'. Must be 'true' or 'false'."));
       mockRequest.done();
     });
 

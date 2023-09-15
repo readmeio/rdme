@@ -40,7 +40,7 @@ export default class UpdateVersionCommand extends Command {
   async run(opts: AuthenticatedCommandOptions<Options>) {
     await super.run(opts);
 
-    const { key, version, newVersion, codename, main, beta, isPublic, deprecated } = opts;
+    const { key, version, newVersion, codename, main, beta, hidden, deprecated } = opts;
 
     const selectedVersion = await getProjectVersion(version, key);
 
@@ -56,7 +56,7 @@ export default class UpdateVersionCommand extends Command {
     prompts.override({
       is_beta: castStringOptToBool(beta, 'beta'),
       is_deprecated: castStringOptToBool(deprecated, 'deprecated'),
-      is_public: castStringOptToBool(isPublic, 'isPublic'),
+      is_hidden: castStringOptToBool(hidden, 'hidden'),
       is_stable: castStringOptToBool(main, 'main'),
       newVersion,
     });
@@ -65,12 +65,11 @@ export default class UpdateVersionCommand extends Command {
 
     const body: Version = {
       codename,
-      // fall back to current version if user didn't enter one
+      // fallback to existing version if user was prompted to rename the version but didn't enter anything
       version: promptResponse.newVersion || version,
       is_beta: promptResponse.is_beta,
       is_deprecated: promptResponse.is_deprecated,
-      // if the "is public" question was never asked, we should omit that from the payload
-      is_hidden: typeof promptResponse.is_public === 'undefined' ? undefined : !promptResponse.is_public,
+      is_hidden: promptResponse.is_hidden,
       is_stable: promptResponse.is_stable,
     };
 
