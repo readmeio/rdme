@@ -35,6 +35,24 @@ describe('rdme openapi:convert', () => {
       expect(Object.keys(reducedSpec.paths)).toStrictEqual(['/pet/{petId}']);
       expect(Object.keys(reducedSpec.paths['/pet/{petId}'])).toStrictEqual(['get', 'post', 'delete']);
     });
+
+    it('should convert with no prompts via opts', async () => {
+      let reducedSpec;
+      fs.writeFileSync = vi.fn((fileName, data) => {
+        reducedSpec = JSON.parse(data as string);
+      });
+
+      await expect(
+        convert.run({
+          spec: require.resolve('@readme/oas-examples/2.0/json/petstore-simple.json'),
+          out: 'output.json',
+        }),
+      ).resolves.toBe(successfulConversion());
+
+      expect(fs.writeFileSync).toHaveBeenCalledWith('output.json', expect.any(String));
+      expect(Object.keys(reducedSpec.paths)).toStrictEqual(['/pet/{petId}']);
+      expect(Object.keys(reducedSpec.paths['/pet/{petId}'])).toStrictEqual(['get', 'post', 'delete']);
+    });
   });
 
   describe('error handling', () => {
