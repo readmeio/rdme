@@ -395,7 +395,7 @@ If you wish to automate the process of creating a new project version, and not h
 For example, the following command contains all the flags to bypass the CLI prompts:
 
 ```sh
-rdme versions:create <version> --fork={version-fork} --main={true|false} --beta={true|false} --deprecated={true|false} --isPublic={true|false}
+rdme versions:create <version> --fork={version-fork} --main={true|false} --beta={true|false} --deprecated={true|false} --hidden={true|false}
 ```
 
 See `rdme versions:create --help` for a full list of flags.

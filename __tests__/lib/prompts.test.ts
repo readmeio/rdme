@@ -97,7 +97,7 @@ describe('prompt test bed', () => {
         newVersion: '1.2.1',
         is_stable: false,
         is_beta: true,
-        is_public: true,
+        is_hidden: true,
         is_deprecated: false,
       });
     });

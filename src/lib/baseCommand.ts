@@ -189,24 +189,23 @@ export default class Command {
       {
         name: 'main',
         type: String,
-        description:
-          "Should this version be the primary (default) version for your project? (Must be 'true' or 'false')",
+        description: "Should this be the main version for your project? (Must be 'true' or 'false')",
       },
       {
         name: 'beta',
         type: String,
-        description: "Is this version in beta? (Must be 'true' or 'false')",
+        description: "Should this version be in beta? (Must be 'true' or 'false')",
       },
       {
         name: 'deprecated',
         type: String,
-        description: "Would you like to deprecate this version? (Must be 'true' or 'false')",
+        description:
+          "Should this version be deprecated? The main version cannot be deprecated. (Must be 'true' or 'false')",
       },
       {
-        name: 'isPublic',
+        name: 'hidden',
         type: String,
-        description:
-          "Would you like to make this version public? Any primary version must be public. (Must be 'true' or 'false')",
+        description: "Should this version be hidden? The main version cannot be hidden. (Must be 'true' or 'false')",
       },
     ];
   }
