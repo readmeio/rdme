@@ -15,7 +15,6 @@ import { validateFilePath } from '../../lib/validatePromptInput.js';
 interface Options {
   out?: string;
   spec?: string;
-  workingDirectory?: string;
 }
 
 export default class OpenAPIConvertCommand extends Command {
@@ -39,20 +38,13 @@ export default class OpenAPIConvertCommand extends Command {
         type: String,
         description: 'Output file path to write converted file to',
       },
-      this.getWorkingDirArg(),
     ];
   }
 
   async run(opts: ZeroAuthCommandOptions<Options>) {
     await super.run(opts);
 
-    const { spec, workingDirectory } = opts;
-
-    if (workingDirectory) {
-      const previousWorkingDirectory = process.cwd();
-      process.chdir(workingDirectory);
-      Command.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
-    }
+    const { spec } = opts;
 
     const { preparedSpec, specPath, specType } = await prepareOas(spec, 'openapi:convert', { convertToLatest: true });
     const parsedPreparedSpec: OASDocument = JSON.parse(preparedSpec);

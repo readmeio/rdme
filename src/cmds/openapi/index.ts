@@ -27,7 +27,6 @@ interface Options {
   update?: boolean;
   useSpecVersion?: boolean;
   version?: string;
-  workingDirectory?: string;
 }
 
 export default class OpenAPICommand extends Command {
@@ -54,7 +53,6 @@ export default class OpenAPICommand extends Command {
         type: String,
         defaultOption: true,
       },
-      this.getWorkingDirArg(),
       {
         name: 'useSpecVersion',
         type: Boolean,
@@ -90,7 +88,7 @@ export default class OpenAPICommand extends Command {
   async run(opts: AuthenticatedCommandOptions<Options>) {
     await super.run(opts);
 
-    const { dryRun, key, id, spec, create, raw, title, useSpecVersion, version, workingDirectory, update } = opts;
+    const { dryRun, key, id, spec, create, raw, title, useSpecVersion, version, update } = opts;
 
     let selectedVersion = version;
     let isUpdate: boolean;
@@ -109,12 +107,6 @@ export default class OpenAPICommand extends Command {
       throw new Error(
         'The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!',
       );
-    }
-
-    if (workingDirectory) {
-      const previousWorkingDirectory = process.cwd();
-      process.chdir(workingDirectory);
-      Command.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
     }
 
     if (version && id) {

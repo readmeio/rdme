@@ -23,7 +23,6 @@ interface Options {
   spec?: string;
   tag?: string[];
   title?: string;
-  workingDirectory?: string;
 }
 
 export default class OpenAPIReduceCommand extends Command {
@@ -66,20 +65,13 @@ export default class OpenAPIReduceCommand extends Command {
         description: 'Output file path to write reduced file to',
       },
       this.getTitleArg(),
-      this.getWorkingDirArg(),
     ];
   }
 
   async run(opts: ZeroAuthCommandOptions<Options>) {
     await super.run(opts);
 
-    const { spec, title, workingDirectory } = opts;
-
-    if (workingDirectory) {
-      const previousWorkingDirectory = process.cwd();
-      process.chdir(workingDirectory);
-      Command.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
-    }
+    const { spec, title } = opts;
 
     const { preparedSpec, specPath, specType } = await prepareOas(spec, 'openapi:reduce', { title });
     const parsedPreparedSpec: OASDocument = JSON.parse(preparedSpec);
