@@ -1,3 +1,19 @@
+# [9.0.0-next.4](https://github.com/readmeio/rdme/compare/v9.0.0-next.3...v9.0.0-next.4) (2023-09-15)
+
+
+### chore
+
+* type fixes for tests ([#903](https://github.com/readmeio/rdme/issues/903)) ([d423b4c](https://github.com/readmeio/rdme/commit/d423b4ceb15f5726bb5efed22a4a9cd6e5dfa9f9))
+
+
+### BREAKING CHANGES
+
+* removes several deprecated commands
+
+* chore: knip cleanup
+
+* chore: type fixes for tests
+
 # [9.0.0-next.3](https://github.com/readmeio/rdme/compare/v9.0.0-next.2...v9.0.0-next.3) (2023-09-14)
 
 
