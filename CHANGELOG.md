@@ -1,3 +1,15 @@
+# [9.0.0-next.5](https://github.com/readmeio/rdme/compare/v9.0.0-next.4...v9.0.0-next.5) (2023-09-15)
+
+
+### Features
+
+* **versions:** flag parity with API, copy fixes ([#906](https://github.com/readmeio/rdme/issues/906)) ([d424d9f](https://github.com/readmeio/rdme/commit/d424d9feef8bcb55f4a2a25fca19d25ad7b7e697))
+
+
+### BREAKING CHANGES
+
+* **versions:** this flips the `isPublic` flag to `hidden`.
+
 # [9.0.0-next.4](https://github.com/readmeio/rdme/compare/v9.0.0-next.3...v9.0.0-next.4) (2023-09-15)
 
 
