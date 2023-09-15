@@ -65,7 +65,7 @@ describe('rdme open', () => {
         return Promise.resolve();
       }
 
-      await expect(cmd.run({ mockOpen, dash: true, key: '12345' })).resolves.toBe(
+      await expect(cmd.run({ mockOpen, dash: true })).resolves.toBe(
         `Opening ${chalk.green(dashUrl)} in your browser...`,
       );
       mockRequest.done();
@@ -81,7 +81,7 @@ describe('rdme open', () => {
         return Promise.resolve();
       }
 
-      return expect(cmd.run({ mockOpen, dash: true, key: '12345' })).rejects.toStrictEqual(
+      return expect(cmd.run({ mockOpen, dash: true })).rejects.toStrictEqual(
         new Error(`Please login using \`${config.cli} login\`.`),
       );
     });

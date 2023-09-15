@@ -47,6 +47,7 @@ function toBeValidSchema(
   /** The JSON schema file */
   schema: AnySchema,
 ): ExpectationResult {
+  // @ts-expect-error this still works, not sure why TS is flagging it
   const ajv = new Ajv({ strictTypes: false, strictTuples: false });
 
   const data = jsYaml.load(yaml);
@@ -58,6 +59,7 @@ function toBeValidSchema(
     let output = 'expected YAML to be valid';
 
     if (validate.errors)
+      // @ts-expect-error this still works, not sure why TS is flagging it
       output = `${output}, here's the validation error\n\n${betterAjvErrors(schema, data, validate.errors)}`;
 
     return {

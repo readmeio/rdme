@@ -21,12 +21,14 @@ describe('rdme versions:create', () => {
   it('should prompt for login if no API key provided', async () => {
     const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
+    // @ts-expect-error deliberately passing in bad data
     await expect(createVersion.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
     consoleInfoSpy.mockRestore();
   });
 
   it('should error in CI if no API key provided', async () => {
     process.env.TEST_RDME_CI = 'true';
+    // @ts-expect-error deliberately passing in bad data
     await expect(createVersion.run({})).rejects.toStrictEqual(
       new Error('No project API key provided. Please use `--key`.'),
     );
