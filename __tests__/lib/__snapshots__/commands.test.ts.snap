@@ -50,11 +50,6 @@ exports[`utils > #listByCategory > should list commands by category 1`] = `
         "name": "openapi:validate",
       },
       {
-        "description": "Alias for \`rdme openapi\`. [deprecated]",
-        "hidden": true,
-        "name": "swagger",
-      },
-      {
         "description": "Alias for \`rdme openapi:validate\` [deprecated].",
         "hidden": true,
         "name": "validate",
@@ -110,11 +105,6 @@ exports[`utils > #listByCategory > should list commands by category 1`] = `
         "name": "docs:prune",
       },
       {
-        "description": "Edit a single file from your ReadMe project without saving locally. [deprecated]",
-        "hidden": true,
-        "name": "docs:edit",
-      },
-      {
         "description": "Alias for \`rdme docs\`.",
         "hidden": false,
         "name": "guides",
@@ -129,11 +119,6 @@ exports[`utils > #listByCategory > should list commands by category 1`] = `
   },
   "utilities": {
     "commands": [
-      {
-        "description": "Helpful OpenAPI generation tooling. [inactive]",
-        "hidden": true,
-        "name": "oas",
-      },
       {
         "description": "Open your current ReadMe project in the browser.",
         "hidden": false,

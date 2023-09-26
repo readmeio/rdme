@@ -1,7 +1,8 @@
 #! /usr/bin/env node
-const core = require('@actions/core');
+import * as core from '@actions/core';
 
-const { getNodeVersion, getMajorPkgVersion } = require('../dist/src/lib/getPkgVersion');
+// eslint-disable-next-line import/extensions
+import { getNodeVersion, getMajorPkgVersion } from '../dist/src/lib/getPkgVersion.js';
 
 /**
  * Sets output parameters for GitHub Actions workflow so we can do

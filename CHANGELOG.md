@@ -1,3 +1,69 @@
+# [9.0.0-next.5](https://github.com/readmeio/rdme/compare/v9.0.0-next.4...v9.0.0-next.5) (2023-09-15)
+
+
+### Features
+
+* **versions:** flag parity with API, copy fixes ([#906](https://github.com/readmeio/rdme/issues/906)) ([d424d9f](https://github.com/readmeio/rdme/commit/d424d9feef8bcb55f4a2a25fca19d25ad7b7e697))
+
+
+### BREAKING CHANGES
+
+* **versions:** this flips the `isPublic` flag to `hidden`.
+
+# [9.0.0-next.4](https://github.com/readmeio/rdme/compare/v9.0.0-next.3...v9.0.0-next.4) (2023-09-15)
+
+
+### chore
+
+* type fixes for tests ([#903](https://github.com/readmeio/rdme/issues/903)) ([d423b4c](https://github.com/readmeio/rdme/commit/d423b4ceb15f5726bb5efed22a4a9cd6e5dfa9f9))
+
+
+### BREAKING CHANGES
+
+* removes several deprecated commands
+
+* chore: knip cleanup
+
+* chore: type fixes for tests
+
+# [9.0.0-next.3](https://github.com/readmeio/rdme/compare/v9.0.0-next.2...v9.0.0-next.3) (2023-09-14)
+
+
+### Code Refactoring
+
+* remove `oas`, `swagger`, `docs:edit` ([#902](https://github.com/readmeio/rdme/issues/902)) ([9107d15](https://github.com/readmeio/rdme/commit/9107d15770532de98156b7407c7f274ba7ea28cf))
+
+
+### BREAKING CHANGES
+
+* removes several deprecated commands
+
+# [9.0.0-next.2](https://github.com/readmeio/rdme/compare/v9.0.0-next.1...v9.0.0-next.2) (2023-09-14)
+
+
+### Bug Fixes
+
+* hide `ExperimentalWarning` ([#901](https://github.com/readmeio/rdme/issues/901)) ([f9b5679](https://github.com/readmeio/rdme/commit/f9b56798ca4e30b18db932051ddab5dce35c49b5))
+
+# [9.0.0-next.1](https://github.com/readmeio/rdme/compare/v8.7.0-next.3...v9.0.0-next.1) (2023-09-14)
+
+
+### Features
+
+* support node 18 and up ([#900](https://github.com/readmeio/rdme/issues/900)) ([a217904](https://github.com/readmeio/rdme/commit/a2179048bd7d76d9177df0848b56c524eff50b13))
+
+
+### BREAKING CHANGES
+
+* Node.js >= 18 required
+
+# [8.7.0-next.3](https://github.com/readmeio/rdme/compare/v8.7.0-next.2...v8.7.0-next.3) (2023-09-14)
+
+
+### Features
+
+* convert to ESM (breaking change) ([#856](https://github.com/readmeio/rdme/issues/856)) ([84b8571](https://github.com/readmeio/rdme/commit/84b8571a31c442288d47c07c57524eae643f9f13)), closes [/www.stefanjudis.com/snippets/how-to-import-json-files-in-es-modules-node-js/#option-1](https://github.com//www.stefanjudis.com/snippets/how-to-import-json-files-in-es-modules-node-js//issues/option-1) [1#L228](https://github.com/1/issues/L228)
+
 # [8.7.0-next.2](https://github.com/readmeio/rdme/compare/v8.7.0-next.1...v8.7.0-next.2) (2023-09-13)
 
 

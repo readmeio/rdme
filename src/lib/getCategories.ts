@@ -1,6 +1,6 @@
 import { Headers } from 'node-fetch';
 
-import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch';
+import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch.js';
 
 /**
  * Returns all categories for a given project and version
@@ -9,21 +9,15 @@ import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch';
  * @param {String} selectedVersion project version
  * @returns An array of category objects
  */
-export default async function getCategories(key: string, selectedVersion: string) {
+export default async function getCategories(key: string, selectedVersion: string | undefined) {
   function getNumberOfPages() {
     let totalCount = 0;
     return readmeAPIFetch('/api/v1/categories?perPage=20&page=1', {
       method: 'get',
-      headers: cleanHeaders(
-        key,
-        new Headers({
-          'x-readme-version': selectedVersion,
-          Accept: 'application/json',
-        }),
-      ),
+      headers: cleanHeaders(key, selectedVersion, new Headers({ Accept: 'application/json' })),
     })
       .then(res => {
-        totalCount = Math.ceil(parseInt(res.headers.get('x-total-count'), 10) / 20);
+        totalCount = Math.ceil(parseInt(res.headers.get('x-total-count') || '0', 10) / 20);
         return handleRes(res);
       })
       .then(res => {
@@ -39,13 +33,7 @@ export default async function getCategories(key: string, selectedVersion: string
       [...new Array(totalCount + 1).keys()].slice(2).map(async page => {
         return readmeAPIFetch(`/api/v1/categories?perPage=20&page=${page}`, {
           method: 'get',
-          headers: cleanHeaders(
-            key,
-            new Headers({
-              'x-readme-version': selectedVersion,
-              Accept: 'application/json',
-            }),
-          ),
+          headers: cleanHeaders(key, selectedVersion, new Headers({ Accept: 'application/json' })),
         }).then(handleRes);
       }),
     )),

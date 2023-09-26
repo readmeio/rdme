@@ -2,8 +2,8 @@ import nock from 'nock';
 import prompts from 'prompts';
 import { describe, beforeAll, afterEach, it, expect, vi } from 'vitest';
 
-import CategoriesCreateCommand from '../../../src/cmds/categories/create';
-import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock';
+import CategoriesCreateCommand from '../../../src/cmds/categories/create.js';
+import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
 
 const categoriesCreate = new CategoriesCreateCommand();
 
@@ -20,12 +20,14 @@ describe('rdme categories:create', () => {
   it('should prompt for login if no API key provided', async () => {
     const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
+    // @ts-expect-error deliberately passing in bad data
     await expect(categoriesCreate.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
     consoleInfoSpy.mockRestore();
   });
 
   it('should error in CI if no API key provided', async () => {
     process.env.TEST_RDME_CI = 'true';
+    // @ts-expect-error deliberately passing in bad data
     await expect(categoriesCreate.run({})).rejects.toStrictEqual(
       new Error('No project API key provided. Please use `--key`.'),
     );

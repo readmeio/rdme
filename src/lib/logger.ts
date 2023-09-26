@@ -5,16 +5,15 @@ import * as core from '@actions/core';
 import chalk from 'chalk';
 import debugModule from 'debug';
 
-import config from './config';
-import { isGHA, isTest } from './isCI';
+import config from './config.js';
+import { isGHA, isTest } from './isCI.js';
 
 const debugPackage = debugModule(config.cli);
 
 /**
  * Wrapper for debug statements.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function debug(input: any) {
+function debug(input: unknown) {
   /* istanbul ignore next */
   if (isGHA() && !isTest()) {
     if (typeof input === 'object') {

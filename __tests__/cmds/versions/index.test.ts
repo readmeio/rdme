@@ -1,11 +1,11 @@
-import type { Version } from '../../../src/cmds/versions';
+import type { Version } from '../../../src/cmds/versions/index.js';
 
 import nock from 'nock';
 import prompts from 'prompts';
 import { describe, beforeAll, afterEach, it, expect, vi } from 'vitest';
 
-import VersionsCommand from '../../../src/cmds/versions';
-import getAPIMock from '../../helpers/get-api-mock';
+import VersionsCommand from '../../../src/cmds/versions/index.js';
+import getAPIMock from '../../helpers/get-api-mock.js';
 
 const key = 'API_KEY';
 const version = '1.0.0';
@@ -43,12 +43,14 @@ describe('rdme versions', () => {
   it('should prompt for login if no API key provided', async () => {
     const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
+    // @ts-expect-error deliberately passing in bad data
     await expect(versions.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
     consoleInfoSpy.mockRestore();
   });
 
   it('should error in CI if no API key provided', async () => {
     process.env.TEST_RDME_CI = 'true';
+    // @ts-expect-error deliberately passing in bad data
     await expect(versions.run({})).rejects.toStrictEqual(new Error('No project API key provided. Please use `--key`.'));
     delete process.env.TEST_RDME_CI;
   });

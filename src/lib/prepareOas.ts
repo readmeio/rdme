@@ -4,17 +4,19 @@ import chalk from 'chalk';
 import OASNormalize, { getAPIDefinitionType } from 'oas-normalize';
 import ora from 'ora';
 
-import isCI from './isCI';
-import { debug, info, warn, oraOptions } from './logger';
-import promptTerminal from './promptWrapper';
-import readdirRecursive from './readdirRecursive';
+import isCI from './isCI.js';
+import { debug, info, warn, oraOptions } from './logger.js';
+import promptTerminal from './promptWrapper.js';
+import readdirRecursive from './readdirRecursive.js';
 
 export type SpecFileType = OASNormalize['type'];
+
+type SpecType = 'OpenAPI' | 'Swagger' | 'Postman';
 
 interface FoundSpecFile {
   /** path to the spec file */
   filePath: string;
-  specType: 'OpenAPI' | 'Swagger' | 'Postman';
+  specType: SpecType;
   /**
    * OpenAPI or Postman specification version
    * @example '3.1'
@@ -24,6 +26,13 @@ interface FoundSpecFile {
 
 interface FileSelection {
   file: string;
+}
+
+// source: https://stackoverflow.com/a/58110124
+type Truthy<T> = T extends false | '' | 0 | null | undefined ? never : T;
+
+function truthy<T>(value: T): value is Truthy<T> {
+  return !!value;
 }
 
 const capitalizeSpecType = (type: string) =>
@@ -38,7 +47,7 @@ const capitalizeSpecType = (type: string) =>
  *    validation, or reducing one).
  */
 export default async function prepareOas(
-  path: string,
+  path: string | undefined,
   command: 'openapi' | 'openapi:convert' | 'openapi:inspect' | 'openapi:reduce' | 'openapi:validate',
   opts: {
     /**
@@ -103,7 +112,7 @@ export default async function prepareOas(
               debug(`specification type for ${file}: ${specification}`);
               debug(`version for ${file}: ${version}`);
               return ['openapi', 'swagger', 'postman'].includes(specification)
-                ? { filePath: file, specType: capitalizeSpecType(specification), version }
+                ? { filePath: file, specType: capitalizeSpecType(specification) as SpecType, version }
                 : null;
             })
             .catch(e => {
@@ -112,7 +121,7 @@ export default async function prepareOas(
             });
         })
       )
-    ).filter(Boolean);
+    ).filter(truthy);
 
     debug(`number of possible OpenAPI/Swagger files found: ${possibleSpecFiles.length}`);
 

@@ -1,4 +1,4 @@
-interface APIErrorResponse {
+export interface APIErrorResponse {
   docs?: string;
   error: string;
   help?: string;

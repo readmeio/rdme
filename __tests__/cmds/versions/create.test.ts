@@ -2,9 +2,9 @@ import nock from 'nock';
 import prompts from 'prompts';
 import { describe, beforeAll, afterEach, it, expect, vi } from 'vitest';
 
-import CreateVersionCommand from '../../../src/cmds/versions/create';
-import APIError from '../../../src/lib/apiError';
-import getAPIMock from '../../helpers/get-api-mock';
+import CreateVersionCommand from '../../../src/cmds/versions/create.js';
+import APIError from '../../../src/lib/apiError.js';
+import getAPIMock from '../../helpers/get-api-mock.js';
 
 const key = 'API_KEY';
 const version = '1.0.0';
@@ -21,12 +21,14 @@ describe('rdme versions:create', () => {
   it('should prompt for login if no API key provided', async () => {
     const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
+    // @ts-expect-error deliberately passing in bad data
     await expect(createVersion.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
     consoleInfoSpy.mockRestore();
   });
 
   it('should error in CI if no API key provided', async () => {
     process.env.TEST_RDME_CI = 'true';
+    // @ts-expect-error deliberately passing in bad data
     await expect(createVersion.run({})).rejects.toStrictEqual(
       new Error('No project API key provided. Please use `--key`.'),
     );
@@ -46,7 +48,7 @@ describe('rdme versions:create', () => {
   });
 
   it('should create a specific version', async () => {
-    prompts.inject([version, false, true, true]);
+    prompts.inject([version, false, true, true, false]);
     const newVersion = '1.0.1';
 
     const mockRequest = getAPIMock()
@@ -58,7 +60,8 @@ describe('rdme versions:create', () => {
         is_stable: false,
         is_beta: true,
         from: '1.0.0',
-        is_hidden: false,
+        is_hidden: true,
+        is_deprecated: false,
       })
       .basicAuth({ user: key })
       .reply(201, { version: newVersion });
@@ -94,7 +97,7 @@ describe('rdme versions:create', () => {
         deprecated: 'false',
         main: 'false',
         codename: 'test',
-        isPublic: 'true',
+        hidden: 'false',
       }),
     ).resolves.toBe(`Version ${newVersion} created successfully.`);
 
@@ -121,7 +124,7 @@ describe('rdme versions:create', () => {
         fork: version,
         beta: 'false',
         main: 'true',
-        isPublic: 'false',
+        hidden: 'true',
         deprecated: 'true',
       }),
     ).resolves.toBe(`Version ${newVersion} created successfully.`);
@@ -172,7 +175,7 @@ describe('rdme versions:create', () => {
       ).rejects.toStrictEqual(new Error("Invalid option passed for 'deprecated'. Must be 'true' or 'false'."));
     });
 
-    it('should throw if non-boolean `isPublic` flag is passed', () => {
+    it('should throw if non-boolean `hidden` flag is passed', () => {
       const newVersion = '1.0.1';
 
       return expect(
@@ -181,9 +184,9 @@ describe('rdme versions:create', () => {
           version: newVersion,
           fork: version,
           // @ts-expect-error deliberately passing a bad value here
-          isPublic: 'test',
+          hidden: 'test',
         }),
-      ).rejects.toStrictEqual(new Error("Invalid option passed for 'isPublic'. Must be 'true' or 'false'."));
+      ).rejects.toStrictEqual(new Error("Invalid option passed for 'hidden'. Must be 'true' or 'false'."));
     });
 
     it('should throw if non-boolean `main` flag is passed', () => {

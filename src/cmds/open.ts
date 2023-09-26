@@ -1,12 +1,12 @@
-import type { CommandOptions } from '../lib/baseCommand';
+import type { ZeroAuthCommandOptions } from '../lib/baseCommand.js';
 
 import chalk from 'chalk';
 import open from 'open';
 
-import Command, { CommandCategories } from '../lib/baseCommand';
-import config from '../lib/config';
-import getCurrentConfig from '../lib/getCurrentConfig';
-import { getProjectVersion } from '../lib/versionSelect';
+import Command, { CommandCategories } from '../lib/baseCommand.js';
+import config from '../lib/config.js';
+import getCurrentConfig from '../lib/getCurrentConfig.js';
+import { getProjectVersion } from '../lib/versionSelect.js';
 
 interface Options {
   dash?: boolean;
@@ -31,7 +31,7 @@ export default class OpenCommand extends Command {
     ];
   }
 
-  async run(opts: CommandOptions<Options>) {
+  async run(opts: ZeroAuthCommandOptions<Options>) {
     await super.run(opts);
 
     const { dash } = opts;

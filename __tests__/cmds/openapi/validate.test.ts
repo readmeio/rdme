@@ -1,13 +1,13 @@
 /* eslint-disable no-console */
-import fs from 'fs';
+import fs from 'node:fs';
 
 import chalk from 'chalk';
 import prompts from 'prompts';
 import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
-import OpenAPIValidateCommand from '../../../src/cmds/openapi/validate';
-import ValidateAliasCommand from '../../../src/cmds/validate';
-import { after, before } from '../../helpers/get-gha-setup';
+import OpenAPIValidateCommand from '../../../src/cmds/openapi/validate.js';
+import ValidateAliasCommand from '../../../src/cmds/validate.js';
+import { after, before } from '../../helpers/get-gha-setup.js';
 
 const validate = new OpenAPIValidateCommand();
 const validateAlias = new ValidateAliasCommand();

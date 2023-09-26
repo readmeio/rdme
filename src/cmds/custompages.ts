@@ -1,8 +1,8 @@
-import type { CommandOptions } from '../lib/baseCommand';
+import type { AuthenticatedCommandOptions } from '../lib/baseCommand.js';
 
-import Command, { CommandCategories } from '../lib/baseCommand';
-import supportsGHA from '../lib/decorators/supportsGHA';
-import syncDocsPath from '../lib/syncDocsPath';
+import Command, { CommandCategories } from '../lib/baseCommand.js';
+import supportsGHA from '../lib/decorators/supportsGHA.js';
+import syncDocsPath from '../lib/syncDocsPath.js';
 
 interface Options {
   dryRun?: boolean;
@@ -37,7 +37,7 @@ export default class CustomPagesCommand extends Command {
     ];
   }
 
-  async run(opts: CommandOptions<Options>) {
+  async run(opts: AuthenticatedCommandOptions<Options>) {
     await super.run(opts);
 
     const { dryRun, filePath, key } = opts;

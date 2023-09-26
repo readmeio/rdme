@@ -1,14 +1,14 @@
 import type { Response } from 'simple-git';
 
-import fs from 'fs';
+import fs from 'node:fs';
 
 import { vi } from 'vitest';
 
-import configstore from '../../src/lib/configstore';
-import { git } from '../../src/lib/createGHA';
-import * as getPkgVersion from '../../src/lib/getPkgVersion';
+import configstore from '../../src/lib/configstore.js';
+import { git } from '../../src/lib/createGHA/index.js';
+import * as getPkgVersion from '../../src/lib/getPkgVersion.js';
 
-import getGitRemoteMock from './get-git-mock';
+import getGitRemoteMock from './get-git-mock.js';
 
 /**
  * A helper function for setting up tests for our GitHub Action onboarding.

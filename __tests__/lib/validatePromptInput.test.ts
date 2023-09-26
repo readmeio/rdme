@@ -1,8 +1,8 @@
-import fs from 'fs';
+import fs from 'node:fs';
 
 import { describe, afterEach, it, expect, vi } from 'vitest';
 
-import { validateFilePath, validateSubdomain } from '../../src/lib/validatePromptInput';
+import { validateFilePath, validateSubdomain } from '../../src/lib/validatePromptInput.js';
 
 describe('#validateFilePath', () => {
   afterEach(() => {

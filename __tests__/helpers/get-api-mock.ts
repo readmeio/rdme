@@ -1,11 +1,11 @@
-import type { Headers } from 'headers-polyfill';
 import type { ResponseTransformer } from 'msw';
+import type { Headers } from 'node-fetch';
 
 import { rest } from 'msw';
 import nock from 'nock';
 
-import config from '../../src/lib/config';
-import { getUserAgent } from '../../src/lib/readmeAPIFetch';
+import config from '../../src/lib/config.js';
+import { getUserAgent } from '../../src/lib/readmeAPIFetch.js';
 
 /**
  * A type describing a raw object of request headers.
@@ -78,11 +78,12 @@ export function getAPIMockMSW(
 ) {
   return rest.get(`${proxy}${config.host}${path}`, (req, res, ctx) => {
     try {
+      // @ts-expect-error once we move off node-fetch, we can make these types consistent
       validateHeaders(req.headers, basicAuthUser, expectedReqHeaders);
       let responseTransformer: ResponseTransformer;
-      if (response.json) {
+      if (response?.json) {
         responseTransformer = ctx.json(response.json);
-      } else if (response.text) {
+      } else if (response?.text) {
         responseTransformer = ctx.text(response.text);
       }
       return res(ctx.status(status), responseTransformer);

@@ -1,11 +1,11 @@
 /* eslint-disable no-console */
-import fs from 'fs';
+import fs from 'node:fs';
 
 import chalk from 'chalk';
 import prompts from 'prompts';
 import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
-import OpenAPIReduceCommand from '../../../src/cmds/openapi/reduce';
+import OpenAPIReduceCommand from '../../../src/cmds/openapi/reduce.js';
 
 const reducer = new OpenAPIReduceCommand();
 
@@ -16,6 +16,7 @@ const getCommandOutput = () => consoleInfoSpy.mock.calls.join('\n\n');
 
 describe('rdme openapi:reduce (single-threaded)', () => {
   let testWorkingDir: string;
+
   beforeEach(() => {
     consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     testWorkingDir = process.cwd();
@@ -79,6 +80,7 @@ describe('rdme openapi:reduce (single-threaded)', () => {
         expect(Object.keys(reducedSpec.paths)).toStrictEqual(['/user']);
       });
     });
+
     describe('by path', () => {
       it('should reduce with no prompts via opts', async () => {
         const spec = 'petstore.json';

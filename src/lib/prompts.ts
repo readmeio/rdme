@@ -1,17 +1,19 @@
-import type { Version } from '../cmds/versions';
+import type { Version } from '../cmds/versions/index.js';
 import type { Response } from 'node-fetch';
 import type { Choice, PromptObject } from 'prompts';
 
 import parse from 'parse-link-header';
 import semver from 'semver';
 
-import promptTerminal from './promptWrapper';
-import { handleRes } from './readmeAPIFetch';
+import promptTerminal from './promptWrapper.js';
+import { handleRes } from './readmeAPIFetch.js';
 
 interface Spec {
   _id: string;
   title: string;
 }
+
+export type OpenAPIPromptOptions = 'create' | 'update';
 
 type SpecList = Spec[];
 
@@ -26,7 +28,12 @@ interface ParsedDocs {
   };
 }
 
-function specOptions(specList: SpecList, parsedDocs: ParsedDocs, currPage: number, totalPages: number): Choice[] {
+function specOptions(
+  specList: SpecList,
+  parsedDocs: ParsedDocs | null,
+  currPage: number,
+  totalPages: number,
+): Choice[] {
   const specs = specList.map(s => {
     return {
       description: `API Definition ID: ${s._id}`, // eslint-disable-line no-underscore-dangle
@@ -53,11 +60,11 @@ function specOptions(specList: SpecList, parsedDocs: ParsedDocs, currPage: numbe
 
 const updateOasPrompt = (
   specList: SpecList,
-  parsedDocs: ParsedDocs,
+  parsedDocs: ParsedDocs | null,
   currPage: number,
   totalPages: number,
   getSpecs: (url: string) => Promise<Response>,
-): PromptObject[] => [
+): PromptObject<'specId'>[] => [
   {
     type: 'select',
     name: 'specId',
@@ -66,12 +73,10 @@ const updateOasPrompt = (
     async format(spec: string) {
       if (spec === 'prev') {
         try {
-          const newSpecs = await getSpecs(`${parsedDocs.prev.url}`);
+          const newSpecs = await getSpecs(`${parsedDocs?.prev?.url || ''}`);
           const newParsedDocs = parse(newSpecs.headers.get('link'));
           const newSpecList = await handleRes(newSpecs);
-          // @todo: figure out how to add a stricter type here, see:
-          // https://github.com/readmeio/rdme/pull/570#discussion_r949715913
-          const { specId } = await promptTerminal(
+          const { specId }: { specId: string } = await promptTerminal(
             updateOasPrompt(newSpecList, newParsedDocs, currPage - 1, totalPages, getSpecs),
           );
           return specId;
@@ -80,12 +85,10 @@ const updateOasPrompt = (
         }
       } else if (spec === 'next') {
         try {
-          const newSpecs = await getSpecs(`${parsedDocs.next.url}`);
+          const newSpecs = await getSpecs(`${parsedDocs?.next?.url || ''}`);
           const newParsedDocs = parse(newSpecs.headers.get('link'));
           const newSpecList = await handleRes(newSpecs);
-          // @todo: figure out how to add a stricter type here, see:
-          // https://github.com/readmeio/rdme/pull/570#discussion_r949715913
-          const { specId } = await promptTerminal(
+          const { specId }: { specId: string } = await promptTerminal(
             updateOasPrompt(newSpecList, newParsedDocs, currPage + 1, totalPages, getSpecs),
           );
           return specId;
@@ -101,10 +104,10 @@ const updateOasPrompt = (
 
 export function createOasPrompt(
   specList: SpecList,
-  parsedDocs: ParsedDocs,
+  parsedDocs: ParsedDocs | null,
   totalPages: number,
-  getSpecs: ((url: string) => Promise<Response>) | null,
-): PromptObject[] {
+  getSpecs: (url: string) => Promise<Response>,
+): PromptObject<'option'>[] {
   return [
     {
       type: 'select',
@@ -114,11 +117,11 @@ export function createOasPrompt(
         { title: 'Update existing', value: 'update' },
         { title: 'Create a new spec', value: 'create' },
       ],
-      async format(picked: 'update' | 'create') {
+      async format(picked: OpenAPIPromptOptions) {
         if (picked === 'update') {
-          // @todo: figure out how to add a stricter type here, see:
-          // https://github.com/readmeio/rdme/pull/570#discussion_r949715913
-          const { specId } = await promptTerminal(updateOasPrompt(specList, parsedDocs, 1, totalPages, getSpecs));
+          const { specId }: { specId: string } = await promptTerminal(
+            updateOasPrompt(specList, parsedDocs, 1, totalPages, getSpecs),
+          );
           return specId;
         }
 
@@ -136,14 +139,14 @@ export function versionPrompt(
   /** list of versions, used for prompt about which version to fork */
   versionList: Version[],
   /** existing version if we're performing an update */
-  isUpdate?: {
+  existingVersion?: {
     is_stable: boolean;
   },
 ): PromptObject[] {
   return [
     {
       // only runs for versions:create command
-      type: isUpdate ? null : 'select',
+      type: existingVersion ? null : 'select',
       name: 'from',
       message: 'Which version would you like to fork from?',
       choices: versionList.map(v => {
@@ -155,7 +158,7 @@ export function versionPrompt(
     },
     {
       // only runs for versions:update command
-      type: !isUpdate ? null : 'text',
+      type: !existingVersion ? null : 'text',
       name: 'newVersion',
       message: 'What should the version be renamed to?',
       hint: '1.0.0',
@@ -166,11 +169,11 @@ export function versionPrompt(
       },
     },
     {
-      // if the existing version being updated is already the main version,
-      // we can't switch that so we skip this question
-      type: isUpdate?.is_stable ? null : 'confirm',
+      // if the user is already updating the main version
+      // we skip this question since it must remain the main version
+      type: existingVersion?.is_stable ? null : 'confirm',
       name: 'is_stable',
-      message: 'Would you like to make this version the main version for this project?',
+      message: 'Should this be the main version for your project?',
     },
     {
       type: 'confirm',
@@ -183,8 +186,8 @@ export function versionPrompt(
         // it can't also be hidden.
         return values.is_stable ? null : 'confirm';
       },
-      name: 'is_public',
-      message: 'Would you like to make this version public?',
+      name: 'is_hidden',
+      message: 'Should this version be hidden?',
     },
     {
       type: (prev, values) => {
@@ -193,7 +196,7 @@ export function versionPrompt(
         return values.is_stable ? null : 'confirm';
       },
       name: 'is_deprecated',
-      message: 'Would you like to deprecate this version?',
+      message: 'Should this version be deprecated?',
     },
   ];
 }

@@ -2,9 +2,9 @@
 import fetch from 'node-fetch';
 import semver from 'semver';
 
-import pkg from '../../package.json';
+import pkg from '../../package.json' assert { type: 'json' };
 
-import { error } from './logger';
+import { error } from './logger.js';
 
 const registryUrl = 'https://registry.npmjs.com/rdme';
 
@@ -20,7 +20,11 @@ type npmDistTag = 'latest';
  */
 export function getNodeVersion() {
   const { node } = pkg.engines;
-  return semver.minVersion(node).major;
+  const parsedVersion = semver.minVersion(node);
+  if (!parsedVersion) {
+    throw new Error('`version` value in package.json is invalid');
+  }
+  return parsedVersion.major;
 }
 
 /**
@@ -36,7 +40,7 @@ export function getNodeVersion() {
 export async function getPkgVersion(npmDistTag?: npmDistTag): Promise<string> {
   if (npmDistTag) {
     return fetch(registryUrl)
-      .then(res => res.json())
+      .then(res => res.json() as Promise<{ 'dist-tags': Record<string, string> }>)
       .then(body => body['dist-tags'][npmDistTag])
       .catch(err => {
         error(`error fetching version from npm registry: ${err.message}`);

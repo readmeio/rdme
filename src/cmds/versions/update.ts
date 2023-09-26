@@ -1,16 +1,16 @@
-import type { Version } from '.';
-import type { CommonOptions } from './create';
-import type { CommandOptions } from '../../lib/baseCommand';
+import type { CommonOptions } from './create.js';
+import type { Version } from './index.js';
+import type { AuthenticatedCommandOptions } from '../../lib/baseCommand.js';
 
 import { Headers } from 'node-fetch';
 import prompts from 'prompts';
 
-import Command, { CommandCategories } from '../../lib/baseCommand';
-import castStringOptToBool from '../../lib/castStringOptToBool';
-import * as promptHandler from '../../lib/prompts';
-import promptTerminal from '../../lib/promptWrapper';
-import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch';
-import { getProjectVersion } from '../../lib/versionSelect';
+import Command, { CommandCategories } from '../../lib/baseCommand.js';
+import castStringOptToBool from '../../lib/castStringOptToBool.js';
+import * as promptHandler from '../../lib/prompts.js';
+import promptTerminal from '../../lib/promptWrapper.js';
+import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch.js';
+import { getProjectVersion } from '../../lib/versionSelect.js';
 
 export interface Options extends CommonOptions {
   newVersion?: string;
@@ -37,10 +37,10 @@ export default class UpdateVersionCommand extends Command {
     ];
   }
 
-  async run(opts: CommandOptions<Options>) {
+  async run(opts: AuthenticatedCommandOptions<Options>) {
     await super.run(opts);
 
-    const { key, version, newVersion, codename, main, beta, isPublic, deprecated } = opts;
+    const { key, version, newVersion, codename, main, beta, hidden, deprecated } = opts;
 
     const selectedVersion = await getProjectVersion(version, key);
 
@@ -56,7 +56,7 @@ export default class UpdateVersionCommand extends Command {
     prompts.override({
       is_beta: castStringOptToBool(beta, 'beta'),
       is_deprecated: castStringOptToBool(deprecated, 'deprecated'),
-      is_public: castStringOptToBool(isPublic, 'isPublic'),
+      is_hidden: castStringOptToBool(hidden, 'hidden'),
       is_stable: castStringOptToBool(main, 'main'),
       newVersion,
     });
@@ -65,12 +65,11 @@ export default class UpdateVersionCommand extends Command {
 
     const body: Version = {
       codename,
-      // fall back to current version if user didn't enter one
+      // fallback to existing version if user was prompted to rename the version but didn't enter anything
       version: promptResponse.newVersion || version,
       is_beta: promptResponse.is_beta,
       is_deprecated: promptResponse.is_deprecated,
-      // if the "is public" question was never asked, we should omit that from the payload
-      is_hidden: typeof promptResponse.is_public === 'undefined' ? undefined : !promptResponse.is_public,
+      is_hidden: promptResponse.is_hidden,
       is_stable: promptResponse.is_stable,
     };
 
@@ -78,10 +77,8 @@ export default class UpdateVersionCommand extends Command {
       method: 'put',
       headers: cleanHeaders(
         key,
-        new Headers({
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        }),
+        undefined,
+        new Headers({ Accept: 'application/json', 'Content-Type': 'application/json' }),
       ),
       body: JSON.stringify(body),
     })

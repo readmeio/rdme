@@ -1,17 +1,17 @@
-import type { CommandOptions } from '../../lib/baseCommand';
+import type { AuthenticatedCommandOptions } from '../../lib/baseCommand.js';
 
 import chalk from 'chalk';
 import prompts from 'prompts';
 
-import Command, { CommandCategories } from '../../lib/baseCommand';
-import config from '../../lib/config';
-import createGHA from '../../lib/createGHA';
-import deleteDoc from '../../lib/deleteDoc';
-import getDocs from '../../lib/getDocs';
-import promptTerminal from '../../lib/promptWrapper';
-import readdirRecursive from '../../lib/readdirRecursive';
-import readDoc from '../../lib/readDoc';
-import { getProjectVersion } from '../../lib/versionSelect';
+import Command, { CommandCategories } from '../../lib/baseCommand.js';
+import config from '../../lib/config.js';
+import createGHA from '../../lib/createGHA/index.js';
+import deleteDoc from '../../lib/deleteDoc.js';
+import getDocs from '../../lib/getDocs.js';
+import promptTerminal from '../../lib/promptWrapper.js';
+import readdirRecursive from '../../lib/readdirRecursive.js';
+import readDoc from '../../lib/readDoc.js';
+import { getProjectVersion } from '../../lib/versionSelect.js';
 
 export interface Options {
   confirm?: boolean;
@@ -56,7 +56,7 @@ export default class DocsPruneCommand extends Command {
     ];
   }
 
-  async run(opts: CommandOptions<Options>) {
+  async run(opts: AuthenticatedCommandOptions<Options>) {
     await super.run(opts);
 
     const { dryRun, folder, key, version } = opts;

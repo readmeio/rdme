@@ -1,7 +1,7 @@
 import { Headers } from 'node-fetch';
 
-import getCategories from './getCategories';
-import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch';
+import getCategories from './getCategories.js';
+import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch.js';
 
 interface Document {
   _id: string;
@@ -14,7 +14,7 @@ interface Document {
 
 function flatten(data: Document[][]): Document[] {
   const allDocs: Document[] = [];
-  const docs: Document[] = [].concat(...data);
+  const docs: Document[] = (<Document[]>[]).concat(...data);
   docs.forEach(doc => {
     allDocs.push(doc);
     if (doc.children) {
@@ -31,16 +31,14 @@ function flatten(data: Document[][]): Document[] {
   return allDocs;
 }
 
-async function getCategoryDocs(key: string, selectedVersion: string, category: string): Promise<Document[]> {
+async function getCategoryDocs(
+  key: string,
+  selectedVersion: string | undefined,
+  category: string,
+): Promise<Document[]> {
   return readmeAPIFetch(`/api/v1/categories/${category}/docs`, {
     method: 'get',
-    headers: cleanHeaders(
-      key,
-      new Headers({
-        'x-readme-version': selectedVersion,
-        'Content-Type': 'application/json',
-      }),
-    ),
+    headers: cleanHeaders(key, selectedVersion, new Headers({ 'Content-Type': 'application/json' })),
   }).then(handleRes);
 }
 
@@ -51,7 +49,7 @@ async function getCategoryDocs(key: string, selectedVersion: string, category: s
  * @param {String} selectedVersion the project version
  * @returns {Promise<Array<Document>>} an array containing the docs
  */
-export default async function getDocs(key: string, selectedVersion: string): Promise<Document[]> {
+export default async function getDocs(key: string, selectedVersion: string | undefined): Promise<Document[]> {
   return getCategories(key, selectedVersion)
     .then(categories => categories.filter(({ type }: { type: string }) => type === 'guide'))
     .then(categories => categories.map(({ slug }: { slug: string }) => getCategoryDocs(key, selectedVersion, slug)))

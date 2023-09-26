@@ -1,18 +1,18 @@
-import type { Analysis, AnalyzedFeature } from '../../lib/analyzeOas';
-import type { CommandOptions } from '../../lib/baseCommand';
-import type { OASDocument } from 'oas/dist/rmoas.types';
+import type { Analysis, AnalyzedFeature } from '../../lib/analyzeOas.js';
+import type { ZeroAuthCommandOptions } from '../../lib/baseCommand.js';
+import type { OASDocument } from 'oas/rmoas.types';
 
 import chalk from 'chalk';
 import ora from 'ora';
 import pluralize from 'pluralize';
 import { getBorderCharacters, table } from 'table';
 
-import analyzeOas, { getSupportedFeatures } from '../../lib/analyzeOas';
-import Command, { CommandCategories } from '../../lib/baseCommand';
-import config from '../../lib/config';
-import { oraOptions } from '../../lib/logger';
-import prepareOas from '../../lib/prepareOas';
-import SoftError from '../../lib/softError';
+import analyzeOas, { getSupportedFeatures } from '../../lib/analyzeOas.js';
+import Command, { CommandCategories } from '../../lib/baseCommand.js';
+import config from '../../lib/config.js';
+import { oraOptions } from '../../lib/logger.js';
+import prepareOas from '../../lib/prepareOas.js';
+import SoftError from '../../lib/softError.js';
 
 interface Options {
   feature?: string[];
@@ -21,7 +21,7 @@ interface Options {
 }
 
 export default class OpenAPIInspectCommand extends Command {
-  definitionVersion: string;
+  definitionVersion!: string;
 
   tableBorder: Record<string, string>;
 
@@ -57,7 +57,7 @@ export default class OpenAPIInspectCommand extends Command {
       .reduce((prev, next) => Object.assign(prev, next));
   }
 
-  getFeatureDocsURL(feature: AnalyzedFeature): string {
+  getFeatureDocsURL(feature: AnalyzedFeature): string | undefined {
     if (!feature.url) {
       return undefined;
     }
@@ -178,12 +178,12 @@ export default class OpenAPIInspectCommand extends Command {
     [
       { component: 'openapi', header: 'OpenAPI Features' },
       { component: 'readme', header: 'ReadMe-Specific Features and Extensions' },
-    ].forEach(({ component, header }: { component: 'openapi' | 'readme'; header: string }) => {
+    ].forEach(({ component, header }: { component: string; header: string }) => {
       const tableData: string[][] = [
         [chalk.bold.green('Feature'), chalk.bold.green('Used?'), chalk.bold.green('Description')],
       ];
 
-      Object.entries(analysis[component]).forEach(([feature, info]) => {
+      Object.entries(analysis[component as 'openapi' | 'readme']).forEach(([feature, info]) => {
         const descriptions: string[] = [];
         if (info.description) {
           descriptions.push(info.description);
@@ -215,7 +215,7 @@ export default class OpenAPIInspectCommand extends Command {
     return report.join('\n');
   }
 
-  async run(opts: CommandOptions<Options>) {
+  async run(opts: ZeroAuthCommandOptions<Options>) {
     await super.run(opts);
 
     const { spec, workingDirectory, feature: features } = opts;

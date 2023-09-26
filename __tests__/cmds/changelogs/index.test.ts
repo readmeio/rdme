@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
 import chalk from 'chalk';
 import frontMatter from 'gray-matter';
@@ -7,10 +7,10 @@ import nock from 'nock';
 import prompts from 'prompts';
 import { describe, beforeAll, afterAll, beforeEach, it, expect, vi } from 'vitest';
 
-import ChangelogsCommand from '../../../src/cmds/changelogs';
-import APIError from '../../../src/lib/apiError';
-import getAPIMock from '../../helpers/get-api-mock';
-import hashFileContents from '../../helpers/hash-file-contents';
+import ChangelogsCommand from '../../../src/cmds/changelogs.js';
+import APIError from '../../../src/lib/apiError.js';
+import getAPIMock from '../../helpers/get-api-mock.js';
+import hashFileContents from '../../helpers/hash-file-contents.js';
 
 const changelogs = new ChangelogsCommand();
 
@@ -28,12 +28,14 @@ describe('rdme changelogs', () => {
   it('should prompt for login if no API key provided', async () => {
     const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
+    // @ts-expect-error deliberately passing in bad data
     await expect(changelogs.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
     consoleInfoSpy.mockRestore();
   });
 
   it('should error in CI if no API key provided', async () => {
     process.env.TEST_RDME_CI = 'true';
+    // @ts-expect-error deliberately passing in bad data
     await expect(changelogs.run({})).rejects.toStrictEqual(
       new Error('No project API key provided. Please use `--key`.'),
     );

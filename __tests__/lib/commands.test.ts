@@ -1,11 +1,11 @@
 /* eslint-disable vitest/no-conditional-expect */
-import type Command from '../../src/lib/baseCommand';
+import type Command from '../../src/lib/baseCommand.js';
 
 import { describe, it, expect, expectTypeOf } from 'vitest';
 
-import DocsCommand from '../../src/cmds/docs';
-import { CommandCategories } from '../../src/lib/baseCommand';
-import * as commands from '../../src/lib/commands';
+import DocsCommand from '../../src/cmds/docs/index.js';
+import { CommandCategories } from '../../src/lib/baseCommand.js';
+import * as commands from '../../src/lib/commands.js';
 
 /** @see {@link https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_isempty} */
 const isEmpty = obj => [Object, Array].includes((obj || {}).constructor) && !Object.entries(obj || {}).length;

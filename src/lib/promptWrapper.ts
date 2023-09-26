@@ -1,6 +1,6 @@
 import prompts from 'prompts';
 
-import isCI from './isCI';
+import isCI from './isCI.js';
 
 /**
  * The `prompts` library doesn't always interpret CTRL+C and release the terminal back to the user

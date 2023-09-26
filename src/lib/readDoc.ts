@@ -1,17 +1,16 @@
-import crypto from 'crypto';
-import fs from 'fs';
-import path from 'path';
+import crypto from 'node:crypto';
+import fs from 'node:fs';
+import path from 'node:path';
 
 import grayMatter from 'gray-matter';
 
-import { debug } from './logger';
+import { debug } from './logger.js';
 
 interface ReadDocMetadata {
   /** The contents of the file below the YAML front matter */
   content: string;
   /** A JSON object with the YAML front matter */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   /**
    * A hash of the file contents (including the front matter)
    */

@@ -1,7 +1,7 @@
-import type { CommandOptions } from '../../lib/baseCommand';
-import type { Options } from '../docs/prune';
+import type { AuthenticatedCommandOptions } from '../../lib/baseCommand.js';
+import type { Options } from '../docs/prune.js';
 
-import DocsPruneCommand from '../docs/prune';
+import DocsPruneCommand from '../docs/prune.js';
 
 export default class GuidesPruneCommand extends DocsPruneCommand {
   constructor() {
@@ -12,7 +12,7 @@ export default class GuidesPruneCommand extends DocsPruneCommand {
     this.description = 'Alias for `rdme docs:prune`.';
   }
 
-  async run(opts: CommandOptions<Options>) {
+  async run(opts: AuthenticatedCommandOptions<Options>) {
     return super.run(opts);
   }
 }

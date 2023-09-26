@@ -1,16 +1,16 @@
-import fs from 'fs/promises';
-import path from 'path';
+import fs from 'node:fs/promises';
+import path from 'node:path';
 
 import chalk from 'chalk';
 import { Headers } from 'node-fetch';
 
-import APIError from './apiError';
-import Command, { CommandCategories } from './baseCommand';
-import config from './config';
-import { debug } from './logger';
-import readdirRecursive from './readdirRecursive';
-import readDoc from './readDoc';
-import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch';
+import APIError from './apiError.js';
+import Command, { CommandCategories } from './baseCommand.js';
+import config from './config.js';
+import { debug } from './logger.js';
+import readdirRecursive from './readdirRecursive.js';
+import readDoc from './readDoc.js';
+import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch.js';
 
 /**
  * Reads the contents of the specified Markdown or HTML file
@@ -25,7 +25,7 @@ import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch';
  */
 async function pushDoc(
   key: string,
-  selectedVersion: string,
+  selectedVersion: string | undefined,
   dryRun: boolean,
   filePath: string,
   type: CommandCategories,
@@ -66,13 +66,7 @@ async function pushDoc(
         `/api/v1/${type}`,
         {
           method: 'post',
-          headers: cleanHeaders(
-            key,
-            new Headers({
-              'x-readme-version': selectedVersion,
-              'Content-Type': 'application/json',
-            }),
-          ),
+          headers: cleanHeaders(key, selectedVersion, new Headers({ 'Content-Type': 'application/json' })),
           body: JSON.stringify({
             slug,
             ...payload,
@@ -103,13 +97,7 @@ async function pushDoc(
       `/api/v1/${type}/${slug}`,
       {
         method: 'put',
-        headers: cleanHeaders(
-          key,
-          new Headers({
-            'x-readme-version': selectedVersion,
-            'Content-Type': 'application/json',
-          }),
-        ),
+        headers: cleanHeaders(key, selectedVersion, new Headers({ 'Content-Type': 'application/json' })),
         body: JSON.stringify(payload),
       },
       { filePath, fileType: 'path' },
@@ -120,13 +108,7 @@ async function pushDoc(
 
   return readmeAPIFetch(`/api/v1/${type}/${slug}`, {
     method: 'get',
-    headers: cleanHeaders(
-      key,
-      new Headers({
-        'x-readme-version': selectedVersion,
-        Accept: 'application/json',
-      }),
-    ),
+    headers: cleanHeaders(key, selectedVersion, new Headers({ Accept: 'application/json' })),
   })
     .then(async res => {
       const body = await handleRes(res, false);
@@ -154,15 +136,15 @@ export default async function syncDocsPath(
   /** Project API key */
   key: string,
   /** ReadMe project version */
-  selectedVersion: string,
+  selectedVersion: string | undefined,
   /** module within ReadMe to update (e.g. docs, changelogs, etc.) */
   cmdType: CommandCategories,
   /** Example command usage, used in error message */
   usage: string,
   /** Path input, can either be a directory or a single file */
-  pathInput: string,
+  pathInput: string | undefined,
   /** boolean indicating dry run mode */
-  dryRun: boolean,
+  dryRun: boolean = false,
   /** array of allowed file extensions */
   allowedFileExtensions = ['.markdown', '.md'],
 ) {

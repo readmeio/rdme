@@ -1,11 +1,11 @@
-import fs from 'fs';
+import fs from 'node:fs';
 
-import FormData from 'form-data';
+import { FormData } from 'formdata-node';
 import ora from 'ora';
 import { file as tmpFile } from 'tmp-promise';
 
-import { debug, oraOptions } from './logger';
-import readmeAPIFetch, { handleRes } from './readmeAPIFetch';
+import { debug, oraOptions } from './logger.js';
+import readmeAPIFetch, { handleRes } from './readmeAPIFetch.js';
 
 /**
  * Uploads a spec to the API registry for usage in ReadMe
@@ -24,7 +24,14 @@ export default async function streamSpecToRegistry(spec: string) {
 
   debug('file and stream created, streaming into form data payload');
   const formData = new FormData();
-  formData.append('spec', stream);
+  formData.append('spec', {
+    type: 'application/json',
+    name: 'openapi.json',
+    [Symbol.toStringTag]: 'File',
+    stream() {
+      return stream;
+    },
+  });
 
   const options = {
     body: formData,

@@ -1,8 +1,8 @@
-import type { CommandCategories } from './baseCommand';
+import type { CommandCategories } from './baseCommand.js';
 
 import { Headers } from 'node-fetch';
 
-import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch';
+import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch.js';
 
 /**
  * Delete a document from ReadMe
@@ -16,8 +16,8 @@ import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch';
  */
 export default async function deleteDoc(
   key: string,
-  selectedVersion: string,
-  dryRun: boolean,
+  selectedVersion: string | undefined,
+  dryRun: boolean | undefined,
   slug: string,
   type: CommandCategories,
 ): Promise<string> {
@@ -26,13 +26,7 @@ export default async function deleteDoc(
   }
   return readmeAPIFetch(`/api/v1/${type}/${slug}`, {
     method: 'delete',
-    headers: cleanHeaders(
-      key,
-      new Headers({
-        'x-readme-version': selectedVersion,
-        'Content-Type': 'application/json',
-      }),
-    ),
+    headers: cleanHeaders(key, selectedVersion, new Headers({ 'Content-Type': 'application/json' })),
   })
     .then(handleRes)
     .then(() => `🗑️  successfully deleted \`${slug}\`.`);

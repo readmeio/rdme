@@ -1,19 +1,22 @@
 /* eslint-disable no-underscore-dangle */
-import type Command from './lib/baseCommand';
-import type { CommandOptions } from './lib/baseCommand';
+import type Command from './lib/baseCommand.js';
+import type { CommandOptions } from './lib/baseCommand.js';
+import type { CommandLineOptions } from 'command-line-args';
 
 import chalk from 'chalk';
 import cliArgs from 'command-line-args';
 import parseArgsStringToArgv from 'string-argv';
 
-import { version } from '../package.json';
+import pkg from '../package.json' assert { type: 'json' };
 
-import * as commands from './lib/commands';
-import config from './lib/config';
-import createGHA from './lib/createGHA';
-import getCurrentConfig from './lib/getCurrentConfig';
-import * as help from './lib/help';
-import { debug } from './lib/logger';
+import * as commands from './lib/commands.js';
+import config from './lib/config.js';
+import createGHA from './lib/createGHA/index.js';
+import getCurrentConfig from './lib/getCurrentConfig.js';
+import * as help from './lib/help.js';
+import { debug } from './lib/logger.js';
+
+const { version } = pkg;
 
 /**
  * @param {Array} processArgv - An array of arguments from the current process. Can be used to mock
@@ -82,7 +85,7 @@ export default function rdme(rawProcessArgv: NodeJS.Process['argv']) {
   }
 
   try {
-    let cmdArgv: CommandOptions<{}>;
+    let cmdArgv: CommandOptions | CommandLineOptions;
     let bin: Command;
 
     // Handling for `rdme help` and `rdme help <command>` cases.
@@ -91,7 +94,7 @@ export default function rdme(rawProcessArgv: NodeJS.Process['argv']) {
         return Promise.resolve(help.globalUsage(mainArgs));
       }
 
-      if (argv._unknown.indexOf('-H') !== -1) {
+      if (argv._unknown?.indexOf('-H') !== -1) {
         return Promise.resolve(help.globalUsage(mainArgs));
       }
 
@@ -123,7 +126,7 @@ export default function rdme(rawProcessArgv: NodeJS.Process['argv']) {
       //
       // Instead of failing out to the user with an undecipherable "Unknown value: ..." error, let's
       // try to parse their request again but a tad less eager.
-      if ((e.name !== 'UNKNOWN_VALUE' || (e.name === 'UNKNOWN_VALUE' && !argv.version)) && argv.command !== 'oas') {
+      if (e.name !== 'UNKNOWN_VALUE' || (e.name === 'UNKNOWN_VALUE' && !argv.version)) {
         throw e;
       }
 
@@ -134,9 +137,9 @@ export default function rdme(rawProcessArgv: NodeJS.Process['argv']) {
 
     cmdArgv = { key, ...cmdArgv };
 
-    return bin.run(cmdArgv).then((msg: string) => {
+    return bin.run(cmdArgv as CommandOptions).then((msg: string) => {
       if (bin.supportsGHA) {
-        return createGHA(msg, bin.command, bin.args, cmdArgv);
+        return createGHA(msg, bin.command, bin.args, cmdArgv as CommandOptions);
       }
       return msg;
     });

@@ -1,16 +1,16 @@
-import type { CommandOptions } from '../../lib/baseCommand';
-import type { OASDocument } from 'oas/dist/rmoas.types';
+import type { ZeroAuthCommandOptions } from '../../lib/baseCommand.js';
+import type { OASDocument } from 'oas/rmoas.types';
 
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
 import chalk from 'chalk';
 import prompts from 'prompts';
 
-import Command, { CommandCategories } from '../../lib/baseCommand';
-import prepareOas from '../../lib/prepareOas';
-import promptTerminal from '../../lib/promptWrapper';
-import { validateFilePath } from '../../lib/validatePromptInput';
+import Command, { CommandCategories } from '../../lib/baseCommand.js';
+import prepareOas from '../../lib/prepareOas.js';
+import promptTerminal from '../../lib/promptWrapper.js';
+import { validateFilePath } from '../../lib/validatePromptInput.js';
 
 interface Options {
   out?: string;
@@ -43,7 +43,7 @@ export default class OpenAPIConvertCommand extends Command {
     ];
   }
 
-  async run(opts: CommandOptions<Options>) {
+  async run(opts: ZeroAuthCommandOptions<Options>) {
     await super.run(opts);
 
     const { spec, workingDirectory } = opts;

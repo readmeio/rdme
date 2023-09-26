@@ -1,9 +1,9 @@
-import type { CommandOptions } from '../../lib/baseCommand';
+import type { AuthenticatedCommandOptions } from '../../lib/baseCommand.js';
 
-import Command, { CommandCategories } from '../../lib/baseCommand';
-import createGHA from '../../lib/createGHA';
-import syncDocsPath from '../../lib/syncDocsPath';
-import { getProjectVersion } from '../../lib/versionSelect';
+import Command, { CommandCategories } from '../../lib/baseCommand.js';
+import createGHA from '../../lib/createGHA/index.js';
+import syncDocsPath from '../../lib/syncDocsPath.js';
+import { getProjectVersion } from '../../lib/versionSelect.js';
 
 export interface Options {
   dryRun?: boolean;
@@ -38,7 +38,7 @@ export default class DocsCommand extends Command {
     ];
   }
 
-  async run(opts: CommandOptions<Options>) {
+  async run(opts: AuthenticatedCommandOptions<Options>) {
     await super.run(opts);
 
     const { dryRun, filePath, key, version } = opts;

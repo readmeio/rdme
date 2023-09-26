@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import fs from 'fs';
+import fs from 'node:fs';
 
 import chalk from 'chalk';
 import { rest } from 'msw';
@@ -7,11 +7,11 @@ import { setupServer } from 'msw/node';
 import prompts from 'prompts';
 import { describe, beforeAll, beforeEach, afterEach, it, expect, vi, afterAll } from 'vitest';
 
-import OpenAPICommand from '../../../src/cmds/openapi';
-import config from '../../../src/lib/config';
-import { getAPIMockMSW } from '../../helpers/get-api-mock';
-import { after, before } from '../../helpers/get-gha-setup';
-import { after as afterGHAEnv, before as beforeGHAEnv } from '../../helpers/setup-gha-env';
+import OpenAPICommand from '../../../src/cmds/openapi/index.js';
+import config from '../../../src/lib/config.js';
+import { getAPIMockMSW } from '../../helpers/get-api-mock.js';
+import { after, before } from '../../helpers/get-gha-setup.js';
+import { after as afterGHAEnv, before as beforeGHAEnv } from '../../helpers/setup-gha-env.js';
 
 const openapi = new OpenAPICommand();
 

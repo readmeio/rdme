@@ -1,10 +1,10 @@
 #! /usr/bin/env node
-const fs = require('fs/promises');
+import fs from 'node:fs/promises';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
-const jsYaml = require('js-yaml');
+import jsYaml from 'js-yaml';
 
-const pkg = require('../package.json');
+import pkg from '../package.json' assert { type: 'json' };
 
 /**
  * Updates our `action.yml` file so it properly points to

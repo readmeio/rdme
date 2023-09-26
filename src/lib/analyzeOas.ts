@@ -1,7 +1,7 @@
-import type { OASAnalysis, OASAnalysisFeature } from 'oas/dist/analyzer';
-import type { OASDocument } from 'oas/dist/rmoas.types';
+import type { OASAnalysis, OASAnalysisFeature } from 'oas/analyzer';
+import type { OASDocument } from 'oas/rmoas.types';
 
-import analyzer from 'oas/dist/analyzer';
+import analyzer from 'oas/analyzer';
 
 export interface AnalyzedFeature extends OASAnalysisFeature {
   description: string;
@@ -169,19 +169,19 @@ const README_FEATURE_DOCS: Record<keyof Analysis['readme'], Pick<AnalyzedFeature
  *
  */
 async function analyzeOas(definition: OASDocument) {
-  return analyzer(definition).then((analysis: Analysis) => {
+  return analyzer(definition).then(analysisResult => {
+    const analysis = analysisResult as Analysis;
     if (analysis.openapi) {
-      Object.entries(OPENAPI_FEATURE_DOCS).forEach(([feature, docs]: [keyof Analysis['openapi'], AnalyzedFeature]) => {
-        // eslint-disable-next-line no-param-reassign
-        analysis.openapi[feature] = {
-          ...analysis.openapi[feature],
+      Object.entries(OPENAPI_FEATURE_DOCS).forEach(([feature, docs]) => {
+        analysis.openapi[feature as keyof Analysis['openapi']] = {
+          ...analysis.openapi[feature as keyof Analysis['openapi']],
           ...docs,
         };
       });
     }
 
     if (analysis.readme) {
-      Object.entries(README_FEATURE_DOCS).forEach(([feature, docs]: [keyof Analysis['readme'], AnalyzedFeature]) => {
+      Object.entries(README_FEATURE_DOCS).forEach(([feature, docs]) => {
         // If this ReadMe feature isn't in our resulted analysis result then it's a deprecated
         // feature that this API definition doesn't contain so we don't need to inform the user of
         // something they neither use, can't use anyways, nor should know about.
@@ -189,11 +189,10 @@ async function analyzeOas(definition: OASDocument) {
           return;
         }
 
-        // eslint-disable-next-line no-param-reassign
-        analysis.readme[feature] = {
-          ...analysis.readme[feature],
+        analysis.readme[feature as keyof Analysis['readme']] = {
+          ...analysis.readme[feature as keyof Analysis['readme']],
           ...docs,
-        };
+        } as AnalyzedFeature;
       });
     }
 

@@ -2,9 +2,9 @@ import nock from 'nock';
 import prompts from 'prompts';
 import { describe, beforeAll, afterAll, it, expect, vi } from 'vitest';
 
-import DocsPruneCommand from '../../../src/cmds/docs/prune';
-import GuidesPruneCommand from '../../../src/cmds/guides/prune';
-import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock';
+import DocsPruneCommand from '../../../src/cmds/docs/prune.js';
+import GuidesPruneCommand from '../../../src/cmds/guides/prune.js';
+import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
 
 const docsPrune = new DocsPruneCommand();
 const guidesPrune = new GuidesPruneCommand();
@@ -26,12 +26,14 @@ describe('rdme docs:prune', () => {
   it('should prompt for login if no API key provided', async () => {
     const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
+    // @ts-expect-error deliberately passing in bad data
     await expect(docsPrune.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
     consoleInfoSpy.mockRestore();
   });
 
   it('should error in CI if no API key provided', async () => {
     process.env.TEST_RDME_CI = 'true';
+    // @ts-expect-error deliberately passing in bad data
     await expect(docsPrune.run({})).rejects.toStrictEqual(
       new Error('No project API key provided. Please use `--key`.'),
     );

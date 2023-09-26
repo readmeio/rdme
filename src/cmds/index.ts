@@ -1,28 +1,25 @@
-import CategoriesCommand from './categories';
-import CategoriesCreateCommand from './categories/create';
-import ChangelogsCommand from './changelogs';
-import CustomPagesCommand from './custompages';
-import DocsCommand from './docs';
-import DocsEditCommand from './docs/edit';
-import DocsPruneCommand from './docs/prune';
-import GuidesCommand from './guides';
-import GuidesPruneCommand from './guides/prune';
-import LoginCommand from './login';
-import LogoutCommand from './logout';
-import OASCommand from './oas';
-import OpenCommand from './open';
-import OpenAPICommand from './openapi';
-import OpenAPIConvertCommand from './openapi/convert';
-import OpenAPIInspectCommand from './openapi/inspect';
-import OpenAPIReduceCommand from './openapi/reduce';
-import OpenAPIValidateCommand from './openapi/validate';
-import SwaggerCommand from './swagger';
-import ValidateAliasCommand from './validate';
-import VersionsCommand from './versions';
-import CreateVersionCommand from './versions/create';
-import DeleteVersionCommand from './versions/delete';
-import UpdateVersionCommand from './versions/update';
-import WhoAmICommand from './whoami';
+import CategoriesCreateCommand from './categories/create.js';
+import CategoriesCommand from './categories/index.js';
+import ChangelogsCommand from './changelogs.js';
+import CustomPagesCommand from './custompages.js';
+import DocsCommand from './docs/index.js';
+import DocsPruneCommand from './docs/prune.js';
+import GuidesCommand from './guides/index.js';
+import GuidesPruneCommand from './guides/prune.js';
+import LoginCommand from './login.js';
+import LogoutCommand from './logout.js';
+import OpenCommand from './open.js';
+import OpenAPIConvertCommand from './openapi/convert.js';
+import OpenAPICommand from './openapi/index.js';
+import OpenAPIInspectCommand from './openapi/inspect.js';
+import OpenAPIReduceCommand from './openapi/reduce.js';
+import OpenAPIValidateCommand from './openapi/validate.js';
+import ValidateAliasCommand from './validate.js';
+import CreateVersionCommand from './versions/create.js';
+import DeleteVersionCommand from './versions/delete.js';
+import VersionsCommand from './versions/index.js';
+import UpdateVersionCommand from './versions/update.js';
+import WhoAmICommand from './whoami.js';
 
 const commands = {
   categories: CategoriesCommand,
@@ -33,7 +30,6 @@ const commands = {
 
   docs: DocsCommand,
   'docs:prune': DocsPruneCommand,
-  'docs:edit': DocsEditCommand,
   guides: GuidesCommand,
   'guides:prune': GuidesPruneCommand,
 
@@ -44,7 +40,6 @@ const commands = {
 
   login: LoginCommand,
   logout: LogoutCommand,
-  oas: OASCommand,
   open: OpenCommand,
 
   openapi: OpenAPICommand,
@@ -53,7 +48,6 @@ const commands = {
   'openapi:reduce': OpenAPIReduceCommand,
   'openapi:validate': OpenAPIValidateCommand,
 
-  swagger: SwaggerCommand,
   validate: ValidateAliasCommand,
   whoami: WhoAmICommand,
 };
