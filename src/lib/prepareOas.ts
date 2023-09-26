@@ -61,7 +61,7 @@ export default async function prepareOas(
     title?: string;
   } = {
     convertToLatest: false,
-  }
+  },
 ) {
   let specPath = path;
 
@@ -96,7 +96,7 @@ export default async function prepareOas(
       file =>
         file.toLowerCase().endsWith('.json') ||
         file.toLowerCase().endsWith('.yaml') ||
-        file.toLowerCase().endsWith('.yml')
+        file.toLowerCase().endsWith('.yml'),
     );
 
     debug(`number of JSON or YAML files found: ${jsonAndYamlFiles.length}`);
@@ -119,7 +119,7 @@ export default async function prepareOas(
               debug(`error extracting API definition specification version for ${file}: ${e.message}`);
               return null;
             });
-        })
+        }),
       )
     ).filter(truthy);
 
@@ -128,7 +128,7 @@ export default async function prepareOas(
     if (!possibleSpecFiles.length) {
       fileFindingSpinner.fail();
       throw new Error(
-        `We couldn't find an OpenAPI or Swagger definition.\n\nPlease specify the path to your definition with \`rdme ${command} ./path/to/api/definition\`.`
+        `We couldn't find an OpenAPI or Swagger definition.\n\nPlease specify the path to your definition with \`rdme ${command} ./path/to/api/definition\`.`,
       );
     }
 
@@ -216,22 +216,22 @@ export default async function prepareOas(
     switch (command) {
       case 'openapi':
         warn(
-          'You are attempting to upload a Postman collection. This feature is currently experimental. For more information, visit our docs here: https://docs.readme.com/main/docs/openapi#the-api-reference'
+          'You are attempting to upload a Postman collection. This feature is currently experimental. For more information, visit our docs here: https://docs.readme.com/main/docs/openapi#the-api-reference',
         );
         break;
       case 'openapi:validate':
         warn(
-          'You are attempting to validate a Postman collection. This feature is currently experimental. For more information, visit our docs here: https://docs.readme.com/main/docs/openapi#the-api-reference'
+          'You are attempting to validate a Postman collection. This feature is currently experimental. For more information, visit our docs here: https://docs.readme.com/main/docs/openapi#the-api-reference',
         );
         break;
       case 'openapi:inspect':
         warn(
-          'You are inspecting a Postman collection. This feature is currently experimental. For more information, visit our docs here: https://docs.readme.com/main/docs/openapi#the-api-reference'
+          'You are inspecting a Postman collection. This feature is currently experimental. For more information, visit our docs here: https://docs.readme.com/main/docs/openapi#the-api-reference',
         );
         break;
       case 'openapi:convert':
         warn(
-          'You are attempting to convert a Postman collection to an OpenAPI file. This feature is currently experimental. For more information, visit our docs here: https://docs.readme.com/main/docs/openapi#the-api-reference'
+          'You are attempting to convert a Postman collection to an OpenAPI file. This feature is currently experimental. For more information, visit our docs here: https://docs.readme.com/main/docs/openapi#the-api-reference',
         );
         break;
       default:
