@@ -1,3 +1,10 @@
+# [9.0.0-next.6](https://github.com/readmeio/rdme/compare/v9.0.0-next.5...v9.0.0-next.6) (2023-09-26)
+
+
+### Bug Fixes
+
+* fixed debug script ([#908](https://github.com/readmeio/rdme/issues/908)) ([82c3541](https://github.com/readmeio/rdme/commit/82c354154fa928c4cb95f6edae1290deb339f783))
+
 # [9.0.0-next.5](https://github.com/readmeio/rdme/compare/v9.0.0-next.4...v9.0.0-next.5) (2023-09-15)
 
 
