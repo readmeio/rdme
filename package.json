@@ -80,7 +80,7 @@
     "@types/js-yaml": "^4.0.5",
     "@types/mime-types": "^2.1.1",
     "@types/parse-link-header": "^2.0.0",
-    "@types/pluralize": "^0.0.30",
+    "@types/pluralize": "^0.0.31",
     "@types/prompts": "^2.4.2",
     "@types/semver": "^7.3.12",
     "@types/update-notifier": "^6.0.5",
