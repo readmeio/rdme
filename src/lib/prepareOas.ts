@@ -1,7 +1,8 @@
 import type { OpenAPI } from 'openapi-types';
 
 import chalk from 'chalk';
-import OASNormalize, { getAPIDefinitionType } from 'oas-normalize';
+import OASNormalize from 'oas-normalize';
+import { getAPIDefinitionType } from 'oas-normalize/lib/utils';
 import ora from 'ora';
 
 import isCI from './isCI.js';
