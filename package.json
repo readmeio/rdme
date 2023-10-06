@@ -67,7 +67,7 @@
     "@commitlint/cli": "^17.6.6",
     "@commitlint/config-conventional": "^17.6.6",
     "@readme/better-ajv-errors": "^1.5.0",
-    "@readme/eslint-config": "^13.0.0",
+    "@readme/eslint-config": "^13.1.0",
     "@readme/oas-examples": "^5.10.0",
     "@rollup/plugin-commonjs": "^25.0.4",
     "@rollup/plugin-json": "^6.0.0",
