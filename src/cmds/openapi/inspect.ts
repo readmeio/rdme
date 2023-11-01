@@ -1,6 +1,6 @@
 import type { Analysis, AnalyzedFeature } from '../../lib/analyzeOas.js';
 import type { ZeroAuthCommandOptions } from '../../lib/baseCommand.js';
-import type { OASDocument } from 'oas/rmoas.types';
+import type { OASDocument } from 'oas/types';
 
 import chalk from 'chalk';
 import ora from 'ora';

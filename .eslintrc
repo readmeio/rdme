@@ -66,6 +66,9 @@
           }
         ]
       }
-    ]
+    ],
+
+    // This rule is only really applicable for OSS libraries and doesn't apply to rdme's case.
+    "readme/no-dual-exports": "off"
   }
 }
