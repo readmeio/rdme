@@ -1,5 +1,5 @@
-import type { OASAnalysis, OASAnalysisFeature } from 'oas/analyzer';
-import type { OASDocument } from 'oas/rmoas.types';
+import type { OASAnalysis, OASAnalysisFeature } from 'oas/analyzer/types';
+import type { OASDocument } from 'oas/types';
 
 import analyzer from 'oas/analyzer';
 

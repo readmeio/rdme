@@ -1,4 +1,4 @@
-import type { OASDocument } from 'oas/rmoas.types';
+import type { OASDocument } from 'oas/types';
 
 import petstore from '@readme/oas-examples/3.0/json/petstore.json' assert { type: 'json' };
 import { describe, it, expect } from 'vitest';

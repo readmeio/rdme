@@ -1,12 +1,12 @@
 import type { ZeroAuthCommandOptions } from '../../lib/baseCommand.js';
-import type { OASDocument } from 'oas/rmoas.types';
+import type { OASDocument } from 'oas/types';
 
 import fs from 'node:fs';
 import path from 'node:path';
 
 import chalk from 'chalk';
 import Oas from 'oas';
-import oasReducer from 'oas/lib/reducer';
+import oasReducer from 'oas/reducer';
 import ora from 'ora';
 import prompts from 'prompts';
 
