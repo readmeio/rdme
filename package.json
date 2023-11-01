@@ -64,7 +64,7 @@
     "validator": "^13.7.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.6.6",
+    "@commitlint/cli": "^18.2.0",
     "@commitlint/config-conventional": "^17.6.6",
     "@readme/better-ajv-errors": "^1.5.0",
     "@readme/eslint-config": "^13.4.0",
