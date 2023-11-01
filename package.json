@@ -43,7 +43,7 @@
     "command-line-usage": "^7.0.1",
     "configstore": "^6.0.0",
     "debug": "^4.3.3",
-    "formdata-node": "^5.0.1",
+    "formdata-node": "^6.0.3",
     "gray-matter": "^4.0.1",
     "ignore": "^5.2.0",
     "mime-types": "^2.1.35",
