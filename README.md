@@ -1,3 +1,8 @@
+<!-- prettier-ignore-start -->
+> [!WARNING]
+> **These docs are for [the forthcoming `v9` release](https://github.com/readmeio/rdme/issues/801).** You can view the docs for the current release (`v8`) [here](https://github.com/readmeio/rdme/tree/v8#readme).
+<!-- prettier-ignore-end -->
+
 [![rdme](https://user-images.githubusercontent.com/8854718/195465739-0f0f83d5-2e18-4e6c-96ae-944e3bb6880a.png)](https://readme.com)
 
 <p align="center">

@@ -1,7 +1,6 @@
-import type { ResponseTransformer } from 'msw';
 import type { Headers } from 'node-fetch';
 
-import { rest } from 'msw';
+import { http } from 'msw';
 import nock from 'nock';
 
 import config from '../../src/lib/config.js';
@@ -76,17 +75,17 @@ export function getAPIMockMSW(
   expectedReqHeaders: ReqHeaders = {},
   proxy = '',
 ) {
-  return rest.get(`${proxy}${config.host}${path}`, (req, res, ctx) => {
+  return http.get(`${proxy}${config.host}${path}`, ({ request }) => {
     try {
       // @ts-expect-error once we move off node-fetch, we can make these types consistent
-      validateHeaders(req.headers, basicAuthUser, expectedReqHeaders);
-      let responseTransformer: ResponseTransformer;
+      validateHeaders(request.headers, basicAuthUser, expectedReqHeaders);
+      let httpResponse = new Response(null, { status });
       if (response?.json) {
-        responseTransformer = ctx.json(response.json);
+        httpResponse = Response.json(response.json, { status });
       } else if (response?.text) {
-        responseTransformer = ctx.text(response.text);
+        httpResponse = new Response(response.text, { status });
       }
-      return res(ctx.status(status), responseTransformer);
+      return httpResponse;
     } catch (e) {
       throw new Error(`Error mocking GET request to https://dash.readme.com${path}: ${e.message}`);
     }

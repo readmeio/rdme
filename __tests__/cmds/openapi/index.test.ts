@@ -2,7 +2,7 @@
 import fs from 'node:fs';
 
 import chalk from 'chalk';
-import { rest } from 'msw';
+import { http } from 'msw';
 import { setupServer } from 'msw/node';
 import nock from 'nock';
 import prompts from 'prompts';
@@ -1361,23 +1361,23 @@ describe('rdme openapi', () => {
 
       server.use(
         ...[
-          rest.post(`${config.host}/api/v1/api-registry`, async (req, res, ctx) => {
-            const body = await req.text();
+          http.post(`${config.host}/api/v1/api-registry`, async ({ request }) => {
+            const body = await request.text();
             expect(body).toMatch('form-data; name="spec"');
-            return res(ctx.status(201), ctx.json({ registryUUID }));
+            return Response.json({ registryUUID }, { status: 201 });
           }),
-          rest.get(spec, (req, res, ctx) => {
-            return res(ctx.status(200), ctx.json(petstoreWeird));
+          http.get(spec, () => {
+            return Response.json(petstoreWeird, { status: 200 });
           }),
-          rest.put(`${config.host}/api/v1/api-specification/${id}`, async (req, res, ctx) => {
-            expect(req.headers.get('authorization')).toBeBasicAuthApiKey(key);
-            expect(req.headers.get('x-rdme-ci')).toBe('GitHub Actions (test)');
-            expect(req.headers.get('x-readme-source')).toBe('cli-gh');
-            expect(req.headers.get('x-readme-source-url')).toBe(spec);
-            expect(req.headers.get('x-readme-version')).toBe(version);
-            const body = await req.json();
+          http.put(`${config.host}/api/v1/api-specification/${id}`, async ({ request }) => {
+            expect(request.headers.get('authorization')).toBeBasicAuthApiKey(key);
+            expect(request.headers.get('x-rdme-ci')).toBe('GitHub Actions (test)');
+            expect(request.headers.get('x-readme-source')).toBe('cli-gh');
+            expect(request.headers.get('x-readme-source-url')).toBe(spec);
+            expect(request.headers.get('x-readme-version')).toBe(version);
+            const body = await request.json();
             expect(body).toStrictEqual({ registryUUID });
-            return res(ctx.status(201), ctx.set('location', exampleRefLocation), ctx.json({ _id: 1 }));
+            return Response.json({ _id: 1 }, { status: 201, headers: { location: exampleRefLocation } });
           }),
         ],
       );

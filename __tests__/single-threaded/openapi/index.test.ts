@@ -2,7 +2,7 @@
 import fs from 'node:fs';
 
 import chalk from 'chalk';
-import { rest } from 'msw';
+import { http } from 'msw';
 import { setupServer } from 'msw/node';
 import prompts from 'prompts';
 import { describe, beforeAll, beforeEach, afterEach, it, expect, vi, afterAll } from 'vitest';
@@ -73,17 +73,17 @@ describe('rdme openapi (single-threaded)', () => {
       server.use(
         ...[
           getAPIMockMSW(`/api/v1/version/${version}`, 200, { json: { version } }, key),
-          rest.post(`${config.host}/api/v1/api-registry`, async (req, res, ctx) => {
-            const body = await req.text();
+          http.post(`${config.host}/api/v1/api-registry`, async ({ request }) => {
+            const body = await request.text();
             expect(body).toMatch('form-data; name="spec"');
-            return res(ctx.status(201), ctx.json({ registryUUID, spec: { openapi: '3.0.0' } }));
+            return Response.json({ registryUUID, spec: { openapi: '3.0.0' } }, { status: 201 });
           }),
           getAPIMockMSW('/api/v1/api-specification', 200, { json: [] }, key, { 'x-readme-version': version }),
-          rest.post(`${config.host}/api/v1/api-specification`, async (req, res, ctx) => {
-            const body = await req.json();
+          http.post(`${config.host}/api/v1/api-specification`, async ({ request }) => {
+            const body = await request.json();
             expect(body).toStrictEqual({ registryUUID });
-            expect(req.headers.get('authorization')).toBeBasicAuthApiKey(key);
-            return res(ctx.status(201), ctx.set('location', exampleRefLocation), ctx.json({ _id: 1 }));
+            expect(request.headers.get('authorization')).toBeBasicAuthApiKey(key);
+            return Response.json({ _id: 1 }, { status: 201, headers: { location: exampleRefLocation } });
           }),
         ],
       );
@@ -112,19 +112,19 @@ describe('rdme openapi (single-threaded)', () => {
       server.use(
         ...[
           getAPIMockMSW(`/api/v1/version/${version}`, 200, { json: { version } }, key),
-          rest.post(`${config.host}/api/v1/api-registry`, async (req, res, ctx) => {
-            const body = await req.text();
+          http.post(`${config.host}/api/v1/api-registry`, async ({ request }) => {
+            const body = await request.text();
             requestBody = body.substring(body.indexOf('{'), body.lastIndexOf('}') + 1);
             requestBody = JSON.parse(requestBody);
             expect(body).toMatch('form-data; name="spec"');
-            return res(ctx.status(201), ctx.json({ registryUUID, spec: { openapi: '3.0.0' } }));
+            return Response.json({ registryUUID, spec: { openapi: '3.0.0' } }, { status: 201 });
           }),
           getAPIMockMSW('/api/v1/api-specification', 200, { json: [] }, key, { 'x-readme-version': version }),
-          rest.post(`${config.host}/api/v1/api-specification`, async (req, res, ctx) => {
-            const body = await req.json();
+          http.post(`${config.host}/api/v1/api-specification`, async ({ request }) => {
+            const body = await request.json();
             expect(body).toStrictEqual({ registryUUID });
-            expect(req.headers.get('authorization')).toBeBasicAuthApiKey(key);
-            return res(ctx.status(201), ctx.set('location', exampleRefLocation), ctx.json({ _id: 1 }));
+            expect(request.headers.get('authorization')).toBeBasicAuthApiKey(key);
+            return Response.json({ _id: 1 }, { status: 201, headers: { location: exampleRefLocation } });
           }),
         ],
       );
@@ -152,10 +152,10 @@ describe('rdme openapi (single-threaded)', () => {
       server.use(
         ...[
           getAPIMockMSW(`/api/v1/version/${version}`, 200, { json: { version } }, key),
-          rest.post(`${config.host}/api/v1/api-registry`, async (req, res, ctx) => {
-            const body = await req.text();
+          http.post(`${config.host}/api/v1/api-registry`, async ({ request }) => {
+            const body = await request.text();
             expect(body).toMatch('form-data; name="spec"');
-            return res(ctx.status(201), ctx.json({ registryUUID, spec: { openapi: '3.0.0' } }));
+            return Response.json({ registryUUID, spec: { openapi: '3.0.0' } }, { status: 201 });
           }),
           getAPIMockMSW('/api/v1/api-specification', 200, { json: [] }, key, { 'x-readme-version': version }),
         ],
@@ -211,17 +211,17 @@ describe('rdme openapi (single-threaded)', () => {
       server.use(
         ...[
           getAPIMockMSW(`/api/v1/version/${version}`, 200, { json: { version } }, key),
-          rest.post(`${config.host}/api/v1/api-registry`, async (req, res, ctx) => {
-            const body = await req.text();
+          http.post(`${config.host}/api/v1/api-registry`, async ({ request }) => {
+            const body = await request.text();
             expect(body).toMatch('form-data; name="spec"');
-            return res(ctx.status(201), ctx.json({ registryUUID, spec: { openapi: '3.0.0' } }));
+            return Response.json({ registryUUID, spec: { openapi: '3.0.0' } }, { status: 201 });
           }),
           getAPIMockMSW('/api/v1/api-specification', 200, { json: [] }, key, { 'x-readme-version': version }),
-          rest.post(`${config.host}/api/v1/api-specification`, async (req, res, ctx) => {
-            expect(req.headers.get('authorization')).toBeBasicAuthApiKey(key);
-            const body = await req.json();
+          http.post(`${config.host}/api/v1/api-specification`, async ({ request }) => {
+            expect(request.headers.get('authorization')).toBeBasicAuthApiKey(key);
+            const body = await request.json();
             expect(body).toStrictEqual({ registryUUID });
-            return res(ctx.status(201), ctx.set('location', exampleRefLocation), ctx.json({ _id: 1 }));
+            return Response.json({ _id: 1 }, { status: 201, headers: { location: exampleRefLocation } });
           }),
         ],
       );
@@ -260,23 +260,23 @@ describe('rdme openapi (single-threaded)', () => {
       server.use(
         ...[
           getAPIMockMSW(`/api/v1/version/${version}`, 200, { json: { version } }, key),
-          rest.post(`${config.host}/api/v1/api-registry`, async (req, res, ctx) => {
-            const body = await req.text();
+          http.post(`${config.host}/api/v1/api-registry`, async ({ request }) => {
+            const body = await request.text();
             expect(body).toMatch('form-data; name="spec"');
-            return res(ctx.status(201), ctx.json({ registryUUID, spec: { openapi: '3.0.0' } }));
+            return Response.json({ registryUUID, spec: { openapi: '3.0.0' } }, { status: 201 });
           }),
           getAPIMockMSW('/api/v1/api-specification', 200, { json: [] }, key, { 'x-readme-version': version }),
-          rest.post(`${config.host}/api/v1/api-specification`, async (req, res, ctx) => {
-            expect(req.headers.get('authorization')).toBeBasicAuthApiKey(key);
-            expect(req.headers.get('x-rdme-ci')).toBe('GitHub Actions (test)');
-            expect(req.headers.get('x-readme-source')).toBe('cli-gh');
-            expect(req.headers.get('x-readme-source-url')).toBe(
+          http.post(`${config.host}/api/v1/api-specification`, async ({ request }) => {
+            expect(request.headers.get('authorization')).toBeBasicAuthApiKey(key);
+            expect(request.headers.get('x-rdme-ci')).toBe('GitHub Actions (test)');
+            expect(request.headers.get('x-readme-source')).toBe('cli-gh');
+            expect(request.headers.get('x-readme-source-url')).toBe(
               'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/__tests__/__fixtures__/relative-ref-oas/petstore.json',
             );
-            expect(req.headers.get('x-readme-version')).toBe(version);
-            const body = await req.json();
+            expect(request.headers.get('x-readme-version')).toBe(version);
+            const body = await request.json();
             expect(body).toStrictEqual({ registryUUID });
-            return res(ctx.status(201), ctx.set('location', exampleRefLocation), ctx.json({ _id: 1 }));
+            return Response.json({ _id: 1 }, { status: 201, headers: { location: exampleRefLocation } });
           }),
         ],
       );
