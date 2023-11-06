@@ -17,7 +17,6 @@ import SoftError from '../../lib/softError.js';
 interface Options {
   feature?: string[];
   spec?: string;
-  workingDirectory?: string;
 }
 
 export default class OpenAPIInspectCommand extends Command {
@@ -40,7 +39,6 @@ export default class OpenAPIInspectCommand extends Command {
         type: String,
         defaultOption: true,
       },
-      this.getWorkingDirArg(),
       {
         name: 'feature',
         type: String,
@@ -218,7 +216,7 @@ export default class OpenAPIInspectCommand extends Command {
   async run(opts: ZeroAuthCommandOptions<Options>) {
     await super.run(opts);
 
-    const { spec, workingDirectory, feature: features } = opts;
+    const { spec, feature: features } = opts;
 
     // If we have features we should validate that they're supported.
     if (features?.length) {
@@ -230,12 +228,6 @@ export default class OpenAPIInspectCommand extends Command {
           ),
         );
       }
-    }
-
-    if (workingDirectory) {
-      const previousWorkingDirectory = process.cwd();
-      process.chdir(workingDirectory);
-      Command.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
     }
 
     const { preparedSpec, definitionVersion } = await prepareOas(spec, 'openapi:inspect', { convertToLatest: true });

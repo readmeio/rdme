@@ -8,7 +8,6 @@ import prepareOas from '../../lib/prepareOas.js';
 
 export interface Options {
   spec?: string;
-  workingDirectory?: string;
 }
 
 export default class OpenAPIValidateCommand extends Command {
@@ -27,7 +26,6 @@ export default class OpenAPIValidateCommand extends Command {
         type: String,
         defaultOption: true,
       },
-      this.getWorkingDirArg(),
       this.getGitHubArg(),
     ];
   }
@@ -35,13 +33,7 @@ export default class OpenAPIValidateCommand extends Command {
   async run(opts: ZeroAuthCommandOptions<Options>) {
     await super.run(opts);
 
-    const { spec, workingDirectory } = opts;
-
-    if (workingDirectory) {
-      const previousWorkingDirectory = process.cwd();
-      process.chdir(workingDirectory);
-      Command.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
-    }
+    const { spec } = opts;
 
     const { specPath, specType } = await prepareOas(spec, 'openapi:validate');
     return Promise.resolve(chalk.green(`${specPath} is a valid ${specType} API definition!`)).then(msg =>
