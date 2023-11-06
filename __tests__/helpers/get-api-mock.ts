@@ -1,5 +1,3 @@
-import type { Headers } from 'node-fetch';
-
 import { http } from 'msw';
 import nock from 'nock';
 
@@ -77,15 +75,13 @@ export function getAPIMockMSW(
 ) {
   return http.get(`${proxy}${config.host}${path}`, ({ request }) => {
     try {
-      // @ts-expect-error once we move off node-fetch, we can make these types consistent
       validateHeaders(request.headers, basicAuthUser, expectedReqHeaders);
-      let httpResponse = new Response(null, { status });
       if (response?.json) {
-        httpResponse = Response.json(response.json, { status });
+        return Response.json(response.json, { status });
       } else if (response?.text) {
-        httpResponse = new Response(response.text, { status });
+        return new Response(response.text, { status });
       }
-      return httpResponse;
+      return new Response(null, { status });
     } catch (e) {
       throw new Error(`Error mocking GET request to https://dash.readme.com${path}: ${e.message}`);
     }
