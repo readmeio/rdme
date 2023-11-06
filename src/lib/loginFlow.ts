@@ -8,7 +8,7 @@ import promptTerminal from './promptWrapper.js';
 import readmeAPIFetch, { handleRes } from './readmeAPIFetch.js';
 import { validateSubdomain } from './validatePromptInput.js';
 
-interface LoginBody {
+export interface LoginBody {
   email?: string;
   password?: string;
   project?: string;

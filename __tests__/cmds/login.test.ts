@@ -1,11 +1,15 @@
-import nock from 'nock';
+/* eslint-disable vitest/no-standalone-expect */
+import type { LoginBody } from '../../src/lib/loginFlow.js';
+
+import { http } from 'msw';
+import { setupServer } from 'msw/node';
 import prompts from 'prompts';
-import { describe, beforeAll, afterAll, afterEach, it, expect } from 'vitest';
+import { describe, beforeAll, afterEach, it, expect } from 'vitest';
 
 import Command from '../../src/cmds/login.js';
 import APIError from '../../src/lib/apiError.js';
+import config from '../../src/lib/config.js';
 import configStore from '../../src/lib/configstore.js';
-import getAPIMock from '../helpers/get-api-mock.js';
 
 const cmd = new Command();
 
@@ -16,13 +20,27 @@ const project = 'subdomain';
 const token = '123456';
 
 describe('rdme login', () => {
+  const server = setupServer(
+    http.post(`${config.host}/api/v1/login`, async ({ request }) => {
+      const json = (await request.json()) as LoginBody;
+      expect(json.email).toBe(email);
+      expect(json.password).toBe(password);
+      expect(json.project).toBe(project);
+      if (json.token) {
+        expect(json.token).toBe(token);
+      }
+      return Response.json({ apiKey });
+    }),
+  );
+
   beforeAll(() => {
-    nock.disableNetConnect();
+    server.listen({ onUnhandledRequest: 'error' });
   });
 
-  afterEach(() => configStore.clear());
-
-  afterAll(() => nock.cleanAll());
+  afterEach(() => {
+    configStore.clear();
+    server.resetHandlers();
+  });
 
   it('should error if no project provided', () => {
     prompts.inject([email, password]);
@@ -39,11 +57,7 @@ describe('rdme login', () => {
   it('should post to /login on the API', async () => {
     prompts.inject([email, password, project]);
 
-    const mock = getAPIMock().post('/api/v1/login', { email, password, project }).reply(200, { apiKey });
-
     await expect(cmd.run({})).resolves.toBe('Successfully logged in as user@example.com to the subdomain project.');
-
-    mock.done();
 
     expect(configStore.get('apiKey')).toBe(apiKey);
     expect(configStore.get('email')).toBe(email);
@@ -53,13 +67,9 @@ describe('rdme login', () => {
   it('should post to /login on the API if passing in project via opt', async () => {
     prompts.inject([email, password]);
 
-    const mock = getAPIMock().post('/api/v1/login', { email, password, project }).reply(200, { apiKey });
-
     await expect(cmd.run({ project })).resolves.toBe(
       'Successfully logged in as user@example.com to the subdomain project.',
     );
-
-    mock.done();
 
     expect(configStore.get('apiKey')).toBe(apiKey);
     expect(configStore.get('email')).toBe(email);
@@ -67,13 +77,9 @@ describe('rdme login', () => {
   });
 
   it('should bypass prompts and post to /login on the API if passing in every opt', async () => {
-    const mock = getAPIMock().post('/api/v1/login', { email, password, project, token }).reply(200, { apiKey });
-
     await expect(cmd.run({ email, password, project, otp: token })).resolves.toBe(
       'Successfully logged in as user@example.com to the subdomain project.',
     );
-
-    mock.done();
 
     expect(configStore.get('apiKey')).toBe(apiKey);
     expect(configStore.get('email')).toBe(email);
@@ -81,20 +87,16 @@ describe('rdme login', () => {
   });
 
   it('should bypass prompts and post to /login on the API if passing in every opt (no 2FA)', async () => {
-    const mock = getAPIMock().post('/api/v1/login', { email, password, project }).reply(200, { apiKey });
-
     await expect(cmd.run({ email, password, project })).resolves.toBe(
       'Successfully logged in as user@example.com to the subdomain project.',
     );
-
-    mock.done();
 
     expect(configStore.get('apiKey')).toBe(apiKey);
     expect(configStore.get('email')).toBe(email);
     expect(configStore.get('project')).toBe(project);
   });
 
-  it('should error if invalid credentials are given', async () => {
+  it('should error if invalid credentials are given', () => {
     prompts.inject([email, password, project]);
     const errorResponse = {
       error: 'LOGIN_INVALID',
@@ -103,10 +105,17 @@ describe('rdme login', () => {
       help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
     };
 
-    const mock = getAPIMock().post('/api/v1/login', { email, password, project }).reply(401, errorResponse);
+    server.use(
+      http.post(`${config.host}/api/v1/login`, async ({ request }) => {
+        const json = (await request.json()) as LoginBody;
+        expect(json.email).toBe(email);
+        expect(json.password).toBe(password);
+        expect(json.project).toBe(project);
+        return Response.json(errorResponse, { status: 401 });
+      }),
+    );
 
-    await expect(cmd.run({})).rejects.toStrictEqual(new APIError(errorResponse));
-    mock.done();
+    return expect(cmd.run({})).rejects.toStrictEqual(new APIError(errorResponse));
   });
 
   it('should make additional prompt for token if login requires 2FA', async () => {
@@ -118,22 +127,28 @@ describe('rdme login', () => {
       help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
     };
 
-    const mock = getAPIMock()
-      .post('/api/v1/login', { email, password, project })
-      .reply(401, errorResponse)
-      .post('/api/v1/login', { email, password, project, token })
-      .reply(200, { apiKey });
+    server.use(
+      http.post(
+        `${config.host}/api/v1/login`,
+        async ({ request }) => {
+          const json = (await request.json()) as LoginBody;
+          expect(json.email).toBe(email);
+          expect(json.password).toBe(password);
+          expect(json.project).toBe(project);
+          return Response.json(errorResponse, { status: 401 });
+        },
+        { once: true }, // once flag is so it returns a 401 once and then a 200 on subsequent calls
+      ),
+    );
 
     await expect(cmd.run({})).resolves.toBe('Successfully logged in as user@example.com to the subdomain project.');
-
-    mock.done();
 
     expect(configStore.get('apiKey')).toBe(apiKey);
     expect(configStore.get('email')).toBe(email);
     expect(configStore.get('project')).toBe(project);
   });
 
-  it('should error if trying to access a project that is not yours', async () => {
+  it('should error if trying to access a project that is not yours', () => {
     const projectThatIsNotYours = 'unauthorized-project';
     prompts.inject([email, password, projectThatIsNotYours]);
     const errorResponse = {
@@ -143,11 +158,16 @@ describe('rdme login', () => {
       help: 'If you need help, email support@readme.io',
     };
 
-    const mock = getAPIMock()
-      .post('/api/v1/login', { email, password, project: projectThatIsNotYours })
-      .reply(404, errorResponse);
+    server.use(
+      http.post(`${config.host}/api/v1/login`, async ({ request }) => {
+        const json = (await request.json()) as LoginBody;
+        expect(json.email).toBe(email);
+        expect(json.password).toBe(password);
+        expect(json.project).toBe(projectThatIsNotYours);
+        return Response.json(errorResponse, { status: 404 });
+      }),
+    );
 
-    await expect(cmd.run({})).rejects.toStrictEqual(new APIError(errorResponse));
-    mock.done();
+    return expect(cmd.run({})).rejects.toStrictEqual(new APIError(errorResponse));
   });
 });
