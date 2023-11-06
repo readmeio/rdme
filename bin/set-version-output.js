@@ -1,4 +1,5 @@
 #! /usr/bin/env node
+// @ts-check
 import * as core from '@actions/core';
 
 // eslint-disable-next-line import/extensions

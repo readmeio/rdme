@@ -1,4 +1,5 @@
 #! /usr/bin/env node
+// @ts-check
 /* eslint-disable import/no-extraneous-dependencies */
 import fs from 'node:fs/promises';
 
@@ -22,7 +23,7 @@ const files = [
  */
 async function refreshSchemas() {
   const isUpdate = process.argv.includes('--update');
-  const prettierConfig = await prettier.resolveConfig();
+  const prettierConfig = await prettier.resolveConfig(process.cwd());
   try {
     await Promise.all(
       files.map(async file => {
