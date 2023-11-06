@@ -1,4 +1,5 @@
 #! /usr/bin/env node
+// @ts-check
 import fs from 'node:fs/promises';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -16,8 +17,10 @@ async function setActionImage() {
   // and writes changes back to action.yml file
   const actionFile = await fs.readFile('./action.yml', 'utf-8');
   const actionObj = jsYaml.load(actionFile);
+  // @ts-expect-error it's annoying to type these YAML instances
   const imageURL = new URL(actionObj.runs.image);
   imageURL.pathname = imageURL.pathname.replace(/:.*/g, `:${pkg.version}`);
+  // @ts-expect-error it's annoying to type these YAML instances
   actionObj.runs.image = imageURL.toString();
   const actionYaml = jsYaml.dump(actionObj, { lineWidth: -1 });
   await fs.writeFile('./action.yml', actionYaml, { encoding: 'utf-8' });

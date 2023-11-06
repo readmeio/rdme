@@ -1,4 +1,5 @@
 #! /usr/bin/env node
+// @ts-check
 /* eslint-disable no-console */
 import { execFile as unpromisifiedExecFile } from 'node:child_process';
 import util from 'node:util';
@@ -36,11 +37,11 @@ async function runDockerCmd(args) {
   const execCmd = execFile('docker', args);
   const child = execCmd.child;
 
-  child.stdout.on('data', chunk => {
+  child.stdout?.on('data', chunk => {
     console.log(chunk.toString());
   });
 
-  child.stderr.on('data', chunk => {
+  child.stderr?.on('data', chunk => {
     console.error(chunk.toString());
   });
 

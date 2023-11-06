@@ -1,4 +1,5 @@
 #! /usr/bin/env node
+// @ts-check
 import { execFile as unpromisifiedExecFile } from 'node:child_process';
 import util from 'node:util';
 
@@ -16,12 +17,12 @@ async function runGitCmd(args) {
   const execCmd = execFile('git', args);
   const child = execCmd.child;
 
-  child.stdout.on('data', chunk => {
+  child.stdout?.on('data', chunk => {
     // eslint-disable-next-line no-console
     console.log(chunk.toString());
   });
 
-  child.stderr.on('data', chunk => {
+  child.stderr?.on('data', chunk => {
     // eslint-disable-next-line no-console
     console.error(chunk.toString());
   });
@@ -37,6 +38,10 @@ async function runGitCmd(args) {
 async function setMajorVersionTag() {
   try {
     const parsedVersion = parse(pkg.version);
+
+    if (!parsedVersion) {
+      throw new Error('Unable to extract semver data from the `package.json` version.');
+    }
 
     if (parsedVersion.prerelease.length) {
       // eslint-disable-next-line no-console
