@@ -45,7 +45,7 @@ export function getAPIMockWithVersionHeader(v: string) {
   });
 }
 
-function validateHeaders(headers: Headers, basicAuthUser: string, expectedReqHeaders: ReqHeaders) {
+export function validateHeaders(headers: Headers, basicAuthUser: string, expectedReqHeaders: ReqHeaders = {}) {
   // validate all headers in expectedReqHeaders
   Object.keys(expectedReqHeaders).forEach(reqHeaderKey => {
     if (headers.get(reqHeaderKey) !== expectedReqHeaders[reqHeaderKey]) {
