@@ -8,8 +8,8 @@ import { describe, beforeAll, afterEach, it, expect } from 'vitest';
 
 import Command from '../../src/cmds/login.js';
 import APIError from '../../src/lib/apiError.js';
-import config from '../../src/lib/config.js';
 import configStore from '../../src/lib/configstore.js';
+import { getAPIPath } from '../helpers/get-api-mock.js';
 
 const cmd = new Command();
 
@@ -21,7 +21,7 @@ const token = '123456';
 
 describe('rdme login', () => {
   const server = setupServer(
-    http.post(`${config.host}/api/v1/login`, async ({ request }) => {
+    http.post(getAPIPath('/api/v1/login'), async ({ request }) => {
       const json = (await request.json()) as LoginBody;
       expect(json.email).toBe(email);
       expect(json.password).toBe(password);
@@ -106,7 +106,7 @@ describe('rdme login', () => {
     };
 
     server.use(
-      http.post(`${config.host}/api/v1/login`, async ({ request }) => {
+      http.post(getAPIPath('/api/v1/login'), async ({ request }) => {
         const json = (await request.json()) as LoginBody;
         expect(json.email).toBe(email);
         expect(json.password).toBe(password);
@@ -129,7 +129,7 @@ describe('rdme login', () => {
 
     server.use(
       http.post(
-        `${config.host}/api/v1/login`,
+        getAPIPath('/api/v1/login'),
         async ({ request }) => {
           const json = (await request.json()) as LoginBody;
           expect(json.email).toBe(email);
@@ -159,7 +159,7 @@ describe('rdme login', () => {
     };
 
     server.use(
-      http.post(`${config.host}/api/v1/login`, async ({ request }) => {
+      http.post(getAPIPath('/api/v1/login'), async ({ request }) => {
         const json = (await request.json()) as LoginBody;
         expect(json.email).toBe(email);
         expect(json.password).toBe(password);

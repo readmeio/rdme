@@ -12,6 +12,20 @@ import { getUserAgent } from '../../src/lib/readmeAPIFetch.js';
 type ReqHeaders = Record<string, unknown>;
 
 /**
+ * Returns full ReadMe API path
+ */
+export function getAPIPath(
+  /**
+   * API route, must start with slash
+   * @example /api/v1
+   */
+  path: string,
+  proxy = '',
+) {
+  return `${proxy}${config.host}${path}`;
+}
+
+/**
  * Nock wrapper that adds required `user-agent` request header
  * so it gets properly picked up by nock.
  * @param proxy Optional proxy URL. Must contain trailing slash.
@@ -73,7 +87,7 @@ export function getAPIMockMSW(
   expectedReqHeaders: ReqHeaders = {},
   proxy = '',
 ) {
-  return http.get(`${proxy}${config.host}${path}`, ({ request }) => {
+  return http.get(getAPIPath(path, proxy), ({ request }) => {
     try {
       validateHeaders(request.headers, basicAuthUser, expectedReqHeaders);
       if (response?.json) {
