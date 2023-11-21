@@ -30,7 +30,7 @@ exports[`utils > #listByCategory > should list commands by category 1`] = `
         "name": "openapi",
       },
       {
-        "description": "Convert a Swagger or Postman Collection to OpenAPI.",
+        "description": "Convert an API definition to OpenAPI and bundle any external references.",
         "hidden": false,
         "name": "openapi:convert",
       },
