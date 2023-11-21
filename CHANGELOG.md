@@ -1,3 +1,10 @@
+# [9.0.0-next.7](https://github.com/readmeio/rdme/compare/v9.0.0-next.6...v9.0.0-next.7) (2023-11-21)
+
+
+### Features
+
+* **openapi/convert:** support openapi in convert command ([#941](https://github.com/readmeio/rdme/issues/941)) ([a33bbeb](https://github.com/readmeio/rdme/commit/a33bbeb1155095f20b01cda18f2c32e9c001b428))
+
 # [9.0.0-next.6](https://github.com/readmeio/rdme/compare/v9.0.0-next.5...v9.0.0-next.6) (2023-09-26)
 
 
