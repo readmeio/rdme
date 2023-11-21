@@ -6,7 +6,7 @@ import OpenAPIConvertCommand from '../../../src/cmds/openapi/convert.js';
 
 const convert = new OpenAPIConvertCommand();
 
-const successfulConversion = () => 'Your converted API definition has been saved to output.json!';
+const successfulConversion = () => 'Your API definition has been converted and bundled and saved to output.json!';
 
 describe('rdme openapi:convert (single-threaded)', () => {
   let testWorkingDir: string;
