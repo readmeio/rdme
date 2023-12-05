@@ -155,7 +155,7 @@ describe('cli', () => {
       });
     });
 
-    describe('stored API key via env vars', () => {
+    describe.each(['README_API_KEY', 'RDME_API_KEY'])('stored API key via %s env var', envKey => {
       let consoleInfoSpy;
       const key = '123456-env';
       const getCommandOutput = () => {
@@ -163,7 +163,7 @@ describe('cli', () => {
       };
 
       beforeEach(() => {
-        vi.stubEnv('RDME_API_KEY', key);
+        vi.stubEnv(envKey, key);
         vi.stubEnv('RDME_EMAIL', 'owlbert-env@readme.io');
         vi.stubEnv('RDME_PROJECT', 'project-owlbert-env');
         consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
