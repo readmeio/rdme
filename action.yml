@@ -13,7 +13,7 @@ outputs:
     description: The rdme command result output
 runs:
   using: docker
-  image: docker://ghcr.io/readmeio/rdme:9.0.0-next.7
+  image: docker://ghcr.io/readmeio/rdme:9.0.0-next.8
   args:
     - docker-gha
     - ${{ inputs.rdme }}

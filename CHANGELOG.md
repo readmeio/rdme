@@ -1,3 +1,10 @@
+# [9.0.0-next.8](https://github.com/readmeio/rdme/compare/v9.0.0-next.7...v9.0.0-next.8) (2023-12-05)
+
+
+### Features
+
+* support `README_API_KEY` env var ([#950](https://github.com/readmeio/rdme/issues/950)) ([bcf3f18](https://github.com/readmeio/rdme/commit/bcf3f1872c0eb416d00a2d9ed434c040c9b7fbe9))
+
 # [9.0.0-next.7](https://github.com/readmeio/rdme/compare/v9.0.0-next.6...v9.0.0-next.7) (2023-11-21)
 
 
