@@ -186,7 +186,9 @@ This command also has a dry run mode, which can be useful for initial setup and 
 
 If you run `rdme` within a directory that contains your OpenAPI or Swagger definition, you can omit the file path. `rdme` will then look for JSON or YAML files (including in sub-directories) that contain a top-level [`openapi`](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#fixed-fields) or [`swagger`](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/2.0.md#fixed-fields) property.
 
-> [!NOTE] `rdme` will not scan anything in the following:
+> [!NOTE]
+>
+> `rdme` will not scan anything in the following:
 >
 > - Any `.git/` directories (if they exist)
 > - Any files/directories specified in `.gitignore` files (including any `.gitignore` files in subdirectories, if they exist)
