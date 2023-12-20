@@ -863,6 +863,8 @@
                       "ready_for_review",
                       "locked",
                       "unlocked",
+                      "milestoned",
+                      "demilestoned",
                       "review_requested",
                       "review_request_removed",
                       "auto_merge_enabled",
@@ -1135,7 +1137,7 @@
               "properties": {
                 "types": {
                   "$ref": "#/definitions/types",
-                  "items": { "type": "string", "enum": ["requested", "completed"] },
+                  "items": { "type": "string", "enum": ["requested", "completed", "in_progress"] },
                   "default": ["requested", "completed"]
                 },
                 "workflows": { "type": "array", "items": { "type": "string" }, "minItems": 1 }
