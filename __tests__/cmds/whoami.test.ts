@@ -4,7 +4,7 @@ import Command from '../../src/cmds/whoami.js';
 import config from '../../src/lib/config.js';
 import configStore from '../../src/lib/configstore.js';
 
-const cmd = new Command();
+const cmd = Command;
 
 describe('rdme whoami', () => {
   afterEach(() => {
@@ -15,13 +15,13 @@ describe('rdme whoami', () => {
     configStore.delete('email');
     configStore.delete('project');
 
-    return expect(cmd.run({})).rejects.toStrictEqual(new Error(`Please login using \`${config.cli} login\`.`));
+    return expect(cmd.run()).rejects.toStrictEqual(new Error(`Please login using \`${config.cli} login\`.`));
   });
 
   it('should return the authenticated user', () => {
     configStore.set('email', 'email@example.com');
     configStore.set('project', 'subdomain');
 
-    return expect(cmd.run({})).resolves.toMatchSnapshot();
+    return expect(cmd.run()).resolves.toMatchSnapshot();
   });
 });
