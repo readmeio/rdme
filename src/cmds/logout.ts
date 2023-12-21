@@ -1,24 +1,11 @@
-import type { ZeroAuthCommandOptions } from '../lib/baseCommand.js';
-
-import Command, { CommandCategories } from '../lib/baseCommand.js';
+import BaseCommand from '../lib/baseCommandNew.js';
 import config from '../lib/config.js';
 import configStore from '../lib/configstore.js';
 
-export default class LogoutCommand extends Command {
-  constructor() {
-    super();
+export default class LogoutCommand extends BaseCommand {
+  static description = 'Logs the currently authenticated user out of ReadMe.';
 
-    this.command = 'logout';
-    this.usage = 'logout';
-    this.description = 'Logs the currently authenticated user out of ReadMe.';
-    this.cmdCategory = CommandCategories.ADMIN;
-
-    this.args = [];
-  }
-
-  async run(opts: ZeroAuthCommandOptions) {
-    await super.run(opts);
-
+  async run() {
     if (configStore.has('email') && configStore.has('project')) {
       configStore.clear();
     }
