@@ -1,55 +1,24 @@
-import type { ZeroAuthCommandOptions } from '../lib/baseCommand.js';
-
+import { Flags } from '@oclif/core';
 import prompts from 'prompts';
 
-import Command, { CommandCategories } from '../lib/baseCommand.js';
+import BaseCommand from '../lib/baseCommandNew.js';
 import loginFlow from '../lib/loginFlow.js';
 
-interface Options {
-  email?: string;
-  otp?: string;
-  password?: string;
-  project?: string;
-}
+export default class LoginCommand extends BaseCommand {
+  static description = 'Login to a ReadMe project.';
 
-export default class LoginCommand extends Command {
-  constructor() {
-    super();
+  static flags = {
+    email: Flags.string({ description: 'Your email address' }),
+    password: Flags.string({ description: 'Your password' }),
+    otp: Flags.string({ description: 'Your one-time password (if you have two-factor authentication enabled)' }),
+    project: Flags.string({ description: 'The subdomain of the project you wish to log into' }),
+  };
 
-    this.command = 'login';
-    this.usage = 'login [options]';
-    this.description = 'Login to a ReadMe project.';
-    this.cmdCategory = CommandCategories.ADMIN;
+  async run() {
+    const { flags } = await this.parse(LoginCommand);
 
-    this.args = [
-      {
-        name: 'email',
-        type: String,
-        description: 'Your email address',
-      },
-      {
-        name: 'password',
-        type: String,
-        description: 'Your password',
-      },
-      {
-        name: 'otp',
-        type: String,
-        description: 'Your one-time password (if you have two-factor authentication enabled)',
-      },
-      {
-        name: 'project',
-        type: String,
-        description: 'The subdomain of the project you wish to log into',
-      },
-    ];
-  }
+    prompts.override(flags);
 
-  async run(opts: ZeroAuthCommandOptions<Options>) {
-    await super.run(opts);
-
-    prompts.override(opts);
-
-    return loginFlow(opts.otp);
+    return loginFlow(flags.otp);
   }
 }

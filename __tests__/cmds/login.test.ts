@@ -7,7 +7,7 @@ import APIError from '../../src/lib/apiError.js';
 import configStore from '../../src/lib/configstore.js';
 import getAPIMock from '../helpers/get-api-mock.js';
 
-const cmd = new Command();
+const cmd = Command;
 
 const apiKey = 'abcdefg';
 const email = 'user@example.com';
@@ -26,14 +26,12 @@ describe('rdme login', () => {
 
   it('should error if no project provided', () => {
     prompts.inject([email, password]);
-    return expect(cmd.run({})).rejects.toStrictEqual(
-      new Error('No project subdomain provided. Please use `--project`.'),
-    );
+    return expect(cmd.run()).rejects.toStrictEqual(new Error('No project subdomain provided. Please use `--project`.'));
   });
 
   it('should error if email is invalid', () => {
     prompts.inject(['this-is-not-an-email', password, project]);
-    return expect(cmd.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
+    return expect(cmd.run()).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
   });
 
   it('should post to /login on the API', async () => {
@@ -41,7 +39,7 @@ describe('rdme login', () => {
 
     const mock = getAPIMock().post('/api/v1/login', { email, password, project }).reply(200, { apiKey });
 
-    await expect(cmd.run({})).resolves.toBe('Successfully logged in as user@example.com to the subdomain project.');
+    await expect(cmd.run()).resolves.toBe('Successfully logged in as user@example.com to the subdomain project.');
 
     mock.done();
 
@@ -55,7 +53,7 @@ describe('rdme login', () => {
 
     const mock = getAPIMock().post('/api/v1/login', { email, password, project }).reply(200, { apiKey });
 
-    await expect(cmd.run({ project })).resolves.toBe(
+    await expect(cmd.run(['--project', project])).resolves.toBe(
       'Successfully logged in as user@example.com to the subdomain project.',
     );
 
@@ -69,9 +67,9 @@ describe('rdme login', () => {
   it('should bypass prompts and post to /login on the API if passing in every opt', async () => {
     const mock = getAPIMock().post('/api/v1/login', { email, password, project, token }).reply(200, { apiKey });
 
-    await expect(cmd.run({ email, password, project, otp: token })).resolves.toBe(
-      'Successfully logged in as user@example.com to the subdomain project.',
-    );
+    await expect(
+      cmd.run(['--email', email, '--password', password, '--project', project, '--otp', token]),
+    ).resolves.toBe('Successfully logged in as user@example.com to the subdomain project.');
 
     mock.done();
 
@@ -83,7 +81,7 @@ describe('rdme login', () => {
   it('should bypass prompts and post to /login on the API if passing in every opt (no 2FA)', async () => {
     const mock = getAPIMock().post('/api/v1/login', { email, password, project }).reply(200, { apiKey });
 
-    await expect(cmd.run({ email, password, project })).resolves.toBe(
+    await expect(cmd.run(['--email', email, '--password', password, '--project', project])).resolves.toBe(
       'Successfully logged in as user@example.com to the subdomain project.',
     );
 
@@ -105,7 +103,7 @@ describe('rdme login', () => {
 
     const mock = getAPIMock().post('/api/v1/login', { email, password, project }).reply(401, errorResponse);
 
-    await expect(cmd.run({})).rejects.toStrictEqual(new APIError(errorResponse));
+    await expect(cmd.run()).rejects.toStrictEqual(new APIError(errorResponse));
     mock.done();
   });
 
@@ -124,7 +122,7 @@ describe('rdme login', () => {
       .post('/api/v1/login', { email, password, project, token })
       .reply(200, { apiKey });
 
-    await expect(cmd.run({})).resolves.toBe('Successfully logged in as user@example.com to the subdomain project.');
+    await expect(cmd.run()).resolves.toBe('Successfully logged in as user@example.com to the subdomain project.');
 
     mock.done();
 
@@ -147,7 +145,7 @@ describe('rdme login', () => {
       .post('/api/v1/login', { email, password, project: projectThatIsNotYours })
       .reply(404, errorResponse);
 
-    await expect(cmd.run({})).rejects.toStrictEqual(new APIError(errorResponse));
+    await expect(cmd.run()).rejects.toStrictEqual(new APIError(errorResponse));
     mock.done();
   });
 });
