@@ -1,4 +1,4 @@
-import type commands from '../../cmds/index.js';
+import type commands from '../allCommands.js';
 import type { CommandOptions } from '../baseCommand.js';
 import type { OptionDefinition } from 'command-line-usage';
 

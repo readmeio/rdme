@@ -1,5 +1,5 @@
 /* eslint-disable class-methods-use-this */
-import type commands from '../cmds/index.js';
+import type commands from './allCommands.js';
 import type { OptionDefinition } from 'command-line-usage';
 
 import chalk from 'chalk';

@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import type commands from '../../../src/cmds/index.js';
+import type commands from '../../../src/lib/allCommands.js';
 import type { CommandOptions } from '../../../src/lib/baseCommand.js';
 import type Command from '../../../src/lib/baseCommand.js';
 import type { Response } from 'simple-git';

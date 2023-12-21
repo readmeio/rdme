@@ -1,6 +1,6 @@
 import type { CommandCategories } from './baseCommand.js';
 
-import commands from '../cmds/index.js';
+import commands from './allCommands.js';
 
 function getCategories(): Record<
   string,
