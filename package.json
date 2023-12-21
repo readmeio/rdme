@@ -145,5 +145,11 @@
       ]
     }
   },
+  "oclif": {
+    "bin": "rdme",
+    "dirname": "rdme",
+    "commands": "./dist/cmds",
+    "topicSeparator": ":"
+  },
   "prettier": "@readme/eslint-config/prettier"
 }
