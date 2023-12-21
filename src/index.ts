@@ -7,14 +7,13 @@ import chalk from 'chalk';
 import cliArgs from 'command-line-args';
 import parseArgsStringToArgv from 'string-argv';
 
-import pkg from '../package.json' assert { type: 'json' };
-
 import * as commands from './lib/commands.js';
 import config from './lib/config.js';
 import createGHA from './lib/createGHA/index.js';
 import getCurrentConfig from './lib/getCurrentConfig.js';
 import * as help from './lib/help.js';
 import { debug } from './lib/logger.js';
+import pkg from './package.json' assert { type: 'json' };
 
 const { version } = pkg;
 

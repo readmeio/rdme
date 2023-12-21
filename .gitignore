@@ -3,3 +3,6 @@ coverage/
 dist/
 exe/
 node_modules/
+
+# required for building with TS
+src/package.json

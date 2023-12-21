@@ -112,7 +112,7 @@
     "debug": "ts-node src/cli.ts",
     "lint": "alex . && knip && npm run lint:ts && npm run prettier && npm run schemas:check",
     "lint:ts": "eslint . --ext .js,.ts",
-    "prebuild": "rm -rf dist/",
+    "prebuild": "rm -rf dist/ && rm -f src/package.json && ln package.json src/package.json",
     "prepack": "npm run build",
     "prepare": "husky install",
     "pretest": "npm run build",

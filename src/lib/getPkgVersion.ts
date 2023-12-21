@@ -2,7 +2,7 @@
 import fetch from 'node-fetch';
 import semver from 'semver';
 
-import pkg from '../../package.json' assert { type: 'json' };
+import pkg from '../package.json' assert { type: 'json' };
 
 import { error } from './logger.js';
 
