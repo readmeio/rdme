@@ -8,7 +8,9 @@ import config from '../../src/lib/config.js';
 import configStore from '../../src/lib/configstore.js';
 import getAPIMock from '../helpers/get-api-mock.js';
 
-const cmd = new Command();
+const cmd = Command;
+
+const mockArg = ['--mock'];
 
 describe('rdme open', () => {
   afterEach(() => {
@@ -18,26 +20,19 @@ describe('rdme open', () => {
   it('should error if no project provided', () => {
     configStore.delete('project');
 
-    return expect(cmd.run({})).rejects.toStrictEqual(new Error(`Please login using \`${config.cli} login\`.`));
+    return expect(cmd.run(mockArg)).rejects.toStrictEqual(new Error(`Please login using \`${config.cli} login\`.`));
   });
 
   it('should open the project', () => {
-    expect.assertions(2);
     configStore.set('project', 'subdomain');
 
     const projectUrl = 'https://subdomain.readme.io';
 
-    function mockOpen(url: string) {
-      expect(url).toBe(projectUrl);
-      return Promise.resolve();
-    }
-
-    return expect(cmd.run({ mockOpen })).resolves.toBe(`Opening ${chalk.green(projectUrl)} in your browser...`);
+    return expect(cmd.run(mockArg)).resolves.toBe(`Opening ${chalk.green(projectUrl)} in your browser...`);
   });
 
   describe('open --dash', () => {
     it('should open the dash', async () => {
-      expect.assertions(2);
       configStore.set('project', 'subdomain');
       configStore.set('apiKey', '12345');
 
@@ -60,12 +55,7 @@ describe('rdme open', () => {
 
       const dashUrl = 'https://dash.readme.com/project/subdomain/v1.0/overview';
 
-      function mockOpen(url: string) {
-        expect(url).toBe(dashUrl);
-        return Promise.resolve();
-      }
-
-      await expect(cmd.run({ mockOpen, dash: true })).resolves.toBe(
+      await expect(cmd.run(mockArg.concat('--dash'))).resolves.toBe(
         `Opening ${chalk.green(dashUrl)} in your browser...`,
       );
       mockRequest.done();
@@ -74,14 +64,7 @@ describe('rdme open', () => {
     it('should require user to be logged in', () => {
       configStore.set('project', 'subdomain');
 
-      const dashUrl = 'https://dash.readme.com/project/subdomain/v1.0/overview';
-
-      function mockOpen(url: string) {
-        expect(url).toBe(dashUrl);
-        return Promise.resolve();
-      }
-
-      return expect(cmd.run({ mockOpen, dash: true })).rejects.toStrictEqual(
+      return expect(cmd.run(mockArg.concat('--dash'))).rejects.toStrictEqual(
         new Error(`Please login using \`${config.cli} login\`.`),
       );
     });

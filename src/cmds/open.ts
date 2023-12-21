@@ -1,42 +1,26 @@
-import type { ZeroAuthCommandOptions } from '../lib/baseCommand.js';
-
+import { Flags } from '@oclif/core';
 import chalk from 'chalk';
 import open from 'open';
 
-import Command, { CommandCategories } from '../lib/baseCommand.js';
+import BaseCommand from '../lib/baseCommandNew.js';
 import config from '../lib/config.js';
 import getCurrentConfig from '../lib/getCurrentConfig.js';
 import { getProjectVersion } from '../lib/versionSelect.js';
 
-interface Options {
-  dash?: boolean;
-  mockOpen?: (url: string) => Promise<void>;
-}
+export default class OpenCommand extends BaseCommand {
+  static description = 'Open your current ReadMe project in the browser.';
 
-export default class OpenCommand extends Command {
-  constructor() {
-    super();
+  static flags = {
+    dash: Flags.boolean({ description: 'Opens your current ReadMe project dashboard.' }),
+    mock: Flags.boolean({ description: '[hidden] used for mocking.', hidden: true }),
+  };
 
-    this.command = 'open';
-    this.usage = 'open';
-    this.description = 'Open your current ReadMe project in the browser.';
-    this.cmdCategory = CommandCategories.UTILITIES;
-
-    this.args = [
-      {
-        name: 'dash',
-        type: Boolean,
-        description: 'Opens your current ReadMe project dashboard.',
-      },
-    ];
-  }
-
-  async run(opts: ZeroAuthCommandOptions<Options>) {
-    await super.run(opts);
-
-    const { dash } = opts;
+  async run() {
+    const {
+      flags: { dash, mock },
+    } = await this.parse(OpenCommand);
     const { apiKey, project } = getCurrentConfig();
-    Command.debug(`project: ${project}`);
+    this.debug(`project: ${project}`);
 
     if (!project) {
       return Promise.reject(new Error(`Please login using \`${config.cli} login\`.`));
@@ -57,8 +41,14 @@ export default class OpenCommand extends Command {
       url = hubURL.replace('{project}', project);
     }
 
-    return (opts.mockOpen || open)(url, {
+    const result = `Opening ${chalk.green(url)} in your browser...`;
+
+    if (mock) {
+      return Promise.resolve(result);
+    }
+
+    return open(url, {
       wait: false,
-    }).then(() => Promise.resolve(`Opening ${chalk.green(url)} in your browser...`));
+    }).then(() => Promise.resolve(result));
   }
 }
