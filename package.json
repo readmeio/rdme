@@ -149,7 +149,12 @@
     "bin": "rdme",
     "dirname": "rdme",
     "commands": "./dist/cmds",
-    "topicSeparator": ":"
+    "topicSeparator": ":",
+    "hooks": {
+      "prerun": [
+        "./dist/lib/hooks/prerun"
+      ]
+    }
   },
   "prettier": "@readme/eslint-config/prettier"
 }
