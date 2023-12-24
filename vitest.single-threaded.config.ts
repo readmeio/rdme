@@ -18,6 +18,6 @@ export default defineConfig({
      *
      * @see {@link https://github.com/vitest-dev/vitest/issues/566}
      */
-    threads: false,
+    pool: 'forks',
   },
 });
