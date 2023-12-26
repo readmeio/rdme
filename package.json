@@ -153,6 +153,9 @@
     "hooks": {
       "prerun": [
         "./dist/lib/hooks/prerun"
+      ],
+      "createGHA": [
+        "./dist/lib/hooks/createGHA"
       ]
     }
   },
