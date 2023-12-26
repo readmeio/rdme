@@ -2,7 +2,7 @@ import BaseCommand from '../lib/baseCommandNew.js';
 import config from '../lib/config.js';
 import configStore from '../lib/configstore.js';
 
-export default class LogoutCommand extends BaseCommand {
+export default class LogoutCommand extends BaseCommand<typeof LogoutCommand> {
   static description = 'Logs the currently authenticated user out of ReadMe.';
 
   async run() {

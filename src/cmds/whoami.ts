@@ -4,7 +4,7 @@ import BaseCommand from '../lib/baseCommandNew.js';
 import config from '../lib/config.js';
 import getCurrentConfig from '../lib/getCurrentConfig.js';
 
-export default class WhoAmICommand extends BaseCommand {
+export default class WhoAmICommand extends BaseCommand<typeof WhoAmICommand> {
   static description = 'Displays the current user and project authenticated with ReadMe.';
 
   async run() {

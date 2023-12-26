@@ -4,7 +4,7 @@ import prompts from 'prompts';
 import BaseCommand from '../lib/baseCommandNew.js';
 import loginFlow from '../lib/loginFlow.js';
 
-export default class LoginCommand extends BaseCommand {
+export default class LoginCommand extends BaseCommand<typeof LoginCommand> {
   static description = 'Login to a ReadMe project.';
 
   static flags = {
@@ -15,10 +15,8 @@ export default class LoginCommand extends BaseCommand {
   };
 
   async run() {
-    const { flags } = await this.parse(LoginCommand);
+    prompts.override(this.flags);
 
-    prompts.override(flags);
-
-    return loginFlow(flags.otp);
+    return loginFlow(this.flags.otp);
   }
 }

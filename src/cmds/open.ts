@@ -7,7 +7,7 @@ import config from '../lib/config.js';
 import getCurrentConfig from '../lib/getCurrentConfig.js';
 import { getProjectVersion } from '../lib/versionSelect.js';
 
-export default class OpenCommand extends BaseCommand {
+export default class OpenCommand extends BaseCommand<typeof OpenCommand> {
   static description = 'Open your current ReadMe project in the browser.';
 
   static flags = {
@@ -16,9 +16,7 @@ export default class OpenCommand extends BaseCommand {
   };
 
   async run() {
-    const {
-      flags: { dash, mock },
-    } = await this.parse(OpenCommand);
+    const { dash, mock } = this.flags;
     const { apiKey, project } = getCurrentConfig();
     this.debug(`project: ${project}`);
 
