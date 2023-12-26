@@ -2,6 +2,7 @@ import { Flags, type Hook } from '@oclif/core';
 import chalk from 'chalk';
 
 import configstore from '../configstore.js';
+import { github } from '../flags.js';
 import getCurrentConfig from '../getCurrentConfig.js';
 import isCI from '../isCI.js';
 import { info } from '../logger.js';
@@ -38,13 +39,22 @@ const hook: Hook<'prerun'> = async function run(options) {
     });
   }
 
-  if (options.Command?.flags?.github && isCI()) {
-    // eslint-disable-next-line no-param-reassign
-    options.Command.flags.github = Flags.boolean({
-      async parse() {
-        throw new Error('The `--github` flag is only for usage in non-CI environments.');
-      },
-    });
+  // the logic in this block is a little weird it does two things:
+  // 1. throws if the user is attempting to use --github in a CI environment
+  // 2. resets the --github flag options to the default in certain tests
+  if (options.Command?.flags?.github) {
+    if (isCI()) {
+      // eslint-disable-next-line no-param-reassign
+      options.Command.flags.github = Flags.boolean({
+        async parse() {
+          throw new Error('The `--github` flag is only for usage in non-CI environments.');
+        },
+      });
+    }
+    if (process.env.TEST_RDME_CREATEGHA) {
+      // eslint-disable-next-line no-param-reassign
+      options.Command.flags.github = github;
+    }
   }
 };
 
