@@ -1,16 +1,14 @@
 /* eslint-disable no-console */
+import type { Config } from '@oclif/core';
+
 import fs from 'node:fs';
 
 import chalk from 'chalk';
 import prompts from 'prompts';
 import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
-import OpenAPIValidateCommand from '../../../src/cmds/openapi/validate.js';
-import ValidateAliasCommand from '../../../src/cmds/validate.js';
 import { after, before } from '../../helpers/get-gha-setup.js';
-
-const validate = new OpenAPIValidateCommand();
-const validateAlias = new ValidateAliasCommand();
+import setupOclifConfig from '../../helpers/setup-oclif-config.js';
 
 let consoleSpy;
 
@@ -19,8 +17,13 @@ const getCommandOutput = () => {
 };
 
 describe('rdme openapi:validate', () => {
-  beforeEach(() => {
+  let config: Config;
+  let run: (args?: string[]) => Promise<unknown>;
+
+  beforeEach(async () => {
     consoleSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
+    config = await setupOclifConfig();
+    run = (args?: string[]) => config.runCommand('openapi:validate', args);
   });
 
   afterEach(() => {
@@ -37,9 +40,7 @@ describe('rdme openapi:validate', () => {
   ])('should support validating a %s definition (format: %s)', (_, format, specVersion) => {
     expect(console.info).toHaveBeenCalledTimes(0);
     return expect(
-      validate.run({
-        spec: require.resolve(`@readme/oas-examples/${specVersion}/${format}/petstore.${format}`),
-      }),
+      run([require.resolve(`@readme/oas-examples/${specVersion}/${format}/petstore.${format}`)]),
     ).resolves.toContain(
       `petstore.${format} is a valid ${specVersion === '2.0' ? 'Swagger' : 'OpenAPI'} API definition!`,
     );
@@ -47,27 +48,27 @@ describe('rdme openapi:validate', () => {
 
   describe('error handling', () => {
     it('should throw an error if invalid JSON is supplied', () => {
-      return expect(validate.run({ spec: './__tests__/__fixtures__/invalid-json/yikes.json' })).rejects.toStrictEqual(
+      return expect(run(['./__tests__/__fixtures__/invalid-json/yikes.json'])).rejects.toStrictEqual(
         new SyntaxError('Unexpected end of JSON input'),
       );
     });
 
     it('should throw an error if an invalid OpenAPI 3.0 definition is supplied', () => {
-      return expect(validate.run({ spec: './__tests__/__fixtures__/invalid-oas.json' })).rejects.toThrow(
+      return expect(run(['./__tests__/__fixtures__/invalid-oas.json'])).rejects.toThrow(
         'Token "Error" does not exist.',
       );
     });
 
     it('should throw an error if an invalid OpenAPI 3.1 definition is supplied', () => {
-      return expect(validate.run({ spec: './__tests__/__fixtures__/invalid-oas-3.1.json' })).rejects.toMatchSnapshot();
+      return expect(run(['./__tests__/__fixtures__/invalid-oas-3.1.json'])).rejects.toMatchSnapshot();
     });
 
     it('should throw an error if an invalid Swagger definition is supplied', () => {
-      return expect(validate.run({ spec: './__tests__/__fixtures__/invalid-swagger.json' })).rejects.toMatchSnapshot();
+      return expect(run(['./__tests__/__fixtures__/invalid-swagger.json'])).rejects.toMatchSnapshot();
     });
 
     it('should throw an error if an invalid API definition has many errors', () => {
-      return expect(validate.run({ spec: './__tests__/__fixtures__/very-invalid-oas.json' })).rejects.toMatchSnapshot();
+      return expect(run(['./__tests__/__fixtures__/very-invalid-oas.json'])).rejects.toMatchSnapshot();
     });
   });
 
@@ -83,13 +84,13 @@ describe('rdme openapi:validate', () => {
     it('should successfully validate prompt and not run GHA onboarding', async () => {
       vi.stubEnv('TEST_RDME_CREATEGHA', 'true');
       const spec = '__tests__/__fixtures__/petstore-simple-weird-version.json';
-      await expect(validate.run({ spec })).resolves.toBe(chalk.green(`${spec} is a valid OpenAPI API definition!`));
+      await expect(run([spec])).resolves.toBe(chalk.green(`${spec} is a valid OpenAPI API definition!`));
     });
 
     it('should fail if user attempts to pass `--github` flag in CI environment', () => {
-      return expect(
-        validate.run({ github: true, spec: '__tests__/__fixtures__/petstore-simple-weird-version.json' }),
-      ).rejects.toStrictEqual(new Error('The `--github` flag is only for usage in non-CI environments.'));
+      return expect(run(['__tests__/__fixtures__/petstore-simple-weird-version.json', '--github'])).rejects.toThrow(
+        'The `--github` flag is only for usage in non-CI environments.',
+      );
     });
   });
 
@@ -112,7 +113,7 @@ describe('rdme openapi:validate', () => {
       const fileName = 'validate-test-file';
       prompts.inject([spec, true, 'validate-test-branch', fileName]);
 
-      await expect(validate.run({})).resolves.toMatchSnapshot();
+      await expect(run()).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();
       expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
@@ -128,7 +129,7 @@ describe('rdme openapi:validate', () => {
       const fileName = 'validate-test-opt-spec-file';
       prompts.inject([true, 'validate-test-opt-spec-branch', fileName]);
 
-      await expect(validate.run({ spec })).resolves.toMatchSnapshot();
+      await expect(run([spec])).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();
       expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
@@ -140,7 +141,7 @@ describe('rdme openapi:validate', () => {
       const fileName = 'validate-test-opt-spec-github-file';
       prompts.inject(['validate-test-opt-spec-github-branch', fileName]);
 
-      await expect(validate.run({ spec, github: true })).resolves.toMatchSnapshot();
+      await expect(run([spec, '--github'])).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();
       expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
@@ -149,42 +150,19 @@ describe('rdme openapi:validate', () => {
     it('should reject if user says no to creating GHA workflow', () => {
       const spec = '__tests__/__fixtures__/petstore-simple-weird-version.json';
       prompts.inject([spec, false]);
-      return expect(validate.run({})).rejects.toStrictEqual(
+      return expect(run()).rejects.toStrictEqual(
         new Error(
           'GitHub Actions workflow creation cancelled. If you ever change your mind, you can run this command again with the `--github` flag.',
         ),
       );
     });
   });
-});
 
-describe('rdme validate', () => {
-  let consoleWarnSpy;
-
-  const getWarningCommandOutput = () => {
-    return [consoleWarnSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
-  };
-
-  beforeEach(() => {
-    consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-  });
-
-  afterEach(() => {
-    consoleWarnSpy.mockRestore();
-  });
-
-  it('should should `rdme openapi:validate`', async () => {
-    await expect(
-      validateAlias.run({
-        spec: require.resolve('@readme/oas-examples/3.0/json/petstore.json'),
-      }),
-    ).resolves.toContain(chalk.green('petstore.json is a valid OpenAPI API definition!'));
-
-    expect(console.warn).toHaveBeenCalledTimes(1);
-
-    const output = getWarningCommandOutput();
-    expect(output).toBe(
-      chalk.yellow('⚠️  Warning! `rdme validate` has been deprecated. Please use `rdme openapi:validate` instead.'),
-    );
+  describe('rdme validate alias', () => {
+    it('should should `rdme openapi:validate`', () => {
+      return expect(
+        config.runCommand('validate', [require.resolve('@readme/oas-examples/3.0/json/petstore.json')]),
+      ).resolves.toContain(chalk.green('petstore.json is a valid OpenAPI API definition!'));
+    });
   });
 });

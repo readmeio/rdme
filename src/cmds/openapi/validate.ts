@@ -1,9 +1,9 @@
-import type { ZeroAuthCommandOptions } from '../../lib/baseCommand.js';
-
+import { Args } from '@oclif/core';
 import chalk from 'chalk';
 
-import Command, { CommandCategories } from '../../lib/baseCommand.js';
-import createGHA from '../../lib/createGHA/index.js';
+import Command from '../../lib/baseCommand.js';
+import BaseCommand from '../../lib/baseCommandNew.js';
+import { github as githubArg, workingDirectory as workingDirectoryArg } from '../../lib/flags.js';
 import prepareOas from '../../lib/prepareOas.js';
 
 export interface Options {
@@ -11,41 +11,41 @@ export interface Options {
   workingDirectory?: string;
 }
 
-export default class OpenAPIValidateCommand extends Command {
-  constructor() {
-    super();
+export default class OpenAPIValidateCommand extends BaseCommand<typeof OpenAPIValidateCommand> {
+  static description = 'Validate your OpenAPI/Swagger definition.';
 
-    this.command = 'openapi:validate';
-    this.usage = 'openapi:validate [file|url] [options]';
-    this.description = 'Validate your OpenAPI/Swagger definition.';
-    this.cmdCategory = CommandCategories.APIS;
+  static hiddenAliases = ['validate'];
 
-    this.hiddenArgs = ['spec'];
-    this.args = [
-      {
-        name: 'spec',
-        type: String,
-        defaultOption: true,
-      },
-      this.getWorkingDirArg(),
-      this.getGitHubArg(),
-    ];
-  }
+  static args = {
+    spec: Args.string({ description: 'A file/URL to your API definition' }),
+  };
 
-  async run(opts: ZeroAuthCommandOptions<Options>) {
-    await super.run(opts);
+  static flags = {
+    github: githubArg,
+    workingDirectory: workingDirectoryArg,
+  };
 
-    const { spec, workingDirectory } = opts;
-
-    if (workingDirectory) {
+  async run(): Promise<string> {
+    if (this.flags.workingDirectory) {
       const previousWorkingDirectory = process.cwd();
-      process.chdir(workingDirectory);
+      process.chdir(this.flags.workingDirectory);
       Command.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
     }
 
-    const { specPath, specType } = await prepareOas(spec, 'openapi:validate');
-    return Promise.resolve(chalk.green(`${specPath} is a valid ${specType} API definition!`)).then(msg =>
-      createGHA(msg, this.command, this.args, { ...opts, spec: specPath } as ZeroAuthCommandOptions<Options>),
-    );
+    const { specPath, specType } = await prepareOas(this.args.spec, 'openapi:validate');
+    const result = chalk.green(`${specPath} is a valid ${specType} API definition!`);
+
+    return this.config
+      .runHook('createGHA', {
+        command: OpenAPIValidateCommand,
+        parsedOpts: { ...this.flags, spec: specPath },
+        result,
+      })
+      .then(res => {
+        const { successes, failures } = res;
+        if (successes.length) return successes[0].result;
+        if (failures.length) throw failures[0].error;
+        return result;
+      });
   }
 }
