@@ -1,79 +1,46 @@
-import type { ZeroAuthCommandOptions } from '../../lib/baseCommand.js';
 import type { OASDocument } from 'oas/types';
 
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { Args, Flags } from '@oclif/core';
 import chalk from 'chalk';
 import Oas from 'oas';
 import oasReducer from 'oas/reducer';
 import ora from 'ora';
 import prompts from 'prompts';
 
-import Command, { CommandCategories } from '../../lib/baseCommand.js';
+import Command from '../../lib/baseCommand.js';
+import BaseCommand from '../../lib/baseCommandNew.js';
+import { github as githubArg, title as titleArg } from '../../lib/flags.js';
 import { oraOptions } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
 import { validateFilePath } from '../../lib/validatePromptInput.js';
 
-interface Options {
-  method?: string[];
-  out?: string;
-  path?: string[];
-  spec?: string;
-  tag?: string[];
-  title?: string;
-  workingDirectory?: string;
-}
+export default class OpenAPIReduceCommand extends BaseCommand<typeof OpenAPIReduceCommand> {
+  static description = 'Reduce an OpenAPI definition into a smaller subset.';
 
-export default class OpenAPIReduceCommand extends Command {
-  constructor() {
-    super();
+  static args = {
+    spec: Args.string({ description: 'A file/URL to your API definition' }),
+  };
 
-    this.command = 'openapi:reduce';
-    this.usage = 'openapi:reduce [file|url] [options]';
-    this.description = 'Reduce an OpenAPI definition into a smaller subset.';
-    this.cmdCategory = CommandCategories.APIS;
+  static flags = {
+    github: githubArg,
+    method: Flags.string({
+      description: 'Methods to reduce by (can only be used alongside the `path` option)',
+      multiple: true,
+    }),
+    out: Flags.string({ description: 'Output file path to write reduced file to' }),
+    path: Flags.string({ description: 'Paths to reduce by', multiple: true }),
+    tag: Flags.string({ description: 'Tags to reduce by', multiple: true }),
+    title: titleArg,
+  };
 
-    this.hiddenArgs = ['spec'];
-    this.args = [
-      {
-        name: 'spec',
-        type: String,
-        defaultOption: true,
-      },
-      {
-        name: 'tag',
-        type: String,
-        multiple: true,
-        description: 'Tags to reduce by',
-      },
-      {
-        name: 'path',
-        type: String,
-        multiple: true,
-        description: 'Paths to reduce by',
-      },
-      {
-        name: 'method',
-        type: String,
-        multiple: true,
-        description: 'Methods to reduce by (can only be used alongside the `path` option)',
-      },
-      {
-        name: 'out',
-        type: String,
-        description: 'Output file path to write reduced file to',
-      },
-      this.getTitleArg(),
-      this.getWorkingDirArg(),
-    ];
-  }
-
-  async run(opts: ZeroAuthCommandOptions<Options>) {
-    await super.run(opts);
-
-    const { spec, title, workingDirectory } = opts;
+  async run(): Promise<string> {
+    const { spec } = this.args;
+    const opts = this.flags;
+    const { title, workingDirectory } = opts;
 
     if (workingDirectory) {
       const previousWorkingDirectory = process.cwd();
