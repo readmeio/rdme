@@ -1,18 +1,25 @@
 import type { Version } from '../../src/cmds/versions/index.js';
+import type { Config } from '@oclif/core';
 
 import chalk from 'chalk';
-import { describe, afterEach, it, expect } from 'vitest';
+import { describe, afterEach, beforeEach, it, expect } from 'vitest';
 
-import Command from '../../src/cmds/open.js';
 import config from '../../src/lib/config.js';
 import configStore from '../../src/lib/configstore.js';
 import getAPIMock from '../helpers/get-api-mock.js';
-
-const cmd = Command;
+import setupOclifConfig from '../helpers/setup-oclif-config.js';
 
 const mockArg = ['--mock'];
 
 describe('rdme open', () => {
+  let oclifConfig: Config;
+  let run: (args?: string[]) => Promise<unknown>;
+
+  beforeEach(async () => {
+    oclifConfig = await setupOclifConfig();
+    run = (args?: string[]) => oclifConfig.runCommand('open', args);
+  });
+
   afterEach(() => {
     configStore.clear();
   });
@@ -20,7 +27,7 @@ describe('rdme open', () => {
   it('should error if no project provided', () => {
     configStore.delete('project');
 
-    return expect(cmd.run(mockArg)).rejects.toStrictEqual(new Error(`Please login using \`${config.cli} login\`.`));
+    return expect(run(mockArg)).rejects.toStrictEqual(new Error(`Please login using \`${config.cli} login\`.`));
   });
 
   it('should open the project', () => {
@@ -28,7 +35,7 @@ describe('rdme open', () => {
 
     const projectUrl = 'https://subdomain.readme.io';
 
-    return expect(cmd.run(mockArg)).resolves.toBe(`Opening ${chalk.green(projectUrl)} in your browser...`);
+    return expect(run(mockArg)).resolves.toBe(`Opening ${chalk.green(projectUrl)} in your browser...`);
   });
 
   describe('open --dash', () => {
@@ -55,16 +62,14 @@ describe('rdme open', () => {
 
       const dashUrl = 'https://dash.readme.com/project/subdomain/v1.0/overview';
 
-      await expect(cmd.run(mockArg.concat('--dash'))).resolves.toBe(
-        `Opening ${chalk.green(dashUrl)} in your browser...`,
-      );
+      await expect(run(mockArg.concat('--dash'))).resolves.toBe(`Opening ${chalk.green(dashUrl)} in your browser...`);
       mockRequest.done();
     });
 
     it('should require user to be logged in', () => {
       configStore.set('project', 'subdomain');
 
-      return expect(cmd.run(mockArg.concat('--dash'))).rejects.toStrictEqual(
+      return expect(run(mockArg.concat('--dash'))).rejects.toStrictEqual(
         new Error(`Please login using \`${config.cli} login\`.`),
       );
     });
