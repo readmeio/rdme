@@ -29,7 +29,7 @@ export function before(writeFileSyncCb) {
 
   vi.setSystemTime(new Date('2022'));
 
-  process.env.TEST_RDME_CREATEGHA = 'true';
+  vi.stubEnv('TEST_RDME_CREATEGHA', 'true');
 
   const spy = vi.spyOn(getPkgVersion, 'getMajorPkgVersion');
   spy.mockResolvedValue(7);
@@ -40,7 +40,7 @@ export function before(writeFileSyncCb) {
  */
 export function after() {
   configstore.clear();
-  delete process.env.TEST_RDME_CREATEGHA;
   vi.clearAllMocks();
+  vi.unstubAllEnvs();
   vi.useRealTimers();
 }
