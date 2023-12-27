@@ -86,7 +86,7 @@
     "@types/update-notifier": "^6.0.5",
     "@types/validator": "^13.7.6",
     "@vitest/coverage-v8": "^1.1.0",
-    "@vitest/expect": "^0.34.3",
+    "@vitest/expect": "^1.1.0",
     "ajv": "^8.11.0",
     "alex": "^11.0.0",
     "eslint": "^8.47.0",
