@@ -25,15 +25,21 @@ const hook: Hook<'prerun'> = async function run(options) {
         }
         return input;
       },
+      // `default` is run if no `--key` flag is passed
       default: async () => {
+        const { apiKey } = getCurrentConfig();
+        // if the user is passing an API key via env var or configstore, use that
+        if (apiKey) return apiKey;
         if (isCI()) {
           // TODO make sure this error throws properly
           // this.error('No project API key provided. Please use `--key`.');
           throw new Error('No project API key provided. Please use `--key`.');
         }
+        // if in non-CI and the user hasn't passed in a key, we prompt them to log in
         info("Looks like you're missing a ReadMe API key, let's fix that! 🦉", { includeEmojiPrefix: false });
         const result = await loginFlow();
         info(result, { includeEmojiPrefix: false });
+        // loginFlow sets the configstore value, so let's use that
         return configstore.get('apiKey');
       },
     });
