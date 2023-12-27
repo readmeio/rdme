@@ -33,19 +33,10 @@ export default class OpenAPIValidateCommand extends BaseCommand<typeof OpenAPIVa
     }
 
     const { specPath, specType } = await prepareOas(this.args.spec, 'openapi:validate');
-    const result = chalk.green(`${specPath} is a valid ${specType} API definition!`);
 
-    return this.config
-      .runHook('createGHA', {
-        command: OpenAPIValidateCommand,
-        parsedOpts: { ...this.flags, spec: specPath },
-        result,
-      })
-      .then(res => {
-        const { successes, failures } = res;
-        if (successes.length) return successes[0].result;
-        if (failures.length) throw failures[0].error;
-        return result;
-      });
+    return this.runCreateGHAHook({
+      parsedOpts: { ...this.flags, spec: specPath },
+      result: chalk.green(`${specPath} is a valid ${specType} API definition!`),
+    });
   }
 }

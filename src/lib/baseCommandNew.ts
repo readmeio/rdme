@@ -1,4 +1,5 @@
-import type { Interfaces } from '@oclif/core';
+import type { CreateGHAHook, CreateGHAHookOptsInClass } from './hooks/createGHA.js';
+import type { Hook, Interfaces } from '@oclif/core';
 
 import { Command as OclifCommand } from '@oclif/core';
 
@@ -59,5 +60,21 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
 
     this.flags = flags as Flags<T>;
     this.args = args as Args<T>;
+  }
+
+  runCreateGHAHook(opts: CreateGHAHookOptsInClass) {
+    return this.config
+      .runHook('createGHA', {
+        command: this.ctor,
+        parsedOpts: opts.parsedOpts || { ...this.args, ...this.flags },
+        result: opts.result,
+      })
+      .then((res: Hook.Result<CreateGHAHook['createGHA']['return']>) => {
+        const { successes, failures } = res;
+        if (successes.length) return successes[0].result;
+        if (failures.length) throw failures[0].error;
+        this.debug('unable to process createGHA hook response', res);
+        return opts.result;
+      });
   }
 }
