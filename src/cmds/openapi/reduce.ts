@@ -10,9 +10,8 @@ import oasReducer from 'oas/reducer';
 import ora from 'ora';
 import prompts from 'prompts';
 
-import Command from '../../lib/baseCommand.js';
 import BaseCommand from '../../lib/baseCommandNew.js';
-import { github as githubArg, title as titleArg } from '../../lib/flags.js';
+import { title as titleArg, workingDirectory as workingDirectoryArg } from '../../lib/flags.js';
 import { oraOptions } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
@@ -26,7 +25,6 @@ export default class OpenAPIReduceCommand extends BaseCommand<typeof OpenAPIRedu
   };
 
   static flags = {
-    github: githubArg,
     method: Flags.string({
       description: 'Methods to reduce by (can only be used alongside the `path` option)',
       multiple: true,
@@ -35,6 +33,7 @@ export default class OpenAPIReduceCommand extends BaseCommand<typeof OpenAPIRedu
     path: Flags.string({ description: 'Paths to reduce by', multiple: true }),
     tag: Flags.string({ description: 'Tags to reduce by', multiple: true }),
     title: titleArg,
+    workingDirectory: workingDirectoryArg,
   };
 
   async run(): Promise<string> {
@@ -143,8 +142,8 @@ export default class OpenAPIReduceCommand extends BaseCommand<typeof OpenAPIRedu
       },
     ]);
 
-    Command.debug(`reducing by ${promptResults.reduceBy}`);
-    Command.debug(
+    this.debug(`reducing by ${promptResults.reduceBy}`);
+    this.debug(
       `options being supplied to the reducer: ${JSON.stringify({
         tags: promptResults.tags,
         paths: promptResults.paths,
@@ -152,7 +151,7 @@ export default class OpenAPIReduceCommand extends BaseCommand<typeof OpenAPIRedu
       })}`,
     );
 
-    Command.debug(`about to reduce spec located at ${specPath}`);
+    this.debug(`about to reduce spec located at ${specPath}`);
 
     const spinner = ora({ ...oraOptions() });
     spinner.start('Reducing your API definition...');
@@ -170,16 +169,16 @@ export default class OpenAPIReduceCommand extends BaseCommand<typeof OpenAPIRedu
 
       spinner.succeed(`${spinner.text} done! ✅`);
     } catch (err) {
-      Command.debug(`reducer err: ${err.message}`);
+      this.debug(`reducer err: ${err.message}`);
       spinner.fail();
       throw err;
     }
 
-    Command.debug(`saving reduced spec to ${promptResults.outputPath}`);
+    this.debug(`saving reduced spec to ${promptResults.outputPath}`);
 
     fs.writeFileSync(promptResults.outputPath, JSON.stringify(reducedSpec, null, 2));
 
-    Command.debug('reduced spec saved');
+    this.debug('reduced spec saved');
 
     return Promise.resolve(
       chalk.green(`Your reduced API definition has been saved to ${promptResults.outputPath}! 🤏`),
