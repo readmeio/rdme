@@ -1,70 +1,51 @@
-import type { ZeroAuthCommandOptions } from '../../lib/baseCommand.js';
 import type { OASDocument } from 'oas/types';
 
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { Args, Flags } from '@oclif/core';
 import chalk from 'chalk';
 import prompts from 'prompts';
 
-import Command, { CommandCategories } from '../../lib/baseCommand.js';
+import BaseCommand from '../../lib/baseCommandNew.js';
+import { workingDirectory as workingDirectoryArg } from '../../lib/flags.js';
 import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
 import { validateFilePath } from '../../lib/validatePromptInput.js';
 
-interface Options {
-  out?: string;
-  spec?: string;
-  workingDirectory?: string;
-}
+export default class OpenAPIConvertCommand extends BaseCommand<typeof OpenAPIConvertCommand> {
+  static description = 'Convert an API definition to OpenAPI and bundle any external references.';
 
-export default class OpenAPIConvertCommand extends Command {
-  constructor() {
-    super();
+  static args = {
+    spec: Args.string({ description: 'A file/URL to your API definition' }),
+  };
 
-    this.command = 'openapi:convert';
-    this.usage = 'openapi:convert [file|url] [options]';
-    this.description = 'Convert an API definition to OpenAPI and bundle any external references.';
-    this.cmdCategory = CommandCategories.APIS;
+  static flags = {
+    out: Flags.string({ description: 'Output file path to write converted file to' }),
+    workingDirectory: workingDirectoryArg,
+  };
 
-    this.hiddenArgs = ['spec'];
-    this.args = [
-      {
-        name: 'spec',
-        type: String,
-        defaultOption: true,
-      },
-      {
-        name: 'out',
-        type: String,
-        description: 'Output file path to write converted file to',
-      },
-      this.getWorkingDirArg(),
-    ];
-  }
-
-  async run(opts: ZeroAuthCommandOptions<Options>) {
-    await super.run(opts);
-
-    const { spec, workingDirectory } = opts;
+  async run(): Promise<string> {
+    const { spec } = this.args;
+    const { out, workingDirectory } = this.flags;
 
     if (workingDirectory) {
       const previousWorkingDirectory = process.cwd();
       process.chdir(workingDirectory);
-      Command.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
+      this.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
     }
 
     const { preparedSpec, specPath, specType } = await prepareOas(spec, 'openapi:convert', { convertToLatest: true });
     const parsedPreparedSpec: OASDocument = JSON.parse(preparedSpec);
 
     if (specType === 'OpenAPI') {
-      Command.warn(
+      this.warn(
         'The input file is already OpenAPI, so no conversion is necessary. Any external references will be bundled.',
       );
     }
 
     prompts.override({
-      outputPath: opts.out,
+      outputPath: out,
     });
 
     const promptResults = await promptTerminal([
@@ -80,11 +61,11 @@ export default class OpenAPIConvertCommand extends Command {
       },
     ]);
 
-    Command.debug(`saving converted/bundled spec to ${promptResults.outputPath}`);
+    this.debug(`saving converted/bundled spec to ${promptResults.outputPath}`);
 
     fs.writeFileSync(promptResults.outputPath, JSON.stringify(parsedPreparedSpec, null, 2));
 
-    Command.debug('converted/bundled spec saved');
+    this.debug('converted/bundled spec saved');
 
     return Promise.resolve(
       chalk.green(`Your API definition has been converted and bundled and saved to ${promptResults.outputPath}!`),
