@@ -85,8 +85,8 @@
     "@types/semver": "^7.3.12",
     "@types/update-notifier": "^6.0.5",
     "@types/validator": "^13.7.6",
-    "@vitest/coverage-v8": "^0.34.1",
-    "@vitest/expect": "^0.34.3",
+    "@vitest/coverage-v8": "^1.1.0",
+    "@vitest/expect": "^1.1.0",
     "ajv": "^8.11.0",
     "alex": "^11.0.0",
     "eslint": "^8.47.0",
@@ -102,7 +102,7 @@
     "ts-node": "^10.9.1",
     "type-fest": "^4.3.1",
     "typescript": "^5.1.6",
-    "vitest": "^0.34.1"
+    "vitest": "^1.1.0"
   },
   "scripts": {
     "build": "tsc",
