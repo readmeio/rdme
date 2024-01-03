@@ -3,7 +3,7 @@ import chalk from 'chalk';
 
 import Command from '../../lib/baseCommand.js';
 import BaseCommand from '../../lib/baseCommandNew.js';
-import { github as githubArg, workingDirectory as workingDirectoryArg } from '../../lib/flags.js';
+import { githubFlag, workingDirectoryFlag } from '../../lib/flags.js';
 import prepareOas from '../../lib/prepareOas.js';
 
 export interface Options {
@@ -21,8 +21,8 @@ export default class OpenAPIValidateCommand extends BaseCommand<typeof OpenAPIVa
   };
 
   static flags = {
-    github: githubArg,
-    workingDirectory: workingDirectoryArg,
+    github: githubFlag,
+    workingDirectory: workingDirectoryFlag,
   };
 
   async run(): Promise<string> {

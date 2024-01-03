@@ -10,7 +10,7 @@ import { getBorderCharacters, table } from 'table';
 import analyzeOas, { getSupportedFeatures } from '../../lib/analyzeOas.js';
 import Command from '../../lib/baseCommand.js';
 import BaseCommand from '../../lib/baseCommandNew.js';
-import { title as titleArg, workingDirectory as workingDirectoryArg } from '../../lib/flags.js';
+import { titleFlag, workingDirectoryFlag } from '../../lib/flags.js';
 import { oraOptions } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
 import SoftError from '../../lib/softError.js';
@@ -186,8 +186,8 @@ export default class OpenAPIInspectCommand extends BaseCommand<typeof OpenAPIIns
       multiple: true,
       options: getSupportedFeatures(),
     }),
-    title: titleArg,
-    workingDirectory: workingDirectoryArg,
+    title: titleFlag,
+    workingDirectory: workingDirectoryFlag,
   };
 
   async run(): Promise<string> {

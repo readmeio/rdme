@@ -2,7 +2,7 @@ import { Flags, type Hook } from '@oclif/core';
 import chalk from 'chalk';
 
 import configstore from '../configstore.js';
-import { github } from '../flags.js';
+import { githubFlag } from '../flags.js';
 import getCurrentConfig from '../getCurrentConfig.js';
 import isCI from '../isCI.js';
 import { info } from '../logger.js';
@@ -59,7 +59,7 @@ const hook: Hook<'prerun'> = async function run(options) {
     }
     if (process.env.TEST_RDME_CREATEGHA) {
       // eslint-disable-next-line no-param-reassign
-      options.Command.flags.github = github;
+      options.Command.flags.github = githubFlag;
     }
   }
 };

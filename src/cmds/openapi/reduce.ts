@@ -11,7 +11,7 @@ import ora from 'ora';
 import prompts from 'prompts';
 
 import BaseCommand from '../../lib/baseCommandNew.js';
-import { title as titleArg, workingDirectory as workingDirectoryArg } from '../../lib/flags.js';
+import { titleFlag, workingDirectoryFlag } from '../../lib/flags.js';
 import { oraOptions } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
@@ -32,8 +32,8 @@ export default class OpenAPIReduceCommand extends BaseCommand<typeof OpenAPIRedu
     out: Flags.string({ description: 'Output file path to write reduced file to' }),
     path: Flags.string({ description: 'Paths to reduce by', multiple: true }),
     tag: Flags.string({ description: 'Tags to reduce by', multiple: true }),
-    title: titleArg,
-    workingDirectory: workingDirectoryArg,
+    title: titleFlag,
+    workingDirectory: workingDirectoryFlag,
   };
 
   async run(): Promise<string> {

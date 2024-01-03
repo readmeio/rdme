@@ -2,7 +2,7 @@ import { Args, Flags } from '@oclif/core';
 
 import { CommandCategories } from '../lib/baseCommand.js';
 import BaseCommand from '../lib/baseCommandNew.js';
-import { github as githubFlag, key as keyFlag } from '../lib/flags.js';
+import { githubFlag, keyFlag } from '../lib/flags.js';
 import syncDocsPath from '../lib/syncDocsPath.js';
 
 export default class ChangelogsCommand extends BaseCommand<typeof ChangelogsCommand> {
