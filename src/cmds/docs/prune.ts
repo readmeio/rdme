@@ -77,7 +77,7 @@ export default class DocsPruneCommand extends BaseCommand<typeof DocsPruneComman
 
     return this.runCreateGHAHook({
       result: chalk.green(deletedDocs.join('\n')),
-      parsedOpts: { ...this.args, ...this.flags, version: selectedVersion },
+      parsedOpts: { ...this.args, ...this.flags, version: selectedVersion, confirm: true },
     });
   }
 }
