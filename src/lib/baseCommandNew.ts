@@ -1,7 +1,12 @@
 import type { CreateGHAHook, CreateGHAHookOptsInClass } from './hooks/createGHA.js';
-import type { Hook, Interfaces } from '@oclif/core';
+import type { Config, Hook, Interfaces } from '@oclif/core';
 
+import util from 'node:util';
+
+import * as core from '@actions/core';
 import { Command as OclifCommand } from '@oclif/core';
+
+import { isGHA, isTest } from './isCI.js';
 
 export enum CommandCategories {
   ADMIN = 'admin',
@@ -20,6 +25,23 @@ export type Flags<T extends typeof OclifCommand> = Interfaces.InferredFlags<
 export type Args<T extends typeof OclifCommand> = Interfaces.InferredArgs<T['args']>;
 
 export default abstract class BaseCommand<T extends typeof OclifCommand> extends OclifCommand {
+  constructor(argv: string[], config: Config) {
+    super(argv, config);
+
+    const oclifDebug = this.debug;
+    // this scope is copied from the @oclif/core source
+    const scope = this.id ? `${this.config.bin}:${this.id}` : this.config.bin;
+    // this is a lightweight reimplementation of the @oclif/core debug function
+    // with some debug logging functionality for github actions
+    this.debug = (formatter: unknown, ...args: unknown[]) => {
+      if (isGHA() && !isTest()) {
+        core.debug(`${scope}: ${util.format(formatter, ...args)}`);
+      }
+
+      return oclifDebug(formatter, ...args);
+    };
+  }
+
   /**
    * The category that the command belongs to, used on
    * the general help screen to group commands together
