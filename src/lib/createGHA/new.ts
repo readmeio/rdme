@@ -50,7 +50,7 @@ export const getGHAFileName = (fileName: string) => {
  * Returns a redacted `key` if the current command uses authentication.
  * Otherwise, returns `false`.
  */
-function getKey(args: CommandArg, opts: ParsedOpts): string | false {
+function getKey(args: CommandFlag, opts: ParsedOpts): string | false {
   if (Object.keys(args).some(arg => arg === 'key')) {
     return `••••••••••••${(opts.key as string)?.slice(-5) || ''}`;
   }
@@ -288,7 +288,7 @@ export default async function createGHA(
 
   const success = [chalk.green('\nYour GitHub Actions workflow file has been created! ✨\n')];
 
-  const key = getKey(args, parsedOpts);
+  const key = getKey(flags, parsedOpts);
 
   if (key) {
     success.push(
