@@ -1,10 +1,9 @@
-import type { AuthenticatedCommandOptions } from '../../lib/baseCommand.js';
-
+import { Args, Flags } from '@oclif/core';
 import chalk from 'chalk';
 import { Headers } from 'node-fetch';
 
-import Command, { CommandCategories } from '../../lib/baseCommand.js';
-import config from '../../lib/config.js';
+import BaseCommand from '../../lib/baseCommandNew.js';
+import { keyFlag, versionFlag } from '../../lib/flags.js';
 import getCategories from '../../lib/getCategories.js';
 import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch.js';
 import { getProjectVersion } from '../../lib/versionSelect.js';
@@ -14,60 +13,34 @@ interface Category {
   type: string;
 }
 
-interface Options {
-  categoryType?: 'guide' | 'reference';
-  preventDuplicates?: boolean;
-  title?: string;
-}
+export default class CategoriesCreateCommand extends BaseCommand<typeof CategoriesCreateCommand> {
+  static description = 'Create a category with the specified title and guide in your ReadMe project.';
 
-export default class CategoriesCreateCommand extends Command {
-  constructor() {
-    super();
+  static args = {
+    title: Args.string({ description: 'Title of the category', required: true }),
+  };
 
-    this.command = 'categories:create';
-    this.usage = 'categories:create <title> [options]';
-    this.description = 'Create a category with the specified title and guide in your ReadMe project.';
-    this.cmdCategory = CommandCategories.CATEGORIES;
+  static flags = {
+    categoryType: Flags.string({
+      description: 'Category type',
+      options: ['guide', 'reference'],
+      required: true,
+    }),
+    key: keyFlag,
+    preventDuplicates: Flags.boolean({
+      description:
+        'Prevents the creation of a new category if there is an existing category with a matching `categoryType` and `title`',
+    }),
+    version: versionFlag,
+  };
 
-    this.hiddenArgs = ['title'];
-    this.args = [
-      this.getKeyArg(),
-      this.getVersionArg(),
-      {
-        name: 'title',
-        type: String,
-        defaultOption: true,
-      },
-      {
-        name: 'categoryType',
-        type: String,
-        description: 'Category type, must be `guide` or `reference`',
-      },
-      {
-        name: 'preventDuplicates',
-        type: Boolean,
-        description:
-          'Prevents the creation of a new category if there is an existing category with a matching `categoryType` and `title`',
-      },
-    ];
-  }
-
-  async run(opts: AuthenticatedCommandOptions<Options>) {
-    await super.run(opts);
-
-    const { categoryType, title, key, version, preventDuplicates } = opts;
-
-    if (!title) {
-      return Promise.reject(new Error(`No title provided. Usage \`${config.cli} ${this.usage}\`.`));
-    }
-
-    if (categoryType !== 'guide' && categoryType !== 'reference') {
-      return Promise.reject(new Error('`categoryType` must be `guide` or `reference`.'));
-    }
+  async run(): Promise<string> {
+    const { title } = this.args;
+    const { categoryType, key, version, preventDuplicates } = this.flags;
 
     const selectedVersion = await getProjectVersion(version, key);
 
-    Command.debug(`selectedVersion: ${selectedVersion}`);
+    this.debug(`selectedVersion: ${selectedVersion}`);
 
     if (preventDuplicates) {
       const allCategories = await getCategories(key, selectedVersion);

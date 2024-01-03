@@ -1,18 +1,26 @@
+import type { Config } from '@oclif/core';
+
 import nock from 'nock';
 import prompts from 'prompts';
-import { describe, beforeAll, afterEach, it, expect, vi } from 'vitest';
+import { describe, beforeAll, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
-import CategoriesCreateCommand from '../../../src/cmds/categories/create.js';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
-
-const categoriesCreate = new CategoriesCreateCommand();
+import setupOclifConfig from '../../helpers/setup-oclif-config.js';
 
 const key = 'API_KEY';
 const version = '1.0.0';
 
 describe('rdme categories:create', () => {
+  let oclifConfig: Config;
+  let run: (args?: string[]) => Promise<unknown>;
+
   beforeAll(() => {
     nock.disableNetConnect();
+  });
+
+  beforeEach(async () => {
+    oclifConfig = await setupOclifConfig();
+    run = (args?: string[]) => oclifConfig.runCommand('categories:create', args);
   });
 
   afterEach(() => nock.cleanAll());
@@ -20,37 +28,28 @@ describe('rdme categories:create', () => {
   it('should prompt for login if no API key provided', async () => {
     const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
-    // @ts-expect-error deliberately passing in bad data
-    await expect(categoriesCreate.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
+    await expect(run()).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
     consoleInfoSpy.mockRestore();
   });
 
   it('should error in CI if no API key provided', async () => {
     process.env.TEST_RDME_CI = 'true';
-    // @ts-expect-error deliberately passing in bad data
-    await expect(categoriesCreate.run({})).rejects.toStrictEqual(
-      new Error('No project API key provided. Please use `--key`.'),
-    );
+    await expect(run()).rejects.toStrictEqual(new Error('No project API key provided. Please use `--key`.'));
     delete process.env.TEST_RDME_CI;
   });
 
   it('should error if no title provided', () => {
-    return expect(categoriesCreate.run({ key: '123' })).rejects.toStrictEqual(
-      new Error('No title provided. Usage `rdme categories:create <title> [options]`.'),
-    );
+    return expect(run(['--key', key])).rejects.toThrow('Missing 1 required arg:\ntitle');
   });
 
   it('should error if categoryType is blank', () => {
-    return expect(categoriesCreate.run({ key: '123', title: 'Test Title' })).rejects.toStrictEqual(
-      new Error('`categoryType` must be `guide` or `reference`.'),
-    );
+    return expect(run(['--key', key, 'Test Title'])).rejects.toThrow('Missing required flag categoryType');
   });
 
   it('should error if categoryType is not `guide` or `reference`', () => {
-    return expect(
-      // @ts-expect-error Testing a CLI arg failure case.
-      categoriesCreate.run({ key: '123', title: 'Test Title', categoryType: 'test' }),
-    ).rejects.toStrictEqual(new Error('`categoryType` must be `guide` or `reference`.'));
+    return expect(run(['--key', key, 'Test Title', '--categoryType', 'test'])).rejects.toThrow(
+      'Expected --categoryType=test to be one of: guide, reference',
+    );
   });
 
   it('should create a new category if the title and type do not match and preventDuplicates=true', async () => {
@@ -70,13 +69,7 @@ describe('rdme categories:create', () => {
     const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
     await expect(
-      categoriesCreate.run({
-        title: 'New Category',
-        categoryType: 'guide',
-        key,
-        version: '1.0.0',
-        preventDuplicates: true,
-      }),
+      run(['New Category', '--categoryType', 'guide', '--key', key, '--version', '1.0.0', '--preventDuplicates']),
     ).resolves.toBe("🌱 successfully created 'New Category' with a type of 'guide' and an id of '123'");
 
     getMock.done();
@@ -101,13 +94,7 @@ describe('rdme categories:create', () => {
     const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
     await expect(
-      categoriesCreate.run({
-        title: 'Category',
-        categoryType: 'reference',
-        key,
-        version: '1.0.0',
-        preventDuplicates: true,
-      }),
+      run(['--categoryType', 'reference', '--key', key, '--version', '1.0.0', '--preventDuplicates', 'Category']),
     ).resolves.toBe("🌱 successfully created 'Category' with a type of 'reference' and an id of '123'");
 
     getMock.done();
@@ -123,14 +110,9 @@ describe('rdme categories:create', () => {
 
     const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
-    await expect(
-      categoriesCreate.run({
-        title: 'Category',
-        categoryType: 'guide',
-        key,
-        version: '1.0.0',
-      }),
-    ).resolves.toBe("🌱 successfully created 'Category' with a type of 'reference' and an id of '123'");
+    await expect(run(['Category', '--categoryType', 'guide', '--key', key, '--version', '1.0.0'])).resolves.toBe(
+      "🌱 successfully created 'Category' with a type of 'reference' and an id of '123'",
+    );
 
     postMock.done();
     versionMock.done();
@@ -148,13 +130,7 @@ describe('rdme categories:create', () => {
     const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
     await expect(
-      categoriesCreate.run({
-        title: 'Category',
-        categoryType: 'guide',
-        key,
-        version: '1.0.0',
-        preventDuplicates: true,
-      }),
+      run(['Category', '--categoryType', 'guide', '--key', key, '--version', '1.0.0', '--preventDuplicates']),
     ).rejects.toStrictEqual(
       new Error(
         "The 'Category' category with a type of 'guide' already exists with an id of '123'. A new category was not created.",
@@ -177,13 +153,7 @@ describe('rdme categories:create', () => {
     const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
     await expect(
-      categoriesCreate.run({
-        title: 'category',
-        categoryType: 'guide',
-        key,
-        version: '1.0.0',
-        preventDuplicates: true,
-      }),
+      run(['Category', '--categoryType', 'guide', '--key', key, '--version', '1.0.0', '--preventDuplicates']),
     ).rejects.toStrictEqual(
       new Error(
         "The 'Category' category with a type of 'guide' already exists with an id of '123'. A new category was not created.",
