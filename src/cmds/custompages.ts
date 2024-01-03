@@ -26,15 +26,11 @@ export default class CustomPagesCommand extends BaseCommand<typeof CustomPagesCo
     const { dryRun, key } = this.flags;
 
     return this.runCreateGHAHook({
-      result: await syncDocsPath(
-        key as string,
-        undefined,
-        CommandCategories.CUSTOM_PAGES,
-        this.id as string,
-        path,
-        dryRun,
-        ['.html', '.markdown', '.md'],
-      ),
+      result: await syncDocsPath(key, undefined, CommandCategories.CUSTOM_PAGES, this.id as string, path, dryRun, [
+        '.html',
+        '.markdown',
+        '.md',
+      ]),
     });
   }
 }

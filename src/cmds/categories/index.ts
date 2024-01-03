@@ -14,11 +14,11 @@ export default class CategoriesCommand extends BaseCommand<typeof CategoriesComm
   async run() {
     const { key, version } = this.flags;
 
-    const selectedVersion = await getProjectVersion(version, key as string);
+    const selectedVersion = await getProjectVersion(version, key);
 
     this.debug(`selectedVersion: ${selectedVersion}`);
 
-    const allCategories = await getCategories(key as string, selectedVersion);
+    const allCategories = await getCategories(key, selectedVersion);
 
     return Promise.resolve(JSON.stringify(allCategories, null, 2));
   }

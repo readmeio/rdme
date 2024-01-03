@@ -26,14 +26,7 @@ export default class ChangelogsCommand extends BaseCommand<typeof ChangelogsComm
     const { dryRun, key } = this.flags;
 
     return this.runCreateGHAHook({
-      result: await syncDocsPath(
-        key as string,
-        undefined,
-        CommandCategories.CHANGELOGS,
-        this.id as string,
-        path,
-        dryRun,
-      ),
+      result: await syncDocsPath(key, undefined, CommandCategories.CHANGELOGS, this.id as string, path, dryRun),
     });
   }
 }
