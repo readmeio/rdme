@@ -8,7 +8,6 @@ import pluralize from 'pluralize';
 import { getBorderCharacters, table } from 'table';
 
 import analyzeOas, { getSupportedFeatures } from '../../lib/analyzeOas.js';
-import Command from '../../lib/baseCommand.js';
 import BaseCommand from '../../lib/baseCommandNew.js';
 import { titleFlag, workingDirectoryFlag } from '../../lib/flags.js';
 import { oraOptions } from '../../lib/logger.js';
@@ -201,7 +200,7 @@ export default class OpenAPIInspectCommand extends BaseCommand<typeof OpenAPIIns
     if (workingDirectory) {
       const previousWorkingDirectory = process.cwd();
       process.chdir(workingDirectory);
-      Command.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
+      this.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
     }
 
     const { preparedSpec, definitionVersion } = await prepareOas(spec, 'openapi:inspect', { convertToLatest: true });
@@ -219,7 +218,7 @@ export default class OpenAPIInspectCommand extends BaseCommand<typeof OpenAPIIns
     }
 
     const analysis = await analyzeOas(parsedPreparedSpec).catch(err => {
-      Command.debug(`analyzer err: ${err.message}`);
+      this.debug(`analyzer err: ${err.message}`);
       spinner.fail();
       throw err;
     });

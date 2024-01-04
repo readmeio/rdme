@@ -1,7 +1,6 @@
 import { Args } from '@oclif/core';
 import chalk from 'chalk';
 
-import Command from '../../lib/baseCommand.js';
 import BaseCommand from '../../lib/baseCommandNew.js';
 import { githubFlag, workingDirectoryFlag } from '../../lib/flags.js';
 import prepareOas from '../../lib/prepareOas.js';
@@ -29,7 +28,7 @@ export default class OpenAPIValidateCommand extends BaseCommand<typeof OpenAPIVa
     if (this.flags.workingDirectory) {
       const previousWorkingDirectory = process.cwd();
       process.chdir(this.flags.workingDirectory);
-      Command.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
+      this.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
     }
 
     const { specPath, specType } = await prepareOas(this.args.spec, 'openapi:validate');
