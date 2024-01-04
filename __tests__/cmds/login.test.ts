@@ -4,6 +4,7 @@ import nock from 'nock';
 import prompts from 'prompts';
 import { describe, beforeAll, beforeEach, afterAll, afterEach, it, expect } from 'vitest';
 
+import APIError from '../../src/lib/apiError.js';
 import configStore from '../../src/lib/configstore.js';
 import getAPIMock from '../helpers/get-api-mock.js';
 import setupOclifConfig from '../helpers/setup-oclif-config.js';
@@ -110,7 +111,7 @@ describe('rdme login', () => {
 
     const mock = getAPIMock().post('/api/v1/login', { email, password, project }).reply(401, errorResponse);
 
-    await expect(run()).rejects.toThrow(errorResponse.message);
+    await expect(run()).rejects.toThrow(new APIError(errorResponse));
     mock.done();
   });
 
@@ -152,7 +153,7 @@ describe('rdme login', () => {
       .post('/api/v1/login', { email, password, project: projectThatIsNotYours })
       .reply(404, errorResponse);
 
-    await expect(run()).rejects.toThrow(errorResponse.message);
+    await expect(run()).rejects.toThrow(new APIError(errorResponse));
     mock.done();
   });
 });
