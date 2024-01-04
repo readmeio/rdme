@@ -38,8 +38,6 @@ const hook: Hook<'prerun'> = async function run(options) {
           return apiKey;
         }
         if (isCI()) {
-          // TODO make sure this error throws properly
-          // this.error('No project API key provided. Please use `--key`.');
           throw new Error('No project API key provided. Please use `--key`.');
         }
         // if in non-CI and the user hasn't passed in a key, we prompt them to log in
