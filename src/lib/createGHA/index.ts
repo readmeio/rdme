@@ -1,6 +1,4 @@
-import type commands from '../allCommands.js';
-import type { CommandOptions } from '../baseCommand.js';
-import type { OptionDefinition } from 'command-line-usage';
+import type { Command, Hook } from '@oclif/core';
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -12,11 +10,15 @@ import { simpleGit } from 'simple-git';
 import configstore from '../configstore.js';
 import { getMajorPkgVersion } from '../getPkgVersion.js';
 import isCI, { isNpmScript, isTest } from '../isCI.js';
-import { debug, info } from '../logger.js';
+import { info } from '../logger.js';
 import promptTerminal from '../promptWrapper.js';
 import { cleanFileName, validateFilePath } from '../validatePromptInput.js';
 
 import yamlBase from './baseFile.js';
+
+export type CommandArg = Record<string, Command.Arg.Cached>;
+export type CommandFlag = Record<string, Command.Flag.Cached>;
+export type ParsedOpts = Record<string, unknown>;
 
 /**
  * Generates the key for storing info in `configstore` object.
@@ -48,9 +50,9 @@ export const getGHAFileName = (fileName: string) => {
  * Returns a redacted `key` if the current command uses authentication.
  * Otherwise, returns `false`.
  */
-function getKey(args: OptionDefinition[], opts: CommandOptions): string | false {
-  if (args.some(arg => arg.name === 'key')) {
-    return `••••••••••••${opts.key?.slice(-5) || ''}`;
+function getKey(args: CommandFlag, opts: ParsedOpts): string | false {
+  if (Object.keys(args).some(arg => arg === 'key')) {
+    return `••••••••••••${(opts.key as string)?.slice(-5) || ''}`;
   }
   return false;
 }
@@ -58,85 +60,87 @@ function getKey(args: OptionDefinition[], opts: CommandOptions): string | false 
 /**
  * Constructs the command string that we pass into the workflow file.
  */
-function constructCmdString(command: keyof typeof commands, args: OptionDefinition[], opts: CommandOptions): string {
-  const optsString = args
-    .sort(arg => (arg.defaultOption ? -1 : 0))
+function constructCmdString(commandId: string, args: CommandArg, flags: CommandFlag, opts: ParsedOpts): string {
+  const argsString = Object.keys(args)
     .map(arg => {
-      // @ts-expect-error by this point it's safe to assume that
-      // the argument names match the opts object.
-      const val = opts[arg.name];
-      // if default option, return the value
-      if (arg.defaultOption) return val;
+      return opts[arg];
+    })
+    .filter(Boolean)
+    .join(' ');
+
+  const flagsString = Object.keys(flags)
+    .map(flag => {
+      const val = opts[flag];
       // obfuscate the key in a GitHub secret
-      if (arg.name === 'key') return `--key=$\{{ secrets.${GITHUB_SECRET_NAME} }}`;
+      if (flag === 'key') return `--key=$\{{ secrets.${GITHUB_SECRET_NAME} }}`;
       // remove the GitHub flag
-      if (arg.name === 'github') return false;
+      if (flag === 'github') return false;
       // if a boolean value, return the flag
-      if (arg.type === Boolean && val) return `--${arg.name}`;
-      if (val) return `--${arg.name}=${val}`;
+      if (flags[flag].type === 'boolean' && val) return `--${flag}`;
+      if (val) return `--${flag}=${val}`;
       return false;
     })
     .filter(Boolean)
     .join(' ');
 
-  return `${command} ${optsString}`.trim();
+  return `${commandId} ${argsString} ${flagsString}`.trim();
 }
 
 /**
  * Function to return various git attributes needed for running GitHub Action
  */
-export async function getGitData() {
+export async function getGitData(this: Hook.Context) {
   // Expressions to search raw output of `git remote show origin`
   const headRegEx = /^ {2}HEAD branch: /g;
   const headLineRegEx = /^ {2}HEAD branch:.*/gm;
 
   const isRepo = await git.checkIsRepo().catch(e => {
-    debug(`error running git repo check: ${e.message}`);
+    this.debug(`[getGitData] error running git repo check: ${e.message}`);
     return false;
   });
 
-  debug(`[getGitData] isRepo result: ${isRepo}`);
+  this.debug(`[getGitData] isRepo result: ${isRepo}`);
 
   let containsGitHubRemote;
   let defaultBranch;
   const rawRemotes = await git.remote([]).catch(e => {
-    debug(`[getGitData] error grabbing git remotes: ${e.message}`);
+    this.debug(`[getGitData] error grabbing git remotes: ${e.message}`);
     return '';
   });
 
-  debug(`[getGitData] rawRemotes result: ${rawRemotes}`);
+  this.debug(`[getGitData] rawRemotes result: ${rawRemotes}`);
 
   if (rawRemotes) {
     const remote = rawRemotes.split('\n')[0];
-    debug(`[getGitData] remote result: ${remote}`);
+    this.debug(`[getGitData] remote result: ${remote}`);
     const rawRemote = await git.remote(['show', remote]).catch(e => {
-      debug(`[getGitData] error accessing remote: ${e.message}`);
+      this.debug(`[getGitData] error accessing remote: ${e.message}`);
       return '';
     });
 
-    debug(`[getGitData] rawRemote result: ${rawRemote}`);
+    this.debug(`[getGitData] rawRemote result: ${rawRemote}`);
     // Extract head branch from git output
     const rawHead = headLineRegEx.exec(rawRemote as string)?.[0];
-    debug(`[getGitData] rawHead result: ${rawHead}`);
+    this.debug(`[getGitData] rawHead result: ${rawHead}`);
     if (rawHead) defaultBranch = rawHead.replace(headRegEx, '');
 
     // Extract the word 'github' from git output
     const remotesList = (await git.remote(['-v'])) as string;
-    debug(`[getGitData] remotesList result: ${remotesList}`);
+    this.debug(`[getGitData] remotesList result: ${remotesList}`);
     // This is a bit hairy but we want to keep it fairly general here
     // in case of GitHub Enterprise, etc.
     containsGitHubRemote = /github/.test(remotesList);
   }
 
-  debug(`[getGitData] containsGitHubRemote result: ${containsGitHubRemote}`);
-  debug(`[getGitData] defaultBranch result: ${defaultBranch}`);
+  this.debug(`[getGitData] containsGitHubRemote result: ${containsGitHubRemote}`);
+  this.debug(`[getGitData] defaultBranch result: ${defaultBranch}`);
 
   const repoRoot = await git.revparse(['--show-toplevel']).catch(e => {
-    debug(`[getGitData] error grabbing git root: ${e.message}`);
+    this.debug(`[getGitData] error grabbing git root: ${e.message}`);
     return '';
   });
 
-  debug(`[getGitData] repoRoot result: ${repoRoot}`);
+  this.debug(`[getGitData] repoRoot result: ${repoRoot}`);
 
   return { containsGitHubRemote, defaultBranch, isRepo, repoRoot };
 }
@@ -146,30 +150,32 @@ export async function getGitData() {
  *
  */
 export default async function createGHA(
+  this: Hook.Context,
   msg: string,
-  command: keyof typeof commands,
-  args: OptionDefinition[],
-  opts: CommandOptions,
+  command: Command.Class,
+  parsedOpts: ParsedOpts,
 ) {
-  debug(`running GHA onboarding for ${command} command`);
-  debug(`opts used in createGHA: ${JSON.stringify(opts)}`);
+  const { args, flags, id: commandId } = command;
+  if (!commandId) throw new Error('unable to determine command ID yikes');
+  this.debug(`running GHA onboarding for ${commandId} command`);
+  this.debug(`opts used in createGHA: ${JSON.stringify(parsedOpts)}`);
 
   // if in a CI environment,
   // don't even bother running the git commands
-  if (!opts.github && (isCI() || isNpmScript())) {
-    debug('not running GHA onboarding workflow in CI and/or npm script, exiting');
+  if (!parsedOpts.github && (isCI() || isNpmScript())) {
+    this.debug('not running GHA onboarding workflow in CI and/or npm script, exiting');
     return msg;
   }
 
-  const { containsGitHubRemote, defaultBranch, isRepo, repoRoot } = await getGitData();
+  const { containsGitHubRemote, defaultBranch, isRepo, repoRoot } = await getGitData.call(this);
 
   const configVal = configstore.get(getConfigStoreKey(repoRoot));
-  debug(`repo value in config: ${configVal}`);
+  this.debug(`repo value in config: ${configVal}`);
 
-  const majorPkgVersion = await getMajorPkgVersion();
-  debug(`major pkg version: ${majorPkgVersion}`);
+  const majorPkgVersion = await getMajorPkgVersion.call(this);
+  this.debug(`major pkg version: ${majorPkgVersion}`);
 
-  if (!opts.github) {
+  if (!parsedOpts.github) {
     if (
       // not a repo
       !isRepo ||
@@ -180,7 +186,7 @@ export default async function createGHA(
       // not testing this function
       (isTest() && !process.env.TEST_RDME_CREATEGHA)
     ) {
-      debug('not running GHA onboarding workflow, exiting');
+      this.debug('not running GHA onboarding workflow, exiting');
       // We return the original command message and pretend this command flow never happened.
       return msg;
     }
@@ -188,7 +194,7 @@ export default async function createGHA(
 
   if (msg) info(msg, { includeEmojiPrefix: false });
 
-  if (opts.github) {
+  if (parsedOpts.github) {
     info(chalk.bold("\n🚀 Let's get you set up with GitHub Actions! 🚀\n"), { includeEmojiPrefix: false });
   } else {
     info(
@@ -196,7 +202,7 @@ export default async function createGHA(
         '',
         chalk.bold("🐙 Looks like you're running this command in a GitHub Repository! 🐙"),
         '',
-        `🚀 With a few quick clicks, you can run this \`${command}\` command via GitHub Actions (${chalk.underline(
+        `🚀 With a few quick clicks, you can run this \`${commandId}\` command via GitHub Actions (${chalk.underline(
           'https://github.com/features/actions',
         )})`,
         '',
@@ -210,10 +216,10 @@ export default async function createGHA(
   const previousWorkingDirectory = process.cwd();
   if (repoRoot && repoRoot !== previousWorkingDirectory) {
     process.chdir(repoRoot);
-    debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
+    this.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
   }
 
-  prompts.override({ shouldCreateGHA: opts.github });
+  prompts.override({ shouldCreateGHA: parsedOpts.github });
 
   const { branch, filePath, shouldCreateGHA }: { branch: string; filePath: string; shouldCreateGHA: boolean } =
     await promptTerminal(
@@ -234,7 +240,7 @@ export default async function createGHA(
           message: 'What would you like to name the GitHub Actions workflow file?',
           name: 'filePath',
           type: 'text',
-          initial: cleanFileName(`rdme-${command}`),
+          initial: cleanFileName(`rdme-${commandId}`),
           format: prev => getGHAFileName(prev),
           validate: value => validateFilePath(value, getGHAFileName),
         },
@@ -258,14 +264,14 @@ export default async function createGHA(
 
   const data = {
     branch,
-    cleanCommand: cleanFileName(command),
-    command,
-    commandString: constructCmdString(command, args, opts),
+    cleanCommand: cleanFileName(commandId),
+    command: commandId,
+    commandString: constructCmdString(commandId, args, flags, parsedOpts),
     rdmeVersion: `v${majorPkgVersion}`,
     timestamp: new Date().toISOString(),
   };
 
-  debug(`data for resolver: ${JSON.stringify(data)}`);
+  this.debug(`data for resolver: ${JSON.stringify(data)}`);
 
   let output = yamlBase;
 
@@ -274,7 +280,7 @@ export default async function createGHA(
   });
 
   if (!fs.existsSync(GITHUB_WORKFLOW_DIR)) {
-    debug('GHA workflow directory does not exist, creating');
+    this.debug('GHA workflow directory does not exist, creating');
     fs.mkdirSync(GITHUB_WORKFLOW_DIR, { recursive: true });
   }
 
@@ -282,7 +288,7 @@ export default async function createGHA(
 
   const success = [chalk.green('\nYour GitHub Actions workflow file has been created! ✨\n')];
 
-  const key = getKey(args, opts);
+  const key = getKey(flags, parsedOpts);
 
   if (key) {
     success.push(

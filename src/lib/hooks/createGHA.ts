@@ -1,7 +1,7 @@
 import type { Command, Hook } from '@oclif/core';
 import type { Hooks } from '@oclif/core/lib/interfaces/hooks.js';
 
-import createGHA from '../createGHA/new.js';
+import createGHA from '../createGHA/index.js';
 
 type ParsedOpts = Record<string, unknown>;
 
