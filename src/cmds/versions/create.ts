@@ -12,18 +12,6 @@ import * as promptHandler from '../../lib/prompts.js';
 import promptTerminal from '../../lib/promptWrapper.js';
 import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch.js';
 
-export interface Options extends CommonOptions {
-  fork?: string;
-}
-
-export interface CommonOptions {
-  beta?: 'true' | 'false';
-  codename?: string;
-  deprecated?: 'true' | 'false';
-  hidden?: 'true' | 'false';
-  main?: 'true' | 'false';
-}
-
 export default class CreateVersionCommand extends BaseCommand<typeof CreateVersionCommand> {
   static description = 'Create a new version for your project.';
 
