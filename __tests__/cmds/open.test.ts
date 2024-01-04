@@ -4,7 +4,6 @@ import type { Config } from '@oclif/core';
 import chalk from 'chalk';
 import { describe, afterEach, beforeEach, it, expect } from 'vitest';
 
-import config from '../../src/lib/config.js';
 import configStore from '../../src/lib/configstore.js';
 import getAPIMock from '../helpers/get-api-mock.js';
 import setupOclifConfig from '../helpers/setup-oclif-config.js';
@@ -27,7 +26,7 @@ describe('rdme open', () => {
   it('should error if no project provided', () => {
     configStore.delete('project');
 
-    return expect(run(mockArg)).rejects.toStrictEqual(new Error(`Please login using \`${config.cli} login\`.`));
+    return expect(run(mockArg)).rejects.toStrictEqual(new Error(`Please login using \`${oclifConfig.bin} login\`.`));
   });
 
   it('should open the project', () => {
@@ -70,7 +69,7 @@ describe('rdme open', () => {
       configStore.set('project', 'subdomain');
 
       return expect(run(mockArg.concat('--dash'))).rejects.toStrictEqual(
-        new Error(`Please login using \`${config.cli} login\`.`),
+        new Error(`Please login using \`${oclifConfig.bin} login\`.`),
       );
     });
   });

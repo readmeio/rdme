@@ -1,5 +1,4 @@
 import BaseCommand from '../lib/baseCommandNew.js';
-import config from '../lib/config.js';
 import configStore from '../lib/configstore.js';
 
 export default class LogoutCommand extends BaseCommand<typeof LogoutCommand> {
@@ -10,6 +9,6 @@ export default class LogoutCommand extends BaseCommand<typeof LogoutCommand> {
       configStore.clear();
     }
 
-    return Promise.resolve(`You have logged out of ReadMe. Please use \`${config.cli} login\` to login again.`);
+    return Promise.resolve(`You have logged out of ReadMe. Please use \`${this.config.bin} login\` to login again.`);
   }
 }

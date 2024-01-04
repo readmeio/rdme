@@ -21,14 +21,14 @@ export default class OpenCommand extends BaseCommand<typeof OpenCommand> {
     this.debug(`project: ${project}`);
 
     if (!project) {
-      return Promise.reject(new Error(`Please login using \`${config.cli} login\`.`));
+      return Promise.reject(new Error(`Please login using \`${this.config.bin} login\`.`));
     }
 
     let url: string;
 
     if (dash) {
       if (!apiKey) {
-        return Promise.reject(new Error(`Please login using \`${config.cli} login\`.`));
+        return Promise.reject(new Error(`Please login using \`${this.config.bin} login\`.`));
       }
 
       const selectedVersion = await getProjectVersion(undefined, apiKey, true);

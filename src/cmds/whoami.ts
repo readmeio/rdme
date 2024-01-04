@@ -1,7 +1,6 @@
 import chalk from 'chalk';
 
 import BaseCommand from '../lib/baseCommandNew.js';
-import config from '../lib/config.js';
 import getCurrentConfig from '../lib/getCurrentConfig.js';
 
 export default class WhoAmICommand extends BaseCommand<typeof WhoAmICommand> {
@@ -11,7 +10,7 @@ export default class WhoAmICommand extends BaseCommand<typeof WhoAmICommand> {
     const { email, project } = getCurrentConfig();
 
     if (!email || !project) {
-      return Promise.reject(new Error(`Please login using \`${config.cli} login\`.`));
+      return Promise.reject(new Error(`Please login using \`${this.config.bin} login\`.`));
     }
 
     return Promise.resolve(

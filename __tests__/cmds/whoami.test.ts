@@ -2,7 +2,6 @@ import type { Config } from '@oclif/core';
 
 import { describe, afterEach, it, expect, beforeEach } from 'vitest';
 
-import config from '../../src/lib/config.js';
 import configStore from '../../src/lib/configstore.js';
 import setupOclifConfig from '../helpers/setup-oclif-config.js';
 
@@ -23,7 +22,7 @@ describe('rdme whoami', () => {
     configStore.delete('email');
     configStore.delete('project');
 
-    return expect(run()).rejects.toStrictEqual(new Error(`Please login using \`${config.cli} login\`.`));
+    return expect(run()).rejects.toStrictEqual(new Error(`Please login using \`${oclifConfig.bin} login\`.`));
   });
 
   it('should return the authenticated user', () => {
