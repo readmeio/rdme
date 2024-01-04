@@ -59,6 +59,8 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
       strict: this.ctor.strict,
     });
 
+    this.debug('parsed flags: %o', flags);
+    this.debug('parsed args: %o', args);
     this.flags = flags as Flags<T>;
     this.args = args as Args<T>;
   }
