@@ -23,7 +23,7 @@ export default class CustomPagesCommand extends BaseCommand<typeof CustomPagesCo
     }),
   };
 
-  async run(): Promise<string> {
+  async run() {
     return this.runCreateGHAHook({
       result: await syncDocsPath.call(this),
     });

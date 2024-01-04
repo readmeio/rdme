@@ -24,7 +24,7 @@ export default class OpenAPIValidateCommand extends BaseCommand<typeof OpenAPIVa
     workingDirectory: workingDirectoryFlag,
   };
 
-  async run(): Promise<string> {
+  async run() {
     if (this.flags.workingDirectory) {
       const previousWorkingDirectory = process.cwd();
       process.chdir(this.flags.workingDirectory);

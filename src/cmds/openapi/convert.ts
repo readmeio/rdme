@@ -25,7 +25,7 @@ export default class OpenAPIConvertCommand extends BaseCommand<typeof OpenAPICon
     workingDirectory: workingDirectoryFlag,
   };
 
-  async run(): Promise<string> {
+  async run() {
     const { spec } = this.args;
     const { out, workingDirectory } = this.flags;
 

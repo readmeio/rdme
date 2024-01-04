@@ -23,7 +23,7 @@ export default class ChangelogsCommand extends BaseCommand<typeof ChangelogsComm
     }),
   };
 
-  async run(): Promise<string> {
+  async run() {
     return this.runCreateGHAHook({
       result: await syncDocsPath.call(this),
     });

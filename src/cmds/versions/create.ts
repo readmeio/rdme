@@ -28,7 +28,7 @@ export default class CreateVersionCommand extends BaseCommand<typeof CreateVersi
     ...baseVersionFlags,
   };
 
-  async run(): Promise<string> {
+  async run() {
     let versionList;
     const { version } = this.args;
     const { key, fork, codename, main, beta, deprecated, hidden } = this.flags;

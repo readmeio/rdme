@@ -36,7 +36,7 @@ export default class OpenAPIReduceCommand extends BaseCommand<typeof OpenAPIRedu
     workingDirectory: workingDirectoryFlag,
   };
 
-  async run(): Promise<string> {
+  async run() {
     const { spec } = this.args;
     const opts = this.flags;
     const { title, workingDirectory } = opts;

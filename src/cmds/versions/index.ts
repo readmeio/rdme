@@ -23,7 +23,7 @@ export default class VersionsCommand extends BaseCommand<typeof VersionsCommand>
     version: Flags.string({ description: 'A specific project version to view.' }),
   };
 
-  async run(): Promise<string> {
+  async run() {
     const { key, version } = this.flags;
 
     const uri = version ? `/api/v1/version/${version}` : '/api/v1/version';

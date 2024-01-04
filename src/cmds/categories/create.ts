@@ -34,7 +34,7 @@ export default class CategoriesCreateCommand extends BaseCommand<typeof Categori
     version: versionFlag,
   };
 
-  async run(): Promise<string> {
+  async run() {
     const { title } = this.args;
     const { categoryType, key, version, preventDuplicates } = this.flags;
 

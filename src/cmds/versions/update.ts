@@ -25,7 +25,7 @@ export default class UpdateVersionCommand extends BaseCommand<typeof UpdateVersi
     ...baseVersionFlags,
   };
 
-  async run(): Promise<string> {
+  async run() {
     const { version } = this.args;
     const { key, newVersion, codename, main, beta, hidden, deprecated } = this.flags;
 

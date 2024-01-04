@@ -27,7 +27,7 @@ export default class DocsCommand extends BaseCommand<typeof DocsCommand> {
     }),
   };
 
-  async run(): Promise<string> {
+  async run() {
     const { key, version } = this.flags;
 
     // TODO: should we allow version selection at all here?

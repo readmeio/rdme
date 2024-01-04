@@ -189,7 +189,7 @@ export default class OpenAPIInspectCommand extends BaseCommand<typeof OpenAPIIns
     workingDirectory: workingDirectoryFlag,
   };
 
-  async run(): Promise<string> {
+  async run() {
     const { spec } = this.args;
     const { workingDirectory, feature: features } = this.flags;
 

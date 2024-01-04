@@ -37,7 +37,7 @@ export default class DocsPruneCommand extends BaseCommand<typeof DocsPruneComman
     }),
   };
 
-  async run(): Promise<string> {
+  async run() {
     const { folder } = this.args;
     const { dryRun, key, version } = this.flags;
 

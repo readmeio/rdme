@@ -18,7 +18,7 @@ export default class DeleteVersionCommand extends BaseCommand<typeof DeleteVersi
     key: keyFlag,
   };
 
-  async run(): Promise<string> {
+  async run() {
     const { version } = this.args;
     const { key } = this.flags;
 
