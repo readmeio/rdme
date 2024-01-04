@@ -1,11 +1,13 @@
 import { Args, Flags } from '@oclif/core';
 
-import { CommandCategories } from '../lib/baseCommand.js';
 import BaseCommand from '../lib/baseCommandNew.js';
 import { githubFlag, keyFlag } from '../lib/flags.js';
 import syncDocsPath from '../lib/syncDocsPath.js';
 
 export default class ChangelogsCommand extends BaseCommand<typeof ChangelogsCommand> {
+  // we need this as a const for syncDocsPath
+  id = 'changelogs' as const;
+
   static description =
     'Sync Markdown files to your ReadMe project as Changelog posts. Can either be a path to a directory or a single Markdown file.';
 
@@ -22,11 +24,8 @@ export default class ChangelogsCommand extends BaseCommand<typeof ChangelogsComm
   };
 
   async run(): Promise<string> {
-    const { path } = this.args;
-    const { dryRun, key } = this.flags;
-
     return this.runCreateGHAHook({
-      result: await syncDocsPath(key, undefined, CommandCategories.CHANGELOGS, this.id as string, path, dryRun),
+      result: await syncDocsPath.call(this),
     });
   }
 }

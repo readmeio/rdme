@@ -1,3 +1,7 @@
+import type ChangelogsCommand from '../cmds/changelogs.js';
+import type CustomPagesCommand from '../cmds/custompages.js';
+import type DocsCommand from '../cmds/docs/index.js';
+
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
@@ -5,37 +9,40 @@ import chalk from 'chalk';
 import { Headers } from 'node-fetch';
 
 import APIError from './apiError.js';
-import Command, { CommandCategories } from './baseCommand.js';
-import config from './config.js';
-import { debug } from './logger.js';
 import readdirRecursive from './readdirRecursive.js';
 import readDoc from './readDoc.js';
 import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch.js';
+
+/** API path within ReadMe to update (e.g. `docs`, `changelogs`, etc.) */
+type PageType = 'docs' | 'changelogs' | 'custompages';
+
+type PageCommand = DocsCommand | ChangelogsCommand | CustomPagesCommand;
 
 /**
  * Reads the contents of the specified Markdown or HTML file
  * and creates/updates the corresponding doc in ReadMe
  *
- * @param key the project API key
- * @param selectedVersion the project version
- * @param dryRun boolean indicating dry run mode
- * @param filePath path to file
- * @param type module within ReadMe to update (e.g. docs, changelogs, etc.)
  * @returns A promise-wrapped string with the result
  */
 async function pushDoc(
-  key: string,
+  this: PageCommand,
+  /** the project version */
   selectedVersion: string | undefined,
-  dryRun: boolean,
+  /**
+   * path to a single file
+   * (**note**: path must be to a single file and NOT a directory)
+   */
   filePath: string,
-  type: CommandCategories,
 ) {
+  const type: PageType = this.id;
+  const { key, dryRun }: { dryRun: boolean; key: string } = this.flags;
+
   const { content, data, hash, slug } = readDoc(filePath);
 
   // TODO: ideally we should offer a zero-configuration approach that doesn't
   // require YAML front matter, but that will have to be a breaking change
   if (!Object.keys(data).length) {
-    debug(`No front matter attributes found for ${filePath}, not syncing`);
+    this.debug(`No front matter attributes found for ${filePath}, not syncing`);
     return `⏭️  no front matter attributes found for ${filePath}, skipping`;
   }
 
@@ -46,7 +53,7 @@ async function pushDoc(
     lastUpdatedHash: string;
   } = { body: content, ...data, lastUpdatedHash: hash };
 
-  if (type === CommandCategories.CUSTOM_PAGES) {
+  if (type === 'custompages') {
     if (filePath.endsWith('.html')) {
       payload = { html: content, htmlmode: true, ...data, lastUpdatedHash: hash };
     } else {
@@ -114,10 +121,10 @@ async function pushDoc(
       const body = await handleRes(res, false);
       if (!res.ok) {
         if (res.status !== 404) return Promise.reject(new APIError(body));
-        debug(`error retrieving data for ${slug}, creating doc`);
+        this.debug(`error retrieving data for ${slug}, creating doc`);
         return createDoc();
       }
-      debug(`data received for ${slug}, updating doc`);
+      this.debug(`data received for ${slug}, updating doc`);
       return updateDoc(body);
     })
     .catch(err => {
@@ -133,23 +140,16 @@ async function pushDoc(
  * @returns A promise-wrapped string with the results
  */
 export default async function syncDocsPath(
-  /** Project API key */
-  key: string,
+  this: PageCommand,
   /** ReadMe project version */
-  selectedVersion: string | undefined,
-  /** module within ReadMe to update (e.g. docs, changelogs, etc.) */
-  cmdType: CommandCategories,
-  /** Example command usage, used in error message */
-  usage: string,
-  /** Path input, can either be a directory or a single file */
-  pathInput: string | undefined,
-  /** boolean indicating dry run mode */
-  dryRun: boolean = false,
-  /** array of allowed file extensions */
-  allowedFileExtensions = ['.markdown', '.md'],
+  selectedVersion?: string,
 ) {
-  if (!pathInput) {
-    return Promise.reject(new Error(`No path provided. Usage \`${config.cli} ${usage}\`.`));
+  const { path: pathInput }: { path: string } = this.args;
+
+  const allowedFileExtensions = ['.markdown', '.md'];
+  // we allow HTML files in custom pages
+  if (this.id === 'custompages') {
+    allowedFileExtensions.unshift('.html');
   }
 
   const stat = await fs.stat(pathInput).catch(err => {
@@ -167,7 +167,7 @@ export default async function syncDocsPath(
       allowedFileExtensions.includes(path.extname(file).toLowerCase()),
     );
 
-    Command.debug(`number of files: ${files.length}`);
+    this.debug(`number of files: ${files.length}`);
 
     if (!files.length) {
       return Promise.reject(
@@ -182,7 +182,7 @@ export default async function syncDocsPath(
     output = (
       await Promise.all(
         files.map(async filename => {
-          return pushDoc(key, selectedVersion, dryRun, filename, cmdType);
+          return pushDoc.call(this, selectedVersion, filename);
         }),
       )
     ).join('\n');
@@ -197,7 +197,7 @@ export default async function syncDocsPath(
         ),
       );
     }
-    output = await pushDoc(key, selectedVersion, dryRun, pathInput, cmdType);
+    output = await pushDoc.call(this, selectedVersion, pathInput);
   }
   return Promise.resolve(chalk.green(output));
 }

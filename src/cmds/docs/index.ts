@@ -1,11 +1,14 @@
 import { Args, Flags } from '@oclif/core';
 
-import BaseCommand, { CommandCategories } from '../../lib/baseCommandNew.js';
+import BaseCommand from '../../lib/baseCommandNew.js';
 import { githubFlag, keyFlag, versionFlag } from '../../lib/flags.js';
 import syncDocsPath from '../../lib/syncDocsPath.js';
 import { getProjectVersion } from '../../lib/versionSelect.js';
 
 export default class DocsCommand extends BaseCommand<typeof DocsCommand> {
+  // we need this as a const for syncDocsPath
+  id = 'docs' as const;
+
   static aliases = ['guides'];
 
   static description =
@@ -25,8 +28,7 @@ export default class DocsCommand extends BaseCommand<typeof DocsCommand> {
   };
 
   async run(): Promise<string> {
-    const { path } = this.args;
-    const { dryRun, key, version } = this.flags;
+    const { key, version } = this.flags;
 
     // TODO: should we allow version selection at all here?
     // Let's revisit this once we re-evaluate our category logic in the API.
@@ -34,7 +36,7 @@ export default class DocsCommand extends BaseCommand<typeof DocsCommand> {
     const selectedVersion = await getProjectVersion(version, key);
 
     return this.runCreateGHAHook({
-      result: await syncDocsPath(key, selectedVersion, CommandCategories.DOCS, this.id as string, path, dryRun),
+      result: await syncDocsPath.call(this, selectedVersion),
       parsedOpts: { ...this.args, ...this.flags, version: selectedVersion },
     });
   }

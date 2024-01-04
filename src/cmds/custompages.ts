@@ -1,11 +1,13 @@
 import { Args, Flags } from '@oclif/core';
 
-import { CommandCategories } from '../lib/baseCommand.js';
 import BaseCommand from '../lib/baseCommandNew.js';
 import { githubFlag, keyFlag } from '../lib/flags.js';
 import syncDocsPath from '../lib/syncDocsPath.js';
 
 export default class CustomPagesCommand extends BaseCommand<typeof CustomPagesCommand> {
+  // we need this as a const for syncDocsPath
+  id = 'custompages' as const;
+
   static description =
     'Sync Markdown/HTML files to your ReadMe project as Custom Pages. Can either be a path to a directory or a single Markdown/HTML file.';
 
@@ -22,15 +24,8 @@ export default class CustomPagesCommand extends BaseCommand<typeof CustomPagesCo
   };
 
   async run(): Promise<string> {
-    const { path } = this.args;
-    const { dryRun, key } = this.flags;
-
     return this.runCreateGHAHook({
-      result: await syncDocsPath(key, undefined, CommandCategories.CUSTOM_PAGES, this.id as string, path, dryRun, [
-        '.html',
-        '.markdown',
-        '.md',
-      ]),
+      result: await syncDocsPath.call(this),
     });
   }
 }
