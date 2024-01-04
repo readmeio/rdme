@@ -8,17 +8,6 @@ import { Command as OclifCommand } from '@oclif/core';
 
 import { isGHA, isTest } from './isCI.js';
 
-export enum CommandCategories {
-  ADMIN = 'admin',
-  APIS = 'apis',
-  CATEGORIES = 'categories',
-  CHANGELOGS = 'changelogs',
-  CUSTOM_PAGES = 'custompages',
-  DOCS = 'docs',
-  UTILITIES = 'utilities',
-  VERSIONS = 'versions',
-}
-
 export type Flags<T extends typeof OclifCommand> = Interfaces.InferredFlags<
   (typeof BaseCommand)['baseFlags'] & T['flags']
 >;
@@ -42,25 +31,13 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
     };
   }
 
-  /**
-   * The category that the command belongs to, used on
-   * the general help screen to group commands together
-   * and on individual command help screens
-   * to show related commands
-   *
-   * @example CommandCategories.APIS
-   */
-  cmdCategory!: CommandCategories;
+  args!: Args<T>;
 
-  /**
-   * Does the command run the GitHub Actions onboarding called via
-   * `src/index.ts`?
-   */
-  supportsGHA = false;
+  flags!: Flags<T>;
 
-  protected args!: Args<T>;
-
-  protected flags!: Flags<T>;
+  // we need the declare statement here since `debug` is a
+  // protected property in the base oclif class
+  declare debug: (...args: unknown[]) => void;
 
   protected async catch(err: Error & { exitCode?: number }): Promise<unknown> {
     // add any custom logic to handle errors from the command
