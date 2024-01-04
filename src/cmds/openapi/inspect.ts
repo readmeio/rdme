@@ -8,7 +8,7 @@ import pluralize from 'pluralize';
 import { getBorderCharacters, table } from 'table';
 
 import analyzeOas, { getSupportedFeatures } from '../../lib/analyzeOas.js';
-import BaseCommand from '../../lib/baseCommandNew.js';
+import BaseCommand from '../../lib/baseCommand.js';
 import { titleFlag, workingDirectoryFlag } from '../../lib/flags.js';
 import { oraOptions } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';

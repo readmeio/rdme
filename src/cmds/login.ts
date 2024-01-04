@@ -1,7 +1,7 @@
 import { Flags } from '@oclif/core';
 import prompts from 'prompts';
 
-import BaseCommand from '../lib/baseCommandNew.js';
+import BaseCommand from '../lib/baseCommand.js';
 import loginFlow from '../lib/loginFlow.js';
 
 export default class LoginCommand extends BaseCommand<typeof LoginCommand> {

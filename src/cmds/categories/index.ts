@@ -1,4 +1,4 @@
-import BaseCommand from '../../lib/baseCommandNew.js';
+import BaseCommand from '../../lib/baseCommand.js';
 import { keyFlag, versionFlag } from '../../lib/flags.js';
 import getCategories from '../../lib/getCategories.js';
 import { getProjectVersion } from '../../lib/versionSelect.js';

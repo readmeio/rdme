@@ -7,7 +7,7 @@ import { Headers } from 'node-fetch';
 import ora from 'ora';
 import parse from 'parse-link-header';
 
-import BaseCommand from '../../lib/baseCommandNew.js';
+import BaseCommand from '../../lib/baseCommand.js';
 import { githubFlag, keyFlag, titleFlag, versionFlag, workingDirectoryFlag } from '../../lib/flags.js';
 import { info, oraOptions, warn } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';

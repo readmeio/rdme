@@ -2,7 +2,7 @@ import { Flags } from '@oclif/core';
 import chalk from 'chalk';
 import open from 'open';
 
-import BaseCommand from '../lib/baseCommandNew.js';
+import BaseCommand from '../lib/baseCommand.js';
 import config from '../lib/config.js';
 import getCurrentConfig from '../lib/getCurrentConfig.js';
 import { getProjectVersion } from '../lib/versionSelect.js';

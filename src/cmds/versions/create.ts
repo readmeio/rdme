@@ -5,7 +5,7 @@ import { Headers } from 'node-fetch';
 import prompts from 'prompts';
 import semver from 'semver';
 
-import BaseCommand from '../../lib/baseCommandNew.js';
+import BaseCommand from '../../lib/baseCommand.js';
 import castStringOptToBool from '../../lib/castStringOptToBool.js';
 import { baseVersionFlags, keyFlag } from '../../lib/flags.js';
 import * as promptHandler from '../../lib/prompts.js';

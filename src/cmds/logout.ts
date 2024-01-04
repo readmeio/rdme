@@ -1,4 +1,4 @@
-import BaseCommand from '../lib/baseCommandNew.js';
+import BaseCommand from '../lib/baseCommand.js';
 import configStore from '../lib/configstore.js';
 
 export default class LogoutCommand extends BaseCommand<typeof LogoutCommand> {

@@ -10,7 +10,7 @@ import oasReducer from 'oas/reducer';
 import ora from 'ora';
 import prompts from 'prompts';
 
-import BaseCommand from '../../lib/baseCommandNew.js';
+import BaseCommand from '../../lib/baseCommand.js';
 import { titleFlag, workingDirectoryFlag } from '../../lib/flags.js';
 import { oraOptions } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';

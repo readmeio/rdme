@@ -1,6 +1,6 @@
 import { Args, Flags } from '@oclif/core';
 
-import BaseCommand from '../../lib/baseCommandNew.js';
+import BaseCommand from '../../lib/baseCommand.js';
 import { githubFlag, keyFlag, versionFlag } from '../../lib/flags.js';
 import syncDocsPath from '../../lib/syncDocsPath.js';
 import { getProjectVersion } from '../../lib/versionSelect.js';

@@ -1,6 +1,6 @@
 import { Flags } from '@oclif/core';
 
-import BaseCommand from '../../lib/baseCommandNew.js';
+import BaseCommand from '../../lib/baseCommand.js';
 import { keyFlag } from '../../lib/flags.js';
 import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch.js';
 

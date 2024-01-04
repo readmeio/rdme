@@ -7,7 +7,7 @@ import { Args, Flags } from '@oclif/core';
 import chalk from 'chalk';
 import prompts from 'prompts';
 
-import BaseCommand from '../../lib/baseCommandNew.js';
+import BaseCommand from '../../lib/baseCommand.js';
 import { workingDirectoryFlag } from '../../lib/flags.js';
 import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';

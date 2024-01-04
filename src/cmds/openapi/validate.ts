@@ -1,7 +1,7 @@
 import { Args } from '@oclif/core';
 import chalk from 'chalk';
 
-import BaseCommand from '../../lib/baseCommandNew.js';
+import BaseCommand from '../../lib/baseCommand.js';
 import { githubFlag, workingDirectoryFlag } from '../../lib/flags.js';
 import prepareOas from '../../lib/prepareOas.js';
 

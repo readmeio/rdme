@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 
-import BaseCommand from '../lib/baseCommandNew.js';
+import BaseCommand from '../lib/baseCommand.js';
 import getCurrentConfig from '../lib/getCurrentConfig.js';
 
 export default class WhoAmICommand extends BaseCommand<typeof WhoAmICommand> {

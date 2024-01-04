@@ -2,7 +2,7 @@ import { Args, Flags } from '@oclif/core';
 import chalk from 'chalk';
 import prompts from 'prompts';
 
-import BaseCommand from '../../lib/baseCommandNew.js';
+import BaseCommand from '../../lib/baseCommand.js';
 import deleteDoc from '../../lib/deleteDoc.js';
 import { githubFlag, keyFlag, versionFlag } from '../../lib/flags.js';
 import getDocs from '../../lib/getDocs.js';
