@@ -1,37 +1,30 @@
-import type { AuthenticatedCommandOptions } from '../../lib/baseCommand.js';
+import { Args } from '@oclif/core';
 
-import Command, { CommandCategories } from '../../lib/baseCommand.js';
+import BaseCommand from '../../lib/baseCommandNew.js';
+import { keyFlag } from '../../lib/flags.js';
 import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch.js';
 import { getProjectVersion } from '../../lib/versionSelect.js';
 
-export default class DeleteVersionCommand extends Command {
-  constructor() {
-    super();
+export default class DeleteVersionCommand extends BaseCommand<typeof DeleteVersionCommand> {
+  static description = 'Delete a version associated with your ReadMe project.';
 
-    this.command = 'versions:delete';
-    this.usage = 'versions:delete <version> [options]';
-    this.description = 'Delete a version associated with your ReadMe project.';
-    this.cmdCategory = CommandCategories.VERSIONS;
+  static args = {
+    version: Args.string({
+      description: "The version you'd like to delete.",
+    }),
+  };
 
-    this.hiddenArgs = ['version'];
-    this.args = [
-      this.getKeyArg(),
-      {
-        name: 'version',
-        type: String,
-        defaultOption: true,
-      },
-    ];
-  }
+  static flags = {
+    key: keyFlag,
+  };
 
-  async run(opts: AuthenticatedCommandOptions) {
-    await super.run(opts);
-
-    const { key, version } = opts;
+  async run(): Promise<string> {
+    const { version } = this.args;
+    const { key } = this.flags;
 
     const selectedVersion = await getProjectVersion(version, key);
 
-    Command.debug(`selectedVersion: ${selectedVersion}`);
+    this.debug(`selectedVersion: ${selectedVersion}`);
 
     return readmeAPIFetch(`/api/v1/version/${selectedVersion}`, {
       method: 'delete',

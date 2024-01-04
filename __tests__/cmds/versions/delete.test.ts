@@ -1,19 +1,27 @@
+import type { Config } from '@oclif/core';
+
 import nock from 'nock';
 import prompts from 'prompts';
-import { describe, beforeAll, afterEach, it, expect, vi } from 'vitest';
+import { describe, beforeAll, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
-import DeleteVersionCommand from '../../../src/cmds/versions/delete.js';
 import APIError from '../../../src/lib/apiError.js';
 import getAPIMock from '../../helpers/get-api-mock.js';
+import setupOclifConfig from '../../helpers/setup-oclif-config.js';
 
 const key = 'API_KEY';
 const version = '1.0.0';
 
-const deleteVersion = new DeleteVersionCommand();
-
 describe('rdme versions:delete', () => {
+  let oclifConfig: Config;
+  let run: (args?: string[]) => Promise<unknown>;
+
   beforeAll(() => {
     nock.disableNetConnect();
+  });
+
+  beforeEach(async () => {
+    oclifConfig = await setupOclifConfig();
+    run = (args?: string[]) => oclifConfig.runCommand('versions:delete', args);
   });
 
   afterEach(() => nock.cleanAll());
@@ -21,17 +29,13 @@ describe('rdme versions:delete', () => {
   it('should prompt for login if no API key provided', async () => {
     const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
-    // @ts-expect-error deliberately passing in bad data
-    await expect(deleteVersion.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
+    await expect(run()).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
     consoleInfoSpy.mockRestore();
   });
 
   it('should error in CI if no API key provided', async () => {
     process.env.TEST_RDME_CI = 'true';
-    // @ts-expect-error deliberately passing in bad data
-    await expect(deleteVersion.run({})).rejects.toStrictEqual(
-      new Error('No project API key provided. Please use `--key`.'),
-    );
+    await expect(run()).rejects.toStrictEqual(new Error('No project API key provided. Please use `--key`.'));
     delete process.env.TEST_RDME_CI;
   });
 
@@ -44,7 +48,7 @@ describe('rdme versions:delete', () => {
       .basicAuth({ user: key })
       .reply(200, { version });
 
-    await expect(deleteVersion.run({ key, version })).resolves.toBe('Version 1.0.0 deleted successfully.');
+    await expect(run(['--key', key, version])).resolves.toBe('Version 1.0.0 deleted successfully.');
     mockRequest.done();
   });
 
@@ -65,7 +69,7 @@ describe('rdme versions:delete', () => {
       .basicAuth({ user: key })
       .reply(200, { version });
 
-    await expect(deleteVersion.run({ key, version })).rejects.toStrictEqual(new APIError(errorResponse));
+    await expect(run(['--key', key, version])).rejects.toThrow(new APIError(errorResponse));
     mockRequest.done();
   });
 });
