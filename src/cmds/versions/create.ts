@@ -1,13 +1,13 @@
 import type { Version } from './index.js';
-import type { AuthenticatedCommandOptions } from '../../lib/baseCommand.js';
 
+import { Args, Flags } from '@oclif/core';
 import { Headers } from 'node-fetch';
 import prompts from 'prompts';
 import semver from 'semver';
 
-import Command, { CommandCategories } from '../../lib/baseCommand.js';
+import BaseCommand from '../../lib/baseCommandNew.js';
 import castStringOptToBool from '../../lib/castStringOptToBool.js';
-import config from '../../lib/config.js';
+import { baseVersionFlags, keyFlag } from '../../lib/flags.js';
 import * as promptHandler from '../../lib/prompts.js';
 import promptTerminal from '../../lib/promptWrapper.js';
 import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch.js';
@@ -24,36 +24,30 @@ export interface CommonOptions {
   main?: 'true' | 'false';
 }
 
-export default class CreateVersionCommand extends Command {
-  constructor() {
-    super();
+export default class CreateVersionCommand extends BaseCommand<typeof CreateVersionCommand> {
+  static description = 'Create a new version for your project.';
 
-    this.command = 'versions:create';
-    this.usage = 'versions:create <version> [options]';
-    this.description = 'Create a new version for your project.';
-    this.cmdCategory = CommandCategories.VERSIONS;
+  static args = {
+    version: Args.string({
+      description: "The version you'd like to create. Must be valid SemVer (https://semver.org/)",
+      required: true,
+    }),
+  };
 
-    this.hiddenArgs = ['version'];
-    this.args = [
-      this.getKeyArg(),
-      {
-        name: 'fork',
-        type: String,
-        description: "The semantic version which you'd like to fork from.",
-      },
-      ...this.getVersionOpts(),
-    ];
-  }
+  static flags = {
+    fork: Flags.string({ description: "The semantic version which you'd like to fork from." }),
+    key: keyFlag,
+    ...baseVersionFlags,
+  };
 
-  async run(opts: AuthenticatedCommandOptions<Options>) {
-    await super.run(opts);
-
+  async run(): Promise<string> {
     let versionList;
-    const { key, version, fork, codename, main, beta, deprecated, hidden } = opts;
+    const { version } = this.args;
+    const { key, fork, codename, main, beta, deprecated, hidden } = this.flags;
 
-    if (!version || !semver.valid(semver.coerce(version))) {
+    if (!semver.valid(semver.coerce(version))) {
       return Promise.reject(
-        new Error(`Please specify a semantic version. See \`${config.cli} help ${this.command}\` for help.`),
+        new Error(`Please specify a semantic version. See \`${this.config.bin} help ${this.id}\` for help.`),
       );
     }
 

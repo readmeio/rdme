@@ -6,7 +6,7 @@ import type { Options as UpdateOptions } from '../cmds/versions/update.js';
  * and casts it to a boolean.
  */
 export default function castStringOptToBool(
-  opt: 'true' | 'false' | undefined,
+  opt: string | undefined,
   optName: keyof CreateOptions | keyof UpdateOptions,
 ) {
   if (!opt) {

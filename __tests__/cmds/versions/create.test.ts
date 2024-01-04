@@ -1,19 +1,26 @@
+import { type Config } from '@oclif/core';
 import nock from 'nock';
 import prompts from 'prompts';
-import { describe, beforeAll, afterEach, it, expect, vi } from 'vitest';
+import { describe, beforeAll, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
-import CreateVersionCommand from '../../../src/cmds/versions/create.js';
 import APIError from '../../../src/lib/apiError.js';
 import getAPIMock from '../../helpers/get-api-mock.js';
+import setupOclifConfig from '../../helpers/setup-oclif-config.js';
 
 const key = 'API_KEY';
 const version = '1.0.0';
 
-const createVersion = new CreateVersionCommand();
-
 describe('rdme versions:create', () => {
+  let oclifConfig: Config;
+  let run: (args?: string[]) => Promise<unknown>;
+
   beforeAll(() => {
     nock.disableNetConnect();
+  });
+
+  beforeEach(async () => {
+    oclifConfig = await setupOclifConfig();
+    run = (args?: string[]) => oclifConfig.runCommand('versions:create', args);
   });
 
   afterEach(() => nock.cleanAll());
@@ -21,28 +28,22 @@ describe('rdme versions:create', () => {
   it('should prompt for login if no API key provided', async () => {
     const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
-    // @ts-expect-error deliberately passing in bad data
-    await expect(createVersion.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
+    await expect(run()).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
     consoleInfoSpy.mockRestore();
   });
 
   it('should error in CI if no API key provided', async () => {
     process.env.TEST_RDME_CI = 'true';
-    // @ts-expect-error deliberately passing in bad data
-    await expect(createVersion.run({})).rejects.toStrictEqual(
-      new Error('No project API key provided. Please use `--key`.'),
-    );
+    await expect(run()).rejects.toStrictEqual(new Error('No project API key provided. Please use `--key`.'));
     delete process.env.TEST_RDME_CI;
   });
 
   it('should error if no version provided', () => {
-    return expect(createVersion.run({ key })).rejects.toStrictEqual(
-      new Error('Please specify a semantic version. See `rdme help versions:create` for help.'),
-    );
+    return expect(run(['--key', key])).rejects.toThrow('Missing 1 required arg:\nversion');
   });
 
   it('should error if invaild version provided', () => {
-    return expect(createVersion.run({ key, version: 'test' })).rejects.toStrictEqual(
+    return expect(run(['--key', key, 'test'])).rejects.toStrictEqual(
       new Error('Please specify a semantic version. See `rdme help versions:create` for help.'),
     );
   });
@@ -66,9 +67,7 @@ describe('rdme versions:create', () => {
       .basicAuth({ user: key })
       .reply(201, { version: newVersion });
 
-    await expect(createVersion.run({ key, version: newVersion })).resolves.toBe(
-      `Version ${newVersion} created successfully.`,
-    );
+    await expect(run(['--key', key, newVersion])).resolves.toBe(`Version ${newVersion} created successfully.`);
     mockRequest.done();
   });
 
@@ -89,16 +88,23 @@ describe('rdme versions:create', () => {
       .reply(201, { version: newVersion });
 
     await expect(
-      createVersion.run({
+      run([
+        '--key',
         key,
-        version: newVersion,
-        fork: version,
-        beta: 'false',
-        deprecated: 'false',
-        main: 'false',
-        codename: 'test',
-        hidden: 'false',
-      }),
+        newVersion,
+        '--fork',
+        version,
+        '--beta',
+        'false',
+        '--deprecated',
+        'false',
+        '--main',
+        'false',
+        '--codename',
+        'test',
+        '--hidden',
+        'false',
+      ]),
     ).resolves.toBe(`Version ${newVersion} created successfully.`);
 
     mockRequest.done();
@@ -118,15 +124,21 @@ describe('rdme versions:create', () => {
       .reply(201, { version: newVersion });
 
     await expect(
-      createVersion.run({
+      run([
+        '--key',
         key,
-        version: newVersion,
-        fork: version,
-        beta: 'false',
-        main: 'true',
-        hidden: 'true',
-        deprecated: 'true',
-      }),
+        newVersion,
+        '--fork',
+        version,
+        '--beta',
+        'false',
+        '--main',
+        'true',
+        '--hidden',
+        'true',
+        '--deprecated',
+        'true',
+      ]),
     ).resolves.toBe(`Version ${newVersion} created successfully.`);
 
     mockRequest.done();
@@ -142,7 +154,7 @@ describe('rdme versions:create', () => {
 
     const mockRequest = getAPIMock().post('/api/v1/version').basicAuth({ user: key }).reply(400, errorResponse);
 
-    await expect(createVersion.run({ key, version, fork: '0.0.5' })).rejects.toStrictEqual(new APIError(errorResponse));
+    await expect(run(['--key', key, version, '--fork', '0.0.5'])).rejects.toThrow(new APIError(errorResponse));
     mockRequest.done();
   });
 
@@ -150,57 +162,33 @@ describe('rdme versions:create', () => {
     it('should throw if non-boolean `beta` flag is passed', () => {
       const newVersion = '1.0.1';
 
-      return expect(
-        createVersion.run({
-          key,
-          version: newVersion,
-          fork: version,
-          // @ts-expect-error deliberately passing a bad value here
-          beta: 'test',
-        }),
-      ).rejects.toStrictEqual(new Error("Invalid option passed for 'beta'. Must be 'true' or 'false'."));
+      return expect(run(['--key', key, newVersion, '--fork', version, '--beta', 'test'])).rejects.toThrow(
+        'Expected --beta=test to be one of: true, false',
+      );
     });
 
     it('should throw if non-boolean `deprecated` flag is passed', () => {
       const newVersion = '1.0.1';
 
-      return expect(
-        createVersion.run({
-          key,
-          version: newVersion,
-          fork: version,
-          // @ts-expect-error deliberately passing a bad value here
-          deprecated: 'test',
-        }),
-      ).rejects.toStrictEqual(new Error("Invalid option passed for 'deprecated'. Must be 'true' or 'false'."));
+      return expect(run(['--key', key, newVersion, '--fork', version, '--deprecated', 'test'])).rejects.toThrow(
+        'Expected --deprecated=test to be one of: true, false',
+      );
     });
 
     it('should throw if non-boolean `hidden` flag is passed', () => {
       const newVersion = '1.0.1';
 
-      return expect(
-        createVersion.run({
-          key,
-          version: newVersion,
-          fork: version,
-          // @ts-expect-error deliberately passing a bad value here
-          hidden: 'test',
-        }),
-      ).rejects.toStrictEqual(new Error("Invalid option passed for 'hidden'. Must be 'true' or 'false'."));
+      return expect(run(['--key', key, newVersion, '--fork', version, '--hidden', 'test'])).rejects.toThrow(
+        'Expected --hidden=test to be one of: true, false',
+      );
     });
 
     it('should throw if non-boolean `main` flag is passed', () => {
       const newVersion = '1.0.1';
 
-      return expect(
-        createVersion.run({
-          key,
-          version: newVersion,
-          fork: version,
-          // @ts-expect-error deliberately passing a bad value here
-          main: 'test',
-        }),
-      ).rejects.toStrictEqual(new Error("Invalid option passed for 'main'. Must be 'true' or 'false'."));
+      return expect(run(['--key', key, newVersion, '--fork', version, '--main', 'test'])).rejects.toThrow(
+        'Expected --main=test to be one of: true, false',
+      );
     });
   });
 });
