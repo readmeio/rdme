@@ -1,6 +1,7 @@
-import type { AuthenticatedCommandOptions } from '../../lib/baseCommand.js';
+import { Flags } from '@oclif/core';
 
-import Command, { CommandCategories } from '../../lib/baseCommand.js';
+import BaseCommand from '../../lib/baseCommandNew.js';
+import { keyFlag } from '../../lib/flags.js';
 import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch.js';
 
 export interface Version {
@@ -14,29 +15,16 @@ export interface Version {
   version: string;
 }
 
-export default class VersionsCommand extends Command {
-  constructor() {
-    super();
+export default class VersionsCommand extends BaseCommand<typeof VersionsCommand> {
+  static description = 'List versions available in your project or get a version by SemVer (https://semver.org/).';
 
-    this.command = 'versions';
-    this.usage = 'versions [options]';
-    this.description = 'List versions available in your project or get a version by SemVer (https://semver.org/).';
-    this.cmdCategory = CommandCategories.VERSIONS;
+  static flags = {
+    key: keyFlag,
+    version: Flags.string({ description: 'A specific project version to view.' }),
+  };
 
-    this.args = [
-      this.getKeyArg(),
-      {
-        name: 'version',
-        type: String,
-        description: 'A specific project version to view.',
-      },
-    ];
-  }
-
-  async run(opts: AuthenticatedCommandOptions) {
-    await super.run(opts);
-
-    const { key, version } = opts;
+  async run(): Promise<string> {
+    const { key, version } = this.flags;
 
     const uri = version ? `/api/v1/version/${version}` : '/api/v1/version';
 

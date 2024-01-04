@@ -1,11 +1,12 @@
 import type { Version } from '../../../src/cmds/versions/index.js';
+import type { Config } from '@oclif/core';
 
 import nock from 'nock';
 import prompts from 'prompts';
-import { describe, beforeAll, afterEach, it, expect, vi } from 'vitest';
+import { describe, beforeAll, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
-import VersionsCommand from '../../../src/cmds/versions/index.js';
 import getAPIMock from '../../helpers/get-api-mock.js';
+import setupOclifConfig from '../../helpers/setup-oclif-config.js';
 
 const key = 'API_KEY';
 const version = '1.0.0';
@@ -31,11 +32,17 @@ const version2Payload: Version = {
   version: version2,
 };
 
-const versions = new VersionsCommand();
-
 describe('rdme versions', () => {
+  let oclifConfig: Config;
+  let run: (args?: string[]) => Promise<unknown>;
+
   beforeAll(() => {
     nock.disableNetConnect();
+  });
+
+  beforeEach(async () => {
+    oclifConfig = await setupOclifConfig();
+    run = (args?: string[]) => oclifConfig.runCommand('versions', args);
   });
 
   afterEach(() => nock.cleanAll());
@@ -43,15 +50,13 @@ describe('rdme versions', () => {
   it('should prompt for login if no API key provided', async () => {
     const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
-    // @ts-expect-error deliberately passing in bad data
-    await expect(versions.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
+    await expect(run()).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
     consoleInfoSpy.mockRestore();
   });
 
   it('should error in CI if no API key provided', async () => {
     process.env.TEST_RDME_CI = 'true';
-    // @ts-expect-error deliberately passing in bad data
-    await expect(versions.run({})).rejects.toStrictEqual(new Error('No project API key provided. Please use `--key`.'));
+    await expect(run()).rejects.toStrictEqual(new Error('No project API key provided. Please use `--key`.'));
     delete process.env.TEST_RDME_CI;
   });
 
@@ -61,7 +66,7 @@ describe('rdme versions', () => {
       .basicAuth({ user: key })
       .reply(200, [versionPayload, version2Payload]);
 
-    const output = await versions.run({ key });
+    const output = await run(['--key', key]);
     expect(output).toStrictEqual(JSON.stringify([versionPayload, version2Payload], null, 2));
     mockRequest.done();
   });
@@ -72,7 +77,7 @@ describe('rdme versions', () => {
       .basicAuth({ user: key })
       .reply(200, versionPayload);
 
-    const output = await versions.run({ key, version });
+    const output = await run(['--key', key, '--version', version]);
     expect(output).toStrictEqual(JSON.stringify(versionPayload, null, 2));
     mockRequest.done();
   });
