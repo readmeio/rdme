@@ -21,11 +21,11 @@ export default class CategoriesCreateCommand extends BaseCommand<typeof Categori
   };
 
   static flags = {
-    categoryType: Flags.string({
+    categoryType: Flags.option({
       description: 'Category type',
-      options: ['guide', 'reference'],
+      options: ['guide', 'reference'] as const,
       required: true,
-    }),
+    })(),
     key: keyFlag,
     preventDuplicates: Flags.boolean({
       description:

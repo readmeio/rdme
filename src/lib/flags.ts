@@ -32,22 +32,22 @@ export const baseVersionFlags = {
   codename: Flags.string({
     description: 'The codename, or nickname, for a particular version.',
   }),
-  main: Flags.string({
+  main: Flags.option({
     description: 'Should this be the main version for your project?',
-    options: ['true', 'false'],
-  }),
-  beta: Flags.string({
+    options: ['true', 'false'] as const,
+  })(),
+  beta: Flags.option({
     description: 'Should this version be in beta?',
-    options: ['true', 'false'],
-  }),
-  deprecated: Flags.string({
+    options: ['true', 'false'] as const,
+  })(),
+  deprecated: Flags.option({
     description: 'Should this version be deprecated? The main version cannot be deprecated.',
-    options: ['true', 'false'],
-  }),
-  hidden: Flags.string({
+    options: ['true', 'false'] as const,
+  })(),
+  hidden: Flags.option({
     description: 'Should this version be hidden? The main version cannot be hidden.',
-    options: ['true', 'false'],
-  }),
+    options: ['true', 'false'] as const,
+  })(),
 } as const;
 
 /**
