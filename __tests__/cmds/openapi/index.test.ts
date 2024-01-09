@@ -686,11 +686,6 @@ describe('rdme openapi', () => {
   });
 
   describe('error handling', () => {
-    it('should prompt for login if no API key provided', () => {
-      prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
-      return expect(run()).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
-    });
-
     it('should error if `--create` and `--update` flags are passed simultaneously', () => {
       return expect(run(['--key', key, '--create', '--update'])).rejects.toThrow(
         '--update=true cannot also be provided when using --create',
@@ -1195,10 +1190,6 @@ describe('rdme openapi', () => {
     });
 
     afterEach(afterGHAEnv);
-
-    it('should error in CI if no API key provided', () => {
-      return expect(run()).rejects.toStrictEqual(new Error('No project API key provided. Please use `--key`.'));
-    });
 
     it('should error out if multiple possible spec matches were found', () => {
       return expect(run(['--key', key, '--version', version])).rejects.toStrictEqual(

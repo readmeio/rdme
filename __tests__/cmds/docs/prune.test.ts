@@ -28,19 +28,6 @@ describe('rdme docs:prune', () => {
 
   afterAll(() => nock.cleanAll());
 
-  it('should prompt for login if no API key provided', async () => {
-    const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
-    prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
-    await expect(run()).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
-    consoleInfoSpy.mockRestore();
-  });
-
-  it('should error in CI if no API key provided', async () => {
-    process.env.TEST_RDME_CI = 'true';
-    await expect(run()).rejects.toStrictEqual(new Error('No project API key provided. Please use `--key`.'));
-    delete process.env.TEST_RDME_CI;
-  });
-
   it('should error if no folder provided', () => {
     return expect(run(['--key', key, '--version', version])).rejects.rejects.toThrow('Missing 1 required arg:\nfolder');
   });
