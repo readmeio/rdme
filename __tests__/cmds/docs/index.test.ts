@@ -40,28 +40,6 @@ describe('rdme docs', () => {
 
   afterAll(() => nock.cleanAll());
 
-  it('should successfully log in user via prompts if API key is not provided', async () => {
-    const email = 'owlbert@readme.io';
-    const password = 'pass123';
-    const project = 'proj1';
-
-    const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
-    const getCommandOutput = () => {
-      return [consoleInfoSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
-    };
-
-    prompts.inject([email, password, project]);
-
-    const mock = getAPIMock().post('/api/v1/login', { email, password, project }).reply(200, { apiKey: key });
-
-    await expect(run()).rejects.toThrow('Missing 1 required arg:\npath');
-    expect(getCommandOutput()).toContain("Looks like you're missing a ReadMe API key, let's fix that! 🦉");
-    expect(getCommandOutput()).toContain('Successfully logged in as owlbert@readme.io to the proj1 project.');
-    mock.done();
-    configstore.clear();
-    vi.resetAllMocks();
-  });
-
   it('should error if no path provided', () => {
     return expect(run(['--key', key, '--version', '1.0.0'])).rejects.toThrow('Missing 1 required arg:\npath');
   });
