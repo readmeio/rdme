@@ -1,3 +1,10 @@
+# [9.0.0-next.9](https://github.com/readmeio/rdme/compare/v9.0.0-next.8...v9.0.0-next.9) (2024-01-09)
+
+
+### Bug Fixes
+
+* **openapi:** add spinner catch statement ([#961](https://github.com/readmeio/rdme/issues/961)) ([4669b29](https://github.com/readmeio/rdme/commit/4669b29120b27962b24a59a4cbacfcb792eaefc0))
+
 # [9.0.0-next.8](https://github.com/readmeio/rdme/compare/v9.0.0-next.7...v9.0.0-next.8) (2023-12-05)
 
 
