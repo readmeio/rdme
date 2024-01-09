@@ -1,4 +1,6 @@
 /* eslint-disable no-console */
+import type { Config } from '@oclif/core';
+
 import fs from 'node:fs';
 
 import chalk from 'chalk';
@@ -7,13 +9,11 @@ import { setupServer } from 'msw/node';
 import prompts from 'prompts';
 import { describe, beforeAll, beforeEach, afterEach, it, expect, vi, afterAll } from 'vitest';
 
-import OpenAPICommand from '../../../src/cmds/openapi/index.js';
 import config from '../../../src/lib/config.js';
 import { getAPIMockMSW } from '../../helpers/get-api-mock.js';
 import { after, before } from '../../helpers/get-gha-setup.js';
 import { after as afterGHAEnv, before as beforeGHAEnv } from '../../helpers/setup-gha-env.js';
-
-const openapi = new OpenAPICommand();
+import setupOclifConfig from '../../helpers/setup-oclif-config.js';
 
 let consoleInfoSpy;
 let consoleWarnSpy;
@@ -44,13 +44,17 @@ const getRandomRegistryId = () => Math.random().toString(36).substring(2);
 const server = setupServer(...[]);
 
 describe('rdme openapi (single-threaded)', () => {
+  let oclifConfig: Config;
+  let run: (args?: string[]) => Promise<unknown>;
   let testWorkingDir: string;
 
   beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
 
-  beforeEach(() => {
+  beforeEach(async () => {
     consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    oclifConfig = await setupOclifConfig();
+    run = (args?: string[]) => oclifConfig.runCommand('openapi', args);
     testWorkingDir = process.cwd();
   });
 
@@ -91,11 +95,7 @@ describe('rdme openapi (single-threaded)', () => {
       const spec = 'petstore.json';
 
       await expect(
-        openapi.run({
-          key,
-          version,
-          workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-        }),
+        run(['--key', key, '--version', version, '--workingDirectory', './__tests__/__fixtures__/relative-ref-oas']),
       ).resolves.toBe(successfulUpload(spec));
 
       expect(console.info).toHaveBeenCalledTimes(1);
@@ -132,12 +132,15 @@ describe('rdme openapi (single-threaded)', () => {
       const spec = 'petstore.json';
 
       await expect(
-        openapi.run({
+        run([
           spec,
+          '--key',
           key,
+          '--version',
           version,
-          workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-        }),
+          '--workingDirectory',
+          './__tests__/__fixtures__/relative-ref-oas',
+        ]),
       ).resolves.toBe(successfulUpload(spec));
 
       expect(console.info).toHaveBeenCalledTimes(0);
@@ -162,12 +165,15 @@ describe('rdme openapi (single-threaded)', () => {
       );
 
       await expect(
-        openapi.run({
+        run([
+          '--key',
           key,
+          '--version',
           version,
-          dryRun: true,
-          workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-        }),
+          '--workingDirectory',
+          './__tests__/__fixtures__/relative-ref-oas',
+          '--dryRun',
+        ]),
       ).resolves.toMatch(
         '🎭 dry run! The API Definition located at petstore.json will be created for this project version: 1.0.0',
       );
@@ -181,7 +187,7 @@ describe('rdme openapi (single-threaded)', () => {
 
   describe('error handling', () => {
     it('should error if no file was provided or able to be discovered', () => {
-      return expect(openapi.run({ key, version, workingDirectory: 'bin' })).rejects.toStrictEqual(
+      return expect(run(['--key', key, '--version', version, '--workingDirectory', 'bin'])).rejects.toStrictEqual(
         new Error(
           "We couldn't find an OpenAPI or Swagger definition.\n\nPlease specify the path to your definition with `rdme openapi ./path/to/api/definition`.",
         ),
@@ -229,12 +235,15 @@ describe('rdme openapi (single-threaded)', () => {
       const spec = 'petstore.json';
 
       await expect(
-        openapi.run({
+        run([
           spec,
+          '--key',
           key,
+          '--version',
           version,
-          workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-        }),
+          '--workingDirectory',
+          './__tests__/__fixtures__/relative-ref-oas',
+        ]),
       ).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();
@@ -284,12 +293,15 @@ describe('rdme openapi (single-threaded)', () => {
       const spec = 'petstore.json';
 
       await expect(
-        openapi.run({
+        run([
           spec,
+          '--key',
           key,
+          '--version',
           version,
-          workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-        }),
+          '--workingDirectory',
+          './__tests__/__fixtures__/relative-ref-oas',
+        ]),
       ).resolves.toBe(successfulUpload(spec));
 
       return after();

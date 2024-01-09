@@ -1,13 +1,13 @@
 /* eslint-disable no-console */
+import type { Config } from '@oclif/core';
+
 import fs from 'node:fs';
 
 import chalk from 'chalk';
 import prompts from 'prompts';
 import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
-import OpenAPIReduceCommand from '../../../src/cmds/openapi/reduce.js';
-
-const reducer = new OpenAPIReduceCommand();
+import setupOclifConfig from '../../helpers/setup-oclif-config.js';
 
 const successfulReduction = () => 'Your reduced API definition has been saved to output.json! 🤏';
 
@@ -15,10 +15,14 @@ let consoleInfoSpy;
 const getCommandOutput = () => consoleInfoSpy.mock.calls.join('\n\n');
 
 describe('rdme openapi:reduce (single-threaded)', () => {
+  let oclifConfig: Config;
+  let run: (args?: string[]) => Promise<unknown>;
   let testWorkingDir: string;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
+    oclifConfig = await setupOclifConfig();
+    run = (args?: string[]) => oclifConfig.runCommand('openapi:reduce', args);
     testWorkingDir = process.cwd();
   });
 
@@ -42,11 +46,9 @@ describe('rdme openapi:reduce (single-threaded)', () => {
 
         prompts.inject(['tags', ['user'], 'output.json']);
 
-        await expect(
-          reducer.run({
-            workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-          }),
-        ).resolves.toBe(successfulReduction());
+        await expect(run(['--workingDirectory', './__tests__/__fixtures__/relative-ref-oas'])).resolves.toBe(
+          successfulReduction(),
+        );
 
         expect(console.info).toHaveBeenCalledTimes(1);
 
@@ -65,11 +67,14 @@ describe('rdme openapi:reduce (single-threaded)', () => {
         });
 
         await expect(
-          reducer.run({
-            workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-            tag: ['user'],
-            out: 'output.json',
-          }),
+          run([
+            '--workingDirectory',
+            './__tests__/__fixtures__/relative-ref-oas',
+            '--tag',
+            'user',
+            '--out',
+            'output.json',
+          ]),
         ).resolves.toBe(successfulReduction());
 
         expect(console.info).toHaveBeenCalledTimes(1);
@@ -91,12 +96,20 @@ describe('rdme openapi:reduce (single-threaded)', () => {
         });
 
         await expect(
-          reducer.run({
-            workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-            path: ['/pet', '/pet/{petId}'],
-            method: ['get', 'post'],
-            out: 'output.json',
-          }),
+          run([
+            '--workingDirectory',
+            './__tests__/__fixtures__/relative-ref-oas',
+            '--path',
+            '/pet',
+            '--path',
+            '/pet/{petId}',
+            '--method',
+            'get',
+            '--method',
+            'post',
+            '--out',
+            'output.json',
+          ]),
         ).resolves.toBe(successfulReduction());
 
         expect(console.info).toHaveBeenCalledTimes(1);
@@ -120,13 +133,22 @@ describe('rdme openapi:reduce (single-threaded)', () => {
         });
 
         await expect(
-          reducer.run({
-            workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-            path: ['/pet', '/pet/{petId}'],
-            method: ['get', 'post'],
+          run([
+            '--workingDirectory',
+            './__tests__/__fixtures__/relative-ref-oas',
+            '--path',
+            '/pet',
+            '--path',
+            '/pet/{petId}',
+            '--method',
+            'get',
+            '--method',
+            'post',
+            '--title',
             title,
-            out: 'output.json',
-          }),
+            '--out',
+            'output.json',
+          ]),
         ).resolves.toBe(successfulReduction());
 
         expect(console.info).toHaveBeenCalledTimes(1);

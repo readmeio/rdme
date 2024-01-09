@@ -37,7 +37,7 @@ jobs:
       - name: Run \`openapi\` command 🚀
         uses: readmeio/rdme@v7
         with:
-          rdme: openapi petstore.json --key=\${{ secrets.README_API_KEY }} --id=1 --workingDirectory=./__tests__/__fixtures__/relative-ref-oas
+          rdme: openapi petstore.json --key=\${{ secrets.README_API_KEY }} --workingDirectory=./__tests__/__fixtures__/relative-ref-oas --id=1
 "
 `;
 
