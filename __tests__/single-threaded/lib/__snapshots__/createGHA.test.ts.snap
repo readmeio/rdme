@@ -447,7 +447,7 @@ jobs:
       - name: Run \`docs\` command 🚀
         uses: readmeio/rdme@v7
         with:
-          rdme: docs --key=\${{ secrets.README_API_KEY }} --version=1.0.0
+          rdme: docs ./docs --key=\${{ secrets.README_API_KEY }} --version=1.0.0
 "
 `;
 
@@ -488,7 +488,7 @@ jobs:
       - name: Run \`docs\` command 🚀
         uses: readmeio/rdme@v7
         with:
-          rdme: docs --key=\${{ secrets.README_API_KEY }} --version=1.0.0
+          rdme: docs ./docs --key=\${{ secrets.README_API_KEY }} --version=1.0.0
 "
 `;
 
