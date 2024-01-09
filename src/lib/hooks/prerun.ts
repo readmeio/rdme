@@ -58,7 +58,7 @@ const hook: Hook<'prerun'> = async function run(options) {
   if (options.Command?.flags?.github) {
     this.debug('current command has --github flag');
     if (isCI()) {
-      this.debug('in CI envirnoment');
+      this.debug('in CI environment');
       // eslint-disable-next-line no-param-reassign
       options.Command.flags.github = Flags.boolean({
         async parse() {
