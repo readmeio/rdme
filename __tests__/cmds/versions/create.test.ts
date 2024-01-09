@@ -1,7 +1,7 @@
 import { type Config } from '@oclif/core';
 import nock from 'nock';
 import prompts from 'prompts';
-import { describe, beforeAll, beforeEach, afterEach, it, expect, vi } from 'vitest';
+import { describe, beforeAll, beforeEach, afterEach, it, expect } from 'vitest';
 
 import APIError from '../../../src/lib/apiError.js';
 import getAPIMock from '../../helpers/get-api-mock.js';

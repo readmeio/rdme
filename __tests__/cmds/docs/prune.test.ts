@@ -2,7 +2,7 @@ import type { Config } from '@oclif/core';
 
 import nock from 'nock';
 import prompts from 'prompts';
-import { describe, beforeAll, afterAll, it, expect, vi, beforeEach } from 'vitest';
+import { describe, beforeAll, beforeEach, afterAll, it, expect } from 'vitest';
 
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
 import setupOclifConfig from '../../helpers/setup-oclif-config.js';
