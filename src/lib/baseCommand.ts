@@ -47,6 +47,21 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
     return super.catch(err);
   }
 
+  /**
+   * This is a light wrapper around the oclif command's `_run` function
+   * that takes the result and sets a GitHub step output parameter to the result
+   * when being run from a GitHub Actions runner.
+   */
+  // eslint-disable-next-line no-underscore-dangle
+  protected async _run<U>(): Promise<U> {
+    // eslint-disable-next-line no-underscore-dangle
+    const result: U = await super._run();
+    if (isGHA() && result) {
+      core.setOutput('rdme', result);
+    }
+    return result;
+  }
+
   // copied from here: https://oclif.io/docs/base_class
   // we use this to standardize our parsing
   public async init(): Promise<void> {
