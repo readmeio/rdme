@@ -13,6 +13,18 @@ describe('rdme docker-gha (single arg string from GitHub Actions runner)', () =>
     run = (args?: string[]) => oclifConfig.runCommand('docker-gha', args);
   });
 
+  it('should return version from package.json for help command', async () => {
+    const output: string[] = [];
+    const spy = vi.spyOn(process.stdout, 'write');
+    spy.mockImplementation(msg => {
+      if (typeof msg === 'string') output.push(msg);
+      return true;
+    });
+    await expect(run(['help'])).resolves.toBeUndefined();
+    expect(output.join('\n')).toContain("ReadMe's official CLI and GitHub Action.");
+    spy.mockClear();
+  });
+
   it('should throw error if no arguments are passed', () => {
     return expect(run()).rejects.toStrictEqual(new Error("Oops! Looks like you're missing a command."));
   });
