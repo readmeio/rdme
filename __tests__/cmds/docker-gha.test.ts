@@ -1,6 +1,6 @@
 import type { Config } from '@oclif/core';
 
-import { describe, beforeEach, it, expect } from 'vitest';
+import { describe, beforeEach, it, expect, vi } from 'vitest';
 
 import setupOclifConfig from '../helpers/setup-oclif-config.js';
 
@@ -15,6 +15,18 @@ describe('rdme docker-gha (single arg string from GitHub Actions runner)', () =>
 
   it('should throw error if no arguments are passed', () => {
     return expect(run()).rejects.toStrictEqual(new Error("Oops! Looks like you're missing a command."));
+  });
+
+  it('should handle a single arg', async () => {
+    vi.stubEnv('TEST_RDME_CI', 'true');
+    await expect(run(['openapi:validate'])).rejects.toThrow(
+      'Multiple API definitions found in current directory. Please specify file.',
+    );
+    vi.unstubAllEnvs();
+  });
+
+  it('should handle an empty arg', () => {
+    return expect(run([' '])).rejects.toThrow('command undefined not found');
   });
 
   it('should validate file (file path in quotes)', () => {
