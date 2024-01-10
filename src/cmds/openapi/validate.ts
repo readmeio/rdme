@@ -8,7 +8,9 @@ import prepareOas from '../../lib/prepareOas.js';
 export default class OpenAPIValidateCommand extends BaseCommand<typeof OpenAPIValidateCommand> {
   static description = 'Validate your OpenAPI/Swagger definition.';
 
-  static hiddenAliases = ['validate'];
+  static aliases = ['validate'];
+
+  static deprecateAliases = true;
 
   static args = {
     spec: Args.string({ description: 'A file/URL to your API definition' }),
