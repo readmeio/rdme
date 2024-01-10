@@ -5,11 +5,6 @@ import BaseCommand from '../../lib/baseCommand.js';
 import { githubFlag, workingDirectoryFlag } from '../../lib/flags.js';
 import prepareOas from '../../lib/prepareOas.js';
 
-export interface Options {
-  spec?: string;
-  workingDirectory?: string;
-}
-
 export default class OpenAPIValidateCommand extends BaseCommand<typeof OpenAPIValidateCommand> {
   static description = 'Validate your OpenAPI/Swagger definition.';
 
