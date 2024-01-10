@@ -4,7 +4,7 @@ import { describe, beforeEach, it, expect } from 'vitest';
 
 import setupOclifConfig from '../helpers/setup-oclif-config.js';
 
-describe('rdme login', () => {
+describe('rdme docker-gha (single arg string from GitHub Actions runner)', () => {
   let oclifConfig: Config;
   let run: (args?: string[]) => Promise<unknown>;
 
