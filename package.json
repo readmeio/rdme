@@ -165,6 +165,24 @@
       "createGHA": [
         "./dist/lib/hooks/createGHA"
       ]
+    },
+    "plugins": [
+      "@oclif/plugin-autocomplete",
+      "@oclif/plugin-help"
+    ],
+    "topics": {
+      "categories": {
+        "description": "List or create categories in your ReadMe developer hub."
+      },
+      "docs": {
+        "description": "Sync or prune Guides pages in your ReadMe developer hub."
+      },
+      "openapi": {
+        "description": "Manage your API definition. Supports OpenAPI, Swagger, Postman."
+      },
+      "versions": {
+        "description": "Manage your documentation versions."
+      }
     }
   },
   "prettier": "@readme/eslint-config/prettier"
