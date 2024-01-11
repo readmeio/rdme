@@ -8,7 +8,7 @@
     "node": ">=18"
   },
   "bin": {
-    "rdme": "bin/rdme.js"
+    "rdme": "bin/run.js"
   },
   "keywords": [
     "api",
