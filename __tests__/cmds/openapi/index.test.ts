@@ -320,12 +320,12 @@ describe('rdme openapi', () => {
 
       await expect(openapi.run({ spec, key, version, raw: true })).resolves.toMatchInlineSnapshot(`
         "{
-          \\"commandType\\": \\"create\\",
-          \\"docs\\": \\"https://dash.readme.com/project/example-project/1.0.1/refs/ex\\",
-          \\"id\\": 1,
-          \\"specPath\\": \\"./__tests__/__fixtures__/ref-oas/petstore.json\\",
-          \\"specType\\": \\"OpenAPI\\",
-          \\"version\\": \\"1.0.0\\"
+          "commandType": "create",
+          "docs": "https://dash.readme.com/project/example-project/1.0.1/refs/ex",
+          "id": 1,
+          "specPath": "./__tests__/__fixtures__/ref-oas/petstore.json",
+          "specType": "OpenAPI",
+          "version": "1.0.0"
         }"
       `);
 

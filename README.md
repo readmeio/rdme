@@ -103,10 +103,11 @@ For local CLI usage with a single project, you can authenticate `rdme` to your R
 > [!WARNING]
 > For security reasons, we strongly recommend providing a project API key via the `--key` option in automations or CI environments (GitHub Actions, CircleCI, Travis CI, etc.). It's also recommended if you're working with multiple ReadMe projects to avoid accidentally overwriting existing data.
 
-You can also pass in your API key via the `RDME_API_KEY` environmental variable. Here is the order of precedence when passing your API key into `rdme`:
+You can also pass in your API key via environmental variable. Here is the order of precedence when passing your API key into `rdme`:
 
 1. The `--key` option. If that isn't present, we look for...
 1. The `RDME_API_KEY` environmental variable. If that isn't present, we look for...
+1. The `README_API_KEY` environmental variable. If that isn't present, we look for...
 1. The API key value stored in your local configuration file (i.e., the one set via `rdme login`)
 
 `rdme whoami` is also available to you to determine who is logged in, and to what project. You can clear your stored credentials with `rdme logout`.
@@ -185,7 +186,9 @@ This command also has a dry run mode, which can be useful for initial setup and 
 
 If you run `rdme` within a directory that contains your OpenAPI or Swagger definition, you can omit the file path. `rdme` will then look for JSON or YAML files (including in sub-directories) that contain a top-level [`openapi`](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#fixed-fields) or [`swagger`](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/2.0.md#fixed-fields) property.
 
-> [!NOTE] `rdme` will not scan anything in the following:
+> [!NOTE]
+>
+> `rdme` will not scan anything in the following:
 >
 > - Any `.git/` directories (if they exist)
 > - Any files/directories specified in `.gitignore` files (including any `.gitignore` files in subdirectories, if they exist)

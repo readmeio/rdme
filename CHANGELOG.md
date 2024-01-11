@@ -1,3 +1,24 @@
+# [9.0.0-next.9](https://github.com/readmeio/rdme/compare/v9.0.0-next.8...v9.0.0-next.9) (2024-01-09)
+
+
+### Bug Fixes
+
+* **openapi:** add spinner catch statement ([#961](https://github.com/readmeio/rdme/issues/961)) ([4669b29](https://github.com/readmeio/rdme/commit/4669b29120b27962b24a59a4cbacfcb792eaefc0))
+
+# [9.0.0-next.8](https://github.com/readmeio/rdme/compare/v9.0.0-next.7...v9.0.0-next.8) (2023-12-05)
+
+
+### Features
+
+* support `README_API_KEY` env var ([#950](https://github.com/readmeio/rdme/issues/950)) ([bcf3f18](https://github.com/readmeio/rdme/commit/bcf3f1872c0eb416d00a2d9ed434c040c9b7fbe9))
+
+# [9.0.0-next.7](https://github.com/readmeio/rdme/compare/v9.0.0-next.6...v9.0.0-next.7) (2023-11-21)
+
+
+### Features
+
+* **openapi/convert:** support openapi in convert command ([#941](https://github.com/readmeio/rdme/issues/941)) ([a33bbeb](https://github.com/readmeio/rdme/commit/a33bbeb1155095f20b01cda18f2c32e9c001b428))
+
 # [9.0.0-next.6](https://github.com/readmeio/rdme/compare/v9.0.0-next.5...v9.0.0-next.6) (2023-09-26)
 
 

@@ -2,6 +2,7 @@
 // @ts-check
 /* eslint-disable import/no-extraneous-dependencies */
 import fs from 'node:fs/promises';
+import path from 'node:path';
 
 // eslint-disable-next-line no-restricted-imports
 import fetch from 'node-fetch';
@@ -23,7 +24,8 @@ const files = [
  */
 async function refreshSchemas() {
   const isUpdate = process.argv.includes('--update');
-  const prettierConfig = await prettier.resolveConfig(process.cwd());
+  // grab prettier config from repo root
+  const prettierConfig = await prettier.resolveConfig(path.join(new URL('.', import.meta.url).pathname, '.'));
   try {
     await Promise.all(
       files.map(async file => {
