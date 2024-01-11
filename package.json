@@ -45,6 +45,7 @@
     "@oclif/core": "^3.16.0",
     "@oclif/plugin-autocomplete": "^3.0.5",
     "@oclif/plugin-help": "^6.0.10",
+    "@oclif/plugin-warn-if-update-available": "^3.0.9",
     "chalk": "^5.3.0",
     "ci-info": "^4.0.0",
     "configstore": "^6.0.0",
@@ -162,7 +163,8 @@
     },
     "plugins": [
       "@oclif/plugin-autocomplete",
-      "@oclif/plugin-help"
+      "@oclif/plugin-help",
+      "@oclif/plugin-warn-if-update-available"
     ],
     "topics": {
       "categories": {
