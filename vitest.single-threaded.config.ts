@@ -3,9 +3,6 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
-    coverage: {
-      reporter: 'text',
-    },
     exclude: ['**/dist/**', '**/node_modules/**', '**/__fixtures__/**', '**/helpers/**', '**/__snapshots__/**'],
     globalSetup: ['./__tests__/setup.js'],
     include: ['**/single-threaded/**'],
