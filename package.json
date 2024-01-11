@@ -38,6 +38,8 @@
   "dependencies": {
     "@actions/core": "^1.6.0",
     "@oclif/core": "^3.16.0",
+    "@oclif/plugin-autocomplete": "^3.0.5",
+    "@oclif/plugin-help": "^6.0.10",
     "chalk": "^5.3.0",
     "ci-info": "^4.0.0",
     "command-line-args": "^5.2.0",
@@ -150,6 +152,7 @@
     "dirname": "rdme",
     "commands": "./dist/cmds",
     "topicSeparator": ":",
+    "helpClass": "./dist/lib/help",
     "hooks": {
       "prerun": [
         "./dist/lib/hooks/prerun"
