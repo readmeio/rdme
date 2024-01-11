@@ -11,7 +11,6 @@ import prompts from 'prompts';
 import { describe, beforeAll, afterAll, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
 import APIError from '../../../src/lib/apiError.js';
-import configstore from '../../../src/lib/configstore.js';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
 import { after, before } from '../../helpers/get-gha-setup.js';
 import hashFileContents from '../../helpers/hash-file-contents.js';
