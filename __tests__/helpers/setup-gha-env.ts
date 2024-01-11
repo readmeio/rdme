@@ -21,9 +21,6 @@ export function before() {
   vi.stubEnv('TEST_RDME_CI', 'true');
   vi.stubEnv('TEST_RDME_GHA', 'true');
 
-  const isGHASpy = vi.spyOn(isCI, 'isGHA');
-  isGHASpy.mockReturnValue(true);
-
   const ciNameSpy = vi.spyOn(isCI, 'ciName');
   ciNameSpy.mockReturnValue('GitHub Actions (test)');
 }
