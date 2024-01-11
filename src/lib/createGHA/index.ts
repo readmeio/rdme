@@ -16,9 +16,9 @@ import { cleanFileName, validateFilePath } from '../validatePromptInput.js';
 
 import yamlBase from './baseFile.js';
 
-export type CommandArg = Record<string, Command.Arg.Cached>;
-export type CommandFlag = Record<string, Command.Flag.Cached>;
-export type ParsedOpts = Record<string, unknown>;
+type CommandArg = Record<string, Command.Arg.Cached>;
+type CommandFlag = Record<string, Command.Flag.Cached>;
+type ParsedOpts = Record<string, unknown>;
 
 /**
  * Generates the key for storing info in `configstore` object.
@@ -89,7 +89,7 @@ function constructCmdString(commandId: string, args: CommandArg, flags: CommandF
 /**
  * Function to return various git attributes needed for running GitHub Action
  */
-export async function getGitData(this: Hook.Context) {
+async function getGitData(this: Hook.Context) {
   // Expressions to search raw output of `git remote show origin`
   const headRegEx = /^ {2}HEAD branch: /g;
   const headLineRegEx = /^ {2}HEAD branch:.*/gm;

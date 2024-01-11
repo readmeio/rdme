@@ -88,7 +88,6 @@
     "@types/prompts": "^2.4.2",
     "@types/semver": "^7.3.12",
     "@types/validator": "^13.7.6",
-    "@vitest/coverage-v8": "^1.1.0",
     "@vitest/expect": "^1.1.0",
     "ajv": "^8.11.0",
     "alex": "^11.0.0",

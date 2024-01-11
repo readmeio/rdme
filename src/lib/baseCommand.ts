@@ -8,10 +8,8 @@ import { Command as OclifCommand } from '@oclif/core';
 
 import { isGHA, isTest } from './isCI.js';
 
-export type Flags<T extends typeof OclifCommand> = Interfaces.InferredFlags<
-  (typeof BaseCommand)['baseFlags'] & T['flags']
->;
-export type Args<T extends typeof OclifCommand> = Interfaces.InferredArgs<T['args']>;
+type Flags<T extends typeof OclifCommand> = Interfaces.InferredFlags<(typeof BaseCommand)['baseFlags'] & T['flags']>;
+type Args<T extends typeof OclifCommand> = Interfaces.InferredArgs<T['args']>;
 
 export default abstract class BaseCommand<T extends typeof OclifCommand> extends OclifCommand {
   constructor(argv: string[], config: Config) {
