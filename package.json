@@ -47,8 +47,6 @@
     "@oclif/plugin-help": "^6.0.10",
     "chalk": "^5.3.0",
     "ci-info": "^4.0.0",
-    "command-line-args": "^5.2.0",
-    "command-line-usage": "^7.0.1",
     "configstore": "^6.0.0",
     "debug": "^4.3.3",
     "formdata-node": "^6.0.3",
@@ -68,7 +66,6 @@
     "string-argv": "^0.3.1",
     "table": "^6.8.1",
     "tmp-promise": "^3.0.2",
-    "update-notifier": "^7.0.0",
     "validator": "^13.7.0"
   },
   "devDependencies": {
@@ -81,8 +78,6 @@
     "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-node-resolve": "^15.2.1",
     "@rollup/plugin-replace": "^5.0.2",
-    "@types/command-line-args": "^5.2.0",
-    "@types/command-line-usage": "^5.0.2",
     "@types/configstore": "^6.0.0",
     "@types/debug": "^4.1.7",
     "@types/js-yaml": "^4.0.5",
@@ -91,7 +86,6 @@
     "@types/pluralize": "^0.0.33",
     "@types/prompts": "^2.4.2",
     "@types/semver": "^7.3.12",
-    "@types/update-notifier": "^6.0.5",
     "@types/validator": "^13.7.6",
     "@vitest/coverage-v8": "^1.1.0",
     "@vitest/expect": "^1.1.0",
