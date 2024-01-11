@@ -23,8 +23,6 @@ export function before(writeFileSyncCb) {
     return Promise.resolve(true) as unknown as Response<boolean>;
   });
 
-  vi.useFakeTimers();
-
   git.remote = getGitRemoteMock();
 
   vi.setSystemTime(new Date('2022'));
@@ -42,5 +40,4 @@ export function after() {
   configstore.clear();
   vi.clearAllMocks();
   vi.unstubAllEnvs();
-  vi.useRealTimers();
 }
