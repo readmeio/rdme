@@ -1,3 +1,10 @@
+# [9.0.0-next.10](https://github.com/readmeio/rdme/compare/v9.0.0-next.9...v9.0.0-next.10) (2024-01-16)
+
+
+### Bug Fixes
+
+* Update LICENSE for 2024 ([#963](https://github.com/readmeio/rdme/issues/963)) ([23cf44b](https://github.com/readmeio/rdme/commit/23cf44b0daa3078d83a0ebb4050fb41f3340ed2d))
+
 # [9.0.0-next.9](https://github.com/readmeio/rdme/compare/v9.0.0-next.8...v9.0.0-next.9) (2024-01-09)
 
 
