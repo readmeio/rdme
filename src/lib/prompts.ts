@@ -184,7 +184,7 @@ export function versionPrompt(
       type: (prev, values) => {
         // if user wants this version to be the main version
         // it can't also be hidden.
-        return values.is_stable ? null : 'confirm';
+        return values.is_stable || existingVersion?.is_stable ? null : 'confirm';
       },
       name: 'is_hidden',
       message: 'Should this version be hidden?',
@@ -193,7 +193,7 @@ export function versionPrompt(
       type: (prev, values) => {
         // if user wants this version to be the main version
         // it can't also be deprecated.
-        return values.is_stable ? null : 'confirm';
+        return values.is_stable || existingVersion?.is_stable ? null : 'confirm';
       },
       name: 'is_deprecated',
       message: 'Should this version be deprecated?',
