@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`rdme openapi:inspect > feature reports > should generate a report for '@readme/oas-examples/3.0/json/readme.json' (w/ [ 'polymorphism' ]) 1`] = `
+exports[`rdme openapi:inspect > feature reports > should generate a report for '@readme/oas-examples/3.0/json/readme.…' (w/ [ 'polymorphism' ]) 1`] = `
 "
 polymorphism:
  · #/components/responses/authForbidden/content/application~1json/schema
@@ -50,7 +50,7 @@ polymorphism:
  · #/paths/~1version/post/responses/400/content/application~1json/schema"
 `;
 
-exports[`rdme openapi:inspect > feature reports > should generate a report for '@readme/oas-examples/3.0/json/readme-extensions.json' (w/ [ 'readme' ]) 1`] = `
+exports[`rdme openapi:inspect > feature reports > should generate a report for '@readme/oas-examples/3.0/json/readme-…' (w/ [ 'readme' ]) 1`] = `
 "
 x-default: You do not use this.
 x-readme.code-samples:
@@ -73,21 +73,7 @@ x-readme.samples-languages:
  · swift"
 `;
 
-exports[`rdme openapi:inspect > feature reports > should generate a report for '@readme/oas-examples/3.0/json/schema-circular.json' (w/ [ 'circularRefs', 'readme' ]) 1`] = `
-"
-circularRefs:
- · #/components/schemas/MultiPart/properties/parent
- · #/components/schemas/ZoneOffset/properties/rules
-
-x-default: You do not use this.
-x-readme.code-samples: You do not use this.
-x-readme.headers: You do not use this.
-x-readme.explorer-enabled: You do not use this.
-x-readme.proxy-enabled: You do not use this.
-x-readme.samples-languages: You do not use this."
-`;
-
-exports[`rdme openapi:inspect > feature reports > should generate a report for '@readme/oas-examples/3.0/json/schema-circular.json' (w/ [ Array(2) ]) 1`] = `
+exports[`rdme openapi:inspect > feature reports > should generate a report for '@readme/oas-examples/3.0/json/schema-…' (w/ [ 'additionalProperties', …(1) ]) 1`] = `
 "
 additionalProperties:
  · #/components/schemas/BodyPart/properties/headers/additionalProperties
@@ -108,7 +94,7 @@ circularRefs:
  · #/components/schemas/ZoneOffset/properties/rules"
 `;
 
-exports[`rdme openapi:inspect > feature reports > should generate a report for '@readme/oas-examples/3.0/json/schema-circular.json' (w/ [ Array(3) ]) 1`] = `
+exports[`rdme openapi:inspect > feature reports > should generate a report for '@readme/oas-examples/3.0/json/schema-…' (w/ [ 'additionalProperties', …(2) ]) 1`] = `
 "
 additionalProperties:
  · #/components/schemas/BodyPart/properties/headers/additionalProperties
@@ -124,6 +110,20 @@ additionalProperties:
  · #/components/schemas/MultiPart/properties/parameterizedHeaders/additionalProperties
  · #/components/schemas/ParameterizedHeader/properties/parameters/additionalProperties
 
+circularRefs:
+ · #/components/schemas/MultiPart/properties/parent
+ · #/components/schemas/ZoneOffset/properties/rules
+
+x-default: You do not use this.
+x-readme.code-samples: You do not use this.
+x-readme.headers: You do not use this.
+x-readme.explorer-enabled: You do not use this.
+x-readme.proxy-enabled: You do not use this.
+x-readme.samples-languages: You do not use this."
+`;
+
+exports[`rdme openapi:inspect > feature reports > should generate a report for '@readme/oas-examples/3.0/json/schema-…' (w/ [ 'circularRefs', 'readme' ]) 1`] = `
+"
 circularRefs:
  · #/components/schemas/MultiPart/properties/parent
  · #/components/schemas/ZoneOffset/properties/rules
