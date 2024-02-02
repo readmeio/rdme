@@ -90,6 +90,8 @@ describe('rdme versions:update', () => {
     mockRequest.done();
   });
 
+  it.todo('should use subset of prompts when updating stable version');
+
   it('should update a specific version object using flags', async () => {
     const versionToChange = '1.1.0';
     const renamedVersion = '1.1.0-update';
