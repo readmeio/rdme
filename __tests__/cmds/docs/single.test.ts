@@ -1,5 +1,3 @@
-import type { Response } from 'simple-git';
-
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -11,8 +9,8 @@ import { describe, beforeAll, afterAll, beforeEach, afterEach, it, expect, vi } 
 
 import DocsCommand from '../../../src/cmds/docs/index.js';
 import APIError from '../../../src/lib/apiError.js';
-import { git } from '../../../src/lib/createGHA/index.js';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
+import { gitDefaultMocks } from '../../helpers/get-git-mock.js';
 import hashFileContents from '../../helpers/hash-file-contents.js';
 import { after as afterGHAEnv, before as beforeGHAEnv } from '../../helpers/setup-gha-env.js';
 
@@ -31,13 +29,11 @@ describe('rdme docs (single)', () => {
   });
 
   beforeEach(() => {
-    git.checkIsRepo = vi.fn(() => {
-      return Promise.resolve(true) as unknown as Response<boolean>;
-    });
+    gitDefaultMocks();
+  });
 
-    git.remote = vi.fn(() => {
-      return Promise.resolve('origin') as unknown as Response<string>;
-    });
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   afterAll(() => nock.cleanAll());

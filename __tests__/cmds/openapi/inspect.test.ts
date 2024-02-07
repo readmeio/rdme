@@ -1,13 +1,22 @@
 /* eslint-disable vitest/no-conditional-expect */
 import assert from 'node:assert';
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
 import OpenAPIInspectCommand from '../../../src/cmds/openapi/inspect.js';
+import { gitDefaultMocks } from '../../helpers/get-git-mock.js';
 
 const analyzer = new OpenAPIInspectCommand();
 
 describe('rdme openapi:inspect', () => {
+  beforeEach(() => {
+    gitDefaultMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   describe('full reports', () => {
     it.each([
       '@readme/oas-examples/3.0/json/petstore.json',
