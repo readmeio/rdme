@@ -1,8 +1,11 @@
+import fsSync from 'node:fs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
 import chalk from 'chalk';
+import frontMatter from 'gray-matter';
 import { Headers } from 'node-fetch';
+import toposort from 'toposort';
 
 import APIError from './apiError.js';
 import Command, { CommandCategories } from './baseCommand.js';
@@ -127,6 +130,40 @@ async function pushDoc(
     });
 }
 
+function sortFiles(files: string[], { allowedFileExtensions }: { allowedFileExtensions: string[] }): string[] {
+  const extensionRegexp = new RegExp(`(${allowedFileExtensions.join('|')})$`);
+
+  const filesBySlug = files
+    .map(filePath => {
+      const doc = frontMatter(fsSync.readFileSync(filePath, 'utf8'));
+      const slug = path.basename(filePath).replace(extensionRegexp, '');
+      const parentDocSlug = doc.data.parentDocSlug;
+
+      return { filePath, slug, parentDocSlug };
+    })
+    .reduce(
+      (bySlug, obj) => {
+        // eslint-disable-next-line no-param-reassign
+        bySlug[obj.slug] = obj;
+        return bySlug;
+      },
+      {} as Record<string, { filePath: string; parentDocSlug: string; slug: string }>,
+    );
+
+  const dependencies = Object.values(filesBySlug).reduce(
+    (edges, obj) => {
+      if (obj.parentDocSlug) {
+        edges.push([filesBySlug[obj.parentDocSlug].filePath, filesBySlug[obj.slug].filePath]);
+      }
+
+      return edges;
+    },
+    [] as [string, string][],
+  );
+
+  return toposort.array(files, dependencies);
+}
+
 /**
  * Takes a path (either to a directory of files or to a single file)
  * and syncs those (either via POST or PUT) to ReadMe.
@@ -178,10 +215,24 @@ export default async function syncDocsPath(
         ),
       );
     }
+    let sortedFiles;
+
+    try {
+      sortedFiles = sortFiles(files, { allowedFileExtensions });
+    } catch (e) {
+      if (e.message.match(/Cyclic dependency/)) {
+        const filePath = e.message.replace(/^.*"(.*)"/, '$1');
+        return Promise.reject(
+          new Error(`Unable to resolve docs parent hierarchy. A cycle was found with: ${filePath}`),
+        );
+      }
+
+      return Promise.reject(e);
+    }
 
     output = (
       await Promise.all(
-        files.map(async filename => {
+        sortedFiles.map(async filename => {
           return pushDoc(key, selectedVersion, dryRun, filename, cmdType);
         }),
       )
