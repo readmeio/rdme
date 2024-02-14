@@ -6,11 +6,13 @@ import grayMatter from 'gray-matter';
 
 import { debug } from './logger.js';
 
-interface ReadDocMetadata {
+export interface ReadDocMetadata {
   /** The contents of the file below the YAML front matter */
   content: string;
   /** A JSON object with the YAML front matter */
   data: Record<string, unknown>;
+  /** The original filePath */
+  filePath: string;
   /**
    * A hash of the file contents (including the front matter)
    */
@@ -22,19 +24,19 @@ interface ReadDocMetadata {
 /**
  * Returns the content, matter and slug of the specified Markdown or HTML file
  *
- * @param {String} filepath path to the HTML/Markdown file
+ * @param {String} filePath path to the HTML/Markdown file
  *  (file extension must end in `.html`, `.md`., or `.markdown`)
  */
-export default function readDoc(filepath: string): ReadDocMetadata {
-  debug(`reading file ${filepath}`);
-  const rawFileContents = fs.readFileSync(filepath, 'utf8');
+export default function readDoc(filePath: string): ReadDocMetadata {
+  debug(`reading file ${filePath}`);
+  const rawFileContents = fs.readFileSync(filePath, 'utf8');
   const matter = grayMatter(rawFileContents);
   const { content, data } = matter;
-  debug(`front matter for ${filepath}: ${JSON.stringify(matter)}`);
+  debug(`front matter for ${filePath}: ${JSON.stringify(matter)}`);
 
   // Stripping the subdirectories and markdown extension from the filename and lowercasing to get the default slug.
-  const slug = matter.data.slug || path.basename(filepath).replace(path.extname(filepath), '').toLowerCase();
+  const slug = matter.data.slug || path.basename(filePath).replace(path.extname(filePath), '').toLowerCase();
 
   const hash = crypto.createHash('sha1').update(rawFileContents).digest('hex');
-  return { content, data, hash, slug };
+  return { content, data, filePath, hash, slug };
 }

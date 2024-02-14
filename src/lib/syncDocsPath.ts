@@ -1,9 +1,9 @@
-import fsSync from 'node:fs';
+import type { ReadDocMetadata } from './readDoc.js';
+
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
 import chalk from 'chalk';
-import frontMatter from 'gray-matter';
 import { Headers } from 'node-fetch';
 import toposort from 'toposort';
 
@@ -30,10 +30,10 @@ async function pushDoc(
   key: string,
   selectedVersion: string | undefined,
   dryRun: boolean,
-  filePath: string,
+  fileData: ReadDocMetadata,
   type: CommandCategories,
 ) {
-  const { content, data, hash, slug } = readDoc(filePath);
+  const { content, data, filePath, hash, slug } = fileData;
 
   // TODO: ideally we should offer a zero-configuration approach that doesn't
   // require YAML front matter, but that will have to be a breaking change
@@ -130,36 +130,24 @@ async function pushDoc(
     });
 }
 
-function sortFiles(files: string[], { allowedFileExtensions }: { allowedFileExtensions: string[] }): string[] {
-  const extensionRegexp = new RegExp(`(${allowedFileExtensions.join('|')})$`);
+const byParentDoc = (left: ReadDocMetadata, right: ReadDocMetadata) => {
+  return (right.data.parentDoc ? 1 : 0) - (left.data.parentDoc ? 1 : 0);
+};
 
-  const filesBySlug = files
-    .map(filePath => {
-      const doc = frontMatter(fsSync.readFileSync(filePath, 'utf8'));
-      const slug = path.basename(filePath).replace(extensionRegexp, '');
-      const parentDocSlug = doc.data.parentDocSlug;
+function sortFiles(filePaths: string[]): ReadDocMetadata[] {
+  const files = filePaths.map(readDoc).sort(byParentDoc);
+  const filesBySlug = files.reduce<Record<string, ReadDocMetadata>>((bySlug, obj) => {
+    // eslint-disable-next-line no-param-reassign
+    bySlug[obj.slug] = obj;
+    return bySlug;
+  }, {});
+  const dependencies = Object.values(filesBySlug).reduce<[ReadDocMetadata, ReadDocMetadata][]>((edges, obj) => {
+    if (obj.data.parentDocSlug && filesBySlug[obj.data.parentDocSlug as string]) {
+      edges.push([filesBySlug[obj.data.parentDocSlug as string], filesBySlug[obj.slug]]);
+    }
 
-      return { filePath, slug, parentDocSlug };
-    })
-    .reduce<Record<string, { filePath: string; parentDocSlug: string; slug: string }>>(
-      (bySlug, obj) => {
-        // eslint-disable-next-line no-param-reassign
-        bySlug[obj.slug] = obj;
-        return bySlug;
-      },
-      {},
-    );
-
-  const dependencies = Object.values(filesBySlug).reduce<[string, string][]>(
-    (edges, obj) => {
-      if (obj.parentDocSlug) {
-        edges.push([filesBySlug[obj.parentDocSlug].filePath, filesBySlug[obj.slug].filePath]);
-      }
-
-      return edges;
-    },
-    [],
-  );
+    return edges;
+  }, []);
 
   return toposort.array(files, dependencies);
 }
@@ -218,22 +206,15 @@ export default async function syncDocsPath(
     let sortedFiles;
 
     try {
-      sortedFiles = sortFiles(files, { allowedFileExtensions });
+      sortedFiles = sortFiles(files);
     } catch (e) {
-      if (e.message.match(/Cyclic dependency/)) {
-        const filePath = e.message.replace(/^.*"(.*)"/, '$1');
-        return Promise.reject(
-          new Error(`Unable to resolve docs parent hierarchy. A cycle was found with: ${filePath}`),
-        );
-      }
-
       return Promise.reject(e);
     }
 
     output = (
       await Promise.all(
-        sortedFiles.map(async filename => {
-          return pushDoc(key, selectedVersion, dryRun, filename, cmdType);
+        sortedFiles.map(async fileData => {
+          return pushDoc(key, selectedVersion, dryRun, fileData, cmdType);
         }),
       )
     ).join('\n');
@@ -248,7 +229,9 @@ export default async function syncDocsPath(
         ),
       );
     }
-    output = await pushDoc(key, selectedVersion, dryRun, pathInput, cmdType);
+
+    const fileData = readDoc(pathInput);
+    output = await pushDoc(key, selectedVersion, dryRun, fileData, cmdType);
   }
   return Promise.resolve(chalk.green(output));
 }
