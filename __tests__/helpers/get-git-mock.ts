@@ -2,8 +2,6 @@ import type { Response } from 'simple-git';
 
 import { vi } from 'vitest';
 
-import { git } from '../../src/lib/createGHA/index.js';
-
 /**
  * Creates a mock function for testing `git.remote`.
  *
@@ -46,15 +44,5 @@ origin  ${remoteUrl} (push)
     }
 
     return Promise.reject(new Error('Bad mock uh oh')) as unknown as Response<string>;
-  });
-}
-
-export function gitDefaultMocks() {
-  vi.spyOn(git, 'checkIsRepo').mockImplementation(() => {
-    return Promise.resolve(true) as unknown as Response<boolean>;
-  });
-
-  vi.spyOn(git, 'remote').mockImplementation(() => {
-    return Promise.resolve('origin') as unknown as Response<string>;
   });
 }

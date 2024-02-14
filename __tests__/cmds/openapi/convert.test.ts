@@ -1,24 +1,15 @@
 import fs from 'node:fs';
 
 import prompts from 'prompts';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 
 import OpenAPIConvertCommand from '../../../src/cmds/openapi/convert.js';
-import { gitDefaultMocks } from '../../helpers/get-git-mock.js';
 
 const convert = new OpenAPIConvertCommand();
 
 const successfulConversion = () => 'Your API definition has been converted and bundled and saved to output.json!';
 
 describe('rdme openapi:convert', () => {
-  beforeEach(() => {
-    gitDefaultMocks();
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
   describe('converting', () => {
     it.each([
       ['Swagger 2.0', 'json', '2.0'],

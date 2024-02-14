@@ -8,7 +8,6 @@ import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 import OpenAPIValidateCommand from '../../../src/cmds/openapi/validate.js';
 import ValidateAliasCommand from '../../../src/cmds/validate.js';
 import { after, before } from '../../helpers/get-gha-setup.js';
-import { gitDefaultMocks } from '../../helpers/get-git-mock.js';
 
 const validate = new OpenAPIValidateCommand();
 const validateAlias = new ValidateAliasCommand();
@@ -28,32 +27,22 @@ describe('rdme openapi:validate', () => {
     consoleSpy.mockRestore();
   });
 
-  describe('', () => {
-    beforeEach(() => {
-      gitDefaultMocks();
-    });
-
-    afterEach(() => {
-      vi.restoreAllMocks();
-    });
-
-    it.each([
-      ['Swagger 2.0', 'json', '2.0'],
-      ['Swagger 2.0', 'yaml', '2.0'],
-      ['OpenAPI 3.0', 'json', '3.0'],
-      ['OpenAPI 3.0', 'yaml', '3.0'],
-      ['OpenAPI 3.1', 'json', '3.1'],
-      ['OpenAPI 3.1', 'yaml', '3.1'],
-    ])('should support validating a %s definition (format: %s)', (_, format, specVersion) => {
-      expect(console.info).toHaveBeenCalledTimes(0);
-      return expect(
-        validate.run({
-          spec: require.resolve(`@readme/oas-examples/${specVersion}/${format}/petstore.${format}`),
-        }),
-      ).resolves.toContain(
-        `petstore.${format} is a valid ${specVersion === '2.0' ? 'Swagger' : 'OpenAPI'} API definition!`,
-      );
-    });
+  it.each([
+    ['Swagger 2.0', 'json', '2.0'],
+    ['Swagger 2.0', 'yaml', '2.0'],
+    ['OpenAPI 3.0', 'json', '3.0'],
+    ['OpenAPI 3.0', 'yaml', '3.0'],
+    ['OpenAPI 3.1', 'json', '3.1'],
+    ['OpenAPI 3.1', 'yaml', '3.1'],
+  ])('should support validating a %s definition (format: %s)', (_, format, specVersion) => {
+    expect(console.info).toHaveBeenCalledTimes(0);
+    return expect(
+      validate.run({
+        spec: require.resolve(`@readme/oas-examples/${specVersion}/${format}/petstore.${format}`),
+      }),
+    ).resolves.toContain(
+      `petstore.${format} is a valid ${specVersion === '2.0' ? 'Swagger' : 'OpenAPI'} API definition!`,
+    );
   });
 
   describe('error handling', () => {

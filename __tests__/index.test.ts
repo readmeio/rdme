@@ -7,7 +7,6 @@ import conf from '../src/lib/configstore.js';
 
 import getAPIMock from './helpers/get-api-mock.js';
 import { after, before } from './helpers/get-gha-setup.js';
-import { gitDefaultMocks } from './helpers/get-git-mock.js';
 
 const { version: pkgVersion } = pkg;
 
@@ -41,14 +40,6 @@ describe('cli', () => {
   });
 
   describe('single arg string from GitHub Actions runner', () => {
-    beforeEach(() => {
-      gitDefaultMocks();
-    });
-
-    afterEach(() => {
-      vi.restoreAllMocks();
-    });
-
     it('should return version from package.json for help command', () => {
       return expect(cli(['docker-gha', 'help --version'])).resolves.toBe(pkgVersion);
     });
@@ -93,14 +84,6 @@ describe('cli', () => {
   });
 
   describe('subcommands', () => {
-    beforeEach(() => {
-      gitDefaultMocks();
-    });
-
-    afterEach(() => {
-      vi.restoreAllMocks();
-    });
-
     it('should load subcommands from the folder', () => {
       return expect(
         cli(['openapi:validate', '__tests__/__fixtures__/petstore-simple-weird-version.json']),

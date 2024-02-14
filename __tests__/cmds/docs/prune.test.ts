@@ -1,11 +1,10 @@
 import nock from 'nock';
 import prompts from 'prompts';
-import { describe, beforeAll, beforeEach, afterEach, afterAll, it, expect, vi } from 'vitest';
+import { describe, beforeAll, afterAll, it, expect, vi } from 'vitest';
 
 import DocsPruneCommand from '../../../src/cmds/docs/prune.js';
 import GuidesPruneCommand from '../../../src/cmds/guides/prune.js';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
-import { gitDefaultMocks } from '../../helpers/get-git-mock.js';
 
 const docsPrune = new DocsPruneCommand();
 const guidesPrune = new GuidesPruneCommand();
@@ -20,15 +19,6 @@ describe('rdme docs:prune', () => {
 
   beforeAll(() => {
     nock.disableNetConnect();
-    gitDefaultMocks();
-  });
-
-  beforeEach(() => {
-    gitDefaultMocks();
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
   });
 
   afterAll(() => nock.cleanAll());

@@ -12,9 +12,9 @@ import DocsCommand from '../../../src/cmds/docs/index.js';
 import GuidesCommand from '../../../src/cmds/guides/index.js';
 import APIError from '../../../src/lib/apiError.js';
 import configstore from '../../../src/lib/configstore.js';
+import { git } from '../../../src/lib/createGHA/index.js';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
 import { after, before } from '../../helpers/get-gha-setup.js';
-import { gitDefaultMocks } from '../../helpers/get-git-mock.js';
 import hashFileContents from '../../helpers/hash-file-contents.js';
 import { after as afterGHAEnv, before as beforeGHAEnv } from '../../helpers/setup-gha-env.js';
 
@@ -106,6 +106,16 @@ describe('rdme docs', () => {
   });
 
   describe('existing docs', () => {
+    beforeEach(() => {
+      git.checkIsRepo = vi.fn(() => {
+        return Promise.resolve(true) as unknown as Response<boolean>;
+      });
+
+      git.remote = vi.fn(() => {
+        return Promise.resolve('origin') as unknown as Response<string>;
+      });
+    });
+
     let simpleDoc;
     let anotherDoc;
 
@@ -123,12 +133,6 @@ describe('rdme docs', () => {
         doc: frontMatter(fileContents),
         hash: hashFileContents(fileContents),
       };
-
-      gitDefaultMocks();
-    });
-
-    afterEach(() => {
-      vi.restoreAllMocks();
     });
 
     it('should fetch doc and merge with what is returned', () => {
@@ -283,13 +287,14 @@ describe('rdme docs', () => {
 
   describe('new docs', () => {
     beforeEach(() => {
-      gitDefaultMocks();
-    });
+      git.checkIsRepo = vi.fn(() => {
+        return Promise.resolve(true) as unknown as Response<boolean>;
+      });
 
-    afterEach(() => {
-      vi.restoreAllMocks();
+      git.remote = vi.fn(() => {
+        return Promise.resolve('origin') as unknown as Response<string>;
+      });
     });
-
     it('should create new doc', async () => {
       const slug = 'new-doc';
       const id = '1234';
@@ -408,13 +413,14 @@ describe('rdme docs', () => {
 
   describe('slug metadata', () => {
     beforeEach(() => {
-      gitDefaultMocks();
-    });
+      git.checkIsRepo = vi.fn(() => {
+        return Promise.resolve(true) as unknown as Response<boolean>;
+      });
 
-    afterEach(() => {
-      vi.restoreAllMocks();
+      git.remote = vi.fn(() => {
+        return Promise.resolve('origin') as unknown as Response<string>;
+      });
     });
-
     it('should use provided slug', async () => {
       const slug = 'new-doc-slug';
       const id = '1234';

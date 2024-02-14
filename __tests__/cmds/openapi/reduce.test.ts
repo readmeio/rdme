@@ -4,7 +4,6 @@ import prompts from 'prompts';
 import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
 import OpenAPIReduceCommand from '../../../src/cmds/openapi/reduce.js';
-import { gitDefaultMocks } from '../../helpers/get-git-mock.js';
 
 const reducer = new OpenAPIReduceCommand();
 
@@ -15,7 +14,6 @@ let consoleInfoSpy;
 describe('rdme openapi:reduce', () => {
   beforeEach(() => {
     consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
-    gitDefaultMocks();
   });
 
   afterEach(() => {

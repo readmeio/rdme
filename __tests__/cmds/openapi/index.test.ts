@@ -14,7 +14,6 @@ import config from '../../../src/lib/config.js';
 import petstoreWeird from '../../__fixtures__/petstore-simple-weird-version.json' assert { type: 'json' };
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
 import { after, before } from '../../helpers/get-gha-setup.js';
-import { gitDefaultMocks } from '../../helpers/get-git-mock.js';
 import { after as afterGHAEnv, before as beforeGHAEnv } from '../../helpers/setup-gha-env.js';
 
 const openapi = new OpenAPICommand();
@@ -60,7 +59,6 @@ describe('rdme openapi', () => {
   beforeEach(() => {
     consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    gitDefaultMocks();
   });
 
   afterEach(() => {
@@ -68,7 +66,6 @@ describe('rdme openapi', () => {
     consoleWarnSpy.mockRestore();
 
     nock.cleanAll();
-    vi.restoreAllMocks();
   });
 
   describe('upload', () => {
