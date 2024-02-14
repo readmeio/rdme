@@ -3,11 +3,10 @@ import path from 'node:path';
 
 import frontMatter from 'gray-matter';
 import nock from 'nock';
-import { describe, beforeAll, afterAll, beforeEach, afterEach, it, expect, vi } from 'vitest';
+import { describe, beforeAll, afterAll, afterEach, it, expect, vi } from 'vitest';
 
 import DocsCommand from '../../../src/cmds/docs/index.js';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
-import { gitDefaultMocks } from '../../helpers/get-git-mock.js';
 import hashFileContents from '../../helpers/hash-file-contents.js';
 
 const docs = new DocsCommand();
@@ -21,10 +20,6 @@ const version = '1.0.0';
 describe('rdme docs (multiple)', () => {
   beforeAll(() => {
     nock.disableNetConnect();
-  });
-
-  beforeEach(() => {
-    gitDefaultMocks();
   });
 
   afterEach(() => {
