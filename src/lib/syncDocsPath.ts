@@ -141,13 +141,13 @@ function sortFiles(files: string[], { allowedFileExtensions }: { allowedFileExte
 
       return { filePath, slug, parentDocSlug };
     })
-    .reduce(
+    .reduce<Record<string, { filePath: string; parentDocSlug: string; slug: string }>>(
       (bySlug, obj) => {
         // eslint-disable-next-line no-param-reassign
         bySlug[obj.slug] = obj;
         return bySlug;
       },
-      {} as Record<string, { filePath: string; parentDocSlug: string; slug: string }>,
+      {},
     );
 
   const dependencies = Object.values(filesBySlug).reduce(
