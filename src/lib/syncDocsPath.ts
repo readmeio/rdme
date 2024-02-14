@@ -150,7 +150,7 @@ function sortFiles(files: string[], { allowedFileExtensions }: { allowedFileExte
       {},
     );
 
-  const dependencies = Object.values(filesBySlug).reduce(
+  const dependencies = Object.values(filesBySlug).reduce<[string, string][]>(
     (edges, obj) => {
       if (obj.parentDocSlug) {
         edges.push([filesBySlug[obj.parentDocSlug].filePath, filesBySlug[obj.slug].filePath]);
@@ -158,7 +158,7 @@ function sortFiles(files: string[], { allowedFileExtensions }: { allowedFileExte
 
       return edges;
     },
-    [] as [string, string][],
+    [],
   );
 
   return toposort.array(files, dependencies);
