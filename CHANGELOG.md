@@ -1,3 +1,10 @@
+# [9.0.0-next.11](https://github.com/readmeio/rdme/compare/v9.0.0-next.10...v9.0.0-next.11) (2024-02-15)
+
+
+### Features
+
+* sort when syncing by parent ([#973](https://github.com/readmeio/rdme/issues/973)) ([9795840](https://github.com/readmeio/rdme/commit/97958402f80120e60a791e4b73f54d6f3c03595c))
+
 # [9.0.0-next.10](https://github.com/readmeio/rdme/compare/v9.0.0-next.9...v9.0.0-next.10) (2024-01-16)
 
 
