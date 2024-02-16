@@ -1,17 +1,17 @@
-import type { KnipConfig } from "knip";
+import type { KnipConfig } from 'knip';
 
-import pkg from "./package.json" assert { type: "json" };
+import pkg from './package.json' assert { type: 'json' };
 
 const config: KnipConfig = {
-  entry: ["src/cmds/**", "src/lib/hooks/*.ts", "src/lib/help.ts"],
-  ignore: ["bin/*.js"],
-  ignoreBinaries: ["ln", "semantic-release"],
+  entry: ['src/cmds/**', 'src/lib/hooks/*.ts', 'src/lib/help.ts'],
+  ignore: ['bin/*.js'],
+  ignoreBinaries: ['ln', 'semantic-release'],
   ignoreDependencies: [
     // used in husky commit hooks
-    "@commitlint/cli",
+    '@commitlint/cli',
     ...pkg.oclif.plugins,
-    "src",
-    "oclif",
+    'src',
+    'oclif',
   ],
 };
 
