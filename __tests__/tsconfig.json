@@ -4,7 +4,7 @@
     "noEmit": true,
     "rootDir": "..",
     "skipLibCheck": true,
-    "strict": false
+    "strict": false,
   },
-  "include": ["*.ts", "**/*"]
+  "include": ["*.ts", "**/*"],
 }

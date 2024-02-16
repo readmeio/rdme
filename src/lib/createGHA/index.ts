@@ -162,8 +162,8 @@ export default async function createGHA(
 
   // if in a CI environment,
   // don't even bother running the git commands
-  if (!parsedOpts.github && (isCI() || isNpmScript())) {
-    this.debug('not running GHA onboarding workflow in CI and/or npm script, exiting');
+  if (!parsedOpts.github && (isCI() || isNpmScript() || (isTest() && !process.env.TEST_RDME_CREATEGHA))) {
+    this.debug('not running GHA onboarding workflow in CI, npm script, or default test env, exiting 👋');
     return msg;
   }
 
@@ -182,9 +182,7 @@ export default async function createGHA(
       // user has previously declined to set up GHA for current repo and `rdme` package version
       configVal === majorPkgVersion ||
       // is a repo, but does not contain a GitHub remote
-      (isRepo && !containsGitHubRemote) ||
-      // not testing this function
-      (isTest() && !process.env.TEST_RDME_CREATEGHA)
+      (isRepo && !containsGitHubRemote)
     ) {
       this.debug('not running GHA onboarding workflow, exiting');
       // We return the original command message and pretend this command flow never happened.

@@ -1,3 +1,4 @@
+import type { ReadDocMetadata } from './readDoc.js';
 import type ChangelogsCommand from '../cmds/changelogs.js';
 import type CustomPagesCommand from '../cmds/custompages.js';
 import type DocsCommand from '../cmds/docs/index.js';
@@ -7,6 +8,7 @@ import path from 'node:path';
 
 import chalk from 'chalk';
 import { Headers } from 'node-fetch';
+import toposort from 'toposort';
 
 import APIError from './apiError.js';
 import readdirRecursive from './readdirRecursive.js';
@@ -28,16 +30,11 @@ async function pushDoc(
   this: PageCommand,
   /** the project version */
   selectedVersion: string | undefined,
-  /**
-   * path to a single file
-   * (**note**: path must be to a single file and NOT a directory)
-   */
-  filePath: string,
+  fileData: ReadDocMetadata,
 ) {
   const type: PageType = this.id;
   const { key, dryRun }: { dryRun: boolean; key: string } = this.flags;
-
-  const { content, data, hash, slug } = readDoc(filePath);
+  const { content, data, filePath, hash, slug } = fileData;
 
   // TODO: ideally we should offer a zero-configuration approach that doesn't
   // require YAML front matter, but that will have to be a breaking change
@@ -134,6 +131,28 @@ async function pushDoc(
     });
 }
 
+const byParentDoc = (left: ReadDocMetadata, right: ReadDocMetadata) => {
+  return (right.data.parentDoc ? 1 : 0) - (left.data.parentDoc ? 1 : 0);
+};
+
+function sortFiles(filePaths: string[]): ReadDocMetadata[] {
+  const files = filePaths.map(readDoc).sort(byParentDoc);
+  const filesBySlug = files.reduce<Record<string, ReadDocMetadata>>((bySlug, obj) => {
+    // eslint-disable-next-line no-param-reassign
+    bySlug[obj.slug] = obj;
+    return bySlug;
+  }, {});
+  const dependencies = Object.values(filesBySlug).reduce<[ReadDocMetadata, ReadDocMetadata][]>((edges, obj) => {
+    if (obj.data.parentDocSlug && filesBySlug[obj.data.parentDocSlug as string]) {
+      edges.push([filesBySlug[obj.data.parentDocSlug as string], filesBySlug[obj.slug]]);
+    }
+
+    return edges;
+  }, []);
+
+  return toposort.array(files, dependencies);
+}
+
 /**
  * Takes a path (either to a directory of files or to a single file)
  * and syncs those (either via POST or PUT) to ReadMe.
@@ -178,11 +197,18 @@ export default async function syncDocsPath(
         ),
       );
     }
+    let sortedFiles;
+
+    try {
+      sortedFiles = sortFiles(files);
+    } catch (e) {
+      return Promise.reject(e);
+    }
 
     output = (
       await Promise.all(
-        files.map(async filename => {
-          return pushDoc.call(this, selectedVersion, filename);
+        sortedFiles.map(async fileData => {
+          return pushDoc.call(this, selectedVersion, fileData);
         }),
       )
     ).join('\n');
@@ -197,7 +223,9 @@ export default async function syncDocsPath(
         ),
       );
     }
-    output = await pushDoc.call(this, selectedVersion, pathInput);
+
+    const fileData = readDoc(pathInput);
+    output = await pushDoc.call(this, selectedVersion, fileData);
   }
   return Promise.resolve(chalk.green(output));
 }
