@@ -39,6 +39,10 @@
   "bugs": {
     "url": "https://github.com/readmeio/rdme/issues"
   },
+  "pkg": {
+    "scripts": "dist/**/*.js",
+    "assets": "package.json"
+  },
   "type": "module",
   "dependencies": {
     "@actions/core": "^1.6.0",
@@ -113,6 +117,8 @@
     "build": "tsc",
     "build:exe": "npm run build && rollup -c && pkg dist/rollup-output.cjs --target host --output exe/rdme",
     "debug": "ts-node src/cli.ts",
+    "esbuild:cmds": "npx esbuild --format=cjs --target=node20 --platform=node --bundle --outfile=bundle-run.cjs bin/run.cjs",
+    "esbuild:oclif": "npx esbuild --format=cjs --target=node20 --platform=node --bundle --outfile=bundle-cmds.cjs dist/index.js",
     "lint": "alex . && knip && npm run lint:ts && npm run prettier && npm run schemas:check",
     "lint:ts": "eslint . --ext .js,.ts",
     "prebuild": "rm -rf dist/ && rm -f src/package.json && ln package.json src/package.json",
