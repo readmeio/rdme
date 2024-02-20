@@ -151,16 +151,22 @@
   "oclif": {
     "bin": "rdme",
     "dirname": "rdme",
-    "commands": "./dist/cmds",
+    "commands": {
+      "strategy": "explicit",
+      "target": "./dist/index.js",
+      "identifier": "COMMANDS"
+    },
     "topicSeparator": ":",
     "helpClass": "./dist/lib/help",
     "hooks": {
-      "prerun": [
-        "./dist/lib/hooks/prerun"
-      ],
-      "createGHA": [
-        "./dist/lib/hooks/createGHA"
-      ]
+      "prerun": {
+        "target": "./dist/index.js",
+        "identifier": "prerun"
+      },
+      "createGHA": {
+        "target": "./dist/index.js",
+        "identifier": "createGHA"
+      }
     },
     "plugins": [
       "@oclif/plugin-autocomplete",
