@@ -1,85 +1,61 @@
-import type { AuthenticatedCommandOptions } from '../../lib/baseCommand.js';
-
+import { Args, Flags } from '@oclif/core';
 import chalk from 'chalk';
 import prompts from 'prompts';
 
-import Command, { CommandCategories } from '../../lib/baseCommand.js';
-import config from '../../lib/config.js';
-import createGHA from '../../lib/createGHA/index.js';
+import BaseCommand from '../../lib/baseCommand.js';
 import deleteDoc from '../../lib/deleteDoc.js';
+import { githubFlag, keyFlag, versionFlag } from '../../lib/flags.js';
 import getDocs from '../../lib/getDocs.js';
 import promptTerminal from '../../lib/promptWrapper.js';
 import readdirRecursive from '../../lib/readdirRecursive.js';
 import readDoc from '../../lib/readDoc.js';
 import { getProjectVersion } from '../../lib/versionSelect.js';
 
-export interface Options {
-  confirm?: boolean;
-  dryRun?: boolean;
-  folder?: string;
-}
-
 function getSlug(filename: string): string {
   const { slug } = readDoc(filename);
   return slug;
 }
 
-export default class DocsPruneCommand extends Command {
-  constructor() {
-    super();
+export default class DocsPruneCommand extends BaseCommand<typeof DocsPruneCommand> {
+  static aliases = ['guides:prune'];
 
-    this.command = 'docs:prune';
-    this.usage = 'docs:prune <folder> [options]';
-    this.description = 'Delete any docs from ReadMe if their slugs are not found in the target folder.';
-    this.cmdCategory = CommandCategories.DOCS;
+  static description = 'Delete any docs from ReadMe if their slugs are not found in the target folder.';
 
-    this.hiddenArgs = ['folder'];
-    this.args = [
-      this.getKeyArg(),
-      this.getVersionArg(),
-      {
-        name: 'folder',
-        type: String,
-        defaultOption: true,
-      },
-      this.getGitHubArg(),
-      {
-        name: 'confirm',
-        type: Boolean,
-        description: 'Bypass the confirmation prompt. Useful for CI environments.',
-      },
-      {
-        name: 'dryRun',
-        type: Boolean,
-        description: 'Runs the command without creating/updating any docs in ReadMe. Useful for debugging.',
-      },
-    ];
-  }
+  static args = {
+    folder: Args.string({ description: 'A local folder containing the files you wish to prune.', required: true }),
+  };
 
-  async run(opts: AuthenticatedCommandOptions<Options>) {
-    await super.run(opts);
+  static flags = {
+    key: keyFlag,
+    version: versionFlag,
+    github: githubFlag,
+    confirm: Flags.boolean({
+      description: 'Bypass the confirmation prompt. Useful for CI environments.',
+    }),
+    dryRun: Flags.boolean({
+      description: 'Runs the command without deleting any docs in ReadMe. Useful for debugging.',
+    }),
+  };
 
-    const { dryRun, folder, key, version } = opts;
-
-    if (!folder) {
-      return Promise.reject(new Error(`No folder provided. Usage \`${config.cli} ${this.usage}\`.`));
-    }
+  async run() {
+    const { folder } = this.args;
+    const { dryRun, key, version } = this.flags;
 
     // TODO: should we allow version selection at all here?
     // Let's revisit this once we re-evaluate our category logic in the API.
     // Ideally we should ignore this parameter entirely if the category is included.
     const selectedVersion = await getProjectVersion(version, key);
 
-    Command.debug(`selectedVersion: ${selectedVersion}`);
+    this.debug(`selectedVersion: ${selectedVersion}`);
 
     // Strip out non-markdown files
     const files = readdirRecursive(folder).filter(
       file => file.toLowerCase().endsWith('.md') || file.toLowerCase().endsWith('.markdown'),
     );
 
-    Command.debug(`number of files: ${files.length}`);
+    this.debug(`number of files: ${files.length}`);
 
-    prompts.override(opts);
+    prompts.override({ confirm: this.flags.confirm });
 
     const { confirm } = await promptTerminal({
       type: 'confirm',
@@ -96,11 +72,12 @@ export default class DocsPruneCommand extends Command {
     const fileSlugs = new Set(files.map(getSlug));
     const slugsToDelete = docSlugs.filter((slug: string) => !fileSlugs.has(slug));
     const deletedDocs = await Promise.all(
-      slugsToDelete.map((slug: string) => deleteDoc(key, selectedVersion, dryRun, slug, this.cmdCategory)),
+      slugsToDelete.map((slug: string) => deleteDoc(key, selectedVersion, dryRun, slug)),
     );
 
-    return Promise.resolve(chalk.green(deletedDocs.join('\n'))).then(msg =>
-      createGHA(msg, this.command, this.args, { ...opts, version: selectedVersion }),
-    );
+    return this.runCreateGHAHook({
+      result: chalk.green(deletedDocs.join('\n')),
+      parsedOpts: { ...this.args, ...this.flags, version: selectedVersion, confirm: true },
+    });
   }
 }

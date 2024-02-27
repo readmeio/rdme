@@ -1,17 +1,21 @@
+import type { Config } from '@oclif/core';
+
 import fs from 'node:fs';
 
 import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 
-import OpenAPIConvertCommand from '../../../src/cmds/openapi/convert.js';
-
-const convert = new OpenAPIConvertCommand();
+import setupOclifConfig from '../../helpers/setup-oclif-config.js';
 
 const successfulConversion = () => 'Your API definition has been converted and bundled and saved to output.json!';
 
 describe('rdme openapi:convert (single-threaded)', () => {
+  let oclifConfig: Config;
+  let run: (args?: string[]) => Promise<unknown>;
   let testWorkingDir: string;
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    oclifConfig = await setupOclifConfig();
+    run = (args?: string[]) => oclifConfig.runCommand('openapi:convert', args);
     testWorkingDir = process.cwd();
   });
 
@@ -31,11 +35,13 @@ describe('rdme openapi:convert (single-threaded)', () => {
       });
 
       await expect(
-        convert.run({
+        run([
           spec,
-          workingDirectory: require.resolve(`@readme/oas-examples/2.0/json/${spec}`).replace(spec, ''),
-          out: 'output.json',
-        }),
+          '--workingDirectory',
+          require.resolve(`@readme/oas-examples/2.0/json/${spec}`).replace(spec, ''),
+          '--out',
+          'output.json',
+        ]),
       ).resolves.toBe(successfulConversion());
 
       expect(fs.writeFileSync).toHaveBeenCalledWith('output.json', expect.any(String));

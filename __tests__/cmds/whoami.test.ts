@@ -1,12 +1,19 @@
-import { describe, afterEach, it, expect } from 'vitest';
+import type { Config } from '@oclif/core';
 
-import Command from '../../src/cmds/whoami.js';
-import config from '../../src/lib/config.js';
+import { describe, afterEach, it, expect, beforeEach } from 'vitest';
+
 import configStore from '../../src/lib/configstore.js';
-
-const cmd = new Command();
+import setupOclifConfig from '../helpers/setup-oclif-config.js';
 
 describe('rdme whoami', () => {
+  let oclifConfig: Config;
+  let run: (args?: string[]) => Promise<unknown>;
+
+  beforeEach(async () => {
+    oclifConfig = await setupOclifConfig();
+    run = (args?: string[]) => oclifConfig.runCommand('whoami', args);
+  });
+
   afterEach(() => {
     configStore.clear();
   });
@@ -15,13 +22,13 @@ describe('rdme whoami', () => {
     configStore.delete('email');
     configStore.delete('project');
 
-    return expect(cmd.run({})).rejects.toStrictEqual(new Error(`Please login using \`${config.cli} login\`.`));
+    return expect(run()).rejects.toStrictEqual(new Error(`Please login using \`${oclifConfig.bin} login\`.`));
   });
 
   it('should return the authenticated user', () => {
     configStore.set('email', 'email@example.com');
     configStore.set('project', 'subdomain');
 
-    return expect(cmd.run({})).resolves.toMatchSnapshot();
+    return expect(run()).resolves.toMatchSnapshot();
   });
 });

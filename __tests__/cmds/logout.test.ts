@@ -1,12 +1,19 @@
-import { describe, afterEach, it, expect } from 'vitest';
+import type { Config } from '@oclif/core';
 
-import Command from '../../src/cmds/logout.js';
-import config from '../../src/lib/config.js';
+import { describe, afterEach, beforeEach, it, expect } from 'vitest';
+
 import configStore from '../../src/lib/configstore.js';
-
-const cmd = new Command();
+import setupOclifConfig from '../helpers/setup-oclif-config.js';
 
 describe('rdme logout', () => {
+  let oclifConfig: Config;
+  let run: (args?: string[]) => Promise<unknown>;
+
+  beforeEach(async () => {
+    oclifConfig = await setupOclifConfig();
+    run = (args?: string[]) => oclifConfig.runCommand('logout', args);
+  });
+
   afterEach(() => {
     configStore.clear();
   });
@@ -15,8 +22,8 @@ describe('rdme logout', () => {
     configStore.delete('email');
     configStore.delete('project');
 
-    return expect(cmd.run({})).resolves.toBe(
-      `You have logged out of ReadMe. Please use \`${config.cli} login\` to login again.`,
+    return expect(run()).resolves.toBe(
+      `You have logged out of ReadMe. Please use \`${oclifConfig.bin} login\` to login again.`,
     );
   });
 
@@ -24,8 +31,8 @@ describe('rdme logout', () => {
     configStore.set('email', 'email@example.com');
     configStore.set('project', 'subdomain');
 
-    await expect(cmd.run({})).resolves.toBe(
-      `You have logged out of ReadMe. Please use \`${config.cli} login\` to login again.`,
+    await expect(run()).resolves.toBe(
+      `You have logged out of ReadMe. Please use \`${oclifConfig.bin} login\` to login again.`,
     );
 
     expect(configStore.get('email')).toBeUndefined();

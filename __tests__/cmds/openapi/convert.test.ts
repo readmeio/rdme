@@ -1,15 +1,23 @@
+import type { Config } from '@oclif/core';
+
 import fs from 'node:fs';
 
 import prompts from 'prompts';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-import OpenAPIConvertCommand from '../../../src/cmds/openapi/convert.js';
-
-const convert = new OpenAPIConvertCommand();
+import setupOclifConfig from '../../helpers/setup-oclif-config.js';
 
 const successfulConversion = () => 'Your API definition has been converted and bundled and saved to output.json!';
 
 describe('rdme openapi:convert', () => {
+  let oclifConfig: Config;
+  let run: (args?: string[]) => Promise<unknown>;
+
+  beforeEach(async () => {
+    oclifConfig = await setupOclifConfig();
+    run = (args?: string[]) => oclifConfig.runCommand('openapi:convert', args);
+  });
+
   describe('converting', () => {
     it.each([
       ['Swagger 2.0', 'json', '2.0'],
@@ -24,11 +32,7 @@ describe('rdme openapi:convert', () => {
 
       prompts.inject(['output.json']);
 
-      await expect(
-        convert.run({
-          spec,
-        }),
-      ).resolves.toBe(successfulConversion());
+      await expect(run([spec])).resolves.toBe(successfulConversion());
 
       expect(fs.writeFileSync).toHaveBeenCalledWith('output.json', expect.any(String));
       expect(reducedSpec.tags).toHaveLength(1);
@@ -41,8 +45,6 @@ describe('rdme openapi:convert', () => {
     it.each([['json'], ['yaml']])('should fail if given an OpenAPI 3.0 definition (format: %s)', async format => {
       const spec = require.resolve(`@readme/oas-examples/3.0/${format}/petstore.${format}`);
 
-      const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-
       let reducedSpec;
       fs.writeFileSync = vi.fn((fileName, data) => {
         reducedSpec = JSON.parse(data as string);
@@ -50,11 +52,7 @@ describe('rdme openapi:convert', () => {
 
       prompts.inject(['output.json']);
 
-      await expect(
-        convert.run({
-          spec,
-        }),
-      ).resolves.toBe(successfulConversion());
+      await expect(run([spec])).resolves.toBe(successfulConversion());
 
       expect(fs.writeFileSync).toHaveBeenCalledWith('output.json', expect.any(String));
       expect(reducedSpec.tags).toHaveLength(3);
@@ -75,11 +73,6 @@ describe('rdme openapi:convert', () => {
         '/user/{username}',
       ]);
       expect(Object.keys(reducedSpec.paths['/pet/{petId}'])).toStrictEqual(['get', 'post', 'delete']);
-      expect(consoleWarnSpy).toHaveBeenCalledWith(
-        '⚠️  Warning! The input file is already OpenAPI, so no conversion is necessary. Any external references will be bundled.',
-      );
-
-      consoleWarnSpy.mockRestore();
     });
   });
 });

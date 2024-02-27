@@ -1,14 +1,14 @@
 /* eslint-disable no-console */
+import type { Config } from '@oclif/core';
+
 import fs from 'node:fs';
 
 import chalk from 'chalk';
 import prompts from 'prompts';
 import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
-import OpenAPIValidateCommand from '../../../src/cmds/openapi/validate.js';
 import { after, before } from '../../helpers/get-gha-setup.js';
-
-const validate = new OpenAPIValidateCommand();
+import setupOclifConfig from '../../helpers/setup-oclif-config.js';
 
 let consoleSpy;
 
@@ -17,10 +17,15 @@ const getCommandOutput = () => {
 };
 
 describe('rdme openapi:validate (single-threaded)', () => {
+  let oclifConfig: Config;
+  let run: (args?: string[]) => Promise<unknown>;
   let testWorkingDir: string;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     consoleSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
+    oclifConfig = await setupOclifConfig();
+    run = (args?: string[]) => oclifConfig.runCommand('openapi:validate', args);
+
     testWorkingDir = process.cwd();
   });
 
@@ -31,7 +36,7 @@ describe('rdme openapi:validate (single-threaded)', () => {
   });
 
   it('should discover and upload an API definition if none is provided', async () => {
-    await expect(validate.run({ workingDirectory: './__tests__/__fixtures__/relative-ref-oas' })).resolves.toBe(
+    await expect(run(['--workingDirectory', './__tests__/__fixtures__/relative-ref-oas'])).resolves.toBe(
       chalk.green('petstore.json is a valid OpenAPI API definition!'),
     );
 
@@ -44,15 +49,12 @@ describe('rdme openapi:validate (single-threaded)', () => {
   it('should select spec in prompt and validate it', async () => {
     const spec = '__tests__/__fixtures__/petstore-simple-weird-version.json';
     prompts.inject([spec]);
-    await expect(validate.run({})).resolves.toBe(chalk.green(`${spec} is a valid OpenAPI API definition!`));
+    await expect(run()).resolves.toBe(chalk.green(`${spec} is a valid OpenAPI API definition!`));
   });
 
   it('should use specified working directory', () => {
     return expect(
-      validate.run({
-        spec: 'petstore.json',
-        workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-      }),
+      run(['petstore.json', '--workingDirectory', './__tests__/__fixtures__/relative-ref-oas']),
     ).resolves.toBe(chalk.green('petstore.json is a valid OpenAPI API definition!'));
   });
 
@@ -62,11 +64,9 @@ describe('rdme openapi:validate (single-threaded)', () => {
       './__tests__/__fixtures__/nested-gitignored-oas/nest/petstore-ignored.json',
     );
 
-    return expect(
-      validate.run({
-        workingDirectory: './__tests__/__fixtures__/nested-gitignored-oas',
-      }),
-    ).resolves.toBe(chalk.green('nest/petstore.json is a valid OpenAPI API definition!'));
+    return expect(run(['--workingDirectory', './__tests__/__fixtures__/nested-gitignored-oas'])).resolves.toBe(
+      chalk.green('nest/petstore.json is a valid OpenAPI API definition!'),
+    );
   });
 
   describe('GHA onboarding E2E tests', () => {
@@ -89,7 +89,7 @@ describe('rdme openapi:validate (single-threaded)', () => {
       prompts.inject([true, 'validate-test-opt-spec-github-branch', fileName]);
 
       await expect(
-        validate.run({ spec, workingDirectory: './__tests__/__fixtures__/relative-ref-oas' }),
+        run([spec, '--workingDirectory', './__tests__/__fixtures__/relative-ref-oas']),
       ).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();

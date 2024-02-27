@@ -1,84 +1,50 @@
-import type { ZeroAuthCommandOptions } from '../../lib/baseCommand.js';
 import type { OASDocument } from 'oas/types';
 
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { Args, Flags } from '@oclif/core';
 import chalk from 'chalk';
 import Oas from 'oas';
 import oasReducer from 'oas/reducer';
 import ora from 'ora';
 import prompts from 'prompts';
 
-import Command, { CommandCategories } from '../../lib/baseCommand.js';
+import BaseCommand from '../../lib/baseCommand.js';
+import { titleFlag, workingDirectoryFlag } from '../../lib/flags.js';
 import { oraOptions } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
 import { validateFilePath } from '../../lib/validatePromptInput.js';
 
-interface Options {
-  method?: string[];
-  out?: string;
-  path?: string[];
-  spec?: string;
-  tag?: string[];
-  title?: string;
-  workingDirectory?: string;
-}
+export default class OpenAPIReduceCommand extends BaseCommand<typeof OpenAPIReduceCommand> {
+  static description = 'Reduce an OpenAPI definition into a smaller subset.';
 
-export default class OpenAPIReduceCommand extends Command {
-  constructor() {
-    super();
+  static args = {
+    spec: Args.string({ description: 'A file/URL to your API definition' }),
+  };
 
-    this.command = 'openapi:reduce';
-    this.usage = 'openapi:reduce [file|url] [options]';
-    this.description = 'Reduce an OpenAPI definition into a smaller subset.';
-    this.cmdCategory = CommandCategories.APIS;
+  static flags = {
+    method: Flags.string({
+      description: 'Methods to reduce by (can only be used alongside the `path` option)',
+      multiple: true,
+    }),
+    out: Flags.string({ description: 'Output file path to write reduced file to' }),
+    path: Flags.string({ description: 'Paths to reduce by', multiple: true }),
+    tag: Flags.string({ description: 'Tags to reduce by', multiple: true }),
+    title: titleFlag,
+    workingDirectory: workingDirectoryFlag,
+  };
 
-    this.hiddenArgs = ['spec'];
-    this.args = [
-      {
-        name: 'spec',
-        type: String,
-        defaultOption: true,
-      },
-      {
-        name: 'tag',
-        type: String,
-        multiple: true,
-        description: 'Tags to reduce by',
-      },
-      {
-        name: 'path',
-        type: String,
-        multiple: true,
-        description: 'Paths to reduce by',
-      },
-      {
-        name: 'method',
-        type: String,
-        multiple: true,
-        description: 'Methods to reduce by (can only be used alongside the `path` option)',
-      },
-      {
-        name: 'out',
-        type: String,
-        description: 'Output file path to write reduced file to',
-      },
-      this.getTitleArg(),
-      this.getWorkingDirArg(),
-    ];
-  }
-
-  async run(opts: ZeroAuthCommandOptions<Options>) {
-    await super.run(opts);
-
-    const { spec, title, workingDirectory } = opts;
+  async run() {
+    const { spec } = this.args;
+    const opts = this.flags;
+    const { title, workingDirectory } = opts;
 
     if (workingDirectory) {
       const previousWorkingDirectory = process.cwd();
       process.chdir(workingDirectory);
-      Command.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
+      this.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
     }
 
     const { preparedSpec, specPath, specType } = await prepareOas(spec, 'openapi:reduce', { title });
@@ -176,8 +142,8 @@ export default class OpenAPIReduceCommand extends Command {
       },
     ]);
 
-    Command.debug(`reducing by ${promptResults.reduceBy}`);
-    Command.debug(
+    this.debug(`reducing by ${promptResults.reduceBy}`);
+    this.debug(
       `options being supplied to the reducer: ${JSON.stringify({
         tags: promptResults.tags,
         paths: promptResults.paths,
@@ -185,7 +151,7 @@ export default class OpenAPIReduceCommand extends Command {
       })}`,
     );
 
-    Command.debug(`about to reduce spec located at ${specPath}`);
+    this.debug(`about to reduce spec located at ${specPath}`);
 
     const spinner = ora({ ...oraOptions() });
     spinner.start('Reducing your API definition...');
@@ -203,16 +169,16 @@ export default class OpenAPIReduceCommand extends Command {
 
       spinner.succeed(`${spinner.text} done! ✅`);
     } catch (err) {
-      Command.debug(`reducer err: ${err.message}`);
+      this.debug(`reducer err: ${err.message}`);
       spinner.fail();
       throw err;
     }
 
-    Command.debug(`saving reduced spec to ${promptResults.outputPath}`);
+    this.debug(`saving reduced spec to ${promptResults.outputPath}`);
 
     fs.writeFileSync(promptResults.outputPath, JSON.stringify(reducedSpec, null, 2));
 
-    Command.debug('reduced spec saved');
+    this.debug('reduced spec saved');
 
     return Promise.resolve(
       chalk.green(`Your reduced API definition has been saved to ${promptResults.outputPath}! 🤏`),

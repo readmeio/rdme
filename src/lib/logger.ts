@@ -5,10 +5,9 @@ import * as core from '@actions/core';
 import chalk from 'chalk';
 import debugModule from 'debug';
 
-import config from './config.js';
 import { isGHA, isTest } from './isCI.js';
 
-const debugPackage = debugModule(config.cli);
+const debugPackage = debugModule('rdme');
 
 /**
  * Wrapper for debug statements.

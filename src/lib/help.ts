@@ -1,29 +1,15 @@
-import type Command from './baseCommand.js';
-import type { Section } from 'command-line-usage';
+import type { Config } from '@oclif/core';
+import type { HelpOptions } from '@oclif/core/lib/interfaces/help.js';
 
+import { Help } from '@oclif/core';
+import { colorize } from '@oclif/core/lib/cli-ux/theme.js';
 import chalk from 'chalk';
-import usage from 'command-line-usage';
 
-import * as commands from './commands.js';
-import config from './config.js';
-
-function formatCommands(cmds: { description: string; hidden: boolean; name: string }[]) {
-  return cmds
-    .sort((a, b) => (a.name > b.name ? 1 : -1))
-    .filter(command => !command.hidden)
-    .map(command => {
-      return {
-        name: `${chalk.grey('$')} ${config.cli} ${command.name}`,
-        summary: command.description,
-      };
-    });
-}
-
-const owlbert = () => {
+function owlbert(this: CustomHelpClass) {
   // http://asciiart.club
-  return `                  📖 ${chalk.blue.bold(config.cli)}
+  return `                  📖 ${chalk.blue.bold(this.config.bin)}
 
-    ${chalk.bold('a utility for interacting with ReadMe')}
+    ${chalk.bold(this.config.pjson.description)}
        .
        .\\\\                          /.
       ’  ‘                        ‘ ‘
@@ -46,90 +32,31 @@ const owlbert = () => {
  READ(nn*’                      ‘mmm.MEEE)
   ‘READn’  \\\\._./  \\\\__./  \\\\.../     ‘MEE*’
        *                           /*`;
-};
+}
 
-/* : {
-    content?: string;
-    header?: string;
-    optionList?: Command.args[];
-    raw?: boolean;
-  }[] */
-
-function commandUsage(cmd: Command) {
-  const helpContent: Section[] = [
-    {
-      content: cmd.description,
-      raw: true,
-    },
-    {
-      header: 'Usage',
-      content: `${config.cli} ${cmd.usage}`,
-    },
-    {
-      header: 'Options',
-      optionList: [...cmd.args].concat([
-        {
-          name: 'help',
-          alias: 'h',
-          type: Boolean,
-          description: 'Display this usage guide',
-        },
-      ]),
-      hide: cmd.hiddenArgs || [],
-    },
-  ];
-
-  const similarCommands = commands.getSimilar(cmd.cmdCategory, cmd.command);
-  if (similarCommands.length) {
-    helpContent.push({
-      header: 'Related commands',
-      content: formatCommands(similarCommands),
-    });
+// Oclif docs on customizing the help class: https://oclif.io/docs/help_classes/
+export default class CustomHelpClass extends Help {
+  constructor(config: Config) {
+    const opts: Partial<HelpOptions> = {
+      hideAliasesFromRoot: true,
+    };
+    super(config, opts);
   }
 
-  return usage(helpContent);
+  formatRoot() {
+    return [
+      '',
+      owlbert.call(this),
+      '',
+      this.section('VERSION', this.config.userAgent),
+      '',
+      this.section(
+        'USAGE',
+        `${colorize(this.config?.theme?.dollarSign, '$')} ${colorize(
+          this.config?.theme?.bin,
+          this.config.bin,
+        )} [COMMAND]`,
+      ),
+    ].join('\n');
+  }
 }
-
-async function globalUsage(args: Command['args']) {
-  const helpContent: Section[] = [
-    {
-      content: owlbert(),
-      raw: true,
-    },
-    {
-      header: 'Usage',
-      content: `${config.cli} <command> [arguments]`,
-    },
-    {
-      header: 'Options',
-      optionList: args,
-      hide: ['command'],
-    },
-  ];
-
-  const categories = commands.listByCategory();
-
-  Object.keys(categories).forEach((key: keyof typeof categories) => {
-    const category = categories[key];
-
-    helpContent.push({
-      header: category.description,
-      content: formatCommands(category.commands),
-    });
-  });
-
-  helpContent.push(
-    {
-      content: `Run ${chalk.dim(`${config.cli} help <command>`)} for help with a specific command.`,
-      raw: true,
-    },
-    {
-      content: 'To get more help with ReadMe, check out our docs at https://docs.readme.com.',
-      raw: true,
-    },
-  );
-
-  return usage(helpContent);
-}
-
-export { commandUsage, globalUsage };

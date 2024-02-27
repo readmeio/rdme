@@ -1,19 +1,18 @@
+import type { Config } from '@oclif/core';
+
 import fs from 'node:fs';
 import path from 'node:path';
 
 import chalk from 'chalk';
 import frontMatter from 'gray-matter';
 import nock from 'nock';
-import prompts from 'prompts';
-import { describe, beforeAll, afterAll, beforeEach, afterEach, it, expect, vi } from 'vitest';
+import { describe, beforeAll, afterAll, beforeEach, afterEach, it, expect } from 'vitest';
 
-import DocsCommand from '../../../src/cmds/docs/index.js';
 import APIError from '../../../src/lib/apiError.js';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
 import hashFileContents from '../../helpers/hash-file-contents.js';
 import { after as afterGHAEnv, before as beforeGHAEnv } from '../../helpers/setup-gha-env.js';
-
-const docs = new DocsCommand();
+import setupOclifConfig from '../../helpers/setup-oclif-config.js';
 
 const fixturesBaseDir = '__fixtures__/docs';
 const fullFixturesDir = `${__dirname}./../../${fixturesBaseDir}`;
@@ -23,34 +22,28 @@ const version = '1.0.0';
 const category = 'CATEGORY_ID';
 
 describe('rdme docs (single)', () => {
+  let oclifConfig: Config;
+  let run: (args?: string[]) => Promise<unknown>;
+
   beforeAll(() => {
     nock.disableNetConnect();
   });
 
-  afterAll(() => nock.cleanAll());
-
-  it('should prompt for login if no API key provided', async () => {
-    const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
-    prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
-    // @ts-expect-error deliberately passing in bad data
-    await expect(docs.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
-    consoleInfoSpy.mockRestore();
+  beforeEach(async () => {
+    oclifConfig = await setupOclifConfig();
+    run = (args?: string[]) => oclifConfig.runCommand('docs', args);
   });
 
-  it('should error if no file path provided', async () => {
-    const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
+  afterAll(() => nock.cleanAll());
 
-    await expect(docs.run({ key, version })).rejects.toStrictEqual(
-      new Error('No path provided. Usage `rdme docs <path> [options]`.'),
-    );
-
-    versionMock.done();
+  it('should error if no file path provided', () => {
+    return expect(run(['--key', key, '--version', version])).rejects.toThrow('Missing 1 required arg:\npath');
   });
 
   it('should error if the argument is not a Markdown file', async () => {
     const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
-    await expect(docs.run({ key, version, filePath: 'not-a-markdown-file' })).rejects.toStrictEqual(
+    await expect(run(['--key', key, '--version', version, 'not-a-markdown-file'])).rejects.toStrictEqual(
       new Error("Oops! We couldn't locate a file or directory at the path you provided."),
     );
 
@@ -59,7 +52,7 @@ describe('rdme docs (single)', () => {
 
   it('should support .markdown files but error if file path cannot be found', async () => {
     const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
-    await expect(docs.run({ key, version, filePath: 'non-existent-file.markdown' })).rejects.toStrictEqual(
+    await expect(run(['--key', key, '--version', version, 'non-existent-file.markdown'])).rejects.toStrictEqual(
       new Error("Oops! We couldn't locate a file or directory at the path you provided."),
     );
     versionMock.done();
@@ -93,7 +86,7 @@ describe('rdme docs (single)', () => {
         .reply(200, { version });
 
       await expect(
-        docs.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, key, version }),
+        run([`./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, '--key', key, '--version', version]),
       ).resolves.toBe(
         `🌱 successfully created 'new-doc' (ID: 1234) with contents from ./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`,
       );
@@ -123,7 +116,7 @@ describe('rdme docs (single)', () => {
         .reply(200, { version });
 
       await expect(
-        docs.run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, key, version }),
+        run(['--dryRun', `./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, '--key', key, '--version', version]),
       ).resolves.toBe(
         `🎭 dry run! This will create 'new-doc' with contents from ./__tests__/${fixturesBaseDir}/new-docs/new-doc.md with the following metadata: ${JSON.stringify(
           doc.data,
@@ -142,7 +135,7 @@ describe('rdme docs (single)', () => {
 
       const filePath = `./__tests__/${fixturesBaseDir}/failure-docs/doc-sans-attributes.md`;
 
-      await expect(docs.run({ filePath, key, version })).resolves.toBe(
+      await expect(run(['--key', key, '--version', version, filePath])).resolves.toBe(
         `⏭️  no front matter attributes found for ${filePath}, skipping`,
       );
 
@@ -176,7 +169,9 @@ describe('rdme docs (single)', () => {
         message: `Error uploading ${chalk.underline(`${filePath}`)}:\n\n${errorObject.message}`,
       };
 
-      await expect(docs.run({ filePath, key, version })).rejects.toStrictEqual(new APIError(formattedErrorObject));
+      await expect(run([filePath, '--key', key, '--version', version])).rejects.toThrow(
+        new APIError(formattedErrorObject),
+      );
 
       getMock.done();
       versionMock.done();
@@ -211,7 +206,7 @@ describe('rdme docs (single)', () => {
         .reply(200, { version });
 
       await expect(
-        docs.run({ filePath: `./__tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`, key, version }),
+        run([`./__tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`, '--key', key, '--version', version]),
       ).resolves.toBe(
         `🌱 successfully created 'marc-actually-wrote-a-test' (ID: 1234) with contents from ./__tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`,
       );
@@ -234,7 +229,7 @@ describe('rdme docs (single)', () => {
       };
     });
 
-    it('should fetch doc and merge with what is returned', () => {
+    it('should fetch doc and merge with what is returned', async () => {
       const getMock = getAPIMockWithVersionHeader(version)
         .get('/api/v1/docs/simple-doc')
         .basicAuth({ user: key })
@@ -258,22 +253,18 @@ describe('rdme docs (single)', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      return docs
-        .run({ filePath: `./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, key, version })
-        .then(updatedDocs => {
-          expect(updatedDocs).toBe(
-            `✏️ successfully updated 'simple-doc' with contents from ./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`,
-          );
+      await expect(
+        run([`./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, '--key', key, '--version', version]),
+      ).resolves.toBe(
+        `✏️ successfully updated 'simple-doc' with contents from ./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`,
+      );
 
-          getMock.done();
-          updateMock.done();
-          versionMock.done();
-        });
+      getMock.done();
+      updateMock.done();
+      versionMock.done();
     });
 
-    it('should return doc update info for dry run', () => {
-      expect.assertions(1);
-
+    it('should return doc update info for dry run', async () => {
       const getMock = getAPIMockWithVersionHeader(version)
         .get('/api/v1/docs/simple-doc')
         .basicAuth({ user: key })
@@ -284,27 +275,28 @@ describe('rdme docs (single)', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      return docs
-        .run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, key, version })
-        .then(updatedDocs => {
-          // All docs should have been updated because their hashes from the GET request were different from what they
-          // are currently.
-          expect(updatedDocs).toBe(
-            [
-              `🎭 dry run! This will update 'simple-doc' with contents from ./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md with the following metadata: ${JSON.stringify(
-                simpleDoc.doc.data,
-              )}`,
-            ].join('\n'),
-          );
+      await expect(
+        run([
+          '--dryRun',
+          `./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`,
+          '--key',
+          key,
+          '--version',
+          version,
+        ]),
+      ).resolves.toBe(
+        [
+          `🎭 dry run! This will update 'simple-doc' with contents from ./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md with the following metadata: ${JSON.stringify(
+            simpleDoc.doc.data,
+          )}`,
+        ].join('\n'),
+      );
 
-          getMock.done();
-          versionMock.done();
-        });
+      getMock.done();
+      versionMock.done();
     });
 
-    it('should not send requests for docs that have not changed', () => {
-      expect.assertions(1);
-
+    it('should not send requests for docs that have not changed', async () => {
       const getMock = getAPIMockWithVersionHeader(version)
         .get('/api/v1/docs/simple-doc')
         .basicAuth({ user: key })
@@ -315,17 +307,15 @@ describe('rdme docs (single)', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      return docs
-        .run({ filePath: `./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, key, version })
-        .then(skippedDocs => {
-          expect(skippedDocs).toBe('`simple-doc` was not updated because there were no changes.');
+      await expect(
+        run([`./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, '--key', key, '--version', version]),
+      ).resolves.toBe('`simple-doc` was not updated because there were no changes.');
 
-          getMock.done();
-          versionMock.done();
-        });
+      getMock.done();
+      versionMock.done();
     });
 
-    it('should adjust "no changes" message if in dry run', () => {
+    it('should adjust "no changes" message if in dry run', async () => {
       const getMock = getAPIMockWithVersionHeader(version)
         .get('/api/v1/docs/simple-doc')
         .basicAuth({ user: key })
@@ -336,14 +326,19 @@ describe('rdme docs (single)', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      return docs
-        .run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, key, version })
-        .then(skippedDocs => {
-          expect(skippedDocs).toBe('🎭 dry run! `simple-doc` will not be updated because there were no changes.');
+      await expect(
+        run([
+          '--dryRun',
+          `./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`,
+          '--key',
+          key,
+          '--version',
+          version,
+        ]),
+      ).resolves.toBe('🎭 dry run! `simple-doc` will not be updated because there were no changes.');
 
-          getMock.done();
-          versionMock.done();
-        });
+      getMock.done();
+      versionMock.done();
     });
   });
 
@@ -353,11 +348,6 @@ describe('rdme docs (single)', () => {
     });
 
     afterEach(afterGHAEnv);
-
-    it('should error in CI if no API key provided', () => {
-      // @ts-expect-error deliberately passing in bad data
-      return expect(docs.run({})).rejects.toStrictEqual(new Error('No project API key provided. Please use `--key`.'));
-    });
 
     it('should sync new doc with correct headers', async () => {
       const slug = 'new-doc';
@@ -392,7 +382,7 @@ describe('rdme docs (single)', () => {
         .reply(200, { version });
 
       await expect(
-        docs.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, key, version }),
+        run([`./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, '--key', key, '--version', version]),
       ).resolves.toBe(
         `🌱 successfully created 'new-doc' (ID: 1234) with contents from ./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`,
       );
@@ -402,7 +392,7 @@ describe('rdme docs (single)', () => {
       versionMock.done();
     });
 
-    it('should sync existing doc with correct headers', () => {
+    it('should sync existing doc with correct headers', async () => {
       const fileContents = fs.readFileSync(path.join(fullFixturesDir, '/existing-docs/simple-doc.md'));
       const simpleDoc = {
         slug: 'simple-doc',
@@ -439,17 +429,15 @@ describe('rdme docs (single)', () => {
         .basicAuth({ user: key })
         .reply(200, { version });
 
-      return docs
-        .run({ filePath: `__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, key, version })
-        .then(updatedDocs => {
-          expect(updatedDocs).toBe(
-            `✏️ successfully updated 'simple-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`,
-          );
+      await expect(
+        run([`__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, '--key', key, '--version', version]),
+      ).resolves.toBe(
+        `✏️ successfully updated 'simple-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`,
+      );
 
-          getMock.done();
-          updateMock.done();
-          versionMock.done();
-        });
+      getMock.done();
+      updateMock.done();
+      versionMock.done();
     });
   });
 });

@@ -5,7 +5,7 @@ import replace from '@rollup/plugin-replace';
 import { defineConfig } from 'rollup';
 
 export default defineConfig({
-  input: 'bin/rdme.js',
+  input: 'bin/run.js',
   output: { file: 'dist/rollup-output.cjs', format: 'cjs', inlineDynamicImports: true },
   plugins: [
     commonjs(),

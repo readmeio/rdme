@@ -37,11 +37,11 @@
     /**
      * This is a small rule to prevent us from using console.log() statements in our commands.
      *
-     * We've had troubles in the past where our test coverage required us to use Jest mocks for
+     * We've had troubles in the past where our test coverage required us to use Vitest mocks for
      * console.log() calls, hurting our ability to write resilient tests and easily debug issues.
      *
      * We should be returning Promise-wrapped values in our main command functions
-     * so we can write robust tests and take advantage of `bin/rdme.js`,
+     * so we can write robust tests and take advantage of `bin/run.js` and `src/baseCommand.ts`,
      * which we use for printing function outputs and returning correct exit codes.
      *
      * Furthermore, we should also be using our custom loggers (see src/lib/logger.js)

@@ -1,24 +1,28 @@
 /* eslint-disable vitest/no-conditional-expect */
+import type { Config } from '@oclif/core';
+
 import assert from 'node:assert';
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 
-import OpenAPIInspectCommand from '../../../src/cmds/openapi/inspect.js';
-
-const analyzer = new OpenAPIInspectCommand();
+import setupOclifConfig from '../../helpers/setup-oclif-config.js';
 
 describe('rdme openapi:inspect', () => {
+  let oclifConfig: Config;
+  let run: (args?: string[]) => Promise<unknown>;
+
+  beforeEach(async () => {
+    oclifConfig = await setupOclifConfig();
+    run = (args?: string[]) => oclifConfig.runCommand('openapi:inspect', args);
+  });
+
   describe('full reports', () => {
     it.each([
       '@readme/oas-examples/3.0/json/petstore.json',
       '@readme/oas-examples/3.0/json/readme.json',
       '@readme/oas-examples/3.0/json/readme-extensions.json',
     ])('should generate a report for %s', spec => {
-      return expect(
-        analyzer.run({
-          spec: require.resolve(spec),
-        }),
-      ).resolves.toMatchSnapshot();
+      return expect(run([require.resolve(spec)])).resolves.toMatchSnapshot();
     });
   });
 
@@ -26,12 +30,9 @@ describe('rdme openapi:inspect', () => {
     it('should throw an error if an invalid feature is supplied', () => {
       const spec = require.resolve('@readme/oas-examples/3.0/json/readme-extensions.json');
 
-      return expect(
-        analyzer.run({
-          spec,
-          feature: ['style', 'reamde'],
-        }),
-      ).rejects.toStrictEqual(new Error('Unknown features: reamde. See `rdme help openapi:inspect` for help.'));
+      return expect(run([spec, '--feature', 'style', '--feature', 'reamde'])).rejects.toThrow(
+        'Expected --feature=reamde to be one of:',
+      );
     });
 
     const cases: { feature: string[]; shouldSoftError?: true; spec: string }[] = [
@@ -63,21 +64,14 @@ describe('rdme openapi:inspect', () => {
     ];
 
     it.each(cases)('should generate a report for $spec (w/ $feature)', async ({ spec, feature, shouldSoftError }) => {
+      const args = [require.resolve(spec)].concat(...feature.map(f => ['--feature', f]));
       if (!shouldSoftError) {
-        await expect(
-          analyzer.run({
-            spec: require.resolve(spec),
-            feature,
-          }),
-        ).resolves.toMatchSnapshot();
+        await expect(run(args)).resolves.toMatchSnapshot();
         return;
       }
 
       try {
-        await analyzer.run({
-          spec: require.resolve(spec),
-          feature,
-        });
+        await run(args);
 
         assert.fail('A soft error should have been thrown for this test case.');
       } catch (err) {
