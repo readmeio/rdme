@@ -17,11 +17,11 @@ export interface Options extends CommonOptions {
 }
 
 export interface CommonOptions {
-  beta?: 'true' | 'false';
+  beta?: 'false' | 'true';
   codename?: string;
-  deprecated?: 'true' | 'false';
-  hidden?: 'true' | 'false';
-  main?: 'true' | 'false';
+  deprecated?: 'false' | 'true';
+  hidden?: 'false' | 'true';
+  main?: 'false' | 'true';
 }
 
 export default class CreateVersionCommand extends Command {

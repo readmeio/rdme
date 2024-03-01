@@ -10,8 +10,8 @@ export interface APIErrorResponse {
 export default class APIError extends Error {
   code: string;
 
-  constructor(res: string | APIErrorResponse | { error: APIErrorResponse }) {
-    let err: string | APIErrorResponse;
+  constructor(res: APIErrorResponse | string | { error: APIErrorResponse }) {
+    let err: APIErrorResponse | string;
 
     // Special handling to for fetch `res` arguments where `res.error` will contain our API error
     // response.

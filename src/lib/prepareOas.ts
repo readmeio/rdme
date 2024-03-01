@@ -12,7 +12,7 @@ import readdirRecursive from './readdirRecursive.js';
 
 export type SpecFileType = OASNormalize['type'];
 
-type SpecType = 'OpenAPI' | 'Swagger' | 'Postman';
+type SpecType = 'OpenAPI' | 'Postman' | 'Swagger';
 
 interface FoundSpecFile {
   /** path to the spec file */
@@ -30,7 +30,7 @@ interface FileSelection {
 }
 
 // source: https://stackoverflow.com/a/58110124
-type Truthy<T> = T extends false | '' | 0 | null | undefined ? never : T;
+type Truthy<T> = T extends '' | 0 | false | null | undefined ? never : T;
 
 function truthy<T>(value: T): value is Truthy<T> {
   return !!value;
@@ -49,7 +49,7 @@ const capitalizeSpecType = (type: string) =>
  */
 export default async function prepareOas(
   path: string | undefined,
-  command: 'openapi' | 'openapi:convert' | 'openapi:inspect' | 'openapi:reduce' | 'openapi:validate',
+  command: 'openapi:convert' | 'openapi:inspect' | 'openapi:reduce' | 'openapi:validate' | 'openapi',
   opts: {
     /**
      * Optionally convert the supplied or discovered API definition to the latest OpenAPI release.
