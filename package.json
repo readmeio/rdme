@@ -65,8 +65,8 @@
     "validator": "^13.7.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^18.2.0",
-    "@commitlint/config-conventional": "^18.1.0",
+    "@commitlint/cli": "^19.0.3",
+    "@commitlint/config-conventional": "^19.0.3",
     "@readme/better-ajv-errors": "^1.5.0",
     "@readme/eslint-config": "^13.4.0",
     "@readme/oas-examples": "^5.10.0",
@@ -94,7 +94,7 @@
     "eslint": "^8.47.0",
     "husky": "^9.0.10",
     "js-yaml": "^4.1.0",
-    "knip": "^4.3.0",
+    "knip": "^5.0.2",
     "msw": "^2.0.3",
     "nock": "^13.2.7",
     "openapi-types": "^12.1.3",

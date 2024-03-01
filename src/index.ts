@@ -85,7 +85,7 @@ export default function rdme(rawProcessArgv: NodeJS.Process['argv']) {
   }
 
   try {
-    let cmdArgv: CommandOptions | CommandLineOptions;
+    let cmdArgv: CommandLineOptions | CommandOptions;
     let bin: Command;
 
     // Handling for `rdme help` and `rdme help <command>` cases.
