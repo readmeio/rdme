@@ -1,3 +1,10 @@
+# [9.0.0-next.12](https://github.com/readmeio/rdme/compare/v9.0.0-next.11...v9.0.0-next.12) (2024-03-07)
+
+
+### Bug Fixes
+
+* **versions/update:** various edge cases ([#965](https://github.com/readmeio/rdme/issues/965)) ([580e307](https://github.com/readmeio/rdme/commit/580e307caecb04281c2083169ce3dbfb937086b3))
+
 # [9.0.0-next.11](https://github.com/readmeio/rdme/compare/v9.0.0-next.10...v9.0.0-next.11) (2024-02-15)
 
 
