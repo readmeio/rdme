@@ -1,7 +1,7 @@
 import type { KnipConfig } from 'knip';
 
 const config: KnipConfig = {
-  ignore: ['bin/*.js', 'vitest.single-threaded.config.ts'],
+  ignore: ['bin/*.js'],
   ignoreBinaries: ['semantic-release'],
 };
 

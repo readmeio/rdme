@@ -10,7 +10,7 @@ import isCI from './isCI.js';
 import { debug, info, warn } from './logger.js';
 import loginFlow from './loginFlow.js';
 
-export type CommandOptions<T = {}> = ZeroAuthCommandOptions<T> | AuthenticatedCommandOptions<T>;
+export type CommandOptions<T = {}> = AuthenticatedCommandOptions<T> | ZeroAuthCommandOptions<T>;
 
 export type AuthenticatedCommandOptions<T = {}> = Omit<ZeroAuthCommandOptions<T>, 'key'> & {
   key: string;
