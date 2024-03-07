@@ -90,7 +90,29 @@ describe('rdme versions:update', () => {
     mockRequest.done();
   });
 
-  it.todo('should use subset of prompts when updating stable version');
+  it('should use subset of prompts when updating stable version', async () => {
+    const versionToChange = '1.1.0';
+    prompts.inject([versionToChange, undefined, true]);
+
+    const updatedVersionObject = {
+      version: versionToChange,
+      is_beta: true,
+    };
+
+    const mockRequest = getAPIMock()
+      .get('/api/v1/version')
+      .basicAuth({ user: key })
+      .reply(200, [{ version }, { version: versionToChange, is_stable: true }])
+      .get(`/api/v1/version/${versionToChange}`)
+      .basicAuth({ user: key })
+      .reply(200, { version: versionToChange, is_stable: true })
+      .put(`/api/v1/version/${versionToChange}`, updatedVersionObject)
+      .basicAuth({ user: key })
+      .reply(201, updatedVersionObject);
+
+    await expect(updateVersion.run({ key })).resolves.toBe(`Version ${versionToChange} updated successfully.`);
+    mockRequest.done();
+  });
 
   it('should update a specific version object using flags', async () => {
     const versionToChange = '1.1.0';
