@@ -48,7 +48,7 @@ export default class UpdateVersionCommand extends Command {
 
     // TODO: I think this fetch here is unnecessary but
     // it will require a bigger refactor of getProjectVersion
-    const foundVersion = await readmeAPIFetch(`/api/v1/version/${selectedVersion}`, {
+    const foundVersion: Version = await readmeAPIFetch(`/api/v1/version/${selectedVersion}`, {
       method: 'get',
       headers: cleanHeaders(key),
     }).then(handleRes);
@@ -66,7 +66,7 @@ export default class UpdateVersionCommand extends Command {
     const body: Version = {
       codename,
       // fallback to existing version if user was prompted to rename the version but didn't enter anything
-      version: promptResponse.newVersion || version,
+      version: promptResponse.newVersion || selectedVersion,
       is_beta: promptResponse.is_beta,
       is_deprecated: promptResponse.is_deprecated,
       is_hidden: promptResponse.is_hidden,
