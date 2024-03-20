@@ -6,7 +6,7 @@ import { getAPIDefinitionType } from 'oas-normalize/lib/utils';
 import ora from 'ora';
 
 import isCI from './isCI.js';
-import { debug, info, oraOptions } from './logger.js';
+import { debug, info, warn, oraOptions } from './logger.js';
 import promptTerminal from './promptWrapper.js';
 import readdirRecursive from './readdirRecursive.js';
 
@@ -217,6 +217,34 @@ export default async function prepareOas(
     api = await oas.bundle();
 
     debug('spec bundled');
+  }
+
+  // Checks to see if the selected file is a postman collection and throws a warning in the console depending on the command.
+  if (definitionVersion.specification === 'postman') {
+    switch (command) {
+      case 'openapi':
+        warn(
+          'You are attempting to upload a Postman collection. This feature is currently experimental. For more information, visit our docs here: https://docs.readme.com/main/docs/openapi#the-api-reference',
+        );
+        break;
+      case 'openapi:validate':
+        warn(
+          'You are attempting to validate a Postman collection. This feature is currently experimental. For more information, visit our docs here: https://docs.readme.com/main/docs/openapi#the-api-reference',
+        );
+        break;
+      case 'openapi:inspect':
+        warn(
+          'You are inspecting a Postman collection. This feature is currently experimental. For more information, visit our docs here: https://docs.readme.com/main/docs/openapi#the-api-reference',
+        );
+        break;
+      case 'openapi:convert':
+        warn(
+          'You are attempting to convert a Postman collection to an OpenAPI file. This feature is currently experimental. For more information, visit our docs here: https://docs.readme.com/main/docs/openapi#the-api-reference',
+        );
+        break;
+      default:
+        debug(`Type ${chalk.yellow('rdme help')} to see all commands`);
+    }
   }
 
   return {
