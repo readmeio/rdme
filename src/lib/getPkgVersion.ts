@@ -18,13 +18,13 @@ type npmDistTag = 'latest';
  *
  * @example 14
  */
-export function getNodeVersion() {
+export function getNodeVersion(): string {
   const { node } = pkg.engines;
   const parsedVersion = semver.minVersion(node);
   if (!parsedVersion) {
     throw new Error('`version` value in package.json is invalid');
   }
-  return parsedVersion.major;
+  return parsedVersion.version;
 }
 
 /**
