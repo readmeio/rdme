@@ -1,7 +1,7 @@
 import prompts from 'prompts';
 import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
-import pkg from '../package.json' assert { type: 'json' };
+import pkg from '../package.json' with { type: 'json' };
 import cli from '../src/index.js';
 import conf from '../src/lib/configstore.js';
 

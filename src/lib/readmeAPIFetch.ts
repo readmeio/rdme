@@ -6,7 +6,7 @@ import path from 'node:path';
 import mime from 'mime-types';
 import nodeFetch, { Headers } from 'node-fetch'; // eslint-disable-line no-restricted-imports
 
-import pkg from '../../package.json' assert { type: 'json' };
+import pkg from '../../package.json' with { type: 'json' };
 
 import APIError from './apiError.js';
 import config from './config.js';

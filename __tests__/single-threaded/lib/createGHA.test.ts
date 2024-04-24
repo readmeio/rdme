@@ -19,7 +19,7 @@ import createGHA, { getConfigStoreKey, getGHAFileName, getGitData, git } from '.
 import { getMajorPkgVersion } from '../../../src/lib/getPkgVersion.js';
 import { after, before } from '../../helpers/get-gha-setup.js';
 import getGitRemoteMock from '../../helpers/get-git-mock.js';
-import ghaWorkflowSchema from '../../helpers/github-workflow-schema.json' assert { type: 'json' };
+import ghaWorkflowSchema from '../../helpers/github-workflow-schema.json' with { type: 'json' };
 
 const testWorkingDir = process.cwd();
 
