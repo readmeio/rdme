@@ -7,7 +7,7 @@ import chalk from 'chalk';
 import cliArgs from 'command-line-args';
 import parseArgsStringToArgv from 'string-argv';
 
-import pkg from '../package.json' assert { type: 'json' };
+import pkg from '../package.json' with { type: 'json' };
 
 import * as commands from './lib/commands.js';
 import config from './lib/config.js';

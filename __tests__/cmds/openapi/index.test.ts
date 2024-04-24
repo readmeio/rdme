@@ -11,7 +11,7 @@ import { describe, beforeAll, beforeEach, afterEach, it, expect, vi } from 'vite
 import OpenAPICommand from '../../../src/cmds/openapi/index.js';
 import APIError from '../../../src/lib/apiError.js';
 import config from '../../../src/lib/config.js';
-import petstoreWeird from '../../__fixtures__/petstore-simple-weird-version.json' assert { type: 'json' };
+import petstoreWeird from '../../__fixtures__/petstore-simple-weird-version.json' with { type: 'json' };
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
 import { after, before } from '../../helpers/get-gha-setup.js';
 import { after as afterGHAEnv, before as beforeGHAEnv } from '../../helpers/setup-gha-env.js';

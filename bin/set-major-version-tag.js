@@ -5,7 +5,7 @@ import util from 'node:util';
 
 import { parse } from 'semver';
 
-import pkg from '../package.json' assert { type: 'json' };
+import pkg from '../package.json' with { type: 'json' };
 
 const execFile = util.promisify(unpromisifiedExecFile);
 
