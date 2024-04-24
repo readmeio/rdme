@@ -10,7 +10,7 @@ import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch.js';
  * @returns An array of category objects
  */
 export default async function getCategories(key: string, selectedVersion: string | undefined) {
-  function getNumberOfPages() {
+  async function getNumberOfPages() {
     let totalCount = 0;
     return readmeAPIFetch('/api/v1/categories?perPage=20&page=1', {
       method: 'get',
