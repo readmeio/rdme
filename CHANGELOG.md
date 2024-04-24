@@ -1,3 +1,10 @@
+# [9.0.0-next.13](https://github.com/readmeio/rdme/compare/v9.0.0-next.12...v9.0.0-next.13) (2024-04-24)
+
+
+### Bug Fixes
+
+* use newest import attributes syntax ([#993](https://github.com/readmeio/rdme/issues/993)) ([d76c0ae](https://github.com/readmeio/rdme/commit/d76c0ae7933bb16e5bf6a21086b718911fc2cd4d)), closes [/github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V20.md#2023-11-22-version-20100](https://github.com//github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V20.md/issues/2023-11-22-version-20100)
+
 # [9.0.0-next.12](https://github.com/readmeio/rdme/compare/v9.0.0-next.11...v9.0.0-next.12) (2024-03-07)
 
 
