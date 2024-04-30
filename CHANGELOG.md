@@ -1,3 +1,10 @@
+# [9.0.0-next.14](https://github.com/readmeio/rdme/compare/v9.0.0-next.13...v9.0.0-next.14) (2024-04-30)
+
+
+### Bug Fixes
+
+* swap out ts-node for tsx ([16f64b3](https://github.com/readmeio/rdme/commit/16f64b38b53b7011f2fae68b0a71138cb8a188d6))
+
 # [9.0.0-next.13](https://github.com/readmeio/rdme/compare/v9.0.0-next.12...v9.0.0-next.13) (2024-04-24)
 
 
