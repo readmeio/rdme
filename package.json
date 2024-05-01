@@ -119,7 +119,7 @@
     "prettier": "prettier --check .",
     "schemas:check": "./bin/json-schema-store.js",
     "schemas:write": "./bin/json-schema-store.js --update",
-    "test": "vitest --run coverage"
+    "test": "vitest run --coverage"
   },
   "commitlint": {
     "extends": [
