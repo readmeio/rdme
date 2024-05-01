@@ -70,6 +70,9 @@ x-readme.proxy-enabled:
  · #/paths/~1x-proxy-enabled/post
 
 x-readme.samples-languages:
+ · node
+ · python
+ · shell
  · swift"
 `;
 
