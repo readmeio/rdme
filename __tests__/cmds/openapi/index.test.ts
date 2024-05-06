@@ -2,8 +2,6 @@
 import fs from 'node:fs';
 
 import chalk from 'chalk';
-import { http } from 'msw';
-import { setupServer } from 'msw/node';
 import nock from 'nock';
 import prompts from 'prompts';
 import { describe, beforeAll, beforeEach, afterEach, it, expect, vi } from 'vitest';
@@ -1350,37 +1348,24 @@ describe('rdme openapi', () => {
     });
 
     it('should send proper headers in GitHub Actions CI for spec hosted at URL', async () => {
-      expect.assertions(8);
       const registryUUID = getRandomRegistryId();
       const spec = 'https://example.com/openapi.json';
 
-      // TODO: move all of this boilerplate to the top-level once we migrate everything over to MSW
-      const server = setupServer(...[]);
+      const mock = getAPIMock()
+        .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+        .reply(201, { registryUUID });
 
-      server.listen({ onUnhandledRequest: 'error' });
+      const exampleMock = nock('https://example.com').get('/openapi.json').reply(200, petstoreWeird);
 
-      server.use(
-        ...[
-          http.post(`${config.host}/api/v1/api-registry`, async ({ request }) => {
-            const body = await request.text();
-            expect(body).toMatch('form-data; name="spec"');
-            return Response.json({ registryUUID }, { status: 201 });
-          }),
-          http.get(spec, () => {
-            return Response.json(petstoreWeird, { status: 200 });
-          }),
-          http.put(`${config.host}/api/v1/api-specification/${id}`, async ({ request }) => {
-            expect(request.headers.get('authorization')).toBeBasicAuthApiKey(key);
-            expect(request.headers.get('x-rdme-ci')).toBe('GitHub Actions (test)');
-            expect(request.headers.get('x-readme-source')).toBe('cli-gh');
-            expect(request.headers.get('x-readme-source-url')).toBe(spec);
-            expect(request.headers.get('x-readme-version')).toBe(version);
-            const body = await request.json();
-            expect(body).toStrictEqual({ registryUUID });
-            return Response.json({ _id: 1 }, { status: 201, headers: { location: exampleRefLocation } });
-          }),
-        ],
-      );
+      const putMock = getAPIMock({
+        'x-rdme-ci': 'GitHub Actions (test)',
+        'x-readme-source': 'cli-gh',
+        'x-readme-source-url': spec,
+        'x-readme-version': version,
+      })
+        .put(`/api/v1/api-specification/${id}`, { registryUUID })
+        .basicAuth({ user: key })
+        .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
       await expect(
         openapi.run({
@@ -1391,7 +1376,9 @@ describe('rdme openapi', () => {
         }),
       ).resolves.toBe(successfulUpdate(spec));
 
-      return server.resetHandlers();
+      putMock.done();
+      exampleMock.done();
+      return mock.done();
     });
   });
 });
