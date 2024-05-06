@@ -8,8 +8,8 @@ import { getUserAgent } from '../../src/lib/readmeAPIFetch.js';
  * so it gets properly picked up by nock.
  * @param proxy Optional proxy URL. Must contain trailing slash.
  */
-export default function getAPIMock(reqHeaders = {}, proxy = '') {
-  return nock(`${proxy}${config.host}`, {
+export default function getAPIMock(reqHeaders = {}) {
+  return nock(config.host, {
     reqheaders: {
       'User-Agent': getUserAgent(),
       ...reqHeaders,

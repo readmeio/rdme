@@ -59,6 +59,7 @@
     "table": "^6.8.1",
     "tmp-promise": "^3.0.2",
     "toposort": "^2.0.2",
+    "undici": "^5.28.4",
     "update-notifier": "^7.0.0",
     "validator": "^13.7.0"
   },
