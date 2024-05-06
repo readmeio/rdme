@@ -2,14 +2,13 @@
 import fs from 'node:fs';
 
 import chalk from 'chalk';
-import { http } from 'msw';
-import { setupServer } from 'msw/node';
+import nock from 'nock';
 import prompts from 'prompts';
-import { describe, beforeAll, beforeEach, afterEach, it, expect, vi, afterAll } from 'vitest';
+import { describe, beforeAll, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
 import OpenAPICommand from '../../../src/cmds/openapi/index.js';
 import config from '../../../src/lib/config.js';
-import { getAPIMockMSW } from '../../helpers/get-api-mock.js';
+import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
 import { after, before } from '../../helpers/get-gha-setup.js';
 import { after as afterGHAEnv, before as beforeGHAEnv } from '../../helpers/setup-gha-env.js';
 
@@ -41,12 +40,12 @@ const getCommandOutput = () => {
 
 const getRandomRegistryId = () => Math.random().toString(36).substring(2);
 
-const server = setupServer(...[]);
-
 describe('rdme openapi (single-threaded)', () => {
   let testWorkingDir: string;
 
-  beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
+  beforeAll(() => {
+    nock.disableNetConnect();
+  });
 
   beforeEach(() => {
     consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
@@ -58,35 +57,31 @@ describe('rdme openapi (single-threaded)', () => {
     consoleInfoSpy.mockRestore();
     consoleWarnSpy.mockRestore();
 
-    server.resetHandlers();
-
     process.chdir(testWorkingDir);
-  });
 
-  afterAll(() => server.close());
+    nock.cleanAll();
+  });
 
   describe('upload', () => {
     it('should discover and upload an API definition if none is provided', async () => {
-      expect.assertions(6);
       const registryUUID = getRandomRegistryId();
 
-      server.use(
-        ...[
-          getAPIMockMSW(`/api/v1/version/${version}`, 200, { json: { version } }, key),
-          http.post(`${config.host}/api/v1/api-registry`, async ({ request }) => {
-            const body = await request.text();
-            expect(body).toMatch('form-data; name="spec"');
-            return Response.json({ registryUUID, spec: { openapi: '3.0.0' } }, { status: 201 });
-          }),
-          getAPIMockMSW('/api/v1/api-specification', 200, { json: [] }, key, { 'x-readme-version': version }),
-          http.post(`${config.host}/api/v1/api-specification`, async ({ request }) => {
-            const body = await request.json();
-            expect(body).toStrictEqual({ registryUUID });
-            expect(request.headers.get('authorization')).toBeBasicAuthApiKey(key);
-            return Response.json({ _id: 1 }, { status: 201, headers: { location: exampleRefLocation } });
-          }),
-        ],
-      );
+      const mock = getAPIMock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version })
+        .post('/api/v1/api-registry', body => {
+          return body.match('form-data; name="spec"');
+        })
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+        .get('/api/v1/api-specification')
+        .basicAuth({ user: key })
+        .reply(200, []);
+
+      const postMock = getAPIMockWithVersionHeader(version)
+        .post('/api/v1/api-specification', { registryUUID })
+        .basicAuth({ user: key })
+        .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
       const spec = 'petstore.json';
 
@@ -101,33 +96,35 @@ describe('rdme openapi (single-threaded)', () => {
       expect(console.info).toHaveBeenCalledTimes(1);
 
       const output = getCommandOutput();
-      return expect(output).toBe(chalk.yellow(`ℹ️  We found ${spec} and are attempting to upload it.`));
+      expect(output).toBe(chalk.yellow(`ℹ️  We found ${spec} and are attempting to upload it.`));
+
+      postMock.done();
+      return mock.done();
     });
 
     it('should use specified working directory and upload the expected content', async () => {
-      expect.assertions(6);
       let requestBody;
       const registryUUID = getRandomRegistryId();
 
-      server.use(
-        ...[
-          getAPIMockMSW(`/api/v1/version/${version}`, 200, { json: { version } }, key),
-          http.post(`${config.host}/api/v1/api-registry`, async ({ request }) => {
-            const body = await request.text();
-            requestBody = body.substring(body.indexOf('{'), body.lastIndexOf('}') + 1);
-            requestBody = JSON.parse(requestBody);
-            expect(body).toMatch('form-data; name="spec"');
-            return Response.json({ registryUUID, spec: { openapi: '3.0.0' } }, { status: 201 });
-          }),
-          getAPIMockMSW('/api/v1/api-specification', 200, { json: [] }, key, { 'x-readme-version': version }),
-          http.post(`${config.host}/api/v1/api-specification`, async ({ request }) => {
-            const body = await request.json();
-            expect(body).toStrictEqual({ registryUUID });
-            expect(request.headers.get('authorization')).toBeBasicAuthApiKey(key);
-            return Response.json({ _id: 1 }, { status: 201, headers: { location: exampleRefLocation } });
-          }),
-        ],
-      );
+      const mock = getAPIMock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version })
+        .post('/api/v1/api-registry', body => {
+          requestBody = body.substring(body.indexOf('{'), body.lastIndexOf('}') + 1);
+          requestBody = JSON.parse(requestBody);
+
+          return body.match('form-data; name="spec"');
+        })
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+        .get('/api/v1/api-specification')
+        .basicAuth({ user: key })
+        .reply(200, []);
+
+      const postMock = getAPIMockWithVersionHeader(version)
+        .post('/api/v1/api-specification', { registryUUID })
+        .basicAuth({ user: key })
+        .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
       const spec = 'petstore.json';
 
@@ -142,24 +139,26 @@ describe('rdme openapi (single-threaded)', () => {
 
       expect(console.info).toHaveBeenCalledTimes(0);
 
-      return expect(requestBody).toMatchSnapshot();
+      expect(requestBody).toMatchSnapshot();
+
+      postMock.done();
+      return mock.done();
     });
 
     it('should return spec create info for dry run', async () => {
-      expect.assertions(3);
       const registryUUID = getRandomRegistryId();
 
-      server.use(
-        ...[
-          getAPIMockMSW(`/api/v1/version/${version}`, 200, { json: { version } }, key),
-          http.post(`${config.host}/api/v1/api-registry`, async ({ request }) => {
-            const body = await request.text();
-            expect(body).toMatch('form-data; name="spec"');
-            return Response.json({ registryUUID, spec: { openapi: '3.0.0' } }, { status: 201 });
-          }),
-          getAPIMockMSW('/api/v1/api-specification', 200, { json: [] }, key, { 'x-readme-version': version }),
-        ],
-      );
+      const mock = getAPIMock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version })
+        .post('/api/v1/api-registry', body => {
+          return body.match('form-data; name="spec"');
+        })
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+        .get('/api/v1/api-specification')
+        .basicAuth({ user: key })
+        .reply(200, []);
 
       await expect(
         openapi.run({
@@ -173,9 +172,11 @@ describe('rdme openapi (single-threaded)', () => {
       );
 
       const output = getCommandOutput();
-      return expect(output).toMatch(
+      expect(output).toMatch(
         chalk.yellow('🎭 dry run option detected! No API definitions will be created or updated in ReadMe.'),
       );
+
+      return mock.done();
     });
   });
 
@@ -203,28 +204,26 @@ describe('rdme openapi (single-threaded)', () => {
     });
 
     it('should create GHA workflow (including workingDirectory)', async () => {
-      expect.assertions(7);
       const yamlFileName = 'openapi-file-workingdirectory';
       prompts.inject([true, 'openapi-branch-workingdirectory', yamlFileName]);
       const registryUUID = getRandomRegistryId();
 
-      server.use(
-        ...[
-          getAPIMockMSW(`/api/v1/version/${version}`, 200, { json: { version } }, key),
-          http.post(`${config.host}/api/v1/api-registry`, async ({ request }) => {
-            const body = await request.text();
-            expect(body).toMatch('form-data; name="spec"');
-            return Response.json({ registryUUID, spec: { openapi: '3.0.0' } }, { status: 201 });
-          }),
-          getAPIMockMSW('/api/v1/api-specification', 200, { json: [] }, key, { 'x-readme-version': version }),
-          http.post(`${config.host}/api/v1/api-specification`, async ({ request }) => {
-            expect(request.headers.get('authorization')).toBeBasicAuthApiKey(key);
-            const body = await request.json();
-            expect(body).toStrictEqual({ registryUUID });
-            return Response.json({ _id: 1 }, { status: 201, headers: { location: exampleRefLocation } });
-          }),
-        ],
-      );
+      const mock = getAPIMock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version })
+        .post('/api/v1/api-registry', body => {
+          return body.match('form-data; name="spec"');
+        })
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+        .get('/api/v1/api-specification')
+        .basicAuth({ user: key })
+        .reply(200, []);
+
+      const postMock = getAPIMockWithVersionHeader(version)
+        .post('/api/v1/api-specification', { registryUUID })
+        .basicAuth({ user: key })
+        .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
       const spec = 'petstore.json';
 
@@ -239,11 +238,10 @@ describe('rdme openapi (single-threaded)', () => {
 
       expect(yamlOutput).toMatchSnapshot();
       expect(fs.writeFileSync).toHaveBeenCalledTimes(2);
-      return expect(fs.writeFileSync).toHaveBeenNthCalledWith(
-        2,
-        `.github/workflows/${yamlFileName}.yml`,
-        expect.any(String),
-      );
+      expect(fs.writeFileSync).toHaveBeenNthCalledWith(2, `.github/workflows/${yamlFileName}.yml`, expect.any(String));
+
+      postMock.done();
+      return mock.done();
     });
   });
 
@@ -255,31 +253,29 @@ describe('rdme openapi (single-threaded)', () => {
     afterEach(afterGHAEnv);
 
     it('should contain request header with correct URL with working directory', async () => {
-      expect.assertions(8);
       const registryUUID = getRandomRegistryId();
-      server.use(
-        ...[
-          getAPIMockMSW(`/api/v1/version/${version}`, 200, { json: { version } }, key),
-          http.post(`${config.host}/api/v1/api-registry`, async ({ request }) => {
-            const body = await request.text();
-            expect(body).toMatch('form-data; name="spec"');
-            return Response.json({ registryUUID, spec: { openapi: '3.0.0' } }, { status: 201 });
-          }),
-          getAPIMockMSW('/api/v1/api-specification', 200, { json: [] }, key, { 'x-readme-version': version }),
-          http.post(`${config.host}/api/v1/api-specification`, async ({ request }) => {
-            expect(request.headers.get('authorization')).toBeBasicAuthApiKey(key);
-            expect(request.headers.get('x-rdme-ci')).toBe('GitHub Actions (test)');
-            expect(request.headers.get('x-readme-source')).toBe('cli-gh');
-            expect(request.headers.get('x-readme-source-url')).toBe(
-              'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/__tests__/__fixtures__/relative-ref-oas/petstore.json',
-            );
-            expect(request.headers.get('x-readme-version')).toBe(version);
-            const body = await request.json();
-            expect(body).toStrictEqual({ registryUUID });
-            return Response.json({ _id: 1 }, { status: 201, headers: { location: exampleRefLocation } });
-          }),
-        ],
-      );
+      const mock = getAPIMock()
+        .get(`/api/v1/version/${version}`)
+        .basicAuth({ user: key })
+        .reply(200, { version })
+        .post('/api/v1/api-registry', body => {
+          return body.match('form-data; name="spec"');
+        })
+        .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
+        .get('/api/v1/api-specification')
+        .basicAuth({ user: key })
+        .reply(200, []);
+
+      const postMock = getAPIMock({
+        'x-rdme-ci': 'GitHub Actions (test)',
+        'x-readme-source': 'cli-gh',
+        'x-readme-source-url':
+          'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/__tests__/__fixtures__/relative-ref-oas/petstore.json',
+        'x-readme-version': version,
+      })
+        .post('/api/v1/api-specification', { registryUUID })
+        .basicAuth({ user: key })
+        .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
       const spec = 'petstore.json';
 
@@ -292,7 +288,10 @@ describe('rdme openapi (single-threaded)', () => {
         }),
       ).resolves.toBe(successfulUpload(spec));
 
-      return after();
+      after();
+
+      postMock.done();
+      return mock.done();
     });
   });
 });
