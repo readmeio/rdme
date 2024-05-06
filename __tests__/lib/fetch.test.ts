@@ -285,6 +285,11 @@ describe('#fetch()', () => {
     });
   });
 
+  /**
+   * @note these tests aren't doing much since there's no way for nock to intercept proxy agents properly.
+   * Undici has its own [`MockAgent`](https://undici.nodejs.org/#/docs/api/MockAgent) but I haven't figured out
+   * how to get it working with [ProxyAgent](https://undici.nodejs.org/#/docs/api/ProxyAgent).
+   */
   describe('proxies', () => {
     afterEach(() => {
       vi.unstubAllEnvs();
