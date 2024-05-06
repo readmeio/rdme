@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-import { Headers } from 'node-fetch';
 import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
 import pkg from '../../package.json' with { type: 'json' };

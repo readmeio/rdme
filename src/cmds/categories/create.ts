@@ -1,7 +1,6 @@
 import type { AuthenticatedCommandOptions } from '../../lib/baseCommand.js';
 
 import chalk from 'chalk';
-import { Headers } from 'node-fetch';
 
 import Command, { CommandCategories } from '../../lib/baseCommand.js';
 import config from '../../lib/config.js';

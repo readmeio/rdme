@@ -1,10 +1,8 @@
 import type { SpecFileType } from './prepareOas.js';
-import type { RequestInit, Response } from 'node-fetch';
 
 import path from 'node:path';
 
 import mime from 'mime-types';
-import nodeFetch, { Headers } from 'node-fetch'; // eslint-disable-line no-restricted-imports
 
 import pkg from '../../package.json' with { type: 'json' };
 
@@ -119,8 +117,11 @@ async function normalizeFilePath(opts: FilePathDetails) {
  * Sanitizes and stringifies the `Headers` object for logging purposes
  */
 function sanitizeHeaders(headers: Headers) {
-  const raw = new Headers(headers).raw();
-  if (raw.Authorization) raw.Authorization = ['redacted'];
+  const raw = Array.from(headers.entries()).reduce<Record<string, string>>((prev, current) => {
+    // eslint-disable-next-line no-param-reassign
+    prev[current[0]] = current[0].toLowerCase() === 'authorization' ? 'redacted' : current[1];
+    return prev;
+  }, {});
   return JSON.stringify(raw);
 }
 
@@ -188,7 +189,7 @@ export default async function readmeAPIFetch(
     `making ${(options.method || 'get').toUpperCase()} request to ${fullUrl} with headers: ${sanitizeHeaders(headers)}`,
   );
 
-  return nodeFetch(fullUrl, {
+  return fetch(fullUrl, {
     ...options,
     headers,
   }).then(res => {
@@ -241,7 +242,7 @@ async function handleRes(res: Response, rejectOnJsonError = true) {
 }
 
 /**
- * Returns the basic auth header and any other defined headers for use in `node-fetch` API calls.
+ * Returns the basic auth header and any other defined headers for use in `fetch` API calls.
  *
  */
 function cleanHeaders(

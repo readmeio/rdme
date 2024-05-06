@@ -1,9 +1,7 @@
 import type { AuthenticatedCommandOptions } from '../../lib/baseCommand.js';
 import type { OpenAPIPromptOptions } from '../../lib/prompts.js';
-import type { RequestInit, Response } from 'node-fetch';
 
 import chalk from 'chalk';
-import { Headers } from 'node-fetch';
 import ora from 'ora';
 import parse from 'parse-link-header';
 

@@ -1,7 +1,5 @@
 import type { CommandCategories } from './baseCommand.js';
 
-import { Headers } from 'node-fetch';
-
 import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch.js';
 
 /**
