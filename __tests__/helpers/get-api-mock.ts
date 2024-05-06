@@ -1,6 +1,5 @@
 import type { Headers } from 'node-fetch';
 
-import { http } from 'msw';
 import nock from 'nock';
 
 import config from '../../src/lib/config.js';
@@ -56,38 +55,4 @@ function validateHeaders(headers: Headers, basicAuthUser: string, expectedReqHea
   if (userAgent !== getUserAgent()) {
     throw new Error(`Expected user agent '${getUserAgent()}', received '${userAgent}'`);
   }
-}
-
-export function getAPIMockMSW(
-  /**
-   * API route to mock against, must start with slash
-   * @example /api/v1
-   */
-  path: string = '',
-  status = 200,
-  response?: { json?: unknown; text?: string },
-  /**
-   * A string which represents the user that's passed via basic authentication.
-   * In our case, this will almost always be the user's ReadMe API key.
-   */
-  basicAuthUser = '',
-  /** Any request headers that should be matched. */
-  expectedReqHeaders: ReqHeaders = {},
-  proxy = '',
-) {
-  return http.get(`${proxy}${config.host}${path}`, ({ request }) => {
-    try {
-      // @ts-expect-error once we move off node-fetch, we can make these types consistent
-      validateHeaders(request.headers, basicAuthUser, expectedReqHeaders);
-      let httpResponse = new Response(null, { status });
-      if (response?.json) {
-        httpResponse = Response.json(response.json, { status });
-      } else if (response?.text) {
-        httpResponse = new Response(response.text, { status });
-      }
-      return httpResponse;
-    } catch (e) {
-      throw new Error(`Error mocking GET request to https://dash.readme.com${path}: ${e.message}`);
-    }
-  });
 }
