@@ -4,7 +4,6 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 
 import chalk from 'chalk';
-import { Headers } from 'node-fetch';
 import toposort from 'toposort';
 
 import APIError from './apiError.js';

@@ -1,10 +1,9 @@
 import type { SpecFileType } from './prepareOas.js';
-import type { RequestInit, Response } from 'node-fetch';
 
 import path from 'node:path';
 
 import mime from 'mime-types';
-import nodeFetch, { Headers } from 'node-fetch'; // eslint-disable-line no-restricted-imports
+import { ProxyAgent } from 'undici';
 
 import pkg from '../../package.json' with { type: 'json' };
 
@@ -29,12 +28,7 @@ interface FilePathDetails {
 
 function getProxy() {
   // this is something of an industry standard env var, hence the checks for different casings
-  const proxy = process.env.HTTPS_PROXY || process.env.https_proxy;
-  if (proxy) {
-    // adds trailing slash
-    return proxy.endsWith('/') ? proxy : `${proxy}/`;
-  }
-  return '';
+  return process.env.HTTPS_PROXY || process.env.https_proxy;
 }
 
 /**
@@ -119,8 +113,11 @@ async function normalizeFilePath(opts: FilePathDetails) {
  * Sanitizes and stringifies the `Headers` object for logging purposes
  */
 function sanitizeHeaders(headers: Headers) {
-  const raw = new Headers(headers).raw();
-  if (raw.Authorization) raw.Authorization = ['redacted'];
+  const raw = Array.from(headers.entries()).reduce<Record<string, string>>((prev, current) => {
+    // eslint-disable-next-line no-param-reassign
+    prev[current[0]] = current[0].toLowerCase() === 'authorization' ? 'redacted' : current[1];
+    return prev;
+  }, {});
   return JSON.stringify(raw);
 }
 
@@ -182,15 +179,17 @@ export default async function readmeAPIFetch(
     headers.set('x-readme-source-url', fileOpts.filePath);
   }
 
-  const fullUrl = `${getProxy()}${config.host}${pathname}`;
+  const fullUrl = `${config.host}${pathname}`;
+  const proxy = getProxy();
 
   debug(
-    `making ${(options.method || 'get').toUpperCase()} request to ${fullUrl} with headers: ${sanitizeHeaders(headers)}`,
+    `making ${(options.method || 'get').toUpperCase()} request to ${fullUrl} ${proxy ? `with proxy ${proxy} and ` : ''}with headers: ${sanitizeHeaders(headers)}`,
   );
 
-  return nodeFetch(fullUrl, {
+  return fetch(fullUrl, {
     ...options,
     headers,
+    dispatcher: proxy ? new ProxyAgent(proxy) : undefined,
   }).then(res => {
     const warningHeader = res.headers.get('Warning');
     if (warningHeader) {
@@ -241,7 +240,7 @@ async function handleRes(res: Response, rejectOnJsonError = true) {
 }
 
 /**
- * Returns the basic auth header and any other defined headers for use in `node-fetch` API calls.
+ * Returns the basic auth header and any other defined headers for use in `fetch` API calls.
  *
  */
 function cleanHeaders(

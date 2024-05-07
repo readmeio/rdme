@@ -2,8 +2,6 @@
 import fs from 'node:fs';
 
 import chalk from 'chalk';
-import { http } from 'msw';
-import { setupServer } from 'msw/node';
 import nock from 'nock';
 import prompts from 'prompts';
 import { describe, beforeAll, beforeEach, afterEach, it, expect, vi } from 'vitest';
@@ -135,7 +133,6 @@ describe('rdme openapi', () => {
         .basicAuth({ user: key })
         .reply(200, [{ _id: 'spec1', title: 'spec1_title' }])
         .post('/api/v1/api-specification', { registryUUID })
-        .delayConnection(1000)
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
@@ -165,7 +162,6 @@ describe('rdme openapi', () => {
 
       const postMock = getAPIMockWithVersionHeader(version)
         .post('/api/v1/api-specification', { registryUUID })
-        .delayConnection(1000)
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
@@ -196,7 +192,6 @@ describe('rdme openapi', () => {
 
       const postMock = getAPIMockWithVersionHeader(version)
         .post('/api/v1/api-specification', { registryUUID })
-        .delayConnection(1000)
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
@@ -416,7 +411,6 @@ describe('rdme openapi', () => {
           { _id: 'spec2', title: 'spec2_title' },
         ])
         .put('/api/v1/api-specification/spec2', { registryUUID })
-        .delayConnection(1000)
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
@@ -484,7 +478,6 @@ describe('rdme openapi', () => {
           .basicAuth({ user: key })
           .reply(200, [{ _id: 'spec1', title: 'spec1_title' }])
           .put('/api/v1/api-specification/spec1', { registryUUID })
-          .delayConnection(1000)
           .basicAuth({ user: key })
           .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
@@ -544,7 +537,6 @@ describe('rdme openapi', () => {
           .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
           .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
           .put('/api/v1/api-specification/spec1', { registryUUID })
-          .delayConnection(1000)
           .basicAuth({ user: key })
           .reply(function (uri, rBody, cb) {
             expect(this.req.headers['x-readme-version']).toBeUndefined();
@@ -824,7 +816,6 @@ describe('rdme openapi', () => {
         .basicAuth({ user: key })
         .reply(200, [])
         .post('/api/v1/api-specification', { registryUUID })
-        .delayConnection(1000)
         .basicAuth({ user: key })
         .reply(400, errorObject);
 
@@ -856,7 +847,6 @@ describe('rdme openapi', () => {
 
       const putMock = getAPIMockWithVersionHeader(version)
         .put(`/api/v1/api-specification/${id}`, { registryUUID })
-        .delayConnection(1000)
         .basicAuth({ user: key })
         .reply(400, errorObject);
 
@@ -922,7 +912,6 @@ describe('rdme openapi', () => {
         .basicAuth({ user: key })
         .reply(200, [])
         .post('/api/v1/api-specification', { registryUUID })
-        .delayConnection(1000)
         .basicAuth({ user: key })
         .reply(400, errorObject);
 
@@ -949,7 +938,6 @@ describe('rdme openapi', () => {
         .basicAuth({ user: key })
         .reply(200, [])
         .post('/api/v1/api-specification', { registryUUID })
-        .delayConnection(1000)
         .basicAuth({ user: key })
         .reply(400, 'some non-JSON upload error');
 
@@ -980,7 +968,6 @@ describe('rdme openapi', () => {
         .basicAuth({ user: key })
         .reply(200, [])
         .post('/api/v1/api-specification', { registryUUID })
-        .delayConnection(1000)
         .basicAuth({ user: key })
         .reply(500, '<title>Application Error</title>');
 
@@ -1028,7 +1015,6 @@ describe('rdme openapi', () => {
         .basicAuth({ user: key })
         .reply(200, [{ _id: 'spec1', title: 'spec1_title' }])
         .post('/api/v1/api-specification', { registryUUID })
-        .delayConnection(1000)
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
@@ -1071,7 +1057,6 @@ describe('rdme openapi', () => {
         .basicAuth({ user: key })
         .reply(200, [{ _id: 'spec1', title: 'spec1_title' }])
         .post('/api/v1/api-specification', { registryUUID })
-        .delayConnection(1000)
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
@@ -1118,7 +1103,6 @@ describe('rdme openapi', () => {
           { _id: 'spec2', title: 'spec2_title' },
         ])
         .put('/api/v1/api-specification/spec2', { registryUUID })
-        .delayConnection(1000)
         .basicAuth({ user: key })
         .reply(201, { _id: 'spec2' }, { location: exampleRefLocation });
 
@@ -1155,7 +1139,6 @@ describe('rdme openapi', () => {
 
       const mockWithHeader = getAPIMockWithVersionHeader(altVersion)
         .post('/api/v1/api-specification', { registryUUID })
-        .delayConnection(1000)
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
@@ -1192,7 +1175,6 @@ describe('rdme openapi', () => {
 
       const postMock = getAPIMockWithVersionHeader(version)
         .post('/api/v1/api-specification', { registryUUID })
-        .delayConnection(1000)
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
@@ -1232,7 +1214,6 @@ describe('rdme openapi', () => {
         .basicAuth({ user: key })
         .reply(200, [{ _id: 'spec1', title: 'spec1_title' }])
         .put('/api/v1/api-specification/spec1', { registryUUID })
-        .delayConnection(1000)
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
@@ -1270,7 +1251,6 @@ describe('rdme openapi', () => {
         .basicAuth({ user: key })
         .reply(200, [{ _id: 'spec1', title: 'spec1_title' }])
         .post('/api/v1/api-specification', { registryUUID })
-        .delayConnection(1000)
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
@@ -1350,37 +1330,24 @@ describe('rdme openapi', () => {
     });
 
     it('should send proper headers in GitHub Actions CI for spec hosted at URL', async () => {
-      expect.assertions(8);
       const registryUUID = getRandomRegistryId();
       const spec = 'https://example.com/openapi.json';
 
-      // TODO: move all of this boilerplate to the top-level once we migrate everything over to MSW
-      const server = setupServer(...[]);
+      const mock = getAPIMock()
+        .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
+        .reply(201, { registryUUID });
 
-      server.listen({ onUnhandledRequest: 'error' });
+      const exampleMock = nock('https://example.com').get('/openapi.json').reply(200, petstoreWeird);
 
-      server.use(
-        ...[
-          http.post(`${config.host}/api/v1/api-registry`, async ({ request }) => {
-            const body = await request.text();
-            expect(body).toMatch('form-data; name="spec"');
-            return Response.json({ registryUUID }, { status: 201 });
-          }),
-          http.get(spec, () => {
-            return Response.json(petstoreWeird, { status: 200 });
-          }),
-          http.put(`${config.host}/api/v1/api-specification/${id}`, async ({ request }) => {
-            expect(request.headers.get('authorization')).toBeBasicAuthApiKey(key);
-            expect(request.headers.get('x-rdme-ci')).toBe('GitHub Actions (test)');
-            expect(request.headers.get('x-readme-source')).toBe('cli-gh');
-            expect(request.headers.get('x-readme-source-url')).toBe(spec);
-            expect(request.headers.get('x-readme-version')).toBe(version);
-            const body = await request.json();
-            expect(body).toStrictEqual({ registryUUID });
-            return Response.json({ _id: 1 }, { status: 201, headers: { location: exampleRefLocation } });
-          }),
-        ],
-      );
+      const putMock = getAPIMock({
+        'x-rdme-ci': 'GitHub Actions (test)',
+        'x-readme-source': 'cli-gh',
+        'x-readme-source-url': spec,
+        'x-readme-version': version,
+      })
+        .put(`/api/v1/api-specification/${id}`, { registryUUID })
+        .basicAuth({ user: key })
+        .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
       await expect(
         openapi.run({
@@ -1391,7 +1358,9 @@ describe('rdme openapi', () => {
         }),
       ).resolves.toBe(successfulUpdate(spec));
 
-      return server.resetHandlers();
+      putMock.done();
+      exampleMock.done();
+      return mock.done();
     });
   });
 });

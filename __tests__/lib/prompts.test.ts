@@ -1,5 +1,3 @@
-import type { Response } from 'node-fetch';
-
 import prompts from 'prompts';
 import { describe, it, expect } from 'vitest';
 

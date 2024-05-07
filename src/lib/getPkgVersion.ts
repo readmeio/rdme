@@ -1,5 +1,3 @@
-// eslint-disable-next-line no-restricted-imports
-import fetch from 'node-fetch';
 import semver from 'semver';
 
 import pkg from '../../package.json' with { type: 'json' };

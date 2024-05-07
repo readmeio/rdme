@@ -1,5 +1,4 @@
 import type { Version } from '../cmds/versions/index.js';
-import type { Response } from 'node-fetch';
 import type { Choice, PromptObject } from 'prompts';
 
 import parse from 'parse-link-header';

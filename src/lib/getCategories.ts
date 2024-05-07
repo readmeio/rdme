@@ -1,5 +1,3 @@
-import { Headers } from 'node-fetch';
-
 import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch.js';
 
 /**

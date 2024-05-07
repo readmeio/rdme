@@ -1,6 +1,5 @@
 import fs from 'node:fs';
 
-import { FormData } from 'formdata-node';
 import ora from 'ora';
 import { file as tmpFile } from 'tmp-promise';
 

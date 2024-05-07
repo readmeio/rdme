@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
-import { Headers } from 'node-fetch';
-import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
+import nock from 'nock';
+import { describe, beforeEach, afterEach, it, expect, vi, beforeAll } from 'vitest';
 
 import pkg from '../../package.json' with { type: 'json' };
 import readmeAPIFetch, { cleanHeaders, handleRes } from '../../src/lib/readmeAPIFetch.js';
@@ -8,6 +8,12 @@ import getAPIMock from '../helpers/get-api-mock.js';
 import { after, before } from '../helpers/setup-gha-env.js';
 
 describe('#fetch()', () => {
+  beforeAll(() => {
+    nock.disableNetConnect();
+  });
+
+  afterEach(() => nock.cleanAll());
+
   describe('GitHub Actions environment', () => {
     beforeEach(before);
 
@@ -279,6 +285,11 @@ describe('#fetch()', () => {
     });
   });
 
+  /**
+   * @note these tests aren't doing much since there's no way for nock to intercept proxy agents properly.
+   * Undici has its own [`MockAgent`](https://undici.nodejs.org/#/docs/api/MockAgent) but I haven't figured out
+   * how to get it working with [ProxyAgent](https://undici.nodejs.org/#/docs/api/ProxyAgent).
+   */
   describe('proxies', () => {
     afterEach(() => {
       vi.unstubAllEnvs();
@@ -289,11 +300,11 @@ describe('#fetch()', () => {
 
       vi.stubEnv('HTTPS_PROXY', proxy);
 
-      const mock = getAPIMock({}, `${proxy}/`).get('/api/v1/proxy').reply(200);
+      const mock = getAPIMock({}).get('/api/v1/proxy').reply(200);
 
       await readmeAPIFetch('/api/v1/proxy');
 
-      expect(mock.isDone()).toBe(true);
+      mock.done();
     });
 
     it('should support proxies via https_proxy env variable', async () => {
@@ -301,11 +312,11 @@ describe('#fetch()', () => {
 
       vi.stubEnv('https_proxy', proxy);
 
-      const mock = getAPIMock({}, `${proxy}/`).get('/api/v1/proxy').reply(200);
+      const mock = getAPIMock({}).get('/api/v1/proxy').reply(200);
 
       await readmeAPIFetch('/api/v1/proxy');
 
-      expect(mock.isDone()).toBe(true);
+      mock.done();
     });
 
     it('should handle trailing slash in proxy URL', async () => {
@@ -313,11 +324,11 @@ describe('#fetch()', () => {
 
       vi.stubEnv('https_proxy', proxy);
 
-      const mock = getAPIMock({}, proxy).get('/api/v1/proxy').reply(200);
+      const mock = getAPIMock({}).get('/api/v1/proxy').reply(200);
 
       await readmeAPIFetch('/api/v1/proxy');
 
-      expect(mock.isDone()).toBe(true);
+      mock.done();
     });
   });
 });
