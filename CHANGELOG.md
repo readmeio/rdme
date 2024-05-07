@@ -1,3 +1,10 @@
+# [9.0.0-next.15](https://github.com/readmeio/rdme/compare/v9.0.0-next.14...v9.0.0-next.15) (2024-05-07)
+
+
+### Features
+
+* **fetch:** use undici + `ProxyAgent`  ([#1000](https://github.com/readmeio/rdme/issues/1000)) ([9da7132](https://github.com/readmeio/rdme/commit/9da7132b71a7a64ef94ed0376fe379e7bffa8f9a)), closes [#999](https://github.com/readmeio/rdme/issues/999)
+
 # [9.0.0-next.14](https://github.com/readmeio/rdme/compare/v9.0.0-next.13...v9.0.0-next.14) (2024-04-30)
 
 
