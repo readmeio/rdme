@@ -190,17 +190,22 @@ export default async function readmeAPIFetch(
     ...options,
     headers,
     dispatcher: proxy ? new ProxyAgent(proxy) : undefined,
-  }).then(res => {
-    const warningHeader = res.headers.get('Warning');
-    if (warningHeader) {
-      debug(`received warning header: ${warningHeader}`);
-      const warnings = parseWarningHeader(warningHeader);
-      warnings.forEach(warning => {
-        warn(warning.message, 'ReadMe API Warning:');
-      });
-    }
-    return res;
-  });
+  })
+    .then(res => {
+      const warningHeader = res.headers.get('Warning');
+      if (warningHeader) {
+        debug(`received warning header: ${warningHeader}`);
+        const warnings = parseWarningHeader(warningHeader);
+        warnings.forEach(warning => {
+          warn(warning.message, 'ReadMe API Warning:');
+        });
+      }
+      return res;
+    })
+    .catch(e => {
+      debug(`error making fetch request: ${e}`);
+      throw e;
+    });
 }
 
 /**
