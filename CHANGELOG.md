@@ -1,3 +1,10 @@
+# [9.0.0-next.16](https://github.com/readmeio/rdme/compare/v9.0.0-next.15...v9.0.0-next.16) (2024-05-14)
+
+
+### Bug Fixes
+
+* add better debugging for fetch failures ([a17f8da](https://github.com/readmeio/rdme/commit/a17f8da51ddc9e57b734b5c46441cd833052ed90))
+
 # [9.0.0-next.15](https://github.com/readmeio/rdme/compare/v9.0.0-next.14...v9.0.0-next.15) (2024-05-07)
 
 
