@@ -1122,7 +1122,8 @@
                   },
                   "additionalProperties": false
                 }
-              }
+              },
+              "additionalProperties": false
             },
             "workflow_run": {
               "$comment": "https://docs.github.com/en/actions/reference/events-that-trigger-workflows#workflow_run",
