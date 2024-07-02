@@ -62,9 +62,7 @@ function constructCmdString(command: keyof typeof commands, args: OptionDefiniti
   const optsString = args
     .sort(arg => (arg.defaultOption ? -1 : 0))
     .map(arg => {
-      // @ts-expect-error by this point it's safe to assume that
-      // the argument names match the opts object.
-      const val = opts[arg.name];
+      const val = opts[arg.name as keyof typeof opts];
       // if default option, return the value
       if (arg.defaultOption) return val;
       // obfuscate the key in a GitHub secret
