@@ -41,7 +41,7 @@
     "ci-info": "^4.0.0",
     "command-line-args": "^5.2.0",
     "command-line-usage": "^7.0.1",
-    "configstore": "^6.0.0",
+    "configstore": "^7.0.0",
     "debug": "^4.3.3",
     "gray-matter": "^4.0.1",
     "ignore": "^5.2.0",
