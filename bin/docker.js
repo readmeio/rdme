@@ -2,9 +2,9 @@
 // @ts-check
 /* eslint-disable no-console */
 import { execFile as unpromisifiedExecFile } from 'node:child_process';
-import util from 'node:util';
+import { promisify } from 'node:util';
 
-const execFile = util.promisify(unpromisifiedExecFile);
+const execFile = promisify(unpromisifiedExecFile);
 
 /**
  * Retrieves and parses the docker image metadata
