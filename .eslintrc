@@ -17,16 +17,12 @@
     "sourceType": "module"
   },
   "rules": {
-    "@typescript-eslint/ban-types": [
-      "error",
-      {
-        "types": {
-          // We specify `{}` in `CommandOptions` generics when those commands don't have their own
-          // options and it's cleaner for us to do that than `Record<string, unknown>`.
-          "{}": false
-        }
-      }
-    ],
+    // We specify `{}` in `CommandOptions` generics when those commands don't have their own
+    // options and it's cleaner for us to do that than `Record<string, unknown>`.
+    "@typescript-eslint/no-empty-object-type": "off",
+
+    // We already have top-level error handling across the codebase, so this rule is not helpful for us.
+    "try-catch-failsafe/json-parse": "off",
 
     /**
      * Because our command classes have a `run` method that might not always call `this` we need to
