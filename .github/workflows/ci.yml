@@ -20,8 +20,7 @@ jobs:
           # https://github.com/nvm-sh/nvm/issues/1998#issuecomment-594958684
           - lts/-1
           - lts/*
-          - 22.2 # temporarily pinning due to fetch mocking failures on node v22.3, see https://github.com/readmeio/rdme/pull/1019#issuecomment-2201147488
-          # - latest
+          - latest
 
     steps:
       - uses: actions/checkout@v4
