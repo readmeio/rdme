@@ -1,3 +1,10 @@
+# [9.0.0-next.18](https://github.com/readmeio/rdme/compare/v9.0.0-next.17...v9.0.0-next.18) (2024-09-10)
+
+
+### Bug Fixes
+
+* **deps:** bump more deps ([#1042](https://github.com/readmeio/rdme/issues/1042)) ([786a000](https://github.com/readmeio/rdme/commit/786a000ff51ccf550f0a29c1bee290f4b2494c4c))
+
 # [9.0.0-next.17](https://github.com/readmeio/rdme/compare/v9.0.0-next.16...v9.0.0-next.17) (2024-05-29)
 
 
