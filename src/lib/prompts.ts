@@ -4,6 +4,7 @@ import type { Choice, PromptObject } from 'prompts';
 import parse from 'parse-link-header';
 import semver from 'semver';
 
+import { debug } from './logger.js';
 import promptTerminal from './promptWrapper.js';
 import { handleRes } from './readmeAPIFetch.js';
 
@@ -80,6 +81,7 @@ const updateOasPrompt = (
           );
           return specId;
         } catch (e) {
+          debug(`error retrieving previous specs: ${e.message}`);
           return null;
         }
       } else if (spec === 'next') {
@@ -92,6 +94,7 @@ const updateOasPrompt = (
           );
           return specId;
         } catch (e) {
+          debug(`error retrieving next specs: ${e.message}`);
           return null;
         }
       }

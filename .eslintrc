@@ -5,28 +5,24 @@
     {
       "files": ["bin/*.js"],
       "rules": {
-        "@typescript-eslint/no-var-requires": "off"
-      }
-    }
+        "@typescript-eslint/no-var-requires": "off",
+      },
+    },
   ],
   "env": {
     "es2021": true,
-    "node": true
+    "node": true,
   },
   "parserOptions": {
-    "sourceType": "module"
+    "sourceType": "module",
   },
   "rules": {
-    "@typescript-eslint/ban-types": [
-      "error",
-      {
-        "types": {
-          // We specify `{}` in `CommandOptions` generics when those commands don't have their own
-          // options and it's cleaner for us to do that than `Record<string, unknown>`.
-          "{}": false
-        }
-      }
-    ],
+    // We specify `{}` in `CommandOptions` generics when those commands don't have their own
+    // options and it's cleaner for us to do that than `Record<string, unknown>`.
+    "@typescript-eslint/no-empty-object-type": "off",
+
+    // We already have top-level error handling across the codebase, so this rule is not helpful for us.
+    "try-catch-failsafe/json-parse": "off",
 
     /**
      * Because our command classes have a `run` method that might not always call `this` we need to
@@ -57,13 +53,13 @@
         "paths": [
           {
             "name": "ci-info",
-            "message": "The `ci-info` package is difficult to test because misleading results will appear when running tests in the GitHub Actions runner. Instead of importing this package directly, create a wrapper function in `lib/isCI.ts` and import that instead."
-          }
-        ]
-      }
+            "message": "The `ci-info` package is difficult to test because misleading results will appear when running tests in the GitHub Actions runner. Instead of importing this package directly, create a wrapper function in `lib/isCI.ts` and import that instead.",
+          },
+        ],
+      },
     ],
 
     // This rule is only really applicable for OSS libraries and doesn't apply to rdme's case.
-    "readme/no-dual-exports": "off"
-  }
+    "readme/no-dual-exports": "off",
+  },
 }

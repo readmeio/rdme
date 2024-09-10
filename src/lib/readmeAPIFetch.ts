@@ -189,6 +189,7 @@ export default async function readmeAPIFetch(
   return fetch(fullUrl, {
     ...options,
     headers,
+    // @ts-expect-error we need to clean up our undici usage here ASAP
     dispatcher: proxy ? new ProxyAgent(proxy) : undefined,
   })
     .then(res => {
