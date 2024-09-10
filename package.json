@@ -88,7 +88,7 @@
     "@types/validator": "^13.7.6",
     "@vitest/coverage-v8": "^2.0.5",
     "@vitest/expect": "^2.0.5",
-    "@yao-pkg/pkg": "^5.11.4",
+    "@yao-pkg/pkg": "^5.14.0",
     "ajv": "^8.11.0",
     "alex": "^11.0.0",
     "eslint": "^8.47.0",
