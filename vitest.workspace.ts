@@ -22,6 +22,7 @@ export default defineWorkspace([
     test: {
       exclude: [...sharedExclude, '**/single-threaded/**'],
       name: 'default',
+      pool: 'threads',
       ...sharedOpts,
     },
   },
