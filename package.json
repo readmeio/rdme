@@ -44,7 +44,7 @@
     "configstore": "^7.0.0",
     "debug": "^4.3.3",
     "gray-matter": "^4.0.1",
-    "ignore": "^5.2.0",
+    "ignore": "^6.0.2",
     "mime-types": "^2.1.35",
     "oas": "^25.0.0",
     "oas-normalize": "^11.1.2",
