@@ -1,13 +1,13 @@
 #! /usr/bin/env node
 // @ts-check
 import { execFile as unpromisifiedExecFile } from 'node:child_process';
-import util from 'node:util';
+import { promisify } from 'node:util';
 
 import { parse } from 'semver';
 
-import pkg from '../package.json' assert { type: 'json' };
+import pkg from '../package.json' with { type: 'json' };
 
-const execFile = util.promisify(unpromisifiedExecFile);
+const execFile = promisify(unpromisifiedExecFile);
 
 /**
  * Runs command and logs all output

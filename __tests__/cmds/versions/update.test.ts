@@ -26,7 +26,51 @@ describe('rdme versions:update', () => {
 
   afterEach(() => nock.cleanAll());
 
-  it('should update a specific version object', async () => {
+  it('should prompt for login if no API key provided', async () => {
+    const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
+    prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
+    // @ts-expect-error deliberately passing in bad data
+    await expect(updateVersion.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
+    consoleInfoSpy.mockRestore();
+  });
+
+  it('should error in CI if no API key provided', async () => {
+    process.env.TEST_RDME_CI = 'true';
+    // @ts-expect-error deliberately passing in bad data
+    await expect(updateVersion.run({})).rejects.toStrictEqual(
+      new Error('No project API key provided. Please use `--key`.'),
+    );
+    delete process.env.TEST_RDME_CI;
+  });
+
+  it('should update a specific version object using prompts', async () => {
+    const versionToChange = '1.1.0';
+    prompts.inject([versionToChange, undefined, false, true, false, false]);
+
+    const updatedVersionObject = {
+      version: versionToChange,
+      is_stable: false,
+      is_beta: true,
+      is_deprecated: false,
+      is_hidden: false,
+    };
+
+    const mockRequest = getAPIMock()
+      .get('/api/v1/version')
+      .basicAuth({ user: key })
+      .reply(200, [{ version }, { version: versionToChange }])
+      .get(`/api/v1/version/${versionToChange}`)
+      .basicAuth({ user: key })
+      .reply(200, { version: versionToChange })
+      .put(`/api/v1/version/${versionToChange}`, updatedVersionObject)
+      .basicAuth({ user: key })
+      .reply(201, updatedVersionObject);
+
+    await expect(updateVersion.run({ key })).resolves.toBe(`Version ${versionToChange} updated successfully.`);
+    mockRequest.done();
+  });
+
+  it('should rename a specific version object using prompts', async () => {
     const versionToChange = '1.1.0';
     const renamedVersion = '1.1.0-update';
     prompts.inject([versionToChange, renamedVersion, false, true, false, false]);
@@ -45,7 +89,31 @@ describe('rdme versions:update', () => {
       .reply(200, [{ version }, { version: versionToChange }])
       .get(`/api/v1/version/${versionToChange}`)
       .basicAuth({ user: key })
-      .reply(200, { version })
+      .reply(200, { version: versionToChange })
+      .put(`/api/v1/version/${versionToChange}`, updatedVersionObject)
+      .basicAuth({ user: key })
+      .reply(201, updatedVersionObject);
+
+    await expect(updateVersion.run({ key })).resolves.toBe(`Version ${versionToChange} updated successfully.`);
+    mockRequest.done();
+  });
+
+  it('should use subset of prompts when updating stable version', async () => {
+    const versionToChange = '1.1.0';
+    prompts.inject([versionToChange, undefined, true]);
+
+    const updatedVersionObject = {
+      version: versionToChange,
+      is_beta: true,
+    };
+
+    const mockRequest = getAPIMock()
+      .get('/api/v1/version')
+      .basicAuth({ user: key })
+      .reply(200, [{ version }, { version: versionToChange, is_stable: true }])
+      .get(`/api/v1/version/${versionToChange}`)
+      .basicAuth({ user: key })
+      .reply(200, { version: versionToChange, is_stable: true })
       .put(`/api/v1/version/${versionToChange}`, updatedVersionObject)
       .basicAuth({ user: key })
       .reply(201, updatedVersionObject);

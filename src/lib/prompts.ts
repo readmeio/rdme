@@ -1,10 +1,10 @@
 import type { Version } from '../cmds/versions/index.js';
-import type { Response } from 'node-fetch';
 import type { Choice, PromptObject } from 'prompts';
 
 import parse from 'parse-link-header';
 import semver from 'semver';
 
+import { debug } from './logger.js';
 import promptTerminal from './promptWrapper.js';
 import { handleRes } from './readmeAPIFetch.js';
 
@@ -81,6 +81,7 @@ const updateOasPrompt = (
           );
           return specId;
         } catch (e) {
+          debug(`error retrieving previous specs: ${e.message}`);
           return null;
         }
       } else if (spec === 'next') {
@@ -93,6 +94,7 @@ const updateOasPrompt = (
           );
           return specId;
         } catch (e) {
+          debug(`error retrieving next specs: ${e.message}`);
           return null;
         }
       }
@@ -184,7 +186,7 @@ export function versionPrompt(
       type: (prev, values) => {
         // if user wants this version to be the main version
         // it can't also be hidden.
-        return values.is_stable ? null : 'confirm';
+        return values.is_stable || existingVersion?.is_stable ? null : 'confirm';
       },
       name: 'is_hidden',
       message: 'Should this version be hidden?',
@@ -193,7 +195,7 @@ export function versionPrompt(
       type: (prev, values) => {
         // if user wants this version to be the main version
         // it can't also be deprecated.
-        return values.is_stable ? null : 'confirm';
+        return values.is_stable || existingVersion?.is_stable ? null : 'confirm';
       },
       name: 'is_deprecated',
       message: 'Should this version be deprecated?',

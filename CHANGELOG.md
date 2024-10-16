@@ -1,3 +1,52 @@
+# [9.0.0-next.18](https://github.com/readmeio/rdme/compare/v9.0.0-next.17...v9.0.0-next.18) (2024-09-10)
+
+
+### Bug Fixes
+
+* **deps:** bump more deps ([#1042](https://github.com/readmeio/rdme/issues/1042)) ([786a000](https://github.com/readmeio/rdme/commit/786a000ff51ccf550f0a29c1bee290f4b2494c4c))
+
+# [9.0.0-next.17](https://github.com/readmeio/rdme/compare/v9.0.0-next.16...v9.0.0-next.17) (2024-05-29)
+
+
+### Bug Fixes
+
+* empty commit to trigger release ([3604f2a](https://github.com/readmeio/rdme/commit/3604f2af4aaec9ee62ebb92a8d24b6276d23b6e8))
+
+# [9.0.0-next.16](https://github.com/readmeio/rdme/compare/v9.0.0-next.15...v9.0.0-next.16) (2024-05-14)
+
+
+### Bug Fixes
+
+* add better debugging for fetch failures ([a17f8da](https://github.com/readmeio/rdme/commit/a17f8da51ddc9e57b734b5c46441cd833052ed90))
+
+# [9.0.0-next.15](https://github.com/readmeio/rdme/compare/v9.0.0-next.14...v9.0.0-next.15) (2024-05-07)
+
+
+### Features
+
+* **fetch:** use undici + `ProxyAgent`  ([#1000](https://github.com/readmeio/rdme/issues/1000)) ([9da7132](https://github.com/readmeio/rdme/commit/9da7132b71a7a64ef94ed0376fe379e7bffa8f9a)), closes [#999](https://github.com/readmeio/rdme/issues/999)
+
+# [9.0.0-next.14](https://github.com/readmeio/rdme/compare/v9.0.0-next.13...v9.0.0-next.14) (2024-04-30)
+
+
+### Bug Fixes
+
+* swap out ts-node for tsx ([16f64b3](https://github.com/readmeio/rdme/commit/16f64b38b53b7011f2fae68b0a71138cb8a188d6))
+
+# [9.0.0-next.13](https://github.com/readmeio/rdme/compare/v9.0.0-next.12...v9.0.0-next.13) (2024-04-24)
+
+
+### Bug Fixes
+
+* use newest import attributes syntax ([#993](https://github.com/readmeio/rdme/issues/993)) ([d76c0ae](https://github.com/readmeio/rdme/commit/d76c0ae7933bb16e5bf6a21086b718911fc2cd4d)), closes [/github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V20.md#2023-11-22-version-20100](https://github.com//github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V20.md/issues/2023-11-22-version-20100)
+
+# [9.0.0-next.12](https://github.com/readmeio/rdme/compare/v9.0.0-next.11...v9.0.0-next.12) (2024-03-07)
+
+
+### Bug Fixes
+
+* **versions/update:** various edge cases ([#965](https://github.com/readmeio/rdme/issues/965)) ([580e307](https://github.com/readmeio/rdme/commit/580e307caecb04281c2083169ce3dbfb937086b3))
+
 # [9.0.0-next.11](https://github.com/readmeio/rdme/compare/v9.0.0-next.10...v9.0.0-next.11) (2024-02-15)
 
 

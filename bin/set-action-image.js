@@ -5,7 +5,7 @@ import fs from 'node:fs/promises';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import jsYaml from 'js-yaml';
 
-import pkg from '../package.json' assert { type: 'json' };
+import pkg from '../package.json' with { type: 'json' };
 
 /**
  * Updates our `action.yml` file so it properly points to

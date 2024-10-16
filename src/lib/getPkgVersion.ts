@@ -1,10 +1,8 @@
 import type { Hook } from '@oclif/core';
 
-// eslint-disable-next-line no-restricted-imports
-import fetch from 'node-fetch';
 import semver from 'semver';
 
-import pkg from '../package.json' assert { type: 'json' };
+import pkg from '../package.json' with { type: 'json' };
 
 import { error } from './logger.js';
 
@@ -20,13 +18,13 @@ type npmDistTag = 'latest';
  *
  * @example 14
  */
-export function getNodeVersion() {
+export function getNodeVersion(): string {
   const { node } = pkg.engines;
   const parsedVersion = semver.minVersion(node);
   if (!parsedVersion) {
     throw new Error('`version` value in package.json is invalid');
   }
-  return parsedVersion.major;
+  return parsedVersion.version;
 }
 
 /**

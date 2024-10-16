@@ -9,7 +9,7 @@ type VersionBooleanOpts = Exclude<keyof typeof baseVersionFlags, 'codename'>;
  * Takes a CLI flag that is expected to be a 'true' or 'false' string
  * and casts it to a boolean.
  */
-export default function castStringOptToBool(opt: 'true' | 'false' | undefined, optName: VersionBooleanOpts) {
+export default function castStringOptToBool(opt: 'false' | 'true' | undefined, optName: VersionBooleanOpts) {
   if (!opt) {
     return undefined;
   }

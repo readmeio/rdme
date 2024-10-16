@@ -10,10 +10,10 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "ES2022",
-    "useUnknownInCatchVariables": false,
+    "useUnknownInCatchVariables": false
   },
   "include": ["./src/**/*"],
   "ts-node": {
-    "esm": true,
-  },
+    "esm": true
+  }
 }

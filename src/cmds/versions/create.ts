@@ -1,7 +1,6 @@
 import type { Version } from './index.js';
 
 import { Args, Flags } from '@oclif/core';
-import { Headers } from 'node-fetch';
 import prompts from 'prompts';
 import semver from 'semver';
 

@@ -1,6 +1,5 @@
 import { Args, Flags } from '@oclif/core';
 import chalk from 'chalk';
-import { Headers } from 'node-fetch';
 
 import BaseCommand from '../../lib/baseCommand.js';
 import { keyFlag, versionFlag } from '../../lib/flags.js';
