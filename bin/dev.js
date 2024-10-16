@@ -1,4 +1,4 @@
-#!/usr/bin/env -S node --loader ts-node/esm
+#!/usr/bin/env node --no-warnings=ExperimentalWarning
 
 async function main() {
   const { execute } = await import('@oclif/core');
