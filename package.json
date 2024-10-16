@@ -70,6 +70,7 @@
     "table": "^6.8.1",
     "tmp-promise": "^3.0.2",
     "toposort": "^2.0.2",
+    "undici": "^5.28.4",
     "validator": "^13.7.0"
   },
   "devDependencies": {
@@ -97,6 +98,7 @@
     "@yao-pkg/pkg": "^5.14.0",
     "ajv": "^8.11.0",
     "alex": "^11.0.0",
+    "esbuild": "^0.24.0",
     "eslint": "^8.47.0",
     "husky": "^9.0.10",
     "js-yaml": "^4.1.0",

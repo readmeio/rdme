@@ -1,7 +1,7 @@
 import type { CreateGHAHook, CreateGHAHookOptsInClass } from './hooks/createGHA.js';
 import type { Config, Hook, Interfaces } from '@oclif/core';
 
-import util from 'node:util';
+import { format } from 'node:util';
 
 import * as core from '@actions/core';
 import { Command as OclifCommand } from '@oclif/core';
@@ -22,7 +22,7 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
     // with some debug logging functionality for github actions
     this.debug = (formatter: unknown, ...args: unknown[]) => {
       if (isGHA() && !isTest()) {
-        core.debug(`${scope}: ${util.format(formatter, ...args)}`);
+        core.debug(`${scope}: ${format(formatter, ...args)}`);
       }
 
       return oclifDebug(formatter, ...args);

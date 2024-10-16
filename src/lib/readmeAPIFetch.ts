@@ -1,17 +1,17 @@
-import type { SpecFileType } from "./prepareOas.js";
+import type { SpecFileType } from './prepareOas.js';
 
-import path from "node:path";
+import path from 'node:path';
 
-import mime from "mime-types";
-import { ProxyAgent } from "undici";
+import mime from 'mime-types';
+import { ProxyAgent } from 'undici';
 
-import pkg from "../package.json" assert { type: "json" };
+import pkg from '../package.json' assert { type: 'json' };
 
-import APIError from "./apiError.js";
-import config from "./config.js";
-import { git } from "./createGHA/index.js";
-import isCI, { ciName, isGHA } from "./isCI.js";
-import { debug, warn } from "./logger.js";
+import APIError from './apiError.js';
+import config from './config.js';
+import { git } from './createGHA/index.js';
+import isCI, { ciName, isGHA } from './isCI.js';
+import { debug, warn } from './logger.js';
 
 const SUCCESS_NO_CONTENT = 204;
 
@@ -44,8 +44,8 @@ interface WarningHeader {
 }
 
 function stripQuotes(s: string) {
-  if (!s) return "";
-  return s.replace(/(^"|[",]*$)/g, "");
+  if (!s) return '';
+  return s.replace(/(^"|[",]*$)/g, '');
 }
 
 /**
@@ -66,7 +66,7 @@ function parseWarningHeader(header: string): WarningHeader[] {
       w = w.trim();
       const newError = w.match(/^([0-9]{3}) (.*)/);
       if (newError) {
-        previous = { code: newError[1], agent: newError[2], message: "" };
+        previous = { code: newError[1], agent: newError[2], message: '' };
       } else if (w) {
         const errorContent = w.split(/" "/);
         if (errorContent) {
@@ -79,7 +79,7 @@ function parseWarningHeader(header: string): WarningHeader[] {
     }, []);
   } catch (e) {
     debug(`error parsing warning header: ${e.message}`);
-    return [{ code: "199", agent: "-", message: header }];
+    return [{ code: '199', agent: '-', message: header }];
   }
 }
 
@@ -89,7 +89,7 @@ function parseWarningHeader(header: string): WarningHeader[] {
  *
  */
 function getUserAgent() {
-  const gh = isGHA() ? "-github" : "";
+  const gh = isGHA() ? '-github' : '';
   return `rdme${gh}/${pkg.version}`;
 }
 
@@ -98,10 +98,10 @@ function getUserAgent() {
  * otherwise returns the path
  */
 async function normalizeFilePath(opts: FilePathDetails) {
-  if (opts.fileType === "path") {
-    const repoRoot = await git.revparse(["--show-toplevel"]).catch((e) => {
+  if (opts.fileType === 'path') {
+    const repoRoot = await git.revparse(['--show-toplevel']).catch(e => {
       debug(`[fetch] error grabbing git root: ${e.message}`);
-      return "";
+      return '';
     });
 
     return path.relative(repoRoot, opts.filePath);
@@ -115,7 +115,7 @@ async function normalizeFilePath(opts: FilePathDetails) {
 function sanitizeHeaders(headers: Headers) {
   const raw = Array.from(headers.entries()).reduce<Record<string, string>>((prev, current) => {
     // eslint-disable-next-line no-param-reassign
-    prev[current[0]] = current[0].toLowerCase() === "authorization" ? "redacted" : current[1];
+    prev[current[0]] = current[0].toLowerCase() === 'authorization' ? 'redacted' : current[1];
     return prev;
   }, {});
   return JSON.stringify(raw);
@@ -131,24 +131,24 @@ function sanitizeHeaders(headers: Headers) {
 export default async function readmeAPIFetch(
   pathname: string,
   options: RequestInit = { headers: new Headers() },
-  fileOpts: FilePathDetails = { filePath: "", fileType: false }
+  fileOpts: FilePathDetails = { filePath: '', fileType: false },
 ) {
-  let source = "cli";
+  let source = 'cli';
   let headers = options.headers as Headers;
 
   if (!(options.headers instanceof Headers)) {
     headers = new Headers(options.headers);
   }
 
-  headers.set("User-Agent", getUserAgent());
+  headers.set('User-Agent', getUserAgent());
 
   if (isGHA()) {
-    source = "cli-gh";
-    if (process.env.GITHUB_REPOSITORY) headers.set("x-github-repository", process.env.GITHUB_REPOSITORY);
-    if (process.env.GITHUB_RUN_ATTEMPT) headers.set("x-github-run-attempt", process.env.GITHUB_RUN_ATTEMPT);
-    if (process.env.GITHUB_RUN_ID) headers.set("x-github-run-id", process.env.GITHUB_RUN_ID);
-    if (process.env.GITHUB_RUN_NUMBER) headers.set("x-github-run-number", process.env.GITHUB_RUN_NUMBER);
-    if (process.env.GITHUB_SHA) headers.set("x-github-sha", process.env.GITHUB_SHA);
+    source = 'cli-gh';
+    if (process.env.GITHUB_REPOSITORY) headers.set('x-github-repository', process.env.GITHUB_REPOSITORY);
+    if (process.env.GITHUB_RUN_ATTEMPT) headers.set('x-github-run-attempt', process.env.GITHUB_RUN_ATTEMPT);
+    if (process.env.GITHUB_RUN_ID) headers.set('x-github-run-id', process.env.GITHUB_RUN_ID);
+    if (process.env.GITHUB_RUN_NUMBER) headers.set('x-github-run-number', process.env.GITHUB_RUN_NUMBER);
+    if (process.env.GITHUB_SHA) headers.set('x-github-sha', process.env.GITHUB_SHA);
 
     const filePath = await normalizeFilePath(fileOpts);
 
@@ -160,9 +160,9 @@ export default async function readmeAPIFetch(
        */
       try {
         const sourceUrl = new URL(
-          `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/blob/${process.env.GITHUB_SHA}/${filePath}`
+          `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/blob/${process.env.GITHUB_SHA}/${filePath}`,
         ).href;
-        headers.set("x-readme-source-url", sourceUrl);
+        headers.set('x-readme-source-url', sourceUrl);
       } catch (e) {
         debug(`error constructing github source url: ${e.message}`);
       }
@@ -170,20 +170,20 @@ export default async function readmeAPIFetch(
   }
 
   if (isCI()) {
-    headers.set("x-rdme-ci", ciName());
+    headers.set('x-rdme-ci', ciName());
   }
 
-  headers.set("x-readme-source", source);
+  headers.set('x-readme-source', source);
 
-  if (fileOpts.filePath && fileOpts.fileType === "url") {
-    headers.set("x-readme-source-url", fileOpts.filePath);
+  if (fileOpts.filePath && fileOpts.fileType === 'url') {
+    headers.set('x-readme-source-url', fileOpts.filePath);
   }
 
   const fullUrl = `${config.host}${pathname}`;
   const proxy = getProxy();
 
   debug(
-    `making ${(options.method || "get").toUpperCase()} request to ${fullUrl} ${proxy ? `with proxy ${proxy} and ` : ""}with headers: ${sanitizeHeaders(headers)}`
+    `making ${(options.method || 'get').toUpperCase()} request to ${fullUrl} ${proxy ? `with proxy ${proxy} and ` : ''}with headers: ${sanitizeHeaders(headers)}`,
   );
 
   return fetch(fullUrl, {
@@ -192,18 +192,18 @@ export default async function readmeAPIFetch(
     // @ts-expect-error we need to clean up our undici usage here ASAP
     dispatcher: proxy ? new ProxyAgent(proxy) : undefined,
   })
-    .then((res) => {
-      const warningHeader = res.headers.get("Warning");
+    .then(res => {
+      const warningHeader = res.headers.get('Warning');
       if (warningHeader) {
         debug(`received warning header: ${warningHeader}`);
         const warnings = parseWarningHeader(warningHeader);
-        warnings.forEach((warning) => {
-          warn(warning.message, "ReadMe API Warning:");
+        warnings.forEach(warning => {
+          warn(warning.message, 'ReadMe API Warning:');
         });
       }
       return res;
     })
-    .catch((e) => {
+    .catch(e => {
       debug(`error making fetch request: ${e}`);
       throw e;
     });
@@ -222,9 +222,9 @@ export default async function readmeAPIFetch(
  *
  */
 async function handleRes(res: Response, rejectOnJsonError = true) {
-  const contentType = res.headers.get("content-type") || "";
+  const contentType = res.headers.get('content-type') || '';
   const extension = mime.extension(contentType);
-  if (extension === "json") {
+  if (extension === 'json') {
     // TODO: type this better
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const body = (await res.json()) as any;
@@ -253,21 +253,21 @@ function cleanHeaders(
   key: string,
   /** used for `x-readme-header` */
   version?: string,
-  inputHeaders: Headers = new Headers()
+  inputHeaders: Headers = new Headers(),
 ) {
-  const encodedKey = Buffer.from(`${key}:`).toString("base64");
+  const encodedKey = Buffer.from(`${key}:`).toString('base64');
   const headers = new Headers({
     Authorization: `Basic ${encodedKey}`,
   });
 
   if (version) {
-    headers.set("x-readme-version", version);
+    headers.set('x-readme-version', version);
   }
 
   for (const header of inputHeaders.entries()) {
     // If you supply `undefined` or `null` to the `Headers` API it'll convert that those to a
     // string.
-    if (header[1] !== "null" && header[1] !== "undefined" && header[1].length > 0) {
+    if (header[1] !== 'null' && header[1] !== 'undefined' && header[1].length > 0) {
       headers.set(header[0], header[1]);
     }
   }

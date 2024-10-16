@@ -10,10 +10,10 @@ export interface CreateGHAHookOptsInClass {
   result: string;
 }
 
-type CreateGHAHookOpts = {
+type CreateGHAHookOpts = Omit<CreateGHAHookOptsInClass, 'parsedOpts'> & {
   command: Command.Class;
   parsedOpts: ParsedOpts;
-} & Omit<CreateGHAHookOptsInClass, 'parsedOpts'>;
+};
 
 export interface CreateGHAHook {
   createGHA: {

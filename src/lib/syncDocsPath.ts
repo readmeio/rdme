@@ -15,9 +15,9 @@ import readDoc from './readDoc.js';
 import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch.js';
 
 /** API path within ReadMe to update (e.g. `docs`, `changelogs`, etc.) */
-type PageType = 'docs' | 'changelogs' | 'custompages';
+type PageType = 'changelogs' | 'custompages' | 'docs';
 
-type PageCommand = DocsCommand | ChangelogsCommand | CustomPagesCommand;
+type PageCommand = ChangelogsCommand | CustomPagesCommand | DocsCommand;
 
 /**
  * Reads the contents of the specified Markdown or HTML file
