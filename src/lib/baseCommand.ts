@@ -78,7 +78,7 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
     this.args = args as Args<T>;
   }
 
-  runCreateGHAHook(opts: CreateGHAHookOptsInClass) {
+  async runCreateGHAHook(opts: CreateGHAHookOptsInClass) {
     return this.config
       .runHook('createGHA', {
         command: this.ctor,
