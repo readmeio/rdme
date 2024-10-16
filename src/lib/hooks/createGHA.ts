@@ -1,5 +1,5 @@
 import type { Command, Hook } from '@oclif/core';
-import type { Hooks } from '@oclif/core/lib/interfaces/hooks.js';
+import type { Hooks } from '@oclif/core/interfaces';
 
 import createGHA from '../createGHA/index.js';
 

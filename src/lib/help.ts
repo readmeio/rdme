@@ -1,8 +1,8 @@
 import type { Config } from '@oclif/core';
-import type { HelpOptions } from '@oclif/core/lib/interfaces/help.js';
+import type { HelpOptions } from '@oclif/core/interfaces';
 
 import { Help } from '@oclif/core';
-import { colorize } from '@oclif/core/lib/cli-ux/theme.js';
+import { colorize } from '@oclif/core/ux';
 import chalk from 'chalk';
 
 function owlbert(this: CustomHelpClass) {
