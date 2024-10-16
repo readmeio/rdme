@@ -15,7 +15,7 @@ describe('rdme docker-gha (single arg string from GitHub Actions runner)', () =>
 
   it('should return version from package.json for help command', async () => {
     const output: string[] = [];
-    const spy = vi.spyOn(process.stdout, 'write');
+    const spy = vi.spyOn(console, 'log');
     spy.mockImplementation(msg => {
       if (typeof msg === 'string') output.push(msg);
       return true;
