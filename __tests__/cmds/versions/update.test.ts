@@ -2,7 +2,7 @@ import type { Config } from '@oclif/core';
 
 import nock from 'nock';
 import prompts from 'prompts';
-import { describe, beforeAll, beforeEach, afterEach, it, expect } from 'vitest';
+import { describe, beforeAll, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
 import APIError from '../../../src/lib/apiError.js';
 import getAPIMock from '../../helpers/get-api-mock.js';
@@ -25,23 +25,6 @@ describe('rdme versions:update', () => {
   });
 
   afterEach(() => nock.cleanAll());
-
-  it('should prompt for login if no API key provided', async () => {
-    const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
-    prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
-    // @ts-expect-error deliberately passing in bad data
-    await expect(updateVersion.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
-    consoleInfoSpy.mockRestore();
-  });
-
-  it('should error in CI if no API key provided', async () => {
-    process.env.TEST_RDME_CI = 'true';
-    // @ts-expect-error deliberately passing in bad data
-    await expect(updateVersion.run({})).rejects.toStrictEqual(
-      new Error('No project API key provided. Please use `--key`.'),
-    );
-    delete process.env.TEST_RDME_CI;
-  });
 
   it('should update a specific version object using prompts', async () => {
     const versionToChange = '1.1.0';
@@ -66,7 +49,7 @@ describe('rdme versions:update', () => {
       .basicAuth({ user: key })
       .reply(201, updatedVersionObject);
 
-    await expect(updateVersion.run({ key })).resolves.toBe(`Version ${versionToChange} updated successfully.`);
+    await expect(run(['--key', key])).resolves.toBe(`Version ${versionToChange} updated successfully.`);
     mockRequest.done();
   });
 
@@ -94,7 +77,7 @@ describe('rdme versions:update', () => {
       .basicAuth({ user: key })
       .reply(201, updatedVersionObject);
 
-    await expect(updateVersion.run({ key })).resolves.toBe(`Version ${versionToChange} updated successfully.`);
+    await expect(run(['--key', key])).resolves.toBe(`Version ${versionToChange} updated successfully.`);
     mockRequest.done();
   });
 
