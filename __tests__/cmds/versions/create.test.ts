@@ -29,7 +29,7 @@ describe('rdme versions:create', () => {
     return expect(run(['--key', key])).rejects.toThrow('Missing 1 required arg:\nversion');
   });
 
-  it('should error if invaild version provided', () => {
+  it('should error if invalid version provided', () => {
     return expect(run(['--key', key, 'test'])).rejects.toStrictEqual(
       new Error('Please specify a semantic version. See `rdme help versions:create` for help.'),
     );
