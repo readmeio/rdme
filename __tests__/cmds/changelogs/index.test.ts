@@ -8,26 +8,25 @@ import frontMatter from 'gray-matter';
 import nock from 'nock';
 import { describe, beforeAll, afterAll, beforeEach, it, expect } from 'vitest';
 
+import Command from '../../../src/cmds/changelogs.js';
 import APIError from '../../../src/lib/apiError.js';
 import getAPIMock from '../../helpers/get-api-mock.js';
 import hashFileContents from '../../helpers/hash-file-contents.js';
-import setupOclifConfig from '../../helpers/setup-oclif-config.js';
+import { runCommand } from '../../helpers/setup-oclif-config.js';
 
 const fixturesBaseDir = '__fixtures__/changelogs';
 const fullFixturesDir = `${__dirname}./../../${fixturesBaseDir}`;
 const key = 'API_KEY';
 
 describe('rdme changelogs', () => {
-  let oclifConfig: Config;
-  let run: (args?: string[]) => Promise<unknown>;
+  let run: (args?: string[]) => Promise<string>;
 
   beforeAll(() => {
     nock.disableNetConnect();
   });
 
-  beforeEach(async () => {
-    oclifConfig = await setupOclifConfig();
-    run = (args?: string[]) => oclifConfig.runCommand('changelogs', args);
+  beforeEach(() => {
+    run = runCommand(Command);
   });
 
   afterAll(() => nock.cleanAll());

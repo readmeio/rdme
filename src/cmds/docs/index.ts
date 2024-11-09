@@ -9,6 +9,9 @@ export default class DocsCommand extends BaseCommand<typeof DocsCommand> {
   // we need this as a const for syncDocsPath
   id = 'docs' as const;
 
+  // needed for unit tests, even though we also specify this in src/index.ts
+  static id = 'docs' as const;
+
   static aliases = ['guides'];
 
   static description =

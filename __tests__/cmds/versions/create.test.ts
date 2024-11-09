@@ -3,24 +3,23 @@ import nock from 'nock';
 import prompts from 'prompts';
 import { describe, beforeAll, beforeEach, afterEach, it, expect } from 'vitest';
 
+import Command from '../../../src/cmds/versions/create.js';
 import APIError from '../../../src/lib/apiError.js';
 import getAPIMock from '../../helpers/get-api-mock.js';
-import setupOclifConfig from '../../helpers/setup-oclif-config.js';
+import { runCommand } from '../../helpers/setup-oclif-config.js';
 
 const key = 'API_KEY';
 const version = '1.0.0';
 
 describe('rdme versions:create', () => {
-  let oclifConfig: Config;
-  let run: (args?: string[]) => Promise<unknown>;
+  let run: (args?: string[]) => Promise<string>;
 
   beforeAll(() => {
     nock.disableNetConnect();
   });
 
-  beforeEach(async () => {
-    oclifConfig = await setupOclifConfig();
-    run = (args?: string[]) => oclifConfig.runCommand('versions:create', args);
+  beforeEach(() => {
+    run = runCommand(Command);
   });
 
   afterEach(() => nock.cleanAll());

@@ -1,11 +1,11 @@
-import type { Config } from '@oclif/core';
-
+import { runCommand as oclifRunCommand } from '@oclif/test';
 import nock from 'nock';
 import prompts from 'prompts';
 import { describe, beforeAll, beforeEach, afterAll, it, expect } from 'vitest';
 
+import Command from '../../../src/cmds/docs/prune.js';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
-import setupOclifConfig from '../../helpers/setup-oclif-config.js';
+import { runCommand } from '../../helpers/setup-oclif-config.js';
 
 const fixturesBaseDir = '__fixtures__/docs';
 
@@ -14,16 +14,14 @@ const version = '1.0.0';
 
 describe('rdme docs:prune', () => {
   const folder = `./__tests__/${fixturesBaseDir}/delete-docs`;
-  let oclifConfig: Config;
-  let run: (args?: string[]) => Promise<unknown>;
+  let run: (args?: string[]) => Promise<string>;
 
   beforeAll(() => {
     nock.disableNetConnect();
   });
 
-  beforeEach(async () => {
-    oclifConfig = await setupOclifConfig();
-    run = (args?: string[]) => oclifConfig.runCommand('docs:prune', args);
+  beforeEach(() => {
+    run = runCommand(Command);
   });
 
   afterAll(() => nock.cleanAll());
@@ -151,10 +149,10 @@ describe('rdme docs:prune', () => {
   });
 
   describe('rdme guides:prune', () => {
-    it('should error if no folder provided', () => {
-      return expect(oclifConfig.runCommand('guides:prune', ['--key', key, '--version', version])).rejects.toThrow(
-        'Missing 1 required arg:\nfolder',
-      );
+    it('should error if no folder provided', async () => {
+      return expect(
+        (await oclifRunCommand(['guides:prune', '--key', key, '--version', version])).error.message,
+      ).toContain('Missing 1 required arg:\nfolder');
     });
   });
 });

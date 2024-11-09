@@ -14,6 +14,9 @@ import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetc
 export default class CreateVersionCommand extends BaseCommand<typeof CreateVersionCommand> {
   static description = 'Create a new version for your project.';
 
+  // needed for unit tests, even though we also specify this in src/index.ts
+  static id = 'versions:create';
+
   static args = {
     version: Args.string({
       description: "The version you'd like to create. Must be valid SemVer (https://semver.org/)",

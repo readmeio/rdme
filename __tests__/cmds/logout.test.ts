@@ -1,17 +1,15 @@
-import type { Config } from '@oclif/core';
-
 import { describe, afterEach, beforeEach, it, expect } from 'vitest';
 
+import pkg from '../../package.json';
+import Command from '../../src/cmds/logout.js';
 import configStore from '../../src/lib/configstore.js';
-import setupOclifConfig from '../helpers/setup-oclif-config.js';
+import { runCommand } from '../helpers/setup-oclif-config.js';
 
 describe('rdme logout', () => {
-  let oclifConfig: Config;
-  let run: (args?: string[]) => Promise<unknown>;
+  let run: (args?: string[]) => Promise<string>;
 
-  beforeEach(async () => {
-    oclifConfig = await setupOclifConfig();
-    run = (args?: string[]) => oclifConfig.runCommand('logout', args);
+  beforeEach(() => {
+    run = runCommand(Command);
   });
 
   afterEach(() => {
@@ -23,7 +21,7 @@ describe('rdme logout', () => {
     configStore.delete('project');
 
     return expect(run()).resolves.toBe(
-      `You have logged out of ReadMe. Please use \`${oclifConfig.bin} login\` to login again.`,
+      `You have logged out of ReadMe. Please use \`${pkg.name} login\` to login again.`,
     );
   });
 
@@ -32,7 +30,7 @@ describe('rdme logout', () => {
     configStore.set('project', 'subdomain');
 
     await expect(run()).resolves.toBe(
-      `You have logged out of ReadMe. Please use \`${oclifConfig.bin} login\` to login again.`,
+      `You have logged out of ReadMe. Please use \`${pkg.name} login\` to login again.`,
     );
 
     expect(configStore.get('email')).toBeUndefined();

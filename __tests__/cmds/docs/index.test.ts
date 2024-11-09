@@ -1,21 +1,22 @@
 /* eslint-disable no-console */
-import type { Config } from '@oclif/core';
 
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { runCommand as oclifRunCommand } from '@oclif/test';
 import chalk from 'chalk';
 import frontMatter from 'gray-matter';
 import nock from 'nock';
 import prompts from 'prompts';
 import { describe, beforeAll, afterAll, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
+import Command from '../../../src/cmds/docs/index.js';
 import APIError from '../../../src/lib/apiError.js';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
 import { after, before } from '../../helpers/get-gha-setup.js';
 import hashFileContents from '../../helpers/hash-file-contents.js';
 import { after as afterGHAEnv, before as beforeGHAEnv } from '../../helpers/setup-gha-env.js';
-import setupOclifConfig from '../../helpers/setup-oclif-config.js';
+import { runCommand } from '../../helpers/setup-oclif-config.js';
 
 const fixturesBaseDir = '__fixtures__/docs';
 const fullFixturesDir = `${__dirname}./../../${fixturesBaseDir}`;
@@ -25,16 +26,14 @@ const version = '1.0.0';
 const category = 'CATEGORY_ID';
 
 describe('rdme docs', () => {
-  let oclifConfig: Config;
-  let run: (args?: string[]) => Promise<unknown>;
+  let run: (args?: string[]) => Promise<string>;
 
   beforeAll(() => {
     nock.disableNetConnect();
   });
 
-  beforeEach(async () => {
-    oclifConfig = await setupOclifConfig();
-    run = (args?: string[]) => oclifConfig.runCommand('docs', args);
+  beforeEach(() => {
+    run = runCommand(Command);
   });
 
   afterAll(() => nock.cleanAll());
@@ -719,8 +718,8 @@ describe('rdme docs', () => {
   });
 
   describe('rdme guides', () => {
-    it('should error if no path provided', () => {
-      return expect(oclifConfig.runCommand('guides', ['--key', key, '--version', '1.0.0'])).rejects.toThrow(
+    it('should error if no path provided', async () => {
+      return expect((await oclifRunCommand(['guides', '--key', key, '--version', '1.0.0'])).error.message).toContain(
         'Missing 1 required arg:\npath',
       );
     });

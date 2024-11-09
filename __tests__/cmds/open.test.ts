@@ -1,22 +1,21 @@
 import type { Version } from '../../src/cmds/versions/index.js';
-import type { Config } from '@oclif/core';
 
 import chalk from 'chalk';
 import { describe, afterEach, beforeEach, it, expect } from 'vitest';
 
+import pkg from '../../package.json';
+import Command from '../../src/cmds/open.js';
 import configStore from '../../src/lib/configstore.js';
 import getAPIMock from '../helpers/get-api-mock.js';
-import setupOclifConfig from '../helpers/setup-oclif-config.js';
+import { runCommand } from '../helpers/setup-oclif-config.js';
 
 const mockArg = ['--mock'];
 
 describe('rdme open', () => {
-  let oclifConfig: Config;
-  let run: (args?: string[]) => Promise<unknown>;
+  let run: (args?: string[]) => Promise<string>;
 
-  beforeEach(async () => {
-    oclifConfig = await setupOclifConfig();
-    run = (args?: string[]) => oclifConfig.runCommand('open', args);
+  beforeEach(() => {
+    run = runCommand(Command);
   });
 
   afterEach(() => {
@@ -26,7 +25,7 @@ describe('rdme open', () => {
   it('should error if no project provided', () => {
     configStore.delete('project');
 
-    return expect(run(mockArg)).rejects.toStrictEqual(new Error(`Please login using \`${oclifConfig.bin} login\`.`));
+    return expect(run(mockArg)).rejects.toStrictEqual(new Error(`Please login using \`${pkg.name} login\`.`));
   });
 
   it('should open the project', () => {
@@ -69,7 +68,7 @@ describe('rdme open', () => {
       configStore.set('project', 'subdomain');
 
       return expect(run(mockArg.concat('--dash'))).rejects.toStrictEqual(
-        new Error(`Please login using \`${oclifConfig.bin} login\`.`),
+        new Error(`Please login using \`${pkg.name} login\`.`),
       );
     });
   });

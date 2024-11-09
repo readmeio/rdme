@@ -1,13 +1,12 @@
-import type { Config } from '@oclif/core';
-
 import nock from 'nock';
 import prompts from 'prompts';
 import { describe, beforeAll, beforeEach, afterAll, afterEach, it, expect } from 'vitest';
 
+import Command from '../../src/cmds/login.js';
 import APIError from '../../src/lib/apiError.js';
 import configStore from '../../src/lib/configstore.js';
 import getAPIMock from '../helpers/get-api-mock.js';
-import setupOclifConfig from '../helpers/setup-oclif-config.js';
+import { runCommand } from '../helpers/setup-oclif-config.js';
 
 const apiKey = 'abcdefg';
 const email = 'user@example.com';
@@ -16,16 +15,14 @@ const project = 'subdomain';
 const token = '123456';
 
 describe('rdme login', () => {
-  let oclifConfig: Config;
-  let run: (args?: string[]) => Promise<unknown>;
+  let run: (args?: string[]) => Promise<string>;
 
   beforeAll(() => {
     nock.disableNetConnect();
   });
 
-  beforeEach(async () => {
-    oclifConfig = await setupOclifConfig();
-    run = (args?: string[]) => oclifConfig.runCommand('login', args);
+  beforeEach(() => {
+    run = runCommand(Command);
   });
 
   afterEach(() => configStore.clear());

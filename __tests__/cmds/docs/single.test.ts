@@ -1,5 +1,3 @@
-import type { Config } from '@oclif/core';
-
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -8,11 +6,12 @@ import frontMatter from 'gray-matter';
 import nock from 'nock';
 import { describe, beforeAll, afterAll, beforeEach, afterEach, it, expect } from 'vitest';
 
+import Command from '../../../src/cmds/docs/index.js';
 import APIError from '../../../src/lib/apiError.js';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
 import hashFileContents from '../../helpers/hash-file-contents.js';
 import { after as afterGHAEnv, before as beforeGHAEnv } from '../../helpers/setup-gha-env.js';
-import setupOclifConfig from '../../helpers/setup-oclif-config.js';
+import { runCommand } from '../../helpers/setup-oclif-config.js';
 
 const fixturesBaseDir = '__fixtures__/docs';
 const fullFixturesDir = `${__dirname}./../../${fixturesBaseDir}`;
@@ -22,16 +21,14 @@ const version = '1.0.0';
 const category = 'CATEGORY_ID';
 
 describe('rdme docs (single)', () => {
-  let oclifConfig: Config;
-  let run: (args?: string[]) => Promise<unknown>;
+  let run: (args?: string[]) => Promise<string>;
 
   beforeAll(() => {
     nock.disableNetConnect();
   });
 
-  beforeEach(async () => {
-    oclifConfig = await setupOclifConfig();
-    run = (args?: string[]) => oclifConfig.runCommand('docs', args);
+  beforeEach(() => {
+    run = runCommand(Command);
   });
 
   afterAll(() => nock.cleanAll());

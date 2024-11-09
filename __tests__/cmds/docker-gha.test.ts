@@ -1,16 +1,13 @@
-import type { Config } from '@oclif/core';
-
 import { describe, beforeEach, it, expect, vi } from 'vitest';
 
-import setupOclifConfig from '../helpers/setup-oclif-config.js';
+import Command from '../../src/cmds/docker-gha.js';
+import { runCommand } from '../helpers/setup-oclif-config.js';
 
 describe('rdme docker-gha (single arg string from GitHub Actions runner)', () => {
-  let oclifConfig: Config;
-  let run: (args?: string[]) => Promise<unknown>;
+  let run: (args?: string[]) => Promise<string>;
 
-  beforeEach(async () => {
-    oclifConfig = await setupOclifConfig();
-    run = (args?: string[]) => oclifConfig.runCommand('docker-gha', args);
+  beforeEach(() => {
+    run = runCommand(Command);
   });
 
   it('should return version from package.json for help command', async () => {

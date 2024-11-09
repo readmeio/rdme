@@ -1,25 +1,22 @@
-import type { Config } from '@oclif/core';
-
 import nock from 'nock';
 import { describe, beforeAll, beforeEach, afterEach, it, expect } from 'vitest';
 
+import Command from '../../../src/cmds/categories/index.js';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
-import setupOclifConfig from '../../helpers/setup-oclif-config.js';
+import { runCommand } from '../../helpers/setup-oclif-config.js';
 
 const key = 'API_KEY';
 const version = '1.0.0';
 
 describe('rdme categories', () => {
-  let oclifConfig: Config;
-  let run: (args?: string[]) => Promise<unknown>;
+  let run: (args?: string[]) => Promise<string>;
 
   beforeAll(() => {
     nock.disableNetConnect();
   });
 
-  beforeEach(async () => {
-    oclifConfig = await setupOclifConfig();
-    run = (args?: string[]) => oclifConfig.runCommand('categories', args);
+  beforeEach(() => {
+    run = runCommand(Command);
   });
 
   afterEach(() => nock.cleanAll());
