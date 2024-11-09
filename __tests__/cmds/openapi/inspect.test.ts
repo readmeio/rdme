@@ -1,19 +1,17 @@
 /* eslint-disable vitest/no-conditional-expect */
-import type { Config } from '@oclif/core';
 
 import assert from 'node:assert';
 
 import { describe, it, expect, beforeEach } from 'vitest';
 
-import setupOclifConfig from '../../helpers/setup-oclif-config.js';
+import Command from '../../../src/cmds/openapi/inspect.js';
+import { runCommand } from '../../helpers/setup-oclif-config.js';
 
 describe('rdme openapi:inspect', () => {
-  let oclifConfig: Config;
   let run: (args?: string[]) => Promise<unknown>;
 
-  beforeEach(async () => {
-    oclifConfig = await setupOclifConfig();
-    run = (args?: string[]) => oclifConfig.runCommand('openapi:inspect', args);
+  beforeEach(() => {
+    run = runCommand(Command);
   });
 
   describe('full reports', () => {

@@ -1,24 +1,21 @@
-import type { Config } from '@oclif/core';
-
 import fs from 'node:fs';
 
 import prompts from 'prompts';
 import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
-import setupOclifConfig from '../../helpers/setup-oclif-config.js';
+import Command from '../../../src/cmds/openapi/reduce.js';
+import { runCommand } from '../../helpers/setup-oclif-config.js';
 
 const successfulReduction = () => 'Your reduced API definition has been saved to output.json! 🤏';
 
 let consoleInfoSpy;
 
 describe('rdme openapi:reduce', () => {
-  let oclifConfig: Config;
   let run: (args?: string[]) => Promise<unknown>;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
-    oclifConfig = await setupOclifConfig();
-    run = (args?: string[]) => oclifConfig.runCommand('openapi:reduce', args);
+    run = runCommand(Command);
   });
 
   afterEach(() => {
