@@ -1,6 +1,6 @@
 {
   "name": "rdme",
-  "version": "9.0.0-next.18",
+  "version": "9.0.0-next.19",
   "description": "ReadMe's official CLI and GitHub Action.",
   "license": "MIT",
   "author": "ReadMe <support@readme.io> (https://readme.com)",
@@ -96,7 +96,7 @@
     "@types/validator": "^13.7.6",
     "@vitest/coverage-v8": "^2.0.5",
     "@vitest/expect": "^2.0.5",
-    "@yao-pkg/pkg": "^5.14.0",
+    "@yao-pkg/pkg": "^6.1.0",
     "ajv": "^8.11.0",
     "alex": "^11.0.0",
     "esbuild": "^0.24.0",
