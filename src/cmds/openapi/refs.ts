@@ -22,7 +22,8 @@ class OpenAPISolvingCircularityAndRecursiveness extends Command {
     super();
     this.command = 'openapi:refs';
     this.usage = 'openapi:refs [file]';
-    this.description = 'The script resolves circular and recursive references in OpenAPI by replacing them with object schemas. However, not all circular references can be resolved. You can run the openapi:inspect command to identify which references remain unresolved.';
+    this.description =
+      'The script resolves circular and recursive references in OpenAPI by replacing them with object schemas. However, not all circular references can be resolved. You can run the openapi:inspect command to identify which references remain unresolved.';
     this.cmdCategory = CommandCategories.APIS;
 
     this.hiddenArgs = ['spec'];
@@ -51,9 +52,7 @@ class OpenAPISolvingCircularityAndRecursiveness extends Command {
    * @param {OASDocument} data - The data to be written.
    */
   static writeOpenApiFile(filePath: string, data: OASDocument) {
-    const content = filePath.endsWith('.json')
-      ? JSON.stringify(data, null, 2)
-      : jsYaml.dump(data, { noRefs: true }); // Disables YAML anchors
+    const content = filePath.endsWith('.json') ? JSON.stringify(data, null, 2) : jsYaml.dump(data, { noRefs: true }); // Disables YAML anchors
     fs.writeFileSync(filePath, content, 'utf8');
   }
 
@@ -82,14 +81,14 @@ class OpenAPISolvingCircularityAndRecursiveness extends Command {
   static replaceRefWithObject(schema: IJsonSchema, circularRefs: string[], schemaName: string): IJsonSchema {
     if (schema.$ref) {
       const refSchemaName = schema.$ref.split('/').pop() as string;
-      const isCircular = circularRefs.some((refPath) => refPath.includes(refSchemaName));
+      const isCircular = circularRefs.some(refPath => refPath.includes(refSchemaName));
       const isRecursive = schemaName === refSchemaName;
 
       if (schemaName.includes('Ref') && (isCircular || isRecursive)) {
         return { type: 'object' } as IJsonSchema;
       }
     }
-    
+
     return schema;
   }
 
@@ -109,7 +108,11 @@ class OpenAPISolvingCircularityAndRecursiveness extends Command {
         // Handle arrays with item references
         if (property.type === 'array' && property.items) {
           property.items = JSON.parse(JSON.stringify(property.items));
-          property.items = OpenAPISolvingCircularityAndRecursiveness.replaceRefWithObject(property.items, circularRefs, schemaName);
+          property.items = OpenAPISolvingCircularityAndRecursiveness.replaceRefWithObject(
+            property.items,
+            circularRefs,
+            schemaName,
+          );
           OpenAPISolvingCircularityAndRecursiveness.replaceReferencesInSchema(property.items, circularRefs, schemaName);
         }
       }
@@ -134,29 +137,39 @@ class OpenAPISolvingCircularityAndRecursiveness extends Command {
           type: 'object',
           properties: { ...schemas[originalSchemaName].properties },
         } as IJsonSchema;
-        OpenAPISolvingCircularityAndRecursiveness.replaceReferencesInSchema(schemas[refSchemaName], circularRefs, refSchemaName);
+        OpenAPISolvingCircularityAndRecursiveness.replaceReferencesInSchema(
+          schemas[refSchemaName],
+          circularRefs,
+          refSchemaName,
+        );
         createdRefs.add(refSchemaName);
       }
     }
 
-    circularRefs.forEach((refPath) => {
+    circularRefs.forEach(refPath => {
       const refParts = refPath.split('/');
       if (refParts.length < 6) {
         throw new Error(`Invalid reference path: ${refPath}`);
       }
-  
+
       const schemaName = refParts[3];
       const propertyName = refParts[5];
       const schema = schemas[schemaName];
       const property = schema?.properties?.[propertyName];
-  
+
       if (!schema || !property) {
         throw new Error(`Schema or property not found for path: ${refPath}`);
       }
 
       // Handle references within items in an array
       let refSchemaName: string | undefined;
-      if (refParts.length > 6 && refParts[6] === 'items' && property.type === 'array' && property.items && typeof property.items === 'object') {
+      if (
+        refParts.length > 6 &&
+        refParts[6] === 'items' &&
+        property.type === 'array' &&
+        property.items &&
+        typeof property.items === 'object'
+      ) {
         const itemsRefSchemaName = (property.items as IJsonSchema).$ref?.split('/')[3];
         if (itemsRefSchemaName) {
           refSchemaName = `${itemsRefSchemaName}Ref`;
@@ -174,7 +187,6 @@ class OpenAPISolvingCircularityAndRecursiveness extends Command {
       }
     });
   }
-
 
   /**
    * The main execution method for the command.
@@ -202,7 +214,10 @@ class OpenAPISolvingCircularityAndRecursiveness extends Command {
       let iterationCount = 0;
 
       while (remainingCircularRefs.length > 0 && iterationCount < 5) {
-        OpenAPISolvingCircularityAndRecursiveness.replaceCircularRefs(openApiData.components.schemas, remainingCircularRefs);
+        OpenAPISolvingCircularityAndRecursiveness.replaceCircularRefs(
+          openApiData.components.schemas,
+          remainingCircularRefs,
+        );
         remainingCircularRefs = remainingCircularRefs.length > 0 ? [] : remainingCircularRefs;
         iterationCount += 1;
       }
@@ -215,7 +230,6 @@ class OpenAPISolvingCircularityAndRecursiveness extends Command {
     OpenAPISolvingCircularityAndRecursiveness.writeOpenApiFile(spec, openApiData);
     return `Processed and updated ${spec}`;
   }
-
 }
 
 export default OpenAPISolvingCircularityAndRecursiveness;
