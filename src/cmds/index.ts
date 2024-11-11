@@ -13,6 +13,7 @@ import OpenAPIConvertCommand from './openapi/convert.js';
 import OpenAPICommand from './openapi/index.js';
 import OpenAPIInspectCommand from './openapi/inspect.js';
 import OpenAPIReduceCommand from './openapi/reduce.js';
+import OpenAPISolvingCircularityAndRecursiveness from './openapi/refs.js';
 import OpenAPIValidateCommand from './openapi/validate.js';
 import ValidateAliasCommand from './validate.js';
 import CreateVersionCommand from './versions/create.js';
@@ -47,6 +48,7 @@ const commands = {
   'openapi:inspect': OpenAPIInspectCommand,
   'openapi:reduce': OpenAPIReduceCommand,
   'openapi:validate': OpenAPIValidateCommand,
+  'openapi:refs': OpenAPISolvingCircularityAndRecursiveness,
 
   validate: ValidateAliasCommand,
   whoami: WhoAmICommand,
