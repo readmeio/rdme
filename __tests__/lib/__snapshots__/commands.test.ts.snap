@@ -50,6 +50,11 @@ exports[`utils > #listByCategory > should list commands by category 1`] = `
         "name": "openapi:validate",
       },
       {
+        "description": "The script resolves circular and recursive references in OpenAPI by replacing them with object schemas. However, not all circular references can be resolved. You can run the openapi:inspect command to identify which references remain unresolved.",
+        "hidden": false,
+        "name": "openapi:refs",
+      },
+      {
         "description": "Alias for \`rdme openapi:validate\` [deprecated].",
         "hidden": true,
         "name": "validate",

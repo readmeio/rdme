@@ -44,6 +44,12 @@ Related commands
   $ rdme openapi:inspect    Analyze an OpenAPI/Swagger definition for various   
                             OpenAPI and ReadMe feature usage.                   
   $ rdme openapi:reduce     Reduce an OpenAPI definition into a smaller subset. 
+  $ rdme openapi:refs       The script resolves circular and recursive          
+                            references in OpenAPI by replacing them with object 
+                            schemas. However, not all circular references can   
+                            be resolved. You can run the openapi:inspect        
+                            command to identify which references remain         
+                            unresolved.                                         
   $ rdme openapi:validate   Validate your OpenAPI/Swagger definition.           
 "
 `;
@@ -92,6 +98,12 @@ Related commands
   $ rdme openapi:inspect    Analyze an OpenAPI/Swagger definition for various   
                             OpenAPI and ReadMe feature usage.                   
   $ rdme openapi:reduce     Reduce an OpenAPI definition into a smaller subset. 
+  $ rdme openapi:refs       The script resolves circular and recursive          
+                            references in OpenAPI by replacing them with object 
+                            schemas. However, not all circular references can   
+                            be resolved. You can run the openapi:inspect        
+                            command to identify which references remain         
+                            unresolved.                                         
   $ rdme openapi:validate   Validate your OpenAPI/Swagger definition.           
 "
 `;
@@ -140,6 +152,12 @@ Related commands
   $ rdme openapi:inspect    Analyze an OpenAPI/Swagger definition for various   
                             OpenAPI and ReadMe feature usage.                   
   $ rdme openapi:reduce     Reduce an OpenAPI definition into a smaller subset. 
+  $ rdme openapi:refs       The script resolves circular and recursive          
+                            references in OpenAPI by replacing them with object 
+                            schemas. However, not all circular references can   
+                            be resolved. You can run the openapi:inspect        
+                            command to identify which references remain         
+                            unresolved.                                         
   $ rdme openapi:validate   Validate your OpenAPI/Swagger definition.           
 "
 `;
