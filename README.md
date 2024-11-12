@@ -26,6 +26,9 @@ With `rdme`, you can manage your API definition (we support [OpenAPI](https://sp
 
 Not using ReadMe for your docs? No worries. `rdme` has a variety of tools to help you identify issues with your API definition — no ReadMe account required.
 
+> [!WARNING]
+> Just a heads up that our new Git offering doesn’t yet support `rdme`. If you’ve chosen to upgrade your project to the new experience, we recommend enabling bi-directional syncing with Git to continue editing your docs and uploading API definitions!
+
 ## Table of Contents
 
 <!--
