@@ -43,7 +43,7 @@ With `rdme`, you can create workflows for a variety of use cases, including:
 
 > 🚧 Heads up!
 >
-> Our new Git offering doesn’t yet support `rdme`. If you’ve chosen to upgrade your project to the new experience, we recommend enabling bi-directional syncing with Git to continue editing your docs and uploading API definitions!
+> Our [new ReadMe Refactored experience](https://docs.readme.com/main/docs/welcome-to-readme-refactored) doesn’t yet support `rdme`. If your project is using the new ReadMe Refactored experience, we recommend [enabling bi-directional syncing with via Git](https://docs.readme.com/main/docs/bi-directional-sync) for an even better editing experience for the technical and non-technical users on your team!
 
 ## General Setup and Usage
 
