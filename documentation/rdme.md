@@ -41,9 +41,9 @@ With `rdme`, you can create workflows for a variety of use cases, including:
 - Pre-upload validation (including OpenAPI 3.1) ✅
 - Syncing directories of Markdown files 📖
 
-> 🚧 Warning!
+> 🚧 Heads up!
 >
-> Just a heads up that our new Git offering doesn’t yet support `rdme`. If you’ve chosen to upgrade your project to the new experience, we recommend enabling bi-directional syncing with Git to continue editing your docs and uploading OpenAPI specs!
+> Our new Git offering doesn’t yet support `rdme`. If you’ve chosen to upgrade your project to the new experience, we recommend enabling bi-directional syncing with Git to continue editing your docs and uploading OpenAPI specs!
 
 ## General Setup and Usage
 
