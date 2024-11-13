@@ -27,7 +27,7 @@ With `rdme`, you can manage your API definition (we support [OpenAPI](https://sp
 Not using ReadMe for your docs? No worries. `rdme` has a variety of tools to help you identify issues with your API definition — no ReadMe account required.
 
 > [!WARNING]
-> Heads up: our [new ReadMe Refactored experience](https://docs.readme.com/main/docs/welcome-to-readme-refactored) doesn’t yet support `rdme`. If your project is using the new ReadMe Refactored experience, we recommend [enabling bi-directional syncing with via Git](https://docs.readme.com/main/docs/bi-directional-sync) for an even better editing experience for the technical and non-technical users on your team!
+> Heads up: our [new ReadMe Refactored experience](https://docs.readme.com/main/docs/welcome-to-readme-refactored) doesn’t yet support `rdme`. If your project is using the new ReadMe Refactored experience, we recommend [enabling bi-directional syncing via Git](https://docs.readme.com/main/docs/bi-directional-sync) for an even better editing experience for the technical and non-technical users on your team!
 
 ## Table of Contents
 

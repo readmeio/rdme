@@ -43,7 +43,7 @@ With `rdme`, you can create workflows for a variety of use cases, including:
 
 > 🚧 Heads up!
 >
-> Our [new ReadMe Refactored experience](https://docs.readme.com/main/docs/welcome-to-readme-refactored) doesn’t yet support `rdme`. If your project is using the new ReadMe Refactored experience, we recommend [enabling bi-directional syncing with via Git](https://docs.readme.com/main/docs/bi-directional-sync) for an even better editing experience for the technical and non-technical users on your team!
+> Our [new ReadMe Refactored experience](https://docs.readme.com/main/docs/welcome-to-readme-refactored) doesn’t yet support `rdme`. If your project is using the new ReadMe Refactored experience, we recommend [enabling bi-directional syncing via Git](https://docs.readme.com/main/docs/bi-directional-sync) for an even better editing experience for the technical and non-technical users on your team!
 
 ## General Setup and Usage
 
