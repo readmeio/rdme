@@ -4,14 +4,18 @@ import type { OASDocument } from 'oas/types';
 import type { IJsonSchema } from 'openapi-types';
 
 import fs from 'node:fs';
+import path from 'node:path';
 
-// eslint-disable-next-line import/no-extraneous-dependencies
-import jsYaml from 'js-yaml';
+import prompts from 'prompts';
 
 import analyzeOas from '../../lib/analyzeOas.js';
 import Command, { CommandCategories } from '../../lib/baseCommand.js';
+import prepareOas from '../../lib/prepareOas.js';
+import promptTerminal from '../../lib/promptWrapper.js';
+import { validateFilePath } from '../../lib/validatePromptInput.js';
 
 interface Options {
+  out?: string;
   spec?: string;
 }
 
@@ -33,27 +37,12 @@ class OpenAPISolvingCircularityAndRecursiveness extends Command {
         type: String,
         defaultOption: true,
       },
+      {
+        name: 'out',
+        type: String,
+        description: 'Output file path to write converted file to',
+      },
     ];
-  }
-
-  /**
-   * Reads and parses an OpenAPI file (JSON or YAML).
-   * @param {string} filePath - The file path to read.
-   * @returns {any} The parsed content of the file.
-   */
-  static readOpenApiFile(filePath: string) {
-    const fileContent = fs.readFileSync(filePath, 'utf8');
-    return filePath.endsWith('.json') ? JSON.parse(fileContent) : jsYaml.load(fileContent);
-  }
-
-  /**
-   * Writes OpenAPI data to a file (JSON or YAML).
-   * @param {string} filePath - The file path to write to.
-   * @param {OASDocument} data - The data to be written.
-   */
-  static writeOpenApiFile(filePath: string, data: OASDocument) {
-    const content = filePath.endsWith('.json') ? JSON.stringify(data, null, 2) : jsYaml.dump(data, { noRefs: true }); // Disables YAML anchors
-    fs.writeFileSync(filePath, content, 'utf8');
   }
 
   /**
@@ -200,7 +189,8 @@ class OpenAPISolvingCircularityAndRecursiveness extends Command {
       return 'File path is required.';
     }
 
-    const openApiData = OpenAPISolvingCircularityAndRecursiveness.readOpenApiFile(spec);
+    const { preparedSpec, specPath } = await prepareOas(spec, 'openapi:refs', { convertToLatest: true });
+    const openApiData = JSON.parse(preparedSpec);
     const circularRefs = await OpenAPISolvingCircularityAndRecursiveness.getCircularRefsFromOas(openApiData);
 
     if (circularRefs.length === 0) {
@@ -227,8 +217,28 @@ class OpenAPISolvingCircularityAndRecursiveness extends Command {
       }
     }
 
-    OpenAPISolvingCircularityAndRecursiveness.writeOpenApiFile(spec, openApiData);
-    return `Processed and updated ${spec}`;
+    prompts.override({
+      outputPath: opts.out,
+    });
+
+    const promptResults = await promptTerminal([
+      {
+        type: 'text',
+        name: 'outputPath',
+        message: 'Enter the path to save your processed API definition to:',
+        initial: () => {
+          const extension = path.extname(specPath);
+          return `${path.basename(specPath).split(extension)[0]}.openapi.json`;
+        },
+        validate: value => validateFilePath(value),
+      },
+    ]);
+
+    Command.debug(`Saving processed spec to ${promptResults.outputPath}`);
+    fs.writeFileSync(promptResults.outputPath, JSON.stringify(openApiData, null, 2), 'utf8');
+    Command.debug('Processed spec saved');
+
+    return `Your API definition has been processed and saved to ${promptResults.outputPath}!`;
   }
 }
 
