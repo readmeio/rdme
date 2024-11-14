@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
-import type commands from '../../../src/cmds/index.js';
-import type { CommandOptions } from '../../../src/lib/baseCommand.js';
-import type Command from '../../../src/lib/baseCommand.js';
+import type commands from '../../src/cmds/index.js';
+import type { CommandOptions } from '../../src/lib/baseCommand.js';
+import type Command from '../../src/lib/baseCommand.js';
 import type { Response } from 'simple-git';
 
 import fs from 'node:fs';
@@ -9,17 +9,17 @@ import fs from 'node:fs';
 import prompts from 'prompts';
 import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
-import ChangelogsCommand from '../../../src/cmds/changelogs.js';
-import CustomPagesCommand from '../../../src/cmds/custompages.js';
-import DocsCommand from '../../../src/cmds/docs/index.js';
-import OpenAPICommand from '../../../src/cmds/openapi/index.js';
-import OpenAPIValidateCommand from '../../../src/cmds/openapi/validate.js';
-import configstore from '../../../src/lib/configstore.js';
-import createGHA, { getConfigStoreKey, getGHAFileName, getGitData, git } from '../../../src/lib/createGHA/index.js';
-import { getMajorPkgVersion } from '../../../src/lib/getPkgVersion.js';
-import { after, before } from '../../helpers/get-gha-setup.js';
-import getGitRemoteMock from '../../helpers/get-git-mock.js';
-import ghaWorkflowSchema from '../../helpers/github-workflow-schema.json' with { type: 'json' };
+import ChangelogsCommand from '../../src/cmds/changelogs.js';
+import CustomPagesCommand from '../../src/cmds/custompages.js';
+import DocsCommand from '../../src/cmds/docs/index.js';
+import OpenAPICommand from '../../src/cmds/openapi/index.js';
+import OpenAPIValidateCommand from '../../src/cmds/openapi/validate.js';
+import configstore from '../../src/lib/configstore.js';
+import createGHA, { getConfigStoreKey, getGHAFileName, getGitData, git } from '../../src/lib/createGHA/index.js';
+import { getMajorPkgVersion } from '../../src/lib/getPkgVersion.js';
+import { after, before } from '../helpers/get-gha-setup.js';
+import getGitRemoteMock from '../helpers/get-git-mock.js';
+import ghaWorkflowSchema from '../helpers/github-workflow-schema.json' with { type: 'json' };
 
 const testWorkingDir = process.cwd();
 
