@@ -162,6 +162,7 @@ With `rdme`, you have access to a variety of tools to manage your API definition
 - [Reduction](#reducing-an-api-definition) 📉
 - [Inspection](#inspecting-an-api-definition) 🔍
 - [Conversion](#converting-an-api-definition) ⏩
+- [References](#simplifying-circular-references-in-api-definition)🔄
 
 `rdme` supports [OpenAPI 3.1](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md), [OpenAPI 3.0](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md), and [Swagger 2.x](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/2.0.md).
 
@@ -319,6 +320,24 @@ Similar to the `openapi` command, you can also [omit the file path](#omitting-th
 
 > [!NOTE]
 > All of our OpenAPI commands already do this conversion automatically, but in case you need to utilize this exclusive functionality outside of the context of those, you can.
+
+#### Simplifying Circular References in API definition
+
+This command addresses limitations in ReadMe’s support for circular or recursive references within OpenAPI specifications. It automatically identifies and replaces these references with simplified object schemas, ensuring compatibility for seamless display in the ReadMe platform. As a result, instead of displaying an empty form, as would occur with schemas containing such references, you will receive a flattened representation of the object, showing what the object can potentially contain, including references to itself.
+
+```sh
+rdme openapi:refs [url-or-local-path-to-file]
+```
+
+The `openapi:refs` command processes an OpenAPI file by analyzing its schemas for circular or recursive references. When such references are found, they are replaced with object schemas where feasible, restructuring the specification to remove unsupported circular and self-references.
+
+To review any unresolved references, you can use the `openapi:inspect` command.
+
+After processing, the command will prompt you to specify a file path for saving the modified API definition. By default, it will create a `.openapi.json` version of the original input file.
+
+> [!NOTE]
+> Complex circular references may require manual inspection and may not be fully resolved.
+> A maximum of five iterations will attempt to remove references; unresolved references beyond this limit will require further analysis.
 
 ### Docs (a.k.a. Guides) 📖
 
