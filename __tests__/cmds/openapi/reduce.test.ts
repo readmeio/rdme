@@ -71,11 +71,9 @@ describe('rdme openapi:reduce', () => {
 
         prompts.inject(['tags', ['user'], 'output.json']);
 
-        await expect(
-          reducer.run({
-            workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-          }),
-        ).resolves.toBe(successfulReduction());
+        await expect(run(['--workingDirectory', './__tests__/__fixtures__/relative-ref-oas'])).resolves.toBe(
+          successfulReduction(),
+        );
 
         expect(console.info).toHaveBeenCalledTimes(1);
 
@@ -94,11 +92,14 @@ describe('rdme openapi:reduce', () => {
         });
 
         await expect(
-          reducer.run({
-            workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-            tag: ['user'],
-            out: 'output.json',
-          }),
+          run([
+            '--workingDirectory',
+            './__tests__/__fixtures__/relative-ref-oas',
+            '--tag',
+            'user',
+            '--out',
+            'output.json',
+          ]),
         ).resolves.toBe(successfulReduction());
 
         expect(console.info).toHaveBeenCalledTimes(1);
@@ -144,12 +145,20 @@ describe('rdme openapi:reduce', () => {
         });
 
         await expect(
-          reducer.run({
-            workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-            path: ['/pet', '/pet/{petId}'],
-            method: ['get', 'post'],
-            out: 'output.json',
-          }),
+          run([
+            '--workingDirectory',
+            './__tests__/__fixtures__/relative-ref-oas',
+            '--path',
+            '/pet',
+            '--path',
+            '/pet/{petId}',
+            '--method',
+            'get',
+            '--method',
+            'post',
+            '--out',
+            'output.json',
+          ]),
         ).resolves.toBe(successfulReduction());
 
         expect(console.info).toHaveBeenCalledTimes(1);
@@ -173,13 +182,22 @@ describe('rdme openapi:reduce', () => {
         });
 
         await expect(
-          reducer.run({
-            workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-            path: ['/pet', '/pet/{petId}'],
-            method: ['get', 'post'],
+          run([
+            '--workingDirectory',
+            './__tests__/__fixtures__/relative-ref-oas',
+            '--path',
+            '/pet',
+            '--path',
+            '/pet/{petId}',
+            '--method',
+            'get',
+            '--method',
+            'post',
+            '--title',
             title,
-            out: 'output.json',
-          }),
+            '--out',
+            'output.json',
+          ]),
         ).resolves.toBe(successfulReduction());
 
         expect(console.info).toHaveBeenCalledTimes(1);
