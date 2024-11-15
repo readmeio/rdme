@@ -7,13 +7,13 @@ import fs from 'node:fs';
 import prompts from 'prompts';
 import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
-import configstore from '../../../src/lib/configstore.js';
-import { getConfigStoreKey, getGHAFileName, git } from '../../../src/lib/createGHA/index.js';
-import { getMajorPkgVersion } from '../../../src/lib/getPkgVersion.js';
-import { after, before } from '../../helpers/get-gha-setup.js';
-import getGitRemoteMock from '../../helpers/get-git-mock.js';
-import ghaWorkflowSchema from '../../helpers/github-workflow-schema.json' with { type: 'json' };
-import setupOclifConfig from '../../helpers/setup-oclif-config.js';
+import configstore from '../../src/lib/configstore.js';
+import { getConfigStoreKey, getGHAFileName, git } from '../../src/lib/createGHA/index.js';
+import { getMajorPkgVersion } from '../../src/lib/getPkgVersion.js';
+import { after, before } from '../helpers/get-gha-setup.js';
+import getGitRemoteMock from '../helpers/get-git-mock.js';
+import ghaWorkflowSchema from '../helpers/github-workflow-schema.json' with { type: 'json' };
+import setupOclifConfig from '../helpers/setup-oclif-config.js';
 
 const testWorkingDir = process.cwd();
 

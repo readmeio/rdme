@@ -19,15 +19,19 @@ const getCommandOutput = () => {
 describe('rdme openapi:validate', () => {
   let config: Config;
   let run: (args?: string[]) => Promise<unknown>;
+  let testWorkingDir: string;
 
   beforeEach(async () => {
     consoleSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     config = await setupOclifConfig();
     run = (args?: string[]) => config.runCommand('openapi:validate', args);
+    testWorkingDir = process.cwd();
   });
 
   afterEach(() => {
     consoleSpy.mockRestore();
+
+    process.chdir(testWorkingDir);
   });
 
   it.each([
@@ -44,6 +48,39 @@ describe('rdme openapi:validate', () => {
     ).resolves.toContain(
       `petstore.${format} is a valid ${specVersion === '2.0' ? 'Swagger' : 'OpenAPI'} API definition!`,
     );
+  });
+
+  it('should discover and upload an API definition if none is provided', async () => {
+    await expect(validate.run({ workingDirectory: './__tests__/__fixtures__/relative-ref-oas' })).resolves.toBe(
+      chalk.green('petstore.json is a valid OpenAPI API definition!'),
+    );
+
+    expect(console.info).toHaveBeenCalledTimes(1);
+
+    const output = getCommandOutput();
+    expect(output).toBe(chalk.yellow('ℹ️  We found petstore.json and are attempting to validate it.'));
+  });
+
+  it('should use specified working directory', () => {
+    return expect(
+      validate.run({
+        spec: 'petstore.json',
+        workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
+      }),
+    ).resolves.toBe(chalk.green('petstore.json is a valid OpenAPI API definition!'));
+  });
+
+  it('should adhere to .gitignore in subdirectories', () => {
+    fs.copyFileSync(
+      require.resolve('@readme/oas-examples/3.0/json/petstore-simple.json'),
+      './__tests__/__fixtures__/nested-gitignored-oas/nest/petstore-ignored.json',
+    );
+
+    return expect(
+      validate.run({
+        workingDirectory: './__tests__/__fixtures__/nested-gitignored-oas',
+      }),
+    ).resolves.toBe(chalk.green('nest/petstore.json is a valid OpenAPI API definition!'));
   });
 
   describe('error handling', () => {
@@ -130,6 +167,20 @@ describe('rdme openapi:validate', () => {
       prompts.inject([true, 'validate-test-opt-spec-branch', fileName]);
 
       await expect(run([spec])).resolves.toMatchSnapshot();
+
+      expect(yamlOutput).toMatchSnapshot();
+      expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
+    });
+
+    it('should create GHA workflow if user passes in spec via opt (including workingDirectory)', async () => {
+      expect.assertions(3);
+      const spec = 'petstore.json';
+      const fileName = 'validate-test-opt-spec-workdir-file';
+      prompts.inject([true, 'validate-test-opt-spec-github-branch', fileName]);
+
+      await expect(
+        validate.run({ spec, workingDirectory: './__tests__/__fixtures__/relative-ref-oas' }),
+      ).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();
       expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
