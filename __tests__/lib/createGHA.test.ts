@@ -5,7 +5,7 @@ import type { Response } from 'simple-git';
 import fs from 'node:fs';
 
 import prompts from 'prompts';
-import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
+import { describe, beforeEach, afterEach, it, expect, vi, type MockInstance } from 'vitest';
 
 import configstore from '../../src/lib/configstore.js';
 import { getConfigStoreKey, getGHAFileName, git } from '../../src/lib/createGHA/index.js';
@@ -17,7 +17,7 @@ import setupOclifConfig from '../helpers/setup-oclif-config.js';
 
 const testWorkingDir = process.cwd();
 
-let consoleInfoSpy;
+let consoleInfoSpy: MockInstance;
 const getCommandOutput = () => consoleInfoSpy.mock.calls.join('\n\n');
 
 const key = 'API_KEY';

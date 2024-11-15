@@ -8,7 +8,7 @@ import chalk from 'chalk';
 import frontMatter from 'gray-matter';
 import nock from 'nock';
 import prompts from 'prompts';
-import { describe, beforeAll, afterAll, beforeEach, afterEach, it, expect, vi } from 'vitest';
+import { describe, beforeAll, afterAll, beforeEach, afterEach, it, expect, vi, type MockInstance } from 'vitest';
 
 import Command from '../../../src/cmds/docs/index.js';
 import APIError from '../../../src/lib/apiError.js';
@@ -393,7 +393,7 @@ describe('rdme docs', () => {
   });
 
   describe('GHA onboarding E2E tests', () => {
-    let consoleInfoSpy;
+    let consoleInfoSpy: MockInstance;
     let yamlOutput;
 
     const getCommandOutput = () => {

@@ -5,16 +5,16 @@ import fs from 'node:fs';
 import { runCommand as oclifRunCommand } from '@oclif/test';
 import chalk from 'chalk';
 import prompts from 'prompts';
-import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
+import { describe, beforeEach, afterEach, it, expect, vi, type MockInstance } from 'vitest';
 
 import Command from '../../../src/cmds/openapi/validate.js';
 import { after, before } from '../../helpers/get-gha-setup.js';
 import { runCommand } from '../../helpers/setup-oclif-config.js';
 
-let consoleSpy;
+let consoleInfoSpy: MockInstance;
 
 const getCommandOutput = () => {
-  return [consoleSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
+  return [consoleInfoSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
 };
 
 describe('rdme openapi:validate', () => {
@@ -22,13 +22,13 @@ describe('rdme openapi:validate', () => {
   let testWorkingDir: string;
 
   beforeEach(() => {
-    consoleSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
+    consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     run = runCommand(Command);
     testWorkingDir = process.cwd();
   });
 
   afterEach(() => {
-    consoleSpy.mockRestore();
+    consoleInfoSpy.mockRestore();
 
     process.chdir(testWorkingDir);
   });

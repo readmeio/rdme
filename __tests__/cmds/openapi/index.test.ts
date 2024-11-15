@@ -6,7 +6,7 @@ import fs from 'node:fs';
 import chalk from 'chalk';
 import nock from 'nock';
 import prompts from 'prompts';
-import { describe, beforeAll, beforeEach, afterEach, it, expect, vi } from 'vitest';
+import { describe, beforeAll, beforeEach, afterEach, it, expect, vi, type MockInstance } from 'vitest';
 
 import APIError from '../../../src/lib/apiError.js';
 import config from '../../../src/lib/config.js';
@@ -16,8 +16,8 @@ import { after, before } from '../../helpers/get-gha-setup.js';
 import { after as afterGHAEnv, before as beforeGHAEnv } from '../../helpers/setup-gha-env.js';
 import setupOclifConfig from '../../helpers/setup-oclif-config.js';
 
-let consoleInfoSpy;
-let consoleWarnSpy;
+let consoleInfoSpy: MockInstance;
+let consoleWarnSpy: MockInstance;
 
 const key = 'API_KEY';
 const id = '5aa0409b7cf527a93bfb44df';
