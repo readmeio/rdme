@@ -1,14 +1,15 @@
 /* eslint-disable no-console */
-import type { Config } from '@oclif/core';
 
 import fs from 'node:fs';
 
+import { runCommand as oclifRunCommand } from '@oclif/test';
 import chalk from 'chalk';
 import prompts from 'prompts';
 import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
+import Command from '../../../src/cmds/openapi/validate.js';
 import { after, before } from '../../helpers/get-gha-setup.js';
-import setupOclifConfig from '../../helpers/setup-oclif-config.js';
+import { runCommand } from '../../helpers/setup-oclif-config.js';
 
 let consoleSpy;
 
@@ -17,14 +18,12 @@ const getCommandOutput = () => {
 };
 
 describe('rdme openapi:validate', () => {
-  let config: Config;
-  let run: (args?: string[]) => Promise<unknown>;
+  let run: (args?: string[]) => Promise<string>;
   let testWorkingDir: string;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     consoleSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
-    config = await setupOclifConfig();
-    run = (args?: string[]) => config.runCommand('openapi:validate', args);
+    run = runCommand(Command);
     testWorkingDir = process.cwd();
   });
 
@@ -51,7 +50,7 @@ describe('rdme openapi:validate', () => {
   });
 
   it('should discover and upload an API definition if none is provided', async () => {
-    await expect(validate.run({ workingDirectory: './__tests__/__fixtures__/relative-ref-oas' })).resolves.toBe(
+    await expect(run(['--workingDirectory', './__tests__/__fixtures__/relative-ref-oas'])).resolves.toBe(
       chalk.green('petstore.json is a valid OpenAPI API definition!'),
     );
 
@@ -63,10 +62,7 @@ describe('rdme openapi:validate', () => {
 
   it('should use specified working directory', () => {
     return expect(
-      validate.run({
-        spec: 'petstore.json',
-        workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-      }),
+      run(['petstore.json', '--workingDirectory', './__tests__/__fixtures__/relative-ref-oas']),
     ).resolves.toBe(chalk.green('petstore.json is a valid OpenAPI API definition!'));
   });
 
@@ -76,17 +72,15 @@ describe('rdme openapi:validate', () => {
       './__tests__/__fixtures__/nested-gitignored-oas/nest/petstore-ignored.json',
     );
 
-    return expect(
-      validate.run({
-        workingDirectory: './__tests__/__fixtures__/nested-gitignored-oas',
-      }),
-    ).resolves.toBe(chalk.green('nest/petstore.json is a valid OpenAPI API definition!'));
+    return expect(run(['--workingDirectory', './__tests__/__fixtures__/nested-gitignored-oas'])).resolves.toBe(
+      chalk.green('nest/petstore.json is a valid OpenAPI API definition!'),
+    );
   });
 
   describe('error handling', () => {
     it('should throw an error if invalid JSON is supplied', () => {
       return expect(run(['./__tests__/__fixtures__/invalid-json/yikes.json'])).rejects.toStrictEqual(
-        new SyntaxError('Unexpected end of JSON input'),
+        new Error('Unexpected end of JSON input'),
       );
     });
 
@@ -179,7 +173,7 @@ describe('rdme openapi:validate', () => {
       prompts.inject([true, 'validate-test-opt-spec-github-branch', fileName]);
 
       await expect(
-        validate.run({ spec, workingDirectory: './__tests__/__fixtures__/relative-ref-oas' }),
+        run([spec, '--workingDirectory', './__tests__/__fixtures__/relative-ref-oas']),
       ).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();
@@ -210,10 +204,10 @@ describe('rdme openapi:validate', () => {
   });
 
   describe('rdme validate alias', () => {
-    it('should should `rdme openapi:validate`', () => {
+    it('should should `rdme openapi:validate`', async () => {
       return expect(
-        config.runCommand('validate', [require.resolve('@readme/oas-examples/3.0/json/petstore.json')]),
-      ).resolves.toContain(chalk.green('petstore.json is a valid OpenAPI API definition!'));
+        (await oclifRunCommand(['validate', require.resolve('@readme/oas-examples/3.0/json/petstore.json')])).result,
+      ).toContain(chalk.green('petstore.json is a valid OpenAPI API definition!'));
     });
   });
 });

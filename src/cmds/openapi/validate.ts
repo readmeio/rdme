@@ -8,6 +8,9 @@ import prepareOas from '../../lib/prepareOas.js';
 export default class OpenAPIValidateCommand extends BaseCommand<typeof OpenAPIValidateCommand> {
   static description = 'Validate your OpenAPI/Swagger definition.';
 
+  // needed for unit tests, even though we also specify this in src/index.ts
+  static id = 'openapi:validate';
+
   static aliases = ['validate'];
 
   static deprecateAliases = true;
