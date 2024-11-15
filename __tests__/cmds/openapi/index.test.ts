@@ -416,11 +416,7 @@ describe('rdme openapi', () => {
       const spec = 'petstore.json';
 
       await expect(
-        openapi.run({
-          key,
-          version,
-          workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-        }),
+        run(['--key', key, '--version', version, '--workingDirectory', './__tests__/__fixtures__/relative-ref-oas']),
       ).resolves.toBe(successfulUpload(spec));
 
       expect(console.info).toHaveBeenCalledTimes(1);
@@ -459,12 +455,15 @@ describe('rdme openapi', () => {
       const spec = 'petstore.json';
 
       await expect(
-        openapi.run({
+        run([
           spec,
+          '--key',
           key,
+          '--version',
           version,
-          workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-        }),
+          '--workingDirectory',
+          './__tests__/__fixtures__/relative-ref-oas',
+        ]),
       ).resolves.toBe(successfulUpload(spec));
 
       expect(console.info).toHaveBeenCalledTimes(0);
@@ -520,12 +519,15 @@ describe('rdme openapi', () => {
         .reply(200, []);
 
       await expect(
-        openapi.run({
+        run([
+          '--key',
           key,
+          '--version',
           version,
-          dryRun: true,
-          workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-        }),
+          '--workingDirectory',
+          './__tests__/__fixtures__/relative-ref-oas',
+          '--dryRun',
+        ]),
       ).resolves.toMatch(
         '🎭 dry run! The API Definition located at petstore.json will be created for this project version: 1.0.0',
       );
@@ -1041,7 +1043,7 @@ describe('rdme openapi', () => {
     });
 
     it('should error if no file was provided or able to be discovered', () => {
-      return expect(openapi.run({ key, version, workingDirectory: 'bin' })).rejects.toStrictEqual(
+      return expect(run(['--key', key, '--version', version, '--workingDirectory', 'bin'])).rejects.toStrictEqual(
         new Error(
           "We couldn't find an OpenAPI or Swagger definition.\n\nPlease specify the path to your definition with `rdme openapi ./path/to/api/definition`.",
         ),
@@ -1285,12 +1287,15 @@ describe('rdme openapi', () => {
       const spec = 'petstore.json';
 
       await expect(
-        openapi.run({
+        run([
           spec,
+          '--key',
           key,
+          '--version',
           version,
-          workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-        }),
+          '--workingDirectory',
+          './__tests__/__fixtures__/relative-ref-oas',
+        ]),
       ).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();
@@ -1427,12 +1432,15 @@ describe('rdme openapi', () => {
       const spec = 'petstore.json';
 
       await expect(
-        openapi.run({
+        run([
           spec,
+          '--key',
           key,
+          '--version',
           version,
-          workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-        }),
+          '--workingDirectory',
+          './__tests__/__fixtures__/relative-ref-oas',
+        ]),
       ).resolves.toBe(successfulUpload(spec));
 
       after();
