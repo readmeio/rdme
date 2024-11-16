@@ -12,8 +12,5 @@ outputs:
   rdme:
     description: The rdme command result output
 runs:
-  using: docker
-  image: docker://ghcr.io/readmeio/rdme:9.0.0-next.19
-  args:
-    - docker-gha
-    - ${{ inputs.rdme }}
+  using: node20
+  main: gha-dist/run-dist.cjs
