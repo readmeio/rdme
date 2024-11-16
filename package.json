@@ -111,7 +111,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "build:gha": "npm run build && rollup -c",
+    "build:gha": "npm run build && rollup --config",
+    "build:gha:prod": "npm run build:gha -- --environment PRODUCTION_BUILD",
     "debug": "tsx src/cli.ts",
     "lint": "alex . && knip && npm run lint:ts && npm run prettier && npm run schemas:check",
     "lint:ts": "eslint . --ext .js,.ts",
