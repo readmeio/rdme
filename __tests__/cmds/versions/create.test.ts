@@ -1,4 +1,3 @@
-import { type Config } from '@oclif/core';
 import nock from 'nock';
 import prompts from 'prompts';
 import { describe, beforeAll, beforeEach, afterEach, it, expect } from 'vitest';

@@ -1,3 +1,4 @@
+/* eslint-disable vitest/no-disabled-tests */
 /* eslint-disable no-console */
 import type { Command, Config } from '@oclif/core';
 import type { Response } from 'simple-git';
