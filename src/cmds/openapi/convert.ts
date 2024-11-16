@@ -39,6 +39,7 @@ export default class OpenAPIConvertCommand extends BaseCommand<typeof OpenAPICon
     const parsedPreparedSpec: OASDocument = JSON.parse(preparedSpec);
 
     if (specType === 'OpenAPI') {
+      // todo: figure out how to not log this in tests
       this.warn(
         'The input file is already OpenAPI, so no conversion is necessary. Any external references will be bundled.',
       );
