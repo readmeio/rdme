@@ -1,5 +1,3 @@
-import type { Config } from '@oclif/core';
-
 import fs from 'node:fs';
 import path from 'node:path';
 
