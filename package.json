@@ -39,10 +39,6 @@
   "bugs": {
     "url": "https://github.com/readmeio/rdme/issues"
   },
-  "pkg": {
-    "scripts": "dist/**/*.js",
-    "assets": "package.json"
-  },
   "type": "module",
   "dependencies": {
     "@actions/core": "^1.6.0",
@@ -84,6 +80,7 @@
     "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-node-resolve": "^15.2.1",
     "@rollup/plugin-replace": "^6.0.1",
+    "@rollup/plugin-terser": "^0.4.4",
     "@types/configstore": "^6.0.0",
     "@types/debug": "^4.1.7",
     "@types/js-yaml": "^4.0.5",
@@ -96,7 +93,6 @@
     "@types/validator": "^13.7.6",
     "@vitest/coverage-v8": "^2.0.5",
     "@vitest/expect": "^2.0.5",
-    "@yao-pkg/pkg": "^6.1.0",
     "ajv": "^8.11.0",
     "alex": "^11.0.0",
     "esbuild": "^0.24.0",
@@ -116,7 +112,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "build:exe": "npm run build && rollup -c && pkg dist/rollup-output.cjs --target host --output exe/rdme",
+    "build:gha": "npm run build && rollup -c",
     "debug": "tsx src/cli.ts",
     "esbuild:cmds": "npx esbuild --format=cjs --target=node20 --platform=node --bundle --outfile=bundle-cmds.cjs dist/index.js",
     "esbuild:oclif": "npx esbuild --format=cjs --target=node20 --platform=node --bundle --outfile=bundle-run.cjs bin/run.cjs",

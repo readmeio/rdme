@@ -3,3 +3,7 @@ CHANGELOG.md
 coverage/
 dist/
 exe/
+
+gha-dist/
+*-dist.cjs
+*-dist.js
