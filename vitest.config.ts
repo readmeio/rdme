@@ -4,11 +4,11 @@ import { coverageConfigDefaults, configDefaults, defineConfig } from 'vitest/con
 export default defineConfig({
   test: {
     coverage: {
-      exclude: [...coverageConfigDefaults.exclude, '**/gha-dist/**'],
+      exclude: [...coverageConfigDefaults.exclude, '**/dist-gha/**'],
     },
     exclude: [
       '**/__fixtures__/**',
-      '**/gha-dist/**',
+      '**/dist-gha/**',
       '**/helpers/**',
       '**/__snapshots__/**',
       ...configDefaults.exclude,

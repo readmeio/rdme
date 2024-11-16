@@ -2,8 +2,5 @@ __tests__/__fixtures__/invalid-json/yikes.json
 CHANGELOG.md
 coverage/
 dist/
+dist-gha/
 exe/
-
-gha-dist/
-*-dist.cjs
-*-dist.js

@@ -13,4 +13,4 @@ outputs:
     description: The rdme command result output
 runs:
   using: node20
-  main: gha-dist/run-dist.cjs
+  main: dist-gha/run-dist.cjs
