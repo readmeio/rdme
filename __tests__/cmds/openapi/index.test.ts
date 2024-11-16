@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-import type { Config } from '@oclif/core';
 
 import fs from 'node:fs';
 
@@ -8,13 +7,14 @@ import nock from 'nock';
 import prompts from 'prompts';
 import { describe, beforeAll, beforeEach, afterEach, it, expect, vi, type MockInstance } from 'vitest';
 
+import Command from '../../../src/cmds/openapi/index.js';
 import APIError from '../../../src/lib/apiError.js';
 import config from '../../../src/lib/config.js';
 import petstoreWeird from '../../__fixtures__/petstore-simple-weird-version.json' with { type: 'json' };
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
 import { after, before } from '../../helpers/get-gha-setup.js';
 import { after as afterGHAEnv, before as beforeGHAEnv } from '../../helpers/setup-gha-env.js';
-import setupOclifConfig from '../../helpers/setup-oclif-config.js';
+import { runCommand } from '../../helpers/setup-oclif-config.js';
 
 let consoleInfoSpy: MockInstance;
 let consoleWarnSpy: MockInstance;
@@ -50,19 +50,17 @@ const getCommandOutput = () => {
 const getRandomRegistryId = () => Math.random().toString(36).substring(2);
 
 describe('rdme openapi', () => {
-  let oclifConfig: Config;
-  let run: (args?: string[]) => Promise<unknown>;
+  let run: (args?: string[]) => Promise<string>;
   let testWorkingDir: string;
 
   beforeAll(() => {
     nock.disableNetConnect();
   });
 
-  beforeEach(async () => {
+  beforeEach(() => {
     consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    oclifConfig = await setupOclifConfig();
-    run = (args?: string[]) => oclifConfig.runCommand('openapi', args);
+    run = runCommand(Command);
     testWorkingDir = process.cwd();
   });
 

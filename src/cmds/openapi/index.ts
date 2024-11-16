@@ -18,6 +18,9 @@ import { getProjectVersion } from '../../lib/versionSelect.js';
 export default class OpenAPICommand extends BaseCommand<typeof OpenAPICommand> {
   static description = 'Upload, or resync, your OpenAPI/Swagger definition to ReadMe.';
 
+  // needed for unit tests, even though we also specify this in src/index.ts
+  static id = 'openapi';
+
   static args = {
     spec: Args.string({ description: 'A file/URL to your API definition' }),
   };
@@ -25,17 +28,16 @@ export default class OpenAPICommand extends BaseCommand<typeof OpenAPICommand> {
   static flags = {
     key: keyFlag,
     version: versionFlag,
+    id: Flags.string({
+      description:
+        "Unique identifier for your API definition. Use this if you're re-uploading an existing API definition.",
+    }),
     title: titleFlag,
     workingDirectory: workingDirectoryFlag,
     github: githubFlag,
     dryRun: Flags.boolean({
       description: 'Runs the command without creating/updating any API Definitions in ReadMe. Useful for debugging.',
     }),
-    id: Flags.string({
-      description:
-        "Unique identifier for your API definition. Use this if you're re-uploading an existing API definition.",
-    }),
-
     useSpecVersion: Flags.boolean({
       description:
         'Uses the version listed in the `info.version` field in the API definition for the project version parameter.',
