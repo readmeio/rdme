@@ -66,7 +66,7 @@ jobs:
 
       # TODO: write a smol explainer comment
       - name: Rebuild GitHub Action for testing purposes
-        run: 'npm run build:gha'
+        run: 'npm ci && npm run build:gha'
         working-directory: rdme-repo
 
       - name: Run `openapi:validate` command
