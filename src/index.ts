@@ -2,7 +2,6 @@ import CategoriesCreateCommand from './cmds/categories/create.js';
 import CategoriesCommand from './cmds/categories/index.js';
 import ChangelogsCommand from './cmds/changelogs.js';
 import CustomPagesCommand from './cmds/custompages.js';
-import DockerGitHubCommand from './cmds/docker-gha.js';
 import DocsCommand from './cmds/docs/index.js';
 import DocsPruneCommand from './cmds/docs/prune.js';
 import LoginCommand from './cmds/login.js';
@@ -31,8 +30,6 @@ export const COMMANDS = {
 
   docs: DocsCommand,
   'docs:prune': DocsPruneCommand,
-
-  'docker-gha': DockerGitHubCommand,
 
   versions: VersionsCommand,
   'versions:create': CreateVersionCommand,
