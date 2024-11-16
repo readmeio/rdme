@@ -18,6 +18,7 @@ const hook: Hook<'prerun'> = async function run(options) {
     } else {
       // eslint-disable-next-line no-param-reassign
       options.Command.flags.key = Flags.string({
+        // `parse` is run if the user passes in a `--key` flag
         parse: async input => {
           this.debug('--key flag detected in parse function');
           const { email, project } = getCurrentConfig.call(this);
@@ -66,7 +67,7 @@ const hook: Hook<'prerun'> = async function run(options) {
       this.debug('in CI environment');
       // eslint-disable-next-line no-param-reassign
       options.Command.flags.github = Flags.boolean({
-        async parse() {
+        parse: () => {
           throw new Error('The `--github` flag is only for usage in non-CI environments.');
         },
       });
