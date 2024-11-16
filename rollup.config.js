@@ -27,12 +27,12 @@ if (isProductionBuild) {
 export default defineConfig([
   {
     input: 'bin/run-gha.js',
-    output: { file: 'dist-gha/run-dist.cjs', format: 'cjs', inlineDynamicImports: true },
+    output: { file: 'dist-gha/run.cjs', format: 'cjs', inlineDynamicImports: true },
     plugins: basePlugins,
   },
   {
     input: 'dist/index.js',
-    output: { file: 'dist-gha/cmds-dist.js', format: 'esm', inlineDynamicImports: true },
+    output: { file: 'dist-gha/cmds.js', format: 'esm', inlineDynamicImports: true },
     plugins: [
       ...basePlugins,
       // this disgusting workaround is required to prevent runtime errors,
