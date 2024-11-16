@@ -118,10 +118,16 @@ describe('rdme openapi:validate', () => {
       await expect(run([spec])).resolves.toBe(chalk.green(`${spec} is a valid OpenAPI API definition!`));
     });
 
-    it('should fail if user attempts to pass `--github` flag in CI environment', () => {
-      return expect(run(['__tests__/__fixtures__/petstore-simple-weird-version.json', '--github'])).rejects.toThrow(
-        'The `--github` flag is only for usage in non-CI environments.',
-      );
+    it('should fail if user attempts to pass `--github` flag in CI environment', async () => {
+      return expect(
+        (
+          await oclifRunCommand([
+            'openapi:validate',
+            '__tests__/__fixtures__/petstore-simple-weird-version.json',
+            '--github',
+          ])
+        ).error.message,
+      ).toContain('The `--github` flag is only for usage in non-CI environments');
     });
   });
 
