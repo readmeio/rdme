@@ -39,13 +39,6 @@
   "bugs": {
     "url": "https://github.com/readmeio/rdme/issues"
   },
-  "pkg": {
-    "scripts": "cmds-dist.js",
-    "assets": [
-      "package.json",
-      "oclif.manifest.json"
-    ]
-  },
   "type": "module",
   "dependencies": {
     "@actions/core": "^1.6.0",
@@ -161,17 +154,17 @@
     "dirname": "rdme",
     "commands": {
       "strategy": "explicit",
-      "target": "./cmds-dist.js",
+      "target": "./cmds.js",
       "identifier": "COMMANDS"
     },
     "topicSeparator": ":",
     "hooks": {
       "prerun": {
-        "target": "./cmds-dist.js",
+        "target": "./cmds.js",
         "identifier": "prerun"
       },
       "createGHA": {
-        "target": "./cmds-dist.js",
+        "target": "./cmds.js",
         "identifier": "createGHA"
       }
     },
