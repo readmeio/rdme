@@ -26,7 +26,7 @@ if (isProductionBuild) {
 
 export default defineConfig([
   {
-    input: 'bin/run-gha.js',
+    input: 'bin/run.js',
     output: { file: 'dist-gha/run.cjs', format: 'cjs', inlineDynamicImports: true },
     plugins: basePlugins,
   },
