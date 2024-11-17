@@ -5,7 +5,7 @@ import chalk from 'chalk';
 import prompts from 'prompts';
 import { describe, beforeAll, beforeEach, afterEach, it, expect, vi, type MockInstance } from 'vitest';
 
-import Command from '../../../src/cmds/openapi/reduce.js';
+import Command from '../../../src/commands/openapi/reduce.js';
 import { runCommand } from '../../helpers/setup-oclif-config.js';
 
 const successfulReduction = () => 'Your reduced API definition has been saved to output.json! 🤏';
