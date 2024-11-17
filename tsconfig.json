@@ -12,8 +12,5 @@
     "target": "ES2022",
     "useUnknownInCatchVariables": false
   },
-  "include": ["./src/**/*"],
-  "ts-node": {
-    "esm": true
-  }
+  "include": ["./src/**/*"]
 }
