@@ -6,17 +6,17 @@ import frontMatter from 'gray-matter';
 import nock from 'nock';
 import { describe, beforeAll, afterAll, beforeEach, it, expect } from 'vitest';
 
-import Command from '../../../src/cmds/custompages.js';
+import Command from '../../../src/commands/changelogs.js';
 import APIError from '../../../src/lib/apiError.js';
 import getAPIMock from '../../helpers/get-api-mock.js';
 import hashFileContents from '../../helpers/hash-file-contents.js';
 import { runCommand } from '../../helpers/setup-oclif-config.js';
 
-const fixturesBaseDir = '__fixtures__/custompages';
+const fixturesBaseDir = '__fixtures__/changelogs';
 const fullFixturesDir = `${__dirname}./../../${fixturesBaseDir}`;
 const key = 'API_KEY';
 
-describe('rdme custompages (single)', () => {
+describe('rdme changelogs (single)', () => {
   let run: (args?: string[]) => Promise<string>;
 
   beforeAll(() => {
@@ -33,37 +33,37 @@ describe('rdme custompages (single)', () => {
     return expect(run(['--key', key])).rejects.toThrow('Missing 1 required arg:\npath');
   });
 
-  it('should error if the argument is not a Markdown/HTML file', () => {
+  it('should error if the argument is not a Markdown file', () => {
     return expect(run(['--key', key, 'package.json'])).rejects.toStrictEqual(
-      new Error('Invalid file extension (.json). Must be one of the following: .html, .markdown, .md'),
+      new Error('Invalid file extension (.json). Must be one of the following: .markdown, .md'),
     );
   });
 
-  it('should error if file path cannot be found', () => {
+  it('should support .markdown files but error if file path cannot be found', () => {
     return expect(run(['--key', key, 'non-existent-file.markdown'])).rejects.toStrictEqual(
       new Error("Oops! We couldn't locate a file or directory at the path you provided."),
     );
   });
 
-  describe('new custompages', () => {
-    it('should create new custom page', async () => {
+  describe('new changelogs', () => {
+    it('should create new changelog', async () => {
       const slug = 'new-doc';
       const id = '1234';
       const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
 
       const getMock = getAPIMock()
-        .get(`/api/v1/custompages/${slug}`)
+        .get(`/api/v1/changelogs/${slug}`)
         .basicAuth({ user: key })
         .reply(404, {
-          error: 'CUSTOMPAGE_NOTFOUND',
-          message: `The custom page with the slug '${slug}' couldn't be found`,
+          error: 'CHANGELOG_NOTFOUND',
+          message: `The changelog with the slug '${slug}' couldn't be found`,
           suggestion: '...a suggestion to resolve the issue...',
           help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
         });
 
       const postMock = getAPIMock()
-        .post('/api/v1/custompages', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
+        .post('/api/v1/changelogs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
         .reply(201, { slug, _id: id, body: doc.content, ...doc.data });
 
@@ -75,45 +75,16 @@ describe('rdme custompages (single)', () => {
       postMock.done();
     });
 
-    it('should create new HTML custom page', async () => {
-      const slug = 'new-doc';
-      const id = '1234';
-      const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs-html/${slug}.html`)));
-      const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/new-docs-html/${slug}.html`)));
-
-      const getMock = getAPIMock()
-        .get(`/api/v1/custompages/${slug}`)
-        .basicAuth({ user: key })
-        .reply(404, {
-          error: 'CUSTOMPAGE_NOTFOUND',
-          message: `The custom page with the slug '${slug}' couldn't be found`,
-          suggestion: '...a suggestion to resolve the issue...',
-          help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
-        });
-
-      const postMock = getAPIMock()
-        .post('/api/v1/custompages', { slug, html: doc.content, htmlmode: true, ...doc.data, lastUpdatedHash: hash })
-        .basicAuth({ user: key })
-        .reply(201, { slug, _id: id, html: doc.content, htmlmode: true, ...doc.data });
-
-      await expect(run([`./__tests__/${fixturesBaseDir}/new-docs-html/new-doc.html`, '--key', key])).resolves.toBe(
-        `🌱 successfully created 'new-doc' (ID: 1234) with contents from ./__tests__/${fixturesBaseDir}/new-docs-html/new-doc.html`,
-      );
-
-      getMock.done();
-      postMock.done();
-    });
-
     it('should return creation info for dry run', async () => {
       const slug = 'new-doc';
       const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
 
       const getMock = getAPIMock()
-        .get(`/api/v1/custompages/${slug}`)
+        .get(`/api/v1/changelogs/${slug}`)
         .basicAuth({ user: key })
         .reply(404, {
-          error: 'CUSTOMPAGE_NOTFOUND',
-          message: `The custom page with the slug '${slug}' couldn't be found`,
+          error: 'CHANGELOG_NOTFOUND',
+          message: `The changelog with the slug '${slug}' couldn't be found`,
           suggestion: '...a suggestion to resolve the issue...',
           help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
         });
@@ -145,7 +116,7 @@ describe('rdme custompages (single)', () => {
         help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
       };
 
-      const getMock = getAPIMock().get(`/api/v1/custompages/${slug}`).basicAuth({ user: key }).reply(500, errorObject);
+      const getMock = getAPIMock().get(`/api/v1/changelogs/${slug}`).basicAuth({ user: key }).reply(500, errorObject);
 
       const filePath = `./__tests__/${fixturesBaseDir}/failure-docs/${slug}.md`;
 
@@ -168,17 +139,17 @@ describe('rdme custompages (single)', () => {
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/slug-docs/${slug}.md`)));
 
       const getMock = getAPIMock()
-        .get(`/api/v1/custompages/${doc.data.slug}`)
+        .get(`/api/v1/changelogs/${doc.data.slug}`)
         .basicAuth({ user: key })
         .reply(404, {
-          error: 'CUSTOMPAGE_NOTFOUND',
-          message: `The custom page with the slug '${slug}' couldn't be found`,
+          error: 'CHANGELOG_NOTFOUND',
+          message: `The changelog with the slug '${slug}' couldn't be found`,
           suggestion: '...a suggestion to resolve the issue...',
           help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
         });
 
       const postMock = getAPIMock()
-        .post('/api/v1/custompages', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
+        .post('/api/v1/changelogs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
         .reply(201, { slug: doc.data.slug, _id: id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
@@ -191,7 +162,7 @@ describe('rdme custompages (single)', () => {
     });
   });
 
-  describe('existing custompages', () => {
+  describe('existing changelogs', () => {
     let simpleDoc;
 
     beforeEach(() => {
@@ -203,16 +174,15 @@ describe('rdme custompages (single)', () => {
       };
     });
 
-    it('should fetch custom page and merge with what is returned', () => {
+    it('should fetch changelog and merge with what is returned', () => {
       const getMock = getAPIMock()
-        .get('/api/v1/custompages/simple-doc')
+        .get('/api/v1/changelogs/simple-doc')
         .basicAuth({ user: key })
         .reply(200, { slug: simpleDoc.slug, lastUpdatedHash: 'anOldHash' });
 
       const updateMock = getAPIMock()
-        .put('/api/v1/custompages/simple-doc', {
+        .put('/api/v1/changelogs/simple-doc', {
           body: simpleDoc.doc.content,
-          htmlmode: false,
           lastUpdatedHash: simpleDoc.hash,
           ...simpleDoc.doc.data,
         })
@@ -220,7 +190,6 @@ describe('rdme custompages (single)', () => {
         .reply(200, {
           slug: simpleDoc.slug,
           body: simpleDoc.doc.content,
-          htmlmode: false,
         });
 
       return run([`./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, '--key', key]).then(updatedDocs => {
@@ -233,17 +202,17 @@ describe('rdme custompages (single)', () => {
       });
     });
 
-    it('should return custom page update info for dry run', () => {
+    it('should return changelog update info for dry run', () => {
       expect.assertions(1);
 
       const getMock = getAPIMock()
-        .get('/api/v1/custompages/simple-doc')
+        .get('/api/v1/changelogs/simple-doc')
         .basicAuth({ user: key })
         .reply(200, { slug: simpleDoc.slug, lastUpdatedHash: 'anOldHash' });
 
       return run(['--dryRun', `./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, '--key', key]).then(
         updatedDocs => {
-          // All custompages should have been updated because their hashes from the GET request were different from what they
+          // All changelogs should have been updated because their hashes from the GET request were different from what they
           // are currently.
           expect(updatedDocs).toBe(
             [
@@ -258,11 +227,11 @@ describe('rdme custompages (single)', () => {
       );
     });
 
-    it('should not send requests for custompages that have not changed', () => {
+    it('should not send requests for changelogs that have not changed', () => {
       expect.assertions(1);
 
       const getMock = getAPIMock()
-        .get('/api/v1/custompages/simple-doc')
+        .get('/api/v1/changelogs/simple-doc')
         .basicAuth({ user: key })
         .reply(200, { slug: simpleDoc.slug, lastUpdatedHash: simpleDoc.hash });
 
@@ -275,7 +244,7 @@ describe('rdme custompages (single)', () => {
 
     it('should adjust "no changes" message if in dry run', () => {
       const getMock = getAPIMock()
-        .get('/api/v1/custompages/simple-doc')
+        .get('/api/v1/changelogs/simple-doc')
         .basicAuth({ user: key })
         .reply(200, { slug: simpleDoc.slug, lastUpdatedHash: simpleDoc.hash });
 

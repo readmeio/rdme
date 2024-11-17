@@ -1,7 +1,7 @@
 import nock from 'nock';
 import { describe, beforeAll, beforeEach, afterEach, it, expect } from 'vitest';
 
-import Command from '../../../src/cmds/versions/delete.js';
+import Command from '../../../src/commands/versions/delete.js';
 import APIError from '../../../src/lib/apiError.js';
 import getAPIMock from '../../helpers/get-api-mock.js';
 import { runCommand } from '../../helpers/setup-oclif-config.js';

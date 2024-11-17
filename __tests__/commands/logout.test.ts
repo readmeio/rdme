@@ -1,7 +1,7 @@
 import { describe, afterEach, beforeEach, it, expect } from 'vitest';
 
 import pkg from '../../package.json';
-import Command from '../../src/cmds/logout.js';
+import Command from '../../src/commands/logout.js';
 import configStore from '../../src/lib/configstore.js';
 import { runCommand } from '../helpers/setup-oclif-config.js';
 

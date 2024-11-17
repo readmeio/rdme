@@ -3,7 +3,7 @@ import nock from 'nock';
 import prompts from 'prompts';
 import { describe, beforeAll, beforeEach, afterAll, it, expect } from 'vitest';
 
-import Command from '../../../src/cmds/docs/prune.js';
+import Command from '../../../src/commands/docs/prune.js';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
 import { runCommand } from '../../helpers/setup-oclif-config.js';
 

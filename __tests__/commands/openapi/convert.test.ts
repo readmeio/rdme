@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import prompts from 'prompts';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
-import Command from '../../../src/cmds/openapi/convert.js';
+import Command from '../../../src/commands/openapi/convert.js';
 import { runCommand } from '../../helpers/setup-oclif-config.js';
 
 const successfulConversion = () => 'Your API definition has been converted and bundled and saved to output.json!';

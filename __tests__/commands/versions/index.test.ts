@@ -1,9 +1,9 @@
-import type { Version } from '../../../src/cmds/versions/index.js';
+import type { Version } from '../../../src/commands/versions/index.js';
 
 import nock from 'nock';
 import { describe, beforeAll, beforeEach, afterEach, it, expect } from 'vitest';
 
-import Command from '../../../src/cmds/versions/index.js';
+import Command from '../../../src/commands/versions/index.js';
 import getAPIMock from '../../helpers/get-api-mock.js';
 import { runCommand } from '../../helpers/setup-oclif-config.js';
 

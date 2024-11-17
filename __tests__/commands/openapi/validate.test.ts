@@ -7,7 +7,7 @@ import chalk from 'chalk';
 import prompts from 'prompts';
 import { describe, beforeEach, afterEach, it, expect, vi, type MockInstance } from 'vitest';
 
-import Command from '../../../src/cmds/openapi/validate.js';
+import Command from '../../../src/commands/openapi/validate.js';
 import { after, before } from '../../helpers/get-gha-setup.js';
 import { runCommand } from '../../helpers/setup-oclif-config.js';
 

@@ -1,7 +1,7 @@
 import { describe, afterEach, it, expect, beforeEach } from 'vitest';
 
 import pkg from '../../package.json';
-import Command from '../../src/cmds/whoami.js';
+import Command from '../../src/commands/whoami.js';
 import configStore from '../../src/lib/configstore.js';
 import { runCommand } from '../helpers/setup-oclif-config.js';
 
