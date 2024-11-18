@@ -13,4 +13,5 @@ outputs:
     description: The rdme command result output
 runs:
   using: node20
+  pre: bin/write-gha-pjson.js
   main: dist-gha/run.cjs
