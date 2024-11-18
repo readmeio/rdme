@@ -1,7 +1,7 @@
 import type { Version } from '../../../src/cmds/versions/index.js';
 
 import nock from 'nock';
-import { describe, beforeAll, beforeEach, afterEach, it, expect } from 'vitest';
+import { describe, beforeAll, afterEach, it, expect } from 'vitest';
 
 import Command from '../../../src/cmds/versions/index.js';
 import getAPIMock from '../../helpers/get-api-mock.js';
@@ -36,9 +36,6 @@ describe('rdme versions', () => {
 
   beforeAll(() => {
     nock.disableNetConnect();
-  });
-
-  beforeEach(() => {
     run = runCommand(Command);
   });
 

@@ -21,9 +21,6 @@ describe('rdme custompages', () => {
 
   beforeAll(() => {
     nock.disableNetConnect();
-  });
-
-  beforeEach(() => {
     run = runCommand(Command);
   });
 

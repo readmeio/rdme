@@ -1,5 +1,5 @@
 import nock from 'nock';
-import { describe, beforeAll, beforeEach, afterEach, it, expect } from 'vitest';
+import { describe, beforeAll, afterEach, it, expect } from 'vitest';
 
 import Command from '../../../src/cmds/versions/delete.js';
 import APIError from '../../../src/lib/apiError.js';
@@ -14,9 +14,6 @@ describe('rdme versions:delete', () => {
 
   beforeAll(() => {
     nock.disableNetConnect();
-  });
-
-  beforeEach(() => {
     run = runCommand(Command);
   });
 

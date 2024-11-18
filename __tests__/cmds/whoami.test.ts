@@ -1,4 +1,4 @@
-import { describe, afterEach, it, expect, beforeEach } from 'vitest';
+import { describe, afterEach, it, expect, beforeAll } from 'vitest';
 
 import pkg from '../../package.json';
 import Command from '../../src/cmds/whoami.js';
@@ -8,7 +8,7 @@ import { runCommand } from '../helpers/setup-oclif-config.js';
 describe('rdme whoami', () => {
   let run: (args?: string[]) => Promise<string>;
 
-  beforeEach(() => {
+  beforeAll(() => {
     run = runCommand(Command);
   });
 

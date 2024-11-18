@@ -1,4 +1,4 @@
-import { describe, afterEach, beforeEach, it, expect } from 'vitest';
+import { describe, afterEach, beforeAll, it, expect } from 'vitest';
 
 import pkg from '../../package.json';
 import Command from '../../src/cmds/logout.js';
@@ -8,7 +8,7 @@ import { runCommand } from '../helpers/setup-oclif-config.js';
 describe('rdme logout', () => {
   let run: (args?: string[]) => Promise<string>;
 
-  beforeEach(() => {
+  beforeAll(() => {
     run = runCommand(Command);
   });
 

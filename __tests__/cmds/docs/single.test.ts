@@ -25,9 +25,6 @@ describe('rdme docs (single)', () => {
 
   beforeAll(() => {
     nock.disableNetConnect();
-  });
-
-  beforeEach(() => {
     run = runCommand(Command);
   });
 

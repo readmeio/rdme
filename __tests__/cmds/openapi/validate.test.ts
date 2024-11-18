@@ -5,7 +5,7 @@ import fs from 'node:fs';
 import { runCommand as oclifRunCommand } from '@oclif/test';
 import chalk from 'chalk';
 import prompts from 'prompts';
-import { describe, beforeEach, afterEach, it, expect, vi, type MockInstance } from 'vitest';
+import { describe, beforeAll, beforeEach, afterEach, it, expect, vi, type MockInstance } from 'vitest';
 
 import Command from '../../../src/cmds/openapi/validate.js';
 import { after, before } from '../../helpers/get-gha-setup.js';
@@ -21,9 +21,12 @@ describe('rdme openapi:validate', () => {
   let run: (args?: string[]) => Promise<string>;
   let testWorkingDir: string;
 
+  beforeAll(() => {
+    run = runCommand(Command);
+  });
+
   beforeEach(() => {
     consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
-    run = runCommand(Command);
     testWorkingDir = process.cwd();
   });
 

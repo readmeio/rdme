@@ -3,7 +3,7 @@ import path from 'node:path';
 
 import frontMatter from 'gray-matter';
 import nock from 'nock';
-import { describe, beforeAll, beforeEach, afterAll, it, expect } from 'vitest';
+import { describe, beforeAll, afterAll, it, expect } from 'vitest';
 
 import Command from '../../../src/cmds/docs/index.js';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
@@ -21,9 +21,6 @@ describe('rdme docs (multiple)', () => {
 
   beforeAll(() => {
     nock.disableNetConnect();
-  });
-
-  beforeEach(() => {
     run = runCommand(Command);
   });
 

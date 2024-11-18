@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 
 import prompts from 'prompts';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeAll, beforeEach, afterEach } from 'vitest';
 
 import Command from '../../../src/cmds/openapi/convert.js';
 import { runCommand } from '../../helpers/setup-oclif-config.js';
@@ -12,8 +12,11 @@ describe('rdme openapi:convert', () => {
   let run: (args?: string[]) => Promise<string>;
   let testWorkingDir: string;
 
-  beforeEach(() => {
+  beforeAll(() => {
     run = runCommand(Command);
+  });
+
+  beforeEach(() => {
     testWorkingDir = process.cwd();
   });
 

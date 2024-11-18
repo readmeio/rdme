@@ -1,6 +1,6 @@
 import nock from 'nock';
 import prompts from 'prompts';
-import { describe, beforeAll, beforeEach, afterAll, afterEach, it, expect } from 'vitest';
+import { describe, beforeAll, afterAll, afterEach, it, expect } from 'vitest';
 
 import Command from '../../src/cmds/login.js';
 import APIError from '../../src/lib/apiError.js';
@@ -19,9 +19,6 @@ describe('rdme login', () => {
 
   beforeAll(() => {
     nock.disableNetConnect();
-  });
-
-  beforeEach(() => {
     run = runCommand(Command);
   });
 

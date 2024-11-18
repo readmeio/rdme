@@ -55,12 +55,12 @@ describe('rdme openapi', () => {
 
   beforeAll(() => {
     nock.disableNetConnect();
+    run = runCommand(Command);
   });
 
   beforeEach(() => {
     consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    run = runCommand(Command);
     testWorkingDir = process.cwd();
   });
 

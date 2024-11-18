@@ -3,7 +3,7 @@ import fs from 'node:fs';
 
 import chalk from 'chalk';
 import prompts from 'prompts';
-import { describe, beforeEach, afterEach, it, expect, vi, type MockInstance } from 'vitest';
+import { describe, beforeAll, beforeEach, afterEach, it, expect, vi, type MockInstance } from 'vitest';
 
 import Command from '../../../src/cmds/openapi/reduce.js';
 import { runCommand } from '../../helpers/setup-oclif-config.js';
@@ -17,9 +17,12 @@ describe('rdme openapi:reduce', () => {
   let run: (args?: string[]) => Promise<unknown>;
   let testWorkingDir: string;
 
+  beforeAll(() => {
+    run = runCommand(Command);
+  });
+
   beforeEach(() => {
     consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
-    run = runCommand(Command);
     testWorkingDir = process.cwd();
   });
 

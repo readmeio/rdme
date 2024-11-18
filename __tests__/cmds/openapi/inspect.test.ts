@@ -2,7 +2,7 @@
 
 import assert from 'node:assert';
 
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeAll } from 'vitest';
 
 import Command from '../../../src/cmds/openapi/inspect.js';
 import { runCommand } from '../../helpers/setup-oclif-config.js';
@@ -10,7 +10,7 @@ import { runCommand } from '../../helpers/setup-oclif-config.js';
 describe('rdme openapi:inspect', () => {
   let run: (args?: string[]) => Promise<unknown>;
 
-  beforeEach(() => {
+  beforeAll(() => {
     run = runCommand(Command);
   });
 
