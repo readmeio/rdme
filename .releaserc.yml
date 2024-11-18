@@ -1,3 +1,4 @@
+$schema: https://json.schemastore.org/semantic-release.json
 branches:
   - name: main
   - name: next
