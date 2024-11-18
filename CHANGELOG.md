@@ -1,3 +1,10 @@
+# [9.0.0-next.20](https://github.com/readmeio/rdme/compare/v9.0.0-next.19...v9.0.0-next.20) (2024-11-18)
+
+
+### Bug Fixes
+
+* bump semantic-release versions ([21efc66](https://github.com/readmeio/rdme/commit/21efc66eef0ff063366e3ad1394fedf5170b1d94))
+
 # [9.0.0-next.19](https://github.com/readmeio/rdme/compare/v9.0.0-next.18...v9.0.0-next.19) (2024-11-09)
 
 
