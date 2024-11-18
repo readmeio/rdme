@@ -2,10 +2,10 @@
 
 ## Running Shell Commands Locally 🐚
 
-To get started, run the `prebuild` script to create a symlink with `package.json` (required for our `oclif` setup to read our commands properly). You only need to do this the first time you clone the repository.
+To get started, run the `build` script to create a symlink with `package.json` (required for our `oclif` setup to read our commands properly). You only need to do this the first time you clone the repository.
 
 ```sh
-npm run prebuild
+npm run build
 ```
 
 To run test commands, use `./bin/dev.js` instead of `rdme`. For example, if the command you're testing looks like this...
@@ -17,15 +17,22 @@ rdme openapi:validate __tests__/__fixtures__/ref-oas/petstore.json
 ... your local command will look like this:
 
 ```sh
-./bin/dev.js openapi:validate __tests__/__fixtures__/ref-oas/petstore.json
+bin/dev.js openapi:validate __tests__/__fixtures__/ref-oas/petstore.json
 ```
 
-The `bin/dev.js` file returns extra verbose error messages which are helpful in development. To recreate the exact `rdme` experience that our users will have, use the `bin/run.js` file instead. You'll need to re-run the TypeScript compiler (i.e., `npm run build`) every time you make a change:
+The `bin/dev.js` file has a few features that are useful for local development:
+
+- It reads directly from your TypeScript files (so no need to re-run the TypeScript compiler every time you make a change)
+- It returns error messages with full stack traces
+
+`bin/dev.js` is convenient for useful for rapid development but it's not a 1:1 recreation of what the end-user experience with `rdme` is like. To recreate the production `rdme` experience, use the `bin/run.js` file instead. You'll need to re-run the TypeScript compiler (i.e., `npm run build`) every time you make a change. So for example:
 
 ```sh
 npm run build
-./bin/run.js openapi:validate __tests__/__fixtures__/ref-oas/petstore.json
+bin/run.js openapi:validate __tests__/__fixtures__/ref-oas/petstore.json
 ```
+
+Your changes to the command code may make changes to [the command reference document](./documentation/commands.md) — it is up to you whether you include those changes in your PR or if you let the release process take care of it. More information on that can be found in [MAINTAINERS.md](./MAINTAINERS.md).
 
 ## Running GitHub Actions Locally 🐳
 
