@@ -28,6 +28,11 @@ function writeGitHubActionsPackageJson() {
   delete current.oclif.helpClass;
   delete current.oclif.plugins;
 
+  // Add GitHub Actions debug statement
+  // (we cannot use the '@actions/core' package here since we do not have access to any of our npm dependencies)
+  // eslint-disable-next-line no-console
+  console.log(`::debug::writing package.json to dist-gha: ${JSON.stringify(current)}`);
+
   // write the new package.json file
   fs.writeFileSync(path.resolve(import.meta.dirname, '../dist-gha/package.json'), JSON.stringify(current, null, 2));
 }
