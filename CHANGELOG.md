@@ -1,3 +1,18 @@
+# [9.0.0-next.21](https://github.com/readmeio/rdme/compare/v9.0.0-next.20...v9.0.0-next.21) (2024-11-18)
+
+
+### Bug Fixes
+
+* add GITHUB_TOKEN ([e106e10](https://github.com/readmeio/rdme/commit/e106e1047c9ec0e47b3b3812783d2e44dddbe9bd))
+* attempt to use semantic-release/github instead of `gh` ([331d28b](https://github.com/readmeio/rdme/commit/331d28bc1e9f0f2b57a4d8d39f2ebaf6bf64896a))
+
+# [9.0.0-next.20](https://github.com/readmeio/rdme/compare/v9.0.0-next.19...v9.0.0-next.20) (2024-11-18)
+
+
+### Bug Fixes
+
+* bump semantic-release versions ([21efc66](https://github.com/readmeio/rdme/commit/21efc66eef0ff063366e3ad1394fedf5170b1d94))
+
 # [9.0.0-next.19](https://github.com/readmeio/rdme/compare/v9.0.0-next.18...v9.0.0-next.19) (2024-11-09)
 
 

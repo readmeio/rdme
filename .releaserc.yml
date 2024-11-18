@@ -1,3 +1,4 @@
+$schema: https://json.schemastore.org/semantic-release.json
 branches:
   - name: main
   - name: next
@@ -34,14 +35,13 @@ plugins:
   - [
       '@semantic-release/exec',
       {
-        # Verify existence of gh and docker CLIs
+        # Verify existence of docker CLI
         'verifyConditionsCmd': './bin/verify-clis.sh',
         # Sets the next version as a GitHub Actions output parameter for usage in subsequent workflow steps
         # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter
         'verifyReleaseCmd': 'echo nextVersion=${nextRelease.version} >> $GITHUB_OUTPUT',
         # Adds an additional git tag without the `v` prefix as a convenience for GitHub Actions users
         'prepareCmd': 'git tag ${nextRelease.version}',
-        # Lightweight alternative to `@semantic-release/github` that creates a draft GitHub release
-        'publishCmd': 'gh release create ${nextRelease.version} --draft --generate-notes',
       },
     ]
+  - '@semantic-release/github'
