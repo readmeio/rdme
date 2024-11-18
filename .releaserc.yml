@@ -41,7 +41,6 @@ plugins:
         'verifyReleaseCmd': 'echo nextVersion=${nextRelease.version} >> $GITHUB_OUTPUT',
         # Adds an additional git tag without the `v` prefix as a convenience for GitHub Actions users
         'prepareCmd': 'git tag ${nextRelease.version}',
-        # Lightweight alternative to `@semantic-release/github` that creates a draft GitHub release
-        'publishCmd': 'gh release create ${nextRelease.version} --draft --generate-notes',
       },
     ]
+  - '@semantic-release/github'
