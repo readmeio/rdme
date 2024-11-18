@@ -33,37 +33,6 @@ jobs:
       - name: Install semantic-release and friends
         run: npm i --no-save semantic-release@24 @semantic-release/changelog@6 @semantic-release/exec@6 @semantic-release/git@10
 
-      # We do a dry run here to analyze the commits and grab the next version
-      # for usage in the Docker metadata action
-      - name: Dry run of semantic-release workflow
-        run: npx semantic-release --dry-run
-        id: release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Log in to the Container registry
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          # For every release we add 2-3 tags to the docker build:
-          # 1. A semver tag (e.g., 8.0.0, 8.0.0-next.0)
-          # 2. A branch tag (e.g., next, main)
-          # 3. A `latest` tag (only on the main branch)
-          tags: |
-            type=semver,pattern={{version}},value=${{ steps.release.outputs.nextVersion }}
-            type=ref,event=branch
-            type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
-
       - name: Run semantic-release workflow
         env:
           GH_TOKEN: ${{ secrets.RELEASE_GH_TOKEN }}

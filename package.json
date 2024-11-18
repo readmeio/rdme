@@ -109,7 +109,7 @@
     "vitest": "^2.0.5"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && oclif manifest && oclif readme --readme-path documentation/commands.md --no-aliases",
     "build:gha": "npm run build && rollup --config",
     "build:gha:prod": "npm run build:gha -- --environment PRODUCTION_BUILD",
     "lint": "alex . && knip && npm run lint:ts && npm run prettier && npm run schemas:check",

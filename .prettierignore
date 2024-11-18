@@ -1,5 +1,11 @@
+# invalid files
 __tests__/__fixtures__/invalid-json/yikes.json
-CHANGELOG.md
+
+# test result artifacts
 coverage/
+
+# release build artifacts
+CHANGELOG.md
 dist/
+documentation/commands.md
 dist-gha/
