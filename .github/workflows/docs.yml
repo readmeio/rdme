@@ -40,7 +40,11 @@ jobs:
           regex: false
           include: documentation/*
 
-      # TODO: write a smol explainer comment
+      # Since this workflow file is in the `rdme` repository itself,
+      # we need to test the GitHub Action using the current commit.
+      # This step builds the `rdme` action code so we can do that.
+      #
+      # This step is not required for syncing your docs to ReadMe!
       - name: Rebuild GitHub Action for testing purposes
         run: 'npm ci && npm run build:gha'
 
