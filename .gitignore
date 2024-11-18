@@ -1,9 +1,7 @@
 .env
 coverage/
 dist/
-exe/
 node_modules/
-tmp/
 
 # required for building with TS + oclif + GitHub Actions
 dist-gha/package.json
