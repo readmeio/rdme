@@ -36,11 +36,8 @@ function owlbert(this: CustomHelpClass) {
 
 // Oclif docs on customizing the help class: https://oclif.io/docs/help_classes/
 export default class CustomHelpClass extends Help {
-  constructor(config: Config) {
-    const opts: Partial<HelpOptions> = {
-      hideAliasesFromRoot: true,
-    };
-    super(config, opts);
+  constructor(config: Config, opts?: Partial<HelpOptions>) {
+    super(config, { ...opts, hideAliasesFromRoot: true });
   }
 
   formatRoot() {
