@@ -70,7 +70,7 @@ jobs:
       #
       # This step is not required for syncing your docs to ReadMe!
       - name: Rebuild GitHub Action for testing purposes
-        run: 'npm ci && npm run build:gha'
+        run: npm ci && npm run build:gha
         working-directory: rdme-repo
 
       - name: Run `openapi:validate` command

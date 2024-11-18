@@ -46,7 +46,7 @@ jobs:
       #
       # This step is not required for syncing your docs to ReadMe!
       - name: Rebuild GitHub Action for testing purposes
-        run: 'npm ci && npm run build:gha'
+        run: npm run build:gha
 
       # And finally, with our updated documentation,
       # we run the `rdme` GitHub Action to sync the Markdown file
