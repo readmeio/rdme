@@ -6,4 +6,5 @@ node_modules/
 tmp/
 
 # required for building with TS
+dist-gha/package.json
 src/package.json

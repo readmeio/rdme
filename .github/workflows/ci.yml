@@ -64,17 +64,10 @@ jobs:
           path: oas-examples-repo
           repository: readmeio/oas-examples
 
-      # For every GitHub Action release, we deploy our Docker images
-      # to the GitHub Container Registry for performance reasons.
-      # Instead of testing against the pre-built image, we can build
-      # an image from the currently checked-out repo contents by doing a
-      # li'l update in the action.yml file to point to the current Dockerfile.
-      - name: Replace Docker image value in action.yml
-        uses: jacobtomlinson/gha-find-replace@v3
-        with:
-          find: 'image:.*'
-          replace: "image: 'Dockerfile'"
-          include: rdme-repo/action.yml
+      # TODO: write a smol explainer comment
+      - name: Rebuild GitHub Action for testing purposes
+        run: 'npm ci && npm run build:gha'
+        working-directory: rdme-repo
 
       - name: Run `openapi:validate` command
         uses: ./rdme-repo/
