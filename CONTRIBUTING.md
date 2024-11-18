@@ -2,17 +2,29 @@
 
 ## Running Shell Commands Locally 🐚
 
-To run test commands from within the repository, run the build and then run your commands from the root of the repository and use `./bin/run.js` instead of `rdme` so it properly points to the command executable, like so:
+To get started, run the `prebuild` script to create a symlink with `package.json` (required for our `oclif` setup to read our commands properly). You only need to do this the first time you clone the repository.
+
+```sh
+npm run prebuild
+```
+
+To run test commands, use `./bin/dev.js` instead of `rdme`. For example, if the command you're testing looks like this...
+
+```sh
+rdme openapi:validate __tests__/__fixtures__/ref-oas/petstore.json
+```
+
+... your local command will look like this:
+
+```sh
+./bin/dev.js openapi:validate __tests__/__fixtures__/ref-oas/petstore.json
+```
+
+The `bin/dev.js` file returns extra verbose error messages which are helpful in development. To recreate the exact `rdme` experience that our users will have, use the `bin/run.js` file instead. You'll need to re-run the TypeScript compiler (i.e., `npm run build`) every time you make a change:
 
 ```sh
 npm run build
 ./bin/run.js openapi:validate __tests__/__fixtures__/ref-oas/petstore.json
-```
-
-If you need to debug commands quicker and re-building TS everytime is becoming cumbersome, you can use the debug command, like so:
-
-```sh
-npm run debug -- openapi:validate __tests__/__fixtures__/ref-oas/petstore.json
 ```
 
 ## Running GitHub Actions Locally 🐳
