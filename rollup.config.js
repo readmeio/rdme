@@ -32,7 +32,7 @@ export default defineConfig([
   },
   {
     input: 'dist/index.js',
-    output: { file: 'dist-gha/cmds.js', format: 'esm', inlineDynamicImports: true },
+    output: { file: 'dist-gha/commands.js', format: 'esm', inlineDynamicImports: true },
     plugins: [
       ...basePlugins,
       // this disgusting workaround is required to prevent runtime errors,

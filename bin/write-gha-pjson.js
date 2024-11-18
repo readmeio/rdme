@@ -4,7 +4,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const newTarget = './cmds.js';
+const newTarget = './commands.js';
 
 /**
  * We need to duplicate the `package.json` file (with a few modifications) from the root of the project to the
