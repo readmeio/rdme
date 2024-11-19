@@ -76,6 +76,8 @@ describe('rdme openapi:convert', () => {
     it.each([['json'], ['yaml']])('should fail if given an OpenAPI 3.0 definition (format: %s)', async format => {
       const spec = require.resolve(`@readme/oas-examples/3.0/${format}/petstore.${format}`);
 
+      const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
       let reducedSpec;
       fs.writeFileSync = vi.fn((fileName, data) => {
         reducedSpec = JSON.parse(data as string);
@@ -104,6 +106,12 @@ describe('rdme openapi:convert', () => {
         '/user/{username}',
       ]);
       expect(Object.keys(reducedSpec.paths['/pet/{petId}'])).toStrictEqual(['get', 'post', 'delete']);
+
+      expect(consoleWarnSpy).toHaveBeenCalledWith(
+        '⚠️  Warning! The input file is already OpenAPI, so no conversion is necessary. Any external references will be bundled.',
+      );
+
+      consoleWarnSpy.mockRestore();
     });
   });
 });

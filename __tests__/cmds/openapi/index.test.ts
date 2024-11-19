@@ -931,16 +931,7 @@ describe('rdme openapi', () => {
         .reply(400, errorObject);
 
       await expect(
-        run([
-          './__tests__/__fixtures__/swagger-with-invalid-extensions.json',
-          // key,
-          // version,
-
-          '--key',
-          key,
-          '--version',
-          version,
-        ]),
+        run(['./__tests__/__fixtures__/swagger-with-invalid-extensions.json', '--key', key, '--version', version]),
       ).rejects.toThrow(new APIError(errorObject));
 
       return mock.done();
