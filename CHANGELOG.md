@@ -1,3 +1,20 @@
+# [9.0.0-next.22](https://github.com/readmeio/rdme/compare/v9.0.0-next.21...v9.0.0-next.22) (2024-11-19)
+
+
+* feat!: oclif (take 2) ([#1068](https://github.com/readmeio/rdme/issues/1068)) ([5e05f93](https://github.com/readmeio/rdme/commit/5e05f9381ff92441b95e49fcf6b369ed74b62a2e)), closes [#962](https://github.com/readmeio/rdme/issues/962) [#1067](https://github.com/readmeio/rdme/issues/1067) [/github.com/readmeio/rdme/blob/d01d76fe3c2e4a98b4f5c415be03e589fbe3b56e/.releaserc.yml#L30](https://github.com//github.com/readmeio/rdme/blob/d01d76fe3c2e4a98b4f5c415be03e589fbe3b56e/.releaserc.yml/issues/L30) [#1067](https://github.com/readmeio/rdme/issues/1067)
+
+
+### BREAKING CHANGES
+
+* the `rdme` GitHub Actions is now a [the `node20` JavaScript action](https://docs.github.com/en/actions/sharing-automations/creating-actions/metadata-syntax-for-github-actions#runs-for-javascript-actions) rather than [a Docker container action](https://docs.github.com/en/actions/sharing-automations/creating-actions/metadata-syntax-for-github-actions#runs-for-docker-container-actions).
+* `rdme` is now powered by [`oclif`](https://oclif.io/). The formatting and content of certain error messages and outputs may have changed. Please continue to only utilize exit codes to determine command successes/failures.
+
+completed tasks:
+
+- [x] a handful of tests are still failing, hoping that
+https://github.com/oclif/test/pull/652 gets merged in)
+- [x] github actions dry runs are failing (but i got them working in
+
 # [9.0.0-next.21](https://github.com/readmeio/rdme/compare/v9.0.0-next.20...v9.0.0-next.21) (2024-11-18)
 
 
