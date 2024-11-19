@@ -15,6 +15,14 @@ export default class OpenCommand extends BaseCommand<typeof OpenCommand> {
     mock: Flags.boolean({ description: '[hidden] used for mocking.', hidden: true }),
   };
 
+  static hidden = true;
+
+  static state = 'deprecated';
+
+  static deprecationOptions = {
+    message: '`rdme open` is deprecated and will be removed in a future release.',
+  };
+
   async run() {
     const { dash, mock } = this.flags;
     const { apiKey, project } = getCurrentConfig();
