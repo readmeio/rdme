@@ -1,23 +1,23 @@
 /* eslint-disable no-console */
+
 import fs from 'node:fs';
 
 import chalk from 'chalk';
 import nock from 'nock';
 import prompts from 'prompts';
-import { describe, beforeAll, beforeEach, afterEach, it, expect, vi } from 'vitest';
+import { describe, beforeAll, beforeEach, afterEach, it, expect, vi, type MockInstance } from 'vitest';
 
-import OpenAPICommand from '../../../src/cmds/openapi/index.js';
+import Command from '../../../src/cmds/openapi/index.js';
 import APIError from '../../../src/lib/apiError.js';
 import config from '../../../src/lib/config.js';
 import petstoreWeird from '../../__fixtures__/petstore-simple-weird-version.json' with { type: 'json' };
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
 import { after, before } from '../../helpers/get-gha-setup.js';
 import { after as afterGHAEnv, before as beforeGHAEnv } from '../../helpers/setup-gha-env.js';
+import { runCommand } from '../../helpers/setup-oclif-config.js';
 
-const openapi = new OpenAPICommand();
-
-let consoleInfoSpy;
-let consoleWarnSpy;
+let consoleInfoSpy: MockInstance;
+let consoleWarnSpy: MockInstance;
 
 const key = 'API_KEY';
 const id = '5aa0409b7cf527a93bfb44df';
@@ -50,10 +50,12 @@ const getCommandOutput = () => {
 const getRandomRegistryId = () => Math.random().toString(36).substring(2);
 
 describe('rdme openapi', () => {
+  let run: (args?: string[]) => Promise<string>;
   let testWorkingDir: string;
 
   beforeAll(() => {
     nock.disableNetConnect();
+    run = runCommand(Command);
   });
 
   beforeEach(() => {
@@ -108,13 +110,7 @@ describe('rdme openapi', () => {
         spec = require.resolve(`@readme/oas-examples/${specVersion}/${format}/petstore.${format}`);
       }
 
-      await expect(
-        openapi.run({
-          spec,
-          key,
-          version,
-        }),
-      ).resolves.toBe(successfulUpload(spec, type));
+      await expect(run(['--key', key, '--version', version, spec])).resolves.toBe(successfulUpload(spec, type));
 
       expect(console.info).toHaveBeenCalledTimes(0);
 
@@ -143,13 +139,7 @@ describe('rdme openapi', () => {
 
       const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
 
-      await expect(
-        openapi.run({
-          key,
-          version,
-          spec,
-        }),
-      ).resolves.toBe(successfulUpload(spec));
+      await expect(run(['--key', key, '--version', version, spec])).resolves.toBe(successfulUpload(spec));
 
       mockWithHeader.done();
       return mock.done();
@@ -172,14 +162,7 @@ describe('rdme openapi', () => {
 
       const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
 
-      await expect(
-        openapi.run({
-          key,
-          version,
-          spec,
-          create: true,
-        }),
-      ).resolves.toBe(successfulUpload(spec));
+      await expect(run(['--key', key, '--version', version, spec, '--create'])).resolves.toBe(successfulUpload(spec));
 
       postMock.done();
       return mock.done();
@@ -202,14 +185,7 @@ describe('rdme openapi', () => {
 
       const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
 
-      await expect(
-        openapi.run({
-          key,
-          spec,
-          id: 'some-id',
-          create: true,
-        }),
-      ).resolves.toBe(successfulUpload(spec));
+      await expect(run(['--key', key, '--id', 'some-id', spec, '--create'])).resolves.toBe(successfulUpload(spec));
 
       expect(console.warn).toHaveBeenCalledTimes(1);
       expect(console.info).toHaveBeenCalledTimes(0);
@@ -247,7 +223,7 @@ describe('rdme openapi', () => {
 
       const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
 
-      await expect(openapi.run({ spec, key, version })).resolves.toBe(successfulUpload(spec));
+      await expect(run(['--key', key, '--version', version, spec])).resolves.toBe(successfulUpload(spec));
 
       expect(console.info).toHaveBeenCalledTimes(0);
 
@@ -283,7 +259,9 @@ describe('rdme openapi', () => {
 
       const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
 
-      await expect(openapi.run({ spec, key, version, title })).resolves.toBe(successfulUpload(spec));
+      await expect(run(['--key', key, '--version', version, spec, '--title', title])).resolves.toBe(
+        successfulUpload(spec),
+      );
 
       expect(console.info).toHaveBeenCalledTimes(0);
 
@@ -318,16 +296,7 @@ describe('rdme openapi', () => {
 
       const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
 
-      await expect(openapi.run({ spec, key, version, raw: true })).resolves.toMatchInlineSnapshot(`
-        "{
-          "commandType": "create",
-          "docs": "https://dash.readme.com/project/example-project/1.0.1/refs/ex",
-          "id": 1,
-          "specPath": "./__tests__/__fixtures__/ref-oas/petstore.json",
-          "specType": "OpenAPI",
-          "version": "1.0.0"
-        }"
-      `);
+      await expect(run(['--key', key, '--version', version, spec, '--raw'])).resolves.toMatchSnapshot();
 
       postMock.done();
       return mock.done();
@@ -356,14 +325,9 @@ describe('rdme openapi', () => {
 
       const spec = require.resolve(`@readme/oas-examples/${specVersion}/${format}/petstore.${format}`);
 
-      await expect(
-        openapi.run({
-          spec,
-          key,
-          id,
-          version,
-        }),
-      ).resolves.toBe(successfulUpdate(spec, type));
+      await expect(run(['--key', key, '--id', id, spec, '--version', version])).resolves.toBe(
+        successfulUpdate(spec, type),
+      );
 
       putMock.done();
       return mock.done();
@@ -384,7 +348,7 @@ describe('rdme openapi', () => {
 
       const spec = require.resolve('@readme/oas-examples/3.1/json/petstore.json');
 
-      await expect(openapi.run({ spec, key, id, version })).resolves.toBe(successfulUpdate(spec));
+      await expect(run(['--key', key, '--id', id, spec, '--version', version])).resolves.toBe(successfulUpdate(spec));
 
       expect(console.warn).toHaveBeenCalledTimes(1);
       expect(console.info).toHaveBeenCalledTimes(0);
@@ -421,13 +385,7 @@ describe('rdme openapi', () => {
 
       const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
 
-      await expect(
-        openapi.run({
-          key,
-          version,
-          spec,
-        }),
-      ).resolves.toBe(successfulUpdate(spec));
+      await expect(run(['--key', key, spec, '--version', version])).resolves.toBe(successfulUpdate(spec));
 
       mockWithHeader.done();
       return mock.done();
@@ -456,11 +414,7 @@ describe('rdme openapi', () => {
       const spec = 'petstore.json';
 
       await expect(
-        openapi.run({
-          key,
-          version,
-          workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-        }),
+        run(['--key', key, '--version', version, '--workingDirectory', './__tests__/__fixtures__/relative-ref-oas']),
       ).resolves.toBe(successfulUpload(spec));
 
       expect(console.info).toHaveBeenCalledTimes(1);
@@ -499,12 +453,15 @@ describe('rdme openapi', () => {
       const spec = 'petstore.json';
 
       await expect(
-        openapi.run({
+        run([
           spec,
+          '--key',
           key,
+          '--version',
           version,
-          workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-        }),
+          '--workingDirectory',
+          './__tests__/__fixtures__/relative-ref-oas',
+        ]),
       ).resolves.toBe(successfulUpload(spec));
 
       expect(console.info).toHaveBeenCalledTimes(0);
@@ -536,14 +493,9 @@ describe('rdme openapi', () => {
 
       const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
 
-      await expect(
-        openapi.run({
-          key,
-          version,
-          spec,
-          dryRun: true,
-        }),
-      ).resolves.toMatch(`dry run! The API Definition located at ${spec} will update this API Definition ID: spec2`);
+      await expect(run(['--key', key, spec, '--version', version, '--dryRun'])).resolves.toMatch(
+        `dry run! The API Definition located at ${spec} will update this API Definition ID: spec2`,
+      );
 
       mockWithHeader.done();
       return mock.done();
@@ -565,12 +517,15 @@ describe('rdme openapi', () => {
         .reply(200, []);
 
       await expect(
-        openapi.run({
+        run([
+          '--key',
           key,
+          '--version',
           version,
-          dryRun: true,
-          workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-        }),
+          '--workingDirectory',
+          './__tests__/__fixtures__/relative-ref-oas',
+          '--dryRun',
+        ]),
       ).resolves.toMatch(
         '🎭 dry run! The API Definition located at petstore.json will be created for this project version: 1.0.0',
       );
@@ -604,14 +559,7 @@ describe('rdme openapi', () => {
 
         const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
 
-        await expect(
-          openapi.run({
-            key,
-            version,
-            spec,
-            update: true,
-          }),
-        ).resolves.toBe(successfulUpdate(spec));
+        await expect(run(['--key', key, spec, '--version', version, '--update'])).resolves.toBe(successfulUpdate(spec));
 
         mockWithHeader.done();
         return mock.done();
@@ -635,14 +583,7 @@ describe('rdme openapi', () => {
 
         const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
 
-        await expect(
-          openapi.run({
-            key,
-            version,
-            spec,
-            update: true,
-          }),
-        ).rejects.toStrictEqual(
+        await expect(run(['--key', key, spec, '--version', version, '--update'])).rejects.toStrictEqual(
           new Error(
             "The `--update` option cannot be used when there's more than one API definition available (found 2).",
           ),
@@ -666,14 +607,7 @@ describe('rdme openapi', () => {
 
         const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
 
-        await expect(
-          openapi.run({
-            key,
-            spec,
-            update: true,
-            id: 'spec1',
-          }),
-        ).resolves.toBe(successfulUpdate(spec));
+        await expect(run(['--key', key, spec, '--id', 'spec1', '--update'])).resolves.toBe(successfulUpdate(spec));
 
         expect(console.warn).toHaveBeenCalledTimes(1);
         expect(console.info).toHaveBeenCalledTimes(0);
@@ -717,7 +651,7 @@ describe('rdme openapi', () => {
 
       const spec = './__tests__/__fixtures__/petstore-simple-weird-version.json';
 
-      await expect(openapi.run({ spec, key, version })).resolves.toBe(successfulUpload(spec));
+      await expect(run(['--key', key, '--version', version, spec])).resolves.toBe(successfulUpload(spec));
 
       mockWithHeader.done();
       return mock.done();
@@ -753,7 +687,9 @@ describe('rdme openapi', () => {
 
       const spec = './__tests__/__fixtures__/petstore-simple-weird-version.json';
 
-      await expect(openapi.run({ spec, key, version, useSpecVersion: true })).resolves.toBe(successfulUpload(spec));
+      await expect(run(['--key', key, spec, '--version', version, '--useSpecVersion'])).resolves.toBe(
+        successfulUpload(spec),
+      );
 
       mockWithHeader.done();
       return mock.done();
@@ -792,7 +728,7 @@ describe('rdme openapi', () => {
 
         const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
 
-        await expect(openapi.run({ spec, key })).resolves.toBe(successfulUpload(spec));
+        await expect(run(['--key', key, spec])).resolves.toBe(successfulUpload(spec));
 
         return mock.done();
       });
@@ -819,12 +755,14 @@ describe('rdme openapi', () => {
       const mock = getAPIMock().get(`/api/v1/version/${invalidVersion}`).reply(404, errorObject);
 
       await expect(
-        openapi.run({
-          spec: require.resolve('@readme/oas-examples/3.1/json/petstore.json'),
+        run([
+          '--key',
           key,
-          version: invalidVersion,
-        }),
-      ).rejects.toStrictEqual(new APIError(errorObject));
+          require.resolve('@readme/oas-examples/3.1/json/petstore.json'),
+          '--version',
+          invalidVersion,
+        ]),
+      ).rejects.toThrow(new APIError(errorObject));
 
       return mock.done();
     });
@@ -852,7 +790,7 @@ describe('rdme openapi', () => {
 
       const spec = require.resolve('@readme/oas-examples/2.0/json/petstore.json');
 
-      await expect(openapi.run({ spec, key })).resolves.toBe(successfulUpload(spec, 'Swagger'));
+      await expect(run(['--key', key, spec])).resolves.toBe(successfulUpload(spec, 'Swagger'));
 
       mockWithHeader.done();
       return mock.done();
@@ -860,15 +798,9 @@ describe('rdme openapi', () => {
   });
 
   describe('error handling', () => {
-    it('should prompt for login if no API key provided', () => {
-      prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
-      // @ts-expect-error deliberately passing in bad data
-      return expect(openapi.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
-    });
-
     it('should error if `--create` and `--update` flags are passed simultaneously', () => {
-      return expect(openapi.run({ key, create: true, update: true })).rejects.toStrictEqual(
-        new Error('The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!'),
+      return expect(run(['--key', key, '--create', '--update'])).rejects.toThrow(
+        '--update=true cannot also be provided when using --create',
       );
     });
 
@@ -891,27 +823,27 @@ describe('rdme openapi', () => {
       const mock = getAPIMock().get('/api/v1/version').reply(401, errorObject);
 
       await expect(
-        openapi.run({ key, spec: require.resolve('@readme/oas-examples/3.1/json/petstore.json') }),
-      ).rejects.toStrictEqual(new APIError(errorObject));
+        run([require.resolve('@readme/oas-examples/3.1/json/petstore.json'), '--key', 'key']),
+      ).rejects.toThrow(new APIError(errorObject));
 
       return mock.done();
     });
 
     it('should throw an error if an invalid OpenAPI 3.0 definition is supplied', () => {
       return expect(
-        openapi.run({ spec: './__tests__/__fixtures__/invalid-oas.json', key, id, version }),
+        run(['./__tests__/__fixtures__/invalid-oas.json', '--key', key, '--id', id, '--version', version]),
       ).rejects.toThrow('Token "Error" does not exist.');
     });
 
     it('should throw an error if an invalid OpenAPI 3.1 definition is supplied', () => {
       return expect(
-        openapi.run({ spec: './__tests__/__fixtures__/invalid-oas-3.1.json', key, id, version }),
+        run(['./__tests__/__fixtures__/invalid-oas-3.1.json', '--key', key, '--id', id, '--version', version]),
       ).rejects.toMatchSnapshot();
     });
 
     it('should throw an error if an invalid ref is supplied', () => {
       return expect(
-        openapi.run({ spec: './__tests__/__fixtures__/invalid-ref-oas/petstore.json', key, id, version }),
+        run(['./__tests__/__fixtures__/invalid-ref-oas/petstore.json', '--key', key, '--id', id, '--version', version]),
       ).rejects.toMatchSnapshot();
     });
 
@@ -941,12 +873,8 @@ describe('rdme openapi', () => {
         .reply(400, errorObject);
 
       await expect(
-        openapi.run({
-          spec: './__tests__/__fixtures__/swagger-with-invalid-extensions.json',
-          key,
-          version,
-        }),
-      ).rejects.toStrictEqual(new APIError(errorObject));
+        run(['./__tests__/__fixtures__/swagger-with-invalid-extensions.json', '--key', key, '--version', version]),
+      ).rejects.toThrow(new APIError(errorObject));
 
       mockWithHeader.done();
       return mock.done();
@@ -972,13 +900,16 @@ describe('rdme openapi', () => {
         .reply(400, errorObject);
 
       await expect(
-        openapi.run({
-          spec: './__tests__/__fixtures__/swagger-with-invalid-extensions.json',
-          id,
+        run([
+          './__tests__/__fixtures__/swagger-with-invalid-extensions.json',
+          '--key',
           key,
+          '--id',
+          id,
+          '--version',
           version,
-        }),
-      ).rejects.toStrictEqual(new APIError(errorObject));
+        ]),
+      ).rejects.toThrow(new APIError(errorObject));
 
       putMock.done();
       return mock.done();
@@ -1000,12 +931,17 @@ describe('rdme openapi', () => {
         .reply(400, errorObject);
 
       await expect(
-        openapi.run({
-          spec: './__tests__/__fixtures__/swagger-with-invalid-extensions.json',
+        run([
+          './__tests__/__fixtures__/swagger-with-invalid-extensions.json',
+          // key,
+          // version,
+
+          '--key',
           key,
+          '--version',
           version,
-        }),
-      ).rejects.toStrictEqual(new APIError(errorObject));
+        ]),
+      ).rejects.toThrow(new APIError(errorObject));
 
       return mock.done();
     });
@@ -1037,8 +973,8 @@ describe('rdme openapi', () => {
         .reply(400, errorObject);
 
       await expect(
-        openapi.run({ spec: require.resolve('@readme/oas-examples/2.0/json/petstore.json'), key, version }),
-      ).rejects.toStrictEqual(new APIError(errorObject));
+        run([require.resolve('@readme/oas-examples/2.0/json/petstore.json'), '--key', key, '--version', version]),
+      ).rejects.toThrow(new APIError(errorObject));
 
       mockWithHeader.done();
       return mock.done();
@@ -1063,7 +999,7 @@ describe('rdme openapi', () => {
         .reply(400, 'some non-JSON upload error');
 
       await expect(
-        openapi.run({ spec: require.resolve('@readme/oas-examples/2.0/json/petstore.json'), key, version }),
+        run([require.resolve('@readme/oas-examples/2.0/json/petstore.json'), '--key', key, '--version', version]),
       ).rejects.toStrictEqual(
         new Error(
           'Yikes, something went wrong! Please try uploading your spec again and if the problem persists, get in touch with our support team at support@readme.io.',
@@ -1093,7 +1029,7 @@ describe('rdme openapi', () => {
         .reply(500, '<title>Application Error</title>');
 
       await expect(
-        openapi.run({ spec: require.resolve('@readme/oas-examples/2.0/json/petstore.json'), key, version }),
+        run([require.resolve('@readme/oas-examples/2.0/json/petstore.json'), '--key', key, '--version', version]),
       ).rejects.toStrictEqual(
         new Error(
           "We're sorry, your upload request timed out. Please try again or split your file up into smaller chunks.",
@@ -1105,7 +1041,7 @@ describe('rdme openapi', () => {
     });
 
     it('should error if no file was provided or able to be discovered', () => {
-      return expect(openapi.run({ key, version, workingDirectory: 'bin' })).rejects.toStrictEqual(
+      return expect(run(['--key', key, '--version', version, '--workingDirectory', 'bin'])).rejects.toStrictEqual(
         new Error(
           "We couldn't find an OpenAPI or Swagger definition.\n\nPlease specify the path to your definition with `rdme openapi ./path/to/api/definition`.",
         ),
@@ -1149,13 +1085,7 @@ describe('rdme openapi', () => {
 
       const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
 
-      await expect(
-        openapi.run({
-          key,
-          version,
-          spec,
-        }),
-      ).resolves.toMatchSnapshot();
+      await expect(run([spec, '--key', key, '--version', version])).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();
       expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${yamlFileName}.yml`, expect.any(String));
@@ -1191,14 +1121,7 @@ describe('rdme openapi', () => {
 
       const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
 
-      await expect(
-        openapi.run({
-          key,
-          version,
-          spec,
-          github: true,
-        }),
-      ).resolves.toMatchSnapshot();
+      await expect(run([spec, '--key', key, '--version', version, '--github'])).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();
       expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${yamlFileName}.yml`, expect.any(String));
@@ -1237,13 +1160,7 @@ describe('rdme openapi', () => {
 
       const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
 
-      await expect(
-        openapi.run({
-          key,
-          version,
-          spec,
-        }),
-      ).resolves.toMatchSnapshot();
+      await expect(run([spec, '--key', key, '--version', version])).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();
       expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${yamlFileName}.yml`, expect.any(String));
@@ -1273,14 +1190,7 @@ describe('rdme openapi', () => {
 
       const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
 
-      await expect(
-        openapi.run({
-          key,
-          version: altVersion,
-          spec,
-          create: true,
-        }),
-      ).resolves.toMatchSnapshot();
+      await expect(run([spec, '--key', key, '--version', altVersion, '--create'])).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();
       expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${yamlFileName}.yml`, expect.any(String));
@@ -1309,14 +1219,7 @@ describe('rdme openapi', () => {
 
       const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
 
-      await expect(
-        openapi.run({
-          key,
-          spec,
-          id: 'some-id',
-          create: true,
-        }),
-      ).resolves.toMatchSnapshot();
+      await expect(run([spec, '--key', key, '--id', 'some-id', '--create'])).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();
       expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${yamlFileName}.yml`, expect.any(String));
@@ -1348,14 +1251,7 @@ describe('rdme openapi', () => {
 
       const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
 
-      await expect(
-        openapi.run({
-          key,
-          version,
-          spec,
-          update: true,
-        }),
-      ).resolves.toMatchSnapshot();
+      await expect(run([spec, '--key', key, '--version', version, '--update'])).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();
       expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${yamlFileName}.yml`, expect.any(String));
@@ -1389,12 +1285,15 @@ describe('rdme openapi', () => {
       const spec = 'petstore.json';
 
       await expect(
-        openapi.run({
+        run([
           spec,
+          '--key',
           key,
+          '--version',
           version,
-          workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-        }),
+          '--workingDirectory',
+          './__tests__/__fixtures__/relative-ref-oas',
+        ]),
       ).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();
@@ -1426,13 +1325,7 @@ describe('rdme openapi', () => {
 
       const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
 
-      await expect(
-        openapi.run({
-          key,
-          version,
-          spec,
-        }),
-      ).rejects.toStrictEqual(
+      await expect(run([spec, '--key', key, '--version', version])).rejects.toStrictEqual(
         new Error(
           'GitHub Actions workflow creation cancelled. If you ever change your mind, you can run this command again with the `--github` flag.',
         ),
@@ -1450,20 +1343,10 @@ describe('rdme openapi', () => {
 
     afterEach(afterGHAEnv);
 
-    it('should error in CI if no API key provided', () => {
-      // @ts-expect-error deliberately passing in bad data
-      return expect(openapi.run({})).rejects.toStrictEqual(
-        new Error('No project API key provided. Please use `--key`.'),
-      );
-    });
-
     it('should error out if multiple possible spec matches were found', () => {
-      return expect(
-        openapi.run({
-          key,
-          version,
-        }),
-      ).rejects.toStrictEqual(new Error('Multiple API definitions found in current directory. Please specify file.'));
+      return expect(run(['--key', key, '--version', version])).rejects.toStrictEqual(
+        new Error('Multiple API definitions found in current directory. Please specify file.'),
+      );
     });
 
     it('should send proper headers in GitHub Actions CI for local spec file', async () => {
@@ -1486,14 +1369,7 @@ describe('rdme openapi', () => {
 
       const spec = './__tests__/__fixtures__/ref-oas/petstore.json';
 
-      await expect(
-        openapi.run({
-          spec,
-          key,
-          id,
-          version,
-        }),
-      ).resolves.toBe(successfulUpdate(spec));
+      await expect(run([spec, '--key', key, '--version', version, '--id', id])).resolves.toBe(successfulUpdate(spec));
 
       putMock.done();
       return mock.done();
@@ -1519,14 +1395,7 @@ describe('rdme openapi', () => {
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
 
-      await expect(
-        openapi.run({
-          spec,
-          key,
-          id,
-          version,
-        }),
-      ).resolves.toBe(successfulUpdate(spec));
+      await expect(run([spec, '--key', key, '--version', version, '--id', id])).resolves.toBe(successfulUpdate(spec));
 
       putMock.done();
       exampleMock.done();
@@ -1561,12 +1430,15 @@ describe('rdme openapi', () => {
       const spec = 'petstore.json';
 
       await expect(
-        openapi.run({
+        run([
           spec,
+          '--key',
           key,
+          '--version',
           version,
-          workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-        }),
+          '--workingDirectory',
+          './__tests__/__fixtures__/relative-ref-oas',
+        ]),
       ).resolves.toBe(successfulUpload(spec));
 
       after();

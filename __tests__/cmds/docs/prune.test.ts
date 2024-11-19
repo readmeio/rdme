@@ -1,13 +1,11 @@
+import { runCommand as oclifRunCommand } from '@oclif/test';
 import nock from 'nock';
 import prompts from 'prompts';
-import { describe, beforeAll, afterAll, it, expect, vi } from 'vitest';
+import { describe, beforeAll, afterAll, it, expect } from 'vitest';
 
-import DocsPruneCommand from '../../../src/cmds/docs/prune.js';
-import GuidesPruneCommand from '../../../src/cmds/guides/prune.js';
+import Command from '../../../src/cmds/docs/prune.js';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
-
-const docsPrune = new DocsPruneCommand();
-const guidesPrune = new GuidesPruneCommand();
+import { runCommand } from '../../helpers/setup-oclif-config.js';
 
 const fixturesBaseDir = '__fixtures__/docs';
 
@@ -16,40 +14,23 @@ const version = '1.0.0';
 
 describe('rdme docs:prune', () => {
   const folder = `./__tests__/${fixturesBaseDir}/delete-docs`;
+  let run: (args?: string[]) => Promise<string>;
 
   beforeAll(() => {
     nock.disableNetConnect();
+    run = runCommand(Command);
   });
 
   afterAll(() => nock.cleanAll());
 
-  it('should prompt for login if no API key provided', async () => {
-    const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
-    prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
-    // @ts-expect-error deliberately passing in bad data
-    await expect(docsPrune.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
-    consoleInfoSpy.mockRestore();
-  });
-
-  it('should error in CI if no API key provided', async () => {
-    process.env.TEST_RDME_CI = 'true';
-    // @ts-expect-error deliberately passing in bad data
-    await expect(docsPrune.run({})).rejects.toStrictEqual(
-      new Error('No project API key provided. Please use `--key`.'),
-    );
-    delete process.env.TEST_RDME_CI;
-  });
-
   it('should error if no folder provided', () => {
-    return expect(docsPrune.run({ key, version: '1.0.0' })).rejects.toStrictEqual(
-      new Error('No folder provided. Usage `rdme docs:prune <folder> [options]`.'),
-    );
+    return expect(run(['--key', key, '--version', version])).rejects.rejects.toThrow('Missing 1 required arg:\nfolder');
   });
 
   it('should error if the argument is not a folder', async () => {
     const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
-    await expect(docsPrune.run({ key, version: '1.0.0', folder: 'not-a-folder' })).rejects.toThrow(
+    await expect(run(['--key', key, '--version', version, 'not-a-folder'])).rejects.toThrow(
       "ENOENT: no such file or directory, scandir 'not-a-folder'",
     );
 
@@ -61,13 +42,9 @@ describe('rdme docs:prune', () => {
 
     const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
-    await expect(
-      docsPrune.run({
-        folder,
-        key,
-        version,
-      }),
-    ).rejects.toStrictEqual(new Error('Aborting, no changes were made.'));
+    await expect(run([folder, '--key', key, '--version', version])).rejects.toStrictEqual(
+      new Error('Aborting, no changes were made.'),
+    );
 
     versionMock.done();
   });
@@ -86,14 +63,9 @@ describe('rdme docs:prune', () => {
       .basicAuth({ user: key })
       .reply(204, '');
 
-    await expect(
-      docsPrune.run({
-        folder,
-        key,
-        confirm: true,
-        version,
-      }),
-    ).resolves.toBe('🗑️  successfully deleted `this-doc-should-be-missing-in-folder`.');
+    await expect(run([folder, '--key', key, '--version', version, '--confirm'])).resolves.toBe(
+      '🗑️  successfully deleted `this-doc-should-be-missing-in-folder`.',
+    );
 
     apiMocks.done();
     versionMock.done();
@@ -115,13 +87,9 @@ describe('rdme docs:prune', () => {
       .basicAuth({ user: key })
       .reply(204, '');
 
-    await expect(
-      docsPrune.run({
-        folder,
-        key,
-        version,
-      }),
-    ).resolves.toBe('🗑️  successfully deleted `this-doc-should-be-missing-in-folder`.');
+    await expect(run([folder, '--key', key, '--version', version])).resolves.toBe(
+      '🗑️  successfully deleted `this-doc-should-be-missing-in-folder`.',
+    );
 
     apiMocks.done();
     versionMock.done();
@@ -149,13 +117,7 @@ describe('rdme docs:prune', () => {
       .basicAuth({ user: key })
       .reply(204, '');
 
-    await expect(
-      docsPrune.run({
-        folder,
-        key,
-        version,
-      }),
-    ).resolves.toBe(
+    await expect(run([folder, '--key', key, '--version', version])).resolves.toBe(
       '🗑️  successfully deleted `this-child-is-also-missing`.\n🗑️  successfully deleted `this-doc-should-be-missing-in-folder`.',
     );
 
@@ -175,30 +137,19 @@ describe('rdme docs:prune', () => {
       .basicAuth({ user: key })
       .reply(200, [{ slug: 'this-doc-should-be-missing-in-folder' }]);
 
-    await expect(
-      docsPrune.run({
-        folder,
-        key,
-        version,
-        dryRun: true,
-      }),
-    ).resolves.toBe('🎭 dry run! This will delete `this-doc-should-be-missing-in-folder`.');
+    await expect(run([folder, '--key', key, '--version', version, '--dryRun'])).resolves.toBe(
+      '🎭 dry run! This will delete `this-doc-should-be-missing-in-folder`.',
+    );
 
     apiMocks.done();
     versionMock.done();
   });
-});
 
-describe('rdme guides:prune', () => {
-  beforeAll(() => {
-    nock.disableNetConnect();
-  });
-
-  afterAll(() => nock.cleanAll());
-
-  it('should error if no folder provided', () => {
-    return expect(guidesPrune.run({ key, version: '1.0.0' })).rejects.toStrictEqual(
-      new Error('No folder provided. Usage `rdme guides:prune <folder> [options]`.'),
-    );
+  describe('rdme guides:prune', () => {
+    it('should error if no folder provided', async () => {
+      return expect(
+        (await oclifRunCommand(['guides:prune', '--key', key, '--version', version])).error.message,
+      ).toContain('Missing 1 required arg:\nfolder');
+    });
   });
 });

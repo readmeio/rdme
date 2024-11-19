@@ -1,19 +1,16 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "baseUrl": "./src",
     "experimentalDecorators": true,
     "lib": ["ES2022"],
     "module": "NodeNext",
     "outDir": "dist/",
     "resolveJsonModule": true,
+    "rootDir": "src",
     "skipLibCheck": true,
     "strict": true,
     "target": "ES2022",
     "useUnknownInCatchVariables": false
   },
-  "include": ["./src/**/*"],
-  "ts-node": {
-    "esm": true
-  }
+  "include": ["./src/**/*"]
 }

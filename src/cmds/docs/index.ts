@@ -1,55 +1,46 @@
-import type { AuthenticatedCommandOptions } from '../../lib/baseCommand.js';
+import { Args, Flags } from '@oclif/core';
 
-import Command, { CommandCategories } from '../../lib/baseCommand.js';
-import createGHA from '../../lib/createGHA/index.js';
+import BaseCommand from '../../lib/baseCommand.js';
+import { githubFlag, keyFlag, versionFlag } from '../../lib/flags.js';
 import syncDocsPath from '../../lib/syncDocsPath.js';
 import { getProjectVersion } from '../../lib/versionSelect.js';
 
-export interface Options {
-  dryRun?: boolean;
-  filePath?: string;
-}
+export default class DocsCommand extends BaseCommand<typeof DocsCommand> {
+  // we need this as a const for syncDocsPath
+  id = 'docs' as const;
 
-export default class DocsCommand extends Command {
-  constructor() {
-    super();
+  // needed for unit tests, even though we also specify this in src/index.ts
+  static id = 'docs' as const;
 
-    this.command = 'docs';
-    this.usage = 'docs <path> [options]';
-    this.description =
-      'Sync Markdown files to your ReadMe project as Guides. Can either be a path to a directory or a single Markdown file.';
-    this.cmdCategory = CommandCategories.DOCS;
+  static aliases = ['guides'];
 
-    this.hiddenArgs = ['filePath'];
-    this.args = [
-      this.getKeyArg(),
-      this.getVersionArg(),
-      {
-        name: 'filePath',
-        type: String,
-        defaultOption: true,
-      },
-      this.getGitHubArg(),
-      {
-        name: 'dryRun',
-        type: Boolean,
-        description: 'Runs the command without creating/updating any docs in ReadMe. Useful for debugging.',
-      },
-    ];
-  }
+  static description =
+    'Sync Markdown files to your ReadMe project as Guides. Can either be a path to a directory or a single Markdown file.';
 
-  async run(opts: AuthenticatedCommandOptions<Options>) {
-    await super.run(opts);
+  static args = {
+    path: Args.string({ description: 'Path to a local Markdown file or folder of Markdown files.', required: true }),
+  };
 
-    const { dryRun, filePath, key, version } = opts;
+  static flags = {
+    key: keyFlag,
+    version: versionFlag,
+    github: githubFlag,
+    dryRun: Flags.boolean({
+      description: 'Runs the command without creating/updating any docs in ReadMe. Useful for debugging.',
+    }),
+  };
+
+  async run() {
+    const { key, version } = this.flags;
 
     // TODO: should we allow version selection at all here?
     // Let's revisit this once we re-evaluate our category logic in the API.
     // Ideally we should ignore this parameter entirely if the category is included.
     const selectedVersion = await getProjectVersion(version, key);
 
-    return syncDocsPath(key, selectedVersion, this.cmdCategory, this.usage, filePath, dryRun).then(msg =>
-      createGHA(msg, this.command, this.args, { ...opts, version: selectedVersion }),
-    );
+    return this.runCreateGHAHook({
+      result: await syncDocsPath.call(this, selectedVersion),
+      parsedOpts: { ...this.args, ...this.flags, version: selectedVersion },
+    });
   }
 }

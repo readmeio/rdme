@@ -3,13 +3,12 @@ import path from 'node:path';
 
 import frontMatter from 'gray-matter';
 import nock from 'nock';
-import { describe, beforeAll, afterAll, afterEach, it, expect, vi } from 'vitest';
+import { describe, beforeAll, afterAll, it, expect } from 'vitest';
 
-import DocsCommand from '../../../src/cmds/docs/index.js';
+import Command from '../../../src/cmds/docs/index.js';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
 import hashFileContents from '../../helpers/hash-file-contents.js';
-
-const docs = new DocsCommand();
+import { runCommand } from '../../helpers/setup-oclif-config.js';
 
 const fixturesBaseDir = '__fixtures__/docs';
 const fullFixturesDir = `${__dirname}./../../${fixturesBaseDir}`;
@@ -18,12 +17,11 @@ const key = 'API_KEY';
 const version = '1.0.0';
 
 describe('rdme docs (multiple)', () => {
+  let run: (args?: string[]) => Promise<string>;
+
   beforeAll(() => {
     nock.disableNetConnect();
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
+    run = runCommand(Command);
   });
 
   afterAll(() => nock.cleanAll());
@@ -57,7 +55,7 @@ describe('rdme docs (multiple)', () => {
 
     const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
-    const promise = docs.run({ filePath: `./__tests__/${fixturesBaseDir}/${dir}`, key, version });
+    const promise = run([`./__tests__/${fixturesBaseDir}/${dir}`, '--key', key, '--version', version]);
 
     await expect(promise).resolves.toStrictEqual(
       [
@@ -101,7 +99,7 @@ describe('rdme docs (multiple)', () => {
 
     const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
-    const promise = docs.run({ filePath: `./__tests__/${fixturesBaseDir}/${dir}`, key, version });
+    const promise = run([`./__tests__/${fixturesBaseDir}/${dir}`, '--key', key, '--version', version]);
 
     await expect(promise).resolves.toStrictEqual(
       [
@@ -145,7 +143,7 @@ describe('rdme docs (multiple)', () => {
 
     const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
-    const promise = docs.run({ filePath: `./__tests__/${fixturesBaseDir}/${dir}`, key, version });
+    const promise = run([`./__tests__/${fixturesBaseDir}/${dir}`, '--key', key, '--version', version]);
 
     await expect(promise).resolves.toStrictEqual(
       [
@@ -162,7 +160,7 @@ describe('rdme docs (multiple)', () => {
     const dir = 'multiple-docs-cycle';
     const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
-    const promise = docs.run({ filePath: `./__tests__/${fixturesBaseDir}/${dir}`, key, version });
+    const promise = run([`./__tests__/${fixturesBaseDir}/${dir}`, '--key', key, '--version', version]);
 
     await expect(promise).rejects.toThrow('Cyclic dependency');
     versionMock.done();

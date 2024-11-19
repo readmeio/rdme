@@ -1068,3 +1068,14 @@ exports[`rdme openapi > upload > should update title, bundle and upload the expe
   ],
 }
 `;
+
+exports[`rdme openapi > upload > should upload the expected content and return raw output 1`] = `
+"{
+  "commandType": "create",
+  "docs": "https://dash.readme.com/project/example-project/1.0.1/refs/ex",
+  "id": 1,
+  "specPath": "./__tests__/__fixtures__/ref-oas/petstore.json",
+  "specType": "OpenAPI",
+  "version": "1.0.0"
+}"
+`;

@@ -3,11 +3,10 @@ import fs from 'node:fs';
 
 import chalk from 'chalk';
 import prompts from 'prompts';
-import { describe, beforeEach, afterEach, it, expect, vi, type MockInstance } from 'vitest';
+import { describe, beforeAll, beforeEach, afterEach, it, expect, vi, type MockInstance } from 'vitest';
 
-import OpenAPIReduceCommand from '../../../src/cmds/openapi/reduce.js';
-
-const reducer = new OpenAPIReduceCommand();
+import Command from '../../../src/cmds/openapi/reduce.js';
+import { runCommand } from '../../helpers/setup-oclif-config.js';
 
 const successfulReduction = () => 'Your reduced API definition has been saved to output.json! 🤏';
 
@@ -15,7 +14,12 @@ let consoleInfoSpy: MockInstance;
 const getCommandOutput = () => consoleInfoSpy.mock.calls.join('\n\n');
 
 describe('rdme openapi:reduce', () => {
+  let run: (args?: string[]) => Promise<unknown>;
   let testWorkingDir: string;
+
+  beforeAll(() => {
+    run = runCommand(Command);
+  });
 
   beforeEach(() => {
     consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
@@ -47,11 +51,7 @@ describe('rdme openapi:reduce', () => {
 
         prompts.inject(['tags', ['pet'], 'output.json']);
 
-        await expect(
-          reducer.run({
-            spec,
-          }),
-        ).resolves.toBe(successfulReduction());
+        await expect(run([spec])).resolves.toBe(successfulReduction());
 
         expect(fs.writeFileSync).toHaveBeenCalledWith('output.json', expect.any(String));
         expect(reducedSpec.tags).toHaveLength(1);
@@ -74,11 +74,9 @@ describe('rdme openapi:reduce', () => {
 
         prompts.inject(['tags', ['user'], 'output.json']);
 
-        await expect(
-          reducer.run({
-            workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-          }),
-        ).resolves.toBe(successfulReduction());
+        await expect(run(['--workingDirectory', './__tests__/__fixtures__/relative-ref-oas'])).resolves.toBe(
+          successfulReduction(),
+        );
 
         expect(console.info).toHaveBeenCalledTimes(1);
 
@@ -97,11 +95,14 @@ describe('rdme openapi:reduce', () => {
         });
 
         await expect(
-          reducer.run({
-            workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-            tag: ['user'],
-            out: 'output.json',
-          }),
+          run([
+            '--workingDirectory',
+            './__tests__/__fixtures__/relative-ref-oas',
+            '--tag',
+            'user',
+            '--out',
+            'output.json',
+          ]),
         ).resolves.toBe(successfulReduction());
 
         expect(console.info).toHaveBeenCalledTimes(1);
@@ -129,11 +130,7 @@ describe('rdme openapi:reduce', () => {
 
         prompts.inject(['paths', ['/pet', '/pet/findByStatus'], ['get', 'post'], 'output.json']);
 
-        await expect(
-          reducer.run({
-            spec,
-          }),
-        ).resolves.toBe(successfulReduction());
+        await expect(run([spec])).resolves.toBe(successfulReduction());
 
         expect(fs.writeFileSync).toHaveBeenCalledWith('output.json', expect.any(String));
         expect(reducedSpec.tags).toHaveLength(1);
@@ -151,12 +148,20 @@ describe('rdme openapi:reduce', () => {
         });
 
         await expect(
-          reducer.run({
-            workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-            path: ['/pet', '/pet/{petId}'],
-            method: ['get', 'post'],
-            out: 'output.json',
-          }),
+          run([
+            '--workingDirectory',
+            './__tests__/__fixtures__/relative-ref-oas',
+            '--path',
+            '/pet',
+            '--path',
+            '/pet/{petId}',
+            '--method',
+            'get',
+            '--method',
+            'post',
+            '--out',
+            'output.json',
+          ]),
         ).resolves.toBe(successfulReduction());
 
         expect(console.info).toHaveBeenCalledTimes(1);
@@ -180,13 +185,22 @@ describe('rdme openapi:reduce', () => {
         });
 
         await expect(
-          reducer.run({
-            workingDirectory: './__tests__/__fixtures__/relative-ref-oas',
-            path: ['/pet', '/pet/{petId}'],
-            method: ['get', 'post'],
+          run([
+            '--workingDirectory',
+            './__tests__/__fixtures__/relative-ref-oas',
+            '--path',
+            '/pet',
+            '--path',
+            '/pet/{petId}',
+            '--method',
+            'get',
+            '--method',
+            'post',
+            '--title',
             title,
-            out: 'output.json',
-          }),
+            '--out',
+            'output.json',
+          ]),
         ).resolves.toBe(successfulReduction());
 
         expect(console.info).toHaveBeenCalledTimes(1);
@@ -207,11 +221,9 @@ describe('rdme openapi:reduce', () => {
     it.each([['json'], ['yaml']])('should fail if given a Swagger 2.0 definition (format: %s)', async format => {
       const spec = require.resolve(`@readme/oas-examples/2.0/${format}/petstore.${format}`);
 
-      await expect(
-        reducer.run({
-          spec,
-        }),
-      ).rejects.toStrictEqual(new Error('Sorry, this reducer feature in rdme only supports OpenAPI 3.0+ definitions.'));
+      await expect(run([spec])).rejects.toStrictEqual(
+        new Error('Sorry, this reducer feature in rdme only supports OpenAPI 3.0+ definitions.'),
+      );
     });
 
     it('should fail if you attempt to reduce a spec to nothing via tags', async () => {
@@ -219,11 +231,7 @@ describe('rdme openapi:reduce', () => {
 
       prompts.inject(['tags', ['unknown-tag'], 'output.json']);
 
-      await expect(
-        reducer.run({
-          spec,
-        }),
-      ).rejects.toStrictEqual(
+      await expect(run([spec])).rejects.toStrictEqual(
         new Error('All paths in the API definition were removed. Did you supply the right path name to reduce by?'),
       );
     });
@@ -233,11 +241,7 @@ describe('rdme openapi:reduce', () => {
 
       prompts.inject(['paths', ['unknown-path'], 'output.json']);
 
-      await expect(
-        reducer.run({
-          spec,
-        }),
-      ).rejects.toStrictEqual(
+      await expect(run([spec])).rejects.toStrictEqual(
         new Error('All paths in the API definition were removed. Did you supply the right path name to reduce by?'),
       );
     });
@@ -245,36 +249,23 @@ describe('rdme openapi:reduce', () => {
     it('should fail if you attempt to pass both tags and paths as opts', async () => {
       const spec = require.resolve('@readme/oas-examples/3.0/json/petstore.json');
 
-      await expect(
-        reducer.run({
-          spec,
-          tag: ['tag1', 'tag2'],
-          path: ['/path'],
-        }),
-      ).rejects.toStrictEqual(new Error('You can pass in either tags or paths/methods, but not both.'));
+      await expect(run([spec, '--tag', 'tag1', '--tag', 'tag2', '--path', '/path'])).rejects.toStrictEqual(
+        new Error('You can pass in either tags or paths/methods, but not both.'),
+      );
     });
 
     it('should fail if you attempt to pass both tags and methods as opts', async () => {
       const spec = require.resolve('@readme/oas-examples/3.0/json/petstore.json');
 
-      await expect(
-        reducer.run({
-          spec,
-          tag: ['tag1', 'tag2'],
-          method: ['get'],
-        }),
-      ).rejects.toStrictEqual(new Error('You can pass in either tags or paths/methods, but not both.'));
+      await expect(run([spec, '--tag', 'tag1', '--tag', 'tag2', '--method', 'get'])).rejects.toStrictEqual(
+        new Error('You can pass in either tags or paths/methods, but not both.'),
+      );
     });
 
     it('should fail if you attempt to pass non-existent path and no method', async () => {
       const spec = require.resolve('@readme/oas-examples/3.0/json/petstore.json');
 
-      await expect(
-        reducer.run({
-          spec,
-          path: ['unknown-path'],
-        }),
-      ).rejects.toStrictEqual(
+      await expect(run([spec, '--path', 'unknown-path'])).rejects.toStrictEqual(
         new Error('All paths in the API definition were removed. Did you supply the right path name to reduce by?'),
       );
     });

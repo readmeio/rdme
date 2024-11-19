@@ -1,14 +1,15 @@
-import type { Options as CreateOptions } from '../cmds/versions/create.js';
-import type { Options as UpdateOptions } from '../cmds/versions/update.js';
+import type { baseVersionFlags } from './flags.js';
+
+/**
+ * All the boolean flags from the `versions:create` and `versions:update` commands
+ */
+type VersionBooleanOpts = Exclude<keyof typeof baseVersionFlags, 'codename'>;
 
 /**
  * Takes a CLI flag that is expected to be a 'true' or 'false' string
  * and casts it to a boolean.
  */
-export default function castStringOptToBool(
-  opt: 'false' | 'true' | undefined,
-  optName: keyof CreateOptions | keyof UpdateOptions,
-) {
+export default function castStringOptToBool(opt: 'false' | 'true' | undefined, optName: VersionBooleanOpts) {
   if (!opt) {
     return undefined;
   }

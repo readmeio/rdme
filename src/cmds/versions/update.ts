@@ -1,49 +1,36 @@
-import type { CommonOptions } from './create.js';
 import type { Version } from './index.js';
-import type { AuthenticatedCommandOptions } from '../../lib/baseCommand.js';
 
+import { Args, Flags } from '@oclif/core';
 import prompts from 'prompts';
 
-import Command, { CommandCategories } from '../../lib/baseCommand.js';
+import BaseCommand from '../../lib/baseCommand.js';
 import castStringOptToBool from '../../lib/castStringOptToBool.js';
+import { baseVersionFlags, keyFlag } from '../../lib/flags.js';
 import * as promptHandler from '../../lib/prompts.js';
 import promptTerminal from '../../lib/promptWrapper.js';
 import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch.js';
 import { getProjectVersion } from '../../lib/versionSelect.js';
 
-export interface Options extends CommonOptions {
-  newVersion?: string;
-}
+export default class UpdateVersionCommand extends BaseCommand<typeof UpdateVersionCommand> {
+  static description = 'Update an existing version for your project.';
 
-export default class UpdateVersionCommand extends Command {
-  constructor() {
-    super();
+  static args = {
+    version: Args.string({ description: "The existing version you'd like to update." }),
+  };
 
-    this.command = 'versions:update';
-    this.usage = 'versions:update <version> [options]';
-    this.description = 'Update an existing version for your project.';
-    this.cmdCategory = CommandCategories.VERSIONS;
+  static flags = {
+    newVersion: Flags.string({ description: 'What should the version be renamed to?' }),
+    key: keyFlag,
+    ...baseVersionFlags,
+  };
 
-    this.hiddenArgs = ['version'];
-    this.args = [
-      this.getKeyArg(),
-      {
-        name: 'newVersion',
-        type: String,
-        description: 'What should the version be renamed to?',
-      },
-      ...this.getVersionOpts(),
-    ];
-  }
-
-  async run(opts: AuthenticatedCommandOptions<Options>) {
-    await super.run(opts);
-
-    const { key, version, newVersion, codename, main, beta, hidden, deprecated } = opts;
+  async run() {
+    const { version } = this.args;
+    const { key, newVersion, codename, main, beta, hidden, deprecated } = this.flags;
 
     const selectedVersion = await getProjectVersion(version, key);
 
-    Command.debug(`selectedVersion: ${selectedVersion}`);
+    this.debug(`selectedVersion: ${selectedVersion}`);
 
     // TODO: I think this fetch here is unnecessary but
     // it will require a bigger refactor of getProjectVersion

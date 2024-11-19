@@ -1,13 +1,13 @@
-import type { AuthenticatedCommandOptions } from '../../lib/baseCommand.js';
 import type { OpenAPIPromptOptions } from '../../lib/prompts.js';
 
+import { Args, Flags } from '@oclif/core';
 import chalk from 'chalk';
 import ora from 'ora';
 import parse from 'parse-link-header';
 
-import Command, { CommandCategories } from '../../lib/baseCommand.js';
-import createGHA from '../../lib/createGHA/index.js';
-import { oraOptions } from '../../lib/logger.js';
+import BaseCommand from '../../lib/baseCommand.js';
+import { githubFlag, keyFlag, titleFlag, versionFlag, workingDirectoryFlag } from '../../lib/flags.js';
+import { info, oraOptions, warn } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
 import * as promptHandler from '../../lib/prompts.js';
 import promptTerminal from '../../lib/promptWrapper.js';
@@ -15,80 +15,48 @@ import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetc
 import streamSpecToRegistry from '../../lib/streamSpecToRegistry.js';
 import { getProjectVersion } from '../../lib/versionSelect.js';
 
-interface Options {
-  create?: boolean;
-  dryRun?: boolean;
-  id?: string;
-  raw?: boolean;
-  spec?: string;
-  title?: string;
-  update?: boolean;
-  useSpecVersion?: boolean;
-  version?: string;
-  workingDirectory?: string;
-}
+export default class OpenAPICommand extends BaseCommand<typeof OpenAPICommand> {
+  static description = 'Upload, or resync, your OpenAPI/Swagger definition to ReadMe.';
 
-export default class OpenAPICommand extends Command {
-  constructor() {
-    super();
+  // needed for unit tests, even though we also specify this in src/index.ts
+  static id = 'openapi';
 
-    this.command = 'openapi';
-    this.usage = 'openapi [file|url] [options]';
-    this.description = 'Upload, or resync, your OpenAPI/Swagger definition to ReadMe.';
-    this.cmdCategory = CommandCategories.APIS;
+  static args = {
+    spec: Args.string({ description: 'A file/URL to your API definition' }),
+  };
 
-    this.hiddenArgs = ['spec'];
-    this.args = [
-      this.getKeyArg(),
-      {
-        name: 'id',
-        type: String,
-        description:
-          "Unique identifier for your API definition. Use this if you're re-uploading an existing API definition.",
-      },
-      this.getVersionArg(),
-      {
-        name: 'spec',
-        type: String,
-        defaultOption: true,
-      },
-      this.getWorkingDirArg(),
-      {
-        name: 'useSpecVersion',
-        type: Boolean,
-        description:
-          'Uses the version listed in the `info.version` field in the API definition for the project version parameter.',
-      },
-      {
-        name: 'raw',
-        type: Boolean,
-        description: 'Return the command results as a JSON object instead of a pretty output.',
-      },
-      this.getGitHubArg(),
-      {
-        name: 'create',
-        type: Boolean,
-        description: 'Bypasses the create/update prompt and creates a new API definition.',
-      },
-      {
-        name: 'update',
-        type: Boolean,
-        description:
-          "Automatically update an existing API definition in ReadMe if it's the only one associated with the current version.",
-      },
-      this.getTitleArg(),
-      {
-        name: 'dryRun',
-        type: Boolean,
-        description: 'Runs the command without creating/updating any API Definitions in ReadMe. Useful for debugging.',
-      },
-    ];
-  }
+  static flags = {
+    key: keyFlag,
+    version: versionFlag,
+    id: Flags.string({
+      description:
+        "Unique identifier for your API definition. Use this if you're re-uploading an existing API definition.",
+    }),
+    title: titleFlag,
+    workingDirectory: workingDirectoryFlag,
+    github: githubFlag,
+    dryRun: Flags.boolean({
+      description: 'Runs the command without creating/updating any API Definitions in ReadMe. Useful for debugging.',
+    }),
+    useSpecVersion: Flags.boolean({
+      description:
+        'Uses the version listed in the `info.version` field in the API definition for the project version parameter.',
+    }),
+    raw: Flags.boolean({ description: 'Return the command results as a JSON object instead of a pretty output.' }),
+    create: Flags.boolean({
+      description: 'Bypasses the create/update prompt and creates a new API definition in ReadMe.',
+      exclusive: ['update'], // this prevents `--create` and `--update` from being used simultaneously
+    }),
+    update: Flags.boolean({
+      description:
+        "Bypasses the create/update prompt and automatically updates an existing API definition in ReadMe. Note that this flag only works if there's only one API definition associated with the current version.",
+      summary: 'Bypasses the create/update prompt and automatically updates an existing API definition in ReadMe.',
+    }),
+  };
 
-  async run(opts: AuthenticatedCommandOptions<Options>) {
-    await super.run(opts);
-
-    const { dryRun, key, id, spec, create, raw, title, useSpecVersion, version, workingDirectory, update } = opts;
+  async run() {
+    const { spec } = this.args;
+    const { dryRun, key, id, create, raw, title, useSpecVersion, version, workingDirectory, update } = this.flags;
 
     let selectedVersion = version;
     let isUpdate: boolean;
@@ -97,36 +65,28 @@ export default class OpenAPICommand extends Command {
      * The `version` and `update` parameters are not typically ones we'd want to include
      * in GitHub Actions workflow files, so we're going to collect them in this object.
      */
-    const ignoredGHAParameters: Options = { version: undefined, update: undefined };
+    const ignoredGHAParameters: Partial<typeof this.flags> = { version: undefined, update: false };
 
     if (dryRun) {
-      Command.warn('🎭 dry run option detected! No API definitions will be created or updated in ReadMe.');
-    }
-
-    if (create && update) {
-      throw new Error(
-        'The `--create` and `--update` options cannot be used simultaneously. Please use one or the other!',
-      );
+      warn('🎭 dry run option detected! No API definitions will be created or updated in ReadMe.');
     }
 
     if (workingDirectory) {
       const previousWorkingDirectory = process.cwd();
       process.chdir(workingDirectory);
-      Command.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
+      this.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
     }
 
     if (version && id) {
-      Command.warn(
-        "We'll be using the version associated with the `--id` option, so the `--version` option will be ignored.",
-      );
+      warn("We'll be using the version associated with the `--id` option, so the `--version` option will be ignored.");
     }
 
     if (create && id) {
-      Command.warn("We'll be using the `--create` option, so the `--id` parameter will be ignored.");
+      warn("We'll be using the `--create` option, so the `--id` parameter will be ignored.");
     }
 
     if (update && id) {
-      Command.warn(
+      warn(
         "We'll be updating the API definition associated with the `--id` parameter, so the `--update` parameter will be ignored.",
       );
     }
@@ -138,9 +98,7 @@ export default class OpenAPICommand extends Command {
     });
 
     if (useSpecVersion) {
-      Command.info(
-        `Using the version specified in your API definition for your ReadMe project version (${specVersion})`,
-      );
+      info(`Using the version specified in your API definition for your ReadMe project version (${specVersion})`);
       selectedVersion = specVersion;
     }
 
@@ -148,7 +106,7 @@ export default class OpenAPICommand extends Command {
       selectedVersion = await getProjectVersion(selectedVersion, key);
     }
 
-    Command.debug(`selectedVersion: ${selectedVersion}`);
+    this.debug(`selectedVersion: ${selectedVersion}`);
 
     const success = async (data: Response) => {
       const message = !isUpdate
@@ -177,16 +135,17 @@ export default class OpenAPICommand extends Command {
         `\t${chalk.green(`rdme openapi ${specPath} --key=<key> --id=${output.id}`)}`,
       ].join('\n');
 
-      return Promise.resolve(raw ? JSON.stringify(output, null, 2) : prettyOutput).then(msg =>
-        createGHA(msg, this.command, this.args, {
-          ...opts,
+      return this.runCreateGHAHook({
+        parsedOpts: {
+          ...this.flags,
           spec: specPath,
           // eslint-disable-next-line no-underscore-dangle
           id: body._id,
           version: selectedVersion,
           ...ignoredGHAParameters,
-        }),
-      );
+        },
+        result: raw ? JSON.stringify(output, null, 2) : prettyOutput,
+      });
     };
 
     const error = (res: Response) => {
@@ -296,13 +255,13 @@ export default class OpenAPICommand extends Command {
     }
 
     if (!id) {
-      Command.debug('no id parameter, retrieving list of API specs');
+      this.debug('no id parameter, retrieving list of API specs');
       const apiSettings = await getSpecs('/api/v1/api-specification');
 
       const totalPages = Math.ceil(parseInt(apiSettings.headers.get('x-total-count') || '0', 10) / 10);
       const parsedDocs = parse(apiSettings.headers.get('link'));
-      Command.debug(`total pages: ${totalPages}`);
-      Command.debug(`pagination result: ${JSON.stringify(parsedDocs)}`);
+      this.debug(`total pages: ${totalPages}`);
+      this.debug(`pagination result: ${JSON.stringify(parsedDocs)}`);
 
       const apiSettingsBody = await handleRes(apiSettings);
       if (!apiSettingsBody.length) return createSpec();
@@ -320,7 +279,7 @@ export default class OpenAPICommand extends Command {
       const { option }: { option: OpenAPIPromptOptions } = await promptTerminal(
         promptHandler.createOasPrompt(apiSettingsBody, parsedDocs, totalPages, getSpecs),
       );
-      Command.debug(`selection result: ${option}`);
+      this.debug(`selection result: ${option}`);
 
       return option === 'create' ? createSpec() : updateSpec(option);
     }

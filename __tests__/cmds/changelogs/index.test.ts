@@ -4,58 +4,40 @@ import path from 'node:path';
 import chalk from 'chalk';
 import frontMatter from 'gray-matter';
 import nock from 'nock';
-import prompts from 'prompts';
-import { describe, beforeAll, afterAll, beforeEach, it, expect, vi } from 'vitest';
+import { describe, beforeAll, afterAll, beforeEach, it, expect } from 'vitest';
 
-import ChangelogsCommand from '../../../src/cmds/changelogs.js';
+import Command from '../../../src/cmds/changelogs.js';
 import APIError from '../../../src/lib/apiError.js';
 import getAPIMock from '../../helpers/get-api-mock.js';
 import hashFileContents from '../../helpers/hash-file-contents.js';
-
-const changelogs = new ChangelogsCommand();
+import { runCommand } from '../../helpers/setup-oclif-config.js';
 
 const fixturesBaseDir = '__fixtures__/changelogs';
 const fullFixturesDir = `${__dirname}./../../${fixturesBaseDir}`;
 const key = 'API_KEY';
 
 describe('rdme changelogs', () => {
+  let run: (args?: string[]) => Promise<string>;
+
   beforeAll(() => {
     nock.disableNetConnect();
+    run = runCommand(Command);
   });
 
   afterAll(() => nock.cleanAll());
 
-  it('should prompt for login if no API key provided', async () => {
-    const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
-    prompts.inject(['this-is-not-an-email', 'password', 'subdomain']);
-    // @ts-expect-error deliberately passing in bad data
-    await expect(changelogs.run({})).rejects.toStrictEqual(new Error('You must provide a valid email address.'));
-    consoleInfoSpy.mockRestore();
-  });
-
-  it('should error in CI if no API key provided', async () => {
-    process.env.TEST_RDME_CI = 'true';
-    // @ts-expect-error deliberately passing in bad data
-    await expect(changelogs.run({})).rejects.toStrictEqual(
-      new Error('No project API key provided. Please use `--key`.'),
-    );
-    delete process.env.TEST_RDME_CI;
-  });
-
   it('should error if no path provided', () => {
-    return expect(changelogs.run({ key })).rejects.toStrictEqual(
-      new Error('No path provided. Usage `rdme changelogs <path> [options]`.'),
-    );
+    return expect(run(['--key', key])).rejects.toThrow('Missing 1 required arg:\npath');
   });
 
   it('should error if the argument is not a folder', () => {
-    return expect(changelogs.run({ key, filePath: 'not-a-folder' })).rejects.toStrictEqual(
+    return expect(run(['not-a-folder', '--key', key])).rejects.toStrictEqual(
       new Error("Oops! We couldn't locate a file or directory at the path you provided."),
     );
   });
 
   it('should error if the folder contains no markdown files', () => {
-    return expect(changelogs.run({ key, filePath: '.github/workflows' })).rejects.toStrictEqual(
+    return expect(run(['.github/workflows', '--key', key])).rejects.toStrictEqual(
       new Error(
         "The directory you provided (.github/workflows) doesn't contain any of the following required files: .markdown, .md.",
       ),
@@ -112,7 +94,7 @@ describe('rdme changelogs', () => {
         .basicAuth({ user: key })
         .reply(200, { slug: anotherDoc.slug, body: anotherDoc.doc.content });
 
-      return changelogs.run({ filePath: `./__tests__/${fixturesBaseDir}/existing-docs`, key }).then(updatedDocs => {
+      return run([`./__tests__/${fixturesBaseDir}/existing-docs`, '--key', key]).then(updatedDocs => {
         // All changelogs should have been updated because their hashes from the GET request were different from what they
         // are currently.
         expect(updatedDocs).toBe(
@@ -138,24 +120,22 @@ describe('rdme changelogs', () => {
         .basicAuth({ user: key })
         .reply(200, { slug: anotherDoc.slug, lastUpdatedHash: 'anOldHash' });
 
-      return changelogs
-        .run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/existing-docs`, key })
-        .then(updatedDocs => {
-          // All changelogs should have been updated because their hashes from the GET request were different from what they
-          // are currently.
-          expect(updatedDocs).toBe(
-            [
-              `🎭 dry run! This will update 'simple-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/simple-doc.md with the following metadata: ${JSON.stringify(
-                simpleDoc.doc.data,
-              )}`,
-              `🎭 dry run! This will update 'another-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/subdir/another-doc.md with the following metadata: ${JSON.stringify(
-                anotherDoc.doc.data,
-              )}`,
-            ].join('\n'),
-          );
+      return run([`./__tests__/${fixturesBaseDir}/existing-docs`, '--key', key, '--dryRun']).then(updatedDocs => {
+        // All changelogs should have been updated because their hashes from the GET request were different from what they
+        // are currently.
+        expect(updatedDocs).toBe(
+          [
+            `🎭 dry run! This will update 'simple-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/simple-doc.md with the following metadata: ${JSON.stringify(
+              simpleDoc.doc.data,
+            )}`,
+            `🎭 dry run! This will update 'another-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/subdir/another-doc.md with the following metadata: ${JSON.stringify(
+              anotherDoc.doc.data,
+            )}`,
+          ].join('\n'),
+        );
 
-          getMocks.done();
-        });
+        getMocks.done();
+      });
     });
 
     it('should not send requests for changelogs that have not changed', () => {
@@ -169,7 +149,7 @@ describe('rdme changelogs', () => {
         .basicAuth({ user: key })
         .reply(200, { slug: anotherDoc.slug, lastUpdatedHash: anotherDoc.hash });
 
-      return changelogs.run({ filePath: `./__tests__/${fixturesBaseDir}/existing-docs`, key }).then(skippedDocs => {
+      return run([`./__tests__/${fixturesBaseDir}/existing-docs`, '--key', key]).then(skippedDocs => {
         expect(skippedDocs).toBe(
           [
             '`simple-doc` was not updated because there were no changes.',
@@ -192,18 +172,16 @@ describe('rdme changelogs', () => {
         .basicAuth({ user: key })
         .reply(200, { slug: anotherDoc.slug, lastUpdatedHash: anotherDoc.hash });
 
-      return changelogs
-        .run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/existing-docs`, key })
-        .then(skippedDocs => {
-          expect(skippedDocs).toBe(
-            [
-              '🎭 dry run! `simple-doc` will not be updated because there were no changes.',
-              '🎭 dry run! `another-doc` will not be updated because there were no changes.',
-            ].join('\n'),
-          );
+      return run([`./__tests__/${fixturesBaseDir}/existing-docs`, '--key', key, '--dryRun']).then(skippedDocs => {
+        expect(skippedDocs).toBe(
+          [
+            '🎭 dry run! `simple-doc` will not be updated because there were no changes.',
+            '🎭 dry run! `another-doc` will not be updated because there were no changes.',
+          ].join('\n'),
+        );
 
-          getMocks.done();
-        });
+        getMocks.done();
+      });
     });
   });
 
@@ -229,7 +207,7 @@ describe('rdme changelogs', () => {
         .basicAuth({ user: key })
         .reply(201, { slug, _id: id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
-      await expect(changelogs.run({ filePath: `./__tests__/${fixturesBaseDir}/new-docs`, key })).resolves.toBe(
+      await expect(run([`./__tests__/${fixturesBaseDir}/new-docs`, '--key', key])).resolves.toBe(
         `🌱 successfully created 'new-doc' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/new-docs/new-doc.md`,
       );
 
@@ -251,9 +229,7 @@ describe('rdme changelogs', () => {
           help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
         });
 
-      await expect(
-        changelogs.run({ dryRun: true, filePath: `./__tests__/${fixturesBaseDir}/new-docs`, key }),
-      ).resolves.toBe(
+      await expect(run([`./__tests__/${fixturesBaseDir}/new-docs`, '--key', key, '--dryRun'])).resolves.toBe(
         `🎭 dry run! This will create 'new-doc' with contents from __tests__/${fixturesBaseDir}/new-docs/new-doc.md with the following metadata: ${JSON.stringify(
           doc.data,
         )}`,
@@ -300,9 +276,7 @@ describe('rdme changelogs', () => {
         message: `Error uploading ${chalk.underline(`${fullDirectory}/${slug}.md`)}:\n\n${errorObject.message}`,
       };
 
-      await expect(changelogs.run({ filePath: `./${fullDirectory}`, key })).rejects.toStrictEqual(
-        new APIError(formattedErrorObject),
-      );
+      await expect(run([`./${fullDirectory}`, '--key', key])).rejects.toThrow(new APIError(formattedErrorObject));
 
       getMocks.done();
       postMocks.done();
@@ -331,7 +305,7 @@ describe('rdme changelogs', () => {
         .basicAuth({ user: key })
         .reply(201, { slug: doc.data.slug, _id: id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
-      await expect(changelogs.run({ filePath: `./__tests__/${fixturesBaseDir}/slug-docs`, key })).resolves.toBe(
+      await expect(run([`./__tests__/${fixturesBaseDir}/slug-docs`, '--key', key])).resolves.toBe(
         `🌱 successfully created 'marc-actually-wrote-a-test' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`,
       );
 

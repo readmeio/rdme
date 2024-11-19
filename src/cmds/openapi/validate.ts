@@ -1,51 +1,41 @@
-import type { ZeroAuthCommandOptions } from '../../lib/baseCommand.js';
-
+import { Args } from '@oclif/core';
 import chalk from 'chalk';
 
-import Command, { CommandCategories } from '../../lib/baseCommand.js';
-import createGHA from '../../lib/createGHA/index.js';
+import BaseCommand from '../../lib/baseCommand.js';
+import { githubFlag, workingDirectoryFlag } from '../../lib/flags.js';
 import prepareOas from '../../lib/prepareOas.js';
 
-export interface Options {
-  spec?: string;
-  workingDirectory?: string;
-}
+export default class OpenAPIValidateCommand extends BaseCommand<typeof OpenAPIValidateCommand> {
+  static description = 'Validate your OpenAPI/Swagger definition.';
 
-export default class OpenAPIValidateCommand extends Command {
-  constructor() {
-    super();
+  // needed for unit tests, even though we also specify this in src/index.ts
+  static id = 'openapi:validate';
 
-    this.command = 'openapi:validate';
-    this.usage = 'openapi:validate [file|url] [options]';
-    this.description = 'Validate your OpenAPI/Swagger definition.';
-    this.cmdCategory = CommandCategories.APIS;
+  static aliases = ['validate'];
 
-    this.hiddenArgs = ['spec'];
-    this.args = [
-      {
-        name: 'spec',
-        type: String,
-        defaultOption: true,
-      },
-      this.getWorkingDirArg(),
-      this.getGitHubArg(),
-    ];
-  }
+  static deprecateAliases = true;
 
-  async run(opts: ZeroAuthCommandOptions<Options>) {
-    await super.run(opts);
+  static args = {
+    spec: Args.string({ description: 'A file/URL to your API definition' }),
+  };
 
-    const { spec, workingDirectory } = opts;
+  static flags = {
+    github: githubFlag,
+    workingDirectory: workingDirectoryFlag,
+  };
 
-    if (workingDirectory) {
+  async run() {
+    if (this.flags.workingDirectory) {
       const previousWorkingDirectory = process.cwd();
-      process.chdir(workingDirectory);
-      Command.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
+      process.chdir(this.flags.workingDirectory);
+      this.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
     }
 
-    const { specPath, specType } = await prepareOas(spec, 'openapi:validate');
-    return Promise.resolve(chalk.green(`${specPath} is a valid ${specType} API definition!`)).then(msg =>
-      createGHA(msg, this.command, this.args, { ...opts, spec: specPath } as ZeroAuthCommandOptions<Options>),
-    );
+    const { specPath, specType } = await prepareOas(this.args.spec, 'openapi:validate');
+
+    return this.runCreateGHAHook({
+      parsedOpts: { ...this.flags, spec: specPath },
+      result: chalk.green(`${specPath} is a valid ${specType} API definition!`),
+    });
   }
 }

@@ -1,6 +1,8 @@
+import type { Hook } from '@oclif/core';
+
 import semver from 'semver';
 
-import pkg from '../../package.json' with { type: 'json' };
+import pkg from '../package.json' with { type: 'json' };
 
 import { error } from './logger.js';
 
@@ -35,7 +37,7 @@ export function getNodeVersion(): string {
  * @note we mock this function in our snapshots, hence it's not the default
  * @see {@link https://stackoverflow.com/a/54245672}
  */
-export async function getPkgVersion(npmDistTag?: npmDistTag): Promise<string> {
+export async function getPkgVersion(this: Hook.Context | void, npmDistTag?: npmDistTag): Promise<string> {
   if (npmDistTag) {
     return fetch(registryUrl)
       .then(res => res.json() as Promise<{ 'dist-tags': Record<string, string> }>)
@@ -45,7 +47,7 @@ export async function getPkgVersion(npmDistTag?: npmDistTag): Promise<string> {
         return pkg.version;
       });
   }
-  return pkg.version;
+  return this?.config?.version || pkg.version;
 }
 
 /**
@@ -53,5 +55,6 @@ export async function getPkgVersion(npmDistTag?: npmDistTag): Promise<string> {
  *
  * @example 8
  */
-export const getMajorPkgVersion = async (npmDistTag?: npmDistTag): Promise<number> =>
-  semver.major(await getPkgVersion(npmDistTag));
+export async function getMajorPkgVersion(this: Hook.Context | void, npmDistTag?: npmDistTag): Promise<number> {
+  return semver.major(await getPkgVersion.call(this, npmDistTag));
+}

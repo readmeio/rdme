@@ -1,6 +1,6 @@
 import nock from 'nock';
 import semver from 'semver';
-import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
+import { describe, beforeEach, afterEach, it, expect, vi, type MockInstance } from 'vitest';
 
 import pkg from '../../package.json' with { type: 'json' };
 import { getNodeVersion, getPkgVersion } from '../../src/lib/getPkgVersion.js';
@@ -14,7 +14,7 @@ describe('#getNodeVersion()', () => {
 });
 
 describe('#getPkgVersion()', () => {
-  let consoleErrorSpy;
+  let consoleErrorSpy: MockInstance;
 
   beforeEach(() => {
     consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});

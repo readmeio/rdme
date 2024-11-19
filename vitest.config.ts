@@ -1,9 +1,18 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { defineConfig } from 'vitest/config';
+import { coverageConfigDefaults, configDefaults, defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
-    exclude: ['**/dist/**', '**/node_modules/**', '**/__fixtures__/**', '**/helpers/**', '**/__snapshots__/**'],
+    coverage: {
+      exclude: [...coverageConfigDefaults.exclude, '**/dist-gha/**'],
+    },
+    exclude: [
+      '**/__fixtures__/**',
+      '**/dist-gha/**',
+      '**/helpers/**',
+      '**/__snapshots__/**',
+      ...configDefaults.exclude,
+    ],
     globalSetup: ['./__tests__/setup.js'],
     setupFiles: ['./__tests__/helpers/vitest.matchers.ts'],
   },
