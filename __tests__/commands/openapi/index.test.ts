@@ -7,7 +7,7 @@ import nock from 'nock';
 import prompts from 'prompts';
 import { describe, beforeAll, beforeEach, afterEach, it, expect, vi, type MockInstance } from 'vitest';
 
-import Command from '../../../src/cmds/openapi/index.js';
+import Command from '../../../src/commands/openapi/index.js';
 import APIError from '../../../src/lib/apiError.js';
 import config from '../../../src/lib/config.js';
 import petstoreWeird from '../../__fixtures__/petstore-simple-weird-version.json' with { type: 'json' };

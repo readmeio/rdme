@@ -1,7 +1,7 @@
 import type { ReadDocMetadata } from './readDoc.js';
-import type ChangelogsCommand from '../cmds/changelogs.js';
-import type CustomPagesCommand from '../cmds/custompages.js';
-import type DocsCommand from '../cmds/docs/index.js';
+import type ChangelogsCommand from '../commands/changelogs.js';
+import type CustomPagesCommand from '../commands/custompages.js';
+import type DocsCommand from '../commands/docs/index.js';
 
 import fs from 'node:fs/promises';
 import path from 'node:path';

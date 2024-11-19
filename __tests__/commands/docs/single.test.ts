@@ -6,7 +6,7 @@ import frontMatter from 'gray-matter';
 import nock from 'nock';
 import { describe, beforeAll, afterAll, beforeEach, afterEach, it, expect } from 'vitest';
 
-import Command from '../../../src/cmds/docs/index.js';
+import Command from '../../../src/commands/docs/index.js';
 import APIError from '../../../src/lib/apiError.js';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
 import hashFileContents from '../../helpers/hash-file-contents.js';

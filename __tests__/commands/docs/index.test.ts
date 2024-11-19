@@ -10,7 +10,7 @@ import nock from 'nock';
 import prompts from 'prompts';
 import { describe, beforeAll, afterAll, beforeEach, afterEach, it, expect, vi, type MockInstance } from 'vitest';
 
-import Command from '../../../src/cmds/docs/index.js';
+import Command from '../../../src/commands/docs/index.js';
 import APIError from '../../../src/lib/apiError.js';
 import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
 import { after, before } from '../../helpers/get-gha-setup.js';

@@ -60,7 +60,7 @@ function getKey(args: CommandFlag, opts: ParsedOpts): string | false {
 /**
  * Constructs the command string that we pass into the workflow file.
  */
-function constructCmdString(commandId: string, args: CommandArg, flags: CommandFlag, opts: ParsedOpts): string {
+function constructCommandString(commandId: string, args: CommandArg, flags: CommandFlag, opts: ParsedOpts): string {
   const argsString = Object.keys(args)
     .map(arg => {
       return opts[arg];
@@ -264,7 +264,7 @@ export default async function createGHA(
     branch,
     cleanCommand: cleanFileName(commandId),
     command: commandId,
-    commandString: constructCmdString(commandId, args, flags, parsedOpts),
+    commandString: constructCommandString(commandId, args, flags, parsedOpts),
     rdmeVersion: `v${majorPkgVersion}`,
     timestamp: new Date().toISOString(),
   };

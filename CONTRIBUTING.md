@@ -89,7 +89,7 @@ act -j simple
 
 ### Usage of `console`
 
-As you'll learn in our commands logic (see [`bin/run.js`](bin/run.js) and the [`src/cmds`](src/cmds) directory), we wrap our command outputs in resolved/rejected [`Promise` objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) and use [`bin/run.js`](bin/run.js) file to log the results to the console and return the correct status code. This is so we can write more resilient tests, ensure that the proper exit codes are being returned, and make debugging easier.
+As you'll learn in our commands logic (see [`bin/run.js`](bin/run.js) and the [`src/commands`](src/commands) directory), we wrap our command outputs in resolved/rejected [`Promise` objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) and use [`bin/run.js`](bin/run.js) file to log the results to the console and return the correct status code. This is so we can write more resilient tests, ensure that the proper exit codes are being returned, and make debugging easier.
 
 When writing command logic, avoid using `console` statements (and correspondingly, avoid mocking `console` statements in tests) when possible.
 

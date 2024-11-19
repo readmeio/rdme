@@ -2,7 +2,7 @@ import nock from 'nock';
 import prompts from 'prompts';
 import { describe, beforeAll, afterEach, it, expect } from 'vitest';
 
-import Command from '../../../src/cmds/versions/create.js';
+import Command from '../../../src/commands/versions/create.js';
 import APIError from '../../../src/lib/apiError.js';
 import getAPIMock from '../../helpers/get-api-mock.js';
 import { runCommand } from '../../helpers/setup-oclif-config.js';
