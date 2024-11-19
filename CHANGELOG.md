@@ -1,3 +1,17 @@
+# [9.0.0-next.24](https://github.com/readmeio/rdme/compare/v9.0.0-next.23...v9.0.0-next.24) (2024-11-19)
+
+
+* feat!: remove `validate`, deprecate/hide `open` ([#1072](https://github.com/readmeio/rdme/issues/1072)) ([f1b46f6](https://github.com/readmeio/rdme/commit/f1b46f6ef1593f81b5bb61b7890aa52e826b58d7))
+
+
+### BREAKING CHANGES
+
+* `rdme validate` has been removed, use `rdme
+openapi:validate` instead.
+* `rdme open` is now deprecated
+
+also updates our docs accordingly
+
 # [9.0.0-next.23](https://github.com/readmeio/rdme/compare/v9.0.0-next.22...v9.0.0-next.23) (2024-11-19)
 
 
