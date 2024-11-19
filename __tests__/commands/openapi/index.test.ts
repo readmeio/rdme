@@ -9,7 +9,6 @@ import { describe, beforeAll, beforeEach, afterEach, it, expect, vi, type MockIn
 
 import Command from '../../../src/commands/openapi/index.js';
 import APIError from '../../../src/lib/apiError.js';
-import config from '../../../src/lib/config.js';
 import petstoreWeird from '../../__fixtures__/petstore-simple-weird-version.json' with { type: 'json' };
 import { getAPIV1Mock, getAPIV1MockWithVersionHeader } from '../../helpers/get-api-mock.js';
 import { after, before } from '../../helpers/get-gha-setup.js';
@@ -22,7 +21,7 @@ let consoleWarnSpy: MockInstance;
 const key = 'API_KEY';
 const id = '5aa0409b7cf527a93bfb44df';
 const version = '1.0.0';
-const exampleRefLocation = `${config.host}/project/example-project/1.0.1/refs/ex`;
+const exampleRefLocation = 'https://dash.example.com/project/example-project/1.0.1/refs/ex';
 const successfulMessageBase = (specPath, specType) => [
   '',
   `\t${chalk.green(exampleRefLocation)}`,
