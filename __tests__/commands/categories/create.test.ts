@@ -2,7 +2,7 @@ import nock from 'nock';
 import { describe, beforeAll, afterEach, it, expect } from 'vitest';
 
 import Command from '../../../src/commands/categories/create.js';
-import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
+import { getAPIV1Mock, getAPIV1MockWithVersionHeader } from '../../helpers/get-api-mock.js';
 import { runCommand } from '../../helpers/setup-oclif-config.js';
 
 const key = 'API_KEY';
@@ -33,7 +33,7 @@ describe('rdme categories:create', () => {
   });
 
   it('should create a new category if the title and type do not match and preventDuplicates=true', async () => {
-    const getMock = getAPIMockWithVersionHeader(version)
+    const getMock = getAPIV1MockWithVersionHeader(version)
       .persist()
       .get('/api/v1/categories?perPage=20&page=1')
       .basicAuth({ user: key })
@@ -41,12 +41,15 @@ describe('rdme categories:create', () => {
         'x-total-count': '1',
       });
 
-    const postMock = getAPIMockWithVersionHeader(version)
+    const postMock = getAPIV1MockWithVersionHeader(version)
       .post('/api/v1/categories')
       .basicAuth({ user: key })
       .reply(201, { title: 'New Category', slug: 'new-category', type: 'guide', id: '123' });
 
-    const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
+    const versionMock = getAPIV1Mock()
+      .get(`/api/v1/version/${version}`)
+      .basicAuth({ user: key })
+      .reply(200, { version });
 
     await expect(
       run(['New Category', '--categoryType', 'guide', '--key', key, '--version', '1.0.0', '--preventDuplicates']),
@@ -58,7 +61,7 @@ describe('rdme categories:create', () => {
   });
 
   it('should create a new category if the title matches but the type does not match and preventDuplicates=true', async () => {
-    const getMock = getAPIMockWithVersionHeader(version)
+    const getMock = getAPIV1MockWithVersionHeader(version)
       .persist()
       .get('/api/v1/categories?perPage=20&page=1')
       .basicAuth({ user: key })
@@ -66,12 +69,15 @@ describe('rdme categories:create', () => {
         'x-total-count': '1',
       });
 
-    const postMock = getAPIMockWithVersionHeader(version)
+    const postMock = getAPIV1MockWithVersionHeader(version)
       .post('/api/v1/categories')
       .basicAuth({ user: key })
       .reply(201, { title: 'Category', slug: 'category', type: 'reference', id: '123' });
 
-    const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
+    const versionMock = getAPIV1Mock()
+      .get(`/api/v1/version/${version}`)
+      .basicAuth({ user: key })
+      .reply(200, { version });
 
     await expect(
       run(['--categoryType', 'reference', '--key', key, '--version', '1.0.0', '--preventDuplicates', 'Category']),
@@ -83,12 +89,15 @@ describe('rdme categories:create', () => {
   });
 
   it('should create a new category if the title and type match and preventDuplicates=false', async () => {
-    const postMock = getAPIMockWithVersionHeader(version)
+    const postMock = getAPIV1MockWithVersionHeader(version)
       .post('/api/v1/categories')
       .basicAuth({ user: key })
       .reply(201, { title: 'Category', slug: 'category', type: 'reference', id: '123' });
 
-    const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
+    const versionMock = getAPIV1Mock()
+      .get(`/api/v1/version/${version}`)
+      .basicAuth({ user: key })
+      .reply(200, { version });
 
     await expect(run(['Category', '--categoryType', 'guide', '--key', key, '--version', '1.0.0'])).resolves.toBe(
       "🌱 successfully created 'Category' with a type of 'reference' and an id of '123'",
@@ -99,7 +108,7 @@ describe('rdme categories:create', () => {
   });
 
   it('should not create a new category if the title and type match and preventDuplicates=true', async () => {
-    const getMock = getAPIMockWithVersionHeader(version)
+    const getMock = getAPIV1MockWithVersionHeader(version)
       .persist()
       .get('/api/v1/categories?perPage=20&page=1')
       .basicAuth({ user: key })
@@ -107,7 +116,10 @@ describe('rdme categories:create', () => {
         'x-total-count': '1',
       });
 
-    const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
+    const versionMock = getAPIV1Mock()
+      .get(`/api/v1/version/${version}`)
+      .basicAuth({ user: key })
+      .reply(200, { version });
 
     await expect(
       run(['Category', '--categoryType', 'guide', '--key', key, '--version', '1.0.0', '--preventDuplicates']),
@@ -122,7 +134,7 @@ describe('rdme categories:create', () => {
   });
 
   it('should not create a new category if the non case sensitive title and type match and preventDuplicates=true', async () => {
-    const getMock = getAPIMockWithVersionHeader(version)
+    const getMock = getAPIV1MockWithVersionHeader(version)
       .persist()
       .get('/api/v1/categories?perPage=20&page=1')
       .basicAuth({ user: key })
@@ -130,7 +142,10 @@ describe('rdme categories:create', () => {
         'x-total-count': '1',
       });
 
-    const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
+    const versionMock = getAPIV1Mock()
+      .get(`/api/v1/version/${version}`)
+      .basicAuth({ user: key })
+      .reply(200, { version });
 
     await expect(
       run(['Category', '--categoryType', 'guide', '--key', key, '--version', '1.0.0', '--preventDuplicates']),

@@ -6,7 +6,7 @@ import { describe, afterEach, beforeAll, it, expect } from 'vitest';
 import pkg from '../../package.json';
 import Command from '../../src/commands/open.js';
 import configStore from '../../src/lib/configstore.js';
-import getAPIMock from '../helpers/get-api-mock.js';
+import { getAPIV1Mock } from '../helpers/get-api-mock.js';
 import { runCommand } from '../helpers/setup-oclif-config.js';
 
 const mockArg = ['--mock'];
@@ -53,7 +53,7 @@ describe('rdme open', () => {
         version,
       };
 
-      const mockRequest = getAPIMock()
+      const mockRequest = getAPIV1Mock()
         .get('/api/v1/version')
         .basicAuth({ user: key })
         .reply(200, [versionPayload, { version: '1.0.1' }]);

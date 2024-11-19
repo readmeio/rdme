@@ -9,10 +9,14 @@ import { handleRes, readmeAPIV1Fetch } from './readmeAPIFetch.js';
 /**
  * Uploads a spec to the API registry for usage in ReadMe
  *
- * @param {String} spec path to a bundled/validated spec file
- * @returns {String} a UUID in the API registry
+ * @returns a UUID in the API registry
  */
-export default async function streamSpecToRegistry(spec: string) {
+export default async function streamSpecToRegistry(
+  /**
+   * path to a bundled/validated spec file
+   */
+  spec: string,
+): Promise<string> {
   const spinner = ora({ text: 'Staging your API definition for upload...', ...oraOptions() }).start();
   // Create a temporary file to write the bundled spec to,
   // which we will then stream into the form data body

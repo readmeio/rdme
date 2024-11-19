@@ -91,8 +91,6 @@ export default class OpenAPICommand extends BaseCommand<typeof OpenAPICommand> {
       );
     }
 
-    // Reason we're hardcoding in command here is because `swagger` command
-    // relies on this and we don't want to use `swagger` in this function
     const { preparedSpec, specFileType, specPath, specType, specVersion } = await prepareOas(spec, 'openapi', {
       title,
     });
