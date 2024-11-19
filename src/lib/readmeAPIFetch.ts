@@ -122,7 +122,7 @@ function sanitizeHeaders(headers: Headers) {
 }
 
 /**
- * Wrapper for the `fetch` API so we can add rdme-specific headers to all API requests.
+ * Wrapper for the `fetch` API so we can add rdme-specific headers to all ReadMe API v1 requests.
  *
  * @param pathname the pathname to make the request to. Must have a leading slash.
  * @param fileOpts optional object containing information about the file being sent.
