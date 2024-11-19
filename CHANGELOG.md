@@ -1,3 +1,10 @@
+# [9.0.0-next.26](https://github.com/readmeio/rdme/compare/v9.0.0-next.25...v9.0.0-next.26) (2024-11-19)
+
+
+### Bug Fixes
+
+* build `dist-gha/` files with every release ([f42392b](https://github.com/readmeio/rdme/commit/f42392b5141d82df2acfa10df82989fe4832b36f))
+
 # [9.0.0-next.25](https://github.com/readmeio/rdme/compare/v9.0.0-next.24...v9.0.0-next.25) (2024-11-19)
 
 
