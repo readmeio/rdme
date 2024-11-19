@@ -8,7 +8,7 @@ import { getUserAgent } from '../../src/lib/readmeAPIFetch.js';
  * `user-agent` request header so it gets properly picked up by nock.
  */
 export function getAPIV1Mock(reqHeaders = {}) {
-  return nock(config.host, {
+  return nock(config.host.v1, {
     reqheaders: {
       'User-Agent': getUserAgent(),
       ...reqHeaders,

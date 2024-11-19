@@ -40,7 +40,7 @@ export default class OpenCommand extends BaseCommand<typeof OpenCommand> {
       }
 
       const selectedVersion = await getProjectVersion(undefined, apiKey, true);
-      const dashURL: string = config.host;
+      const dashURL: string = config.host.v1;
       url = `${dashURL}/project/${project}/v${selectedVersion}/overview`;
     } else {
       const hubURL: string = config.hub;

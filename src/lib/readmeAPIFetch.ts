@@ -179,7 +179,7 @@ export async function readmeAPIV1Fetch(
     headers.set('x-readme-source-url', fileOpts.filePath);
   }
 
-  const fullUrl = `${config.host}${pathname}`;
+  const fullUrl = `${config.host.v1}${pathname}`;
   const proxy = getProxy();
 
   debug(
