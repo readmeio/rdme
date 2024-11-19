@@ -1,4 +1,4 @@
-import type { Version } from '../cmds/versions/index.js';
+import type { Version } from '../commands/versions/index.js';
 import type { Choice, PromptObject } from 'prompts';
 
 import parse from 'parse-link-header';

@@ -19,9 +19,7 @@ export function before() {
   vi.stubEnv('GITHUB_SERVER_URL', 'https://github.com');
   vi.stubEnv('GITHUB_SHA', 'ffac537e6cbbf934b08745a378932722df287a53');
   vi.stubEnv('TEST_RDME_CI', 'true');
-
-  const isGHASpy = vi.spyOn(isCI, 'isGHA');
-  isGHASpy.mockReturnValue(true);
+  vi.stubEnv('TEST_RDME_GHA', 'true');
 
   const ciNameSpy = vi.spyOn(isCI, 'ciName');
   ciNameSpy.mockReturnValue('GitHub Actions (test)');

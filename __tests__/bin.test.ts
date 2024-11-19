@@ -7,8 +7,8 @@ describe('bin', () => {
     expect.assertions(1);
 
     await new Promise(resolve => {
-      exec(`node ${__dirname}/../bin/rdme.js`, (error, stdout) => {
-        expect(stdout).toContain('a utility for interacting with ReadMe');
+      exec(`node ${__dirname}/../bin/run.js`, (error, stdout) => {
+        expect(stdout).toContain("ReadMe's official CLI and GitHub Action");
         resolve(true);
       });
     });

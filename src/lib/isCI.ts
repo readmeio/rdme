@@ -8,6 +8,7 @@ import ci from 'ci-info'; // eslint-disable-line no-restricted-imports
  * https://github.com/watson/ci-info#supported-ci-tools
  */
 export function ciName() {
+  if (process.env.TEST_RDME_GHA) return 'GitHub Actions (test)';
   return ci.name || 'n/a';
 }
 
@@ -51,5 +52,5 @@ export default function isCI() {
  * @see {@link https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables}
  */
 export function isGHA() {
-  return isCI() && ci.GITHUB_ACTIONS;
+  return (isCI() && ci.GITHUB_ACTIONS) || !!process.env.TEST_RDME_GHA;
 }

@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import nock from 'nock';
-import { describe, beforeEach, afterEach, it, expect, vi, beforeAll } from 'vitest';
+import { describe, beforeEach, afterEach, it, expect, vi, beforeAll, type MockInstance } from 'vitest';
 
 import pkg from '../../package.json' with { type: 'json' };
 import readmeAPIFetch, { cleanHeaders, handleRes } from '../../src/lib/readmeAPIFetch.js';
@@ -216,7 +216,7 @@ describe('#fetch()', () => {
   });
 
   describe('warning response header', () => {
-    let consoleWarnSpy;
+    let consoleWarnSpy: MockInstance;
 
     const getWarningCommandOutput = () => {
       return [consoleWarnSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');

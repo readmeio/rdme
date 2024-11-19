@@ -41,6 +41,10 @@ With `rdme`, you can create workflows for a variety of use cases, including:
 - Pre-upload validation (including OpenAPI 3.1) ✅
 - Syncing directories of Markdown files 📖
 
+> 🚧 Heads up!
+>
+> Our [new ReadMe Refactored experience](https://docs.readme.com/main/docs/welcome-to-readme-refactored) doesn’t yet support `rdme`. If your project is using the new ReadMe Refactored experience, we recommend [enabling bi-directional syncing via Git](https://docs.readme.com/main/docs/bi-directional-sync) for an even better editing experience for the technical and non-technical users on your team!
+
 ## General Setup and Usage
 
 To see detailed CLI setup instructions and all available commands, check out [the `rdme` GitHub repository](https://github.com/readmeio/rdme#readme).
@@ -190,7 +194,7 @@ We recommend using the [quick start](#quick-start) to get started with GitHub Ac
 The command syntax in GitHub Actions is functionally equivalent to the CLI. For example, take the following CLI command:
 
 ```sh
-rdme validate [url-or-local-path-to-file]
+rdme openapi:validate [url-or-local-path-to-file]
 ```
 
 To execute this command via GitHub Actions, the step would look like this:
@@ -198,7 +202,7 @@ To execute this command via GitHub Actions, the step would look like this:
 ```yml
 - uses: readmeio/rdme@RDME_VERSION
   with:
-    rdme: validate [url-or-local-path-to-file]
+    rdme: openapi:validate [url-or-local-path-to-file]
 ```
 
 The following section has links to full GitHub Actions workflow file examples.

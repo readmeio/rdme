@@ -2,18 +2,37 @@
 
 ## Running Shell Commands Locally 🐚
 
-To run test commands from within the repository, run the build and then run your commands from the root of the repository and use `./bin/rdme.js` instead of `rdme` so it properly points to the command executable, like so:
+To get started, run the `build` script to create a symlink with `package.json` (required for our `oclif` setup to read our commands properly). You only need to do this the first time you clone the repository.
 
 ```sh
 npm run build
-./bin/rdme.js openapi:validate __tests__/__fixtures__/ref-oas/petstore.json
 ```
 
-If you need to debug commands quicker and re-building TS everytime is becoming cumbersome, you can use the debug command, like so:
+To run test commands, use `./bin/dev.js` instead of `rdme`. For example, if the command you're testing looks like this...
 
 ```sh
-npm run debug -- openapi:validate __tests__/__fixtures__/ref-oas/petstore.json
+rdme openapi:validate __tests__/__fixtures__/ref-oas/petstore.json
 ```
+
+... your local command will look like this:
+
+```sh
+bin/dev.js openapi:validate __tests__/__fixtures__/ref-oas/petstore.json
+```
+
+The `bin/dev.js` file has a few features that are useful for local development:
+
+- It reads directly from your TypeScript files (so no need to re-run the TypeScript compiler every time you make a change)
+- It returns error messages with full stack traces
+
+`bin/dev.js` is convenient for useful for rapid development but it's not a 1:1 recreation of what the end-user experience with `rdme` is like. To recreate the production `rdme` experience, use the `bin/run.js` file instead. You'll need to re-run the TypeScript compiler (i.e., `npm run build`) every time you make a change. So for example:
+
+```sh
+npm run build
+bin/run.js openapi:validate __tests__/__fixtures__/ref-oas/petstore.json
+```
+
+Your changes to the command code may make changes to [the command reference document](./documentation/commands.md) — it is up to you whether you include those changes in your PR or if you let the release process take care of it. More information on that can be found in [MAINTAINERS.md](./MAINTAINERS.md).
 
 ## Running GitHub Actions Locally 🐳
 
@@ -70,7 +89,7 @@ act -j simple
 
 ### Usage of `console`
 
-As you'll learn in our commands logic (see [`bin/rdme.js`](bin/rdme.js) and the [`src/cmds`](src/cmds) directory), we wrap our command outputs in resolved/rejected [`Promise` objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) and use [`bin/rdme.js`](bin/rdme.js) file to log the results to the console and return the correct status code. This is so we can write more resilient tests, ensure that the proper exit codes are being returned, and make debugging easier.
+As you'll learn in our commands logic (see [`bin/run.js`](bin/run.js) and the [`src/commands`](src/commands) directory), we wrap our command outputs in resolved/rejected [`Promise` objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) and use [`bin/run.js`](bin/run.js) file to log the results to the console and return the correct status code. This is so we can write more resilient tests, ensure that the proper exit codes are being returned, and make debugging easier.
 
 When writing command logic, avoid using `console` statements (and correspondingly, avoid mocking `console` statements in tests) when possible.
 

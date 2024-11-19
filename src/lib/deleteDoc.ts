@@ -1,5 +1,3 @@
-import type { CommandCategories } from './baseCommand.js';
-
 import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch.js';
 
 /**
@@ -17,12 +15,11 @@ export default async function deleteDoc(
   selectedVersion: string | undefined,
   dryRun: boolean | undefined,
   slug: string,
-  type: CommandCategories,
 ): Promise<string> {
   if (dryRun) {
     return Promise.resolve(`🎭 dry run! This will delete \`${slug}\`.`);
   }
-  return readmeAPIFetch(`/api/v1/${type}/${slug}`, {
+  return readmeAPIFetch(`/api/v1/docs/${slug}`, {
     method: 'delete',
     headers: cleanHeaders(key, selectedVersion, new Headers({ 'Content-Type': 'application/json' })),
   })

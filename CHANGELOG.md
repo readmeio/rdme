@@ -1,3 +1,70 @@
+# [9.0.0-next.26](https://github.com/readmeio/rdme/compare/v9.0.0-next.25...v9.0.0-next.26) (2024-11-19)
+
+
+### Bug Fixes
+
+* build `dist-gha/` files with every release ([f42392b](https://github.com/readmeio/rdme/commit/f42392b5141d82df2acfa10df82989fe4832b36f))
+
+# [9.0.0-next.25](https://github.com/readmeio/rdme/compare/v9.0.0-next.24...v9.0.0-next.25) (2024-11-19)
+
+
+### Bug Fixes
+
+* **npm:** tweak npm lifecycle scripts ([#1073](https://github.com/readmeio/rdme/issues/1073)) ([35534db](https://github.com/readmeio/rdme/commit/35534dbe7228a75b49408bf4db3fcfb31091358a))
+
+# [9.0.0-next.24](https://github.com/readmeio/rdme/compare/v9.0.0-next.23...v9.0.0-next.24) (2024-11-19)
+
+
+* feat!: remove `validate`, deprecate/hide `open` ([#1072](https://github.com/readmeio/rdme/issues/1072)) ([f1b46f6](https://github.com/readmeio/rdme/commit/f1b46f6ef1593f81b5bb61b7890aa52e826b58d7))
+
+
+### BREAKING CHANGES
+
+* `rdme validate` has been removed, use `rdme
+openapi:validate` instead.
+* `rdme open` is now deprecated
+
+also updates our docs accordingly
+
+# [9.0.0-next.23](https://github.com/readmeio/rdme/compare/v9.0.0-next.22...v9.0.0-next.23) (2024-11-19)
+
+
+### Features
+
+* add `title` flag to `openapi:convert` ([#1071](https://github.com/readmeio/rdme/issues/1071)) ([1d71f3f](https://github.com/readmeio/rdme/commit/1d71f3ff3db022bf81a5c6ec9d9eceb42d093961)), closes [#1068](https://github.com/readmeio/rdme/issues/1068)
+
+# [9.0.0-next.22](https://github.com/readmeio/rdme/compare/v9.0.0-next.21...v9.0.0-next.22) (2024-11-19)
+
+
+* feat!: oclif (take 2) ([#1068](https://github.com/readmeio/rdme/issues/1068)) ([5e05f93](https://github.com/readmeio/rdme/commit/5e05f9381ff92441b95e49fcf6b369ed74b62a2e)), closes [#962](https://github.com/readmeio/rdme/issues/962) [#1067](https://github.com/readmeio/rdme/issues/1067) [/github.com/readmeio/rdme/blob/d01d76fe3c2e4a98b4f5c415be03e589fbe3b56e/.releaserc.yml#L30](https://github.com//github.com/readmeio/rdme/blob/d01d76fe3c2e4a98b4f5c415be03e589fbe3b56e/.releaserc.yml/issues/L30) [#1067](https://github.com/readmeio/rdme/issues/1067)
+
+
+### BREAKING CHANGES
+
+* the `rdme` GitHub Actions is now a [the `node20` JavaScript action](https://docs.github.com/en/actions/sharing-automations/creating-actions/metadata-syntax-for-github-actions#runs-for-javascript-actions) rather than [a Docker container action](https://docs.github.com/en/actions/sharing-automations/creating-actions/metadata-syntax-for-github-actions#runs-for-docker-container-actions).
+* `rdme` is now powered by [`oclif`](https://oclif.io/). The formatting and content of certain error messages and outputs may have changed. Please continue to only utilize exit codes to determine command successes/failures.
+
+completed tasks:
+
+- [x] a handful of tests are still failing, hoping that
+https://github.com/oclif/test/pull/652 gets merged in)
+- [x] github actions dry runs are failing (but i got them working in
+
+# [9.0.0-next.21](https://github.com/readmeio/rdme/compare/v9.0.0-next.20...v9.0.0-next.21) (2024-11-18)
+
+
+### Bug Fixes
+
+* add GITHUB_TOKEN ([e106e10](https://github.com/readmeio/rdme/commit/e106e1047c9ec0e47b3b3812783d2e44dddbe9bd))
+* attempt to use semantic-release/github instead of `gh` ([331d28b](https://github.com/readmeio/rdme/commit/331d28bc1e9f0f2b57a4d8d39f2ebaf6bf64896a))
+
+# [9.0.0-next.20](https://github.com/readmeio/rdme/compare/v9.0.0-next.19...v9.0.0-next.20) (2024-11-18)
+
+
+### Bug Fixes
+
+* bump semantic-release versions ([21efc66](https://github.com/readmeio/rdme/commit/21efc66eef0ff063366e3ad1394fedf5170b1d94))
+
 # [9.0.0-next.19](https://github.com/readmeio/rdme/compare/v9.0.0-next.18...v9.0.0-next.19) (2024-11-09)
 
 
