@@ -5,7 +5,7 @@ import APIError from './apiError.js';
 import isCI from './isCI.js';
 import { warn } from './logger.js';
 import promptTerminal from './promptWrapper.js';
-import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch.js';
+import { cleanHeaders, handleRes, readmeAPIV1Fetch } from './readmeAPIFetch.js';
 
 /**
  * Validates and returns a project version.
@@ -21,7 +21,7 @@ export async function getProjectVersion(
 ): Promise<string | undefined> {
   try {
     if (versionFlag) {
-      return await readmeAPIFetch(`/api/v1/version/${versionFlag}`, {
+      return await readmeAPIV1Fetch(`/api/v1/version/${versionFlag}`, {
         method: 'get',
         headers: cleanHeaders(key),
       })
@@ -34,7 +34,7 @@ export async function getProjectVersion(
       return undefined;
     }
 
-    const versionList: Version[] = await readmeAPIFetch('/api/v1/version', {
+    const versionList: Version[] = await readmeAPIV1Fetch('/api/v1/version', {
       method: 'get',
       headers: cleanHeaders(key),
     }).then(handleRes);

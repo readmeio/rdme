@@ -5,7 +5,7 @@ import configStore from './configstore.js';
 import getCurrentConfig from './getCurrentConfig.js';
 import { debug } from './logger.js';
 import promptTerminal from './promptWrapper.js';
-import readmeAPIFetch, { handleRes } from './readmeAPIFetch.js';
+import { handleRes, readmeAPIV1Fetch } from './readmeAPIFetch.js';
 import { validateSubdomain } from './validatePromptInput.js';
 
 interface LoginBody {
@@ -16,7 +16,7 @@ interface LoginBody {
 }
 
 function loginFetch(body: LoginBody) {
-  return readmeAPIFetch('/api/v1/login', {
+  return readmeAPIV1Fetch('/api/v1/login', {
     method: 'post',
     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
     body: JSON.stringify(body),

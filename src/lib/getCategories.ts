@@ -1,4 +1,4 @@
-import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch.js';
+import { cleanHeaders, handleRes, readmeAPIV1Fetch } from './readmeAPIFetch.js';
 
 /**
  * Returns all categories for a given project and version
@@ -10,7 +10,7 @@ import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch.js';
 export default async function getCategories(key: string, selectedVersion: string | undefined) {
   async function getNumberOfPages() {
     let totalCount = 0;
-    return readmeAPIFetch('/api/v1/categories?perPage=20&page=1', {
+    return readmeAPIV1Fetch('/api/v1/categories?perPage=20&page=1', {
       method: 'get',
       headers: cleanHeaders(key, selectedVersion, new Headers({ Accept: 'application/json' })),
     })
@@ -29,7 +29,7 @@ export default async function getCategories(key: string, selectedVersion: string
     ...(await Promise.all(
       // retrieves all categories beyond first page
       [...new Array(totalCount + 1).keys()].slice(2).map(async page => {
-        return readmeAPIFetch(`/api/v1/categories?perPage=20&page=${page}`, {
+        return readmeAPIV1Fetch(`/api/v1/categories?perPage=20&page=${page}`, {
           method: 'get',
           headers: cleanHeaders(key, selectedVersion, new Headers({ Accept: 'application/json' })),
         }).then(handleRes);
