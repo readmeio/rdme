@@ -122,7 +122,7 @@
     "schemas:check": "./bin/json-schema-store.js",
     "schemas:write": "./bin/json-schema-store.js --update",
     "test": "vitest run --coverage",
-    "version": "oclif manifest && oclif readme --readme-path documentation/commands.md --no-aliases"
+    "version": "npm run build:gha:prod && oclif manifest && oclif readme --readme-path documentation/commands.md --no-aliases"
   },
   "commitlint": {
     "extends": [
