@@ -14,7 +14,7 @@ $ npm install -g rdme
 $ rdme COMMAND
 running command...
 $ rdme (--version)
-rdme/9.0.0-next.21 linux-x64 node-v20.18.0
+rdme/9.0.0-next.22 linux-x64 node-v20.18.0
 $ rdme --help [COMMAND]
 USAGE
   $ rdme COMMAND
@@ -323,13 +323,14 @@ Convert an API definition to OpenAPI and bundle any external references.
 
 ```
 USAGE
-  $ rdme openapi:convert [SPEC] [--out <value>] [--workingDirectory <value>]
+  $ rdme openapi:convert [SPEC] [--out <value>] [--title <value>] [--workingDirectory <value>]
 
 ARGUMENTS
   SPEC  A file/URL to your API definition
 
 FLAGS
   --out=<value>               Output file path to write converted file to
+  --title=<value>             An override value for the `info.title` field in the API definition
   --workingDirectory=<value>  Working directory (for usage with relative external references)
 
 DESCRIPTION
@@ -344,7 +345,7 @@ Analyze an OpenAPI/Swagger definition for various OpenAPI and ReadMe feature usa
 USAGE
   $ rdme openapi:inspect [SPEC] [--feature
     additionalProperties|callbacks|circularRefs|discriminators|links|style|polymorphism|serverVariables|webhooks|xml|rea
-    dme...] [--title <value>] [--workingDirectory <value>]
+    dme...] [--workingDirectory <value>]
 
 ARGUMENTS
   SPEC  A file/URL to your API definition
@@ -355,7 +356,6 @@ FLAGS
                               will be returned alongside the report.
                               <options: additionalProperties|callbacks|circularRefs|discriminators|links|style|polymorph
                               ism|serverVariables|webhooks|xml|readme>
-  --title=<value>             An override value for the `info.title` field in the API definition
   --workingDirectory=<value>  Working directory (for usage with relative external references)
 
 DESCRIPTION

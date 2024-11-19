@@ -1,3 +1,10 @@
+# [9.0.0-next.23](https://github.com/readmeio/rdme/compare/v9.0.0-next.22...v9.0.0-next.23) (2024-11-19)
+
+
+### Features
+
+* add `title` flag to `openapi:convert` ([#1071](https://github.com/readmeio/rdme/issues/1071)) ([1d71f3f](https://github.com/readmeio/rdme/commit/1d71f3ff3db022bf81a5c6ec9d9eceb42d093961)), closes [#1068](https://github.com/readmeio/rdme/issues/1068)
+
 # [9.0.0-next.22](https://github.com/readmeio/rdme/compare/v9.0.0-next.21...v9.0.0-next.22) (2024-11-19)
 
 
