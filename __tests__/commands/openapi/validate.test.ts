@@ -211,12 +211,4 @@ describe('rdme openapi:validate', () => {
       );
     });
   });
-
-  describe('rdme validate alias', () => {
-    it('should should `rdme openapi:validate`', async () => {
-      return expect(
-        (await oclifRunCommand(['validate', require.resolve('@readme/oas-examples/3.0/json/petstore.json')])).result,
-      ).toContain(chalk.green('petstore.json is a valid OpenAPI API definition!'));
-    });
-  });
 });

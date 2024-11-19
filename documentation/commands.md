@@ -403,9 +403,6 @@ FLAGS
 
 DESCRIPTION
   Validate your OpenAPI/Swagger definition.
-
-ALIASES
-  $ rdme validate
 ```
 
 ## `rdme versions`
