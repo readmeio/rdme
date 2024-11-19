@@ -30,7 +30,7 @@ export default class OpenAPISolvingCircularityAndRecursiveness extends BaseComma
   };
 
   static flags = {
-    out: Flags.string({ description: 'Output file path to write converted file to' }),
+    out: Flags.string({ description: 'Output file path to write processed file to' }),
     title: titleFlag,
     workingDirectory: workingDirectoryFlag,
   };
