@@ -109,7 +109,7 @@
     "vitest": "^2.0.5"
   },
   "scripts": {
-    "build": "tsc && oclif manifest && oclif readme --readme-path documentation/commands.md --no-aliases",
+    "build": "tsc",
     "build:gha": "npm run build && rollup --config",
     "build:gha:prod": "npm run build:gha -- --environment PRODUCTION_BUILD",
     "lint": "alex . && knip && npm run lint:ts && npm run prettier && npm run schemas:check",
@@ -121,7 +121,8 @@
     "prettier": "prettier --check .",
     "schemas:check": "./bin/json-schema-store.js",
     "schemas:write": "./bin/json-schema-store.js --update",
-    "test": "vitest run --coverage"
+    "test": "vitest run --coverage",
+    "version": "oclif manifest && oclif readme --readme-path documentation/commands.md --no-aliases"
   },
   "commitlint": {
     "extends": [
