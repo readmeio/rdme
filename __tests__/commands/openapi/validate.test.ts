@@ -88,9 +88,7 @@ describe('rdme openapi:validate', () => {
     });
 
     it('should throw an error if an invalid OpenAPI 3.0 definition is supplied', () => {
-      return expect(run(['./__tests__/__fixtures__/invalid-oas.json'])).rejects.toThrow(
-        'Token "Error" does not exist.',
-      );
+      return expect(run(['./__tests__/__fixtures__/invalid-oas.json'])).rejects.toMatchSnapshot();
     });
 
     it('should throw an error if an invalid OpenAPI 3.1 definition is supplied', () => {
