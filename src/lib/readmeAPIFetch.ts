@@ -128,7 +128,7 @@ function sanitizeHeaders(headers: Headers) {
  * @param fileOpts optional object containing information about the file being sent.
  * We use this to construct a full source URL for the file.
  */
-export default async function readmeAPIFetch(
+export async function readmeAPIV1Fetch(
   pathname: string,
   options: RequestInit = { headers: new Headers() },
   fileOpts: FilePathDetails = { filePath: '', fileType: false },

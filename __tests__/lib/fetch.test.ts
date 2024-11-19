@@ -3,11 +3,11 @@ import nock from 'nock';
 import { describe, beforeEach, afterEach, it, expect, vi, beforeAll, type MockInstance } from 'vitest';
 
 import pkg from '../../package.json' with { type: 'json' };
-import readmeAPIFetch, { cleanHeaders, handleRes } from '../../src/lib/readmeAPIFetch.js';
+import { cleanHeaders, handleRes, readmeAPIV1Fetch } from '../../src/lib/readmeAPIFetch.js';
 import getAPIMock from '../helpers/get-api-mock.js';
 import { after, before } from '../helpers/setup-gha-env.js';
 
-describe('#fetch()', () => {
+describe('#readmeAPIV1Fetch()', () => {
   beforeAll(() => {
     nock.disableNetConnect();
   });
@@ -29,7 +29,7 @@ describe('#fetch()', () => {
           return this.req.headers;
         });
 
-      const headers = await readmeAPIFetch('/api/v1', {
+      const headers = await readmeAPIV1Fetch('/api/v1', {
         method: 'get',
         headers: cleanHeaders(key),
       }).then(handleRes);
@@ -56,7 +56,7 @@ describe('#fetch()', () => {
             return this.req.headers;
           });
 
-        const headers = await readmeAPIFetch(
+        const headers = await readmeAPIV1Fetch(
           '/api/v1',
           {
             method: 'get',
@@ -81,7 +81,7 @@ describe('#fetch()', () => {
             return this.req.headers;
           });
 
-        const headers = await readmeAPIFetch(
+        const headers = await readmeAPIV1Fetch(
           '/api/v1',
           {
             method: 'get',
@@ -107,7 +107,7 @@ describe('#fetch()', () => {
             return this.req.headers;
           });
 
-        const headers = await readmeAPIFetch(
+        const headers = await readmeAPIV1Fetch(
           '/api/v1',
           {
             method: 'get',
@@ -130,7 +130,7 @@ describe('#fetch()', () => {
             return this.req.headers;
           });
 
-        const headers = await readmeAPIFetch(
+        const headers = await readmeAPIV1Fetch(
           '/api/v1',
           {
             method: 'get',
@@ -156,7 +156,7 @@ describe('#fetch()', () => {
             return this.req.headers;
           });
 
-        const headers = await readmeAPIFetch(
+        const headers = await readmeAPIV1Fetch(
           '/api/v1',
           {
             method: 'get',
@@ -181,7 +181,7 @@ describe('#fetch()', () => {
         return this.req.headers;
       });
 
-    const headers = await readmeAPIFetch('/api/v1', {
+    const headers = await readmeAPIV1Fetch('/api/v1', {
       method: 'get',
       headers: cleanHeaders(key),
     }).then(handleRes);
@@ -203,7 +203,7 @@ describe('#fetch()', () => {
         return this.req.headers;
       });
 
-    const headers = await readmeAPIFetch('/api/v1/doesnt-need-auth').then(handleRes);
+    const headers = await readmeAPIV1Fetch('/api/v1/doesnt-need-auth').then(handleRes);
 
     expect(headers['user-agent']).toBe(`rdme/${pkg.version}`);
     expect(headers['x-readme-source']).toBe('cli');
@@ -235,7 +235,7 @@ describe('#fetch()', () => {
         Warning: '',
       });
 
-      await readmeAPIFetch('/api/v1/some-warning');
+      await readmeAPIV1Fetch('/api/v1/some-warning');
 
       expect(console.warn).toHaveBeenCalledTimes(0);
       expect(getWarningCommandOutput()).toBe('');
@@ -248,7 +248,7 @@ describe('#fetch()', () => {
         Warning: '199 - "some error"',
       });
 
-      await readmeAPIFetch('/api/v1/some-warning');
+      await readmeAPIV1Fetch('/api/v1/some-warning');
 
       expect(console.warn).toHaveBeenCalledTimes(1);
       expect(getWarningCommandOutput()).toBe('⚠️  ReadMe API Warning: some error');
@@ -261,7 +261,7 @@ describe('#fetch()', () => {
         Warning: '199 - "some error" 199 - "another error"',
       });
 
-      await readmeAPIFetch('/api/v1/some-warning');
+      await readmeAPIV1Fetch('/api/v1/some-warning');
 
       expect(console.warn).toHaveBeenCalledTimes(2);
       expect(getWarningCommandOutput()).toBe(
@@ -276,7 +276,7 @@ describe('#fetch()', () => {
         Warning: 'some garbage error',
       });
 
-      await readmeAPIFetch('/api/v1/some-warning');
+      await readmeAPIV1Fetch('/api/v1/some-warning');
 
       expect(console.warn).toHaveBeenCalledTimes(1);
       expect(getWarningCommandOutput()).toBe('⚠️  ReadMe API Warning: some garbage error');
@@ -302,7 +302,7 @@ describe('#fetch()', () => {
 
       const mock = getAPIMock({}).get('/api/v1/proxy').reply(200);
 
-      await readmeAPIFetch('/api/v1/proxy');
+      await readmeAPIV1Fetch('/api/v1/proxy');
 
       mock.done();
     });
@@ -314,7 +314,7 @@ describe('#fetch()', () => {
 
       const mock = getAPIMock({}).get('/api/v1/proxy').reply(200);
 
-      await readmeAPIFetch('/api/v1/proxy');
+      await readmeAPIV1Fetch('/api/v1/proxy');
 
       mock.done();
     });
@@ -326,7 +326,7 @@ describe('#fetch()', () => {
 
       const mock = getAPIMock({}).get('/api/v1/proxy').reply(200);
 
-      await readmeAPIFetch('/api/v1/proxy');
+      await readmeAPIV1Fetch('/api/v1/proxy');
 
       mock.done();
     });
