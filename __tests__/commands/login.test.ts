@@ -105,7 +105,7 @@ describe('rdme login', () => {
 
     const mock = getAPIMock().post('/api/v1/login', { email, password, project }).reply(401, errorResponse);
 
-    await expect(run()).rejects.toThrow(new APIError(errorResponse));
+    await expect(run()).rejects.toStrictEqual(new APIError(errorResponse));
     mock.done();
   });
 
@@ -147,7 +147,7 @@ describe('rdme login', () => {
       .post('/api/v1/login', { email, password, project: projectThatIsNotYours })
       .reply(404, errorResponse);
 
-    await expect(run()).rejects.toThrow(new APIError(errorResponse));
+    await expect(run()).rejects.toStrictEqual(new APIError(errorResponse));
     mock.done();
   });
 });

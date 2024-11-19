@@ -348,7 +348,7 @@ describe('rdme versions:update', () => {
       .basicAuth({ user: key })
       .reply(400, errorResponse);
 
-    await expect(run(['--key', key, version])).rejects.toThrow(new APIError(errorResponse));
+    await expect(run(['--key', key, version])).rejects.toStrictEqual(new APIError(errorResponse));
     mockRequest.done();
   });
 

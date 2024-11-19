@@ -122,7 +122,7 @@ describe('rdme changelogs (single)', () => {
         message: `Error uploading ${chalk.underline(`${filePath}`)}:\n\n${errorObject.message}`,
       };
 
-      await expect(run([filePath, '--key', key])).rejects.toThrow(new APIError(formattedErrorObject));
+      await expect(run([filePath, '--key', key])).rejects.toStrictEqual(new APIError(formattedErrorObject));
 
       getMock.done();
     });

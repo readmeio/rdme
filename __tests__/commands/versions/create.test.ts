@@ -136,7 +136,7 @@ describe('rdme versions:create', () => {
 
     const mockRequest = getAPIMock().post('/api/v1/version').basicAuth({ user: key }).reply(400, errorResponse);
 
-    await expect(run(['--key', key, version, '--fork', '0.0.5'])).rejects.toThrow(new APIError(errorResponse));
+    await expect(run(['--key', key, version, '--fork', '0.0.5'])).rejects.toStrictEqual(new APIError(errorResponse));
     mockRequest.done();
   });
 

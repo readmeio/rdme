@@ -308,7 +308,7 @@ describe('rdme custompages', () => {
         message: `Error uploading ${chalk.underline(`${fullDirectory}/${slug}.md`)}:\n\n${errorObject.message}`,
       };
 
-      await expect(run([`./${fullDirectory}`, '--key', key])).rejects.toThrow(new APIError(formattedErrorObject));
+      await expect(run([`./${fullDirectory}`, '--key', key])).rejects.toStrictEqual(new APIError(formattedErrorObject));
 
       getMocks.done();
       postMocks.done();

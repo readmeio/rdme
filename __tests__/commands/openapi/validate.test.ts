@@ -83,7 +83,7 @@ describe('rdme openapi:validate', () => {
   describe('error handling', () => {
     it('should throw an error if invalid JSON is supplied', () => {
       return expect(run(['./__tests__/__fixtures__/invalid-json/yikes.json'])).rejects.toStrictEqual(
-        new Error('Unexpected end of JSON input'),
+        new SyntaxError('Unexpected end of JSON input'),
       );
     });
 
