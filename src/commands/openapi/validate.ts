@@ -11,10 +11,6 @@ export default class OpenAPIValidateCommand extends BaseCommand<typeof OpenAPIVa
   // needed for unit tests, even though we also specify this in src/index.ts
   static id = 'openapi:validate';
 
-  static aliases = ['validate'];
-
-  static deprecateAliases = true;
-
   static args = {
     spec: Args.string({ description: 'A file/URL to your API definition' }),
   };
