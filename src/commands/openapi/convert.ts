@@ -8,7 +8,7 @@ import chalk from 'chalk';
 import prompts from 'prompts';
 
 import BaseCommand from '../../lib/baseCommand.js';
-import { workingDirectoryFlag } from '../../lib/flags.js';
+import { titleFlag, workingDirectoryFlag } from '../../lib/flags.js';
 import { warn } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
@@ -23,12 +23,13 @@ export default class OpenAPIConvertCommand extends BaseCommand<typeof OpenAPICon
 
   static flags = {
     out: Flags.string({ description: 'Output file path to write converted file to' }),
+    title: titleFlag,
     workingDirectory: workingDirectoryFlag,
   };
 
   async run() {
     const { spec } = this.args;
-    const { out, workingDirectory } = this.flags;
+    const { out, title, workingDirectory } = this.flags;
 
     if (workingDirectory) {
       const previousWorkingDirectory = process.cwd();
@@ -36,7 +37,10 @@ export default class OpenAPIConvertCommand extends BaseCommand<typeof OpenAPICon
       this.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
     }
 
-    const { preparedSpec, specPath, specType } = await prepareOas(spec, 'openapi:convert', { convertToLatest: true });
+    const { preparedSpec, specPath, specType } = await prepareOas(spec, 'openapi:convert', {
+      convertToLatest: true,
+      title,
+    });
     const parsedPreparedSpec: OASDocument = JSON.parse(preparedSpec);
 
     if (specType === 'OpenAPI') {
