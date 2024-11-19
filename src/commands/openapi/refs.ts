@@ -1,49 +1,39 @@
 /* eslint-disable no-param-reassign */
-import type { ZeroAuthCommandOptions } from '../../lib/baseCommand.js';
 import type { OASDocument } from 'oas/types';
 import type { IJsonSchema } from 'openapi-types';
 
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { Args, Flags } from '@oclif/core';
+import chalk from 'chalk';
 import prompts from 'prompts';
 
 import analyzeOas from '../../lib/analyzeOas.js';
-import Command, { CommandCategories } from '../../lib/baseCommand.js';
+import BaseCommand from '../../lib/baseCommand.js';
+import { titleFlag, workingDirectoryFlag } from '../../lib/flags.js';
+import { warn } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
 import { validateFilePath } from '../../lib/validatePromptInput.js';
 
-interface Options {
-  out?: string;
-  spec?: string;
-}
-
 type SchemaCollection = Record<string, IJsonSchema>;
 
-class OpenAPISolvingCircularityAndRecursiveness extends Command {
-  constructor() {
-    super();
-    this.command = 'openapi:refs';
-    this.usage = 'openapi:refs [file]';
-    this.description =
-      'The script resolves circular and recursive references in OpenAPI by replacing them with object schemas. However, not all circular references can be resolved. You can run the openapi:inspect command to identify which references remain unresolved.';
-    this.cmdCategory = CommandCategories.APIS;
+export default class OpenAPISolvingCircularityAndRecursiveness extends BaseCommand<
+  typeof OpenAPISolvingCircularityAndRecursiveness
+> {
+  static description =
+    'Resolves circular and recursive references in OpenAPI by replacing them with object schemas. Not all circular references can be resolved automatically.';
 
-    this.hiddenArgs = ['spec'];
-    this.args = [
-      {
-        name: 'spec',
-        type: String,
-        defaultOption: true,
-      },
-      {
-        name: 'out',
-        type: String,
-        description: 'Output file path to write converted file to',
-      },
-    ];
-  }
+  static args = {
+    spec: Args.string({ description: 'A file/URL to your API definition' }),
+  };
+
+  static flags = {
+    out: Flags.string({ description: 'Output file path to write converted file to' }),
+    title: titleFlag,
+    workingDirectory: workingDirectoryFlag,
+  };
 
   /**
    * Identifies circular references in the OpenAPI document.
@@ -179,14 +169,16 @@ class OpenAPISolvingCircularityAndRecursiveness extends Command {
 
   /**
    * The main execution method for the command.
-   * @param {ZeroAuthCommandOptions<Options>} opts - Command options.
    * @returns {Promise<string>} Result message.
    */
-  async run(opts: ZeroAuthCommandOptions<Options>): Promise<string> {
-    await super.run(opts);
-    const { spec } = opts;
-    if (!spec) {
-      return 'File path is required.';
+  async run() {
+    const { spec } = this.args;
+    const { out, workingDirectory } = this.flags;
+
+    if (workingDirectory) {
+      const previousWorkingDirectory = process.cwd();
+      process.chdir(workingDirectory);
+      this.debug(`Switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
     }
 
     const { preparedSpec, specPath } = await prepareOas(spec, 'openapi:refs', { convertToLatest: true });
@@ -194,7 +186,7 @@ class OpenAPISolvingCircularityAndRecursiveness extends Command {
     const circularRefs = await OpenAPISolvingCircularityAndRecursiveness.getCircularRefsFromOas(openApiData);
 
     if (circularRefs.length === 0) {
-      return 'The file does not contain circular or recursive references.';
+      warn('The file does not contain circular or recursive references.');
     }
 
     if (openApiData.components?.schemas && circularRefs.length > 0) {
@@ -217,29 +209,21 @@ class OpenAPISolvingCircularityAndRecursiveness extends Command {
       }
     }
 
-    prompts.override({
-      outputPath: opts.out,
-    });
-
+    prompts.override({ outputPath: out });
     const promptResults = await promptTerminal([
       {
         type: 'text',
         name: 'outputPath',
         message: 'Enter the path to save your processed API definition to:',
-        initial: () => {
-          const extension = path.extname(specPath);
-          return `${path.basename(specPath).split(extension)[0]}.openapi.json`;
-        },
+        initial: () => `${path.basename(specPath).split(path.extname(specPath))[0]}.openapi.json`,
         validate: value => validateFilePath(value),
       },
     ]);
 
-    Command.debug(`Saving processed spec to ${promptResults.outputPath}`);
-    fs.writeFileSync(promptResults.outputPath, JSON.stringify(openApiData, null, 2), 'utf8');
-    Command.debug('Processed spec saved');
+    this.debug(`Saving processed spec to ${promptResults.outputPath}`);
+    fs.writeFileSync(promptResults.outputPath, JSON.stringify(openApiData, null, 2));
+    this.debug('Processed spec saved');
 
-    return `Your API definition has been processed and saved to ${promptResults.outputPath}!`;
+    return chalk.green(`Your API definition has been processed and saved to ${promptResults.outputPath}!`);
   }
 }
-
-export default OpenAPISolvingCircularityAndRecursiveness;
