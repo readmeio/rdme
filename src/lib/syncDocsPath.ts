@@ -12,7 +12,7 @@ import toposort from 'toposort';
 import APIError from './apiError.js';
 import readdirRecursive from './readdirRecursive.js';
 import readDoc from './readDoc.js';
-import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch.js';
+import { cleanHeaders, handleRes, readmeAPIV1Fetch } from './readmeAPIFetch.js';
 
 /** API path within ReadMe to update (e.g. `docs`, `changelogs`, etc.) */
 type PageType = 'changelogs' | 'custompages' | 'docs';
@@ -65,7 +65,7 @@ async function pushDoc(
     }
 
     return (
-      readmeAPIFetch(
+      readmeAPIV1Fetch(
         `/api/v1/${type}`,
         {
           method: 'post',
@@ -96,7 +96,7 @@ async function pushDoc(
       )}`;
     }
 
-    return readmeAPIFetch(
+    return readmeAPIV1Fetch(
       `/api/v1/${type}/${slug}`,
       {
         method: 'put',
@@ -109,7 +109,7 @@ async function pushDoc(
       .then(res => `✏️ successfully updated '${res.slug}' with contents from ${filePath}`);
   }
 
-  return readmeAPIFetch(`/api/v1/${type}/${slug}`, {
+  return readmeAPIV1Fetch(`/api/v1/${type}/${slug}`, {
     method: 'get',
     headers: cleanHeaders(key, selectedVersion, new Headers({ Accept: 'application/json' })),
   })

@@ -1,5 +1,5 @@
 import getCategories from './getCategories.js';
-import readmeAPIFetch, { cleanHeaders, handleRes } from './readmeAPIFetch.js';
+import { cleanHeaders, handleRes, readmeAPIV1Fetch } from './readmeAPIFetch.js';
 
 interface Document {
   _id: string;
@@ -34,7 +34,7 @@ async function getCategoryDocs(
   selectedVersion: string | undefined,
   category: string,
 ): Promise<Document[]> {
-  return readmeAPIFetch(`/api/v1/categories/${category}/docs`, {
+  return readmeAPIV1Fetch(`/api/v1/categories/${category}/docs`, {
     method: 'get',
     headers: cleanHeaders(key, selectedVersion, new Headers({ 'Content-Type': 'application/json' })),
   }).then(handleRes);
