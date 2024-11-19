@@ -30,8 +30,8 @@ describe('rdme docs:prune', () => {
   it('should error if the argument is not a folder', async () => {
     const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
 
-    await expect(run(['--key', key, '--version', version, 'not-a-folder'])).rejects.toThrow(
-      "ENOENT: no such file or directory, scandir 'not-a-folder'",
+    await expect(run(['--key', key, '--version', version, 'not-a-folder'])).rejects.toStrictEqual(
+      new Error("ENOENT: no such file or directory, scandir 'not-a-folder'"),
     );
 
     versionMock.done();

@@ -49,7 +49,7 @@ describe('rdme versions:delete', () => {
       .basicAuth({ user: key })
       .reply(200, { version });
 
-    await expect(run(['--key', key, version])).rejects.toThrow(new APIError(errorResponse));
+    await expect(run(['--key', key, version])).rejects.toStrictEqual(new APIError(errorResponse));
     mockRequest.done();
   });
 });

@@ -342,7 +342,7 @@ describe('rdme docs', () => {
         message: `Error uploading ${chalk.underline(`${fullDirectory}/${slug}.md`)}:\n\n${errorObject.message}`,
       };
 
-      await expect(run([`./${fullDirectory}`, '--key', key, '--version', version])).rejects.toThrow(
+      await expect(run([`./${fullDirectory}`, '--key', key, '--version', version])).rejects.toStrictEqual(
         new APIError(formattedErrorObject),
       );
 

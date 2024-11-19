@@ -14,6 +14,10 @@ export default defineConfig({
       ...configDefaults.exclude,
     ],
     globalSetup: ['./__tests__/setup.js'],
+    onConsoleLog(log: string, type: 'stderr' | 'stdout'): boolean | void {
+      // hides `rdme open` deprecation warning
+      return !(log.includes('`rdme open` is deprecated and will be removed in a future release') && type === 'stderr');
+    },
     setupFiles: ['./__tests__/helpers/vitest.matchers.ts'],
   },
 });
