@@ -35,7 +35,6 @@ USAGE
 * [`rdme help [COMMAND]`](#rdme-help-command)
 * [`rdme login`](#rdme-login)
 * [`rdme logout`](#rdme-logout)
-* [`rdme open`](#rdme-open)
 * [`rdme openapi [SPEC]`](#rdme-openapi-spec)
 * [`rdme openapi:convert [SPEC]`](#rdme-openapiconvert-spec)
 * [`rdme openapi:inspect [SPEC]`](#rdme-openapiinspect-spec)
@@ -260,21 +259,6 @@ USAGE
 
 DESCRIPTION
   Logs the currently authenticated user out of ReadMe.
-```
-
-## `rdme open`
-
-Open your current ReadMe project in the browser.
-
-```
-USAGE
-  $ rdme open [--dash]
-
-FLAGS
-  --dash  Opens your current ReadMe project dashboard.
-
-DESCRIPTION
-  Open your current ReadMe project in the browser.
 ```
 
 ## `rdme openapi [SPEC]`
