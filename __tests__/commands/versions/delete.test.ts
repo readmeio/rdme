@@ -3,7 +3,7 @@ import { describe, beforeAll, afterEach, it, expect } from 'vitest';
 
 import Command from '../../../src/commands/versions/delete.js';
 import APIError from '../../../src/lib/apiError.js';
-import getAPIMock from '../../helpers/get-api-mock.js';
+import { getAPIV1Mock } from '../../helpers/get-api-mock.js';
 import { runCommand } from '../../helpers/setup-oclif-config.js';
 
 const key = 'API_KEY';
@@ -20,7 +20,7 @@ describe('rdme versions:delete', () => {
   afterEach(() => nock.cleanAll());
 
   it('should delete a specific version', async () => {
-    const mockRequest = getAPIMock()
+    const mockRequest = getAPIV1Mock()
       .delete(`/api/v1/version/${version}`)
       .basicAuth({ user: key })
       .reply(200, { removed: true })
@@ -41,7 +41,7 @@ describe('rdme versions:delete', () => {
       help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
     };
 
-    const mockRequest = getAPIMock()
+    const mockRequest = getAPIV1Mock()
       .delete(`/api/v1/version/${version}`)
       .basicAuth({ user: key })
       .reply(404, errorResponse)

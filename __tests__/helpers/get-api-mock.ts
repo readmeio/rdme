@@ -4,11 +4,10 @@ import config from '../../src/lib/config.js';
 import { getUserAgent } from '../../src/lib/readmeAPIFetch.js';
 
 /**
- * Nock wrapper that adds required `user-agent` request header
- * so it gets properly picked up by nock.
- * @param proxy Optional proxy URL. Must contain trailing slash.
+ * Nock wrapper for ReadMe API v1 that adds required
+ * `user-agent` request header so it gets properly picked up by nock.
  */
-export default function getAPIMock(reqHeaders = {}) {
+export function getAPIV1Mock(reqHeaders = {}) {
   return nock(config.host, {
     reqheaders: {
       'User-Agent': getUserAgent(),
@@ -17,8 +16,8 @@ export default function getAPIMock(reqHeaders = {}) {
   });
 }
 
-export function getAPIMockWithVersionHeader(v: string) {
-  return getAPIMock({
+export function getAPIV1MockWithVersionHeader(v: string) {
+  return getAPIV1Mock({
     'x-readme-version': v,
   });
 }

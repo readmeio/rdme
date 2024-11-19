@@ -2,7 +2,7 @@ import nock from 'nock';
 import { describe, beforeAll, afterEach, it, expect } from 'vitest';
 
 import Command from '../../../src/commands/categories/index.js';
-import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
+import { getAPIV1Mock, getAPIV1MockWithVersionHeader } from '../../helpers/get-api-mock.js';
 import { runCommand } from '../../helpers/setup-oclif-config.js';
 
 const key = 'API_KEY';
@@ -19,7 +19,7 @@ describe('rdme categories', () => {
   afterEach(() => nock.cleanAll());
 
   it('should return all categories for a single page', async () => {
-    const getMock = getAPIMockWithVersionHeader(version)
+    const getMock = getAPIV1MockWithVersionHeader(version)
       .persist()
       .get('/api/v1/categories?perPage=20&page=1')
       .basicAuth({ user: key })
@@ -27,7 +27,10 @@ describe('rdme categories', () => {
         'x-total-count': '1',
       });
 
-    const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
+    const versionMock = getAPIV1Mock()
+      .get(`/api/v1/version/${version}`)
+      .basicAuth({ user: key })
+      .reply(200, { version });
 
     await expect(run(['--key', key, '--version', '1.0.0'])).resolves.toBe(
       JSON.stringify([{ title: 'One Category', slug: 'one-category', type: 'guide' }], null, 2),
@@ -38,7 +41,7 @@ describe('rdme categories', () => {
   });
 
   it('should return all categories for multiple pages', async () => {
-    const getMock = getAPIMockWithVersionHeader(version)
+    const getMock = getAPIV1MockWithVersionHeader(version)
       .persist()
       .get('/api/v1/categories?perPage=20&page=1')
       .basicAuth({ user: key })
@@ -51,7 +54,10 @@ describe('rdme categories', () => {
         'x-total-count': '21',
       });
 
-    const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
+    const versionMock = getAPIV1Mock()
+      .get(`/api/v1/version/${version}`)
+      .basicAuth({ user: key })
+      .reply(200, { version });
 
     await expect(run(['--key', key, '--version', '1.0.0'])).resolves.toBe(
       JSON.stringify(
