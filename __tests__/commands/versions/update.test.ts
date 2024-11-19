@@ -4,7 +4,7 @@ import { describe, beforeAll, afterEach, it, expect } from 'vitest';
 
 import Command from '../../../src/commands/versions/update.js';
 import APIError from '../../../src/lib/apiError.js';
-import getAPIMock from '../../helpers/get-api-mock.js';
+import { getAPIV1Mock } from '../../helpers/get-api-mock.js';
 import { runCommand } from '../../helpers/setup-oclif-config.js';
 
 const key = 'API_KEY';
@@ -32,7 +32,7 @@ describe('rdme versions:update', () => {
       is_hidden: false,
     };
 
-    const mockRequest = getAPIMock()
+    const mockRequest = getAPIV1Mock()
       .get('/api/v1/version')
       .basicAuth({ user: key })
       .reply(200, [{ version }, { version: versionToChange }])
@@ -60,7 +60,7 @@ describe('rdme versions:update', () => {
       is_hidden: false,
     };
 
-    const mockRequest = getAPIMock()
+    const mockRequest = getAPIV1Mock()
       .get('/api/v1/version')
       .basicAuth({ user: key })
       .reply(200, [{ version }, { version: versionToChange }])
@@ -84,7 +84,7 @@ describe('rdme versions:update', () => {
       is_beta: true,
     };
 
-    const mockRequest = getAPIMock()
+    const mockRequest = getAPIV1Mock()
       .get('/api/v1/version')
       .basicAuth({ user: key })
       .reply(200, [{ version }, { version: versionToChange, is_stable: true }])
@@ -112,7 +112,7 @@ describe('rdme versions:update', () => {
       is_stable: false,
     };
 
-    const mockRequest = getAPIMock()
+    const mockRequest = getAPIV1Mock()
       .get(`/api/v1/version/${versionToChange}`)
       .basicAuth({ user: key })
       .reply(200, { version: versionToChange })
@@ -158,7 +158,7 @@ describe('rdme versions:update', () => {
       is_stable: false,
     };
 
-    const mockRequest = getAPIMock()
+    const mockRequest = getAPIV1Mock()
       .get(`/api/v1/version/${versionToChange}`)
       .basicAuth({ user: key })
       .reply(200, { version: versionToChange })
@@ -205,7 +205,7 @@ describe('rdme versions:update', () => {
       is_stable: false,
     };
 
-    const mockRequest = getAPIMock()
+    const mockRequest = getAPIV1Mock()
       .get(`/api/v1/version/${versionToChange}`)
       .basicAuth({ user: key })
       .reply(200, { version: versionToChange })
@@ -247,7 +247,7 @@ describe('rdme versions:update', () => {
       version: versionToChange,
     };
 
-    const mockRequest = getAPIMock()
+    const mockRequest = getAPIV1Mock()
       .get(`/api/v1/version/${versionToChange}`)
       .basicAuth({ user: key })
       .reply(200, { version: versionToChange })
@@ -286,7 +286,7 @@ describe('rdme versions:update', () => {
       is_stable: true,
     };
 
-    const mockRequest = getAPIMock()
+    const mockRequest = getAPIV1Mock()
       .get(`/api/v1/version/${versionToChange}`)
       .basicAuth({ user: key })
       .reply(200, { version: versionToChange })
@@ -337,7 +337,7 @@ describe('rdme versions:update', () => {
       help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
     };
 
-    const mockRequest = getAPIMock()
+    const mockRequest = getAPIV1Mock()
       .get(`/api/v1/version/${version}`)
       .basicAuth({ user: key })
       .reply(200, { version })
@@ -348,7 +348,7 @@ describe('rdme versions:update', () => {
       .basicAuth({ user: key })
       .reply(400, errorResponse);
 
-    await expect(run(['--key', key, version])).rejects.toThrow(new APIError(errorResponse));
+    await expect(run(['--key', key, version])).rejects.toStrictEqual(new APIError(errorResponse));
     mockRequest.done();
   });
 

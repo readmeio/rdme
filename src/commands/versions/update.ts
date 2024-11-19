@@ -8,7 +8,7 @@ import castStringOptToBool from '../../lib/castStringOptToBool.js';
 import { baseVersionFlags, keyFlag } from '../../lib/flags.js';
 import * as promptHandler from '../../lib/prompts.js';
 import promptTerminal from '../../lib/promptWrapper.js';
-import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch.js';
+import { cleanHeaders, handleRes, readmeAPIV1Fetch } from '../../lib/readmeAPIFetch.js';
 import { getProjectVersion } from '../../lib/versionSelect.js';
 
 export default class UpdateVersionCommand extends BaseCommand<typeof UpdateVersionCommand> {
@@ -34,7 +34,7 @@ export default class UpdateVersionCommand extends BaseCommand<typeof UpdateVersi
 
     // TODO: I think this fetch here is unnecessary but
     // it will require a bigger refactor of getProjectVersion
-    const foundVersion: Version = await readmeAPIFetch(`/api/v1/version/${selectedVersion}`, {
+    const foundVersion: Version = await readmeAPIV1Fetch(`/api/v1/version/${selectedVersion}`, {
       method: 'get',
       headers: cleanHeaders(key),
     }).then(handleRes);
@@ -59,7 +59,7 @@ export default class UpdateVersionCommand extends BaseCommand<typeof UpdateVersi
       is_stable: promptResponse.is_stable,
     };
 
-    return readmeAPIFetch(`/api/v1/version/${selectedVersion}`, {
+    return readmeAPIV1Fetch(`/api/v1/version/${selectedVersion}`, {
       method: 'put',
       headers: cleanHeaders(
         key,

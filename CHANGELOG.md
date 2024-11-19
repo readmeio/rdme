@@ -1,3 +1,10 @@
+# [9.0.0-next.27](https://github.com/readmeio/rdme/compare/v9.0.0-next.26...v9.0.0-next.27) (2024-11-19)
+
+
+### Features
+
+* add `@oclif/plugin-not-found`, other cleanups ([#1074](https://github.com/readmeio/rdme/issues/1074)) ([6529b03](https://github.com/readmeio/rdme/commit/6529b0317db5dcda0ba2d2acbf5e3f21cff7dba0))
+
 # [9.0.0-next.26](https://github.com/readmeio/rdme/compare/v9.0.0-next.25...v9.0.0-next.26) (2024-11-19)
 
 

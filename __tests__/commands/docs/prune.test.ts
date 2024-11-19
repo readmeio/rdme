@@ -4,7 +4,7 @@ import prompts from 'prompts';
 import { describe, beforeAll, afterAll, it, expect } from 'vitest';
 
 import Command from '../../../src/commands/docs/prune.js';
-import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
+import { getAPIV1Mock, getAPIV1MockWithVersionHeader } from '../../helpers/get-api-mock.js';
 import { runCommand } from '../../helpers/setup-oclif-config.js';
 
 const fixturesBaseDir = '__fixtures__/docs';
@@ -28,10 +28,13 @@ describe('rdme docs:prune', () => {
   });
 
   it('should error if the argument is not a folder', async () => {
-    const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
+    const versionMock = getAPIV1Mock()
+      .get(`/api/v1/version/${version}`)
+      .basicAuth({ user: key })
+      .reply(200, { version });
 
-    await expect(run(['--key', key, '--version', version, 'not-a-folder'])).rejects.toThrow(
-      "ENOENT: no such file or directory, scandir 'not-a-folder'",
+    await expect(run(['--key', key, '--version', version, 'not-a-folder'])).rejects.toStrictEqual(
+      new Error("ENOENT: no such file or directory, scandir 'not-a-folder'"),
     );
 
     versionMock.done();
@@ -40,7 +43,10 @@ describe('rdme docs:prune', () => {
   it('should do nothing if the user aborted', async () => {
     prompts.inject([false]);
 
-    const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
+    const versionMock = getAPIV1Mock()
+      .get(`/api/v1/version/${version}`)
+      .basicAuth({ user: key })
+      .reply(200, { version });
 
     await expect(run([folder, '--key', key, '--version', version])).rejects.toStrictEqual(
       new Error('Aborting, no changes were made.'),
@@ -50,9 +56,12 @@ describe('rdme docs:prune', () => {
   });
 
   it('should not ask for user confirmation if `confirm` is set to true', async () => {
-    const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
+    const versionMock = getAPIV1Mock()
+      .get(`/api/v1/version/${version}`)
+      .basicAuth({ user: key })
+      .reply(200, { version });
 
-    const apiMocks = getAPIMockWithVersionHeader(version)
+    const apiMocks = getAPIV1MockWithVersionHeader(version)
       .get('/api/v1/categories?perPage=20&page=1')
       .basicAuth({ user: key })
       .reply(200, [{ slug: 'category1', type: 'guide' }], { 'x-total-count': '1' })
@@ -74,9 +83,12 @@ describe('rdme docs:prune', () => {
   it('should delete doc if file is missing', async () => {
     prompts.inject([true]);
 
-    const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
+    const versionMock = getAPIV1Mock()
+      .get(`/api/v1/version/${version}`)
+      .basicAuth({ user: key })
+      .reply(200, { version });
 
-    const apiMocks = getAPIMockWithVersionHeader(version)
+    const apiMocks = getAPIV1MockWithVersionHeader(version)
       .get('/api/v1/categories?perPage=20&page=1')
       .basicAuth({ user: key })
       .reply(200, [{ slug: 'category1', type: 'guide' }], { 'x-total-count': '1' })
@@ -98,9 +110,12 @@ describe('rdme docs:prune', () => {
   it('should delete doc and its child if they are missing', async () => {
     prompts.inject([true]);
 
-    const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
+    const versionMock = getAPIV1Mock()
+      .get(`/api/v1/version/${version}`)
+      .basicAuth({ user: key })
+      .reply(200, { version });
 
-    const apiMocks = getAPIMockWithVersionHeader(version)
+    const apiMocks = getAPIV1MockWithVersionHeader(version)
       .get('/api/v1/categories?perPage=20&page=1')
       .basicAuth({ user: key })
       .reply(200, [{ slug: 'category1', type: 'guide' }], { 'x-total-count': '1' })
@@ -128,8 +143,11 @@ describe('rdme docs:prune', () => {
   it('should return doc delete info for dry run', async () => {
     prompts.inject([true]);
 
-    const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
-    const apiMocks = getAPIMockWithVersionHeader(version)
+    const versionMock = getAPIV1Mock()
+      .get(`/api/v1/version/${version}`)
+      .basicAuth({ user: key })
+      .reply(200, { version });
+    const apiMocks = getAPIV1MockWithVersionHeader(version)
       .get('/api/v1/categories?perPage=20&page=1')
       .basicAuth({ user: key })
       .reply(200, [{ slug: 'category1', type: 'guide' }], { 'x-total-count': '1' })

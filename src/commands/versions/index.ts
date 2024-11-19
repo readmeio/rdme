@@ -2,7 +2,7 @@ import { Flags } from '@oclif/core';
 
 import BaseCommand from '../../lib/baseCommand.js';
 import { keyFlag } from '../../lib/flags.js';
-import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch.js';
+import { cleanHeaders, handleRes, readmeAPIV1Fetch } from '../../lib/readmeAPIFetch.js';
 
 export interface Version {
   codename?: string;
@@ -28,7 +28,7 @@ export default class VersionsCommand extends BaseCommand<typeof VersionsCommand>
 
     const uri = version ? `/api/v1/version/${version}` : '/api/v1/version';
 
-    return readmeAPIFetch(uri, {
+    return readmeAPIV1Fetch(uri, {
       method: 'get',
       headers: cleanHeaders(key),
     })

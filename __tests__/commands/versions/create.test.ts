@@ -4,7 +4,7 @@ import { describe, beforeAll, afterEach, it, expect } from 'vitest';
 
 import Command from '../../../src/commands/versions/create.js';
 import APIError from '../../../src/lib/apiError.js';
-import getAPIMock from '../../helpers/get-api-mock.js';
+import { getAPIV1Mock } from '../../helpers/get-api-mock.js';
 import { runCommand } from '../../helpers/setup-oclif-config.js';
 
 const key = 'API_KEY';
@@ -34,7 +34,7 @@ describe('rdme versions:create', () => {
     prompts.inject([version, false, true, true, false]);
     const newVersion = '1.0.1';
 
-    const mockRequest = getAPIMock()
+    const mockRequest = getAPIV1Mock()
       .get('/api/v1/version')
       .basicAuth({ user: key })
       .reply(200, [{ version }, { version: '1.1.0' }])
@@ -56,7 +56,7 @@ describe('rdme versions:create', () => {
   it('should create a specific version with options', async () => {
     const newVersion = '1.0.1';
 
-    const mockRequest = getAPIMock()
+    const mockRequest = getAPIV1Mock()
       .post('/api/v1/version', {
         version: newVersion,
         codename: 'test',
@@ -95,7 +95,7 @@ describe('rdme versions:create', () => {
   it('should create successfully a main version', async () => {
     const newVersion = '1.0.1';
 
-    const mockRequest = getAPIMock()
+    const mockRequest = getAPIV1Mock()
       .post('/api/v1/version', {
         version: newVersion,
         from: '1.0.0',
@@ -134,9 +134,9 @@ describe('rdme versions:create', () => {
       help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
     };
 
-    const mockRequest = getAPIMock().post('/api/v1/version').basicAuth({ user: key }).reply(400, errorResponse);
+    const mockRequest = getAPIV1Mock().post('/api/v1/version').basicAuth({ user: key }).reply(400, errorResponse);
 
-    await expect(run(['--key', key, version, '--fork', '0.0.5'])).rejects.toThrow(new APIError(errorResponse));
+    await expect(run(['--key', key, version, '--fork', '0.0.5'])).rejects.toStrictEqual(new APIError(errorResponse));
     mockRequest.done();
   });
 

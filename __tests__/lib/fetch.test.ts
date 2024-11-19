@@ -3,11 +3,11 @@ import nock from 'nock';
 import { describe, beforeEach, afterEach, it, expect, vi, beforeAll, type MockInstance } from 'vitest';
 
 import pkg from '../../package.json' with { type: 'json' };
-import readmeAPIFetch, { cleanHeaders, handleRes } from '../../src/lib/readmeAPIFetch.js';
-import getAPIMock from '../helpers/get-api-mock.js';
+import { cleanHeaders, handleRes, readmeAPIV1Fetch } from '../../src/lib/readmeAPIFetch.js';
+import { getAPIV1Mock } from '../helpers/get-api-mock.js';
 import { after, before } from '../helpers/setup-gha-env.js';
 
-describe('#fetch()', () => {
+describe('#readmeAPIV1Fetch()', () => {
   beforeAll(() => {
     nock.disableNetConnect();
   });
@@ -22,14 +22,14 @@ describe('#fetch()', () => {
     it('should have correct headers for requests in GitHub Action env', async () => {
       const key = 'API_KEY';
 
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .get('/api/v1')
         .basicAuth({ user: key })
         .reply(200, function () {
           return this.req.headers;
         });
 
-      const headers = await readmeAPIFetch('/api/v1', {
+      const headers = await readmeAPIV1Fetch('/api/v1', {
         method: 'get',
         headers: cleanHeaders(key),
       }).then(handleRes);
@@ -49,14 +49,14 @@ describe('#fetch()', () => {
       it('should include source URL header with simple path', async () => {
         const key = 'API_KEY';
 
-        const mock = getAPIMock()
+        const mock = getAPIV1Mock()
           .get('/api/v1')
           .basicAuth({ user: key })
           .reply(200, function () {
             return this.req.headers;
           });
 
-        const headers = await readmeAPIFetch(
+        const headers = await readmeAPIV1Fetch(
           '/api/v1',
           {
             method: 'get',
@@ -74,14 +74,14 @@ describe('#fetch()', () => {
       it('should include source URL header with path that contains weird characters', async () => {
         const key = 'API_KEY';
 
-        const mock = getAPIMock()
+        const mock = getAPIV1Mock()
           .get('/api/v1')
           .basicAuth({ user: key })
           .reply(200, function () {
             return this.req.headers;
           });
 
-        const headers = await readmeAPIFetch(
+        const headers = await readmeAPIV1Fetch(
           '/api/v1',
           {
             method: 'get',
@@ -100,14 +100,14 @@ describe('#fetch()', () => {
         const key = 'API_KEY';
         vi.stubEnv('GITHUB_SERVER_URL', undefined);
 
-        const mock = getAPIMock()
+        const mock = getAPIV1Mock()
           .get('/api/v1')
           .basicAuth({ user: key })
           .reply(200, function () {
             return this.req.headers;
           });
 
-        const headers = await readmeAPIFetch(
+        const headers = await readmeAPIV1Fetch(
           '/api/v1',
           {
             method: 'get',
@@ -123,14 +123,14 @@ describe('#fetch()', () => {
       it('should include source URL header with relative path', async () => {
         const key = 'API_KEY';
 
-        const mock = getAPIMock()
+        const mock = getAPIV1Mock()
           .get('/api/v1')
           .basicAuth({ user: key })
           .reply(200, function () {
             return this.req.headers;
           });
 
-        const headers = await readmeAPIFetch(
+        const headers = await readmeAPIV1Fetch(
           '/api/v1',
           {
             method: 'get',
@@ -149,14 +149,14 @@ describe('#fetch()', () => {
         const key = 'API_KEY';
         const filePath = 'https://example.com/openapi.json';
 
-        const mock = getAPIMock()
+        const mock = getAPIV1Mock()
           .get('/api/v1')
           .basicAuth({ user: key })
           .reply(200, function () {
             return this.req.headers;
           });
 
-        const headers = await readmeAPIFetch(
+        const headers = await readmeAPIV1Fetch(
           '/api/v1',
           {
             method: 'get',
@@ -174,14 +174,14 @@ describe('#fetch()', () => {
   it('should wrap all requests with standard user-agent and source headers', async () => {
     const key = 'API_KEY';
 
-    const mock = getAPIMock()
+    const mock = getAPIV1Mock()
       .get('/api/v1')
       .basicAuth({ user: key })
       .reply(200, function () {
         return this.req.headers;
       });
 
-    const headers = await readmeAPIFetch('/api/v1', {
+    const headers = await readmeAPIV1Fetch('/api/v1', {
       method: 'get',
       headers: cleanHeaders(key),
     }).then(handleRes);
@@ -197,13 +197,13 @@ describe('#fetch()', () => {
   });
 
   it('should make fetch call if no other request options are provided', async () => {
-    const mock = getAPIMock()
+    const mock = getAPIV1Mock()
       .get('/api/v1/doesnt-need-auth')
       .reply(200, function () {
         return this.req.headers;
       });
 
-    const headers = await readmeAPIFetch('/api/v1/doesnt-need-auth').then(handleRes);
+    const headers = await readmeAPIV1Fetch('/api/v1/doesnt-need-auth').then(handleRes);
 
     expect(headers['user-agent']).toBe(`rdme/${pkg.version}`);
     expect(headers['x-readme-source']).toBe('cli');
@@ -231,11 +231,11 @@ describe('#fetch()', () => {
     });
 
     it('should not log anything if no warning header was passed', async () => {
-      const mock = getAPIMock().get('/api/v1/some-warning').reply(200, undefined, {
+      const mock = getAPIV1Mock().get('/api/v1/some-warning').reply(200, undefined, {
         Warning: '',
       });
 
-      await readmeAPIFetch('/api/v1/some-warning');
+      await readmeAPIV1Fetch('/api/v1/some-warning');
 
       expect(console.warn).toHaveBeenCalledTimes(0);
       expect(getWarningCommandOutput()).toBe('');
@@ -244,11 +244,11 @@ describe('#fetch()', () => {
     });
 
     it('should surface a single warning header', async () => {
-      const mock = getAPIMock().get('/api/v1/some-warning').reply(200, undefined, {
+      const mock = getAPIV1Mock().get('/api/v1/some-warning').reply(200, undefined, {
         Warning: '199 - "some error"',
       });
 
-      await readmeAPIFetch('/api/v1/some-warning');
+      await readmeAPIV1Fetch('/api/v1/some-warning');
 
       expect(console.warn).toHaveBeenCalledTimes(1);
       expect(getWarningCommandOutput()).toBe('⚠️  ReadMe API Warning: some error');
@@ -257,11 +257,11 @@ describe('#fetch()', () => {
     });
 
     it('should surface multiple warning headers', async () => {
-      const mock = getAPIMock().get('/api/v1/some-warning').reply(200, undefined, {
+      const mock = getAPIV1Mock().get('/api/v1/some-warning').reply(200, undefined, {
         Warning: '199 - "some error" 199 - "another error"',
       });
 
-      await readmeAPIFetch('/api/v1/some-warning');
+      await readmeAPIV1Fetch('/api/v1/some-warning');
 
       expect(console.warn).toHaveBeenCalledTimes(2);
       expect(getWarningCommandOutput()).toBe(
@@ -272,11 +272,11 @@ describe('#fetch()', () => {
     });
 
     it('should surface header content even if parsing fails', async () => {
-      const mock = getAPIMock().get('/api/v1/some-warning').reply(200, undefined, {
+      const mock = getAPIV1Mock().get('/api/v1/some-warning').reply(200, undefined, {
         Warning: 'some garbage error',
       });
 
-      await readmeAPIFetch('/api/v1/some-warning');
+      await readmeAPIV1Fetch('/api/v1/some-warning');
 
       expect(console.warn).toHaveBeenCalledTimes(1);
       expect(getWarningCommandOutput()).toBe('⚠️  ReadMe API Warning: some garbage error');
@@ -300,9 +300,9 @@ describe('#fetch()', () => {
 
       vi.stubEnv('HTTPS_PROXY', proxy);
 
-      const mock = getAPIMock({}).get('/api/v1/proxy').reply(200);
+      const mock = getAPIV1Mock({}).get('/api/v1/proxy').reply(200);
 
-      await readmeAPIFetch('/api/v1/proxy');
+      await readmeAPIV1Fetch('/api/v1/proxy');
 
       mock.done();
     });
@@ -312,9 +312,9 @@ describe('#fetch()', () => {
 
       vi.stubEnv('https_proxy', proxy);
 
-      const mock = getAPIMock({}).get('/api/v1/proxy').reply(200);
+      const mock = getAPIV1Mock({}).get('/api/v1/proxy').reply(200);
 
-      await readmeAPIFetch('/api/v1/proxy');
+      await readmeAPIV1Fetch('/api/v1/proxy');
 
       mock.done();
     });
@@ -324,9 +324,9 @@ describe('#fetch()', () => {
 
       vi.stubEnv('https_proxy', proxy);
 
-      const mock = getAPIMock({}).get('/api/v1/proxy').reply(200);
+      const mock = getAPIV1Mock({}).get('/api/v1/proxy').reply(200);
 
-      await readmeAPIFetch('/api/v1/proxy');
+      await readmeAPIV1Fetch('/api/v1/proxy');
 
       mock.done();
     });

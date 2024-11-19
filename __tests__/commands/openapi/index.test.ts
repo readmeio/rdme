@@ -11,7 +11,7 @@ import Command from '../../../src/commands/openapi/index.js';
 import APIError from '../../../src/lib/apiError.js';
 import config from '../../../src/lib/config.js';
 import petstoreWeird from '../../__fixtures__/petstore-simple-weird-version.json' with { type: 'json' };
-import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
+import { getAPIV1Mock, getAPIV1MockWithVersionHeader } from '../../helpers/get-api-mock.js';
 import { after, before } from '../../helpers/get-gha-setup.js';
 import { after as afterGHAEnv, before as beforeGHAEnv } from '../../helpers/setup-gha-env.js';
 import { runCommand } from '../../helpers/setup-oclif-config.js';
@@ -88,7 +88,7 @@ describe('rdme openapi', () => {
     ])('should support uploading a %s definition (format: %s)', async (_, format, specVersion, type) => {
       const registryUUID = getRandomRegistryId();
 
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
         .reply(201, { registryUUID, spec: { openapi: specVersion } })
         .get('/api/v1/api-specification')
@@ -98,7 +98,7 @@ describe('rdme openapi', () => {
         .basicAuth({ user: key })
         .reply(200, { version: '1.0.0' });
 
-      const postMock = getAPIMockWithVersionHeader(version)
+      const postMock = getAPIV1MockWithVersionHeader(version)
         .post('/api/v1/api-specification', { registryUUID })
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
@@ -122,14 +122,14 @@ describe('rdme openapi', () => {
       prompts.inject(['create']);
       const registryUUID = getRandomRegistryId();
 
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version })
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
         .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
 
-      const mockWithHeader = getAPIMockWithVersionHeader(version)
+      const mockWithHeader = getAPIV1MockWithVersionHeader(version)
         .get('/api/v1/api-specification')
         .basicAuth({ user: key })
         .reply(200, [{ _id: 'spec1', title: 'spec1_title' }])
@@ -148,14 +148,14 @@ describe('rdme openapi', () => {
     it('should create a new spec via `--create` flag', async () => {
       const registryUUID = getRandomRegistryId();
 
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version })
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
         .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
 
-      const postMock = getAPIMockWithVersionHeader(version)
+      const postMock = getAPIV1MockWithVersionHeader(version)
         .post('/api/v1/api-specification', { registryUUID })
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
@@ -171,14 +171,14 @@ describe('rdme openapi', () => {
     it('should create a new spec via `--create` flag and ignore `--id`', async () => {
       const registryUUID = getRandomRegistryId();
 
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .get('/api/v1/version')
         .basicAuth({ user: key })
         .reply(200, [{ version }])
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
         .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
 
-      const postMock = getAPIMockWithVersionHeader(version)
+      const postMock = getAPIV1MockWithVersionHeader(version)
         .post('/api/v1/api-specification', { registryUUID })
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
@@ -201,7 +201,7 @@ describe('rdme openapi', () => {
     it('should bundle and upload the expected content', async () => {
       let requestBody;
       const registryUUID = getRandomRegistryId();
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version: '1.0.0' })
@@ -216,7 +216,7 @@ describe('rdme openapi', () => {
         .basicAuth({ user: key })
         .reply(200, []);
 
-      const postMock = getAPIMockWithVersionHeader(version)
+      const postMock = getAPIV1MockWithVersionHeader(version)
         .post('/api/v1/api-specification', { registryUUID })
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
@@ -237,7 +237,7 @@ describe('rdme openapi', () => {
       let requestBody;
       const registryUUID = getRandomRegistryId();
       const title = 'some alternative title';
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version: '1.0.0' })
@@ -252,7 +252,7 @@ describe('rdme openapi', () => {
         .basicAuth({ user: key })
         .reply(200, []);
 
-      const postMock = getAPIMockWithVersionHeader(version)
+      const postMock = getAPIV1MockWithVersionHeader(version)
         .post('/api/v1/api-specification', { registryUUID })
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
@@ -274,7 +274,7 @@ describe('rdme openapi', () => {
     it('should upload the expected content and return raw output', async () => {
       let requestBody;
       const registryUUID = getRandomRegistryId();
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version: '1.0.0' })
@@ -289,7 +289,7 @@ describe('rdme openapi', () => {
         .basicAuth({ user: key })
         .reply(200, []);
 
-      const postMock = getAPIMockWithVersionHeader(version)
+      const postMock = getAPIV1MockWithVersionHeader(version)
         .post('/api/v1/api-specification', { registryUUID })
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
@@ -314,11 +314,11 @@ describe('rdme openapi', () => {
     ])('should support updating a %s definition (format: %s)', async (_, format, specVersion, type) => {
       const registryUUID = getRandomRegistryId();
 
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
         .reply(201, { registryUUID, spec: { openapi: specVersion } });
 
-      const putMock = getAPIMockWithVersionHeader(version)
+      const putMock = getAPIV1MockWithVersionHeader(version)
         .put(`/api/v1/api-specification/${id}`, { registryUUID })
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
@@ -337,11 +337,11 @@ describe('rdme openapi', () => {
       expect.assertions(4);
       const registryUUID = getRandomRegistryId();
 
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
         .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
 
-      const putMock = getAPIMockWithVersionHeader(version)
+      const putMock = getAPIV1MockWithVersionHeader(version)
         .put(`/api/v1/api-specification/${id}`, { registryUUID })
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
@@ -365,14 +365,14 @@ describe('rdme openapi', () => {
       prompts.inject(['update', 'spec2']);
       const registryUUID = getRandomRegistryId();
 
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version })
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
         .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
 
-      const mockWithHeader = getAPIMockWithVersionHeader(version)
+      const mockWithHeader = getAPIV1MockWithVersionHeader(version)
         .get('/api/v1/api-specification')
         .basicAuth({ user: key })
         .reply(200, [
@@ -394,7 +394,7 @@ describe('rdme openapi', () => {
     it('should discover and upload an API definition if none is provided', async () => {
       const registryUUID = getRandomRegistryId();
 
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version })
@@ -406,7 +406,7 @@ describe('rdme openapi', () => {
         .basicAuth({ user: key })
         .reply(200, []);
 
-      const postMock = getAPIMockWithVersionHeader(version)
+      const postMock = getAPIV1MockWithVersionHeader(version)
         .post('/api/v1/api-specification', { registryUUID })
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
@@ -430,7 +430,7 @@ describe('rdme openapi', () => {
       let requestBody;
       const registryUUID = getRandomRegistryId();
 
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version })
@@ -445,7 +445,7 @@ describe('rdme openapi', () => {
         .basicAuth({ user: key })
         .reply(200, []);
 
-      const postMock = getAPIMockWithVersionHeader(version)
+      const postMock = getAPIV1MockWithVersionHeader(version)
         .post('/api/v1/api-specification', { registryUUID })
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
@@ -476,14 +476,14 @@ describe('rdme openapi', () => {
       prompts.inject(['update', 'spec2']);
       const registryUUID = getRandomRegistryId();
 
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version })
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
         .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
 
-      const mockWithHeader = getAPIMockWithVersionHeader(version)
+      const mockWithHeader = getAPIV1MockWithVersionHeader(version)
         .get('/api/v1/api-specification')
         .basicAuth({ user: key })
         .reply(200, [
@@ -504,7 +504,7 @@ describe('rdme openapi', () => {
     it('should return spec create info for dry run (with working directory)', async () => {
       const registryUUID = getRandomRegistryId();
 
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version })
@@ -542,14 +542,14 @@ describe('rdme openapi', () => {
       it("should update a spec file without prompts if providing `update` and it's the one spec available", async () => {
         const registryUUID = getRandomRegistryId();
 
-        const mock = getAPIMock()
+        const mock = getAPIV1Mock()
           .get(`/api/v1/version/${version}`)
           .basicAuth({ user: key })
           .reply(200, { version })
           .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
           .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
 
-        const mockWithHeader = getAPIMockWithVersionHeader(version)
+        const mockWithHeader = getAPIV1MockWithVersionHeader(version)
           .get('/api/v1/api-specification')
           .basicAuth({ user: key })
           .reply(200, [{ _id: 'spec1', title: 'spec1_title' }])
@@ -568,7 +568,7 @@ describe('rdme openapi', () => {
       it('should error if providing `update` and there are multiple specs available', async () => {
         const registryUUID = getRandomRegistryId();
 
-        const mock = getAPIMock()
+        const mock = getAPIV1Mock()
           .get(`/api/v1/version/${version}`)
           .basicAuth({ user: key })
           .reply(200, { version })
@@ -595,7 +595,7 @@ describe('rdme openapi', () => {
         expect.assertions(5);
         const registryUUID = getRandomRegistryId();
 
-        const mock = getAPIMock()
+        const mock = getAPIV1Mock()
           .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
           .reply(201, { registryUUID, spec: { openapi: '3.0.0' } })
           .put('/api/v1/api-specification/spec1', { registryUUID })
@@ -626,7 +626,7 @@ describe('rdme openapi', () => {
       expect.assertions(2);
       let requestBody = '';
       const registryUUID = getRandomRegistryId();
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version: '1.0.0' })
@@ -638,7 +638,7 @@ describe('rdme openapi', () => {
         })
         .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
 
-      const mockWithHeader = getAPIMockWithVersionHeader(version)
+      const mockWithHeader = getAPIV1MockWithVersionHeader(version)
         .get('/api/v1/api-specification')
         .basicAuth({ user: key })
         .reply(200, [])
@@ -662,7 +662,7 @@ describe('rdme openapi', () => {
       const specVersion = '1.2.3';
       let requestBody = '';
       const registryUUID = getRandomRegistryId();
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .get(`/api/v1/version/${specVersion}`)
         .basicAuth({ user: key })
         .reply(200, { version: specVersion })
@@ -674,7 +674,7 @@ describe('rdme openapi', () => {
         })
         .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
 
-      const mockWithHeader = getAPIMockWithVersionHeader(specVersion)
+      const mockWithHeader = getAPIV1MockWithVersionHeader(specVersion)
         .get('/api/v1/api-specification')
         .basicAuth({ user: key })
         .reply(200, [])
@@ -708,7 +708,7 @@ describe('rdme openapi', () => {
         expect.assertions(2);
         let requestBody = '';
         const registryUUID = getRandomRegistryId();
-        const mock = getAPIMock()
+        const mock = getAPIV1Mock()
           .post('/api/v1/api-registry', body => {
             requestBody = body.substring(body.indexOf('{'), body.lastIndexOf('}') + 1);
             requestBody = JSON.parse(requestBody);
@@ -752,7 +752,7 @@ describe('rdme openapi', () => {
         ],
       };
 
-      const mock = getAPIMock().get(`/api/v1/version/${invalidVersion}`).reply(404, errorObject);
+      const mock = getAPIV1Mock().get(`/api/v1/version/${invalidVersion}`).reply(404, errorObject);
 
       await expect(
         run([
@@ -762,7 +762,7 @@ describe('rdme openapi', () => {
           '--version',
           invalidVersion,
         ]),
-      ).rejects.toThrow(new APIError(errorObject));
+      ).rejects.toStrictEqual(new APIError(errorObject));
 
       return mock.done();
     });
@@ -773,14 +773,14 @@ describe('rdme openapi', () => {
 
       const registryUUID = getRandomRegistryId();
 
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .get('/api/v1/version')
         .basicAuth({ user: key })
         .reply(200, [{ version: '1.0.0' }, { version: '1.0.1' }])
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
         .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
 
-      const mockWithHeader = getAPIMockWithVersionHeader(selectedVersion)
+      const mockWithHeader = getAPIV1MockWithVersionHeader(selectedVersion)
         .get('/api/v1/api-specification')
         .basicAuth({ user: key })
         .reply(200, [])
@@ -820,11 +820,11 @@ describe('rdme openapi', () => {
         ],
       };
 
-      const mock = getAPIMock().get('/api/v1/version').reply(401, errorObject);
+      const mock = getAPIV1Mock().get('/api/v1/version').reply(401, errorObject);
 
       await expect(
         run([require.resolve('@readme/oas-examples/3.1/json/petstore.json'), '--key', 'key']),
-      ).rejects.toThrow(new APIError(errorObject));
+      ).rejects.toStrictEqual(new APIError(errorObject));
 
       return mock.done();
     });
@@ -832,7 +832,7 @@ describe('rdme openapi', () => {
     it('should throw an error if an invalid OpenAPI 3.0 definition is supplied', () => {
       return expect(
         run(['./__tests__/__fixtures__/invalid-oas.json', '--key', key, '--id', id, '--version', version]),
-      ).rejects.toThrow('Token "Error" does not exist.');
+      ).rejects.toMatchSnapshot();
     });
 
     it('should throw an error if an invalid OpenAPI 3.1 definition is supplied', () => {
@@ -857,14 +857,14 @@ describe('rdme openapi', () => {
 
       const registryUUID = getRandomRegistryId();
 
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version: '1.0.0' })
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
         .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
 
-      const mockWithHeader = getAPIMockWithVersionHeader(version)
+      const mockWithHeader = getAPIV1MockWithVersionHeader(version)
         .get('/api/v1/api-specification')
         .basicAuth({ user: key })
         .reply(200, [])
@@ -874,7 +874,7 @@ describe('rdme openapi', () => {
 
       await expect(
         run(['./__tests__/__fixtures__/swagger-with-invalid-extensions.json', '--key', key, '--version', version]),
-      ).rejects.toThrow(new APIError(errorObject));
+      ).rejects.toStrictEqual(new APIError(errorObject));
 
       mockWithHeader.done();
       return mock.done();
@@ -890,11 +890,11 @@ describe('rdme openapi', () => {
 
       const registryUUID = getRandomRegistryId();
 
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
         .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
 
-      const putMock = getAPIMockWithVersionHeader(version)
+      const putMock = getAPIV1MockWithVersionHeader(version)
         .put(`/api/v1/api-specification/${id}`, { registryUUID })
         .basicAuth({ user: key })
         .reply(400, errorObject);
@@ -909,7 +909,7 @@ describe('rdme openapi', () => {
           '--version',
           version,
         ]),
-      ).rejects.toThrow(new APIError(errorObject));
+      ).rejects.toStrictEqual(new APIError(errorObject));
 
       putMock.done();
       return mock.done();
@@ -923,7 +923,7 @@ describe('rdme openapi', () => {
         help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
       };
 
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version: '1.0.0' })
@@ -932,7 +932,7 @@ describe('rdme openapi', () => {
 
       await expect(
         run(['./__tests__/__fixtures__/swagger-with-invalid-extensions.json', '--key', key, '--version', version]),
-      ).rejects.toThrow(new APIError(errorObject));
+      ).rejects.toStrictEqual(new APIError(errorObject));
 
       return mock.done();
     });
@@ -948,14 +948,14 @@ describe('rdme openapi', () => {
 
       const registryUUID = getRandomRegistryId();
 
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version: '1.0.0' })
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
         .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
 
-      const mockWithHeader = getAPIMockWithVersionHeader(version)
+      const mockWithHeader = getAPIV1MockWithVersionHeader(version)
         .get('/api/v1/api-specification')
         .basicAuth({ user: key })
         .reply(200, [])
@@ -965,7 +965,7 @@ describe('rdme openapi', () => {
 
       await expect(
         run([require.resolve('@readme/oas-examples/2.0/json/petstore.json'), '--key', key, '--version', version]),
-      ).rejects.toThrow(new APIError(errorObject));
+      ).rejects.toStrictEqual(new APIError(errorObject));
 
       mockWithHeader.done();
       return mock.done();
@@ -974,14 +974,14 @@ describe('rdme openapi', () => {
     it('should error if API errors (generic upload error)', async () => {
       const registryUUID = getRandomRegistryId();
 
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version: '1.0.0' })
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
         .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
 
-      const mockWithHeader = getAPIMockWithVersionHeader(version)
+      const mockWithHeader = getAPIV1MockWithVersionHeader(version)
         .get('/api/v1/api-specification')
         .basicAuth({ user: key })
         .reply(200, [])
@@ -1004,14 +1004,14 @@ describe('rdme openapi', () => {
     it('should error if API errors (request timeout)', async () => {
       const registryUUID = getRandomRegistryId();
 
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version: '1.0.0' })
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
         .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
 
-      const mockWithHeader = getAPIMockWithVersionHeader(version)
+      const mockWithHeader = getAPIV1MockWithVersionHeader(version)
         .get('/api/v1/api-specification')
         .basicAuth({ user: key })
         .reply(200, [])
@@ -1059,14 +1059,14 @@ describe('rdme openapi', () => {
       prompts.inject(['create', true, 'openapi-branch', yamlFileName]);
       const registryUUID = getRandomRegistryId();
 
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version })
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
         .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
 
-      const mockWithHeader = getAPIMockWithVersionHeader(version)
+      const mockWithHeader = getAPIV1MockWithVersionHeader(version)
         .get('/api/v1/api-specification')
         .basicAuth({ user: key })
         .reply(200, [{ _id: 'spec1', title: 'spec1_title' }])
@@ -1095,14 +1095,14 @@ describe('rdme openapi', () => {
       prompts.inject(['create', 'openapi-branch-github-flag', yamlFileName]);
       const registryUUID = getRandomRegistryId();
 
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version })
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
         .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
 
-      const mockWithHeader = getAPIMockWithVersionHeader(version)
+      const mockWithHeader = getAPIV1MockWithVersionHeader(version)
         .get('/api/v1/api-specification')
         .basicAuth({ user: key })
         .reply(200, [{ _id: 'spec1', title: 'spec1_title' }])
@@ -1131,14 +1131,14 @@ describe('rdme openapi', () => {
       prompts.inject(['update', 'spec2', true, 'openapi-branch-update-prompt', yamlFileName]);
       const registryUUID = getRandomRegistryId();
 
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version })
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
         .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
 
-      const mockWithHeader = getAPIMockWithVersionHeader(version)
+      const mockWithHeader = getAPIV1MockWithVersionHeader(version)
         .get('/api/v1/api-specification')
         .basicAuth({ user: key })
         .reply(200, [
@@ -1167,14 +1167,14 @@ describe('rdme openapi', () => {
       prompts.inject([true, 'openapi-branch-create-flag', yamlFileName]);
       const registryUUID = getRandomRegistryId();
 
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .get(`/api/v1/version/${altVersion}`)
         .basicAuth({ user: key })
         .reply(200, { version: altVersion })
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
         .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
 
-      const mockWithHeader = getAPIMockWithVersionHeader(altVersion)
+      const mockWithHeader = getAPIV1MockWithVersionHeader(altVersion)
         .post('/api/v1/api-specification', { registryUUID })
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
@@ -1196,14 +1196,14 @@ describe('rdme openapi', () => {
       prompts.inject([version, true, 'openapi-branch-create-flag-id-opt', yamlFileName]);
       const registryUUID = getRandomRegistryId();
 
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .get('/api/v1/version')
         .basicAuth({ user: key })
         .reply(200, [{ version }, { version: '1.1.0' }])
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
         .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
 
-      const postMock = getAPIMockWithVersionHeader(version)
+      const postMock = getAPIV1MockWithVersionHeader(version)
         .post('/api/v1/api-specification', { registryUUID })
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
@@ -1225,14 +1225,14 @@ describe('rdme openapi', () => {
       prompts.inject([true, 'openapi-branch-update-flag', yamlFileName]);
       const registryUUID = getRandomRegistryId();
 
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version })
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
         .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
 
-      const mockWithHeader = getAPIMockWithVersionHeader(version)
+      const mockWithHeader = getAPIV1MockWithVersionHeader(version)
         .get('/api/v1/api-specification')
         .basicAuth({ user: key })
         .reply(200, [{ _id: 'spec1', title: 'spec1_title' }])
@@ -1256,7 +1256,7 @@ describe('rdme openapi', () => {
       prompts.inject([true, 'openapi-branch-workingdirectory', yamlFileName]);
       const registryUUID = getRandomRegistryId();
 
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version })
@@ -1268,7 +1268,7 @@ describe('rdme openapi', () => {
         .basicAuth({ user: key })
         .reply(200, []);
 
-      const postMock = getAPIMockWithVersionHeader(version)
+      const postMock = getAPIV1MockWithVersionHeader(version)
         .post('/api/v1/api-specification', { registryUUID })
         .basicAuth({ user: key })
         .reply(201, { _id: 1 }, { location: exampleRefLocation });
@@ -1299,14 +1299,14 @@ describe('rdme openapi', () => {
       prompts.inject(['create', false]);
       const registryUUID = getRandomRegistryId();
 
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version })
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
         .reply(201, { registryUUID, spec: { openapi: '3.0.0' } });
 
-      const mockWithHeader = getAPIMockWithVersionHeader(version)
+      const mockWithHeader = getAPIV1MockWithVersionHeader(version)
         .get('/api/v1/api-specification')
         .basicAuth({ user: key })
         .reply(200, [{ _id: 'spec1', title: 'spec1_title' }])
@@ -1343,11 +1343,11 @@ describe('rdme openapi', () => {
     it('should send proper headers in GitHub Actions CI for local spec file', async () => {
       const registryUUID = getRandomRegistryId();
 
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
         .reply(201, { registryUUID });
 
-      const putMock = getAPIMock({
+      const putMock = getAPIV1Mock({
         'x-rdme-ci': 'GitHub Actions (test)',
         'x-readme-source': 'cli-gh',
         'x-readme-source-url':
@@ -1370,13 +1370,13 @@ describe('rdme openapi', () => {
       const registryUUID = getRandomRegistryId();
       const spec = 'https://example.com/openapi.json';
 
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .post('/api/v1/api-registry', body => body.match('form-data; name="spec"'))
         .reply(201, { registryUUID });
 
       const exampleMock = nock('https://example.com').get('/openapi.json').reply(200, petstoreWeird);
 
-      const putMock = getAPIMock({
+      const putMock = getAPIV1Mock({
         'x-rdme-ci': 'GitHub Actions (test)',
         'x-readme-source': 'cli-gh',
         'x-readme-source-url': spec,
@@ -1395,7 +1395,7 @@ describe('rdme openapi', () => {
 
     it('should contain request header with correct URL with working directory', async () => {
       const registryUUID = getRandomRegistryId();
-      const mock = getAPIMock()
+      const mock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version })
@@ -1407,7 +1407,7 @@ describe('rdme openapi', () => {
         .basicAuth({ user: key })
         .reply(200, []);
 
-      const postMock = getAPIMock({
+      const postMock = getAPIV1Mock({
         'x-rdme-ci': 'GitHub Actions (test)',
         'x-readme-source': 'cli-gh',
         'x-readme-source-url':

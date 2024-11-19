@@ -12,7 +12,7 @@ import { describe, beforeAll, afterAll, beforeEach, afterEach, it, expect, vi, t
 
 import Command from '../../../src/commands/docs/index.js';
 import APIError from '../../../src/lib/apiError.js';
-import getAPIMock, { getAPIMockWithVersionHeader } from '../../helpers/get-api-mock.js';
+import { getAPIV1Mock, getAPIV1MockWithVersionHeader } from '../../helpers/get-api-mock.js';
 import { after, before } from '../../helpers/get-gha-setup.js';
 import hashFileContents from '../../helpers/hash-file-contents.js';
 import { after as afterGHAEnv, before as beforeGHAEnv } from '../../helpers/setup-gha-env.js';
@@ -40,7 +40,10 @@ describe('rdme docs', () => {
   });
 
   it('should error if the argument is not a folder', async () => {
-    const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
+    const versionMock = getAPIV1Mock()
+      .get(`/api/v1/version/${version}`)
+      .basicAuth({ user: key })
+      .reply(200, { version });
 
     await expect(run(['--key', key, '--version', '1.0.0', 'not-a-folder'])).rejects.toStrictEqual(
       new Error("Oops! We couldn't locate a file or directory at the path you provided."),
@@ -50,7 +53,10 @@ describe('rdme docs', () => {
   });
 
   it('should error if the folder contains no markdown files', async () => {
-    const versionMock = getAPIMock().get(`/api/v1/version/${version}`).basicAuth({ user: key }).reply(200, { version });
+    const versionMock = getAPIV1Mock()
+      .get(`/api/v1/version/${version}`)
+      .basicAuth({ user: key })
+      .reply(200, { version });
 
     await expect(run(['--key', key, '--version', '1.0.0', '.github/workflows'])).rejects.toStrictEqual(
       new Error(
@@ -84,7 +90,7 @@ describe('rdme docs', () => {
     it('should fetch doc and merge with what is returned', () => {
       expect.assertions(1);
 
-      const getMocks = getAPIMockWithVersionHeader(version)
+      const getMocks = getAPIV1MockWithVersionHeader(version)
         .get('/api/v1/docs/simple-doc')
         .basicAuth({ user: key })
         .reply(200, { category, slug: simpleDoc.slug, lastUpdatedHash: 'anOldHash' })
@@ -92,7 +98,7 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200, { category, slug: anotherDoc.slug, lastUpdatedHash: 'anOldHash' });
 
-      const updateMocks = getAPIMockWithVersionHeader(version)
+      const updateMocks = getAPIV1MockWithVersionHeader(version)
         .put('/api/v1/docs/simple-doc', {
           body: simpleDoc.doc.content,
           lastUpdatedHash: simpleDoc.hash,
@@ -112,7 +118,7 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200, { category, slug: anotherDoc.slug, body: anotherDoc.doc.content });
 
-      const versionMock = getAPIMock()
+      const versionMock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version });
@@ -138,7 +144,7 @@ describe('rdme docs', () => {
     it('should return doc update info for dry run', () => {
       expect.assertions(1);
 
-      const getMocks = getAPIMockWithVersionHeader(version)
+      const getMocks = getAPIV1MockWithVersionHeader(version)
         .get('/api/v1/docs/simple-doc')
         .basicAuth({ user: key })
         .reply(200, { category, slug: simpleDoc.slug, lastUpdatedHash: 'anOldHash' })
@@ -146,7 +152,7 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200, { category, slug: anotherDoc.slug, lastUpdatedHash: 'anOldHash' });
 
-      const versionMock = getAPIMock()
+      const versionMock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version });
@@ -175,7 +181,7 @@ describe('rdme docs', () => {
     it('should not send requests for docs that have not changed', () => {
       expect.assertions(1);
 
-      const getMocks = getAPIMockWithVersionHeader(version)
+      const getMocks = getAPIV1MockWithVersionHeader(version)
         .get('/api/v1/docs/simple-doc')
         .basicAuth({ user: key })
         .reply(200, { category, slug: simpleDoc.slug, lastUpdatedHash: simpleDoc.hash })
@@ -183,7 +189,7 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200, { category, slug: anotherDoc.slug, lastUpdatedHash: anotherDoc.hash });
 
-      const versionMock = getAPIMock()
+      const versionMock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version });
@@ -206,7 +212,7 @@ describe('rdme docs', () => {
     it('should adjust "no changes" message if in dry run', () => {
       expect.assertions(1);
 
-      const getMocks = getAPIMockWithVersionHeader(version)
+      const getMocks = getAPIV1MockWithVersionHeader(version)
         .get('/api/v1/docs/simple-doc')
         .basicAuth({ user: key })
         .reply(200, { category, slug: simpleDoc.slug, lastUpdatedHash: simpleDoc.hash })
@@ -214,7 +220,7 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200, { category, slug: anotherDoc.slug, lastUpdatedHash: anotherDoc.hash });
 
-      const versionMock = getAPIMock()
+      const versionMock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version });
@@ -242,7 +248,7 @@ describe('rdme docs', () => {
       const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
 
-      const getMock = getAPIMockWithVersionHeader(version)
+      const getMock = getAPIV1MockWithVersionHeader(version)
         .get(`/api/v1/docs/${slug}`)
         .basicAuth({ user: key })
         .reply(404, {
@@ -252,12 +258,12 @@ describe('rdme docs', () => {
           help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
         });
 
-      const postMock = getAPIMockWithVersionHeader(version)
+      const postMock = getAPIV1MockWithVersionHeader(version)
         .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
         .reply(201, { slug, _id: id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
-      const versionMock = getAPIMock()
+      const versionMock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version });
@@ -275,7 +281,7 @@ describe('rdme docs', () => {
       const slug = 'new-doc';
       const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
 
-      const getMock = getAPIMockWithVersionHeader(version)
+      const getMock = getAPIV1MockWithVersionHeader(version)
         .get(`/api/v1/docs/${slug}`)
         .basicAuth({ user: key })
         .reply(404, {
@@ -285,7 +291,7 @@ describe('rdme docs', () => {
           help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
         });
 
-      const versionMock = getAPIMock()
+      const versionMock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version });
@@ -315,7 +321,7 @@ describe('rdme docs', () => {
 
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/${folder}/${slug}.md`)));
 
-      const getMocks = getAPIMockWithVersionHeader(version)
+      const getMocks = getAPIV1MockWithVersionHeader(version)
         .get(`/api/v1/docs/${slug}`)
         .basicAuth({ user: key })
         .reply(404, {
@@ -325,12 +331,12 @@ describe('rdme docs', () => {
           help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
         });
 
-      const postMocks = getAPIMockWithVersionHeader(version)
+      const postMocks = getAPIV1MockWithVersionHeader(version)
         .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
         .reply(400, errorObject);
 
-      const versionMock = getAPIMock()
+      const versionMock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version });
@@ -342,7 +348,7 @@ describe('rdme docs', () => {
         message: `Error uploading ${chalk.underline(`${fullDirectory}/${slug}.md`)}:\n\n${errorObject.message}`,
       };
 
-      await expect(run([`./${fullDirectory}`, '--key', key, '--version', version])).rejects.toThrow(
+      await expect(run([`./${fullDirectory}`, '--key', key, '--version', version])).rejects.toStrictEqual(
         new APIError(formattedErrorObject),
       );
 
@@ -359,7 +365,7 @@ describe('rdme docs', () => {
       const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/slug-docs/${slug}.md`)));
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/slug-docs/${slug}.md`)));
 
-      const getMock = getAPIMock()
+      const getMock = getAPIV1Mock()
         .get(`/api/v1/docs/${doc.data.slug}`)
         .basicAuth({ user: key })
         .reply(404, {
@@ -369,12 +375,12 @@ describe('rdme docs', () => {
           help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
         });
 
-      const postMock = getAPIMock()
+      const postMock = getAPIV1Mock()
         .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
         .reply(201, { slug: doc.data.slug, _id: id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
-      const versionMock = getAPIMock()
+      const versionMock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version });
@@ -420,12 +426,12 @@ describe('rdme docs', () => {
       const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
 
-      const versionsMock = getAPIMock()
+      const versionsMock = getAPIV1Mock()
         .get('/api/v1/version')
         .basicAuth({ user: key })
         .reply(200, [{ version }, { version: altVersion }]);
 
-      const getMock = getAPIMockWithVersionHeader(altVersion)
+      const getMock = getAPIV1MockWithVersionHeader(altVersion)
         .get(`/api/v1/docs/${slug}`)
         .basicAuth({ user: key })
         .reply(404, {
@@ -435,7 +441,7 @@ describe('rdme docs', () => {
           help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
         });
 
-      const postMock = getAPIMockWithVersionHeader(altVersion)
+      const postMock = getAPIV1MockWithVersionHeader(altVersion)
         .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
         .reply(201, { _id: id, slug, body: doc.content, ...doc.data, lastUpdatedHash: hash });
@@ -464,7 +470,7 @@ describe('rdme docs', () => {
       const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
 
-      const getMock = getAPIMockWithVersionHeader(version)
+      const getMock = getAPIV1MockWithVersionHeader(version)
         .get(`/api/v1/docs/${slug}`)
         .basicAuth({ user: key })
         .reply(404, {
@@ -474,12 +480,12 @@ describe('rdme docs', () => {
           help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
         });
 
-      const postMock = getAPIMockWithVersionHeader(version)
+      const postMock = getAPIV1MockWithVersionHeader(version)
         .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
         .reply(201, { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
-      const versionMock = getAPIMock()
+      const versionMock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version });
@@ -506,7 +512,7 @@ describe('rdme docs', () => {
       const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
 
-      const getMock = getAPIMockWithVersionHeader(version)
+      const getMock = getAPIV1MockWithVersionHeader(version)
         .get(`/api/v1/docs/${slug}`)
         .basicAuth({ user: key })
         .reply(404, {
@@ -516,12 +522,12 @@ describe('rdme docs', () => {
           help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
         });
 
-      const postMock = getAPIMockWithVersionHeader(version)
+      const postMock = getAPIV1MockWithVersionHeader(version)
         .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
         .reply(201, { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
-      const versionMock = getAPIMock()
+      const versionMock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version });
@@ -546,7 +552,7 @@ describe('rdme docs', () => {
       const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
 
-      const getMock = getAPIMockWithVersionHeader(version)
+      const getMock = getAPIV1MockWithVersionHeader(version)
         .get(`/api/v1/docs/${slug}`)
         .basicAuth({ user: key })
         .reply(404, {
@@ -556,12 +562,12 @@ describe('rdme docs', () => {
           help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
         });
 
-      const postMock = getAPIMockWithVersionHeader(version)
+      const postMock = getAPIV1MockWithVersionHeader(version)
         .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
         .reply(201, { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
-      const versionMock = getAPIMock()
+      const versionMock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version });
@@ -595,7 +601,7 @@ describe('rdme docs', () => {
       const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
 
-      const getMock = getAPIMockWithVersionHeader(version)
+      const getMock = getAPIV1MockWithVersionHeader(version)
         .get(`/api/v1/docs/${slug}`)
         .basicAuth({ user: key })
         .reply(404, {
@@ -605,7 +611,7 @@ describe('rdme docs', () => {
           help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
         });
 
-      const postMock = getAPIMock({
+      const postMock = getAPIV1Mock({
         'x-rdme-ci': 'GitHub Actions (test)',
         'x-readme-source': 'cli-gh',
         'x-readme-source-url':
@@ -616,7 +622,7 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(201, { slug, _id: id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
-      const versionMock = getAPIMock()
+      const versionMock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version });
@@ -647,7 +653,7 @@ describe('rdme docs', () => {
 
       expect.assertions(1);
 
-      const getMocks = getAPIMockWithVersionHeader(version)
+      const getMocks = getAPIV1MockWithVersionHeader(version)
         .get('/api/v1/docs/simple-doc')
         .basicAuth({ user: key })
         .reply(200, { category, slug: simpleDoc.slug, lastUpdatedHash: 'anOldHash' })
@@ -655,7 +661,7 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200, { category, slug: anotherDoc.slug, lastUpdatedHash: 'anOldHash' });
 
-      const firstUpdateMock = getAPIMock({
+      const firstUpdateMock = getAPIV1Mock({
         'x-rdme-ci': 'GitHub Actions (test)',
         'x-readme-source': 'cli-gh',
         'x-readme-source-url':
@@ -674,7 +680,7 @@ describe('rdme docs', () => {
           body: simpleDoc.doc.content,
         });
 
-      const secondUpdateMock = getAPIMock({
+      const secondUpdateMock = getAPIV1Mock({
         'x-rdme-ci': 'GitHub Actions (test)',
         'x-readme-source': 'cli-gh',
         'x-readme-source-url':
@@ -689,7 +695,7 @@ describe('rdme docs', () => {
         .basicAuth({ user: key })
         .reply(200, { category, slug: anotherDoc.slug, body: anotherDoc.doc.content });
 
-      const versionMock = getAPIMock()
+      const versionMock = getAPIV1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
         .reply(200, { version });

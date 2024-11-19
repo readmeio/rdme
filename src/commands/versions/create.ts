@@ -9,7 +9,7 @@ import castStringOptToBool from '../../lib/castStringOptToBool.js';
 import { baseVersionFlags, keyFlag } from '../../lib/flags.js';
 import * as promptHandler from '../../lib/prompts.js';
 import promptTerminal from '../../lib/promptWrapper.js';
-import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch.js';
+import { cleanHeaders, handleRes, readmeAPIV1Fetch } from '../../lib/readmeAPIFetch.js';
 
 export default class CreateVersionCommand extends BaseCommand<typeof CreateVersionCommand> {
   static description = 'Create a new version for your project.';
@@ -42,7 +42,7 @@ export default class CreateVersionCommand extends BaseCommand<typeof CreateVersi
     }
 
     if (!fork) {
-      versionList = await readmeAPIFetch('/api/v1/version', {
+      versionList = await readmeAPIV1Fetch('/api/v1/version', {
         method: 'get',
         headers: cleanHeaders(key),
       }).then(handleRes);
@@ -68,7 +68,7 @@ export default class CreateVersionCommand extends BaseCommand<typeof CreateVersi
       is_stable: promptResponse.is_stable,
     };
 
-    return readmeAPIFetch('/api/v1/version', {
+    return readmeAPIV1Fetch('/api/v1/version', {
       method: 'post',
       headers: cleanHeaders(
         key,

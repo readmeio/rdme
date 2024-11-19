@@ -11,7 +11,7 @@ import { info, oraOptions, warn } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
 import * as promptHandler from '../../lib/prompts.js';
 import promptTerminal from '../../lib/promptWrapper.js';
-import readmeAPIFetch, { cleanHeaders, handleRes } from '../../lib/readmeAPIFetch.js';
+import { cleanHeaders, handleRes, readmeAPIV1Fetch } from '../../lib/readmeAPIFetch.js';
 import streamSpecToRegistry from '../../lib/streamSpecToRegistry.js';
 import { getProjectVersion } from '../../lib/versionSelect.js';
 
@@ -91,8 +91,6 @@ export default class OpenAPICommand extends BaseCommand<typeof OpenAPICommand> {
       );
     }
 
-    // Reason we're hardcoding in command here is because `swagger` command
-    // relies on this and we don't want to use `swagger` in this function
     const { preparedSpec, specFileType, specPath, specType, specVersion } = await prepareOas(spec, 'openapi', {
       title,
     });
@@ -193,7 +191,7 @@ export default class OpenAPICommand extends BaseCommand<typeof OpenAPICommand> {
 
       options.method = 'post';
       spinner.start('Creating your API docs in ReadMe...');
-      return readmeAPIFetch('/api/v1/api-specification', options, {
+      return readmeAPIV1Fetch('/api/v1/api-specification', options, {
         filePath: specPath,
         fileType: specFileType,
       }).then(res => {
@@ -214,7 +212,7 @@ export default class OpenAPICommand extends BaseCommand<typeof OpenAPICommand> {
       isUpdate = true;
       options.method = 'put';
       spinner.start('Updating your API docs in ReadMe...');
-      return readmeAPIFetch(`/api/v1/api-specification/${specId}`, options, {
+      return readmeAPIV1Fetch(`/api/v1/api-specification/${specId}`, options, {
         filePath: specPath,
         fileType: specFileType,
       }).then(res => {
@@ -237,7 +235,7 @@ export default class OpenAPICommand extends BaseCommand<typeof OpenAPICommand> {
 
     function getSpecs(url: string) {
       if (url) {
-        return readmeAPIFetch(url, {
+        return readmeAPIV1Fetch(url, {
           method: 'get',
           headers: cleanHeaders(key, selectedVersion),
         });

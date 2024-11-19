@@ -31,9 +31,7 @@ export function runCommand<T extends typeof OclifCommand>(Command: T) {
     return captureOutput<string>(() => Command.run(args, oclifConfig), { testNodeEnv: 'rdme-test' }).then(
       ({ error, result }) => {
         if (error) {
-          const e = new Error(error.message);
-          if (error.name) e.name = error.name;
-          throw e;
+          throw error;
         }
         return result;
       },
