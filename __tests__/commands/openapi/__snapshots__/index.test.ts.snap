@@ -287,6 +287,8 @@ jobs:
 "
 `;
 
+exports[`rdme openapi > error handling > should throw an error if an invalid OpenAPI 3.0 definition is supplied 1`] = `[MissingPointerError: Token "Error" does not exist.]`;
+
 exports[`rdme openapi > error handling > should throw an error if an invalid OpenAPI 3.1 definition is supplied 1`] = `
 [SyntaxError: OpenAPI schema validation failed.
 

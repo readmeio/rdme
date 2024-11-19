@@ -762,7 +762,7 @@ describe('rdme openapi', () => {
           '--version',
           invalidVersion,
         ]),
-      ).rejects.toThrow(new APIError(errorObject));
+      ).rejects.toStrictEqual(new APIError(errorObject));
 
       return mock.done();
     });
@@ -824,7 +824,7 @@ describe('rdme openapi', () => {
 
       await expect(
         run([require.resolve('@readme/oas-examples/3.1/json/petstore.json'), '--key', 'key']),
-      ).rejects.toThrow(new APIError(errorObject));
+      ).rejects.toStrictEqual(new APIError(errorObject));
 
       return mock.done();
     });
@@ -832,7 +832,7 @@ describe('rdme openapi', () => {
     it('should throw an error if an invalid OpenAPI 3.0 definition is supplied', () => {
       return expect(
         run(['./__tests__/__fixtures__/invalid-oas.json', '--key', key, '--id', id, '--version', version]),
-      ).rejects.toThrow('Token "Error" does not exist.');
+      ).rejects.toMatchSnapshot();
     });
 
     it('should throw an error if an invalid OpenAPI 3.1 definition is supplied', () => {
@@ -874,7 +874,7 @@ describe('rdme openapi', () => {
 
       await expect(
         run(['./__tests__/__fixtures__/swagger-with-invalid-extensions.json', '--key', key, '--version', version]),
-      ).rejects.toThrow(new APIError(errorObject));
+      ).rejects.toStrictEqual(new APIError(errorObject));
 
       mockWithHeader.done();
       return mock.done();
@@ -909,7 +909,7 @@ describe('rdme openapi', () => {
           '--version',
           version,
         ]),
-      ).rejects.toThrow(new APIError(errorObject));
+      ).rejects.toStrictEqual(new APIError(errorObject));
 
       putMock.done();
       return mock.done();
@@ -932,7 +932,7 @@ describe('rdme openapi', () => {
 
       await expect(
         run(['./__tests__/__fixtures__/swagger-with-invalid-extensions.json', '--key', key, '--version', version]),
-      ).rejects.toThrow(new APIError(errorObject));
+      ).rejects.toStrictEqual(new APIError(errorObject));
 
       return mock.done();
     });
@@ -965,7 +965,7 @@ describe('rdme openapi', () => {
 
       await expect(
         run([require.resolve('@readme/oas-examples/2.0/json/petstore.json'), '--key', key, '--version', version]),
-      ).rejects.toThrow(new APIError(errorObject));
+      ).rejects.toStrictEqual(new APIError(errorObject));
 
       mockWithHeader.done();
       return mock.done();

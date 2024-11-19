@@ -162,7 +162,7 @@ describe('rdme docs (multiple)', () => {
 
     const promise = run([`./__tests__/${fixturesBaseDir}/${dir}`, '--key', key, '--version', version]);
 
-    await expect(promise).rejects.toThrow('Cyclic dependency');
+    await expect(promise).rejects.toMatchSnapshot();
     versionMock.done();
   });
 });
