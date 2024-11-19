@@ -110,6 +110,7 @@
   },
   "scripts": {
     "build": "tsc",
+    "build:docs": "oclif readme --readme-path documentation/commands.md --no-aliases",
     "build:gha": "npm run build && rollup --config",
     "build:gha:prod": "npm run build:gha -- --environment PRODUCTION_BUILD",
     "lint": "alex . && knip && npm run lint:ts && npm run prettier && npm run schemas:check",
@@ -122,7 +123,7 @@
     "schemas:check": "./bin/json-schema-store.js",
     "schemas:write": "./bin/json-schema-store.js --update",
     "test": "vitest run --coverage",
-    "version": "npm run build:gha:prod && oclif manifest && oclif readme --readme-path documentation/commands.md --no-aliases"
+    "version": "npm run build:gha:prod && oclif manifest && npm run build:docs"
   },
   "commitlint": {
     "extends": [
