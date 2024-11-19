@@ -14,7 +14,7 @@ $ npm install -g rdme
 $ rdme COMMAND
 running command...
 $ rdme (--version)
-rdme/9.0.0-next.23 linux-x64 node-v20.18.0
+rdme/9.0.0-next.25 linux-x64 node-v20.18.0
 $ rdme --help [COMMAND]
 USAGE
   $ rdme COMMAND

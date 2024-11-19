@@ -1,3 +1,10 @@
+# [9.0.0-next.25](https://github.com/readmeio/rdme/compare/v9.0.0-next.24...v9.0.0-next.25) (2024-11-19)
+
+
+### Bug Fixes
+
+* **npm:** tweak npm lifecycle scripts ([#1073](https://github.com/readmeio/rdme/issues/1073)) ([35534db](https://github.com/readmeio/rdme/commit/35534dbe7228a75b49408bf4db3fcfb31091358a))
+
 # [9.0.0-next.24](https://github.com/readmeio/rdme/compare/v9.0.0-next.23...v9.0.0-next.24) (2024-11-19)
 
 
