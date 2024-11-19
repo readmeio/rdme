@@ -1,0 +1,76 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Cyclic Reference Example",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/example": {
+      "get": {
+        "summary": "Example endpoint with cyclic references",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ObjectC": {
+        "type": "object",
+        "properties": {
+          "test": {
+            "type": "string"
+          }
+        }
+      },
+      "ObjectA": {
+        "type": "object",
+        "properties": {
+          "test": {
+            "type": "string"
+          },
+          "relatedObject": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ObjectB"
+            }
+          }
+        }
+      },
+      "ObjectB": {
+        "type": "object",
+        "properties": {
+          "test": {
+            "type": "string"
+          },
+          "relatedObject": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ObjectARef"
+            }
+          },
+          "test2": {
+            "$ref": "#/components/schemas/ObjectC"
+          }
+        }
+      },
+      "ObjectARef": {
+        "type": "object",
+        "properties": {
+          "test": {
+            "type": "string"
+          },
+          "relatedObject": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  }
+}
