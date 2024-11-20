@@ -2,7 +2,7 @@ import { Args } from '@oclif/core';
 
 import BaseCommand from '../../lib/baseCommand.js';
 import { keyFlag } from '../../lib/flags.js';
-import { cleanHeaders, handleRes, readmeAPIV1Fetch } from '../../lib/readmeAPIFetch.js';
+import { cleanAPIv1Headers, handleAPIv1Res, readmeAPIv1Fetch } from '../../lib/readmeAPIFetch.js';
 import { getProjectVersion } from '../../lib/versionSelect.js';
 
 export default class DeleteVersionCommand extends BaseCommand<typeof DeleteVersionCommand> {
@@ -26,11 +26,11 @@ export default class DeleteVersionCommand extends BaseCommand<typeof DeleteVersi
 
     this.debug(`selectedVersion: ${selectedVersion}`);
 
-    return readmeAPIV1Fetch(`/api/v1/version/${selectedVersion}`, {
+    return readmeAPIv1Fetch(`/api/v1/version/${selectedVersion}`, {
       method: 'delete',
-      headers: cleanHeaders(key),
+      headers: cleanAPIv1Headers(key),
     })
-      .then(handleRes)
+      .then(handleAPIv1Res)
       .then(() => {
         return Promise.resolve(`Version ${selectedVersion} deleted successfully.`);
       });

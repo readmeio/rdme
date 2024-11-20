@@ -4,7 +4,7 @@ import ora from 'ora';
 import { file as tmpFile } from 'tmp-promise';
 
 import { debug, oraOptions } from './logger.js';
-import { handleRes, readmeAPIV1Fetch } from './readmeAPIFetch.js';
+import { handleAPIv1Res, readmeAPIv1Fetch } from './readmeAPIFetch.js';
 
 /**
  * Uploads a spec to the API registry for usage in ReadMe
@@ -44,8 +44,8 @@ export default async function streamSpecToRegistry(
     method: 'POST',
   };
 
-  return readmeAPIV1Fetch('/api/v1/api-registry', options)
-    .then(handleRes)
+  return readmeAPIv1Fetch('/api/v1/api-registry', options)
+    .then(handleAPIv1Res)
     .then(body => {
       spinner.stop();
       return body.registryUUID;

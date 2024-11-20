@@ -8,7 +8,7 @@ import castStringOptToBool from '../../lib/castStringOptToBool.js';
 import { baseVersionFlags, keyFlag } from '../../lib/flags.js';
 import * as promptHandler from '../../lib/prompts.js';
 import promptTerminal from '../../lib/promptWrapper.js';
-import { cleanHeaders, handleRes, readmeAPIV1Fetch } from '../../lib/readmeAPIFetch.js';
+import { cleanAPIv1Headers, handleAPIv1Res, readmeAPIv1Fetch } from '../../lib/readmeAPIFetch.js';
 import { getProjectVersion } from '../../lib/versionSelect.js';
 
 export default class UpdateVersionCommand extends BaseCommand<typeof UpdateVersionCommand> {
@@ -34,10 +34,10 @@ export default class UpdateVersionCommand extends BaseCommand<typeof UpdateVersi
 
     // TODO: I think this fetch here is unnecessary but
     // it will require a bigger refactor of getProjectVersion
-    const foundVersion: Version = await readmeAPIV1Fetch(`/api/v1/version/${selectedVersion}`, {
+    const foundVersion: Version = await readmeAPIv1Fetch(`/api/v1/version/${selectedVersion}`, {
       method: 'get',
-      headers: cleanHeaders(key),
-    }).then(handleRes);
+      headers: cleanAPIv1Headers(key),
+    }).then(handleAPIv1Res);
 
     prompts.override({
       is_beta: castStringOptToBool(beta, 'beta'),
@@ -59,16 +59,16 @@ export default class UpdateVersionCommand extends BaseCommand<typeof UpdateVersi
       is_stable: promptResponse.is_stable,
     };
 
-    return readmeAPIV1Fetch(`/api/v1/version/${selectedVersion}`, {
+    return readmeAPIv1Fetch(`/api/v1/version/${selectedVersion}`, {
       method: 'put',
-      headers: cleanHeaders(
+      headers: cleanAPIv1Headers(
         key,
         undefined,
         new Headers({ Accept: 'application/json', 'Content-Type': 'application/json' }),
       ),
       body: JSON.stringify(body),
     })
-      .then(handleRes)
+      .then(handleAPIv1Res)
       .then(() => {
         return Promise.resolve(`Version ${selectedVersion} updated successfully.`);
       });

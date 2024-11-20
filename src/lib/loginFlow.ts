@@ -5,7 +5,7 @@ import configStore from './configstore.js';
 import getCurrentConfig from './getCurrentConfig.js';
 import { debug } from './logger.js';
 import promptTerminal from './promptWrapper.js';
-import { handleRes, readmeAPIV1Fetch } from './readmeAPIFetch.js';
+import { handleAPIv1Res, readmeAPIv1Fetch } from './readmeAPIFetch.js';
 import { validateSubdomain } from './validatePromptInput.js';
 
 interface LoginBody {
@@ -16,7 +16,7 @@ interface LoginBody {
 }
 
 function loginFetch(body: LoginBody) {
-  return readmeAPIV1Fetch('/api/v1/login', {
+  return readmeAPIv1Fetch('/api/v1/login', {
     method: 'post',
     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
@@ -71,7 +71,7 @@ export default async function loginFlow(otp?: string) {
   if (otp) payload.token = otp;
 
   return loginFetch(payload)
-    .then(handleRes)
+    .then(handleAPIv1Res)
     .catch(async err => {
       // if the user's login requires 2FA, let's prompt them for the token!
       if (err.code === 'LOGIN_TWOFACTOR') {
@@ -82,7 +82,7 @@ export default async function loginFlow(otp?: string) {
           message: 'What is your 2FA token?',
         });
 
-        return loginFetch({ email, password, project, token: otpPrompt.otp }).then(handleRes);
+        return loginFetch({ email, password, project, token: otpPrompt.otp }).then(handleAPIv1Res);
       }
       throw err;
     })
