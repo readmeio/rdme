@@ -3,11 +3,11 @@ import nock from 'nock';
 import { describe, beforeEach, afterEach, it, expect, vi, beforeAll, type MockInstance } from 'vitest';
 
 import pkg from '../../package.json' with { type: 'json' };
-import { cleanHeaders, handleRes, readmeAPIV1Fetch } from '../../src/lib/readmeAPIFetch.js';
+import { cleanAPIv1Headers, handleAPIv1Res, readmeAPIv1Fetch } from '../../src/lib/readmeAPIFetch.js';
 import { getAPIV1Mock } from '../helpers/get-api-mock.js';
 import { after, before } from '../helpers/setup-gha-env.js';
 
-describe('#readmeAPIV1Fetch()', () => {
+describe('#readmeAPIv1Fetch()', () => {
   beforeAll(() => {
     nock.disableNetConnect();
   });
@@ -29,10 +29,10 @@ describe('#readmeAPIV1Fetch()', () => {
           return this.req.headers;
         });
 
-      const headers = await readmeAPIV1Fetch('/api/v1', {
+      const headers = await readmeAPIv1Fetch('/api/v1', {
         method: 'get',
-        headers: cleanHeaders(key),
-      }).then(handleRes);
+        headers: cleanAPIv1Headers(key),
+      }).then(handleAPIv1Res);
 
       expect(headers['user-agent']).toBe(`rdme-github/${pkg.version}`);
       expect(headers['x-readme-source']).toBe('cli-gh');
@@ -56,14 +56,14 @@ describe('#readmeAPIV1Fetch()', () => {
             return this.req.headers;
           });
 
-        const headers = await readmeAPIV1Fetch(
+        const headers = await readmeAPIv1Fetch(
           '/api/v1',
           {
             method: 'get',
-            headers: cleanHeaders(key),
+            headers: cleanAPIv1Headers(key),
           },
           { filePath: 'openapi.json', fileType: 'path' },
-        ).then(handleRes);
+        ).then(handleAPIv1Res);
 
         expect(headers['x-readme-source-url']).toBe(
           'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/openapi.json',
@@ -81,14 +81,14 @@ describe('#readmeAPIV1Fetch()', () => {
             return this.req.headers;
           });
 
-        const headers = await readmeAPIV1Fetch(
+        const headers = await readmeAPIv1Fetch(
           '/api/v1',
           {
             method: 'get',
-            headers: cleanHeaders(key),
+            headers: cleanAPIv1Headers(key),
           },
           { filePath: './📈 Dashboard & Metrics/openapi.json', fileType: 'path' },
-        ).then(handleRes);
+        ).then(handleAPIv1Res);
 
         expect(headers['x-readme-source-url']).toBe(
           'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/%F0%9F%93%88%20Dashboard%20&%20Metrics/openapi.json',
@@ -107,14 +107,14 @@ describe('#readmeAPIV1Fetch()', () => {
             return this.req.headers;
           });
 
-        const headers = await readmeAPIV1Fetch(
+        const headers = await readmeAPIv1Fetch(
           '/api/v1',
           {
             method: 'get',
-            headers: cleanHeaders(key),
+            headers: cleanAPIv1Headers(key),
           },
           { filePath: './📈 Dashboard & Metrics/openapi.json', fileType: 'path' },
-        ).then(handleRes);
+        ).then(handleAPIv1Res);
 
         expect(headers['x-readme-source-url']).toBeUndefined();
         mock.done();
@@ -130,14 +130,14 @@ describe('#readmeAPIV1Fetch()', () => {
             return this.req.headers;
           });
 
-        const headers = await readmeAPIV1Fetch(
+        const headers = await readmeAPIv1Fetch(
           '/api/v1',
           {
             method: 'get',
-            headers: cleanHeaders(key),
+            headers: cleanAPIv1Headers(key),
           },
           { filePath: './openapi.json', fileType: 'path' },
-        ).then(handleRes);
+        ).then(handleAPIv1Res);
 
         expect(headers['x-readme-source-url']).toBe(
           'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/openapi.json',
@@ -156,14 +156,14 @@ describe('#readmeAPIV1Fetch()', () => {
             return this.req.headers;
           });
 
-        const headers = await readmeAPIV1Fetch(
+        const headers = await readmeAPIv1Fetch(
           '/api/v1',
           {
             method: 'get',
-            headers: cleanHeaders(key),
+            headers: cleanAPIv1Headers(key),
           },
           { filePath, fileType: 'url' },
-        ).then(handleRes);
+        ).then(handleAPIv1Res);
 
         expect(headers['x-readme-source-url']).toBe(filePath);
         mock.done();
@@ -181,10 +181,10 @@ describe('#readmeAPIV1Fetch()', () => {
         return this.req.headers;
       });
 
-    const headers = await readmeAPIV1Fetch('/api/v1', {
+    const headers = await readmeAPIv1Fetch('/api/v1', {
       method: 'get',
-      headers: cleanHeaders(key),
-    }).then(handleRes);
+      headers: cleanAPIv1Headers(key),
+    }).then(handleAPIv1Res);
 
     expect(headers['user-agent']).toBe(`rdme/${pkg.version}`);
     expect(headers['x-readme-source']).toBe('cli');
@@ -203,7 +203,7 @@ describe('#readmeAPIV1Fetch()', () => {
         return this.req.headers;
       });
 
-    const headers = await readmeAPIV1Fetch('/api/v1/doesnt-need-auth').then(handleRes);
+    const headers = await readmeAPIv1Fetch('/api/v1/doesnt-need-auth').then(handleAPIv1Res);
 
     expect(headers['user-agent']).toBe(`rdme/${pkg.version}`);
     expect(headers['x-readme-source']).toBe('cli');
@@ -235,7 +235,7 @@ describe('#readmeAPIV1Fetch()', () => {
         Warning: '',
       });
 
-      await readmeAPIV1Fetch('/api/v1/some-warning');
+      await readmeAPIv1Fetch('/api/v1/some-warning');
 
       expect(console.warn).toHaveBeenCalledTimes(0);
       expect(getWarningCommandOutput()).toBe('');
@@ -248,7 +248,7 @@ describe('#readmeAPIV1Fetch()', () => {
         Warning: '199 - "some error"',
       });
 
-      await readmeAPIV1Fetch('/api/v1/some-warning');
+      await readmeAPIv1Fetch('/api/v1/some-warning');
 
       expect(console.warn).toHaveBeenCalledTimes(1);
       expect(getWarningCommandOutput()).toBe('⚠️  ReadMe API Warning: some error');
@@ -261,7 +261,7 @@ describe('#readmeAPIV1Fetch()', () => {
         Warning: '199 - "some error" 199 - "another error"',
       });
 
-      await readmeAPIV1Fetch('/api/v1/some-warning');
+      await readmeAPIv1Fetch('/api/v1/some-warning');
 
       expect(console.warn).toHaveBeenCalledTimes(2);
       expect(getWarningCommandOutput()).toBe(
@@ -276,7 +276,7 @@ describe('#readmeAPIV1Fetch()', () => {
         Warning: 'some garbage error',
       });
 
-      await readmeAPIV1Fetch('/api/v1/some-warning');
+      await readmeAPIv1Fetch('/api/v1/some-warning');
 
       expect(console.warn).toHaveBeenCalledTimes(1);
       expect(getWarningCommandOutput()).toBe('⚠️  ReadMe API Warning: some garbage error');
@@ -302,7 +302,7 @@ describe('#readmeAPIV1Fetch()', () => {
 
       const mock = getAPIV1Mock({}).get('/api/v1/proxy').reply(200);
 
-      await readmeAPIV1Fetch('/api/v1/proxy');
+      await readmeAPIv1Fetch('/api/v1/proxy');
 
       mock.done();
     });
@@ -314,7 +314,7 @@ describe('#readmeAPIV1Fetch()', () => {
 
       const mock = getAPIV1Mock({}).get('/api/v1/proxy').reply(200);
 
-      await readmeAPIV1Fetch('/api/v1/proxy');
+      await readmeAPIv1Fetch('/api/v1/proxy');
 
       mock.done();
     });
@@ -326,27 +326,27 @@ describe('#readmeAPIV1Fetch()', () => {
 
       const mock = getAPIV1Mock({}).get('/api/v1/proxy').reply(200);
 
-      await readmeAPIV1Fetch('/api/v1/proxy');
+      await readmeAPIv1Fetch('/api/v1/proxy');
 
       mock.done();
     });
   });
 });
 
-describe('#cleanHeaders()', () => {
+describe('#cleanAPIv1Headers()', () => {
   it('should base64-encode key in ReadMe-friendly format', () => {
-    expect(Array.from(cleanHeaders('test'))).toStrictEqual([['authorization', 'Basic dGVzdDo=']]);
+    expect(Array.from(cleanAPIv1Headers('test'))).toStrictEqual([['authorization', 'Basic dGVzdDo=']]);
   });
 
   it('should filter out undefined headers', () => {
-    expect(Array.from(cleanHeaders('test', undefined, new Headers({ 'x-something': undefined })))).toStrictEqual([
+    expect(Array.from(cleanAPIv1Headers('test', undefined, new Headers({ 'x-something': undefined })))).toStrictEqual([
       ['authorization', 'Basic dGVzdDo='],
     ]);
   });
 
   it('should filter out null headers', () => {
     expect(
-      Array.from(cleanHeaders('test', undefined, new Headers({ 'x-something': '1234', Accept: null }))),
+      Array.from(cleanAPIv1Headers('test', undefined, new Headers({ 'x-something': '1234', Accept: null }))),
     ).toStrictEqual([
       ['authorization', 'Basic dGVzdDo='],
       ['x-something', '1234'],
@@ -360,7 +360,7 @@ describe('#cleanHeaders()', () => {
       'Content-Type': 'application/json',
     });
 
-    expect(Array.from(cleanHeaders('test', undefined, headers))).toStrictEqual([
+    expect(Array.from(cleanAPIv1Headers('test', undefined, headers))).toStrictEqual([
       ['accept', 'text/plain'],
       ['authorization', 'Basic dGVzdDo='],
       ['content-type', 'application/json'],
