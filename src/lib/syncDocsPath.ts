@@ -12,7 +12,7 @@ import toposort from 'toposort';
 import APIError from './apiError.js';
 import readdirRecursive from './readdirRecursive.js';
 import readDoc from './readDoc.js';
-import { cleanHeaders, handleRes, readmeAPIV1Fetch } from './readmeAPIFetch.js';
+import { cleanAPIv1Headers, handleAPIv1Res, readmeAPIv1Fetch } from './readmeAPIFetch.js';
 
 /** API path within ReadMe to update (e.g. `docs`, `changelogs`, etc.) */
 type PageType = 'changelogs' | 'custompages' | 'docs';
@@ -65,11 +65,11 @@ async function pushDoc(
     }
 
     return (
-      readmeAPIV1Fetch(
+      readmeAPIv1Fetch(
         `/api/v1/${type}`,
         {
           method: 'post',
-          headers: cleanHeaders(key, selectedVersion, new Headers({ 'Content-Type': 'application/json' })),
+          headers: cleanAPIv1Headers(key, selectedVersion, new Headers({ 'Content-Type': 'application/json' })),
           body: JSON.stringify({
             slug,
             ...payload,
@@ -77,7 +77,7 @@ async function pushDoc(
         },
         { filePath, fileType: 'path' },
       )
-        .then(handleRes)
+        .then(handleAPIv1Res)
         // eslint-disable-next-line no-underscore-dangle
         .then(res => `🌱 successfully created '${res.slug}' (ID: ${res._id}) with contents from ${filePath}`)
     );
@@ -96,25 +96,25 @@ async function pushDoc(
       )}`;
     }
 
-    return readmeAPIV1Fetch(
+    return readmeAPIv1Fetch(
       `/api/v1/${type}/${slug}`,
       {
         method: 'put',
-        headers: cleanHeaders(key, selectedVersion, new Headers({ 'Content-Type': 'application/json' })),
+        headers: cleanAPIv1Headers(key, selectedVersion, new Headers({ 'Content-Type': 'application/json' })),
         body: JSON.stringify(payload),
       },
       { filePath, fileType: 'path' },
     )
-      .then(handleRes)
+      .then(handleAPIv1Res)
       .then(res => `✏️ successfully updated '${res.slug}' with contents from ${filePath}`);
   }
 
-  return readmeAPIV1Fetch(`/api/v1/${type}/${slug}`, {
+  return readmeAPIv1Fetch(`/api/v1/${type}/${slug}`, {
     method: 'get',
-    headers: cleanHeaders(key, selectedVersion, new Headers({ Accept: 'application/json' })),
+    headers: cleanAPIv1Headers(key, selectedVersion, new Headers({ Accept: 'application/json' })),
   })
     .then(async res => {
-      const body = await handleRes(res, false);
+      const body = await handleAPIv1Res(res, false);
       if (!res.ok) {
         if (res.status !== 404) return Promise.reject(new APIError(body));
         this.debug(`error retrieving data for ${slug}, creating doc`);

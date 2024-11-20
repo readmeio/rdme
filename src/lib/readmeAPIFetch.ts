@@ -128,7 +128,7 @@ function sanitizeHeaders(headers: Headers) {
  * @param fileOpts optional object containing information about the file being sent.
  * We use this to construct a full source URL for the file.
  */
-export async function readmeAPIV1Fetch(
+export async function readmeAPIv1Fetch(
   pathname: string,
   options: RequestInit = { headers: new Headers() },
   fileOpts: FilePathDetails = { filePath: '', fileType: false },
@@ -210,7 +210,7 @@ export async function readmeAPIV1Fetch(
 }
 
 /**
- * Small handler for handling responses from our API.
+ * Small handler for handling responses from API v1.
  *
  * If we receive JSON errors, we throw an APIError exception.
  *
@@ -221,7 +221,7 @@ export async function readmeAPIV1Fetch(
  * the function will return a resolved promise containing the JSON object.
  *
  */
-export async function handleRes(res: Response, rejectOnJsonError = true) {
+export async function handleAPIv1Res(res: Response, rejectOnJsonError = true) {
   const contentType = res.headers.get('content-type') || '';
   const extension = mime.extension(contentType);
   if (extension === 'json') {
@@ -249,7 +249,7 @@ export async function handleRes(res: Response, rejectOnJsonError = true) {
  * Returns the basic auth header and any other defined headers for use in `fetch` API calls.
  *
  */
-export function cleanHeaders(
+export function cleanAPIv1Headers(
   key: string,
   /** used for `x-readme-header` */
   version?: string,

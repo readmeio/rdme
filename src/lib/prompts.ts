@@ -6,7 +6,7 @@ import semver from 'semver';
 
 import { debug } from './logger.js';
 import promptTerminal from './promptWrapper.js';
-import { handleRes } from './readmeAPIFetch.js';
+import { handleAPIv1Res } from './readmeAPIFetch.js';
 
 interface Spec {
   _id: string;
@@ -75,7 +75,7 @@ const updateOasPrompt = (
         try {
           const newSpecs = await getSpecs(`${parsedDocs?.prev?.url || ''}`);
           const newParsedDocs = parse(newSpecs.headers.get('link'));
-          const newSpecList = await handleRes(newSpecs);
+          const newSpecList = await handleAPIv1Res(newSpecs);
           const { specId }: { specId: string } = await promptTerminal(
             updateOasPrompt(newSpecList, newParsedDocs, currPage - 1, totalPages, getSpecs),
           );
@@ -88,7 +88,7 @@ const updateOasPrompt = (
         try {
           const newSpecs = await getSpecs(`${parsedDocs?.next?.url || ''}`);
           const newParsedDocs = parse(newSpecs.headers.get('link'));
-          const newSpecList = await handleRes(newSpecs);
+          const newSpecList = await handleAPIv1Res(newSpecs);
           const { specId }: { specId: string } = await promptTerminal(
             updateOasPrompt(newSpecList, newParsedDocs, currPage + 1, totalPages, getSpecs),
           );
