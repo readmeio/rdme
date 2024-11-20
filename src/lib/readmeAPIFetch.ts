@@ -88,7 +88,7 @@ function parseWarningHeader(header: string): WarningHeader[] {
  * environment.
  *
  */
-function getUserAgent() {
+export function getUserAgent() {
   const gh = isGHA() ? '-github' : '';
   return `rdme${gh}/${pkg.version}`;
 }
@@ -221,7 +221,7 @@ export async function readmeAPIV1Fetch(
  * the function will return a resolved promise containing the JSON object.
  *
  */
-async function handleRes(res: Response, rejectOnJsonError = true) {
+export async function handleRes(res: Response, rejectOnJsonError = true) {
   const contentType = res.headers.get('content-type') || '';
   const extension = mime.extension(contentType);
   if (extension === 'json') {
@@ -249,7 +249,7 @@ async function handleRes(res: Response, rejectOnJsonError = true) {
  * Returns the basic auth header and any other defined headers for use in `fetch` API calls.
  *
  */
-function cleanHeaders(
+export function cleanHeaders(
   key: string,
   /** used for `x-readme-header` */
   version?: string,
@@ -274,5 +274,3 @@ function cleanHeaders(
 
   return headers;
 }
-
-export { cleanHeaders, getUserAgent, handleRes };
