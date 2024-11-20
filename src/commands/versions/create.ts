@@ -9,7 +9,7 @@ import castStringOptToBool from '../../lib/castStringOptToBool.js';
 import { baseVersionFlags, keyFlag } from '../../lib/flags.js';
 import * as promptHandler from '../../lib/prompts.js';
 import promptTerminal from '../../lib/promptWrapper.js';
-import { cleanHeaders, handleRes, readmeAPIV1Fetch } from '../../lib/readmeAPIFetch.js';
+import { cleanAPIv1Headers, handleAPIv1Res, readmeAPIv1Fetch } from '../../lib/readmeAPIFetch.js';
 
 export default class CreateVersionCommand extends BaseCommand<typeof CreateVersionCommand> {
   static description = 'Create a new version for your project.';
@@ -42,10 +42,10 @@ export default class CreateVersionCommand extends BaseCommand<typeof CreateVersi
     }
 
     if (!fork) {
-      versionList = await readmeAPIV1Fetch('/api/v1/version', {
+      versionList = await readmeAPIv1Fetch('/api/v1/version', {
         method: 'get',
-        headers: cleanHeaders(key),
-      }).then(handleRes);
+        headers: cleanAPIv1Headers(key),
+      }).then(handleAPIv1Res);
     }
 
     prompts.override({
@@ -68,16 +68,16 @@ export default class CreateVersionCommand extends BaseCommand<typeof CreateVersi
       is_stable: promptResponse.is_stable,
     };
 
-    return readmeAPIV1Fetch('/api/v1/version', {
+    return readmeAPIv1Fetch('/api/v1/version', {
       method: 'post',
-      headers: cleanHeaders(
+      headers: cleanAPIv1Headers(
         key,
         undefined,
         new Headers({ Accept: 'application/json', 'Content-Type': 'application/json' }),
       ),
       body: JSON.stringify(body),
     })
-      .then(handleRes)
+      .then(handleAPIv1Res)
       .then(() => {
         return Promise.resolve(`Version ${version} created successfully.`);
       });

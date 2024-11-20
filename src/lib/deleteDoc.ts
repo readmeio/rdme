@@ -1,4 +1,4 @@
-import { cleanHeaders, handleRes, readmeAPIV1Fetch } from './readmeAPIFetch.js';
+import { cleanAPIv1Headers, handleAPIv1Res, readmeAPIv1Fetch } from './readmeAPIFetch.js';
 
 /**
  * Delete a document from ReadMe
@@ -19,10 +19,10 @@ export default async function deleteDoc(
   if (dryRun) {
     return Promise.resolve(`🎭 dry run! This will delete \`${slug}\`.`);
   }
-  return readmeAPIV1Fetch(`/api/v1/docs/${slug}`, {
+  return readmeAPIv1Fetch(`/api/v1/docs/${slug}`, {
     method: 'delete',
-    headers: cleanHeaders(key, selectedVersion, new Headers({ 'Content-Type': 'application/json' })),
+    headers: cleanAPIv1Headers(key, selectedVersion, new Headers({ 'Content-Type': 'application/json' })),
   })
-    .then(handleRes)
+    .then(handleAPIv1Res)
     .then(() => `🗑️  successfully deleted \`${slug}\`.`);
 }

@@ -11,7 +11,7 @@ import { info, oraOptions, warn } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
 import * as promptHandler from '../../lib/prompts.js';
 import promptTerminal from '../../lib/promptWrapper.js';
-import { cleanHeaders, handleRes, readmeAPIV1Fetch } from '../../lib/readmeAPIFetch.js';
+import { cleanAPIv1Headers, handleAPIv1Res, readmeAPIv1Fetch } from '../../lib/readmeAPIFetch.js';
 import streamSpecToRegistry from '../../lib/streamSpecToRegistry.js';
 import { getProjectVersion } from '../../lib/versionSelect.js';
 
@@ -111,7 +111,7 @@ export default class OpenAPICommand extends BaseCommand<typeof OpenAPICommand> {
         ? `You've successfully uploaded a new ${specType} file to your ReadMe project!`
         : `You've successfully updated an existing ${specType} file on your ReadMe project!`;
 
-      const body = await handleRes(data, false);
+      const body = await handleAPIv1Res(data, false);
 
       const output = {
         commandType: isUpdate ? 'update' : 'create',
@@ -147,7 +147,7 @@ export default class OpenAPICommand extends BaseCommand<typeof OpenAPICommand> {
     };
 
     const error = (res: Response) => {
-      return handleRes(res).catch(err => {
+      return handleAPIv1Res(res).catch(err => {
         // If we receive an APIError, no changes needed! Throw it as is.
         if (err.name === 'APIError') {
           throw err;
@@ -176,7 +176,7 @@ export default class OpenAPICommand extends BaseCommand<typeof OpenAPICommand> {
     const registryUUID = await streamSpecToRegistry(preparedSpec);
 
     const options: RequestInit = {
-      headers: cleanHeaders(
+      headers: cleanAPIv1Headers(
         key,
         selectedVersion,
         new Headers({ Accept: 'application/json', 'Content-Type': 'application/json' }),
@@ -191,7 +191,7 @@ export default class OpenAPICommand extends BaseCommand<typeof OpenAPICommand> {
 
       options.method = 'post';
       spinner.start('Creating your API docs in ReadMe...');
-      return readmeAPIV1Fetch('/api/v1/api-specification', options, {
+      return readmeAPIv1Fetch('/api/v1/api-specification', options, {
         filePath: specPath,
         fileType: specFileType,
       }).then(res => {
@@ -212,7 +212,7 @@ export default class OpenAPICommand extends BaseCommand<typeof OpenAPICommand> {
       isUpdate = true;
       options.method = 'put';
       spinner.start('Updating your API docs in ReadMe...');
-      return readmeAPIV1Fetch(`/api/v1/api-specification/${specId}`, options, {
+      return readmeAPIv1Fetch(`/api/v1/api-specification/${specId}`, options, {
         filePath: specPath,
         fileType: specFileType,
       }).then(res => {
@@ -235,9 +235,9 @@ export default class OpenAPICommand extends BaseCommand<typeof OpenAPICommand> {
 
     function getSpecs(url: string) {
       if (url) {
-        return readmeAPIV1Fetch(url, {
+        return readmeAPIv1Fetch(url, {
           method: 'get',
-          headers: cleanHeaders(key, selectedVersion),
+          headers: cleanAPIv1Headers(key, selectedVersion),
         });
       }
 
@@ -261,7 +261,7 @@ export default class OpenAPICommand extends BaseCommand<typeof OpenAPICommand> {
       this.debug(`total pages: ${totalPages}`);
       this.debug(`pagination result: ${JSON.stringify(parsedDocs)}`);
 
-      const apiSettingsBody = await handleRes(apiSettings);
+      const apiSettingsBody = await handleAPIv1Res(apiSettings);
       if (!apiSettingsBody.length) return createSpec();
 
       if (update) {

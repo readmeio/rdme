@@ -4,7 +4,7 @@ import chalk from 'chalk';
 import BaseCommand from '../../lib/baseCommand.js';
 import { keyFlag, versionFlag } from '../../lib/flags.js';
 import getCategories from '../../lib/getCategories.js';
-import { cleanHeaders, handleRes, readmeAPIV1Fetch } from '../../lib/readmeAPIFetch.js';
+import { cleanAPIv1Headers, handleAPIv1Res, readmeAPIv1Fetch } from '../../lib/readmeAPIFetch.js';
 import { getProjectVersion } from '../../lib/versionSelect.js';
 
 interface Category {
@@ -57,15 +57,15 @@ export default class CategoriesCreateCommand extends BaseCommand<typeof Categori
       }
     }
 
-    const createdCategory = await readmeAPIV1Fetch('/api/v1/categories', {
+    const createdCategory = await readmeAPIv1Fetch('/api/v1/categories', {
       method: 'post',
-      headers: cleanHeaders(key, selectedVersion, new Headers({ 'Content-Type': 'application/json' })),
+      headers: cleanAPIv1Headers(key, selectedVersion, new Headers({ 'Content-Type': 'application/json' })),
       body: JSON.stringify({
         title,
         type: categoryType,
       }),
     })
-      .then(handleRes)
+      .then(handleAPIv1Res)
       .then(res => `🌱 successfully created '${res.title}' with a type of '${res.type}' and an id of '${res.id}'`);
 
     return Promise.resolve(chalk.green(createdCategory));
