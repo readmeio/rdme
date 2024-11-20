@@ -246,7 +246,7 @@ export async function handleAPIv1Res(res: Response, rejectOnJsonError = true) {
 }
 
 /**
- * Returns the basic auth header and any other defined headers for use in `fetch` API calls.
+ * Returns the basic auth header and any other defined headers for use in `fetch` calls against API v1.
  *
  */
 export function cleanAPIv1Headers(
@@ -265,8 +265,8 @@ export function cleanAPIv1Headers(
   }
 
   for (const header of inputHeaders.entries()) {
-    // If you supply `undefined` or `null` to the `Headers` API it'll convert that those to a
-    // string.
+    // If you supply `undefined` or `null` to the `Headers` API it'll convert those to a string by default,
+    // so we instead filter those out here.
     if (header[1] !== 'null' && header[1] !== 'undefined' && header[1].length > 0) {
       headers.set(header[0], header[1]);
     }
