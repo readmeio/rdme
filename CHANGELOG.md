@@ -1,3 +1,10 @@
+# [9.0.0-next.30](https://github.com/readmeio/rdme/compare/v9.0.0-next.29...v9.0.0-next.30) (2024-11-21)
+
+
+### Bug Fixes
+
+* **release:** track `dist-gha` assets properly ([b0934cb](https://github.com/readmeio/rdme/commit/b0934cb25143aa2097ba3ef9f60d9311365a3695))
+
 # [9.0.0-next.29](https://github.com/readmeio/rdme/compare/v9.0.0-next.28...v9.0.0-next.29) (2024-11-21)
 
 
