@@ -43,8 +43,6 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
   // protected property in the base oclif class
   declare debug: (...args: unknown[]) => void;
 
-  abstract run(): Promise<string>;
-
   protected async catch(err: Error & { exitCode?: number }) {
     if (isTest()) {
       return super.catch(err);
