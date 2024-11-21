@@ -1,3 +1,10 @@
+# [9.0.0-next.29](https://github.com/readmeio/rdme/compare/v9.0.0-next.28...v9.0.0-next.29) (2024-11-21)
+
+
+### Bug Fixes
+
+* oclif-friendly error logging ([#1080](https://github.com/readmeio/rdme/issues/1080)) ([73c5f4c](https://github.com/readmeio/rdme/commit/73c5f4cd9e32c9f755915f6d670c8f36a64db453))
+
 # [9.0.0-next.28](https://github.com/readmeio/rdme/compare/v9.0.0-next.27...v9.0.0-next.28) (2024-11-21)
 
 
