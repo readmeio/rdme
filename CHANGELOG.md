@@ -1,3 +1,10 @@
+# [9.0.0-next.28](https://github.com/readmeio/rdme/compare/v9.0.0-next.27...v9.0.0-next.28) (2024-11-21)
+
+
+### Bug Fixes
+
+* debug properly ([#1078](https://github.com/readmeio/rdme/issues/1078)) ([5de0a4f](https://github.com/readmeio/rdme/commit/5de0a4f48668b45a4e7ae17ea11afc6bf5104d19))
+
 # [9.0.0-next.27](https://github.com/readmeio/rdme/compare/v9.0.0-next.26...v9.0.0-next.27) (2024-11-19)
 
 
