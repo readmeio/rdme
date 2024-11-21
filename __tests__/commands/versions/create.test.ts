@@ -3,7 +3,7 @@ import prompts from 'prompts';
 import { describe, beforeAll, afterEach, it, expect } from 'vitest';
 
 import Command from '../../../src/commands/versions/create.js';
-import APIError from '../../../src/lib/apiError.js';
+import { APIv1Error } from '../../../src/lib/apiError.js';
 import { getAPIV1Mock } from '../../helpers/get-api-mock.js';
 import { runCommand } from '../../helpers/setup-oclif-config.js';
 
@@ -136,7 +136,7 @@ describe('rdme versions:create', () => {
 
     const mockRequest = getAPIV1Mock().post('/api/v1/version').basicAuth({ user: key }).reply(400, errorResponse);
 
-    await expect(run(['--key', key, version, '--fork', '0.0.5'])).rejects.toStrictEqual(new APIError(errorResponse));
+    await expect(run(['--key', key, version, '--fork', '0.0.5'])).rejects.toStrictEqual(new APIv1Error(errorResponse));
     mockRequest.done();
   });
 

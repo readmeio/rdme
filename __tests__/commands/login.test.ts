@@ -3,7 +3,7 @@ import prompts from 'prompts';
 import { describe, beforeAll, afterAll, afterEach, it, expect } from 'vitest';
 
 import Command from '../../src/commands/login.js';
-import APIError from '../../src/lib/apiError.js';
+import { APIv1Error } from '../../src/lib/apiError.js';
 import configStore from '../../src/lib/configstore.js';
 import { getAPIV1Mock } from '../helpers/get-api-mock.js';
 import { runCommand } from '../helpers/setup-oclif-config.js';
@@ -105,7 +105,7 @@ describe('rdme login', () => {
 
     const mock = getAPIV1Mock().post('/api/v1/login', { email, password, project }).reply(401, errorResponse);
 
-    await expect(run()).rejects.toStrictEqual(new APIError(errorResponse));
+    await expect(run()).rejects.toStrictEqual(new APIv1Error(errorResponse));
     mock.done();
   });
 
@@ -147,7 +147,7 @@ describe('rdme login', () => {
       .post('/api/v1/login', { email, password, project: projectThatIsNotYours })
       .reply(404, errorResponse);
 
-    await expect(run()).rejects.toStrictEqual(new APIError(errorResponse));
+    await expect(run()).rejects.toStrictEqual(new APIv1Error(errorResponse));
     mock.done();
   });
 });

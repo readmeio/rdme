@@ -11,7 +11,7 @@ import prompts from 'prompts';
 import { describe, beforeAll, afterAll, beforeEach, afterEach, it, expect, vi, type MockInstance } from 'vitest';
 
 import Command from '../../../src/commands/docs/index.js';
-import APIError from '../../../src/lib/apiError.js';
+import { APIv1Error } from '../../../src/lib/apiError.js';
 import { getAPIV1Mock, getAPIV1MockWithVersionHeader } from '../../helpers/get-api-mock.js';
 import { after, before } from '../../helpers/get-gha-setup.js';
 import hashFileContents from '../../helpers/hash-file-contents.js';
@@ -349,7 +349,7 @@ describe('rdme docs', () => {
       };
 
       await expect(run([`./${fullDirectory}`, '--key', key, '--version', version])).rejects.toStrictEqual(
-        new APIError(formattedErrorObject),
+        new APIv1Error(formattedErrorObject),
       );
 
       getMocks.done();

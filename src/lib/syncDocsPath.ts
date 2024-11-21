@@ -9,7 +9,7 @@ import path from 'node:path';
 import chalk from 'chalk';
 import toposort from 'toposort';
 
-import APIError from './apiError.js';
+import { APIv1Error } from './apiError.js';
 import readdirRecursive from './readdirRecursive.js';
 import readDoc from './readDoc.js';
 import { cleanAPIv1Headers, handleAPIv1Res, readmeAPIv1Fetch } from './readmeAPIFetch.js';
@@ -116,7 +116,7 @@ async function pushDoc(
     .then(async res => {
       const body = await handleAPIv1Res(res, false);
       if (!res.ok) {
-        if (res.status !== 404) return Promise.reject(new APIError(body));
+        if (res.status !== 404) return Promise.reject(new APIv1Error(body));
         this.debug(`error retrieving data for ${slug}, creating doc`);
         return createDoc();
       }

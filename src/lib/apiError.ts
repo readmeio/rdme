@@ -1,4 +1,4 @@
-export interface APIErrorResponse {
+export interface APIv1ErrorResponse {
   docs?: string;
   error: string;
   help?: string;
@@ -7,11 +7,11 @@ export interface APIErrorResponse {
   suggestion?: string;
 }
 
-export default class APIError extends Error {
+export class APIv1Error extends Error {
   code: string;
 
-  constructor(res: APIErrorResponse | string | { error: APIErrorResponse }) {
-    let err: APIErrorResponse | string;
+  constructor(res: APIv1ErrorResponse | string | { error: APIv1ErrorResponse }) {
+    let err: APIv1ErrorResponse | string;
 
     // Special handling to for fetch `res` arguments where `res.error` will contain our API error
     // response.
@@ -19,7 +19,7 @@ export default class APIError extends Error {
       if (typeof res?.error === 'object') {
         err = res.error;
       } else {
-        err = res as APIErrorResponse;
+        err = res as APIv1ErrorResponse;
       }
     } else {
       err = res;
@@ -27,7 +27,7 @@ export default class APIError extends Error {
 
     super(err as unknown as string);
 
-    this.name = 'APIError';
+    this.name = 'APIv1Error';
 
     if (typeof err === 'object') {
       this.code = err.error;
@@ -41,7 +41,7 @@ export default class APIError extends Error {
         this.message = err.message;
       }
 
-      this.name = 'APIError';
+      this.name = 'APIv1Error';
     } else {
       this.code = err;
       this.message = err;

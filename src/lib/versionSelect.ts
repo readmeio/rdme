@@ -1,7 +1,7 @@
-import type { APIErrorResponse } from './apiError.js';
+import type { APIv1ErrorResponse } from './apiError.js';
 import type { Version } from '../commands/versions/index.js';
 
-import APIError from './apiError.js';
+import { APIv1Error } from './apiError.js';
 import isCI from './isCI.js';
 import { warn } from './logger.js';
 import promptTerminal from './promptWrapper.js';
@@ -65,6 +65,6 @@ export async function getProjectVersion(
 
     return versionSelection;
   } catch (err) {
-    return Promise.reject(new APIError(err as APIErrorResponse));
+    return Promise.reject(new APIv1Error(err as APIv1ErrorResponse));
   }
 }
