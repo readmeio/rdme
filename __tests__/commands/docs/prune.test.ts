@@ -1,11 +1,10 @@
-import { runCommand as oclifRunCommand } from '@oclif/test';
 import nock from 'nock';
 import prompts from 'prompts';
 import { describe, beforeAll, afterAll, it, expect } from 'vitest';
 
 import Command from '../../../src/commands/docs/prune.js';
 import { getAPIV1Mock, getAPIV1MockWithVersionHeader } from '../../helpers/get-api-mock.js';
-import { runCommand } from '../../helpers/setup-oclif-config.js';
+import { runCommand, runCommandWithHooks } from '../../helpers/setup-oclif-config.js';
 
 const fixturesBaseDir = '__fixtures__/docs';
 
@@ -166,7 +165,7 @@ describe('rdme docs:prune', () => {
   describe('rdme guides:prune', () => {
     it('should error if no folder provided', async () => {
       return expect(
-        (await oclifRunCommand(['guides:prune', '--key', key, '--version', version])).error.message,
+        (await runCommandWithHooks(['guides:prune', '--key', key, '--version', version])).error.message,
       ).toContain('Missing 1 required arg:\nfolder');
     });
   });
