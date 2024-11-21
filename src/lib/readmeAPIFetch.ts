@@ -210,7 +210,7 @@ export async function readmeAPIv1Fetch(
 }
 
 /**
- * Small handler for handling responses from API v1.
+ * Small handler for handling responses from ReadMe API v1.
  *
  * If we receive JSON errors, we throw an APIv1Error exception.
  *
@@ -246,7 +246,7 @@ export async function handleAPIv1Res(res: Response, rejectOnJsonError = true) {
 }
 
 /**
- * Returns the basic auth header and any other defined headers for use in `fetch` calls against API v1.
+ * Returns the basic auth header and any other defined headers for use in `fetch` calls against ReadMe API v1.
  *
  */
 export function cleanAPIv1Headers(

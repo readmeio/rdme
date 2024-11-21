@@ -1,3 +1,6 @@
+/**
+ * APIv1ErrorResponse is the shape of the error response we get from ReadMe API v1.
+ */
 export interface APIv1ErrorResponse {
   docs?: string;
   error: string;
@@ -7,6 +10,9 @@ export interface APIv1ErrorResponse {
   suggestion?: string;
 }
 
+/**
+ * Error class for handling ReadMe API v1 errors.
+ */
 export class APIv1Error extends Error {
   code: string;
 
