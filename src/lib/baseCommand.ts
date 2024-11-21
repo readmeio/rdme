@@ -5,6 +5,7 @@ import { format } from 'node:util';
 
 import * as core from '@actions/core';
 import { Command as OclifCommand } from '@oclif/core';
+import debugPkg from 'debug';
 
 import { isGHA, isTest } from './isCI.js';
 
@@ -15,9 +16,13 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
   constructor(argv: string[], config: Config) {
     super(argv, config);
 
-    const oclifDebug = this.debug;
     // this scope is copied from the @oclif/core source
+    // see https://github.com/oclif/core/blob/eef2ddedf6a844b28d8968ef5afd38c92f5875db/src/command.ts#L140
     const scope = this.id ? `${this.config.bin}:${this.id}` : this.config.bin;
+
+    // rather than using the @oclif/core debug function, we use the debug package
+    // so we have full control over the scope.
+    const debug = debugPkg(scope);
     // this is a lightweight reimplementation of the @oclif/core debug function
     // with some debug logging functionality for github actions
     this.debug = (formatter: unknown, ...args: unknown[]) => {
@@ -25,7 +30,7 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
         core.debug(`${scope}: ${format(formatter, ...args)}`);
       }
 
-      return oclifDebug(formatter, ...args);
+      return debug(formatter, ...args);
     };
   }
 
