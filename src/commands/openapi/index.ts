@@ -148,8 +148,8 @@ export default class OpenAPICommand extends BaseCommand<typeof OpenAPICommand> {
 
     const error = (res: Response) => {
       return handleAPIv1Res(res).catch(err => {
-        // If we receive an APIError, no changes needed! Throw it as is.
-        if (err.name === 'APIError') {
+        // If we receive an APIv1Error, no changes needed! Throw it as is.
+        if (err.name === 'APIv1Error') {
           throw err;
         }
 

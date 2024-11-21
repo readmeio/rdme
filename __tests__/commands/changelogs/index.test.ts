@@ -7,7 +7,7 @@ import nock from 'nock';
 import { describe, beforeAll, afterAll, beforeEach, it, expect } from 'vitest';
 
 import Command from '../../../src/commands/changelogs.js';
-import APIError from '../../../src/lib/apiError.js';
+import { APIv1Error } from '../../../src/lib/apiError.js';
 import { getAPIV1Mock } from '../../helpers/get-api-mock.js';
 import hashFileContents from '../../helpers/hash-file-contents.js';
 import { runCommand } from '../../helpers/setup-oclif-config.js';
@@ -276,7 +276,9 @@ describe('rdme changelogs', () => {
         message: `Error uploading ${chalk.underline(`${fullDirectory}/${slug}.md`)}:\n\n${errorObject.message}`,
       };
 
-      await expect(run([`./${fullDirectory}`, '--key', key])).rejects.toStrictEqual(new APIError(formattedErrorObject));
+      await expect(run([`./${fullDirectory}`, '--key', key])).rejects.toStrictEqual(
+        new APIv1Error(formattedErrorObject),
+      );
 
       getMocks.done();
       postMocks.done();

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 
-import APIError from '../../src/lib/apiError.js';
+import { APIv1Error } from '../../src/lib/apiError.js';
 
 const response = {
   error: 'VERSION_FORK_EMPTY',
@@ -16,9 +16,9 @@ const response = {
   ],
 };
 
-describe('APIError', () => {
+describe('APIv1Error', () => {
   it('should handle ReadMe API errors', () => {
-    const error = new APIError(response);
+    const error = new APIv1Error(response);
 
     expect(error.code).toBe(response.error);
     expect(error.message).toBe(
@@ -27,14 +27,14 @@ describe('APIError', () => {
   });
 
   it('should handle API errors from a fetch `res` object', () => {
-    const error = new APIError({ error: response });
+    const error = new APIv1Error({ error: response });
 
     expect(error.code).toBe(response.error);
   });
 
   it('should be able to handle generic non-API errors', () => {
     const msg = 'i am an generic javascript error';
-    const error = new APIError(msg);
+    const error = new APIv1Error(msg);
 
     expect(error.code).toBe(msg);
     expect(error.message).toBe(msg);
