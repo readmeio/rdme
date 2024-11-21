@@ -7,7 +7,7 @@ import nock from 'nock';
 import { describe, beforeAll, afterAll, beforeEach, afterEach, it, expect } from 'vitest';
 
 import Command from '../../../src/commands/docs/index.js';
-import APIError from '../../../src/lib/apiError.js';
+import { APIv1Error } from '../../../src/lib/apiError.js';
 import { getAPIV1Mock, getAPIV1MockWithVersionHeader } from '../../helpers/get-api-mock.js';
 import hashFileContents from '../../helpers/hash-file-contents.js';
 import { after as afterGHAEnv, before as beforeGHAEnv } from '../../helpers/setup-gha-env.js';
@@ -170,7 +170,7 @@ describe('rdme docs (single)', () => {
       };
 
       await expect(run([filePath, '--key', key, '--version', version])).rejects.toStrictEqual(
-        new APIError(formattedErrorObject),
+        new APIv1Error(formattedErrorObject),
       );
 
       getMock.done();

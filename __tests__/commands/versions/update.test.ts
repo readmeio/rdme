@@ -3,7 +3,7 @@ import prompts from 'prompts';
 import { describe, beforeAll, afterEach, it, expect } from 'vitest';
 
 import Command from '../../../src/commands/versions/update.js';
-import APIError from '../../../src/lib/apiError.js';
+import { APIv1Error } from '../../../src/lib/apiError.js';
 import { getAPIV1Mock } from '../../helpers/get-api-mock.js';
 import { runCommand } from '../../helpers/setup-oclif-config.js';
 
@@ -348,7 +348,7 @@ describe('rdme versions:update', () => {
       .basicAuth({ user: key })
       .reply(400, errorResponse);
 
-    await expect(run(['--key', key, version])).rejects.toStrictEqual(new APIError(errorResponse));
+    await expect(run(['--key', key, version])).rejects.toStrictEqual(new APIv1Error(errorResponse));
     mockRequest.done();
   });
 

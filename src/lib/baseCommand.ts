@@ -5,6 +5,8 @@ import { format } from 'node:util';
 
 import * as core from '@actions/core';
 import { Command as OclifCommand } from '@oclif/core';
+import chalk from 'chalk';
+import debugPkg from 'debug';
 
 import { isGHA, isTest } from './isCI.js';
 
@@ -15,9 +17,13 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
   constructor(argv: string[], config: Config) {
     super(argv, config);
 
-    const oclifDebug = this.debug;
     // this scope is copied from the @oclif/core source
+    // see https://github.com/oclif/core/blob/eef2ddedf6a844b28d8968ef5afd38c92f5875db/src/command.ts#L140
     const scope = this.id ? `${this.config.bin}:${this.id}` : this.config.bin;
+
+    // rather than using the @oclif/core debug function, we use the debug package
+    // so we have full control over the scope.
+    const debug = debugPkg(scope);
     // this is a lightweight reimplementation of the @oclif/core debug function
     // with some debug logging functionality for github actions
     this.debug = (formatter: unknown, ...args: unknown[]) => {
@@ -25,7 +31,7 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
         core.debug(`${scope}: ${format(formatter, ...args)}`);
       }
 
-      return oclifDebug(formatter, ...args);
+      return debug(formatter, ...args);
     };
   }
 
@@ -39,10 +45,40 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
 
   abstract run(): Promise<string>;
 
-  protected async catch(err: Error & { exitCode?: number }): Promise<unknown> {
-    // add any custom logic to handle errors from the command
-    // or simply return the parent class error handling
-    return super.catch(err);
+  protected async catch(err: Error & { exitCode?: number }) {
+    if (isTest()) {
+      return super.catch(err);
+    }
+
+    let message = `Yikes, something went wrong! Please try again and if the problem persists, get in touch with our support team at ${chalk.underline(
+      'support@readme.io',
+    )}.`;
+
+    if (err.message) {
+      message = err.message;
+    }
+
+    /**
+     * If we're in a GitHub Actions environment, log errors with that formatting instead.
+     *
+     * @see {@link https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-error-message}
+     * @see {@link https://github.com/actions/toolkit/tree/main/packages/core#annotations}
+     */
+    if (isGHA()) {
+      return core.setFailed(message);
+    }
+
+    // If this is a soft error then we should output the result as a regular log but exit the CLI
+    // with an error status code.
+    if (err.name === 'SoftError') {
+      // eslint-disable-next-line no-console
+      console.log(err.message);
+    } else {
+      // eslint-disable-next-line no-console
+      console.error(chalk.red(`\n${message}\n`));
+    }
+
+    return process.exit(process.exitCode ?? err.exitCode ?? 1);
   }
 
   /**
