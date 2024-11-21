@@ -11,7 +11,7 @@ async function main() {
     opts.args = stringArgv(process.env.INPUT_RDME);
   }
   await execute(opts).then(msg => {
-    if (msg) {
+    if (msg && typeof msg === 'string') {
       // eslint-disable-next-line no-console
       console.log(msg);
     }
