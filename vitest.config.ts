@@ -6,6 +6,20 @@ export default defineConfig({
     coverage: {
       exclude: [...coverageConfigDefaults.exclude, '**/dist-gha/**'],
     },
+    env: {
+      /**
+       * The `chalk` and `colors` libraries have trouble with tests sometimes in test snapshots so
+       * we're disabling colorization here for all tests.
+       *
+       * @see {@link https://github.com/chalk/supports-color/issues/106}
+       */
+      FORCE_COLOR: '0',
+      /**
+       * Sets our test `NODE_ENV` to a custom value in case of false positives if someone is using this
+       * tool in a testing environment.
+       */
+      NODE_ENV: 'rdme-test',
+    },
     exclude: [
       '**/__fixtures__/**',
       '**/dist-gha/**',
@@ -13,7 +27,6 @@ export default defineConfig({
       '**/__snapshots__/**',
       ...configDefaults.exclude,
     ],
-    globalSetup: ['./__tests__/setup.js'],
     onConsoleLog(log: string, type: 'stderr' | 'stdout'): boolean | void {
       // hides `rdme open` deprecation warning
       return !(log.includes('`rdme open` is deprecated and will be removed in a future release') && type === 'stderr');
