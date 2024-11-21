@@ -8,7 +8,7 @@ import prompts from 'prompts';
 import { describe, beforeAll, beforeEach, afterEach, it, expect, vi, type MockInstance } from 'vitest';
 
 import Command from '../../../src/commands/openapi/index.js';
-import APIError from '../../../src/lib/apiError.js';
+import { APIv1Error } from '../../../src/lib/apiError.js';
 import petstoreWeird from '../../__fixtures__/petstore-simple-weird-version.json' with { type: 'json' };
 import { getAPIV1Mock, getAPIV1MockWithVersionHeader } from '../../helpers/get-api-mock.js';
 import { after, before } from '../../helpers/get-gha-setup.js';
@@ -761,7 +761,7 @@ describe('rdme openapi', () => {
           '--version',
           invalidVersion,
         ]),
-      ).rejects.toStrictEqual(new APIError(errorObject));
+      ).rejects.toStrictEqual(new APIv1Error(errorObject));
 
       return mock.done();
     });
@@ -823,7 +823,7 @@ describe('rdme openapi', () => {
 
       await expect(
         run([require.resolve('@readme/oas-examples/3.1/json/petstore.json'), '--key', 'key']),
-      ).rejects.toStrictEqual(new APIError(errorObject));
+      ).rejects.toStrictEqual(new APIv1Error(errorObject));
 
       return mock.done();
     });
@@ -873,7 +873,7 @@ describe('rdme openapi', () => {
 
       await expect(
         run(['./__tests__/__fixtures__/swagger-with-invalid-extensions.json', '--key', key, '--version', version]),
-      ).rejects.toStrictEqual(new APIError(errorObject));
+      ).rejects.toStrictEqual(new APIv1Error(errorObject));
 
       mockWithHeader.done();
       return mock.done();
@@ -908,7 +908,7 @@ describe('rdme openapi', () => {
           '--version',
           version,
         ]),
-      ).rejects.toStrictEqual(new APIError(errorObject));
+      ).rejects.toStrictEqual(new APIv1Error(errorObject));
 
       putMock.done();
       return mock.done();
@@ -931,7 +931,7 @@ describe('rdme openapi', () => {
 
       await expect(
         run(['./__tests__/__fixtures__/swagger-with-invalid-extensions.json', '--key', key, '--version', version]),
-      ).rejects.toStrictEqual(new APIError(errorObject));
+      ).rejects.toStrictEqual(new APIv1Error(errorObject));
 
       return mock.done();
     });
@@ -964,7 +964,7 @@ describe('rdme openapi', () => {
 
       await expect(
         run([require.resolve('@readme/oas-examples/2.0/json/petstore.json'), '--key', key, '--version', version]),
-      ).rejects.toStrictEqual(new APIError(errorObject));
+      ).rejects.toStrictEqual(new APIv1Error(errorObject));
 
       mockWithHeader.done();
       return mock.done();

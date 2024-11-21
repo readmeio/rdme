@@ -7,7 +7,7 @@ import { ProxyAgent } from 'undici';
 
 import pkg from '../package.json' with { type: 'json' };
 
-import APIError from './apiError.js';
+import { APIv1Error } from './apiError.js';
 import config from './config.js';
 import { git } from './createGHA/index.js';
 import isCI, { ciName, isGHA } from './isCI.js';
@@ -210,14 +210,14 @@ export async function readmeAPIv1Fetch(
 }
 
 /**
- * Small handler for handling responses from API v1.
+ * Small handler for handling responses from ReadMe API v1.
  *
- * If we receive JSON errors, we throw an APIError exception.
+ * If we receive JSON errors, we throw an APIv1Error exception.
  *
  * If we receive non-JSON responses, we consider them errors and throw them.
  *
  * @param rejectOnJsonError if omitted (or set to true), the function will return
- * an `APIError` if the JSON body contains an `error` property. If set to false,
+ * an `APIv1Error` if the JSON body contains an `error` property. If set to false,
  * the function will return a resolved promise containing the JSON object.
  *
  */
@@ -230,7 +230,7 @@ export async function handleAPIv1Res(res: Response, rejectOnJsonError = true) {
     const body = (await res.json()) as any;
     debug(`received status code ${res.status} from ${res.url} with JSON response: ${JSON.stringify(body)}`);
     if (body.error && rejectOnJsonError) {
-      return Promise.reject(new APIError(body));
+      return Promise.reject(new APIv1Error(body));
     }
     return body;
   }
@@ -246,7 +246,7 @@ export async function handleAPIv1Res(res: Response, rejectOnJsonError = true) {
 }
 
 /**
- * Returns the basic auth header and any other defined headers for use in `fetch` calls against API v1.
+ * Returns the basic auth header and any other defined headers for use in `fetch` calls against ReadMe API v1.
  *
  */
 export function cleanAPIv1Headers(
