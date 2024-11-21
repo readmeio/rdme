@@ -3,7 +3,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { runCommand as oclifRunCommand } from '@oclif/test';
 import chalk from 'chalk';
 import frontMatter from 'gray-matter';
 import nock from 'nock';
@@ -16,7 +15,7 @@ import { getAPIV1Mock, getAPIV1MockWithVersionHeader } from '../../helpers/get-a
 import { after, before } from '../../helpers/get-gha-setup.js';
 import hashFileContents from '../../helpers/hash-file-contents.js';
 import { after as afterGHAEnv, before as beforeGHAEnv } from '../../helpers/setup-gha-env.js';
-import { runCommand } from '../../helpers/setup-oclif-config.js';
+import { runCommand, runCommandWithHooks } from '../../helpers/setup-oclif-config.js';
 
 const fixturesBaseDir = '__fixtures__/docs';
 const fullFixturesDir = `${__dirname}./../../${fixturesBaseDir}`;
@@ -722,9 +721,9 @@ describe('rdme docs', () => {
 
   describe('rdme guides', () => {
     it('should error if no path provided', async () => {
-      return expect((await oclifRunCommand(['guides', '--key', key, '--version', '1.0.0'])).error.message).toContain(
-        'Missing 1 required arg:\npath',
-      );
+      return expect(
+        (await runCommandWithHooks(['guides', '--key', key, '--version', '1.0.0'])).error.message,
+      ).toContain('Missing 1 required arg:\npath');
     });
   });
 });

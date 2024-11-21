@@ -45,8 +45,11 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
 
   abstract run(): Promise<string>;
 
-  // eslint-disable-next-line class-methods-use-this
   protected async catch(err: Error & { exitCode?: number }) {
+    if (isTest()) {
+      return super.catch(err);
+    }
+
     let message = `Yikes, something went wrong! Please try again and if the problem persists, get in touch with our support team at ${chalk.underline(
       'support@readme.io',
     )}.`;

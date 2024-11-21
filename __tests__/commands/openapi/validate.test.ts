@@ -2,14 +2,13 @@
 
 import fs from 'node:fs';
 
-import { runCommand as oclifRunCommand } from '@oclif/test';
 import chalk from 'chalk';
 import prompts from 'prompts';
 import { describe, beforeAll, beforeEach, afterEach, it, expect, vi, type MockInstance } from 'vitest';
 
 import Command from '../../../src/commands/openapi/validate.js';
 import { after, before } from '../../helpers/get-gha-setup.js';
-import { runCommand } from '../../helpers/setup-oclif-config.js';
+import { runCommand, runCommandWithHooks } from '../../helpers/setup-oclif-config.js';
 
 let consoleInfoSpy: MockInstance;
 
@@ -122,7 +121,7 @@ describe('rdme openapi:validate', () => {
     it('should fail if user attempts to pass `--github` flag in CI environment', async () => {
       return expect(
         (
-          await oclifRunCommand([
+          await runCommandWithHooks([
             'openapi:validate',
             '__tests__/__fixtures__/petstore-simple-weird-version.json',
             '--github',
