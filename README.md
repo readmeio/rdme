@@ -29,13 +29,13 @@ Not using ReadMe for your docs? No worries. `rdme` has a variety of tools to hel
 > [!WARNING]
 > Heads up: our [new ReadMe Refactored experience](https://docs.readme.com/main/docs/welcome-to-readme-refactored) doesn’t yet support `rdme`. If your project is using the new ReadMe Refactored experience, we recommend [enabling bi-directional syncing via Git](https://docs.readme.com/main/docs/bi-directional-sync) for an even better editing experience for the technical and non-technical users on your team!
 
-## Table of Contents
+# Table of Contents
 
 <!--
 Pro tip: to autogenerate this TOC, run the following from your command line:
 
 ```
-npx markdown-toc README.md --maxdepth 3 --bullets="-" -i
+npx markdown-toc README.md --maxdepth 2 --bullets="-" -i
 ```
 
 You'll need to remove the character escapes from where the emojis are used, see:
@@ -62,9 +62,9 @@ https://github.com/jonschlinkert/markdown-toc/issues/119
 
 <!-- tocstop -->
 
-## CLI Configuration
+# CLI Configuration
 
-### Setup
+## Setup
 
 > [!NOTE]
 > These setup instructions are for CLI usage only. For usage in GitHub Actions, see [GitHub Actions Configuration](#github-actions-configuration) below.
@@ -73,7 +73,7 @@ https://github.com/jonschlinkert/markdown-toc/issues/119
 
 To install the `rdme` CLI, you'll need to have [Node.js](https://nodejs.org) installed. Node.js comes bundled with [the `npm` CLI](https://github.com/npm/cli), which you'll need to install `rdme`. You can see our current Node.js version requirements in the green badge on the right.
 
-#### Installing `rdme` to Your Local Machine
+### Installing `rdme` to Your Local Machine
 
 The simplest way to use `rdme` is to install it globally:
 
@@ -83,7 +83,7 @@ npm install -g rdme
 
 With a global installation, you'll be able to run `rdme` within any directory on your local machine. If you log in once, you can quickly access your project without having to remember your API key (see the [Authentication](#authentication) section below).
 
-#### Installing `rdme` to a Project
+### Installing `rdme` to a Project
 
 The recommended approach for shared projects is to install `rdme` in your project's dependencies, that way you don't run into unexpected behavior with mismatching versions of `rdme`. We also suggest using the `--save-dev` flag since `rdme` is typically used as part of a CI process and is unlikely to be running in your production application:
 
@@ -99,7 +99,7 @@ npx rdme openapi:validate [file]
 
 To ensure you're getting the latest features and security updates, we recommend using a tool like [Dependabot](https://docs.github.com/code-security/dependabot/dependabot-version-updates/about-dependabot-version-updates) to keep `rdme` (and your other dependencies) up-to-date.
 
-### Authentication
+## Authentication
 
 For local CLI usage with a single project, you can authenticate `rdme` to your ReadMe project using `rdme login`. Once you follow the prompts and are successfully authenticated, your API key will be saved to a local configuration file (`~/.config/configstore/rdme-production.json`) and you won't have to provide the `--key` option to commands that require it.
 
@@ -115,7 +115,7 @@ You can also pass in your API key via environmental variable. Here is the order 
 
 `rdme whoami` is also available to you to determine who is logged in, and to what project. You can clear your stored credentials with `rdme logout`.
 
-#### 1Password
+### 1Password
 
 As a secure alternative to the `rdme login` approach to using the CLI locally, [1Password](https://1password.com/) users can set up the [ReadMe shell plugin](https://developer.1password.com/docs/cli/shell-plugins/readme/). With this approach, you can store your ReadMe API key in 1Password and securely pass it in your `rdme` commands using biometrics. See below for a demo of this behavior:
 
@@ -123,7 +123,7 @@ https://user-images.githubusercontent.com/8854718/208739413-590aa265-072d-4800-b
 
 To set this up, check out [1Password's documentation on the ReadMe shell plugin](https://developer.1password.com/docs/cli/shell-plugins/readme/).
 
-### Proxy
+## Proxy
 
 `rdme` makes API requests to the ReadMe API, which is located at [dash.readme.com](https://dash.readme.com). If you need to configure a proxy for these requests, you can do so by setting the `HTTPS_PROXY` environmental variable.
 
@@ -132,7 +132,7 @@ export HTTPS_PROXY=https://proxy.example.com:5678
 rdme openapi
 ```
 
-## GitHub Actions Configuration
+# GitHub Actions Configuration
 
 > [!NOTE]
 > For a full GitHub Workflow file example and additional information on GitHub Actions usage, check out [our docs](https://docs.readme.com/docs/rdme#github-actions-usage).
@@ -147,16 +147,16 @@ This will run through the `openapi` command, ask you a few quick questions, and 
 
 You can see examples featuring the latest version in [our docs](https://docs.readme.com/docs/rdme#github-actions-examples). We recommend [configuring Dependabot to keep your actions up-to-date](https://docs.github.com/code-security/dependabot/working-with-dependabot/keeping-your-actions-up-to-date-with-dependabot).
 
-## Usage
+# Usage
 
 If you wish to get more information about any command within `rdme`, you can execute `rdme help <command>` or `rdme <command> --help`. You an also execute `rdme help` to see a global list of commands that `rdme` offers.
 
-### Common `rdme` Options
+## Common `rdme` Options
 
 - `--key <string>`: The API key associated with your ReadMe project. Note that most of the commands below require API key authentication, even though the `--key` flag is omitted from the examples. See the [Authentication](#authentication) section above for more information.
 - `--version <string>`: Your project version. See [our docs](https://docs.readme.com/docs/versions) for more information.
 
-### API Definitions 📚
+## API Definitions 📚
 
 With `rdme`, you have access to a variety of tools to manage your API definition, most of which don't require an account on ReadMe. These tools include:
 
@@ -174,7 +174,7 @@ You can also pass in [Postman Collections](https://www.postman.com/collection/).
 
 The following examples use JSON files, but `rdme` supports API Definitions that are written in either JSON or YAML.
 
-#### Syncing an API Definition to ReadMe
+### Syncing an API Definition to ReadMe
 
 `rdme openapi` locates your API definition (if [you don't supply one](#omitting-the-file-path)), validates it, and then syncs it to your API reference on ReadMe.
 
@@ -185,7 +185,7 @@ If you wish to programmatically access any of this script's results (such as the
 
 This command also has a dry run mode, which can be useful for initial setup and debugging. You can perform a dry run by supplying the `--dryRun` flag.
 
-##### Omitting the File Path
+#### Omitting the File Path
 
 If you run `rdme` within a directory that contains your OpenAPI or Swagger definition, you can omit the file path. `rdme` will then look for JSON or YAML files (including in sub-directories) that contain a top-level [`openapi`](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#fixed-fields) or [`swagger`](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/2.0.md#fixed-fields) property.
 
@@ -200,7 +200,7 @@ If you run `rdme` within a directory that contains your OpenAPI or Swagger defin
 rdme openapi
 ```
 
-##### Uploading a New API Definition to ReadMe
+#### Uploading a New API Definition to ReadMe
 
 This will upload the API definition at the given URL or path to your project and return an ID and URL for you to later update your file, and view it in the client.
 
@@ -214,7 +214,7 @@ If you want to bypass the prompt to create or update an API definition, you can 
 rdme openapi [url-or-local-path-to-file] --version={project-version} --create
 ```
 
-##### Editing (Re-Syncing) an Existing API Definition
+#### Editing (Re-Syncing) an Existing API Definition
 
 This will edit (re-sync) an existing API definition (identified by `--id`) within your ReadMe project. **This is the recommended approach for usage in CI environments.**
 
@@ -222,7 +222,7 @@ This will edit (re-sync) an existing API definition (identified by `--id`) withi
 rdme openapi [url-or-local-path-to-file] --id={existing-id}
 ```
 
-##### Uploading or Editing an API Definition in a Project Version
+#### Uploading or Editing an API Definition in a Project Version
 
 You can additionally include a version flag, specifying the target version for your file's destination. This approach will provide you with CLI prompts, so we do not recommend this technique in CI environments.
 
@@ -252,7 +252,7 @@ You can add `--update` to the command so if there's only one API definition for 
 rdme openapi [url-or-local-path-to-file] --version={project-version} --update
 ```
 
-##### Override the Working Directory
+#### Override the Working Directory
 
 By default, `rdme` bundles all [references](https://swagger.io/docs/specification/using-ref/) with paths based on the directory that `rdme` is being run in. You can override the working directory using the `--workingDirectory` option, which can be helpful for bundling certain external references (see [here](__tests__/__fixtures__/relative-ref-oas/petstore.json) for an example file).
 
@@ -260,7 +260,7 @@ By default, `rdme` bundles all [references](https://swagger.io/docs/specificatio
 rdme openapi petstore.json --workingDirectory=[path to directory]
 ```
 
-#### Validating an API Definition
+### Validating an API Definition
 
 You can also perform a local validation of your API definition (no ReadMe account required!), which can be useful when constructing or editing your API definition.
 
@@ -270,7 +270,7 @@ rdme openapi:validate [url-or-local-path-to-file]
 
 Similar to the `openapi` command, you can also [omit the file path](#omitting-the-file-path).
 
-#### Reducing an API Definition
+### Reducing an API Definition
 
 We also offer a tool that allows you to reduce a large API definition down to a specific set of tags or paths (again, no ReadMe account required!). This can be useful if you're debugging a problematic schema somewhere, or if you have a file that is too big to maintain.
 
@@ -292,7 +292,7 @@ rdme openapi:reduce petstore.json --path /pet/{id} --method get --method put --o
 
 As with the `openapi` command, you can also [omit the file path](#omitting-the-file-path).
 
-#### Inspecting an API Definition
+### Inspecting an API Definition
 
 This tool can also perform a comprehensive analysis (again, no ReadMe account required!) of your API definition to determine how it's utilizing aspects of [the OpenAPI Specification](https://spec.openapis.org/oas/v3.1.0.html) (such as circular references, polymorphism, etc.) and any [ReadMe-specific extensions](https://docs.readme.com/main/docs/openapi-extensions) you might be using.
 
@@ -308,7 +308,7 @@ rdme openapi:inspect [url-or-local-path-to-file] --feature circularRefs --featur
 
 As with the `openapi` command, you can also [omit the file path](#omitting-the-file-path).
 
-#### Converting an API definition
+### Converting an API definition
 
 <!--alex ignore postman-postwoman-->
 
@@ -323,7 +323,7 @@ Similar to the `openapi` command, you can also [omit the file path](#omitting-th
 > [!NOTE]
 > All of our OpenAPI commands already do this conversion automatically, but in case you need to utilize this exclusive functionality outside of the context of those, you can.
 
-### Docs (a.k.a. Guides) 📖
+## Docs (a.k.a. Guides) 📖
 
 The Markdown files will require YAML front matter with certain ReadMe documentation attributes. Check out [our docs](https://docs.readme.com/docs/rdme#markdown-file-setup) for more info on setting up your front matter.
 
@@ -341,7 +341,7 @@ rdme guides [path] --version={project-version}
 
 This command also has a dry run mode, which can be useful for initial setup and debugging. You can read more about dry run mode [in our docs](https://docs.readme.com/docs/rdme#dry-run-mode).
 
-#### Prune
+### Prune
 
 If you wish to delete documents from ReadMe that are no longer present in your local directory:
 
@@ -357,7 +357,7 @@ This command also has an alias called `guides:prune`:
 rdme guides:prune path-to-directory-of-markdown
 ```
 
-### Changelog 📣
+## Changelog 📣
 
 The Markdown files will require YAML front matter with certain ReadMe documentation attributes. Check out [our docs](https://docs.readme.com/docs/rdme#markdown-file-setup) for more info on setting up your front matter.
 
@@ -369,7 +369,7 @@ rdme changelogs [path]
 
 This command also has a dry run mode, which can be useful for initial setup and debugging. You can read more about dry run mode [in our docs](https://docs.readme.com/docs/rdme#dry-run-mode).
 
-### Custom Pages 📄
+## Custom Pages 📄
 
 Custom Pages has support for both Markdown and HTML files. These files will require YAML front matter with certain ReadMe documentation attributes. Check out [our docs](https://docs.readme.com/docs/rdme#markdown-file-setup) for more info on setting up your front matter.
 
@@ -381,21 +381,21 @@ rdme custompages [path]
 
 This command also has a dry run mode, which can be useful for initial setup and debugging. You can read more about dry run mode [in our docs](https://docs.readme.com/docs/rdme#dry-run-mode).
 
-### Versions ⏳
+## Versions ⏳
 
-#### Get All Versions Associated With Your Project
+### Get All Versions Associated With Your Project
 
 ```sh
 rdme versions
 ```
 
-##### Get All Information About a Particular Version
+#### Get All Information About a Particular Version
 
 ```sh
 rdme versions --version={project-version}
 ```
 
-#### Create a New Version
+### Create a New Version
 
 ```sh
 rdme versions:create <version>
@@ -411,7 +411,7 @@ rdme versions:create <version> --fork={version-fork} --main={true|false} --beta=
 
 See `rdme versions:create --help` for a full list of flags.
 
-#### Update a Version
+### Update a Version
 
 ```sh
 rdme versions:update <version>
@@ -419,7 +419,7 @@ rdme versions:update <version>
 
 Like `versions:create`, if you wish to automate this process and not be blocked by CLI input, you can supply the necessary flags to this command. See `rdme versions:update --help` for a full list of flags.
 
-#### Delete a Version
+### Delete a Version
 
 You can remove a specific version from your project, as well as all of the attached specs
 
@@ -427,15 +427,15 @@ You can remove a specific version from your project, as well as all of the attac
 rdme versions:delete <version>
 ```
 
-### Categories 🪣
+## Categories 🪣
 
-#### Get All Categories Associated to Your Project Version
+### Get All Categories Associated to Your Project Version
 
 ```sh
 rdme categories --version={project-version}
 ```
 
-#### Create a New Category for your Project Version
+### Create a New Category for your Project Version
 
 ```sh
 rdme categories:create <title> --categoryType={category-type} --version={project-version}
@@ -445,7 +445,7 @@ rdme categories:create <title> --categoryType={category-type} --version={project
 
 If you want to prevent the creation of a duplicate category with a matching `title` and `categoryType`, supply the `--preventDuplicates` flag.
 
-### Open Your ReadMe Project in Your Browser
+## Open Your ReadMe Project in Your Browser
 
 If you are logged in, this will open the project in your browser:
 
@@ -453,6 +453,6 @@ If you are logged in, this will open the project in your browser:
 rdme open
 ```
 
-## Future
+# Future
 
 We are continually expanding and improving the offerings of this application as we expand our public API and are able. Some interactions may change over time, but we will do our best to retain backwards compatibility.
