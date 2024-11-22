@@ -10,7 +10,7 @@ import Command from '../../../src/commands/custompages.js';
 import { APIv1Error } from '../../../src/lib/apiError.js';
 import { getAPIV1Mock } from '../../helpers/get-api-mock.js';
 import hashFileContents from '../../helpers/hash-file-contents.js';
-import { runCommand } from '../../helpers/oclif.js';
+import { runCommandAndReturnResult } from '../../helpers/oclif.js';
 
 const fixturesBaseDir = '__fixtures__/custompages';
 const fullFixturesDir = `${__dirname}./../../${fixturesBaseDir}`;
@@ -21,13 +21,7 @@ describe('rdme custompages', () => {
 
   beforeAll(() => {
     nock.disableNetConnect();
-    run = (args: string[]) =>
-      runCommand(Command)(args).then(({ error, result }) => {
-        if (error) {
-          throw error;
-        }
-        return result;
-      });
+    run = (args: string[]) => runCommandAndReturnResult(Command)(args);
   });
 
   afterAll(() => nock.cleanAll());

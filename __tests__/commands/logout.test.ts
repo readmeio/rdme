@@ -3,19 +3,13 @@ import { describe, afterEach, beforeAll, it, expect } from 'vitest';
 import pkg from '../../package.json';
 import Command from '../../src/commands/logout.js';
 import configStore from '../../src/lib/configstore.js';
-import { runCommand } from '../helpers/oclif.js';
+import { runCommandAndReturnResult } from '../helpers/oclif.js';
 
 describe('rdme logout', () => {
   let run: (args?: string[]) => Promise<string>;
 
   beforeAll(() => {
-    run = (args: string[]) =>
-      runCommand(Command)(args).then(({ error, result }) => {
-        if (error) {
-          throw error;
-        }
-        return result;
-      });
+    run = (args: string[]) => runCommandAndReturnResult(Command)(args);
   });
 
   afterEach(() => {

@@ -3,7 +3,7 @@ import { describe, beforeAll, afterEach, it, expect } from 'vitest';
 
 import Command from '../../../src/commands/categories/create.js';
 import { getAPIV1Mock, getAPIV1MockWithVersionHeader } from '../../helpers/get-api-mock.js';
-import { runCommand } from '../../helpers/oclif.js';
+import { runCommandAndReturnResult } from '../../helpers/oclif.js';
 
 const key = 'API_KEY';
 const version = '1.0.0';
@@ -13,13 +13,7 @@ describe('rdme categories:create', () => {
 
   beforeAll(() => {
     nock.disableNetConnect();
-    run = (args: string[]) =>
-      runCommand(Command)(args).then(({ error, result }) => {
-        if (error) {
-          throw error;
-        }
-        return result;
-      });
+    run = (args: string[]) => runCommandAndReturnResult(Command)(args);
   });
 
   afterEach(() => nock.cleanAll());

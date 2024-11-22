@@ -5,19 +5,13 @@ import assert from 'node:assert';
 import { describe, it, expect, beforeAll } from 'vitest';
 
 import Command from '../../../src/commands/openapi/inspect.js';
-import { runCommand } from '../../helpers/oclif.js';
+import { runCommandAndReturnResult } from '../../helpers/oclif.js';
 
 describe('rdme openapi:inspect', () => {
   let run: (args?: string[]) => Promise<unknown>;
 
   beforeAll(() => {
-    run = (args: string[]) =>
-      runCommand(Command)(args).then(({ error, result }) => {
-        if (error) {
-          throw error;
-        }
-        return result;
-      });
+    run = (args: string[]) => runCommandAndReturnResult(Command)(args);
   });
 
   describe('full reports', () => {
