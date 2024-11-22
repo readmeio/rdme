@@ -11,7 +11,13 @@ describe('rdme openapi:inspect', () => {
   let run: (args?: string[]) => Promise<unknown>;
 
   beforeAll(() => {
-    run = runCommand(Command);
+    run = (args: string[]) =>
+      runCommand(Command)(args).then(({ error, result }) => {
+        if (error) {
+          throw error;
+        }
+        return result;
+      });
   });
 
   describe('full reports', () => {

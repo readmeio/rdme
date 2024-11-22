@@ -18,7 +18,13 @@ describe('rdme openapi:reduce', () => {
   let testWorkingDir: string;
 
   beforeAll(() => {
-    run = runCommand(Command);
+    run = (args: string[]) =>
+      runCommand(Command)(args).then(({ error, result }) => {
+        if (error) {
+          throw error;
+        }
+        return result;
+      });
   });
 
   beforeEach(() => {

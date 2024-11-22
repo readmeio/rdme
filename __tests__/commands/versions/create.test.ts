@@ -15,7 +15,13 @@ describe('rdme versions:create', () => {
 
   beforeAll(() => {
     nock.disableNetConnect();
-    run = runCommand(Command);
+    run = (args: string[]) =>
+      runCommand(Command)(args).then(({ error, result }) => {
+        if (error) {
+          throw error;
+        }
+        return result;
+      });
   });
 
   afterEach(() => nock.cleanAll());

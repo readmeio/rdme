@@ -35,12 +35,7 @@ export function runCommand<T extends typeof OclifCommand>(Command: T) {
     const oclifConfig = await setupOclifConfig();
     // @ts-expect-error this is the pattern recommended by the @oclif/test docs.
     // Not sure how to get this working with type generics.
-    return captureOutput<string>(() => Command.run(args, oclifConfig), { testNodeEnv }).then(({ error, result }) => {
-      if (error) {
-        throw error;
-      }
-      return result;
-    });
+    return captureOutput<string>(() => Command.run(args, oclifConfig), { testNodeEnv });
   };
 }
 

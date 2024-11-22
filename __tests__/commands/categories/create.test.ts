@@ -12,8 +12,14 @@ describe('rdme categories:create', () => {
   let run: (args?: string[]) => Promise<string>;
 
   beforeAll(() => {
-    run = runCommand(Command);
     nock.disableNetConnect();
+    run = (args: string[]) =>
+      runCommand(Command)(args).then(({ error, result }) => {
+        if (error) {
+          throw error;
+        }
+        return result;
+      });
   });
 
   afterEach(() => nock.cleanAll());
