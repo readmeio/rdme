@@ -8,15 +8,13 @@ To get started, run the `build` script to create a symlink with `package.json` (
 npm run build
 ```
 
-To run test commands, use `./bin/dev.js` instead of `rdme`. For example, if the command you're testing looks like this...
+To run test commands, swap out `rdme` for `bin/dev.js`. For example:
 
 ```sh
+# if the production command you're testing looks like this...
 rdme openapi:validate __tests__/__fixtures__/ref-oas/petstore.json
-```
 
-... your local command will look like this:
-
-```sh
+# ... your local test command will look like this:
 bin/dev.js openapi:validate __tests__/__fixtures__/ref-oas/petstore.json
 ```
 
@@ -32,7 +30,7 @@ npm run build
 bin/run.js openapi:validate __tests__/__fixtures__/ref-oas/petstore.json
 ```
 
-Your changes to the command code may make changes to [the command reference documents](./documentation/commands) — it is up to you whether you include those changes in your PR or if you let the release process take care of it. More information on that can be found in [MAINTAINERS.md](./MAINTAINERS.md).
+Your changes to the command code may make changes to [the command reference documents](./documentation/commands) — it is up to you whether you include those changes in your PR or if you let the release process take care of it. More information on that can be found in [`MAINTAINERS.md`](./MAINTAINERS.md).
 
 ## Running GitHub Actions Locally 🐳
 
