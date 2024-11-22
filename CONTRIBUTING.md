@@ -32,7 +32,7 @@ npm run build
 bin/run.js openapi:validate __tests__/__fixtures__/ref-oas/petstore.json
 ```
 
-Your changes to the command code may make changes to [the command reference document](./documentation/commands.md) — it is up to you whether you include those changes in your PR or if you let the release process take care of it. More information on that can be found in [MAINTAINERS.md](./MAINTAINERS.md).
+Your changes to the command code may make changes to [the command reference documents](./documentation/commands) — it is up to you whether you include those changes in your PR or if you let the release process take care of it. More information on that can be found in [MAINTAINERS.md](./MAINTAINERS.md).
 
 ## Running GitHub Actions Locally 🐳
 
