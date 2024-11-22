@@ -3,6 +3,8 @@ branches:
   - name: main
   - name: next
     prerelease: true
+  - name: v9
+    channel: 9.x
 
 plugins:
   - '@semantic-release/commit-analyzer'
