@@ -4,7 +4,6 @@ import type { AnySchema } from 'ajv';
 import betterAjvErrors from '@readme/better-ajv-errors';
 import Ajv from 'ajv';
 import jsYaml from 'js-yaml';
-import { expect } from 'vitest';
 
 interface CustomMatchers<R = unknown> {
   /**
