@@ -18,6 +18,13 @@ export default class DeleteVersionCommand extends BaseCommand<typeof DeleteVersi
     key: keyFlag,
   };
 
+  static examples = [
+    {
+      description: 'Remove a specific version from your project, as well as all of the associated documentation:',
+      command: '<%= config.bin %> <%= command.id %> <version>',
+    },
+  ];
+
   async run() {
     const { version } = this.args;
     const { key } = this.flags;

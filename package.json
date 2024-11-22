@@ -1,6 +1,6 @@
 {
   "name": "rdme",
-  "version": "9.0.0-next.28",
+  "version": "9.0.0-next.32",
   "description": "ReadMe's official CLI and GitHub Action.",
   "license": "MIT",
   "author": "ReadMe <support@readme.io> (https://readme.com)",
@@ -112,7 +112,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "build:docs": "oclif readme --readme-path documentation/commands.md --no-aliases",
+    "build:docs": "oclif readme --multi --output-dir documentation/commands --no-aliases",
     "build:gha": "npm run build && rollup --config",
     "build:gha:prod": "npm run build:gha -- --environment PRODUCTION_BUILD",
     "lint": "alex . && knip && npm run lint:ts && npm run prettier && npm run schemas:check",
@@ -183,7 +183,7 @@
         "description": "Sync or prune Guides pages in your ReadMe developer hub."
       },
       "openapi": {
-        "description": "Manage your API definition. Supports OpenAPI, Swagger, and Postman."
+        "description": "Manage your API definition (e.g., syncing, validation, analysis, conversion, etc.). Supports OpenAPI, Swagger, and Postman collections, in either JSON or YAML formats."
       },
       "versions": {
         "description": "Manage your documentation versions."

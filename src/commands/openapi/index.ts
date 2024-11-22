@@ -16,7 +16,10 @@ import streamSpecToRegistry from '../../lib/streamSpecToRegistry.js';
 import { getProjectVersion } from '../../lib/versionSelect.js';
 
 export default class OpenAPICommand extends BaseCommand<typeof OpenAPICommand> {
-  static description = 'Upload, or resync, your OpenAPI/Swagger definition to ReadMe.';
+  static summary = 'Upload, or resync, your OpenAPI/Swagger definition to ReadMe.';
+
+  static description =
+    "Locates your API definition (if you don't supply one), validates it, and then syncs it to your API reference on ReadMe.";
 
   // needed for unit tests, even though we also specify this in src/index.ts
   static id = 'openapi';
@@ -53,6 +56,59 @@ export default class OpenAPICommand extends BaseCommand<typeof OpenAPICommand> {
       summary: 'Bypasses the create/update prompt and automatically updates an existing API definition in ReadMe.',
     }),
   };
+
+  static examples = [
+    {
+      description:
+        'This will upload the API definition at the given URL or path to your project and return an ID and URL for you to later update your file, and view it in the client:',
+      command: '<%= config.bin %> <%= command.id %> [url-or-local-path-to-file]',
+    },
+    {
+      description:
+        'You can omit the file name and `rdme` will scan your working directory (and any subdirectories) for OpenAPI/Swagger files. This approach will provide you with CLI prompts, so we do not recommend this technique in CI environments.',
+      command: '<%= config.bin %> <%= command.id %>',
+    },
+    {
+      description:
+        'If you want to bypass the prompt to create or update an API definition, you can pass the `--create` flag:',
+      command: '<%= config.bin %> <%= command.id %> [url-or-local-path-to-file] --version={project-version} --create',
+    },
+    {
+      description:
+        'This will edit (re-sync) an existing API definition (identified by `--id`) within your ReadMe project. **This is the recommended approach for usage in CI environments.**',
+      command: '<%= config.bin %> <%= command.id %> [url-or-local-path-to-file] --id={existing-api-definition-id}',
+    },
+    {
+      description:
+        "Alternatively, you can include a version flag, which specifies the target version for your file's destination. This approach will provide you with CLI prompts, so we do not recommend this technique in CI environments.",
+      command: '<%= config.bin %> <%= command.id %> [url-or-local-path-to-file] --id={existing-api-definition-id}',
+    },
+    {
+      description:
+        "If you wish to programmatically access any of this script's results (such as the API definition ID or the link to the corresponding docs in your dashboard), supply the `--raw` flag and the command will return a JSON output:",
+      command: '<%= config.bin %> <%= command.id %> openapi.json --id={existing-api-definition-id} --raw',
+    },
+    {
+      description:
+        'You can also pass in a file in a subdirectory (we recommend running the CLI from the root of your repository if possible):',
+      command: '<%= config.bin %> <%= command.id %> example-directory/petstore.json',
+    },
+    {
+      description:
+        'By default, `<%= config.bin %>` bundles all references with paths based on the directory that it is being run in. You can override the working directory using the `--workingDirectory` option, which can be helpful for bundling certain external references:',
+      command: '<%= config.bin %> <%= command.id %> petstore.json --workingDirectory=[path to directory]',
+    },
+    {
+      description:
+        'If you wish to use the version specified in the `info.version` field of your OpenAPI definition, you can pass the `--useSpecVersion` option. So if the the `info.version` field was `1.2.3`, this is equivalent to passing `--version=1.2.3`.',
+      command: '<%= config.bin %> <%= command.id %> [url-or-local-path-to-file] --useSpecVersion',
+    },
+    {
+      description:
+        "If there's only one API definition for the given project version to update, you can use the `--update` flag and it will select it without any prompts:",
+      command: '<%= config.bin %> <%= command.id %> [url-or-local-path-to-file] --version={project-version} --update',
+    },
+  ];
 
   async run() {
     const { spec } = this.args;

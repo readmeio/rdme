@@ -172,7 +172,10 @@ function buildFullReport(analysis: Analysis, definitionVersion: string, tableBor
 }
 
 export default class OpenAPIInspectCommand extends BaseCommand<typeof OpenAPIInspectCommand> {
-  static description = 'Analyze an OpenAPI/Swagger definition for various OpenAPI and ReadMe feature usage.';
+  static summary = 'Analyze an OpenAPI/Swagger definition for various OpenAPI and ReadMe feature usage.';
+
+  static description =
+    "This command will perform a comprehensive analysis of your API definition to determine how it's utilizing aspects of the OpenAPI Specification (such as circular references, polymorphism, etc.) and any ReadMe-specific extensions you might be using.";
 
   static args = {
     spec: Args.string({ description: 'A file/URL to your API definition' }),
@@ -187,6 +190,25 @@ export default class OpenAPIInspectCommand extends BaseCommand<typeof OpenAPIIns
     }),
     workingDirectory: workingDirectoryFlag,
   };
+
+  static examples = [
+    {
+      description:
+        'By default, this command will display a comprehensive table of all OpenAPI and ReadMe features found in your API definition:',
+      command: '<%= config.bin %> <%= command.id %> [url-or-local-path-to-file]',
+    },
+    {
+      description:
+        'You can omit the file name and `rdme` will scan your working directory (and any subdirectories) for OpenAPI/Swagger files. This approach will provide you with CLI prompts, so we do not recommend this technique in CI environments.',
+      command: '<%= config.bin %> <%= command.id %>',
+    },
+    {
+      description:
+        'If you wish to automate this command, it contains a `--feature` flag so you can filter for one or several specific features. If you pass in one or more `--feature` flags, the command returns a `0` exit code if your definition contains all of the given features and a `1` exit code if your definition lacks any of the given features:',
+      command:
+        '<%= config.bin %> <%= command.id %> [url-or-local-path-to-file] --feature circularRefs --feature polymorphism',
+    },
+  ];
 
   async run() {
     const { spec } = this.args;

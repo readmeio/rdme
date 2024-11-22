@@ -1,3 +1,31 @@
+# [9.0.0-next.32](https://github.com/readmeio/rdme/compare/v9.0.0-next.31...v9.0.0-next.32) (2024-11-22)
+
+
+### Bug Fixes
+
+* **release:** track changes to commands doc directory ([78b6554](https://github.com/readmeio/rdme/commit/78b6554e2d7b1596b020c5dadce1c9dd72345fdc))
+
+# [9.0.0-next.31](https://github.com/readmeio/rdme/compare/v9.0.0-next.30...v9.0.0-next.31) (2024-11-22)
+
+
+### Features
+
+* revamped `oclif`-powered docs ([#1081](https://github.com/readmeio/rdme/issues/1081)) ([8a2833b](https://github.com/readmeio/rdme/commit/8a2833b93bc248c9634524462c4c54d5dc3fbb71))
+
+# [9.0.0-next.30](https://github.com/readmeio/rdme/compare/v9.0.0-next.29...v9.0.0-next.30) (2024-11-21)
+
+
+### Bug Fixes
+
+* **release:** track `dist-gha` assets properly ([b0934cb](https://github.com/readmeio/rdme/commit/b0934cb25143aa2097ba3ef9f60d9311365a3695))
+
+# [9.0.0-next.29](https://github.com/readmeio/rdme/compare/v9.0.0-next.28...v9.0.0-next.29) (2024-11-21)
+
+
+### Bug Fixes
+
+* oclif-friendly error logging ([#1080](https://github.com/readmeio/rdme/issues/1080)) ([73c5f4c](https://github.com/readmeio/rdme/commit/73c5f4cd9e32c9f755915f6d670c8f36a64db453))
+
 # [9.0.0-next.28](https://github.com/readmeio/rdme/compare/v9.0.0-next.27...v9.0.0-next.28) (2024-11-21)
 
 

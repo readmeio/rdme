@@ -24,14 +24,7 @@ plugins:
       '@semantic-release/git',
       {
         assets:
-          [
-            'CHANGELOG.md',
-            'documentation/commands.md',
-            'package.json',
-            'package-lock.json',
-            'dist-gha/commands.js',
-            'dist-gha/run.js',
-          ],
+          ['CHANGELOG.md', 'dist-gha', 'documentation/commands', 'package.json', 'package-lock.json', 'README.md'],
         message: "build(release): 🚀 v${nextRelease.version} 🦉\n\n${nextRelease.notes}\n[skip ci]",
       },
     ]

@@ -30,6 +30,19 @@ export default class CreateVersionCommand extends BaseCommand<typeof CreateVersi
     ...baseVersionFlags,
   };
 
+  static examples = [
+    {
+      description: 'Create a new version (with no flags):',
+      command: '<%= config.bin %> <%= command.id %>',
+    },
+    {
+      description:
+        'If you wish to automate the process of creating a new project version, and not have the CLI prompt you for input, you can do so by supplying the necessary flags:',
+      command:
+        '<%= config.bin %> <%= command.id %> <version> --fork={version-fork} --main={true|false} --beta={true|false} --deprecated={true|false} --hidden={true|false}',
+    },
+  ];
+
   async run() {
     let versionList;
     const { version } = this.args;
