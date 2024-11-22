@@ -1,3 +1,10 @@
+# [9.0.0-next.32](https://github.com/readmeio/rdme/compare/v9.0.0-next.31...v9.0.0-next.32) (2024-11-22)
+
+
+### Bug Fixes
+
+* **release:** track changes to commands doc directory ([78b6554](https://github.com/readmeio/rdme/commit/78b6554e2d7b1596b020c5dadce1c9dd72345fdc))
+
 # [9.0.0-next.31](https://github.com/readmeio/rdme/compare/v9.0.0-next.30...v9.0.0-next.31) (2024-11-22)
 
 
