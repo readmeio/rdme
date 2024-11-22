@@ -15,7 +15,7 @@ const testNodeEnv = process.env.NODE_ENV;
  * @see {@link https://github.com/oclif/test}
  * @see {@link https://oclif.io/docs/testing}
  */
-export default function setupOclifConfig() {
+export function setupOclifConfig() {
   // https://stackoverflow.com/a/61829368
   const root = path.join(new URL('.', import.meta.url).pathname, '.');
 
