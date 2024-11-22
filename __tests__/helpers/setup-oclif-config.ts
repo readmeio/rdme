@@ -25,6 +25,11 @@ export default function setupOclifConfig() {
   });
 }
 
+/**
+ * This runs the command you pass in against the args you pass in.
+ * This helper is preferred because `vitest --watch` will properly reload
+ * when you make changes to your command.
+ */
 export function runCommand<T extends typeof OclifCommand>(Command: T) {
   return async function runCommandAgainstArgs(args?: string[]) {
     const oclifConfig = await setupOclifConfig();
@@ -40,8 +45,9 @@ export function runCommand<T extends typeof OclifCommand>(Command: T) {
 }
 
 /**
- * A lightweight wrapper around `@oclif/test`'s `runCommand`
- * that loads our mock config and mock test env.
+ * This runs the command you pass in against the args you pass in.
+ * This helper is not ideal in that `vitest --watch` won't reload,
+ * but it's helpful if you need to run assertions against the command's hooks.
  */
 export async function runCommandWithHooks(args?: string[]) {
   const oclifConfig = await setupOclifConfig();
