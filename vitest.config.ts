@@ -30,6 +30,5 @@ export default defineConfig({
       '**/__snapshots__/**',
       ...configDefaults.exclude,
     ],
-    setupFiles: ['./__tests__/helpers/vitest.matchers.ts'],
   },
 });

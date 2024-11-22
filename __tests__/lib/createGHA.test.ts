@@ -6,7 +6,7 @@ import type { Response } from 'simple-git';
 import fs from 'node:fs';
 
 import prompts from 'prompts';
-import { describe, beforeEach, afterEach, it, expect, vi, type MockInstance } from 'vitest';
+import { describe, beforeEach, afterEach, it, expect, vi, type MockInstance, beforeAll } from 'vitest';
 
 import configstore from '../../src/lib/configstore.js';
 import { getConfigStoreKey, getGHAFileName, git } from '../../src/lib/createGHA/index.js';
@@ -15,6 +15,7 @@ import { after, before } from '../helpers/get-gha-setup.js';
 import getGitRemoteMock from '../helpers/get-git-mock.js';
 import ghaWorkflowSchema from '../helpers/github-workflow-schema.json' with { type: 'json' };
 import { setupOclifConfig } from '../helpers/oclif.js';
+import { toBeValidSchema } from '../helpers/vitest.matchers.js';
 
 const testWorkingDir = process.cwd();
 
@@ -26,6 +27,10 @@ const key = 'API_KEY';
 describe('#createGHA', () => {
   let oclifConfig: Config;
   let yamlOutput;
+
+  beforeAll(() => {
+    expect.extend({ toBeValidSchema });
+  });
 
   beforeEach(async () => {
     consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});

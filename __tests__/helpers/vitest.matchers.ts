@@ -19,7 +19,7 @@ declare module 'vitest' {
   interface AsymmetricMatchersContaining extends CustomMatchers {}
 }
 
-function toBeValidSchema(
+export function toBeValidSchema(
   /** The input YAML, as a string */
   yaml: string,
   /** The JSON schema file */
@@ -51,5 +51,3 @@ function toBeValidSchema(
     pass: true,
   };
 }
-
-expect.extend({ toBeValidSchema });
