@@ -11,7 +11,7 @@ describe('rdme openapi:inspect', () => {
   let run: (args?: string[]) => Promise<unknown>;
 
   beforeAll(() => {
-    run = (args: string[]) => runCommandAndReturnResult(Command)(args);
+    run = runCommandAndReturnResult(Command);
   });
 
   describe('full reports', () => {

@@ -9,7 +9,7 @@ describe('rdme logout', () => {
   let run: (args?: string[]) => Promise<string>;
 
   beforeAll(() => {
-    run = (args: string[]) => runCommandAndReturnResult(Command)(args);
+    run = runCommandAndReturnResult(Command);
   });
 
   afterEach(() => {

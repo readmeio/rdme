@@ -14,7 +14,7 @@ describe('rdme versions:delete', () => {
 
   beforeAll(() => {
     nock.disableNetConnect();
-    run = (args: string[]) => runCommandAndReturnResult(Command)(args);
+    run = runCommandAndReturnResult(Command);
   });
 
   afterEach(() => nock.cleanAll());

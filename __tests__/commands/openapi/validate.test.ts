@@ -21,7 +21,7 @@ describe('rdme openapi:validate', () => {
   let testWorkingDir: string;
 
   beforeAll(() => {
-    run = (args: string[]) => runCommandAndReturnResult(Command)(args);
+    run = runCommandAndReturnResult(Command);
   });
 
   beforeEach(() => {

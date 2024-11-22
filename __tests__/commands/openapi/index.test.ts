@@ -55,7 +55,7 @@ describe('rdme openapi', () => {
 
   beforeAll(() => {
     nock.disableNetConnect();
-    run = (args: string[]) => runCommandAndReturnResult(Command)(args);
+    run = runCommandAndReturnResult(Command);
   });
 
   beforeEach(() => {
