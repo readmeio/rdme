@@ -8,7 +8,7 @@ import { describe, beforeAll, beforeEach, afterEach, it, expect, vi, type MockIn
 
 import Command from '../../../src/commands/openapi/validate.js';
 import { after, before } from '../../helpers/get-gha-setup.js';
-import { runCommand, runCommandWithHooks } from '../../helpers/setup-oclif-config.js';
+import { runCommand, runCommandWithHooks } from '../../helpers/oclif.js';
 
 let consoleInfoSpy: MockInstance;
 

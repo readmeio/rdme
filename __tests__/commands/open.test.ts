@@ -7,7 +7,7 @@ import pkg from '../../package.json';
 import Command from '../../src/commands/open.js';
 import configStore from '../../src/lib/configstore.js';
 import { getAPIV1Mock } from '../helpers/get-api-mock.js';
-import { runCommand } from '../helpers/setup-oclif-config.js';
+import { runCommand } from '../helpers/oclif.js';
 
 const mockArg = ['--mock'];
 

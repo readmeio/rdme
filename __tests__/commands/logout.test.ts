@@ -3,7 +3,7 @@ import { describe, afterEach, beforeAll, it, expect } from 'vitest';
 import pkg from '../../package.json';
 import Command from '../../src/commands/logout.js';
 import configStore from '../../src/lib/configstore.js';
-import { runCommand } from '../helpers/setup-oclif-config.js';
+import { runCommand } from '../helpers/oclif.js';
 
 describe('rdme logout', () => {
   let run: (args?: string[]) => Promise<string>;

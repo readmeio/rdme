@@ -5,7 +5,7 @@ import assert from 'node:assert';
 import { describe, it, expect, beforeAll } from 'vitest';
 
 import Command from '../../../src/commands/openapi/inspect.js';
-import { runCommand } from '../../helpers/setup-oclif-config.js';
+import { runCommand } from '../../helpers/oclif.js';
 
 describe('rdme openapi:inspect', () => {
   let run: (args?: string[]) => Promise<unknown>;

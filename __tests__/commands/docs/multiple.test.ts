@@ -8,7 +8,7 @@ import { describe, beforeAll, afterAll, it, expect } from 'vitest';
 import Command from '../../../src/commands/docs/index.js';
 import { getAPIV1Mock, getAPIV1MockWithVersionHeader } from '../../helpers/get-api-mock.js';
 import hashFileContents from '../../helpers/hash-file-contents.js';
-import { runCommand } from '../../helpers/setup-oclif-config.js';
+import { runCommand } from '../../helpers/oclif.js';
 
 const fixturesBaseDir = '__fixtures__/docs';
 const fullFixturesDir = `${__dirname}./../../${fixturesBaseDir}`;

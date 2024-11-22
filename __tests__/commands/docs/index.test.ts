@@ -15,7 +15,7 @@ import { getAPIV1Mock, getAPIV1MockWithVersionHeader } from '../../helpers/get-a
 import { after, before } from '../../helpers/get-gha-setup.js';
 import hashFileContents from '../../helpers/hash-file-contents.js';
 import { after as afterGHAEnv, before as beforeGHAEnv } from '../../helpers/setup-gha-env.js';
-import { runCommand, runCommandWithHooks } from '../../helpers/setup-oclif-config.js';
+import { runCommand, runCommandWithHooks } from '../../helpers/oclif.js';
 
 const fixturesBaseDir = '__fixtures__/docs';
 const fullFixturesDir = `${__dirname}./../../${fixturesBaseDir}`;

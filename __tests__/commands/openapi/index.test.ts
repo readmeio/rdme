@@ -14,7 +14,7 @@ import petstoreWeird from '../../__fixtures__/petstore-simple-weird-version.json
 import { getAPIV1Mock, getAPIV1MockWithVersionHeader } from '../../helpers/get-api-mock.js';
 import { after, before } from '../../helpers/get-gha-setup.js';
 import { after as afterGHAEnv, before as beforeGHAEnv } from '../../helpers/setup-gha-env.js';
-import { runCommand } from '../../helpers/setup-oclif-config.js';
+import { runCommand } from '../../helpers/oclif.js';
 
 let consoleInfoSpy: MockInstance;
 let consoleWarnSpy: MockInstance;

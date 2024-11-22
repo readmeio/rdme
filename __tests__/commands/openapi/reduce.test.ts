@@ -6,7 +6,7 @@ import prompts from 'prompts';
 import { describe, beforeAll, beforeEach, afterEach, it, expect, vi, type MockInstance } from 'vitest';
 
 import Command from '../../../src/commands/openapi/reduce.js';
-import { runCommand } from '../../helpers/setup-oclif-config.js';
+import { runCommand } from '../../helpers/oclif.js';
 
 const successfulReduction = () => 'Your reduced API definition has been saved to output.json! 🤏';
 

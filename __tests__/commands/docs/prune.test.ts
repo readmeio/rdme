@@ -4,7 +4,7 @@ import { describe, beforeAll, afterAll, it, expect } from 'vitest';
 
 import Command from '../../../src/commands/docs/prune.js';
 import { getAPIV1Mock, getAPIV1MockWithVersionHeader } from '../../helpers/get-api-mock.js';
-import { runCommand, runCommandWithHooks } from '../../helpers/setup-oclif-config.js';
+import { runCommand, runCommandWithHooks } from '../../helpers/oclif.js';
 
 const fixturesBaseDir = '__fixtures__/docs';
 
