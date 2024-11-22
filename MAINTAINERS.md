@@ -15,7 +15,7 @@ When code is merged into the `main` or `next` branches, a release workflow (powe
 - Based on the changes, the version is bumped in [`package.json`](./package.json) 🥊 For example, say the current version is `8.5.1` and the commit history includes a new feature. This would result in a minor semver bump, which would produce the following tags:
   - A release tag like `v8.6.0` if on the `main` branch
   - A prerelease tag like `v8.6.0-next.1` if on the `next` branch
-- A few other files, such as [`CHANGELOG.md`](./CHANGELOG.md), [the command reference page](./documentation/commands.md), and our GitHub Actions bundle files, are updated based on this code 🪵
+- A few other files, such as [`CHANGELOG.md`](./CHANGELOG.md), [the command reference pages](./documentation/commands), and our GitHub Actions bundle files, are updated based on this code 🪵
 - A build commit (like [this](https://github.com/readmeio/rdme/commit/533a2db50b39c3b6130b3af07bebaed38218db4c)) is created with all of the updated files (e.g., `package.json`, `CHANGELOG.md`, etc.) 🆕
 - A couple duplicated tags are created for the current commit so our users can refer to them differently in their GitHub Actions (e.g., `8.6.0`, `v8`) 🔖
 - The new commit and tags are pushed to GitHub 📌
