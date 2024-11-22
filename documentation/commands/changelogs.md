@@ -24,7 +24,7 @@ FLAGS
 DESCRIPTION
   Sync Markdown files to your ReadMe project as Changelog posts.
 
-  Syncs Markdown files to the Changelog section of your ReadMe project. The path can either a directory or a single
+  Syncs Markdown files to the Changelog section of your ReadMe project. The path can either be a directory or a single
   Markdown file. The Markdown files will require YAML front matter with certain ReadMe documentation attributes. Check
   out our docs for more info on setting up your front matter: https://docs.readme.com/main/docs/rdme#markdown-file-setup
 
