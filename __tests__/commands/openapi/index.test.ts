@@ -13,8 +13,8 @@ import config from '../../../src/lib/config.js';
 import petstoreWeird from '../../__fixtures__/petstore-simple-weird-version.json' with { type: 'json' };
 import { getAPIV1Mock, getAPIV1MockWithVersionHeader } from '../../helpers/get-api-mock.js';
 import { after, before } from '../../helpers/get-gha-setup.js';
+import { runCommandAndReturnResult } from '../../helpers/oclif.js';
 import { after as afterGHAEnv, before as beforeGHAEnv } from '../../helpers/setup-gha-env.js';
-import { runCommand } from '../../helpers/setup-oclif-config.js';
 
 let consoleInfoSpy: MockInstance;
 let consoleWarnSpy: MockInstance;
@@ -55,7 +55,7 @@ describe('rdme openapi', () => {
 
   beforeAll(() => {
     nock.disableNetConnect();
-    run = runCommand(Command);
+    run = runCommandAndReturnResult(Command);
   });
 
   beforeEach(() => {

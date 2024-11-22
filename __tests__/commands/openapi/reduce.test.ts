@@ -6,7 +6,7 @@ import prompts from 'prompts';
 import { describe, beforeAll, beforeEach, afterEach, it, expect, vi, type MockInstance } from 'vitest';
 
 import Command from '../../../src/commands/openapi/reduce.js';
-import { runCommand } from '../../helpers/setup-oclif-config.js';
+import { runCommandAndReturnResult } from '../../helpers/oclif.js';
 
 const successfulReduction = () => 'Your reduced API definition has been saved to output.json! 🤏';
 
@@ -18,7 +18,7 @@ describe('rdme openapi:reduce', () => {
   let testWorkingDir: string;
 
   beforeAll(() => {
-    run = runCommand(Command);
+    run = runCommandAndReturnResult(Command);
   });
 
   beforeEach(() => {

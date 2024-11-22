@@ -6,6 +6,9 @@ export default defineConfig({
     coverage: {
       exclude: [...coverageConfigDefaults.exclude, '**/dist-gha/**'],
     },
+    // We'll defer to `@oclif/test` for console interception
+    // so we can run assertions against console output.
+    disableConsoleIntercept: true,
     env: {
       /**
        * The `chalk` and `colors` libraries have trouble with tests sometimes in test snapshots so
@@ -19,6 +22,8 @@ export default defineConfig({
        * tool in a testing environment.
        */
       NODE_ENV: 'rdme-test',
+      // Node emits ExperimentalWarnings because we import JSON modules, so this hides that output.
+      NODE_OPTIONS: '--disable-warning=ExperimentalWarning',
     },
     exclude: [
       '**/__fixtures__/**',
@@ -27,10 +32,5 @@ export default defineConfig({
       '**/__snapshots__/**',
       ...configDefaults.exclude,
     ],
-    onConsoleLog(log: string, type: 'stderr' | 'stdout'): boolean | void {
-      // hides `rdme open` deprecation warning
-      return !(log.includes('`rdme open` is deprecated and will be removed in a future release') && type === 'stderr');
-    },
-    setupFiles: ['./__tests__/helpers/vitest.matchers.ts'],
   },
 });
