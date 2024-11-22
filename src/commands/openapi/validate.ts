@@ -6,7 +6,10 @@ import { githubFlag, workingDirectoryFlag } from '../../lib/flags.js';
 import prepareOas from '../../lib/prepareOas.js';
 
 export default class OpenAPIValidateCommand extends BaseCommand<typeof OpenAPIValidateCommand> {
-  static description = 'Validate your OpenAPI/Swagger definition.';
+  static summary = 'Validate your OpenAPI/Swagger definition.';
+
+  static description =
+    'Perform a local validation of your API definition (no ReadMe account required!), which can be useful when constructing or editing your API definition.';
 
   // needed for unit tests, even though we also specify this in src/index.ts
   static id = 'openapi:validate';
@@ -14,6 +17,18 @@ export default class OpenAPIValidateCommand extends BaseCommand<typeof OpenAPIVa
   static args = {
     spec: Args.string({ description: 'A file/URL to your API definition' }),
   };
+
+  static examples = [
+    {
+      description: 'This will validate the API definition at the given URL or path:',
+      command: '<%= config.bin %> <%= command.id %> [url-or-local-path-to-file]',
+    },
+    {
+      description:
+        'You can omit the file name and `rdme` will scan your working directory (and any subdirectories) for OpenAPI/Swagger files. This approach will provide you with CLI prompts, so we do not recommend this technique in CI environments.',
+      command: '<%= config.bin %> <%= command.id %>',
+    },
+  ];
 
   static flags = {
     github: githubFlag,

@@ -11,6 +11,13 @@ export default class CategoriesCommand extends BaseCommand<typeof CategoriesComm
     version: versionFlag,
   };
 
+  static examples = [
+    {
+      description: 'Get all categories associated to your project version:',
+      command: '<%= config.bin %> <%= command.id %> --version={project-version}',
+    },
+  ];
+
   async run() {
     const { key, version } = this.flags;
 

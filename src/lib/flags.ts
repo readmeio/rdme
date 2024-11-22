@@ -8,7 +8,7 @@ export const githubFlag = Flags.boolean({ description: 'Create a new GitHub Acti
 /**
  * Used in any command where `key` is a `flag.
  */
-export const keyFlag = Flags.string({ description: 'Project API key', required: true });
+export const keyFlag = Flags.string({ description: 'ReadMe Project API key', required: true });
 
 /**
  * Used in the `openapi` family of commands where `title` is an option.
