@@ -1,13 +1,13 @@
 `rdme custompages`
 ==================
 
-Sync Markdown/HTML files to your ReadMe project as Custom Pages. Can either be a path to a directory or a single Markdown/HTML file.
+Sync Markdown/HTML files to your ReadMe project as Custom Pages.
 
 * [`rdme custompages PATH`](#rdme-custompages-path)
 
 ## `rdme custompages PATH`
 
-Sync Markdown/HTML files to your ReadMe project as Custom Pages. Can either be a path to a directory or a single Markdown/HTML file.
+Sync Markdown/HTML files to your ReadMe project as Custom Pages.
 
 ```
 USAGE
@@ -22,6 +22,20 @@ FLAGS
   --key=<value>  (required) ReadMe Project API key
 
 DESCRIPTION
-  Sync Markdown/HTML files to your ReadMe project as Custom Pages. Can either be a path to a directory or a single
-  Markdown/HTML file.
+  Sync Markdown/HTML files to your ReadMe project as Custom Pages.
+
+  Syncs Markdown files as Custom Pages in your ReadMe project. The path can either a directory or a single Markdown
+  file. The Markdown files will require YAML front matter with certain ReadMe documentation attributes. Check out our
+  docs for more info on setting up your front matter: https://docs.readme.com/main/docs/rdme#markdown-file-setup
+
+EXAMPLES
+  Passing in a path to a directory will also sync any Markdown files that are located in subdirectories. The path
+  input can also be individual Markdown files:
+
+    $ rdme custompages [path] --version={project-version}
+
+  This command also has a dry run mode, which can be useful for initial setup and debugging. You can read more about
+  dry run mode in our docs: https://docs.readme.com/main/docs/rdme#dry-run-mode
+
+    $ rdme custompages [path] --version={project-version} --dryRun
 ```

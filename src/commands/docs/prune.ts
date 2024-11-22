@@ -37,6 +37,17 @@ export default class DocsPruneCommand extends BaseCommand<typeof DocsPruneComman
     }),
   };
 
+  static examples = [
+    {
+      description: 'If you wish to delete documents from ReadMe that are no longer present in your local directory:',
+      command: '<%= config.bin %> <%= command.id %> [path-to-directory-of-markdown]',
+    },
+    {
+      description: 'Run with `--confirm` to bypass the confirmation prompt (useful for CI environments):',
+      command: '<%= config.bin %> <%= command.id %> [path-to-directory-of-markdown] --confirm',
+    },
+  ];
+
   async run() {
     const { folder } = this.args;
     const { dryRun, key, version } = this.flags;

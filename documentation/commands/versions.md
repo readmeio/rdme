@@ -22,6 +22,15 @@ FLAGS
 
 DESCRIPTION
   List versions available in your project or get a version by SemVer (https://semver.org/).
+
+EXAMPLES
+  Get all versions associated with your project:
+
+    $ rdme versions
+
+  Get all information about a particular version:
+
+    $ rdme versions --version={project-version}
 ```
 
 ## `rdme versions:create VERSION`
@@ -51,6 +60,17 @@ FLAGS
 
 DESCRIPTION
   Create a new version for your project.
+
+EXAMPLES
+  Create a new version (with no flags):
+
+    $ rdme versions:create
+
+  If you wish to automate the process of creating a new project version, and not have the CLI prompt you for input,
+  you can do so by supplying the necessary flags:
+
+    $ rdme versions:create <version> --fork={version-fork} --main={true|false} --beta={true|false} \
+      --deprecated={true|false} --hidden={true|false}
 ```
 
 ## `rdme versions:delete [VERSION]`
@@ -69,6 +89,11 @@ FLAGS
 
 DESCRIPTION
   Delete a version associated with your ReadMe project.
+
+EXAMPLES
+  Remove a specific version from your project, as well as all of the associated documentation:
+
+    $ rdme versions:delete <version>
 ```
 
 ## `rdme versions:update [VERSION]`
@@ -98,4 +123,15 @@ FLAGS
 
 DESCRIPTION
   Update an existing version for your project.
+
+EXAMPLES
+  Update an existing version (with no flags):
+
+    $ rdme versions:update
+
+  If you wish to automate the process of updating a project version, and not have the CLI prompt you for input, you
+  can do so by supplying the necessary flags:
+
+    $ rdme versions:update <version> --newVersion={new-version-name} --main={true|false} --beta={true|false} \
+      --deprecated={true|false} --hidden={true|false}
 ```

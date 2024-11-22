@@ -8,7 +8,7 @@ Sync or prune Guides pages in your ReadMe developer hub.
 
 ## `rdme docs PATH`
 
-Sync Markdown files to your ReadMe project as Guides. Can either be a path to a directory or a single Markdown file.
+Sync Markdown files to your ReadMe project as Guides.
 
 ```
 USAGE
@@ -25,10 +25,25 @@ FLAGS
                      project version will be used.
 
 DESCRIPTION
-  Sync Markdown files to your ReadMe project as Guides. Can either be a path to a directory or a single Markdown file.
+  Sync Markdown files to your ReadMe project as Guides.
+
+  Syncs Markdown files to the Guides section of your ReadMe project. The path can either a directory or a single
+  Markdown file. The Markdown files will require YAML front matter with certain ReadMe documentation attributes. Check
+  out our docs for more info on setting up your front matter: https://docs.readme.com/main/docs/rdme#markdown-file-setup
 
 ALIASES
   $ rdme guides
+
+EXAMPLES
+  Passing in a path to a directory will also sync any Markdown files that are located in subdirectories. The path
+  input can also be individual Markdown files:
+
+    $ rdme docs [path] --version={project-version}
+
+  This command also has a dry run mode, which can be useful for initial setup and debugging. You can read more about
+  dry run mode in our docs: https://docs.readme.com/main/docs/rdme#dry-run-mode
+
+    $ rdme docs [path] --version={project-version} --dryRun
 ```
 
 ## `rdme docs:prune FOLDER`
@@ -55,4 +70,13 @@ DESCRIPTION
 
 ALIASES
   $ rdme guides:prune
+
+EXAMPLES
+  If you wish to delete documents from ReadMe that are no longer present in your local directory:
+
+    $ rdme docs:prune [path-to-directory-of-markdown]
+
+  Run with `--confirm` to bypass the confirmation prompt (useful for CI environments):
+
+    $ rdme docs:prune [path-to-directory-of-markdown] --confirm
 ```

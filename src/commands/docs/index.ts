@@ -14,8 +14,10 @@ export default class DocsCommand extends BaseCommand<typeof DocsCommand> {
 
   static aliases = ['guides'];
 
+  static summary = 'Sync Markdown files to your ReadMe project as Guides.';
+
   static description =
-    'Sync Markdown files to your ReadMe project as Guides. Can either be a path to a directory or a single Markdown file.';
+    'Syncs Markdown files to the Guides section of your ReadMe project. The path can either a directory or a single Markdown file. The Markdown files will require YAML front matter with certain ReadMe documentation attributes. Check out our docs for more info on setting up your front matter: https://docs.readme.com/main/docs/rdme#markdown-file-setup';
 
   static args = {
     path: Args.string({ description: 'Path to a local Markdown file or folder of Markdown files.', required: true }),
@@ -29,6 +31,19 @@ export default class DocsCommand extends BaseCommand<typeof DocsCommand> {
       description: 'Runs the command without creating/updating any docs in ReadMe. Useful for debugging.',
     }),
   };
+
+  static examples = [
+    {
+      description:
+        'Passing in a path to a directory will also sync any Markdown files that are located in subdirectories. The path input can also be individual Markdown files:',
+      command: '<%= config.bin %> <%= command.id %> [path] --version={project-version}',
+    },
+    {
+      description:
+        'This command also has a dry run mode, which can be useful for initial setup and debugging. You can read more about dry run mode in our docs: https://docs.readme.com/main/docs/rdme#dry-run-mode',
+      command: '<%= config.bin %> <%= command.id %> [path] --version={project-version} --dryRun',
+    },
+  ];
 
   async run() {
     const { key, version } = this.flags;

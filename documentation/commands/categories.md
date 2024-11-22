@@ -21,6 +21,11 @@ FLAGS
 
 DESCRIPTION
   Get all categories in your ReadMe project.
+
+EXAMPLES
+  Get all categories associated to your project version:
+
+    $ rdme categories --version={project-version}
 ```
 
 ## `rdme categories:create TITLE`
@@ -45,4 +50,15 @@ FLAGS
 
 DESCRIPTION
   Create a category with the specified title and guide in your ReadMe project.
+
+EXAMPLES
+  Create a new category for your project version:
+
+    $ rdme categories:create <title> --categoryType={guide|reference} --version={project-version}
+
+  If you want to prevent the creation of a duplicate category with a matching `title` and `categoryType`, supply the
+  `--preventDuplicates` flag:
+
+    $ rdme categories:create <title> --categoryType={guide|reference} --version={project-version} \
+      --preventDuplicates
 ```
