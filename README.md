@@ -46,7 +46,6 @@ npm run build && npm run build:docs
 * [GitHub Actions Configuration](#github-actions-configuration)
 * [Usage](#usage)
 * [Command Topics](#command-topics)
-* [Future](#future)
 <!-- tocstop -->
 <!-- prettier-ignore-end -->
 
