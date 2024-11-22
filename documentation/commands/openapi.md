@@ -261,7 +261,7 @@ EXAMPLES
 
 ## `rdme openapi:refs [SPEC]`
 
-Simplifying Circular References in API definition
+Simplify Circular References in your OpenAPI definition
 
 ```
 USAGE
@@ -276,7 +276,7 @@ FLAGS
   --workingDirectory=<value>  Working directory (for usage with relative external references)
 
 DESCRIPTION
-  Simplifying Circular References in API definition
+  Simplify Circular References in your OpenAPI definition
 
   This command addresses limitations in ReadMe’s support for circular or recursive references within OpenAPI specifications. It automatically identifies and replaces these references with   simplified object schemas, ensuring compatibility for seamless display in the ReadMe platform. As a result, instead of displaying an empty form, as would occur with schemas containing such  references, you will receive a flattened representation of the object, showing what the object can potentially contain, including references to itself. Complex circular references may require manual inspection and may not be fully resolved.
 
