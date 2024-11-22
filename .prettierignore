@@ -7,5 +7,5 @@ coverage/
 # release build artifacts
 CHANGELOG.md
 dist/
-documentation/commands.md
+documentation/commands
 dist-gha/
