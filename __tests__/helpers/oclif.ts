@@ -32,7 +32,7 @@ export function setupOclifConfig() {
  *
  * @example runCommand(LoginCommand)(['--email', 'owlbert@example.com', '--password', 'password'])
  */
-export function runCommand<T extends typeof OclifCommand>(Command: T) {
+function runCommand<T extends typeof OclifCommand>(Command: T) {
   return async function runCommandAgainstArgs(args?: string[]) {
     const oclifConfig = await setupOclifConfig();
     // @ts-expect-error this is the pattern recommended by the @oclif/test docs.
