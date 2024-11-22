@@ -8,10 +8,6 @@ import { expect } from 'vitest';
 
 interface CustomMatchers<R = unknown> {
   /**
-   * Ensures that the decoded Basic Auth header matches the expected API key.
-   */
-  toBeBasicAuthApiKey(expectedApiKey: string): R;
-  /**
    * Ensures that the expected YAML conforms to the given JSON Schema.
    */
   toBeValidSchema(schema: unknown): R;
@@ -21,24 +17,6 @@ declare module 'vitest' {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   interface Assertion<T = any> extends CustomMatchers<T> {}
   interface AsymmetricMatchersContaining extends CustomMatchers {}
-}
-
-function toBeBasicAuthApiKey(actualAuthorizationHeader: string, expectedApiKey: string): ExpectationResult {
-  const encodedApiKey = actualAuthorizationHeader.split(' ')[1];
-  const decodedApiKey = Buffer.from(encodedApiKey, 'base64').toString().replace(/:$/, '');
-  if (decodedApiKey !== expectedApiKey) {
-    return {
-      message: () => 'expected Basic Auth header to match API key',
-      pass: false,
-      actual: decodedApiKey,
-      expected: expectedApiKey,
-    };
-  }
-
-  return {
-    message: () => 'expected Basic Auth header to not match API key',
-    pass: true,
-  };
 }
 
 function toBeValidSchema(
@@ -74,4 +52,4 @@ function toBeValidSchema(
   };
 }
 
-expect.extend({ toBeBasicAuthApiKey, toBeValidSchema });
+expect.extend({ toBeValidSchema });
