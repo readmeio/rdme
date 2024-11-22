@@ -15,11 +15,26 @@ plugins:
   # in the package*.json files before we commit the changes in `@semantic-release/git`
   - '@semantic-release/npm'
   - [
+      '@semantic-release/exec',
+      {
+        # Adds a major version git tag (e.g., v8) as a convenience for GitHub Actions users
+        # We need to run this in the publish phase so it can be force-pushed separately from the other tags
+        'publishCmd': './bin/set-major-version-tag.js push',
+      },
+    ]
+  - [
       '@semantic-release/git',
       {
         assets:
           ['CHANGELOG.md', 'dist-gha', 'documentation/commands', 'package.json', 'package-lock.json', 'README.md'],
         message: "build(release): 🚀 v${nextRelease.version} 🦉\n\n${nextRelease.notes}\n[skip ci]",
+      },
+    ]
+  - [
+      '@semantic-release/exec',
+      {
+        # Adds an additional git tag without the `v` prefix as a convenience for GitHub Actions users
+        'prepareCmd': 'git tag ${nextRelease.version}',
       },
     ]
   - '@semantic-release/github'
