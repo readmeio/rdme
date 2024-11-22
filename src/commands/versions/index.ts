@@ -23,6 +23,17 @@ export default class VersionsCommand extends BaseCommand<typeof VersionsCommand>
     version: Flags.string({ description: 'A specific project version to view.' }),
   };
 
+  static examples = [
+    {
+      description: 'Get all versions associated with your project:',
+      command: '<%= config.bin %> <%= command.id %>',
+    },
+    {
+      description: 'Get all information about a particular version:',
+      command: '<%= config.bin %> <%= command.id %> --version={project-version}',
+    },
+  ];
+
   async run() {
     const { key, version } = this.flags;
 

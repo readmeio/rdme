@@ -18,7 +18,10 @@ import promptTerminal from '../../lib/promptWrapper.js';
 import { validateFilePath } from '../../lib/validatePromptInput.js';
 
 export default class OpenAPIReduceCommand extends BaseCommand<typeof OpenAPIReduceCommand> {
-  static description = 'Reduce an OpenAPI definition into a smaller subset.';
+  static summary = 'Reduce an OpenAPI definition into a smaller subset.';
+
+  static description =
+    "Reduce your API definition down to a specific set of tags or paths, which can be useful if you're debugging a problematic schema somewhere, or if you have a file that is too big to maintain.";
 
   static args = {
     spec: Args.string({ description: 'A file/URL to your API definition' }),
@@ -35,6 +38,24 @@ export default class OpenAPIReduceCommand extends BaseCommand<typeof OpenAPIRedu
     title: titleFlag,
     workingDirectory: workingDirectoryFlag,
   };
+
+  static examples = [
+    {
+      description:
+        'By default, this command will ask you a couple questions about how you wish to reduce the file and then do so:',
+      command: '<%= config.bin %> <%= command.id %> [url-or-local-path-to-file]',
+    },
+    {
+      description:
+        'You can omit the file name and `rdme` will scan your working directory (and any subdirectories) for OpenAPI/Swagger files. This approach will provide you with CLI prompts, so we do not recommend this technique in CI environments.',
+      command: '<%= config.bin %> <%= command.id %>',
+    },
+    {
+      description: 'If you wish to automate this command, you can pass in CLI arguments to bypass the prompts:',
+      command:
+        '<%= config.bin %> <%= command.id %> petstore.json --path /pet/{id} --method get --method put --out petstore.reduced.json',
+    },
+  ];
 
   async run() {
     const { spec } = this.args;

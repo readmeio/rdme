@@ -24,6 +24,19 @@ export default class UpdateVersionCommand extends BaseCommand<typeof UpdateVersi
     ...baseVersionFlags,
   };
 
+  static examples = [
+    {
+      description: 'Update an existing version (with no flags):',
+      command: '<%= config.bin %> <%= command.id %>',
+    },
+    {
+      description:
+        'If you wish to automate the process of updating a project version, and not have the CLI prompt you for input, you can do so by supplying the necessary flags:',
+      command:
+        '<%= config.bin %> <%= command.id %> <version> --newVersion={new-version-name} --main={true|false} --beta={true|false} --deprecated={true|false} --hidden={true|false}',
+    },
+  ];
+
   async run() {
     const { version } = this.args;
     const { key, newVersion, codename, main, beta, hidden, deprecated } = this.flags;

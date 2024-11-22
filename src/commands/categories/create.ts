@@ -33,6 +33,20 @@ export default class CategoriesCreateCommand extends BaseCommand<typeof Categori
     version: versionFlag,
   };
 
+  static examples = [
+    {
+      description: 'Create a new category for your project version:',
+      command:
+        '<%= config.bin %> <%= command.id %> <title> --categoryType={guide|reference} --version={project-version}',
+    },
+    {
+      description:
+        'If you want to prevent the creation of a duplicate category with a matching `title` and `categoryType`, supply the `--preventDuplicates` flag:',
+      command:
+        '<%= config.bin %> <%= command.id %> <title> --categoryType={guide|reference} --version={project-version} --preventDuplicates',
+    },
+  ];
+
   async run() {
     const { title } = this.args;
     const { categoryType, key, version, preventDuplicates } = this.flags;
