@@ -6,6 +6,9 @@ export default defineConfig({
     coverage: {
       exclude: [...coverageConfigDefaults.exclude, '**/dist-gha/**'],
     },
+    // We'll defer to `@oclif/test` for console interception
+    // so we can run assertions against console output.
+    disableConsoleIntercept: true,
     env: {
       /**
        * The `chalk` and `colors` libraries have trouble with tests sometimes in test snapshots so
