@@ -8,6 +8,7 @@ Manage your API definition (e.g., syncing, validation, analysis, conversion, etc
 * [`rdme openapi:inspect [SPEC]`](#rdme-openapiinspect-spec)
 * [`rdme openapi:reduce [SPEC]`](#rdme-openapireduce-spec)
 * [`rdme openapi:validate [SPEC]`](#rdme-openapivalidate-spec)
+* [`rdme openapi:refs [SPEC]`](#rdme-openapirefs-spec)
 
 ## `rdme openapi [SPEC]`
 
@@ -256,4 +257,40 @@ EXAMPLES
   files. This approach will provide you with CLI prompts, so we do not recommend this technique in CI environments.
 
     $ rdme openapi:validate
+```
+
+## `rdme openapi:refs [SPEC]`
+
+Simplifying Circular References in API definition
+
+```
+USAGE
+  $ rdme openapi:refs [SPEC] [--out <value>] [--title <value>] [--workingDirectory <value>]
+
+ARGUMENTS
+  SPEC  A file/URL to your API definition
+
+FLAGS
+  --out=<value>               Output file path to write processed file to
+  --title=<value>             An override value for the `info.title` field in the API definition
+  --workingDirectory=<value>  Working directory (for usage with relative external references)
+
+DESCRIPTION
+  Simplifying Circular References in API definition
+
+  This command addresses limitations in ReadMe’s support for circular or recursive references within OpenAPI specifications. It automatically identifies and replaces these references with   simplified object schemas, ensuring compatibility for seamless display in the ReadMe platform. As a result, instead of displaying an empty form, as would occur with schemas containing such  references, you will receive a flattened representation of the object, showing what the object can potentially contain, including references to itself. Complex circular references may require manual inspection and may not be fully resolved.
+
+EXAMPLES
+  This will resolve circular and recursive references in the OpenAPI definition at the given file or URL:
+
+    $ rdme openapi:refs [url-or-local-path-to-file]
+
+  You can omit the file name and `rdme` will scan your working directory (and any subdirectories) for OpenAPI
+  files. This approach will provide you with CLI prompts, so we do not recommend this technique in CI environments.
+
+    $ rdme openapi:refs
+
+  If you wish to automate this command, you can pass in CLI arguments to bypass the prompts:
+
+    $ rdme openapi:refs petstore.json --out petstore.reduced.json 
 ```
