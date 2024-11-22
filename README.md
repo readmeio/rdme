@@ -196,7 +196,3 @@ npm run build && npm run build:docs
 
 <!-- commandsstop -->
 <!-- prettier-ignore-end -->
-
-# Future
-
-We are continually expanding and improving the offerings of this application as we expand our public API and are able. Some interactions may change over time, but we will do our best to retain backwards compatibility.
