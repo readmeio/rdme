@@ -70,5 +70,17 @@ describe('openapi:solving-circularity-recursiveness', () => {
       const expectedOutput = JSON.parse(fs.readFileSync(expectedOutputFile, 'utf8'));
       expect(processedOutput).toStrictEqual(expectedOutput);
     });
+
+    it('should display warning if unresolved references remain', async () => {
+      const inputFile = path.resolve(
+        '__tests__/__fixtures__/circular-references-oas/unresolvable-circular-references.json',
+      );
+
+      const result = await run([inputFile]);
+
+      expect(result).toContain('File not saved due to unresolved circular references.');
+
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
+    });
   });
 });
