@@ -207,6 +207,14 @@ export default class OpenAPISolvingCircularityAndRecursiveness extends BaseComma
       if (iterationCount >= 5) {
         return 'Maximum iteration limit reached. Some circular references may remain unresolved.';
       }
+
+      const unresolvedCircularRefs =
+        await OpenAPISolvingCircularityAndRecursiveness.getCircularRefsFromOas(openApiData);
+      if (unresolvedCircularRefs.length > 0) {
+        warn('There are unresolved circular references remaining.');
+        this.debug(unresolvedCircularRefs.join('\n'));
+        return chalk.red('File not saved due to unresolved circular references.');
+      }
     }
 
     prompts.override({ outputPath: out });
