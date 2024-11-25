@@ -5,13 +5,13 @@ import prompts from 'prompts';
 import { describe, beforeAll, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
 import Command from '../../../src/commands/openapi/refs.js';
-import { runCommand } from '../../helpers/setup-oclif-config.js';
+import { runCommandAndReturnResult } from '../../helpers/oclif.js';
 
 describe('openapi:solving-circularity-recursiveness', () => {
   let run: (args?: string[]) => Promise<unknown>;
 
   beforeAll(() => {
-    run = runCommand(Command);
+    run = runCommandAndReturnResult(Command);
   });
 
   beforeEach(() => {
