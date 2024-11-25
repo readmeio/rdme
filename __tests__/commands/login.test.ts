@@ -6,7 +6,7 @@ import Command from '../../src/commands/login.js';
 import { APIv1Error } from '../../src/lib/apiError.js';
 import configStore from '../../src/lib/configstore.js';
 import { getAPIV1Mock } from '../helpers/get-api-mock.js';
-import { runCommand } from '../helpers/setup-oclif-config.js';
+import { runCommandAndReturnResult } from '../helpers/oclif.js';
 
 const apiKey = 'abcdefg';
 const email = 'user@example.com';
@@ -19,7 +19,7 @@ describe('rdme login', () => {
 
   beforeAll(() => {
     nock.disableNetConnect();
-    run = runCommand(Command);
+    run = runCommandAndReturnResult(Command);
   });
 
   afterEach(() => configStore.clear());
