@@ -12,7 +12,7 @@ import prompts from 'prompts';
 import analyzeOas from '../../lib/analyzeOas.js';
 import BaseCommand from '../../lib/baseCommand.js';
 import { titleFlag, workingDirectoryFlag } from '../../lib/flags.js';
-import { warn } from '../../lib/logger.js';
+import { warn, debug } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
 import { validateFilePath } from '../../lib/validatePromptInput.js';
@@ -57,7 +57,11 @@ export default class OpenAPISolvingCircularityAndRecursiveness extends BaseComma
    * @param {string} schemaName - The name of the schema being processed.
    * @returns {IJsonSchema} The modified schema or the original.
    */
-  static replaceRefWithObject(schema: IJsonSchema, circularRefs: string[], schemaName: string): IJsonSchema {
+  static replaceRefWithObjectProxySchemes(
+    schema: IJsonSchema,
+    circularRefs: string[],
+    schemaName: string,
+  ): IJsonSchema {
     if (schema.$ref) {
       const refSchemaName = schema.$ref.split('/').pop() as string;
       const isCircular = circularRefs.some(refPath => refPath.includes(refSchemaName));
@@ -77,22 +81,26 @@ export default class OpenAPISolvingCircularityAndRecursiveness extends BaseComma
    * @param {string[]} circularRefs - List of circular reference paths.
    * @param {string} schemaName - The name of the schema being processed.
    */
-  static replaceReferencesInSchema(schema: IJsonSchema, circularRefs: string[], schemaName: string) {
+  static replaceRefsInSchema(schema: IJsonSchema, circularRefs: string[], schemaName: string) {
     if (schema.type === 'object' && schema.properties) {
       for (const prop of Object.keys(schema.properties)) {
         let property = JSON.parse(JSON.stringify(schema.properties[prop]));
-        property = OpenAPISolvingCircularityAndRecursiveness.replaceRefWithObject(property, circularRefs, schemaName);
+        property = OpenAPISolvingCircularityAndRecursiveness.replaceRefWithObjectProxySchemes(
+          property,
+          circularRefs,
+          schemaName,
+        );
         schema.properties[prop] = property;
 
         // Handle arrays with item references
         if (property.type === 'array' && property.items) {
           property.items = JSON.parse(JSON.stringify(property.items));
-          property.items = OpenAPISolvingCircularityAndRecursiveness.replaceRefWithObject(
+          property.items = OpenAPISolvingCircularityAndRecursiveness.replaceRefWithObjectProxySchemes(
             property.items,
             circularRefs,
             schemaName,
           );
-          OpenAPISolvingCircularityAndRecursiveness.replaceReferencesInSchema(property.items, circularRefs, schemaName);
+          OpenAPISolvingCircularityAndRecursiveness.replaceRefsInSchema(property.items, circularRefs, schemaName);
         }
       }
     }
@@ -116,7 +124,7 @@ export default class OpenAPISolvingCircularityAndRecursiveness extends BaseComma
           type: 'object',
           properties: { ...schemas[originalSchemaName].properties },
         } as IJsonSchema;
-        OpenAPISolvingCircularityAndRecursiveness.replaceReferencesInSchema(
+        OpenAPISolvingCircularityAndRecursiveness.replaceRefsInSchema(
           schemas[refSchemaName],
           circularRefs,
           refSchemaName,
@@ -152,6 +160,10 @@ export default class OpenAPISolvingCircularityAndRecursiveness extends BaseComma
         const itemsRefSchemaName = (property.items as IJsonSchema).$ref?.split('/')[3];
         if (itemsRefSchemaName) {
           refSchemaName = `${itemsRefSchemaName}Ref`;
+          if (itemsRefSchemaName.includes('Ref')) {
+            debug(`Skipping proxy schema for ${itemsRefSchemaName} in array items.`);
+            return;
+          }
           property.items = { $ref: `#/components/schemas/${refSchemaName}` } as IJsonSchema;
           createRefSchema(itemsRefSchemaName, refSchemaName);
         }
@@ -160,6 +172,10 @@ export default class OpenAPISolvingCircularityAndRecursiveness extends BaseComma
         refSchemaName = property.$ref?.split('/')[3];
         if (refSchemaName) {
           const newRefSchemaName = `${refSchemaName}Ref`;
+          if (refSchemaName.includes('Ref')) {
+            debug(`Skipping proxy schema for ${refSchemaName}.`);
+            return;
+          }
           replaceRef(schemaName, propertyName, newRefSchemaName);
           createRefSchema(refSchemaName, newRefSchemaName);
         }
@@ -168,9 +184,102 @@ export default class OpenAPISolvingCircularityAndRecursiveness extends BaseComma
   }
 
   /**
-   * The main execution method for the command.
-   * @returns {Promise<string>} Result message.
+   * Replaces all remaining circular references ($ref) in the schema with { type: 'object' }.
+   * @param {SchemaCollection} schemas - Collection of schemas to modify.
+   * @param {string[]} circularRefs - List of circular reference paths.
    */
+  static replaceAllRefsWithObject(schemas: SchemaCollection, circularRefs: string[]): void {
+    circularRefs.forEach(refPath => {
+      const refParts = refPath.split('/');
+      if (refParts.length < 6) {
+        throw new Error(`Invalid reference path: ${refPath}`);
+      }
+
+      const schemaName = refParts[3];
+      const propertyName = refParts[5];
+
+      const schema = schemas?.[schemaName];
+      if (!schema) {
+        warn(`Schema not found for: ${schemaName}`);
+        return;
+      }
+
+      if (schema.properties && schema.properties[propertyName]) {
+        schema.properties[propertyName] = { type: 'object' };
+      } else if (schema.type === 'array' && schema.items) {
+        schema.items = { type: 'object' };
+      }
+    });
+  }
+
+  /**
+   * Resolves circular references in the provided OpenAPI document.
+   * @param {OASDocument} openApiData - The OpenAPI document to process.
+   * @param {SchemaCollection} schemas - Collection of schemas to modify.
+   * @returns {Promise<void>}
+   */
+  static async resolveCircularRefs(openApiData: OASDocument, schemas: SchemaCollection) {
+    const initialCircularRefs = await OpenAPISolvingCircularityAndRecursiveness.getCircularRefsFromOas(openApiData);
+
+    if (initialCircularRefs.length === 0) {
+      chalk.green('The file does not contain circular or recursive references.');
+      return;
+    }
+
+    debug(`Found ${initialCircularRefs.length} circular references. Attempting resolution.`);
+
+    OpenAPISolvingCircularityAndRecursiveness.replaceCircularRefs(schemas, initialCircularRefs);
+
+    let remainingCircularRefs = await OpenAPISolvingCircularityAndRecursiveness.getCircularRefsFromOas(openApiData);
+    let iterationCount = 0;
+    const maxIterations = 8;
+
+    while (remainingCircularRefs.length > 0 && iterationCount < maxIterations) {
+      debug(
+        `Iteration ${iterationCount + 1}: Resolving ${remainingCircularRefs.length} remaining circular references.`,
+      );
+      OpenAPISolvingCircularityAndRecursiveness.replaceCircularRefs(schemas, remainingCircularRefs);
+
+      // eslint-disable-next-line no-await-in-loop
+      remainingCircularRefs = await OpenAPISolvingCircularityAndRecursiveness.getCircularRefsFromOas(openApiData);
+      iterationCount += 1;
+    }
+
+    if (remainingCircularRefs.length > 0) {
+      // eslint-disable-next-line no-console
+      console.info(
+        'ℹ️  Unresolved circular references remain. These references will be replaced with empty objects for schema display purposes.',
+      );
+      debug(`Remaining circular references: ${JSON.stringify(remainingCircularRefs, null, 2)}`);
+
+      const maxObjectReplacementIterations = 5;
+      let objectReplacementIterationCount = 0;
+
+      while (remainingCircularRefs.length > 0 && objectReplacementIterationCount < maxObjectReplacementIterations) {
+        debug(
+          `Object replacement iteration ${objectReplacementIterationCount + 1}: replacing remaining circular references.`,
+        );
+        OpenAPISolvingCircularityAndRecursiveness.replaceAllRefsWithObject(schemas, remainingCircularRefs);
+
+        // eslint-disable-next-line no-await-in-loop
+        remainingCircularRefs = await OpenAPISolvingCircularityAndRecursiveness.getCircularRefsFromOas(openApiData);
+        debug(
+          `After iteration ${objectReplacementIterationCount + 1}, remaining circular references: ${remainingCircularRefs.length}`,
+        );
+        objectReplacementIterationCount += 1;
+      }
+
+      if (remainingCircularRefs.length > 0) {
+        debug(`Final unresolved circular references: ${JSON.stringify(remainingCircularRefs, null, 2)}`);
+        throw new Error('Unable to resolve all circular references, even with fallback replacements.');
+      } else {
+        debug('All remaining circular references successfully replaced with empty objects.');
+      }
+    } else {
+      debug('All circular references successfully resolved.');
+    }
+  }
+
   async run() {
     const { spec } = this.args;
     const { out, workingDirectory } = this.flags;
@@ -183,38 +292,17 @@ export default class OpenAPISolvingCircularityAndRecursiveness extends BaseComma
 
     const { preparedSpec, specPath } = await prepareOas(spec, 'openapi:refs', { convertToLatest: true });
     const openApiData = JSON.parse(preparedSpec);
-    const circularRefs = await OpenAPISolvingCircularityAndRecursiveness.getCircularRefsFromOas(openApiData);
 
-    if (circularRefs.length === 0) {
-      warn('The file does not contain circular or recursive references.');
-    }
+    await OpenAPISolvingCircularityAndRecursiveness.resolveCircularRefs(openApiData, openApiData.components!.schemas!);
 
-    if (openApiData.components?.schemas && circularRefs.length > 0) {
-      OpenAPISolvingCircularityAndRecursiveness.replaceCircularRefs(openApiData.components.schemas, circularRefs);
-
-      let remainingCircularRefs = await OpenAPISolvingCircularityAndRecursiveness.getCircularRefsFromOas(openApiData);
-      let iterationCount = 0;
-
-      while (remainingCircularRefs.length > 0 && iterationCount < 5) {
-        OpenAPISolvingCircularityAndRecursiveness.replaceCircularRefs(
-          openApiData.components.schemas,
-          remainingCircularRefs,
-        );
-        remainingCircularRefs = remainingCircularRefs.length > 0 ? [] : remainingCircularRefs;
-        iterationCount += 1;
-      }
-
-      if (iterationCount >= 5) {
-        return 'Maximum iteration limit reached. Some circular references may remain unresolved.';
-      }
-
-      const unresolvedCircularRefs =
-        await OpenAPISolvingCircularityAndRecursiveness.getCircularRefsFromOas(openApiData);
-      if (unresolvedCircularRefs.length > 0) {
-        warn('There are unresolved circular references remaining.');
-        this.debug(unresolvedCircularRefs.join('\n'));
-        return chalk.red('File not saved due to unresolved circular references.');
-      }
+    try {
+      await OpenAPISolvingCircularityAndRecursiveness.resolveCircularRefs(
+        openApiData,
+        openApiData.components!.schemas!,
+      );
+    } catch (err) {
+      this.debug(`${err.message}`);
+      throw err;
     }
 
     prompts.override({ outputPath: out });
@@ -228,10 +316,11 @@ export default class OpenAPISolvingCircularityAndRecursiveness extends BaseComma
       },
     ]);
 
-    this.debug(`Saving processed spec to ${promptResults.outputPath}`);
-    fs.writeFileSync(promptResults.outputPath, JSON.stringify(openApiData, null, 2));
-    this.debug('Processed spec saved');
+    const outputPath = promptResults.outputPath;
+    this.debug(`Saving processed spec to ${outputPath}...`);
+    fs.writeFileSync(outputPath, JSON.stringify(openApiData, null, 2));
+    this.debug('Processed spec saved successfully.');
 
-    return chalk.green(`Your API definition has been processed and saved to ${promptResults.outputPath}!`);
+    return Promise.resolve(chalk.green(`Your API definition has been processed and saved to ${outputPath}!`));
   }
 }
