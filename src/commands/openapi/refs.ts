@@ -222,8 +222,7 @@ export default class OpenAPISolvingCircularityAndRecursiveness extends BaseComma
     const initialCircularRefs = await OpenAPISolvingCircularityAndRecursiveness.getCircularRefsFromOas(openApiData);
 
     if (initialCircularRefs.length === 0) {
-      chalk.green('The file does not contain circular or recursive references.');
-      return;
+      throw new Error('The file does not contain circular or recursive references.');
     }
 
     debug(`Found ${initialCircularRefs.length} circular references. Attempting resolution.`);
@@ -292,8 +291,6 @@ export default class OpenAPISolvingCircularityAndRecursiveness extends BaseComma
 
     const { preparedSpec, specPath } = await prepareOas(spec, 'openapi:refs', { convertToLatest: true });
     const openApiData = JSON.parse(preparedSpec);
-
-    await OpenAPISolvingCircularityAndRecursiveness.resolveCircularRefs(openApiData, openApiData.components!.schemas!);
 
     try {
       await OpenAPISolvingCircularityAndRecursiveness.resolveCircularRefs(
