@@ -33,10 +33,6 @@ updates:
       prefix: chore(deps)
       prefix-development: chore(deps-dev)
     ignore:
-      # See https://github.com/sindresorhus/ora/issues/229
-      - dependency-name: ora
-        versions:
-          - '>= 7'
       # There are ProxyAgent discrepancies between undici@6 and
       # the Node.js fetch implementation (which uses undici@5).
       # Until we use undici itself for fetch calls, we should
