@@ -11,7 +11,7 @@ import prompts from 'prompts';
 
 import analyzeOas from '../../lib/analyzeOas.js';
 import BaseCommand from '../../lib/baseCommand.js';
-import { titleFlag, workingDirectoryFlag } from '../../lib/flags.js';
+import { workingDirectoryFlag } from '../../lib/flags.js';
 import { warn, debug } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
@@ -19,19 +19,35 @@ import { validateFilePath } from '../../lib/validatePromptInput.js';
 
 type SchemaCollection = Record<string, IJsonSchema>;
 
-export default class OpenAPISolvingCircularityAndRecursiveness extends BaseCommand<
-  typeof OpenAPISolvingCircularityAndRecursiveness
-> {
+export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCommand> {
+  static summary = 'Resolves circular and recursive references in OpenAPI by replacing them with object schemas.';
+
   static description =
-    'Resolves circular and recursive references in OpenAPI by replacing them with object schemas. Not all circular references can be resolved automatically.';
+    'This command addresses limitations in ReadMe’s support for circular or recursive references within OpenAPI specifications. It automatically identifies and replaces these references with simplified object schemas, ensuring compatibility for seamless display in the ReadMe platform. As a result, instead of displaying an empty form, as would occur with schemas containing such references, you will receive a flattened representation of the object, showing what the object can potentially contain, including references to itself. Complex circular references may require manual inspection and may not be fully resolved.';
 
   static args = {
     spec: Args.string({ description: 'A file/URL to your API definition' }),
   };
 
+  static examples = [
+    {
+      description:
+        'This will resolve circular and recursive references in the OpenAPI definition at the given file or URL:',
+      command: '<%= config.bin %> <%= command.id %> [url-or-local-path-to-file]',
+    },
+    {
+      description:
+        'You can omit the file name and `rdme` will scan your working directory (and any subdirectories) for OpenAPI files. This approach will provide you with CLI prompts, so we do not recommend this technique in CI environments.',
+      command: '<%= config.bin %> <%= command.id %>',
+    },
+    {
+      description: 'If you wish to automate this command, you can pass in CLI arguments to bypass the prompts:',
+      command: '<%= config.bin %> <%= command.id %> petstore.json -out petstore.openapi.json',
+    },
+  ];
+
   static flags = {
     out: Flags.string({ description: 'Output file path to write processed file to' }),
-    title: titleFlag,
     workingDirectory: workingDirectoryFlag,
   };
 
@@ -85,22 +101,18 @@ export default class OpenAPISolvingCircularityAndRecursiveness extends BaseComma
     if (schema.type === 'object' && schema.properties) {
       for (const prop of Object.keys(schema.properties)) {
         let property = JSON.parse(JSON.stringify(schema.properties[prop]));
-        property = OpenAPISolvingCircularityAndRecursiveness.replaceRefWithObjectProxySchemes(
-          property,
-          circularRefs,
-          schemaName,
-        );
+        property = OpenAPIRefsCommand.replaceRefWithObjectProxySchemes(property, circularRefs, schemaName);
         schema.properties[prop] = property;
 
         // Handle arrays with item references
         if (property.type === 'array' && property.items) {
           property.items = JSON.parse(JSON.stringify(property.items));
-          property.items = OpenAPISolvingCircularityAndRecursiveness.replaceRefWithObjectProxySchemes(
+          property.items = OpenAPIRefsCommand.replaceRefWithObjectProxySchemes(
             property.items,
             circularRefs,
             schemaName,
           );
-          OpenAPISolvingCircularityAndRecursiveness.replaceRefsInSchema(property.items, circularRefs, schemaName);
+          OpenAPIRefsCommand.replaceRefsInSchema(property.items, circularRefs, schemaName);
         }
       }
     }
@@ -124,11 +136,7 @@ export default class OpenAPISolvingCircularityAndRecursiveness extends BaseComma
           type: 'object',
           properties: { ...schemas[originalSchemaName].properties },
         } as IJsonSchema;
-        OpenAPISolvingCircularityAndRecursiveness.replaceRefsInSchema(
-          schemas[refSchemaName],
-          circularRefs,
-          refSchemaName,
-        );
+        OpenAPIRefsCommand.replaceRefsInSchema(schemas[refSchemaName], circularRefs, refSchemaName);
         createdRefs.add(refSchemaName);
       }
     }
@@ -219,7 +227,7 @@ export default class OpenAPISolvingCircularityAndRecursiveness extends BaseComma
    * @returns {Promise<void>}
    */
   static async resolveCircularRefs(openApiData: OASDocument, schemas: SchemaCollection) {
-    const initialCircularRefs = await OpenAPISolvingCircularityAndRecursiveness.getCircularRefsFromOas(openApiData);
+    const initialCircularRefs = await OpenAPIRefsCommand.getCircularRefsFromOas(openApiData);
 
     if (initialCircularRefs.length === 0) {
       throw new Error('The file does not contain circular or recursive references.');
@@ -227,9 +235,9 @@ export default class OpenAPISolvingCircularityAndRecursiveness extends BaseComma
 
     debug(`Found ${initialCircularRefs.length} circular references. Attempting resolution.`);
 
-    OpenAPISolvingCircularityAndRecursiveness.replaceCircularRefs(schemas, initialCircularRefs);
+    OpenAPIRefsCommand.replaceCircularRefs(schemas, initialCircularRefs);
 
-    let remainingCircularRefs = await OpenAPISolvingCircularityAndRecursiveness.getCircularRefsFromOas(openApiData);
+    let remainingCircularRefs = await OpenAPIRefsCommand.getCircularRefsFromOas(openApiData);
     let iterationCount = 0;
     const maxIterations = 8;
 
@@ -237,10 +245,10 @@ export default class OpenAPISolvingCircularityAndRecursiveness extends BaseComma
       debug(
         `Iteration ${iterationCount + 1}: Resolving ${remainingCircularRefs.length} remaining circular references.`,
       );
-      OpenAPISolvingCircularityAndRecursiveness.replaceCircularRefs(schemas, remainingCircularRefs);
+      OpenAPIRefsCommand.replaceCircularRefs(schemas, remainingCircularRefs);
 
       // eslint-disable-next-line no-await-in-loop
-      remainingCircularRefs = await OpenAPISolvingCircularityAndRecursiveness.getCircularRefsFromOas(openApiData);
+      remainingCircularRefs = await OpenAPIRefsCommand.getCircularRefsFromOas(openApiData);
       iterationCount += 1;
     }
 
@@ -258,10 +266,10 @@ export default class OpenAPISolvingCircularityAndRecursiveness extends BaseComma
         debug(
           `Object replacement iteration ${objectReplacementIterationCount + 1}: replacing remaining circular references.`,
         );
-        OpenAPISolvingCircularityAndRecursiveness.replaceAllRefsWithObject(schemas, remainingCircularRefs);
+        OpenAPIRefsCommand.replaceAllRefsWithObject(schemas, remainingCircularRefs);
 
         // eslint-disable-next-line no-await-in-loop
-        remainingCircularRefs = await OpenAPISolvingCircularityAndRecursiveness.getCircularRefsFromOas(openApiData);
+        remainingCircularRefs = await OpenAPIRefsCommand.getCircularRefsFromOas(openApiData);
         debug(
           `After iteration ${objectReplacementIterationCount + 1}, remaining circular references: ${remainingCircularRefs.length}`,
         );
@@ -293,10 +301,7 @@ export default class OpenAPISolvingCircularityAndRecursiveness extends BaseComma
     const openApiData = JSON.parse(preparedSpec);
 
     try {
-      await OpenAPISolvingCircularityAndRecursiveness.resolveCircularRefs(
-        openApiData,
-        openApiData.components!.schemas!,
-      );
+      await OpenAPIRefsCommand.resolveCircularRefs(openApiData, openApiData.components!.schemas!);
     } catch (err) {
       this.debug(`${err.message}`);
       throw err;
