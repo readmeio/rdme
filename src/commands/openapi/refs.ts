@@ -12,7 +12,7 @@ import prompts from 'prompts';
 import analyzeOas from '../../lib/analyzeOas.js';
 import BaseCommand from '../../lib/baseCommand.js';
 import { workingDirectoryFlag } from '../../lib/flags.js';
-import { warn, debug } from '../../lib/logger.js';
+import { info, warn, debug } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
 import { validateFilePath } from '../../lib/validatePromptInput.js';
@@ -42,7 +42,7 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
     },
     {
       description: 'If you wish to automate this command, you can pass in CLI arguments to bypass the prompts:',
-      command: '<%= config.bin %> <%= command.id %> petstore.json -out petstore.openapi.json',
+      command: '<%= config.bin %> <%= command.id %> petstore.json --out petstore.openapi.json',
     },
   ];
 
@@ -53,10 +53,12 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
 
   /**
    * Identifies circular references in the OpenAPI document.
-   * @param {OASDocument} document - The OpenAPI document to analyze.
-   * @returns {Promise<string[]>} A list of circular reference paths.
+   * @returns A list of circular reference paths.
    */
-  static async getCircularRefsFromOas(document: OASDocument): Promise<string[]> {
+  static async getCircularRefsFromOas(
+    /** The OpenAPI document to analyze. */
+    document: OASDocument,
+  ): Promise<string[]> {
     try {
       const analysis = await analyzeOas(document);
       const circularRefs = analysis.openapi.circularRefs;
@@ -68,14 +70,14 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
 
   /**
    * Replaces a reference in a schema with an object if it's circular or recursive.
-   * @param {IJsonSchema} schema - The schema to process.
-   * @param {string[]} circularRefs - List of circular reference paths.
-   * @param {string} schemaName - The name of the schema being processed.
-   * @returns {IJsonSchema} The modified schema or the original.
+   * @returns The modified schema or the original.
    */
   static replaceRefWithObjectProxySchemes(
+    /** The schema to process. */
     schema: IJsonSchema,
+    /** List of circular reference paths. */
     circularRefs: string[],
+    /** The name of the schema being processed. */
     schemaName: string,
   ): IJsonSchema {
     if (schema.$ref) {
@@ -93,11 +95,15 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
 
   /**
    * Recursively replaces references in schemas, transforming circular references to objects.
-   * @param {IJsonSchema} schema - The schema to process.
-   * @param {string[]} circularRefs - List of circular reference paths.
-   * @param {string} schemaName - The name of the schema being processed.
    */
-  static replaceRefsInSchema(schema: IJsonSchema, circularRefs: string[], schemaName: string) {
+  static replaceRefsInSchema(
+    /** The schema to process. */
+    schema: IJsonSchema,
+    /** List of circular reference paths. */
+    circularRefs: string[],
+    /** The name of the schema being processed. */
+    schemaName: string,
+  ) {
     if (schema.type === 'object' && schema.properties) {
       for (const prop of Object.keys(schema.properties)) {
         let property = JSON.parse(JSON.stringify(schema.properties[prop]));
@@ -120,10 +126,13 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
 
   /**
    * Replaces circular references within a collection of schemas.
-   * @param {SchemaCollection} schemas - Collection of schemas to modify.
-   * @param {string[]} circularRefs - List of circular reference paths.
    */
-  static replaceCircularRefs(schemas: SchemaCollection, circularRefs: string[]): void {
+  static replaceCircularRefs(
+    /** Collection of schemas to modify. */
+    schemas: SchemaCollection,
+    /** List of circular reference paths. */
+    circularRefs: string[],
+  ): void {
     const createdRefs = new Set<string>();
 
     function replaceRef(schemaName: string, propertyName: string, refSchemaName: string) {
@@ -193,10 +202,13 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
 
   /**
    * Replaces all remaining circular references ($ref) in the schema with { type: 'object' }.
-   * @param {SchemaCollection} schemas - Collection of schemas to modify.
-   * @param {string[]} circularRefs - List of circular reference paths.
    */
-  static replaceAllRefsWithObject(schemas: SchemaCollection, circularRefs: string[]): void {
+  static replaceAllRefsWithObject(
+    /** Collection of schemas to modify. */
+    schemas: SchemaCollection,
+    /** List of circular reference paths. */
+    circularRefs: string[],
+  ): void {
     circularRefs.forEach(refPath => {
       const refParts = refPath.split('/');
       if (refParts.length < 6) {
@@ -222,11 +234,13 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
 
   /**
    * Resolves circular references in the provided OpenAPI document.
-   * @param {OASDocument} openApiData - The OpenAPI document to process.
-   * @param {SchemaCollection} schemas - Collection of schemas to modify.
-   * @returns {Promise<void>}
    */
-  static async resolveCircularRefs(openApiData: OASDocument, schemas: SchemaCollection) {
+  static async resolveCircularRefs(
+    /** The OpenAPI document to analyze. */
+    openApiData: OASDocument,
+    /** Collection of schemas to modify. */
+    schemas: SchemaCollection,
+  ) {
     const initialCircularRefs = await OpenAPIRefsCommand.getCircularRefsFromOas(openApiData);
 
     if (initialCircularRefs.length === 0) {
@@ -253,9 +267,9 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
     }
 
     if (remainingCircularRefs.length > 0) {
-      // eslint-disable-next-line no-console
-      console.info(
-        'ℹ️  Unresolved circular references remain. These references will be replaced with empty objects for schema display purposes.',
+      info(
+        'Unresolved circular references remain. These references will be replaced with empty objects for schema display purposes.',
+        { includeEmojiPrefix: true },
       );
       debug(`Remaining circular references: ${JSON.stringify(remainingCircularRefs, null, 2)}`);
 

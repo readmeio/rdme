@@ -8,7 +8,7 @@ import Command from '../../../src/commands/openapi/refs.js';
 import { runCommandAndReturnResult } from '../../helpers/oclif.js';
 
 describe('openapi:solving-circularity-recursiveness', () => {
-  let run: (args?: string[]) => Promise<unknown>;
+  let run: (args?: string[]) => Promise<string>;
 
   beforeAll(() => {
     run = runCommandAndReturnResult(Command);
