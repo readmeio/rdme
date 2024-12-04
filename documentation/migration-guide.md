@@ -60,7 +60,7 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
 ```yaml
 - uses: readmeio/rdme@v10
   with:
-    rdme: openapi:validate petstore.json
+    rdme: openapi validate petstore.json
 ```
 
 #### Step 3: Address Breaking Changes
@@ -69,7 +69,7 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
 
    We recommend setting up [bi-directional syncing](https://docs.readme.com/main/docs/bi-directional-sync) for managing your Markdown files, API definitions and project hierarchy.
 
-1. **Command Replacements**
+2. **Command Replacements**
 
    - Replace: `categories` → use [Git-based workflow](https://docs.readme.com/main/docs/bi-directional-sync)
    - Replace: `custompages` → use [Git-based workflow](https://docs.readme.com/main/docs/bi-directional-sync)
@@ -119,7 +119,7 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
 ```yaml
 - uses: readmeio/rdme@v9
   with:
-    rdme: openapi:validate petstore.json
+    rdme: openapi validate petstore.json
 ```
 
 #### Step 3: Address Breaking Changes
@@ -129,15 +129,20 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
    - For CLI users, make sure your Node.js version is up-to-date. The minimum required Node.js version for `rdme@9` is **v20.10.0**.
    - The `rdme` release process is no longer publishing Docker images and the GitHub Action is now a JavaScript action. This change should not affect any GitHub Actions users.
 
-2. **Command Replacements**
+2. **Topic separator changes**
 
-   - Replace `swagger` → `openapi`
-   - Replace `validate` → `openapi:validate`
+   - The topic separator (i.e., what separates a command from its subcommand) has changed from a colon to a space by default. For example, `rdme openapi:validate` is now `rdme openapi validate`.
+   - The colon topic separator will continue to be supported so there is no need to change any existing commands, but all documentation and help screens will reflect the space topic separator.
+
+3. **Command replacements**
+
+   - Replace `swagger` → [`openapi`](https://github.com/readmeio/rdme/tree/v9/documentation/commands/openapi.md#rdme-openapi-spec)
+   - Replace `validate` → [`openapi validate`](https://github.com/readmeio/rdme/tree/v9/documentation/commands/openapi.md#rdme-openapi-validate-spec)
    - Remove: `docs:edit`, `oas`
 
-3. **Version Flag Updates**
+4. **Version flag updates**
 
-   The CLI flags on the `versions:create` and `versions:update` commands now maintain parity with [our API flags](https://docs.readme.com/main/reference/createversion). The `--isPublic` flag has been removed in favor of a new flag called `--hidden`, which is the inverse of `--isPublic`.
+   The CLI flags on [the `versions create` and `versions update` commands](https://github.com/readmeio/rdme/tree/v9/documentation/commands/versions.md) now maintain parity with [our API flags](https://docs.readme.com/main/reference/createversion). The `--isPublic` flag has been removed in favor of a new flag called `--hidden`, which is the inverse of `--isPublic`.
 
    **Before**
 
@@ -148,10 +153,10 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
    **After**
 
    ```bash
-   rdme versions:create 1.0.1 --hidden false
+   rdme versions create 1.0.1 --hidden false
    ```
 
-4. **Deprecated Commands**
+5. **Deprecated commands**
 
    The following commands (and their subcommands) will be removed in future releases:
 
@@ -162,7 +167,7 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
    - `versions`
    - `open`
 
-5. **Verify any scripts that utilize raw CLI outputs**
+6. **Verify any scripts that utilize raw CLI outputs**
 
    - The underlying architecture for the CLI has been rewritten with [`oclif`](https://oclif.io/), so some command outputs and error messages may look different.
    - With the exception of the `--raw` flag on `rdme openapi`, we recommend relying on CLI exit codes in your workflows rather than raw command outputs.
