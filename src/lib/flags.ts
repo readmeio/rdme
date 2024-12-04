@@ -26,7 +26,7 @@ export const versionFlag = Flags.string({
 });
 
 /**
- * Used in the `versions:create` and `versions:update` commands.
+ * Used in the `versions create` and `versions update` commands.
  */
 export const baseVersionFlags = {
   codename: Flags.string({
