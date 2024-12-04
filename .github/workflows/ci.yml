@@ -88,6 +88,21 @@ jobs:
         with:
           rdme: openapi validate "oas-examples-repo/3.1/json/petstore.json"
 
+      - name: Run `openapi validate` on a file that will fail
+        uses: ./rdme-repo/
+        id: openapi-validate-fail
+        continue-on-error: true
+        with:
+          rdme: openapi validate rdme-repo/__tests__/__fixtures__/invalid-oas.json
+
+      - name: Assert previous step failed
+        if: ${{ steps.openapi-validate-fail.outcome == 'success' }}
+        run: echo "::error::Expected previous workflow step to fail" && exit 1
+
+      - name: Echo previous step failed
+        if: ${{ steps.openapi-validate-fail.outcome == 'failure' }}
+        run: echo "The previous step failed as expected."
+
       # Docs: https://rdme-test.readme.io
       - name: Run `openapi` command
         uses: ./rdme-repo/
