@@ -3,13 +3,13 @@ import { describe, afterEach, it, expect, beforeAll } from 'vitest';
 import pkg from '../../package.json';
 import Command from '../../src/commands/whoami.js';
 import configStore from '../../src/lib/configstore.js';
-import { runCommand } from '../helpers/setup-oclif-config.js';
+import { runCommandAndReturnResult } from '../helpers/oclif.js';
 
 describe('rdme whoami', () => {
   let run: (args?: string[]) => Promise<string>;
 
   beforeAll(() => {
-    run = runCommand(Command);
+    run = runCommandAndReturnResult(Command);
   });
 
   afterEach(() => {

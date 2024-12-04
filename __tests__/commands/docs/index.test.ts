@@ -14,8 +14,8 @@ import { APIv1Error } from '../../../src/lib/apiError.js';
 import { getAPIV1Mock, getAPIV1MockWithVersionHeader } from '../../helpers/get-api-mock.js';
 import { after, before } from '../../helpers/get-gha-setup.js';
 import hashFileContents from '../../helpers/hash-file-contents.js';
+import { runCommandAndReturnResult, runCommandWithHooks } from '../../helpers/oclif.js';
 import { after as afterGHAEnv, before as beforeGHAEnv } from '../../helpers/setup-gha-env.js';
-import { runCommand, runCommandWithHooks } from '../../helpers/setup-oclif-config.js';
 
 const fixturesBaseDir = '__fixtures__/docs';
 const fullFixturesDir = `${__dirname}./../../${fixturesBaseDir}`;
@@ -29,7 +29,7 @@ describe('rdme docs', () => {
 
   beforeAll(() => {
     nock.disableNetConnect();
-    run = runCommand(Command);
+    run = runCommandAndReturnResult(Command);
   });
 
   afterAll(() => nock.cleanAll());
