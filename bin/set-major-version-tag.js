@@ -37,6 +37,17 @@ async function runGitCmd(args) {
  */
 async function setMajorVersionTag() {
   try {
+    console.log(
+      'kanad test',
+      JSON.stringify({
+        GITHUB_BASE_REF: process.env.GITHUB_BASE_REF,
+        GITHUB_HEAD_REF: process.env.GITHUB_HEAD_REF,
+        GITHUB_REF: process.env.GITHUB_REF,
+        GITHUB_REF_NAME: process.env.GITHUB_REF_NAME,
+        GITHUB_REF_TYPE: process.env.GITHUB_REF_TYPE,
+      }),
+    );
+
     const parsedVersion = parse(pkg.version);
 
     if (!parsedVersion) {
