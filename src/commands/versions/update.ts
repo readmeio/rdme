@@ -12,6 +12,15 @@ import { cleanAPIv1Headers, handleAPIv1Res, readmeAPIv1Fetch } from '../../lib/r
 import { getProjectVersion } from '../../lib/versionSelect.js';
 
 export default class UpdateVersionCommand extends BaseCommand<typeof UpdateVersionCommand> {
+  // needed for deprecation message
+  static id = 'versions:update';
+
+  static state = 'deprecated';
+
+  static deprecationOptions = {
+    message: `\`rdme ${this.id}\` is deprecated and will be removed in v10. For more information, please visit our migration guide: https://github.com/readmeio/rdme/tree/v9/documentation/migration-guide.md`,
+  };
+
   static description = 'Update an existing version for your project.';
 
   static args = {

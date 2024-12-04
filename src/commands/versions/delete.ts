@@ -6,6 +6,15 @@ import { cleanAPIv1Headers, handleAPIv1Res, readmeAPIv1Fetch } from '../../lib/r
 import { getProjectVersion } from '../../lib/versionSelect.js';
 
 export default class DeleteVersionCommand extends BaseCommand<typeof DeleteVersionCommand> {
+  // needed for deprecation message
+  static id = 'versions:delete';
+
+  static state = 'deprecated';
+
+  static deprecationOptions = {
+    message: `\`rdme ${this.id}\` is deprecated and will be removed in v10. For more information, please visit our migration guide: https://github.com/readmeio/rdme/tree/v9/documentation/migration-guide.md`,
+  };
+
   static description = 'Delete a version associated with your ReadMe project.';
 
   static args = {
