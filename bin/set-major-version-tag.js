@@ -44,7 +44,9 @@ async function setMajorVersionTag() {
         GITHUB_HEAD_REF: process.env.GITHUB_HEAD_REF,
         GITHUB_REF: process.env.GITHUB_REF,
         GITHUB_REF_NAME: process.env.GITHUB_REF_NAME,
+        GITHUB_REF_PROTECTED: process.env.GITHUB_REF_PROTECTED,
         GITHUB_REF_TYPE: process.env.GITHUB_REF_TYPE,
+        GITHUB_WORKFLOW_REF: process.env.GITHUB_WORKFLOW_REF,
       }),
     );
 
