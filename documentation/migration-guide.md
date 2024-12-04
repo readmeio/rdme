@@ -29,7 +29,7 @@ npx markdown-toc documentation/migration-guide.md --maxdepth 2 --bullets="-" -i
 
 <!-- prettier-ignore-start -->
 > [!NOTE]
-> `rdme@10` has not been released yet. If you're using ReadMe Refactored, hang tight!
+> `rdme@10` has not been released yet. If you're using ReadMe Refactored, stay tuned!
 <!-- prettier-ignore-end -->
 
 ### Overview
@@ -87,7 +87,7 @@ This release adds a few features that make it even easier to get started with `r
 
    - Complete command reference in [the `documentation/commands` directory](https://github.com/readmeio/rdme/tree/v9/documentation/commands)
    - Detailed usage examples and parameter descriptions
-   - Structured by command category for easy navigation
+   - Structured by command category for intuitive navigation
 
 2. **Improved CLI Experience**
    - Overhauled help screens with detailed examples to improve readability and ease of use
