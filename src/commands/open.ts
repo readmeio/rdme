@@ -17,10 +17,13 @@ export default class OpenCommand extends BaseCommand<typeof OpenCommand> {
 
   static hidden = true;
 
+  // needed for deprecation message
+  static id = 'open';
+
   static state = 'deprecated';
 
   static deprecationOptions = {
-    message: '`rdme open` is deprecated and will be removed in a future release.',
+    message: `\`rdme ${this.id}\` is deprecated and will be removed in v10. For more information, please visit our migration guide: https://github.com/readmeio/rdme/tree/v9/documentation/migration-guide.md`,
   };
 
   async run() {
