@@ -81,7 +81,7 @@ npm install rdme --save-dev
 Once installed in your project, you can use the `npx` prefix (which is included if you have `npm` installed) to run your CLI commands locally. For example:
 
 ```sh
-npx rdme openapi:validate [file]
+npx rdme openapi validate [file]
 ```
 
 To ensure you're getting the latest features and security updates, we recommend using a tool like [Dependabot](https://docs.github.com/code-security/dependabot/dependabot-version-updates/about-dependabot-version-updates) to keep `rdme` (and your other dependencies) up-to-date.
