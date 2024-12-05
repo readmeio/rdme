@@ -29,7 +29,7 @@ npx markdown-toc documentation/migration-guide.md --maxdepth 2 --bullets="-" -i
 
 <!-- prettier-ignore-start -->
 > [!NOTE]
-> `rdme@10` has not been released yet. If you're using ReadMe Refactored, stay tuned!
+> `rdme@10` has not been released yet, so the following section is subject to change. If you're using ReadMe Refactored, stay tuned!
 <!-- prettier-ignore-end -->
 
 ### Overview
@@ -164,7 +164,7 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
 
 5. **Deprecated commands**
 
-   The following commands (and their subcommands) will be removed in future releases:
+   The following commands (and their subcommands) will be removed in `rdme@10`:
 
    - `categories`
    - `changelogs`
@@ -176,7 +176,7 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
 6. **Verify any scripts that utilize raw CLI outputs**
 
    - The underlying architecture for the CLI has been rewritten with [`oclif`](https://oclif.io/), so some command outputs and error messages may look different.
-   - With the exception of the `--raw` flag on `rdme openapi`, we recommend relying on CLI exit codes in your workflows rather than raw command outputs.
+   - With the exception of the `--raw` flag on `openapi`, we recommend relying on CLI exit codes in your workflows rather than raw command outputs.
 
 ## Migrating to `rdme@8`
 
