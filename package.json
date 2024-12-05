@@ -175,17 +175,8 @@
       "@oclif/plugin-warn-if-update-available"
     ],
     "topics": {
-      "categories": {
-        "description": "List or create categories in your ReadMe developer hub."
-      },
-      "docs": {
-        "description": "Sync or prune Guides pages in your ReadMe developer hub."
-      },
       "openapi": {
         "description": "Manage your API definition (e.g., syncing, validation, analysis, conversion, etc.). Supports OpenAPI, Swagger, and Postman collections, in either JSON or YAML formats."
-      },
-      "versions": {
-        "description": "Manage your documentation versions."
       }
     }
   },
