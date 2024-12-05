@@ -97,4 +97,14 @@ describe('openapi refs', () => {
       expect(processedOutput).toStrictEqual(expectedOutput);
     });
   });
+
+  describe('error handling', () => {
+    it.each([['json'], ['yaml']])('should fail if given a Swagger 2.0 definition (format: %s)', async format => {
+      const spec = require.resolve(`@readme/oas-examples/2.0/${format}/petstore.${format}`);
+
+      await expect(run([spec])).rejects.toStrictEqual(
+        new Error('Sorry, this ref resolver feature in rdme only supports OpenAPI 3.0+ definitions.'),
+      );
+    });
+  });
 });

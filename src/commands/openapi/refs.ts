@@ -312,7 +312,11 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
       this.debug(`Switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
     }
 
-    const { preparedSpec, specPath } = await prepareOas(spec, 'openapi:refs', { convertToLatest: true });
+    const { preparedSpec, specPath, specType } = await prepareOas(spec, 'openapi:refs', { convertToLatest: true });
+    if (specType !== 'OpenAPI') {
+      throw new Error('Sorry, this ref resolver feature in rdme only supports OpenAPI 3.0+ definitions.');
+    }
+
     const openApiData = JSON.parse(preparedSpec);
 
     const spinner = ora({ ...oraOptions() });
