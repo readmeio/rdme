@@ -37,9 +37,10 @@ async function runGitCmd(args) {
  */
 async function setMajorVersionTag() {
   try {
-    if (!['refs/heads/main', 'refs/heads/next'].includes(process.env.GITHUB_REF || '')) {
+    // The major version tag should only be set when releasing on the `main` branch
+    if (process.env.GITHUB_REF !== 'refs/heads/main') {
       // eslint-disable-next-line no-console
-      console.warn('Not on main or next branch, not setting major version tag');
+      console.warn(`Running with the following ref: ${process.env.GITHUB_REF || 'n/a'}, not setting major version tag`);
       return;
     }
 
