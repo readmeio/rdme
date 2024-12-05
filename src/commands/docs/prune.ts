@@ -18,7 +18,7 @@ function getSlug(filename: string): string {
 
 export default class DocsPruneCommand extends BaseCommand<typeof DocsPruneCommand> {
   // needed for deprecation message
-  static id = 'docs:prune';
+  static id = 'docs prune' as const;
 
   static state = 'deprecated';
 
@@ -26,7 +26,7 @@ export default class DocsPruneCommand extends BaseCommand<typeof DocsPruneComman
     message: `\`rdme ${this.id}\` is deprecated and will be removed in v10. For more information, please visit our migration guide: https://github.com/readmeio/rdme/tree/v9/documentation/migration-guide.md`,
   };
 
-  static aliases = ['guides:prune'];
+  static aliases = ['guides prune'];
 
   static description = 'Delete any docs from ReadMe if their slugs are not found in the target folder.';
 

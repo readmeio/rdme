@@ -12,10 +12,10 @@ To run test commands, swap out `rdme` for `bin/dev.js`. For example:
 
 ```sh
 # if the production command you're testing looks like this...
-rdme openapi:validate __tests__/__fixtures__/ref-oas/petstore.json
+rdme openapi validate __tests__/__fixtures__/ref-oas/petstore.json
 
 # ... your local test command will look like this:
-bin/dev.js openapi:validate __tests__/__fixtures__/ref-oas/petstore.json
+bin/dev.js openapi validate __tests__/__fixtures__/ref-oas/petstore.json
 ```
 
 The `bin/dev.js` file has a few features that are useful for local development:
@@ -27,7 +27,7 @@ The `bin/dev.js` file has a few features that are useful for local development:
 
 ```sh
 npm run build
-bin/run.js openapi:validate __tests__/__fixtures__/ref-oas/petstore.json
+bin/run.js openapi validate __tests__/__fixtures__/ref-oas/petstore.json
 ```
 
 Your changes to the command code may make changes to [the command reference documents](./documentation/commands) — it is up to you whether you include those changes in your PR or if you let the release process take care of it. More information on that can be found in [`MAINTAINERS.md`](./MAINTAINERS.md).

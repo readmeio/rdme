@@ -1,6 +1,6 @@
 {
   "name": "rdme",
-  "version": "9.0.0-next.33",
+  "version": "9.0.0-next.34",
   "description": "ReadMe's official CLI and GitHub Action.",
   "license": "MIT",
   "author": "ReadMe <support@readme.io> (https://readme.com)",
@@ -157,7 +157,7 @@
       "target": "./dist/index.js",
       "identifier": "COMMANDS"
     },
-    "topicSeparator": ":",
+    "topicSeparator": " ",
     "helpClass": "./dist/lib/help",
     "hooks": {
       "prerun": {

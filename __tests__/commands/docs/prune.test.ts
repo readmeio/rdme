@@ -11,7 +11,7 @@ const fixturesBaseDir = '__fixtures__/docs';
 const key = 'API_KEY';
 const version = '1.0.0';
 
-describe('rdme docs:prune', () => {
+describe('rdme docs prune', () => {
   const folder = `./__tests__/${fixturesBaseDir}/delete-docs`;
   let run: (args?: string[]) => Promise<string>;
 
@@ -162,10 +162,10 @@ describe('rdme docs:prune', () => {
     versionMock.done();
   });
 
-  describe('rdme guides:prune', () => {
+  describe('rdme guides prune', () => {
     it('should error if no folder provided', async () => {
       return expect(
-        (await runCommandWithHooks(['guides:prune', '--key', key, '--version', version])).error.message,
+        (await runCommandWithHooks(['guides', 'prune', '--key', key, '--version', version])).error.message,
       ).toContain('Missing 1 required arg:\nfolder');
     });
   });

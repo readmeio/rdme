@@ -4,9 +4,9 @@
 Manage your documentation versions.
 
 * [`rdme versions`](#rdme-versions)
-* [`rdme versions:create VERSION`](#rdme-versionscreate-version)
-* [`rdme versions:delete [VERSION]`](#rdme-versionsdelete-version)
-* [`rdme versions:update [VERSION]`](#rdme-versionsupdate-version)
+* [`rdme versions create VERSION`](#rdme-versions-create-version)
+* [`rdme versions delete [VERSION]`](#rdme-versions-delete-version)
+* [`rdme versions update [VERSION]`](#rdme-versions-update-version)
 
 ## `rdme versions`
 
@@ -33,13 +33,13 @@ EXAMPLES
     $ rdme versions --version={project-version}
 ```
 
-## `rdme versions:create VERSION`
+## `rdme versions create VERSION`
 
 Create a new version for your project.
 
 ```
 USAGE
-  $ rdme versions:create VERSION --key <value> [--fork <value>] [--codename <value>] [--main true|false] [--beta
+  $ rdme versions create VERSION --key <value> [--fork <value>] [--codename <value>] [--main true|false] [--beta
     true|false] [--deprecated true|false] [--hidden true|false]
 
 ARGUMENTS
@@ -64,22 +64,22 @@ DESCRIPTION
 EXAMPLES
   Create a new version (with no flags):
 
-    $ rdme versions:create
+    $ rdme versions create
 
   If you wish to automate the process of creating a new project version, and not have the CLI prompt you for input,
   you can do so by supplying the necessary flags:
 
-    $ rdme versions:create <version> --fork={version-fork} --main={true|false} --beta={true|false} \
+    $ rdme versions create <version> --fork={version-fork} --main={true|false} --beta={true|false} \
       --deprecated={true|false} --hidden={true|false}
 ```
 
-## `rdme versions:delete [VERSION]`
+## `rdme versions delete [VERSION]`
 
 Delete a version associated with your ReadMe project.
 
 ```
 USAGE
-  $ rdme versions:delete [VERSION] --key <value>
+  $ rdme versions delete [VERSION] --key <value>
 
 ARGUMENTS
   VERSION  The version you'd like to delete.
@@ -93,16 +93,16 @@ DESCRIPTION
 EXAMPLES
   Remove a specific version from your project, as well as all of the associated documentation:
 
-    $ rdme versions:delete <version>
+    $ rdme versions delete <version>
 ```
 
-## `rdme versions:update [VERSION]`
+## `rdme versions update [VERSION]`
 
 Update an existing version for your project.
 
 ```
 USAGE
-  $ rdme versions:update [VERSION] --key <value> [--newVersion <value>] [--codename <value>] [--main true|false]
+  $ rdme versions update [VERSION] --key <value> [--newVersion <value>] [--codename <value>] [--main true|false]
     [--beta true|false] [--deprecated true|false] [--hidden true|false]
 
 ARGUMENTS
@@ -127,11 +127,11 @@ DESCRIPTION
 EXAMPLES
   Update an existing version (with no flags):
 
-    $ rdme versions:update
+    $ rdme versions update
 
   If you wish to automate the process of updating a project version, and not have the CLI prompt you for input, you
   can do so by supplying the necessary flags:
 
-    $ rdme versions:update <version> --newVersion={new-version-name} --main={true|false} --beta={true|false} \
+    $ rdme versions update <version> --newVersion={new-version-name} --main={true|false} --beta={true|false} \
       --deprecated={true|false} --hidden={true|false}
 ```

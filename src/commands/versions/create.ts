@@ -15,7 +15,7 @@ export default class CreateVersionCommand extends BaseCommand<typeof CreateVersi
   static description = 'Create a new version for your project.';
 
   // needed for unit tests, even though we also specify this in src/index.ts
-  static id = 'versions:create';
+  static id = 'versions create';
 
   static state = 'deprecated';
 

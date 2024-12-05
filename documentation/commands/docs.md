@@ -4,7 +4,7 @@
 Sync or prune Guides pages in your ReadMe developer hub.
 
 * [`rdme docs PATH`](#rdme-docs-path)
-* [`rdme docs:prune FOLDER`](#rdme-docsprune-folder)
+* [`rdme docs prune FOLDER`](#rdme-docs-prune-folder)
 
 ## `rdme docs PATH`
 
@@ -46,13 +46,13 @@ EXAMPLES
     $ rdme docs [path] --version={project-version} --dryRun
 ```
 
-## `rdme docs:prune FOLDER`
+## `rdme docs prune FOLDER`
 
 Delete any docs from ReadMe if their slugs are not found in the target folder.
 
 ```
 USAGE
-  $ rdme docs:prune FOLDER --key <value> [--version <value>] [--github] [--confirm] [--dryRun]
+  $ rdme docs prune FOLDER --key <value> [--version <value>] [--github] [--confirm] [--dryRun]
 
 ARGUMENTS
   FOLDER  A local folder containing the files you wish to prune.
@@ -69,14 +69,14 @@ DESCRIPTION
   Delete any docs from ReadMe if their slugs are not found in the target folder.
 
 ALIASES
-  $ rdme guides:prune
+  $ rdme guides prune
 
 EXAMPLES
   If you wish to delete documents from ReadMe that are no longer present in your local directory:
 
-    $ rdme docs:prune [path-to-directory-of-markdown]
+    $ rdme docs prune [path-to-directory-of-markdown]
 
   Run with `--confirm` to bypass the confirmation prompt (useful for CI environments):
 
-    $ rdme docs:prune [path-to-directory-of-markdown] --confirm
+    $ rdme docs prune [path-to-directory-of-markdown] --confirm
 ```

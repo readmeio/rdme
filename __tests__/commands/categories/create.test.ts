@@ -8,7 +8,7 @@ import { runCommandAndReturnResult } from '../../helpers/oclif.js';
 const key = 'API_KEY';
 const version = '1.0.0';
 
-describe('rdme categories:create', () => {
+describe('rdme categories create', () => {
   let run: (args?: string[]) => Promise<string>;
 
   beforeAll(() => {

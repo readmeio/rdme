@@ -68,7 +68,7 @@ export default class OpenAPIReduceCommand extends BaseCommand<typeof OpenAPIRedu
       this.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
     }
 
-    const { preparedSpec, specPath, specType } = await prepareOas(spec, 'openapi:reduce', { title });
+    const { preparedSpec, specPath, specType } = await prepareOas(spec, 'openapi reduce', { title });
     const parsedPreparedSpec: OASDocument = JSON.parse(preparedSpec);
 
     if (specType !== 'OpenAPI') {
