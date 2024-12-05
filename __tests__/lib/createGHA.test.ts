@@ -55,6 +55,8 @@ describe('#createGHA', () => {
       label: string;
       opts: Record<string, string>;
     }>([
+      // `openapi:validate` is the ID we define in src/index.ts for backwards compatibility,
+      // hence we're using this command ID here
       { cmd: 'openapi:validate', opts: { spec: 'petstore.json' }, label: '' },
       { cmd: 'openapi', opts: { key, spec: 'petstore.json', id: 'spec_id' }, label: '' },
       { cmd: 'changelogs', opts: { key, path: './changelogs' }, label: '' },

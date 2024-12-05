@@ -1,3 +1,40 @@
+# [9.0.0-next.35](https://github.com/readmeio/rdme/compare/v9.0.0-next.34...v9.0.0-next.35) (2024-12-05)
+
+
+* feat!: deprecation notices for non-readme-refactored commands ([#1099](https://github.com/readmeio/rdme/issues/1099)) ([732e32b](https://github.com/readmeio/rdme/commit/732e32bbccd1deb4a1f44d9ce0d7befc234e7c40))
+
+
+### BREAKING CHANGES
+
+* deprecates commands that are not supported in ReadMe
+Refactored. For more information, please visit our migration guide:
+https://github.com/readmeio/rdme/tree/v9/documentation/migration-guide.md
+
+## 🧬 QA & Testing
+
+Does the copy in these deprecation warnings make sense to you? Note that
+the links will be broken for now since we haven't tagged a proper v9
+release yet, but that will be fixed once this release is out!
+
+# [9.0.0-next.34](https://github.com/readmeio/rdme/compare/v9.0.0-next.33...v9.0.0-next.34) (2024-12-05)
+
+
+* feat!: switch topic separator to space ([#1100](https://github.com/readmeio/rdme/issues/1100)) ([13eb8ab](https://github.com/readmeio/rdme/commit/13eb8abfd29d678e95c9e7ef52ccc22575386519))
+
+
+### BREAKING CHANGES
+
+* the topic separator (i.e., what separates a command
+from its subcommand) has changed from a colon to a space by default. For
+example, `rdme openapi:validate` is now `rdme openapi validate`. The
+colon topic separator will continue to be supported so there is no need
+to change any existing commands, but all documentation and help screens
+will reflect the space topic separator.
+
+## 🧬 QA & Testing
+
+Do tests still pass?
+
 # [9.0.0-next.33](https://github.com/readmeio/rdme/compare/v9.0.0-next.32...v9.0.0-next.33) (2024-12-02)
 
 
