@@ -7,7 +7,7 @@ import { describe, beforeAll, beforeEach, afterEach, it, expect, vi } from 'vite
 import Command from '../../../src/commands/openapi/refs.js';
 import { runCommandAndReturnResult } from '../../helpers/oclif.js';
 
-describe('openapi:solving-circularity-recursiveness', () => {
+describe('openapi refs', () => {
   let run: (args?: string[]) => Promise<string>;
 
   beforeAll(() => {
@@ -95,6 +95,16 @@ describe('openapi:solving-circularity-recursiveness', () => {
 
       const expectedOutput = JSON.parse(fs.readFileSync(expectedOutputFile, 'utf8'));
       expect(processedOutput).toStrictEqual(expectedOutput);
+    });
+  });
+
+  describe('error handling', () => {
+    it.each([['json'], ['yaml']])('should fail if given a Swagger 2.0 definition (format: %s)', async format => {
+      const spec = require.resolve(`@readme/oas-examples/2.0/${format}/petstore.${format}`);
+
+      await expect(run([spec])).rejects.toStrictEqual(
+        new Error('Sorry, this ref resolver feature in rdme only supports OpenAPI 3.0+ definitions.'),
+      );
     });
   });
 });

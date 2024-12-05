@@ -7,12 +7,13 @@ import path from 'node:path';
 
 import { Args, Flags } from '@oclif/core';
 import chalk from 'chalk';
+import ora from 'ora';
 import prompts from 'prompts';
 
 import analyzeOas from '../../lib/analyzeOas.js';
 import BaseCommand from '../../lib/baseCommand.js';
 import { workingDirectoryFlag } from '../../lib/flags.js';
-import { info, warn, debug } from '../../lib/logger.js';
+import { info, warn, debug, oraOptions } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
 import { validateFilePath } from '../../lib/validatePromptInput.js';
@@ -23,7 +24,7 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
   static summary = 'Resolves circular and recursive references in OpenAPI by replacing them with object schemas.';
 
   static description =
-    'This command addresses limitations in ReadMe’s support for circular or recursive references within OpenAPI specifications. It automatically identifies and replaces these references with simplified object schemas, ensuring compatibility for seamless display in the ReadMe platform. As a result, instead of displaying an empty form, as would occur with schemas containing such references, you will receive a flattened representation of the object, showing what the object can potentially contain, including references to itself. Complex circular references may require manual inspection and may not be fully resolved.';
+    'This command provides a workaround for circular or recursive references within OpenAPI definitions so they can render properly in ReadMe. It automatically identifies and replaces these references with simplified object schemas, ensuring compatibility for seamless display in the ReadMe API Reference. As a result, instead of displaying an empty form, as would occur with schemas containing such references, you will receive a flattened representation of the object, showing what the object can potentially contain, including references to itself. Complex circular references may require manual inspection and may not be fully resolved.';
 
   static args = {
     spec: Args.string({ description: 'A file/URL to your API definition' }),
@@ -311,13 +312,22 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
       this.debug(`Switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
     }
 
-    const { preparedSpec, specPath } = await prepareOas(spec, 'openapi:refs', { convertToLatest: true });
-    const openApiData = JSON.parse(preparedSpec);
+    const { preparedSpec, specPath, specType } = await prepareOas(spec, 'openapi:refs', { convertToLatest: true });
+    if (specType !== 'OpenAPI') {
+      throw new Error('Sorry, this ref resolver feature in rdme only supports OpenAPI 3.0+ definitions.');
+    }
+
+    const openApiData: OASDocument = JSON.parse(preparedSpec);
+
+    const spinner = ora({ ...oraOptions() });
+    spinner.start('Identifying and resolving circular/recursive references in your API definition...');
 
     try {
       await OpenAPIRefsCommand.resolveCircularRefs(openApiData, openApiData.components!.schemas!);
+      spinner.succeed(`${spinner.text} done! ✅`);
     } catch (err) {
       this.debug(`${err.message}`);
+      spinner.fail();
       throw err;
     }
 
@@ -335,7 +345,6 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
     const outputPath = promptResults.outputPath;
     this.debug(`Saving processed spec to ${outputPath}...`);
     fs.writeFileSync(outputPath, JSON.stringify(openApiData, null, 2));
-    this.debug('Processed spec saved successfully.');
 
     return Promise.resolve(chalk.green(`Your API definition has been processed and saved to ${outputPath}!`));
   }

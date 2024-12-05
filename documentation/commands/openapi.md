@@ -245,12 +245,12 @@ FLAGS
 DESCRIPTION
   Resolves circular and recursive references in OpenAPI by replacing them with object schemas.
 
-  This command addresses limitations in ReadMe’s support for circular or recursive references within OpenAPI
-  specifications. It automatically identifies and replaces these references with simplified object schemas, ensuring
-  compatibility for seamless display in the ReadMe platform. As a result, instead of displaying an empty form, as would
-  occur with schemas containing such references, you will receive a flattened representation of the object, showing what
-  the object can potentially contain, including references to itself. Complex circular references may require manual
-  inspection and may not be fully resolved.
+  This command provides a workaround for circular or recursive references within OpenAPI definitions so they can render
+  properly in ReadMe. It automatically identifies and replaces these references with simplified object schemas, ensuring
+  compatibility for seamless display in the ReadMe API Reference. As a result, instead of displaying an empty form, as
+  would occur with schemas containing such references, you will receive a flattened representation of the object,
+  showing what the object can potentially contain, including references to itself. Complex circular references may
+  require manual inspection and may not be fully resolved.
 
 EXAMPLES
   This will resolve circular and recursive references in the OpenAPI definition at the given file or URL:
@@ -264,7 +264,7 @@ EXAMPLES
 
   If you wish to automate this command, you can pass in CLI arguments to bypass the prompts:
 
-    $ rdme openapi:refs petstore.json -out petstore.openapi.json
+    $ rdme openapi:refs petstore.json --out petstore.openapi.json
 ```
 
 ## `rdme openapi:validate [SPEC]`
