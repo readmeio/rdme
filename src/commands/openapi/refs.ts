@@ -317,7 +317,7 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
       throw new Error('Sorry, this ref resolver feature in rdme only supports OpenAPI 3.0+ definitions.');
     }
 
-    const openApiData = JSON.parse(preparedSpec);
+    const openApiData: OASDocument = JSON.parse(preparedSpec);
 
     const spinner = ora({ ...oraOptions() });
     spinner.start('Identifying and resolving circular/recursive references in your API definition...');
