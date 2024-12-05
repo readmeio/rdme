@@ -17,7 +17,7 @@ export interface Version {
 
 export default class VersionsCommand extends BaseCommand<typeof VersionsCommand> {
   // needed for deprecation message
-  static id = 'versions';
+  static id = 'versions' as const;
 
   static state = 'deprecated';
 

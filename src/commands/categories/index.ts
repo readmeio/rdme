@@ -5,7 +5,7 @@ import { getProjectVersion } from '../../lib/versionSelect.js';
 
 export default class CategoriesCommand extends BaseCommand<typeof CategoriesCommand> {
   // needed for deprecation message
-  static id = 'categories';
+  static id = 'categories' as const;
 
   static state = 'deprecated';
 

@@ -18,7 +18,7 @@ export default class OpenCommand extends BaseCommand<typeof OpenCommand> {
   static hidden = true;
 
   // needed for deprecation message
-  static id = 'open';
+  static id = 'open' as const;
 
   static state = 'deprecated';
 

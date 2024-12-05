@@ -14,7 +14,7 @@ interface Category {
 
 export default class CategoriesCreateCommand extends BaseCommand<typeof CategoriesCreateCommand> {
   // needed for deprecation message
-  static id = 'categories:create';
+  static id = 'categories create' as const;
 
   static state = 'deprecated';
 

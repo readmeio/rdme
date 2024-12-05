@@ -13,7 +13,7 @@ import { getProjectVersion } from '../../lib/versionSelect.js';
 
 export default class UpdateVersionCommand extends BaseCommand<typeof UpdateVersionCommand> {
   // needed for deprecation message
-  static id = 'versions:update';
+  static id = 'versions update' as const;
 
   static state = 'deprecated';
 

@@ -7,7 +7,7 @@ import { getProjectVersion } from '../../lib/versionSelect.js';
 
 export default class DeleteVersionCommand extends BaseCommand<typeof DeleteVersionCommand> {
   // needed for deprecation message
-  static id = 'versions:delete';
+  static id = 'versions delete' as const;
 
   static state = 'deprecated';
 
