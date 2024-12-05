@@ -264,7 +264,7 @@ EXAMPLES
 
   If you wish to automate this command, you can pass in CLI arguments to bypass the prompts:
 
-    $ rdme openapi:refs petstore.json -out petstore.openapi.json
+    $ rdme openapi:refs petstore.json --out petstore.openapi.json
 ```
 
 ## `rdme openapi:validate [SPEC]`
