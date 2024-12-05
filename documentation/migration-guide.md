@@ -76,11 +76,29 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
 
 2. **Command Replacements**
 
+   - Replace: `openapi` → `openapi upload` (see more in step 3 below)
    - Replace: `categories` → use [Git-based workflow](https://docs.readme.com/main/docs/bi-directional-sync)
    - Replace: `custompages` → use [Git-based workflow](https://docs.readme.com/main/docs/bi-directional-sync)
    - Replace: `docs` (and its `guides` alias) → use [Git-based workflow](https://docs.readme.com/main/docs/bi-directional-sync)
    - Replace: `versions` → use [Git-based workflow](https://docs.readme.com/main/docs/bi-directional-sync)
    - Remove: `open`
+
+3. **`openapi`** changes
+
+   If you previously uploaded API definitions to ReadMe via `rdme openapi`, the command is now `rdme openapi upload`. There are now two main updates:
+
+   - The `--version` flag is now required.
+
+   - Previously with `openapi`, the `--id` flag was an ObjectID that required an initial upload to ReadMe, which made it difficult to upsert API definitions and manage many at scale. With `openapi upload`, the `--id` flag is optional and the identifier is inferred from the file path or URL to your API definition.
+
+     See the table below to get a sense of how this identifier is inferred. As long as you maintain these directory/file names and run `rdme` from the same location relative to your file, this identifier will be preserved and any updates you make to this file will be synced to the same resource in ReadMe.
+
+     | File Path Type | Example File Path                        | Resulting Identifier in ReadMe |
+     | -------------- | ---------------------------------------- | ------------------------------ |
+     | Local File     | `docs/api/petstore.json`                 | `docs-api-petstore.json`       |
+     | URL            | `https://example.com/docs/petstore.json` | `petstore.json`                |
+
+     If you wish to override this inference behavior, you can include the `--id` flag and set it to whatever identifier you'd like.
 
 ## Migrating to `rdme@9`
 
