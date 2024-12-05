@@ -7,12 +7,13 @@ import path from 'node:path';
 
 import { Args, Flags } from '@oclif/core';
 import chalk from 'chalk';
+import ora from 'ora';
 import prompts from 'prompts';
 
 import analyzeOas from '../../lib/analyzeOas.js';
 import BaseCommand from '../../lib/baseCommand.js';
 import { workingDirectoryFlag } from '../../lib/flags.js';
-import { info, warn, debug } from '../../lib/logger.js';
+import { info, warn, debug, oraOptions } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
 import { validateFilePath } from '../../lib/validatePromptInput.js';
@@ -314,10 +315,15 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
     const { preparedSpec, specPath } = await prepareOas(spec, 'openapi:refs', { convertToLatest: true });
     const openApiData = JSON.parse(preparedSpec);
 
+    const spinner = ora({ ...oraOptions() });
+    spinner.start('Identifying and resolving circular/recursive references in your API definition...');
+
     try {
       await OpenAPIRefsCommand.resolveCircularRefs(openApiData, openApiData.components!.schemas!);
+      spinner.succeed(`${spinner.text} done! ✅`);
     } catch (err) {
       this.debug(`${err.message}`);
+      spinner.fail();
       throw err;
     }
 
@@ -335,7 +341,6 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
     const outputPath = promptResults.outputPath;
     this.debug(`Saving processed spec to ${outputPath}...`);
     fs.writeFileSync(outputPath, JSON.stringify(openApiData, null, 2));
-    this.debug('Processed spec saved successfully.');
 
     return Promise.resolve(chalk.green(`Your API definition has been processed and saved to ${outputPath}!`));
   }
