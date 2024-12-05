@@ -7,7 +7,7 @@ import { describe, beforeAll, beforeEach, afterEach, it, expect, vi } from 'vite
 import Command from '../../../src/commands/openapi/refs.js';
 import { runCommandAndReturnResult } from '../../helpers/oclif.js';
 
-describe('openapi:solving-circularity-recursiveness', () => {
+describe('openapi refs', () => {
   let run: (args?: string[]) => Promise<string>;
 
   beforeAll(() => {
