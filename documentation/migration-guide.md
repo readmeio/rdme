@@ -95,6 +95,7 @@ This release adds a few features that make it even easier to get started with `r
    - Structured by command category for intuitive navigation
 
 2. **Improved CLI Experience**
+
    - Overhauled help screens with detailed examples to improve readability and ease of use
    - Set up CLI autocompletions with [the `autocomplete` command](https://github.com/readmeio/rdme/tree/v9/documentation/commands/autocomplete.md)
    - Smart command discovery that helps catch and correct typos
