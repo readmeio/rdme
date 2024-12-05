@@ -157,7 +157,7 @@
       "target": "./dist/index.js",
       "identifier": "COMMANDS"
     },
-    "topicSeparator": ":",
+    "topicSeparator": " ",
     "helpClass": "./dist/lib/help",
     "hooks": {
       "prerun": {

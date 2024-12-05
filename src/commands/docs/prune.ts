@@ -17,7 +17,7 @@ function getSlug(filename: string): string {
 }
 
 export default class DocsPruneCommand extends BaseCommand<typeof DocsPruneCommand> {
-  static aliases = ['guides:prune'];
+  static aliases = ['guides prune'];
 
   static description = 'Delete any docs from ReadMe if their slugs are not found in the target folder.';
 
