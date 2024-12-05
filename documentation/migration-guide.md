@@ -125,7 +125,7 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
    - `versions`
    - `open`
 
-   The `openapi` command will be replaced by `openapi upload` and will have a simpler flag setup based on community feedback.
+   The `openapi` command is deprecated and will be replaced in `rdme@10` by a command with a simpler flag setup based on community feedback.
 
 6. **Verify any scripts that utilize raw CLI outputs**
 
