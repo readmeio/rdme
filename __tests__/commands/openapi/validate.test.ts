@@ -8,7 +8,7 @@ import { describe, beforeAll, beforeEach, afterEach, it, expect, vi, type MockIn
 
 import Command from '../../../src/commands/openapi/validate.js';
 import { after, before } from '../../helpers/get-gha-setup.js';
-import { runCommand, runCommandWithHooks } from '../../helpers/setup-oclif-config.js';
+import { runCommandAndReturnResult, runCommandWithHooks } from '../../helpers/oclif.js';
 
 let consoleInfoSpy: MockInstance;
 
@@ -16,12 +16,12 @@ const getCommandOutput = () => {
   return [consoleInfoSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
 };
 
-describe('rdme openapi:validate', () => {
+describe('rdme openapi validate', () => {
   let run: (args?: string[]) => Promise<string>;
   let testWorkingDir: string;
 
   beforeAll(() => {
-    run = runCommand(Command);
+    run = runCommandAndReturnResult(Command);
   });
 
   beforeEach(() => {
@@ -122,7 +122,7 @@ describe('rdme openapi:validate', () => {
       return expect(
         (
           await runCommandWithHooks([
-            'openapi:validate',
+            'openapi validate',
             '__tests__/__fixtures__/petstore-simple-weird-version.json',
             '--github',
           ])

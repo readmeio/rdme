@@ -1,11 +1,11 @@
 {
   "name": "rdme",
-  "version": "9.0.0-next.32",
+  "version": "9.0.0-next.34",
   "description": "ReadMe's official CLI and GitHub Action.",
   "license": "MIT",
   "author": "ReadMe <support@readme.io> (https://readme.com)",
   "engines": {
-    "node": "^18.20.0 || >=20.10.0"
+    "node": ">=20.10.0"
   },
   "bin": {
     "rdme": "bin/run.js"
@@ -57,7 +57,7 @@
     "oas": "^25.0.0",
     "oas-normalize": "^11.1.2",
     "open": "^10.0.2",
-    "ora": "^6.3.1",
+    "ora": "^8.1.1",
     "parse-link-header": "^2.0.0",
     "pluralize": "^8.0.0",
     "prompts": "^2.4.2",
@@ -157,7 +157,7 @@
       "target": "./dist/index.js",
       "identifier": "COMMANDS"
     },
-    "topicSeparator": ":",
+    "topicSeparator": " ",
     "helpClass": "./dist/lib/help",
     "hooks": {
       "prerun": {

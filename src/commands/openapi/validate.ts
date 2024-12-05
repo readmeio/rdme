@@ -12,7 +12,7 @@ export default class OpenAPIValidateCommand extends BaseCommand<typeof OpenAPIVa
     'Perform a local validation of your API definition (no ReadMe account required!), which can be useful when constructing or editing your API definition.';
 
   // needed for unit tests, even though we also specify this in src/index.ts
-  static id = 'openapi:validate';
+  static id = 'openapi validate' as const;
 
   static args = {
     spec: Args.string({ description: 'A file/URL to your API definition' }),
@@ -42,7 +42,7 @@ export default class OpenAPIValidateCommand extends BaseCommand<typeof OpenAPIVa
       this.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
     }
 
-    const { specPath, specType } = await prepareOas(this.args.spec, 'openapi:validate');
+    const { specPath, specType } = await prepareOas(this.args.spec, OpenAPIValidateCommand.id);
 
     return this.runCreateGHAHook({
       parsedOpts: { ...this.flags, spec: specPath },

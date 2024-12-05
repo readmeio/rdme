@@ -5,17 +5,17 @@ import { describe, beforeAll, afterEach, it, expect } from 'vitest';
 import Command from '../../../src/commands/versions/create.js';
 import { APIv1Error } from '../../../src/lib/apiError.js';
 import { getAPIV1Mock } from '../../helpers/get-api-mock.js';
-import { runCommand } from '../../helpers/setup-oclif-config.js';
+import { runCommandAndReturnResult } from '../../helpers/oclif.js';
 
 const key = 'API_KEY';
 const version = '1.0.0';
 
-describe('rdme versions:create', () => {
+describe('rdme versions create', () => {
   let run: (args?: string[]) => Promise<string>;
 
   beforeAll(() => {
     nock.disableNetConnect();
-    run = runCommand(Command);
+    run = runCommandAndReturnResult(Command);
   });
 
   afterEach(() => nock.cleanAll());
@@ -26,7 +26,7 @@ describe('rdme versions:create', () => {
 
   it('should error if invalid version provided', () => {
     return expect(run(['--key', key, 'test'])).rejects.toStrictEqual(
-      new Error('Please specify a semantic version. See `rdme help versions:create` for help.'),
+      new Error('Please specify a semantic version. See `rdme help versions create` for help.'),
     );
   });
 

@@ -4,16 +4,16 @@ import prompts from 'prompts';
 import { describe, it, expect, vi, beforeAll, beforeEach, afterEach } from 'vitest';
 
 import Command from '../../../src/commands/openapi/convert.js';
-import { runCommand } from '../../helpers/setup-oclif-config.js';
+import { runCommandAndReturnResult } from '../../helpers/oclif.js';
 
 const successfulConversion = () => 'Your API definition has been converted and bundled and saved to output.json!';
 
-describe('rdme openapi:convert', () => {
+describe('rdme openapi convert', () => {
   let run: (args?: string[]) => Promise<string>;
   let testWorkingDir: string;
 
   beforeAll(() => {
-    run = runCommand(Command);
+    run = runCommandAndReturnResult(Command);
   });
 
   beforeEach(() => {

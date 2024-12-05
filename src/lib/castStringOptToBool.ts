@@ -1,7 +1,7 @@
 import type { baseVersionFlags } from './flags.js';
 
 /**
- * All the boolean flags from the `versions:create` and `versions:update` commands
+ * All the boolean flags from the `versions create` and `versions update` commands
  */
 type VersionBooleanOpts = Exclude<keyof typeof baseVersionFlags, 'codename'>;
 

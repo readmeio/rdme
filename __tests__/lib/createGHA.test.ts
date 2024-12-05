@@ -6,7 +6,7 @@ import type { Response } from 'simple-git';
 import fs from 'node:fs';
 
 import prompts from 'prompts';
-import { describe, beforeEach, afterEach, it, expect, vi, type MockInstance } from 'vitest';
+import { describe, beforeEach, afterEach, it, expect, vi, type MockInstance, beforeAll } from 'vitest';
 
 import configstore from '../../src/lib/configstore.js';
 import { getConfigStoreKey, getGHAFileName, git } from '../../src/lib/createGHA/index.js';
@@ -14,7 +14,8 @@ import { getMajorPkgVersion } from '../../src/lib/getPkgVersion.js';
 import { after, before } from '../helpers/get-gha-setup.js';
 import getGitRemoteMock from '../helpers/get-git-mock.js';
 import ghaWorkflowSchema from '../helpers/github-workflow-schema.json' with { type: 'json' };
-import setupOclifConfig from '../helpers/setup-oclif-config.js';
+import { setupOclifConfig } from '../helpers/oclif.js';
+import { toBeValidSchema } from '../helpers/vitest.matchers.js';
 
 const testWorkingDir = process.cwd();
 
@@ -26,6 +27,10 @@ const key = 'API_KEY';
 describe('#createGHA', () => {
   let oclifConfig: Config;
   let yamlOutput;
+
+  beforeAll(() => {
+    expect.extend({ toBeValidSchema });
+  });
 
   beforeEach(async () => {
     consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
@@ -50,6 +55,8 @@ describe('#createGHA', () => {
       label: string;
       opts: Record<string, string>;
     }>([
+      // `openapi:validate` is the ID we define in src/index.ts for backwards compatibility,
+      // hence we're using this command ID here
       { cmd: 'openapi:validate', opts: { spec: 'petstore.json' }, label: '' },
       { cmd: 'openapi', opts: { key, spec: 'petstore.json', id: 'spec_id' }, label: '' },
       { cmd: 'docs', opts: { key, path: './docs', version: '1.0.0' }, label: '' },
