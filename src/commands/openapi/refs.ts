@@ -323,7 +323,7 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
     spinner.start('Identifying and resolving circular/recursive references in your API definition...');
 
     try {
-      await OpenAPIRefsCommand.resolveCircularRefs(openApiData, openApiData.components!.schemas!);
+      await OpenAPIRefsCommand.resolveCircularRefs(openApiData, openApiData.components!.schemas! as SchemaCollection); // temporarily
       spinner.succeed(`${spinner.text} done! ✅`);
     } catch (err) {
       this.debug(`${err.message}`);
