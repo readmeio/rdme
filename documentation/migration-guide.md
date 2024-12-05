@@ -173,6 +173,8 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
    - `versions`
    - `open`
 
+   The `openapi` command will be replaced by `openapi upload` and will have a simpler flag setup based on community feedback.
+
 6. **Verify any scripts that utilize raw CLI outputs**
 
    - The underlying architecture for the CLI has been rewritten with [`oclif`](https://oclif.io/), so some command outputs and error messages may look different.
