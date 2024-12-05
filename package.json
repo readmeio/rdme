@@ -56,7 +56,6 @@
     "mime-types": "^2.1.35",
     "oas": "^25.0.0",
     "oas-normalize": "^11.1.2",
-    "open": "^10.0.2",
     "ora": "^8.1.1",
     "parse-link-header": "^2.0.0",
     "pluralize": "^8.0.0",

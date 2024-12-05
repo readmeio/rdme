@@ -26,31 +26,6 @@ export const versionFlag = Flags.string({
 });
 
 /**
- * Used in the `versions:create` and `versions:update` commands.
- */
-export const baseVersionFlags = {
-  codename: Flags.string({
-    description: 'The codename, or nickname, for a particular version.',
-  }),
-  main: Flags.option({
-    description: 'Should this be the main version for your project?',
-    options: ['true', 'false'] as const,
-  })(),
-  beta: Flags.option({
-    description: 'Should this version be in beta?',
-    options: ['true', 'false'] as const,
-  })(),
-  deprecated: Flags.option({
-    description: 'Should this version be deprecated? The main version cannot be deprecated.',
-    options: ['true', 'false'] as const,
-  })(),
-  hidden: Flags.option({
-    description: 'Should this version be hidden? The main version cannot be hidden.',
-    options: ['true', 'false'] as const,
-  })(),
-} as const;
-
-/**
  * Used in the `openapi` family of commands where `workingDirectory` is an option.
  */
 export const workingDirectoryFlag = Flags.string({
