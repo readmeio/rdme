@@ -1,3 +1,22 @@
+# [9.0.0-next.34](https://github.com/readmeio/rdme/compare/v9.0.0-next.33...v9.0.0-next.34) (2024-12-05)
+
+
+* feat!: switch topic separator to space ([#1100](https://github.com/readmeio/rdme/issues/1100)) ([13eb8ab](https://github.com/readmeio/rdme/commit/13eb8abfd29d678e95c9e7ef52ccc22575386519))
+
+
+### BREAKING CHANGES
+
+* the topic separator (i.e., what separates a command
+from its subcommand) has changed from a colon to a space by default. For
+example, `rdme openapi:validate` is now `rdme openapi validate`. The
+colon topic separator will continue to be supported so there is no need
+to change any existing commands, but all documentation and help screens
+will reflect the space topic separator.
+
+## 🧬 QA & Testing
+
+Do tests still pass?
+
 # [9.0.0-next.33](https://github.com/readmeio/rdme/compare/v9.0.0-next.32...v9.0.0-next.33) (2024-12-02)
 
 

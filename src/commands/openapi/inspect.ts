@@ -224,7 +224,7 @@ export default class OpenAPIInspectCommand extends BaseCommand<typeof OpenAPIIns
       this.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
     }
 
-    const { preparedSpec, definitionVersion } = await prepareOas(spec, 'openapi:inspect', { convertToLatest: true });
+    const { preparedSpec, definitionVersion } = await prepareOas(spec, 'openapi inspect', { convertToLatest: true });
     const parsedPreparedSpec: OASDocument = JSON.parse(preparedSpec);
 
     const spinner = ora({ ...oraOptions() });

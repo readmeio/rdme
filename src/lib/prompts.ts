@@ -135,7 +135,7 @@ export function createOasPrompt(
 
 /**
  * Series of prompts to construct a version object,
- * used in our `versions:create` and `versions:update` commands
+ * used in our `versions create` and `versions update` commands
  */
 export function versionPrompt(
   /** list of versions, used for prompt about which version to fork */
@@ -147,7 +147,7 @@ export function versionPrompt(
 ): PromptObject[] {
   return [
     {
-      // only runs for versions:create command
+      // only runs for versions create command
       type: existingVersion ? null : 'select',
       name: 'from',
       message: 'Which version would you like to fork from?',
@@ -159,7 +159,7 @@ export function versionPrompt(
       }),
     },
     {
-      // only runs for versions:update command
+      // only runs for versions update command
       type: !existingVersion ? null : 'text',
       name: 'newVersion',
       message: 'What should the version be renamed to?',

@@ -10,7 +10,7 @@ import { runCommandAndReturnResult } from '../../helpers/oclif.js';
 const key = 'API_KEY';
 const version = '1.0.0';
 
-describe('rdme versions:create', () => {
+describe('rdme versions create', () => {
   let run: (args?: string[]) => Promise<string>;
 
   beforeAll(() => {
@@ -26,7 +26,7 @@ describe('rdme versions:create', () => {
 
   it('should error if invalid version provided', () => {
     return expect(run(['--key', key, 'test'])).rejects.toStrictEqual(
-      new Error('Please specify a semantic version. See `rdme help versions:create` for help.'),
+      new Error('Please specify a semantic version. See `rdme help versions create` for help.'),
     );
   });
 
