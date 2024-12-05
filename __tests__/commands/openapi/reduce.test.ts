@@ -13,7 +13,7 @@ const successfulReduction = () => 'Your reduced API definition has been saved to
 let consoleInfoSpy: MockInstance;
 const getCommandOutput = () => consoleInfoSpy.mock.calls.join('\n\n');
 
-describe('rdme openapi:reduce', () => {
+describe('rdme openapi reduce', () => {
   let run: (args?: string[]) => Promise<unknown>;
   let testWorkingDir: string;
 

@@ -194,7 +194,7 @@ We recommend using the [quick start](#quick-start) to get started with GitHub Ac
 The command syntax in GitHub Actions is functionally equivalent to the CLI. For example, take the following CLI command:
 
 ```sh
-rdme openapi:validate [url-or-local-path-to-file]
+rdme openapi validate [url-or-local-path-to-file]
 ```
 
 To execute this command via GitHub Actions, the step would look like this:
@@ -202,7 +202,7 @@ To execute this command via GitHub Actions, the step would look like this:
 ```yml
 - uses: readmeio/rdme@RDME_VERSION
   with:
-    rdme: openapi:validate [url-or-local-path-to-file]
+    rdme: openapi validate [url-or-local-path-to-file]
 ```
 
 The following section has links to full GitHub Actions workflow file examples.
