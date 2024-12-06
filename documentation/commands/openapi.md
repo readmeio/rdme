@@ -29,15 +29,16 @@ FLAGS
   --github                    Create a new GitHub Actions workflow for this command.
   --id=<value>                Unique identifier for your API definition. Use this if you're re-uploading an existing API
                               definition.
-  --key=<value>               (required) ReadMe Project API key
+  --key=<value>               (required) An API key for your ReadMe project. Note that API authentication is required
+                              despite being omitted from the example usage. See our docs for more information:
+                              https://github.com/readmeio/rdme/tree/v9#authentication
   --raw                       Return the command results as a JSON object instead of a pretty output.
   --title=<value>             An override value for the `info.title` field in the API definition
   --update                    Bypasses the create/update prompt and automatically updates an existing API definition in
                               ReadMe.
   --useSpecVersion            Uses the version listed in the `info.version` field in the API definition for the project
                               version parameter.
-  --version=<value>           Project version. If running command in a CI environment and this option is not passed, the
-                              main project version will be used.
+  --version=<value>           ReadMe project version
   --workingDirectory=<value>  Working directory (for usage with relative external references)
 
 DESCRIPTION
@@ -99,10 +100,22 @@ EXAMPLES
     $ rdme openapi [url-or-local-path-to-file] --version={project-version} --update
 
 FLAG DESCRIPTIONS
+  --key=<value>
+
+    An API key for your ReadMe project. Note that API authentication is required despite being omitted from the example
+    usage. See our docs for more information: https://github.com/readmeio/rdme/tree/v9#authentication
+
+    ReadMe project API key
+
   --update  Bypasses the create/update prompt and automatically updates an existing API definition in ReadMe.
 
     Bypasses the create/update prompt and automatically updates an existing API definition in ReadMe. Note that this
     flag only works if there's only one API definition associated with the current version.
+
+  --version=<value>  ReadMe project version
+
+    Your ReadMe project version. If running command in a CI environment and this option is not passed, the main project
+    version will be used. See our docs for more information: https://docs.readme.com/main/docs/versions
 ```
 
 ## `rdme openapi convert [SPEC]`
