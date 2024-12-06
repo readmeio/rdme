@@ -1,60 +1,7 @@
 import type { Version } from '../commands/versions/index.js';
-import type { Choice, PromptObject } from 'prompts';
+import type { PromptObject } from 'prompts';
 
-import parse from 'parse-link-header';
 import semver from 'semver';
-
-import { debug } from './logger.js';
-import promptTerminal from './promptWrapper.js';
-import { handleAPIv1Res } from './readmeAPIFetch.js';
-
-interface Spec {
-  _id: string;
-  title: string;
-}
-
-type SpecList = Spec[];
-
-interface ParsedDocs {
-  next?: {
-    page: number;
-    url: string;
-  };
-  prev?: {
-    page: number;
-    url: string;
-  };
-}
-
-function specOptions(
-  specList: SpecList,
-  parsedDocs: ParsedDocs | null,
-  currPage: number,
-  totalPages: number,
-): Choice[] {
-  const specs = specList.map(s => {
-    return {
-      description: `API Definition ID: ${s._id}`, // eslint-disable-line no-underscore-dangle
-      title: s.title,
-      value: s._id, // eslint-disable-line no-underscore-dangle
-    };
-  });
-  if (parsedDocs?.prev?.page) {
-    specs.push({
-      description: 'Go to the previous page',
-      title: `< Prev (page ${currPage - 1} of ${totalPages})`,
-      value: 'prev',
-    });
-  }
-  if (parsedDocs?.next?.page) {
-    specs.push({
-      description: 'Go to the next page',
-      title: `Next (page ${currPage + 1} of ${totalPages}) >`,
-      value: 'next',
-    });
-  }
-  return specs;
-}
 
 /**
  * Series of prompts to construct a version object,
