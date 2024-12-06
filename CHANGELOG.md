@@ -1,3 +1,15 @@
+# [9.0.0-next.36](https://github.com/readmeio/rdme/compare/v9.0.0-next.35...v9.0.0-next.36) (2024-12-06)
+
+
+* feat!: final v9 touchups ([#1106](https://github.com/readmeio/rdme/issues/1106)) ([15447c5](https://github.com/readmeio/rdme/commit/15447c52b414b97345b33ff7e17007fdd2fde106)), closes [#1107](https://github.com/readmeio/rdme/issues/1107)
+
+
+### BREAKING CHANGES
+
+* `rdme openapi` is deprecated and will be replaced in
+`rdme@10` by a command with a simpler flag setup based on community
+feedback.
+
 # [9.0.0-next.35](https://github.com/readmeio/rdme/compare/v9.0.0-next.34...v9.0.0-next.35) (2024-12-05)
 
 

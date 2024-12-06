@@ -28,59 +28,11 @@ npx markdown-toc documentation/migration-guide.md --maxdepth 2 --bullets="-" -i
 ## Migrating to `rdme@10`
 
 <!-- prettier-ignore-start -->
-> [!NOTE]
-> `rdme@10` has not been released yet. If you're using ReadMe Refactored, stay tuned!
+> [!WARNING]
+> `rdme@10` has not been released yet, so this section is still under construction.
+>
+> [Please verify that you're looking at the latest docs for v9](https://github.com/readmeio/rdme/tree/v9/documentation/migration-guide.md). If you're using ReadMe Refactored, stay tuned!
 <!-- prettier-ignore-end -->
-
-### Overview
-
-A [bi-directional syncing](https://docs.readme.com/main/docs/bi-directional-sync) workflow with [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored) mostly eliminates the need for a tool like `rdme`. For syncing Markdown files, syncing API definitions, and managing project hierarchy (e.g., project versions and categories) with ReadMe Refactored, you'll want to set up bi-directional syncing.
-
-`rdme@10` is recommended for the following use cases:
-
-- Syncing your API definition (generated via a build process and not tracked via Git) to your ReadMe Refactored-enabled project
-- Syncing Markdown files to the Changelog for your ReadMe Refactored-enabled project
-
-<!-- prettier-ignore-start -->
-> [!NOTE]
-> `rdme@10` only works with ReadMe projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored). If you are not yet using ReadMe Refactored, [you'll want to use `rdme@9`](#migrating-to-rdme9).
-<!-- prettier-ignore-end -->
-
-### Upgrading to `v10`
-
-#### Step 1: Upgrade via `npm`
-
-To install this version of the `rdme` CLI globally, run the following command:
-
-```sh
-npm install -g rdme@10
-```
-
-More installation options can be found in [our docs](https://github.com/readmeio/rdme/tree/v10?tab=readme-ov-file#setup).
-
-#### Step 2: Update GitHub Actions Workflow
-
-If you're using the `rdme` GitHub Action, update your GitHub Actions workflow file so your `rdme` usage uses the `v10` reference like so:
-
-```yaml
-- uses: readmeio/rdme@v10
-  with:
-    rdme: openapi validate petstore.json
-```
-
-#### Step 3: Address Breaking Changes
-
-1. **Enable Bi-Directional Syncing** _(recommended)_
-
-   We recommend setting up [bi-directional syncing](https://docs.readme.com/main/docs/bi-directional-sync) for managing your Markdown files, API definitions and project hierarchy.
-
-2. **Command Replacements**
-
-   - Replace: `categories` → use [Git-based workflow](https://docs.readme.com/main/docs/bi-directional-sync)
-   - Replace: `custompages` → use [Git-based workflow](https://docs.readme.com/main/docs/bi-directional-sync)
-   - Replace: `docs` (and its `guides` alias) → use [Git-based workflow](https://docs.readme.com/main/docs/bi-directional-sync)
-   - Replace: `versions` → use [Git-based workflow](https://docs.readme.com/main/docs/bi-directional-sync)
-   - Remove: `open`
 
 ## Migrating to `rdme@9`
 
@@ -128,7 +80,7 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
     rdme: openapi validate petstore.json
 ```
 
-#### Step 3: Address Breaking Changes
+#### Step 3: Address `v9` Breaking Changes
 
 1. **Verify your runtime**
 
@@ -164,7 +116,7 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
 
 5. **Deprecated commands**
 
-   The following commands (and their subcommands) will be removed in future releases:
+   The following commands (and their subcommands) will be removed in `rdme@10`:
 
    - `categories`
    - `changelogs`
@@ -173,10 +125,12 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
    - `versions`
    - `open`
 
+   The `openapi` command is deprecated and will be replaced in `rdme@10` by a command with a simpler flag setup based on community feedback.
+
 6. **Verify any scripts that utilize raw CLI outputs**
 
    - The underlying architecture for the CLI has been rewritten with [`oclif`](https://oclif.io/), so some command outputs and error messages may look different.
-   - With the exception of the `--raw` flag on `rdme openapi`, we recommend relying on CLI exit codes in your workflows rather than raw command outputs.
+   - With the exception of the `--raw` flag on `openapi`, we recommend relying on CLI exit codes in your workflows rather than raw command outputs.
 
 ## Migrating to `rdme@8`
 
