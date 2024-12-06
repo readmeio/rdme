@@ -146,7 +146,7 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
     rdme: openapi validate petstore.json
 ```
 
-#### Step 3: Address Breaking Changes
+#### Step 3: Address `v9` Breaking Changes
 
 1. **Verify your runtime**
 
