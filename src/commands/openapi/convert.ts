@@ -53,7 +53,7 @@ export default class OpenAPIConvertCommand extends BaseCommand<typeof OpenAPICon
       this.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
     }
 
-    const { preparedSpec, specPath, specType } = await prepareOas(spec, 'openapi:convert', {
+    const { preparedSpec, specPath, specType } = await prepareOas(spec, 'openapi convert', {
       convertToLatest: true,
       title,
     });

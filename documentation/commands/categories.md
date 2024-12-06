@@ -4,7 +4,7 @@
 List or create categories in your ReadMe developer hub.
 
 * [`rdme categories`](#rdme-categories)
-* [`rdme categories:create TITLE`](#rdme-categoriescreate-title)
+* [`rdme categories create TITLE`](#rdme-categories-create-title)
 
 ## `rdme categories`
 
@@ -28,13 +28,13 @@ EXAMPLES
     $ rdme categories --version={project-version}
 ```
 
-## `rdme categories:create TITLE`
+## `rdme categories create TITLE`
 
 Create a category with the specified title and guide in your ReadMe project.
 
 ```
 USAGE
-  $ rdme categories:create TITLE --categoryType guide|reference --key <value> [--preventDuplicates] [--version <value>]
+  $ rdme categories create TITLE --categoryType guide|reference --key <value> [--preventDuplicates] [--version <value>]
 
 ARGUMENTS
   TITLE  Title of the category
@@ -54,11 +54,11 @@ DESCRIPTION
 EXAMPLES
   Create a new category for your project version:
 
-    $ rdme categories:create <title> --categoryType={guide|reference} --version={project-version}
+    $ rdme categories create <title> --categoryType={guide|reference} --version={project-version}
 
   If you want to prevent the creation of a duplicate category with a matching `title` and `categoryType`, supply the
   `--preventDuplicates` flag:
 
-    $ rdme categories:create <title> --categoryType={guide|reference} --version={project-version} \
+    $ rdme categories create <title> --categoryType={guide|reference} --version={project-version} \
       --preventDuplicates
 ```

@@ -10,7 +10,7 @@ import { runCommandAndReturnResult } from '../../helpers/oclif.js';
 const key = 'API_KEY';
 const version = '1.0.0';
 
-describe('rdme versions:update', () => {
+describe('rdme versions update', () => {
   let run: (args?: string[]) => Promise<string>;
 
   beforeAll(() => {

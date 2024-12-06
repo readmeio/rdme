@@ -16,6 +16,15 @@ export interface Version {
 }
 
 export default class VersionsCommand extends BaseCommand<typeof VersionsCommand> {
+  // needed for deprecation message
+  static id = 'versions' as const;
+
+  static state = 'deprecated';
+
+  static deprecationOptions = {
+    message: `\`rdme ${this.id}\` is deprecated and will be removed in v10. For more information, please visit our migration guide: https://github.com/readmeio/rdme/tree/v9/documentation/migration-guide.md`,
+  };
+
   static description = 'List versions available in your project or get a version by SemVer (https://semver.org/).';
 
   static flags = {

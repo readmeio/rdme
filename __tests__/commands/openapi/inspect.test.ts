@@ -7,7 +7,7 @@ import { describe, it, expect, beforeAll } from 'vitest';
 import Command from '../../../src/commands/openapi/inspect.js';
 import { runCommandAndReturnResult } from '../../helpers/oclif.js';
 
-describe('rdme openapi:inspect', () => {
+describe('rdme openapi inspect', () => {
   let run: (args?: string[]) => Promise<unknown>;
 
   beforeAll(() => {

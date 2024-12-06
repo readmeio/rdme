@@ -8,7 +8,7 @@ import { runCommandAndReturnResult } from '../../helpers/oclif.js';
 
 const successfulConversion = () => 'Your API definition has been converted and bundled and saved to output.json!';
 
-describe('rdme openapi:convert', () => {
+describe('rdme openapi convert', () => {
   let run: (args?: string[]) => Promise<string>;
   let testWorkingDir: string;
 

@@ -49,7 +49,7 @@ const capitalizeSpecType = (type: string) =>
  */
 export default async function prepareOas(
   path: string | undefined,
-  command: 'openapi:convert' | 'openapi:inspect' | 'openapi:reduce' | 'openapi:refs' | 'openapi:validate' | 'openapi',
+  command: 'openapi convert' | 'openapi inspect' | 'openapi reduce' | 'openapi validate' | 'openapi',
   opts: {
     /**
      * Optionally convert the supplied or discovered API definition to the latest OpenAPI release.
@@ -90,7 +90,7 @@ export default async function prepareOas(
         action = 'upload';
         break;
       default:
-        action = command.split(':')[1] as 'convert' | 'inspect' | 'reduce' | 'refs' | 'validate';
+        action = command.split(' ')[1] as 'convert' | 'inspect' | 'reduce' | 'validate';
     }
 
     const jsonAndYamlFiles = readdirRecursive('.', true).filter(
@@ -213,7 +213,7 @@ export default async function prepareOas(
   const specVersion: string = api.info.version;
   debug(`version in spec: ${specVersion}`);
 
-  if (['openapi', 'openapi:inspect', 'openapi:reduce'].includes(command)) {
+  if (['openapi', 'openapi inspect', 'openapi reduce'].includes(command)) {
     api = await oas.bundle();
 
     debug('spec bundled');

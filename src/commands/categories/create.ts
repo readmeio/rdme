@@ -13,6 +13,15 @@ interface Category {
 }
 
 export default class CategoriesCreateCommand extends BaseCommand<typeof CategoriesCreateCommand> {
+  // needed for deprecation message
+  static id = 'categories create' as const;
+
+  static state = 'deprecated';
+
+  static deprecationOptions = {
+    message: `\`rdme ${this.id}\` is deprecated and will be removed in v10. For more information, please visit our migration guide: https://github.com/readmeio/rdme/tree/v9/documentation/migration-guide.md`,
+  };
+
   static description = 'Create a category with the specified title and guide in your ReadMe project.';
 
   static args = {

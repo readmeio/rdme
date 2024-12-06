@@ -4,11 +4,10 @@
 Manage your API definition (e.g., syncing, validation, analysis, conversion, etc.). Supports OpenAPI, Swagger, and Postman collections, in either JSON or YAML formats.
 
 * [`rdme openapi [SPEC]`](#rdme-openapi-spec)
-* [`rdme openapi:convert [SPEC]`](#rdme-openapiconvert-spec)
-* [`rdme openapi:inspect [SPEC]`](#rdme-openapiinspect-spec)
-* [`rdme openapi:reduce [SPEC]`](#rdme-openapireduce-spec)
-* [`rdme openapi:refs [SPEC]`](#rdme-openapirefs-spec)
-* [`rdme openapi:validate [SPEC]`](#rdme-openapivalidate-spec)
+* [`rdme openapi convert [SPEC]`](#rdme-openapi-convert-spec)
+* [`rdme openapi inspect [SPEC]`](#rdme-openapi-inspect-spec)
+* [`rdme openapi reduce [SPEC]`](#rdme-openapi-reduce-spec)
+* [`rdme openapi validate [SPEC]`](#rdme-openapi-validate-spec)
 
 ## `rdme openapi [SPEC]`
 
@@ -105,13 +104,13 @@ FLAG DESCRIPTIONS
     flag only works if there's only one API definition associated with the current version.
 ```
 
-## `rdme openapi:convert [SPEC]`
+## `rdme openapi convert [SPEC]`
 
 Converts an API definition to OpenAPI and bundles any external references.
 
 ```
 USAGE
-  $ rdme openapi:convert [SPEC] [--out <value>] [--title <value>] [--workingDirectory <value>]
+  $ rdme openapi convert [SPEC] [--out <value>] [--title <value>] [--workingDirectory <value>]
 
 ARGUMENTS
   SPEC  A file/URL to your API definition
@@ -132,21 +131,21 @@ EXAMPLES
   By default, this command will display a comprehensive table of all OpenAPI and ReadMe features found in your API
   definition:
 
-    $ rdme openapi:convert [url-or-local-path-to-file]
+    $ rdme openapi convert [url-or-local-path-to-file]
 
   You can omit the file name and `rdme` will scan your working directory (and any subdirectories) for OpenAPI/Swagger
   files. This approach will provide you with CLI prompts, so we do not recommend this technique in CI environments.
 
-    $ rdme openapi:convert
+    $ rdme openapi convert
 ```
 
-## `rdme openapi:inspect [SPEC]`
+## `rdme openapi inspect [SPEC]`
 
 Analyze an OpenAPI/Swagger definition for various OpenAPI and ReadMe feature usage.
 
 ```
 USAGE
-  $ rdme openapi:inspect [SPEC] [--feature
+  $ rdme openapi inspect [SPEC] [--feature
     additionalProperties|callbacks|circularRefs|discriminators|links|style|polymorphism|serverVariables|webhooks|xml|rea
     dme...] [--workingDirectory <value>]
 
@@ -172,27 +171,27 @@ EXAMPLES
   By default, this command will display a comprehensive table of all OpenAPI and ReadMe features found in your API
   definition:
 
-    $ rdme openapi:inspect [url-or-local-path-to-file]
+    $ rdme openapi inspect [url-or-local-path-to-file]
 
   You can omit the file name and `rdme` will scan your working directory (and any subdirectories) for OpenAPI/Swagger
   files. This approach will provide you with CLI prompts, so we do not recommend this technique in CI environments.
 
-    $ rdme openapi:inspect
+    $ rdme openapi inspect
 
   If you wish to automate this command, it contains a `--feature` flag so you can filter for one or several specific
   features. If you pass in one or more `--feature` flags, the command returns a `0` exit code if your definition
   contains all of the given features and a `1` exit code if your definition lacks any of the given features:
 
-    $ rdme openapi:inspect [url-or-local-path-to-file] --feature circularRefs --feature polymorphism
+    $ rdme openapi inspect [url-or-local-path-to-file] --feature circularRefs --feature polymorphism
 ```
 
-## `rdme openapi:reduce [SPEC]`
+## `rdme openapi reduce [SPEC]`
 
 Reduce an OpenAPI definition into a smaller subset.
 
 ```
 USAGE
-  $ rdme openapi:reduce [SPEC] [--method <value>...] [--out <value>] [--path <value>...] [--tag <value>...] [--title
+  $ rdme openapi reduce [SPEC] [--method <value>...] [--out <value>] [--path <value>...] [--tag <value>...] [--title
     <value>] [--workingDirectory <value>]
 
 ARGUMENTS
@@ -215,16 +214,16 @@ DESCRIPTION
 EXAMPLES
   By default, this command will ask you a couple questions about how you wish to reduce the file and then do so:
 
-    $ rdme openapi:reduce [url-or-local-path-to-file]
+    $ rdme openapi reduce [url-or-local-path-to-file]
 
   You can omit the file name and `rdme` will scan your working directory (and any subdirectories) for OpenAPI/Swagger
   files. This approach will provide you with CLI prompts, so we do not recommend this technique in CI environments.
 
-    $ rdme openapi:reduce
+    $ rdme openapi reduce
 
   If you wish to automate this command, you can pass in CLI arguments to bypass the prompts:
 
-    $ rdme openapi:reduce petstore.json --path /pet/{id} --method get --method put --out petstore.reduced.json
+    $ rdme openapi reduce petstore.json --path /pet/{id} --method get --method put --out petstore.reduced.json
 ```
 
 ## `rdme openapi:refs [SPEC]`
@@ -267,13 +266,13 @@ EXAMPLES
     $ rdme openapi:refs petstore.json --out petstore.openapi.json
 ```
 
-## `rdme openapi:validate [SPEC]`
+## `rdme openapi validate [SPEC]`
 
 Validate your OpenAPI/Swagger definition.
 
 ```
 USAGE
-  $ rdme openapi:validate [SPEC] [--github] [--workingDirectory <value>]
+  $ rdme openapi validate [SPEC] [--github] [--workingDirectory <value>]
 
 ARGUMENTS
   SPEC  A file/URL to your API definition
@@ -291,10 +290,10 @@ DESCRIPTION
 EXAMPLES
   This will validate the API definition at the given URL or path:
 
-    $ rdme openapi:validate [url-or-local-path-to-file]
+    $ rdme openapi validate [url-or-local-path-to-file]
 
   You can omit the file name and `rdme` will scan your working directory (and any subdirectories) for OpenAPI/Swagger
   files. This approach will provide you with CLI prompts, so we do not recommend this technique in CI environments.
 
-    $ rdme openapi:validate
+    $ rdme openapi validate
 ```

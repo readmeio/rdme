@@ -22,6 +22,16 @@ import WhoAmICommand from './commands/whoami.js';
 export { default as createGHA } from './lib/hooks/createGHA.js';
 export { default as prerun } from './lib/hooks/prerun.js';
 
+/**
+ * All the commands available in the CLI. We use the `explicit` command discovery strategy
+ * so we can properly bundle the CLI for usage in GitHub Actions.
+ *
+ * Also, we use colon separators for subcommands below. This ensures that users can use both colons
+ * and spaces when running subcommands. The documentation will always show spaces, but colons are
+ * also supported.
+ *
+ * @see {@link https://oclif.io/docs/command_discovery_strategies/#explicit-strategy}
+ */
 export const COMMANDS = {
   categories: CategoriesCommand,
   'categories:create': CategoriesCreateCommand,

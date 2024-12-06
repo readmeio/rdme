@@ -9,7 +9,7 @@ import { runCommandAndReturnResult } from '../../helpers/oclif.js';
 const key = 'API_KEY';
 const version = '1.0.0';
 
-describe('rdme versions:delete', () => {
+describe('rdme versions delete', () => {
   let run: (args?: string[]) => Promise<string>;
 
   beforeAll(() => {
