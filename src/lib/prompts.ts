@@ -1,8 +1,6 @@
-import type { Version } from '../commands/versions/index.js';
 import type { Choice, PromptObject } from 'prompts';
 
 import parse from 'parse-link-header';
-import semver from 'semver';
 
 import { debug } from './logger.js';
 import promptTerminal from './promptWrapper.js';
@@ -129,76 +127,6 @@ export function createOasPrompt(
 
         return picked;
       },
-    },
-  ];
-}
-
-/**
- * Series of prompts to construct a version object,
- * used in our `versions create` and `versions update` commands
- */
-export function versionPrompt(
-  /** list of versions, used for prompt about which version to fork */
-  versionList: Version[],
-  /** existing version if we're performing an update */
-  existingVersion?: {
-    is_stable: boolean;
-  },
-): PromptObject[] {
-  return [
-    {
-      // only runs for versions create command
-      type: existingVersion ? null : 'select',
-      name: 'from',
-      message: 'Which version would you like to fork from?',
-      choices: versionList.map(v => {
-        return {
-          title: v.version,
-          value: v.version,
-        };
-      }),
-    },
-    {
-      // only runs for versions update command
-      type: !existingVersion ? null : 'text',
-      name: 'newVersion',
-      message: 'What should the version be renamed to?',
-      hint: '1.0.0',
-      validate(val: string) {
-        // allow empty string, in which case the version won't be renamed
-        if (!val) return true;
-        return semver.valid(semver.coerce(val)) ? true : 'Please specify a semantic version.';
-      },
-    },
-    {
-      // if the user is already updating the main version
-      // we skip this question since it must remain the main version
-      type: existingVersion?.is_stable ? null : 'confirm',
-      name: 'is_stable',
-      message: 'Should this be the main version for your project?',
-    },
-    {
-      type: 'confirm',
-      name: 'is_beta',
-      message: 'Should this version be in beta?',
-    },
-    {
-      type: (prev, values) => {
-        // if user wants this version to be the main version
-        // it can't also be hidden.
-        return values.is_stable || existingVersion?.is_stable ? null : 'confirm';
-      },
-      name: 'is_hidden',
-      message: 'Should this version be hidden?',
-    },
-    {
-      type: (prev, values) => {
-        // if user wants this version to be the main version
-        // it can't also be deprecated.
-        return values.is_stable || existingVersion?.is_stable ? null : 'confirm';
-      },
-      name: 'is_deprecated',
-      message: 'Should this version be deprecated?',
     },
   ];
 }
