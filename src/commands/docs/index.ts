@@ -12,6 +12,12 @@ export default class DocsCommand extends BaseCommand<typeof DocsCommand> {
   // needed for unit tests, even though we also specify this in src/index.ts
   static id = 'docs' as const;
 
+  static state = 'deprecated';
+
+  static deprecationOptions = {
+    message: `\`rdme ${this.id}\` is deprecated and will be removed in v10. For more information, please visit our migration guide: https://github.com/readmeio/rdme/tree/v9/documentation/migration-guide.md`,
+  };
+
   static aliases = ['guides'];
 
   static summary = 'Sync Markdown files to your ReadMe project as Guides.';

@@ -22,7 +22,13 @@ export default class OpenAPICommand extends BaseCommand<typeof OpenAPICommand> {
     "Locates your API definition (if you don't supply one), validates it, and then syncs it to your API reference on ReadMe.";
 
   // needed for unit tests, even though we also specify this in src/index.ts
-  static id = 'openapi';
+  static id = 'openapi' as const;
+
+  static state = 'deprecated';
+
+  static deprecationOptions = {
+    message: `\`rdme ${this.id}\` is deprecated and v10 will have a replacement command that supports ReadMe Refactored. For more information, please visit our migration guide: https://github.com/readmeio/rdme/tree/v9/documentation/migration-guide.md`,
+  };
 
   static args = {
     spec: Args.string({ description: 'A file/URL to your API definition' }),
