@@ -153,7 +153,7 @@ $ npm install -g rdme
 $ rdme COMMAND
 running command...
 $ rdme (--version)
-rdme/9.0.0-next.35 darwin-arm64 node-v20.13.1
+rdme/9.0.0-next.35 linux-x64 node-v20.18.1
 $ rdme --help [COMMAND]
 USAGE
   $ rdme COMMAND

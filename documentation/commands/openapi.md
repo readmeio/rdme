@@ -7,7 +7,6 @@ Manage your API definition (e.g., syncing, validation, analysis, conversion, etc
 * [`rdme openapi convert [SPEC]`](#rdme-openapi-convert-spec)
 * [`rdme openapi inspect [SPEC]`](#rdme-openapi-inspect-spec)
 * [`rdme openapi reduce [SPEC]`](#rdme-openapi-reduce-spec)
-* [`rdme openapi refs [SPEC]`](#rdme-openapi-refs-spec)
 * [`rdme openapi validate [SPEC]`](#rdme-openapi-validate-spec)
 
 ## `rdme openapi [SPEC]`
@@ -227,13 +226,13 @@ EXAMPLES
     $ rdme openapi reduce petstore.json --path /pet/{id} --method get --method put --out petstore.reduced.json
 ```
 
-## `rdme openapi refs [SPEC]`
+## `rdme openapi:refs [SPEC]`
 
 Resolves circular and recursive references in OpenAPI by replacing them with object schemas.
 
 ```
 USAGE
-  $ rdme openapi refs [SPEC] [--out <value>] [--workingDirectory <value>]
+  $ rdme openapi:refs [SPEC] [--out <value>] [--workingDirectory <value>]
 
 ARGUMENTS
   SPEC  A file/URL to your API definition
@@ -255,16 +254,16 @@ DESCRIPTION
 EXAMPLES
   This will resolve circular and recursive references in the OpenAPI definition at the given file or URL:
 
-    $ rdme openapi refs [url-or-local-path-to-file]
+    $ rdme openapi:refs [url-or-local-path-to-file]
 
   You can omit the file name and `rdme` will scan your working directory (and any subdirectories) for OpenAPI files.
   This approach will provide you with CLI prompts, so we do not recommend this technique in CI environments.
 
-    $ rdme openapi refs
+    $ rdme openapi:refs
 
   If you wish to automate this command, you can pass in CLI arguments to bypass the prompts:
 
-    $ rdme openapi refs petstore.json --out petstore.openapi.json
+    $ rdme openapi:refs petstore.json --out petstore.openapi.json
 ```
 
 ## `rdme openapi validate [SPEC]`
