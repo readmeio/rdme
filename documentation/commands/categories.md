@@ -15,9 +15,10 @@ USAGE
   $ rdme categories --key <value> [--version <value>]
 
 FLAGS
-  --key=<value>      (required) ReadMe Project API key
-  --version=<value>  Project version. If running command in a CI environment and this option is not passed, the main
-                     project version will be used.
+  --key=<value>      (required) An API key for your ReadMe project. Note that API authentication is required despite
+                     being omitted from the example usage. See our docs for more information:
+                     https://github.com/readmeio/rdme/tree/v9#authentication
+  --version=<value>  ReadMe project version
 
 DESCRIPTION
   Get all categories in your ReadMe project.
@@ -26,6 +27,19 @@ EXAMPLES
   Get all categories associated to your project version:
 
     $ rdme categories --version={project-version}
+
+FLAG DESCRIPTIONS
+  --key=<value>
+
+    An API key for your ReadMe project. Note that API authentication is required despite being omitted from the example
+    usage. See our docs for more information: https://github.com/readmeio/rdme/tree/v9#authentication
+
+    ReadMe project API key
+
+  --version=<value>  ReadMe project version
+
+    Your ReadMe project version. If running command in a CI environment and this option is not passed, the main project
+    version will be used. See our docs for more information: https://docs.readme.com/main/docs/versions
 ```
 
 ## `rdme categories create TITLE`
@@ -42,11 +56,12 @@ ARGUMENTS
 FLAGS
   --categoryType=<option>  (required) Category type
                            <options: guide|reference>
-  --key=<value>            (required) ReadMe Project API key
+  --key=<value>            (required) An API key for your ReadMe project. Note that API authentication is required
+                           despite being omitted from the example usage. See our docs for more information:
+                           https://github.com/readmeio/rdme/tree/v9#authentication
   --preventDuplicates      Prevents the creation of a new category if there is an existing category with a matching
                            `categoryType` and `title`
-  --version=<value>        Project version. If running command in a CI environment and this option is not passed, the
-                           main project version will be used.
+  --version=<value>        ReadMe project version
 
 DESCRIPTION
   Create a category with the specified title and guide in your ReadMe project.
@@ -61,4 +76,17 @@ EXAMPLES
 
     $ rdme categories create <title> --categoryType={guide|reference} --version={project-version} \
       --preventDuplicates
+
+FLAG DESCRIPTIONS
+  --key=<value>
+
+    An API key for your ReadMe project. Note that API authentication is required despite being omitted from the example
+    usage. See our docs for more information: https://github.com/readmeio/rdme/tree/v9#authentication
+
+    ReadMe project API key
+
+  --version=<value>  ReadMe project version
+
+    Your ReadMe project version. If running command in a CI environment and this option is not passed, the main project
+    version will be used. See our docs for more information: https://docs.readme.com/main/docs/versions
 ```
