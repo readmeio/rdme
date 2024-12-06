@@ -49,7 +49,7 @@ const capitalizeSpecType = (type: string) =>
  */
 export default async function prepareOas(
   path: string | undefined,
-  command: 'openapi convert' | 'openapi inspect' | 'openapi reduce' | 'openapi refs' |'openapi validate' | 'openapi',
+  command: 'openapi convert' | 'openapi inspect' | 'openapi reduce' | 'openapi refs' | 'openapi validate' | 'openapi',
   opts: {
     /**
      * Optionally convert the supplied or discovered API definition to the latest OpenAPI release.
