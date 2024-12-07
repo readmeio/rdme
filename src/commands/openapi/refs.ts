@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import type { OASDocument } from 'oas/types';
+// eslint-disable-next-line camelcase
 import type { IJsonSchema, OpenAPIV3, OpenAPIV3_1 } from 'openapi-types';
 
 import fs from 'node:fs';
@@ -20,12 +21,13 @@ import { validateFilePath } from '../../lib/validatePromptInput.js';
 
 type SchemaCollection = Record<
   string,
+  // eslint-disable-next-line camelcase
   OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.SchemaObject | OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject
 >;
 
-type Schema = 
-  OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.SchemaObject | OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject
-;
+type Schema =
+  // eslint-disable-next-line camelcase
+  OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.SchemaObject | OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject;
 
 export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCommand> {
   static summary = 'Resolves circular and recursive references in OpenAPI by replacing them with object schemas.';
@@ -88,7 +90,6 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
     /** The name of the schema being processed. */
     schemaName: string,
   ) {
-    
     if ('$ref' in schema) {
       const refSchemaName = schema.$ref.split('/').pop();
       if (!refSchemaName) {
@@ -218,9 +219,8 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
           replaceRef(schemaName, propertyName, newRefSchemaName);
           createRefSchema(refSchemaName, newRefSchemaName);
           return;
-        } else {
-          throw new Error(`Invalid $ref in property: ${JSON.stringify(property)}`);
         }
+        throw new Error(`Invalid $ref in property: ${JSON.stringify(property)}`);
       }
 
       // Handle references within items in an array
@@ -242,24 +242,23 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
           property.items = { $ref: `#/components/schemas/${refSchemaName}` };
           createRefSchema(itemsRefSchemaName, refSchemaName);
         }
-      } else {
-        // Handle direct reference
-        if ('$ref' in property && typeof property.$ref === 'string') {
-          refSchemaName = property.$ref?.split('/')[3];
-          if (refSchemaName) {
-            const newRefSchemaName = `${refSchemaName}Ref`;
-            if (refSchemaName.includes('Ref')) {
-              debug(`Skipping proxy schema for ${refSchemaName}.`);
-              return;
-            }
-            replaceRef(schemaName, propertyName, newRefSchemaName);
-            createRefSchema(refSchemaName, newRefSchemaName);
-          } else {
-            throw new Error(`Invalid $ref in property: ${JSON.stringify(property)}`);
+      }
+      // Handle direct reference
+      else if ('$ref' in property && typeof property.$ref === 'string') {
+        refSchemaName = property.$ref?.split('/')[3];
+        if (refSchemaName) {
+          const newRefSchemaName = `${refSchemaName}Ref`;
+          if (refSchemaName.includes('Ref')) {
+            debug(`Skipping proxy schema for ${refSchemaName}.`);
+            return;
           }
+          replaceRef(schemaName, propertyName, newRefSchemaName);
+          createRefSchema(refSchemaName, newRefSchemaName);
         } else {
-          throw new Error(`Property does not contain a $ref: ${JSON.stringify(property)}`);
+          throw new Error(`Invalid $ref in property: ${JSON.stringify(property)}`);
         }
+      } else {
+        throw new Error(`Property does not contain a $ref: ${JSON.stringify(property)}`);
       }
     });
   }
