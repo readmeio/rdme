@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import type { OASDocument } from 'oas/types';
-import type { IJsonSchema } from 'openapi-types';
+import type { IJsonSchema, OpenAPIV3, OpenAPIV3_1 } from 'openapi-types';
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -18,7 +18,14 @@ import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
 import { validateFilePath } from '../../lib/validatePromptInput.js';
 
-type SchemaCollection = Record<string, IJsonSchema>;
+type SchemaCollection = Record<
+  string,
+  OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.SchemaObject | OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject
+>;
+
+type Schema = 
+  OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.SchemaObject | OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject
+;
 
 export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCommand> {
   static summary = 'Resolves circular and recursive references in OpenAPI by replacing them with object schemas.';
@@ -75,19 +82,23 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
    */
   static replaceRefWithObjectProxySchemes(
     /** The schema to process. */
-    schema: IJsonSchema,
+    schema: Schema,
     /** List of circular reference paths. */
     circularRefs: string[],
     /** The name of the schema being processed. */
     schemaName: string,
-  ): IJsonSchema {
-    if (schema.$ref) {
-      const refSchemaName = schema.$ref.split('/').pop() as string;
+  ) {
+    
+    if ('$ref' in schema) {
+      const refSchemaName = schema.$ref.split('/').pop();
+      if (!refSchemaName) {
+        throw new Error('Invalid $ref: unable to extract schema name.');
+      }
       const isCircular = circularRefs.some(refPath => refPath.includes(refSchemaName));
       const isRecursive = schemaName === refSchemaName;
 
       if (schemaName.includes('Ref') && (isCircular || isRecursive)) {
-        return { type: 'object' } as IJsonSchema;
+        return { type: 'object' };
       }
     }
 
@@ -99,12 +110,16 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
    */
   static replaceRefsInSchema(
     /** The schema to process. */
-    schema: IJsonSchema,
+    schema: Schema,
     /** List of circular reference paths. */
     circularRefs: string[],
     /** The name of the schema being processed. */
     schemaName: string,
   ) {
+    if ('$ref' in schema) {
+      return;
+    }
+
     if (schema.type === 'object' && schema.properties) {
       for (const prop of Object.keys(schema.properties)) {
         let property = JSON.parse(JSON.stringify(schema.properties[prop]));
@@ -137,15 +152,31 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
     const createdRefs = new Set<string>();
 
     function replaceRef(schemaName: string, propertyName: string, refSchemaName: string) {
-      schemas[schemaName]!.properties![propertyName] = { $ref: `#/components/schemas/${refSchemaName}` } as IJsonSchema;
+      const schema = schemas[schemaName];
+      if ('properties' in schema) {
+        schema.properties![propertyName] = { $ref: `#/components/schemas/${refSchemaName}` };
+      } else if ('$ref' in schema) {
+        schema.$ref = `#/components/schemas/${refSchemaName}`;
+      }
     }
 
     function createRefSchema(originalSchemaName: string, refSchemaName: string) {
       if (!createdRefs.has(refSchemaName) && schemas[originalSchemaName]) {
-        schemas[refSchemaName] = {
-          type: 'object',
-          properties: { ...schemas[originalSchemaName].properties },
-        } as IJsonSchema;
+        const schema = schemas[originalSchemaName];
+
+        if ('properties' in schema) {
+          schemas[refSchemaName] = {
+            type: 'object',
+            properties: { ...schema.properties },
+          };
+        } else if ('$ref' in schema) {
+          schemas[refSchemaName] = {
+            $ref: schema.$ref,
+          };
+        } else {
+          throw new Error(`Unsupported schema type for ${originalSchemaName}`);
+        }
+
         OpenAPIRefsCommand.replaceRefsInSchema(schemas[refSchemaName], circularRefs, refSchemaName);
         createdRefs.add(refSchemaName);
       }
@@ -153,17 +184,43 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
 
     circularRefs.forEach(refPath => {
       const refParts = refPath.split('/');
-      if (refParts.length < 6) {
+      if (refParts.length < 4) {
         throw new Error(`Invalid reference path: ${refPath}`);
       }
 
       const schemaName = refParts[3];
       const propertyName = refParts[5];
       const schema = schemas[schemaName];
-      const property = schema?.properties?.[propertyName];
+
+      let property: Schema;
+
+      if ('properties' in schema && schema.properties?.[propertyName]) {
+        property = schema.properties[propertyName];
+      } else if ('$ref' in schema && schema.$ref) {
+        property = { $ref: schema.$ref };
+      } else {
+        throw new Error(`Property "${propertyName}" is not found or schema is invalid.`);
+      }
 
       if (!schema || !property) {
         throw new Error(`Schema or property not found for path: ${refPath}`);
+      }
+
+      // Handle case when schema contains only a $ref
+      if ('$ref' in property) {
+        const refSchemaName = property.$ref?.split('/')[3];
+        if (refSchemaName) {
+          const newRefSchemaName = `${refSchemaName}Ref`;
+          if (refSchemaName.includes('Ref')) {
+            debug(`Skipping proxy schema for ${refSchemaName}.`);
+            return;
+          }
+          replaceRef(schemaName, propertyName, newRefSchemaName);
+          createRefSchema(refSchemaName, newRefSchemaName);
+          return;
+        } else {
+          throw new Error(`Invalid $ref in property: ${JSON.stringify(property)}`);
+        }
       }
 
       // Handle references within items in an array
@@ -182,20 +239,26 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
             debug(`Skipping proxy schema for ${itemsRefSchemaName} in array items.`);
             return;
           }
-          property.items = { $ref: `#/components/schemas/${refSchemaName}` } as IJsonSchema;
+          property.items = { $ref: `#/components/schemas/${refSchemaName}` };
           createRefSchema(itemsRefSchemaName, refSchemaName);
         }
       } else {
         // Handle direct reference
-        refSchemaName = property.$ref?.split('/')[3];
-        if (refSchemaName) {
-          const newRefSchemaName = `${refSchemaName}Ref`;
-          if (refSchemaName.includes('Ref')) {
-            debug(`Skipping proxy schema for ${refSchemaName}.`);
-            return;
+        if ('$ref' in property && typeof property.$ref === 'string') {
+          refSchemaName = property.$ref?.split('/')[3];
+          if (refSchemaName) {
+            const newRefSchemaName = `${refSchemaName}Ref`;
+            if (refSchemaName.includes('Ref')) {
+              debug(`Skipping proxy schema for ${refSchemaName}.`);
+              return;
+            }
+            replaceRef(schemaName, propertyName, newRefSchemaName);
+            createRefSchema(refSchemaName, newRefSchemaName);
+          } else {
+            throw new Error(`Invalid $ref in property: ${JSON.stringify(property)}`);
           }
-          replaceRef(schemaName, propertyName, newRefSchemaName);
-          createRefSchema(refSchemaName, newRefSchemaName);
+        } else {
+          throw new Error(`Property does not contain a $ref: ${JSON.stringify(property)}`);
         }
       }
     });
@@ -212,23 +275,27 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
   ): void {
     circularRefs.forEach(refPath => {
       const refParts = refPath.split('/');
-      if (refParts.length < 6) {
+      if (refParts.length < 4) {
         throw new Error(`Invalid reference path: ${refPath}`);
       }
 
       const schemaName = refParts[3];
       const propertyName = refParts[5];
 
-      const schema = schemas?.[schemaName];
+      let schema = schemas?.[schemaName];
       if (!schema) {
         warn(`Schema not found for: ${schemaName}`);
         return;
       }
 
-      if (schema.properties && schema.properties[propertyName]) {
+      if ('properties' in schema && schema.properties && schema.properties[propertyName]) {
         schema.properties[propertyName] = { type: 'object' };
-      } else if (schema.type === 'array' && schema.items) {
+      } else if ('type' in schema && schema.type === 'array' && 'items' in schema && schema.items) {
         schema.items = { type: 'object' };
+      } else if ('$ref' in schema && typeof schema.$ref === 'string') {
+        schema = { type: 'object' };
+      } else {
+        throw new Error(`Invalid schema format: ${JSON.stringify(schema)}`);
       }
     });
   }
@@ -319,11 +386,17 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
 
     const openApiData: OASDocument = JSON.parse(preparedSpec);
 
+    if (!openApiData.components?.schemas) {
+      throw new Error('Schemas not found in OpenAPI data');
+    }
+
+    const schemas: SchemaCollection = openApiData.components?.schemas;
+
     const spinner = ora({ ...oraOptions() });
     spinner.start('Identifying and resolving circular/recursive references in your API definition...');
 
     try {
-      await OpenAPIRefsCommand.resolveCircularRefs(openApiData, openApiData.components!.schemas! as SchemaCollection); // temporarily
+      await OpenAPIRefsCommand.resolveCircularRefs(openApiData, schemas);
       spinner.succeed(`${spinner.text} done! ✅`);
     } catch (err) {
       this.debug(`${err.message}`);
