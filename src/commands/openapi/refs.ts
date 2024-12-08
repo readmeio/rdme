@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
+/* eslint-disable camelcase */
 import type { OASDocument } from 'oas/types';
-// eslint-disable-next-line camelcase
-import type { IJsonSchema, OpenAPIV3, OpenAPIV3_1 } from 'openapi-types';
+import type { OpenAPIV3, OpenAPIV3_1 } from 'openapi-types';
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -21,13 +21,14 @@ import { validateFilePath } from '../../lib/validatePromptInput.js';
 
 type SchemaCollection = Record<
   string,
-  // eslint-disable-next-line camelcase
   OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.SchemaObject | OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject
 >;
 
 type Schema =
-  // eslint-disable-next-line camelcase
-  OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.SchemaObject | OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject;
+  | OpenAPIV3_1.ReferenceObject
+  | OpenAPIV3_1.SchemaObject
+  | OpenAPIV3.ReferenceObject
+  | OpenAPIV3.SchemaObject;
 
 export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCommand> {
   static summary = 'Resolves circular and recursive references in OpenAPI by replacing them with object schemas.';
@@ -207,7 +208,6 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
         throw new Error(`Schema or property not found for path: ${refPath}`);
       }
 
-      // Handle case when schema contains only a $ref
       if ('$ref' in property) {
         const refSchemaName = property.$ref?.split('/')[3];
         if (refSchemaName) {
@@ -224,7 +224,7 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
       }
 
       // Handle references within items in an array
-      let refSchemaName: string | undefined;
+      let refSchemaName: string;
       if (
         refParts.length > 6 &&
         refParts[6] === 'items' &&
@@ -232,33 +232,19 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
         property.items &&
         typeof property.items === 'object'
       ) {
-        const itemsRefSchemaName = (property.items as IJsonSchema).$ref?.split('/')[3];
-        if (itemsRefSchemaName) {
-          refSchemaName = `${itemsRefSchemaName}Ref`;
-          if (itemsRefSchemaName.includes('Ref')) {
-            debug(`Skipping proxy schema for ${itemsRefSchemaName} in array items.`);
-            return;
+        if ('$ref' in property.items) {
+          const itemsRefSchemaName = property.items.$ref.split('/')[3];
+
+          if (itemsRefSchemaName) {
+            refSchemaName = `${itemsRefSchemaName}Ref`;
+            if (itemsRefSchemaName.includes('Ref')) {
+              debug(`Skipping proxy schema for ${itemsRefSchemaName} in array items.`);
+              return;
+            }
+            property.items = { $ref: `#/components/schemas/${refSchemaName}` };
+            createRefSchema(itemsRefSchemaName, refSchemaName);
           }
-          property.items = { $ref: `#/components/schemas/${refSchemaName}` };
-          createRefSchema(itemsRefSchemaName, refSchemaName);
         }
-      }
-      // Handle direct reference
-      else if ('$ref' in property && typeof property.$ref === 'string') {
-        refSchemaName = property.$ref?.split('/')[3];
-        if (refSchemaName) {
-          const newRefSchemaName = `${refSchemaName}Ref`;
-          if (refSchemaName.includes('Ref')) {
-            debug(`Skipping proxy schema for ${refSchemaName}.`);
-            return;
-          }
-          replaceRef(schemaName, propertyName, newRefSchemaName);
-          createRefSchema(refSchemaName, newRefSchemaName);
-        } else {
-          throw new Error(`Invalid $ref in property: ${JSON.stringify(property)}`);
-        }
-      } else {
-        throw new Error(`Property does not contain a $ref: ${JSON.stringify(property)}`);
       }
     });
   }
@@ -281,7 +267,7 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
       const schemaName = refParts[3];
       const propertyName = refParts[5];
 
-      let schema = schemas?.[schemaName];
+      let schema: Schema = schemas?.[schemaName];
       if (!schema) {
         warn(`Schema not found for: ${schemaName}`);
         return;
@@ -320,7 +306,7 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
 
     let remainingCircularRefs = await OpenAPIRefsCommand.getCircularRefsFromOas(openApiData);
     let iterationCount = 0;
-    const maxIterations = 8;
+    const maxIterations = 10;
 
     while (remainingCircularRefs.length > 0 && iterationCount < maxIterations) {
       debug(
