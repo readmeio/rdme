@@ -56,8 +56,8 @@ FLAG DESCRIPTIONS
 
   --version=<value>  ReadMe project version
 
-    Your ReadMe project version. If running command in a CI environment and this option is not passed, the main project
-    version will be used. See our docs for more information: https://docs.readme.com/main/docs/versions
+    If running command in a CI environment and this option is not passed, the main project version will be used. See our
+    docs for more information: https://docs.readme.com/main/docs/versions
 ```
 
 ## `rdme docs prune FOLDER`
@@ -105,6 +105,6 @@ FLAG DESCRIPTIONS
 
   --version=<value>  ReadMe project version
 
-    Your ReadMe project version. If running command in a CI environment and this option is not passed, the main project
-    version will be used. See our docs for more information: https://docs.readme.com/main/docs/versions
+    If running command in a CI environment and this option is not passed, the main project version will be used. See our
+    docs for more information: https://docs.readme.com/main/docs/versions
 ```

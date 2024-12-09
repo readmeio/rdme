@@ -58,7 +58,7 @@ export default class OpenAPICommand extends BaseCommand<typeof OpenAPICommand> {
     }),
     update: Flags.boolean({
       description:
-        "Bypasses the create/update prompt and automatically updates an existing API definition in ReadMe. Note that this flag only works if there's only one API definition associated with the current version.",
+        "Note that this flag only works if there's only one API definition associated with the current version.",
       summary: 'Bypasses the create/update prompt and automatically updates an existing API definition in ReadMe.',
     }),
   };

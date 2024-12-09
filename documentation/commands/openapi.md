@@ -109,13 +109,12 @@ FLAG DESCRIPTIONS
 
   --update  Bypasses the create/update prompt and automatically updates an existing API definition in ReadMe.
 
-    Bypasses the create/update prompt and automatically updates an existing API definition in ReadMe. Note that this
-    flag only works if there's only one API definition associated with the current version.
+    Note that this flag only works if there's only one API definition associated with the current version.
 
   --version=<value>  ReadMe project version
 
-    Your ReadMe project version. If running command in a CI environment and this option is not passed, the main project
-    version will be used. See our docs for more information: https://docs.readme.com/main/docs/versions
+    If running command in a CI environment and this option is not passed, the main project version will be used. See our
+    docs for more information: https://docs.readme.com/main/docs/versions
 ```
 
 ## `rdme openapi convert [SPEC]`
