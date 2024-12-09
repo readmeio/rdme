@@ -6,7 +6,7 @@ import nock from 'nock';
 import { describe, beforeAll, afterAll, it, expect } from 'vitest';
 
 import Command from '../../../src/commands/docs/index.js';
-import { getAPIV1Mock, getAPIV1MockWithVersionHeader } from '../../helpers/get-api-mock.js';
+import { getAPIv1Mock, getAPIv1MockWithVersionHeader } from '../../helpers/get-api-mock.js';
 import hashFileContents from '../../helpers/hash-file-contents.js';
 import { runCommandAndReturnResult } from '../../helpers/oclif.js';
 
@@ -36,7 +36,7 @@ describe('rdme docs (multiple)', () => {
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/${dir}/${slug}.md`)));
 
       return [
-        getAPIV1MockWithVersionHeader(version)
+        getAPIv1MockWithVersionHeader(version)
           .get(`/api/v1/docs/${slug}`)
           .basicAuth({ user: key })
           .reply(404, {
@@ -45,7 +45,7 @@ describe('rdme docs (multiple)', () => {
             suggestion: '...a suggestion to resolve the issue...',
             help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
           }),
-        getAPIV1MockWithVersionHeader(version)
+        getAPIv1MockWithVersionHeader(version)
           .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
           .basicAuth({ user: key })
           // eslint-disable-next-line no-plusplus
@@ -53,7 +53,7 @@ describe('rdme docs (multiple)', () => {
       ];
     });
 
-    const versionMock = getAPIV1Mock()
+    const versionMock = getAPIv1Mock()
       .get(`/api/v1/version/${version}`)
       .basicAuth({ user: key })
       .reply(200, { version });
@@ -83,7 +83,7 @@ describe('rdme docs (multiple)', () => {
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/${dir}/${slug}.md`)));
 
       return [
-        getAPIV1MockWithVersionHeader(version)
+        getAPIv1MockWithVersionHeader(version)
           .get(`/api/v1/docs/${slug}`)
           .basicAuth({ user: key })
           .reply(404, {
@@ -92,7 +92,7 @@ describe('rdme docs (multiple)', () => {
             suggestion: '...a suggestion to resolve the issue...',
             help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
           }),
-        getAPIV1MockWithVersionHeader(version)
+        getAPIv1MockWithVersionHeader(version)
           .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
           .basicAuth({ user: key })
           // eslint-disable-next-line no-plusplus
@@ -100,7 +100,7 @@ describe('rdme docs (multiple)', () => {
       ];
     });
 
-    const versionMock = getAPIV1Mock()
+    const versionMock = getAPIv1Mock()
       .get(`/api/v1/version/${version}`)
       .basicAuth({ user: key })
       .reply(200, { version });
@@ -130,7 +130,7 @@ describe('rdme docs (multiple)', () => {
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/${dir}/${slug}.md`)));
 
       return [
-        getAPIV1MockWithVersionHeader(version)
+        getAPIv1MockWithVersionHeader(version)
           .get(`/api/v1/docs/${slug}`)
           .basicAuth({ user: key })
           .reply(404, {
@@ -139,7 +139,7 @@ describe('rdme docs (multiple)', () => {
             suggestion: '...a suggestion to resolve the issue...',
             help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
           }),
-        getAPIV1MockWithVersionHeader(version)
+        getAPIv1MockWithVersionHeader(version)
           .post('/api/v1/docs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
           .basicAuth({ user: key })
           // eslint-disable-next-line no-plusplus
@@ -147,7 +147,7 @@ describe('rdme docs (multiple)', () => {
       ];
     });
 
-    const versionMock = getAPIV1Mock()
+    const versionMock = getAPIv1Mock()
       .get(`/api/v1/version/${version}`)
       .basicAuth({ user: key })
       .reply(200, { version });
@@ -167,7 +167,7 @@ describe('rdme docs (multiple)', () => {
 
   it('should return an error message when it encounters a cycle', async () => {
     const dir = 'multiple-docs-cycle';
-    const versionMock = getAPIV1Mock()
+    const versionMock = getAPIv1Mock()
       .get(`/api/v1/version/${version}`)
       .basicAuth({ user: key })
       .reply(200, { version });
