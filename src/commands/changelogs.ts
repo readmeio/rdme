@@ -4,8 +4,6 @@ import BaseCommand from '../lib/baseCommand.js';
 import { githubFlag, keyFlag } from '../lib/flags.js';
 import syncDocsPath from '../lib/syncDocsPath.js';
 
-import DocsCommand from './docs/index.js';
-
 export default class ChangelogsCommand extends BaseCommand<typeof ChangelogsCommand> {
   // we need this as a const for syncDocsPath
   id = 'changelogs' as const;
@@ -22,7 +20,18 @@ export default class ChangelogsCommand extends BaseCommand<typeof ChangelogsComm
     path: Args.string({ description: 'Path to a local Markdown file or folder of Markdown files.', required: true }),
   };
 
-  static examples = DocsCommand.examples;
+  static examples = [
+    {
+      description:
+        'Passing in a path to a directory will also sync any Markdown files that are located in subdirectories. The path input can also be individual Markdown files:',
+      command: '<%= config.bin %> <%= command.id %> [path] --version={project-version}',
+    },
+    {
+      description:
+        'This command also has a dry run mode, which can be useful for initial setup and debugging. You can read more about dry run mode in our docs: https://docs.readme.com/main/docs/rdme#dry-run-mode',
+      command: '<%= config.bin %> <%= command.id %> [path] --version={project-version} --dryRun',
+    },
+  ];
 
   static flags = {
     github: githubFlag,

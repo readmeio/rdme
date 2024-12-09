@@ -167,16 +167,15 @@ npm run build && npm run build:docs
 # Command Topics
 
 * [`rdme autocomplete`](documentation/commands/autocomplete.md) - Display autocomplete installation instructions.
-* [`rdme categories`](documentation/commands/categories.md) - List or create categories in your ReadMe developer hub.
 * [`rdme changelogs`](documentation/commands/changelogs.md) - Sync Markdown files to your ReadMe project as Changelog posts.
-* [`rdme custompages`](documentation/commands/custompages.md) - Sync Markdown/HTML files to your ReadMe project as Custom Pages.
-* [`rdme docs`](documentation/commands/docs.md) - Sync or prune Guides pages in your ReadMe developer hub.
 * [`rdme help`](documentation/commands/help.md) - Display help for rdme.
 * [`rdme login`](documentation/commands/login.md) - Login to a ReadMe project.
 * [`rdme logout`](documentation/commands/logout.md) - Logs the currently authenticated user out of ReadMe.
 * [`rdme openapi`](documentation/commands/openapi.md) - Manage your API definition (e.g., syncing, validation, analysis, conversion, etc.). Supports OpenAPI, Swagger, and Postman collections, in either JSON or YAML formats.
-* [`rdme versions`](documentation/commands/versions.md) - Manage your documentation versions.
 * [`rdme whoami`](documentation/commands/whoami.md) - Displays the current user and project authenticated with ReadMe.
 
 <!-- commandsstop -->
 <!-- prettier-ignore-end -->
+
+> [!IMPORTANT]
+> You'll notice that several previous `rdme` commands are no longer present. That's because this version is for projects that use [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored) and [bi-directional syncing](https://docs.readme.com/main/docs/bi-directional-sync) is the recommended approach for most workflows previously managed via `rdme`. See more in [our migration guide](./documentation/migration-guide.md).
