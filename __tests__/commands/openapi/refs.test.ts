@@ -120,6 +120,30 @@ describe('openapi refs', () => {
       const expectedOutput = JSON.parse(fs.readFileSync(expectedOutputFile, 'utf8'));
       expect(processedOutput).toStrictEqual(expectedOutput);
     });
+
+    it('should handle a combination of recursiveness/nested circularity within a single file', async () => {
+      const inputFile = path.resolve('__tests__/__fixtures__/circular-references-oas/combined-cases.json');
+      const expectedOutputFile = path.resolve(
+        '__tests__/__fixtures__/circular-references-oas/combined-cases-resolved.json',
+      );
+      const defaultOutputFilePath = 'combined-cases.openapi.json';
+
+      prompts.inject([defaultOutputFilePath]);
+
+      let processedOutput;
+      fs.writeFileSync = vi.fn((fileName, data) => {
+        processedOutput = JSON.parse(data as string);
+      });
+
+      const result = await run([inputFile]);
+
+      expect(result).toMatch(`Your API definition has been processed and saved to ${defaultOutputFilePath}!`);
+
+      expect(fs.writeFileSync).toHaveBeenCalledWith(defaultOutputFilePath, expect.any(String));
+
+      const expectedOutput = JSON.parse(fs.readFileSync(expectedOutputFile, 'utf8'));
+      expect(processedOutput).toStrictEqual(expectedOutput);
+    });
   });
 
   describe('error handling', () => {
