@@ -2,7 +2,7 @@ import nock from 'nock';
 import { describe, beforeAll, afterEach, it, expect } from 'vitest';
 
 import Command from '../../../src/commands/categories/index.js';
-import { getAPIV1Mock, getAPIV1MockWithVersionHeader } from '../../helpers/get-api-mock.js';
+import { getAPIv1Mock, getAPIv1MockWithVersionHeader } from '../../helpers/get-api-mock.js';
 import { runCommandAndReturnResult } from '../../helpers/oclif.js';
 
 const key = 'API_KEY';
@@ -19,7 +19,7 @@ describe('rdme categories', () => {
   afterEach(() => nock.cleanAll());
 
   it('should return all categories for a single page', async () => {
-    const getMock = getAPIV1MockWithVersionHeader(version)
+    const getMock = getAPIv1MockWithVersionHeader(version)
       .persist()
       .get('/api/v1/categories?perPage=20&page=1')
       .basicAuth({ user: key })
@@ -27,7 +27,7 @@ describe('rdme categories', () => {
         'x-total-count': '1',
       });
 
-    const versionMock = getAPIV1Mock()
+    const versionMock = getAPIv1Mock()
       .get(`/api/v1/version/${version}`)
       .basicAuth({ user: key })
       .reply(200, { version });
@@ -41,7 +41,7 @@ describe('rdme categories', () => {
   });
 
   it('should return all categories for multiple pages', async () => {
-    const getMock = getAPIV1MockWithVersionHeader(version)
+    const getMock = getAPIv1MockWithVersionHeader(version)
       .persist()
       .get('/api/v1/categories?perPage=20&page=1')
       .basicAuth({ user: key })
@@ -54,7 +54,7 @@ describe('rdme categories', () => {
         'x-total-count': '21',
       });
 
-    const versionMock = getAPIV1Mock()
+    const versionMock = getAPIv1Mock()
       .get(`/api/v1/version/${version}`)
       .basicAuth({ user: key })
       .reply(200, { version });

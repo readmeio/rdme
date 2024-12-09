@@ -8,7 +8,7 @@ import { describe, beforeAll, afterAll, beforeEach, it, expect } from 'vitest';
 
 import Command from '../../../src/commands/custompages.js';
 import { APIv1Error } from '../../../src/lib/apiError.js';
-import { getAPIV1Mock } from '../../helpers/get-api-mock.js';
+import { getAPIv1Mock } from '../../helpers/get-api-mock.js';
 import hashFileContents from '../../helpers/hash-file-contents.js';
 import { runCommandAndReturnResult } from '../../helpers/oclif.js';
 
@@ -67,7 +67,7 @@ describe('rdme custompages', () => {
     it('should fetch custom page and merge with what is returned', () => {
       expect.assertions(1);
 
-      const getMocks = getAPIV1Mock()
+      const getMocks = getAPIv1Mock()
         .get('/api/v1/custompages/simple-doc')
         .basicAuth({ user: key })
         .reply(200, { slug: simpleDoc.slug, htmlmode: false, lastUpdatedHash: 'anOldHash' })
@@ -75,7 +75,7 @@ describe('rdme custompages', () => {
         .basicAuth({ user: key })
         .reply(200, { slug: anotherDoc.slug, htmlmode: false, lastUpdatedHash: 'anOldHash' });
 
-      const updateMocks = getAPIV1Mock()
+      const updateMocks = getAPIv1Mock()
         .put('/api/v1/custompages/simple-doc', {
           body: simpleDoc.doc.content,
           htmlmode: false,
@@ -115,7 +115,7 @@ describe('rdme custompages', () => {
     it('should return custom page update info for dry run', () => {
       expect.assertions(1);
 
-      const getMocks = getAPIV1Mock()
+      const getMocks = getAPIv1Mock()
         .get('/api/v1/custompages/simple-doc')
         .basicAuth({ user: key })
         .reply(200, { slug: simpleDoc.slug, lastUpdatedHash: 'anOldHash' })
@@ -144,7 +144,7 @@ describe('rdme custompages', () => {
     it('should not send requests for custompages that have not changed', () => {
       expect.assertions(1);
 
-      const getMocks = getAPIV1Mock()
+      const getMocks = getAPIv1Mock()
         .get('/api/v1/custompages/simple-doc')
         .basicAuth({ user: key })
         .reply(200, { slug: simpleDoc.slug, lastUpdatedHash: simpleDoc.hash })
@@ -167,7 +167,7 @@ describe('rdme custompages', () => {
     it('should adjust "no changes" message if in dry run', () => {
       expect.assertions(1);
 
-      const getMocks = getAPIV1Mock()
+      const getMocks = getAPIv1Mock()
         .get('/api/v1/custompages/simple-doc')
         .basicAuth({ user: key })
         .reply(200, { slug: simpleDoc.slug, lastUpdatedHash: simpleDoc.hash })
@@ -195,7 +195,7 @@ describe('rdme custompages', () => {
       const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
 
-      const getMock = getAPIV1Mock()
+      const getMock = getAPIv1Mock()
         .get(`/api/v1/custompages/${slug}`)
         .basicAuth({ user: key })
         .reply(404, {
@@ -205,7 +205,7 @@ describe('rdme custompages', () => {
           help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
         });
 
-      const postMock = getAPIV1Mock()
+      const postMock = getAPIv1Mock()
         .post('/api/v1/custompages', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
         .reply(201, { slug, _id: id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
@@ -224,7 +224,7 @@ describe('rdme custompages', () => {
       const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs-html/${slug}.html`)));
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/new-docs-html/${slug}.html`)));
 
-      const getMock = getAPIV1Mock()
+      const getMock = getAPIv1Mock()
         .get(`/api/v1/custompages/${slug}`)
         .basicAuth({ user: key })
         .reply(404, {
@@ -234,7 +234,7 @@ describe('rdme custompages', () => {
           help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
         });
 
-      const postMock = getAPIV1Mock()
+      const postMock = getAPIv1Mock()
         .post('/api/v1/custompages', { slug, html: doc.content, htmlmode: true, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
         .reply(201, { slug, _id: id, html: doc.content, htmlmode: true, ...doc.data, lastUpdatedHash: hash });
@@ -251,7 +251,7 @@ describe('rdme custompages', () => {
       const slug = 'new-doc';
       const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
 
-      const getMock = getAPIV1Mock()
+      const getMock = getAPIv1Mock()
         .get(`/api/v1/custompages/${slug}`)
         .basicAuth({ user: key })
         .reply(404, {
@@ -286,7 +286,7 @@ describe('rdme custompages', () => {
 
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/${folder}/${slug}.md`)));
 
-      const getMocks = getAPIV1Mock()
+      const getMocks = getAPIv1Mock()
         .get(`/api/v1/custompages/${slug}`)
         .basicAuth({ user: key })
         .reply(404, {
@@ -296,7 +296,7 @@ describe('rdme custompages', () => {
           help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
         });
 
-      const postMocks = getAPIV1Mock()
+      const postMocks = getAPIv1Mock()
         .post('/api/v1/custompages', { slug, body: doc.content, htmlmode: false, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
         .reply(400, errorObject);
@@ -324,7 +324,7 @@ describe('rdme custompages', () => {
       const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/slug-docs/${slug}.md`)));
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/slug-docs/${slug}.md`)));
 
-      const getMock = getAPIV1Mock()
+      const getMock = getAPIv1Mock()
         .get(`/api/v1/custompages/${doc.data.slug}`)
         .basicAuth({ user: key })
         .reply(404, {
@@ -334,7 +334,7 @@ describe('rdme custompages', () => {
           help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
         });
 
-      const postMock = getAPIV1Mock()
+      const postMock = getAPIv1Mock()
         .post('/api/v1/custompages', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
         .reply(201, { slug: doc.data.slug, _id: id, body: doc.content, ...doc.data, lastUpdatedHash: hash });

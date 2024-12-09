@@ -4,7 +4,7 @@ import nock from 'nock';
 import { describe, beforeAll, afterEach, it, expect } from 'vitest';
 
 import Command from '../../../src/commands/versions/index.js';
-import { getAPIV1Mock } from '../../helpers/get-api-mock.js';
+import { getAPIv1Mock } from '../../helpers/get-api-mock.js';
 import { runCommandAndReturnResult } from '../../helpers/oclif.js';
 
 const key = 'API_KEY';
@@ -42,7 +42,7 @@ describe('rdme versions', () => {
   afterEach(() => nock.cleanAll());
 
   it('should make a request to get a list of existing versions', async () => {
-    const mockRequest = getAPIV1Mock()
+    const mockRequest = getAPIv1Mock()
       .get('/api/v1/version')
       .basicAuth({ user: key })
       .reply(200, [versionPayload, version2Payload]);
@@ -53,7 +53,7 @@ describe('rdme versions', () => {
   });
 
   it('should get a specific version object if version flag provided', async () => {
-    const mockRequest = getAPIV1Mock()
+    const mockRequest = getAPIv1Mock()
       .get(`/api/v1/version/${version}`)
       .basicAuth({ user: key })
       .reply(200, versionPayload);
