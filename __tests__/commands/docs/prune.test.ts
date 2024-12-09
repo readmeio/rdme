@@ -3,7 +3,7 @@ import prompts from 'prompts';
 import { describe, beforeAll, afterAll, it, expect } from 'vitest';
 
 import Command from '../../../src/commands/docs/prune.js';
-import { getAPIV1Mock, getAPIV1MockWithVersionHeader } from '../../helpers/get-api-mock.js';
+import { getAPIv1Mock, getAPIv1MockWithVersionHeader } from '../../helpers/get-api-mock.js';
 import { runCommandAndReturnResult, runCommandWithHooks } from '../../helpers/oclif.js';
 
 const fixturesBaseDir = '__fixtures__/docs';
@@ -27,7 +27,7 @@ describe('rdme docs prune', () => {
   });
 
   it('should error if the argument is not a folder', async () => {
-    const versionMock = getAPIV1Mock()
+    const versionMock = getAPIv1Mock()
       .get(`/api/v1/version/${version}`)
       .basicAuth({ user: key })
       .reply(200, { version });
@@ -42,7 +42,7 @@ describe('rdme docs prune', () => {
   it('should do nothing if the user aborted', async () => {
     prompts.inject([false]);
 
-    const versionMock = getAPIV1Mock()
+    const versionMock = getAPIv1Mock()
       .get(`/api/v1/version/${version}`)
       .basicAuth({ user: key })
       .reply(200, { version });
@@ -55,12 +55,12 @@ describe('rdme docs prune', () => {
   });
 
   it('should not ask for user confirmation if `confirm` is set to true', async () => {
-    const versionMock = getAPIV1Mock()
+    const versionMock = getAPIv1Mock()
       .get(`/api/v1/version/${version}`)
       .basicAuth({ user: key })
       .reply(200, { version });
 
-    const apiMocks = getAPIV1MockWithVersionHeader(version)
+    const apiMocks = getAPIv1MockWithVersionHeader(version)
       .get('/api/v1/categories?perPage=20&page=1')
       .basicAuth({ user: key })
       .reply(200, [{ slug: 'category1', type: 'guide' }], { 'x-total-count': '1' })
@@ -82,12 +82,12 @@ describe('rdme docs prune', () => {
   it('should delete doc if file is missing', async () => {
     prompts.inject([true]);
 
-    const versionMock = getAPIV1Mock()
+    const versionMock = getAPIv1Mock()
       .get(`/api/v1/version/${version}`)
       .basicAuth({ user: key })
       .reply(200, { version });
 
-    const apiMocks = getAPIV1MockWithVersionHeader(version)
+    const apiMocks = getAPIv1MockWithVersionHeader(version)
       .get('/api/v1/categories?perPage=20&page=1')
       .basicAuth({ user: key })
       .reply(200, [{ slug: 'category1', type: 'guide' }], { 'x-total-count': '1' })
@@ -109,12 +109,12 @@ describe('rdme docs prune', () => {
   it('should delete doc and its child if they are missing', async () => {
     prompts.inject([true]);
 
-    const versionMock = getAPIV1Mock()
+    const versionMock = getAPIv1Mock()
       .get(`/api/v1/version/${version}`)
       .basicAuth({ user: key })
       .reply(200, { version });
 
-    const apiMocks = getAPIV1MockWithVersionHeader(version)
+    const apiMocks = getAPIv1MockWithVersionHeader(version)
       .get('/api/v1/categories?perPage=20&page=1')
       .basicAuth({ user: key })
       .reply(200, [{ slug: 'category1', type: 'guide' }], { 'x-total-count': '1' })
@@ -142,11 +142,11 @@ describe('rdme docs prune', () => {
   it('should return doc delete info for dry run', async () => {
     prompts.inject([true]);
 
-    const versionMock = getAPIV1Mock()
+    const versionMock = getAPIv1Mock()
       .get(`/api/v1/version/${version}`)
       .basicAuth({ user: key })
       .reply(200, { version });
-    const apiMocks = getAPIV1MockWithVersionHeader(version)
+    const apiMocks = getAPIv1MockWithVersionHeader(version)
       .get('/api/v1/categories?perPage=20&page=1')
       .basicAuth({ user: key })
       .reply(200, [{ slug: 'category1', type: 'guide' }], { 'x-total-count': '1' })
