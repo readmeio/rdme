@@ -19,16 +19,13 @@ import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
 import { validateFilePath } from '../../lib/validatePromptInput.js';
 
-type SchemaCollection = Record<
-  string,
-  OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.SchemaObject | OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject
->;
-
 type Schema =
   | OpenAPIV3_1.ReferenceObject
   | OpenAPIV3_1.SchemaObject
   | OpenAPIV3.ReferenceObject
   | OpenAPIV3.SchemaObject;
+
+type SchemaCollection = Record<string, Schema>;
 
 export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCommand> {
   static summary = 'Resolves circular and recursive references in OpenAPI by replacing them with object schemas.';
