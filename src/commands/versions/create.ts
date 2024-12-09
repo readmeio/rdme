@@ -17,6 +17,12 @@ export default class CreateVersionCommand extends BaseCommand<typeof CreateVersi
   // needed for unit tests, even though we also specify this in src/index.ts
   static id = 'versions create';
 
+  static state = 'deprecated';
+
+  static deprecationOptions = {
+    message: `\`rdme ${this.id}\` is deprecated and will be removed in v10. For more information, please visit our migration guide: https://github.com/readmeio/rdme/tree/v9/documentation/migration-guide.md`,
+  };
+
   static args = {
     version: Args.string({
       description: "The version you'd like to create. Must be valid SemVer (https://semver.org/)",

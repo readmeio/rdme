@@ -20,9 +20,10 @@ ARGUMENTS
 FLAGS
   --dryRun           Runs the command without creating/updating any docs in ReadMe. Useful for debugging.
   --github           Create a new GitHub Actions workflow for this command.
-  --key=<value>      (required) ReadMe Project API key
-  --version=<value>  Project version. If running command in a CI environment and this option is not passed, the main
-                     project version will be used.
+  --key=<value>      (required) An API key for your ReadMe project. Note that API authentication is required despite
+                     being omitted from the example usage. See our docs for more information:
+                     https://github.com/readmeio/rdme/tree/v9#authentication
+  --version=<value>  ReadMe project version
 
 DESCRIPTION
   Sync Markdown files to your ReadMe project as Guides.
@@ -44,6 +45,19 @@ EXAMPLES
   dry run mode in our docs: https://docs.readme.com/main/docs/rdme#dry-run-mode
 
     $ rdme docs [path] --version={project-version} --dryRun
+
+FLAG DESCRIPTIONS
+  --key=<value>
+
+    An API key for your ReadMe project. Note that API authentication is required despite being omitted from the example
+    usage. See our docs for more information: https://github.com/readmeio/rdme/tree/v9#authentication
+
+    ReadMe project API key
+
+  --version=<value>  ReadMe project version
+
+    If running command in a CI environment and this option is not passed, the main project version will be used. See our
+    docs for more information: https://docs.readme.com/main/docs/versions
 ```
 
 ## `rdme docs prune FOLDER`
@@ -61,9 +75,10 @@ FLAGS
   --confirm          Bypass the confirmation prompt. Useful for CI environments.
   --dryRun           Runs the command without deleting any docs in ReadMe. Useful for debugging.
   --github           Create a new GitHub Actions workflow for this command.
-  --key=<value>      (required) ReadMe Project API key
-  --version=<value>  Project version. If running command in a CI environment and this option is not passed, the main
-                     project version will be used.
+  --key=<value>      (required) An API key for your ReadMe project. Note that API authentication is required despite
+                     being omitted from the example usage. See our docs for more information:
+                     https://github.com/readmeio/rdme/tree/v9#authentication
+  --version=<value>  ReadMe project version
 
 DESCRIPTION
   Delete any docs from ReadMe if their slugs are not found in the target folder.
@@ -79,4 +94,17 @@ EXAMPLES
   Run with `--confirm` to bypass the confirmation prompt (useful for CI environments):
 
     $ rdme docs prune [path-to-directory-of-markdown] --confirm
+
+FLAG DESCRIPTIONS
+  --key=<value>
+
+    An API key for your ReadMe project. Note that API authentication is required despite being omitted from the example
+    usage. See our docs for more information: https://github.com/readmeio/rdme/tree/v9#authentication
+
+    ReadMe project API key
+
+  --version=<value>  ReadMe project version
+
+    If running command in a CI environment and this option is not passed, the main project version will be used. See our
+    docs for more information: https://docs.readme.com/main/docs/versions
 ```
