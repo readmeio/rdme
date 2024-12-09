@@ -49,7 +49,7 @@ const capitalizeSpecType = (type: string) =>
  */
 export default async function prepareOas(
   path: string | undefined,
-  command: 'openapi convert' | 'openapi inspect' | 'openapi reduce' | 'openapi validate' | 'openapi',
+  command: 'openapi convert' | 'openapi inspect' | 'openapi reduce' | 'openapi refs' | 'openapi validate' | 'openapi',
   opts: {
     /**
      * Optionally convert the supplied or discovered API definition to the latest OpenAPI release.
@@ -84,7 +84,7 @@ export default async function prepareOas(
 
     const fileFindingSpinner = ora({ text: 'Looking for API definitions...', ...oraOptions() }).start();
 
-    let action: 'convert' | 'inspect' | 'reduce' | 'upload' | 'validate';
+    let action: 'convert' | 'inspect' | 'reduce' | 'refs' | 'upload' | 'validate';
     switch (command) {
       case 'openapi':
         action = 'upload';
