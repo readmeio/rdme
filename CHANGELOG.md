@@ -1,3 +1,10 @@
+## [9.0.1-next.2](https://github.com/readmeio/rdme/compare/v9.0.1-next.1...v9.0.1-next.2) (2024-12-09)
+
+
+### Bug Fixes
+
+* executable issue for linux users ([#1115](https://github.com/readmeio/rdme/issues/1115)) ([4319fb5](https://github.com/readmeio/rdme/commit/4319fb514d6ee9b4bbdbd44868df05144bd6acee))
+
 ## [9.0.1-next.1](https://github.com/readmeio/rdme/compare/v9.0.0...v9.0.1-next.1) (2024-12-06)
 
 
