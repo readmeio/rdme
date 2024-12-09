@@ -8,7 +8,7 @@ import { describe, beforeAll, afterAll, beforeEach, it, expect } from 'vitest';
 
 import Command from '../../../src/commands/changelogs.js';
 import { APIv1Error } from '../../../src/lib/apiError.js';
-import { getAPIv1Mock } from '../../helpers/get-api-mock.js';
+import { getAPIV1Mock } from '../../helpers/get-api-mock.js';
 import hashFileContents from '../../helpers/hash-file-contents.js';
 import { runCommandAndReturnResult } from '../../helpers/oclif.js';
 
@@ -67,7 +67,7 @@ describe('rdme changelogs', () => {
     it('should fetch changelog and merge with what is returned', () => {
       expect.assertions(1);
 
-      const getMocks = getAPIv1Mock()
+      const getMocks = getAPIV1Mock()
         .get('/api/v1/changelogs/simple-doc')
         .basicAuth({ user: key })
         .reply(200, { slug: simpleDoc.slug, lastUpdatedHash: 'anOldHash' })
@@ -75,7 +75,7 @@ describe('rdme changelogs', () => {
         .basicAuth({ user: key })
         .reply(200, { slug: anotherDoc.slug, lastUpdatedHash: 'anOldHash' });
 
-      const updateMocks = getAPIv1Mock()
+      const updateMocks = getAPIV1Mock()
         .put('/api/v1/changelogs/simple-doc', {
           body: simpleDoc.doc.content,
           lastUpdatedHash: simpleDoc.hash,
@@ -112,7 +112,7 @@ describe('rdme changelogs', () => {
     it('should return changelog update info for dry run', () => {
       expect.assertions(1);
 
-      const getMocks = getAPIv1Mock()
+      const getMocks = getAPIV1Mock()
         .get('/api/v1/changelogs/simple-doc')
         .basicAuth({ user: key })
         .reply(200, { slug: simpleDoc.slug, lastUpdatedHash: 'anOldHash' })
@@ -141,7 +141,7 @@ describe('rdme changelogs', () => {
     it('should not send requests for changelogs that have not changed', () => {
       expect.assertions(1);
 
-      const getMocks = getAPIv1Mock()
+      const getMocks = getAPIV1Mock()
         .get('/api/v1/changelogs/simple-doc')
         .basicAuth({ user: key })
         .reply(200, { slug: simpleDoc.slug, lastUpdatedHash: simpleDoc.hash })
@@ -164,7 +164,7 @@ describe('rdme changelogs', () => {
     it('should adjust "no changes" message if in dry run', () => {
       expect.assertions(1);
 
-      const getMocks = getAPIv1Mock()
+      const getMocks = getAPIV1Mock()
         .get('/api/v1/changelogs/simple-doc')
         .basicAuth({ user: key })
         .reply(200, { slug: simpleDoc.slug, lastUpdatedHash: simpleDoc.hash })
@@ -192,7 +192,7 @@ describe('rdme changelogs', () => {
       const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
 
-      const getMock = getAPIv1Mock()
+      const getMock = getAPIV1Mock()
         .get(`/api/v1/changelogs/${slug}`)
         .basicAuth({ user: key })
         .reply(404, {
@@ -202,7 +202,7 @@ describe('rdme changelogs', () => {
           help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
         });
 
-      const postMock = getAPIv1Mock()
+      const postMock = getAPIV1Mock()
         .post('/api/v1/changelogs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
         .reply(201, { slug, _id: id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
@@ -219,7 +219,7 @@ describe('rdme changelogs', () => {
       const slug = 'new-doc';
       const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
 
-      const getMock = getAPIv1Mock()
+      const getMock = getAPIV1Mock()
         .get(`/api/v1/changelogs/${slug}`)
         .basicAuth({ user: key })
         .reply(404, {
@@ -254,7 +254,7 @@ describe('rdme changelogs', () => {
 
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/${folder}/${slug}.md`)));
 
-      const getMocks = getAPIv1Mock()
+      const getMocks = getAPIV1Mock()
         .get(`/api/v1/changelogs/${slug}`)
         .basicAuth({ user: key })
         .reply(404, {
@@ -264,7 +264,7 @@ describe('rdme changelogs', () => {
           help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
         });
 
-      const postMocks = getAPIv1Mock()
+      const postMocks = getAPIV1Mock()
         .post('/api/v1/changelogs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
         .reply(400, errorObject);
@@ -292,7 +292,7 @@ describe('rdme changelogs', () => {
       const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/slug-docs/${slug}.md`)));
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/slug-docs/${slug}.md`)));
 
-      const getMock = getAPIv1Mock()
+      const getMock = getAPIV1Mock()
         .get(`/api/v1/changelogs/${doc.data.slug}`)
         .basicAuth({ user: key })
         .reply(404, {
@@ -302,7 +302,7 @@ describe('rdme changelogs', () => {
           help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
         });
 
-      const postMock = getAPIv1Mock()
+      const postMock = getAPIV1Mock()
         .post('/api/v1/changelogs', { slug, body: doc.content, ...doc.data, lastUpdatedHash: hash })
         .basicAuth({ user: key })
         .reply(201, { slug: doc.data.slug, _id: id, body: doc.content, ...doc.data, lastUpdatedHash: hash });

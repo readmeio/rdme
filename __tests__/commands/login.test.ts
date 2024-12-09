@@ -5,7 +5,7 @@ import { describe, beforeAll, afterAll, afterEach, it, expect } from 'vitest';
 import Command from '../../src/commands/login.js';
 import { APIv1Error } from '../../src/lib/apiError.js';
 import configStore from '../../src/lib/configstore.js';
-import { getAPIv1Mock } from '../helpers/get-api-mock.js';
+import { getAPIV1Mock } from '../helpers/get-api-mock.js';
 import { runCommandAndReturnResult } from '../helpers/oclif.js';
 
 const apiKey = 'abcdefg';
@@ -39,7 +39,7 @@ describe('rdme login', () => {
   it('should post to /login on the API', async () => {
     prompts.inject([email, password, project]);
 
-    const mock = getAPIv1Mock().post('/api/v1/login', { email, password, project }).reply(200, { apiKey });
+    const mock = getAPIV1Mock().post('/api/v1/login', { email, password, project }).reply(200, { apiKey });
 
     await expect(run()).resolves.toBe('Successfully logged in as user@example.com to the subdomain project.');
 
@@ -53,7 +53,7 @@ describe('rdme login', () => {
   it('should post to /login on the API if passing in project via opt', async () => {
     prompts.inject([email, password]);
 
-    const mock = getAPIv1Mock().post('/api/v1/login', { email, password, project }).reply(200, { apiKey });
+    const mock = getAPIV1Mock().post('/api/v1/login', { email, password, project }).reply(200, { apiKey });
 
     await expect(run(['--project', project])).resolves.toBe(
       'Successfully logged in as user@example.com to the subdomain project.',
@@ -67,7 +67,7 @@ describe('rdme login', () => {
   });
 
   it('should bypass prompts and post to /login on the API if passing in every opt', async () => {
-    const mock = getAPIv1Mock().post('/api/v1/login', { email, password, project, token }).reply(200, { apiKey });
+    const mock = getAPIV1Mock().post('/api/v1/login', { email, password, project, token }).reply(200, { apiKey });
 
     await expect(run(['--email', email, '--password', password, '--project', project, '--otp', token])).resolves.toBe(
       'Successfully logged in as user@example.com to the subdomain project.',
@@ -81,7 +81,7 @@ describe('rdme login', () => {
   });
 
   it('should bypass prompts and post to /login on the API if passing in every opt (no 2FA)', async () => {
-    const mock = getAPIv1Mock().post('/api/v1/login', { email, password, project }).reply(200, { apiKey });
+    const mock = getAPIV1Mock().post('/api/v1/login', { email, password, project }).reply(200, { apiKey });
 
     await expect(run(['--email', email, '--password', password, '--project', project])).resolves.toBe(
       'Successfully logged in as user@example.com to the subdomain project.',
@@ -103,7 +103,7 @@ describe('rdme login', () => {
       help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
     };
 
-    const mock = getAPIv1Mock().post('/api/v1/login', { email, password, project }).reply(401, errorResponse);
+    const mock = getAPIV1Mock().post('/api/v1/login', { email, password, project }).reply(401, errorResponse);
 
     await expect(run()).rejects.toStrictEqual(new APIv1Error(errorResponse));
     mock.done();
@@ -118,7 +118,7 @@ describe('rdme login', () => {
       help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
     };
 
-    const mock = getAPIv1Mock()
+    const mock = getAPIV1Mock()
       .post('/api/v1/login', { email, password, project })
       .reply(401, errorResponse)
       .post('/api/v1/login', { email, password, project, token })
@@ -143,7 +143,7 @@ describe('rdme login', () => {
       help: 'If you need help, email support@readme.io',
     };
 
-    const mock = getAPIv1Mock()
+    const mock = getAPIV1Mock()
       .post('/api/v1/login', { email, password, project: projectThatIsNotYours })
       .reply(404, errorResponse);
 
