@@ -1,3 +1,135 @@
+## [9.0.1](https://github.com/readmeio/rdme/compare/v9.0.0...v9.0.1) (2024-12-09)
+
+
+### Bug Fixes
+
+* executable issue for linux users ([#1115](https://github.com/readmeio/rdme/issues/1115)) ([4319fb5](https://github.com/readmeio/rdme/commit/4319fb514d6ee9b4bbdbd44868df05144bd6acee))
+* repository URL fix ([2103a29](https://github.com/readmeio/rdme/commit/2103a294f8382ad60d7aec34c4b5d168ae9e06a4))
+
+## [9.0.1-next.2](https://github.com/readmeio/rdme/compare/v9.0.1-next.1...v9.0.1-next.2) (2024-12-09)
+
+
+### Bug Fixes
+
+* executable issue for linux users ([#1115](https://github.com/readmeio/rdme/issues/1115)) ([4319fb5](https://github.com/readmeio/rdme/commit/4319fb514d6ee9b4bbdbd44868df05144bd6acee))
+
+## [9.0.1-next.1](https://github.com/readmeio/rdme/compare/v9.0.0...v9.0.1-next.1) (2024-12-06)
+
+
+### Bug Fixes
+
+* repository URL fix ([2103a29](https://github.com/readmeio/rdme/commit/2103a294f8382ad60d7aec34c4b5d168ae9e06a4))
+
+# [9.0.0](https://github.com/readmeio/rdme/compare/v8.6.6...v9.0.0) (2024-12-06)
+
+
+* feat!: deprecation notices for non-readme-refactored commands ([#1099](https://github.com/readmeio/rdme/issues/1099)) ([732e32b](https://github.com/readmeio/rdme/commit/732e32bbccd1deb4a1f44d9ce0d7befc234e7c40))
+* feat!: drop node 18 ([#1085](https://github.com/readmeio/rdme/issues/1085)) ([ebc2ac0](https://github.com/readmeio/rdme/commit/ebc2ac03fb2781c667f0da7d70c92ce8eda8ce7d))
+* feat!: final v9 touchups ([#1106](https://github.com/readmeio/rdme/issues/1106)) ([15447c5](https://github.com/readmeio/rdme/commit/15447c52b414b97345b33ff7e17007fdd2fde106)), closes [#1107](https://github.com/readmeio/rdme/issues/1107)
+* feat!: oclif (take 2) ([#1068](https://github.com/readmeio/rdme/issues/1068)) ([5e05f93](https://github.com/readmeio/rdme/commit/5e05f9381ff92441b95e49fcf6b369ed74b62a2e)), closes [#962](https://github.com/readmeio/rdme/issues/962) [#1067](https://github.com/readmeio/rdme/issues/1067) [/github.com/readmeio/rdme/blob/d01d76fe3c2e4a98b4f5c415be03e589fbe3b56e/.releaserc.yml#L30](https://github.com//github.com/readmeio/rdme/blob/d01d76fe3c2e4a98b4f5c415be03e589fbe3b56e/.releaserc.yml/issues/L30) [#1067](https://github.com/readmeio/rdme/issues/1067)
+* feat!: remove `validate`, deprecate/hide `open` ([#1072](https://github.com/readmeio/rdme/issues/1072)) ([f1b46f6](https://github.com/readmeio/rdme/commit/f1b46f6ef1593f81b5bb61b7890aa52e826b58d7))
+* feat!: switch topic separator to space ([#1100](https://github.com/readmeio/rdme/issues/1100)) ([13eb8ab](https://github.com/readmeio/rdme/commit/13eb8abfd29d678e95c9e7ef52ccc22575386519))
+
+
+### Bug Fixes
+
+* add better debugging for fetch failures ([a17f8da](https://github.com/readmeio/rdme/commit/a17f8da51ddc9e57b734b5c46441cd833052ed90))
+* add GITHUB_TOKEN ([e106e10](https://github.com/readmeio/rdme/commit/e106e1047c9ec0e47b3b3812783d2e44dddbe9bd))
+* attempt to use semantic-release/github instead of `gh` ([331d28b](https://github.com/readmeio/rdme/commit/331d28bc1e9f0f2b57a4d8d39f2ebaf6bf64896a))
+* build `dist-gha/` files with every release ([f42392b](https://github.com/readmeio/rdme/commit/f42392b5141d82df2acfa10df82989fe4832b36f))
+* bump semantic-release versions ([21efc66](https://github.com/readmeio/rdme/commit/21efc66eef0ff063366e3ad1394fedf5170b1d94))
+* debug properly ([#1078](https://github.com/readmeio/rdme/issues/1078)) ([5de0a4f](https://github.com/readmeio/rdme/commit/5de0a4f48668b45a4e7ae17ea11afc6bf5104d19))
+* **deps:** bump more deps ([#1042](https://github.com/readmeio/rdme/issues/1042)) ([786a000](https://github.com/readmeio/rdme/commit/786a000ff51ccf550f0a29c1bee290f4b2494c4c))
+* empty commit to trigger build ([51c1566](https://github.com/readmeio/rdme/commit/51c1566c2c504e5d93d2d864df64cad0625c70dc))
+* empty commit to trigger build ([76efb7e](https://github.com/readmeio/rdme/commit/76efb7e01f8b5df0a14b9b68bdc50443be8f13d1))
+* empty commit to trigger release ([3604f2a](https://github.com/readmeio/rdme/commit/3604f2af4aaec9ee62ebb92a8d24b6276d23b6e8))
+* fixed debug script ([#908](https://github.com/readmeio/rdme/issues/908)) ([82c3541](https://github.com/readmeio/rdme/commit/82c354154fa928c4cb95f6edae1290deb339f783))
+* hide `ExperimentalWarning` ([#901](https://github.com/readmeio/rdme/issues/901)) ([f9b5679](https://github.com/readmeio/rdme/commit/f9b56798ca4e30b18db932051ddab5dce35c49b5))
+* **npm:** tweak npm lifecycle scripts ([#1073](https://github.com/readmeio/rdme/issues/1073)) ([35534db](https://github.com/readmeio/rdme/commit/35534dbe7228a75b49408bf4db3fcfb31091358a))
+* oclif-friendly error logging ([#1080](https://github.com/readmeio/rdme/issues/1080)) ([73c5f4c](https://github.com/readmeio/rdme/commit/73c5f4cd9e32c9f755915f6d670c8f36a64db453))
+* **openapi:** add spinner catch statement ([#961](https://github.com/readmeio/rdme/issues/961)) ([4669b29](https://github.com/readmeio/rdme/commit/4669b29120b27962b24a59a4cbacfcb792eaefc0))
+* **release:** track `dist-gha` assets properly ([b0934cb](https://github.com/readmeio/rdme/commit/b0934cb25143aa2097ba3ef9f60d9311365a3695))
+* **release:** track changes to commands doc directory ([78b6554](https://github.com/readmeio/rdme/commit/78b6554e2d7b1596b020c5dadce1c9dd72345fdc))
+* swap out ts-node for tsx ([16f64b3](https://github.com/readmeio/rdme/commit/16f64b38b53b7011f2fae68b0a71138cb8a188d6))
+* Update LICENSE for 2024 ([#963](https://github.com/readmeio/rdme/issues/963)) ([23cf44b](https://github.com/readmeio/rdme/commit/23cf44b0daa3078d83a0ebb4050fb41f3340ed2d))
+* use newest import attributes syntax ([#993](https://github.com/readmeio/rdme/issues/993)) ([d76c0ae](https://github.com/readmeio/rdme/commit/d76c0ae7933bb16e5bf6a21086b718911fc2cd4d)), closes [/github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V20.md#2023-11-22-version-20100](https://github.com//github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V20.md/issues/2023-11-22-version-20100)
+* **versions/update:** various edge cases ([#965](https://github.com/readmeio/rdme/issues/965)) ([580e307](https://github.com/readmeio/rdme/commit/580e307caecb04281c2083169ce3dbfb937086b3))
+
+
+### chore
+
+* type fixes for tests ([#903](https://github.com/readmeio/rdme/issues/903)) ([d423b4c](https://github.com/readmeio/rdme/commit/d423b4ceb15f5726bb5efed22a4a9cd6e5dfa9f9))
+
+
+### Code Refactoring
+
+* remove `oas`, `swagger`, `docs:edit` ([#902](https://github.com/readmeio/rdme/issues/902)) ([9107d15](https://github.com/readmeio/rdme/commit/9107d15770532de98156b7407c7f274ba7ea28cf))
+
+
+### Features
+
+* add `@oclif/plugin-not-found`, other cleanups ([#1074](https://github.com/readmeio/rdme/issues/1074)) ([6529b03](https://github.com/readmeio/rdme/commit/6529b0317db5dcda0ba2d2acbf5e3f21cff7dba0))
+* add `title` flag to `openapi:convert` ([#1071](https://github.com/readmeio/rdme/issues/1071)) ([1d71f3f](https://github.com/readmeio/rdme/commit/1d71f3ff3db022bf81a5c6ec9d9eceb42d093961)), closes [#1068](https://github.com/readmeio/rdme/issues/1068)
+* convert to ESM (breaking change) ([#856](https://github.com/readmeio/rdme/issues/856)) ([84b8571](https://github.com/readmeio/rdme/commit/84b8571a31c442288d47c07c57524eae643f9f13)), closes [/www.stefanjudis.com/snippets/how-to-import-json-files-in-es-modules-node-js/#option-1](https://github.com//www.stefanjudis.com/snippets/how-to-import-json-files-in-es-modules-node-js//issues/option-1) [1#L228](https://github.com/1/issues/L228)
+* **fetch:** use undici + `ProxyAgent`  ([#1000](https://github.com/readmeio/rdme/issues/1000)) ([9da7132](https://github.com/readmeio/rdme/commit/9da7132b71a7a64ef94ed0376fe379e7bffa8f9a)), closes [#999](https://github.com/readmeio/rdme/issues/999)
+* **openapi/convert:** support openapi in convert command ([#941](https://github.com/readmeio/rdme/issues/941)) ([a33bbeb](https://github.com/readmeio/rdme/commit/a33bbeb1155095f20b01cda18f2c32e9c001b428))
+* revamped `oclif`-powered docs ([#1081](https://github.com/readmeio/rdme/issues/1081)) ([8a2833b](https://github.com/readmeio/rdme/commit/8a2833b93bc248c9634524462c4c54d5dc3fbb71))
+* sort when syncing by parent ([#973](https://github.com/readmeio/rdme/issues/973)) ([9795840](https://github.com/readmeio/rdme/commit/97958402f80120e60a791e4b73f54d6f3c03595c))
+* support `README_API_KEY` env var ([#950](https://github.com/readmeio/rdme/issues/950)) ([bcf3f18](https://github.com/readmeio/rdme/commit/bcf3f1872c0eb416d00a2d9ed434c040c9b7fbe9))
+* support node 18 and up ([#900](https://github.com/readmeio/rdme/issues/900)) ([a217904](https://github.com/readmeio/rdme/commit/a2179048bd7d76d9177df0848b56c524eff50b13))
+* **test:** moving unit tests over to vitest ([#857](https://github.com/readmeio/rdme/issues/857)) ([36d561b](https://github.com/readmeio/rdme/commit/36d561bba08593fb54b8473b5782d12ad436b98e)), closes [#870](https://github.com/readmeio/rdme/issues/870)
+* use `actions/checkout@v4` everywhere ([#895](https://github.com/readmeio/rdme/issues/895)) ([d30b71c](https://github.com/readmeio/rdme/commit/d30b71cf39caa30da9ba94822f55e828f1a2bdc3))
+* **versions:** flag parity with API, copy fixes ([#906](https://github.com/readmeio/rdme/issues/906)) ([d424d9f](https://github.com/readmeio/rdme/commit/d424d9feef8bcb55f4a2a25fca19d25ad7b7e697))
+
+
+### BREAKING CHANGES
+
+* `rdme openapi` is deprecated and will be replaced in
+`rdme@10` by a command with a simpler flag setup based on community
+feedback.
+* deprecates commands that are not supported in ReadMe
+Refactored. For more information, please visit our migration guide:
+https://github.com/readmeio/rdme/tree/v9/documentation/migration-guide.md
+
+## 🧬 QA & Testing
+
+Does the copy in these deprecation warnings make sense to you? Note that
+the links will be broken for now since we haven't tagged a proper v9
+release yet, but that will be fixed once this release is out!
+* the topic separator (i.e., what separates a command
+from its subcommand) has changed from a colon to a space by default. For
+example, `rdme openapi:validate` is now `rdme openapi validate`. The
+colon topic separator will continue to be supported so there is no need
+to change any existing commands, but all documentation and help screens
+will reflect the space topic separator.
+
+## 🧬 QA & Testing
+
+Do tests still pass?
+* dropping support for Node.js v18. The minimum required
+Node.js version is v20.10.0.
+* `rdme validate` has been removed, use `rdme
+openapi:validate` instead.
+* `rdme open` is now deprecated
+
+also updates our docs accordingly
+* the `rdme` GitHub Actions is now a [the `node20` JavaScript action](https://docs.github.com/en/actions/sharing-automations/creating-actions/metadata-syntax-for-github-actions#runs-for-javascript-actions) rather than [a Docker container action](https://docs.github.com/en/actions/sharing-automations/creating-actions/metadata-syntax-for-github-actions#runs-for-docker-container-actions).
+* `rdme` is now powered by [`oclif`](https://oclif.io/). The formatting and content of certain error messages and outputs may have changed. Please continue to only utilize exit codes to determine command successes/failures.
+
+completed tasks:
+
+- [x] a handful of tests are still failing, hoping that
+https://github.com/oclif/test/pull/652 gets merged in)
+- [x] github actions dry runs are failing (but i got them working in
+* **versions:** this flips the `isPublic` flag to `hidden`.
+* removes several deprecated commands
+
+* chore: knip cleanup
+
+* chore: type fixes for tests
+* removes several deprecated commands
+* Node.js >= 18 required
+
 # [9.0.0-next.36](https://github.com/readmeio/rdme/compare/v9.0.0-next.35...v9.0.0-next.36) (2024-12-06)
 
 

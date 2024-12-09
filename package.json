@@ -1,6 +1,6 @@
 {
   "name": "rdme",
-  "version": "9.0.0-next.36",
+  "version": "9.0.1",
   "description": "ReadMe's official CLI and GitHub Action.",
   "license": "MIT",
   "author": "ReadMe <support@readme.io> (https://readme.com)",
@@ -34,7 +34,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/readmeio/rdme.git"
+    "url": "https://github.com/readmeio/rdme.git"
   },
   "bugs": {
     "url": "https://github.com/readmeio/rdme/issues"
