@@ -1,3 +1,10 @@
+## [9.0.1-next.1](https://github.com/readmeio/rdme/compare/v9.0.0...v9.0.1-next.1) (2024-12-06)
+
+
+### Bug Fixes
+
+* repository URL fix ([2103a29](https://github.com/readmeio/rdme/commit/2103a294f8382ad60d7aec34c4b5d168ae9e06a4))
+
 # [9.0.0](https://github.com/readmeio/rdme/compare/v8.6.6...v9.0.0) (2024-12-06)
 
 
