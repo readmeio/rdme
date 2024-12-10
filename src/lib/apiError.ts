@@ -5,7 +5,7 @@
 
 import chalk from 'chalk';
 
-export interface APIv1ErrorResponse {
+interface APIv1ErrorResponse {
   docs?: string;
   error: string;
   help?: string;
