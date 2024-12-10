@@ -23,15 +23,6 @@ export const titleFlag = Flags.string({
 });
 
 /**
- * Used in any command where `version` is a flag.
- */
-export const versionFlag = Flags.string({
-  description:
-    'If running command in a CI environment and this option is not passed, the main project version will be used. See our docs for more information: https://docs.readme.com/main/docs/versions',
-  summary: 'ReadMe project version',
-});
-
-/**
  * Used in the `openapi` family of commands where `workingDirectory` is an option.
  */
 export const workingDirectoryFlag = Flags.string({

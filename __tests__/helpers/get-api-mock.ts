@@ -15,9 +15,3 @@ export function getAPIv1Mock(reqHeaders = {}) {
     },
   });
 }
-
-export function getAPIv1MockWithVersionHeader(v: string) {
-  return getAPIv1Mock({
-    'x-readme-version': v,
-  });
-}
