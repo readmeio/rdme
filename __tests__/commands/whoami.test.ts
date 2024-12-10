@@ -1,6 +1,6 @@
 import { describe, afterEach, it, expect, beforeAll } from 'vitest';
 
-import pkg from '../../package.json';
+import pkg from '../../package.json' with { type: 'json' };
 import Command from '../../src/commands/whoami.js';
 import configStore from '../../src/lib/configstore.js';
 import { runCommandAndReturnResult } from '../helpers/oclif.js';
