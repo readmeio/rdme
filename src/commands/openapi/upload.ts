@@ -177,24 +177,17 @@ export default class OpenAPIBetaCommand extends BaseCommand<typeof OpenAPIBetaCo
     if (response?.data?.upload?.status && response?.data?.uri) {
       let status = response.data.upload.status;
 
+      if (status === 'pending') {
+        spinner.text = `${spinner.text} uploaded but not yet processed by ReadMe. Polling for completion...`;
+        status = await this.pollAPIUntilUploadIsComplete(response.data.uri, headers);
+      }
+
       if (status === 'done') {
         spinner.succeed(`${spinner.text} done!`);
         this.log(
           `🚀 Your API definition (${filename}) was successfully ${method === 'POST' ? 'created' : 'updated'} in ReadMe!`,
         );
         return { uri: response.data.uri, status };
-      }
-
-      if (status === 'pending') {
-        spinner.text = `${spinner.text} uploaded but not yet processed by ReadMe. Polling for completion...`;
-        status = await this.pollAPIUntilUploadIsComplete(response.data.uri, headers);
-        if (status === 'done') {
-          spinner.succeed(`${spinner.text} done!`);
-          this.log(
-            `🚀 Your API definition (${filename}) was successfully ${method === 'POST' ? 'created' : 'updated'} in ReadMe!`,
-          );
-          return { uri: response.data.uri, status };
-        }
       }
     }
 
