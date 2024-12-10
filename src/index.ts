@@ -11,6 +11,7 @@ import OpenAPIConvertCommand from './commands/openapi/convert.js';
 import OpenAPICommand from './commands/openapi/index.js';
 import OpenAPIInspectCommand from './commands/openapi/inspect.js';
 import OpenAPIReduceCommand from './commands/openapi/reduce.js';
+import OpenAPIRefsCommand from './commands/openapi/refs.js';
 import OpenAPIValidateCommand from './commands/openapi/validate.js';
 import CreateVersionCommand from './commands/versions/create.js';
 import DeleteVersionCommand from './commands/versions/delete.js';
@@ -54,6 +55,7 @@ export const COMMANDS = {
   'openapi:convert': OpenAPIConvertCommand,
   'openapi:inspect': OpenAPIInspectCommand,
   'openapi:reduce': OpenAPIReduceCommand,
+  'openapi:refs': OpenAPIRefsCommand,
   'openapi:validate': OpenAPIValidateCommand,
 
   whoami: WhoAmICommand,
