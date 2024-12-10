@@ -102,14 +102,3 @@ jobs:
       - name: Throw error if previous validation step did not fail
         if: ${{ steps.openapi-validate-fail.outcome == 'success' }}
         run: echo "::error::Expected validation in previous step to fail" && exit 1
-
-      # Docs: https://rdme-test.readme.io
-      - name: Run `openapi` command
-        uses: ./rdme-repo/
-        with:
-          rdme: openapi oas-examples-repo/3.1/json/petstore.json --key=${{ secrets.RDME_TEST_PROJECT_API_KEY }} --id=${{ secrets.RDME_TEST_PROJECT_API_SETTING }}
-
-      - name: Run `openapi` command with weird arg syntax
-        uses: ./rdme-repo/
-        with:
-          rdme: openapi "oas-examples-repo/3.1/json/petstore.json" --key "${{ secrets.RDME_TEST_PROJECT_API_KEY }}" --id=${{ secrets.RDME_TEST_PROJECT_API_SETTING }}
