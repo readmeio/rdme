@@ -26,6 +26,20 @@ describe('rdme openapi upload', () => {
     nock.cleanAll();
   });
 
+  describe('flag error handling', () => {
+    it('should throw if an error if both `--version` and `--useSpecVersion` flags are passed', async () => {
+      const result = await run(['--useSpecVersion', '--version', version, filename, '--key', key]);
+      expect(result.error.message).toContain('--version cannot also be provided when using --useSpecVersion');
+    });
+
+    it('should throw if an error if neither version flag is passed', async () => {
+      const result = await run([filename, '--key', key]);
+      expect(result.error.message).toContain(
+        'Exactly one of the following must be provided: --useSpecVersion, --version',
+      );
+    });
+  });
+
   describe('given that the API definition is a local file', () => {
     it('should create a new API definition in ReadMe', async () => {
       const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
