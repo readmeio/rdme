@@ -8,7 +8,7 @@ import prompts from 'prompts';
 import { simpleGit } from 'simple-git';
 
 import configstore from '../configstore.js';
-import { getMajorPkgVersion } from '../getPkgVersion.js';
+import { getMajorPkgVersion } from '../getPkg.js';
 import isCI, { isNpmScript, isTest } from '../isCI.js';
 import { info } from '../logger.js';
 import promptTerminal from '../promptWrapper.js';

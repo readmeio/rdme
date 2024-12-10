@@ -3,7 +3,7 @@
 import * as core from '@actions/core';
 
 // eslint-disable-next-line import/extensions
-import { getNodeVersion, getMajorPkgVersion } from '../dist/lib/getPkgVersion.js';
+import { getNodeVersion, getMajorPkgVersion } from '../dist/lib/getPkg.js';
 
 /**
  * Sets output parameters for GitHub Actions workflow so we can do

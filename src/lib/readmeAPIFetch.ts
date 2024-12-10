@@ -5,11 +5,10 @@ import path from 'node:path';
 import mime from 'mime-types';
 import { ProxyAgent } from 'undici';
 
-import pkg from '../package.json' with { type: 'json' };
-
 import { APIv1Error } from './apiError.js';
 import config from './config.js';
 import { git } from './createGHA/index.js';
+import { getPkgVersion } from './getPkg.js';
 import isCI, { ciName, isGHA } from './isCI.js';
 import { debug, warn } from './logger.js';
 
@@ -90,7 +89,7 @@ function parseWarningHeader(header: string): WarningHeader[] {
  */
 export function getUserAgent() {
   const gh = isGHA() ? '-github' : '';
-  return `rdme${gh}/${pkg.version}`;
+  return `rdme${gh}/${getPkgVersion()}`;
 }
 
 /**
