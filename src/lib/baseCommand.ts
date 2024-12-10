@@ -9,6 +9,7 @@ import chalk from 'chalk';
 import debugPkg from 'debug';
 
 import { isGHA, isTest } from './isCI.js';
+import { handleAPIv2Res, readmeAPIv2Fetch, type FilePathDetails } from './readmeAPIFetch.js';
 
 type Flags<T extends typeof OclifCommand> = Interfaces.InferredFlags<(typeof BaseCommand)['baseFlags'] & T['flags']>;
 type Args<T extends typeof OclifCommand> = Interfaces.InferredArgs<T['args']>;
@@ -110,6 +111,24 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
     this.debug('parsed args: %o', args);
     this.flags = flags as Flags<T>;
     this.args = args as Args<T>;
+  }
+
+  /**
+   * Wrapper around `handleAPIv2Res` that binds the context of the class to the function.
+   */
+  public async handleAPIRes(res: Response) {
+    return handleAPIv2Res.call(this, res);
+  }
+
+  /**
+   * Wrapper around `readmeAPIv2Fetch` that binds the context of the class to the function.
+   */
+  public async readmeAPIFetch(
+    pathname: string,
+    options: RequestInit = { headers: new Headers() },
+    fileOpts: FilePathDetails = { filePath: '', fileType: false },
+  ) {
+    return readmeAPIv2Fetch.call(this, pathname, options, fileOpts);
   }
 
   async runCreateGHAHook(opts: CreateGHAHookOptsInClass) {

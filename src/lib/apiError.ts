@@ -1,6 +1,10 @@
+/* eslint-disable max-classes-per-file */
 /**
  * APIv1ErrorResponse is the shape of the error response we get from ReadMe API v1.
  */
+
+import chalk from 'chalk';
+
 export interface APIv1ErrorResponse {
   docs?: string;
   error: string;
@@ -9,6 +13,23 @@ export interface APIv1ErrorResponse {
   poem?: string[];
   suggestion?: string;
 }
+
+/**
+ * APIv2ErrorResponse is the shape of the error response we get from ReadMe API v2.
+ */
+export type APIv2ErrorResponse = Partial<{
+  detail: string;
+  errors?:
+    | {
+        key: string;
+        message: string;
+      }[]
+    | undefined;
+  poem: string[];
+  status: number;
+  title: string;
+  type: string;
+}>;
 
 /**
  * Error class for handling ReadMe API v1 errors.
@@ -52,5 +73,35 @@ export class APIv1Error extends Error {
       this.code = err;
       this.message = err;
     }
+  }
+}
+
+/**
+ * Error class for handling ReadMe API v2 errors.
+ */
+export class APIv2Error extends Error {
+  response: APIv2ErrorResponse;
+
+  constructor(res: APIv2ErrorResponse) {
+    let stringified =
+      'The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.';
+
+    if (res.title) {
+      stringified = `The ReadMe API returned the following error:\n\n${chalk.bold(res.title)}`;
+    }
+
+    if (res.detail) {
+      stringified += `\n\n${res.detail}`;
+    }
+
+    if (res.errors?.length) {
+      stringified += `\n\n${res.errors.map((e, i) => `${i + 1}. ${chalk.bold(e.key)}: ${e.message}`).join('\n')}`;
+    }
+
+    super(stringified);
+
+    this.name = 'APIv2Error';
+
+    this.response = res;
   }
 }
