@@ -92,34 +92,7 @@ describe('rdme openapi upload', () => {
     });
 
     describe('and the upload status initially is a pending state', () => {
-      it('should poll the API once until the upload is complete', async () => {
-        const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
-          .get(`/versions/${version}/apis`)
-          .reply(200, { data: [] })
-          .post(`/versions/${version}/apis`, body =>
-            body.match(`form-data; name="schema"; filename="${slugifiedFilename}"`),
-          )
-          .reply(200, {
-            data: {
-              upload: { status: 'pending' },
-              uri: `/versions/${version}/apis/${slugifiedFilename}`,
-            },
-          })
-          .get(`/versions/${version}/apis/${slugifiedFilename}`)
-          .reply(200, {
-            data: {
-              upload: { status: 'done' },
-              uri: `/versions/${version}/apis/${slugifiedFilename}`,
-            },
-          });
-
-        const result = await run(['--version', version, filename, '--key', key]);
-        expect(result.stdout).toContain('was successfully created in ReadMe!');
-
-        mock.done();
-      });
-
-      it('should poll the API twice until the upload is complete', async () => {
+      it('should poll the API until the upload is complete', async () => {
         const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
           .get(`/versions/${version}/apis`)
           .reply(200, { data: [] })
