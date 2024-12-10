@@ -1,4 +1,5 @@
 import type { SpecFileType } from './prepareOas.js';
+import type { Command } from '@oclif/core';
 
 import path from 'node:path';
 
@@ -7,7 +8,7 @@ import { ProxyAgent } from 'undici';
 
 import pkg from '../package.json' with { type: 'json' };
 
-import { APIv1Error } from './apiError.js';
+import { APIv1Error, APIv2Error, type APIv2ErrorResponse } from './apiError.js';
 import config from './config.js';
 import { git } from './createGHA/index.js';
 import isCI, { ciName, isGHA } from './isCI.js';
@@ -19,7 +20,7 @@ const SUCCESS_NO_CONTENT = 204;
  * This contains a few pieces of information about a file so
  * we can properly construct a source URL for it.
  */
-interface FilePathDetails {
+export interface FilePathDetails {
   /** The URL or local file path */
   filePath: string;
   /** This is derived from the `oas-normalize` `type` property. */
@@ -85,7 +86,7 @@ function parseWarningHeader(header: string): WarningHeader[] {
 
 /**
  * Getter function for a string to be used in the user-agent header based on the current
- * environment.
+ * environment. Used for API v1 requests.
  *
  */
 export function getUserAgent() {
@@ -210,6 +211,102 @@ export async function readmeAPIv1Fetch(
 }
 
 /**
+ * Wrapper for the `fetch` API so we can add rdme-specific headers to all ReadMe API v2 requests.
+ *
+ * @param pathname the pathname to make the request to. Must have a leading slash.
+ * @param fileOpts optional object containing information about the file being sent.
+ * We use this to construct a full source URL for the file.
+ */
+export async function readmeAPIv2Fetch<T extends Command>(
+  this: T,
+  pathname: string,
+  options: RequestInit = { headers: new Headers() },
+  fileOpts: FilePathDetails = { filePath: '', fileType: false },
+) {
+  let source = 'cli';
+  let headers = options.headers as Headers;
+
+  if (!(options.headers instanceof Headers)) {
+    headers = new Headers(options.headers);
+  }
+
+  headers.set(
+    'User-Agent',
+    this.config.userAgent.replace(this.config.name, `${this.config.name}${isGHA() ? '-github' : ''}`),
+  );
+
+  if (!headers.get('accept')) {
+    headers.set('accept', 'application/json');
+  }
+
+  if (isGHA()) {
+    source = 'cli-gh';
+    if (process.env.GITHUB_REPOSITORY) headers.set('x-github-repository', process.env.GITHUB_REPOSITORY);
+    if (process.env.GITHUB_RUN_ATTEMPT) headers.set('x-github-run-attempt', process.env.GITHUB_RUN_ATTEMPT);
+    if (process.env.GITHUB_RUN_ID) headers.set('x-github-run-id', process.env.GITHUB_RUN_ID);
+    if (process.env.GITHUB_RUN_NUMBER) headers.set('x-github-run-number', process.env.GITHUB_RUN_NUMBER);
+    if (process.env.GITHUB_SHA) headers.set('x-github-sha', process.env.GITHUB_SHA);
+
+    const filePath = await normalizeFilePath(fileOpts);
+
+    if (filePath) {
+      /**
+       * Constructs a full URL to the file using GitHub Actions runner variables
+       * @see {@link https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables}
+       * @example https://github.com/readmeio/rdme/blob/cb4129d5c7b51ff3b50f933a9c7d0c3d0d33d62c/documentation/rdme.md
+       */
+      try {
+        const sourceUrl = new URL(
+          `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/blob/${process.env.GITHUB_SHA}/${filePath}`,
+        ).href;
+        headers.set('x-readme-source-url', sourceUrl);
+      } catch (e) {
+        this.debug(`error constructing github source url: ${e.message}`);
+      }
+    }
+  }
+
+  if (isCI()) {
+    headers.set('x-rdme-ci', ciName());
+  }
+
+  headers.set('x-readme-source', source);
+
+  if (fileOpts.filePath && fileOpts.fileType === 'url') {
+    headers.set('x-readme-source-url', fileOpts.filePath);
+  }
+
+  const fullUrl = `${config.host.v2}${pathname}`;
+  const proxy = getProxy();
+
+  this.debug(
+    `making ${(options.method || 'get').toUpperCase()} request to ${fullUrl} ${proxy ? `with proxy ${proxy} and ` : ''}with headers: ${sanitizeHeaders(headers)}`,
+  );
+
+  return fetch(fullUrl, {
+    ...options,
+    headers,
+    // @ts-expect-error we need to clean up our undici usage here ASAP
+    dispatcher: proxy ? new ProxyAgent(proxy) : undefined,
+  })
+    .then(res => {
+      const warningHeader = res.headers.get('Warning');
+      if (warningHeader) {
+        this.debug(`received warning header: ${warningHeader}`);
+        const warnings = parseWarningHeader(warningHeader);
+        warnings.forEach(warning => {
+          warn(warning.message, 'ReadMe API Warning:');
+        });
+      }
+      return res;
+    })
+    .catch(e => {
+      this.debug(`error making fetch request: ${e}`);
+      throw e;
+    });
+}
+
+/**
  * Small handler for handling responses from ReadMe API v1.
  *
  * If we receive JSON errors, we throw an APIv1Error exception.
@@ -245,6 +342,39 @@ export async function handleAPIv1Res(res: Response, rejectOnJsonError = true) {
   return Promise.reject(body);
 }
 
+/**
+ * Small handler for handling responses from ReadMe API v2.
+ *
+ * If we receive JSON errors, we throw an APIError exception.
+ *
+ * If we receive non-JSON responses, we consider them errors and throw them.
+ */
+export async function handleAPIv2Res<T extends Command>(this: T, res: Response) {
+  const contentType = res.headers.get('content-type') || '';
+  const extension = mime.extension(contentType) || contentType.includes('json') ? 'json' : false;
+  if (extension === 'json') {
+    // TODO: type this better
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const body = (await res.json()) as any;
+    this.debug(`received status code ${res.status} from ${res.url} with JSON response: ${JSON.stringify(body)}`);
+    if (!res.ok) {
+      throw new APIv2Error(body as APIv2ErrorResponse);
+    }
+    return body;
+  }
+  if (res.status === SUCCESS_NO_CONTENT) {
+    this.debug(`received status code ${res.status} from ${res.url} with no content`);
+    return {};
+  }
+
+  // If we receive a non-JSON response, it's likely an error.
+  // Let's debug the raw response body and throw it.
+  const body = await res.text();
+  this.debug(`received status code ${res.status} from ${res.url} with non-JSON response: ${body}`);
+  throw new Error(
+    'The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.',
+  );
+}
 
 /**
  * If you supply `undefined` or `null` to the `Headers` API,
