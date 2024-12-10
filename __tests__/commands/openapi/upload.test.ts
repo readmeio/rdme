@@ -106,6 +106,7 @@ describe('rdme openapi upload', () => {
             },
           })
           .get(`/versions/${version}/apis/${slugifiedFilename}`)
+          .times(9)
           .reply(200, {
             data: {
               upload: { status: 'pending' },
@@ -122,6 +123,34 @@ describe('rdme openapi upload', () => {
 
         const result = await run(['--version', version, filename, '--key', key]);
         expect(result.stdout).toContain('was successfully created in ReadMe!');
+
+        mock.done();
+      });
+
+      it('should poll the API and handle timeouts', async () => {
+        const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+          .get(`/versions/${version}/apis`)
+          .reply(200, { data: [] })
+          .post(`/versions/${version}/apis`, body =>
+            body.match(`form-data; name="schema"; filename="${slugifiedFilename}"`),
+          )
+          .reply(200, {
+            data: {
+              upload: { status: 'pending' },
+              uri: `/versions/${version}/apis/${slugifiedFilename}`,
+            },
+          })
+          .get(`/versions/${version}/apis/${slugifiedFilename}`)
+          .times(10)
+          .reply(200, {
+            data: {
+              upload: { status: 'pending' },
+              uri: `/versions/${version}/apis/${slugifiedFilename}`,
+            },
+          });
+
+        const result = await run(['--version', version, filename, '--key', key]);
+        expect(result.error.message).toBe('Sorry, this upload timed out. Please try again later.');
 
         mock.done();
       });
