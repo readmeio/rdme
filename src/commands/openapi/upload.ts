@@ -31,11 +31,6 @@ export default class OpenAPIBetaCommand extends BaseCommand<typeof OpenAPIBetaCo
       summary: 'The URI for your API definition.',
       description: 'If not provided, the URI will be inferred from the file name and path.',
     }),
-    action: Flags.string({
-      description: 'The action you want to take. Recommended in CI to prevent accidental overwrites.',
-      default: 'upsert',
-      options: ['create', 'update', 'upsert'],
-    }),
     useSpecVersion: Flags.boolean({
       summary: 'Use the version specified in your API definition',
       description:
