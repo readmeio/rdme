@@ -1,11 +1,21 @@
 import type { APIv1ErrorResponse } from './apiError.js';
-import type { Version } from '../commands/versions/index.js';
 
 import { APIv1Error } from './apiError.js';
 import isCI from './isCI.js';
 import { warn } from './logger.js';
 import promptTerminal from './promptWrapper.js';
 import { cleanAPIv1Headers, handleAPIv1Res, readmeAPIv1Fetch } from './readmeAPIFetch.js';
+
+interface Version {
+  codename?: string;
+  createdAt?: string;
+  from?: string;
+  is_beta?: boolean;
+  is_deprecated?: boolean;
+  is_hidden?: boolean;
+  is_stable: boolean;
+  version: string;
+}
 
 /**
  * Validates and returns a project version.
