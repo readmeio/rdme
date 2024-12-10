@@ -56,7 +56,6 @@
     "mime-types": "^2.1.35",
     "oas": "^25.0.0",
     "oas-normalize": "^11.1.2",
-    "open": "^10.0.2",
     "ora": "^8.1.1",
     "pluralize": "^8.0.0",
     "prompts": "^2.4.2",
@@ -175,17 +174,8 @@
       "@oclif/plugin-warn-if-update-available"
     ],
     "topics": {
-      "categories": {
-        "description": "List or create categories in your ReadMe developer hub."
-      },
-      "docs": {
-        "description": "Sync or prune Guides pages in your ReadMe developer hub."
-      },
       "openapi": {
         "description": "Manage your API definition (e.g., syncing, validation, analysis, conversion, etc.). Supports OpenAPI, Swagger, and Postman collections, in either JSON or YAML formats."
-      },
-      "versions": {
-        "description": "Manage your documentation versions."
       }
     }
   },

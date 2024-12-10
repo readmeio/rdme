@@ -1,3 +1,0 @@
-// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
-
-exports[`rdme docs (multiple) > should return an error message when it encounters a cycle 1`] = `[Error: Cyclic dependency, node was:{"content":"\\n# Parent Body\\n","data":{"title":"Parent","parentDocSlug":"grandparent"},"filePath":"__tests__/__fixtures__/docs/multiple-docs-cycle/parent.md","hash":"0fc832371f8e240047bfc14bc8be9e37d50c8bb8","slug":"parent"}]`;
