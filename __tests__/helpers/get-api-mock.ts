@@ -37,3 +37,14 @@ export function getAPIv2Mock(reqHeaders: nock.Options['reqheaders'] = {}) {
     },
   });
 }
+
+/**
+ * Variant of `getAPIv2Mock` for mocking a GitHub Actions environment.
+ */
+export function getAPIv2MockForGHA(reqHeaders: nock.Options['reqheaders'] = {}) {
+  return getAPIv2Mock({
+    'User-Agent': ua => ua.startsWith(`rdme-github/${mockVersion}`),
+    'x-readme-source': 'cli-gh',
+    ...reqHeaders,
+  });
+}

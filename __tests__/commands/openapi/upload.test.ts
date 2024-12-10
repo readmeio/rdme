@@ -1,12 +1,13 @@
 import nock from 'nock';
 import prompts from 'prompts';
 import slugify from 'slugify';
-import { describe, beforeAll, beforeEach, afterEach, it, expect, vi } from 'vitest';
+import { describe, beforeAll, beforeEach, afterEach, it, expect } from 'vitest';
 
 import Command from '../../../src/commands/openapi/upload.js';
 import petstore from '../../__fixtures__/petstore-simple-weird-version.json' with { type: 'json' };
-import { getAPIv2Mock } from '../../helpers/get-api-mock.js';
+import { getAPIv2Mock, getAPIv2MockForGHA } from '../../helpers/get-api-mock.js';
 import { runCommand, type OclifOutput } from '../../helpers/oclif.js';
+import { after, before } from '../../helpers/setup-gha-env.js';
 
 const key = 'rdme_123';
 const version = '1.0.0';
@@ -226,16 +227,12 @@ describe('rdme openapi upload', () => {
     });
 
     describe('and the command is being run in a CI environment', () => {
-      beforeEach(() => {
-        vi.stubEnv('TEST_RDME_CI', 'true');
-      });
+      beforeEach(before);
 
-      afterEach(() => {
-        vi.unstubAllEnvs();
-      });
+      afterEach(after);
 
       it('should overwrite an existing API definition without asking for confirmation', async () => {
-        const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        const mock = getAPIv2MockForGHA({ authorization: `Bearer ${key}` })
           .get(`/versions/${version}/apis`)
           .reply(200, { data: [{ filename: slugifiedFilename }] })
           .put(`/versions/1.0.0/apis/${slugifiedFilename}`, body =>
@@ -249,7 +246,6 @@ describe('rdme openapi upload', () => {
           });
 
         const result = await run(['--version', version, filename, '--key', key]);
-        expect(result).toStrictEqual({});
         expect(result.stdout).toContain('was successfully updated in ReadMe!');
 
         mock.done();
