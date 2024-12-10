@@ -1,4 +1,4 @@
-#!/usr/bin/env -S npx tsx
+#!/usr/bin/env npx tsx
 
 async function main() {
   const { execute } = await import('@oclif/core');
