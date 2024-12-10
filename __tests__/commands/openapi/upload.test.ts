@@ -249,6 +249,7 @@ describe('rdme openapi upload', () => {
           });
 
         const result = await run(['--version', version, filename, '--key', key]);
+        expect(result).toStrictEqual({});
         expect(result.stdout).toContain('was successfully updated in ReadMe!');
 
         mock.done();
