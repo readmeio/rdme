@@ -240,6 +240,29 @@ describe('rdme openapi upload', () => {
         mock.done();
       });
     });
+
+    describe('given that the `useSpecVersion` flag is set', () => {
+      it('should use the version from the spec file', async () => {
+        const altVersion = '1.2.3';
+        const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+          .get(`/versions/${altVersion}/apis`)
+          .reply(200, { data: [] })
+          .post(`/versions/${altVersion}/apis`, body =>
+            body.match(`form-data; name="schema"; filename="${slugifiedFilename}"`),
+          )
+          .reply(200, {
+            data: {
+              upload: { status: 'done' },
+              uri: `/versions/${altVersion}/apis/${slugifiedFilename}`,
+            },
+          });
+
+        const result = await run(['--useSpecVersion', filename, '--key', key]);
+        expect(result.stdout).toContain('was successfully created in ReadMe!');
+
+        mock.done();
+      });
+    });
   });
 
   describe('given that the API definition is a URL', () => {
