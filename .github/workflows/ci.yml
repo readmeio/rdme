@@ -114,8 +114,8 @@ jobs:
         with:
           rdme: openapi "oas-examples-repo/3.1/json/petstore.json" --key "${{ secrets.RDME_TEST_PROJECT_API_KEY }}" --id=${{ secrets.RDME_TEST_PROJECT_API_SETTING }}
 
-      - name: Run `openapi` command with weird arg syntax
+      - name: E2E run of `openapi validate` on `next` branch
         uses: readmeio/rdme@next
         if: ${{ github.ref }} == 'refs/heads/next'
         with:
-          rdme: openapi validate "oas-examples-repo/3.1/json/petstore.json"
+          rdme: openapi validate oas-examples-repo/3.1/json/petstore.json
