@@ -14,7 +14,7 @@ import { oraOptions } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
 
-export default class OpenAPIBetaCommand extends BaseCommand<typeof OpenAPIBetaCommand> {
+export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUploadCommand> {
   static args = {
     spec: Args.string({
       summary: 'A file/URL to your API definition',
