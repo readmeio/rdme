@@ -1,29 +1,25 @@
 import fs from 'node:fs';
 import nodePath from 'node:path';
 
-import { Args, Flags } from '@oclif/core';
+import { Flags } from '@oclif/core';
 import ora from 'ora';
 import prompts from 'prompts';
 import slugify from 'slugify';
 import { file as tmpFile } from 'tmp-promise';
 
 import BaseCommand from '../../lib/baseCommand.js';
-import { keyFlag } from '../../lib/flags.js';
+import { keyFlag, specArg } from '../../lib/flags.js';
 import isCI, { isTest } from '../../lib/isCI.js';
 import { oraOptions } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
 
 export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUploadCommand> {
-  static args = {
-    spec: Args.string({
-      summary: 'A file/URL to your API definition',
-      description:
-        'If your working directory and all subdirectories contain a single OpenAPI file, you can omit the file name.',
-    }),
-  };
+  static description = 'Upload (or reupload) your API definition to ReadMe.';
 
-  static description = 'the new openapi command yayay';
+  static args = {
+    spec: specArg,
+  };
 
   static flags = {
     key: keyFlag,
@@ -47,11 +43,6 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     {
       description: 'You can pass in a file name like so:',
       command: '<%= config.bin %> <%= command.id %> --version=1.0.0 openapi.json',
-    },
-    {
-      description:
-        'If your working directory and all subdirectories contain a single OpenAPI file, you can omit the file name:',
-      command: '<%= config.bin %> <%= command.id %> --version=1.0.0',
     },
     {
       description:

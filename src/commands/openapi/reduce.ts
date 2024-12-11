@@ -11,7 +11,7 @@ import ora from 'ora';
 import prompts from 'prompts';
 
 import BaseCommand from '../../lib/baseCommand.js';
-import { titleFlag, workingDirectoryFlag } from '../../lib/flags.js';
+import { specArg, titleFlag, workingDirectoryFlag } from '../../lib/flags.js';
 import { oraOptions } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
@@ -24,7 +24,7 @@ export default class OpenAPIReduceCommand extends BaseCommand<typeof OpenAPIRedu
     "Reduce your API definition down to a specific set of tags or paths, which can be useful if you're debugging a problematic schema somewhere, or if you have a file that is too big to maintain.";
 
   static args = {
-    spec: Args.string({ description: 'A file/URL to your API definition' }),
+    spec: specArg,
   };
 
   static flags = {
