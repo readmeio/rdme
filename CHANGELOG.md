@@ -1,3 +1,10 @@
+## [9.0.4-next.2](https://github.com/readmeio/rdme/compare/v9.0.4-next.1...v9.0.4-next.2) (2024-12-11)
+
+
+### Bug Fixes
+
+* copy package.json file instead of symlinking ([1d56c21](https://github.com/readmeio/rdme/commit/1d56c21b0313fb0dcf0721294196b729eb2eaa49))
+
 ## [9.0.4-next.1](https://github.com/readmeio/rdme/compare/v9.0.3...v9.0.4-next.1) (2024-12-11)
 
 
