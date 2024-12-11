@@ -8,16 +8,10 @@ import { getUserAgent } from '../../src/lib/readmeAPIFetch.js';
  * `user-agent` request header so it gets properly picked up by nock.
  */
 export function getAPIv1Mock(reqHeaders = {}) {
-  return nock(config.host, {
+  return nock(config.host.v1, {
     reqheaders: {
       'User-Agent': getUserAgent(),
       ...reqHeaders,
     },
-  });
-}
-
-export function getAPIv1MockWithVersionHeader(v: string) {
-  return getAPIv1Mock({
-    'x-readme-version': v,
   });
 }
