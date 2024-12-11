@@ -9,9 +9,9 @@ export const githubFlag = Flags.boolean({ description: 'Create a new GitHub Acti
  * Used in any command where `key` is a `flag.
  */
 export const keyFlag = Flags.string({
-  description: 'ReadMe project API key',
+  summary: 'ReadMe project API key',
   required: true,
-  summary:
+  description:
     'An API key for your ReadMe project. Note that API authentication is required despite being omitted from the example usage. See our docs for more information: https://github.com/readmeio/rdme/tree/v9#authentication',
 });
 
