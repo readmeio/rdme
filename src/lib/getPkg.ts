@@ -20,7 +20,7 @@ type npmDistTag = 'latest';
  * @see {@link https://nodejs.org/docs/latest-v20.x/api/esm.html#import-attributes}
  * @see {@link https://www.stefanjudis.com/snippets/how-to-import-json-files-in-es-modules-node-js/}
  */
-export const pkg = JSON.parse(readFileSync(new URL('../../package.json', import.meta.url), { encoding: 'utf-8' }));
+export const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), { encoding: 'utf-8' }));
 
 /**
  * Return the major Node.js version specified in our `package.json` config.

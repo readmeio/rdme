@@ -9,9 +9,9 @@ export const githubFlag = Flags.boolean({ description: 'Create a new GitHub Acti
  * Used in any command where `key` is a `flag.
  */
 export const keyFlag = Flags.string({
-  description: 'ReadMe project API key',
+  summary: 'ReadMe project API key',
   required: true,
-  summary:
+  description:
     'An API key for your ReadMe project. Note that API authentication is required despite being omitted from the example usage. See our docs for more information: https://github.com/readmeio/rdme/tree/v9#authentication',
 });
 
@@ -26,35 +26,10 @@ export const titleFlag = Flags.string({
  * Used in any command where `version` is a flag.
  */
 export const versionFlag = Flags.string({
+  summary: 'ReadMe project version',
   description:
     'If running command in a CI environment and this option is not passed, the main project version will be used. See our docs for more information: https://docs.readme.com/main/docs/versions',
-  summary: 'ReadMe project version',
 });
-
-/**
- * Used in the `versions create` and `versions update` commands.
- */
-export const baseVersionFlags = {
-  codename: Flags.string({
-    description: 'The codename, or nickname, for a particular version.',
-  }),
-  main: Flags.option({
-    description: 'Should this be the main version for your project?',
-    options: ['true', 'false'] as const,
-  })(),
-  beta: Flags.option({
-    description: 'Should this version be in beta?',
-    options: ['true', 'false'] as const,
-  })(),
-  deprecated: Flags.option({
-    description: 'Should this version be deprecated? The main version cannot be deprecated.',
-    options: ['true', 'false'] as const,
-  })(),
-  hidden: Flags.option({
-    description: 'Should this version be hidden? The main version cannot be hidden.',
-    options: ['true', 'false'] as const,
-  })(),
-} as const;
 
 /**
  * Used in the `openapi` family of commands where `workingDirectory` is an option.
