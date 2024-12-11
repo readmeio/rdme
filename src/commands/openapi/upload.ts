@@ -37,15 +37,15 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       ].join('\n\n'),
     }),
     useSpecVersion: Flags.boolean({
-      summary: 'Use the version specified in your API definition',
+      summary: 'Use the OpenAPI `info.version` field for your ReadMe project version',
       description:
-        'If included, use the version specified in the `info.version field in your OpenAPI definition. This is mutually exclusive with `--version`.',
+        'If included, use the version specified in the `info.version` field in your OpenAPI definition for your ReadMe project version. This flag is mutually exclusive with `--version`.',
       exclusive: ['version'],
     }),
     version: Flags.string({
       summary: 'ReadMe project version',
       description:
-        'Defaults to `stable` (i.e., your main project version). This is mutually exclusive with `--useSpecVersion`.',
+        'Defaults to `stable` (i.e., your main project version). This flag is mutually exclusive with `--useSpecVersion`.',
       default: 'stable',
     }),
   };

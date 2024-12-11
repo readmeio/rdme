@@ -149,7 +149,7 @@ ARGUMENTS
 FLAGS
   --key=<value>      (required) ReadMe project API key
   --slug=<value>     Override the slug (i.e., the unique identifier) for your API definition.
-  --useSpecVersion   Use the version specified in your API definition
+  --useSpecVersion   Use the OpenAPI `info.version` field for your ReadMe project version
   --version=<value>  [default: stable] ReadMe project version
 
 DESCRIPTION
@@ -198,14 +198,14 @@ FLAG DESCRIPTIONS
     You do not need to include a file extension (i.e., either `custom-slug.json` or `custom-slug` will work). If you do,
     it must match the file extension of the file you're uploading.
 
-  --useSpecVersion  Use the version specified in your API definition
+  --useSpecVersion  Use the OpenAPI `info.version` field for your ReadMe project version
 
-    If included, use the version specified in the `info.version field in your OpenAPI definition. This is mutually
-    exclusive with `--version`.
+    If included, use the version specified in the `info.version` field in your OpenAPI definition for your ReadMe
+    project version. This flag is mutually exclusive with `--version`.
 
   --version=<value>  ReadMe project version
 
-    Defaults to `stable` (i.e., your main project version). This is mutually exclusive with `--useSpecVersion`.
+    Defaults to `stable` (i.e., your main project version). This flag is mutually exclusive with `--useSpecVersion`.
 ```
 
 ## `rdme openapi validate [SPEC]`
