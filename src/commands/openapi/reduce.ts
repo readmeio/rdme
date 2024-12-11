@@ -3,7 +3,7 @@ import type { OASDocument } from 'oas/types';
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { Args, Flags } from '@oclif/core';
+import { Flags } from '@oclif/core';
 import chalk from 'chalk';
 import Oas from 'oas';
 import oasReducer from 'oas/reducer';
