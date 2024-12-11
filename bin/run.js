@@ -1,6 +1,4 @@
-#!/usr/bin/env -S node --no-warnings=ExperimentalWarning
-// ^ we need this env variable above to hide the ExperimentalWarnings
-// source: https://github.com/nodejs/node/issues/10802#issuecomment-573376999
+#!/usr/bin/env node
 
 import stringArgv from 'string-argv';
 

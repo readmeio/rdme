@@ -19,9 +19,7 @@ ARGUMENTS
 FLAGS
   --dryRun       Runs the command without creating/updating any custom pages in ReadMe. Useful for debugging.
   --github       Create a new GitHub Actions workflow for this command.
-  --key=<value>  (required) An API key for your ReadMe project. Note that API authentication is required despite being
-                 omitted from the example usage. See our docs for more information:
-                 https://github.com/readmeio/rdme/tree/v9#authentication
+  --key=<value>  (required) ReadMe project API key
 
 DESCRIPTION
   Sync Markdown/HTML files to your ReadMe project as Custom Pages.
@@ -42,10 +40,8 @@ EXAMPLES
     $ rdme custompages [path] --version={project-version} --dryRun
 
 FLAG DESCRIPTIONS
-  --key=<value>
+  --key=<value>  ReadMe project API key
 
     An API key for your ReadMe project. Note that API authentication is required despite being omitted from the example
     usage. See our docs for more information: https://github.com/readmeio/rdme/tree/v9#authentication
-
-    ReadMe project API key
 ```

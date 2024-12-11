@@ -15,9 +15,7 @@ USAGE
   $ rdme categories --key <value> [--version <value>]
 
 FLAGS
-  --key=<value>      (required) An API key for your ReadMe project. Note that API authentication is required despite
-                     being omitted from the example usage. See our docs for more information:
-                     https://github.com/readmeio/rdme/tree/v9#authentication
+  --key=<value>      (required) ReadMe project API key
   --version=<value>  ReadMe project version
 
 DESCRIPTION
@@ -29,12 +27,10 @@ EXAMPLES
     $ rdme categories --version={project-version}
 
 FLAG DESCRIPTIONS
-  --key=<value>
+  --key=<value>  ReadMe project API key
 
     An API key for your ReadMe project. Note that API authentication is required despite being omitted from the example
     usage. See our docs for more information: https://github.com/readmeio/rdme/tree/v9#authentication
-
-    ReadMe project API key
 
   --version=<value>  ReadMe project version
 
@@ -56,9 +52,7 @@ ARGUMENTS
 FLAGS
   --categoryType=<option>  (required) Category type
                            <options: guide|reference>
-  --key=<value>            (required) An API key for your ReadMe project. Note that API authentication is required
-                           despite being omitted from the example usage. See our docs for more information:
-                           https://github.com/readmeio/rdme/tree/v9#authentication
+  --key=<value>            (required) ReadMe project API key
   --preventDuplicates      Prevents the creation of a new category if there is an existing category with a matching
                            `categoryType` and `title`
   --version=<value>        ReadMe project version
@@ -78,12 +72,10 @@ EXAMPLES
       --preventDuplicates
 
 FLAG DESCRIPTIONS
-  --key=<value>
+  --key=<value>  ReadMe project API key
 
     An API key for your ReadMe project. Note that API authentication is required despite being omitted from the example
     usage. See our docs for more information: https://github.com/readmeio/rdme/tree/v9#authentication
-
-    ReadMe project API key
 
   --version=<value>  ReadMe project version
 

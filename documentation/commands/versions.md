@@ -17,9 +17,7 @@ USAGE
   $ rdme versions --key <value> [--version <value>]
 
 FLAGS
-  --key=<value>      (required) An API key for your ReadMe project. Note that API authentication is required despite
-                     being omitted from the example usage. See our docs for more information:
-                     https://github.com/readmeio/rdme/tree/v9#authentication
+  --key=<value>      (required) ReadMe project API key
   --version=<value>  A specific project version to view.
 
 DESCRIPTION
@@ -35,12 +33,10 @@ EXAMPLES
     $ rdme versions --version={project-version}
 
 FLAG DESCRIPTIONS
-  --key=<value>
+  --key=<value>  ReadMe project API key
 
     An API key for your ReadMe project. Note that API authentication is required despite being omitted from the example
     usage. See our docs for more information: https://github.com/readmeio/rdme/tree/v9#authentication
-
-    ReadMe project API key
 ```
 
 ## `rdme versions create VERSION`
@@ -64,9 +60,7 @@ FLAGS
   --fork=<value>         The semantic version which you'd like to fork from.
   --hidden=<option>      Should this version be hidden? The main version cannot be hidden.
                          <options: true|false>
-  --key=<value>          (required) An API key for your ReadMe project. Note that API authentication is required despite
-                         being omitted from the example usage. See our docs for more information:
-                         https://github.com/readmeio/rdme/tree/v9#authentication
+  --key=<value>          (required) ReadMe project API key
   --main=<option>        Should this be the main version for your project?
                          <options: true|false>
 
@@ -85,12 +79,10 @@ EXAMPLES
       --deprecated={true|false} --hidden={true|false}
 
 FLAG DESCRIPTIONS
-  --key=<value>
+  --key=<value>  ReadMe project API key
 
     An API key for your ReadMe project. Note that API authentication is required despite being omitted from the example
     usage. See our docs for more information: https://github.com/readmeio/rdme/tree/v9#authentication
-
-    ReadMe project API key
 ```
 
 ## `rdme versions delete [VERSION]`
@@ -105,9 +97,7 @@ ARGUMENTS
   VERSION  The version you'd like to delete.
 
 FLAGS
-  --key=<value>  (required) An API key for your ReadMe project. Note that API authentication is required despite being
-                 omitted from the example usage. See our docs for more information:
-                 https://github.com/readmeio/rdme/tree/v9#authentication
+  --key=<value>  (required) ReadMe project API key
 
 DESCRIPTION
   Delete a version associated with your ReadMe project.
@@ -118,12 +108,10 @@ EXAMPLES
     $ rdme versions delete <version>
 
 FLAG DESCRIPTIONS
-  --key=<value>
+  --key=<value>  ReadMe project API key
 
     An API key for your ReadMe project. Note that API authentication is required despite being omitted from the example
     usage. See our docs for more information: https://github.com/readmeio/rdme/tree/v9#authentication
-
-    ReadMe project API key
 ```
 
 ## `rdme versions update [VERSION]`
@@ -146,9 +134,7 @@ FLAGS
                          <options: true|false>
   --hidden=<option>      Should this version be hidden? The main version cannot be hidden.
                          <options: true|false>
-  --key=<value>          (required) An API key for your ReadMe project. Note that API authentication is required despite
-                         being omitted from the example usage. See our docs for more information:
-                         https://github.com/readmeio/rdme/tree/v9#authentication
+  --key=<value>          (required) ReadMe project API key
   --main=<option>        Should this be the main version for your project?
                          <options: true|false>
   --newVersion=<value>   What should the version be renamed to?
@@ -168,10 +154,8 @@ EXAMPLES
       --deprecated={true|false} --hidden={true|false}
 
 FLAG DESCRIPTIONS
-  --key=<value>
+  --key=<value>  ReadMe project API key
 
     An API key for your ReadMe project. Note that API authentication is required despite being omitted from the example
     usage. See our docs for more information: https://github.com/readmeio/rdme/tree/v9#authentication
-
-    ReadMe project API key
 ```
