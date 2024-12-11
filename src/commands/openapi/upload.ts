@@ -18,9 +18,9 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
   static summary = 'Upload (or reupload) your API definition to ReadMe.';
 
   static description = [
-    'By default, the URI (i.e., the unique identifier for your API definition resource in ReadMe) will be inferred from the spec name and path. As long as you maintain these directory/file names and run `rdme` from the same location relative to your file, the inferred URI will be preserved and any updates you make to this file will be synced to the same resource in ReadMe.',
-    'If the spec is a local file, the inferred URI takes the relative path and slugifies it (e.g., `docs/api/petstore.json` will become `docs-api-petstore.json`).',
-    'If the spec is a URL, the inferred URI is the file name from the URL (e.g., `https://example.com/docs/petstore.json` will become `petstore.json`).',
+    'By default, the slug (i.e., the unique identifier for your API definition resource in ReadMe) will be inferred from the spec name and path. As long as you maintain these directory/file names and run `rdme` from the same location relative to your file, the inferred slug will be preserved and any updates you make to this file will be synced to the same resource in ReadMe.',
+    'If the spec is a local file, the inferred slug takes the relative path and slugifies it (e.g., the slug for `docs/api/petstore.json` will be `docs-api-petstore.json`).',
+    'If the spec is a URL, the inferred slug is the base file name from the URL (e.g., the slug for `https://example.com/docs/petstore.json` will be `petstore.json`).',
   ].join('\n\n');
 
   static args = {
@@ -29,9 +29,12 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
   static flags = {
     key: keyFlag,
-    uri: Flags.string({
-      summary:
-        "The URI for your API definition. Allows you to override the URI that's inferred from the file/URL path.",
+    slug: Flags.string({
+      summary: 'Override the slug (i.e., the unique identifier) for your API definition.',
+      description: [
+        "Allows you to override the slug (i.e., the unique identifier for your API definition resource in ReadMe) that's inferred from the API definition's file/URL path.",
+        "You do not need to include a file extension (i.e., either `custom-slug.json` or `custom-slug` will work). If you do, it must match the file extension of the file you're uploading.",
+      ].join('\n\n'),
     }),
     useSpecVersion: Flags.boolean({
       summary: 'Use the version specified in your API definition',
@@ -71,7 +74,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
   /**
    * Poll the ReadMe API until the upload is complete.
    */
-  private async pollAPIUntilUploadIsComplete(uri: string, headers: Headers) {
+  private async pollAPIUntilUploadIsComplete(slug: string, headers: Headers) {
     let count = 0;
     let status = 'pending';
 
@@ -81,9 +84,9 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
         // exponential backoff — wait 1s, 2s, 4s, 8s, 16s, 32s, 30s, 30s, 30s, 30s, etc.
         setTimeout(resolve, Math.min(isTest() ? 1 : 1000 * 2 ** count, 30000));
       });
-      this.debug(`polling API for status of ${uri}, count is ${count}`);
+      this.debug(`polling API for status of ${slug}, count is ${count}`);
       // eslint-disable-next-line no-await-in-loop
-      const response = await this.readmeAPIFetch(uri, { headers }).then(res => this.handleAPIRes(res));
+      const response = await this.readmeAPIFetch(slug, { headers }).then(res => this.handleAPIRes(res));
       status = response?.data?.upload?.status;
       count += 1;
     }
@@ -102,7 +105,20 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
     const version = this.flags.useSpecVersion ? specVersion : this.flags.version;
 
-    const filename = this.flags.uri || specFileType === 'url' ? nodePath.basename(specPath) : slugify.default(specPath);
+    let filename = specFileType === 'url' ? nodePath.basename(specPath) : slugify.default(specPath);
+
+    if (this.flags.slug) {
+      const fileExtension = nodePath.extname(filename);
+      const slugExtension = nodePath.extname(this.flags.slug);
+      if (slugExtension && (!['.json', '.yaml', '.yml'].includes(slugExtension) || fileExtension !== slugExtension)) {
+        throw new Error(
+          'Please provide a valid file extension that matches the extension on the file you provided. Must be `.json`, `.yaml`, or `.yml`.',
+        );
+      }
+
+      // the API expects a file extension, so keep it if it's there, add it if it's not
+      filename = `${this.flags.slug.replace(slugExtension, '')}${fileExtension}`;
+    }
 
     const headers = new Headers({ authorization: `Bearer ${this.flags.key}` });
 
@@ -110,7 +126,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       this.handleAPIRes(res),
     );
 
-    // if the current uri already exists, we'll use PUT to update it. otherwise, we'll use POST to create it
+    // if the current slug already exists, we'll use PUT to update it. otherwise, we'll use POST to create it
     const method = existingAPIDefinitions?.data?.some((d: { filename: string }) => d.filename === filename)
       ? 'PUT'
       : 'POST';

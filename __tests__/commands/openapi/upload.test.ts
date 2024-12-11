@@ -99,6 +99,69 @@ describe('rdme openapi upload', () => {
       mock.done();
     });
 
+    describe('and the `--slug` flag is passed', () => {
+      it('should use the provided slug (no file extension) as the filename', async () => {
+        const customSlug = 'custom-slug';
+        const customSlugWithExtension = `${customSlug}.json`;
+        const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+          .get(`/versions/${version}/apis`)
+          .reply(200, { data: [] })
+          .post(`/versions/${version}/apis`, body =>
+            body.match(`form-data; name="schema"; filename="${customSlugWithExtension}"`),
+          )
+          .reply(200, {
+            data: {
+              upload: { status: 'done' },
+              uri: `/versions/${version}/apis/${customSlugWithExtension}`,
+            },
+          });
+
+        const result = await run(['--version', version, filename, '--key', key, '--slug', customSlug]);
+        expect(result.stdout).toContain(
+          `Your API definition (${customSlugWithExtension}) was successfully created in ReadMe!`,
+        );
+
+        mock.done();
+      });
+
+      it('should use the provided slug (includes file extension) as the filename', async () => {
+        const customSlug = 'custom-slug.json';
+        const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+          .get(`/versions/${version}/apis`)
+          .reply(200, { data: [] })
+          .post(`/versions/${version}/apis`, body => body.match(`form-data; name="schema"; filename="${customSlug}"`))
+          .reply(200, {
+            data: {
+              upload: { status: 'done' },
+              uri: `/versions/${version}/apis/${customSlug}`,
+            },
+          });
+
+        const result = await run(['--version', version, filename, '--key', key, '--slug', customSlug]);
+        expect(result.stdout).toContain(`Your API definition (${customSlug}) was successfully created in ReadMe!`);
+
+        mock.done();
+      });
+
+      it('should handle a slug with an invalid file extension', async () => {
+        const customSlug = 'custom-slug.yikes';
+
+        const result = await run(['--version', version, filename, '--key', key, '--slug', customSlug]);
+        expect(result.error.message).toBe(
+          'Please provide a valid file extension that matches the extension on the file you provided. Must be `.json`, `.yaml`, or `.yml`.',
+        );
+      });
+
+      it('should handle a slug with a valid but mismatching file extension', async () => {
+        const customSlug = 'custom-slug.yml';
+
+        const result = await run(['--version', version, filename, '--key', key, '--slug', customSlug]);
+        expect(result.error.message).toBe(
+          'Please provide a valid file extension that matches the extension on the file you provided. Must be `.json`, `.yaml`, or `.yml`.',
+        );
+      });
+    });
+
     describe('and the upload status initially is a pending state', () => {
       it('should poll the API until the upload is complete', async () => {
         const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })

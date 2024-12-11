@@ -140,7 +140,7 @@ Upload (or reupload) your API definition to ReadMe.
 
 ```
 USAGE
-  $ rdme openapi upload [SPEC] --key <value> [--uri <value>] [--useSpecVersion | --version <value>]
+  $ rdme openapi upload [SPEC] --key <value> [--slug <value>] [--useSpecVersion | --version <value>]
 
 ARGUMENTS
   SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
@@ -148,24 +148,23 @@ ARGUMENTS
 
 FLAGS
   --key=<value>      (required) ReadMe project API key
-  --uri=<value>      The URI for your API definition. Allows you to override the URI that's inferred from the file/URL
-                     path.
+  --slug=<value>     Override the slug (i.e., the unique identifier) for your API definition.
   --useSpecVersion   Use the version specified in your API definition
   --version=<value>  [default: stable] ReadMe project version
 
 DESCRIPTION
   Upload (or reupload) your API definition to ReadMe.
 
-  By default, the URI (i.e., the unique identifier for your API definition resource in ReadMe) will be inferred from the
-  spec name and path. As long as you maintain these directory/file names and run `rdme` from the same location relative
-  to your file, the inferred URI will be preserved and any updates you make to this file will be synced to the same
-  resource in ReadMe.
+  By default, the slug (i.e., the unique identifier for your API definition resource in ReadMe) will be inferred from
+  the spec name and path. As long as you maintain these directory/file names and run `rdme` from the same location
+  relative to your file, the inferred slug will be preserved and any updates you make to this file will be synced to the
+  same resource in ReadMe.
 
-  If the spec is a local file, the inferred URI takes the relative path and slugifies it (e.g., `docs/api/petstore.json`
-  will become `docs-api-petstore.json`).
+  If the spec is a local file, the inferred slug takes the relative path and slugifies it (e.g., the slug for
+  `docs/api/petstore.json` will be `docs-api-petstore.json`).
 
-  If the spec is a URL, the inferred URI is the file name from the URL (e.g., `https://example.com/docs/petstore.json`
-  will become `petstore.json`).
+  If the spec is a URL, the inferred slug is the base file name from the URL (e.g., the slug for
+  `https://example.com/docs/petstore.json` will be `petstore.json`).
 
 EXAMPLES
   You can pass in a file name like so:
@@ -190,6 +189,14 @@ FLAG DESCRIPTIONS
 
     An API key for your ReadMe project. Note that API authentication is required despite being omitted from the example
     usage. See our docs for more information: https://github.com/readmeio/rdme/tree/v10#authentication
+
+  --slug=<value>  Override the slug (i.e., the unique identifier) for your API definition.
+
+    Allows you to override the slug (i.e., the unique identifier for your API definition resource in ReadMe) that's
+    inferred from the API definition's file/URL path.
+
+    You do not need to include a file extension (i.e., either `custom-slug.json` or `custom-slug` will work). If you do,
+    it must match the file extension of the file you're uploading.
 
   --useSpecVersion  Use the version specified in your API definition
 
