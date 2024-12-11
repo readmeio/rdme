@@ -1,3 +1,10 @@
+## [9.0.4-next.1](https://github.com/readmeio/rdme/compare/v9.0.3...v9.0.4-next.1) (2024-12-11)
+
+
+### Bug Fixes
+
+* bring back [#1117](https://github.com/readmeio/rdme/issues/1117) without breaking everything ([#1120](https://github.com/readmeio/rdme/issues/1120)) ([d5d74c5](https://github.com/readmeio/rdme/commit/d5d74c5ac4200c1e0ceaf994f2ff71086894b2c3))
+
 ## [9.0.3](https://github.com/readmeio/rdme/compare/v9.0.2...v9.0.3) (2024-12-11)
 
 
