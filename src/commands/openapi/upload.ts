@@ -37,11 +37,13 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       summary: 'Use the version specified in your API definition',
       description:
         'If included, use the version specified in the `info.version field in your OpenAPI definition. This is mutually exclusive with `--version`.',
-      exactlyOne: ['version', 'useSpecVersion'],
+      exclusive: ['version'],
     }),
     version: Flags.string({
       summary: 'ReadMe project version',
-      description: 'This is mutually exclusive with `--useSpecVersion`.',
+      description:
+        'Defaults to `stable` (i.e., your main project version). This is mutually exclusive with `--useSpecVersion`.',
+      default: 'stable',
     }),
   };
 

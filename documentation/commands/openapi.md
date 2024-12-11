@@ -140,7 +140,7 @@ Upload (or reupload) your API definition to ReadMe.
 
 ```
 USAGE
-  $ rdme openapi upload [SPEC] --key <value> [--uri <value>] [--useSpecVersion] [--version <value>]
+  $ rdme openapi upload [SPEC] --key <value> [--uri <value>] [--useSpecVersion | --version <value>]
 
 ARGUMENTS
   SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
@@ -151,7 +151,7 @@ FLAGS
   --uri=<value>      The URI for your API definition. Allows you to override the URI that's inferred from the file/URL
                      path.
   --useSpecVersion   Use the version specified in your API definition
-  --version=<value>  ReadMe project version
+  --version=<value>  [default: stable] ReadMe project version
 
 DESCRIPTION
   Upload (or reupload) your API definition to ReadMe.
@@ -198,7 +198,7 @@ FLAG DESCRIPTIONS
 
   --version=<value>  ReadMe project version
 
-    This is mutually exclusive with `--useSpecVersion`.
+    Defaults to `stable` (i.e., your main project version). This is mutually exclusive with `--useSpecVersion`.
 ```
 
 ## `rdme openapi validate [SPEC]`

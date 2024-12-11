@@ -30,14 +30,7 @@ describe('rdme openapi upload', () => {
   describe('flag error handling', () => {
     it('should throw if an error if both `--version` and `--useSpecVersion` flags are passed', async () => {
       const result = await run(['--useSpecVersion', '--version', version, filename, '--key', key]);
-      expect(result.error.message).toContain('--version cannot also be provided when using --useSpecVersion');
-    });
-
-    it('should throw if an error if neither version flag is passed', async () => {
-      const result = await run([filename, '--key', key]);
-      expect(result.error.message).toContain(
-        'Exactly one of the following must be provided: --useSpecVersion, --version',
-      );
+      expect(result.error.message).toContain('--version=1.0.0 cannot also be provided when using --useSpecVersion');
     });
   });
 
@@ -252,8 +245,28 @@ describe('rdme openapi upload', () => {
       });
     });
 
-    describe('given that the `useSpecVersion` flag is set', () => {
-      it('should use the version from the spec file', async () => {
+    describe('given that the `--version` flag is not set', () => {
+      it('should default to the `stable` version', async () => {
+        const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+          .get('/versions/stable/apis')
+          .reply(200, { data: [] })
+          .post('/versions/stable/apis', body =>
+            body.match(`form-data; name="schema"; filename="${slugifiedFilename}"`),
+          )
+          .reply(200, {
+            data: {
+              upload: { status: 'done' },
+              uri: `/versions/stable/apis/${slugifiedFilename}`,
+            },
+          });
+
+        const result = await run([filename, '--key', key]);
+        expect(result.stdout).toContain('was successfully created in ReadMe!');
+
+        mock.done();
+      });
+
+      it('should use the version from the spec file if --`useSpecVersion` is passed', async () => {
         const altVersion = '1.2.3';
         const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
           .get(`/versions/${altVersion}/apis`)
