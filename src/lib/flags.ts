@@ -12,7 +12,7 @@ export const keyFlag = Flags.string({
   summary: 'ReadMe project API key',
   required: true,
   description:
-    'An API key for your ReadMe project. Note that API authentication is required despite being omitted from the example usage. See our docs for more information: https://github.com/readmeio/rdme/tree/v9#authentication',
+    'An API key for your ReadMe project. Note that API authentication is required despite being omitted from the example usage. See our docs for more information: https://github.com/readmeio/rdme/tree/v10#authentication',
 });
 
 /**
