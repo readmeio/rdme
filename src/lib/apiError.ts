@@ -1,7 +1,7 @@
 /**
  * APIv1ErrorResponse is the shape of the error response we get from ReadMe API v1.
  */
-export interface APIv1ErrorResponse {
+interface APIv1ErrorResponse {
   docs?: string;
   error: string;
   help?: string;
