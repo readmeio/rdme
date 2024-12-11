@@ -6,7 +6,7 @@ import { vi } from 'vitest';
 
 import configstore from '../../src/lib/configstore.js';
 import { git } from '../../src/lib/createGHA/index.js';
-import * as getPkgVersion from '../../src/lib/getPkgVersion.js';
+import * as getPkgVersion from '../../src/lib/getPkg.js';
 
 import getGitRemoteMock from './get-git-mock.js';
 
