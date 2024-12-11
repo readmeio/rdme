@@ -3,7 +3,7 @@ import type { Version } from '../../src/commands/versions/index.js';
 import chalk from 'chalk';
 import { describe, afterEach, beforeAll, it, expect } from 'vitest';
 
-import pkg from '../../package.json' with { type: 'json' };
+import pkg from '../../package.json';
 import Command from '../../src/commands/open.js';
 import configStore from '../../src/lib/configstore.js';
 import { getAPIv1Mock } from '../helpers/get-api-mock.js';
