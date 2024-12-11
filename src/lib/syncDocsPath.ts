@@ -1,7 +1,5 @@
 import type { ReadDocMetadata } from './readDoc.js';
 import type ChangelogsCommand from '../commands/changelogs.js';
-import type CustomPagesCommand from '../commands/custompages.js';
-import type DocsCommand from '../commands/docs/index.js';
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -17,8 +15,6 @@ import { cleanAPIv1Headers, handleAPIv1Res, readmeAPIv1Fetch } from './readmeAPI
 /** API path within ReadMe to update (e.g. `docs`, `changelogs`, etc.) */
 type PageType = 'changelogs' | 'custompages' | 'docs';
 
-type PageCommand = ChangelogsCommand | CustomPagesCommand | DocsCommand;
-
 /**
  * Reads the contents of the specified Markdown or HTML file
  * and creates/updates the corresponding doc in ReadMe
@@ -26,7 +22,7 @@ type PageCommand = ChangelogsCommand | CustomPagesCommand | DocsCommand;
  * @returns A promise-wrapped string with the result
  */
 async function pushDoc(
-  this: PageCommand,
+  this: ChangelogsCommand,
   /** the project version */
   selectedVersion: string | undefined,
   fileData: ReadDocMetadata,
@@ -42,20 +38,12 @@ async function pushDoc(
     return `⏭️  no front matter attributes found for ${filePath}, skipping`;
   }
 
-  let payload: {
+  const payload: {
     body?: string;
     html?: string;
     htmlmode?: boolean;
     lastUpdatedHash: string;
   } = { body: content, ...data, lastUpdatedHash: hash };
-
-  if (type === 'custompages') {
-    if (filePath.endsWith('.html')) {
-      payload = { html: content, htmlmode: true, ...data, lastUpdatedHash: hash };
-    } else {
-      payload = { body: content, htmlmode: false, ...data, lastUpdatedHash: hash };
-    }
-  }
 
   function createDoc() {
     if (dryRun) {
@@ -158,17 +146,13 @@ function sortFiles(filePaths: string[]): ReadDocMetadata[] {
  * @returns A promise-wrapped string with the results
  */
 export default async function syncDocsPath(
-  this: PageCommand,
+  this: ChangelogsCommand,
   /** ReadMe project version */
   selectedVersion?: string,
 ) {
   const { path: pathInput }: { path: string } = this.args;
 
   const allowedFileExtensions = ['.markdown', '.md'];
-  // we allow HTML files in custom pages
-  if (this.id === 'custompages') {
-    allowedFileExtensions.unshift('.html');
-  }
 
   const stat = await fs.stat(pathInput).catch(err => {
     if (err.code === 'ENOENT') {
