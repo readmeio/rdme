@@ -1,7 +1,7 @@
 import type { Analysis, AnalyzedFeature } from '../../lib/analyzeOas.js';
 import type { OASDocument } from 'oas/types';
 
-import { Args, Flags } from '@oclif/core';
+import { Flags } from '@oclif/core';
 import chalk from 'chalk';
 import ora from 'ora';
 import pluralize from 'pluralize';
@@ -9,7 +9,7 @@ import { getBorderCharacters, table } from 'table';
 
 import analyzeOas, { getSupportedFeatures } from '../../lib/analyzeOas.js';
 import BaseCommand from '../../lib/baseCommand.js';
-import { workingDirectoryFlag } from '../../lib/flags.js';
+import { specArg, workingDirectoryFlag } from '../../lib/flags.js';
 import { oraOptions } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
 import SoftError from '../../lib/softError.js';
@@ -178,7 +178,7 @@ export default class OpenAPIInspectCommand extends BaseCommand<typeof OpenAPIIns
     "This command will perform a comprehensive analysis of your API definition to determine how it's utilizing aspects of the OpenAPI Specification (such as circular references, polymorphism, etc.) and any ReadMe-specific extensions you might be using.";
 
   static args = {
-    spec: Args.string({ description: 'A file/URL to your API definition' }),
+    spec: specArg,
   };
 
   static flags = {

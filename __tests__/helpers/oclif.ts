@@ -5,7 +5,11 @@ import path from 'node:path';
 import { Config } from '@oclif/core';
 import { captureOutput, runCommand as oclifRunCommand } from '@oclif/test';
 
+export type OclifOutput<T = string> = ReturnType<typeof captureOutput<T>>;
+
 const testNodeEnv = process.env.NODE_ENV;
+
+export const mockVersion = '7.0.0';
 
 /**
  * Used for setting up the oclif configuration for simulating commands in tests.
@@ -21,7 +25,7 @@ export function setupOclifConfig() {
 
   return Config.load({
     root,
-    version: '7.0.0',
+    version: mockVersion,
   });
 }
 
@@ -32,7 +36,7 @@ export function setupOclifConfig() {
  *
  * @example runCommand(LoginCommand)(['--email', 'owlbert@example.com', '--password', 'password'])
  */
-function runCommand<T extends typeof OclifCommand>(Command: T) {
+export function runCommand<T extends typeof OclifCommand>(Command: T) {
   return async function runCommandAgainstArgs(args?: string[]) {
     const oclifConfig = await setupOclifConfig();
     // @ts-expect-error this is the pattern recommended by the @oclif/test docs.

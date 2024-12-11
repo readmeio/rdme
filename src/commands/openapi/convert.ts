@@ -3,12 +3,12 @@ import type { OASDocument } from 'oas/types';
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { Args, Flags } from '@oclif/core';
+import { Flags } from '@oclif/core';
 import chalk from 'chalk';
 import prompts from 'prompts';
 
 import BaseCommand from '../../lib/baseCommand.js';
-import { titleFlag, workingDirectoryFlag } from '../../lib/flags.js';
+import { specArg, titleFlag, workingDirectoryFlag } from '../../lib/flags.js';
 import { warn } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
@@ -21,7 +21,7 @@ export default class OpenAPIConvertCommand extends BaseCommand<typeof OpenAPICon
     'Converts Swagger files and Postman collections to OpenAPI and bundles any external references. **Note**: All of our other OpenAPI commands already do this conversion automatically, but this command is available in case you need this functionality exclusively.';
 
   static args = {
-    spec: Args.string({ description: 'A file/URL to your API definition' }),
+    spec: specArg,
   };
 
   static flags = {

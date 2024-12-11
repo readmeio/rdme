@@ -1,4 +1,4 @@
-import { Flags } from '@oclif/core';
+import { Args, Flags } from '@oclif/core';
 
 /**
  * Used in any command where `github` is a `flag.
@@ -27,4 +27,9 @@ export const titleFlag = Flags.string({
  */
 export const workingDirectoryFlag = Flags.string({
   description: 'Working directory (for usage with relative external references)',
+});
+
+export const specArg = Args.string({
+  description:
+    'A path to your API definition — either a local file path or a URL. If your working directory and all subdirectories contain a single OpenAPI file, you can omit the path.',
 });

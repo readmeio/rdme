@@ -55,8 +55,7 @@ function info(
 }
 
 function oraOptions() {
-  // Disables spinner in tests so it doesn't pollute test output
-  const opts: Writable<OraOptions> = { isSilent: isTest() };
+  const opts: Writable<OraOptions> = {};
 
   // Cleans up ora output so it prints nicely alongside debug logs
   /* istanbul ignore next */
