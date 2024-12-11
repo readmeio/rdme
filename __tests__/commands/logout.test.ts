@@ -1,6 +1,6 @@
 import { describe, afterEach, beforeAll, it, expect } from 'vitest';
 
-import pkg from '../../package.json' with { type: 'json' };
+import pkg from '../../package.json';
 import Command from '../../src/commands/logout.js';
 import configStore from '../../src/lib/configstore.js';
 import { runCommandAndReturnResult } from '../helpers/oclif.js';
