@@ -114,6 +114,8 @@ jobs:
         with:
           rdme: openapi "oas-examples-repo/3.1/json/petstore.json" --key "${{ secrets.RDME_TEST_PROJECT_API_KEY }}" --id=${{ secrets.RDME_TEST_PROJECT_API_SETTING }}
 
+      # this is a test to ensure that the rdme github action can run properly
+      # the way that our users invoke it
       - name: E2E run of `openapi validate` on `next` branch
         uses: readmeio/rdme@next
         if: ${{ github.ref }} == 'refs/heads/next'
