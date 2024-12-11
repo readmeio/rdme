@@ -6,6 +6,7 @@ Manage your API definition (e.g., syncing, validation, analysis, conversion, etc
 * [`rdme openapi convert [SPEC]`](#rdme-openapi-convert-spec)
 * [`rdme openapi inspect [SPEC]`](#rdme-openapi-inspect-spec)
 * [`rdme openapi reduce [SPEC]`](#rdme-openapi-reduce-spec)
+* [`rdme openapi upload [SPEC]`](#rdme-openapi-upload-spec)
 * [`rdme openapi validate [SPEC]`](#rdme-openapi-validate-spec)
 
 ## `rdme openapi convert [SPEC]`
@@ -17,7 +18,8 @@ USAGE
   $ rdme openapi convert [SPEC] [--out <value>] [--title <value>] [--workingDirectory <value>]
 
 ARGUMENTS
-  SPEC  A file/URL to your API definition
+  SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
+        subdirectories contain a single OpenAPI file, you can omit the path.
 
 FLAGS
   --out=<value>               Output file path to write converted file to
@@ -54,7 +56,8 @@ USAGE
     dme...] [--workingDirectory <value>]
 
 ARGUMENTS
-  SPEC  A file/URL to your API definition
+  SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
+        subdirectories contain a single OpenAPI file, you can omit the path.
 
 FLAGS
   --feature=<option>...       A specific OpenAPI or ReadMe feature you wish to see detailed information on (if it
@@ -99,7 +102,8 @@ USAGE
     <value>] [--workingDirectory <value>]
 
 ARGUMENTS
-  SPEC  A file/URL to your API definition
+  SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
+        subdirectories contain a single OpenAPI file, you can omit the path.
 
 FLAGS
   --method=<value>...         Methods to reduce by (can only be used alongside the `path` option)
@@ -130,6 +134,73 @@ EXAMPLES
     $ rdme openapi reduce petstore.json --path /pet/{id} --method get --method put --out petstore.reduced.json
 ```
 
+## `rdme openapi upload [SPEC]`
+
+Upload (or reupload) your API definition to ReadMe.
+
+```
+USAGE
+  $ rdme openapi upload [SPEC] --key <value> [--uri <value>] [--useSpecVersion] [--version <value>]
+
+ARGUMENTS
+  SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
+        subdirectories contain a single OpenAPI file, you can omit the path.
+
+FLAGS
+  --key=<value>      (required) ReadMe project API key
+  --uri=<value>      The URI for your API definition. Allows you to override the URI that's inferred from the file/URL
+                     path.
+  --useSpecVersion   Use the version specified in your API definition
+  --version=<value>  ReadMe project version
+
+DESCRIPTION
+  Upload (or reupload) your API definition to ReadMe.
+
+  By default, the URI (i.e., the unique identifier for your API definition resource in ReadMe) will be inferred from the
+  spec name and path. As long as you maintain these directory/file names and run `rdme` from the same location relative
+  to your file, the inferred URI will be preserved and any updates you make to this file will be synced to the same
+  resource in ReadMe.
+
+  If the spec is a local file, the inferred URI takes the relative path and slugifies it (e.g., `docs/api/petstore.json`
+  will become `docs-api-petstore.json`).
+
+  If the spec is a URL, the inferred URI is the file name from the URL (e.g., `https://example.com/docs/petstore.json`
+  will become `petstore.json`).
+
+EXAMPLES
+  You can pass in a file name like so:
+
+    $ rdme openapi upload --version=1.0.0 openapi.json
+
+  You can also pass in a file in a subdirectory (we recommend always running the CLI from the root of your
+  repository):
+
+    $ rdme openapi upload --version=v1.0.0 example-directory/petstore.json
+
+  You can also pass in a URL:
+
+    $ rdme openapi upload --version=1.0.0 https://example.com/openapi.json
+
+  If you specify your ReadMe project version in the `info.version` field in your OpenAPI definition, you can use that:
+
+    $ rdme openapi upload --useSpecVersion https://example.com/openapi.json
+
+FLAG DESCRIPTIONS
+  --key=<value>  ReadMe project API key
+
+    An API key for your ReadMe project. Note that API authentication is required despite being omitted from the example
+    usage. See our docs for more information: https://github.com/readmeio/rdme/tree/v9#authentication
+
+  --useSpecVersion  Use the version specified in your API definition
+
+    If included, use the version specified in the `info.version field in your OpenAPI definition. This is mutually
+    exclusive with `--version`.
+
+  --version=<value>  ReadMe project version
+
+    This is mutually exclusive with `--useSpecVersion`.
+```
+
 ## `rdme openapi validate [SPEC]`
 
 Validate your OpenAPI/Swagger definition.
@@ -139,7 +210,8 @@ USAGE
   $ rdme openapi validate [SPEC] [--github] [--workingDirectory <value>]
 
 ARGUMENTS
-  SPEC  A file/URL to your API definition
+  SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
+        subdirectories contain a single OpenAPI file, you can omit the path.
 
 FLAGS
   --github                    Create a new GitHub Actions workflow for this command.
