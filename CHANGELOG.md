@@ -1,3 +1,10 @@
+## [9.0.3](https://github.com/readmeio/rdme/compare/v9.0.2...v9.0.3) (2024-12-11)
+
+
+### Bug Fixes
+
+* revert [#1117](https://github.com/readmeio/rdme/issues/1117) ([#1119](https://github.com/readmeio/rdme/issues/1119)) ([c20cc3c](https://github.com/readmeio/rdme/commit/c20cc3cf89a4e108efa485e46c26e8bfb7ba68d6))
+
 ## [9.0.3-next.1](https://github.com/readmeio/rdme/compare/v9.0.2...v9.0.3-next.1) (2024-12-11)
 
 
