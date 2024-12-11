@@ -28,9 +28,7 @@ FLAGS
   --github                    Create a new GitHub Actions workflow for this command.
   --id=<value>                Unique identifier for your API definition. Use this if you're re-uploading an existing API
                               definition.
-  --key=<value>               (required) An API key for your ReadMe project. Note that API authentication is required
-                              despite being omitted from the example usage. See our docs for more information:
-                              https://github.com/readmeio/rdme/tree/v9#authentication
+  --key=<value>               (required) ReadMe project API key
   --raw                       Return the command results as a JSON object instead of a pretty output.
   --title=<value>             An override value for the `info.title` field in the API definition
   --update                    Bypasses the create/update prompt and automatically updates an existing API definition in
@@ -99,12 +97,10 @@ EXAMPLES
     $ rdme openapi [url-or-local-path-to-file] --version={project-version} --update
 
 FLAG DESCRIPTIONS
-  --key=<value>
+  --key=<value>  ReadMe project API key
 
     An API key for your ReadMe project. Note that API authentication is required despite being omitted from the example
     usage. See our docs for more information: https://github.com/readmeio/rdme/tree/v9#authentication
-
-    ReadMe project API key
 
   --update  Bypasses the create/update prompt and automatically updates an existing API definition in ReadMe.
 

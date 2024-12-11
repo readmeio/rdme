@@ -1,3 +1,11 @@
+## [9.0.2](https://github.com/readmeio/rdme/compare/v9.0.1...v9.0.2) (2024-12-11)
+
+
+### Bug Fixes
+
+* **autocomplete:** bad alias ([#1118](https://github.com/readmeio/rdme/issues/1118)) ([5b8d928](https://github.com/readmeio/rdme/commit/5b8d9286e891b1bc5cfbcfce1a1862cb8dbdf2b4))
+* remove import attributes ([#1117](https://github.com/readmeio/rdme/issues/1117)) ([e662654](https://github.com/readmeio/rdme/commit/e66265486cac80f79c79f8594b7c60862fadbe12)), closes [#1115](https://github.com/readmeio/rdme/issues/1115) [/github.com/readmeio/rdme/pull/1115#issuecomment-2532123627](https://github.com//github.com/readmeio/rdme/pull/1115/issues/issuecomment-2532123627)
+
 ## [9.0.2-next.2](https://github.com/readmeio/rdme/compare/v9.0.2-next.1...v9.0.2-next.2) (2024-12-10)
 
 

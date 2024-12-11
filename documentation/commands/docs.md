@@ -20,9 +20,7 @@ ARGUMENTS
 FLAGS
   --dryRun           Runs the command without creating/updating any docs in ReadMe. Useful for debugging.
   --github           Create a new GitHub Actions workflow for this command.
-  --key=<value>      (required) An API key for your ReadMe project. Note that API authentication is required despite
-                     being omitted from the example usage. See our docs for more information:
-                     https://github.com/readmeio/rdme/tree/v9#authentication
+  --key=<value>      (required) ReadMe project API key
   --version=<value>  ReadMe project version
 
 DESCRIPTION
@@ -47,12 +45,10 @@ EXAMPLES
     $ rdme docs [path] --version={project-version} --dryRun
 
 FLAG DESCRIPTIONS
-  --key=<value>
+  --key=<value>  ReadMe project API key
 
     An API key for your ReadMe project. Note that API authentication is required despite being omitted from the example
     usage. See our docs for more information: https://github.com/readmeio/rdme/tree/v9#authentication
-
-    ReadMe project API key
 
   --version=<value>  ReadMe project version
 
@@ -75,9 +71,7 @@ FLAGS
   --confirm          Bypass the confirmation prompt. Useful for CI environments.
   --dryRun           Runs the command without deleting any docs in ReadMe. Useful for debugging.
   --github           Create a new GitHub Actions workflow for this command.
-  --key=<value>      (required) An API key for your ReadMe project. Note that API authentication is required despite
-                     being omitted from the example usage. See our docs for more information:
-                     https://github.com/readmeio/rdme/tree/v9#authentication
+  --key=<value>      (required) ReadMe project API key
   --version=<value>  ReadMe project version
 
 DESCRIPTION
@@ -96,12 +90,10 @@ EXAMPLES
     $ rdme docs prune [path-to-directory-of-markdown] --confirm
 
 FLAG DESCRIPTIONS
-  --key=<value>
+  --key=<value>  ReadMe project API key
 
     An API key for your ReadMe project. Note that API authentication is required despite being omitted from the example
     usage. See our docs for more information: https://github.com/readmeio/rdme/tree/v9#authentication
-
-    ReadMe project API key
 
   --version=<value>  ReadMe project version
 
