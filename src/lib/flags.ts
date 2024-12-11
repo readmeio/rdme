@@ -30,7 +30,6 @@ export const workingDirectoryFlag = Flags.string({
 });
 
 export const specArg = Args.string({
-  summary: 'A path to your API definition',
   description:
-    'This can be either a local file path or a URL. If your working directory and all subdirectories contain a single OpenAPI file, you can omit the path.',
+    'A path to your API definition — either a local file path or a URL. If your working directory and all subdirectories contain a single OpenAPI file, you can omit the path.',
 });

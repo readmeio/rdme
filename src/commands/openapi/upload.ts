@@ -15,7 +15,13 @@ import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
 
 export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUploadCommand> {
-  static description = 'Upload (or reupload) your API definition to ReadMe.';
+  static summary = 'Upload (or reupload) your API definition to ReadMe.';
+
+  static description = [
+    'By default, the URI (i.e., the unique identifier for your API definition resource in ReadMe) will be inferred from the spec name and path. As long as you maintain these directory/file names and run `rdme` from the same location relative to your file, the inferred URI will be preserved and any updates you make to this file will be synced to the same resource in ReadMe.',
+    'If the spec is a local file, the inferred URI takes the relative path and slugifies it (e.g., `docs/api/petstore.json` will become `docs-api-petstore.json`).',
+    'If the spec is a URL, the inferred URI is the file name from the URL (e.g., `https://example.com/docs/petstore.json` will become `petstore.json`).',
+  ].join('\n\n');
 
   static args = {
     spec: specArg,
@@ -24,8 +30,8 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
   static flags = {
     key: keyFlag,
     uri: Flags.string({
-      summary: 'The URI for your API definition.',
-      description: 'If not provided, the URI will be inferred from the file name and path.',
+      summary:
+        "The URI for your API definition. Allows you to override the URI that's inferred from the file/URL path.",
     }),
     useSpecVersion: Flags.boolean({
       summary: 'Use the version specified in your API definition',
