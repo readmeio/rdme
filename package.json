@@ -111,7 +111,7 @@
     "vitest": "^2.0.5"
   },
   "scripts": {
-    "build": "tsc && ln package.json dist/package.json",
+    "build": "tsc && cp package.json dist/package.json",
     "build:docs": "oclif readme --multi --output-dir documentation/commands --no-aliases",
     "build:gha": "npm run build && rollup --config",
     "build:gha:prod": "npm run build:gha -- --environment PRODUCTION_BUILD",
