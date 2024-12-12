@@ -136,7 +136,7 @@ EXAMPLES
 
 ## `rdme openapi upload [SPEC]`
 
-Upload (or reupload) your API definition to ReadMe.
+Upload (or re-upload) your API definition to ReadMe.
 
 ```
 USAGE
@@ -153,7 +153,7 @@ FLAGS
   --version=<value>  [default: stable] ReadMe project version
 
 DESCRIPTION
-  Upload (or reupload) your API definition to ReadMe.
+  Upload (or re-upload) your API definition to ReadMe.
 
   By default, the slug (i.e., the unique identifier for your API definition resource in ReadMe) will be inferred from
   the spec name and path. As long as you maintain these directory/file names and run `rdme` from the same location

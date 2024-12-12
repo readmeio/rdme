@@ -15,7 +15,7 @@ import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
 
 export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUploadCommand> {
-  static summary = 'Upload (or reupload) your API definition to ReadMe.';
+  static summary = 'Upload (or re-upload) your API definition to ReadMe.';
 
   static description = [
     'By default, the slug (i.e., the unique identifier for your API definition resource in ReadMe) will be inferred from the spec name and path. As long as you maintain these directory/file names and run `rdme` from the same location relative to your file, the inferred slug will be preserved and any updates you make to this file will be synced to the same resource in ReadMe.',
