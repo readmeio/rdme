@@ -83,22 +83,15 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
    - Replace: `versions` → use [Git-based workflow](https://docs.readme.com/main/docs/bi-directional-sync)
    - Remove: `open`
 
-3. **`openapi`** changes
+3. **`openapi` has been replaced by `openapi upload`**
 
    If you previously uploaded API definitions to ReadMe via `rdme openapi`, the command is now `rdme openapi upload`. There are now two main updates:
 
-   - The `--version` flag is now required.
+   - There is no prompt to select your ReadMe project version if you omit the `--version` flag. It now defaults to `stable` (i.e., your main ReadMe project version).
 
-   - Previously with `openapi`, the `--id` flag was an ObjectID that required an initial upload to ReadMe, which made it difficult to upsert API definitions and manage many at scale. With `openapi upload`, the `--id` flag is optional and the identifier is inferred from the file path or URL to your API definition.
+   - Previously with `openapi`, the `--id` flag was an ObjectID that required an initial upload to ReadMe, which made it difficult to upsert API definitions and manage many at scale. With `openapi upload`, the `--id` flag has been renamed to `--slug` and is now optional. The slug (i.e., the unique identifier for your API definition resource in ReadMe) is inferred from the file path or URL to your API definition.
 
-     See the table below to get a sense of how this identifier is inferred. As long as you maintain these directory/file names and run `rdme` from the same location relative to your file, this identifier will be preserved and any updates you make to this file will be synced to the same resource in ReadMe.
-
-     | File Path Type | Example File Path                        | Resulting Identifier in ReadMe |
-     | -------------- | ---------------------------------------- | ------------------------------ |
-     | Local File     | `docs/api/petstore.json`                 | `docs-api-petstore.json`       |
-     | URL            | `https://example.com/docs/petstore.json` | `petstore.json`                |
-
-     If you wish to override this inference behavior, you can include the `--id` flag and set it to whatever identifier you'd like.
+   Read more in [the `openapi upload` command docs](https://github.com/readmeio/rdme/tree/v10/documentation/commands/openapi.md#rdme-openapi-upload-spec).
 
 ## Migrating to `rdme@9`
 
