@@ -4,6 +4,7 @@ on:
     branches:
       - main
       - next
+      - v9
 
 env:
   REGISTRY: ghcr.io
