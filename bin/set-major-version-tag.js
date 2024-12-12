@@ -58,6 +58,13 @@ async function setMajorVersionTag() {
 
     const majorTag = `v${parsedVersion.major}`;
 
+    // we maintain a v9 branch, this just ensures that we don't attempt to also push a tag with the same ref
+    if (majorTag === 'v9') {
+      // eslint-disable-next-line no-console
+      console.warn('A `v9` ref already exists, not setting major version tag');
+      return;
+    }
+
     await runGitCmd(['tag', majorTag, '--force', '--message', `Top-level tag pointing to ${parsedVersion.version}`]);
 
     const args = process.argv.slice(2);
