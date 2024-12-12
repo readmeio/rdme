@@ -1,3 +1,10 @@
+## [9.0.4-next.5](https://github.com/readmeio/rdme/compare/v9.0.4-next.4...v9.0.4-next.5) (2024-12-12)
+
+
+### Bug Fixes
+
+* do not force push a tag called v9 ([df27049](https://github.com/readmeio/rdme/commit/df27049657ac0c55b019cac54a6d45195c330a6b))
+
 ## [9.0.4-next.4](https://github.com/readmeio/rdme/compare/v9.0.4-next.3...v9.0.4-next.4) (2024-12-12)
 
 
