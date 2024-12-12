@@ -245,6 +245,23 @@ export async function handleAPIv1Res(res: Response, rejectOnJsonError = true) {
 }
 
 /**
+ * If you supply `undefined` or `null` to the `Headers` API,
+ * it'll convert those to a string by default,
+ * so we instead filter those out here.
+ */
+function filterOutFalsyHeaders(inputHeaders: Headers) {
+  const headers = new Headers();
+
+  for (const header of inputHeaders.entries()) {
+    if (header[1] !== 'null' && header[1] !== 'undefined' && header[1].length > 0) {
+      headers.set(header[0], header[1]);
+    }
+  }
+
+  return headers;
+}
+
+/**
  * Returns the basic auth header and any other defined headers for use in `fetch` calls against ReadMe API v1.
  *
  */
@@ -252,24 +269,14 @@ export function cleanAPIv1Headers(
   key: string,
   /** used for `x-readme-header` */
   version?: string,
-  inputHeaders: Headers = new Headers(),
+  headers: Headers = new Headers(),
 ) {
   const encodedKey = Buffer.from(`${key}:`).toString('base64');
-  const headers = new Headers({
-    Authorization: `Basic ${encodedKey}`,
-  });
+  headers.set('Authorization', `Basic ${encodedKey}`);
 
   if (version) {
     headers.set('x-readme-version', version);
   }
 
-  for (const header of inputHeaders.entries()) {
-    // If you supply `undefined` or `null` to the `Headers` API it'll convert those to a string by default,
-    // so we instead filter those out here.
-    if (header[1] !== 'null' && header[1] !== 'undefined' && header[1].length > 0) {
-      headers.set(header[0], header[1]);
-    }
-  }
-
-  return headers;
+  return filterOutFalsyHeaders(headers);
 }
