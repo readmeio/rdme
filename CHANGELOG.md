@@ -1,3 +1,10 @@
+## [9.0.4-next.4](https://github.com/readmeio/rdme/compare/v9.0.4-next.3...v9.0.4-next.4) (2024-12-12)
+
+
+### Bug Fixes
+
+* **ci:** semantic-release workflow for v9 releases ([#1082](https://github.com/readmeio/rdme/issues/1082)) ([410daa7](https://github.com/readmeio/rdme/commit/410daa79655feb66ebb0afcafeefaa89e1f7dfe4))
+
 ## [9.0.4-next.3](https://github.com/readmeio/rdme/compare/v9.0.4-next.2...v9.0.4-next.3) (2024-12-12)
 
 
