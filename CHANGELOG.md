@@ -1,3 +1,10 @@
+## [9.0.4-next.3](https://github.com/readmeio/rdme/compare/v9.0.4-next.2...v9.0.4-next.3) (2024-12-12)
+
+
+### Bug Fixes
+
+* openapi arg doc enhancements, refactors ([#1122](https://github.com/readmeio/rdme/issues/1122)) ([b83b233](https://github.com/readmeio/rdme/commit/b83b23337c09f053bf470bf4b41615353b1f3eae))
+
 ## [9.0.4-next.2](https://github.com/readmeio/rdme/compare/v9.0.4-next.1...v9.0.4-next.2) (2024-12-11)
 
 
