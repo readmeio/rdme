@@ -6,6 +6,7 @@ Manage your API definition (e.g., syncing, validation, analysis, conversion, etc
 * [`rdme openapi convert [SPEC]`](#rdme-openapi-convert-spec)
 * [`rdme openapi inspect [SPEC]`](#rdme-openapi-inspect-spec)
 * [`rdme openapi reduce [SPEC]`](#rdme-openapi-reduce-spec)
+* [`rdme openapi upload [SPEC]`](#rdme-openapi-upload-spec)
 * [`rdme openapi validate [SPEC]`](#rdme-openapi-validate-spec)
 
 ## `rdme openapi convert [SPEC]`
@@ -131,6 +132,80 @@ EXAMPLES
   If you wish to automate this command, you can pass in CLI arguments to bypass the prompts:
 
     $ rdme openapi reduce petstore.json --path /pet/{id} --method get --method put --out petstore.reduced.json
+```
+
+## `rdme openapi upload [SPEC]`
+
+Upload (or reupload) your API definition to ReadMe.
+
+```
+USAGE
+  $ rdme openapi upload [SPEC] --key <value> [--slug <value>] [--useSpecVersion | --version <value>]
+
+ARGUMENTS
+  SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
+        subdirectories contain a single OpenAPI file, you can omit the path.
+
+FLAGS
+  --key=<value>      (required) ReadMe project API key
+  --slug=<value>     Override the slug (i.e., the unique identifier) for your API definition.
+  --useSpecVersion   Use the OpenAPI `info.version` field for your ReadMe project version
+  --version=<value>  [default: stable] ReadMe project version
+
+DESCRIPTION
+  Upload (or reupload) your API definition to ReadMe.
+
+  By default, the slug (i.e., the unique identifier for your API definition resource in ReadMe) will be inferred from
+  the spec name and path. As long as you maintain these directory/file names and run `rdme` from the same location
+  relative to your file, the inferred slug will be preserved and any updates you make to this file will be synced to the
+  same resource in ReadMe.
+
+  If the spec is a local file, the inferred slug takes the relative path and slugifies it (e.g., the slug for
+  `docs/api/petstore.json` will be `docs-api-petstore.json`).
+
+  If the spec is a URL, the inferred slug is the base file name from the URL (e.g., the slug for
+  `https://example.com/docs/petstore.json` will be `petstore.json`).
+
+EXAMPLES
+  You can pass in a file name like so:
+
+    $ rdme openapi upload --version=1.0.0 openapi.json
+
+  You can also pass in a file in a subdirectory (we recommend always running the CLI from the root of your
+  repository):
+
+    $ rdme openapi upload --version=v1.0.0 example-directory/petstore.json
+
+  You can also pass in a URL:
+
+    $ rdme openapi upload --version=1.0.0 https://example.com/openapi.json
+
+  If you specify your ReadMe project version in the `info.version` field in your OpenAPI definition, you can use that:
+
+    $ rdme openapi upload --useSpecVersion https://example.com/openapi.json
+
+FLAG DESCRIPTIONS
+  --key=<value>  ReadMe project API key
+
+    An API key for your ReadMe project. Note that API authentication is required despite being omitted from the example
+    usage. See our docs for more information: https://github.com/readmeio/rdme/tree/v10#authentication
+
+  --slug=<value>  Override the slug (i.e., the unique identifier) for your API definition.
+
+    Allows you to override the slug (i.e., the unique identifier for your API definition resource in ReadMe) that's
+    inferred from the API definition's file/URL path.
+
+    You do not need to include a file extension (i.e., either `custom-slug.json` or `custom-slug` will work). If you do,
+    it must match the file extension of the file you're uploading.
+
+  --useSpecVersion  Use the OpenAPI `info.version` field for your ReadMe project version
+
+    If included, use the version specified in the `info.version` field in your OpenAPI definition for your ReadMe
+    project version. This flag is mutually exclusive with `--version`.
+
+  --version=<value>  ReadMe project version
+
+    Defaults to `stable` (i.e., your main project version). This flag is mutually exclusive with `--useSpecVersion`.
 ```
 
 ## `rdme openapi validate [SPEC]`

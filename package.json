@@ -61,8 +61,10 @@
     "prompts": "^2.4.2",
     "semver": "^7.5.3",
     "simple-git": "^3.19.1",
+    "slugify": "^1.6.6",
     "string-argv": "^0.3.2",
     "table": "^6.8.1",
+    "tmp-promise": "^3.0.3",
     "toposort": "^2.0.2",
     "undici": "^5.28.4",
     "validator": "^13.7.0"
