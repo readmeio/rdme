@@ -20,7 +20,8 @@ USAGE
     [--workingDirectory <value>] [--github] [--dryRun] [--useSpecVersion] [--raw] [--create | --update]
 
 ARGUMENTS
-  SPEC  A file/URL to your API definition
+  SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
+        subdirectories contain a single OpenAPI file, you can omit the path.
 
 FLAGS
   --create                    Bypasses the create/update prompt and creates a new API definition in ReadMe.
@@ -122,7 +123,8 @@ USAGE
   $ rdme openapi convert [SPEC] [--out <value>] [--title <value>] [--workingDirectory <value>]
 
 ARGUMENTS
-  SPEC  A file/URL to your API definition
+  SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
+        subdirectories contain a single OpenAPI file, you can omit the path.
 
 FLAGS
   --out=<value>               Output file path to write converted file to
@@ -159,7 +161,8 @@ USAGE
     dme...] [--workingDirectory <value>]
 
 ARGUMENTS
-  SPEC  A file/URL to your API definition
+  SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
+        subdirectories contain a single OpenAPI file, you can omit the path.
 
 FLAGS
   --feature=<option>...       A specific OpenAPI or ReadMe feature you wish to see detailed information on (if it
@@ -204,7 +207,8 @@ USAGE
     <value>] [--workingDirectory <value>]
 
 ARGUMENTS
-  SPEC  A file/URL to your API definition
+  SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
+        subdirectories contain a single OpenAPI file, you can omit the path.
 
 FLAGS
   --method=<value>...         Methods to reduce by (can only be used alongside the `path` option)
@@ -284,7 +288,8 @@ USAGE
   $ rdme openapi validate [SPEC] [--github] [--workingDirectory <value>]
 
 ARGUMENTS
-  SPEC  A file/URL to your API definition
+  SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
+        subdirectories contain a single OpenAPI file, you can omit the path.
 
 FLAGS
   --github                    Create a new GitHub Actions workflow for this command.
