@@ -1,9 +1,12 @@
-## [9.0.4-next.5](https://github.com/readmeio/rdme/compare/v9.0.4-next.4...v9.0.4-next.5) (2024-12-12)
+## [9.0.4](https://github.com/readmeio/rdme/compare/v9.0.3...v9.0.4) (2024-12-12)
 
 
 ### Bug Fixes
 
-* do not force push a tag called v9 ([df27049](https://github.com/readmeio/rdme/commit/df27049657ac0c55b019cac54a6d45195c330a6b))
+* bring back [#1117](https://github.com/readmeio/rdme/issues/1117) without breaking everything ([#1120](https://github.com/readmeio/rdme/issues/1120)) ([d5d74c5](https://github.com/readmeio/rdme/commit/d5d74c5ac4200c1e0ceaf994f2ff71086894b2c3))
+* **ci:** semantic-release workflow for v9 releases ([#1082](https://github.com/readmeio/rdme/issues/1082)) ([410daa7](https://github.com/readmeio/rdme/commit/410daa79655feb66ebb0afcafeefaa89e1f7dfe4))
+* copy package.json file instead of symlinking ([1d56c21](https://github.com/readmeio/rdme/commit/1d56c21b0313fb0dcf0721294196b729eb2eaa49))
+* openapi arg doc enhancements, refactors ([#1122](https://github.com/readmeio/rdme/issues/1122)) ([b83b233](https://github.com/readmeio/rdme/commit/b83b23337c09f053bf470bf4b41615353b1f3eae))
 
 ## [9.0.4-next.4](https://github.com/readmeio/rdme/compare/v9.0.4-next.3...v9.0.4-next.4) (2024-12-12)
 
