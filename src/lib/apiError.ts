@@ -19,12 +19,10 @@ interface APIv1ErrorResponse {
  */
 export type APIv2ErrorResponse = Partial<{
   detail: string;
-  errors?:
-    | {
-        key: string;
-        message: string;
-      }[]
-    | undefined;
+  errors?: {
+    key: string;
+    message: string;
+  }[];
   poem: string[];
   status: number;
   title: string;
