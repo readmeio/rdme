@@ -103,17 +103,6 @@ jobs:
         if: ${{ steps.openapi-validate-fail.outcome == 'success' }}
         run: echo "::error::Expected validation in previous step to fail" && exit 1
 
-      # Docs: https://rdme-test.readme.io
-      - name: Run `openapi` command
-        uses: ./rdme-repo/
-        with:
-          rdme: openapi oas-examples-repo/3.1/json/petstore.json --key=${{ secrets.RDME_TEST_PROJECT_API_KEY }} --id=${{ secrets.RDME_TEST_PROJECT_API_SETTING }}
-
-      - name: Run `openapi` command with weird arg syntax
-        uses: ./rdme-repo/
-        with:
-          rdme: openapi "oas-examples-repo/3.1/json/petstore.json" --key "${{ secrets.RDME_TEST_PROJECT_API_KEY }}" --id=${{ secrets.RDME_TEST_PROJECT_API_SETTING }}
-
       # this is a test to ensure that the rdme github action can run properly
       # the way that our users invoke it
       - name: E2E run of `openapi validate` on `next` branch
@@ -121,3 +110,25 @@ jobs:
         if: ${{ github.ref }} == 'refs/heads/next'
         with:
           rdme: openapi validate oas-examples-repo/3.1/json/petstore.json
+
+      # Docs: https://rdme-test.readme.io
+      - name: Run `openapi` command
+        uses: ./rdme-repo/
+        with:
+          rdme: openapi upload oas-examples-repo/3.1/json/petstore.json --key=${{ secrets.RDME_REFACTORED_TEST_PROJECT_API_KEY }}
+      - name: Run `openapi` command with env var
+        uses: ./rdme-repo/
+        with:
+          rdme: openapi upload oas-examples-repo/3.1/json/petstore.json
+        env:
+          RDME_API_KEY: ${{ secrets.RDME_REFACTORED_TEST_PROJECT_API_KEY }}
+      - name: Run `openapi` command with other env var
+        uses: ./rdme-repo/
+        with:
+          rdme: openapi upload oas-examples-repo/3.1/json/petstore.json
+        env:
+          README_API_KEY: ${{ secrets.RDME_REFACTORED_TEST_PROJECT_API_KEY }}
+      - name: Run `openapi` command with weird arg syntax
+        uses: ./rdme-repo/
+        with:
+          rdme: openapi upload "oas-examples-repo/3.1/json/petstore.json" --key "${{ secrets.RDME_REFACTORED_TEST_PROJECT_API_KEY }}"

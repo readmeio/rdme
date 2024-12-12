@@ -58,26 +58,12 @@ describe('#createGHA', () => {
       // `openapi:validate` is the ID we define in src/index.ts for backwards compatibility,
       // hence we're using this command ID here
       { cmd: 'openapi:validate', opts: { spec: 'petstore.json' }, label: '' },
-      { cmd: 'openapi', opts: { key, spec: 'petstore.json', id: 'spec_id' }, label: '' },
-      { cmd: 'docs', opts: { key, path: './docs', version: '1.0.0' }, label: '' },
-      {
-        cmd: 'docs',
-
-        label: ' (single)',
-        opts: { key, path: './docs/rdme.md', version: '1.0.0' },
-      },
       { cmd: 'changelogs', opts: { key, path: './changelogs' }, label: '' },
       {
         cmd: 'changelogs',
 
         label: ' (single)',
         opts: { key, path: './changelogs/rdme.md' },
-      },
-      { cmd: 'custompages', opts: { key, path: './custompages' }, label: '' },
-      {
-        cmd: 'custompages',
-        label: ' (single)',
-        opts: { key, path: './custompages/rdme.md' },
       },
     ])('$cmd $label', ({ cmd, opts }) => {
       let CurrentCommand: Command.Class;
