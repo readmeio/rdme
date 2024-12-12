@@ -1,8 +1,7 @@
-import { Args } from '@oclif/core';
 import chalk from 'chalk';
 
 import BaseCommand from '../../lib/baseCommand.js';
-import { githubFlag, workingDirectoryFlag } from '../../lib/flags.js';
+import { githubFlag, specArg, workingDirectoryFlag } from '../../lib/flags.js';
 import prepareOas from '../../lib/prepareOas.js';
 
 export default class OpenAPIValidateCommand extends BaseCommand<typeof OpenAPIValidateCommand> {
@@ -15,7 +14,7 @@ export default class OpenAPIValidateCommand extends BaseCommand<typeof OpenAPIVa
   static id = 'openapi validate' as const;
 
   static args = {
-    spec: Args.string({ description: 'A file/URL to your API definition' }),
+    spec: specArg,
   };
 
   static examples = [
