@@ -1,12 +1,12 @@
 import type { OpenAPIPromptOptions } from '../../lib/prompts.js';
 
-import { Args, Flags } from '@oclif/core';
+import { Flags } from '@oclif/core';
 import chalk from 'chalk';
 import ora from 'ora';
 import parse from 'parse-link-header';
 
 import BaseCommand from '../../lib/baseCommand.js';
-import { githubFlag, keyFlag, titleFlag, versionFlag, workingDirectoryFlag } from '../../lib/flags.js';
+import { githubFlag, keyFlag, specArg, titleFlag, versionFlag, workingDirectoryFlag } from '../../lib/flags.js';
 import { info, oraOptions, warn } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
 import * as promptHandler from '../../lib/prompts.js';
@@ -31,7 +31,7 @@ export default class OpenAPICommand extends BaseCommand<typeof OpenAPICommand> {
   };
 
   static args = {
-    spec: Args.string({ description: 'A file/URL to your API definition' }),
+    spec: specArg,
   };
 
   static flags = {

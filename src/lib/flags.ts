@@ -1,4 +1,4 @@
-import { Flags } from '@oclif/core';
+import { Args, Flags } from '@oclif/core';
 
 /**
  * Used in any command where `github` is a `flag.
@@ -9,9 +9,9 @@ export const githubFlag = Flags.boolean({ description: 'Create a new GitHub Acti
  * Used in any command where `key` is a `flag.
  */
 export const keyFlag = Flags.string({
-  description: 'ReadMe project API key',
+  summary: 'ReadMe project API key',
   required: true,
-  summary:
+  description:
     'An API key for your ReadMe project. Note that API authentication is required despite being omitted from the example usage. See our docs for more information: https://github.com/readmeio/rdme/tree/v9#authentication',
 });
 
@@ -26,9 +26,9 @@ export const titleFlag = Flags.string({
  * Used in any command where `version` is a flag.
  */
 export const versionFlag = Flags.string({
+  summary: 'ReadMe project version',
   description:
     'If running command in a CI environment and this option is not passed, the main project version will be used. See our docs for more information: https://docs.readme.com/main/docs/versions',
-  summary: 'ReadMe project version',
 });
 
 /**
@@ -61,4 +61,9 @@ export const baseVersionFlags = {
  */
 export const workingDirectoryFlag = Flags.string({
   description: 'Working directory (for usage with relative external references)',
+});
+
+export const specArg = Args.string({
+  description:
+    'A path to your API definition — either a local file path or a URL. If your working directory and all subdirectories contain a single OpenAPI file, you can omit the path.',
 });

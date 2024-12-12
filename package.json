@@ -1,6 +1,6 @@
 {
   "name": "rdme",
-  "version": "9.0.2-next.2",
+  "version": "9.0.4-next.3",
   "description": "ReadMe's official CLI and GitHub Action.",
   "license": "MIT",
   "author": "ReadMe <support@readme.io> (https://readme.com)",
@@ -111,7 +111,7 @@
     "vitest": "^2.0.5"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && cp package.json dist/package.json",
     "build:docs": "oclif readme --multi --output-dir documentation/commands --no-aliases",
     "build:gha": "npm run build && rollup --config",
     "build:gha:prod": "npm run build:gha -- --environment PRODUCTION_BUILD",
