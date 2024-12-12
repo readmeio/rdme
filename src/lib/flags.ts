@@ -12,7 +12,7 @@ export const keyFlag = Flags.string({
   summary: 'ReadMe project API key',
   required: true,
   description:
-    'An API key for your ReadMe project. Note that API authentication is required despite being omitted from the example usage. See our docs for more information: https://github.com/readmeio/rdme/tree/v9#authentication',
+    'An API key for your ReadMe project. Note that API authentication is required despite being omitted from the example usage. See our docs for more information: https://github.com/readmeio/rdme/tree/v10#authentication',
 });
 
 /**
@@ -20,15 +20,6 @@ export const keyFlag = Flags.string({
  */
 export const titleFlag = Flags.string({
   description: 'An override value for the `info.title` field in the API definition',
-});
-
-/**
- * Used in any command where `version` is a flag.
- */
-export const versionFlag = Flags.string({
-  summary: 'ReadMe project version',
-  description:
-    'If running command in a CI environment and this option is not passed, the main project version will be used. See our docs for more information: https://docs.readme.com/main/docs/versions',
 });
 
 /**
