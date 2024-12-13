@@ -28,10 +28,8 @@ npx markdown-toc documentation/migration-guide.md --maxdepth 2 --bullets="-" -i
 ## Migrating to `rdme@10`
 
 <!-- prettier-ignore-start -->
-> [!WARNING]
-> `rdme@10` has not been released yet, so this section is still under construction.
->
-> [Please verify that you're looking at the latest docs for v9](https://github.com/readmeio/rdme/tree/v9/documentation/migration-guide.md). If you're using ReadMe Refactored, stay tuned!
+> [!NOTE]
+> If you're using ReadMe Refactored, you'll want to use `rdme@10` or later. The `v10` migration guide can be found [here](https://github.com/readmeio/rdme/tree/v10/documentation/migration-guide.md).
 <!-- prettier-ignore-end -->
 
 ## Migrating to `rdme@9`
