@@ -1,3 +1,19 @@
+# [10.0.0](https://github.com/readmeio/rdme/compare/v9.0.5...v10.0.0) (2024-12-13)
+
+
+* feat!: v10 release ([#1113](https://github.com/readmeio/rdme/issues/1113)) ([f260a00](https://github.com/readmeio/rdme/commit/f260a004d53a4ece9d33236b1d66665cab3ba68e))
+
+
+### BREAKING CHANGES
+
+* `categories`, `custompages`, `docs` and `versions` have
+now been removed. Please use a bidirectional syncing workflow instead.
+Read more in [our migration
+guide](https://github.com/readmeio/rdme/tree/v10/documentation/migration-guide.md).
+* `rdme openapi` has been replaced by `rdme openapi
+upload`. Read more in [our migration
+guide](https://github.com/readmeio/rdme/tree/v10/documentation/migration-guide.md).
+
 # [10.0.0-next.1](https://github.com/readmeio/rdme/compare/v9.0.5...v10.0.0-next.1) (2024-12-12)
 
 
