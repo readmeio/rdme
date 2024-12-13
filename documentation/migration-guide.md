@@ -27,11 +27,6 @@ npx markdown-toc documentation/migration-guide.md --maxdepth 2 --bullets="-" -i
 
 ## Migrating to `rdme@10`
 
-<!-- prettier-ignore-start -->
-> [!NOTE]
-> `rdme@10` has not been released yet, so the following section is subject to change. If you're using ReadMe Refactored, stay tuned!
-<!-- prettier-ignore-end -->
-
 ### Overview
 
 A [bi-directional syncing](https://docs.readme.com/main/docs/bi-directional-sync) workflow with [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored) mostly eliminates the need for a tool like `rdme`. For syncing Markdown files, syncing API definitions, and managing project hierarchy (e.g., project versions and categories) with ReadMe Refactored, you'll want to set up bi-directional syncing.
