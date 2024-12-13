@@ -4,6 +4,7 @@ on:
     branches:
       - main
       - next
+      - v9
 
 env:
   REGISTRY: ghcr.io
@@ -42,12 +43,14 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npx semantic-release
 
-      - name: Sync changes back to next
-        if: ${{ github.ref }} == 'refs/heads/main'
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.RELEASE_GH_TOKEN }}
-          branch: next
+      ## the v9 branch is not syncing changes back to next so we can skip this step
+      ## as for why this step keeps getting hit despite the if-statement, no idea
+      # - name: Sync changes back to next
+      #   if: ${{ github.ref }} == 'refs/heads/main'
+      #   uses: ad-m/github-push-action@master
+      #   with:
+      #     github_token: ${{ secrets.RELEASE_GH_TOKEN }}
+      #     branch: next
 
   # quick assertion to validate that rdme CLI can be installed and run on ubuntu
   postrelease:
