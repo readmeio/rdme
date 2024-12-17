@@ -13,7 +13,7 @@ When code is merged into the `main` or `next` branches, a release workflow (powe
 
 - All commit messages since the last release are analyzed to determine whether or not the new changes warrant a new release (i.e., if the changes are features or fixes as opposed to smaller housekeeping changes) 🧐
 - Based on the changes, the version is bumped in [`package.json`](./package.json) 🥊 For example, say the current version is `8.5.1` and the commit history includes a new feature. This would result in a minor semver bump, which would produce the following tags:
-  - A release tag like `v8.6.0` if on the `main` branch
+  - A release tag like `v8.6.0` if on the `main` or `v9` branches
   - A prerelease tag like `v8.6.0-next.1` if on the `next` branch
 - A few other files, such as [`CHANGELOG.md`](./CHANGELOG.md), [the command reference pages](./documentation/commands), and our GitHub Actions bundle files, are updated based on this code 🪵
 - A build commit (like [this](https://github.com/readmeio/rdme/commit/533a2db50b39c3b6130b3af07bebaed38218db4c)) is created with all of the updated files (e.g., `package.json`, `CHANGELOG.md`, etc.) 🆕
@@ -22,8 +22,38 @@ When code is merged into the `main` or `next` branches, a release workflow (powe
 - The new version is published to the `npm` registry 🚀 The package [distribution tag](https://docs.npmjs.com/adding-dist-tags-to-packages) will depend on which branch is being pushed to:
   - If on the `main` branch, a version is pushed on the main distribution tag (a.k.a. `latest`, which is used when someone runs `npm i rdme` with no other specifiers).
   - If on the `next` branch, the prerelease distribution tag (a.k.a. [`next`](https://www.npmjs.com/package/rdme/v/next)) is updated.
+  - If on the `v9` branch, there is no distribution tag, but any minor/patch changes on this branch are automatically released to the 9.x release channel.
 - A [GitHub release is created](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository#creating-a-release) for the tag 🐙
 - If on the `main` branch, the new changes are backported to the `next` branch so both branches remain in sync 🔄
+
+### Maintaining two major release channels
+
+We maintain two different release channels:
+
+- one for `v9` (so we can have a release that supports all functionality pre-ReadMe Refactored, more in [our migration guide](./documentation/migration-guide.md))
+- one for the latest release (`v10`, as of this writing — `v10` and onward are for customers on ReadMe Refactored only)
+
+All new feature development should be on the `next` branch. If the feature does not interact with the ReadMe API in anyway (e.g., a docs change, an OpenAPI utility command), we can backport the change to the `v9` branch.
+
+Here's the recommended approach:
+
+1. Once the pull request has been merged into `next`, grab the merge commit SHA.
+2. Check out the `v9` branch, create a new branch based off of that branch, and cherry-pick the aformentioned commit SHA:
+
+   ```sh
+   git checkout v9
+   git checkout -b my-v9-backport-branch
+   git cherry-pick SHA
+   ```
+
+3. Create a new pull request and set the base branch to `v9`.
+4. Once CI passes and you get the necessary approvals, merge that pull request in.
+5. The final step ensures that everything in the `next` branch is a superset of everything in the `v9` branch. To do this, checkout the `next` branch and merge `v9` into it.
+
+   ```sh
+   git checkout next
+   git merge v9
+   ```
 
 ## One more thing ☝️
 
