@@ -191,13 +191,15 @@ Please see [the `rdme@8.0.0` release notes](https://github.com/readmeio/rdme/rel
 
 ## Version Compatibility Matrix
 
-| Feature                                                                                                                                     | v8     | v9          | v10         |
+| Feature                                                                                                                                     | `v8`   | `v9`        | `v10`       |
 | ------------------------------------------------------------------------------------------------------------------------------------------- | ------ | ----------- | ----------- |
 | Actively Maintained?                                                                                                                        | ❌     | ✅          | ✅          |
-| Support for [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored)                                             | ❌     | ❌          | ✅          |
+| Support for [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored)\*                                           | ❌     | ❌          | ✅          |
 | Supports Bi-Directional Sync                                                                                                                | ❌     | ❌          | ✅          |
 | Support for Legacy Projects (i.e., not yet migrated to [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored)) | ✅     | ✅          | ❌          |
 | Node.js Requirements                                                                                                                        | `>=14` | `>=20.10.0` | `>=20.10.0` |
+
+\*If you uploaded an API definition prior to migrating your project to ReadMe Refactored, we've added a backwards compatibility layer so existing integrations using older `rdme` versions (e.g., `v8`, `v9`, etc.) should continue to work. **For best results, we recommend that all projects on ReadMe Refactored upgrade to the latest version.**
 
 ## Need Help?
 
