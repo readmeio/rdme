@@ -199,7 +199,7 @@ Please see [the `rdme@8.0.0` release notes](https://github.com/readmeio/rdme/rel
 | Support for Legacy Projects (i.e., not yet migrated to [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored)) | ✅     | ✅          | ❌          |
 | Node.js Requirements                                                                                                                        | `>=14` | `>=20.10.0` | `>=20.10.0` |
 
-\*If you uploaded an API definition prior to migrating your project to ReadMe Refactored, we've added a backwards compatibility layer so existing integrations using older `rdme` versions (e.g., `v8`, `v9`, etc.) should continue to work. **For best results, we recommend that all projects on ReadMe Refactored upgrade to the latest version.**
+\*If you uploaded an API definition prior to migrating your project to ReadMe Refactored, any existing workflows for syncing these files that use a legacy `rdme` version (i.e., `v9` or earlier) should continue to work, even after migrating. **For new workflows, we recommend following this migration guide and upgrading to the latest version.**
 
 ## Need Help?
 
