@@ -101,7 +101,7 @@ When writing command logic, avoid using `console` statements (and correspondingl
 
 <summary><b>Updated Guidance</b></summary>
 
-When writing command logic, avoid using `console` statements. As modeled by [the `openapi upload` command](./src/commands/openapi/upload.ts), we use [`oclif`'s command methods](https://oclif.io/docs/commands/#command-methods) for writing to the console. This allows us to easily add in [`oclif`'s support for JSON output](https://oclif.io/docs/json/).
+When writing command logic, avoid using `console` statements. As modeled by [the `openapi upload` command](./src/commands/openapi/upload.ts), we use [`oclif`'s command methods](https://oclif.io/docs/commands/#command-methods) for writing to the console. This allows us to seamlessly integrate [`oclif`'s support for JSON output](https://oclif.io/docs/json/).
 
 [The `@oclif/test` helper](https://github.com/oclif/test) automatically mocks any writes to `stdout` or `stderr`. This is great for properly asserting `rdme` outputs, but can be a bit confusing to develop with at first if you rely on `console.log` as part of your debugging since those statements won't get written to the console the way you'd expect.
 
