@@ -137,7 +137,7 @@ To set this up, check out [1Password's documentation on the ReadMe shell plugin]
 
 ```sh
 export HTTPS_PROXY=https://proxy.example.com:5678
-rdme openapi
+rdme openapi upload
 ```
 
 # GitHub Actions Configuration
@@ -148,7 +148,7 @@ rdme openapi
 For usage in [GitHub Actions](https://docs.github.com/actions), you can create a new GitHub Actions workflow file by installing the CLI on your local machine and running the the command you wish to run in GitHub Actions, along with the `--github` flag. For example:
 
 ```sh
-rdme openapi --github
+rdme openapi validate --github
 ```
 
 This will run through the `openapi` command, ask you a few quick questions, and then automatically create a fully functional GitHub Actions workflow file for you. 🪄
