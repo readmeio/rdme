@@ -173,7 +173,7 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
             $ref: schema.$ref,
           };
         } else {
-          throw new Error(`Unsupported schema type for ${originalSchemaName}`);
+          throw new Error(`Unsupported schema type for ${originalSchemaName}. Please contact support@readme.io.`);
         }
 
         OpenAPIRefsCommand.replaceRefsInSchema(schemas[refSchemaName], circularRefs, refSchemaName);
@@ -184,7 +184,7 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
     circularRefs.forEach(refPath => {
       const refParts = refPath.split('/');
       if (refParts.length < 4) {
-        throw new Error(`Invalid reference path: ${refPath}`);
+        throw new Error(`Invalid reference path: ${refPath}. Please contact support@readme.io.`);
       }
 
       const schemaName = refParts[3];
@@ -198,11 +198,13 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
       } else if ('$ref' in schema && schema.$ref) {
         property = { $ref: schema.$ref };
       } else {
-        throw new Error(`Property "${propertyName}" is not found or schema is invalid.`);
+        throw new Error(
+          `Property "${propertyName}" is not found or schema is invalid. Please contact support@readme.io.`,
+        );
       }
 
       if (!schema || !property) {
-        throw new Error(`Schema or property not found for path: ${refPath}`);
+        throw new Error(`Schema or property not found for path: ${refPath}. Please contact support@readme.io.`);
       }
 
       if ('$ref' in property) {
@@ -217,7 +219,7 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
           createRefSchema(refSchemaName, newRefSchemaName);
           return;
         }
-        throw new Error(`Invalid $ref in property: ${JSON.stringify(property)}`);
+        throw new Error(`Invalid $ref in property: ${JSON.stringify(property)}. Please contact support@readme.io.`);
       }
 
       // Handle references within items in an array
@@ -258,7 +260,7 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
     circularRefs.forEach(refPath => {
       const refParts = refPath.split('/');
       if (refParts.length < 4) {
-        throw new Error(`Invalid reference path: ${refPath}`);
+        throw new Error(`Invalid reference path: ${refPath}. Please contact support@readme.io.`);
       }
 
       const schemaName = refParts[3];
@@ -277,7 +279,7 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
       } else if ('$ref' in schema && typeof schema.$ref === 'string') {
         schema = { type: 'object' };
       } else {
-        throw new Error(`Invalid schema format: ${JSON.stringify(schema)}`);
+        throw new Error(`Invalid schema format: ${JSON.stringify(schema)}. Please contact support@readme.io.`);
       }
     });
   }
@@ -342,7 +344,9 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
 
       if (remainingCircularRefs.length > 0) {
         debug(`Final unresolved circular references: ${JSON.stringify(remainingCircularRefs, null, 2)}`);
-        throw new Error('Unable to resolve all circular references, even with fallback replacements.');
+        throw new Error(
+          'Unable to resolve all circular references, even with fallback replacements. Please contact support@readme.io.',
+        );
       } else {
         debug('All remaining circular references successfully replaced with empty objects.');
       }
