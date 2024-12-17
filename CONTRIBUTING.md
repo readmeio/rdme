@@ -87,15 +87,42 @@ act -j simple
 
 ### Usage of `console`
 
+<details>
+
+<summary>⚠️ <b>Outdated guidance</b> (you'll notice we still use this paradigm in a few commands, but don't use this guidance for new commands!)</summary>
+
 As you'll learn in our commands logic (see [`bin/run.js`](bin/run.js) and the [`src/commands`](src/commands) directory), we wrap our command outputs in resolved/rejected [`Promise` objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) and use [`bin/run.js`](bin/run.js) file to log the results to the console and return the correct status code. This is so we can write more resilient tests, ensure that the proper exit codes are being returned, and make debugging easier.
 
 When writing command logic, avoid using `console` statements (and correspondingly, avoid mocking `console` statements in tests) when possible.
+
+</details>
+
+<details open>
+
+<summary><b>Updated Guidance</b></summary>
+
+When writing command logic, avoid using `console` statements. As modeled by [the `openapi upload` command](./src/commands/openapi/upload.ts), we use [`oclif`'s command methods](https://oclif.io/docs/commands/#command-methods) for writing to the console. This allows us to easily add in [`oclif`'s support for JSON output](https://oclif.io/docs/json/).
+
+[The `@oclif/test` helper](https://github.com/oclif/test) automatically mocks any writes to `stdout` or `stderr`. This is great for properly asserting `rdme` outputs, but can be a bit confusing to develop with at first if you rely on `console.log` as part of your debugging since those statements won't get written to the console the way you'd expect.
+
+If you rely on `console.log` (or something similar) during development, you can do the following to view your output:
+
+1. Make sure you're using the `runCommand` helper in [this file](./__tests__/helpers/oclif.ts) and **not** `runCommandAndReturnResult`. See [this test file](./__tests__/commands/openapi/upload.test.ts) for an example.
+
+2. Add a statement like this in your test:
+
+   ```js
+   const result = await run(['--key', key]); // add any other flags here as needed
+   expect(result).toStrictEqual({}); // this will fail, but it will output the entire result object, which you can inspect
+   ```
+
+</details>
 
 <img align="right" width="25%" style="margin-bottom: 2em" src="https://owlbertsio-resized.s3.amazonaws.com/Blocks.psd.png">
 
 ### Making `fetch` requests
 
-`fetch` requests are very common in this codebase. When sending `fetch` requests to the ReadMe API (i.e., [dash.readme.com](https://dash.readme.com)), make sure to use the `fetch` wrapper function located in [`src/lib/readmeAPIFetch.ts`](src/lib/readmeAPIFetch.ts). We have an ESLint rule to flag this.
+`fetch` requests are very common in this codebase. When sending `fetch` requests to the ReadMe API (i.e., [dash.readme.com](https://dash.readme.com) or [api.readme.com](https://api.readme.com)), make sure to use the `fetch` wrapper function located in [`src/lib/readmeAPIFetch.ts`](src/lib/readmeAPIFetch.ts).
 
 In that wrapper function, we set several important request headers and configure the proxy, if the user added one via `HTTPS_PROXY`.
 
