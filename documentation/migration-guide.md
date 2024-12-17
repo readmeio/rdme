@@ -173,7 +173,6 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
    The following commands (and their subcommands) will be removed in `rdme@10`:
 
    - `categories`
-   - `changelogs`
    - `custompages`
    - `docs` (and its `guides` alias)
    - `versions`
