@@ -1,7 +1,6 @@
 /* eslint-disable no-param-reassign */
-/* eslint-disable camelcase */
 import type { OASDocument } from 'oas/types';
-import type { OpenAPIV3, OpenAPIV3_1 } from 'openapi-types';
+import type { OpenAPIV3_1 as OpenAPIV31 } from 'openapi-types';
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -19,11 +18,7 @@ import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
 import { validateFilePath } from '../../lib/validatePromptInput.js';
 
-type Schema =
-  | OpenAPIV3_1.ReferenceObject
-  | OpenAPIV3_1.SchemaObject
-  | OpenAPIV3.ReferenceObject
-  | OpenAPIV3.SchemaObject;
+type Schema = OpenAPIV31.ReferenceObject | OpenAPIV31.SchemaObject;
 
 type SchemaCollection = Record<string, Schema>;
 
