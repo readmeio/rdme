@@ -32,7 +32,7 @@ exports[`#analyzeOas > should analyze an OpenAPI definition 1`] = `
       ],
       "present": true,
       "url": {
-        "3.0": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#schema-object",
+        "3.0": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#schema-object",
         "3.1": "https://json-schema.org/understanding-json-schema/reference/object.html#additional-properties",
       },
     },
@@ -41,8 +41,8 @@ exports[`#analyzeOas > should analyze an OpenAPI definition 1`] = `
       "locations": [],
       "present": false,
       "url": {
-        "3.0": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#callback-object",
-        "3.1": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#callback-object",
+        "3.0": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#callback-object",
+        "3.1": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#callback-object",
       },
     },
     "circularRefs": {
@@ -64,8 +64,8 @@ exports[`#analyzeOas > should analyze an OpenAPI definition 1`] = `
       "locations": [],
       "present": false,
       "url": {
-        "3.0": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#discriminator-object",
-        "3.1": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#discriminator-object",
+        "3.0": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#discriminator-object",
+        "3.1": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#discriminator-object",
       },
     },
     "links": {
@@ -73,8 +73,8 @@ exports[`#analyzeOas > should analyze an OpenAPI definition 1`] = `
       "locations": [],
       "present": false,
       "url": {
-        "3.0": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#link-object",
-        "3.1": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#link-object",
+        "3.0": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#link-object",
+        "3.1": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#link-object",
       },
     },
     "polymorphism": {
@@ -82,7 +82,7 @@ exports[`#analyzeOas > should analyze an OpenAPI definition 1`] = `
       "locations": [],
       "present": false,
       "url": {
-        "3.0": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#schema-object",
+        "3.0": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#schema-object",
         "3.1": "https://json-schema.org/understanding-json-schema/reference/combining.html",
       },
     },
@@ -91,8 +91,8 @@ exports[`#analyzeOas > should analyze an OpenAPI definition 1`] = `
       "locations": [],
       "present": false,
       "url": {
-        "3.0": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#server-variable-object",
-        "3.1": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#server-variable-object",
+        "3.0": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#server-variable-object",
+        "3.1": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#server-variable-object",
       },
     },
     "style": {
@@ -100,8 +100,8 @@ exports[`#analyzeOas > should analyze an OpenAPI definition 1`] = `
       "locations": [],
       "present": false,
       "url": {
-        "3.0": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#parameter-style",
-        "3.1": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#parameter-style",
+        "3.0": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#parameter-style",
+        "3.1": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#parameter-style",
       },
     },
     "webhooks": {
@@ -109,7 +109,7 @@ exports[`#analyzeOas > should analyze an OpenAPI definition 1`] = `
       "locations": [],
       "present": false,
       "url": {
-        "3.1": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#user-content-oaswebhooks",
+        "3.1": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#user-content-oaswebhooks",
       },
     },
     "xml": {
@@ -132,8 +132,8 @@ exports[`#analyzeOas > should analyze an OpenAPI definition 1`] = `
       ],
       "present": true,
       "url": {
-        "3.0": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#xml-object",
-        "3.1": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#xml-object",
+        "3.0": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#xml-object",
+        "3.1": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#xml-object",
       },
     },
   },

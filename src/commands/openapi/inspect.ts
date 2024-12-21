@@ -108,68 +108,71 @@ function buildFullReport(analysis: Analysis, definitionVersion: string, tableBor
   const report: string[] = ['Here are some interesting things we found in your API definition. 🕵️', ''];
 
   // General API definition statistics
-  Object.entries(analysis.general).forEach(([, info]) => {
-    let msg: string;
+  report.push(
+    ...(Object.entries(analysis.general || {})
+      .map(([, info]) => {
+        if (Array.isArray(info.found)) {
+          if (!info.found.length) return false;
 
-    if (Array.isArray(info.found)) {
-      if (!info.found.length) {
-        return;
-      }
+          const highlightedData = info.found.map(d => chalk.yellow(d));
+          if (info.found.length > 1) {
+            const pluralName = pluralize(info.name.toLowerCase(), info.found.length);
+            return `You are using ${chalk.bold(info.found.length)} ${pluralName} throughout your API: ${new Intl.ListFormat('en').format(highlightedData)}`;
+          }
 
-      const highlightedData = info.found.map(d => chalk.yellow(d));
-      if (info.found.length > 1) {
-        msg = `You are using ${chalk.bold(info.found.length)} ${pluralize(
-          info.name,
-          info.found.length,
-        )} throughout your API: ${new Intl.ListFormat('en').format(highlightedData)}`;
-      } else {
-        msg = `You are using a single ${info.name} throughout your API: ${highlightedData[0]}`;
-      }
-    } else if (info.found > 1) {
-      msg = `You have a total of ${chalk.bold(info.found)} ${pluralize(info.name, info.found)} in your API.`;
-      if (info.found > 100) {
-        msg += ' Wow!';
-      }
-    } else {
-      msg = `You have a single ${info.name} in your API.`;
-    }
+          return `You are using a single ${info.name.toLowerCase()} throughout your API: ${highlightedData[0]}`;
+        } else if (info.found > 1) {
+          let msg: string;
+          msg = `You have a total of ${chalk.bold(info.found)} ${pluralize(info.name.toLowerCase(), info.found)} in your API.`;
+          if (info.found > 100) {
+            msg += ` ${chalk.cyanBright('Wow! 🤯')}`;
+          }
 
-    report.push(` · ${msg}`);
-  });
+          return msg;
+        }
+
+        return `You have a single ${info.name.toLowerCase()} in your API.`;
+      })
+      .filter(Boolean)
+      .map(msg => ` · ${msg}`) as string[]),
+  );
+
+  report.push(''); // Extra bit of space between our general API information and feature tables.
 
   // Build out a view of all OpenAPI and ReadMe features that we discovered.
   [
-    { component: 'openapi', header: 'OpenAPI Features' },
-    { component: 'readme', header: 'ReadMe-Specific Features and Extensions' },
-  ].forEach(({ component, header }: { component: string; header: string }) => {
+    { component: 'openapi', header: 'OpenAPI Features', emoji: '🌲' },
+    { component: 'readme', header: 'ReadMe-Specific Features and Extensions', emoji: '📖' },
+  ].forEach(({ component, header, emoji }) => {
     const tableData: string[][] = [
-      [chalk.bold.green('Feature'), chalk.bold.green('Used?'), chalk.bold.green('Description')],
+      [chalk.bold.yellow('Feature'), chalk.bold.yellow('Used?'), chalk.bold.yellow('Description')],
+      ...(Object.entries(analysis[component as 'openapi' | 'readme'])
+        .map(([feature, info]) => {
+          if (info.hidden) return false;
+
+          const descriptions: string[] = [];
+          if (info.description) {
+            descriptions.push(info.description);
+          }
+
+          const url = getFeatureDocsURL(info, definitionVersion);
+          if (url) {
+            descriptions.push(chalk.dim(url));
+          }
+
+          return [feature, info.present ? '🟢' : '🔴', descriptions.join('\n\n')];
+        })
+        .filter(Boolean) as string[][]),
     ];
 
-    Object.entries(analysis[component as 'openapi' | 'readme']).forEach(([feature, info]) => {
-      if (info.hidden) {
-        return;
-      }
-
-      const descriptions: string[] = [];
-      if (info.description) {
-        descriptions.push(info.description);
-      }
-
-      const url = getFeatureDocsURL(info, definitionVersion);
-      if (url) {
-        descriptions.push(chalk.grey(url));
-      }
-
-      tableData.push([feature, info.present ? '✅' : '', descriptions.join('\n\n')]);
-    });
-
-    report.push('');
-    report.push(header);
+    report.push(`${emoji} ${header}`);
     report.push(
       table(tableData, {
         border: tableBorder,
         columns: {
+          0: {
+            width: 26,
+          },
           2: {
             width: 80,
             wrapWord: true,
