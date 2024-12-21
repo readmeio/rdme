@@ -1,3 +1,5 @@
+import type { OclifOutput } from '../../helpers/oclif.js';
+
 import nock from 'nock';
 import prompts from 'prompts';
 import slugify from 'slugify';
@@ -6,7 +8,7 @@ import { describe, beforeAll, beforeEach, afterEach, it, expect } from 'vitest';
 import Command from '../../../src/commands/openapi/upload.js';
 import petstore from '../../__fixtures__/petstore-simple-weird-version.json' with { type: 'json' };
 import { getAPIv2Mock, getAPIv2MockForGHA } from '../../helpers/get-api-mock.js';
-import { runCommand, type OclifOutput } from '../../helpers/oclif.js';
+import { runCommand } from '../../helpers/oclif.js';
 import { after, before } from '../../helpers/setup-gha-env.js';
 
 const key = 'rdme_123';

@@ -1,6 +1,8 @@
 /* eslint-disable no-console */
+import type { MockInstance } from 'vitest';
+
 import nock from 'nock';
-import { describe, beforeEach, afterEach, it, expect, vi, beforeAll, type MockInstance } from 'vitest';
+import { describe, beforeEach, afterEach, it, expect, vi, beforeAll } from 'vitest';
 
 import pkg from '../../package.json' with { type: 'json' };
 import { cleanAPIv1Headers, handleAPIv1Res, readmeAPIv1Fetch } from '../../src/lib/readmeAPIFetch.js';

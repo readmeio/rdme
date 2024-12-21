@@ -1,4 +1,6 @@
-import { Flags, type Hook } from '@oclif/core';
+import type { Hook } from '@oclif/core';
+
+import { Flags } from '@oclif/core';
 import chalk from 'chalk';
 
 import configstore from '../configstore.js';

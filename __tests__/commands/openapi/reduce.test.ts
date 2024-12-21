@@ -1,9 +1,11 @@
 /* eslint-disable no-console */
+import type { MockInstance } from 'vitest';
+
 import fs from 'node:fs';
 
 import chalk from 'chalk';
 import prompts from 'prompts';
-import { describe, beforeAll, beforeEach, afterEach, it, expect, vi, type MockInstance } from 'vitest';
+import { describe, beforeAll, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
 import Command from '../../../src/commands/openapi/reduce.js';
 import { runCommandAndReturnResult } from '../../helpers/oclif.js';

@@ -1,4 +1,5 @@
 import type { CreateGHAHook, CreateGHAHookOptsInClass } from './hooks/createGHA.js';
+import type { FilePathDetails } from './readmeAPIFetch.js';
 import type { Config, Hook, Interfaces } from '@oclif/core';
 
 import { format } from 'node:util';
@@ -9,7 +10,7 @@ import chalk from 'chalk';
 import debugPkg from 'debug';
 
 import { isGHA, isTest } from './isCI.js';
-import { handleAPIv2Res, readmeAPIv2Fetch, type FilePathDetails } from './readmeAPIFetch.js';
+import { handleAPIv2Res, readmeAPIv2Fetch } from './readmeAPIFetch.js';
 
 type Flags<T extends typeof OclifCommand> = Interfaces.InferredFlags<(typeof BaseCommand)['baseFlags'] & T['flags']>;
 type Args<T extends typeof OclifCommand> = Interfaces.InferredArgs<T['args']>;

@@ -1,3 +1,4 @@
+import type { APIv2ErrorResponse } from './apiError.js';
 import type { SpecFileType } from './prepareOas.js';
 import type { Command } from '@oclif/core';
 
@@ -6,7 +7,7 @@ import path from 'node:path';
 import mime from 'mime-types';
 import { ProxyAgent } from 'undici';
 
-import { APIv1Error, APIv2Error, type APIv2ErrorResponse } from './apiError.js';
+import { APIv1Error, APIv2Error } from './apiError.js';
 import config from './config.js';
 import { git } from './createGHA/index.js';
 import { getPkgVersion } from './getPkg.js';

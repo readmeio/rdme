@@ -2,11 +2,12 @@
 /* eslint-disable no-console */
 import type { Command, Config } from '@oclif/core';
 import type { Response } from 'simple-git';
+import type { MockInstance } from 'vitest';
 
 import fs from 'node:fs';
 
 import prompts from 'prompts';
-import { describe, beforeEach, afterEach, it, expect, vi, type MockInstance, beforeAll } from 'vitest';
+import { describe, beforeEach, afterEach, it, expect, vi, beforeAll } from 'vitest';
 
 import configstore from '../../src/lib/configstore.js';
 import { getConfigStoreKey, getGHAFileName, git } from '../../src/lib/createGHA/index.js';
