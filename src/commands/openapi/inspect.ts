@@ -142,7 +142,7 @@ function buildFullReport(analysis: Analysis, definitionVersion: string, tableBor
   // Build out a view of all OpenAPI and ReadMe features that we discovered.
   [
     { component: 'openapi', header: 'OpenAPI Features', emoji: '🌲' },
-    { component: 'readme', header: 'ReadMe-Specific Features and Extensions', emoji: '📖' },
+    { component: 'readme', header: 'ReadMe-Specific Features and Extensions', emoji: '🦉' },
   ].forEach(({ component, header, emoji }) => {
     const tableData: string[][] = [
       [chalk.bold.yellow('Feature'), chalk.bold.yellow('Used?'), chalk.bold.yellow('Description')],
