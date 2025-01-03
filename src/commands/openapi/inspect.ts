@@ -124,7 +124,7 @@ function buildFullReport(analysis: Analysis, definitionVersion: string, tableBor
         } else if (info.found > 1) {
           let msg: string;
           msg = `You have a total of ${chalk.bold(info.found)} ${pluralize(info.name.toLowerCase(), info.found)} in your API.`;
-          if (info.found > 100) {
+          if (info.found > 200) {
             msg += ` ${chalk.cyanBright('Wow! 🤯')}`;
           }
 
