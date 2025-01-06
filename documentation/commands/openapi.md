@@ -156,8 +156,8 @@ Analyze an OpenAPI/Swagger definition for various OpenAPI and ReadMe feature usa
 ```
 USAGE
   $ rdme openapi inspect [SPEC] [--feature
-    additionalProperties|callbacks|circularRefs|discriminators|links|style|polymorphism|serverVariables|webhooks|xml|rea
-    dme...] [--workingDirectory <value>]
+    additionalProperties|callbacks|circularRefs|commonParameters|discriminators|links|style|polymorphism|serverVariables
+    |webhooks|xml|readme...] [--workingDirectory <value>]
 
 ARGUMENTS
   SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
@@ -167,8 +167,8 @@ FLAGS
   --feature=<option>...       A specific OpenAPI or ReadMe feature you wish to see detailed information on (if it
                               exists). If any features supplied do not exist within the API definition an exit(1) code
                               will be returned alongside the report.
-                              <options: additionalProperties|callbacks|circularRefs|discriminators|links|style|polymorph
-                              ism|serverVariables|webhooks|xml|readme>
+                              <options: additionalProperties|callbacks|circularRefs|commonParameters|discriminators|link
+                              s|style|polymorphism|serverVariables|webhooks|xml|readme>
   --workingDirectory=<value>  Working directory (for usage with relative external references)
 
 DESCRIPTION

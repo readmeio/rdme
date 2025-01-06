@@ -1,3 +1,4 @@
+import type { CommandIdForTopic } from '../index.js';
 import type { OpenAPI } from 'openapi-types';
 
 import chalk from 'chalk';
@@ -36,6 +37,8 @@ function truthy<T>(value: T): value is Truthy<T> {
   return !!value;
 }
 
+type OpenAPIAction = CommandIdForTopic<'openapi'> | 'upload';
+
 const capitalizeSpecType = (type: string) =>
   type === 'openapi' ? 'OpenAPI' : type.charAt(0).toUpperCase() + type.slice(1);
 
@@ -49,20 +52,14 @@ const capitalizeSpecType = (type: string) =>
  */
 export default async function prepareOas(
   path: string | undefined,
-  command: 'openapi convert' | 'openapi inspect' | 'openapi reduce' | 'openapi validate' | 'openapi',
+  command: 'openapi' | `openapi ${OpenAPIAction}`,
   opts: {
-    /**
-     * Optionally convert the supplied or discovered API definition to the latest OpenAPI release.
-     */
-    convertToLatest?: boolean;
     /**
      * An optional title to replace the value in the `info.title` field.
      * @see {@link https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#info-object}
      */
     title?: string;
-  } = {
-    convertToLatest: false,
-  },
+  } = {},
 ) {
   let specPath = path;
 
@@ -84,14 +81,7 @@ export default async function prepareOas(
 
     const fileFindingSpinner = ora({ text: 'Looking for API definitions...', ...oraOptions() }).start();
 
-    let action: 'convert' | 'inspect' | 'reduce' | 'upload' | 'validate';
-    switch (command) {
-      case 'openapi':
-        action = 'upload';
-        break;
-      default:
-        action = command.split(' ')[1] as 'convert' | 'inspect' | 'reduce' | 'validate';
-    }
+    const action: OpenAPIAction = command === 'openapi' ? 'upload' : (command.replace('openapi ', '') as OpenAPIAction);
 
     const jsonAndYamlFiles = readdirRecursive('.', true).filter(
       file =>
@@ -189,12 +179,21 @@ export default async function prepareOas(
       throw err;
     });
 
-  // If we were supplied a Postman collection this will **always** convert it to OpenAPI 3.0.
-  let api: OpenAPI.Document = await oas.validate({ convertToLatest: opts.convertToLatest }).catch((err: Error) => {
+  let api: OpenAPI.Document;
+  await oas.validate().catch((err: Error) => {
     spinner.fail();
     debug(`raw validation error object: ${JSON.stringify(err)}`);
     throw err;
   });
+
+  // If we were supplied a Postman collection this will **always** convert it to OpenAPI 3.0.
+  debug('converting the spec to OpenAPI 3.0 (if necessary)');
+  api = await oas.convert().catch((err: Error) => {
+    spinner.fail();
+    debug(`raw openapi conversion error object: ${JSON.stringify(err)}`);
+    throw err;
+  });
+
   spinner.stop();
 
   debug('👇👇👇👇👇 spec validated! logging spec below 👇👇👇👇👇');
@@ -213,7 +212,9 @@ export default async function prepareOas(
   const specVersion: string = api.info.version;
   debug(`version in spec: ${specVersion}`);
 
-  if (['openapi', 'openapi inspect', 'openapi reduce'].includes(command)) {
+  const commandsThatBundle: (typeof command)[] = ['openapi inspect', 'openapi reduce', 'openapi'];
+
+  if (commandsThatBundle.includes(command)) {
     api = await oas.bundle();
 
     debug('spec bundled');

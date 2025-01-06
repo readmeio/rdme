@@ -58,3 +58,13 @@ export const COMMANDS = {
 
   whoami: WhoAmICommand,
 };
+
+/**
+ * A type-safe way to get the command IDs in the CLI for a specific topic.
+ *
+ * @example type OpenAPIAction = CommandIdForTopic<'openapi'>;
+ */
+export type CommandIdForTopic<
+  T extends 'openapi',
+  U extends keyof typeof COMMANDS = keyof typeof COMMANDS,
+> = U extends `${T}:${infer Suffix}` ? `${Suffix}` : never;
