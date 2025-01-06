@@ -1,6 +1,6 @@
 {
   "name": "rdme",
-  "version": "9.0.5",
+  "version": "10.0.0",
   "description": "ReadMe's official CLI and GitHub Action.",
   "license": "MIT",
   "author": "ReadMe <support@readme.io> (https://readme.com)",
@@ -56,16 +56,15 @@
     "mime-types": "^2.1.35",
     "oas": "^25.0.0",
     "oas-normalize": "^11.1.2",
-    "open": "^10.0.2",
     "ora": "^8.1.1",
-    "parse-link-header": "^2.0.0",
     "pluralize": "^8.0.0",
     "prompts": "^2.4.2",
     "semver": "^7.5.3",
     "simple-git": "^3.19.1",
+    "slugify": "^1.6.6",
     "string-argv": "^0.3.2",
     "table": "^6.8.1",
-    "tmp-promise": "^3.0.2",
+    "tmp-promise": "^3.0.3",
     "toposort": "^2.0.2",
     "undici": "^5.28.4",
     "validator": "^13.7.0"
@@ -86,7 +85,6 @@
     "@types/debug": "^4.1.7",
     "@types/js-yaml": "^4.0.5",
     "@types/mime-types": "^2.1.1",
-    "@types/parse-link-header": "^2.0.0",
     "@types/pluralize": "^0.0.33",
     "@types/prompts": "^2.4.2",
     "@types/semver": "^7.3.12",
@@ -176,17 +174,8 @@
       "@oclif/plugin-warn-if-update-available"
     ],
     "topics": {
-      "categories": {
-        "description": "List or create categories in your ReadMe developer hub."
-      },
-      "docs": {
-        "description": "Sync or prune Guides pages in your ReadMe developer hub."
-      },
       "openapi": {
         "description": "Manage your API definition (e.g., syncing, validation, analysis, conversion, etc.). Supports OpenAPI, Swagger, and Postman collections, in either JSON or YAML formats."
-      },
-      "versions": {
-        "description": "Manage your documentation versions."
       }
     }
   },
