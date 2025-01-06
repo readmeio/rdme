@@ -4,7 +4,6 @@ import type { OASDocument } from 'oas/types';
 import { Flags } from '@oclif/core';
 import chalk from 'chalk';
 import ora from 'ora';
-import pluralize from 'pluralize';
 import { getBorderCharacters, table } from 'table';
 
 import analyzeOas, { getSupportedFeatures } from '../../lib/analyzeOas.js';
@@ -13,6 +12,10 @@ import { specArg, workingDirectoryFlag } from '../../lib/flags.js';
 import { oraOptions } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
 import SoftError from '../../lib/softError.js';
+
+function pluralize(str: string, count: number) {
+  return count > 1 ? `${str}s` : str;
+}
 
 function getFeatureDocsURL(feature: AnalyzedFeature, definitionVersion: string): string | undefined {
   if (!feature.url) {
@@ -68,6 +71,10 @@ function buildFeaturesReport(analysis: Analysis, features: string[]) {
     }
 
     Object.entries(analysis.readme).forEach(([feature, info]) => {
+      if (info.hidden) {
+        return;
+      }
+
       if (!info.present) {
         report.push(`${feature}: You do not use this.`);
         hasUnusedFeature = true;
@@ -140,6 +147,10 @@ function buildFullReport(analysis: Analysis, definitionVersion: string, tableBor
     ];
 
     Object.entries(analysis[component as 'openapi' | 'readme']).forEach(([feature, info]) => {
+      if (info.hidden) {
+        return;
+      }
+
       const descriptions: string[] = [];
       if (info.description) {
         descriptions.push(info.description);
@@ -224,7 +235,7 @@ export default class OpenAPIInspectCommand extends BaseCommand<typeof OpenAPIIns
       this.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
     }
 
-    const { preparedSpec, definitionVersion } = await prepareOas(spec, 'openapi inspect', { convertToLatest: true });
+    const { preparedSpec, definitionVersion } = await prepareOas(spec, 'openapi inspect');
     const parsedPreparedSpec: OASDocument = JSON.parse(preparedSpec);
 
     const spinner = ora({ ...oraOptions() });
