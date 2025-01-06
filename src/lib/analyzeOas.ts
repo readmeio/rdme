@@ -5,6 +5,12 @@ import analyzer from 'oas/analyzer';
 
 export interface AnalyzedFeature extends OASAnalysisFeature {
   description: string;
+
+  /**
+   * The analyzed feature is not worth reporting within the inspector.
+   */
+  hidden?: boolean;
+
   url?:
     | string
     | {
@@ -21,6 +27,7 @@ export interface Analysis extends OASAnalysis {
     additionalProperties: AnalyzedFeature;
     callbacks: AnalyzedFeature;
     circularRefs: AnalyzedFeature;
+    commonParameters: AnalyzedFeature;
     discriminators: AnalyzedFeature;
     links: AnalyzedFeature;
     polymorphism: AnalyzedFeature;
@@ -37,6 +44,8 @@ export interface Analysis extends OASAnalysis {
     raw_body?: AnalyzedFeature;
 
     'x-default': AnalyzedFeature;
+    'x-readme-ref-name': AnalyzedFeature;
+
     'x-readme.code-samples': AnalyzedFeature;
     'x-readme.explorer-enabled': AnalyzedFeature;
     'x-readme.headers': AnalyzedFeature;
@@ -68,6 +77,14 @@ const OPENAPI_FEATURE_DOCS: Record<keyof Analysis['openapi'], Pick<AnalyzedFeatu
   },
   circularRefs: {
     description: 'Circular references are $ref pointers that at some point in their lineage reference themselves.',
+  },
+  commonParameters: {
+    description:
+      'Common parameters allow you to define parameters that are shared across multiple operations within your API.',
+    url: {
+      '3.0': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#path-item-object',
+      '3.1': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#path-item-object',
+    },
   },
   discriminators: {
     description:
@@ -121,11 +138,16 @@ const OPENAPI_FEATURE_DOCS: Record<keyof Analysis['openapi'], Pick<AnalyzedFeatu
   },
 };
 
-const README_FEATURE_DOCS: Record<keyof Analysis['readme'], Pick<AnalyzedFeature, 'description' | 'url'>> = {
+const README_FEATURE_DOCS: Record<keyof Analysis['readme'], Pick<AnalyzedFeature, 'description' | 'hidden' | 'url'>> = {
   'x-default': {
     description:
       'The x-default extension allows you to define static authentication credential defaults for OAuth 2 and API Key security types.',
     url: 'https://docs.readme.com/main/docs/openapi-extensions#authentication-defaults',
+  },
+  'x-readme-ref-name': {
+    description:
+      'x-readme-ref-name is added by our tooling after dereferencing in order to preserve original reference schema names.',
+    hidden: true,
   },
   'x-readme.code-samples': {
     description:

@@ -52,17 +52,11 @@ export default async function prepareOas(
   command: 'openapi convert' | 'openapi inspect' | 'openapi reduce' | 'openapi refs' | 'openapi validate' | 'openapi',
   opts: {
     /**
-     * Optionally convert the supplied or discovered API definition to the latest OpenAPI release.
-     */
-    convertToLatest?: boolean;
-    /**
      * An optional title to replace the value in the `info.title` field.
      * @see {@link https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#info-object}
      */
     title?: string;
-  } = {
-    convertToLatest: false,
-  },
+  } = {},
 ) {
   let specPath = path;
 
@@ -189,12 +183,21 @@ export default async function prepareOas(
       throw err;
     });
 
-  // If we were supplied a Postman collection this will **always** convert it to OpenAPI 3.0.
-  let api: OpenAPI.Document = await oas.validate({ convertToLatest: opts.convertToLatest }).catch((err: Error) => {
+  let api: OpenAPI.Document;
+  await oas.validate().catch((err: Error) => {
     spinner.fail();
     debug(`raw validation error object: ${JSON.stringify(err)}`);
     throw err;
   });
+
+  // If we were supplied a Postman collection this will **always** convert it to OpenAPI 3.0.
+  debug('converting the spec to OpenAPI 3.0 (if necessary)');
+  api = await oas.convert().catch((err: Error) => {
+    spinner.fail();
+    debug(`raw openapi conversion error object: ${JSON.stringify(err)}`);
+    throw err;
+  });
+
   spinner.stop();
 
   debug('👇👇👇👇👇 spec validated! logging spec below 👇👇👇👇👇');
