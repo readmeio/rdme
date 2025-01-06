@@ -1,3 +1,4 @@
+import type { CommandIdForTopic } from '../index.js';
 import type { OpenAPI } from 'openapi-types';
 
 import chalk from 'chalk';
@@ -36,7 +37,7 @@ function truthy<T>(value: T): value is Truthy<T> {
   return !!value;
 }
 
-type OpenAPIAction = 'convert' | 'inspect' | 'reduce' | 'upload' | 'validate';
+type OpenAPIAction = CommandIdForTopic<'openapi'>;
 
 const capitalizeSpecType = (type: string) =>
   type === 'openapi' ? 'OpenAPI' : type.charAt(0).toUpperCase() + type.slice(1);
