@@ -101,7 +101,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
   async run() {
     const { spec } = this.args;
 
-    const { preparedSpec, specFileType, specPath, specVersion } = await prepareOas(spec, 'openapi');
+    const { preparedSpec, specFileType, specPath, specVersion } = await prepareOas(spec, 'openapi upload');
 
     const version = this.flags.useSpecVersion ? specVersion : this.flags.version;
 
