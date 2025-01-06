@@ -191,6 +191,7 @@ export default async function prepareOas(
   });
 
   // If we were supplied a Postman collection this will **always** convert it to OpenAPI 3.0.
+  debug('converting the spec to OpenAPI 3.0 (if necessary)');
   api = await oas.convert().catch((err: Error) => {
     spinner.fail();
     debug(`raw openapi conversion error object: ${JSON.stringify(err)}`);
