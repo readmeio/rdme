@@ -37,7 +37,7 @@ function truthy<T>(value: T): value is Truthy<T> {
   return !!value;
 }
 
-type OpenAPIAction = CommandIdForTopic<'openapi'>;
+type OpenAPIAction = CommandIdForTopic<'openapi'> | 'upload';
 
 const capitalizeSpecType = (type: string) =>
   type === 'openapi' ? 'OpenAPI' : type.charAt(0).toUpperCase() + type.slice(1);
@@ -81,7 +81,7 @@ export default async function prepareOas(
 
     const fileFindingSpinner = ora({ text: 'Looking for API definitions...', ...oraOptions() }).start();
 
-    const action: OpenAPIAction = command.replace('openapi ', '') as OpenAPIAction;
+    const action: OpenAPIAction = command === 'openapi' ? 'upload' : (command.replace('openapi ', '') as OpenAPIAction);
 
     const jsonAndYamlFiles = readdirRecursive('.', true).filter(
       file =>
