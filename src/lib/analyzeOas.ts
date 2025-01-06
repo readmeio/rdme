@@ -63,7 +63,7 @@ const OPENAPI_FEATURE_DOCS: Record<keyof Analysis['openapi'], Pick<AnalyzedFeatu
   additionalProperties: {
     description: 'additionalProperties allows you to document dictionaries where the keys are user-supplied strings.',
     url: {
-      '3.0': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#schema-object',
+      '3.0': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#schema-object',
       '3.1': 'https://json-schema.org/understanding-json-schema/reference/object.html#additional-properties',
     },
   },
@@ -71,8 +71,8 @@ const OPENAPI_FEATURE_DOCS: Record<keyof Analysis['openapi'], Pick<AnalyzedFeatu
     description:
       'Callbacks are asynchronous, out-of-band requests that your service will send to some other service in response to certain events.',
     url: {
-      '3.0': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#callback-object',
-      '3.1': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#callback-object',
+      '3.0': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#callback-object',
+      '3.1': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#callback-object',
     },
   },
   circularRefs: {
@@ -90,50 +90,50 @@ const OPENAPI_FEATURE_DOCS: Record<keyof Analysis['openapi'], Pick<AnalyzedFeatu
     description:
       'With schemas that can be, or contain, different shapes, discriminators help you assist your users in identifying and determining the kind of shape they can supply or receive.',
     url: {
-      '3.0': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#discriminator-object',
-      '3.1': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#discriminator-object',
+      '3.0': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#discriminator-object',
+      '3.1': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#discriminator-object',
     },
   },
   links: {
     description: 'Links allow you to define at call-time relationships to other operations within your API.',
     url: {
-      '3.0': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#link-object',
-      '3.1': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#link-object',
+      '3.0': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#link-object',
+      '3.1': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#link-object',
     },
   },
   style: {
     description: 'Parameter serialization (style) allows you to describe how the parameter should be sent to your API.',
     url: {
-      '3.0': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#parameter-style',
-      '3.1': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#parameter-style',
+      '3.0': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#parameter-style',
+      '3.1': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#parameter-style',
     },
   },
   polymorphism: {
     description:
       'Polymorphism (allOf, oneOf, and anyOf) allow you to describe schemas that may contain either many different shapes, or a single shape containing multiple different schemas.',
     url: {
-      '3.0': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#schema-object',
+      '3.0': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#schema-object',
       '3.1': 'https://json-schema.org/understanding-json-schema/reference/combining.html',
     },
   },
   serverVariables: {
     description: 'Server variables allow to do user-supplied variable subsitituions within your API server URL.',
     url: {
-      '3.0': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#server-variable-object',
-      '3.1': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#server-variable-object',
+      '3.0': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#server-variable-object',
+      '3.1': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#server-variable-object',
     },
   },
   webhooks: {
     description: 'Webhooks allow you to describe out of band requests that may be initiated by your users.',
     url: {
-      '3.1': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#user-content-oaswebhooks',
+      '3.1': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#user-content-oaswebhooks',
     },
   },
   xml: {
     description: 'Any parameter and/or request body that accepts XML or responses that return XML payloads.',
     url: {
-      '3.0': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#xml-object',
-      '3.1': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#xml-object',
+      '3.0': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#xml-object',
+      '3.1': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#xml-object',
     },
   },
 };
