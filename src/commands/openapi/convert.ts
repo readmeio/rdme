@@ -54,7 +54,6 @@ export default class OpenAPIConvertCommand extends BaseCommand<typeof OpenAPICon
     }
 
     const { preparedSpec, specPath, specType } = await prepareOas(spec, 'openapi convert', {
-      convertToLatest: true,
       title,
     });
     const parsedPreparedSpec: OASDocument = JSON.parse(preparedSpec);

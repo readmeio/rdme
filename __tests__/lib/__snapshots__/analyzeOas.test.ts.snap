@@ -50,6 +50,15 @@ exports[`#analyzeOas > should analyze an OpenAPI definition 1`] = `
       "locations": [],
       "present": false,
     },
+    "commonParameters": {
+      "description": "Common parameters allow you to define parameters that are shared across multiple operations within your API.",
+      "locations": [],
+      "present": false,
+      "url": {
+        "3.0": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#path-item-object",
+        "3.1": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#path-item-object",
+      },
+    },
     "discriminators": {
       "description": "With schemas that can be, or contain, different shapes, discriminators help you assist your users in identifying and determining the kind of shape they can supply or receive.",
       "locations": [],
@@ -134,6 +143,12 @@ exports[`#analyzeOas > should analyze an OpenAPI definition 1`] = `
       "locations": [],
       "present": false,
       "url": "https://docs.readme.com/main/docs/openapi-extensions#authentication-defaults",
+    },
+    "x-readme-ref-name": {
+      "description": "x-readme-ref-name is added by our tooling after dereferencing in order to preserve original reference schema names.",
+      "hidden": true,
+      "locations": [],
+      "present": false,
     },
     "x-readme.code-samples": {
       "description": "The x-readme.code-samples extension allows you to custom, create static code samples on your API documentation.",
