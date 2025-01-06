@@ -19,6 +19,7 @@ describe('rdme openapi inspect', () => {
       '@readme/oas-examples/3.0/json/petstore.json',
       '@readme/oas-examples/3.0/json/readme.json',
       '@readme/oas-examples/3.0/json/readme-extensions.json',
+      '@readme/oas-examples/3.1/json/train-travel.json',
     ])('should generate a report for %s', spec => {
       return expect(run([require.resolve(spec)])).resolves.toMatchSnapshot();
     });
@@ -41,6 +42,10 @@ describe('rdme openapi inspect', () => {
       {
         spec: '@readme/oas-examples/3.0/json/schema-circular.json',
         feature: ['additionalProperties', 'circularRefs'],
+      },
+      {
+        spec: '@readme/oas-examples/3.1/json/train-travel.json',
+        feature: ['commonParameters'],
       },
 
       // Soft error cases where we may or may not contain the features we're querying for.

@@ -19,6 +19,7 @@ describe('#getSupportedFeatures', () => {
       'additionalProperties',
       'callbacks',
       'circularRefs',
+      'commonParameters',
       'discriminators',
       'links',
       'style',
