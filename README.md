@@ -137,7 +137,7 @@ To set this up, check out [1Password's documentation on the ReadMe shell plugin]
 
 ```sh
 export HTTPS_PROXY=https://proxy.example.com:5678
-rdme openapi upload
+rdme login
 ```
 
 # GitHub Actions Configuration
