@@ -52,7 +52,7 @@ const capitalizeSpecType = (type: string) =>
  */
 export default async function prepareOas(
   path: string | undefined,
-  command: `openapi ${OpenAPIAction}`,
+  command: 'openapi' | `openapi ${OpenAPIAction}`,
   opts: {
     /**
      * An optional title to replace the value in the `info.title` field.
@@ -212,7 +212,7 @@ export default async function prepareOas(
   const specVersion: string = api.info.version;
   debug(`version in spec: ${specVersion}`);
 
-  const commandsThatBundle: (typeof command)[] = ['openapi inspect', 'openapi reduce', 'openapi upload'];
+  const commandsThatBundle: (typeof command)[] = ['openapi inspect', 'openapi reduce', 'openapi'];
 
   if (commandsThatBundle.includes(command)) {
     api = await oas.bundle();
