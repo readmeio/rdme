@@ -1,3 +1,10 @@
+# [10.1.0-next.1](https://github.com/readmeio/rdme/compare/v10.0.0...v10.1.0-next.1) (2025-01-06)
+
+
+### Features
+
+* **openapi:** tooling upgrades ([#1126](https://github.com/readmeio/rdme/issues/1126)) ([6678d68](https://github.com/readmeio/rdme/commit/6678d689d6a41347e249b15a8f78b1ba1bde8154))
+
 # [10.0.0](https://github.com/readmeio/rdme/compare/v9.0.5...v10.0.0) (2024-12-13)
 
 
