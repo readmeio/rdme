@@ -1,3 +1,10 @@
+# [9.1.0](https://github.com/readmeio/rdme/compare/v9.0.5...v9.1.0) (2025-01-06)
+
+
+### Features
+
+* **v9:** backport openapi tooling etc. from v10 ([#1145](https://github.com/readmeio/rdme/issues/1145)) ([14828db](https://github.com/readmeio/rdme/commit/14828db4aa8d29c2509198ed2be53b91e9ce3fdb))
+
 ## [9.0.5](https://github.com/readmeio/rdme/compare/v9.0.4...v9.0.5) (2024-12-12)
 
 
