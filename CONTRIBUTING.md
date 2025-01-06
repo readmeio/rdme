@@ -101,13 +101,13 @@ When writing command logic, avoid using `console` statements (and correspondingl
 
 <summary><b>Updated Guidance</b></summary>
 
-When writing command logic, avoid using `console` statements. As modeled by [the `openapi upload` command](./src/commands/openapi/upload.ts), we use [`oclif`'s command methods](https://oclif.io/docs/commands/#command-methods) for writing to the console. This allows us to seamlessly integrate [`oclif`'s support for JSON output](https://oclif.io/docs/json/).
+When writing command logic, avoid using `console` statements. As modeled by [the `openapi upload` command](https://github.com/readmeio/rdme/blob/1e199064b0418b11b56ce08bad3d96ff2bead10c/src/commands/openapi/upload.ts) (only available in `v10` and above), we use [`oclif`'s command methods](https://oclif.io/docs/commands/#command-methods) for writing to the console. This allows us to seamlessly integrate [`oclif`'s support for JSON output](https://oclif.io/docs/json/).
 
 [The `@oclif/test` helper](https://github.com/oclif/test) automatically mocks any writes to `stdout` or `stderr`. This is great for properly asserting `rdme` outputs, but can be a bit confusing to develop with at first if you rely on `console.log` as part of your debugging since those statements won't get written to the console the way you'd expect.
 
 If you rely on `console.log` (or something similar) during development, you can do the following to view your output:
 
-1. Make sure you're using the `runCommand` helper in [this file](./__tests__/helpers/oclif.ts) and **not** `runCommandAndReturnResult`. See [this test file](./__tests__/commands/openapi/upload.test.ts) for an example.
+1. Make sure you're using the `runCommand` helper in [this file](https://github.com/readmeio/rdme/blob/1e199064b0418b11b56ce08bad3d96ff2bead10c/__tests__/helpers/oclif.ts) and **not** `runCommandAndReturnResult`. See [this test file](https://github.com/readmeio/rdme/blob/1e199064b0418b11b56ce08bad3d96ff2bead10c/__tests__/commands/openapi/upload.test.ts) for an example.
 
 2. Add a statement like this in your test:
 
