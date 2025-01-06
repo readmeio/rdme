@@ -1,3 +1,17 @@
+# [10.1.0-next.3](https://github.com/readmeio/rdme/compare/v10.1.0-next.2...v10.1.0-next.3) (2025-01-06)
+
+
+### Bug Fixes
+
+* **openapi:** type fixes in `prepareOas` ([#1141](https://github.com/readmeio/rdme/issues/1141)) ([fc55d28](https://github.com/readmeio/rdme/commit/fc55d285658e7918bc697398d7c2b10e8a39cacc))
+
+# [10.1.0-next.2](https://github.com/readmeio/rdme/compare/v10.1.0-next.1...v10.1.0-next.2) (2025-01-06)
+
+
+### Features
+
+* **openapi:** a fresh coat of paint on `openapi inspect` ([#1127](https://github.com/readmeio/rdme/issues/1127)) ([ff8c304](https://github.com/readmeio/rdme/commit/ff8c304c84cb58aa27754d9f5a85092e610ed1f4))
+
 # [10.1.0-next.1](https://github.com/readmeio/rdme/compare/v10.0.0...v10.1.0-next.1) (2025-01-06)
 
 

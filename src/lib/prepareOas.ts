@@ -1,3 +1,4 @@
+import type { CommandIdForTopic } from '../index.js';
 import type { OpenAPI } from 'openapi-types';
 
 import chalk from 'chalk';
@@ -36,6 +37,8 @@ function truthy<T>(value: T): value is Truthy<T> {
   return !!value;
 }
 
+type OpenAPIAction = CommandIdForTopic<'openapi'>;
+
 const capitalizeSpecType = (type: string) =>
   type === 'openapi' ? 'OpenAPI' : type.charAt(0).toUpperCase() + type.slice(1);
 
@@ -49,7 +52,7 @@ const capitalizeSpecType = (type: string) =>
  */
 export default async function prepareOas(
   path: string | undefined,
-  command: 'openapi convert' | 'openapi inspect' | 'openapi reduce' | 'openapi refs' | 'openapi validate' | 'openapi',
+  command: `openapi ${OpenAPIAction}`,
   opts: {
     /**
      * An optional title to replace the value in the `info.title` field.
@@ -78,14 +81,7 @@ export default async function prepareOas(
 
     const fileFindingSpinner = ora({ text: 'Looking for API definitions...', ...oraOptions() }).start();
 
-    let action: 'convert' | 'inspect' | 'reduce' | 'refs' | 'upload' | 'validate';
-    switch (command) {
-      case 'openapi':
-        action = 'upload';
-        break;
-      default:
-        action = command.split(' ')[1] as 'convert' | 'inspect' | 'reduce' | 'validate';
-    }
+    const action: OpenAPIAction = command.replace('openapi ', '') as OpenAPIAction;
 
     const jsonAndYamlFiles = readdirRecursive('.', true).filter(
       file =>
@@ -216,7 +212,9 @@ export default async function prepareOas(
   const specVersion: string = api.info.version;
   debug(`version in spec: ${specVersion}`);
 
-  if (['openapi', 'openapi inspect', 'openapi reduce'].includes(command)) {
+  const commandsThatBundle: (typeof command)[] = ['openapi inspect', 'openapi reduce', 'openapi upload', 'openapi refs'];
+
+  if (commandsThatBundle.includes(command)) {
     api = await oas.bundle();
 
     debug('spec bundled');
