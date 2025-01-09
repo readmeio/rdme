@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import chalk from 'chalk';
-import frontMatter from 'gray-matter';
+import grayMatter from 'gray-matter';
 import nock from 'nock';
 import { describe, beforeAll, afterAll, beforeEach, it, expect } from 'vitest';
 
@@ -52,14 +52,14 @@ describe('rdme changelogs', () => {
       let fileContents = fs.readFileSync(path.join(fullFixturesDir, '/existing-docs/simple-doc.md'));
       simpleDoc = {
         slug: 'simple-doc',
-        doc: frontMatter(fileContents),
+        doc: grayMatter(fileContents),
         hash: hashFileContents(fileContents),
       };
 
       fileContents = fs.readFileSync(path.join(fullFixturesDir, '/existing-docs/subdir/another-doc.md'));
       anotherDoc = {
         slug: 'another-doc',
-        doc: frontMatter(fileContents),
+        doc: grayMatter(fileContents),
         hash: hashFileContents(fileContents),
       };
     });
@@ -189,7 +189,7 @@ describe('rdme changelogs', () => {
     it('should create new changelog', async () => {
       const slug = 'new-doc';
       const id = '1234';
-      const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
+      const doc = grayMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
 
       const getMock = getAPIv1Mock()
@@ -217,7 +217,7 @@ describe('rdme changelogs', () => {
 
     it('should return creation info for dry run', async () => {
       const slug = 'new-doc';
-      const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
+      const doc = grayMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
 
       const getMock = getAPIv1Mock()
         .get(`/api/v1/changelogs/${slug}`)
@@ -250,7 +250,7 @@ describe('rdme changelogs', () => {
         help: "If you need help, email support@readme.io and include the following link to your API log: 'fake-metrics-uuid'.",
       };
 
-      const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/${folder}/${slug}.md`)));
+      const doc = grayMatter(fs.readFileSync(path.join(fullFixturesDir, `/${folder}/${slug}.md`)));
 
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/${folder}/${slug}.md`)));
 
@@ -289,7 +289,7 @@ describe('rdme changelogs', () => {
     it('should use provided slug', async () => {
       const slug = 'new-doc-slug';
       const id = '1234';
-      const doc = frontMatter(fs.readFileSync(path.join(fullFixturesDir, `/slug-docs/${slug}.md`)));
+      const doc = grayMatter(fs.readFileSync(path.join(fullFixturesDir, `/slug-docs/${slug}.md`)));
       const hash = hashFileContents(fs.readFileSync(path.join(fullFixturesDir, `/slug-docs/${slug}.md`)));
 
       const getMock = getAPIv1Mock()
