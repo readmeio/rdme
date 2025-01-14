@@ -2,7 +2,7 @@ import type { ExpectationResult } from '@vitest/expect';
 import type { AnySchema } from 'ajv';
 
 import betterAjvErrors from '@readme/better-ajv-errors';
-import Ajv from 'ajv';
+import { Ajv } from 'ajv';
 import jsYaml from 'js-yaml';
 
 interface CustomMatchers<R = unknown> {
@@ -24,7 +24,6 @@ export function toBeValidSchema(
   /** The JSON schema file */
   schema: AnySchema,
 ): ExpectationResult {
-  // @ts-expect-error this still works, not sure why TS is flagging it
   const ajv = new Ajv({ strictTypes: false, strictTuples: false });
 
   const data = jsYaml.load(yaml);
