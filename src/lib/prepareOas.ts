@@ -212,7 +212,12 @@ export default async function prepareOas(
   const specVersion: string = api.info.version;
   debug(`version in spec: ${specVersion}`);
 
-  const commandsThatBundle: (typeof command)[] = ['openapi inspect', 'openapi reduce', 'openapi upload', 'openapi refs'];
+  const commandsThatBundle: (typeof command)[] = [
+    'openapi inspect',
+    'openapi reduce',
+    'openapi upload',
+    'openapi refs',
+  ];
 
   if (commandsThatBundle.includes(command)) {
     api = await oas.bundle();
