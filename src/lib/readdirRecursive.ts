@@ -21,7 +21,7 @@ export default function readdirRecursive(folderToSearch: string, ignoreGit = fal
   let ignoreFilter: Ignore;
   if (ignoreGit) {
     // Initialize ignore filter with `.git` directory
-    ignoreFilter = ignore.default().add(path.join(folderToSearch, '.git/'));
+    ignoreFilter = ignore().add(path.join(folderToSearch, '.git/'));
     // If .gitignore file exists, load its contents into ignore filter
     if (fs.existsSync(path.join(folderToSearch, '.gitignore'))) {
       debug('.gitignore file found, adding to ignore filter');
