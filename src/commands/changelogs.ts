@@ -2,7 +2,7 @@ import { Args, Flags } from '@oclif/core';
 
 import BaseCommand from '../lib/baseCommand.js';
 import { githubFlag, keyFlag } from '../lib/flags.js';
-import syncDocsPath from '../lib/syncDocsPath.js';
+import syncDocsPath from '../lib/syncDocsPath.legacy.js';
 
 import DocsCommand from './docs/index.js';
 

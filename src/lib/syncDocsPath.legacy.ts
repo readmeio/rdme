@@ -156,6 +156,8 @@ function sortFiles(filePaths: string[]): ReadDocMetadata[] {
  * Takes a path (either to a directory of files or to a single file)
  * and syncs those (either via POST or PUT) to ReadMe.
  * @returns A promise-wrapped string with the results
+ *
+ * @deprecated This is for APIv1 only. Use `syncDocsPath.ts` instead, if possible.
  */
 export default async function syncDocsPath(
   this: PageCommand,
