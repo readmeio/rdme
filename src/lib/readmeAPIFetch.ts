@@ -19,7 +19,7 @@ const SUCCESS_NO_CONTENT = 204;
  * This contains a few pieces of information about a file so
  * we can properly construct a source URL for it.
  */
-export interface FilePathDetails {
+interface FilePathDetails {
   /** The URL or local file path */
   filePath: string;
   /** This is derived from the `oas-normalize` `type` property. */
