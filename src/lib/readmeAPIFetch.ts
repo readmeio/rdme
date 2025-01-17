@@ -19,7 +19,7 @@ const SUCCESS_NO_CONTENT = 204;
  * This contains a few pieces of information about a file so
  * we can properly construct a source URL for it.
  */
-export interface FilePathDetails {
+interface FilePathDetails {
   /** The URL or local file path */
   filePath: string;
   /** This is derived from the `oas-normalize` `type` property. */
@@ -348,10 +348,30 @@ export async function handleAPIv1Res(res: Response, rejectOnJsonError = true) {
  *
  * If we receive non-JSON responses, we consider them errors and throw them.
  */
-export async function handleAPIv2Res<T extends Command>(this: T, res: Response) {
+export async function handleAPIv2Res<T extends Command>(
+  this: T,
+  res: Response,
+  /**
+   * If we're making a request where we don't care about the body (e.g. a HEAD or DELETE request),
+   * we can skip parsing the JSON body using this flag.
+   */
+  skipJsonParsing = false,
+) {
   const contentType = res.headers.get('content-type') || '';
   const extension = mime.extension(contentType) || contentType.includes('json') ? 'json' : false;
-  if (extension === 'json') {
+  if (res.status === SUCCESS_NO_CONTENT) {
+    // to prevent a memory leak, we should still consume the response body? even though we don't use it?
+    // https://x.com/cramforce/status/1762142087930433999
+    const body = await res.text();
+    this.debug(`received status code ${res.status} from ${res.url} with no content: ${body}`);
+    return {};
+  } else if (skipJsonParsing) {
+    // to prevent a memory leak, we should still consume the response body? even though we don't use it?
+    // https://x.com/cramforce/status/1762142087930433999
+    const body = await res.text();
+    this.debug(`received status code ${res.status} from ${res.url} and not parsing JSON b/c of flag: ${body}`);
+    return {};
+  } else if (extension === 'json') {
     // TODO: type this better
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const body = (await res.json()) as any;
@@ -360,10 +380,6 @@ export async function handleAPIv2Res<T extends Command>(this: T, res: Response) 
       throw new APIv2Error(body as APIv2ErrorResponse);
     }
     return body;
-  }
-  if (res.status === SUCCESS_NO_CONTENT) {
-    this.debug(`received status code ${res.status} from ${res.url} with no content`);
-    return {};
   }
 
   // If we receive a non-JSON response, it's likely an error.
