@@ -1,3 +1,17 @@
+## [10.1.1](https://github.com/readmeio/rdme/compare/v10.1.0...v10.1.1) (2025-01-28)
+
+
+### Bug Fixes
+
+* **openapi:** adding support for OpenAPI 3.1.1, 3.0.4 and basic auth fetches ([#1153](https://github.com/readmeio/rdme/issues/1153)) ([6fad02b](https://github.com/readmeio/rdme/commit/6fad02bd257337cd69deb8d12a8cb3bfd9cffc11)), closes [#1152](https://github.com/readmeio/rdme/issues/1152)
+
+## [10.1.1-next.1](https://github.com/readmeio/rdme/compare/v10.1.0...v10.1.1-next.1) (2025-01-25)
+
+
+### Bug Fixes
+
+* **openapi:** adding support for OpenAPI 3.1.1, 3.0.4 and basic auth fetches ([#1153](https://github.com/readmeio/rdme/issues/1153)) ([6fad02b](https://github.com/readmeio/rdme/commit/6fad02bd257337cd69deb8d12a8cb3bfd9cffc11)), closes [#1152](https://github.com/readmeio/rdme/issues/1152)
+
 # [10.1.0](https://github.com/readmeio/rdme/compare/v10.0.0...v10.1.0) (2025-01-14)
 
 
