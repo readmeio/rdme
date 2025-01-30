@@ -40,7 +40,10 @@ export interface PageMetadata<T = Record<string, unknown>> {
 export default function readPage(filePath: string): PageMetadata {
   debug(`reading file ${filePath}`);
   const rawFileContents = fs.readFileSync(filePath, 'utf8');
-  const matter = grayMatter(rawFileContents);
+  // by default, grayMatter maintains a buggy cache with the page data,
+  // so we pass an empty object as second argument to avoid it entirely
+  // (so far we've seen this issue crop up in tests)
+  const matter = grayMatter(rawFileContents, {});
   const { content, data } = matter;
   debug(`front matter for ${filePath}: ${JSON.stringify(matter)}`);
 
