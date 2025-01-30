@@ -1,5 +1,5 @@
 import type { SpecFileType } from './prepareOas.js';
-import type { Command } from '@oclif/core';
+import type { CommandClass } from '../index.js';
 
 import path from 'node:path';
 
@@ -218,8 +218,8 @@ export async function readmeAPIv1Fetch(
  * @param fileOpts optional object containing information about the file being sent.
  * We use this to construct a full source URL for the file.
  */
-export async function readmeAPIv2Fetch<T extends Command>(
-  this: T,
+export async function readmeAPIv2Fetch(
+  this: CommandClass['prototype'],
   pathname: string,
   options: RequestInit = { headers: new Headers() },
   fileOpts: FilePathDetails = { filePath: '', fileType: false },
@@ -351,8 +351,8 @@ export async function handleAPIv1Res(res: Response, rejectOnJsonError = true) {
  *
  * If we receive non-JSON responses, we consider them errors and throw them.
  */
-export async function handleAPIv2Res<T extends Command>(
-  this: T,
+export async function handleAPIv2Res(
+  this: CommandClass['prototype'],
   res: Response,
   /**
    * If we're making a request where we don't care about the body (e.g. a HEAD or DELETE request),
