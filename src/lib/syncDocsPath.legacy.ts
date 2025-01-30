@@ -122,8 +122,8 @@ const byParentDoc = (left: PageMetadata, right: PageMetadata) => {
   return (right.data.parentDoc ? 1 : 0) - (left.data.parentDoc ? 1 : 0);
 };
 
-function sortFiles(filePaths: string[]): PageMetadata[] {
-  const files = filePaths.map(readPage).sort(byParentDoc);
+function sortFiles(this: ChangelogsCommand, filePaths: string[]): PageMetadata[] {
+  const files = filePaths.map(file => readPage.call(this, file)).sort(byParentDoc);
   const filesBySlug = files.reduce<Record<string, PageMetadata>>((bySlug, obj) => {
     // eslint-disable-next-line no-param-reassign
     bySlug[obj.slug] = obj;
@@ -185,7 +185,7 @@ export default async function syncDocsPath(
     let sortedFiles;
 
     try {
-      sortedFiles = sortFiles(files);
+      sortedFiles = sortFiles.call(this, files);
     } catch (e) {
       return Promise.reject(e);
     }
@@ -209,7 +209,7 @@ export default async function syncDocsPath(
       );
     }
 
-    const fileData = readPage(pathInput);
+    const fileData = readPage.call(this, pathInput);
     output = await pushDoc.call(this, selectedVersion, fileData);
   }
   return Promise.resolve(chalk.green(output));
