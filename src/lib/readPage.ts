@@ -21,6 +21,8 @@ export interface PageMetadata<T = Record<string, unknown>> {
   filePath: string;
   /**
    * A hash of the file contents (including the front matter)
+   *
+   * @deprecated this is no longer used in our API.
    */
   hash: string;
   /**
