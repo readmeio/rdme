@@ -1,10 +1,11 @@
+import type ChangelogsCommand from '../commands/changelogs.js';
+import type DocsUploadCommand from '../commands/docs/upload.js';
+
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 
 import grayMatter from 'gray-matter';
-
-import { debug } from './logger.js';
 
 export interface PageMetadata<T = Record<string, unknown>> {
   /**
@@ -37,15 +38,15 @@ export interface PageMetadata<T = Record<string, unknown>> {
  * @param {String} filePath path to the HTML/Markdown file
  *  (file extension must end in `.html`, `.md`., or `.markdown`)
  */
-export default function readPage(filePath: string): PageMetadata {
-  debug(`reading file ${filePath}`);
+export default function readPage(this: ChangelogsCommand | DocsUploadCommand, filePath: string): PageMetadata {
+  this.debug(`reading file ${filePath}`);
   const rawFileContents = fs.readFileSync(filePath, 'utf8');
   // by default, grayMatter maintains a buggy cache with the page data,
   // so we pass an empty object as second argument to avoid it entirely
   // (so far we've seen this issue crop up in tests)
   const matter = grayMatter(rawFileContents, {});
   const { content, data } = matter;
-  debug(`front matter for ${filePath}: ${JSON.stringify(matter)}`);
+  this.debug(`front matter for ${filePath}: ${JSON.stringify(matter)}`);
 
   // Stripping the subdirectories and markdown extension from the filename and lowercasing to get the default slug.
   const slug = matter.data.slug || path.basename(filePath).replace(path.extname(filePath), '').toLowerCase();
