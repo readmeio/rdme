@@ -6,18 +6,26 @@ import grayMatter from 'gray-matter';
 
 import { debug } from './logger.js';
 
-export interface ReadDocMetadata {
-  /** The contents of the file below the YAML front matter */
+export interface PageMetadata<T = Record<string, unknown>> {
+  /**
+   * The contents of the Markdown file below the YAML front matter
+   */
   content: string;
-  /** A JSON object with the YAML front matter */
-  data: Record<string, unknown>;
-  /** The original filePath */
+  /**
+   * A JSON object representation of the the YAML front matter
+   */
+  data: T;
+  /**
+   * The path to the file
+   */
   filePath: string;
   /**
    * A hash of the file contents (including the front matter)
    */
   hash: string;
-  /** The page slug */
+  /**
+   * The page slug from front matter (and falls back to the filename without the extension)
+   */
   slug: string;
 }
 
@@ -27,7 +35,7 @@ export interface ReadDocMetadata {
  * @param {String} filePath path to the HTML/Markdown file
  *  (file extension must end in `.html`, `.md`., or `.markdown`)
  */
-export default function readDoc(filePath: string): ReadDocMetadata {
+export default function readPage(filePath: string): PageMetadata {
   debug(`reading file ${filePath}`);
   const rawFileContents = fs.readFileSync(filePath, 'utf8');
   const matter = grayMatter(rawFileContents);
