@@ -10,7 +10,7 @@ import { runCommandAndReturnResult } from '../../helpers/oclif.js';
 
 const successfulReduction = () => 'Your reduced API definition has been saved to output.json! 🤏';
 
-let consoleInfoSpy: MockInstance;
+let consoleInfoSpy: MockInstance<typeof console.info>;
 const getCommandOutput = () => consoleInfoSpy.mock.calls.join('\n\n');
 
 describe('rdme openapi reduce', () => {
