@@ -19,7 +19,7 @@ import { toBeValidSchema } from '../helpers/vitest.matchers.js';
 
 const testWorkingDir = process.cwd();
 
-let consoleInfoSpy: MockInstance;
+let consoleInfoSpy: MockInstance<typeof console.info>;
 const getCommandOutput = () => consoleInfoSpy.mock.calls.join('\n\n');
 
 const key = 'API_KEY';

@@ -216,7 +216,7 @@ describe('#readmeAPIv1Fetch()', () => {
   });
 
   describe('warning response header', () => {
-    let consoleWarnSpy: MockInstance;
+    let consoleWarnSpy: MockInstance<typeof console.warn>;
 
     const getWarningCommandOutput = () => {
       return [consoleWarnSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');

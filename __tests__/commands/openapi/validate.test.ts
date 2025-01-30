@@ -10,7 +10,7 @@ import Command from '../../../src/commands/openapi/validate.js';
 import { after, before } from '../../helpers/get-gha-setup.js';
 import { runCommandAndReturnResult, runCommandWithHooks } from '../../helpers/oclif.js';
 
-let consoleInfoSpy: MockInstance;
+let consoleInfoSpy: MockInstance<typeof console.info>;
 
 const getCommandOutput = () => {
   return [consoleInfoSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');

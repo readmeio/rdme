@@ -14,7 +14,7 @@ describe('#getNodeVersion()', () => {
 });
 
 describe('#getPkgVersion()', () => {
-  let consoleErrorSpy: MockInstance;
+  let consoleErrorSpy: MockInstance<typeof console.error>;
 
   beforeEach(() => {
     consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
