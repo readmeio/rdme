@@ -127,6 +127,8 @@ function sanitizeHeaders(headers: Headers) {
  * @param pathname the pathname to make the request to. Must have a leading slash.
  * @param fileOpts optional object containing information about the file being sent.
  * We use this to construct a full source URL for the file.
+ *
+ * @deprecated This is for APIv1 only. Use {@link readmeAPIv2Fetch} instead, if possible.
  */
 export async function readmeAPIv1Fetch(
   pathname: string,
@@ -316,6 +318,7 @@ export async function readmeAPIv2Fetch<T extends Command>(
  * an `APIv1Error` if the JSON body contains an `error` property. If set to false,
  * the function will return a resolved promise containing the JSON object.
  *
+ * @deprecated This is for APIv1 only. Use {@link handleAPIv2Res} instead, if possible.
  */
 export async function handleAPIv1Res(res: Response, rejectOnJsonError = true) {
   const contentType = res.headers.get('content-type') || '';
@@ -411,6 +414,7 @@ function filterOutFalsyHeaders(inputHeaders: Headers) {
 /**
  * Returns the basic auth header and any other defined headers for use in `fetch` calls against ReadMe API v1.
  *
+ * @deprecated This is for APIv1 only.
  */
 export function cleanAPIv1Headers(
   key: string,

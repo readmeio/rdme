@@ -31,6 +31,8 @@ export type APIv2ErrorResponse = Partial<{
 
 /**
  * Error class for handling ReadMe API v1 errors.
+ *
+ * @deprecated Use {@link APIv2Error} instead.
  */
 export class APIv1Error extends Error {
   code: string;
