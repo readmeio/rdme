@@ -113,7 +113,7 @@ exports[`rdme docs upload > given that the file path is a directory > should han
    - legacy-category (__tests__/__fixtures__/docs/mixed-docs/legacy-category.md)
 ⏭️ The following 1 page(s) will be skipped due to no front matter data:
    - doc-sans-attributes (__tests__/__fixtures__/docs/mixed-docs/doc-sans-attributes.md)
-Unable to fetch data about the following 2 page(s):
+🚨 Unable to fetch data about the following 2 page(s):
    - __tests__/__fixtures__/docs/mixed-docs/new-doc-slug.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
    - __tests__/__fixtures__/docs/mixed-docs/simple-doc.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
 ",
@@ -137,9 +137,9 @@ exports[`rdme docs upload > given that the file path is a directory > should han
    - invalid-attributes (__tests__/__fixtures__/docs/mixed-docs/invalid-attributes.md)
 🔄 Successfully updated 1 page(s) in ReadMe:
    - legacy-category (__tests__/__fixtures__/docs/mixed-docs/legacy-category.md)
-Skipped 1 page(s) in ReadMe due to no front matter data:
+⏭️ Skipped 1 page(s) in ReadMe due to no front matter data:
    - doc-sans-attributes (__tests__/__fixtures__/docs/mixed-docs/doc-sans-attributes.md)
-Received errors when attempting to upload 2 page(s):
+🚨 Received errors when attempting to upload 2 page(s):
    - __tests__/__fixtures__/docs/mixed-docs/new-doc-slug.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
    - __tests__/__fixtures__/docs/mixed-docs/simple-doc.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
 ",

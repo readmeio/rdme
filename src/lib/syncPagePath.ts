@@ -375,7 +375,7 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
     this.log(
       dryRun
         ? `⏭️ The following ${results.skipped.length} page(s) will be skipped due to no front matter data:`
-        : `Skipped ${results.skipped.length} page(s) in ReadMe due to no front matter data:`,
+        : `⏭️ Skipped ${results.skipped.length} page(s) in ReadMe due to no front matter data:`,
     );
     results.skipped.forEach(({ filePath, slug }) => {
       this.log(`   - ${slug} (${chalk.underline(filePath)})`);
@@ -388,8 +388,8 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
     } else {
       this.log(
         dryRun
-          ? `Unable to fetch data about the following ${results.failed.length} page(s):`
-          : `Received errors when attempting to upload ${results.failed.length} page(s):`,
+          ? `🚨 Unable to fetch data about the following ${results.failed.length} page(s):`
+          : `🚨 Received errors when attempting to upload ${results.failed.length} page(s):`,
       );
       results.failed.forEach(({ error, filePath }) => {
         let errorMessage = error.message || 'unknown error';
