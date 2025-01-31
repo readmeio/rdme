@@ -36,10 +36,7 @@ export const readmeAPIv2Oas = {
           "Retrieves all of the API schemas that are set up for your developer hub. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: {
-              type: 'string',
-              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
-            },
+            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
             in: 'path',
             name: 'version',
             required: true,
@@ -54,9 +51,7 @@ export const readmeAPIv2Oas = {
                 schema: {
                   type: 'object',
                   properties: {
-                    total: {
-                      type: 'number',
-                    },
+                    total: { type: 'number' },
                     data: {
                       type: 'array',
                       items: {
@@ -147,16 +142,12 @@ export const readmeAPIv2Oas = {
               schema: {
                 type: 'object',
                 properties: {
-                  schema: {
-                    description: 'The API definition.',
-                  },
+                  schema: { description: 'The API definition.' },
                   upload_source: {
                     default: 'form',
                     description: 'The source that the API definition is being uploaded through.',
                   },
-                  url: {
-                    description: 'The URL where the API definition is hosted.',
-                  },
+                  url: { description: 'The URL where the API definition is hosted.' },
                 },
                 additionalProperties: false,
               },
@@ -165,10 +156,7 @@ export const readmeAPIv2Oas = {
         },
         parameters: [
           {
-            schema: {
-              type: 'string',
-              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
-            },
+            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
             in: 'path',
             name: 'version',
             required: true,
@@ -227,20 +215,14 @@ export const readmeAPIv2Oas = {
           "Retrieves information about a specific API schema on your developer hub. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: {
-              type: 'string',
-              pattern: '(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml))',
-            },
+            schema: { type: 'string', pattern: '(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml))' },
             in: 'path',
             name: 'filename',
             required: true,
             description: 'The filename of the API definition to retrieve.',
           },
           {
-            schema: {
-              type: 'string',
-              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
-            },
+            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
             in: 'path',
             name: 'version',
             required: true,
@@ -317,11 +299,7 @@ export const readmeAPIv2Oas = {
                             '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
                           description: 'A URI to the API definition resource.',
                         },
-                        schema: {
-                          type: 'object',
-                          additionalProperties: {},
-                          description: 'The API schema.',
-                        },
+                        schema: { type: 'object', additionalProperties: {}, description: 'The API schema.' },
                       },
                       required: ['created_at', 'filename', 'source', 'type', 'updated_at', 'upload', 'uri', 'schema'],
                       additionalProperties: false,
@@ -347,16 +325,12 @@ export const readmeAPIv2Oas = {
               schema: {
                 type: 'object',
                 properties: {
-                  schema: {
-                    description: 'The API definition.',
-                  },
+                  schema: { description: 'The API definition.' },
                   upload_source: {
                     default: 'form',
                     description: 'The source that the API definition is being uploaded through.',
                   },
-                  url: {
-                    description: 'The URL where the API definition is hosted.',
-                  },
+                  url: { description: 'The URL where the API definition is hosted.' },
                 },
                 additionalProperties: false,
               },
@@ -365,20 +339,14 @@ export const readmeAPIv2Oas = {
         },
         parameters: [
           {
-            schema: {
-              type: 'string',
-              pattern: '(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml))',
-            },
+            schema: { type: 'string', pattern: '(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml))' },
             in: 'path',
             name: 'filename',
             required: true,
             description: 'The filename of the API definition to retrieve.',
           },
           {
-            schema: {
-              type: 'string',
-              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
-            },
+            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
             in: 'path',
             name: 'version',
             required: true,
@@ -437,34 +405,21 @@ export const readmeAPIv2Oas = {
           "Get a collection of changelogs.\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: {
-              type: 'number',
-              minimum: 1,
-              default: 1,
-            },
+            schema: { type: 'number', minimum: 1, default: 1 },
             in: 'query',
             name: 'page',
             required: false,
             description: 'Used to specify further pages (starts at 1).',
           },
           {
-            schema: {
-              type: 'number',
-              minimum: 1,
-              maximum: 100,
-              default: 10,
-            },
+            schema: { type: 'number', minimum: 1, maximum: 100, default: 10 },
             in: 'query',
             name: 'per_page',
             required: false,
             description: 'Number of items to include in pagination (up to 100, defaults to 10).',
           },
           {
-            schema: {
-              type: 'string',
-              enum: ['public', 'anyone_with_link', 'all'],
-              default: 'all',
-            },
+            schema: { type: 'string', enum: ['public', 'anyone_with_link', 'all'], default: 'all' },
             in: 'query',
             name: 'visibility',
             required: false,
@@ -480,34 +435,16 @@ export const readmeAPIv2Oas = {
                 schema: {
                   type: 'object',
                   properties: {
-                    total: {
-                      type: 'number',
-                    },
-                    page: {
-                      type: 'number',
-                    },
-                    per_page: {
-                      type: 'number',
-                    },
+                    total: { type: 'number' },
+                    page: { type: 'number' },
+                    per_page: { type: 'number' },
                     paging: {
                       type: 'object',
                       properties: {
-                        next: {
-                          type: 'string',
-                          nullable: true,
-                        },
-                        previous: {
-                          type: 'string',
-                          nullable: true,
-                        },
-                        first: {
-                          type: 'string',
-                          nullable: true,
-                        },
-                        last: {
-                          type: 'string',
-                          nullable: true,
-                        },
+                        next: { type: 'string', nullable: true },
+                        previous: { type: 'string', nullable: true },
+                        first: { type: 'string', nullable: true },
+                        last: { type: 'string', nullable: true },
                       },
                       required: ['next', 'previous', 'first', 'last'],
                       additionalProperties: false,
@@ -520,11 +457,7 @@ export const readmeAPIv2Oas = {
                           author: {
                             type: 'object',
                             properties: {
-                              id: {
-                                type: 'string',
-                                nullable: true,
-                                description: 'User ID of the changelog author.',
-                              },
+                              id: { type: 'string', nullable: true, description: 'User ID of the changelog author.' },
                               name: {
                                 type: 'string',
                                 nullable: true,
@@ -536,12 +469,7 @@ export const readmeAPIv2Oas = {
                           },
                           content: {
                             type: 'object',
-                            properties: {
-                              body: {
-                                type: 'string',
-                                nullable: true,
-                              },
-                            },
+                            properties: { body: { type: 'string', nullable: true } },
                             required: ['body'],
                             additionalProperties: false,
                           },
@@ -553,10 +481,7 @@ export const readmeAPIv2Oas = {
                           metadata: {
                             type: 'object',
                             properties: {
-                              description: {
-                                type: 'string',
-                                nullable: true,
-                              },
+                              description: { type: 'string', nullable: true },
                               image: {
                                 type: 'object',
                                 properties: {
@@ -567,11 +492,7 @@ export const readmeAPIv2Oas = {
                                     description:
                                       'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
                                   },
-                                  url: {
-                                    type: 'string',
-                                    format: 'uri',
-                                    nullable: true,
-                                  },
+                                  url: { type: 'string', format: 'uri', nullable: true },
                                 },
                                 required: ['uri', 'url'],
                                 additionalProperties: false,
@@ -582,10 +503,7 @@ export const readmeAPIv2Oas = {
                                 description:
                                   'A comma-separated list of keywords to place into your changelog metadata.',
                               },
-                              title: {
-                                type: 'string',
-                                nullable: true,
-                              },
+                              title: { type: 'string', nullable: true },
                             },
                             required: ['description', 'image', 'keywords', 'title'],
                             additionalProperties: false,
@@ -602,12 +520,8 @@ export const readmeAPIv2Oas = {
                             },
                             additionalProperties: false,
                           },
-                          slug: {
-                            type: 'string',
-                          },
-                          title: {
-                            type: 'string',
-                          },
+                          slug: { type: 'string' },
+                          title: { type: 'string' },
                           type: {
                             type: 'string',
                             enum: ['none', 'added', 'fixed', 'improved', 'deprecated', 'removed'],
@@ -672,11 +586,7 @@ export const readmeAPIv2Oas = {
           {
             schema: {
               anyOf: [
-                {
-                  type: 'string',
-                  pattern: '[a-f\\d]{24}',
-                  description: 'A unique identifier for the resource.',
-                },
+                { type: 'string', pattern: '[a-f\\d]{24}', description: 'A unique identifier for the resource.' },
                 {
                   type: 'string',
                   pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
@@ -703,11 +613,7 @@ export const readmeAPIv2Oas = {
                         author: {
                           type: 'object',
                           properties: {
-                            id: {
-                              type: 'string',
-                              nullable: true,
-                              description: 'User ID of the changelog author.',
-                            },
+                            id: { type: 'string', nullable: true, description: 'User ID of the changelog author.' },
                             name: {
                               type: 'string',
                               nullable: true,
@@ -719,12 +625,7 @@ export const readmeAPIv2Oas = {
                         },
                         content: {
                           type: 'object',
-                          properties: {
-                            body: {
-                              type: 'string',
-                              nullable: true,
-                            },
-                          },
+                          properties: { body: { type: 'string', nullable: true } },
                           required: ['body'],
                           additionalProperties: false,
                         },
@@ -736,10 +637,7 @@ export const readmeAPIv2Oas = {
                         metadata: {
                           type: 'object',
                           properties: {
-                            description: {
-                              type: 'string',
-                              nullable: true,
-                            },
+                            description: { type: 'string', nullable: true },
                             image: {
                               type: 'object',
                               properties: {
@@ -750,11 +648,7 @@ export const readmeAPIv2Oas = {
                                   description:
                                     'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
                                 },
-                                url: {
-                                  type: 'string',
-                                  format: 'uri',
-                                  nullable: true,
-                                },
+                                url: { type: 'string', format: 'uri', nullable: true },
                               },
                               required: ['uri', 'url'],
                               additionalProperties: false,
@@ -764,10 +658,7 @@ export const readmeAPIv2Oas = {
                               nullable: true,
                               description: 'A comma-separated list of keywords to place into your changelog metadata.',
                             },
-                            title: {
-                              type: 'string',
-                              nullable: true,
-                            },
+                            title: { type: 'string', nullable: true },
                           },
                           required: ['description', 'image', 'keywords', 'title'],
                           additionalProperties: false,
@@ -784,12 +675,8 @@ export const readmeAPIv2Oas = {
                           },
                           additionalProperties: false,
                         },
-                        slug: {
-                          type: 'string',
-                        },
-                        title: {
-                          type: 'string',
-                        },
+                        slug: { type: 'string' },
+                        title: { type: 'string' },
                         type: {
                           type: 'string',
                           enum: ['none', 'added', 'fixed', 'improved', 'deprecated', 'removed'],
@@ -869,10 +756,7 @@ export const readmeAPIv2Oas = {
                   content: {
                     type: 'object',
                     properties: {
-                      body: {
-                        type: 'string',
-                        nullable: true,
-                      },
+                      body: { type: 'string', nullable: true },
                       type: {
                         type: 'string',
                         enum: ['markdown', 'html'],
@@ -885,34 +769,17 @@ export const readmeAPIv2Oas = {
                   metadata: {
                     type: 'object',
                     properties: {
-                      description: {
-                        type: 'string',
-                        nullable: true,
-                      },
+                      description: { type: 'string', nullable: true },
                       image: {
                         type: 'object',
                         properties: {
-                          uri: {
-                            type: 'string',
-                            pattern: '\\/images\\/([a-f\\d]{24})',
-                            nullable: true,
-                          },
-                          url: {
-                            type: 'string',
-                            format: 'uri',
-                            nullable: true,
-                          },
+                          uri: { type: 'string', pattern: '\\/images\\/([a-f\\d]{24})', nullable: true },
+                          url: { type: 'string', format: 'uri', nullable: true },
                         },
                         additionalProperties: false,
                       },
-                      keywords: {
-                        type: 'string',
-                        nullable: true,
-                      },
-                      title: {
-                        type: 'string',
-                        nullable: true,
-                      },
+                      keywords: { type: 'string', nullable: true },
+                      title: { type: 'string', nullable: true },
                     },
                     additionalProperties: false,
                   },
@@ -928,14 +795,8 @@ export const readmeAPIv2Oas = {
                     },
                     additionalProperties: false,
                   },
-                  slug: {
-                    type: 'string',
-                    pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
-                  },
-                  title: {
-                    type: 'string',
-                    nullable: true,
-                  },
+                  slug: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
+                  title: { type: 'string', nullable: true },
                 },
                 required: ['title'],
                 additionalProperties: false,
@@ -946,10 +807,7 @@ export const readmeAPIv2Oas = {
         },
         parameters: [
           {
-            schema: {
-              type: 'string',
-              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
-            },
+            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
             in: 'path',
             name: 'version',
             required: true,
@@ -981,10 +839,7 @@ export const readmeAPIv2Oas = {
                         content: {
                           type: 'object',
                           properties: {
-                            body: {
-                              type: 'string',
-                              nullable: true,
-                            },
+                            body: { type: 'string', nullable: true },
                             type: {
                               type: 'string',
                               enum: ['markdown', 'html'],
@@ -998,10 +853,7 @@ export const readmeAPIv2Oas = {
                         metadata: {
                           type: 'object',
                           properties: {
-                            description: {
-                              type: 'string',
-                              nullable: true,
-                            },
+                            description: { type: 'string', nullable: true },
                             image: {
                               type: 'object',
                               properties: {
@@ -1012,11 +864,7 @@ export const readmeAPIv2Oas = {
                                   description:
                                     'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
                                 },
-                                url: {
-                                  type: 'string',
-                                  format: 'uri',
-                                  nullable: true,
-                                },
+                                url: { type: 'string', format: 'uri', nullable: true },
                               },
                               required: ['uri', 'url'],
                               additionalProperties: false,
@@ -1027,10 +875,7 @@ export const readmeAPIv2Oas = {
                               description:
                                 'A comma-separated list of keywords to place into your custom page metadata.',
                             },
-                            title: {
-                              type: 'string',
-                              nullable: true,
-                            },
+                            title: { type: 'string', nullable: true },
                           },
                           required: ['description', 'image', 'keywords', 'title'],
                           additionalProperties: false,
@@ -1047,14 +892,8 @@ export const readmeAPIv2Oas = {
                           },
                           additionalProperties: false,
                         },
-                        slug: {
-                          type: 'string',
-                          pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
-                        },
-                        title: {
-                          type: 'string',
-                          nullable: true,
-                        },
+                        slug: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
+                        title: { type: 'string', nullable: true },
                         links: {
                           type: 'object',
                           properties: {
@@ -1109,10 +948,7 @@ export const readmeAPIv2Oas = {
           "Get a collection of custom pages. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: {
-              type: 'string',
-              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
-            },
+            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
             in: 'path',
             name: 'version',
             required: true,
@@ -1127,9 +963,7 @@ export const readmeAPIv2Oas = {
                 schema: {
                   type: 'object',
                   properties: {
-                    total: {
-                      type: 'number',
-                    },
+                    total: { type: 'number' },
                     data: {
                       type: 'array',
                       items: {
@@ -1149,10 +983,7 @@ export const readmeAPIv2Oas = {
                           content: {
                             type: 'object',
                             properties: {
-                              body: {
-                                type: 'string',
-                                nullable: true,
-                              },
+                              body: { type: 'string', nullable: true },
                               type: {
                                 type: 'string',
                                 enum: ['markdown', 'html'],
@@ -1166,10 +997,7 @@ export const readmeAPIv2Oas = {
                           metadata: {
                             type: 'object',
                             properties: {
-                              description: {
-                                type: 'string',
-                                nullable: true,
-                              },
+                              description: { type: 'string', nullable: true },
                               image: {
                                 type: 'object',
                                 properties: {
@@ -1180,11 +1008,7 @@ export const readmeAPIv2Oas = {
                                     description:
                                       'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
                                   },
-                                  url: {
-                                    type: 'string',
-                                    format: 'uri',
-                                    nullable: true,
-                                  },
+                                  url: { type: 'string', format: 'uri', nullable: true },
                                 },
                                 required: ['uri', 'url'],
                                 additionalProperties: false,
@@ -1195,10 +1019,7 @@ export const readmeAPIv2Oas = {
                                 description:
                                   'A comma-separated list of keywords to place into your custom page metadata.',
                               },
-                              title: {
-                                type: 'string',
-                                nullable: true,
-                              },
+                              title: { type: 'string', nullable: true },
                             },
                             required: ['description', 'image', 'keywords', 'title'],
                             additionalProperties: false,
@@ -1215,14 +1036,8 @@ export const readmeAPIv2Oas = {
                             },
                             additionalProperties: false,
                           },
-                          slug: {
-                            type: 'string',
-                            pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
-                          },
-                          title: {
-                            type: 'string',
-                            nullable: true,
-                          },
+                          slug: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
+                          title: { type: 'string', nullable: true },
                           links: {
                             type: 'object',
                             properties: {
@@ -1280,20 +1095,14 @@ export const readmeAPIv2Oas = {
           "Retrieves a custom page from the custom page section of your developer hub. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: {
-              type: 'string',
-              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
-            },
+            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
             in: 'path',
             name: 'version',
             required: true,
             description: 'Project version number or stable.',
           },
           {
-            schema: {
-              type: 'string',
-              pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
-            },
+            schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
             in: 'path',
             name: 'slug',
             required: true,
@@ -1325,10 +1134,7 @@ export const readmeAPIv2Oas = {
                         content: {
                           type: 'object',
                           properties: {
-                            body: {
-                              type: 'string',
-                              nullable: true,
-                            },
+                            body: { type: 'string', nullable: true },
                             type: {
                               type: 'string',
                               enum: ['markdown', 'html'],
@@ -1342,10 +1148,7 @@ export const readmeAPIv2Oas = {
                         metadata: {
                           type: 'object',
                           properties: {
-                            description: {
-                              type: 'string',
-                              nullable: true,
-                            },
+                            description: { type: 'string', nullable: true },
                             image: {
                               type: 'object',
                               properties: {
@@ -1356,11 +1159,7 @@ export const readmeAPIv2Oas = {
                                   description:
                                     'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
                                 },
-                                url: {
-                                  type: 'string',
-                                  format: 'uri',
-                                  nullable: true,
-                                },
+                                url: { type: 'string', format: 'uri', nullable: true },
                               },
                               required: ['uri', 'url'],
                               additionalProperties: false,
@@ -1371,10 +1170,7 @@ export const readmeAPIv2Oas = {
                               description:
                                 'A comma-separated list of keywords to place into your custom page metadata.',
                             },
-                            title: {
-                              type: 'string',
-                              nullable: true,
-                            },
+                            title: { type: 'string', nullable: true },
                           },
                           required: ['description', 'image', 'keywords', 'title'],
                           additionalProperties: false,
@@ -1391,14 +1187,8 @@ export const readmeAPIv2Oas = {
                           },
                           additionalProperties: false,
                         },
-                        slug: {
-                          type: 'string',
-                          pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
-                        },
-                        title: {
-                          type: 'string',
-                          nullable: true,
-                        },
+                        slug: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
+                        title: { type: 'string', nullable: true },
                         links: {
                           type: 'object',
                           properties: {
@@ -1453,31 +1243,21 @@ export const readmeAPIv2Oas = {
           "Deletes a custom page from the custom page section of your developer hub. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: {
-              type: 'string',
-              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
-            },
+            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
             in: 'path',
             name: 'version',
             required: true,
             description: 'Project version number or stable.',
           },
           {
-            schema: {
-              type: 'string',
-              pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
-            },
+            schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
             in: 'path',
             name: 'slug',
             required: true,
             description: 'A URL-safe representation of the resource.',
           },
         ],
-        responses: {
-          '204': {
-            description: 'No Content',
-          },
-        },
+        responses: { '204': { description: 'No Content' } },
       },
       patch: {
         operationId: 'updateCustomPage',
@@ -1505,10 +1285,7 @@ export const readmeAPIv2Oas = {
                   content: {
                     type: 'object',
                     properties: {
-                      body: {
-                        type: 'string',
-                        nullable: true,
-                      },
+                      body: { type: 'string', nullable: true },
                       type: {
                         type: 'string',
                         enum: ['markdown', 'html'],
@@ -1521,34 +1298,17 @@ export const readmeAPIv2Oas = {
                   metadata: {
                     type: 'object',
                     properties: {
-                      description: {
-                        type: 'string',
-                        nullable: true,
-                      },
+                      description: { type: 'string', nullable: true },
                       image: {
                         type: 'object',
                         properties: {
-                          uri: {
-                            type: 'string',
-                            pattern: '\\/images\\/([a-f\\d]{24})',
-                            nullable: true,
-                          },
-                          url: {
-                            type: 'string',
-                            format: 'uri',
-                            nullable: true,
-                          },
+                          uri: { type: 'string', pattern: '\\/images\\/([a-f\\d]{24})', nullable: true },
+                          url: { type: 'string', format: 'uri', nullable: true },
                         },
                         additionalProperties: false,
                       },
-                      keywords: {
-                        type: 'string',
-                        nullable: true,
-                      },
-                      title: {
-                        type: 'string',
-                        nullable: true,
-                      },
+                      keywords: { type: 'string', nullable: true },
+                      title: { type: 'string', nullable: true },
                     },
                     additionalProperties: false,
                   },
@@ -1564,14 +1324,8 @@ export const readmeAPIv2Oas = {
                     },
                     additionalProperties: false,
                   },
-                  slug: {
-                    type: 'string',
-                    pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
-                  },
-                  title: {
-                    type: 'string',
-                    nullable: true,
-                  },
+                  slug: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
+                  title: { type: 'string', nullable: true },
                 },
                 additionalProperties: false,
               },
@@ -1580,20 +1334,14 @@ export const readmeAPIv2Oas = {
         },
         parameters: [
           {
-            schema: {
-              type: 'string',
-              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
-            },
+            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
             in: 'path',
             name: 'version',
             required: true,
             description: 'Project version number or stable.',
           },
           {
-            schema: {
-              type: 'string',
-              pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
-            },
+            schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
             in: 'path',
             name: 'slug',
             required: true,
@@ -1625,10 +1373,7 @@ export const readmeAPIv2Oas = {
                         content: {
                           type: 'object',
                           properties: {
-                            body: {
-                              type: 'string',
-                              nullable: true,
-                            },
+                            body: { type: 'string', nullable: true },
                             type: {
                               type: 'string',
                               enum: ['markdown', 'html'],
@@ -1642,10 +1387,7 @@ export const readmeAPIv2Oas = {
                         metadata: {
                           type: 'object',
                           properties: {
-                            description: {
-                              type: 'string',
-                              nullable: true,
-                            },
+                            description: { type: 'string', nullable: true },
                             image: {
                               type: 'object',
                               properties: {
@@ -1656,11 +1398,7 @@ export const readmeAPIv2Oas = {
                                   description:
                                     'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
                                 },
-                                url: {
-                                  type: 'string',
-                                  format: 'uri',
-                                  nullable: true,
-                                },
+                                url: { type: 'string', format: 'uri', nullable: true },
                               },
                               required: ['uri', 'url'],
                               additionalProperties: false,
@@ -1671,10 +1409,7 @@ export const readmeAPIv2Oas = {
                               description:
                                 'A comma-separated list of keywords to place into your custom page metadata.',
                             },
-                            title: {
-                              type: 'string',
-                              nullable: true,
-                            },
+                            title: { type: 'string', nullable: true },
                           },
                           required: ['description', 'image', 'keywords', 'title'],
                           additionalProperties: false,
@@ -1691,14 +1426,8 @@ export const readmeAPIv2Oas = {
                           },
                           additionalProperties: false,
                         },
-                        slug: {
-                          type: 'string',
-                          pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
-                        },
-                        title: {
-                          type: 'string',
-                          nullable: true,
-                        },
+                        slug: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
+                        title: { type: 'string', nullable: true },
                         links: {
                           type: 'object',
                           properties: {
@@ -1781,25 +1510,13 @@ export const readmeAPIv2Oas = {
                   content: {
                     type: 'object',
                     properties: {
-                      body: {
-                        type: 'string',
-                        nullable: true,
-                      },
-                      excerpt: {
-                        type: 'string',
-                        nullable: true,
-                      },
+                      body: { type: 'string', nullable: true },
+                      excerpt: { type: 'string', nullable: true },
                       link: {
                         type: 'object',
                         properties: {
-                          url: {
-                            type: 'string',
-                            nullable: true,
-                          },
-                          new_tab: {
-                            type: 'boolean',
-                            nullable: true,
-                          },
+                          url: { type: 'string', nullable: true },
+                          new_tab: { type: 'boolean', nullable: true },
                         },
                         additionalProperties: false,
                         description:
@@ -1808,10 +1525,7 @@ export const readmeAPIv2Oas = {
                       next: {
                         type: 'object',
                         properties: {
-                          description: {
-                            type: 'string',
-                            nullable: true,
-                          },
+                          description: { type: 'string', nullable: true },
                           pages: {
                             type: 'array',
                             items: {
@@ -1819,17 +1533,9 @@ export const readmeAPIv2Oas = {
                                 {
                                   type: 'object',
                                   properties: {
-                                    slug: {
-                                      type: 'string',
-                                    },
-                                    title: {
-                                      type: 'string',
-                                      nullable: true,
-                                    },
-                                    type: {
-                                      type: 'string',
-                                      enum: ['basic', 'endpoint'],
-                                    },
+                                    slug: { type: 'string' },
+                                    title: { type: 'string', nullable: true },
+                                    type: { type: 'string', enum: ['basic', 'endpoint'] },
                                   },
                                   required: ['slug', 'title', 'type'],
                                   additionalProperties: false,
@@ -1837,17 +1543,9 @@ export const readmeAPIv2Oas = {
                                 {
                                   type: 'object',
                                   properties: {
-                                    title: {
-                                      type: 'string',
-                                      nullable: true,
-                                    },
-                                    type: {
-                                      type: 'string',
-                                      enum: ['link'],
-                                    },
-                                    url: {
-                                      type: 'string',
-                                    },
+                                    title: { type: 'string', nullable: true },
+                                    type: { type: 'string', enum: ['link'] },
+                                    url: { type: 'string' },
                                   },
                                   required: ['title', 'type', 'url'],
                                   additionalProperties: false,
@@ -1864,38 +1562,19 @@ export const readmeAPIv2Oas = {
                   href: {
                     type: 'object',
                     properties: {
-                      dash: {
-                        type: 'string',
-                        format: 'uri',
-                        description: 'A URL to this page in your ReadMe Dash.',
-                      },
+                      dash: { type: 'string', format: 'uri', description: 'A URL to this page in your ReadMe Dash.' },
                     },
                     additionalProperties: false,
                   },
                   metadata: {
                     type: 'object',
                     properties: {
-                      description: {
-                        type: 'string',
-                        nullable: true,
-                      },
-                      keywords: {
-                        type: 'string',
-                        nullable: true,
-                      },
-                      title: {
-                        type: 'string',
-                        nullable: true,
-                      },
+                      description: { type: 'string', nullable: true },
+                      keywords: { type: 'string', nullable: true },
+                      title: { type: 'string', nullable: true },
                       image: {
                         type: 'object',
-                        properties: {
-                          uri: {
-                            type: 'string',
-                            pattern: '\\/images\\/([a-f\\d]{24})',
-                            nullable: true,
-                          },
-                        },
+                        properties: { uri: { type: 'string', pattern: '\\/images\\/([a-f\\d]{24})', nullable: true } },
                         additionalProperties: false,
                       },
                     },
@@ -1916,11 +1595,7 @@ export const readmeAPIv2Oas = {
                   privacy: {
                     type: 'object',
                     properties: {
-                      view: {
-                        type: 'string',
-                        enum: ['public', 'anyone_with_link'],
-                        default: 'anyone_with_link',
-                      },
+                      view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
                     },
                     additionalProperties: false,
                   },
@@ -1932,45 +1607,19 @@ export const readmeAPIv2Oas = {
                         default: true,
                         description: 'A flag for if the page is renderable or not.',
                       },
-                      error: {
-                        type: 'string',
-                        nullable: true,
-                      },
-                      message: {
-                        type: 'string',
-                        nullable: true,
-                      },
+                      error: { type: 'string', nullable: true },
+                      message: { type: 'string', nullable: true },
                     },
                     additionalProperties: false,
                   },
                   slug: {
-                    allOf: [
-                      {
-                        type: 'string',
-                      },
-                      {
-                        type: 'string',
-                        minLength: 1,
-                      },
-                    ],
+                    allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
                     description: 'The accessible URL slug for the page.',
                   },
-                  state: {
-                    type: 'string',
-                    enum: ['current', 'deprecated'],
-                    default: 'current',
-                  },
-                  title: {
-                    type: 'string',
-                  },
-                  type: {
-                    type: 'string',
-                    enum: ['api_config', 'basic', 'endpoint', 'link'],
-                    default: 'basic',
-                  },
-                  position: {
-                    type: 'number',
-                  },
+                  state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
+                  title: { type: 'string' },
+                  type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
+                  position: { type: 'number' },
                 },
                 required: ['category', 'title'],
                 additionalProperties: false,
@@ -1981,10 +1630,7 @@ export const readmeAPIv2Oas = {
         },
         parameters: [
           {
-            schema: {
-              type: 'string',
-              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
-            },
+            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
             in: 'path',
             name: 'version',
             required: true,
@@ -2024,21 +1670,12 @@ export const readmeAPIv2Oas = {
                         content: {
                           type: 'object',
                           properties: {
-                            body: {
-                              type: 'string',
-                              nullable: true,
-                            },
-                            excerpt: {
-                              type: 'string',
-                              nullable: true,
-                            },
+                            body: { type: 'string', nullable: true },
+                            excerpt: { type: 'string', nullable: true },
                             link: {
                               type: 'object',
                               properties: {
-                                url: {
-                                  type: 'string',
-                                  nullable: true,
-                                },
+                                url: { type: 'string', nullable: true },
                                 new_tab: {
                                   type: 'boolean',
                                   nullable: true,
@@ -2053,10 +1690,7 @@ export const readmeAPIv2Oas = {
                             next: {
                               type: 'object',
                               properties: {
-                                description: {
-                                  type: 'string',
-                                  nullable: true,
-                                },
+                                description: { type: 'string', nullable: true },
                                 pages: {
                                   type: 'array',
                                   items: {
@@ -2064,17 +1698,9 @@ export const readmeAPIv2Oas = {
                                       {
                                         type: 'object',
                                         properties: {
-                                          slug: {
-                                            type: 'string',
-                                          },
-                                          title: {
-                                            type: 'string',
-                                            nullable: true,
-                                          },
-                                          type: {
-                                            type: 'string',
-                                            enum: ['basic', 'endpoint'],
-                                          },
+                                          slug: { type: 'string' },
+                                          title: { type: 'string', nullable: true },
+                                          type: { type: 'string', enum: ['basic', 'endpoint'] },
                                         },
                                         required: ['slug', 'title', 'type'],
                                         additionalProperties: false,
@@ -2082,17 +1708,9 @@ export const readmeAPIv2Oas = {
                                       {
                                         type: 'object',
                                         properties: {
-                                          title: {
-                                            type: 'string',
-                                            nullable: true,
-                                          },
-                                          type: {
-                                            type: 'string',
-                                            enum: ['link'],
-                                          },
-                                          url: {
-                                            type: 'string',
-                                          },
+                                          title: { type: 'string', nullable: true },
+                                          type: { type: 'string', enum: ['link'] },
+                                          url: { type: 'string' },
                                         },
                                         required: ['title', 'type', 'url'],
                                         additionalProperties: false,
@@ -2123,10 +1741,7 @@ export const readmeAPIv2Oas = {
                         metadata: {
                           type: 'object',
                           properties: {
-                            description: {
-                              type: 'string',
-                              nullable: true,
-                            },
+                            description: { type: 'string', nullable: true },
                             image: {
                               type: 'object',
                               properties: {
@@ -2137,11 +1752,7 @@ export const readmeAPIv2Oas = {
                                   description:
                                     'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
                                 },
-                                url: {
-                                  type: 'string',
-                                  format: 'uri',
-                                  nullable: true,
-                                },
+                                url: { type: 'string', format: 'uri', nullable: true },
                               },
                               required: ['uri', 'url'],
                               additionalProperties: false,
@@ -2151,10 +1762,7 @@ export const readmeAPIv2Oas = {
                               nullable: true,
                               description: 'A comma-separated list of keywords to place into your page metadata.',
                             },
-                            title: {
-                              type: 'string',
-                              nullable: true,
-                            },
+                            title: { type: 'string', nullable: true },
                           },
                           required: ['description', 'image', 'keywords', 'title'],
                           additionalProperties: false,
@@ -2176,21 +1784,14 @@ export const readmeAPIv2Oas = {
                         privacy: {
                           type: 'object',
                           properties: {
-                            view: {
-                              type: 'string',
-                              enum: ['public', 'anyone_with_link'],
-                              default: 'anyone_with_link',
-                            },
+                            view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
                           },
                           additionalProperties: false,
                         },
                         project: {
                           type: 'object',
                           properties: {
-                            name: {
-                              type: 'string',
-                              description: 'The name of the project.',
-                            },
+                            name: { type: 'string', description: 'The name of the project.' },
                             subdomain: {
                               type: 'string',
                               pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
@@ -2214,11 +1815,7 @@ export const readmeAPIv2Oas = {
                               default: true,
                               description: 'A flag for if the page is renderable or not.',
                             },
-                            error: {
-                              type: 'string',
-                              nullable: true,
-                              description: 'The rendering error.',
-                            },
+                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
                             message: {
                               type: 'string',
                               nullable: true,
@@ -2228,30 +1825,12 @@ export const readmeAPIv2Oas = {
                           additionalProperties: false,
                         },
                         slug: {
-                          allOf: [
-                            {
-                              type: 'string',
-                            },
-                            {
-                              type: 'string',
-                              minLength: 1,
-                            },
-                          ],
+                          allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
                           description: 'The accessible URL slug for the page.',
                         },
-                        state: {
-                          type: 'string',
-                          enum: ['current', 'deprecated'],
-                          default: 'current',
-                        },
-                        title: {
-                          type: 'string',
-                        },
-                        type: {
-                          type: 'string',
-                          enum: ['api_config', 'basic', 'endpoint', 'link'],
-                          default: 'basic',
-                        },
+                        state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
+                        title: { type: 'string' },
+                        type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
                         updated_at: {
                           type: 'string',
                           format: 'date-time',
@@ -2299,20 +1878,14 @@ export const readmeAPIv2Oas = {
           "Retrieves a page from the guides section of your developer hub. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: {
-              type: 'string',
-              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
-            },
+            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
             in: 'path',
             name: 'version',
             required: true,
             description: 'Project version number or stable.',
           },
           {
-            schema: {
-              type: 'string',
-              pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
-            },
+            schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
             in: 'path',
             name: 'slug',
             required: true,
@@ -2352,21 +1925,12 @@ export const readmeAPIv2Oas = {
                         content: {
                           type: 'object',
                           properties: {
-                            body: {
-                              type: 'string',
-                              nullable: true,
-                            },
-                            excerpt: {
-                              type: 'string',
-                              nullable: true,
-                            },
+                            body: { type: 'string', nullable: true },
+                            excerpt: { type: 'string', nullable: true },
                             link: {
                               type: 'object',
                               properties: {
-                                url: {
-                                  type: 'string',
-                                  nullable: true,
-                                },
+                                url: { type: 'string', nullable: true },
                                 new_tab: {
                                   type: 'boolean',
                                   nullable: true,
@@ -2381,10 +1945,7 @@ export const readmeAPIv2Oas = {
                             next: {
                               type: 'object',
                               properties: {
-                                description: {
-                                  type: 'string',
-                                  nullable: true,
-                                },
+                                description: { type: 'string', nullable: true },
                                 pages: {
                                   type: 'array',
                                   items: {
@@ -2392,17 +1953,9 @@ export const readmeAPIv2Oas = {
                                       {
                                         type: 'object',
                                         properties: {
-                                          slug: {
-                                            type: 'string',
-                                          },
-                                          title: {
-                                            type: 'string',
-                                            nullable: true,
-                                          },
-                                          type: {
-                                            type: 'string',
-                                            enum: ['basic', 'endpoint'],
-                                          },
+                                          slug: { type: 'string' },
+                                          title: { type: 'string', nullable: true },
+                                          type: { type: 'string', enum: ['basic', 'endpoint'] },
                                         },
                                         required: ['slug', 'title', 'type'],
                                         additionalProperties: false,
@@ -2410,17 +1963,9 @@ export const readmeAPIv2Oas = {
                                       {
                                         type: 'object',
                                         properties: {
-                                          title: {
-                                            type: 'string',
-                                            nullable: true,
-                                          },
-                                          type: {
-                                            type: 'string',
-                                            enum: ['link'],
-                                          },
-                                          url: {
-                                            type: 'string',
-                                          },
+                                          title: { type: 'string', nullable: true },
+                                          type: { type: 'string', enum: ['link'] },
+                                          url: { type: 'string' },
                                         },
                                         required: ['title', 'type', 'url'],
                                         additionalProperties: false,
@@ -2451,10 +1996,7 @@ export const readmeAPIv2Oas = {
                         metadata: {
                           type: 'object',
                           properties: {
-                            description: {
-                              type: 'string',
-                              nullable: true,
-                            },
+                            description: { type: 'string', nullable: true },
                             image: {
                               type: 'object',
                               properties: {
@@ -2465,11 +2007,7 @@ export const readmeAPIv2Oas = {
                                   description:
                                     'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
                                 },
-                                url: {
-                                  type: 'string',
-                                  format: 'uri',
-                                  nullable: true,
-                                },
+                                url: { type: 'string', format: 'uri', nullable: true },
                               },
                               required: ['uri', 'url'],
                               additionalProperties: false,
@@ -2479,10 +2017,7 @@ export const readmeAPIv2Oas = {
                               nullable: true,
                               description: 'A comma-separated list of keywords to place into your page metadata.',
                             },
-                            title: {
-                              type: 'string',
-                              nullable: true,
-                            },
+                            title: { type: 'string', nullable: true },
                           },
                           required: ['description', 'image', 'keywords', 'title'],
                           additionalProperties: false,
@@ -2504,21 +2039,14 @@ export const readmeAPIv2Oas = {
                         privacy: {
                           type: 'object',
                           properties: {
-                            view: {
-                              type: 'string',
-                              enum: ['public', 'anyone_with_link'],
-                              default: 'anyone_with_link',
-                            },
+                            view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
                           },
                           additionalProperties: false,
                         },
                         project: {
                           type: 'object',
                           properties: {
-                            name: {
-                              type: 'string',
-                              description: 'The name of the project.',
-                            },
+                            name: { type: 'string', description: 'The name of the project.' },
                             subdomain: {
                               type: 'string',
                               pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
@@ -2542,11 +2070,7 @@ export const readmeAPIv2Oas = {
                               default: true,
                               description: 'A flag for if the page is renderable or not.',
                             },
-                            error: {
-                              type: 'string',
-                              nullable: true,
-                              description: 'The rendering error.',
-                            },
+                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
                             message: {
                               type: 'string',
                               nullable: true,
@@ -2556,30 +2080,12 @@ export const readmeAPIv2Oas = {
                           additionalProperties: false,
                         },
                         slug: {
-                          allOf: [
-                            {
-                              type: 'string',
-                            },
-                            {
-                              type: 'string',
-                              minLength: 1,
-                            },
-                          ],
+                          allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
                           description: 'The accessible URL slug for the page.',
                         },
-                        state: {
-                          type: 'string',
-                          enum: ['current', 'deprecated'],
-                          default: 'current',
-                        },
-                        title: {
-                          type: 'string',
-                        },
-                        type: {
-                          type: 'string',
-                          enum: ['api_config', 'basic', 'endpoint', 'link'],
-                          default: 'basic',
-                        },
+                        state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
+                        title: { type: 'string' },
+                        type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
                         updated_at: {
                           type: 'string',
                           format: 'date-time',
@@ -2625,31 +2131,21 @@ export const readmeAPIv2Oas = {
           "Deletes a page from the guides section of your developer hub. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: {
-              type: 'string',
-              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
-            },
+            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
             in: 'path',
             name: 'version',
             required: true,
             description: 'Project version number or stable.',
           },
           {
-            schema: {
-              type: 'string',
-              pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
-            },
+            schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
             in: 'path',
             name: 'slug',
             required: true,
             description: 'A URL-safe representation of the resource.',
           },
         ],
-        responses: {
-          '204': {
-            description: 'No Content',
-          },
-        },
+        responses: { '204': { description: 'No Content' } },
       },
       patch: {
         operationId: 'updateGuide',
@@ -2684,25 +2180,13 @@ export const readmeAPIv2Oas = {
                   content: {
                     type: 'object',
                     properties: {
-                      body: {
-                        type: 'string',
-                        nullable: true,
-                      },
-                      excerpt: {
-                        type: 'string',
-                        nullable: true,
-                      },
+                      body: { type: 'string', nullable: true },
+                      excerpt: { type: 'string', nullable: true },
                       link: {
                         type: 'object',
                         properties: {
-                          url: {
-                            type: 'string',
-                            nullable: true,
-                          },
-                          new_tab: {
-                            type: 'boolean',
-                            nullable: true,
-                          },
+                          url: { type: 'string', nullable: true },
+                          new_tab: { type: 'boolean', nullable: true },
                         },
                         additionalProperties: false,
                         description:
@@ -2711,10 +2195,7 @@ export const readmeAPIv2Oas = {
                       next: {
                         type: 'object',
                         properties: {
-                          description: {
-                            type: 'string',
-                            nullable: true,
-                          },
+                          description: { type: 'string', nullable: true },
                           pages: {
                             type: 'array',
                             items: {
@@ -2722,17 +2203,9 @@ export const readmeAPIv2Oas = {
                                 {
                                   type: 'object',
                                   properties: {
-                                    slug: {
-                                      type: 'string',
-                                    },
-                                    title: {
-                                      type: 'string',
-                                      nullable: true,
-                                    },
-                                    type: {
-                                      type: 'string',
-                                      enum: ['basic', 'endpoint'],
-                                    },
+                                    slug: { type: 'string' },
+                                    title: { type: 'string', nullable: true },
+                                    type: { type: 'string', enum: ['basic', 'endpoint'] },
                                   },
                                   required: ['slug', 'title', 'type'],
                                   additionalProperties: false,
@@ -2740,17 +2213,9 @@ export const readmeAPIv2Oas = {
                                 {
                                   type: 'object',
                                   properties: {
-                                    title: {
-                                      type: 'string',
-                                      nullable: true,
-                                    },
-                                    type: {
-                                      type: 'string',
-                                      enum: ['link'],
-                                    },
-                                    url: {
-                                      type: 'string',
-                                    },
+                                    title: { type: 'string', nullable: true },
+                                    type: { type: 'string', enum: ['link'] },
+                                    url: { type: 'string' },
                                   },
                                   required: ['title', 'type', 'url'],
                                   additionalProperties: false,
@@ -2767,38 +2232,19 @@ export const readmeAPIv2Oas = {
                   href: {
                     type: 'object',
                     properties: {
-                      dash: {
-                        type: 'string',
-                        format: 'uri',
-                        description: 'A URL to this page in your ReadMe Dash.',
-                      },
+                      dash: { type: 'string', format: 'uri', description: 'A URL to this page in your ReadMe Dash.' },
                     },
                     additionalProperties: false,
                   },
                   metadata: {
                     type: 'object',
                     properties: {
-                      description: {
-                        type: 'string',
-                        nullable: true,
-                      },
-                      keywords: {
-                        type: 'string',
-                        nullable: true,
-                      },
-                      title: {
-                        type: 'string',
-                        nullable: true,
-                      },
+                      description: { type: 'string', nullable: true },
+                      keywords: { type: 'string', nullable: true },
+                      title: { type: 'string', nullable: true },
                       image: {
                         type: 'object',
-                        properties: {
-                          uri: {
-                            type: 'string',
-                            pattern: '\\/images\\/([a-f\\d]{24})',
-                            nullable: true,
-                          },
-                        },
+                        properties: { uri: { type: 'string', pattern: '\\/images\\/([a-f\\d]{24})', nullable: true } },
                         additionalProperties: false,
                       },
                     },
@@ -2819,11 +2265,7 @@ export const readmeAPIv2Oas = {
                   privacy: {
                     type: 'object',
                     properties: {
-                      view: {
-                        type: 'string',
-                        enum: ['public', 'anyone_with_link'],
-                        default: 'anyone_with_link',
-                      },
+                      view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
                     },
                     additionalProperties: false,
                   },
@@ -2835,45 +2277,19 @@ export const readmeAPIv2Oas = {
                         default: true,
                         description: 'A flag for if the page is renderable or not.',
                       },
-                      error: {
-                        type: 'string',
-                        nullable: true,
-                      },
-                      message: {
-                        type: 'string',
-                        nullable: true,
-                      },
+                      error: { type: 'string', nullable: true },
+                      message: { type: 'string', nullable: true },
                     },
                     additionalProperties: false,
                   },
                   slug: {
-                    allOf: [
-                      {
-                        type: 'string',
-                      },
-                      {
-                        type: 'string',
-                        minLength: 1,
-                      },
-                    ],
+                    allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
                     description: 'The accessible URL slug for the page.',
                   },
-                  state: {
-                    type: 'string',
-                    enum: ['current', 'deprecated'],
-                    default: 'current',
-                  },
-                  title: {
-                    type: 'string',
-                  },
-                  type: {
-                    type: 'string',
-                    enum: ['api_config', 'basic', 'endpoint', 'link'],
-                    default: 'basic',
-                  },
-                  position: {
-                    type: 'number',
-                  },
+                  state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
+                  title: { type: 'string' },
+                  type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
+                  position: { type: 'number' },
                 },
                 additionalProperties: false,
               },
@@ -2882,20 +2298,14 @@ export const readmeAPIv2Oas = {
         },
         parameters: [
           {
-            schema: {
-              type: 'string',
-              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
-            },
+            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
             in: 'path',
             name: 'version',
             required: true,
             description: 'Project version number or stable.',
           },
           {
-            schema: {
-              type: 'string',
-              pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
-            },
+            schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
             in: 'path',
             name: 'slug',
             required: true,
@@ -2935,21 +2345,12 @@ export const readmeAPIv2Oas = {
                         content: {
                           type: 'object',
                           properties: {
-                            body: {
-                              type: 'string',
-                              nullable: true,
-                            },
-                            excerpt: {
-                              type: 'string',
-                              nullable: true,
-                            },
+                            body: { type: 'string', nullable: true },
+                            excerpt: { type: 'string', nullable: true },
                             link: {
                               type: 'object',
                               properties: {
-                                url: {
-                                  type: 'string',
-                                  nullable: true,
-                                },
+                                url: { type: 'string', nullable: true },
                                 new_tab: {
                                   type: 'boolean',
                                   nullable: true,
@@ -2964,10 +2365,7 @@ export const readmeAPIv2Oas = {
                             next: {
                               type: 'object',
                               properties: {
-                                description: {
-                                  type: 'string',
-                                  nullable: true,
-                                },
+                                description: { type: 'string', nullable: true },
                                 pages: {
                                   type: 'array',
                                   items: {
@@ -2975,17 +2373,9 @@ export const readmeAPIv2Oas = {
                                       {
                                         type: 'object',
                                         properties: {
-                                          slug: {
-                                            type: 'string',
-                                          },
-                                          title: {
-                                            type: 'string',
-                                            nullable: true,
-                                          },
-                                          type: {
-                                            type: 'string',
-                                            enum: ['basic', 'endpoint'],
-                                          },
+                                          slug: { type: 'string' },
+                                          title: { type: 'string', nullable: true },
+                                          type: { type: 'string', enum: ['basic', 'endpoint'] },
                                         },
                                         required: ['slug', 'title', 'type'],
                                         additionalProperties: false,
@@ -2993,17 +2383,9 @@ export const readmeAPIv2Oas = {
                                       {
                                         type: 'object',
                                         properties: {
-                                          title: {
-                                            type: 'string',
-                                            nullable: true,
-                                          },
-                                          type: {
-                                            type: 'string',
-                                            enum: ['link'],
-                                          },
-                                          url: {
-                                            type: 'string',
-                                          },
+                                          title: { type: 'string', nullable: true },
+                                          type: { type: 'string', enum: ['link'] },
+                                          url: { type: 'string' },
                                         },
                                         required: ['title', 'type', 'url'],
                                         additionalProperties: false,
@@ -3034,10 +2416,7 @@ export const readmeAPIv2Oas = {
                         metadata: {
                           type: 'object',
                           properties: {
-                            description: {
-                              type: 'string',
-                              nullable: true,
-                            },
+                            description: { type: 'string', nullable: true },
                             image: {
                               type: 'object',
                               properties: {
@@ -3048,11 +2427,7 @@ export const readmeAPIv2Oas = {
                                   description:
                                     'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
                                 },
-                                url: {
-                                  type: 'string',
-                                  format: 'uri',
-                                  nullable: true,
-                                },
+                                url: { type: 'string', format: 'uri', nullable: true },
                               },
                               required: ['uri', 'url'],
                               additionalProperties: false,
@@ -3062,10 +2437,7 @@ export const readmeAPIv2Oas = {
                               nullable: true,
                               description: 'A comma-separated list of keywords to place into your page metadata.',
                             },
-                            title: {
-                              type: 'string',
-                              nullable: true,
-                            },
+                            title: { type: 'string', nullable: true },
                           },
                           required: ['description', 'image', 'keywords', 'title'],
                           additionalProperties: false,
@@ -3087,21 +2459,14 @@ export const readmeAPIv2Oas = {
                         privacy: {
                           type: 'object',
                           properties: {
-                            view: {
-                              type: 'string',
-                              enum: ['public', 'anyone_with_link'],
-                              default: 'anyone_with_link',
-                            },
+                            view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
                           },
                           additionalProperties: false,
                         },
                         project: {
                           type: 'object',
                           properties: {
-                            name: {
-                              type: 'string',
-                              description: 'The name of the project.',
-                            },
+                            name: { type: 'string', description: 'The name of the project.' },
                             subdomain: {
                               type: 'string',
                               pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
@@ -3125,11 +2490,7 @@ export const readmeAPIv2Oas = {
                               default: true,
                               description: 'A flag for if the page is renderable or not.',
                             },
-                            error: {
-                              type: 'string',
-                              nullable: true,
-                              description: 'The rendering error.',
-                            },
+                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
                             message: {
                               type: 'string',
                               nullable: true,
@@ -3139,30 +2500,12 @@ export const readmeAPIv2Oas = {
                           additionalProperties: false,
                         },
                         slug: {
-                          allOf: [
-                            {
-                              type: 'string',
-                            },
-                            {
-                              type: 'string',
-                              minLength: 1,
-                            },
-                          ],
+                          allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
                           description: 'The accessible URL slug for the page.',
                         },
-                        state: {
-                          type: 'string',
-                          enum: ['current', 'deprecated'],
-                          default: 'current',
-                        },
-                        title: {
-                          type: 'string',
-                        },
-                        type: {
-                          type: 'string',
-                          enum: ['api_config', 'basic', 'endpoint', 'link'],
-                          default: 'basic',
-                        },
+                        state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
+                        title: { type: 'string' },
+                        type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
                         updated_at: {
                           type: 'string',
                           format: 'date-time',
@@ -3236,25 +2579,13 @@ export const readmeAPIv2Oas = {
                   content: {
                     type: 'object',
                     properties: {
-                      body: {
-                        type: 'string',
-                        nullable: true,
-                      },
-                      excerpt: {
-                        type: 'string',
-                        nullable: true,
-                      },
+                      body: { type: 'string', nullable: true },
+                      excerpt: { type: 'string', nullable: true },
                       link: {
                         type: 'object',
                         properties: {
-                          url: {
-                            type: 'string',
-                            nullable: true,
-                          },
-                          new_tab: {
-                            type: 'boolean',
-                            nullable: true,
-                          },
+                          url: { type: 'string', nullable: true },
+                          new_tab: { type: 'boolean', nullable: true },
                         },
                         additionalProperties: false,
                         description:
@@ -3263,10 +2594,7 @@ export const readmeAPIv2Oas = {
                       next: {
                         type: 'object',
                         properties: {
-                          description: {
-                            type: 'string',
-                            nullable: true,
-                          },
+                          description: { type: 'string', nullable: true },
                           pages: {
                             type: 'array',
                             items: {
@@ -3274,17 +2602,9 @@ export const readmeAPIv2Oas = {
                                 {
                                   type: 'object',
                                   properties: {
-                                    slug: {
-                                      type: 'string',
-                                    },
-                                    title: {
-                                      type: 'string',
-                                      nullable: true,
-                                    },
-                                    type: {
-                                      type: 'string',
-                                      enum: ['basic', 'endpoint'],
-                                    },
+                                    slug: { type: 'string' },
+                                    title: { type: 'string', nullable: true },
+                                    type: { type: 'string', enum: ['basic', 'endpoint'] },
                                   },
                                   required: ['slug', 'title', 'type'],
                                   additionalProperties: false,
@@ -3292,17 +2612,9 @@ export const readmeAPIv2Oas = {
                                 {
                                   type: 'object',
                                   properties: {
-                                    title: {
-                                      type: 'string',
-                                      nullable: true,
-                                    },
-                                    type: {
-                                      type: 'string',
-                                      enum: ['link'],
-                                    },
-                                    url: {
-                                      type: 'string',
-                                    },
+                                    title: { type: 'string', nullable: true },
+                                    type: { type: 'string', enum: ['link'] },
+                                    url: { type: 'string' },
                                   },
                                   required: ['title', 'type', 'url'],
                                   additionalProperties: false,
@@ -3319,38 +2631,19 @@ export const readmeAPIv2Oas = {
                   href: {
                     type: 'object',
                     properties: {
-                      dash: {
-                        type: 'string',
-                        format: 'uri',
-                        description: 'A URL to this page in your ReadMe Dash.',
-                      },
+                      dash: { type: 'string', format: 'uri', description: 'A URL to this page in your ReadMe Dash.' },
                     },
                     additionalProperties: false,
                   },
                   metadata: {
                     type: 'object',
                     properties: {
-                      description: {
-                        type: 'string',
-                        nullable: true,
-                      },
-                      keywords: {
-                        type: 'string',
-                        nullable: true,
-                      },
-                      title: {
-                        type: 'string',
-                        nullable: true,
-                      },
+                      description: { type: 'string', nullable: true },
+                      keywords: { type: 'string', nullable: true },
+                      title: { type: 'string', nullable: true },
                       image: {
                         type: 'object',
-                        properties: {
-                          uri: {
-                            type: 'string',
-                            pattern: '\\/images\\/([a-f\\d]{24})',
-                            nullable: true,
-                          },
-                        },
+                        properties: { uri: { type: 'string', pattern: '\\/images\\/([a-f\\d]{24})', nullable: true } },
                         additionalProperties: false,
                       },
                     },
@@ -3371,11 +2664,7 @@ export const readmeAPIv2Oas = {
                   privacy: {
                     type: 'object',
                     properties: {
-                      view: {
-                        type: 'string',
-                        enum: ['public', 'anyone_with_link'],
-                        default: 'anyone_with_link',
-                      },
+                      view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
                     },
                     additionalProperties: false,
                   },
@@ -3387,42 +2676,18 @@ export const readmeAPIv2Oas = {
                         default: true,
                         description: 'A flag for if the page is renderable or not.',
                       },
-                      error: {
-                        type: 'string',
-                        nullable: true,
-                      },
-                      message: {
-                        type: 'string',
-                        nullable: true,
-                      },
+                      error: { type: 'string', nullable: true },
+                      message: { type: 'string', nullable: true },
                     },
                     additionalProperties: false,
                   },
                   slug: {
-                    allOf: [
-                      {
-                        type: 'string',
-                      },
-                      {
-                        type: 'string',
-                        minLength: 1,
-                      },
-                    ],
+                    allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
                     description: 'The accessible URL slug for the page.',
                   },
-                  state: {
-                    type: 'string',
-                    enum: ['current', 'deprecated'],
-                    default: 'current',
-                  },
-                  title: {
-                    type: 'string',
-                  },
-                  type: {
-                    type: 'string',
-                    enum: ['api_config', 'basic', 'endpoint', 'link'],
-                    default: 'basic',
-                  },
+                  state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
+                  title: { type: 'string' },
+                  type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
                   connections: {
                     type: 'object',
                     properties: {
@@ -3446,13 +2711,8 @@ export const readmeAPIv2Oas = {
                     },
                     additionalProperties: false,
                   },
-                  position: {
-                    type: 'number',
-                  },
-                  api_config: {
-                    type: 'string',
-                    enum: ['authentication', 'getting-started', 'my-requests'],
-                  },
+                  position: { type: 'number' },
+                  api_config: { type: 'string', enum: ['authentication', 'getting-started', 'my-requests'] },
                   api: {
                     type: 'object',
                     properties: {
@@ -3461,13 +2721,8 @@ export const readmeAPIv2Oas = {
                         enum: ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'],
                         description: 'The endpoint HTTP method.',
                       },
-                      path: {
-                        type: 'string',
-                        description: 'The endpoint path.',
-                      },
-                      schema: {
-                        nullable: true,
-                      },
+                      path: { type: 'string', description: 'The endpoint path.' },
+                      schema: { nullable: true },
                       stats: {
                         type: 'object',
                         properties: {
@@ -3562,10 +2817,7 @@ export const readmeAPIv2Oas = {
         },
         parameters: [
           {
-            schema: {
-              type: 'string',
-              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
-            },
+            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
             in: 'path',
             name: 'version',
             required: true,
@@ -3605,21 +2857,12 @@ export const readmeAPIv2Oas = {
                         content: {
                           type: 'object',
                           properties: {
-                            body: {
-                              type: 'string',
-                              nullable: true,
-                            },
-                            excerpt: {
-                              type: 'string',
-                              nullable: true,
-                            },
+                            body: { type: 'string', nullable: true },
+                            excerpt: { type: 'string', nullable: true },
                             link: {
                               type: 'object',
                               properties: {
-                                url: {
-                                  type: 'string',
-                                  nullable: true,
-                                },
+                                url: { type: 'string', nullable: true },
                                 new_tab: {
                                   type: 'boolean',
                                   nullable: true,
@@ -3634,10 +2877,7 @@ export const readmeAPIv2Oas = {
                             next: {
                               type: 'object',
                               properties: {
-                                description: {
-                                  type: 'string',
-                                  nullable: true,
-                                },
+                                description: { type: 'string', nullable: true },
                                 pages: {
                                   type: 'array',
                                   items: {
@@ -3645,17 +2885,9 @@ export const readmeAPIv2Oas = {
                                       {
                                         type: 'object',
                                         properties: {
-                                          slug: {
-                                            type: 'string',
-                                          },
-                                          title: {
-                                            type: 'string',
-                                            nullable: true,
-                                          },
-                                          type: {
-                                            type: 'string',
-                                            enum: ['basic', 'endpoint'],
-                                          },
+                                          slug: { type: 'string' },
+                                          title: { type: 'string', nullable: true },
+                                          type: { type: 'string', enum: ['basic', 'endpoint'] },
                                         },
                                         required: ['slug', 'title', 'type'],
                                         additionalProperties: false,
@@ -3663,17 +2895,9 @@ export const readmeAPIv2Oas = {
                                       {
                                         type: 'object',
                                         properties: {
-                                          title: {
-                                            type: 'string',
-                                            nullable: true,
-                                          },
-                                          type: {
-                                            type: 'string',
-                                            enum: ['link'],
-                                          },
-                                          url: {
-                                            type: 'string',
-                                          },
+                                          title: { type: 'string', nullable: true },
+                                          type: { type: 'string', enum: ['link'] },
+                                          url: { type: 'string' },
                                         },
                                         required: ['title', 'type', 'url'],
                                         additionalProperties: false,
@@ -3704,10 +2928,7 @@ export const readmeAPIv2Oas = {
                         metadata: {
                           type: 'object',
                           properties: {
-                            description: {
-                              type: 'string',
-                              nullable: true,
-                            },
+                            description: { type: 'string', nullable: true },
                             image: {
                               type: 'object',
                               properties: {
@@ -3718,11 +2939,7 @@ export const readmeAPIv2Oas = {
                                   description:
                                     'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
                                 },
-                                url: {
-                                  type: 'string',
-                                  format: 'uri',
-                                  nullable: true,
-                                },
+                                url: { type: 'string', format: 'uri', nullable: true },
                               },
                               required: ['uri', 'url'],
                               additionalProperties: false,
@@ -3732,10 +2949,7 @@ export const readmeAPIv2Oas = {
                               nullable: true,
                               description: 'A comma-separated list of keywords to place into your page metadata.',
                             },
-                            title: {
-                              type: 'string',
-                              nullable: true,
-                            },
+                            title: { type: 'string', nullable: true },
                           },
                           required: ['description', 'image', 'keywords', 'title'],
                           additionalProperties: false,
@@ -3757,21 +2971,14 @@ export const readmeAPIv2Oas = {
                         privacy: {
                           type: 'object',
                           properties: {
-                            view: {
-                              type: 'string',
-                              enum: ['public', 'anyone_with_link'],
-                              default: 'anyone_with_link',
-                            },
+                            view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
                           },
                           additionalProperties: false,
                         },
                         project: {
                           type: 'object',
                           properties: {
-                            name: {
-                              type: 'string',
-                              description: 'The name of the project.',
-                            },
+                            name: { type: 'string', description: 'The name of the project.' },
                             subdomain: {
                               type: 'string',
                               pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
@@ -3795,11 +3002,7 @@ export const readmeAPIv2Oas = {
                               default: true,
                               description: 'A flag for if the page is renderable or not.',
                             },
-                            error: {
-                              type: 'string',
-                              nullable: true,
-                              description: 'The rendering error.',
-                            },
+                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
                             message: {
                               type: 'string',
                               nullable: true,
@@ -3809,30 +3012,12 @@ export const readmeAPIv2Oas = {
                           additionalProperties: false,
                         },
                         slug: {
-                          allOf: [
-                            {
-                              type: 'string',
-                            },
-                            {
-                              type: 'string',
-                              minLength: 1,
-                            },
-                          ],
+                          allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
                           description: 'The accessible URL slug for the page.',
                         },
-                        state: {
-                          type: 'string',
-                          enum: ['current', 'deprecated'],
-                          default: 'current',
-                        },
-                        title: {
-                          type: 'string',
-                        },
-                        type: {
-                          type: 'string',
-                          enum: ['api_config', 'basic', 'endpoint', 'link'],
-                          default: 'basic',
-                        },
+                        state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
+                        title: { type: 'string' },
+                        type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
                         updated_at: {
                           type: 'string',
                           format: 'date-time',
@@ -3857,10 +3042,7 @@ export const readmeAPIv2Oas = {
                               enum: ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'],
                               description: 'The endpoint HTTP method.',
                             },
-                            path: {
-                              type: 'string',
-                              description: 'The endpoint path.',
-                            },
+                            path: { type: 'string', description: 'The endpoint path.' },
                             schema: {
                               nullable: true,
                               description:
@@ -4022,20 +3204,14 @@ export const readmeAPIv2Oas = {
           "Retrieves a page from the API reference section of your developer hub. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: {
-              type: 'string',
-              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
-            },
+            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
             in: 'path',
             name: 'version',
             required: true,
             description: 'Project version number or stable.',
           },
           {
-            schema: {
-              type: 'string',
-              pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
-            },
+            schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
             in: 'path',
             name: 'slug',
             required: true,
@@ -4075,21 +3251,12 @@ export const readmeAPIv2Oas = {
                         content: {
                           type: 'object',
                           properties: {
-                            body: {
-                              type: 'string',
-                              nullable: true,
-                            },
-                            excerpt: {
-                              type: 'string',
-                              nullable: true,
-                            },
+                            body: { type: 'string', nullable: true },
+                            excerpt: { type: 'string', nullable: true },
                             link: {
                               type: 'object',
                               properties: {
-                                url: {
-                                  type: 'string',
-                                  nullable: true,
-                                },
+                                url: { type: 'string', nullable: true },
                                 new_tab: {
                                   type: 'boolean',
                                   nullable: true,
@@ -4104,10 +3271,7 @@ export const readmeAPIv2Oas = {
                             next: {
                               type: 'object',
                               properties: {
-                                description: {
-                                  type: 'string',
-                                  nullable: true,
-                                },
+                                description: { type: 'string', nullable: true },
                                 pages: {
                                   type: 'array',
                                   items: {
@@ -4115,17 +3279,9 @@ export const readmeAPIv2Oas = {
                                       {
                                         type: 'object',
                                         properties: {
-                                          slug: {
-                                            type: 'string',
-                                          },
-                                          title: {
-                                            type: 'string',
-                                            nullable: true,
-                                          },
-                                          type: {
-                                            type: 'string',
-                                            enum: ['basic', 'endpoint'],
-                                          },
+                                          slug: { type: 'string' },
+                                          title: { type: 'string', nullable: true },
+                                          type: { type: 'string', enum: ['basic', 'endpoint'] },
                                         },
                                         required: ['slug', 'title', 'type'],
                                         additionalProperties: false,
@@ -4133,17 +3289,9 @@ export const readmeAPIv2Oas = {
                                       {
                                         type: 'object',
                                         properties: {
-                                          title: {
-                                            type: 'string',
-                                            nullable: true,
-                                          },
-                                          type: {
-                                            type: 'string',
-                                            enum: ['link'],
-                                          },
-                                          url: {
-                                            type: 'string',
-                                          },
+                                          title: { type: 'string', nullable: true },
+                                          type: { type: 'string', enum: ['link'] },
+                                          url: { type: 'string' },
                                         },
                                         required: ['title', 'type', 'url'],
                                         additionalProperties: false,
@@ -4174,10 +3322,7 @@ export const readmeAPIv2Oas = {
                         metadata: {
                           type: 'object',
                           properties: {
-                            description: {
-                              type: 'string',
-                              nullable: true,
-                            },
+                            description: { type: 'string', nullable: true },
                             image: {
                               type: 'object',
                               properties: {
@@ -4188,11 +3333,7 @@ export const readmeAPIv2Oas = {
                                   description:
                                     'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
                                 },
-                                url: {
-                                  type: 'string',
-                                  format: 'uri',
-                                  nullable: true,
-                                },
+                                url: { type: 'string', format: 'uri', nullable: true },
                               },
                               required: ['uri', 'url'],
                               additionalProperties: false,
@@ -4202,10 +3343,7 @@ export const readmeAPIv2Oas = {
                               nullable: true,
                               description: 'A comma-separated list of keywords to place into your page metadata.',
                             },
-                            title: {
-                              type: 'string',
-                              nullable: true,
-                            },
+                            title: { type: 'string', nullable: true },
                           },
                           required: ['description', 'image', 'keywords', 'title'],
                           additionalProperties: false,
@@ -4227,21 +3365,14 @@ export const readmeAPIv2Oas = {
                         privacy: {
                           type: 'object',
                           properties: {
-                            view: {
-                              type: 'string',
-                              enum: ['public', 'anyone_with_link'],
-                              default: 'anyone_with_link',
-                            },
+                            view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
                           },
                           additionalProperties: false,
                         },
                         project: {
                           type: 'object',
                           properties: {
-                            name: {
-                              type: 'string',
-                              description: 'The name of the project.',
-                            },
+                            name: { type: 'string', description: 'The name of the project.' },
                             subdomain: {
                               type: 'string',
                               pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
@@ -4265,11 +3396,7 @@ export const readmeAPIv2Oas = {
                               default: true,
                               description: 'A flag for if the page is renderable or not.',
                             },
-                            error: {
-                              type: 'string',
-                              nullable: true,
-                              description: 'The rendering error.',
-                            },
+                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
                             message: {
                               type: 'string',
                               nullable: true,
@@ -4279,30 +3406,12 @@ export const readmeAPIv2Oas = {
                           additionalProperties: false,
                         },
                         slug: {
-                          allOf: [
-                            {
-                              type: 'string',
-                            },
-                            {
-                              type: 'string',
-                              minLength: 1,
-                            },
-                          ],
+                          allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
                           description: 'The accessible URL slug for the page.',
                         },
-                        state: {
-                          type: 'string',
-                          enum: ['current', 'deprecated'],
-                          default: 'current',
-                        },
-                        title: {
-                          type: 'string',
-                        },
-                        type: {
-                          type: 'string',
-                          enum: ['api_config', 'basic', 'endpoint', 'link'],
-                          default: 'basic',
-                        },
+                        state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
+                        title: { type: 'string' },
+                        type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
                         updated_at: {
                           type: 'string',
                           format: 'date-time',
@@ -4327,10 +3436,7 @@ export const readmeAPIv2Oas = {
                               enum: ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'],
                               description: 'The endpoint HTTP method.',
                             },
-                            path: {
-                              type: 'string',
-                              description: 'The endpoint path.',
-                            },
+                            path: { type: 'string', description: 'The endpoint path.' },
                             schema: {
                               nullable: true,
                               description:
@@ -4490,31 +3596,21 @@ export const readmeAPIv2Oas = {
           "Deletes a page from the API reference section of your developer hub. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: {
-              type: 'string',
-              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
-            },
+            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
             in: 'path',
             name: 'version',
             required: true,
             description: 'Project version number or stable.',
           },
           {
-            schema: {
-              type: 'string',
-              pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
-            },
+            schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
             in: 'path',
             name: 'slug',
             required: true,
             description: 'A URL-safe representation of the resource.',
           },
         ],
-        responses: {
-          '204': {
-            description: 'No Content',
-          },
-        },
+        responses: { '204': { description: 'No Content' } },
       },
       patch: {
         operationId: 'updateReference',
@@ -4549,25 +3645,13 @@ export const readmeAPIv2Oas = {
                   content: {
                     type: 'object',
                     properties: {
-                      body: {
-                        type: 'string',
-                        nullable: true,
-                      },
-                      excerpt: {
-                        type: 'string',
-                        nullable: true,
-                      },
+                      body: { type: 'string', nullable: true },
+                      excerpt: { type: 'string', nullable: true },
                       link: {
                         type: 'object',
                         properties: {
-                          url: {
-                            type: 'string',
-                            nullable: true,
-                          },
-                          new_tab: {
-                            type: 'boolean',
-                            nullable: true,
-                          },
+                          url: { type: 'string', nullable: true },
+                          new_tab: { type: 'boolean', nullable: true },
                         },
                         additionalProperties: false,
                         description:
@@ -4576,10 +3660,7 @@ export const readmeAPIv2Oas = {
                       next: {
                         type: 'object',
                         properties: {
-                          description: {
-                            type: 'string',
-                            nullable: true,
-                          },
+                          description: { type: 'string', nullable: true },
                           pages: {
                             type: 'array',
                             items: {
@@ -4587,17 +3668,9 @@ export const readmeAPIv2Oas = {
                                 {
                                   type: 'object',
                                   properties: {
-                                    slug: {
-                                      type: 'string',
-                                    },
-                                    title: {
-                                      type: 'string',
-                                      nullable: true,
-                                    },
-                                    type: {
-                                      type: 'string',
-                                      enum: ['basic', 'endpoint'],
-                                    },
+                                    slug: { type: 'string' },
+                                    title: { type: 'string', nullable: true },
+                                    type: { type: 'string', enum: ['basic', 'endpoint'] },
                                   },
                                   required: ['slug', 'title', 'type'],
                                   additionalProperties: false,
@@ -4605,17 +3678,9 @@ export const readmeAPIv2Oas = {
                                 {
                                   type: 'object',
                                   properties: {
-                                    title: {
-                                      type: 'string',
-                                      nullable: true,
-                                    },
-                                    type: {
-                                      type: 'string',
-                                      enum: ['link'],
-                                    },
-                                    url: {
-                                      type: 'string',
-                                    },
+                                    title: { type: 'string', nullable: true },
+                                    type: { type: 'string', enum: ['link'] },
+                                    url: { type: 'string' },
                                   },
                                   required: ['title', 'type', 'url'],
                                   additionalProperties: false,
@@ -4632,38 +3697,19 @@ export const readmeAPIv2Oas = {
                   href: {
                     type: 'object',
                     properties: {
-                      dash: {
-                        type: 'string',
-                        format: 'uri',
-                        description: 'A URL to this page in your ReadMe Dash.',
-                      },
+                      dash: { type: 'string', format: 'uri', description: 'A URL to this page in your ReadMe Dash.' },
                     },
                     additionalProperties: false,
                   },
                   metadata: {
                     type: 'object',
                     properties: {
-                      description: {
-                        type: 'string',
-                        nullable: true,
-                      },
-                      keywords: {
-                        type: 'string',
-                        nullable: true,
-                      },
-                      title: {
-                        type: 'string',
-                        nullable: true,
-                      },
+                      description: { type: 'string', nullable: true },
+                      keywords: { type: 'string', nullable: true },
+                      title: { type: 'string', nullable: true },
                       image: {
                         type: 'object',
-                        properties: {
-                          uri: {
-                            type: 'string',
-                            pattern: '\\/images\\/([a-f\\d]{24})',
-                            nullable: true,
-                          },
-                        },
+                        properties: { uri: { type: 'string', pattern: '\\/images\\/([a-f\\d]{24})', nullable: true } },
                         additionalProperties: false,
                       },
                     },
@@ -4684,11 +3730,7 @@ export const readmeAPIv2Oas = {
                   privacy: {
                     type: 'object',
                     properties: {
-                      view: {
-                        type: 'string',
-                        enum: ['public', 'anyone_with_link'],
-                        default: 'anyone_with_link',
-                      },
+                      view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
                     },
                     additionalProperties: false,
                   },
@@ -4700,42 +3742,18 @@ export const readmeAPIv2Oas = {
                         default: true,
                         description: 'A flag for if the page is renderable or not.',
                       },
-                      error: {
-                        type: 'string',
-                        nullable: true,
-                      },
-                      message: {
-                        type: 'string',
-                        nullable: true,
-                      },
+                      error: { type: 'string', nullable: true },
+                      message: { type: 'string', nullable: true },
                     },
                     additionalProperties: false,
                   },
                   slug: {
-                    allOf: [
-                      {
-                        type: 'string',
-                      },
-                      {
-                        type: 'string',
-                        minLength: 1,
-                      },
-                    ],
+                    allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
                     description: 'The accessible URL slug for the page.',
                   },
-                  state: {
-                    type: 'string',
-                    enum: ['current', 'deprecated'],
-                    default: 'current',
-                  },
-                  title: {
-                    type: 'string',
-                  },
-                  type: {
-                    type: 'string',
-                    enum: ['api_config', 'basic', 'endpoint', 'link'],
-                    default: 'basic',
-                  },
+                  state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
+                  title: { type: 'string' },
+                  type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
                   connections: {
                     type: 'object',
                     properties: {
@@ -4767,13 +3785,8 @@ export const readmeAPIv2Oas = {
                         enum: ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'],
                         description: 'The endpoint HTTP method.',
                       },
-                      path: {
-                        type: 'string',
-                        description: 'The endpoint path.',
-                      },
-                      schema: {
-                        nullable: true,
-                      },
+                      path: { type: 'string', description: 'The endpoint path.' },
+                      schema: { nullable: true },
                       stats: {
                         type: 'object',
                         properties: {
@@ -4860,9 +3873,7 @@ export const readmeAPIv2Oas = {
                     description:
                       'Information about the API that this reference page is attached to. If you wish to detach this page from an API definition, making it a stand page, set `api.uri` to `null`.',
                   },
-                  position: {
-                    type: 'number',
-                  },
+                  position: { type: 'number' },
                 },
                 additionalProperties: false,
               },
@@ -4871,20 +3882,14 @@ export const readmeAPIv2Oas = {
         },
         parameters: [
           {
-            schema: {
-              type: 'string',
-              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
-            },
+            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
             in: 'path',
             name: 'version',
             required: true,
             description: 'Project version number or stable.',
           },
           {
-            schema: {
-              type: 'string',
-              pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
-            },
+            schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
             in: 'path',
             name: 'slug',
             required: true,
@@ -4924,21 +3929,12 @@ export const readmeAPIv2Oas = {
                         content: {
                           type: 'object',
                           properties: {
-                            body: {
-                              type: 'string',
-                              nullable: true,
-                            },
-                            excerpt: {
-                              type: 'string',
-                              nullable: true,
-                            },
+                            body: { type: 'string', nullable: true },
+                            excerpt: { type: 'string', nullable: true },
                             link: {
                               type: 'object',
                               properties: {
-                                url: {
-                                  type: 'string',
-                                  nullable: true,
-                                },
+                                url: { type: 'string', nullable: true },
                                 new_tab: {
                                   type: 'boolean',
                                   nullable: true,
@@ -4953,10 +3949,7 @@ export const readmeAPIv2Oas = {
                             next: {
                               type: 'object',
                               properties: {
-                                description: {
-                                  type: 'string',
-                                  nullable: true,
-                                },
+                                description: { type: 'string', nullable: true },
                                 pages: {
                                   type: 'array',
                                   items: {
@@ -4964,17 +3957,9 @@ export const readmeAPIv2Oas = {
                                       {
                                         type: 'object',
                                         properties: {
-                                          slug: {
-                                            type: 'string',
-                                          },
-                                          title: {
-                                            type: 'string',
-                                            nullable: true,
-                                          },
-                                          type: {
-                                            type: 'string',
-                                            enum: ['basic', 'endpoint'],
-                                          },
+                                          slug: { type: 'string' },
+                                          title: { type: 'string', nullable: true },
+                                          type: { type: 'string', enum: ['basic', 'endpoint'] },
                                         },
                                         required: ['slug', 'title', 'type'],
                                         additionalProperties: false,
@@ -4982,17 +3967,9 @@ export const readmeAPIv2Oas = {
                                       {
                                         type: 'object',
                                         properties: {
-                                          title: {
-                                            type: 'string',
-                                            nullable: true,
-                                          },
-                                          type: {
-                                            type: 'string',
-                                            enum: ['link'],
-                                          },
-                                          url: {
-                                            type: 'string',
-                                          },
+                                          title: { type: 'string', nullable: true },
+                                          type: { type: 'string', enum: ['link'] },
+                                          url: { type: 'string' },
                                         },
                                         required: ['title', 'type', 'url'],
                                         additionalProperties: false,
@@ -5023,10 +4000,7 @@ export const readmeAPIv2Oas = {
                         metadata: {
                           type: 'object',
                           properties: {
-                            description: {
-                              type: 'string',
-                              nullable: true,
-                            },
+                            description: { type: 'string', nullable: true },
                             image: {
                               type: 'object',
                               properties: {
@@ -5037,11 +4011,7 @@ export const readmeAPIv2Oas = {
                                   description:
                                     'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
                                 },
-                                url: {
-                                  type: 'string',
-                                  format: 'uri',
-                                  nullable: true,
-                                },
+                                url: { type: 'string', format: 'uri', nullable: true },
                               },
                               required: ['uri', 'url'],
                               additionalProperties: false,
@@ -5051,10 +4021,7 @@ export const readmeAPIv2Oas = {
                               nullable: true,
                               description: 'A comma-separated list of keywords to place into your page metadata.',
                             },
-                            title: {
-                              type: 'string',
-                              nullable: true,
-                            },
+                            title: { type: 'string', nullable: true },
                           },
                           required: ['description', 'image', 'keywords', 'title'],
                           additionalProperties: false,
@@ -5076,21 +4043,14 @@ export const readmeAPIv2Oas = {
                         privacy: {
                           type: 'object',
                           properties: {
-                            view: {
-                              type: 'string',
-                              enum: ['public', 'anyone_with_link'],
-                              default: 'anyone_with_link',
-                            },
+                            view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
                           },
                           additionalProperties: false,
                         },
                         project: {
                           type: 'object',
                           properties: {
-                            name: {
-                              type: 'string',
-                              description: 'The name of the project.',
-                            },
+                            name: { type: 'string', description: 'The name of the project.' },
                             subdomain: {
                               type: 'string',
                               pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
@@ -5114,11 +4074,7 @@ export const readmeAPIv2Oas = {
                               default: true,
                               description: 'A flag for if the page is renderable or not.',
                             },
-                            error: {
-                              type: 'string',
-                              nullable: true,
-                              description: 'The rendering error.',
-                            },
+                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
                             message: {
                               type: 'string',
                               nullable: true,
@@ -5128,30 +4084,12 @@ export const readmeAPIv2Oas = {
                           additionalProperties: false,
                         },
                         slug: {
-                          allOf: [
-                            {
-                              type: 'string',
-                            },
-                            {
-                              type: 'string',
-                              minLength: 1,
-                            },
-                          ],
+                          allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
                           description: 'The accessible URL slug for the page.',
                         },
-                        state: {
-                          type: 'string',
-                          enum: ['current', 'deprecated'],
-                          default: 'current',
-                        },
-                        title: {
-                          type: 'string',
-                        },
-                        type: {
-                          type: 'string',
-                          enum: ['api_config', 'basic', 'endpoint', 'link'],
-                          default: 'basic',
-                        },
+                        state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
+                        title: { type: 'string' },
+                        type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
                         updated_at: {
                           type: 'string',
                           format: 'date-time',
@@ -5176,10 +4114,7 @@ export const readmeAPIv2Oas = {
                               enum: ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'],
                               description: 'The endpoint HTTP method.',
                             },
-                            path: {
-                              type: 'string',
-                              description: 'The endpoint path.',
-                            },
+                            path: { type: 'string', description: 'The endpoint path.' },
                             schema: {
                               nullable: true,
                               description:
@@ -5374,19 +4309,9 @@ export const readmeAPIv2Oas = {
                             brand: {
                               type: 'object',
                               properties: {
-                                primary_color: {
-                                  type: 'string',
-                                  nullable: true,
-                                },
-                                link_color: {
-                                  type: 'string',
-                                  nullable: true,
-                                },
-                                theme: {
-                                  type: 'string',
-                                  enum: ['system', 'light', 'dark'],
-                                  default: 'light',
-                                },
+                                primary_color: { type: 'string', nullable: true },
+                                link_color: { type: 'string', nullable: true },
+                                theme: { type: 'string', enum: ['system', 'light', 'dark'], default: 'light' },
                               },
                               required: ['primary_color', 'link_color'],
                               additionalProperties: false,
@@ -5394,11 +4319,7 @@ export const readmeAPIv2Oas = {
                             changelog: {
                               type: 'object',
                               properties: {
-                                layout: {
-                                  type: 'string',
-                                  enum: ['collapsed', 'continuous'],
-                                  default: 'collapsed',
-                                },
+                                layout: { type: 'string', enum: ['collapsed', 'continuous'], default: 'collapsed' },
                                 show_author: {
                                   type: 'boolean',
                                   default: true,
@@ -5459,13 +4380,7 @@ export const readmeAPIv2Oas = {
                             },
                             footer: {
                               type: 'object',
-                              properties: {
-                                readme_logo: {
-                                  type: 'string',
-                                  enum: ['hide', 'show'],
-                                  default: 'show',
-                                },
-                              },
+                              properties: { readme_logo: { type: 'string', enum: ['hide', 'show'], default: 'show' } },
                               additionalProperties: false,
                             },
                             header: {
@@ -5476,20 +4391,14 @@ export const readmeAPIv2Oas = {
                                   enum: ['solid', 'gradient', 'line', 'overlay'],
                                   default: 'solid',
                                 },
-                                gradient_color: {
-                                  type: 'string',
-                                  nullable: true,
-                                },
+                                gradient_color: { type: 'string', nullable: true },
                                 overlay: {
                                   type: 'object',
                                   properties: {
                                     image: {
                                       type: 'object',
                                       properties: {
-                                        name: {
-                                          type: 'string',
-                                          nullable: true,
-                                        },
+                                        name: { type: 'string', nullable: true },
                                         width: {
                                           type: 'number',
                                           nullable: true,
@@ -5528,11 +4437,7 @@ export const readmeAPIv2Oas = {
                                           description:
                                             'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
                                         },
-                                        url: {
-                                          type: 'string',
-                                          format: 'uri',
-                                          nullable: true,
-                                        },
+                                        url: { type: 'string', format: 'uri', nullable: true },
                                       },
                                       required: ['name', 'width', 'height', 'color', 'links', 'uri', 'url'],
                                       additionalProperties: false,
@@ -5582,10 +4487,7 @@ export const readmeAPIv2Oas = {
                                 dark_mode: {
                                   type: 'object',
                                   properties: {
-                                    name: {
-                                      type: 'string',
-                                      nullable: true,
-                                    },
+                                    name: { type: 'string', nullable: true },
                                     width: {
                                       type: 'number',
                                       nullable: true,
@@ -5623,11 +4525,7 @@ export const readmeAPIv2Oas = {
                                       description:
                                         'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
                                     },
-                                    url: {
-                                      type: 'string',
-                                      format: 'uri',
-                                      nullable: true,
-                                    },
+                                    url: { type: 'string', format: 'uri', nullable: true },
                                   },
                                   required: ['name', 'width', 'height', 'color', 'links', 'uri', 'url'],
                                   additionalProperties: false,
@@ -5635,10 +4533,7 @@ export const readmeAPIv2Oas = {
                                 main: {
                                   type: 'object',
                                   properties: {
-                                    name: {
-                                      type: 'string',
-                                      nullable: true,
-                                    },
+                                    name: { type: 'string', nullable: true },
                                     width: {
                                       type: 'number',
                                       nullable: true,
@@ -5676,11 +4571,7 @@ export const readmeAPIv2Oas = {
                                       description:
                                         'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
                                     },
-                                    url: {
-                                      type: 'string',
-                                      format: 'uri',
-                                      nullable: true,
-                                    },
+                                    url: { type: 'string', format: 'uri', nullable: true },
                                   },
                                   required: ['name', 'width', 'height', 'color', 'links', 'uri', 'url'],
                                   additionalProperties: false,
@@ -5688,10 +4579,7 @@ export const readmeAPIv2Oas = {
                                 favicon: {
                                   type: 'object',
                                   properties: {
-                                    name: {
-                                      type: 'string',
-                                      nullable: true,
-                                    },
+                                    name: { type: 'string', nullable: true },
                                     width: {
                                       type: 'number',
                                       nullable: true,
@@ -5729,20 +4617,12 @@ export const readmeAPIv2Oas = {
                                       description:
                                         'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
                                     },
-                                    url: {
-                                      type: 'string',
-                                      format: 'uri',
-                                      nullable: true,
-                                    },
+                                    url: { type: 'string', format: 'uri', nullable: true },
                                   },
                                   required: ['name', 'width', 'height', 'color', 'links', 'uri', 'url'],
                                   additionalProperties: false,
                                 },
-                                size: {
-                                  type: 'string',
-                                  enum: ['default', 'large'],
-                                  default: 'default',
-                                },
+                                size: { type: 'string', enum: ['default', 'large'], default: 'default' },
                               },
                               required: ['dark_mode', 'main', 'favicon'],
                               additionalProperties: false,
@@ -5796,18 +4676,9 @@ export const readmeAPIv2Oas = {
                                           'recipes',
                                         ],
                                       },
-                                      title: {
-                                        type: 'string',
-                                        nullable: true,
-                                      },
-                                      url: {
-                                        type: 'string',
-                                        nullable: true,
-                                      },
-                                      custom_page: {
-                                        type: 'string',
-                                        nullable: true,
-                                      },
+                                      title: { type: 'string', nullable: true },
+                                      url: { type: 'string', nullable: true },
+                                      custom_page: { type: 'string', nullable: true },
                                     },
                                     required: ['type', 'title', 'url', 'custom_page'],
                                     additionalProperties: false,
@@ -5821,14 +4692,8 @@ export const readmeAPIv2Oas = {
                                     changelog: {
                                       type: 'object',
                                       properties: {
-                                        label: {
-                                          type: 'string',
-                                          enum: ['Changelog'],
-                                        },
-                                        alias: {
-                                          type: 'string',
-                                          nullable: true,
-                                        },
+                                        label: { type: 'string', enum: ['Changelog'] },
+                                        alias: { type: 'string', nullable: true },
                                         visibility: {
                                           type: 'string',
                                           enum: ['enabled', 'disabled'],
@@ -5841,14 +4706,8 @@ export const readmeAPIv2Oas = {
                                     discussions: {
                                       type: 'object',
                                       properties: {
-                                        label: {
-                                          type: 'string',
-                                          enum: ['Discussions'],
-                                        },
-                                        alias: {
-                                          type: 'string',
-                                          nullable: true,
-                                        },
+                                        label: { type: 'string', enum: ['Discussions'] },
+                                        alias: { type: 'string', nullable: true },
                                         visibility: {
                                           type: 'string',
                                           enum: ['enabled', 'disabled'],
@@ -5861,10 +4720,7 @@ export const readmeAPIv2Oas = {
                                     home: {
                                       type: 'object',
                                       properties: {
-                                        label: {
-                                          type: 'string',
-                                          enum: ['Home'],
-                                        },
+                                        label: { type: 'string', enum: ['Home'] },
                                         visibility: {
                                           type: 'string',
                                           enum: ['enabled', 'disabled'],
@@ -5877,10 +4733,7 @@ export const readmeAPIv2Oas = {
                                     graphql: {
                                       type: 'object',
                                       properties: {
-                                        label: {
-                                          type: 'string',
-                                          enum: ['GraphQL'],
-                                        },
+                                        label: { type: 'string', enum: ['GraphQL'] },
                                         visibility: {
                                           type: 'string',
                                           enum: ['enabled', 'disabled'],
@@ -5894,14 +4747,8 @@ export const readmeAPIv2Oas = {
                                     guides: {
                                       type: 'object',
                                       properties: {
-                                        label: {
-                                          type: 'string',
-                                          enum: ['Guides'],
-                                        },
-                                        alias: {
-                                          type: 'string',
-                                          nullable: true,
-                                        },
+                                        label: { type: 'string', enum: ['Guides'] },
+                                        alias: { type: 'string', nullable: true },
                                         visibility: {
                                           type: 'string',
                                           enum: ['enabled', 'disabled'],
@@ -5914,14 +4761,8 @@ export const readmeAPIv2Oas = {
                                     recipes: {
                                       type: 'object',
                                       properties: {
-                                        label: {
-                                          type: 'string',
-                                          enum: ['Recipes'],
-                                        },
-                                        alias: {
-                                          type: 'string',
-                                          nullable: true,
-                                        },
+                                        label: { type: 'string', enum: ['Recipes'] },
+                                        alias: { type: 'string', nullable: true },
                                         visibility: {
                                           type: 'string',
                                           enum: ['enabled', 'disabled'],
@@ -5934,14 +4775,8 @@ export const readmeAPIv2Oas = {
                                     reference: {
                                       type: 'object',
                                       properties: {
-                                        label: {
-                                          type: 'string',
-                                          enum: ['API Reference'],
-                                        },
-                                        alias: {
-                                          type: 'string',
-                                          nullable: true,
-                                        },
+                                        label: { type: 'string', enum: ['API Reference'] },
+                                        alias: { type: 'string', nullable: true },
                                         visibility: {
                                           type: 'string',
                                           enum: ['enabled', 'disabled'],
@@ -5990,18 +4825,9 @@ export const readmeAPIv2Oas = {
                                           'recipes',
                                         ],
                                       },
-                                      title: {
-                                        type: 'string',
-                                        nullable: true,
-                                      },
-                                      url: {
-                                        type: 'string',
-                                        nullable: true,
-                                      },
-                                      custom_page: {
-                                        type: 'string',
-                                        nullable: true,
-                                      },
+                                      title: { type: 'string', nullable: true },
+                                      url: { type: 'string', nullable: true },
+                                      custom_page: { type: 'string', nullable: true },
                                     },
                                     required: ['type', 'title', 'url', 'custom_page'],
                                     additionalProperties: false,
@@ -6029,29 +4855,16 @@ export const readmeAPIv2Oas = {
                                           'recipes',
                                         ],
                                       },
-                                      title: {
-                                        type: 'string',
-                                        nullable: true,
-                                      },
-                                      url: {
-                                        type: 'string',
-                                        nullable: true,
-                                      },
-                                      custom_page: {
-                                        type: 'string',
-                                        nullable: true,
-                                      },
+                                      title: { type: 'string', nullable: true },
+                                      url: { type: 'string', nullable: true },
+                                      custom_page: { type: 'string', nullable: true },
                                     },
                                     required: ['type', 'title', 'url', 'custom_page'],
                                     additionalProperties: false,
                                   },
                                   description: 'The navigation settings for your projects subnavigation bar.',
                                 },
-                                subheader_layout: {
-                                  type: 'string',
-                                  enum: ['links', 'dropdown'],
-                                  default: 'links',
-                                },
+                                subheader_layout: { type: 'string', enum: ['links', 'dropdown'], default: 'links' },
                                 version: {
                                   type: 'string',
                                   enum: ['enabled', 'disabled'],
@@ -6099,19 +4912,9 @@ export const readmeAPIv2Oas = {
                         custom_login: {
                           type: 'object',
                           properties: {
-                            jwt_secret: {
-                              type: 'string',
-                            },
-                            login_url: {
-                              type: 'string',
-                              format: 'uri',
-                              nullable: true,
-                            },
-                            logout_url: {
-                              type: 'string',
-                              format: 'uri',
-                              nullable: true,
-                            },
+                            jwt_secret: { type: 'string' },
+                            login_url: { type: 'string', format: 'uri', nullable: true },
+                            logout_url: { type: 'string', format: 'uri', nullable: true },
                           },
                           required: ['jwt_secret', 'login_url', 'logout_url'],
                           additionalProperties: false,
@@ -6214,10 +5017,7 @@ export const readmeAPIv2Oas = {
                                 readme_webhook_login: {
                                   type: 'object',
                                   properties: {
-                                    external_id: {
-                                      type: 'string',
-                                      nullable: true,
-                                    },
+                                    external_id: { type: 'string', nullable: true },
                                     region: {
                                       type: 'string',
                                       enum: [
@@ -6256,14 +5056,8 @@ export const readmeAPIv2Oas = {
                                       ],
                                       nullable: true,
                                     },
-                                    role_arn: {
-                                      type: 'string',
-                                      nullable: true,
-                                    },
-                                    usage_plan_id: {
-                                      type: 'string',
-                                      nullable: true,
-                                    },
+                                    role_arn: { type: 'string', nullable: true },
+                                    usage_plan_id: { type: 'string', nullable: true },
                                   },
                                   required: ['external_id', 'region', 'role_arn', 'usage_plan_id'],
                                   additionalProperties: false,
@@ -6274,12 +5068,7 @@ export const readmeAPIv2Oas = {
                             },
                             bing: {
                               type: 'object',
-                              properties: {
-                                verify: {
-                                  type: 'string',
-                                  nullable: true,
-                                },
-                              },
+                              properties: { verify: { type: 'string', nullable: true } },
                               required: ['verify'],
                               additionalProperties: false,
                             },
@@ -6292,32 +5081,21 @@ export const readmeAPIv2Oas = {
                                   description:
                                     "Your Google Analytics ID. If it starts with UA-, we'll use Universal Analytics otherwise Google Analytics 4.",
                                 },
-                                site_verification: {
-                                  type: 'string',
-                                  nullable: true,
-                                },
+                                site_verification: { type: 'string', nullable: true },
                               },
                               required: ['analytics', 'site_verification'],
                               additionalProperties: false,
                             },
                             heap: {
                               type: 'object',
-                              properties: {
-                                id: {
-                                  type: 'string',
-                                  nullable: true,
-                                },
-                              },
+                              properties: { id: { type: 'string', nullable: true } },
                               required: ['id'],
                               additionalProperties: false,
                             },
                             intercom: {
                               type: 'object',
                               properties: {
-                                app_id: {
-                                  type: 'string',
-                                  nullable: true,
-                                },
+                                app_id: { type: 'string', nullable: true },
                                 secure_mode: {
                                   type: 'object',
                                   properties: {
@@ -6343,37 +5121,21 @@ export const readmeAPIv2Oas = {
                             },
                             koala: {
                               type: 'object',
-                              properties: {
-                                key: {
-                                  type: 'string',
-                                  nullable: true,
-                                },
-                              },
+                              properties: { key: { type: 'string', nullable: true } },
                               required: ['key'],
                               additionalProperties: false,
                             },
                             localize: {
                               type: 'object',
-                              properties: {
-                                key: {
-                                  type: 'string',
-                                  nullable: true,
-                                },
-                              },
+                              properties: { key: { type: 'string', nullable: true } },
                               required: ['key'],
                               additionalProperties: false,
                             },
                             recaptcha: {
                               type: 'object',
                               properties: {
-                                site_key: {
-                                  type: 'string',
-                                  nullable: true,
-                                },
-                                secret_key: {
-                                  type: 'string',
-                                  nullable: true,
-                                },
+                                site_key: { type: 'string', nullable: true },
+                                secret_key: { type: 'string', nullable: true },
                               },
                               required: ['site_key', 'secret_key'],
                               additionalProperties: false,
@@ -6382,10 +5144,7 @@ export const readmeAPIv2Oas = {
                             segment: {
                               type: 'object',
                               properties: {
-                                key: {
-                                  type: 'string',
-                                  nullable: true,
-                                },
+                                key: { type: 'string', nullable: true },
                                 domain: {
                                   type: 'string',
                                   nullable: true,
@@ -6398,23 +5157,13 @@ export const readmeAPIv2Oas = {
                             },
                             typekit: {
                               type: 'object',
-                              properties: {
-                                key: {
-                                  type: 'string',
-                                  nullable: true,
-                                },
-                              },
+                              properties: { key: { type: 'string', nullable: true } },
                               required: ['key'],
                               additionalProperties: false,
                             },
                             zendesk: {
                               type: 'object',
-                              properties: {
-                                subdomain: {
-                                  type: 'string',
-                                  nullable: true,
-                                },
-                              },
+                              properties: { subdomain: { type: 'string', nullable: true } },
                               required: ['subdomain'],
                               additionalProperties: false,
                             },
@@ -6434,41 +5183,17 @@ export const readmeAPIv2Oas = {
                           ],
                           additionalProperties: false,
                         },
-                        name: {
-                          type: 'string',
-                          description: 'The name of the project.',
-                        },
+                        name: { type: 'string', description: 'The name of the project.' },
                         onboarding_completed: {
                           type: 'object',
                           properties: {
-                            api: {
-                              type: 'boolean',
-                              default: false,
-                            },
-                            appearance: {
-                              type: 'boolean',
-                              default: false,
-                            },
-                            documentation: {
-                              type: 'boolean',
-                              default: false,
-                            },
-                            domain: {
-                              type: 'boolean',
-                              default: false,
-                            },
-                            jwt: {
-                              type: 'boolean',
-                              default: false,
-                            },
-                            logs: {
-                              type: 'boolean',
-                              default: false,
-                            },
-                            metricsSDK: {
-                              type: 'boolean',
-                              default: false,
-                            },
+                            api: { type: 'boolean', default: false },
+                            appearance: { type: 'boolean', default: false },
+                            documentation: { type: 'boolean', default: false },
+                            domain: { type: 'boolean', default: false },
+                            jwt: { type: 'boolean', default: false },
+                            logs: { type: 'boolean', default: false },
+                            metricsSDK: { type: 'boolean', default: false },
                           },
                           additionalProperties: false,
                         },
@@ -6515,26 +5240,15 @@ export const readmeAPIv2Oas = {
                             grace_period: {
                               type: 'object',
                               properties: {
-                                enabled: {
-                                  type: 'boolean',
-                                  default: false,
-                                },
-                                end_date: {
-                                  type: 'string',
-                                  format: 'date-time',
-                                  nullable: true,
-                                  default: null,
-                                },
+                                enabled: { type: 'boolean', default: false },
+                                end_date: { type: 'string', format: 'date-time', nullable: true, default: null },
                               },
                               additionalProperties: false,
                             },
                             trial: {
                               type: 'object',
                               properties: {
-                                expired: {
-                                  type: 'boolean',
-                                  default: false,
-                                },
+                                expired: { type: 'boolean', default: false },
                                 end_date: {
                                   type: 'string',
                                   format: 'date-time',
@@ -6572,14 +5286,7 @@ export const readmeAPIv2Oas = {
                           type: 'array',
                           items: {
                             type: 'object',
-                            properties: {
-                              from: {
-                                type: 'string',
-                              },
-                              to: {
-                                type: 'string',
-                              },
-                            },
+                            properties: { from: { type: 'string' }, to: { type: 'string' } },
                             required: ['from', 'to'],
                             additionalProperties: false,
                           },
@@ -6677,11 +5384,7 @@ export const readmeAPIv2Oas = {
                           default: 'disabled',
                           description: 'Expose a `sitemap.xml` directory on your project.',
                         },
-                        subdomain: {
-                          type: 'string',
-                          pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
-                          maxLength: 30,
-                        },
+                        subdomain: { type: 'string', pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*', maxLength: 30 },
                         suggested_edits: {
                           type: 'string',
                           enum: ['enabled', 'disabled'],
@@ -6693,18 +5396,9 @@ export const readmeAPIv2Oas = {
                           items: {
                             type: 'object',
                             properties: {
-                              id: {
-                                type: 'string',
-                                description: 'Variable Identifier',
-                              },
-                              name: {
-                                type: 'string',
-                                description: 'The key name of the variable.',
-                              },
-                              default: {
-                                type: 'string',
-                                description: 'The default value of the variable.',
-                              },
+                              id: { type: 'string', description: 'Variable Identifier' },
+                              name: { type: 'string', description: 'The key name of the variable.' },
+                              default: { type: 'string', description: 'The default value of the variable.' },
                               source: {
                                 type: 'string',
                                 enum: ['server', 'security', 'custom', ''],
@@ -6734,19 +5428,9 @@ export const readmeAPIv2Oas = {
                           items: {
                             type: 'object',
                             properties: {
-                              action: {
-                                type: 'string',
-                                enum: ['login'],
-                                default: 'login',
-                              },
-                              timeout: {
-                                type: 'number',
-                                default: 5000,
-                              },
-                              url: {
-                                type: 'string',
-                                format: 'uri',
-                              },
+                              action: { type: 'string', enum: ['login'], default: 'login' },
+                              timeout: { type: 'number', default: 5000 },
+                              url: { type: 'string', format: 'uri' },
                             },
                             required: ['url'],
                             additionalProperties: false,
@@ -6873,9 +5557,7 @@ export const readmeAPIv2Oas = {
           "Searches the developer hub.\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: {
-              type: 'string',
-            },
+            schema: { type: 'string' },
             in: 'query',
             name: 'query',
             required: true,
@@ -6892,9 +5574,7 @@ export const readmeAPIv2Oas = {
             description: 'The section to search within.',
           },
           {
-            schema: {
-              type: 'string',
-            },
+            schema: { type: 'string' },
             in: 'query',
             name: 'version',
             required: false,
@@ -6909,9 +5589,7 @@ export const readmeAPIv2Oas = {
                 schema: {
                   type: 'object',
                   properties: {
-                    total: {
-                      type: 'number',
-                    },
+                    total: { type: 'number' },
                     data: {
                       type: 'array',
                       items: {
@@ -6920,10 +5598,7 @@ export const readmeAPIv2Oas = {
                           url: {
                             type: 'object',
                             properties: {
-                              full: {
-                                type: 'string',
-                                description: 'The full URL of the page.',
-                              },
+                              full: { type: 'string', description: 'The full URL of the page.' },
                               relative: {
                                 type: 'string',
                                 description: 'The relative URL of the page without the version or base URL.',
@@ -6932,36 +5607,22 @@ export const readmeAPIv2Oas = {
                             required: ['full', 'relative'],
                             additionalProperties: false,
                           },
-                          title: {
-                            type: 'string',
-                          },
-                          excerpt: {
-                            type: 'string',
-                          },
+                          title: { type: 'string' },
+                          excerpt: { type: 'string' },
                           highlights: {
                             type: 'array',
                             items: {
                               type: 'object',
                               properties: {
-                                score: {
-                                  type: 'number',
-                                },
-                                path: {
-                                  type: 'string',
-                                  enum: ['title', 'excerpt', 'searchContents', 'body'],
-                                },
+                                score: { type: 'number' },
+                                path: { type: 'string', enum: ['title', 'excerpt', 'searchContents', 'body'] },
                                 texts: {
                                   type: 'array',
                                   items: {
                                     type: 'object',
                                     properties: {
-                                      value: {
-                                        type: 'string',
-                                      },
-                                      type: {
-                                        type: 'string',
-                                        enum: ['hit', 'text'],
-                                      },
+                                      value: { type: 'string' },
+                                      type: { type: 'string', enum: ['hit', 'text'] },
                                     },
                                     required: ['value', 'type'],
                                     additionalProperties: false,
@@ -6972,9 +5633,7 @@ export const readmeAPIv2Oas = {
                               additionalProperties: false,
                             },
                           },
-                          slug: {
-                            type: 'string',
-                          },
+                          slug: { type: 'string' },
                           section: {
                             type: 'string',
                             enum: ['guides', 'reference', 'recipes', 'custom_pages', 'discuss', 'changelog'],
@@ -6984,23 +5643,14 @@ export const readmeAPIv2Oas = {
                             nullable: true,
                             description: 'The semver version number this search is scoped to.',
                           },
-                          subdomain: {
-                            type: 'string',
-                          },
+                          subdomain: { type: 'string' },
                           api: {
                             type: 'object',
-                            properties: {
-                              method: {
-                                type: 'string',
-                                nullable: true,
-                              },
-                            },
+                            properties: { method: { type: 'string', nullable: true } },
                             required: ['method'],
                             additionalProperties: false,
                           },
-                          uri: {
-                            type: 'string',
-                          },
+                          uri: { type: 'string' },
                         },
                         required: [
                           'url',
@@ -7028,42 +5678,17 @@ export const readmeAPIv2Oas = {
       },
     },
   },
-  servers: [
-    {
-      url: 'https://api.readme.com/v2',
-      description: 'The ReadMe API',
-    },
-  ],
-  security: [
-    {
-      bearer: [],
-    },
-  ],
-  'x-readme': {
-    'proxy-enabled': true,
-  },
+  servers: [{ url: 'https://api.readme.com/v2', description: 'The ReadMe API' }],
+  security: [{ bearer: [] }],
+  'x-readme': { 'proxy-enabled': true },
   tags: [
-    {
-      name: 'API Reference',
-    },
-    {
-      name: 'APIs',
-    },
-    {
-      name: 'Changelog',
-    },
-    {
-      name: 'Custom Pages',
-    },
-    {
-      name: 'Guides',
-    },
-    {
-      name: 'Projects',
-    },
-    {
-      name: 'Search',
-    },
+    { name: 'API Reference' },
+    { name: 'APIs' },
+    { name: 'Changelog' },
+    { name: 'Custom Pages' },
+    { name: 'Guides' },
+    { name: 'Projects' },
+    { name: 'Search' },
   ],
 } as const satisfies OASDocument;
 
