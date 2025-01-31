@@ -399,7 +399,9 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
     if (results.failed.length === 1) {
       throw results.failed[0].error;
     } else {
-      throw new Error(
+      const errors = results.failed.map(({ error }) => error);
+      throw new AggregateError(
+        errors,
         dryRun
           ? `Multiple dry runs failed. To see more detailed errors for a page, run \`${this.config.bin} ${this.id} <path-to-page.md>\` --dry-run.`
           : `Multiple page uploads failed. To see more detailed errors for a page, run \`${this.config.bin} ${this.id} <path-to-page.md>\`.`,

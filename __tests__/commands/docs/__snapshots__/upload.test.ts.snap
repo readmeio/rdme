@@ -96,7 +96,7 @@ exports[`rdme docs upload > given that the file path is a directory > should err
 
 exports[`rdme docs upload > given that the file path is a directory > should handle a mix of creates and updates and failures and skipped files (dry run) 1`] = `
 {
-  "error": [Error: Multiple dry runs failed. To see more detailed errors for a page, run \`rdme docs upload <path-to-page.md>\` --dry-run.],
+  "error": [AggregateError: Multiple dry runs failed. To see more detailed errors for a page, run \`rdme docs upload <path-to-page.md>\` --dry-run.],
   "stderr": "- 🔍 Looking for Markdown files in __tests__/__fixtures__/docs/mixed-docs...
 ✔ 🔍 Looking for Markdown files in __tests__/__fixtures__/docs/mixed-docs... 5 file(s) found!
 - 🔬 Validating front matter data...
@@ -122,7 +122,7 @@ exports[`rdme docs upload > given that the file path is a directory > should han
 
 exports[`rdme docs upload > given that the file path is a directory > should handle a mix of creates and updates and failures and skipped files 1`] = `
 {
-  "error": [Error: Multiple page uploads failed. To see more detailed errors for a page, run \`rdme docs upload <path-to-page.md>\`.],
+  "error": [AggregateError: Multiple page uploads failed. To see more detailed errors for a page, run \`rdme docs upload <path-to-page.md>\`.],
   "stderr": "- 🔍 Looking for Markdown files in __tests__/__fixtures__/docs/mixed-docs...
 ✔ 🔍 Looking for Markdown files in __tests__/__fixtures__/docs/mixed-docs... 5 file(s) found!
 - 🔬 Validating front matter data...
