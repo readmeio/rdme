@@ -4,14 +4,13 @@ import { vi } from 'vitest';
 
 /**
  * Creates a mock function for testing `git.remote`.
- *
- * @param remote remote to return (usually `origin`)
- * @param remoteUrl git URL for the given remote
- * @param defaultBranch the HEAD branch
  */
 export default function getGitRemoteMock(
+  /** remote to return (usually `origin`) */
   remote = 'origin',
+  /** git URL for the given remote */
   remoteUrl = 'https://github.com/readmeio/rdme.git',
+  /** the HEAD branch */
   defaultBranch = 'main',
 ) {
   return vi.fn(arr => {

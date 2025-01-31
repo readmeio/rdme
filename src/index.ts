@@ -1,3 +1,5 @@
+import type { ValueOf } from 'type-fest';
+
 import ChangelogsCommand from './commands/changelogs.js';
 import LoginCommand from './commands/login.js';
 import LogoutCommand from './commands/logout.js';
@@ -35,6 +37,8 @@ export const COMMANDS = {
 
   whoami: WhoAmICommand,
 };
+
+export type CommandClass = ValueOf<typeof COMMANDS>;
 
 /**
  * A type-safe way to get the command IDs in the CLI for a specific topic.
