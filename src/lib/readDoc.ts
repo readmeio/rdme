@@ -8,11 +8,11 @@ import grayMatter from 'gray-matter';
 
 export interface PageMetadata<T = Record<string, unknown>> {
   /**
-   * The contents of the Markdown file below the YAML front matter
+   * The contents of the Markdown file below the YAML frontmatter
    */
   content: string;
   /**
-   * A JSON object representation of the the YAML front matter
+   * A JSON object representation of the the YAML frontmatter
    */
   data: T;
   /**
@@ -20,13 +20,13 @@ export interface PageMetadata<T = Record<string, unknown>> {
    */
   filePath: string;
   /**
-   * A hash of the file contents (including the front matter)
+   * A hash of the file contents (including the frontmatter)
    *
    * @deprecated this is no longer used in our API.
    */
   hash: string;
   /**
-   * The page slug from front matter (and falls back to the filename without the extension)
+   * The page slug from frontmatter (and falls back to the filename without the extension)
    */
   slug: string;
 }
@@ -49,7 +49,7 @@ export default function readPage(
   // (so far we've seen this issue crop up in tests)
   const matter = grayMatter(rawFileContents, {});
   const { content, data } = matter;
-  this.debug(`front matter for ${filePath}: ${JSON.stringify(matter)}`);
+  this.debug(`frontmatter for ${filePath}: ${JSON.stringify(matter)}`);
 
   // Stripping the subdirectories and markdown extension from the filename and lowercasing to get the default slug.
   const slug = matter.data.slug || path.basename(filePath).replace(path.extname(filePath), '').toLowerCase();

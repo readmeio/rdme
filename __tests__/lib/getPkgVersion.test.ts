@@ -22,8 +22,6 @@ describe('#getPkgVersion()', () => {
 
   afterEach(() => {
     consoleErrorSpy.mockRestore();
-
-    nock.cleanAll();
   });
 
   it('should grab version from package.json by default', () => {
