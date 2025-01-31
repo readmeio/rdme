@@ -3,7 +3,7 @@ import type { OASDocument } from 'oas/types';
 import fs from 'node:fs';
 
 import prompts from 'prompts';
-import { describe, it, expect, vi, beforeAll, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeAll, beforeEach, afterEach, type MockInstance } from 'vitest';
 
 import Command from '../../../src/commands/openapi/convert.js';
 import { runCommandAndReturnResult } from '../../helpers/oclif.js';
@@ -11,7 +11,7 @@ import { runCommandAndReturnResult } from '../../helpers/oclif.js';
 const successfulConversion = () => 'Your API definition has been converted and bundled and saved to output.json!';
 
 describe('rdme openapi convert', () => {
-  const fsWriteFileSync = fs.writeFileSync;
+  let fsWriteFileSyncSpy: MockInstance<typeof fs.writeFileSync>;
   let reducedSpec: OASDocument;
   let run: (args?: string[]) => Promise<string>;
   let testWorkingDir: string;
@@ -22,15 +22,15 @@ describe('rdme openapi convert', () => {
 
   beforeEach(() => {
     testWorkingDir = process.cwd();
-    fs.writeFileSync = vi.fn((fileName, data) => {
+
+    fsWriteFileSyncSpy = vi.spyOn(fs, 'writeFileSync').mockImplementationOnce((filename, data) => {
       reducedSpec = JSON.parse(data as string);
     });
   });
 
   afterEach(() => {
-    fs.writeFileSync = fsWriteFileSync;
     process.chdir(testWorkingDir);
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('converting', () => {
@@ -44,7 +44,7 @@ describe('rdme openapi convert', () => {
 
       await expect(run([spec])).resolves.toBe(successfulConversion());
 
-      expect(fs.writeFileSync).toHaveBeenCalledWith('output.json', expect.any(String));
+      expect(fsWriteFileSyncSpy).toHaveBeenCalledWith('output.json', expect.any(String));
       expect(reducedSpec.tags).toHaveLength(1);
       expect(Object.keys(reducedSpec.paths)).toStrictEqual(['/pet/{petId}']);
       expect(Object.keys(reducedSpec.paths['/pet/{petId}'])).toStrictEqual(['get', 'post', 'delete']);
@@ -64,7 +64,7 @@ describe('rdme openapi convert', () => {
       ]),
     ).resolves.toBe(successfulConversion());
 
-    expect(fs.writeFileSync).toHaveBeenCalledWith('output.json', expect.any(String));
+    expect(fsWriteFileSyncSpy).toHaveBeenCalledWith('output.json', expect.any(String));
     expect(Object.keys(reducedSpec.paths)).toStrictEqual(['/pet/{petId}']);
     expect(Object.keys(reducedSpec.paths['/pet/{petId}'])).toStrictEqual(['get', 'post', 'delete']);
   });
@@ -79,7 +79,7 @@ describe('rdme openapi convert', () => {
 
       await expect(run([spec])).resolves.toBe(successfulConversion());
 
-      expect(fs.writeFileSync).toHaveBeenCalledWith('output.json', expect.any(String));
+      expect(fsWriteFileSyncSpy).toHaveBeenCalledWith('output.json', expect.any(String));
       expect(reducedSpec.tags).toHaveLength(3);
       expect(Object.keys(reducedSpec.paths)).toStrictEqual([
         '/pet',
