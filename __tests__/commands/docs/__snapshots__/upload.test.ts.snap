@@ -225,7 +225,9 @@ exports[`rdme docs upload > given that the file path is a single file > given th
 - 🎭 Uploading files to ReadMe (but not really because it's a dry run)...
 ✖ 🎭 Uploading files to ReadMe (but not really because it's a dry run)... 1 file(s) failed.
 ",
-  "stdout": "",
+  "stdout": "🚨 Unable to fetch data about the following 1 page(s):
+   - __tests__/__fixtures__/docs/slug-docs/new-doc-slug.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+",
 }
 `;
 
@@ -327,7 +329,9 @@ your category is whack],
 - 🚀 Uploading files to ReadMe...
 ✖ 🚀 Uploading files to ReadMe... 1 file(s) failed.
 ",
-  "stdout": "",
+  "stdout": "🚨 Received errors when attempting to upload 1 page(s):
+   - __tests__/__fixtures__/docs/mixed-docs/legacy-category.md: bad request
+",
 }
 `;
 
@@ -472,7 +476,9 @@ exports[`rdme docs upload > given that the file path is a single file > should e
 - 🚀 Uploading files to ReadMe...
 ✖ 🚀 Uploading files to ReadMe... 1 file(s) failed.
 ",
-  "stdout": "",
+  "stdout": "🚨 Received errors when attempting to upload 1 page(s):
+   - __tests__/__fixtures__/docs/new-docs/new-doc.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+",
 }
 `;
 

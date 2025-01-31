@@ -383,23 +383,22 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
   }
 
   if (results.failed.length) {
-    if (results.failed.length === 1 && results.failed[0].result === 'failed') {
+    this.log(
+      dryRun
+        ? `🚨 Unable to fetch data about the following ${results.failed.length} page(s):`
+        : `🚨 Received errors when attempting to upload ${results.failed.length} page(s):`,
+    );
+    results.failed.forEach(({ error, filePath }) => {
+      let errorMessage = error.message || 'unknown error';
+      if (error instanceof APIv2Error && error.response.title) {
+        errorMessage = error.response.title;
+      }
+
+      this.log(`   - ${chalk.underline(filePath)}: ${errorMessage}`);
+    });
+    if (results.failed.length === 1) {
       throw results.failed[0].error;
     } else {
-      this.log(
-        dryRun
-          ? `🚨 Unable to fetch data about the following ${results.failed.length} page(s):`
-          : `🚨 Received errors when attempting to upload ${results.failed.length} page(s):`,
-      );
-      results.failed.forEach(({ error, filePath }) => {
-        let errorMessage = error.message || 'unknown error';
-        if (error instanceof APIv2Error && error.response.title) {
-          errorMessage = error.response.title;
-        }
-
-        this.log(`   - ${chalk.underline(filePath)}: ${errorMessage}`);
-      });
-
       throw new Error(
         dryRun
           ? `Multiple dry runs failed. To see more detailed errors for a page, run \`${this.config.bin} ${this.id} <path-to-page.md>\` --dry-run.`
