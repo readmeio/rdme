@@ -83,7 +83,6 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
    If you previously uploaded API definitions to ReadMe via `rdme openapi`, the command is now `rdme openapi upload`. There are now two main updates:
 
    - There is no prompt to select your ReadMe project version if you omit the `--version` flag. It now defaults to `stable` (i.e., your main ReadMe project version).
-
    - Previously with `openapi`, the `--id` flag was an ObjectID that required an initial upload to ReadMe, which made it difficult to upsert API definitions and manage many at scale. With `openapi upload`, the `--id` flag has been renamed to `--slug` and is now optional. The slug (i.e., the unique identifier for your API definition resource in ReadMe) is inferred from the file path or URL to your API definition.
 
    Read more in [the `openapi upload` command docs](https://github.com/readmeio/rdme/tree/v10/documentation/commands/openapi.md#rdme-openapi-upload-spec).
