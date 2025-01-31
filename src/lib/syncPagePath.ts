@@ -29,13 +29,15 @@ export type CommandsThatSyncMarkdown = DocsUploadCommand;
 
 type PageRepresentation = GuidesRequestRepresentation;
 
+interface FailedPushResult {
+  error: APIv2Error | Error;
+  filePath: string;
+  result: 'failed';
+  slug: string;
+}
+
 type PushResult =
-  | {
-      error: Error;
-      filePath: string;
-      result: 'failed';
-      slug: string;
-    }
+  | FailedPushResult
   | {
       filePath: string;
       response: PageRepresentation | null;
@@ -316,7 +318,7 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
 
   const results = rawResults.reduce<{
     created: PushResult[];
-    failed: PushResult[];
+    failed: FailedPushResult[];
     skipped: PushResult[];
     updated: PushResult[];
   }>(
@@ -327,10 +329,10 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
           acc.created.push(pushResult);
         } else if (pushResult.result === 'updated') {
           acc.updated.push(pushResult);
-        } else if (pushResult.result === 'skipped') {
-          acc.skipped.push(pushResult);
-        } else {
+        } else if (pushResult.result === 'failed') {
           acc.failed.push(pushResult);
+        } else {
+          acc.skipped.push(pushResult);
         }
       } else {
         // we're ignoring these ones for now since errors are handled in the catch block
