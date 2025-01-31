@@ -5,7 +5,7 @@ import prompts from 'prompts';
 import { describe, afterEach, it, expect, beforeAll, beforeEach, vi } from 'vitest';
 
 import Command from '../../../src/commands/docs/upload.js';
-import { getAPIv2Mock, getAPIv2MockForGHA } from '../../helpers/get-api-mock.js';
+import { getAPIv1Mock, getAPIv2Mock, getAPIv2MockForGHA } from '../../helpers/get-api-mock.js';
 import { runCommand, type OclifOutput } from '../../helpers/oclif.js';
 import { after, before } from '../../helpers/setup-gha-env.js';
 
@@ -161,6 +161,39 @@ describe('rdme docs upload', () => {
           { encoding: 'utf-8' },
         );
 
+        mock.done();
+      });
+
+      it('should fix the front matter issues in the file and insert the proper category mapping', async () => {
+        const mappingsMock = getAPIv1Mock()
+          .get('/api/v1/migration')
+          .basicAuth({ user: key })
+          .reply(201, {
+            categories: { '5ae122e10fdf4e39bb34db6f': 'mapped-uri' },
+          });
+
+        const mock = getAPIv2Mock({ authorization })
+          .head('/versions/stable/guides/legacy-category')
+          .reply(404)
+          .post('/versions/stable/guides', {
+            category: { uri: '/versions/stable/categories/guides/mapped-uri' },
+            slug: 'legacy-category',
+            title: 'This is the document title',
+            content: { body: '\nBody\n' },
+          })
+          .reply(201, {});
+
+        prompts.inject([true]);
+
+        const result = await run(['__tests__/__fixtures__/docs/mixed-docs/legacy-category.md', '--key', key]);
+        expect(result).toMatchSnapshot();
+        expect(fs.writeFileSync).toHaveBeenCalledWith(
+          '__tests__/__fixtures__/docs/mixed-docs/legacy-category.md',
+          expect.stringContaining('uri: mapped-uri'),
+          { encoding: 'utf-8' },
+        );
+
+        mappingsMock.done();
         mock.done();
       });
 
