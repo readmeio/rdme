@@ -1,0 +1,376 @@
+import fs from 'node:fs';
+
+import nock from 'nock';
+import prompts from 'prompts';
+import { describe, afterEach, it, expect, beforeAll, beforeEach, vi } from 'vitest';
+
+import Command from '../../../src/commands/docs/upload.js';
+import { getAPIv2Mock } from '../../helpers/get-api-mock.js';
+import { runCommand, type OclifOutput } from '../../helpers/oclif.js';
+import { after, before } from '../../helpers/setup-gha-env.js';
+
+const key = 'rdme_123';
+const authorization = `Bearer ${key}`;
+
+describe('rdme docs upload', () => {
+  let run: (args?: string[]) => OclifOutput;
+
+  beforeAll(() => {
+    nock.disableNetConnect();
+    run = runCommand(Command);
+  });
+
+  beforeEach(() => {
+    fs.writeFileSync = vi.fn(() => {});
+  });
+
+  afterEach(() => {
+    nock.cleanAll();
+  });
+
+  describe('given that the file path is a single file', () => {
+    it('should create a guides page in ReadMe', async () => {
+      const mock = getAPIv2Mock({ authorization })
+        .head('/versions/stable/guides/new-doc')
+        .reply(404)
+        .post('/versions/stable/guides', {
+          category: { uri: '/versions/stable/categories/guides/category-slug' },
+          slug: 'new-doc',
+          title: 'This is the document title',
+          content: { body: '\nBody\n' },
+        })
+        .reply(201, {});
+
+      const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key]);
+      expect(result).toMatchSnapshot();
+
+      mock.done();
+    });
+
+    it('should allow for user to specify version via --version flag', async () => {
+      const mock = getAPIv2Mock({ authorization })
+        .head('/versions/1.2.3/guides/new-doc')
+        .reply(404)
+        .post('/versions/1.2.3/guides', {
+          category: { uri: '/versions/1.2.3/categories/guides/category-slug' },
+          slug: 'new-doc',
+          title: 'This is the document title',
+          content: { body: '\nBody\n' },
+        })
+        .reply(201, {});
+
+      const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key, '--version', '1.2.3']);
+      expect(result).toMatchSnapshot();
+
+      mock.done();
+    });
+
+    it('should not create anything in ReadMe if the --dry-run flag is passed', async () => {
+      const mock = getAPIv2Mock({ authorization }).head('/versions/stable/guides/new-doc').reply(404);
+
+      const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key, '--dry-run']);
+      expect(result).toMatchSnapshot();
+
+      mock.done();
+    });
+
+    it('should not update anything in ReadMe if the --dry-run flag is passed', async () => {
+      const mock = getAPIv2Mock({ authorization }).head('/versions/stable/guides/some-slug').reply(200);
+
+      const result = await run(['__tests__/__fixtures__/docs/slug-docs/new-doc-slug.md', '--key', key, '--dry-run']);
+      expect(result).toMatchSnapshot();
+
+      mock.done();
+    });
+
+    describe('given that the slug is passed in the front matter', () => {
+      it('should use that slug to create a page in ReadMe', async () => {
+        const mock = getAPIv2Mock({ authorization })
+          .head('/versions/stable/guides/some-slug')
+          .reply(404)
+          .post('/versions/stable/guides', {
+            category: { uri: '/versions/stable/categories/guides/some-category-uri' },
+            title: 'This is the document title',
+            content: { body: '\nBody\n' },
+            slug: 'some-slug',
+          })
+          .reply(201, {});
+
+        const result = await run(['__tests__/__fixtures__/docs/slug-docs/new-doc-slug.md', '--key', key]);
+        expect(result).toMatchSnapshot();
+
+        mock.done();
+      });
+
+      it('should use that slug update an existing guides page in ReadMe', async () => {
+        const mock = getAPIv2Mock({ authorization })
+          .head('/versions/stable/guides/some-slug')
+          .reply(200)
+          .patch('/versions/stable/guides/some-slug', {
+            category: { uri: '/versions/stable/categories/guides/some-category-uri' },
+            title: 'This is the document title',
+            content: { body: '\nBody\n' },
+          })
+          .reply(201, {});
+
+        const result = await run(['__tests__/__fixtures__/docs/slug-docs/new-doc-slug.md', '--key', key]);
+        expect(result).toMatchSnapshot();
+
+        mock.done();
+      });
+    });
+
+    it('should fix the front matter issues in the file and create the corrected file in ReadMe', async () => {
+      const mock = getAPIv2Mock({ authorization })
+        .head('/versions/stable/guides/legacy-category')
+        .reply(404)
+        .post('/versions/stable/guides', {
+          category: { uri: '/versions/stable/categories/guides/uri-that-does-not-map-to-5ae122e10fdf4e39bb34db6f' },
+          slug: 'legacy-category',
+          title: 'This is the document title',
+          content: { body: '\nBody\n' },
+        })
+        .reply(201, {});
+
+      prompts.inject([true]);
+
+      const result = await run(['__tests__/__fixtures__/docs/mixed-docs/legacy-category.md', '--key', key]);
+      expect(result).toMatchSnapshot();
+      expect(fs.writeFileSync).toHaveBeenCalledWith(
+        '__tests__/__fixtures__/docs/mixed-docs/legacy-category.md',
+        expect.any(String),
+        { encoding: 'utf-8' },
+      );
+
+      mock.done();
+    });
+
+    it('should exit if the user declines to fix the issues', async () => {
+      prompts.inject([false]);
+
+      const result = await run(['__tests__/__fixtures__/docs/mixed-docs/legacy-category.md', '--key', key]);
+      expect(result).toMatchSnapshot();
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
+    });
+
+    it('should skip client-side validation if the --skip-validation flag is passed', async () => {
+      const mock = getAPIv2Mock({ authorization })
+        .head('/versions/stable/guides/legacy-category')
+        .reply(404)
+        .post('/versions/stable/guides', {
+          category: '5ae122e10fdf4e39bb34db6f',
+          slug: 'legacy-category',
+          title: 'This is the document title',
+          content: { body: '\nBody\n' },
+        })
+        .reply(400, { title: 'bad request', detail: 'your category is whack' });
+
+      const result = await run([
+        '__tests__/__fixtures__/docs/mixed-docs/legacy-category.md',
+        '--key',
+        key,
+        '--skip-validation',
+      ]);
+      expect(result).toMatchSnapshot();
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
+
+      mock.done();
+    });
+
+    it('should warn user if the file has no autofixable issues', async () => {
+      const mock = getAPIv2Mock({ authorization })
+        .head('/versions/stable/guides/invalid-attributes')
+        .reply(404)
+        .post('/versions/stable/guides', {
+          category: { uri: '/versions/stable/categories/guides/some-category-uri', 'is-this-a-valid-property': 'nope' },
+          slug: 'invalid-attributes',
+          title: 'This is the document title',
+          content: { body: '\nBody\n' },
+        })
+        .reply(201, {});
+
+      const result = await run(['__tests__/__fixtures__/docs/mixed-docs/invalid-attributes.md', '--key', key]);
+      expect(result).toMatchSnapshot();
+
+      mock.done();
+    });
+
+    describe('and the command is being run in a CI environment', () => {
+      beforeEach(before);
+
+      afterEach(after);
+
+      it('should error out if the file has validation errors', async () => {
+        const result = await run(['__tests__/__fixtures__/docs/mixed-docs/legacy-category.md', '--key', key]);
+        expect(result).toMatchSnapshot();
+        expect(fs.writeFileSync).not.toHaveBeenCalled();
+      });
+    });
+
+    it('should error out if a non-404 error is returned from the HEAD request', async () => {
+      const mock = getAPIv2Mock({ authorization }).head('/versions/stable/guides/new-doc').reply(500);
+
+      const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key]);
+      expect(result).toMatchSnapshot();
+
+      mock.done();
+    });
+
+    it('should error out if the file does not exist', async () => {
+      const result = await run(['non-existent-file', '--key', key]);
+      expect(result).toMatchSnapshot();
+    });
+
+    it('should error out if the file has an invalid file extension', async () => {
+      const result = await run(['package.json', '--key', key]);
+      expect(result).toMatchSnapshot();
+    });
+  });
+
+  describe('given that the file path is a directory', () => {
+    it('should create a guides page in ReadMe for each file in the directory and its subdirectories', async () => {
+      const mock = getAPIv2Mock({ authorization })
+        .head('/versions/stable/guides/simple-doc')
+        .reply(404)
+        .post('/versions/stable/guides', {
+          slug: 'simple-doc',
+          title: 'This is the document title',
+          content: { body: '\nBody\n' },
+        })
+        .reply(201, {})
+        .head('/versions/stable/guides/another-doc')
+        .reply(404)
+        .post('/versions/stable/guides', {
+          slug: 'another-doc',
+          title: 'This is another document title',
+          content: { body: '\nAnother body\n' },
+          category: { uri: '/versions/stable/categories/guides/category-slug' },
+        })
+        .reply(201, {});
+
+      const result = await run(['__tests__/__fixtures__/docs/existing-docs', '--key', key]);
+      expect(result).toMatchSnapshot();
+
+      mock.done();
+    });
+
+    it('should update existing guides pages in ReadMe for each file in the directory and its subdirectories', async () => {
+      const mock = getAPIv2Mock({ authorization })
+        .head('/versions/stable/guides/simple-doc')
+        .reply(200)
+        .patch('/versions/stable/guides/simple-doc', {
+          title: 'This is the document title',
+          content: { body: '\nBody\n' },
+        })
+        .reply(201, {})
+        .head('/versions/stable/guides/another-doc')
+        .reply(200)
+        .patch('/versions/stable/guides/another-doc', {
+          title: 'This is another document title',
+          category: { uri: '/versions/stable/categories/guides/category-slug' },
+          content: { body: '\nAnother body\n' },
+        })
+        .reply(201, {});
+
+      const result = await run(['__tests__/__fixtures__/docs/existing-docs', '--key', key]);
+      expect(result).toMatchSnapshot();
+
+      mock.done();
+    });
+
+    describe('given that the directory contains parent/child docs', () => {
+      it('should upload parents before children', async () => {
+        const mock = getAPIv2Mock({ authorization })
+          .head('/versions/stable/guides/child')
+          .reply(404)
+          .post('/versions/stable/guides', {
+            slug: 'child',
+            title: 'Child',
+            parent: { uri: '/versions/stable/guides/parent' },
+            content: { body: '\nBody\n' },
+          })
+          .reply(201, {})
+          .head('/versions/stable/guides/friend')
+          .reply(404)
+          .post('/versions/stable/guides', {
+            slug: 'friend',
+            title: 'Friend',
+            content: { body: '\nBody\n' },
+          })
+          .reply(201, {})
+          .head('/versions/stable/guides/parent')
+          .reply(404)
+          .post('/versions/stable/guides', {
+            slug: 'parent',
+            title: 'Parent',
+            parent: { uri: '/versions/stable/guides/grandparent' },
+            content: { body: '\nBody\n' },
+          })
+          .reply(201, {})
+          .head('/versions/stable/guides/grandparent')
+          .reply(404)
+          .post('/versions/stable/guides', {
+            slug: 'grandparent',
+            title: 'Grandparent',
+            content: { body: '\nBody\n' },
+          })
+          .reply(201, {});
+
+        const result = await run(['__tests__/__fixtures__/docs/multiple-docs', '--key', key]);
+        expect(result).toMatchSnapshot();
+
+        mock.done();
+      });
+    });
+
+    it('should error out if the directory does not contain any Markdown files', async () => {
+      const result = await run(['__tests__/__fixtures__/ref-oas', '--key', key]);
+      expect(result).toMatchSnapshot();
+    });
+
+    it('should handle a mix of creates and updates and failures and skipped files', async () => {
+      const mock = getAPIv2Mock({ authorization })
+        .head('/versions/stable/guides/invalid-attributes')
+        .reply(404)
+        .post('/versions/stable/guides', {
+          category: { uri: '/versions/stable/categories/guides/some-category-uri', 'is-this-a-valid-property': 'nope' },
+          slug: 'invalid-attributes',
+          title: 'This is the document title',
+          content: { body: '\nBody\n' },
+        })
+        .reply(201, {})
+        .head('/versions/stable/guides/legacy-category')
+        .reply(200)
+        .patch('/versions/stable/guides/legacy-category', {
+          category: { uri: '/versions/stable/categories/guides/uri-that-does-not-map-to-5ae122e10fdf4e39bb34db6f' },
+          title: 'This is the document title',
+          content: { body: '\nBody\n' },
+        })
+        .reply(201, {})
+        .head('/versions/stable/guides/some-slug')
+        .reply(404)
+        .post('/versions/stable/guides', {
+          slug: 'some-slug',
+          title: 'This is the document title',
+          category: { uri: '/versions/stable/categories/guides/some-category-uri' },
+          content: { body: '\nBody\n' },
+        })
+        .reply(500, {})
+        .head('/versions/stable/guides/simple-doc')
+        .reply(404)
+        .post('/versions/stable/guides', {
+          slug: 'simple-doc',
+          title: 'This is the document title',
+          content: { body: '\nBody\n' },
+        })
+        .reply(500, {});
+
+      prompts.inject([true]);
+
+      const result = await run(['__tests__/__fixtures__/docs/mixed-docs', '--key', key]);
+      expect(result).toMatchSnapshot();
+
+      mock.done();
+    });
+  });
+});

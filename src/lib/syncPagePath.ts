@@ -1,0 +1,393 @@
+import type { PageMetadata } from './readPage.js';
+import type { GuidesRequestRepresentation } from './types.js';
+import type DocsUploadCommand from '../commands/docs/upload.js';
+
+import fs from 'node:fs/promises';
+import path from 'node:path';
+
+import chalk from 'chalk';
+import toposort from 'toposort';
+
+import { APIv2Error } from './apiError.js';
+import { fetchMappings, fetchSchema, fix, writeFixes } from './frontmatter.js';
+import isCI from './isCI.js';
+import promptTerminal from './promptWrapper.js';
+import readdirRecursive from './readdirRecursive.js';
+import readPage from './readPage.js';
+import { categoryUriRegexPattern, parentUriRegexPattern } from './types.js';
+
+/**
+ * Commands that use this file for syncing Markdown via APIv2.
+ *
+ * Note that the `changelogs` command is not included here
+ * because it is backed by APIv1.
+ */
+export type CommandsThatSyncMarkdown = DocsUploadCommand;
+
+type PageRepresentation = GuidesRequestRepresentation;
+
+type PushResult =
+  | {
+      error: Error;
+      filePath: string;
+      result: 'failed';
+      slug: string;
+    }
+  | {
+      filePath: string;
+      response: PageRepresentation | null;
+      result: 'created' | 'skipped' | 'updated';
+      slug: string;
+    };
+
+/**
+ * Reads the contents of the specified Markdown or HTML file
+ * and creates/updates the corresponding page in ReadMe
+ *
+ * @returns A promise-wrapped string with the result
+ */
+async function pushPage(
+  this: CommandsThatSyncMarkdown,
+  /** the file data */
+  fileData: PageMetadata,
+): Promise<PushResult> {
+  const { key, 'dry-run': dryRun, version } = this.flags;
+  const { content, filePath, slug } = fileData;
+  const data = fileData.data;
+  let route = `/${this.route}`;
+  if (version) {
+    route = `/versions/${version}${route}`;
+  }
+
+  const headers = new Headers({ authorization: `Bearer ${key}`, 'Content-Type': 'application/json' });
+
+  if (!Object.keys(data).length) {
+    this.debug(`No front matter attributes found for ${filePath}, not syncing`);
+    return { response: null, filePath, result: 'skipped', slug };
+  }
+
+  const payload: PageRepresentation = {
+    ...data,
+    content: {
+      ...(typeof data.content === 'object' ? data.content : {}),
+      body: content,
+    },
+    slug,
+  };
+
+  try {
+    // normalize the category uri
+    if (payload.category?.uri) {
+      const regex = new RegExp(categoryUriRegexPattern);
+      if (!regex.test(payload.category.uri)) {
+        let uri = payload.category.uri;
+        this.debug(`normalizing category uri ${uri} for ${filePath}`);
+        // remove leading and trailing slashes
+        uri = uri.replace(/^\/|\/$/g, '');
+        payload.category.uri = `/versions/${version}/categories/${this.route}/${uri}`;
+      }
+    }
+
+    // normalize the parent uri
+    if (payload.parent?.uri) {
+      const regex = new RegExp(parentUriRegexPattern);
+      if (!regex.test(payload.parent.uri)) {
+        let uri = payload.parent.uri;
+        this.debug(`normalizing parent uri ${uri} for ${filePath}`);
+        // remove leading and trailing slashes
+        uri = uri.replace(/^\/|\/$/g, '');
+        payload.parent.uri = `/versions/${version}/${this.route}/${uri}`;
+      }
+    }
+
+    const createPage = (): Promise<PushResult> | PushResult => {
+      if (dryRun) {
+        return { filePath, result: 'created', response: null, slug };
+      }
+
+      return this.readmeAPIFetch(
+        route,
+        { method: 'POST', headers, body: JSON.stringify(payload) },
+        { filePath, fileType: 'path' },
+      )
+        .then(res => this.handleAPIRes(res))
+        .then(res => {
+          return { filePath, result: 'created', response: res, slug };
+        });
+    };
+
+    const updatePage = (): Promise<PushResult> | PushResult => {
+      if (dryRun) {
+        return { filePath, result: 'updated', response: null, slug };
+      }
+
+      // omits the slug from the PATCH payload since this would lead to unexpected behavior
+      delete payload.slug;
+
+      return this.readmeAPIFetch(
+        `${route}/${slug}`,
+        {
+          method: 'PATCH',
+          headers,
+          body: JSON.stringify(payload),
+        },
+        { filePath, fileType: 'path' },
+      )
+        .then(res => this.handleAPIRes(res))
+        .then(res => {
+          return { filePath, result: 'updated', response: res, slug };
+        });
+    };
+
+    return this.readmeAPIFetch(`${route}/${slug}`, {
+      method: 'HEAD',
+      headers,
+    })
+      .then(async res => {
+        await this.handleAPIRes(res, true);
+        if (!res.ok) {
+          if (res.status !== 404) throw new APIv2Error(res);
+          this.debug(`error retrieving data for ${slug}, creating page`);
+          return createPage();
+        }
+        this.debug(`data received for ${slug}, updating page`);
+        return updatePage();
+      })
+      .catch(err => {
+        // eslint-disable-next-line no-param-reassign
+        err.message = `Error uploading ${chalk.underline(filePath)}:\n\n${err.message}`;
+        throw err;
+      });
+  } catch (e) {
+    return { error: e, filePath, result: 'failed', slug };
+  }
+}
+
+const byParentPage = (left: PageMetadata<PageRepresentation>, right: PageMetadata<PageRepresentation>) => {
+  return (right.data.parent?.uri ? 1 : 0) - (left.data.parent?.uri ? 1 : 0);
+};
+
+function sortFiles(files: PageMetadata<PageRepresentation>[]): PageMetadata<PageRepresentation>[] {
+  const filesBySlug = files.reduce<Record<string, PageMetadata<PageRepresentation>>>((bySlug, obj) => {
+    // eslint-disable-next-line no-param-reassign
+    bySlug[obj.slug] = obj;
+    return bySlug;
+  }, {});
+  const dependencies = Object.values(filesBySlug).reduce<
+    [PageMetadata<PageRepresentation>, PageMetadata<PageRepresentation>][]
+  >((edges, obj) => {
+    if (obj.data.parent?.uri && filesBySlug[obj.data.parent.uri]) {
+      edges.push([filesBySlug[obj.data.parent.uri], filesBySlug[obj.slug]]);
+    }
+
+    return edges;
+  }, []);
+
+  return toposort.array(files, dependencies);
+}
+
+/**
+ * Takes a path (either to a directory of files or to a single file)
+ * and syncs those (either via POST or PATCH) to ReadMe.
+ * @returns An array of objects with the results
+ */
+export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
+  const { path: pathInput }: { path: string } = this.args;
+  const { 'dry-run': dryRun, 'skip-validation': skipValidation } = this.flags;
+
+  const allowedFileExtensions = ['.markdown', '.md'];
+
+  const stat = await fs.stat(pathInput).catch(err => {
+    if (err.code === 'ENOENT') {
+      throw new Error("Oops! We couldn't locate a file or directory at the path you provided.");
+    }
+    throw err;
+  });
+
+  if (skipValidation) {
+    this.warn('Skipping pre-upload validation of the Markdown file(s). This is not recommended.');
+  }
+
+  const schema = await fetchSchema.call(this);
+  const mappings = await fetchMappings.call(this);
+
+  let files: string[];
+
+  if (stat.isDirectory()) {
+    // Filter out any files that don't match allowedFileExtensions
+    files = readdirRecursive(pathInput).filter(file =>
+      allowedFileExtensions.includes(path.extname(file).toLowerCase()),
+    );
+
+    if (!files.length) {
+      throw new Error(
+        `The directory you provided (${pathInput}) doesn't contain any of the following file extensions: ${allowedFileExtensions.join(
+          ', ',
+        )}.`,
+      );
+    }
+  } else {
+    const fileExtension = path.extname(pathInput).toLowerCase();
+    if (!allowedFileExtensions.includes(fileExtension)) {
+      throw new Error(
+        `Invalid file extension (${fileExtension}). Must be one of the following: ${allowedFileExtensions.join(', ')}`,
+      );
+    }
+
+    files = [pathInput];
+  }
+
+  this.debug(`number of files: ${files.length}`);
+
+  let unsortedFiles = files.map(file => readPage.call(this, file));
+
+  if (!skipValidation) {
+    // validate the files, prompt user to fix if necessary
+    const validationResults = unsortedFiles.map(file => {
+      this.debug(`validating front matter for ${file.filePath}`);
+      return fix.call(this, file.data, schema, mappings);
+    });
+
+    const filesWithIssues = validationResults.filter(result => result.hasIssues);
+    const filesWithFixableIssues = filesWithIssues.filter(result => result.changeCount);
+
+    if (filesWithIssues.length) {
+      if (filesWithFixableIssues.length) {
+        if (isCI()) {
+          throw new Error(
+            `${filesWithIssues.length} file(s) have issues that should be fixed before uploading to ReadMe. Please run \`${this.config.bin} ${this.id} ${pathInput} --dry-run\` in a non-CI environment to fix them.`,
+          );
+        }
+
+        this.warn(`${filesWithFixableIssues.length} file(s) have issues that can be fixed automatically.`);
+
+        const { confirm } = await promptTerminal([
+          {
+            type: 'confirm',
+            name: 'confirm',
+            message:
+              'Would you like to make these fixes? This will write changes to the file(s) that you should save and commit.',
+          },
+        ]);
+
+        if (!confirm) {
+          throw new Error('Aborting upload due to user input.');
+        }
+
+        const updatedFiles = unsortedFiles.map((file, index) => {
+          return writeFixes.call(this, file, validationResults[index].updatedData);
+        });
+
+        unsortedFiles = updatedFiles;
+      } else {
+        this.warn(
+          `${filesWithIssues.length} file(s) have front matter issues that cannot be fixed automatically. The upload will proceed but we recommend addressing these issues. Please get in touch with us at support@readme.io if you need a hand.`,
+        );
+      }
+    }
+  }
+
+  // topological sort the files
+  const sortedFiles = sortFiles((unsortedFiles as PageMetadata<PageRepresentation>[]).sort(byParentPage));
+
+  // push the files to ReadMe
+  const rawResults = await Promise.allSettled(sortedFiles.map(async fileData => pushPage.call(this, fileData)));
+
+  const results = rawResults.reduce<{
+    created: PushResult[];
+    failed: PushResult[];
+    skipped: PushResult[];
+    updated: PushResult[];
+  }>(
+    (acc, result, index) => {
+      if (result.status === 'fulfilled') {
+        const pushResult = result.value;
+        if (pushResult.result === 'created') {
+          acc.created.push(pushResult);
+        } else if (pushResult.result === 'updated') {
+          acc.updated.push(pushResult);
+        } else if (pushResult.result === 'skipped') {
+          acc.skipped.push(pushResult);
+        } else {
+          acc.failed.push(pushResult);
+        }
+      } else {
+        // we're ignoring these ones for now since errors are handled in the catch block
+        acc.failed.push({
+          error: result.reason,
+          filePath: sortedFiles[index].filePath,
+          result: 'failed',
+          slug: sortedFiles[index].slug,
+        });
+      }
+
+      return acc;
+    },
+    { created: [], updated: [], skipped: [], failed: [] },
+  );
+
+  if (dryRun) {
+    this.log('Dry run complete. No changes were made to ReadMe.');
+    if (results.created.length) {
+      this.log(
+        `🌱 The following ${results.created.length} page(s) do not currently exist in ReadMe and will be created:`,
+      );
+      results.created.forEach(({ filePath, slug }) => {
+        this.log(`   - ${slug} (${chalk.underline(filePath)})`);
+      });
+    }
+
+    if (results.updated.length) {
+      this.log(`🔄 The following ${results.updated.length} page(s) already exist in ReadMe and will be updated:`);
+      results.updated.forEach(({ filePath, slug }) => {
+        this.log(`   - ${slug} (${chalk.underline(filePath)})`);
+      });
+    }
+
+    if (results.skipped.length) {
+      this.log(`⏭️ The following ${results.skipped.length} page(s) will be skipped due to no front matter data:`);
+      results.skipped.forEach(({ filePath, slug }) => {
+        this.log(`   - ${slug} (${chalk.underline(filePath)})`);
+      });
+    }
+
+    if (results.failed.length) {
+      if (results.failed.length === 1 && results.failed[0].result === 'failed') {
+        throw results.failed[0].error;
+      } else {
+        this.log(`The following ${results.failed.length} page(s) experienced failures:`);
+      }
+    }
+  } else {
+    if (results.created.length) {
+      this.log(`🌱 Successfully created ${results.created.length} page(s) in ReadMe:`);
+      results.created.forEach(({ filePath, slug }) => {
+        this.log(`   - ${slug} (${chalk.underline(filePath)})`);
+      });
+    }
+
+    if (results.updated.length) {
+      this.log(`🔄 Successfully updated ${results.updated.length} page(s) in ReadMe:`);
+      results.updated.forEach(({ filePath, slug }) => {
+        this.log(`   - ${slug} (${chalk.underline(filePath)})`);
+      });
+    }
+
+    if (results.skipped.length) {
+      this.log(`Skipped ${results.skipped.length} page(s) in ReadMe due to no front matter data:`);
+      results.skipped.forEach(({ filePath, slug }) => {
+        this.log(`   - ${slug} (${chalk.underline(filePath)})`);
+      });
+    }
+
+    if (results.failed.length) {
+      if (results.failed.length === 1 && results.failed[0].result === 'failed') {
+        throw results.failed[0].error;
+      } else {
+        this.log(`Failed to upload the following ${results.failed.length} page(s):`);
+      }
+    }
+  }
+
+  return results;
+}

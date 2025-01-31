@@ -2,4 +2,4 @@
 title: Grandparent
 ---
 
-# Grandparent Body
+Body
