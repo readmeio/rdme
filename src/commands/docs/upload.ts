@@ -43,7 +43,7 @@ export default class DocsUploadCommand extends BaseCommand<typeof DocsUploadComm
     github: githubFlag,
     key: keyFlag,
     'dry-run': Flags.boolean({
-      description: 'Runs the command without creating nor updating any changelogs in ReadMe. Useful for debugging.',
+      description: 'Runs the command without creating nor updating any Guides in ReadMe. Useful for debugging.',
       aliases: ['dryRun'],
       deprecateAliases: true,
     }),
