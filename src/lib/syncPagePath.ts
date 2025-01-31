@@ -206,9 +206,6 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
     this.warn('Skipping pre-upload validation of the Markdown file(s). This is not recommended.');
   }
 
-  const schema = await fetchSchema.call(this);
-  const mappings = await fetchMappings.call(this);
-
   let files: string[];
 
   if (stat.isDirectory()) {
@@ -240,6 +237,9 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
   let unsortedFiles = files.map(file => readPage.call(this, file));
 
   if (!skipValidation) {
+    const schema = await fetchSchema.call(this);
+    const mappings = await fetchMappings.call(this);
+
     // validate the files, prompt user to fix if necessary
     const validationResults = unsortedFiles.map(file => {
       this.debug(`validating front matter for ${file.filePath}`);
