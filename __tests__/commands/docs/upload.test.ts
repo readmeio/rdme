@@ -126,80 +126,85 @@ describe('rdme docs upload', () => {
       });
     });
 
-    it('should fix the front matter issues in the file and create the corrected file in ReadMe', async () => {
-      const mock = getAPIv2Mock({ authorization })
-        .head('/versions/stable/guides/legacy-category')
-        .reply(404)
-        .post('/versions/stable/guides', {
-          category: { uri: '/versions/stable/categories/guides/uri-that-does-not-map-to-5ae122e10fdf4e39bb34db6f' },
-          slug: 'legacy-category',
-          title: 'This is the document title',
-          content: { body: '\nBody\n' },
-        })
-        .reply(201, {});
+    describe('given that the file has front matter issues', () => {
+      it('should fix the front matter issues in the file and create the corrected file in ReadMe', async () => {
+        const mock = getAPIv2Mock({ authorization })
+          .head('/versions/stable/guides/legacy-category')
+          .reply(404)
+          .post('/versions/stable/guides', {
+            category: { uri: '/versions/stable/categories/guides/uri-that-does-not-map-to-5ae122e10fdf4e39bb34db6f' },
+            slug: 'legacy-category',
+            title: 'This is the document title',
+            content: { body: '\nBody\n' },
+          })
+          .reply(201, {});
 
-      prompts.inject([true]);
+        prompts.inject([true]);
 
-      const result = await run(['__tests__/__fixtures__/docs/mixed-docs/legacy-category.md', '--key', key]);
-      expect(result).toMatchSnapshot();
-      expect(fs.writeFileSync).toHaveBeenCalledWith(
-        '__tests__/__fixtures__/docs/mixed-docs/legacy-category.md',
-        expect.stringContaining('uri: uri-that-does-not-map-to-5ae122e10fdf4e39bb34db6f'),
-        { encoding: 'utf-8' },
-      );
+        const result = await run(['__tests__/__fixtures__/docs/mixed-docs/legacy-category.md', '--key', key]);
+        expect(result).toMatchSnapshot();
+        expect(fs.writeFileSync).toHaveBeenCalledWith(
+          '__tests__/__fixtures__/docs/mixed-docs/legacy-category.md',
+          expect.stringContaining('uri: uri-that-does-not-map-to-5ae122e10fdf4e39bb34db6f'),
+          { encoding: 'utf-8' },
+        );
 
-      mock.done();
-    });
+        mock.done();
+      });
 
-    it('should exit if the user declines to fix the issues', async () => {
-      prompts.inject([false]);
+      it('should exit if the user declines to fix the issues', async () => {
+        prompts.inject([false]);
 
-      const result = await run(['__tests__/__fixtures__/docs/mixed-docs/legacy-category.md', '--key', key]);
-      expect(result).toMatchSnapshot();
-      expect(fs.writeFileSync).not.toHaveBeenCalled();
-    });
+        const result = await run(['__tests__/__fixtures__/docs/mixed-docs/legacy-category.md', '--key', key]);
+        expect(result).toMatchSnapshot();
+        expect(fs.writeFileSync).not.toHaveBeenCalled();
+      });
 
-    it('should skip client-side validation if the --skip-validation flag is passed', async () => {
-      const mock = getAPIv2Mock({ authorization })
-        .head('/versions/stable/guides/legacy-category')
-        .reply(404)
-        .post('/versions/stable/guides', {
-          category: '5ae122e10fdf4e39bb34db6f',
-          slug: 'legacy-category',
-          title: 'This is the document title',
-          content: { body: '\nBody\n' },
-        })
-        .reply(400, { title: 'bad request', detail: 'your category is whack' });
+      it('should skip client-side validation if the --skip-validation flag is passed', async () => {
+        const mock = getAPIv2Mock({ authorization })
+          .head('/versions/stable/guides/legacy-category')
+          .reply(404)
+          .post('/versions/stable/guides', {
+            category: '5ae122e10fdf4e39bb34db6f',
+            slug: 'legacy-category',
+            title: 'This is the document title',
+            content: { body: '\nBody\n' },
+          })
+          .reply(400, { title: 'bad request', detail: 'your category is whack' });
 
-      const result = await run([
-        '__tests__/__fixtures__/docs/mixed-docs/legacy-category.md',
-        '--key',
-        key,
-        '--skip-validation',
-      ]);
-      expect(result).toMatchSnapshot();
-      expect(fs.writeFileSync).not.toHaveBeenCalled();
+        const result = await run([
+          '__tests__/__fixtures__/docs/mixed-docs/legacy-category.md',
+          '--key',
+          key,
+          '--skip-validation',
+        ]);
+        expect(result).toMatchSnapshot();
+        expect(fs.writeFileSync).not.toHaveBeenCalled();
 
-      mock.done();
-    });
+        mock.done();
+      });
 
-    it('should warn user if the file has no autofixable issues', async () => {
-      const mock = getAPIv2Mock({ authorization })
-        .head('/versions/stable/guides/invalid-attributes')
-        .reply(404)
-        .post('/versions/stable/guides', {
-          category: { uri: '/versions/stable/categories/guides/some-category-uri', 'is-this-a-valid-property': 'nope' },
-          slug: 'invalid-attributes',
-          title: 'This is the document title',
-          content: { body: '\nBody\n' },
-        })
-        .reply(201, {});
+      it('should warn user if the file has no autofixable issues', async () => {
+        const mock = getAPIv2Mock({ authorization })
+          .head('/versions/stable/guides/invalid-attributes')
+          .reply(404)
+          .post('/versions/stable/guides', {
+            category: {
+              uri: '/versions/stable/categories/guides/some-category-uri',
+              'is-this-a-valid-property': 'nope',
+            },
+            slug: 'invalid-attributes',
+            title: 'This is the document title',
+            content: { body: '\nBody\n' },
+          })
+          .reply(201, {});
 
-      const result = await run(['__tests__/__fixtures__/docs/mixed-docs/invalid-attributes.md', '--key', key]);
-      expect(result).toMatchSnapshot();
-      expect(fs.writeFileSync).not.toHaveBeenCalled();
+        const result = await run(['__tests__/__fixtures__/docs/mixed-docs/invalid-attributes.md', '--key', key]);
+        expect(result).toMatchSnapshot();
+        expect(fs.writeFileSync).not.toHaveBeenCalled();
 
-      mock.done();
+        mock.done();
+      });
     });
 
     describe('and the command is being run in a CI environment', () => {
