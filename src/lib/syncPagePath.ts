@@ -349,10 +349,6 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
     uploadSpinner.succeed(`${uploadSpinner.text} done!`);
   }
 
-  if (dryRun) {
-    this.log('Dry run complete. No changes were made to ReadMe.');
-  }
-
   if (results.created.length) {
     this.log(
       dryRun
