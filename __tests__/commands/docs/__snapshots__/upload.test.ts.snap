@@ -411,9 +411,7 @@ exports[`rdme docs upload > given that the file path is a single file > given th
 {
   "error": [APIv2Error: Error uploading __tests__/__fixtures__/docs/mixed-docs/legacy-category.md:
 
-The ReadMe API returned the following error:
-
-bad request
+ReadMe API error: bad request
 
 your category is whack],
   "stderr": " ›   Warning: Skipping pre-upload validation of the Markdown file(s). This is 
