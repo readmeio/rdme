@@ -67,24 +67,26 @@ describe('rdme docs upload', () => {
       mock.done();
     });
 
-    it('should not create anything in ReadMe if the --dry-run flag is passed', async () => {
-      const mock = getAPIv2Mock({ authorization }).head('/versions/stable/guides/new-doc').reply(404);
+    describe('given that the --dry-run flag is passed', () => {
+      it('should not create anything in ReadMe', async () => {
+        const mock = getAPIv2Mock({ authorization }).head('/versions/stable/guides/new-doc').reply(404);
 
-      const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key, '--dry-run']);
-      expect(result).toMatchSnapshot();
-      expect(fs.writeFileSync).not.toHaveBeenCalled();
+        const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key, '--dry-run']);
+        expect(result).toMatchSnapshot();
+        expect(fs.writeFileSync).not.toHaveBeenCalled();
 
-      mock.done();
-    });
+        mock.done();
+      });
 
-    it('should not update anything in ReadMe if the --dry-run flag is passed', async () => {
-      const mock = getAPIv2Mock({ authorization }).head('/versions/stable/guides/some-slug').reply(200);
+      it('should not update anything in ReadMe', async () => {
+        const mock = getAPIv2Mock({ authorization }).head('/versions/stable/guides/some-slug').reply(200);
 
-      const result = await run(['__tests__/__fixtures__/docs/slug-docs/new-doc-slug.md', '--key', key, '--dry-run']);
-      expect(result).toMatchSnapshot();
-      expect(fs.writeFileSync).not.toHaveBeenCalled();
+        const result = await run(['__tests__/__fixtures__/docs/slug-docs/new-doc-slug.md', '--key', key, '--dry-run']);
+        expect(result).toMatchSnapshot();
+        expect(fs.writeFileSync).not.toHaveBeenCalled();
 
-      mock.done();
+        mock.done();
+      });
     });
 
     describe('given that the slug is passed in the front matter', () => {

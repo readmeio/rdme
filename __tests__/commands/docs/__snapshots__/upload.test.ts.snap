@@ -302,6 +302,60 @@ exports[`rdme docs upload > given that the file path is a single file > and the 
 }
 `;
 
+exports[`rdme docs upload > given that the file path is a single file > given that the --dry-run flag is passed > should not create anything in ReadMe 1`] = `
+{
+  "result": {
+    "created": [
+      {
+        "filePath": "__tests__/__fixtures__/docs/new-docs/new-doc.md",
+        "response": null,
+        "result": "created",
+        "slug": "new-doc",
+      },
+    ],
+    "failed": [],
+    "skipped": [],
+    "updated": [],
+  },
+  "stderr": "- 🔬 Validating front matter data...
+✔ 🔬 Validating front matter data... no issues found!
+- 🎭 Uploading files to ReadMe (but not really because it's a dry run)...
+✔ 🎭 Uploading files to ReadMe (but not really because it's a dry run)... done!
+",
+  "stdout": "Dry run complete. No changes were made to ReadMe.
+🌱 The following 1 page(s) do not currently exist in ReadMe and will be created:
+   - new-doc (__tests__/__fixtures__/docs/new-docs/new-doc.md)
+",
+}
+`;
+
+exports[`rdme docs upload > given that the file path is a single file > given that the --dry-run flag is passed > should not update anything in ReadMe 1`] = `
+{
+  "result": {
+    "created": [],
+    "failed": [],
+    "skipped": [],
+    "updated": [
+      {
+        "filePath": "__tests__/__fixtures__/docs/slug-docs/new-doc-slug.md",
+        "response": null,
+        "result": "updated",
+        "slug": "some-slug",
+      },
+    ],
+  },
+  "stderr": "- 🔬 Validating front matter data...
+✔ 🔬 Validating front matter data... no issues found!
+- 🎭 Uploading files to ReadMe (but not really because it's a dry run)...
+✔ 🎭 Uploading files to ReadMe (but not really because it's a dry run)... done!
+",
+  "stdout": "Dry run complete. No changes were made to ReadMe.
+🔄 The following 1 page(s) already exist in ReadMe and will be updated:
+   - some-slug (__tests__/__fixtures__/docs/slug-docs/new-doc-slug.md)
+",
+}
+`;
+
 exports[`rdme docs upload > given that the file path is a single file > given that the file has front matter issues > should exit if the user declines to fix the issues 1`] = `
 {
   "error": [Error: Aborting upload due to user input.],
@@ -516,59 +570,5 @@ exports[`rdme docs upload > given that the file path is a single file > should e
   "error": [Error: Invalid file extension (.json). Must be one of the following: .markdown, .md],
   "stderr": "",
   "stdout": "",
-}
-`;
-
-exports[`rdme docs upload > given that the file path is a single file > should not create anything in ReadMe if the --dry-run flag is passed 1`] = `
-{
-  "result": {
-    "created": [
-      {
-        "filePath": "__tests__/__fixtures__/docs/new-docs/new-doc.md",
-        "response": null,
-        "result": "created",
-        "slug": "new-doc",
-      },
-    ],
-    "failed": [],
-    "skipped": [],
-    "updated": [],
-  },
-  "stderr": "- 🔬 Validating front matter data...
-✔ 🔬 Validating front matter data... no issues found!
-- 🎭 Uploading files to ReadMe (but not really because it's a dry run)...
-✔ 🎭 Uploading files to ReadMe (but not really because it's a dry run)... done!
-",
-  "stdout": "Dry run complete. No changes were made to ReadMe.
-🌱 The following 1 page(s) do not currently exist in ReadMe and will be created:
-   - new-doc (__tests__/__fixtures__/docs/new-docs/new-doc.md)
-",
-}
-`;
-
-exports[`rdme docs upload > given that the file path is a single file > should not update anything in ReadMe if the --dry-run flag is passed 1`] = `
-{
-  "result": {
-    "created": [],
-    "failed": [],
-    "skipped": [],
-    "updated": [
-      {
-        "filePath": "__tests__/__fixtures__/docs/slug-docs/new-doc-slug.md",
-        "response": null,
-        "result": "updated",
-        "slug": "some-slug",
-      },
-    ],
-  },
-  "stderr": "- 🔬 Validating front matter data...
-✔ 🔬 Validating front matter data... no issues found!
-- 🎭 Uploading files to ReadMe (but not really because it's a dry run)...
-✔ 🎭 Uploading files to ReadMe (but not really because it's a dry run)... done!
-",
-  "stdout": "Dry run complete. No changes were made to ReadMe.
-🔄 The following 1 page(s) already exist in ReadMe and will be updated:
-   - some-slug (__tests__/__fixtures__/docs/slug-docs/new-doc-slug.md)
-",
 }
 `;
