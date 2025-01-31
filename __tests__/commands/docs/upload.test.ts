@@ -415,5 +415,25 @@ describe('rdme docs upload', () => {
 
       mock.done();
     });
+
+    it('should handle a mix of creates and updates and failures and skipped files (dry run)', async () => {
+      const mock = getAPIv2Mock({ authorization })
+        .head('/versions/stable/guides/invalid-attributes')
+        .reply(404)
+        .head('/versions/stable/guides/legacy-category')
+        .reply(200)
+        .head('/versions/stable/guides/some-slug')
+        .reply(500)
+        .head('/versions/stable/guides/simple-doc')
+        .reply(500);
+
+      prompts.inject([true]);
+
+      const result = await run(['__tests__/__fixtures__/docs/mixed-docs', '--key', key, '--dry-run']);
+      expect(result).toMatchSnapshot();
+      expect(fs.writeFileSync).toHaveBeenCalledTimes(5);
+
+      mock.done();
+    });
   });
 });
