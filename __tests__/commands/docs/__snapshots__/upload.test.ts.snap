@@ -203,8 +203,6 @@ exports[`rdme docs upload > given that the file path is a single file > and the 
 ",
   "stdout": "🌱 Successfully created 1 page(s) in ReadMe:
    - new-doc (__tests__/__fixtures__/docs/new-docs/new-doc.md)
-
-::set-output name=rdme::{"created":[{"filePath":"__tests__/__fixtures__/docs/new-docs/new-doc.md","result":"created","response":{},"slug":"new-doc"}],"updated":[],"skipped":[],"failed":[]}
 ",
 }
 `;
