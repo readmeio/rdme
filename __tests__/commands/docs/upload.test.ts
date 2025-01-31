@@ -87,6 +87,16 @@ describe('rdme docs upload', () => {
 
         mock.done();
       });
+
+      it('should error out if a non-404 error is returned from the HEAD request', async () => {
+        const mock = getAPIv2Mock({ authorization }).head('/versions/stable/guides/some-slug').reply(500);
+
+        const result = await run(['__tests__/__fixtures__/docs/slug-docs/new-doc-slug.md', '--key', key, '--dry-run']);
+        expect(result).toMatchSnapshot();
+        expect(fs.writeFileSync).not.toHaveBeenCalled();
+
+        mock.done();
+      });
     });
 
     describe('given that the slug is passed in the front matter', () => {

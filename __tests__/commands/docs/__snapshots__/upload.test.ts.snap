@@ -302,6 +302,21 @@ exports[`rdme docs upload > given that the file path is a single file > and the 
 }
 `;
 
+exports[`rdme docs upload > given that the file path is a single file > given that the --dry-run flag is passed > should error out if a non-404 error is returned from the HEAD request 1`] = `
+{
+  "error": [APIv2Error: Error uploading __tests__/__fixtures__/docs/slug-docs/new-doc-slug.md:
+
+The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
+  "stderr": "- 🔬 Validating front matter data...
+✔ 🔬 Validating front matter data... no issues found!
+- 🎭 Uploading files to ReadMe (but not really because it's a dry run)...
+✖ 🎭 Uploading files to ReadMe (but not really because it's a dry run)... 1 file(s) failed.
+",
+  "stdout": "Dry run complete. No changes were made to ReadMe.
+",
+}
+`;
+
 exports[`rdme docs upload > given that the file path is a single file > given that the --dry-run flag is passed > should not create anything in ReadMe 1`] = `
 {
   "result": {
