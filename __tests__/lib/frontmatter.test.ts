@@ -6,11 +6,8 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import DocsUploadCommand from '../../src/commands/docs/upload.js';
 import { fix } from '../../src/lib/frontmatter.js';
 import { emptyMappings, fetchSchema } from '../../src/lib/readmeAPIFetch.js';
-import { readmeAPIv2Oas } from '../../src/lib/types.js';
-import { getAPIv2Mock } from '../helpers/get-api-mock.js';
+import { oasFetchMock } from '../helpers/get-api-mock.js';
 import { setupOclifConfig } from '../helpers/oclif.js';
-
-const oasFetchMock = (status = 200) => getAPIv2Mock().get('/openapi.json').reply(status, readmeAPIv2Oas);
 
 describe('#fix', () => {
   let command: DocsUploadCommand;
