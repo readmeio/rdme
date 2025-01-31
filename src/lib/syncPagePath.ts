@@ -6,18 +6,18 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 
 import chalk from 'chalk';
+import ora from 'ora';
 import toposort from 'toposort';
 
 import { APIv2Error } from './apiError.js';
 import { fix, writeFixes } from './frontmatter.js';
 import isCI from './isCI.js';
+import { oraOptions } from './logger.js';
 import promptTerminal from './promptWrapper.js';
 import readdirRecursive from './readdirRecursive.js';
 import { fetchMappings, fetchSchema } from './readmeAPIFetch.js';
 import readPage from './readPage.js';
 import { categoryUriRegexPattern, parentUriRegexPattern } from './types.js';
-import { oraOptions } from './logger.js';
-import ora from 'ora';
 
 /**
  * Commands that use this file for syncing Markdown via APIv2.
