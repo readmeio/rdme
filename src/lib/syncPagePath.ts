@@ -164,6 +164,13 @@ const byParentPage = (left: PageMetadata<PageRepresentation>, right: PageMetadat
   return (right.data.parent?.uri ? 1 : 0) - (left.data.parent?.uri ? 1 : 0);
 };
 
+/**
+ * Sorts files based on their `parent.uri` attribute. If a file has a `parent.uri` attribute,
+ * it will be sorted after the file it references.
+ *
+ * @see {@link https://github.com/readmeio/rdme/pull/973}
+ * @returns An array of sorted PageMetadata objects
+ */
 function sortFiles(files: PageMetadata<PageRepresentation>[]): PageMetadata<PageRepresentation>[] {
   const filesBySlug = files.reduce<Record<string, PageMetadata<PageRepresentation>>>((bySlug, obj) => {
     // eslint-disable-next-line no-param-reassign
@@ -290,8 +297,6 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
         this.warn(
           `${filesWithUnfixableIssues.length} file(s) have issues that cannot be fixed automatically. The upload will proceed but we recommend addressing these issues. Please get in touch with us at support@readme.io if you need a hand.`,
         );
-
-        //
       }
     } else {
       validationSpinner.succeed(`${validationSpinner.text} no issues found!`);

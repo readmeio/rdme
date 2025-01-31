@@ -39,17 +39,11 @@ export default class DocsUploadCommand extends BaseCommand<typeof DocsUploadComm
     },
   ];
 
-  static aliases = [
-    // 'docs',
-    // this needs to be separated by a colon in order for autocomplete to work properly
-    'guides:upload',
-  ];
-
   static flags = {
     github: githubFlag,
     key: keyFlag,
     'dry-run': Flags.boolean({
-      description: 'Runs the command without creating/updating any changelogs in ReadMe. Useful for debugging.',
+      description: 'Runs the command without creating nor updating any changelogs in ReadMe. Useful for debugging.',
       aliases: ['dryRun'],
       deprecateAliases: true,
     }),

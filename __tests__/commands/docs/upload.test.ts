@@ -21,11 +21,12 @@ describe('rdme docs upload', () => {
   });
 
   beforeEach(() => {
-    fs.writeFileSync = vi.fn(() => {});
+    vi.spyOn(fs, 'writeFileSync').mockImplementation(() => {});
   });
 
   afterEach(() => {
     nock.cleanAll();
+    vi.restoreAllMocks();
   });
 
   describe('given that the file path is a single file', () => {
