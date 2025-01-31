@@ -5,7 +5,7 @@ import prompts from 'prompts';
 import { describe, afterEach, it, expect, beforeAll, beforeEach, vi } from 'vitest';
 
 import Command from '../../../src/commands/docs/upload.js';
-import { getAPIv2Mock } from '../../helpers/get-api-mock.js';
+import { getAPIv2Mock, getAPIv2MockForGHA } from '../../helpers/get-api-mock.js';
 import { runCommand, type OclifOutput } from '../../helpers/oclif.js';
 import { after, before } from '../../helpers/setup-gha-env.js';
 
@@ -206,6 +206,30 @@ describe('rdme docs upload', () => {
       beforeEach(before);
 
       afterEach(after);
+
+      it('should create a guides page in ReadMe and include `x-readme-source-url` source header', async () => {
+        const headMock = getAPIv2MockForGHA({ authorization }).head('/versions/stable/guides/new-doc').reply(404);
+
+        const postMock = getAPIv2MockForGHA({
+          authorization,
+          'x-readme-source-url':
+            'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/__tests__/__fixtures__/docs/new-docs/new-doc.md',
+        })
+          .post('/versions/stable/guides', {
+            category: { uri: '/versions/stable/categories/guides/category-slug' },
+            slug: 'new-doc',
+            title: 'This is the document title',
+            content: { body: '\nBody\n' },
+          })
+          .reply(201, {});
+
+        const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key]);
+        expect(result).toMatchSnapshot();
+        expect(fs.writeFileSync).not.toHaveBeenCalled();
+
+        headMock.done();
+        postMock.done();
+      });
 
       it('should error out if the file has validation errors', async () => {
         const result = await run(['__tests__/__fixtures__/docs/mixed-docs/legacy-category.md', '--key', key]);

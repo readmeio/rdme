@@ -196,6 +196,34 @@ exports[`rdme docs upload > given that the file path is a directory > should upd
 }
 `;
 
+exports[`rdme docs upload > given that the file path is a single file > and the command is being run in a CI environment > should create a guides page in ReadMe and include \`x-readme-source-url\` source header 1`] = `
+{
+  "result": {
+    "created": [
+      {
+        "filePath": "__tests__/__fixtures__/docs/new-docs/new-doc.md",
+        "response": {},
+        "result": "created",
+        "slug": "new-doc",
+      },
+    ],
+    "failed": [],
+    "skipped": [],
+    "updated": [],
+  },
+  "stderr": "- 🔬 Validating front matter data...
+✔ 🔬 Validating front matter data... no issues found!
+- 🚀 Uploading files to ReadMe...
+✔ 🚀 Uploading files to ReadMe... done!
+",
+  "stdout": "🌱 Successfully created 1 page(s) in ReadMe:
+   - new-doc (__tests__/__fixtures__/docs/new-docs/new-doc.md)
+
+::set-output name=rdme::{"created":[{"filePath":"__tests__/__fixtures__/docs/new-docs/new-doc.md","result":"created","response":{},"slug":"new-doc"}],"updated":[],"skipped":[],"failed":[]}
+",
+}
+`;
+
 exports[`rdme docs upload > given that the file path is a single file > and the command is being run in a CI environment > should error out if the file has validation errors 1`] = `
 {
   "error": [Error: 1 file(s) have issues that should be fixed before uploading to ReadMe. Please run \`rdme docs upload __tests__/__fixtures__/docs/mixed-docs/legacy-category.md --dry-run\` in a non-CI environment to fix them.],
