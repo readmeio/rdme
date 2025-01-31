@@ -17,7 +17,7 @@ ARGUMENTS
   PATH  Path to a local Markdown file or folder of Markdown files.
 
 FLAGS
-  --dryRun       Runs the command without creating/updating any changelogs in ReadMe. Useful for debugging.
+  --dryRun       Runs the command without creating nor updating any changelogs in ReadMe. Useful for debugging.
   --github       Create a new GitHub Actions workflow for this command.
   --key=<value>  (required) ReadMe project API key
 
