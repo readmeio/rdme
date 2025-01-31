@@ -1,3 +1,5 @@
+import type { OASDocument } from 'oas/types';
+
 import fs from 'node:fs';
 
 import prompts from 'prompts';
@@ -9,6 +11,8 @@ import { runCommandAndReturnResult } from '../../helpers/oclif.js';
 const successfulConversion = () => 'Your API definition has been converted and bundled and saved to output.json!';
 
 describe('rdme openapi convert', () => {
+  const fsWriteFileSync = fs.writeFileSync;
+  let reducedSpec: OASDocument;
   let run: (args?: string[]) => Promise<string>;
   let testWorkingDir: string;
 
@@ -18,11 +22,14 @@ describe('rdme openapi convert', () => {
 
   beforeEach(() => {
     testWorkingDir = process.cwd();
+    fs.writeFileSync = vi.fn((fileName, data) => {
+      reducedSpec = JSON.parse(data as string);
+    });
   });
 
   afterEach(() => {
+    fs.writeFileSync = fsWriteFileSync;
     process.chdir(testWorkingDir);
-
     vi.clearAllMocks();
   });
 
@@ -32,11 +39,6 @@ describe('rdme openapi convert', () => {
       ['Swagger 2.0', 'yaml', '2.0'],
     ])('should support reducing a %s definition (format: %s)', async (_, format, specVersion) => {
       const spec = require.resolve(`@readme/oas-examples/${specVersion}/${format}/petstore-simple.${format}`);
-
-      let reducedSpec;
-      fs.writeFileSync = vi.fn((fileName, data) => {
-        reducedSpec = JSON.parse(data as string);
-      });
 
       prompts.inject(['output.json']);
 
@@ -51,11 +53,6 @@ describe('rdme openapi convert', () => {
 
   it('should convert with no prompts via opts', async () => {
     const spec = 'petstore-simple.json';
-
-    let reducedSpec;
-    fs.writeFileSync = vi.fn((fileName, data) => {
-      reducedSpec = JSON.parse(data as string);
-    });
 
     await expect(
       run([
@@ -77,11 +74,6 @@ describe('rdme openapi convert', () => {
       const spec = require.resolve(`@readme/oas-examples/3.0/${format}/petstore.${format}`);
 
       const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-
-      let reducedSpec;
-      fs.writeFileSync = vi.fn((fileName, data) => {
-        reducedSpec = JSON.parse(data as string);
-      });
 
       prompts.inject(['output.json']);
 

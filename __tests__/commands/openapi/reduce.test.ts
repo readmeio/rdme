@@ -1,4 +1,6 @@
 /* eslint-disable no-console */
+import type { OASDocument } from 'oas/types';
+
 import fs from 'node:fs';
 
 import chalk from 'chalk';
@@ -14,6 +16,8 @@ let consoleInfoSpy: MockInstance<typeof console.info>;
 const getCommandOutput = () => consoleInfoSpy.mock.calls.join('\n\n');
 
 describe('rdme openapi reduce', () => {
+  const fsWriteFileSync = fs.writeFileSync;
+  let reducedSpec: OASDocument;
   let run: (args?: string[]) => Promise<unknown>;
   let testWorkingDir: string;
 
@@ -24,13 +28,15 @@ describe('rdme openapi reduce', () => {
   beforeEach(() => {
     consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     testWorkingDir = process.cwd();
+    fs.writeFileSync = vi.fn((fileName, data) => {
+      reducedSpec = JSON.parse(data as string);
+    });
   });
 
   afterEach(() => {
     consoleInfoSpy.mockRestore();
-
+    fs.writeFileSync = fsWriteFileSync;
     process.chdir(testWorkingDir);
-
     vi.clearAllMocks();
   });
 
@@ -43,11 +49,6 @@ describe('rdme openapi reduce', () => {
         ['OpenAPI 3.1', 'yaml', '3.1'],
       ])('should support reducing a %s definition (format: %s)', async (_, format, specVersion) => {
         const spec = require.resolve(`@readme/oas-examples/${specVersion}/${format}/petstore.${format}`);
-
-        let reducedSpec;
-        fs.writeFileSync = vi.fn((fileName, data) => {
-          reducedSpec = JSON.parse(data as string);
-        });
 
         prompts.inject(['tags', ['pet'], 'output.json']);
 
@@ -67,11 +68,6 @@ describe('rdme openapi reduce', () => {
       it('should discover and upload an API definition if none is provided', async () => {
         const spec = 'petstore.json';
 
-        let reducedSpec;
-        fs.writeFileSync = vi.fn((fileName, data) => {
-          reducedSpec = JSON.parse(data as string);
-        });
-
         prompts.inject(['tags', ['user'], 'output.json']);
 
         await expect(run(['--workingDirectory', './__tests__/__fixtures__/relative-ref-oas'])).resolves.toBe(
@@ -88,11 +84,6 @@ describe('rdme openapi reduce', () => {
 
       it('should reduce with no prompts via opts', async () => {
         const spec = 'petstore.json';
-
-        let reducedSpec;
-        fs.writeFileSync = vi.fn((fileName, data) => {
-          reducedSpec = JSON.parse(data as string);
-        });
 
         await expect(
           run([
@@ -123,11 +114,6 @@ describe('rdme openapi reduce', () => {
       ])('should support reducing a %s definition (format: %s)', async (_, format, specVersion) => {
         const spec = require.resolve(`@readme/oas-examples/${specVersion}/${format}/petstore.${format}`);
 
-        let reducedSpec;
-        fs.writeFileSync = vi.fn((fileName, data) => {
-          reducedSpec = JSON.parse(data as string);
-        });
-
         prompts.inject(['paths', ['/pet', '/pet/findByStatus'], ['get', 'post'], 'output.json']);
 
         await expect(run([spec])).resolves.toBe(successfulReduction());
@@ -141,11 +127,6 @@ describe('rdme openapi reduce', () => {
 
       it('should reduce with no prompts via opts', async () => {
         const spec = 'petstore.json';
-
-        let reducedSpec;
-        fs.writeFileSync = vi.fn((fileName, data) => {
-          reducedSpec = JSON.parse(data as string);
-        });
 
         await expect(
           run([
@@ -178,11 +159,6 @@ describe('rdme openapi reduce', () => {
       it('should reduce and update title with no prompts via opts', async () => {
         const spec = 'petstore.json';
         const title = 'some alternative title';
-
-        let reducedSpec;
-        fs.writeFileSync = vi.fn((fileName, data) => {
-          reducedSpec = JSON.parse(data as string);
-        });
 
         await expect(
           run([
