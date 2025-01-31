@@ -122,6 +122,13 @@ const byParentDoc = (left: PageMetadata, right: PageMetadata) => {
   return (right.data.parentDoc ? 1 : 0) - (left.data.parentDoc ? 1 : 0);
 };
 
+/**
+ * Sorts files based on their parentDoc attribute. If a file has a parentDoc attribute,
+ * it will be sorted after the file it references.
+ *
+ * @see {@link https://github.com/readmeio/rdme/pull/973}
+ * @returns An array of sorted PageMetadata objects
+ */
 function sortFiles(this: ChangelogsCommand, filePaths: string[]): PageMetadata[] {
   const files = filePaths.map(file => readPage.call(this, file)).sort(byParentDoc);
   const filesBySlug = files.reduce<Record<string, PageMetadata>>((bySlug, obj) => {

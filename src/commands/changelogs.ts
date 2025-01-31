@@ -37,7 +37,7 @@ export default class ChangelogsCommand extends BaseCommand<typeof ChangelogsComm
     github: githubFlag,
     key: keyFlag,
     dryRun: Flags.boolean({
-      description: 'Runs the command without creating/updating any changelogs in ReadMe. Useful for debugging.',
+      description: 'Runs the command without creating nor updating any changelogs in ReadMe. Useful for debugging.',
     }),
   };
 
