@@ -85,13 +85,13 @@ describe('#fix', () => {
 
     expect(result.hasIssues).toBe(true);
     expect(result.updatedData).toMatchInlineSnapshot(`
-        {
-          "category": {
-            "uri": "some-slug",
-          },
-          "title": "Hello, world!",
-        }
-      `);
+      {
+        "category": {
+          "uri": "some-slug",
+        },
+        "title": "Hello, world!",
+      }
+    `);
   });
 
   it('should fix legacy category id and use fallback mapping', () => {
@@ -104,13 +104,13 @@ describe('#fix', () => {
 
     expect(result.hasIssues).toBe(true);
     expect(result.updatedData).toMatchInlineSnapshot(`
-        {
-          "category": {
-            "uri": "uri-that-does-not-map-to-5f92cbf10cf217478ba93561",
-          },
-          "title": "Hello, world!",
-        }
-      `);
+      {
+        "category": {
+          "uri": "uri-that-does-not-map-to-5f92cbf10cf217478ba93561",
+        },
+        "title": "Hello, world!",
+      }
+    `);
   });
 
   it('should fix legacy category slug', () => {
@@ -123,13 +123,13 @@ describe('#fix', () => {
 
     expect(result.hasIssues).toBe(true);
     expect(result.updatedData).toMatchInlineSnapshot(`
-        {
-          "category": {
-            "uri": "some-slug",
-          },
-          "title": "Hello, world!",
-        }
-      `);
+      {
+        "category": {
+          "uri": "some-slug",
+        },
+        "title": "Hello, world!",
+      }
+    `);
   });
 
   it('should fix legacy parent page id and use mappings', () => {
@@ -145,13 +145,13 @@ describe('#fix', () => {
 
     expect(result.hasIssues).toBe(true);
     expect(result.updatedData).toMatchInlineSnapshot(`
-        {
-          "parent": {
-            "uri": "some-slug",
-          },
-          "title": "Hello, world!",
-        }
-      `);
+      {
+        "parent": {
+          "uri": "some-slug",
+        },
+        "title": "Hello, world!",
+      }
+    `);
   });
 
   it('should fix legacy parent page id and use fallback mapping', () => {
@@ -164,13 +164,13 @@ describe('#fix', () => {
 
     expect(result.hasIssues).toBe(true);
     expect(result.updatedData).toMatchInlineSnapshot(`
-        {
-          "parent": {
-            "uri": "uri-that-does-not-map-to-5f92cbf10cf217478ba93561",
-          },
-          "title": "Hello, world!",
-        }
-      `);
+      {
+        "parent": {
+          "uri": "uri-that-does-not-map-to-5f92cbf10cf217478ba93561",
+        },
+        "title": "Hello, world!",
+      }
+    `);
   });
 
   it('should fix legacy parent page slug', () => {
@@ -183,13 +183,13 @@ describe('#fix', () => {
 
     expect(result.hasIssues).toBe(true);
     expect(result.updatedData).toMatchInlineSnapshot(`
-        {
-          "parent": {
-            "uri": "some-slug",
-          },
-          "title": "Hello, world!",
-        }
-      `);
+      {
+        "parent": {
+          "uri": "some-slug",
+        },
+        "title": "Hello, world!",
+      }
+    `);
   });
 
   it('should fix excerpt', () => {
@@ -202,13 +202,13 @@ describe('#fix', () => {
 
     expect(result.hasIssues).toBe(true);
     expect(result.updatedData).toMatchInlineSnapshot(`
-        {
-          "content": {
-            "excerpt": "This is an excerpt",
-          },
-          "title": "Hello, world!",
-        }
-      `);
+      {
+        "content": {
+          "excerpt": "This is an excerpt",
+        },
+        "title": "Hello, world!",
+      }
+    `);
   });
 
   it('should fix position', () => {
@@ -221,11 +221,11 @@ describe('#fix', () => {
 
     expect(result.hasIssues).toBe(true);
     expect(result.updatedData).toMatchInlineSnapshot(`
-        {
-          "position": 5,
-          "title": "Hello, world!",
-        }
-      `);
+      {
+        "position": 5,
+        "title": "Hello, world!",
+      }
+    `);
   });
 
   it('should fix privacy (public)', () => {
@@ -238,13 +238,13 @@ describe('#fix', () => {
 
     expect(result.hasIssues).toBe(true);
     expect(result.updatedData).toMatchInlineSnapshot(`
-        {
-          "privacy": {
-            "view": "public",
-          },
-          "title": "Hello, world!",
-        }
-      `);
+      {
+        "privacy": {
+          "view": "public",
+        },
+        "title": "Hello, world!",
+      }
+    `);
   });
 
   it('should fix privacy (anyone_with_link)', () => {
@@ -257,13 +257,13 @@ describe('#fix', () => {
 
     expect(result.hasIssues).toBe(true);
     expect(result.updatedData).toMatchInlineSnapshot(`
-        {
-          "privacy": {
-            "view": "anyone_with_link",
-          },
-          "title": "Hello, world!",
-        }
-      `);
+      {
+        "privacy": {
+          "view": "anyone_with_link",
+        },
+        "title": "Hello, world!",
+      }
+    `);
   });
 
   it.todo('should fix metadata object');
@@ -293,25 +293,25 @@ describe('#fix', () => {
 
     expect(result.hasIssues).toBe(true);
     expect(result.updatedData).toMatchInlineSnapshot(`
-        {
-          "category": {
-            "uri": "some-category-slug",
-          },
-          "content": {
-            "body": "This is the body",
-            "excerpt": "This is an excerpt",
-          },
-          "parent": {
-            "uri": "some-parent-slug",
-          },
-          "position": 7,
-          "privacy": {
-            "view": "anyone_with_link",
-          },
-          "slug": "some-slug",
-          "title": "Hello, world!",
-        }
-      `);
+      {
+        "category": {
+          "uri": "some-category-slug",
+        },
+        "content": {
+          "body": "This is the body",
+          "excerpt": "This is an excerpt",
+        },
+        "parent": {
+          "uri": "some-parent-slug",
+        },
+        "position": 7,
+        "privacy": {
+          "view": "anyone_with_link",
+        },
+        "slug": "some-slug",
+        "title": "Hello, world!",
+      }
+    `);
   });
 });
 
