@@ -1,5 +1,7 @@
 import type { SpecFileType } from './prepareOas.js';
 import type { CommandClass } from '../index.js';
+import type { CommandsThatSyncMarkdown } from './syncPagePath.js';
+import type { SchemaObject } from 'oas/types';
 
 import path from 'node:path';
 
@@ -12,6 +14,7 @@ import { git } from './createGHA/index.js';
 import { getPkgVersion } from './getPkg.js';
 import isCI, { ciName, isGHA } from './isCI.js';
 import { debug, warn } from './logger.js';
+import { readmeAPIv2Oas } from './types.js';
 
 const SUCCESS_NO_CONTENT = 204;
 
@@ -47,6 +50,13 @@ function stripQuotes(s: string) {
   if (!s) return '';
   return s.replace(/(^"|[",]*$)/g, '');
 }
+
+export interface Mappings {
+  categories: Record<string, string>;
+  parentPages: Record<string, string>;
+}
+
+export const emptyMappings: Mappings = { categories: {}, parentPages: {} };
 
 /**
  * Parses Warning header into an array of warning header objects
@@ -435,4 +445,57 @@ export function cleanAPIv1Headers(
   }
 
   return filterOutFalsyHeaders(headers);
+}
+
+/**
+ * Fetches the category and parent page mappings from the ReadMe API.
+ */
+export async function fetchMappings(this: CommandClass['prototype']): Promise<Mappings> {
+  const mappings = await readmeAPIv1Fetch('/api/v1/migration', {
+    method: 'get',
+    headers: cleanAPIv1Headers(this.flags.key, undefined, new Headers({ Accept: 'application/json' })),
+  })
+    .then(res => {
+      if (!res.ok) {
+        this.debug(`received the following error when attempting to fetch mappings: ${res.status}`);
+        return emptyMappings;
+      }
+      this.debug('received a successful response when fetching mappings');
+      return res.json() as Promise<Mappings>;
+    })
+    .catch(e => {
+      this.debug(`error fetching mappings: ${e}`);
+      return emptyMappings;
+    });
+
+  return mappings;
+}
+
+/**
+ * Fetches the schema for the current route from the OpenAPI description for ReadMe API v2.
+ */
+export async function fetchSchema(this: CommandsThatSyncMarkdown): Promise<SchemaObject> {
+  const oas = await this.readmeAPIFetch('/openapi.json')
+    .then(res => {
+      if (!res.ok) {
+        this.debug(`received the following error when attempting to fetch the readme OAS: ${res.status}`);
+        return readmeAPIv2Oas;
+      }
+      this.debug('received a successful response when fetching schema');
+      return res.json() as Promise<typeof readmeAPIv2Oas>;
+    })
+    .catch(e => {
+      this.debug(`error fetching readme OAS: ${e}`);
+      return readmeAPIv2Oas;
+    });
+
+  const requestBody = oas.paths?.[`/versions/{version}/${this.route}/{slug}`]?.patch?.requestBody;
+
+  if (requestBody && 'content' in requestBody) {
+    return requestBody.content['application/json'].schema as SchemaObject;
+  }
+
+  this.debug(`unable to find parse out schema for ${JSON.stringify(oas)}`);
+  return readmeAPIv2Oas.paths[`/versions/{version}/${this.route}/{slug}`].patch.requestBody.content['application/json']
+    .schema satisfies SchemaObject;
 }

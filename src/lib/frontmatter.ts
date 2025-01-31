@@ -1,5 +1,6 @@
+import type { Mappings } from './readmeAPIFetch.js';
 import type { PageMetadata } from './readPage.js';
-import type { CommandsThatSyncMarkdown } from './syncPagePath.js';
+import type { CommandClass } from '../index.js';
 import type { ErrorObject } from 'ajv';
 import type { SchemaObject } from 'oas/types';
 
@@ -9,77 +10,14 @@ import { Ajv } from 'ajv';
 import _addFormats from 'ajv-formats';
 import grayMatter from 'gray-matter';
 
-import { cleanAPIv1Headers, readmeAPIv1Fetch } from './readmeAPIFetch.js';
-import { readmeAPIv2Oas } from './types.js';
-
 // workaround from here: https://github.com/ajv-validator/ajv-formats/issues/85#issuecomment-2262652443
 const addFormats = _addFormats as unknown as typeof _addFormats.default;
-
-interface Mappings {
-  categories: Record<string, string>;
-  parentPages: Record<string, string>;
-}
-
-export const emptyMappings: Mappings = { categories: {}, parentPages: {} };
-
-/**
- * Fetches the category and parent page mappings from the ReadMe API.
- */
-export async function fetchMappings(this: CommandsThatSyncMarkdown): Promise<Mappings> {
-  const mappings = await readmeAPIv1Fetch('/api/v1/migration', {
-    method: 'get',
-    headers: cleanAPIv1Headers(this.flags.key, undefined, new Headers({ Accept: 'application/json' })),
-  })
-    .then(res => {
-      if (!res.ok) {
-        this.debug(`received the following error when attempting to fetch mappings: ${res.status}`);
-        return emptyMappings;
-      }
-      this.debug('received a successful response when fetching mappings');
-      return res.json() as Promise<Mappings>;
-    })
-    .catch(e => {
-      this.debug(`error fetching mappings: ${e}`);
-      return emptyMappings;
-    });
-
-  return mappings;
-}
-
-/**
- * Fetches the schema for the current route from the ReadMe API's OpenAPI description.
- */
-export async function fetchSchema(this: CommandsThatSyncMarkdown) {
-  const oas = await this.readmeAPIFetch('/openapi.json')
-    .then(res => {
-      if (!res.ok) {
-        this.debug(`received the following error when attempting to fetch the readme OAS: ${res.status}`);
-        return readmeAPIv2Oas;
-      }
-      this.debug('received a successful response when fetching schema');
-      return res.json() as Promise<typeof readmeAPIv2Oas>;
-    })
-    .catch(e => {
-      this.debug(`error fetching readme OAS: ${e}`);
-      return readmeAPIv2Oas;
-    });
-
-  const requestBody = oas.paths?.[`/versions/{version}/${this.route}/{slug}`]?.patch?.requestBody;
-
-  if (requestBody && 'content' in requestBody) {
-    return requestBody.content['application/json'].schema as SchemaObject;
-  }
-
-  this.debug(`unable to find parse out schema for ${JSON.stringify(oas)}`);
-  return readmeAPIv2Oas.paths[`/versions/{version}/${this.route}/{slug}`].patch.requestBody.content['application/json']
-    .schema satisfies SchemaObject;
-}
 
 /**
  * Validates the front matter data, fixes any issues, and returns the results.
  */
 export function fix(
-  this: CommandsThatSyncMarkdown,
+  this: CommandClass['prototype'],
   /** front matter data to be validated */
   data: PageMetadata['data'],
   /** schema to validate against */
@@ -198,7 +136,7 @@ export function fix(
 }
 
 export function writeFixes(
-  this: CommandsThatSyncMarkdown,
+  this: CommandClass['prototype'],
   /** all metadata for the page that will be written to */
   metadata: PageMetadata,
   /** front matter changes to be applied */

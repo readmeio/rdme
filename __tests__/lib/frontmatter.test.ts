@@ -4,7 +4,8 @@ import type { SchemaObject } from 'oas/types';
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 
 import DocsUploadCommand from '../../src/commands/docs/upload.js';
-import { emptyMappings, fetchSchema, fix } from '../../src/lib/frontmatter.js';
+import { fix } from '../../src/lib/frontmatter.js';
+import { emptyMappings, fetchSchema } from '../../src/lib/readmeAPIFetch.js';
 import { readmeAPIv2Oas } from '../../src/lib/types.js';
 import { getAPIv2Mock } from '../helpers/get-api-mock.js';
 import { setupOclifConfig } from '../helpers/oclif.js';

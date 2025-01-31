@@ -9,10 +9,11 @@ import chalk from 'chalk';
 import toposort from 'toposort';
 
 import { APIv2Error } from './apiError.js';
-import { fetchMappings, fetchSchema, fix, writeFixes } from './frontmatter.js';
+import { fix, writeFixes } from './frontmatter.js';
 import isCI from './isCI.js';
 import promptTerminal from './promptWrapper.js';
 import readdirRecursive from './readdirRecursive.js';
+import { fetchMappings, fetchSchema } from './readmeAPIFetch.js';
 import readPage from './readPage.js';
 import { categoryUriRegexPattern, parentUriRegexPattern } from './types.js';
 
