@@ -449,7 +449,7 @@ export function cleanAPIv1Headers(
 
 /**
  * Fetches the category and parent page mappings from the ReadMe API.
- * Used for migrating front matter in Guides pages to the new API v2 format.
+ * Used for migrating frontmatter in Guides pages to the new API v2 format.
  */
 export async function fetchMappings(this: CommandClass['prototype']): Promise<Mappings> {
   const mappings = await readmeAPIv1Fetch('/api/v1/migration', {

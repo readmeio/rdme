@@ -65,7 +65,7 @@ async function pushPage(
   const headers = new Headers({ authorization: `Bearer ${key}`, 'Content-Type': 'application/json' });
 
   if (!Object.keys(data).length) {
-    this.debug(`No front matter attributes found for ${filePath}, not syncing`);
+    this.debug(`No frontmatter attributes found for ${filePath}, not syncing`);
     return { response: null, filePath, result: 'skipped', slug };
   }
 
@@ -249,14 +249,14 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
   let unsortedFiles = files.map(file => readPage.call(this, file));
 
   if (!skipValidation) {
-    const validationSpinner = ora({ ...oraOptions() }).start('🔬 Validating front matter data...');
+    const validationSpinner = ora({ ...oraOptions() }).start('🔬 Validating frontmatter data...');
 
     const schema = await fetchSchema.call(this);
     const mappings = await fetchMappings.call(this);
 
     // validate the files, prompt user to fix if necessary
     const validationResults = unsortedFiles.map(file => {
-      this.debug(`validating front matter for ${file.filePath}`);
+      this.debug(`validating frontmatter for ${file.filePath}`);
       return fix.call(this, file.data, schema, mappings);
     });
 
@@ -379,8 +379,8 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
   if (results.skipped.length) {
     this.log(
       dryRun
-        ? `⏭️ The following ${results.skipped.length} page(s) will be skipped due to no front matter data:`
-        : `⏭️ Skipped ${results.skipped.length} page(s) in ReadMe due to no front matter data:`,
+        ? `⏭️ The following ${results.skipped.length} page(s) will be skipped due to no frontmatter data:`
+        : `⏭️ Skipped ${results.skipped.length} page(s) in ReadMe due to no frontmatter data:`,
     );
     results.skipped.forEach(({ filePath, slug }) => {
       this.log(`   - ${slug} (${chalk.underline(filePath)})`);

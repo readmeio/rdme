@@ -34,7 +34,7 @@ describe('#fix', () => {
     expect(result.updatedData).toStrictEqual(data);
   });
 
-  it('should do nothing for valid front matter', () => {
+  it('should do nothing for valid frontmatter', () => {
     const data = {
       title: 'Hello, world!',
       category: { uri: '/versions/stable/categories/guides/sup' },
@@ -46,7 +46,7 @@ describe('#fix', () => {
     expect(result.updatedData).toStrictEqual(data);
   });
 
-  it('should do nothing for valid front matter (with invalid category uri)', () => {
+  it('should do nothing for valid frontmatter (with invalid category uri)', () => {
     const data = {
       title: 'Hello, world!',
       category: { uri: 'sup' },
@@ -58,7 +58,7 @@ describe('#fix', () => {
     expect(result.updatedData).toStrictEqual(data);
   });
 
-  it('should do nothing for valid front matter (with invalid parent uri)', () => {
+  it('should do nothing for valid frontmatter (with invalid parent uri)', () => {
     const data = {
       title: 'Hello, world!',
       parent: { uri: 'sup' },

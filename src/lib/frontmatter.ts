@@ -14,11 +14,11 @@ import grayMatter from 'gray-matter';
 const addFormats = _addFormats as unknown as typeof _addFormats.default;
 
 /**
- * Validates the front matter data, fixes any issues, and returns the results.
+ * Validates the frontmatter data, fixes any issues, and returns the results.
  */
 export function fix(
   this: CommandClass['prototype'],
-  /** front matter data to be validated */
+  /** frontmatter data to be validated */
   data: PageMetadata['data'],
   /** schema to validate against */
   schema: SchemaObject,
@@ -35,7 +35,7 @@ export function fix(
   updatedData: PageMetadata['data'];
 } {
   if (!Object.keys(data).length) {
-    this.debug('no front matter attributes found, skipping validation');
+    this.debug('no frontmatter attributes found, skipping validation');
     return { changeCount: 0, errors: [], hasIssues: false, unfixableErrors: [], updatedData: data };
   }
 
@@ -139,7 +139,7 @@ export function writeFixes(
   this: CommandClass['prototype'],
   /** all metadata for the page that will be written to */
   metadata: PageMetadata,
-  /** front matter changes to be applied */
+  /** frontmatter changes to be applied */
   updatedData: PageMetadata['data'],
 ) {
   this.debug(`writing fixes to ${metadata.filePath}`);

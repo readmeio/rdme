@@ -100,7 +100,7 @@ describe('rdme docs upload', () => {
       });
     });
 
-    describe('given that the slug is passed in the front matter', () => {
+    describe('given that the slug is passed in the frontmatter', () => {
       it('should use that slug to create a page in ReadMe', async () => {
         const mock = getAPIv2Mock({ authorization })
           .head('/versions/stable/guides/some-slug')
@@ -139,8 +139,8 @@ describe('rdme docs upload', () => {
       });
     });
 
-    describe('given that the file has front matter issues', () => {
-      it('should fix the front matter issues in the file and create the corrected file in ReadMe', async () => {
+    describe('given that the file has frontmatter issues', () => {
+      it('should fix the frontmatter issues in the file and create the corrected file in ReadMe', async () => {
         const mock = getAPIv2Mock({ authorization })
           .head('/versions/stable/guides/legacy-category')
           .reply(404)
@@ -165,7 +165,7 @@ describe('rdme docs upload', () => {
         mock.done();
       });
 
-      it('should fix the front matter issues in the file and insert the proper category mapping', async () => {
+      it('should fix the frontmatter issues in the file and insert the proper category mapping', async () => {
         const mappingsMock = getAPIv1Mock()
           .get('/api/v1/migration')
           .basicAuth({ user: key })
