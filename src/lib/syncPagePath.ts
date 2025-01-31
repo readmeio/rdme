@@ -145,22 +145,16 @@ async function pushPage(
     return this.readmeAPIFetch(`${route}/${slug}`, {
       method: 'HEAD',
       headers,
-    })
-      .then(async res => {
-        await this.handleAPIRes(res, true);
-        if (!res.ok) {
-          if (res.status !== 404) throw new APIv2Error(res);
-          this.debug(`error retrieving data for ${slug}, creating page`);
-          return createPage();
-        }
-        this.debug(`data received for ${slug}, updating page`);
-        return updatePage();
-      })
-      .catch(err => {
-        // eslint-disable-next-line no-param-reassign
-        err.message = `Error uploading ${chalk.underline(filePath)}:\n\n${err.message}`;
-        throw err;
-      });
+    }).then(async res => {
+      await this.handleAPIRes(res, true);
+      if (!res.ok) {
+        if (res.status !== 404) throw new APIv2Error(res);
+        this.debug(`error retrieving data for ${slug}, creating page`);
+        return createPage();
+      }
+      this.debug(`data received for ${slug}, updating page`);
+      return updatePage();
+    });
   } catch (e) {
     return { error: e, filePath, result: 'failed', slug };
   }
@@ -384,7 +378,22 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
       if (results.failed.length === 1 && results.failed[0].result === 'failed') {
         throw results.failed[0].error;
       } else {
-        this.log(`The following ${results.failed.length} page(s) experienced failures:`);
+        this.log(`Unable to fetch data about the following ${results.failed.length} page(s):`);
+        results.failed.forEach(({ error, filePath }) => {
+          let errorMessage = 'unknown error';
+          if (error.message) {
+            errorMessage = error.message;
+          }
+          if (error instanceof APIv2Error && error.response.title) {
+            errorMessage = error.response.title;
+          }
+
+          this.log(`   - ${chalk.underline(filePath)}: ${errorMessage}`);
+        });
+
+        throw new Error(
+          `Multiple dry runs failed. To see more detailed errors for a page, run \`${this.config.bin} ${this.id} <path-to-page.md>\` --dry-run.`,
+        );
       }
     }
   } else {
@@ -413,7 +422,22 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
       if (results.failed.length === 1 && results.failed[0].result === 'failed') {
         throw results.failed[0].error;
       } else {
-        this.log(`Failed to upload the following ${results.failed.length} page(s):`);
+        this.log(`Received errors when attempting to upload ${results.failed.length} page(s):`);
+        results.failed.forEach(({ error, filePath }) => {
+          let errorMessage = 'unknown error';
+          if (error.message) {
+            errorMessage = error.message;
+          }
+          if (error instanceof APIv2Error && error.response.title) {
+            errorMessage = error.response.title;
+          }
+
+          this.log(`   - ${chalk.underline(filePath)}: ${errorMessage}`);
+        });
+
+        throw new Error(
+          `Multiple page uploads failed. To see more detailed errors for a page, run \`${this.config.bin} ${this.id} <path-to-page.md>\`.`,
+        );
       }
     }
   }

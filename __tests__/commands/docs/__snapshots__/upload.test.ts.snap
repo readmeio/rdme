@@ -96,50 +96,7 @@ exports[`rdme docs upload > given that the file path is a directory > should err
 
 exports[`rdme docs upload > given that the file path is a directory > should handle a mix of creates and updates and failures and skipped files (dry run) 1`] = `
 {
-  "result": {
-    "created": [
-      {
-        "filePath": "__tests__/__fixtures__/docs/mixed-docs/invalid-attributes.md",
-        "response": null,
-        "result": "created",
-        "slug": "invalid-attributes",
-      },
-    ],
-    "failed": [
-      {
-        "error": [APIv2Error: Error uploading __tests__/__fixtures__/docs/mixed-docs/new-doc-slug.md:
-
-The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
-        "filePath": "__tests__/__fixtures__/docs/mixed-docs/new-doc-slug.md",
-        "result": "failed",
-        "slug": "some-slug",
-      },
-      {
-        "error": [APIv2Error: Error uploading __tests__/__fixtures__/docs/mixed-docs/simple-doc.md:
-
-The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
-        "filePath": "__tests__/__fixtures__/docs/mixed-docs/simple-doc.md",
-        "result": "failed",
-        "slug": "simple-doc",
-      },
-    ],
-    "skipped": [
-      {
-        "filePath": "__tests__/__fixtures__/docs/mixed-docs/doc-sans-attributes.md",
-        "response": null,
-        "result": "skipped",
-        "slug": "doc-sans-attributes",
-      },
-    ],
-    "updated": [
-      {
-        "filePath": "__tests__/__fixtures__/docs/mixed-docs/legacy-category.md",
-        "response": null,
-        "result": "updated",
-        "slug": "legacy-category",
-      },
-    ],
-  },
+  "error": [Error: Multiple dry runs failed. To see more detailed errors for a page, run \`rdme docs upload <path-to-page.md>\` --dry-run.],
   "stderr": "- 🔍 Looking for Markdown files in __tests__/__fixtures__/docs/mixed-docs...
 ✔ 🔍 Looking for Markdown files in __tests__/__fixtures__/docs/mixed-docs... 5 file(s) found!
 - 🔬 Validating front matter data...
@@ -157,57 +114,16 @@ The ReadMe API responded with an unexpected error. Please try again and if this 
    - legacy-category (__tests__/__fixtures__/docs/mixed-docs/legacy-category.md)
 ⏭️ The following 1 page(s) will be skipped due to no front matter data:
    - doc-sans-attributes (__tests__/__fixtures__/docs/mixed-docs/doc-sans-attributes.md)
-The following 2 page(s) experienced failures:
+Unable to fetch data about the following 2 page(s):
+   - __tests__/__fixtures__/docs/mixed-docs/new-doc-slug.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+   - __tests__/__fixtures__/docs/mixed-docs/simple-doc.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
 ",
 }
 `;
 
 exports[`rdme docs upload > given that the file path is a directory > should handle a mix of creates and updates and failures and skipped files 1`] = `
 {
-  "result": {
-    "created": [
-      {
-        "filePath": "__tests__/__fixtures__/docs/mixed-docs/invalid-attributes.md",
-        "response": {},
-        "result": "created",
-        "slug": "invalid-attributes",
-      },
-    ],
-    "failed": [
-      {
-        "error": [APIv2Error: Error uploading __tests__/__fixtures__/docs/mixed-docs/new-doc-slug.md:
-
-The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
-        "filePath": "__tests__/__fixtures__/docs/mixed-docs/new-doc-slug.md",
-        "result": "failed",
-        "slug": "some-slug",
-      },
-      {
-        "error": [APIv2Error: Error uploading __tests__/__fixtures__/docs/mixed-docs/simple-doc.md:
-
-The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
-        "filePath": "__tests__/__fixtures__/docs/mixed-docs/simple-doc.md",
-        "result": "failed",
-        "slug": "simple-doc",
-      },
-    ],
-    "skipped": [
-      {
-        "filePath": "__tests__/__fixtures__/docs/mixed-docs/doc-sans-attributes.md",
-        "response": null,
-        "result": "skipped",
-        "slug": "doc-sans-attributes",
-      },
-    ],
-    "updated": [
-      {
-        "filePath": "__tests__/__fixtures__/docs/mixed-docs/legacy-category.md",
-        "response": {},
-        "result": "updated",
-        "slug": "legacy-category",
-      },
-    ],
-  },
+  "error": [Error: Multiple page uploads failed. To see more detailed errors for a page, run \`rdme docs upload <path-to-page.md>\`.],
   "stderr": "- 🔍 Looking for Markdown files in __tests__/__fixtures__/docs/mixed-docs...
 ✔ 🔍 Looking for Markdown files in __tests__/__fixtures__/docs/mixed-docs... 5 file(s) found!
 - 🔬 Validating front matter data...
@@ -224,7 +140,9 @@ The ReadMe API responded with an unexpected error. Please try again and if this 
    - legacy-category (__tests__/__fixtures__/docs/mixed-docs/legacy-category.md)
 Skipped 1 page(s) in ReadMe due to no front matter data:
    - doc-sans-attributes (__tests__/__fixtures__/docs/mixed-docs/doc-sans-attributes.md)
-Failed to upload the following 2 page(s):
+Received errors when attempting to upload 2 page(s):
+   - __tests__/__fixtures__/docs/mixed-docs/new-doc-slug.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+   - __tests__/__fixtures__/docs/mixed-docs/simple-doc.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
 ",
 }
 `;
@@ -304,9 +222,7 @@ exports[`rdme docs upload > given that the file path is a single file > and the 
 
 exports[`rdme docs upload > given that the file path is a single file > given that the --dry-run flag is passed > should error out if a non-404 error is returned from the HEAD request 1`] = `
 {
-  "error": [APIv2Error: Error uploading __tests__/__fixtures__/docs/slug-docs/new-doc-slug.md:
-
-The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
+  "error": [APIv2Error: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
   "stderr": "- 🔬 Validating front matter data...
 ✔ 🔬 Validating front matter data... no issues found!
 - 🎭 Uploading files to ReadMe (but not really because it's a dry run)...
@@ -409,9 +325,7 @@ exports[`rdme docs upload > given that the file path is a single file > given th
 
 exports[`rdme docs upload > given that the file path is a single file > given that the file has front matter issues > should skip client-side validation if the --skip-validation flag is passed 1`] = `
 {
-  "error": [APIv2Error: Error uploading __tests__/__fixtures__/docs/mixed-docs/legacy-category.md:
-
-ReadMe API error: bad request
+  "error": [APIv2Error: ReadMe API error: bad request
 
 your category is whack],
   "stderr": " ›   Warning: Skipping pre-upload validation of the Markdown file(s). This is 
@@ -558,9 +472,7 @@ exports[`rdme docs upload > given that the file path is a single file > should c
 
 exports[`rdme docs upload > given that the file path is a single file > should error out if a non-404 error is returned from the HEAD request 1`] = `
 {
-  "error": [APIv2Error: Error uploading __tests__/__fixtures__/docs/new-docs/new-doc.md:
-
-The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
+  "error": [APIv2Error: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
   "stderr": "- 🔬 Validating front matter data...
 ✔ 🔬 Validating front matter data... no issues found!
 - 🚀 Uploading files to ReadMe...
