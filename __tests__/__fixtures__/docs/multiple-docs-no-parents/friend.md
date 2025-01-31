@@ -1,5 +1,0 @@
----
-title: Friend
----
-
-# Friend Body
