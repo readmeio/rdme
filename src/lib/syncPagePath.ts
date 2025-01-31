@@ -16,6 +16,8 @@ import readdirRecursive from './readdirRecursive.js';
 import { fetchMappings, fetchSchema } from './readmeAPIFetch.js';
 import readPage from './readPage.js';
 import { categoryUriRegexPattern, parentUriRegexPattern } from './types.js';
+import { oraOptions } from './logger.js';
+import ora from 'ora';
 
 /**
  * Commands that use this file for syncing Markdown via APIv2.
@@ -210,18 +212,24 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
   let files: string[];
 
   if (stat.isDirectory()) {
+    const fileScanningSpinner = ora({ ...oraOptions() }).start(
+      `🔍 Looking for Markdown files in ${chalk.underline(pathInput)}...`,
+    );
     // Filter out any files that don't match allowedFileExtensions
     files = readdirRecursive(pathInput).filter(file =>
       allowedFileExtensions.includes(path.extname(file).toLowerCase()),
     );
 
     if (!files.length) {
+      fileScanningSpinner.fail(`${fileScanningSpinner.text} no files found.`);
       throw new Error(
         `The directory you provided (${pathInput}) doesn't contain any of the following file extensions: ${allowedFileExtensions.join(
           ', ',
         )}.`,
       );
     }
+
+    fileScanningSpinner.succeed(`${fileScanningSpinner.text} ${files.length} file(s) found!`);
   } else {
     const fileExtension = path.extname(pathInput).toLowerCase();
     if (!allowedFileExtensions.includes(fileExtension)) {
@@ -238,6 +246,8 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
   let unsortedFiles = files.map(file => readPage.call(this, file));
 
   if (!skipValidation) {
+    const validationSpinner = ora({ ...oraOptions() }).start('🔬 Validating front matter data...');
+
     const schema = await fetchSchema.call(this);
     const mappings = await fetchMappings.call(this);
 
@@ -249,8 +259,10 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
 
     const filesWithIssues = validationResults.filter(result => result.hasIssues);
     const filesWithFixableIssues = filesWithIssues.filter(result => result.changeCount);
+    const filesWithUnfixableIssues = filesWithIssues.filter(result => result.unfixableErrors.length);
 
     if (filesWithIssues.length) {
+      validationSpinner.warn(`${validationSpinner.text} issues found in ${filesWithIssues.length} file(s).`);
       if (filesWithFixableIssues.length) {
         if (isCI()) {
           throw new Error(
@@ -258,14 +270,11 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
           );
         }
 
-        this.warn(`${filesWithFixableIssues.length} file(s) have issues that can be fixed automatically.`);
-
         const { confirm } = await promptTerminal([
           {
             type: 'confirm',
             name: 'confirm',
-            message:
-              'Would you like to make these fixes? This will write changes to the file(s) that you should save and commit.',
+            message: `${filesWithFixableIssues.length} file(s) have issues that can be fixed automatically. Would you like to make these changes and continue with the upload to ReadMe?`,
           },
         ]);
 
@@ -278,13 +287,26 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
         });
 
         unsortedFiles = updatedFiles;
-      } else {
-        this.warn(
-          `${filesWithIssues.length} file(s) have front matter issues that cannot be fixed automatically. The upload will proceed but we recommend addressing these issues. Please get in touch with us at support@readme.io if you need a hand.`,
-        );
       }
+
+      // also inform the user if there are files with issues that can't be fixed
+      if (filesWithUnfixableIssues.length) {
+        this.warn(
+          `${filesWithUnfixableIssues.length} file(s) have issues that cannot be fixed automatically. The upload will proceed but we recommend addressing these issues. Please get in touch with us at support@readme.io if you need a hand.`,
+        );
+
+        //
+      }
+    } else {
+      validationSpinner.succeed(`${validationSpinner.text} no issues found!`);
     }
   }
+
+  const uploadSpinner = ora({ ...oraOptions() }).start(
+    dryRun
+      ? "🎭 Uploading files to ReadMe (but not really because it's a dry run)..."
+      : '🚀 Uploading files to ReadMe...',
+  );
 
   // topological sort the files
   const sortedFiles = sortFiles((unsortedFiles as PageMetadata<PageRepresentation>[]).sort(byParentPage));
@@ -324,6 +346,12 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
     },
     { created: [], updated: [], skipped: [], failed: [] },
   );
+
+  if (results.failed.length) {
+    uploadSpinner.fail(`${uploadSpinner.text} ${results.failed.length} file(s) failed.`);
+  } else {
+    uploadSpinner.succeed(`${uploadSpinner.text} done!`);
+  }
 
   if (dryRun) {
     this.log('Dry run complete. No changes were made to ReadMe.');
