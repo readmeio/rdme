@@ -16,7 +16,7 @@ let consoleInfoSpy: MockInstance<typeof console.info>;
 const getCommandOutput = () => consoleInfoSpy.mock.calls.join('\n\n');
 
 describe('rdme openapi reduce', () => {
-  const fsWriteFileSync = fs.writeFileSync;
+  let fsWriteFileSyncSpy: MockInstance<typeof fs.writeFileSync>;
   let reducedSpec: OASDocument;
   let run: (args?: string[]) => Promise<unknown>;
   let testWorkingDir: string;
@@ -28,16 +28,15 @@ describe('rdme openapi reduce', () => {
   beforeEach(() => {
     consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     testWorkingDir = process.cwd();
-    fs.writeFileSync = vi.fn((fileName, data) => {
+    fsWriteFileSyncSpy = vi.spyOn(fs, 'writeFileSync').mockImplementationOnce((filename, data) => {
       reducedSpec = JSON.parse(data as string);
     });
   });
 
   afterEach(() => {
     consoleInfoSpy.mockRestore();
-    fs.writeFileSync = fsWriteFileSync;
     process.chdir(testWorkingDir);
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('reducing', () => {
@@ -54,7 +53,7 @@ describe('rdme openapi reduce', () => {
 
         await expect(run([spec])).resolves.toBe(successfulReduction());
 
-        expect(fs.writeFileSync).toHaveBeenCalledWith('output.json', expect.any(String));
+        expect(fsWriteFileSyncSpy).toHaveBeenCalledWith('output.json', expect.any(String));
         expect(reducedSpec.tags).toHaveLength(1);
         expect(Object.keys(reducedSpec.paths)).toStrictEqual([
           '/pet',
@@ -118,7 +117,7 @@ describe('rdme openapi reduce', () => {
 
         await expect(run([spec])).resolves.toBe(successfulReduction());
 
-        expect(fs.writeFileSync).toHaveBeenCalledWith('output.json', expect.any(String));
+        expect(fsWriteFileSyncSpy).toHaveBeenCalledWith('output.json', expect.any(String));
         expect(reducedSpec.tags).toHaveLength(1);
         expect(Object.keys(reducedSpec.paths)).toStrictEqual(['/pet', '/pet/findByStatus']);
         expect(Object.keys(reducedSpec.paths['/pet'])).toStrictEqual(['post']);
@@ -150,7 +149,7 @@ describe('rdme openapi reduce', () => {
         const output = getCommandOutput();
         expect(output).toBe(chalk.yellow(`ℹ️  We found ${spec} and are attempting to reduce it.`));
 
-        expect(fs.writeFileSync).toHaveBeenCalledWith('output.json', expect.any(String));
+        expect(fsWriteFileSyncSpy).toHaveBeenCalledWith('output.json', expect.any(String));
         expect(Object.keys(reducedSpec.paths)).toStrictEqual(['/pet', '/pet/{petId}']);
         expect(Object.keys(reducedSpec.paths['/pet'])).toStrictEqual(['post']);
         expect(Object.keys(reducedSpec.paths['/pet/{petId}'])).toStrictEqual(['get']);
@@ -184,7 +183,7 @@ describe('rdme openapi reduce', () => {
         const output = getCommandOutput();
         expect(output).toBe(chalk.yellow(`ℹ️  We found ${spec} and are attempting to reduce it.`));
 
-        expect(fs.writeFileSync).toHaveBeenCalledWith('output.json', expect.any(String));
+        expect(fsWriteFileSyncSpy).toHaveBeenCalledWith('output.json', expect.any(String));
         expect(Object.keys(reducedSpec.paths)).toStrictEqual(['/pet', '/pet/{petId}']);
         expect(Object.keys(reducedSpec.paths['/pet'])).toStrictEqual(['post']);
         expect(Object.keys(reducedSpec.paths['/pet/{petId}'])).toStrictEqual(['get']);
