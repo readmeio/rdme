@@ -3,8 +3,7 @@ import path from 'node:path';
 
 import chalk from 'chalk';
 import grayMatter from 'gray-matter';
-import nock from 'nock';
-import { describe, beforeAll, afterAll, beforeEach, it, expect } from 'vitest';
+import { describe, beforeAll, beforeEach, it, expect } from 'vitest';
 
 import Command from '../../../src/commands/changelogs.js';
 import { APIv1Error } from '../../../src/lib/apiError.js';
@@ -20,11 +19,8 @@ describe('rdme changelogs', () => {
   let run: (args?: string[]) => Promise<string>;
 
   beforeAll(() => {
-    nock.disableNetConnect();
     run = runCommandAndReturnResult(Command);
   });
-
-  afterAll(() => nock.cleanAll());
 
   it('should error if no path provided', () => {
     return expect(run(['--key', key])).rejects.toThrow('Missing 1 required arg:\npath');

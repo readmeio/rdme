@@ -10,6 +10,8 @@ import * as getPkgVersion from '../../src/lib/getPkg.js';
 
 import getGitRemoteMock from './get-git-mock.js';
 
+const fsWriteFileSync = fs.writeFileSync;
+
 /**
  * A helper function for setting up tests for our GitHub Action onboarding.
  *
@@ -40,6 +42,7 @@ export function before(
  */
 export function after() {
   configstore.clear();
+  fs.writeFileSync = fsWriteFileSync;
   vi.clearAllMocks();
   vi.unstubAllEnvs();
 }

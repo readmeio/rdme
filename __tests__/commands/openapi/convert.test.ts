@@ -1,7 +1,9 @@
+import type { OASDocument } from 'oas/types';
+
 import fs from 'node:fs';
 
 import prompts from 'prompts';
-import { describe, it, expect, vi, beforeAll, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeAll, beforeEach, afterEach, type MockInstance } from 'vitest';
 
 import Command from '../../../src/commands/openapi/convert.js';
 import { runCommandAndReturnResult } from '../../helpers/oclif.js';
@@ -9,6 +11,8 @@ import { runCommandAndReturnResult } from '../../helpers/oclif.js';
 const successfulConversion = () => 'Your API definition has been converted and bundled and saved to output.json!';
 
 describe('rdme openapi convert', () => {
+  let fsWriteFileSyncSpy: MockInstance<typeof fs.writeFileSync>;
+  let reducedSpec: OASDocument;
   let run: (args?: string[]) => Promise<string>;
   let testWorkingDir: string;
 
@@ -18,12 +22,15 @@ describe('rdme openapi convert', () => {
 
   beforeEach(() => {
     testWorkingDir = process.cwd();
+
+    fsWriteFileSyncSpy = vi.spyOn(fs, 'writeFileSync').mockImplementationOnce((filename, data) => {
+      reducedSpec = JSON.parse(data as string);
+    });
   });
 
   afterEach(() => {
     process.chdir(testWorkingDir);
-
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('converting', () => {
@@ -33,16 +40,11 @@ describe('rdme openapi convert', () => {
     ])('should support reducing a %s definition (format: %s)', async (_, format, specVersion) => {
       const spec = require.resolve(`@readme/oas-examples/${specVersion}/${format}/petstore-simple.${format}`);
 
-      let reducedSpec;
-      fs.writeFileSync = vi.fn((fileName, data) => {
-        reducedSpec = JSON.parse(data as string);
-      });
-
       prompts.inject(['output.json']);
 
       await expect(run([spec])).resolves.toBe(successfulConversion());
 
-      expect(fs.writeFileSync).toHaveBeenCalledWith('output.json', expect.any(String));
+      expect(fsWriteFileSyncSpy).toHaveBeenCalledWith('output.json', expect.any(String));
       expect(reducedSpec.tags).toHaveLength(1);
       expect(Object.keys(reducedSpec.paths)).toStrictEqual(['/pet/{petId}']);
       expect(Object.keys(reducedSpec.paths['/pet/{petId}'])).toStrictEqual(['get', 'post', 'delete']);
@@ -51,11 +53,6 @@ describe('rdme openapi convert', () => {
 
   it('should convert with no prompts via opts', async () => {
     const spec = 'petstore-simple.json';
-
-    let reducedSpec;
-    fs.writeFileSync = vi.fn((fileName, data) => {
-      reducedSpec = JSON.parse(data as string);
-    });
 
     await expect(
       run([
@@ -67,7 +64,7 @@ describe('rdme openapi convert', () => {
       ]),
     ).resolves.toBe(successfulConversion());
 
-    expect(fs.writeFileSync).toHaveBeenCalledWith('output.json', expect.any(String));
+    expect(fsWriteFileSyncSpy).toHaveBeenCalledWith('output.json', expect.any(String));
     expect(Object.keys(reducedSpec.paths)).toStrictEqual(['/pet/{petId}']);
     expect(Object.keys(reducedSpec.paths['/pet/{petId}'])).toStrictEqual(['get', 'post', 'delete']);
   });
@@ -78,16 +75,11 @@ describe('rdme openapi convert', () => {
 
       const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
-      let reducedSpec;
-      fs.writeFileSync = vi.fn((fileName, data) => {
-        reducedSpec = JSON.parse(data as string);
-      });
-
       prompts.inject(['output.json']);
 
       await expect(run([spec])).resolves.toBe(successfulConversion());
 
-      expect(fs.writeFileSync).toHaveBeenCalledWith('output.json', expect.any(String));
+      expect(fsWriteFileSyncSpy).toHaveBeenCalledWith('output.json', expect.any(String));
       expect(reducedSpec.tags).toHaveLength(3);
       expect(Object.keys(reducedSpec.paths)).toStrictEqual([
         '/pet',

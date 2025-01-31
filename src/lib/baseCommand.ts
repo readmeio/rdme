@@ -88,7 +88,7 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
   protected async _run<U>(): Promise<U> {
     // eslint-disable-next-line no-underscore-dangle
     const result: U = await super._run();
-    if (isGHA() && result) {
+    if (isGHA() && !isTest() && result) {
       core.setOutput('rdme', result);
     }
     return result;

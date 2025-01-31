@@ -36,10 +36,10 @@ async function pushDoc(
   const { content, data, filePath, hash, slug } = fileData;
 
   // TODO: ideally we should offer a zero-configuration approach that doesn't
-  // require YAML front matter, but that will have to be a breaking change
+  // require YAML frontmatter, but that will have to be a breaking change
   if (!Object.keys(data).length) {
-    this.debug(`No front matter attributes found for ${filePath}, not syncing`);
-    return `⏭️  no front matter attributes found for ${filePath}, skipping`;
+    this.debug(`No frontmatter attributes found for ${filePath}, not syncing`);
+    return `⏭️  no frontmatter attributes found for ${filePath}, skipping`;
   }
 
   let payload: {
@@ -134,6 +134,13 @@ const byParentDoc = (left: PageMetadata, right: PageMetadata) => {
   return (right.data.parentDoc ? 1 : 0) - (left.data.parentDoc ? 1 : 0);
 };
 
+/**
+ * Sorts files based on their parentDoc attribute. If a file has a parentDoc attribute,
+ * it will be sorted after the file it references.
+ *
+ * @see {@link https://github.com/readmeio/rdme/pull/973}
+ * @returns An array of sorted PageMetadata objects
+ */
 function sortFiles(this: ChangelogsCommand, filePaths: string[]): PageMetadata[] {
   const files = filePaths.map(file => readPage.call(this, file)).sort(byParentDoc);
   const filesBySlug = files.reduce<Record<string, PageMetadata>>((bySlug, obj) => {

@@ -62,10 +62,10 @@ To see detailed CLI setup instructions and all available commands, check out [th
 > The following guidance on Markdown file setup is nearly identical for Guides (i.e. the `docs` command), Changelog (i.e. the `changelogs` command), and Custom Pages (i.e. the `custompages` command). There are a couple of small differences:
 >
 > - Guides are tied to project versions and therefore require a `--version` parameter. Changelog and Custom Pages are the same across project versions and therefore do not have a `--version` parameter.
-> - There are slight variations in the YAML front matter attributes for each respective section of your documentation. For example, Changelog has a `type` attribute which you can set to `added`. See [Specifying Other Attributes](#specifying-other-attributes) for more information.
-> - In addition to Markdown, Custom Pages also supports HTML files. If you pass an HTML file into the `custompages` commands, the page will have the `htmlmode` flag set to `true` and it will conversely be set to `false` for Markdown files. You can override this in the YAML front matter.
+> - There are slight variations in the YAML frontmatter attributes for each respective section of your documentation. For example, Changelog has a `type` attribute which you can set to `added`. See [Specifying Other Attributes](#specifying-other-attributes) for more information.
+> - In addition to Markdown, Custom Pages also supports HTML files. If you pass an HTML file into the `custompages` commands, the page will have the `htmlmode` flag set to `true` and it will conversely be set to `false` for Markdown files. You can override this in the YAML frontmatter.
 
-In order to sync Markdown files to your Guides, your Changelog, or your Custom Pages, you'll need to add certain attributes to the top of each page via a [YAML front matter block](https://jekyllrb.com/docs/front-matter/). See below for an example (using the page you're currently reading!):
+In order to sync Markdown files to your Guides, your Changelog, or your Custom Pages, you'll need to add certain attributes to the top of each page via a [YAML frontmatter block](https://jekyllrb.com/docs/front-matter/). See below for an example (using the page you're currently reading!):
 
 ```markdown
 ---
@@ -79,7 +79,7 @@ If you're anything like us...
 
 #### Required Attributes
 
-See below for a table detailing the required YAML front matter attributes:
+See below for a table detailing the required YAML frontmatter attributes:
 
 | Attribute  | Required for `changelogs`? | Required for `custompages`? | Required for `docs`? |
 | :--------- | :------------------------- | :-------------------------- | :------------------- |
@@ -90,11 +90,11 @@ To determine what your `category` value should be, you can use [the `Get all cat
 
 > 📘
 >
-> Any Markdown/HTML files that lack YAML front matter attributes will be skipped.
+> Any Markdown/HTML files that lack YAML frontmatter attributes will be skipped.
 
 #### Specifying Page Slugs
 
-By default, we automatically derive the page's slug via the file name (e.g. the file name `rdme.md` would become `/docs/rdme` in your ReadMe project). Note that our API uses [`slugify`](https://www.npmjs.com/package/slugify) to automatically handle certain characters (e.g. spaces), which may lead to unexpected syncing behavior if your file names don't match your page slugs. If you prefer to keep your page slugs different from your file names, you can manually set the `slug` value in the YAML front matter:
+By default, we automatically derive the page's slug via the file name (e.g. the file name `rdme.md` would become `/docs/rdme` in your ReadMe project). Note that our API uses [`slugify`](https://www.npmjs.com/package/slugify) to automatically handle certain characters (e.g. spaces), which may lead to unexpected syncing behavior if your file names don't match your page slugs. If you prefer to keep your page slugs different from your file names, you can manually set the `slug` value in the YAML frontmatter:
 
 ```markdown
 ---
@@ -107,7 +107,7 @@ slug: an-alternative-page-slug-example
 
 #### Specifying Other Attributes
 
-You can also specify several other page attributes in your YAML front matter, such as `hidden` (a boolean which denotes whether your page is published or unpublished). Any attributes you omit will remain unchanged on `rdme` runs. To view the full list of attributes, check out the `POST` endpoints for respective section of your documentation that you're syncing:
+You can also specify several other page attributes in your YAML frontmatter, such as `hidden` (a boolean which denotes whether your page is published or unpublished). Any attributes you omit will remain unchanged on `rdme` runs. To view the full list of attributes, check out the `POST` endpoints for respective section of your documentation that you're syncing:
 
 - [`Create doc`](https://docs.readme.com/reference/createdoc)
 - [`Create changelog`](https://docs.readme.com/reference/createchangelog)

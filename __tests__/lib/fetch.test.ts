@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
-import nock from 'nock';
-import { describe, beforeEach, afterEach, it, expect, vi, beforeAll, type MockInstance } from 'vitest';
+import { describe, beforeEach, afterEach, it, expect, vi, type MockInstance } from 'vitest';
 
 import pkg from '../../package.json' with { type: 'json' };
 import { cleanAPIv1Headers, handleAPIv1Res, readmeAPIv1Fetch } from '../../src/lib/readmeAPIFetch.js';
@@ -8,12 +7,6 @@ import { getAPIv1Mock } from '../helpers/get-api-mock.js';
 import { after, before } from '../helpers/setup-gha-env.js';
 
 describe('#readmeAPIv1Fetch()', () => {
-  beforeAll(() => {
-    nock.disableNetConnect();
-  });
-
-  afterEach(() => nock.cleanAll());
-
   describe('GitHub Actions environment', () => {
     beforeEach(before);
 

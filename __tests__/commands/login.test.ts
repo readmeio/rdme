@@ -1,6 +1,5 @@
-import nock from 'nock';
 import prompts from 'prompts';
-import { describe, beforeAll, afterAll, afterEach, it, expect } from 'vitest';
+import { describe, beforeAll, afterEach, it, expect } from 'vitest';
 
 import Command from '../../src/commands/login.js';
 import { APIv1Error } from '../../src/lib/apiError.js';
@@ -18,13 +17,10 @@ describe('rdme login', () => {
   let run: (args?: string[]) => Promise<string>;
 
   beforeAll(() => {
-    nock.disableNetConnect();
     run = runCommandAndReturnResult(Command);
   });
 
   afterEach(() => configStore.clear());
-
-  afterAll(() => nock.cleanAll());
 
   it('should error if no project provided', () => {
     prompts.inject([email, password]);
