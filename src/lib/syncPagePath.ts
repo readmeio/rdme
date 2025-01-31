@@ -351,94 +351,64 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
 
   if (dryRun) {
     this.log('Dry run complete. No changes were made to ReadMe.');
-    if (results.created.length) {
+  }
+
+  if (results.created.length) {
+    this.log(
+      dryRun
+        ? `🌱 The following ${results.created.length} page(s) do not currently exist in ReadMe and will be created:`
+        : `🌱 Successfully created ${results.created.length} page(s) in ReadMe:`,
+    );
+    results.created.forEach(({ filePath, slug }) => {
+      this.log(`   - ${slug} (${chalk.underline(filePath)})`);
+    });
+  }
+
+  if (results.updated.length) {
+    this.log(
+      dryRun
+        ? `🔄 The following ${results.updated.length} page(s) already exist in ReadMe and will be updated:`
+        : `🔄 Successfully updated ${results.updated.length} page(s) in ReadMe:`,
+    );
+    results.updated.forEach(({ filePath, slug }) => {
+      this.log(`   - ${slug} (${chalk.underline(filePath)})`);
+    });
+  }
+
+  if (results.skipped.length) {
+    this.log(
+      dryRun
+        ? `⏭️ The following ${results.skipped.length} page(s) will be skipped due to no front matter data:`
+        : `Skipped ${results.skipped.length} page(s) in ReadMe due to no front matter data:`,
+    );
+    results.skipped.forEach(({ filePath, slug }) => {
+      this.log(`   - ${slug} (${chalk.underline(filePath)})`);
+    });
+  }
+
+  if (results.failed.length) {
+    if (results.failed.length === 1 && results.failed[0].result === 'failed') {
+      throw results.failed[0].error;
+    } else {
       this.log(
-        `🌱 The following ${results.created.length} page(s) do not currently exist in ReadMe and will be created:`,
+        dryRun
+          ? `Unable to fetch data about the following ${results.failed.length} page(s):`
+          : `Received errors when attempting to upload ${results.failed.length} page(s):`,
       );
-      results.created.forEach(({ filePath, slug }) => {
-        this.log(`   - ${slug} (${chalk.underline(filePath)})`);
+      results.failed.forEach(({ error, filePath }) => {
+        let errorMessage = error.message || 'unknown error';
+        if (error instanceof APIv2Error && error.response.title) {
+          errorMessage = error.response.title;
+        }
+
+        this.log(`   - ${chalk.underline(filePath)}: ${errorMessage}`);
       });
-    }
 
-    if (results.updated.length) {
-      this.log(`🔄 The following ${results.updated.length} page(s) already exist in ReadMe and will be updated:`);
-      results.updated.forEach(({ filePath, slug }) => {
-        this.log(`   - ${slug} (${chalk.underline(filePath)})`);
-      });
-    }
-
-    if (results.skipped.length) {
-      this.log(`⏭️ The following ${results.skipped.length} page(s) will be skipped due to no front matter data:`);
-      results.skipped.forEach(({ filePath, slug }) => {
-        this.log(`   - ${slug} (${chalk.underline(filePath)})`);
-      });
-    }
-
-    if (results.failed.length) {
-      if (results.failed.length === 1 && results.failed[0].result === 'failed') {
-        throw results.failed[0].error;
-      } else {
-        this.log(`Unable to fetch data about the following ${results.failed.length} page(s):`);
-        results.failed.forEach(({ error, filePath }) => {
-          let errorMessage = 'unknown error';
-          if (error.message) {
-            errorMessage = error.message;
-          }
-          if (error instanceof APIv2Error && error.response.title) {
-            errorMessage = error.response.title;
-          }
-
-          this.log(`   - ${chalk.underline(filePath)}: ${errorMessage}`);
-        });
-
-        throw new Error(
-          `Multiple dry runs failed. To see more detailed errors for a page, run \`${this.config.bin} ${this.id} <path-to-page.md>\` --dry-run.`,
-        );
-      }
-    }
-  } else {
-    if (results.created.length) {
-      this.log(`🌱 Successfully created ${results.created.length} page(s) in ReadMe:`);
-      results.created.forEach(({ filePath, slug }) => {
-        this.log(`   - ${slug} (${chalk.underline(filePath)})`);
-      });
-    }
-
-    if (results.updated.length) {
-      this.log(`🔄 Successfully updated ${results.updated.length} page(s) in ReadMe:`);
-      results.updated.forEach(({ filePath, slug }) => {
-        this.log(`   - ${slug} (${chalk.underline(filePath)})`);
-      });
-    }
-
-    if (results.skipped.length) {
-      this.log(`Skipped ${results.skipped.length} page(s) in ReadMe due to no front matter data:`);
-      results.skipped.forEach(({ filePath, slug }) => {
-        this.log(`   - ${slug} (${chalk.underline(filePath)})`);
-      });
-    }
-
-    if (results.failed.length) {
-      if (results.failed.length === 1 && results.failed[0].result === 'failed') {
-        throw results.failed[0].error;
-      } else {
-        this.log(`Received errors when attempting to upload ${results.failed.length} page(s):`);
-        results.failed.forEach(({ error, filePath }) => {
-          let errorMessage = 'unknown error';
-          if (error.message) {
-            errorMessage = error.message;
-          }
-          if (error instanceof APIv2Error && error.response.title) {
-            errorMessage = error.response.title;
-          }
-
-          this.log(`   - ${chalk.underline(filePath)}: ${errorMessage}`);
-        });
-
-        throw new Error(
-          `Multiple page uploads failed. To see more detailed errors for a page, run \`${this.config.bin} ${this.id} <path-to-page.md>\`.`,
-        );
-      }
+      throw new Error(
+        dryRun
+          ? `Multiple dry runs failed. To see more detailed errors for a page, run \`${this.config.bin} ${this.id} <path-to-page.md>\` --dry-run.`
+          : `Multiple page uploads failed. To see more detailed errors for a page, run \`${this.config.bin} ${this.id} <path-to-page.md>\`.`,
+      );
     }
   }
 
