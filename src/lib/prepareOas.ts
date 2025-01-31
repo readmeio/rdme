@@ -44,14 +44,17 @@ const capitalizeSpecType = (type: string) =>
 
 /**
  * Normalizes, validates, and (optionally) bundles an OpenAPI definition.
- *
- * @param path Path to a spec file. If this is missing, the current directory is searched for
- *    certain file names.
- * @param command The command context in which this is being run within (uploading a spec,
- *    validation, or reducing one).
  */
 export default async function prepareOas(
+  /**
+   * Path to a spec file. If this is missing, the current directory is searched for
+   * certain file names.
+   */
   path: string | undefined,
+  /**
+   * The command context in which this is being run within (uploading a spec,
+   * validation, or reducing one).
+   */
   command: 'openapi' | `openapi ${OpenAPIAction}`,
   opts: {
     /**

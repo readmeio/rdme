@@ -22,9 +22,11 @@ type ParsedOpts = Record<string, unknown>;
 
 /**
  * Generates the key for storing info in `configstore` object.
- * @param repoRoot The root of the repo
  */
-export const getConfigStoreKey = (repoRoot: string) => `createGHA.${repoRoot}`;
+export const getConfigStoreKey = (
+  /** the root of the repository */
+  repoRoot: string,
+) => `createGHA.${repoRoot}`;
 /**
  * The directory where GitHub Actions workflow files are stored.
  *
@@ -40,9 +42,11 @@ export const git = simpleGit();
 /**
  * Removes any non-file-friendly characters and adds
  * the full path + file extension for GitHub Workflow files.
- * @param fileName raw file name to clean up
  */
-export const getGHAFileName = (fileName: string) => {
+export const getGHAFileName = (
+  /** raw file name to clean up */
+  fileName: string,
+) => {
   return path.join(GITHUB_WORKFLOW_DIR, `${cleanFileName(fileName).toLowerCase()}.yml`);
 };
 

@@ -1,4 +1,4 @@
-import type { Command as OclifCommand } from '@oclif/core';
+import type { CommandClass } from '../../src/index.js';
 
 import path from 'node:path';
 
@@ -32,7 +32,7 @@ export function setupOclifConfig() {
  *
  * @example runCommand(LoginCommand)(['--email', 'owlbert@example.com', '--password', 'password'])
  */
-function runCommand<T extends typeof OclifCommand>(Command: T) {
+export function runCommand(Command: CommandClass) {
   return async function runCommandAgainstArgs(args?: string[]) {
     const oclifConfig = await setupOclifConfig();
     // @ts-expect-error this is the pattern recommended by the @oclif/test docs.
@@ -48,7 +48,7 @@ function runCommand<T extends typeof OclifCommand>(Command: T) {
  *
  * @example runCommandAndReturnResult(LoginCommand)(['--email', 'owlbert@example.com', '--password', 'password'])
  */
-export function runCommandAndReturnResult<T extends typeof OclifCommand>(Command: T) {
+export function runCommandAndReturnResult(Command: CommandClass) {
   return async function runCommandAgainstArgs(args?: string[]) {
     const { error, result } = await runCommand(Command)(args);
     if (error) {

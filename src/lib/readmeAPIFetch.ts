@@ -49,12 +49,15 @@ function stripQuotes(s: string) {
 
 /**
  * Parses Warning header into an array of warning header objects
- * @param header raw `Warning` header
+ *
  * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Warning}
  * @see {@link https://www.rfc-editor.org/rfc/rfc7234#section-5.5}
  * @see {@link https://github.com/marcbachmann/warning-header-parser}
  */
-function parseWarningHeader(header: string): WarningHeader[] {
+function parseWarningHeader(
+  /** The raw `Warning` header string */
+  header: string,
+): WarningHeader[] {
   try {
     const warnings = header.split(/([0-9]{3} [a-z0-9.@\-/]*) /g);
 
@@ -123,13 +126,14 @@ function sanitizeHeaders(headers: Headers) {
 /**
  * Wrapper for the `fetch` API so we can add rdme-specific headers to all ReadMe API v1 requests.
  *
- * @param pathname the pathname to make the request to. Must have a leading slash.
- * @param fileOpts optional object containing information about the file being sent.
- * We use this to construct a full source URL for the file.
+ * @deprecated This is for APIv1 only. Use {@link readmeAPIv2Fetch} instead, if possible.
  */
 export async function readmeAPIv1Fetch(
+  /** The pathname to make the request to. Must have a leading slash. */
   pathname: string,
   options: RequestInit = { headers: new Headers() },
+  /** optional object containing information about the file being sent.
+   * We use this to construct a full source URL for the file. */
   fileOpts: FilePathDetails = { filePath: '', fileType: false },
 ) {
   let source = 'cli';
@@ -215,12 +219,17 @@ export async function readmeAPIv1Fetch(
  *
  * If we receive non-JSON responses, we consider them errors and throw them.
  *
- * @param rejectOnJsonError if omitted (or set to true), the function will return
- * an `APIv1Error` if the JSON body contains an `error` property. If set to false,
- * the function will return a resolved promise containing the JSON object.
- *
+ * @deprecated This is for APIv1 only. Use {@link handleAPIv2Res} instead, if possible.
  */
-export async function handleAPIv1Res(res: Response, rejectOnJsonError = true) {
+export async function handleAPIv1Res(
+  res: Response,
+  /**
+   * If omitted (or set to true), the function will return an `APIv1Error`
+   * if the JSON body contains an `error` property. If set to false,
+   * the function will return a resolved promise containing the JSON object.
+   */
+  rejectOnJsonError = true,
+) {
   const contentType = res.headers.get('content-type') || '';
   const extension = mime.extension(contentType);
   if (extension === 'json') {
@@ -264,6 +273,7 @@ function filterOutFalsyHeaders(inputHeaders: Headers) {
 /**
  * Returns the basic auth header and any other defined headers for use in `fetch` calls against ReadMe API v1.
  *
+ * @deprecated This is for APIv1 only.
  */
 export function cleanAPIv1Headers(
   key: string,

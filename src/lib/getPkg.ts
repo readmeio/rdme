@@ -51,14 +51,19 @@ export function getPkgVersion(this: Hook.Context | void): string {
 /**
  * The current `rdme` version
  *
- * @param npmDistTag the `npm` dist tag to retrieve. If this value is omitted,
- * the version from the `package.json` is returned.
  * @example "8.0.0"
  * @see {@link https://docs.npmjs.com/adding-dist-tags-to-packages}
  * @note we mock this function in our snapshots
  * @see {@link https://stackoverflow.com/a/54245672}
  */
-export async function getPkgVersionFromNPM(this: Hook.Context | void, npmDistTag?: npmDistTag): Promise<string> {
+export async function getPkgVersionFromNPM(
+  this: Hook.Context | void,
+  /**
+   * The `npm` dist tag to retrieve. If this value is omitted,
+   * the version from the `package.json` is returned.
+   */
+  npmDistTag?: npmDistTag,
+): Promise<string> {
   if (npmDistTag) {
     return fetch(registryUrl)
       .then(res => res.json() as Promise<{ 'dist-tags': Record<string, string> }>)

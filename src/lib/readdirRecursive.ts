@@ -10,12 +10,18 @@ import { debug } from './logger.js';
 /**
  * Recursively grabs all files within a given directory
  * (including subdirectories)
- * @param folderToSearch path to directory
- * @param ignoreGit boolean to indicate whether or not to ignore
- * `.git` directory plus any files specified in `.gitignore`
+ *
  * @returns array of file names
  */
-export default function readdirRecursive(folderToSearch: string, ignoreGit = false): string[] {
+export default function readdirRecursive(
+  /** path to directory */
+  folderToSearch: string,
+  /**
+   * Boolean to indicate whether or not to ignore `.git` directory
+   * as well as any files specified in `.gitignore`
+   */
+  ignoreGit = false,
+): string[] {
   debug(`current readdirRecursive folder: ${folderToSearch}`);
 
   let ignoreFilter: Ignore;

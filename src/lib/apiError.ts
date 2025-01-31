@@ -12,6 +12,8 @@ export interface APIv1ErrorResponse {
 
 /**
  * Error class for handling ReadMe API v1 errors.
+ *
+ * @deprecated Use {@link APIv2Error} instead.
  */
 export class APIv1Error extends Error {
   code: string;
