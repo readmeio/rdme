@@ -1,5 +1,4 @@
 import type ChangelogsCommand from '../commands/changelogs.js';
-import type DocsUploadCommand from '../commands/docs/upload.js';
 
 import crypto from 'node:crypto';
 import fs from 'node:fs';
@@ -38,7 +37,7 @@ export interface PageMetadata<T = Record<string, unknown>> {
  * @param {String} filePath path to the HTML/Markdown file
  *  (file extension must end in `.html`, `.md`., or `.markdown`)
  */
-export default function readPage(this: ChangelogsCommand | DocsUploadCommand, filePath: string): PageMetadata {
+export default function readPage(this: ChangelogsCommand, filePath: string): PageMetadata {
   this.debug(`reading file ${filePath}`);
   const rawFileContents = fs.readFileSync(filePath, 'utf8');
   // by default, grayMatter maintains a buggy cache with the page data,
