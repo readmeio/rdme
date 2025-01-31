@@ -43,8 +43,6 @@ type PushResult =
 /**
  * Reads the contents of the specified Markdown or HTML file
  * and creates/updates the corresponding page in ReadMe
- *
- * @returns A promise-wrapped string with the result
  */
 async function pushPage(
   this: CommandsThatSyncMarkdown,
