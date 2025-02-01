@@ -112,9 +112,11 @@ export function fix(
           };
         } else if (badKey === 'parentDoc') {
           const uri = mappings.parentPages[extractedValue as string];
-          updatedData.parent = {
-            uri: uri || `uri-that-does-not-map-to-${extractedValue}`,
-          };
+          if (uri) {
+            updatedData.parent = {
+              uri,
+            };
+          }
         } else if (badKey === 'parentDocSlug') {
           updatedData.parent = {
             uri: extractedValue,

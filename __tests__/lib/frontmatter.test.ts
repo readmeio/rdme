@@ -152,7 +152,7 @@ describe('#fix', () => {
     `);
   });
 
-  it('should fix legacy parent page id and use fallback mapping', () => {
+  it('should delete legacy parent page id if no mapping is available', () => {
     const data = {
       title: 'Hello, world!',
       parentDoc: '5f92cbf10cf217478ba93561',
@@ -163,9 +163,6 @@ describe('#fix', () => {
     expect(result.hasIssues).toBe(true);
     expect(result.updatedData).toMatchInlineSnapshot(`
       {
-        "parent": {
-          "uri": "uri-that-does-not-map-to-5f92cbf10cf217478ba93561",
-        },
         "title": "Hello, world!",
       }
     `);
