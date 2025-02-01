@@ -16,16 +16,18 @@ describe('rdme docs upload', () => {
   let run: (args?: string[]) => OclifOutput;
 
   beforeAll(() => {
-    nock.disableNetConnect();
     run = runCommand(Command);
   });
 
   beforeEach(() => {
+    getAPIv1Mock().get('/api/v1/migration').basicAuth({ user: key }).reply(201, {
+      categories: {},
+      parentPages: {},
+    });
     vi.spyOn(fs, 'writeFileSync').mockImplementation(() => {});
   });
 
   afterEach(() => {
-    nock.cleanAll();
     vi.restoreAllMocks();
   });
 
@@ -166,6 +168,7 @@ describe('rdme docs upload', () => {
       });
 
       it('should fix the frontmatter issues in the file and insert the proper category mapping', async () => {
+        nock.cleanAll();
         const mappingsMock = getAPIv1Mock()
           .get('/api/v1/migration')
           .basicAuth({ user: key })
