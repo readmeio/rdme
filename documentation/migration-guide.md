@@ -96,7 +96,7 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
 
    - Like `openapi upload` above, there is no prompt to select your ReadMe project version if you omit the `--version` flag. It now defaults to `stable` (i.e., your main ReadMe project version).
 
-   - `rdme docs upload` will now automatically validate your front matter and flag any issues prior to syncing. This is particularly helpful if you're coming from `rdme@9` or earlier, since the shape of certain front matter attributes (e.g., `category`, `parent`) have slightly changed. If you run this command in a non-CI environment, any outdated front matter will be detected and you'll have the ability to update it automatically.
+   - `rdme docs upload` will now automatically validate your frontmatter and flag any issues prior to syncing. This is particularly helpful if you're coming from `rdme@9` or earlier, since the shape of certain frontmatter attributes (e.g., `category`, `parent`) have slightly changed. If you run this command in a non-CI environment, any outdated frontmatter will be detected and you'll have the ability to update it automatically.
 
    Read more in [the `docs upload` command docs](https://github.com/readmeio/rdme/tree/v10/documentation/commands/docs.md#rdme-docs-upload-path) and in [the ReadMe API migration guide](https://docs.readme.com/main/reference/api-migration-guide).
 
