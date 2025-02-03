@@ -1,3 +1,9 @@
+## [9.1.1](https://github.com/readmeio/rdme/compare/v9.1.0...v9.1.1) (2025-02-03)
+
+### Bug Fixes
+
+* **v9:** point to correct dist-tag for outdated version notifications ([#1156](https://github.com/readmeio/rdme/issues/1156)) ([099060d](https://github.com/readmeio/rdme/commit/099060d2c9eefb5335277edc5201ca74001f447f))
+
 ## [10.1.1](https://github.com/readmeio/rdme/compare/v10.1.0...v10.1.1) (2025-01-28)
 
 
