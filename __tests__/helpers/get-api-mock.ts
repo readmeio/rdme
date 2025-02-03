@@ -2,6 +2,7 @@ import nock from 'nock';
 
 import config from '../../src/lib/config.js';
 import { getUserAgent } from '../../src/lib/readmeAPIFetch.js';
+import { readmeAPIv2Oas } from '../../src/lib/types.js';
 
 import { mockVersion } from './oclif.js';
 
@@ -42,3 +43,8 @@ export function getAPIv2MockForGHA(reqHeaders: nock.Options['reqheaders'] = {}) 
     ...reqHeaders,
   });
 }
+
+/**
+ * Mocks the fetch call to ReadMe API v2's OpenAPI spec.
+ */
+export const oasFetchMock = (status = 200) => getAPIv2Mock().get('/openapi.json').reply(status, readmeAPIv2Oas);
