@@ -1,0 +1,8 @@
+{
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist-gha": true,
+    "CHANGELOG.md": true,
+    "package-lock.json": true
+  }
+}
