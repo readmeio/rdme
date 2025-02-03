@@ -16,6 +16,12 @@ Check out `.github/workflows/docs.yml` for more info on this!
 
 -->
 
+> 🚧 Deprecated Guidance
+>
+> This example is only applicable for projects that have yet to migrate to [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored), which requires `rdme@9`. You can find more info in [our `rdme` migration guide](https://github.com/readmeio/rdme/blob/next/documentation/migration-guide.md) or by reaching out to us at [support@readme.io](mailto:support@readme.io).
+>
+> We will be updating this document with our latest guidance soon. Thanks for your patience!
+
 Do you have Markdown files stored on GitHub? With [the `rdme` GitHub Action](https://docs.readme.com/docs/rdme), you can sync them to ReadMe every time they're updated in GitHub. Let's go over how to set this up!
 
 ## "Automagical" Workflow File Generation

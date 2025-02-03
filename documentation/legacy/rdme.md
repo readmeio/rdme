@@ -47,6 +47,12 @@ To see detailed CLI setup instructions and all available commands, check out [th
 
 ### Markdown File Setup
 
+> 🚧 Deprecated Guidance
+>
+> This guidance is only applicable for projects that have yet to migrate to [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored), which requires `rdme@9`. You can find more info in [our `rdme` migration guide](https://github.com/readmeio/rdme/blob/next/documentation/migration-guide.md) or by reaching out to us at [support@readme.io](mailto:support@readme.io).
+>
+> We will be updating this document with our latest guidance soon. Thanks for your patience!
+
 > 📘 Guides, Changelog, Custom Pages... you name it!
 >
 > The following guidance on Markdown file setup is nearly identical for Guides (i.e. the `docs` command), Changelog (i.e. the `changelogs` command), and Custom Pages (i.e. the `custompages` command). There are a couple of small differences:
@@ -131,6 +137,12 @@ While there are [dozens of event options available](https://docs.github.com/acti
 
 ### Quick Start
 
+> 🚧 Deprecated Guidance
+>
+> This guidance is only applicable for projects that have yet to migrate to [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored), which requires `rdme@9`. You can find more info in [our `rdme` migration guide](https://github.com/readmeio/rdme/blob/next/documentation/migration-guide.md) or by reaching out to us at [support@readme.io](mailto:support@readme.io).
+>
+> We will be updating this document with our latest guidance soon. Thanks for your patience!
+
 The fastest way to create a GitHub Actions workflow file is by doing the following:
 
 1. Download `rdme` to your local machine (see [our setup instructions](https://github.com/readmeio/rdme#setup))
@@ -138,7 +150,7 @@ The fastest way to create a GitHub Actions workflow file is by doing the followi
 3. Run the command you wish to automate on your local machine with the `--github` flag tacked on at the end. For example:
 
 ```sh
-rdme openapi --github
+rdme openapi validate --github
 ```
 
 This will run through the `openapi` command, ask you a few quick questions, and then automatically create a fully functional GitHub Actions workflow file for you. 🪄
@@ -164,7 +176,7 @@ To use sensitive information (like your ReadMe API key) in your `rdme` GitHub Ac
 ```yml
 - uses: readmeio/rdme@RDME_VERSION
   with:
-    rdme: openapi [url-or-local-path-to-file] --key=${{ secrets.README_API_KEY }} --id=API_DEFINITION_ID
+    rdme: openapi validate [url-or-local-path-to-file] --key=${{ secrets.README_API_KEY }} --id=API_DEFINITION_ID
 ```
 
 ### Manually Configuring a GitHub Actions Workflow
@@ -205,6 +217,12 @@ The following section has links to full GitHub Actions workflow file examples.
 
 ### GitHub Actions Examples
 
+> 🚧 Deprecated Guidance
+>
+> This guidance is only applicable for projects that have yet to migrate to [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored), which requires `rdme@9`. You can find more info in [our `rdme` migration guide](https://github.com/readmeio/rdme/blob/next/documentation/migration-guide.md) or by reaching out to us at [support@readme.io](mailto:support@readme.io).
+>
+> We will be updating this document with our latest guidance soon. Thanks for your patience!
+
 Want to start syncing? We have several example workflow files available:
 
 - [Syncing an OpenAPI definition](https://docs.readme.com/docs/github-actions-openapi-example)
@@ -229,7 +247,7 @@ pipelines:
   default:
     - step:
         script:
-          - npx rdme@RDME_VERSION openapi [url-or-local-path-to-file] --key=$README_API_KEY --id=API_DEFINITION_ID
+          - npx rdme@RDME_VERSION openapi validate [url-or-local-path-to-file] --key=$README_API_KEY --id=API_DEFINITION_ID
 ```
 ```yml CircleCI (.circleci/config.yml)
 version: 2.1
@@ -241,7 +259,7 @@ jobs:
       - image: node:NODE_VERSION
     steps:
       - run:
-          command: npx rdme@RDME_VERSION openapi [url-or-local-path-to-file] --key=$README_API_KEY --id=API_DEFINITION_ID
+          command: npx rdme@RDME_VERSION openapi validate [url-or-local-path-to-file] --key=$README_API_KEY --id=API_DEFINITION_ID
 ```
 ```yml GitLab CI (rdme-sync.gitlab-ci.yml)
 # Official framework image. Look for the different tagged releases at:
@@ -250,7 +268,7 @@ image: node:NODE_VERSION
 
 sync-via-rdme:
   script:
-    - npx rdme@RDME_VERSION openapi [url-or-local-path-to-file] --key=$README_API_KEY --id=API_DEFINITION_ID
+    - npx rdme@RDME_VERSION openapi validate [url-or-local-path-to-file] --key=$README_API_KEY --id=API_DEFINITION_ID
 ```
 ```yml Travis CI (.travis.yml)
 # https://docs.travis-ci.com/user/languages/javascript-with-nodejs/#specifying-nodejs-versions
@@ -258,7 +276,7 @@ language: node_js
 node_js:
   - NODE_VERSION
 
-script: npx rdme@RDME_VERSION openapi [url-or-local-path-to-file] --key=$README_API_KEY --id=API_DEFINITION_ID
+script: npx rdme@RDME_VERSION openapi validate [url-or-local-path-to-file] --key=$README_API_KEY --id=API_DEFINITION_ID
 ```
 <!-- prettier-ignore-end -->
 
@@ -284,7 +302,7 @@ If you're working with the `docs` command specifically, we recommend using [dry 
 If you're troubleshooting issues with the CLI (or in some non-GitHub Actions environment), you can use the `DEBUG` environmental variable to print helpful debugging info to the console:
 
 ```sh
-DEBUG=rdme* rdme openapi [url-or-local-path-to-file]
+DEBUG=rdme* rdme openapi validate [url-or-local-path-to-file]
 ```
 
 Note that this should only be used for development/debugging purposes and should not be enabled in production environments.
