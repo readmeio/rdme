@@ -1,0 +1,8 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "search.exclude": {
+    "**/dist-gha": true,
+    "CHANGELOG.md": true,
+    "package-lock.json": true
+  }
+}
