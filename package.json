@@ -73,7 +73,7 @@
     "@commitlint/cli": "^19.0.3",
     "@commitlint/config-conventional": "^19.0.3",
     "@oclif/test": "^4.1.0",
-    "@readme/better-ajv-errors": "^1.5.0",
+    "@readme/better-ajv-errors": "^2.1.2",
     "@readme/eslint-config": "^14.0.0",
     "@readme/oas-examples": "^5.10.0",
     "@rollup/plugin-commonjs": "^28.0.0",
@@ -90,8 +90,8 @@
     "@types/semver": "^7.3.12",
     "@types/toposort": "^2.0.7",
     "@types/validator": "^13.7.6",
-    "@vitest/coverage-v8": "^2.0.5",
-    "@vitest/expect": "^2.0.5",
+    "@vitest/coverage-v8": "^3.0.5",
+    "@vitest/expect": "^3.0.5",
     "ajv": "^8.11.0",
     "alex": "^11.0.0",
     "eslint": "^8.47.0",
@@ -106,7 +106,7 @@
     "tsx": "^4.19.2",
     "type-fest": "^4.3.1",
     "typescript": "^5.1.6",
-    "vitest": "^2.0.5"
+    "vitest": "^3.0.5"
   },
   "scripts": {
     "build": "tsc && cp package.json dist/package.json",

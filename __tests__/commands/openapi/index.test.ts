@@ -762,7 +762,7 @@ describe('rdme openapi', () => {
           '--version',
           invalidVersion,
         ]),
-      ).rejects.toStrictEqual(new APIv1Error(errorObject));
+      ).rejects.toThrow(errorObject.message);
 
       return mock.done();
     });
@@ -824,7 +824,7 @@ describe('rdme openapi', () => {
 
       await expect(
         run([require.resolve('@readme/oas-examples/3.1/json/petstore.json'), '--key', 'key']),
-      ).rejects.toStrictEqual(new APIv1Error(errorObject));
+      ).rejects.toThrow(errorObject.message);
 
       return mock.done();
     });
