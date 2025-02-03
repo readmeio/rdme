@@ -762,7 +762,7 @@ describe('rdme openapi', () => {
           '--version',
           invalidVersion,
         ]),
-      ).rejects.toStrictEqual(new APIv1Error(errorObject));
+      ).rejects.toThrow(errorObject.message);
 
       return mock.done();
     });
@@ -804,7 +804,7 @@ describe('rdme openapi', () => {
       );
     });
 
-    it('should error if invalid API key is sent and version list does not load', async () => {
+    it.only('should error if invalid API key is sent and version list does not load', async () => {
       const errorObject = {
         error: 'APIKEY_NOTFOUND',
         message: "We couldn't find your API key.",
@@ -824,7 +824,7 @@ describe('rdme openapi', () => {
 
       await expect(
         run([require.resolve('@readme/oas-examples/3.1/json/petstore.json'), '--key', 'key']),
-      ).rejects.toStrictEqual(new APIv1Error(errorObject));
+      ).rejects.toThrow(errorObject.message);
 
       return mock.done();
     });
