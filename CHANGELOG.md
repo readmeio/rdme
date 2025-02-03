@@ -1,3 +1,15 @@
+## [10.1.2-next.1](https://github.com/readmeio/rdme/compare/v10.1.1...v10.1.2-next.1) (2025-02-03)
+
+
+### Bug Fixes
+
+* **v9:** point to correct dist-tag for outdated version notifications ([#1156](https://github.com/readmeio/rdme/issues/1156)) ([099060d](https://github.com/readmeio/rdme/commit/099060d2c9eefb5335277edc5201ca74001f447f))
+
+
+### Reverts
+
+* don't use v9 release channel in v10 ([db80253](https://github.com/readmeio/rdme/commit/db80253bdd0af66057e6ef7bcb367be6de7e0ce5))
+
 ## [9.1.1](https://github.com/readmeio/rdme/compare/v9.1.0...v9.1.1) (2025-02-03)
 
 ### Bug Fixes
