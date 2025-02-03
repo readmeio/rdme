@@ -804,7 +804,7 @@ describe('rdme openapi', () => {
       );
     });
 
-    it.only('should error if invalid API key is sent and version list does not load', async () => {
+    it('should error if invalid API key is sent and version list does not load', async () => {
       const errorObject = {
         error: 'APIKEY_NOTFOUND',
         message: "We couldn't find your API key.",
