@@ -1,3 +1,10 @@
+# [10.2.0-next.1](https://github.com/readmeio/rdme/compare/v10.1.2-next.1...v10.2.0-next.1) (2025-02-04)
+
+
+### Features
+
+* `rdme docs upload` ([#1159](https://github.com/readmeio/rdme/issues/1159)) ([69f9c7e](https://github.com/readmeio/rdme/commit/69f9c7e0ae213a91dfb7b0d360cb4d8097156ff5))
+
 ## [10.1.2-next.1](https://github.com/readmeio/rdme/compare/v10.1.1...v10.1.2-next.1) (2025-02-03)
 
 
