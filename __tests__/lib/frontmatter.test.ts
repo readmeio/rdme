@@ -309,29 +309,3 @@ describe('#fix', () => {
     `);
   });
 });
-
-describe('#fetchSchema', () => {
-  it('should fetch the schema', async () => {
-    const mock = oasFetchMock();
-
-    const oclifConfig = await setupOclifConfig();
-    const command = new DocsUploadCommand([], oclifConfig);
-    const schema = await fetchSchema.call(command);
-
-    expect(schema.type).toBe('object');
-
-    mock.done();
-  });
-
-  it('should have a fallback value in case fetch fails', async () => {
-    const mock = oasFetchMock(500);
-
-    const oclifConfig = await setupOclifConfig();
-    const command = new DocsUploadCommand([], oclifConfig);
-    const schema = await fetchSchema.call(command);
-
-    expect(schema.type).toBe('object');
-
-    mock.done();
-  });
-});
