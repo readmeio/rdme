@@ -71,10 +71,10 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
 
 2. **Command Replacements**
 
+   - Replace: `docs` (and its `guides` alias) → `docs upload` (see more in step 4 below)
    - Replace: `openapi` → `openapi upload` (see more in step 3 below)
    - Replace: `categories` → use [Git-based workflow](https://docs.readme.com/main/docs/bi-directional-sync)
    - Replace: `custompages` → use [Git-based workflow](https://docs.readme.com/main/docs/bi-directional-sync)
-   - Replace: `docs` (and its `guides` alias) → `docs upload` (see more in step 4 below)
    - Replace: `versions` → use [Git-based workflow](https://docs.readme.com/main/docs/bi-directional-sync)
    - Remove: `open`
 
@@ -84,7 +84,7 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
 
    - There is no prompt to select your ReadMe project version if you omit the `--version` flag. It now defaults to `stable` (i.e., your main ReadMe project version).
 
-   - Previously with `openapi`, the `--id` flag was an ObjectId that required an initial upload to ReadMe, which made it difficult to upsert API definitions and manage many at scale. With `openapi upload`, the `--id` flag has been renamed to `--slug` and is now optional. The slug (i.e., the unique identifier for your API definition resource in ReadMe) is inferred from the file path or URL to your API definition.
+   - The flag paradigms have been simplified based on community feedback. Previously with `openapi`, the `--id` flag was an ObjectId that required an initial upload to ReadMe, which made it difficult to upsert API definitions and manage many at scale (and workarounds were added after the fact in the form of the `--create` and `--update` flags). With `openapi upload`, the `--id` flag has been renamed to `--slug` and is now optional. The slug (i.e., the unique identifier for your API definition resource in ReadMe) is inferred from the file path or URL to your API definition.
 
    Read more in [the `openapi upload` command docs](https://github.com/readmeio/rdme/tree/v10/documentation/commands/openapi.md#rdme-openapi-upload-spec) and in [the ReadMe API migration guide](https://docs.readme.com/main/reference/api-migration-guide).
 
@@ -182,15 +182,18 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
 
 5. **Deprecated commands**
 
-   The following commands (and their subcommands) will be removed in `rdme@10`:
+   The following commands (and their subcommands, if applicable) will be removed in `rdme@10`:
 
    - `categories`
    - `custompages`
-   - `docs` (and its `guides` alias)
+   - `docs:prune` (and its `guides:prune` alias)
    - `versions`
    - `open`
 
-   The `openapi` command will be replaced by `openapi upload` and will have a simpler flag setup based on community feedback.
+   The following commands will be replaced in `v10`. See "Command Replacements" in [the `v10` migration guide above](#migrating-to-rdme10) for more info:
+
+   - `docs` (and its `guides` alias) → `docs upload`
+   - `openapi` → `openapi upload`
 
 6. **Verify any scripts that utilize raw CLI outputs**
 
