@@ -29,6 +29,11 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
   static flags = {
     key: keyFlag,
+    overwrite: Flags.boolean({
+      description:
+        'If set, the overwrite prompt will be skipped. This flag can be a useful in automated environments where prompts cannot be responded to.',
+      hidden: true,
+    }),
     slug: Flags.string({
       summary: 'Override the slug (i.e., the unique identifier) for your API definition.',
       description: [
@@ -137,7 +142,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     if (method === 'PUT') {
       // bypass the prompt if we're in a CI environment
       prompts.override({
-        confirm: isCI() ? true : undefined,
+        confirm: isCI() ? true : this.flags.overwrite,
       });
 
       const { confirm } = await promptTerminal({
