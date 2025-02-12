@@ -55,7 +55,7 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
   "error": [Error: Please provide a valid file extension that matches the extension on the file you provided. Must be \`.json\`, \`.yaml\`, or \`.yml\`.],
   "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
 ",
-  "stdout": "The file name of your API Definition will be updated to __tests____fixtures__petstore-simple-weird-version.json to match ReadMe's slug requirements.
+  "stdout": "The slug of your API Definition will be updated to __tests____fixtures__petstore-simple-weird-version.json to match ReadMe's slug requirements.
 ",
 }
 `;
@@ -65,7 +65,7 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
   "error": [Error: Please provide a valid file extension that matches the extension on the file you provided. Must be \`.json\`, \`.yaml\`, or \`.yml\`.],
   "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
 ",
-  "stdout": "The file name of your API Definition will be updated to __tests____fixtures__petstore-simple-weird-version.json to match ReadMe's slug requirements.
+  "stdout": "The slug of your API Definition will be updated to __tests____fixtures__petstore-simple-weird-version.json to match ReadMe's slug requirements.
 ",
 }
 `;
@@ -80,7 +80,7 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
 - Creating your API definition to ReadMe...
 ✔ Creating your API definition to ReadMe... done!
 ",
-  "stdout": "The file name of your API Definition will be updated to __tests____fixtures__petstore-simple-weird-version.json to match ReadMe's slug requirements.
+  "stdout": "The slug of your API Definition will be updated to __tests____fixtures__petstore-simple-weird-version.json to match ReadMe's slug requirements.
 🚀 Your API definition (custom-slug.json) was successfully created in ReadMe!
 ",
 }
@@ -96,7 +96,7 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
 - Creating your API definition to ReadMe...
 ✔ Creating your API definition to ReadMe... done!
 ",
-  "stdout": "The file name of your API Definition will be updated to __tests____fixtures__petstore-simple-weird-version.json to match ReadMe's slug requirements.
+  "stdout": "The slug of your API Definition will be updated to __tests____fixtures__petstore-simple-weird-version.json to match ReadMe's slug requirements.
 🚀 Your API definition (custom-slug.json) was successfully created in ReadMe!
 ",
 }
@@ -112,7 +112,7 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
 - Updating your API definition to ReadMe...
 ✔ Updating your API definition to ReadMe... done!
 ",
-  "stdout": "The file name of your API Definition will be updated to __tests____fixtures__petstore-simple-weird-version.json to match ReadMe's slug requirements.
+  "stdout": "The slug of your API Definition will be updated to __tests____fixtures__petstore-simple-weird-version.json to match ReadMe's slug requirements.
 🚀 Your API definition (__tests____fixtures__petstore-simple-weird-version.json) was successfully updated in ReadMe!
 ",
 }
@@ -124,7 +124,7 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
   "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
 - Creating your API definition to ReadMe...
 ",
-  "stdout": "The file name of your API Definition will be updated to __tests____fixtures__petstore-simple-weird-version.json to match ReadMe's slug requirements.
+  "stdout": "The slug of your API Definition will be updated to __tests____fixtures__petstore-simple-weird-version.json to match ReadMe's slug requirements.
 ",
 }
 `;
@@ -135,7 +135,7 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
   "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
 - Creating your API definition to ReadMe...
 ",
-  "stdout": "The file name of your API Definition will be updated to __tests____fixtures__petstore-simple-weird-version.json to match ReadMe's slug requirements.
+  "stdout": "The slug of your API Definition will be updated to __tests____fixtures__petstore-simple-weird-version.json to match ReadMe's slug requirements.
 ",
 }
 `;
@@ -147,7 +147,7 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
 - Creating your API definition to ReadMe...
 ✖ Creating your API definition to ReadMe... uploaded but not yet processed by ReadMe. Polling for completion...
 ",
-  "stdout": "The file name of your API Definition will be updated to __tests____fixtures__petstore-simple-weird-version.json to match ReadMe's slug requirements.
+  "stdout": "The slug of your API Definition will be updated to __tests____fixtures__petstore-simple-weird-version.json to match ReadMe's slug requirements.
 ",
 }
 `;
@@ -162,7 +162,7 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
 - Creating your API definition to ReadMe...
 ✔ Creating your API definition to ReadMe... uploaded but not yet processed by ReadMe. Polling for completion... done!
 ",
-  "stdout": "The file name of your API Definition will be updated to __tests____fixtures__petstore-simple-weird-version.json to match ReadMe's slug requirements.
+  "stdout": "The slug of your API Definition will be updated to __tests____fixtures__petstore-simple-weird-version.json to match ReadMe's slug requirements.
 🚀 Your API definition (__tests____fixtures__petstore-simple-weird-version.json) was successfully created in ReadMe!
 ",
 }
@@ -178,7 +178,7 @@ exports[`rdme openapi upload > given that the API definition is a local file > g
 - Creating your API definition to ReadMe...
 ✔ Creating your API definition to ReadMe... done!
 ",
-  "stdout": "The file name of your API Definition will be updated to __tests____fixtures__petstore-simple-weird-version.json to match ReadMe's slug requirements.
+  "stdout": "The slug of your API Definition will be updated to __tests____fixtures__petstore-simple-weird-version.json to match ReadMe's slug requirements.
 🚀 Your API definition (__tests____fixtures__petstore-simple-weird-version.json) was successfully created in ReadMe!
 ",
 }
@@ -194,7 +194,7 @@ exports[`rdme openapi upload > given that the API definition is a local file > g
 - Creating your API definition to ReadMe...
 ✔ Creating your API definition to ReadMe... done!
 ",
-  "stdout": "The file name of your API Definition will be updated to __tests____fixtures__petstore-simple-weird-version.json to match ReadMe's slug requirements.
+  "stdout": "The slug of your API Definition will be updated to __tests____fixtures__petstore-simple-weird-version.json to match ReadMe's slug requirements.
 🚀 Your API definition (__tests____fixtures__petstore-simple-weird-version.json) was successfully created in ReadMe!
 ",
 }
@@ -210,7 +210,7 @@ exports[`rdme openapi upload > given that the API definition is a local file > s
 - Creating your API definition to ReadMe...
 ✔ Creating your API definition to ReadMe... done!
 ",
-  "stdout": "The file name of your API Definition will be updated to __tests____fixtures__petstore-simple-weird-version.json to match ReadMe's slug requirements.
+  "stdout": "The slug of your API Definition will be updated to __tests____fixtures__petstore-simple-weird-version.json to match ReadMe's slug requirements.
 🚀 Your API definition (__tests____fixtures__petstore-simple-weird-version.json) was successfully created in ReadMe!
 ",
 }
@@ -223,7 +223,7 @@ exports[`rdme openapi upload > given that the API definition is a local file > s
 - Creating your API definition to ReadMe...
 ✖ Creating your API definition to ReadMe...
 ",
-  "stdout": "The file name of your API Definition will be updated to __tests____fixtures__petstore-simple-weird-version.json to match ReadMe's slug requirements.
+  "stdout": "The slug of your API Definition will be updated to __tests____fixtures__petstore-simple-weird-version.json to match ReadMe's slug requirements.
 ",
 }
 `;
@@ -238,7 +238,7 @@ exports[`rdme openapi upload > given that the API definition is a local file > s
 - Updating your API definition to ReadMe...
 ✔ Updating your API definition to ReadMe... done!
 ",
-  "stdout": "The file name of your API Definition will be updated to __tests____fixtures__petstore-simple-weird-version.json to match ReadMe's slug requirements.
+  "stdout": "The slug of your API Definition will be updated to __tests____fixtures__petstore-simple-weird-version.json to match ReadMe's slug requirements.
 🚀 Your API definition (__tests____fixtures__petstore-simple-weird-version.json) was successfully updated in ReadMe!
 ",
 }
