@@ -7,7 +7,7 @@ export default class LintCommand extends BaseCommand<typeof LintCommand> {
   static summary = 'Lint Markdown files to ensure they are formatted correctly.';
 
   static description =
-    'Lints Markdown files to ensure they are formatted correctly. The path can either be a directory or a single Markdown file. Running this command with `--fix` will autofix any formatting issues deemed automatically fixable or provide errors for issues that need manual intervention.';
+    'The path can either be a directory or a single Markdown file. Running this command with `--fix` will autofix any formatting issues deemed automatically fixable or provide errors for issues that need manual intervention.';
 
   static args = {
     path: Args.string({ description: 'Path to a local Markdown file or folder of Markdown files.', required: true }),
