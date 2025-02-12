@@ -25,7 +25,8 @@ export default class LintCommand extends BaseCommand<typeof LintCommand> {
     github: githubFlag,
     key: keyFlag,
     fix: Flags.boolean({
-      description: 'Runs the command and automatically fixes any formatting issues that are deemed automatically fixable.',
+      description:
+        'Runs the command and automatically fixes any formatting issues that are deemed automatically fixable.',
     }),
     quiet: Flags.boolean({
       description: 'Runs the command showing only errors in the console.',

@@ -17,4 +17,3 @@ describe('rdme lint', () => {
     expect(results.result).toBe('something happens now');
   });
 });
-  
