@@ -158,9 +158,10 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       this.debug('attaching URL to form data payload');
       body.append('url', specPath);
     } else {
+      const isYaml = fileExtension === '.yaml' || fileExtension === '.yml';
       // Convert YAML files back to YAML before uploading
       let specToUpload = preparedSpec;
-      if (fileExtension === '.yaml' || fileExtension === '.yml') {
+      if (isYaml) {
         specToUpload = yaml.dump(JSON.parse(preparedSpec));
       }
       // Create a temporary file to write the bundled spec to,
@@ -175,7 +176,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
         [Symbol.toStringTag]: 'File',
         name: filename,
         stream: () => stream,
-        type: 'application/json',
+        type: isYaml ? 'application/x-yaml' : 'application/json',
       });
     }
 
