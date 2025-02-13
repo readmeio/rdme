@@ -102,7 +102,6 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
   async run() {
     const { spec } = this.args;
 
-    // preparedSpec is what we're uploading
     const { preparedSpec, specFileType, specPath, specVersion } = await prepareOas(spec, 'openapi upload');
 
     const version = this.flags.useSpecVersion ? specVersion : this.flags.version;
@@ -159,7 +158,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       this.debug('attaching URL to form data payload');
       body.append('url', specPath);
     } else {
-      // before we write prepareSpec, let's convert it back to yaml
+      // Convert YAML files back to YAML before uploading
       let specToUpload = preparedSpec;
       if (fileExtension === '.yaml' || fileExtension === '.yml') {
         specToUpload = yaml.dump(JSON.parse(preparedSpec));
