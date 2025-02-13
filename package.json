@@ -65,6 +65,7 @@
     "table": "^6.8.1",
     "tmp-promise": "^3.0.3",
     "toposort": "^2.0.2",
+    "@types/js-yaml": "^4.0.5",
     "undici": "^5.28.4",
     "validator": "^13.7.0"
   },
@@ -82,7 +83,6 @@
     "@rollup/plugin-terser": "^0.4.4",
     "@types/configstore": "^6.0.0",
     "@types/debug": "^4.1.7",
-    "@types/js-yaml": "^4.0.5",
     "@types/mime-types": "^2.1.1",
     "@types/prompts": "^2.4.2",
     "@types/semver": "^7.3.12",
