@@ -19,12 +19,7 @@ describe('rdme openapi upload', () => {
   let run: (args?: string[]) => OclifOutput;
 
   beforeAll(() => {
-    nock.disableNetConnect();
     run = runCommand(Command);
-  });
-
-  afterEach(() => {
-    nock.cleanAll();
   });
 
   describe('flag error handling', () => {

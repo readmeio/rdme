@@ -14,7 +14,7 @@ describe('#getNodeVersion()', () => {
 });
 
 describe('#getPkgVersion()', () => {
-  let consoleErrorSpy: MockInstance;
+  let consoleErrorSpy: MockInstance<typeof console.error>;
 
   beforeEach(() => {
     consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -22,8 +22,6 @@ describe('#getPkgVersion()', () => {
 
   afterEach(() => {
     consoleErrorSpy.mockRestore();
-
-    nock.cleanAll();
   });
 
   it('should grab version from package.json by default', () => {

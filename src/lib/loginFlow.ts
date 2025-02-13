@@ -27,11 +27,16 @@ function loginFetch(body: LoginBody) {
  * The prompt flow for logging a user in and writing the credentials to
  * `configstore`. This is a separate lib function because we reuse it both
  * in the `login` command as well as any time a user omits an API key.
- * @param otp an optional one-time passcode, if the user passes one in
- * via a flag to the the `login` command
+ *
  * @returns A Promise-wrapped string with the logged-in user's credentials
  */
-export default async function loginFlow(otp?: string) {
+export default async function loginFlow(
+  /**
+   * An optional one-time passcode, if the user passes one in
+   * via a flag to the the `login` command
+   */
+  otp?: string,
+) {
   const storedConfig = getCurrentConfig();
   const { email, password, project } = await promptTerminal([
     {

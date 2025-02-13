@@ -1,3 +1,42 @@
+# [10.2.0-next.1](https://github.com/readmeio/rdme/compare/v10.1.2-next.1...v10.2.0-next.1) (2025-02-04)
+
+
+### Features
+
+* `rdme docs upload` ([#1159](https://github.com/readmeio/rdme/issues/1159)) ([69f9c7e](https://github.com/readmeio/rdme/commit/69f9c7e0ae213a91dfb7b0d360cb4d8097156ff5))
+
+## [10.1.2-next.1](https://github.com/readmeio/rdme/compare/v10.1.1...v10.1.2-next.1) (2025-02-03)
+
+
+### Bug Fixes
+
+* **v9:** point to correct dist-tag for outdated version notifications ([#1156](https://github.com/readmeio/rdme/issues/1156)) ([099060d](https://github.com/readmeio/rdme/commit/099060d2c9eefb5335277edc5201ca74001f447f))
+
+
+### Reverts
+
+* don't use v9 release channel in v10 ([db80253](https://github.com/readmeio/rdme/commit/db80253bdd0af66057e6ef7bcb367be6de7e0ce5))
+
+## [9.1.1](https://github.com/readmeio/rdme/compare/v9.1.0...v9.1.1) (2025-02-03)
+
+### Bug Fixes
+
+* **v9:** point to correct dist-tag for outdated version notifications ([#1156](https://github.com/readmeio/rdme/issues/1156)) ([099060d](https://github.com/readmeio/rdme/commit/099060d2c9eefb5335277edc5201ca74001f447f))
+
+## [10.1.1](https://github.com/readmeio/rdme/compare/v10.1.0...v10.1.1) (2025-01-28)
+
+
+### Bug Fixes
+
+* **openapi:** adding support for OpenAPI 3.1.1, 3.0.4 and basic auth fetches ([#1153](https://github.com/readmeio/rdme/issues/1153)) ([6fad02b](https://github.com/readmeio/rdme/commit/6fad02bd257337cd69deb8d12a8cb3bfd9cffc11)), closes [#1152](https://github.com/readmeio/rdme/issues/1152)
+
+## [10.1.1-next.1](https://github.com/readmeio/rdme/compare/v10.1.0...v10.1.1-next.1) (2025-01-25)
+
+
+### Bug Fixes
+
+* **openapi:** adding support for OpenAPI 3.1.1, 3.0.4 and basic auth fetches ([#1153](https://github.com/readmeio/rdme/issues/1153)) ([6fad02b](https://github.com/readmeio/rdme/commit/6fad02bd257337cd69deb8d12a8cb3bfd9cffc11)), closes [#1152](https://github.com/readmeio/rdme/issues/1152)
+
 # [10.1.0](https://github.com/readmeio/rdme/compare/v10.0.0...v10.1.0) (2025-01-14)
 
 

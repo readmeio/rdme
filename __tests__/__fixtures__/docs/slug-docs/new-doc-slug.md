@@ -1,7 +1,8 @@
 ---
-category: CATEGORY_ID
+category:
+  uri: some-category-uri
 title: This is the document title
-slug: marc-actually-wrote-a-test
+slug: some-slug
 ---
 
 Body

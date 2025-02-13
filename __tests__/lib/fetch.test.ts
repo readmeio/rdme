@@ -1,19 +1,14 @@
 /* eslint-disable no-console */
-import nock from 'nock';
-import { describe, beforeEach, afterEach, it, expect, vi, beforeAll, type MockInstance } from 'vitest';
+import { describe, beforeEach, afterEach, it, expect, vi, type MockInstance } from 'vitest';
 
 import pkg from '../../package.json' with { type: 'json' };
-import { cleanAPIv1Headers, handleAPIv1Res, readmeAPIv1Fetch } from '../../src/lib/readmeAPIFetch.js';
-import { getAPIv1Mock } from '../helpers/get-api-mock.js';
+import DocsUploadCommand from '../../src/commands/docs/upload.js';
+import { cleanAPIv1Headers, fetchSchema, handleAPIv1Res, readmeAPIv1Fetch } from '../../src/lib/readmeAPIFetch.js';
+import { getAPIv1Mock, oasFetchMock } from '../helpers/get-api-mock.js';
+import { setupOclifConfig } from '../helpers/oclif.js';
 import { after, before } from '../helpers/setup-gha-env.js';
 
 describe('#readmeAPIv1Fetch()', () => {
-  beforeAll(() => {
-    nock.disableNetConnect();
-  });
-
-  afterEach(() => nock.cleanAll());
-
   describe('GitHub Actions environment', () => {
     beforeEach(before);
 
@@ -216,7 +211,7 @@ describe('#readmeAPIv1Fetch()', () => {
   });
 
   describe('warning response header', () => {
-    let consoleWarnSpy: MockInstance;
+    let consoleWarnSpy: MockInstance<typeof console.warn>;
 
     const getWarningCommandOutput = () => {
       return [consoleWarnSpy.mock.calls.join('\n\n')].filter(Boolean).join('\n\n');
@@ -366,5 +361,31 @@ describe('#cleanAPIv1Headers()', () => {
       ['content-type', 'application/json'],
       ['x-readme-version', '1234'],
     ]);
+  });
+});
+
+describe('#fetchSchema', () => {
+  it('should fetch the schema', async () => {
+    const mock = oasFetchMock();
+
+    const oclifConfig = await setupOclifConfig();
+    const command = new DocsUploadCommand([], oclifConfig);
+    const schema = await fetchSchema.call(command);
+
+    expect(schema.type).toBe('object');
+
+    mock.done();
+  });
+
+  it('should have a fallback value in case fetch fails', async () => {
+    const mock = oasFetchMock(500);
+
+    const oclifConfig = await setupOclifConfig();
+    const command = new DocsUploadCommand([], oclifConfig);
+    const schema = await fetchSchema.call(command);
+
+    expect(schema.type).toBe('object');
+
+    mock.done();
   });
 });

@@ -10,13 +10,17 @@ import * as getPkgVersion from '../../src/lib/getPkg.js';
 
 import getGitRemoteMock from './get-git-mock.js';
 
+const fsWriteFileSync = fs.writeFileSync;
+
 /**
  * A helper function for setting up tests for our GitHub Action onboarding.
  *
- * @param writeFileSyncCb the mock function that should be called in place of `fs.writeFileSync`.
  * @see {@link __tests__/lib/createGHA.test.ts}
  */
-export function before(writeFileSyncCb) {
+export function before(
+  /** the mock function that should be called in place of `fs.writeFileSync` */
+  writeFileSyncCb: typeof fs.writeFileSync,
+) {
   fs.writeFileSync = vi.fn(writeFileSyncCb);
 
   git.checkIsRepo = vi.fn(() => {
@@ -38,6 +42,7 @@ export function before(writeFileSyncCb) {
  */
 export function after() {
   configstore.clear();
+  fs.writeFileSync = fsWriteFileSync;
   vi.clearAllMocks();
   vi.unstubAllEnvs();
 }
