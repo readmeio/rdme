@@ -105,7 +105,15 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
     const version = this.flags.useSpecVersion ? specVersion : this.flags.version;
 
-    let filename = specFileType === 'url' ? nodePath.basename(specPath) : slugify.default(specPath);
+    const specFileTypeIsUrl = specFileType === 'url';
+
+    let filename = specFileTypeIsUrl ? nodePath.basename(specPath) : slugify.default(specPath);
+
+    if (!specFileTypeIsUrl && filename !== specPath) {
+      this.warn(
+        `The slug of your API Definition will be set to ${filename} in ReadMe. This slug is not visible to your end users. To set this slug to something else, use the \`--slug\` flag.`,
+      );
+    }
 
     if (this.flags.slug) {
       const fileExtension = nodePath.extname(filename);
