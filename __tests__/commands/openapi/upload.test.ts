@@ -37,7 +37,7 @@ describe('rdme openapi upload', () => {
         .get(`/versions/${version}/apis`)
         .reply(200, { data: [] })
         .post(`/versions/${version}/apis`, body =>
-          body.match(`form-data; name="schema"; filename="${slugifiedFilename}"`),
+          body.match(`form-data; name="schema"; filename="${slugifiedFilename}"\r\nContent-Type: application/json`),
         )
         .reply(200, {
           data: {
@@ -58,7 +58,7 @@ describe('rdme openapi upload', () => {
         .get(`/versions/${version}/apis`)
         .reply(200, { data: [] })
         .post(`/versions/${version}/apis`, body =>
-          body.match(`form-data; name="schema"; filename="${slugifiedYamlFile}"`),
+          body.match(`form-data; name="schema"; filename="${slugifiedYamlFile}"\r\nContent-Type: application/x-yaml`),
         )
         .reply(200, {
           data: {
