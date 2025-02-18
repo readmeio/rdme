@@ -47,7 +47,6 @@ describe('rdme openapi upload', () => {
         });
 
       const result = await run(['--version', version, filename, '--key', key]);
-      expect(result.stdout).toContain('Your JSON API definition');
       expect(result.stdout).toContain('was successfully created in ReadMe!');
 
       mock.done();
@@ -68,7 +67,6 @@ describe('rdme openapi upload', () => {
         });
 
       const result = await run(['--version', version, yamlFile, '--key', key]);
-      expect(result.stdout).toContain('Your YAML API definition');
       expect(result.stdout).toContain('was successfully created in ReadMe!');
 
       mock.done();
@@ -91,7 +89,6 @@ describe('rdme openapi upload', () => {
         });
 
       const result = await run(['--version', version, filename, '--key', key]);
-      expect(result.stdout).toContain('Your JSON API definition');
       expect(result.stdout).toContain('was successfully updated in ReadMe!');
 
       mock.done();
@@ -138,7 +135,7 @@ describe('rdme openapi upload', () => {
 
         const result = await run(['--version', version, filename, '--key', key, '--slug', customSlug]);
         expect(result.stdout).toContain(
-          `Your JSON API definition (${customSlugWithExtension}) was successfully created in ReadMe!`,
+          `Your API definition (${customSlugWithExtension}) was successfully created in ReadMe!`,
         );
 
         mock.done();
@@ -158,7 +155,7 @@ describe('rdme openapi upload', () => {
           });
 
         const result = await run(['--version', version, filename, '--key', key, '--slug', customSlug]);
-        expect(result.stdout).toContain(`Your JSON API definition (${customSlug}) was successfully created in ReadMe!`);
+        expect(result.stdout).toContain(`Your API definition (${customSlug}) was successfully created in ReadMe!`);
 
         mock.done();
       });

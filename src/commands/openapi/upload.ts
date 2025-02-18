@@ -154,11 +154,11 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
     const body = new FormData();
 
-    const isYaml = fileExtension === '.yaml' || fileExtension === '.yml';
     if (specFileType === 'url') {
       this.debug('attaching URL to form data payload');
       body.append('url', specPath);
     } else {
+      const isYaml = fileExtension === '.yaml' || fileExtension === '.yml';
       // Convert YAML files back to YAML before uploading
       let specToUpload = preparedSpec;
       if (isYaml) {
@@ -207,7 +207,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       if (status === 'done') {
         spinner.succeed(`${spinner.text} done!`);
         this.log(
-          `🚀 Your ${isYaml ? 'YAML' : 'JSON'} API definition (${filename}) was successfully ${method === 'POST' ? 'created' : 'updated'} in ReadMe!`,
+          `🚀 Your API definition (${filename}) was successfully ${method === 'POST' ? 'created' : 'updated'} in ReadMe!`,
         );
         return { uri: response.data.uri, status };
       }
