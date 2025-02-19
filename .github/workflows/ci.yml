@@ -71,7 +71,9 @@ jobs:
       #
       # This step is not required for syncing your docs to ReadMe!
       - name: Rebuild GitHub Action for testing purposes
-        run: npm ci && npm run build:gha
+        # We manually invoke `bin/write-gha-pjson.js` here because
+        # GitHub Actions does not support `pre` scripts for local actions.
+        run: npm ci && npm run build:gha && bin/write-gha-pjson.js
         working-directory: rdme-repo
 
       - name: Run `openapi validate` command
