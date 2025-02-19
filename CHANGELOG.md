@@ -1,3 +1,10 @@
+# [10.2.0-next.2](https://github.com/readmeio/rdme/compare/v10.2.0-next.1...v10.2.0-next.2) (2025-02-19)
+
+
+### Bug Fixes
+
+* **openapi/upload:** add warning for unexpected slugs ([55e0974](https://github.com/readmeio/rdme/commit/55e09749466b72e68e188aa964c9317000012c39))
+
 # [10.2.0-next.1](https://github.com/readmeio/rdme/compare/v10.1.2-next.1...v10.2.0-next.1) (2025-02-04)
 
 
