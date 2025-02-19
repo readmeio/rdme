@@ -6,8 +6,6 @@ import replace from '@rollup/plugin-replace';
 import { defineConfig } from 'rollup';
 import { minify } from 'rollup-plugin-esbuild';
 
-const isProductionBuild = process.env.PRODUCTION_BUILD === 'true';
-
 const basePlugins = [
   commonjs(),
   json(),
@@ -17,13 +15,8 @@ const basePlugins = [
     exportConditions: ['node'],
     preferBuiltins: true,
   }),
+  minify(),
 ];
-
-// only minify when doing a "production" build (i.e., for a release)
-// it takes a lot longer!
-if (isProductionBuild) {
-  basePlugins.push(minify());
-}
 
 export default defineConfig([
   {
