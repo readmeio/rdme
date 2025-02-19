@@ -67,7 +67,7 @@ describe('rdme openapi upload', () => {
         });
 
       const result = await run(['--version', version, yamlFile, '--key', key]);
-      expect(result.stdout).toContain('was successfully created in ReadMe!');
+      expect(result).toMatchSnapshot();
 
       mock.done();
     });
