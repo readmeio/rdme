@@ -7,6 +7,7 @@ import LogoutCommand from './commands/logout.js';
 import OpenAPIConvertCommand from './commands/openapi/convert.js';
 import OpenAPIInspectCommand from './commands/openapi/inspect.js';
 import OpenAPIReduceCommand from './commands/openapi/reduce.js';
+import OpenAPIRefsCommand from './commands/openapi/refs.js';
 import OpenAPIUploadCommand from './commands/openapi/upload.js';
 import OpenAPIValidateCommand from './commands/openapi/validate.js';
 import WhoAmICommand from './commands/whoami.js';
@@ -35,6 +36,7 @@ export const COMMANDS = {
   'openapi:convert': OpenAPIConvertCommand,
   'openapi:inspect': OpenAPIInspectCommand,
   'openapi:reduce': OpenAPIReduceCommand,
+  'openapi:refs': OpenAPIRefsCommand,
   'openapi:upload': OpenAPIUploadCommand,
   'openapi:validate': OpenAPIValidateCommand,
 
