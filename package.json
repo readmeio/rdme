@@ -1,6 +1,6 @@
 {
   "name": "rdme",
-  "version": "10.2.0-next.1",
+  "version": "10.2.0-next.3",
   "description": "ReadMe's official CLI and GitHub Action.",
   "license": "MIT",
   "author": "ReadMe <support@readme.io> (https://readme.com)",
@@ -56,6 +56,7 @@
     "debug": "^4.3.3",
     "gray-matter": "^4.0.1",
     "ignore": "^7.0.0",
+    "js-yaml": "^4.1.0",
     "mime-types": "^2.1.35",
     "oas": "^25.3.0",
     "oas-normalize": "^12.1.0",
@@ -95,7 +96,6 @@
     "alex": "^11.0.0",
     "eslint": "^8.47.0",
     "husky": "^9.0.10",
-    "js-yaml": "^4.1.0",
     "json-schema-to-ts": "^3.1.1",
     "knip": "^5.0.2",
     "nock": "^14.0.0",
