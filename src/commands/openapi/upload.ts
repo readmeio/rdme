@@ -29,9 +29,9 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
   static flags = {
     key: keyFlag,
-    overwrite: Flags.boolean({
+    'confirm-overwrite': Flags.boolean({
       description:
-        'If set, the overwrite prompt will be skipped. This flag can be a useful in automated environments where prompts cannot be responded to.',
+        'If set, file overwrites will be made without a confirmation prompt. This flag can be a useful in automated environments where prompts cannot be responded to.',
       hidden: true,
     }),
     slug: Flags.string({
@@ -142,7 +142,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     if (method === 'PUT') {
       // bypass the prompt if we're in a CI environment
       prompts.override({
-        confirm: isCI() ? true : this.flags.overwrite,
+        confirm: isCI() || this.flags['confirm-overwrite'] ? true : undefined,
       });
 
       const { confirm } = await promptTerminal({
