@@ -233,7 +233,7 @@ exports[`rdme openapi upload > given that the API definition is a local file > g
 }
 `;
 
-exports[`rdme openapi upload > given that the API definition is a local file > should create a new API definition in ReadMe 1`] = `
+exports[`rdme openapi upload > given that the API definition is a local file > should create a new JSON API definition in ReadMe 1`] = `
 {
   "result": {
     "status": "done",
@@ -248,6 +248,25 @@ exports[`rdme openapi upload > given that the API definition is a local file > s
 ✔ Creating your API definition to ReadMe... done!
 ",
   "stdout": "🚀 Your API definition (__tests____fixtures__petstore-simple-weird-version.json) was successfully created in ReadMe!
+",
+}
+`;
+
+exports[`rdme openapi upload > given that the API definition is a local file > should create a new YAML API definition in ReadMe 1`] = `
+{
+  "result": {
+    "status": "done",
+    "uri": "/versions/1.0.0/apis/__tests____fixtures__postmanpetstore.collection.yaml",
+  },
+  "stderr": "- Validating the API definition located at __tests__/__fixtures__/postman/petstore.collection.yaml...
+ ›   Warning: The slug of your API Definition will be set to 
+ ›   __tests____fixtures__postmanpetstore.collection.yaml in ReadMe. This slug 
+ ›   is not visible to your end users. To set this slug to something else, use 
+ ›   the \`--slug\` flag.
+- Creating your API definition to ReadMe...
+✔ Creating your API definition to ReadMe... done!
+",
+  "stdout": "🚀 Your API definition (__tests____fixtures__postmanpetstore.collection.yaml) was successfully created in ReadMe!
 ",
 }
 `;
