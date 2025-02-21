@@ -1,4 +1,4 @@
-/* eslint-disable vitest/no-disabled-tests */
+/* eslint-disable @vitest/no-disabled-tests */
 /* eslint-disable no-console */
 import type { Command, Config } from '@oclif/core';
 import type { Response } from 'simple-git';
@@ -75,22 +75,27 @@ describe('#createGHA', () => {
 
       it('should run GHA creation workflow and generate valid workflow file', async () => {
         expect.assertions(6);
+
         const fileName = `rdme-${cmd}`;
         prompts.inject([true, 'some-branch', fileName]);
 
         const res = await oclifConfig.runHook('createGHA', { command: CurrentCommand, parsedOpts: opts, result: '' });
+
         expect(res.successes[0].result).toMatchSnapshot();
 
         expect(yamlOutput).toBeValidSchema(ghaWorkflowSchema);
         expect(yamlOutput).toMatchSnapshot();
         expect(fs.writeFileSync).toHaveBeenCalledWith(getGHAFileName(fileName), expect.any(String));
         expect(console.info).toHaveBeenCalledTimes(1);
+
         const output = getCommandOutput();
+
         expect(output).toMatch("Looks like you're running this command in a GitHub Repository!");
       });
 
       it('should run GHA creation workflow with `--github` flag and messy file name and generate valid workflow file', async () => {
         expect.assertions(4);
+
         const fileName = `rdme-${cmd} with GitHub flag`;
         prompts.inject(['another-branch', fileName]);
 
@@ -99,6 +104,7 @@ describe('#createGHA', () => {
           parsedOpts: { ...opts, github: true },
           result: '',
         });
+
         expect(res.successes[0].result).toMatchSnapshot();
 
         expect(yamlOutput).toBeValidSchema(ghaWorkflowSchema);
@@ -109,6 +115,7 @@ describe('#createGHA', () => {
       // skipping because these mocks aren't playing nicely with oclif
       it.skip('should create workflow directory if it does not exist', async () => {
         expect.assertions(3);
+
         const repoRoot = '__tests__/__fixtures__';
 
         git.revparse = vi.fn(() => {
@@ -123,7 +130,8 @@ describe('#createGHA', () => {
         });
 
         const res = await oclifConfig.runHook('createGHA', { command: CurrentCommand, parsedOpts: opts, result: '' });
-        expect(res.successes[0].result).toBeTruthy();
+
+        expect(res.successes[0].result).toBe(true);
 
         expect(fs.mkdirSync).toHaveBeenCalledWith('.github/workflows', { recursive: true });
         expect(fs.writeFileSync).toHaveBeenCalledWith(getGHAFileName(fileName), expect.any(String));
@@ -143,6 +151,7 @@ describe('#createGHA', () => {
 
       it('should set config and exit if user does not want to set up GHA', async () => {
         expect.assertions(2);
+
         prompts.inject([false]);
 
         const repoRoot = process.cwd();
@@ -152,6 +161,7 @@ describe('#createGHA', () => {
         });
 
         const res = await oclifConfig.runHook('createGHA', { command: CurrentCommand, parsedOpts: opts, result: '' });
+
         expect(res.failures[0].error).toStrictEqual(
           new Error(
             'GitHub Actions workflow creation cancelled. If you ever change your mind, you can run this command again with the `--github` flag.',
@@ -225,9 +235,11 @@ describe('#createGHA', () => {
           parsedOpts: opts,
           result: 'success!',
         });
+
         expect(res.successes[0].result).toBe('success!');
         // asserts that git commands aren't run in CI
         expect(git.checkIsRepo).not.toHaveBeenCalled();
+
         delete process.env.TEST_RDME_CI;
       });
 
@@ -238,9 +250,11 @@ describe('#createGHA', () => {
           parsedOpts: opts,
           result: 'success!',
         });
+
         expect(res.successes[0].result).toBe('success!');
         // asserts that git commands aren't run in CI
         expect(git.checkIsRepo).not.toHaveBeenCalled();
+
         delete process.env.TEST_RDME_NPM_SCRIPT;
       });
 

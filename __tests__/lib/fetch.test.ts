@@ -37,6 +37,7 @@ describe('#readmeAPIv1Fetch()', () => {
       expect(headers['x-github-run-number']).toBe('3');
       expect(headers['x-github-sha']).toBe('ffac537e6cbbf934b08745a378932722df287a53');
       expect(headers['x-rdme-ci']).toBe('GitHub Actions (test)');
+
       mock.done();
     });
 
@@ -63,6 +64,7 @@ describe('#readmeAPIv1Fetch()', () => {
         expect(headers['x-readme-source-url']).toBe(
           'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/openapi.json',
         );
+
         mock.done();
       });
 
@@ -88,6 +90,7 @@ describe('#readmeAPIv1Fetch()', () => {
         expect(headers['x-readme-source-url']).toBe(
           'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/%F0%9F%93%88%20Dashboard%20&%20Metrics/openapi.json',
         );
+
         mock.done();
       });
 
@@ -112,6 +115,7 @@ describe('#readmeAPIv1Fetch()', () => {
         ).then(handleAPIv1Res);
 
         expect(headers['x-readme-source-url']).toBeUndefined();
+
         mock.done();
       });
 
@@ -137,6 +141,7 @@ describe('#readmeAPIv1Fetch()', () => {
         expect(headers['x-readme-source-url']).toBe(
           'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/openapi.json',
         );
+
         mock.done();
       });
 
@@ -161,6 +166,7 @@ describe('#readmeAPIv1Fetch()', () => {
         ).then(handleAPIv1Res);
 
         expect(headers['x-readme-source-url']).toBe(filePath);
+
         mock.done();
       });
     });
@@ -188,6 +194,7 @@ describe('#readmeAPIv1Fetch()', () => {
     expect(headers['x-github-run-id']).toBeUndefined();
     expect(headers['x-github-run-number']).toBeUndefined();
     expect(headers['x-github-sha']).toBeUndefined();
+
     mock.done();
   });
 
@@ -207,6 +214,7 @@ describe('#readmeAPIv1Fetch()', () => {
     expect(headers['x-github-run-id']).toBeUndefined();
     expect(headers['x-github-run-number']).toBeUndefined();
     expect(headers['x-github-sha']).toBeUndefined();
+
     mock.done();
   });
 
@@ -299,7 +307,7 @@ describe('#readmeAPIv1Fetch()', () => {
 
       await readmeAPIv1Fetch('/api/v1/proxy');
 
-      mock.done();
+      expect(mock.isDone()).toBe(true);
     });
 
     it('should support proxies via https_proxy env variable', async () => {
@@ -311,7 +319,7 @@ describe('#readmeAPIv1Fetch()', () => {
 
       await readmeAPIv1Fetch('/api/v1/proxy');
 
-      mock.done();
+      expect(mock.isDone()).toBe(true);
     });
 
     it('should handle trailing slash in proxy URL', async () => {
@@ -323,7 +331,7 @@ describe('#readmeAPIv1Fetch()', () => {
 
       await readmeAPIv1Fetch('/api/v1/proxy');
 
-      mock.done();
+      expect(mock.isDone()).toBe(true);
     });
   });
 });
