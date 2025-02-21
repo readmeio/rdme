@@ -1,4 +1,4 @@
-/* eslint-disable vitest/no-conditional-expect */
+/* eslint-disable @vitest/no-conditional-expect */
 import assert from 'node:assert';
 
 import { describe, it, expect, beforeAll } from 'vitest';

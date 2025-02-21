@@ -299,7 +299,7 @@ describe('#readmeAPIv1Fetch()', () => {
 
       await readmeAPIv1Fetch('/api/v1/proxy');
 
-      mock.done();
+      expect(mock.isDone()).toBe(true);
     });
 
     it('should support proxies via https_proxy env variable', async () => {
@@ -311,7 +311,7 @@ describe('#readmeAPIv1Fetch()', () => {
 
       await readmeAPIv1Fetch('/api/v1/proxy');
 
-      mock.done();
+      expect(mock.isDone()).toBe(true);
     });
 
     it('should handle trailing slash in proxy URL', async () => {
@@ -323,7 +323,7 @@ describe('#readmeAPIv1Fetch()', () => {
 
       await readmeAPIv1Fetch('/api/v1/proxy');
 
-      mock.done();
+      expect(mock.isDone()).toBe(true);
     });
   });
 });

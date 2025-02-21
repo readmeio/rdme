@@ -1,4 +1,4 @@
-/* eslint-disable vitest/no-disabled-tests */
+/* eslint-disable @vitest/no-disabled-tests */
 /* eslint-disable no-console */
 import type { Command, Config } from '@oclif/core';
 import type { Response } from 'simple-git';
@@ -123,7 +123,7 @@ describe('#createGHA', () => {
         });
 
         const res = await oclifConfig.runHook('createGHA', { command: CurrentCommand, parsedOpts: opts, result: '' });
-        expect(res.successes[0].result).toBeTruthy();
+        expect(res.successes[0].result).toBe(true);
 
         expect(fs.mkdirSync).toHaveBeenCalledWith('.github/workflows', { recursive: true });
         expect(fs.writeFileSync).toHaveBeenCalledWith(getGHAFileName(fileName), expect.any(String));
