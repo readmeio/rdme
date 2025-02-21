@@ -9,6 +9,7 @@ describe('bin', () => {
     await new Promise(resolve => {
       exec(`node ${__dirname}/../bin/run.js`, (error, stdout) => {
         expect(stdout).toContain("ReadMe's official CLI and GitHub Action");
+
         resolve(true);
       });
     });

@@ -76,6 +76,7 @@ describe('rdme openapi reduce', () => {
         expect(console.info).toHaveBeenCalledTimes(1);
 
         const output = getCommandOutput();
+
         expect(output).toBe(chalk.yellow(`ℹ️  We found ${spec} and are attempting to reduce it.`));
 
         expect(Object.keys(reducedSpec.paths)).toStrictEqual(['/user']);
@@ -98,6 +99,7 @@ describe('rdme openapi reduce', () => {
         expect(console.info).toHaveBeenCalledTimes(1);
 
         const output = getCommandOutput();
+
         expect(output).toBe(chalk.yellow(`ℹ️  We found ${spec} and are attempting to reduce it.`));
 
         expect(Object.keys(reducedSpec.paths)).toStrictEqual(['/user']);
@@ -147,6 +149,7 @@ describe('rdme openapi reduce', () => {
         expect(console.info).toHaveBeenCalledTimes(1);
 
         const output = getCommandOutput();
+
         expect(output).toBe(chalk.yellow(`ℹ️  We found ${spec} and are attempting to reduce it.`));
 
         expect(fsWriteFileSyncSpy).toHaveBeenCalledWith('output.json', expect.any(String));
@@ -181,6 +184,7 @@ describe('rdme openapi reduce', () => {
         expect(console.info).toHaveBeenCalledTimes(1);
 
         const output = getCommandOutput();
+
         expect(output).toBe(chalk.yellow(`ℹ️  We found ${spec} and are attempting to reduce it.`));
 
         expect(fsWriteFileSyncSpy).toHaveBeenCalledWith('output.json', expect.any(String));
