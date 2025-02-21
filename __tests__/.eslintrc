@@ -6,7 +6,5 @@
     "unicorn/prefer-module": "off",
 
     "@vitest/require-mock-type-parameters": "off",
-    "@vitest/padding-around-expect-groups": "off",
-    "@vitest/padding-around-all": "off",
   }
 }

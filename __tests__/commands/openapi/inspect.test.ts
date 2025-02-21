@@ -69,6 +69,7 @@ describe('rdme openapi inspect', () => {
       const args = [require.resolve(spec)].concat(...feature.map(f => ['--feature', f]));
       if (!shouldSoftError) {
         await expect(run(args)).resolves.toMatchSnapshot();
+
         return;
       }
 
