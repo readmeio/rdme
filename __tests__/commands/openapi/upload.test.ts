@@ -27,6 +27,7 @@ describe('rdme openapi upload', () => {
   describe('flag error handling', () => {
     it('should throw if an error if both `--version` and `--useSpecVersion` flags are passed', async () => {
       const result = await run(['--useSpecVersion', '--version', version, filename, '--key', key]);
+
       expect(result).toMatchSnapshot();
     });
   });
@@ -47,6 +48,7 @@ describe('rdme openapi upload', () => {
         });
 
       const result = await run(['--version', version, filename, '--key', key]);
+
       expect(result).toMatchSnapshot();
 
       mock.done();
@@ -67,6 +69,7 @@ describe('rdme openapi upload', () => {
         });
 
       const result = await run(['--version', version, yamlFile, '--key', key]);
+
       expect(result).toMatchSnapshot();
 
       mock.done();
@@ -89,6 +92,7 @@ describe('rdme openapi upload', () => {
         });
 
       const result = await run(['--version', version, filename, '--key', key]);
+
       expect(result).toMatchSnapshot();
 
       mock.done();
@@ -109,6 +113,7 @@ describe('rdme openapi upload', () => {
         });
 
       const result = await run(['--version', version, filename, '--key', key]);
+
       expect(result).toMatchSnapshot();
 
       mock.done();
@@ -132,6 +137,7 @@ describe('rdme openapi upload', () => {
           });
 
         const result = await run(['--version', version, filename, '--key', key, '--slug', customSlug]);
+
         expect(result).toMatchSnapshot();
 
         mock.done();
@@ -151,6 +157,7 @@ describe('rdme openapi upload', () => {
           });
 
         const result = await run(['--version', version, filename, '--key', key, '--slug', customSlug]);
+
         expect(result).toMatchSnapshot();
 
         mock.done();
@@ -160,6 +167,7 @@ describe('rdme openapi upload', () => {
         const customSlug = 'custom-slug.yikes';
 
         const result = await run(['--version', version, filename, '--key', key, '--slug', customSlug]);
+
         expect(result).toMatchSnapshot();
       });
 
@@ -167,6 +175,7 @@ describe('rdme openapi upload', () => {
         const customSlug = 'custom-slug.yml';
 
         const result = await run(['--version', version, filename, '--key', key, '--slug', customSlug]);
+
         expect(result).toMatchSnapshot();
       });
     });
@@ -202,7 +211,9 @@ describe('rdme openapi upload', () => {
           });
 
         const result = await run(['--version', version, filename, '--key', key]);
+
         expect(result).toMatchSnapshot();
+
         mock.done();
       });
 
@@ -229,7 +240,9 @@ describe('rdme openapi upload', () => {
           });
 
         const result = await run(['--version', version, filename, '--key', key]);
+
         expect(result).toMatchSnapshot();
+
         mock.done();
       });
 
@@ -250,7 +263,9 @@ describe('rdme openapi upload', () => {
           .reply(400);
 
         const result = await run(['--version', version, filename, '--key', key]);
+
         expect(result).toMatchSnapshot();
+
         mock.done();
       });
 
@@ -276,7 +291,9 @@ describe('rdme openapi upload', () => {
           });
 
         const result = await run(['--version', version, filename, '--key', key]);
+
         expect(result).toMatchSnapshot();
+
         mock.done();
       });
     });
@@ -301,7 +318,9 @@ describe('rdme openapi upload', () => {
           });
 
         const result = await run(['--version', version, filename, '--key', key]);
+
         expect(result).toMatchSnapshot();
+
         mock.done();
       });
     });
@@ -322,7 +341,9 @@ describe('rdme openapi upload', () => {
           });
 
         const result = await run([filename, '--key', key]);
+
         expect(result).toMatchSnapshot();
+
         mock.done();
       });
 
@@ -342,7 +363,9 @@ describe('rdme openapi upload', () => {
           });
 
         const result = await run(['--useSpecVersion', filename, '--key', key]);
+
         expect(result).toMatchSnapshot();
+
         mock.done();
       });
     });
@@ -364,7 +387,9 @@ describe('rdme openapi upload', () => {
         });
 
       const result = await run(['--version', version, fileUrl, '--key', key]);
+
       expect(result).toMatchSnapshot();
+
       fileMock.done();
       mock.done();
     });
@@ -386,7 +411,9 @@ describe('rdme openapi upload', () => {
         });
 
       const result = await run(['--version', version, fileUrl, '--key', key]);
+
       expect(result).toMatchSnapshot();
+
       fileMock.done();
       mock.done();
     });
@@ -395,7 +422,9 @@ describe('rdme openapi upload', () => {
       const fileMock = nock('https://example.com').get('/openapi.json').reply(400, {});
 
       const result = await run(['--version', version, fileUrl, '--key', key]);
+
       expect(result).toMatchSnapshot();
+
       fileMock.done();
     });
   });

@@ -102,6 +102,7 @@ describe('rdme login', () => {
     const mock = getAPIv1Mock().post('/api/v1/login', { email, password, project }).reply(401, errorResponse);
 
     await expect(run()).rejects.toStrictEqual(new APIv1Error(errorResponse));
+
     mock.done();
   });
 
@@ -144,6 +145,7 @@ describe('rdme login', () => {
       .reply(404, errorResponse);
 
     await expect(run()).rejects.toStrictEqual(new APIv1Error(errorResponse));
+
     mock.done();
   });
 });
