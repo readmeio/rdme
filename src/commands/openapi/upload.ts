@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import nodePath from 'node:path';
 
 import { Flags } from '@oclif/core';
+import yaml from 'js-yaml';
 import ora from 'ora';
 import prompts from 'prompts';
 import slugify from 'slugify';
@@ -110,10 +111,18 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
     const version = this.flags.useSpecVersion ? specVersion : this.flags.version;
 
-    let filename = specFileType === 'url' ? nodePath.basename(specPath) : slugify.default(specPath);
+    const specFileTypeIsUrl = specFileType === 'url';
 
+    let filename = specFileTypeIsUrl ? nodePath.basename(specPath) : slugify.default(specPath);
+
+    if (!specFileTypeIsUrl && filename !== specPath) {
+      this.warn(
+        `The slug of your API Definition will be set to ${filename} in ReadMe. This slug is not visible to your end users. To set this slug to something else, use the \`--slug\` flag.`,
+      );
+    }
+
+    const fileExtension = nodePath.extname(filename);
     if (this.flags.slug) {
-      const fileExtension = nodePath.extname(filename);
       const slugExtension = nodePath.extname(this.flags.slug);
       if (slugExtension && (!['.json', '.yaml', '.yml'].includes(slugExtension) || fileExtension !== slugExtension)) {
         throw new Error(
@@ -162,11 +171,17 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       this.debug('attaching URL to form data payload');
       body.append('url', specPath);
     } else {
+      const isYaml = fileExtension === '.yaml' || fileExtension === '.yml';
+      // Convert YAML files back to YAML before uploading
+      let specToUpload = preparedSpec;
+      if (isYaml) {
+        specToUpload = yaml.dump(JSON.parse(preparedSpec));
+      }
       // Create a temporary file to write the bundled spec to,
       // which we will then stream into the form data body
-      const { path } = await tmpFile({ prefix: 'rdme-openapi-', postfix: '.json' });
+      const { path } = await tmpFile({ prefix: 'rdme-openapi-', postfix: fileExtension });
       this.debug(`creating temporary file at ${path}`);
-      fs.writeFileSync(path, preparedSpec);
+      fs.writeFileSync(path, specToUpload);
       const stream = fs.createReadStream(path);
 
       this.debug('file and stream created, streaming into form data payload');
@@ -174,7 +189,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
         [Symbol.toStringTag]: 'File',
         name: filename,
         stream: () => stream,
-        type: 'application/json',
+        type: isYaml ? 'application/x-yaml' : 'application/json',
       });
     }
 

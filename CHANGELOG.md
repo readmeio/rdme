@@ -1,3 +1,17 @@
+# [10.2.0-next.3](https://github.com/readmeio/rdme/compare/v10.2.0-next.2...v10.2.0-next.3) (2025-02-19)
+
+
+### Bug Fixes
+
+* **openapi/upload:** improved handling for YAML files ([#1154](https://github.com/readmeio/rdme/issues/1154)) ([f1e4d16](https://github.com/readmeio/rdme/commit/f1e4d16a40915c5fa4e8d006420cd9d150d082d3))
+
+# [10.2.0-next.2](https://github.com/readmeio/rdme/compare/v10.2.0-next.1...v10.2.0-next.2) (2025-02-19)
+
+
+### Bug Fixes
+
+* **openapi/upload:** add warning for unexpected slugs ([55e0974](https://github.com/readmeio/rdme/commit/55e09749466b72e68e188aa964c9317000012c39))
+
 # [10.2.0-next.1](https://github.com/readmeio/rdme/compare/v10.1.2-next.1...v10.2.0-next.1) (2025-02-04)
 
 

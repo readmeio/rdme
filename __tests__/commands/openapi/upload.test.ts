@@ -12,8 +12,10 @@ import { after, before } from '../../helpers/setup-gha-env.js';
 const key = 'rdme_123';
 const version = '1.0.0';
 const filename = '__tests__/__fixtures__/petstore-simple-weird-version.json';
+const yamlFile = '__tests__/__fixtures__/postman/petstore.collection.yaml';
 const fileUrl = 'https://example.com/openapi.json';
 const slugifiedFilename = slugify.default(filename);
+const slugifiedYamlFile = slugify.default(yamlFile);
 
 describe('rdme openapi upload', () => {
   let run: (args?: string[]) => OclifOutput;
@@ -25,17 +27,17 @@ describe('rdme openapi upload', () => {
   describe('flag error handling', () => {
     it('should throw if an error if both `--version` and `--useSpecVersion` flags are passed', async () => {
       const result = await run(['--useSpecVersion', '--version', version, filename, '--key', key]);
-      expect(result.error.message).toContain('--version=1.0.0 cannot also be provided when using --useSpecVersion');
+      expect(result).toMatchSnapshot();
     });
   });
 
   describe('given that the API definition is a local file', () => {
-    it('should create a new API definition in ReadMe', async () => {
+    it('should create a new JSON API definition in ReadMe', async () => {
       const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
         .get(`/versions/${version}/apis`)
         .reply(200, { data: [] })
         .post(`/versions/${version}/apis`, body =>
-          body.match(`form-data; name="schema"; filename="${slugifiedFilename}"`),
+          body.match(`form-data; name="schema"; filename="${slugifiedFilename}"\r\nContent-Type: application/json`),
         )
         .reply(200, {
           data: {
@@ -45,7 +47,27 @@ describe('rdme openapi upload', () => {
         });
 
       const result = await run(['--version', version, filename, '--key', key]);
-      expect(result.stdout).toContain('was successfully created in ReadMe!');
+      expect(result).toMatchSnapshot();
+
+      mock.done();
+    });
+
+    it('should create a new YAML API definition in ReadMe', async () => {
+      const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .get(`/versions/${version}/apis`)
+        .reply(200, { data: [] })
+        .post(`/versions/${version}/apis`, body =>
+          body.match(`form-data; name="schema"; filename="${slugifiedYamlFile}"\r\nContent-Type: application/x-yaml`),
+        )
+        .reply(200, {
+          data: {
+            upload: { status: 'done' },
+            uri: `/versions/${version}/apis/${slugifiedYamlFile}`,
+          },
+        });
+
+      const result = await run(['--version', version, yamlFile, '--key', key]);
+      expect(result).toMatchSnapshot();
 
       mock.done();
     });
@@ -67,7 +89,7 @@ describe('rdme openapi upload', () => {
         });
 
       const result = await run(['--version', version, filename, '--key', key]);
-      expect(result.stdout).toContain('was successfully updated in ReadMe!');
+      expect(result).toMatchSnapshot();
 
       mock.done();
     });
@@ -87,9 +109,7 @@ describe('rdme openapi upload', () => {
         });
 
       const result = await run(['--version', version, filename, '--key', key]);
-      expect(result.error.message).toBe(
-        'Your API definition upload failed with an unexpected error. Please get in touch with us at support@readme.io.',
-      );
+      expect(result).toMatchSnapshot();
 
       mock.done();
     });
@@ -112,9 +132,7 @@ describe('rdme openapi upload', () => {
           });
 
         const result = await run(['--version', version, filename, '--key', key, '--slug', customSlug]);
-        expect(result.stdout).toContain(
-          `Your API definition (${customSlugWithExtension}) was successfully created in ReadMe!`,
-        );
+        expect(result).toMatchSnapshot();
 
         mock.done();
       });
@@ -133,7 +151,7 @@ describe('rdme openapi upload', () => {
           });
 
         const result = await run(['--version', version, filename, '--key', key, '--slug', customSlug]);
-        expect(result.stdout).toContain(`Your API definition (${customSlug}) was successfully created in ReadMe!`);
+        expect(result).toMatchSnapshot();
 
         mock.done();
       });
@@ -142,18 +160,14 @@ describe('rdme openapi upload', () => {
         const customSlug = 'custom-slug.yikes';
 
         const result = await run(['--version', version, filename, '--key', key, '--slug', customSlug]);
-        expect(result.error.message).toBe(
-          'Please provide a valid file extension that matches the extension on the file you provided. Must be `.json`, `.yaml`, or `.yml`.',
-        );
+        expect(result).toMatchSnapshot();
       });
 
       it('should handle a slug with a valid but mismatching file extension', async () => {
         const customSlug = 'custom-slug.yml';
 
         const result = await run(['--version', version, filename, '--key', key, '--slug', customSlug]);
-        expect(result.error.message).toBe(
-          'Please provide a valid file extension that matches the extension on the file you provided. Must be `.json`, `.yaml`, or `.yml`.',
-        );
+        expect(result).toMatchSnapshot();
       });
     });
 
@@ -188,8 +202,7 @@ describe('rdme openapi upload', () => {
           });
 
         const result = await run(['--version', version, filename, '--key', key]);
-        expect(result.stdout).toContain('was successfully created in ReadMe!');
-
+        expect(result).toMatchSnapshot();
         mock.done();
       });
 
@@ -216,8 +229,7 @@ describe('rdme openapi upload', () => {
           });
 
         const result = await run(['--version', version, filename, '--key', key]);
-        expect(result.error.message).toBe('Sorry, this upload timed out. Please try again later.');
-
+        expect(result).toMatchSnapshot();
         mock.done();
       });
 
@@ -238,10 +250,7 @@ describe('rdme openapi upload', () => {
           .reply(400);
 
         const result = await run(['--version', version, filename, '--key', key]);
-        expect(result.error.message).toBe(
-          'The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.',
-        );
-
+        expect(result).toMatchSnapshot();
         mock.done();
       });
 
@@ -267,12 +276,7 @@ describe('rdme openapi upload', () => {
           });
 
         const result = await run(['--version', version, filename, '--key', key]);
-        expect(result.error).toStrictEqual(
-          new Error(
-            'Your API definition upload failed with an unexpected error. Please get in touch with us at support@readme.io.',
-          ),
-        );
-
+        expect(result).toMatchSnapshot();
         mock.done();
       });
     });
@@ -297,8 +301,7 @@ describe('rdme openapi upload', () => {
           });
 
         const result = await run(['--version', version, filename, '--key', key]);
-        expect(result.stdout).toContain('was successfully updated in ReadMe!');
-
+        expect(result).toMatchSnapshot();
         mock.done();
       });
     });
@@ -319,8 +322,7 @@ describe('rdme openapi upload', () => {
           });
 
         const result = await run([filename, '--key', key]);
-        expect(result.stdout).toContain('was successfully created in ReadMe!');
-
+        expect(result).toMatchSnapshot();
         mock.done();
       });
 
@@ -340,8 +342,7 @@ describe('rdme openapi upload', () => {
           });
 
         const result = await run(['--useSpecVersion', filename, '--key', key]);
-        expect(result.stdout).toContain('was successfully created in ReadMe!');
-
+        expect(result).toMatchSnapshot();
         mock.done();
       });
     });
@@ -363,8 +364,7 @@ describe('rdme openapi upload', () => {
         });
 
       const result = await run(['--version', version, fileUrl, '--key', key]);
-      expect(result.stdout).toContain('was successfully created in ReadMe!');
-
+      expect(result).toMatchSnapshot();
       fileMock.done();
       mock.done();
     });
@@ -386,8 +386,7 @@ describe('rdme openapi upload', () => {
         });
 
       const result = await run(['--version', version, fileUrl, '--key', key]);
-      expect(result.stdout).toContain('was successfully updated in ReadMe!');
-
+      expect(result).toMatchSnapshot();
       fileMock.done();
       mock.done();
     });
@@ -396,8 +395,7 @@ describe('rdme openapi upload', () => {
       const fileMock = nock('https://example.com').get('/openapi.json').reply(400, {});
 
       const result = await run(['--version', version, fileUrl, '--key', key]);
-      expect(result.error.message).toBe('Unknown file detected.');
-
+      expect(result).toMatchSnapshot();
       fileMock.done();
     });
   });
