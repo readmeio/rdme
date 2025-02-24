@@ -1,3 +1,10 @@
+# [10.2.0-next.4](https://github.com/readmeio/rdme/compare/v10.2.0-next.3...v10.2.0-next.4) (2025-02-24)
+
+
+### Features
+
+* **openapi/upload:** add `--confirm-overwrite` flag ([#1168](https://github.com/readmeio/rdme/issues/1168)) ([59a913f](https://github.com/readmeio/rdme/commit/59a913f9196bd01fe3e17d0dca8965bf609425c1))
+
 # [10.2.0-next.3](https://github.com/readmeio/rdme/compare/v10.2.0-next.2...v10.2.0-next.3) (2025-02-19)
 
 
