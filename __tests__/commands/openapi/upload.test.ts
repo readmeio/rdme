@@ -1,7 +1,7 @@
 import nock from 'nock';
 import prompts from 'prompts';
 import slugify from 'slugify';
-import { describe, beforeAll, beforeEach, afterEach, it, expect } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 
 import Command from '../../../src/commands/openapi/upload.js';
 import petstore from '../../__fixtures__/petstore-simple-weird-version.json' with { type: 'json' };
@@ -399,6 +399,28 @@ describe('rdme openapi upload', () => {
       expect(result.error.message).toBe('Unknown file detected.');
 
       fileMock.done();
+    });
+  });
+
+  describe('given that the confirm overwrite flag is passed', () => {
+    it('should overwrite an existing API definition without asking for confirmation', async () => {
+      const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .get(`/versions/${version}/apis`)
+        .reply(200, { data: [{ filename: slugifiedFilename }] })
+        .put(`/versions/${version}/apis/${slugifiedFilename}`, body =>
+          body.match(`form-data; name="schema"; filename="${slugifiedFilename}"`),
+        )
+        .reply(200, {
+          data: {
+            upload: { status: 'done' },
+            uri: `/versions/${version}/apis/${slugifiedFilename}`,
+          },
+        });
+
+      const result = await run(['--version', version, filename, '--key', key, '--confirm-overwrite']);
+      expect(result.stdout).toContain('was successfully updated in ReadMe!');
+
+      mock.done();
     });
   });
 });
