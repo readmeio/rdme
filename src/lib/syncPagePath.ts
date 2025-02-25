@@ -197,7 +197,7 @@ function sortFiles(files: PageMetadata<PageRepresentation>[]): PageMetadata<Page
  */
 export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
   const { path: pathInput }: { path: string } = this.args;
-  const { 'dry-run': dryRun, 'skip-validation': skipValidation } = this.flags;
+  const { key, 'dry-run': dryRun, 'skip-validation': skipValidation } = this.flags;
 
   const allowedFileExtensions = ['.markdown', '.md'];
 
@@ -207,6 +207,23 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
     }
     throw err;
   });
+
+  // get the project metadata via apiv2 https://api.readme.com/v2/projects/me
+  // look for project.git?.connection
+  // if it exists, AND the skipValidation flag is not on, throw an error
+  // if the it doesn't exist or the skipValidation flag is on, proceed
+
+  const headers = new Headers({ authorization: `Bearer ${key}` });
+  const projectMetadata = await this.readmeAPIFetch('/projects/me', { method: 'GET', headers }).then(res => {
+    return this.handleAPIRes(res);
+  });
+
+  const biDiConnection = projectMetadata.git?.connection;
+  if (biDiConnection && !skipValidation) {
+    throw new Error(
+      `Bi-directional syncing is enabled for this project. Uploading these docs will overwrite what's currently synced from Git. To proceed with uploading via \`rdme\`, please use the \`--skip-validation\` flag.`,
+    );
+  }
 
   if (skipValidation) {
     this.warn('Skipping pre-upload validation of the Markdown file(s). This is not recommended.');
