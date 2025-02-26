@@ -445,6 +445,31 @@ describe('rdme openapi upload', () => {
       mock.done();
     });
 
+    // this test is failing and requires a bit more eng work in order to get working!
+    it.todo('should update files for URLs that do not have a file extension', async () => {
+      const fileMock = nock('https://example.com').get('/openapi').reply(200, petstore);
+      fileUrl = 'https://example.com/openapi';
+
+      const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .get(`/versions/${version}/apis`)
+        .reply(200, { data: [{ filename: 'openapi.json' }] })
+        .put('/versions/1.0.0/apis/openapi.json', body => body.match(`form-data; name="url"\r\n\r\n${fileUrl}`))
+        .reply(200, {
+          data: {
+            upload: { status: 'done' },
+            uri: `/versions/${version}/apis/openapi.json`,
+          },
+        });
+      const result = await run(['--version', version, fileUrl, '--key', key, '--slug', 'openapi.json']);
+
+      expect(result).toStrictEqual({});
+
+      fileMock.done();
+      mock.done();
+    });
+
+    it.todo('should accept URLs without a path');
+
     it('should handle issues fetching from the URL', async () => {
       const fileMock = nock('https://example.com').get('/openapi.json').reply(400, {});
 
