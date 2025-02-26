@@ -124,7 +124,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     const fileExtension = nodePath.extname(filename);
     if (this.flags.slug) {
       const slugExtension = nodePath.extname(this.flags.slug);
-      if (slugExtension && (!['.json', '.yaml', '.yml'].includes(slugExtension) || fileExtension !== slugExtension)) {
+      if (!specFileTypeIsUrl && slugExtension && (!['.json', '.yaml', '.yml'].includes(slugExtension) || fileExtension !== slugExtension)) {
         throw new Error(
           'Please provide a valid file extension that matches the extension on the file you provided. Must be `.json`, `.yaml`, or `.yml`.',
         );
