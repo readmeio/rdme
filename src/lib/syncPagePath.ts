@@ -1,5 +1,5 @@
 import type { PageMetadata } from './readPage.js';
-import type { GuidesRequestRepresentation } from './types.js';
+import type { GuidesRequestRepresentation, ProjectRepresentation } from './types.js';
 import type DocsUploadCommand from '../commands/docs/upload.js';
 
 import fs from 'node:fs/promises';
@@ -208,17 +208,17 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
     throw err;
   });
 
-  // get the project metadata via apiv2 https://api.readme.com/v2/projects/me
-  // look for project.git?.connection
-  // if it exists, AND the skipValidation flag is not on, throw an error
-  // if the it doesn't exist or the skipValidation flag is on, proceed
-
+  // check whether or not the project has bidirection syncing enabled
+  // if it is, validations must be skipped to prevent frontmatter from being overwritten
   const headers = new Headers({ authorization: `Bearer ${key}` });
-  const projectMetadata = await this.readmeAPIFetch('/projects/me', { method: 'GET', headers }).then(res => {
+  const projectMetadata: ProjectRepresentation = await this.readmeAPIFetch('/projects/me', {
+    method: 'GET',
+    headers,
+  }).then(res => {
     return this.handleAPIRes(res);
   });
 
-  const biDiConnection = projectMetadata.git?.connection;
+  const biDiConnection = projectMetadata.data.git?.connection;
   if (biDiConnection && !skipValidation) {
     throw new Error(
       `Bi-directional syncing is enabled for this project. Uploading these docs will overwrite what's currently synced from Git. To proceed with uploading via \`rdme\`, please use the \`--skip-validation\` flag.`,
