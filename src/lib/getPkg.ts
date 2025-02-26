@@ -2,7 +2,7 @@ import type { Hook } from '@oclif/core';
 
 import semver from 'semver';
 
-import pkg from '../package.json' with { type: 'json' };
+import pkg from '../../package.json' with { type: 'json' };
 
 import { error } from './logger.js';
 

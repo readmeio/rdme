@@ -115,7 +115,7 @@
     "build:gha:prod": "npm run build:gha -- --environment PRODUCTION_BUILD",
     "lint": "alex . && knip && npm run lint:ts && npm run prettier && npm run schemas:check",
     "lint:ts": "eslint . --ext .js,.ts",
-    "prebuild": "rm -rf dist/ && rm -f src/package.json && ln package.json src/package.json",
+    "prebuild": "rm -rf dist/",
     "prepack": "npm run build",
     "prepare": "husky",
     "pretest": "npm run build",
