@@ -13,15 +13,19 @@ const key = 'rdme_123';
 const version = '1.0.0';
 const filename = '__tests__/__fixtures__/petstore-simple-weird-version.json';
 const yamlFile = '__tests__/__fixtures__/postman/petstore.collection.yaml';
-const fileUrl = 'https://example.com/openapi.json';
 const slugifiedFilename = slugify.default(filename);
 const slugifiedYamlFile = slugify.default(yamlFile);
 
 describe('rdme openapi upload', () => {
   let run: (args?: string[]) => OclifOutput;
+  let fileUrl: string;
 
   beforeAll(() => {
     run = runCommand(Command);
+  });
+
+  beforeEach(() => {
+    fileUrl = 'https://example.com/openapi.json';
   });
 
   describe('flag error handling', () => {
@@ -403,6 +407,29 @@ describe('rdme openapi upload', () => {
         .get(`/versions/${version}/apis`)
         .reply(200, { data: [{ filename: 'openapi.json' }] })
         .put('/versions/1.0.0/apis/openapi.json', body => body.match(`form-data; name="url"\r\n\r\n${fileUrl}`))
+        .reply(200, {
+          data: {
+            upload: { status: 'done' },
+            uri: `/versions/${version}/apis/openapi.json`,
+          },
+        });
+
+      const result = await run(['--version', version, fileUrl, '--key', key]);
+
+      expect(result).toMatchSnapshot();
+
+      fileMock.done();
+      mock.done();
+    });
+
+    it('should create files for URLs that do not have a file extension', async () => {
+      const fileMock = nock('https://example.com').get('/openapi').reply(200, petstore);
+      fileUrl = 'https://example.com/openapi';
+
+      const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .get(`/versions/${version}/apis`)
+        .reply(200, {})
+        .post(`/versions/${version}/apis`, body => body.match(`form-data; name="url"\r\n\r\n${fileUrl}`))
         .reply(200, {
           data: {
             upload: { status: 'done' },
