@@ -71,8 +71,13 @@ jobs:
       #
       # This step is not required for syncing your docs to ReadMe!
       - name: Rebuild GitHub Action for testing purposes
-        run: npm ci && npm run build:gha
+        # We manually invoke `bin/write-gha-pjson.js` here because
+        # GitHub Actions does not support `pre` scripts for local actions.
+        run: npm ci && npm run build:gha && bin/write-gha-pjson.js
         working-directory: rdme-repo
+
+      - name: Run root command
+        uses: ./rdme-repo/
 
       - name: Run `openapi validate` command
         uses: ./rdme-repo/
@@ -98,11 +103,28 @@ jobs:
 
       - name: Assert that previous validation step failed
         if: ${{ steps.openapi-validate-fail.outcome == 'failure' }}
-        run: echo "The validation in the previous step failed as expected."
+        run: echo "The previous step failed as expected."
 
       - name: Throw error if previous validation step did not fail
         if: ${{ steps.openapi-validate-fail.outcome == 'success' }}
-        run: echo "::error::Expected validation in previous step to fail" && exit 1
+        run: echo "::error::Expected previous step to fail" && exit 1
+
+      # The `help` command is only available in the CLI.
+      # This step should fail because `help` does not exist in GitHub Actions
+      - name: Run `help`
+        uses: ./rdme-repo/
+        id: help-fail
+        continue-on-error: true
+        with:
+          rdme: help
+
+      - name: Assert that previous step failed
+        if: ${{ steps.help-fail.outcome == 'failure' }}
+        run: echo "The previous step failed as expected."
+
+      - name: Throw error if previous step did not fail
+        if: ${{ steps.help-fail.outcome == 'success' }}
+        run: echo "::error::Expected previous step to fail" && exit 1
 
       # Docs: https://rdme-test.readme.io
       - name: Run `openapi` command

@@ -1,11 +1,10 @@
+// @ts-check
 import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
-import terser from '@rollup/plugin-terser';
 import { defineConfig } from 'rollup';
-
-const isProductionBuild = process.env.PRODUCTION_BUILD === 'true';
+import { minify } from 'rollup-plugin-esbuild';
 
 const basePlugins = [
   commonjs(),
@@ -16,13 +15,8 @@ const basePlugins = [
     exportConditions: ['node'],
     preferBuiltins: true,
   }),
+  minify(),
 ];
-
-// only minify when doing a "production" build (i.e., for a release)
-// it takes a lot longer!
-if (isProductionBuild) {
-  basePlugins.push(terser());
-}
 
 export default defineConfig([
   {
