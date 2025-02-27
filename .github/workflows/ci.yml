@@ -76,6 +76,9 @@ jobs:
         run: npm ci && npm run build:gha && bin/write-gha-pjson.js
         working-directory: rdme-repo
 
+      - name: Run root command
+        uses: ./rdme-repo/
+
       - name: Run `openapi validate` command
         uses: ./rdme-repo/
         with:
