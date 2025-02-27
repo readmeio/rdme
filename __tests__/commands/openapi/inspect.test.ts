@@ -1,4 +1,4 @@
-/* eslint-disable vitest/no-conditional-expect */
+/* eslint-disable @vitest/no-conditional-expect */
 import assert from 'node:assert';
 
 import { describe, it, expect, beforeAll } from 'vitest';
@@ -69,6 +69,7 @@ describe('rdme openapi inspect', () => {
       const args = [require.resolve(spec)].concat(...feature.map(f => ['--feature', f]));
       if (!shouldSoftError) {
         await expect(run(args)).resolves.toMatchSnapshot();
+
         return;
       }
 
