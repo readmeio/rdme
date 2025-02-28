@@ -6,4 +6,3 @@ node_modules/
 # required for building with TS + oclif + GitHub Actions
 dist-gha/package.json
 oclif.manifest.json
-src/package.json
