@@ -297,7 +297,7 @@ describe('rdme docs upload', () => {
           })
           .reply(201, {});
 
-        const projectsMeMock2 = getAPIv2MockForGHA({ authorization }).get('/projects/me').reply(200, {
+        const projectsMeMock = getAPIv2MockForGHA({ authorization }).get('/projects/me').reply(200, {
           data: {},
         });
 
@@ -308,18 +308,18 @@ describe('rdme docs upload', () => {
 
         headMock.done();
         postMock.done();
-        projectsMeMock2.done();
+        projectsMeMock.done();
       });
 
       it('should error out if the file has validation errors', async () => {
-        const projectsMeMock2 = getAPIv2MockForGHA({ authorization }).get('/projects/me').reply(200, {
+        const projectsMeMock = getAPIv2MockForGHA({ authorization }).get('/projects/me').reply(200, {
           data: {},
         });
         const result = await run(['__tests__/__fixtures__/docs/mixed-docs/legacy-category.md', '--key', key]);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
-        projectsMeMock2.done();
+        projectsMeMock.done();
       });
     });
 
