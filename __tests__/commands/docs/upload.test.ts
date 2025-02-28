@@ -24,6 +24,9 @@ describe('rdme docs upload', () => {
       categories: {},
       parentPages: {},
     });
+    getAPIv2Mock({ authorization }).get('/projects/me').reply(200, {
+      data: {},
+    });
     vi.spyOn(fs, 'writeFileSync').mockImplementation(() => {});
   });
 
@@ -195,6 +198,10 @@ describe('rdme docs upload', () => {
           })
           .reply(201, {});
 
+        const projectsMeMock = getAPIv2Mock({ authorization }).get('/projects/me').reply(200, {
+          data: {},
+        });
+
         prompts.inject([true]);
 
         const result = await run(['__tests__/__fixtures__/docs/mixed-docs/legacy-category.md', '--key', key]);
@@ -208,6 +215,7 @@ describe('rdme docs upload', () => {
 
         mappingsMock.done();
         mock.done();
+        projectsMeMock.done();
       });
 
       it('should exit if the user declines to fix the issues', async () => {
@@ -289,6 +297,10 @@ describe('rdme docs upload', () => {
           })
           .reply(201, {});
 
+        const projectsMeMock2 = getAPIv2MockForGHA({ authorization }).get('/projects/me').reply(200, {
+          data: {},
+        });
+
         const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key]);
 
         expect(result).toMatchSnapshot();
@@ -296,13 +308,18 @@ describe('rdme docs upload', () => {
 
         headMock.done();
         postMock.done();
+        projectsMeMock2.done();
       });
 
       it('should error out if the file has validation errors', async () => {
+        const projectsMeMock2 = getAPIv2MockForGHA({ authorization }).get('/projects/me').reply(200, {
+          data: {},
+        });
         const result = await run(['__tests__/__fixtures__/docs/mixed-docs/legacy-category.md', '--key', key]);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
+        projectsMeMock2.done();
       });
     });
 
@@ -506,6 +523,61 @@ describe('rdme docs upload', () => {
       expect(fs.writeFileSync).toHaveBeenCalledTimes(5);
 
       mock.done();
+    });
+  });
+
+  describe.only('given that ReadMe project has bidirection sync set up', () => {
+    it('should should error if validation is not skipped', async () => {
+      nock.cleanAll();
+
+      const mock = getAPIv2Mock({ authorization })
+        .get('/projects/me')
+        .reply(200, {
+          data: { git: { connection: 'some-repo' } },
+        });
+
+      const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key]);
+
+      expect(result).toMatchSnapshot();
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
+
+      mock.done();
+    });
+
+    it('should upload if validation is skipped', async () => {
+      nock.cleanAll();
+
+      const mock = getAPIv2Mock({ authorization })
+        .head('/versions/1.2.3/guides/new-doc')
+        .reply(404)
+        .post('/versions/1.2.3/guides', {
+          category: { uri: '/versions/1.2.3/categories/guides/category-slug' },
+          slug: 'new-doc',
+          title: 'This is the document title',
+          content: { body: '\nBody\n' },
+        })
+        .reply(201, {});
+
+      const projectsMeMock = getAPIv2Mock({ authorization })
+        .get('/projects/me')
+        .reply(200, {
+          data: { git: { connection: 'some-repo' } },
+        });
+
+      const result = await run([
+        '__tests__/__fixtures__/docs/new-docs/new-doc.md',
+        '--key',
+        key,
+        '--version',
+        '1.2.3',
+        '--skip-validation',
+      ]);
+
+      expect(result).toMatchSnapshot();
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
+
+      mock.done();
+      projectsMeMock.done();
     });
   });
 });

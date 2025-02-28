@@ -1,5 +1,39 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`rdme docs upload > given that ReadMe project has bidirection sync set up > should should error if validation is not skipped 1`] = `
+{
+  "error": [Error: Bi-directional syncing is enabled for this project. Uploading these docs will overwrite what's currently synced from Git. To proceed with uploading via \`rdme\`, please use the \`--skip-validation\` flag.],
+  "stderr": "",
+  "stdout": "",
+}
+`;
+
+exports[`rdme docs upload > given that ReadMe project has bidirection sync set up > should upload if validation is skipped 1`] = `
+{
+  "result": {
+    "created": [
+      {
+        "filePath": "__tests__/__fixtures__/docs/new-docs/new-doc.md",
+        "response": {},
+        "result": "created",
+        "slug": "new-doc",
+      },
+    ],
+    "failed": [],
+    "skipped": [],
+    "updated": [],
+  },
+  "stderr": " ›   Warning: Skipping pre-upload validation of the Markdown file(s). This is 
+ ›   not recommended.
+- 🚀 Uploading files to ReadMe...
+✔ 🚀 Uploading files to ReadMe... done!
+",
+  "stdout": "🌱 Successfully created 1 page(s) in ReadMe:
+   - new-doc (__tests__/__fixtures__/docs/new-docs/new-doc.md)
+",
+}
+`;
+
 exports[`rdme docs upload > given that the file path is a directory > given that the directory contains parent/child docs > should upload parents before children 1`] = `
 {
   "result": {
