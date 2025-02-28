@@ -62,11 +62,6 @@ jobs:
 
       # And finally, we perform an actual sync to ReadMe if we're on the main branch
       - name: Sync docs to ReadMe
-        if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
-        # We use the `main` branch as ref for GitHub Action
-        # This is NOT recommended, as it can break your workflows without notice!
-        # We recommend specifying a fixed version, i.e. @8.0.0
-        # Docs: https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#example-using-versioned-actions
-        uses: readmeio/rdme@main
+        uses: readmeio/rdme@v10.2.0-next.4
         with:
-          rdme: docs ./documentation/legacy/ --key=${{ secrets.README_DEVELOPERS_API_KEY }} --version=${{ vars.README_DEVELOPERS_MAIN_VERSION }}
+          rdme: docs upload ./documentation/legacy/ --key=${{ secrets.README_DEVELOPERS_API_KEY }} --version=${{ vars.README_DEVELOPERS_MAIN_VERSION }}
