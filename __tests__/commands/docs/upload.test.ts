@@ -526,7 +526,7 @@ describe('rdme docs upload', () => {
     });
   });
 
-  describe.only('given that ReadMe project has bidirection sync set up', () => {
+  describe('given that ReadMe project has bidirection sync set up', () => {
     it('should should error if validation is not skipped', async () => {
       nock.cleanAll();
 
