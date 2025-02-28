@@ -533,7 +533,7 @@ describe('rdme docs upload', () => {
       const mock = getAPIv2Mock({ authorization })
         .get('/projects/me')
         .reply(200, {
-          data: { git: { connection: 'some-repo' } },
+          data: { git: { connection: { name: 'some-repo' } } },
         });
 
       const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key]);
@@ -561,7 +561,7 @@ describe('rdme docs upload', () => {
       const projectsMeMock = getAPIv2Mock({ authorization })
         .get('/projects/me')
         .reply(200, {
-          data: { git: { connection: 'some-repo' } },
+          data: { git: { connection: { name: 'some-repo' } } },
         });
 
       const result = await run([
