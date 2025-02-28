@@ -22,8 +22,6 @@ export default defineConfig({
        * tool in a testing environment.
        */
       NODE_ENV: 'rdme-test',
-      // Node emits ExperimentalWarnings because we import JSON modules, so this hides that output.
-      NODE_OPTIONS: '--disable-warning=ExperimentalWarning',
     },
     exclude: [
       '**/__fixtures__/**',

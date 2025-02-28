@@ -108,12 +108,12 @@
     "vitest": "^3.0.5"
   },
   "scripts": {
-    "build": "tsc && cp package.json dist/package.json",
+    "build": "tsc",
     "build:docs": "oclif readme --multi --output-dir documentation/commands --no-aliases",
     "build:gha": "npm run build && rollup --config",
     "lint": "alex . && knip && npm run lint:ts && npm run prettier && npm run schemas:check",
     "lint:ts": "eslint . --ext .js,.ts",
-    "prebuild": "rm -rf dist/ && rm -f src/package.json && ln package.json src/package.json",
+    "prebuild": "rm -rf dist/",
     "prepack": "npm run build",
     "prepare": "husky",
     "pretest": "npm run build",
