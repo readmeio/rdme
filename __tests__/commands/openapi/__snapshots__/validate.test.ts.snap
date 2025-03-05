@@ -149,7 +149,7 @@ jobs:
 `;
 
 exports[`rdme openapi validate > error handling > should throw an error if an invalid API definition has many errors 1`] = `
-[SyntaxError: OpenAPI schema validation failed.
+[ValidationError: OpenAPI schema validation failed.
 
 REQUIRED must have required property 'url'
 
@@ -172,10 +172,14 @@ ADDITIONAL PROPERTY must NOT have additional properties
   29 |         "summary": "Finds Pets by status",]
 `;
 
-exports[`rdme openapi validate > error handling > should throw an error if an invalid OpenAPI 3.0 definition is supplied 1`] = `[MissingPointerError: Token "Error" does not exist.]`;
+exports[`rdme openapi validate > error handling > should throw an error if an invalid OpenAPI 3.0 definition is supplied 1`] = `
+[ValidationError: API definition schema validation failed.
+
+Missing $ref pointer "#/components/schemas/Error". Token "Error" does not exist.]
+`;
 
 exports[`rdme openapi validate > error handling > should throw an error if an invalid OpenAPI 3.1 definition is supplied 1`] = `
-[SyntaxError: OpenAPI schema validation failed.
+[ValidationError: OpenAPI schema validation failed.
 
 REQUIRED must have required property 'name'
 
@@ -189,7 +193,7 @@ REQUIRED must have required property 'name'
 `;
 
 exports[`rdme openapi validate > error handling > should throw an error if an invalid Swagger definition is supplied 1`] = `
-[SyntaxError: Swagger schema validation failed.
+[ValidationError: Swagger schema validation failed.
 
 ADDITIONAL PROPERTY must NOT have additional properties
 
