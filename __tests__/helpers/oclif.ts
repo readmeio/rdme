@@ -50,6 +50,8 @@ export function runCommand(Command: CommandClass) {
  * an error if the command throws one. Mainly a helper to minimize the amount of refactoring
  * in our existing tests.
  *
+ * @deprecated This is a legacy helper to aid with the initial migration to `oclif`.
+ * Use `runCommand` for all new tests instead.
  * @example runCommandAndReturnResult(LoginCommand)(['--email', 'owlbert@example.com', '--password', 'password'])
  */
 export function runCommandAndReturnResult(Command: CommandClass) {

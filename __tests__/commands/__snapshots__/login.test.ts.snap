@@ -1,0 +1,77 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`rdme login > should bypass prompts and post to /login on the API if passing in every opt (no 2FA) 1`] = `
+{
+  "result": "Successfully logged in as user@example.com to the subdomain project.",
+  "stderr": "",
+  "stdout": "",
+}
+`;
+
+exports[`rdme login > should bypass prompts and post to /login on the API if passing in every opt 1`] = `
+{
+  "result": "Successfully logged in as user@example.com to the subdomain project.",
+  "stderr": "",
+  "stdout": "",
+}
+`;
+
+exports[`rdme login > should error if email is invalid 1`] = `
+{
+  "error": [Error: You must provide a valid email address.],
+  "stderr": "",
+  "stdout": "",
+}
+`;
+
+exports[`rdme login > should error if invalid credentials are given 1`] = `
+{
+  "error": [APIv1Error: Either your email address or password is incorrect
+
+If you need help, email support@readme.io and mention log "fake-metrics-uuid".],
+  "stderr": "",
+  "stdout": "",
+}
+`;
+
+exports[`rdme login > should error if no project provided 1`] = `
+{
+  "error": [Error: No project subdomain provided. Please use \`--project\`.],
+  "stderr": "",
+  "stdout": "",
+}
+`;
+
+exports[`rdme login > should error if trying to access a project that is not yours 1`] = `
+{
+  "error": [APIv1Error: The project (unauthorized-project) can't be found.
+
+If you need help, email support@readme.io],
+  "stderr": "",
+  "stdout": "",
+}
+`;
+
+exports[`rdme login > should make additional prompt for token if login requires 2FA 1`] = `
+{
+  "result": "Successfully logged in as user@example.com to the subdomain project.",
+  "stderr": "",
+  "stdout": "",
+}
+`;
+
+exports[`rdme login > should post to /login on the API 1`] = `
+{
+  "result": "Successfully logged in as user@example.com to the subdomain project.",
+  "stderr": "",
+  "stdout": "",
+}
+`;
+
+exports[`rdme login > should post to /login on the API if passing in project via opt 1`] = `
+{
+  "result": "Successfully logged in as user@example.com to the subdomain project.",
+  "stderr": "",
+  "stdout": "",
+}
+`;

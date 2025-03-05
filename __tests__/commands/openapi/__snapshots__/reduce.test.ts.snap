@@ -1,0 +1,67 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`rdme openapi reduce > error handling > should fail if given a Swagger 2.0 definition (format: json) 1`] = `[Error: Sorry, this reducer feature in rdme only supports OpenAPI 3.0+ definitions.]`;
+
+exports[`rdme openapi reduce > error handling > should fail if given a Swagger 2.0 definition (format: yaml) 1`] = `[Error: Sorry, this reducer feature in rdme only supports OpenAPI 3.0+ definitions.]`;
+
+exports[`rdme openapi reduce > error handling > should fail if you attempt to pass both tags and methods as opts 1`] = `[Error: You can pass in either tags or paths/methods, but not both.]`;
+
+exports[`rdme openapi reduce > error handling > should fail if you attempt to pass both tags and paths as opts 1`] = `[Error: You can pass in either tags or paths/methods, but not both.]`;
+
+exports[`rdme openapi reduce > error handling > should fail if you attempt to pass non-existent path and no method 1`] = `[Error: All paths in the API definition were removed. Did you supply the right path name to reduce by?]`;
+
+exports[`rdme openapi reduce > error handling > should fail if you attempt to reduce a spec to nothing via paths 1`] = `[Error: All paths in the API definition were removed. Did you supply the right path name to reduce by?]`;
+
+exports[`rdme openapi reduce > error handling > should fail if you attempt to reduce a spec to nothing via tags 1`] = `[Error: All paths in the API definition were removed. Did you supply the right path name to reduce by?]`;
+
+exports[`rdme openapi reduce > reducing > by path > should reduce and update title with no prompts via opts 1`] = `
+{
+  "result": "Your reduced API definition has been saved to output.json! 🤏",
+  "stderr": "- Looking for API definitions...
+- Validating the API definition located at petstore.json...
+- Reducing your API definition...
+✔ Reducing your API definition... done! ✅
+",
+  "stdout": "ℹ️  We found petstore.json and are attempting to reduce it.
+",
+}
+`;
+
+exports[`rdme openapi reduce > reducing > by path > should reduce with no prompts via opts 1`] = `
+{
+  "result": "Your reduced API definition has been saved to output.json! 🤏",
+  "stderr": "- Looking for API definitions...
+- Validating the API definition located at petstore.json...
+- Reducing your API definition...
+✔ Reducing your API definition... done! ✅
+",
+  "stdout": "ℹ️  We found petstore.json and are attempting to reduce it.
+",
+}
+`;
+
+exports[`rdme openapi reduce > reducing > by tag > should discover and upload an API definition if none is provided 1`] = `
+{
+  "result": "Your reduced API definition has been saved to output.json! 🤏",
+  "stderr": "- Looking for API definitions...
+- Validating the API definition located at petstore.json...
+- Reducing your API definition...
+✔ Reducing your API definition... done! ✅
+",
+  "stdout": "ℹ️  We found petstore.json and are attempting to reduce it.
+",
+}
+`;
+
+exports[`rdme openapi reduce > reducing > by tag > should reduce with no prompts via opts 1`] = `
+{
+  "result": "Your reduced API definition has been saved to output.json! 🤏",
+  "stderr": "- Looking for API definitions...
+- Validating the API definition located at petstore.json...
+- Reducing your API definition...
+✔ Reducing your API definition... done! ✅
+",
+  "stdout": "ℹ️  We found petstore.json and are attempting to reduce it.
+",
+}
+`;

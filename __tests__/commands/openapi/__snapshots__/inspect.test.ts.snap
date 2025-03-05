@@ -51,7 +51,7 @@ polymorphism:
 `;
 
 exports[`rdme openapi inspect > feature reports > should generate a report for '@readme/oas-examples/3.0/json/readme-…' (w/ [ 'readme' ]) 1`] = `
-"
+[SoftError: 
 x-default: You do not use this.
 x-readme.code-samples:
  · #/paths/~1x-code-samples/get/x-code-samples
@@ -73,7 +73,7 @@ x-readme.samples-languages:
  · node
  · python
  · shell
- · swift"
+ · swift]
 `;
 
 exports[`rdme openapi inspect > feature reports > should generate a report for '@readme/oas-examples/3.0/json/schema-…' (w/ [ 'additionalProperties', …(1) ]) 1`] = `
@@ -103,7 +103,7 @@ circularRefs:
 `;
 
 exports[`rdme openapi inspect > feature reports > should generate a report for '@readme/oas-examples/3.0/json/schema-…' (w/ [ 'additionalProperties', …(2) ]) 1`] = `
-"
+[SoftError: 
 additionalProperties:
  · #/components/schemas/BodyPart/properties/headers/additionalProperties
  · #/components/schemas/BodyPart/properties/mediaType/properties/parameters/additionalProperties
@@ -132,11 +132,11 @@ x-readme.code-samples: You do not use this.
 x-readme.headers: You do not use this.
 x-readme.explorer-enabled: You do not use this.
 x-readme.proxy-enabled: You do not use this.
-x-readme.samples-languages: You do not use this."
+x-readme.samples-languages: You do not use this.]
 `;
 
 exports[`rdme openapi inspect > feature reports > should generate a report for '@readme/oas-examples/3.0/json/schema-…' (w/ [ 'circularRefs', 'readme' ]) 1`] = `
-"
+[SoftError: 
 circularRefs:
  · #/components/schemas/BodyPart/properties/parent
  · #/components/schemas/MultiPart/properties/bodyParts/items
@@ -151,7 +151,7 @@ x-readme.code-samples: You do not use this.
 x-readme.headers: You do not use this.
 x-readme.explorer-enabled: You do not use this.
 x-readme.proxy-enabled: You do not use this.
-x-readme.samples-languages: You do not use this."
+x-readme.samples-languages: You do not use this.]
 `;
 
 exports[`rdme openapi inspect > feature reports > should generate a report for '@readme/oas-examples/3.1/json/train-t…' (w/ [ 'commonParameters' ]) 1`] = `
@@ -159,6 +159,15 @@ exports[`rdme openapi inspect > feature reports > should generate a report for '
 commonParameters:
  · #/paths/~1bookings~1{bookingId}/parameters
  · #/paths/~1bookings~1{bookingId}~1payment/parameters"
+`;
+
+exports[`rdme openapi inspect > feature reports > should throw an error if an invalid feature is supplied 1`] = `
+{
+  "error": [Error: Expected --feature=reamde to be one of: additionalProperties, callbacks, circularRefs, commonParameters, discriminators, links, style, polymorphism, serverVariables, webhooks, xml, readme
+See more help with --help],
+  "stderr": "",
+  "stdout": "",
+}
 `;
 
 exports[`rdme openapi inspect > full reports > should generate a report for @readme/oas-examples/3.0/json/petstore.json 1`] = `
