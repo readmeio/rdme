@@ -1,5 +1,3 @@
- 
-
 import fs from 'node:fs';
 
 import prompts from 'prompts';
@@ -35,9 +33,7 @@ describe('rdme openapi validate', () => {
   ])('should support validating a %s definition (format: %s)', async (_, format, specVersion) => {
     expect(
       (await run([require.resolve(`@readme/oas-examples/${specVersion}/${format}/petstore.${format}`)])).result,
-    ).toContain(
-      `petstore.${format} is a valid ${specVersion === '2.0' ? 'Swagger' : 'OpenAPI'} API definition!`,
-    );
+    ).toContain(`petstore.${format} is a valid ${specVersion === '2.0' ? 'Swagger' : 'OpenAPI'} API definition!`);
   });
 
   it('should discover and upload an API definition if none is provided', async () => {
