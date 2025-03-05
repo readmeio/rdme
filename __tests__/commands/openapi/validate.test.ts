@@ -121,8 +121,6 @@ describe('rdme openapi validate', () => {
     });
 
     it('should create GHA workflow if user passes in spec via prompts', async () => {
-      expect.assertions(3);
-
       const spec = '__tests__/__fixtures__/petstore-simple-weird-version.json';
       const fileName = 'validate-test-file';
       prompts.inject([spec, true, 'validate-test-branch', fileName]);
@@ -133,8 +131,6 @@ describe('rdme openapi validate', () => {
     });
 
     it('should create GHA workflow if user passes in spec via opt', async () => {
-      expect.assertions(3);
-
       const spec = '__tests__/__fixtures__/petstore-simple-weird-version.json';
       const fileName = 'validate-test-opt-spec-file';
       prompts.inject([true, 'validate-test-opt-spec-branch', fileName]);
@@ -146,8 +142,6 @@ describe('rdme openapi validate', () => {
     });
 
     it('should create GHA workflow if user passes in spec via opt (including workingDirectory)', async () => {
-      expect.assertions(3);
-
       const spec = 'petstore.json';
       const fileName = 'validate-test-opt-spec-workdir-file';
       prompts.inject([true, 'validate-test-opt-spec-github-branch', fileName]);
@@ -161,8 +155,6 @@ describe('rdme openapi validate', () => {
     });
 
     it('should create GHA workflow if user passes in spec via opt (github flag enabled)', async () => {
-      expect.assertions(3);
-
       const spec = '__tests__/__fixtures__/petstore-simple-weird-version.json';
       const fileName = 'validate-test-opt-spec-github-file';
       prompts.inject(['validate-test-opt-spec-github-branch', fileName]);
