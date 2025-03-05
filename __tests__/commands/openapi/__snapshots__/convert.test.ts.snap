@@ -1,25 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`rdme openapi convert > error handling > should fail if given an OpenAPI 3.0 definition (format: json) 1`] = `
-{
-  "result": "Your API definition has been converted and bundled and saved to output.json!",
-  "stderr": "- Validating the API definition located at /Users/kanadg/Code/readmeio/rdme/node_modules/@readme/oas-examples/3.0/json/petstore.json...
-⚠️  Warning! The input file is already OpenAPI, so no conversion is necessary. Any external references will be bundled.
-",
-  "stdout": "",
-}
-`;
-
-exports[`rdme openapi convert > error handling > should fail if given an OpenAPI 3.0 definition (format: yaml) 1`] = `
-{
-  "result": "Your API definition has been converted and bundled and saved to output.json!",
-  "stderr": "- Validating the API definition located at /Users/kanadg/Code/readmeio/rdme/node_modules/@readme/oas-examples/3.0/yaml/petstore.yaml...
-⚠️  Warning! The input file is already OpenAPI, so no conversion is necessary. Any external references will be bundled.
-",
-  "stdout": "",
-}
-`;
-
 exports[`rdme openapi convert > error handling > should warn if given an OpenAPI 3.0 definition (format: json) 1`] = `
 {
   "result": "Your API definition has been converted and bundled and saved to output.json!",
@@ -35,6 +15,15 @@ exports[`rdme openapi convert > error handling > should warn if given an OpenAPI
   "result": "Your API definition has been converted and bundled and saved to output.json!",
   "stderr": "- Validating the API definition located at petstore.yaml...
 ⚠️  Warning! The input file is already OpenAPI, so no conversion is necessary. Any external references will be bundled.
+",
+  "stdout": "",
+}
+`;
+
+exports[`rdme openapi convert > should convert with no prompts via opts 1`] = `
+{
+  "result": "Your API definition has been converted and bundled and saved to output.json!",
+  "stderr": "- Validating the API definition located at petstore-simple.json...
 ",
   "stdout": "",
 }

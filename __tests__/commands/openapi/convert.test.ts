@@ -8,8 +8,6 @@ import { describe, it, expect, vi, beforeAll, beforeEach, afterEach, type MockIn
 import Command from '../../../src/commands/openapi/convert.js';
 import { runCommand, type OclifOutput } from '../../helpers/oclif.js';
 
-const successfulConversion = () => 'Your API definition has been converted and bundled and saved to output.json!';
-
 describe('rdme openapi convert', () => {
   let fsWriteFileSyncSpy: MockInstance<typeof fs.writeFileSync>;
   let reducedSpec: OASDocument;
@@ -42,7 +40,9 @@ describe('rdme openapi convert', () => {
 
       prompts.inject(['output.json']);
 
-      expect((await run([spec])).result).toBe(successfulConversion());
+      expect((await run([spec])).result).toBe(
+        'Your API definition has been converted and bundled and saved to output.json!',
+      );
 
       expect(fsWriteFileSyncSpy).toHaveBeenCalledWith('output.json', expect.any(String));
       expect(reducedSpec.tags).toHaveLength(1);
@@ -62,14 +62,7 @@ describe('rdme openapi convert', () => {
         '--out',
         'output.json',
       ]),
-    ).resolves.toMatchInlineSnapshot(`
-      {
-        "result": "Your API definition has been converted and bundled and saved to output.json!",
-        "stderr": "- Validating the API definition located at petstore-simple.json...
-      ",
-        "stdout": "",
-      }
-    `);
+    ).resolves.toMatchSnapshot();
 
     expect(fsWriteFileSyncSpy).toHaveBeenCalledWith('output.json', expect.any(String));
     expect(Object.keys(reducedSpec.paths)).toStrictEqual(['/pet/{petId}']);
