@@ -1,3 +1,10 @@
+# [10.2.0-next.5](https://github.com/readmeio/rdme/compare/v10.2.0-next.4...v10.2.0-next.5) (2025-03-05)
+
+
+### Features
+
+* **openapi:** improvements to circular ref detection, validation errors ([#1189](https://github.com/readmeio/rdme/issues/1189)) ([57b732f](https://github.com/readmeio/rdme/commit/57b732f870680afe2ff7fcda4221468e4763bd7a))
+
 # [10.2.0-next.4](https://github.com/readmeio/rdme/compare/v10.2.0-next.3...v10.2.0-next.4) (2025-02-24)
 
 
