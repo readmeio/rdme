@@ -1,0 +1,17 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`rdme logout > should log the user out 1`] = `
+{
+  "result": "You have logged out of ReadMe. Please use \`rdme login\` to login again.",
+  "stderr": "",
+  "stdout": "",
+}
+`;
+
+exports[`rdme logout > should report the user as logged out if they aren't logged in 1`] = `
+{
+  "result": "You have logged out of ReadMe. Please use \`rdme login\` to login again.",
+  "stderr": "",
+  "stdout": "",
+}
+`;
