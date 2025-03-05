@@ -2,7 +2,6 @@ import prompts from 'prompts';
 import { describe, beforeAll, afterEach, it, expect } from 'vitest';
 
 import Command from '../../src/commands/login.js';
-import { APIv1Error } from '../../src/lib/apiError.js';
 import configStore from '../../src/lib/configstore.js';
 import { getAPIv1Mock } from '../helpers/get-api-mock.js';
 import { runCommand, type OclifOutput } from '../helpers/oclif.js';
