@@ -232,7 +232,7 @@ exports[`rdme openapi validate > GHA onboarding E2E tests > should reject if use
 
 exports[`rdme openapi validate > error handling > should throw an error if an invalid API definition has many errors 1`] = `
 {
-  "error": [SyntaxError: OpenAPI schema validation failed.
+  "error": [ValidationError: OpenAPI schema validation failed.
 
 REQUIRED must have required property 'url'
 
@@ -262,7 +262,9 @@ ADDITIONAL PROPERTY must NOT have additional properties
 
 exports[`rdme openapi validate > error handling > should throw an error if an invalid OpenAPI 3.0 definition is supplied 1`] = `
 {
-  "error": [MissingPointerError: Token "Error" does not exist.],
+  "error": [ValidationError: API definition schema validation failed.
+
+Missing $ref pointer "#/components/schemas/Error". Token "Error" does not exist.],
   "stderr": "- Validating the API definition located at ./__tests__/__fixtures__/invalid-oas.json...
 ✖ Validating the API definition located at ./__tests__/__fixtures__/invalid-oas.json...
 ",
@@ -272,7 +274,7 @@ exports[`rdme openapi validate > error handling > should throw an error if an in
 
 exports[`rdme openapi validate > error handling > should throw an error if an invalid OpenAPI 3.1 definition is supplied 1`] = `
 {
-  "error": [SyntaxError: OpenAPI schema validation failed.
+  "error": [ValidationError: OpenAPI schema validation failed.
 
 REQUIRED must have required property 'name'
 
@@ -292,7 +294,7 @@ REQUIRED must have required property 'name'
 
 exports[`rdme openapi validate > error handling > should throw an error if an invalid Swagger definition is supplied 1`] = `
 {
-  "error": [SyntaxError: Swagger schema validation failed.
+  "error": [ValidationError: Swagger schema validation failed.
 
 ADDITIONAL PROPERTY must NOT have additional properties
 

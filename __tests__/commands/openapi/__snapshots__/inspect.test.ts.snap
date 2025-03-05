@@ -93,8 +93,13 @@ additionalProperties:
  · #/components/schemas/ParameterizedHeader/properties/parameters/additionalProperties
 
 circularRefs:
+ · #/components/schemas/BodyPart/properties/parent
+ · #/components/schemas/MultiPart/properties/bodyParts/items
  · #/components/schemas/MultiPart/properties/parent
- · #/components/schemas/ZoneOffset/properties/rules"
+ · #/components/schemas/ZoneOffset/properties/rules
+ · #/components/schemas/ZoneOffsetTransition/properties/offsetAfter
+ · #/components/schemas/ZoneOffsetTransition/properties/offsetBefore
+ · #/components/schemas/ZoneRules/properties/transitions/items"
 `;
 
 exports[`rdme openapi inspect > feature reports > should generate a report for '@readme/oas-examples/3.0/json/schema-…' (w/ [ 'additionalProperties', …(2) ]) 1`] = `
@@ -114,8 +119,13 @@ additionalProperties:
  · #/components/schemas/ParameterizedHeader/properties/parameters/additionalProperties
 
 circularRefs:
+ · #/components/schemas/BodyPart/properties/parent
+ · #/components/schemas/MultiPart/properties/bodyParts/items
  · #/components/schemas/MultiPart/properties/parent
  · #/components/schemas/ZoneOffset/properties/rules
+ · #/components/schemas/ZoneOffsetTransition/properties/offsetAfter
+ · #/components/schemas/ZoneOffsetTransition/properties/offsetBefore
+ · #/components/schemas/ZoneRules/properties/transitions/items
 
 x-default: You do not use this.
 x-readme.code-samples: You do not use this.
@@ -128,8 +138,13 @@ x-readme.samples-languages: You do not use this."
 exports[`rdme openapi inspect > feature reports > should generate a report for '@readme/oas-examples/3.0/json/schema-…' (w/ [ 'circularRefs', 'readme' ]) 1`] = `
 "
 circularRefs:
+ · #/components/schemas/BodyPart/properties/parent
+ · #/components/schemas/MultiPart/properties/bodyParts/items
  · #/components/schemas/MultiPart/properties/parent
  · #/components/schemas/ZoneOffset/properties/rules
+ · #/components/schemas/ZoneOffsetTransition/properties/offsetAfter
+ · #/components/schemas/ZoneOffsetTransition/properties/offsetBefore
+ · #/components/schemas/ZoneRules/properties/transitions/items
 
 x-default: You do not use this.
 x-readme.code-samples: You do not use this.
