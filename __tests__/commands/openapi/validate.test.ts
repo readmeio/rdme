@@ -31,9 +31,10 @@ describe('rdme openapi validate', () => {
     ['OpenAPI 3.1', 'json', '3.1'],
     ['OpenAPI 3.1', 'yaml', '3.1'],
   ])('should support validating a %s definition (format: %s)', async (_, format, specVersion) => {
-    expect(
-      (await run([require.resolve(`@readme/oas-examples/${specVersion}/${format}/petstore.${format}`)])).result,
-    ).toContain(`petstore.${format} is a valid ${specVersion === '2.0' ? 'Swagger' : 'OpenAPI'} API definition!`);
+    const { result } = await run([require.resolve(`@readme/oas-examples/${specVersion}/${format}/petstore.${format}`)]);
+    expect(result).toContain(
+      `petstore.${format} is a valid ${specVersion === '2.0' ? 'Swagger' : 'OpenAPI'} API definition!`,
+    );
   });
 
   it('should discover and upload an API definition if none is provided', async () => {

@@ -18,7 +18,8 @@ describe('rdme openapi inspect', () => {
       '@readme/oas-examples/3.0/json/readme-extensions.json',
       '@readme/oas-examples/3.1/json/train-travel.json',
     ])('should generate a report for %s', async spec => {
-      expect((await run([require.resolve(spec)])).result).toMatchSnapshot();
+      const { result } = await run([require.resolve(spec)]);
+      expect(result).toMatchSnapshot();
     });
   });
 
@@ -62,10 +63,11 @@ describe('rdme openapi inspect', () => {
 
     it.each(cases)('should generate a report for $spec (w/ $feature)', async ({ spec, feature, shouldSoftError }) => {
       const args = [require.resolve(spec)].concat(...feature.map(f => ['--feature', f]));
+      const { result, error } = await run(args);
       if (!shouldSoftError) {
-        expect((await run(args)).result).toMatchSnapshot();
+        expect(result).toMatchSnapshot();
       } else {
-        expect((await run(args)).error).toMatchSnapshot();
+        expect(error).toMatchSnapshot();
       }
     });
   });

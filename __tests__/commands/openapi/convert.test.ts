@@ -40,9 +40,8 @@ describe('rdme openapi convert', () => {
 
       prompts.inject(['output.json']);
 
-      expect((await run([spec])).result).toBe(
-        'Your API definition has been converted and bundled and saved to output.json!',
-      );
+      const { result } = await run([spec]);
+      expect(result).toBe('Your API definition has been converted and bundled and saved to output.json!');
 
       expect(fsWriteFileSyncSpy).toHaveBeenCalledWith('output.json', expect.any(String));
       expect(reducedSpec.tags).toHaveLength(1);
