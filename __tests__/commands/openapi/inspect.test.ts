@@ -1,16 +1,14 @@
 /* eslint-disable @vitest/no-conditional-expect */
-import assert from 'node:assert';
-
 import { describe, it, expect, beforeAll } from 'vitest';
 
 import Command from '../../../src/commands/openapi/inspect.js';
-import { runCommandAndReturnResult } from '../../helpers/oclif.js';
+import { runCommand, type OclifOutput } from '../../helpers/oclif.js';
 
 describe('rdme openapi inspect', () => {
-  let run: (args?: string[]) => Promise<unknown>;
+  let run: (args?: string[]) => OclifOutput;
 
   beforeAll(() => {
-    run = runCommandAndReturnResult(Command);
+    run = runCommand(Command);
   });
 
   describe('full reports', () => {
@@ -19,18 +17,15 @@ describe('rdme openapi inspect', () => {
       '@readme/oas-examples/3.0/json/readme.json',
       '@readme/oas-examples/3.0/json/readme-extensions.json',
       '@readme/oas-examples/3.1/json/train-travel.json',
-    ])('should generate a report for %s', spec => {
-      return expect(run([require.resolve(spec)])).resolves.toMatchSnapshot();
+    ])('should generate a report for %s', async spec => {
+      expect((await run([require.resolve(spec)])).result).toMatchSnapshot();
     });
   });
 
   describe('feature reports', () => {
     it('should throw an error if an invalid feature is supplied', () => {
       const spec = require.resolve('@readme/oas-examples/3.0/json/readme-extensions.json');
-
-      return expect(run([spec, '--feature', 'style', '--feature', 'reamde'])).rejects.toThrow(
-        'Expected --feature=reamde to be one of:',
-      );
+      return expect(run([spec, '--feature', 'style', '--feature', 'reamde'])).resolves.toMatchSnapshot();
     });
 
     const cases: { feature: string[]; shouldSoftError?: true; spec: string }[] = [
@@ -68,18 +63,9 @@ describe('rdme openapi inspect', () => {
     it.each(cases)('should generate a report for $spec (w/ $feature)', async ({ spec, feature, shouldSoftError }) => {
       const args = [require.resolve(spec)].concat(...feature.map(f => ['--feature', f]));
       if (!shouldSoftError) {
-        await expect(run(args)).resolves.toMatchSnapshot();
-
-        return;
-      }
-
-      try {
-        await run(args);
-
-        assert.fail('A soft error should have been thrown for this test case.');
-      } catch (err) {
-        expect(err.name).toBe('SoftError');
-        expect(err.message).toMatchSnapshot();
+        expect((await run(args)).result).toMatchSnapshot();
+      } else {
+        expect((await run(args)).error).toMatchSnapshot();
       }
     });
   });
