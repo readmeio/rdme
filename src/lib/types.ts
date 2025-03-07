@@ -8,7 +8,7 @@ export const readmeAPIv2Oas = {
     version: '2.0.0-beta',
     title: 'ReadMe API v2 🦉 (BETA)',
     // @ts-expect-error custom extension
-    'x-readme-deploy': '5.271.0',
+    'x-readme-deploy': '5.298.0',
     termsOfService: 'https://readme.com/tos',
     contact: {
       name: 'API Support',
@@ -30,10 +30,10 @@ export const readmeAPIv2Oas = {
     '/versions/{version}/apis': {
       get: {
         operationId: 'getAPIs',
-        summary: 'Retrieve all API schemas that a project has.',
+        summary: 'Get all API definitions',
         tags: ['APIs'],
         description:
-          "Retrieves all of the API schemas that are set up for your developer hub. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Get all API definitions from your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
             schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
@@ -132,10 +132,10 @@ export const readmeAPIv2Oas = {
       },
       post: {
         operationId: 'createAPI',
-        summary: 'Create an API',
+        summary: 'Create an API definition',
         tags: ['APIs'],
         description:
-          "Creates an API in the reference section of your developer hub. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Create an API definition in the API Reference section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         requestBody: {
           content: {
             'multipart/form-data': {
@@ -209,10 +209,10 @@ export const readmeAPIv2Oas = {
     '/versions/{version}/apis/{filename}': {
       get: {
         operationId: 'getAPI',
-        summary: 'Retrieves information about a specific API schema.',
+        summary: 'Get an API definition',
         tags: ['APIs'],
         description:
-          "Retrieves information about a specific API schema on your developer hub. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Get an API definition from your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
             schema: { type: 'string', pattern: '(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml))' },
@@ -313,12 +313,36 @@ export const readmeAPIv2Oas = {
           },
         },
       },
-      put: {
-        operationId: 'updateAPI',
-        summary: 'Update an API',
+      delete: {
+        operationId: 'deleteAPI',
+        summary: 'Delete an API definition',
         tags: ['APIs'],
         description:
-          "Updates an API in the reference section of your developer hub. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Delete an API definition from the API Reference section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        parameters: [
+          {
+            schema: { type: 'string', pattern: '(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml))' },
+            in: 'path',
+            name: 'filename',
+            required: true,
+            description: 'The filename of the API definition to retrieve.',
+          },
+          {
+            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            in: 'path',
+            name: 'version',
+            required: true,
+            description: 'Project version number or stable.',
+          },
+        ],
+        responses: { '204': { description: 'No Content' } },
+      },
+      put: {
+        operationId: 'updateAPI',
+        summary: 'Update an API definition',
+        tags: ['APIs'],
+        description:
+          "Updates an API definition in the API Reference section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         requestBody: {
           content: {
             'multipart/form-data': {
@@ -399,10 +423,10 @@ export const readmeAPIv2Oas = {
     '/changelogs': {
       get: {
         operationId: 'getChangelogs',
-        summary: 'Get changelogs',
+        summary: 'Get all changelog entries',
         tags: ['Changelog'],
         description:
-          "Get a collection of changelogs.\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Get all changelog entries from your ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
             schema: { type: 'number', minimum: 1, default: 1 },
@@ -578,10 +602,10 @@ export const readmeAPIv2Oas = {
     '/changelogs/{identifier}': {
       get: {
         operationId: 'getChangelog',
-        summary: 'Get changelog',
+        summary: 'Get a changelog entry',
         tags: ['Changelog'],
         description:
-          "Returns the changelog.\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Get a changelog entry from your ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
             schema: {
@@ -735,7 +759,7 @@ export const readmeAPIv2Oas = {
         summary: 'Create a custom page',
         tags: ['Custom Pages'],
         description:
-          "Create a new custom page. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Create a custom page in your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         requestBody: {
           content: {
             'application/json': {
@@ -942,10 +966,10 @@ export const readmeAPIv2Oas = {
       },
       get: {
         operationId: 'getCustomPages',
-        summary: 'Get custom pages',
+        summary: 'Get all custom pages',
         tags: ['Custom Pages'],
         description:
-          "Get a collection of custom pages. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Get all custom pages from your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
             schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
@@ -1089,10 +1113,10 @@ export const readmeAPIv2Oas = {
     '/versions/{version}/custom_pages/{slug}': {
       get: {
         operationId: 'getCustomPage',
-        summary: 'Retrieve a custom page',
+        summary: 'Get a custom page',
         tags: ['Custom Pages'],
         description:
-          "Retrieves a custom page from the custom page section of your developer hub. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Get a custom page from your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
             schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
@@ -1240,7 +1264,7 @@ export const readmeAPIv2Oas = {
         summary: 'Delete a custom page',
         tags: ['Custom Pages'],
         description:
-          "Deletes a custom page from the custom page section of your developer hub. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Delete a custom page from your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
             schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
@@ -1264,7 +1288,7 @@ export const readmeAPIv2Oas = {
         summary: 'Update a custom page',
         tags: ['Custom Pages'],
         description:
-          "Updates a custom page in the custompage section of your developer hub. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Update an existing custom page in your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         requestBody: {
           content: {
             'application/json': {
@@ -1478,10 +1502,10 @@ export const readmeAPIv2Oas = {
     '/versions/{version}/guides': {
       post: {
         operationId: 'createGuide',
-        summary: 'Create a guide',
+        summary: 'Create a guides page',
         tags: ['Guides'],
         description:
-          "Creates a page in the guides section of your developer hub. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Create a page in the Guides section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         requestBody: {
           content: {
             'application/json': {
@@ -1872,10 +1896,10 @@ export const readmeAPIv2Oas = {
     '/versions/{version}/guides/{slug}': {
       get: {
         operationId: 'getGuide',
-        summary: 'Retrieve a guide',
+        summary: 'Get a guides page',
         tags: ['Guides'],
         description:
-          "Retrieves a page from the guides section of your developer hub. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Get a page from the Guides section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
             schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
@@ -2125,10 +2149,10 @@ export const readmeAPIv2Oas = {
       },
       delete: {
         operationId: 'deleteGuide',
-        summary: 'Delete a guide',
+        summary: 'Delete a guides page',
         tags: ['Guides'],
         description:
-          "Deletes a page from the guides section of your developer hub. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Delete a page from the Guides section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
             schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
@@ -2149,10 +2173,10 @@ export const readmeAPIv2Oas = {
       },
       patch: {
         operationId: 'updateGuide',
-        summary: 'Update a guide',
+        summary: 'Update a guides page',
         tags: ['Guides'],
         description:
-          "Updates a page in the guides section of your developer hub. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Updates an existing page in the Guides section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         requestBody: {
           content: {
             'application/json': {
@@ -2531,1729 +2555,6 @@ export const readmeAPIv2Oas = {
                         'title',
                         'updated_at',
                         'uri',
-                      ],
-                      additionalProperties: false,
-                    },
-                  },
-                  required: ['data'],
-                  additionalProperties: false,
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-    '/versions/{version}/reference': {
-      post: {
-        operationId: 'createReference',
-        summary: 'Create a reference',
-        tags: ['API Reference'],
-        description:
-          "Creates a reference page in the API Reference section of your developer hub. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
-        requestBody: {
-          content: {
-            'application/json': {
-              schema: {
-                type: 'object',
-                properties: {
-                  allow_crawlers: {
-                    type: 'string',
-                    enum: ['enabled', 'disabled'],
-                    default: 'enabled',
-                    description: 'Allow indexing by robots.',
-                  },
-                  category: {
-                    type: 'object',
-                    properties: {
-                      uri: {
-                        type: 'string',
-                        pattern:
-                          '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/categories\\/(guides|reference)\\/((.*))',
-                        description: 'A URI to the category resource.',
-                      },
-                    },
-                    required: ['uri'],
-                    additionalProperties: false,
-                  },
-                  content: {
-                    type: 'object',
-                    properties: {
-                      body: { type: 'string', nullable: true },
-                      excerpt: { type: 'string', nullable: true },
-                      link: {
-                        type: 'object',
-                        properties: {
-                          url: { type: 'string', nullable: true },
-                          new_tab: { type: 'boolean', nullable: true },
-                        },
-                        additionalProperties: false,
-                        description:
-                          'Information about where this page should redirect to; only available when `type` is `link`.',
-                      },
-                      next: {
-                        type: 'object',
-                        properties: {
-                          description: { type: 'string', nullable: true },
-                          pages: {
-                            type: 'array',
-                            items: {
-                              anyOf: [
-                                {
-                                  type: 'object',
-                                  properties: {
-                                    slug: { type: 'string' },
-                                    title: { type: 'string', nullable: true },
-                                    type: { type: 'string', enum: ['basic', 'endpoint'] },
-                                  },
-                                  required: ['slug', 'title', 'type'],
-                                  additionalProperties: false,
-                                },
-                                {
-                                  type: 'object',
-                                  properties: {
-                                    title: { type: 'string', nullable: true },
-                                    type: { type: 'string', enum: ['link'] },
-                                    url: { type: 'string' },
-                                  },
-                                  required: ['title', 'type', 'url'],
-                                  additionalProperties: false,
-                                },
-                              ],
-                            },
-                          },
-                        },
-                        additionalProperties: false,
-                      },
-                    },
-                    additionalProperties: false,
-                  },
-                  href: {
-                    type: 'object',
-                    properties: {
-                      dash: { type: 'string', format: 'uri', description: 'A URL to this page in your ReadMe Dash.' },
-                    },
-                    additionalProperties: false,
-                  },
-                  metadata: {
-                    type: 'object',
-                    properties: {
-                      description: { type: 'string', nullable: true },
-                      keywords: { type: 'string', nullable: true },
-                      title: { type: 'string', nullable: true },
-                      image: {
-                        type: 'object',
-                        properties: { uri: { type: 'string', pattern: '\\/images\\/([a-f\\d]{24})', nullable: true } },
-                        additionalProperties: false,
-                      },
-                    },
-                    additionalProperties: false,
-                  },
-                  parent: {
-                    type: 'object',
-                    properties: {
-                      uri: {
-                        type: 'string',
-                        pattern:
-                          '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
-                        nullable: true,
-                      },
-                    },
-                    additionalProperties: false,
-                  },
-                  privacy: {
-                    type: 'object',
-                    properties: {
-                      view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
-                    },
-                    additionalProperties: false,
-                  },
-                  renderable: {
-                    type: 'object',
-                    properties: {
-                      status: {
-                        type: 'boolean',
-                        default: true,
-                        description: 'A flag for if the page is renderable or not.',
-                      },
-                      error: { type: 'string', nullable: true },
-                      message: { type: 'string', nullable: true },
-                    },
-                    additionalProperties: false,
-                  },
-                  slug: {
-                    allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
-                    description: 'The accessible URL slug for the page.',
-                  },
-                  state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
-                  title: { type: 'string' },
-                  type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
-                  connections: {
-                    type: 'object',
-                    properties: {
-                      recipes: {
-                        type: 'array',
-                        items: {
-                          type: 'object',
-                          properties: {
-                            uri: {
-                              type: 'string',
-                              pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
-                              description:
-                                'URI of the recipe that this API reference is connected to. The recipe and API reference must exist within the same version.',
-                            },
-                          },
-                          additionalProperties: false,
-                        },
-                        nullable: true,
-                      },
-                    },
-                    additionalProperties: false,
-                  },
-                  position: { type: 'number' },
-                  api_config: { type: 'string', enum: ['authentication', 'getting-started', 'my-requests'] },
-                  api: {
-                    type: 'object',
-                    properties: {
-                      method: {
-                        type: 'string',
-                        enum: ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'],
-                        description: 'The endpoint HTTP method.',
-                      },
-                      path: { type: 'string', description: 'The endpoint path.' },
-                      schema: { nullable: true },
-                      stats: {
-                        type: 'object',
-                        properties: {
-                          additional_properties: {
-                            type: 'boolean',
-                            default: false,
-                            description:
-                              'This API operation uses `additionalProperties` for handling extra schema properties.',
-                          },
-                          callbacks: {
-                            type: 'boolean',
-                            default: false,
-                            description: 'This API operation has `callbacks` documented.',
-                          },
-                          circular_references: {
-                            type: 'boolean',
-                            default: false,
-                            description: 'This API operation contains `$ref` schema pointers that resolve to itself.',
-                          },
-                          common_parameters: {
-                            type: 'boolean',
-                            default: false,
-                            description: 'This API operation utilizes common parameters set at the path level.',
-                          },
-                          discriminators: {
-                            type: 'boolean',
-                            default: false,
-                            description:
-                              'This API operation utilizes `discriminator` for discriminating between different parts in a polymorphic schema.',
-                          },
-                          links: {
-                            type: 'boolean',
-                            default: false,
-                            description: 'This API operation has `links` documented.',
-                          },
-                          polymorphism: {
-                            type: 'boolean',
-                            default: false,
-                            description: 'This API operation contains polymorphic schemas.',
-                          },
-                          server_variables: {
-                            type: 'boolean',
-                            default: false,
-                            description:
-                              'This API operation has composable variables configured for its server definition.',
-                          },
-                          style: {
-                            type: 'boolean',
-                            default: false,
-                            description: 'This API operation has parameters that have specific `style` serializations.',
-                          },
-                          webhooks: {
-                            type: 'boolean',
-                            default: false,
-                            description: 'This API definition has `webhooks` documented.',
-                          },
-                          xml: {
-                            type: 'boolean',
-                            default: false,
-                            description: 'This API operation has parameters or schemas that serialize to XML.',
-                          },
-                          references: {
-                            type: 'boolean',
-                            description:
-                              'This API operation, after being dereferenced, has `x-readme-ref-name` entries defining what the original `$ref` schema pointers were named.',
-                          },
-                        },
-                        additionalProperties: false,
-                        description: 'OpenAPI features that are utilized within this API operation.',
-                      },
-                      source: {
-                        type: 'string',
-                        enum: ['api', 'apidesigner', 'apieditor', 'bidi', 'form', 'rdme', 'rdme_github', 'url'],
-                        nullable: true,
-                      },
-                      uri: {
-                        type: 'string',
-                        pattern:
-                          '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
-                        nullable: true,
-                      },
-                    },
-                    additionalProperties: false,
-                  },
-                },
-                required: ['category', 'title'],
-                additionalProperties: false,
-              },
-            },
-          },
-          required: true,
-        },
-        parameters: [
-          {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
-            in: 'path',
-            name: 'version',
-            required: true,
-            description: 'Project version number or stable.',
-          },
-        ],
-        responses: {
-          '201': {
-            description: 'Created',
-            content: {
-              'application/json': {
-                schema: {
-                  type: 'object',
-                  properties: {
-                    data: {
-                      type: 'object',
-                      properties: {
-                        allow_crawlers: {
-                          type: 'string',
-                          enum: ['enabled', 'disabled'],
-                          default: 'enabled',
-                          description: 'Allow indexing by robots.',
-                        },
-                        category: {
-                          type: 'object',
-                          properties: {
-                            uri: {
-                              type: 'string',
-                              pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/categories\\/(guides|reference)\\/((.*))',
-                              description: 'A URI to the category resource.',
-                            },
-                          },
-                          required: ['uri'],
-                          additionalProperties: false,
-                        },
-                        content: {
-                          type: 'object',
-                          properties: {
-                            body: { type: 'string', nullable: true },
-                            excerpt: { type: 'string', nullable: true },
-                            link: {
-                              type: 'object',
-                              properties: {
-                                url: { type: 'string', nullable: true },
-                                new_tab: {
-                                  type: 'boolean',
-                                  nullable: true,
-                                  description: 'Should this URL be opened up in a new tab?',
-                                },
-                              },
-                              required: ['url', 'new_tab'],
-                              additionalProperties: false,
-                              description:
-                                'Information about where this page should redirect to; only available when `type` is `link`.',
-                            },
-                            next: {
-                              type: 'object',
-                              properties: {
-                                description: { type: 'string', nullable: true },
-                                pages: {
-                                  type: 'array',
-                                  items: {
-                                    anyOf: [
-                                      {
-                                        type: 'object',
-                                        properties: {
-                                          slug: { type: 'string' },
-                                          title: { type: 'string', nullable: true },
-                                          type: { type: 'string', enum: ['basic', 'endpoint'] },
-                                        },
-                                        required: ['slug', 'title', 'type'],
-                                        additionalProperties: false,
-                                      },
-                                      {
-                                        type: 'object',
-                                        properties: {
-                                          title: { type: 'string', nullable: true },
-                                          type: { type: 'string', enum: ['link'] },
-                                          url: { type: 'string' },
-                                        },
-                                        required: ['title', 'type', 'url'],
-                                        additionalProperties: false,
-                                      },
-                                    ],
-                                  },
-                                },
-                              },
-                              required: ['description', 'pages'],
-                              additionalProperties: false,
-                            },
-                          },
-                          required: ['body', 'excerpt', 'link', 'next'],
-                          additionalProperties: false,
-                        },
-                        href: {
-                          type: 'object',
-                          properties: {
-                            dash: {
-                              type: 'string',
-                              format: 'uri',
-                              description: 'A URL to this page in your ReadMe Dash.',
-                            },
-                          },
-                          required: ['dash'],
-                          additionalProperties: false,
-                        },
-                        metadata: {
-                          type: 'object',
-                          properties: {
-                            description: { type: 'string', nullable: true },
-                            image: {
-                              type: 'object',
-                              properties: {
-                                uri: {
-                                  type: 'string',
-                                  pattern: '\\/images\\/([a-f\\d]{24})',
-                                  nullable: true,
-                                  description:
-                                    'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
-                                },
-                                url: { type: 'string', format: 'uri', nullable: true },
-                              },
-                              required: ['uri', 'url'],
-                              additionalProperties: false,
-                            },
-                            keywords: {
-                              type: 'string',
-                              nullable: true,
-                              description: 'A comma-separated list of keywords to place into your page metadata.',
-                            },
-                            title: { type: 'string', nullable: true },
-                          },
-                          required: ['description', 'image', 'keywords', 'title'],
-                          additionalProperties: false,
-                        },
-                        parent: {
-                          type: 'object',
-                          properties: {
-                            uri: {
-                              type: 'string',
-                              pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
-                              nullable: true,
-                              description: 'A URI to the parent page resource including the page ID or slug.',
-                            },
-                          },
-                          required: ['uri'],
-                          additionalProperties: false,
-                        },
-                        privacy: {
-                          type: 'object',
-                          properties: {
-                            view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
-                          },
-                          additionalProperties: false,
-                        },
-                        project: {
-                          type: 'object',
-                          properties: {
-                            name: { type: 'string', description: 'The name of the project.' },
-                            subdomain: {
-                              type: 'string',
-                              pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
-                              maxLength: 30,
-                              description: 'The subdomain of the project.',
-                            },
-                            uri: {
-                              type: 'string',
-                              pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)',
-                              description: 'A URI to the project that this page belongs to.',
-                            },
-                          },
-                          required: ['name', 'subdomain', 'uri'],
-                          additionalProperties: false,
-                        },
-                        renderable: {
-                          type: 'object',
-                          properties: {
-                            status: {
-                              type: 'boolean',
-                              default: true,
-                              description: 'A flag for if the page is renderable or not.',
-                            },
-                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
-                            message: {
-                              type: 'string',
-                              nullable: true,
-                              description: 'Additional details about the rendering error.',
-                            },
-                          },
-                          additionalProperties: false,
-                        },
-                        slug: {
-                          allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
-                          description: 'The accessible URL slug for the page.',
-                        },
-                        state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
-                        title: { type: 'string' },
-                        type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
-                        updated_at: {
-                          type: 'string',
-                          format: 'date-time',
-                          description: 'An ISO 8601 formatted date for when the page was updated.',
-                        },
-                        uri: {
-                          type: 'string',
-                          pattern:
-                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
-                          description: 'A URI to the page resource.',
-                        },
-                        api_config: {
-                          type: 'string',
-                          enum: ['authentication', 'getting-started', 'my-requests'],
-                          nullable: true,
-                        },
-                        api: {
-                          type: 'object',
-                          properties: {
-                            method: {
-                              type: 'string',
-                              enum: ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'],
-                              description: 'The endpoint HTTP method.',
-                            },
-                            path: { type: 'string', description: 'The endpoint path.' },
-                            schema: {
-                              nullable: true,
-                              description:
-                                'The API schema for this reference endpoint. This schema is a reduced version of the full API definition and only contains the necessary information for this endpoint.',
-                            },
-                            stats: {
-                              type: 'object',
-                              properties: {
-                                additional_properties: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description:
-                                    'This API operation uses `additionalProperties` for handling extra schema properties.',
-                                },
-                                callbacks: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description: 'This API operation has `callbacks` documented.',
-                                },
-                                circular_references: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description:
-                                    'This API operation contains `$ref` schema pointers that resolve to itself.',
-                                },
-                                common_parameters: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description: 'This API operation utilizes common parameters set at the path level.',
-                                },
-                                discriminators: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description:
-                                    'This API operation utilizes `discriminator` for discriminating between different parts in a polymorphic schema.',
-                                },
-                                links: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description: 'This API operation has `links` documented.',
-                                },
-                                polymorphism: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description: 'This API operation contains polymorphic schemas.',
-                                },
-                                server_variables: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description:
-                                    'This API operation has composable variables configured for its server definition.',
-                                },
-                                style: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description:
-                                    'This API operation has parameters that have specific `style` serializations.',
-                                },
-                                webhooks: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description: 'This API definition has `webhooks` documented.',
-                                },
-                                xml: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description: 'This API operation has parameters or schemas that serialize to XML.',
-                                },
-                                references: {
-                                  type: 'boolean',
-                                  description:
-                                    'This API operation, after being dereferenced, has `x-readme-ref-name` entries defining what the original `$ref` schema pointers were named.',
-                                },
-                              },
-                              required: ['references'],
-                              additionalProperties: false,
-                              description: 'OpenAPI features that are utilized within this API operation.',
-                            },
-                            source: {
-                              type: 'string',
-                              enum: ['api', 'apidesigner', 'apieditor', 'bidi', 'form', 'rdme', 'rdme_github', 'url'],
-                              nullable: true,
-                              description: 'The source by which this API definition was ingested.',
-                            },
-                            uri: {
-                              type: 'string',
-                              pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
-                              nullable: true,
-                              description: 'A URI to the API resource.',
-                            },
-                          },
-                          required: ['method', 'path', 'stats', 'source', 'uri'],
-                          additionalProperties: false,
-                          description: 'Information about the API that this reference page is attached to.',
-                        },
-                        connections: {
-                          type: 'object',
-                          properties: {
-                            recipes: {
-                              type: 'array',
-                              items: {
-                                type: 'object',
-                                properties: {
-                                  uri: {
-                                    type: 'string',
-                                    pattern:
-                                      '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
-                                    description:
-                                      'URI of the recipe that this API reference is connected to. The recipe and API reference must exist within the same version.',
-                                  },
-                                },
-                                required: ['uri'],
-                                additionalProperties: false,
-                              },
-                              nullable: true,
-                              description: 'A collection of recipes that are displayed on this API reference.',
-                            },
-                          },
-                          required: ['recipes'],
-                          additionalProperties: false,
-                        },
-                      },
-                      required: [
-                        'category',
-                        'content',
-                        'href',
-                        'metadata',
-                        'parent',
-                        'privacy',
-                        'project',
-                        'renderable',
-                        'slug',
-                        'title',
-                        'updated_at',
-                        'uri',
-                        'api_config',
-                        'api',
-                        'connections',
-                      ],
-                      additionalProperties: false,
-                    },
-                  },
-                  required: ['data'],
-                  additionalProperties: false,
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-    '/versions/{version}/reference/{slug}': {
-      get: {
-        operationId: 'getReference',
-        summary: 'Retrieve a reference',
-        tags: ['API Reference'],
-        description:
-          "Retrieves a page from the API reference section of your developer hub. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
-        parameters: [
-          {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
-            in: 'path',
-            name: 'version',
-            required: true,
-            description: 'Project version number or stable.',
-          },
-          {
-            schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
-            in: 'path',
-            name: 'slug',
-            required: true,
-            description: 'A URL-safe representation of the resource.',
-          },
-        ],
-        responses: {
-          '200': {
-            description: 'OK',
-            content: {
-              'application/json': {
-                schema: {
-                  type: 'object',
-                  properties: {
-                    data: {
-                      type: 'object',
-                      properties: {
-                        allow_crawlers: {
-                          type: 'string',
-                          enum: ['enabled', 'disabled'],
-                          default: 'enabled',
-                          description: 'Allow indexing by robots.',
-                        },
-                        category: {
-                          type: 'object',
-                          properties: {
-                            uri: {
-                              type: 'string',
-                              pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/categories\\/(guides|reference)\\/((.*))',
-                              description: 'A URI to the category resource.',
-                            },
-                          },
-                          required: ['uri'],
-                          additionalProperties: false,
-                        },
-                        content: {
-                          type: 'object',
-                          properties: {
-                            body: { type: 'string', nullable: true },
-                            excerpt: { type: 'string', nullable: true },
-                            link: {
-                              type: 'object',
-                              properties: {
-                                url: { type: 'string', nullable: true },
-                                new_tab: {
-                                  type: 'boolean',
-                                  nullable: true,
-                                  description: 'Should this URL be opened up in a new tab?',
-                                },
-                              },
-                              required: ['url', 'new_tab'],
-                              additionalProperties: false,
-                              description:
-                                'Information about where this page should redirect to; only available when `type` is `link`.',
-                            },
-                            next: {
-                              type: 'object',
-                              properties: {
-                                description: { type: 'string', nullable: true },
-                                pages: {
-                                  type: 'array',
-                                  items: {
-                                    anyOf: [
-                                      {
-                                        type: 'object',
-                                        properties: {
-                                          slug: { type: 'string' },
-                                          title: { type: 'string', nullable: true },
-                                          type: { type: 'string', enum: ['basic', 'endpoint'] },
-                                        },
-                                        required: ['slug', 'title', 'type'],
-                                        additionalProperties: false,
-                                      },
-                                      {
-                                        type: 'object',
-                                        properties: {
-                                          title: { type: 'string', nullable: true },
-                                          type: { type: 'string', enum: ['link'] },
-                                          url: { type: 'string' },
-                                        },
-                                        required: ['title', 'type', 'url'],
-                                        additionalProperties: false,
-                                      },
-                                    ],
-                                  },
-                                },
-                              },
-                              required: ['description', 'pages'],
-                              additionalProperties: false,
-                            },
-                          },
-                          required: ['body', 'excerpt', 'link', 'next'],
-                          additionalProperties: false,
-                        },
-                        href: {
-                          type: 'object',
-                          properties: {
-                            dash: {
-                              type: 'string',
-                              format: 'uri',
-                              description: 'A URL to this page in your ReadMe Dash.',
-                            },
-                          },
-                          required: ['dash'],
-                          additionalProperties: false,
-                        },
-                        metadata: {
-                          type: 'object',
-                          properties: {
-                            description: { type: 'string', nullable: true },
-                            image: {
-                              type: 'object',
-                              properties: {
-                                uri: {
-                                  type: 'string',
-                                  pattern: '\\/images\\/([a-f\\d]{24})',
-                                  nullable: true,
-                                  description:
-                                    'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
-                                },
-                                url: { type: 'string', format: 'uri', nullable: true },
-                              },
-                              required: ['uri', 'url'],
-                              additionalProperties: false,
-                            },
-                            keywords: {
-                              type: 'string',
-                              nullable: true,
-                              description: 'A comma-separated list of keywords to place into your page metadata.',
-                            },
-                            title: { type: 'string', nullable: true },
-                          },
-                          required: ['description', 'image', 'keywords', 'title'],
-                          additionalProperties: false,
-                        },
-                        parent: {
-                          type: 'object',
-                          properties: {
-                            uri: {
-                              type: 'string',
-                              pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
-                              nullable: true,
-                              description: 'A URI to the parent page resource including the page ID or slug.',
-                            },
-                          },
-                          required: ['uri'],
-                          additionalProperties: false,
-                        },
-                        privacy: {
-                          type: 'object',
-                          properties: {
-                            view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
-                          },
-                          additionalProperties: false,
-                        },
-                        project: {
-                          type: 'object',
-                          properties: {
-                            name: { type: 'string', description: 'The name of the project.' },
-                            subdomain: {
-                              type: 'string',
-                              pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
-                              maxLength: 30,
-                              description: 'The subdomain of the project.',
-                            },
-                            uri: {
-                              type: 'string',
-                              pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)',
-                              description: 'A URI to the project that this page belongs to.',
-                            },
-                          },
-                          required: ['name', 'subdomain', 'uri'],
-                          additionalProperties: false,
-                        },
-                        renderable: {
-                          type: 'object',
-                          properties: {
-                            status: {
-                              type: 'boolean',
-                              default: true,
-                              description: 'A flag for if the page is renderable or not.',
-                            },
-                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
-                            message: {
-                              type: 'string',
-                              nullable: true,
-                              description: 'Additional details about the rendering error.',
-                            },
-                          },
-                          additionalProperties: false,
-                        },
-                        slug: {
-                          allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
-                          description: 'The accessible URL slug for the page.',
-                        },
-                        state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
-                        title: { type: 'string' },
-                        type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
-                        updated_at: {
-                          type: 'string',
-                          format: 'date-time',
-                          description: 'An ISO 8601 formatted date for when the page was updated.',
-                        },
-                        uri: {
-                          type: 'string',
-                          pattern:
-                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
-                          description: 'A URI to the page resource.',
-                        },
-                        api_config: {
-                          type: 'string',
-                          enum: ['authentication', 'getting-started', 'my-requests'],
-                          nullable: true,
-                        },
-                        api: {
-                          type: 'object',
-                          properties: {
-                            method: {
-                              type: 'string',
-                              enum: ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'],
-                              description: 'The endpoint HTTP method.',
-                            },
-                            path: { type: 'string', description: 'The endpoint path.' },
-                            schema: {
-                              nullable: true,
-                              description:
-                                'The API schema for this reference endpoint. This schema is a reduced version of the full API definition and only contains the necessary information for this endpoint.',
-                            },
-                            stats: {
-                              type: 'object',
-                              properties: {
-                                additional_properties: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description:
-                                    'This API operation uses `additionalProperties` for handling extra schema properties.',
-                                },
-                                callbacks: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description: 'This API operation has `callbacks` documented.',
-                                },
-                                circular_references: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description:
-                                    'This API operation contains `$ref` schema pointers that resolve to itself.',
-                                },
-                                common_parameters: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description: 'This API operation utilizes common parameters set at the path level.',
-                                },
-                                discriminators: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description:
-                                    'This API operation utilizes `discriminator` for discriminating between different parts in a polymorphic schema.',
-                                },
-                                links: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description: 'This API operation has `links` documented.',
-                                },
-                                polymorphism: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description: 'This API operation contains polymorphic schemas.',
-                                },
-                                server_variables: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description:
-                                    'This API operation has composable variables configured for its server definition.',
-                                },
-                                style: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description:
-                                    'This API operation has parameters that have specific `style` serializations.',
-                                },
-                                webhooks: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description: 'This API definition has `webhooks` documented.',
-                                },
-                                xml: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description: 'This API operation has parameters or schemas that serialize to XML.',
-                                },
-                                references: {
-                                  type: 'boolean',
-                                  description:
-                                    'This API operation, after being dereferenced, has `x-readme-ref-name` entries defining what the original `$ref` schema pointers were named.',
-                                },
-                              },
-                              required: ['references'],
-                              additionalProperties: false,
-                              description: 'OpenAPI features that are utilized within this API operation.',
-                            },
-                            source: {
-                              type: 'string',
-                              enum: ['api', 'apidesigner', 'apieditor', 'bidi', 'form', 'rdme', 'rdme_github', 'url'],
-                              nullable: true,
-                              description: 'The source by which this API definition was ingested.',
-                            },
-                            uri: {
-                              type: 'string',
-                              pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
-                              nullable: true,
-                              description: 'A URI to the API resource.',
-                            },
-                          },
-                          required: ['method', 'path', 'stats', 'source', 'uri'],
-                          additionalProperties: false,
-                          description: 'Information about the API that this reference page is attached to.',
-                        },
-                        connections: {
-                          type: 'object',
-                          properties: {
-                            recipes: {
-                              type: 'array',
-                              items: {
-                                type: 'object',
-                                properties: {
-                                  uri: {
-                                    type: 'string',
-                                    pattern:
-                                      '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
-                                    description:
-                                      'URI of the recipe that this API reference is connected to. The recipe and API reference must exist within the same version.',
-                                  },
-                                },
-                                required: ['uri'],
-                                additionalProperties: false,
-                              },
-                              nullable: true,
-                              description: 'A collection of recipes that are displayed on this API reference.',
-                            },
-                          },
-                          required: ['recipes'],
-                          additionalProperties: false,
-                        },
-                      },
-                      required: [
-                        'category',
-                        'content',
-                        'href',
-                        'metadata',
-                        'parent',
-                        'privacy',
-                        'project',
-                        'renderable',
-                        'slug',
-                        'title',
-                        'updated_at',
-                        'uri',
-                        'api_config',
-                        'api',
-                        'connections',
-                      ],
-                      additionalProperties: false,
-                    },
-                  },
-                  required: ['data'],
-                  additionalProperties: false,
-                },
-              },
-            },
-          },
-        },
-      },
-      delete: {
-        operationId: 'deleteReference',
-        summary: 'Delete a reference',
-        tags: ['API Reference'],
-        description:
-          "Deletes a page from the API reference section of your developer hub. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
-        parameters: [
-          {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
-            in: 'path',
-            name: 'version',
-            required: true,
-            description: 'Project version number or stable.',
-          },
-          {
-            schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
-            in: 'path',
-            name: 'slug',
-            required: true,
-            description: 'A URL-safe representation of the resource.',
-          },
-        ],
-        responses: { '204': { description: 'No Content' } },
-      },
-      patch: {
-        operationId: 'updateReference',
-        summary: 'Update a reference',
-        tags: ['API Reference'],
-        description:
-          "Updates a page in the API reference section of your developer hub. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
-        requestBody: {
-          content: {
-            'application/json': {
-              schema: {
-                type: 'object',
-                properties: {
-                  allow_crawlers: {
-                    type: 'string',
-                    enum: ['enabled', 'disabled'],
-                    default: 'enabled',
-                    description: 'Allow indexing by robots.',
-                  },
-                  category: {
-                    type: 'object',
-                    properties: {
-                      uri: {
-                        type: 'string',
-                        pattern:
-                          '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/categories\\/(guides|reference)\\/((.*))',
-                        description: 'A URI to the category resource.',
-                      },
-                    },
-                    additionalProperties: false,
-                  },
-                  content: {
-                    type: 'object',
-                    properties: {
-                      body: { type: 'string', nullable: true },
-                      excerpt: { type: 'string', nullable: true },
-                      link: {
-                        type: 'object',
-                        properties: {
-                          url: { type: 'string', nullable: true },
-                          new_tab: { type: 'boolean', nullable: true },
-                        },
-                        additionalProperties: false,
-                        description:
-                          'Information about where this page should redirect to; only available when `type` is `link`.',
-                      },
-                      next: {
-                        type: 'object',
-                        properties: {
-                          description: { type: 'string', nullable: true },
-                          pages: {
-                            type: 'array',
-                            items: {
-                              anyOf: [
-                                {
-                                  type: 'object',
-                                  properties: {
-                                    slug: { type: 'string' },
-                                    title: { type: 'string', nullable: true },
-                                    type: { type: 'string', enum: ['basic', 'endpoint'] },
-                                  },
-                                  required: ['slug', 'title', 'type'],
-                                  additionalProperties: false,
-                                },
-                                {
-                                  type: 'object',
-                                  properties: {
-                                    title: { type: 'string', nullable: true },
-                                    type: { type: 'string', enum: ['link'] },
-                                    url: { type: 'string' },
-                                  },
-                                  required: ['title', 'type', 'url'],
-                                  additionalProperties: false,
-                                },
-                              ],
-                            },
-                          },
-                        },
-                        additionalProperties: false,
-                      },
-                    },
-                    additionalProperties: false,
-                  },
-                  href: {
-                    type: 'object',
-                    properties: {
-                      dash: { type: 'string', format: 'uri', description: 'A URL to this page in your ReadMe Dash.' },
-                    },
-                    additionalProperties: false,
-                  },
-                  metadata: {
-                    type: 'object',
-                    properties: {
-                      description: { type: 'string', nullable: true },
-                      keywords: { type: 'string', nullable: true },
-                      title: { type: 'string', nullable: true },
-                      image: {
-                        type: 'object',
-                        properties: { uri: { type: 'string', pattern: '\\/images\\/([a-f\\d]{24})', nullable: true } },
-                        additionalProperties: false,
-                      },
-                    },
-                    additionalProperties: false,
-                  },
-                  parent: {
-                    type: 'object',
-                    properties: {
-                      uri: {
-                        type: 'string',
-                        pattern:
-                          '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
-                        nullable: true,
-                      },
-                    },
-                    additionalProperties: false,
-                  },
-                  privacy: {
-                    type: 'object',
-                    properties: {
-                      view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
-                    },
-                    additionalProperties: false,
-                  },
-                  renderable: {
-                    type: 'object',
-                    properties: {
-                      status: {
-                        type: 'boolean',
-                        default: true,
-                        description: 'A flag for if the page is renderable or not.',
-                      },
-                      error: { type: 'string', nullable: true },
-                      message: { type: 'string', nullable: true },
-                    },
-                    additionalProperties: false,
-                  },
-                  slug: {
-                    allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
-                    description: 'The accessible URL slug for the page.',
-                  },
-                  state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
-                  title: { type: 'string' },
-                  type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
-                  connections: {
-                    type: 'object',
-                    properties: {
-                      recipes: {
-                        type: 'array',
-                        items: {
-                          type: 'object',
-                          properties: {
-                            uri: {
-                              type: 'string',
-                              pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
-                              description:
-                                'URI of the recipe that this API reference is connected to. The recipe and API reference must exist within the same version.',
-                            },
-                          },
-                          additionalProperties: false,
-                        },
-                        nullable: true,
-                      },
-                    },
-                    additionalProperties: false,
-                  },
-                  api: {
-                    type: 'object',
-                    properties: {
-                      method: {
-                        type: 'string',
-                        enum: ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'],
-                        description: 'The endpoint HTTP method.',
-                      },
-                      path: { type: 'string', description: 'The endpoint path.' },
-                      schema: { nullable: true },
-                      stats: {
-                        type: 'object',
-                        properties: {
-                          additional_properties: {
-                            type: 'boolean',
-                            default: false,
-                            description:
-                              'This API operation uses `additionalProperties` for handling extra schema properties.',
-                          },
-                          callbacks: {
-                            type: 'boolean',
-                            default: false,
-                            description: 'This API operation has `callbacks` documented.',
-                          },
-                          circular_references: {
-                            type: 'boolean',
-                            default: false,
-                            description: 'This API operation contains `$ref` schema pointers that resolve to itself.',
-                          },
-                          common_parameters: {
-                            type: 'boolean',
-                            default: false,
-                            description: 'This API operation utilizes common parameters set at the path level.',
-                          },
-                          discriminators: {
-                            type: 'boolean',
-                            default: false,
-                            description:
-                              'This API operation utilizes `discriminator` for discriminating between different parts in a polymorphic schema.',
-                          },
-                          links: {
-                            type: 'boolean',
-                            default: false,
-                            description: 'This API operation has `links` documented.',
-                          },
-                          polymorphism: {
-                            type: 'boolean',
-                            default: false,
-                            description: 'This API operation contains polymorphic schemas.',
-                          },
-                          server_variables: {
-                            type: 'boolean',
-                            default: false,
-                            description:
-                              'This API operation has composable variables configured for its server definition.',
-                          },
-                          style: {
-                            type: 'boolean',
-                            default: false,
-                            description: 'This API operation has parameters that have specific `style` serializations.',
-                          },
-                          webhooks: {
-                            type: 'boolean',
-                            default: false,
-                            description: 'This API definition has `webhooks` documented.',
-                          },
-                          xml: {
-                            type: 'boolean',
-                            default: false,
-                            description: 'This API operation has parameters or schemas that serialize to XML.',
-                          },
-                          references: {
-                            type: 'boolean',
-                            description:
-                              'This API operation, after being dereferenced, has `x-readme-ref-name` entries defining what the original `$ref` schema pointers were named.',
-                          },
-                        },
-                        additionalProperties: false,
-                        description: 'OpenAPI features that are utilized within this API operation.',
-                      },
-                      source: {
-                        type: 'string',
-                        enum: ['api', 'apidesigner', 'apieditor', 'bidi', 'form', 'rdme', 'rdme_github', 'url'],
-                        nullable: true,
-                      },
-                      uri: {
-                        type: 'string',
-                        pattern:
-                          '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
-                        nullable: true,
-                      },
-                    },
-                    additionalProperties: false,
-                    description:
-                      'Information about the API that this reference page is attached to. If you wish to detach this page from an API definition, making it a stand page, set `api.uri` to `null`.',
-                  },
-                  position: { type: 'number' },
-                },
-                additionalProperties: false,
-              },
-            },
-          },
-        },
-        parameters: [
-          {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
-            in: 'path',
-            name: 'version',
-            required: true,
-            description: 'Project version number or stable.',
-          },
-          {
-            schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
-            in: 'path',
-            name: 'slug',
-            required: true,
-            description: 'A URL-safe representation of the resource.',
-          },
-        ],
-        responses: {
-          '200': {
-            description: 'OK',
-            content: {
-              'application/json': {
-                schema: {
-                  type: 'object',
-                  properties: {
-                    data: {
-                      type: 'object',
-                      properties: {
-                        allow_crawlers: {
-                          type: 'string',
-                          enum: ['enabled', 'disabled'],
-                          default: 'enabled',
-                          description: 'Allow indexing by robots.',
-                        },
-                        category: {
-                          type: 'object',
-                          properties: {
-                            uri: {
-                              type: 'string',
-                              pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/categories\\/(guides|reference)\\/((.*))',
-                              description: 'A URI to the category resource.',
-                            },
-                          },
-                          required: ['uri'],
-                          additionalProperties: false,
-                        },
-                        content: {
-                          type: 'object',
-                          properties: {
-                            body: { type: 'string', nullable: true },
-                            excerpt: { type: 'string', nullable: true },
-                            link: {
-                              type: 'object',
-                              properties: {
-                                url: { type: 'string', nullable: true },
-                                new_tab: {
-                                  type: 'boolean',
-                                  nullable: true,
-                                  description: 'Should this URL be opened up in a new tab?',
-                                },
-                              },
-                              required: ['url', 'new_tab'],
-                              additionalProperties: false,
-                              description:
-                                'Information about where this page should redirect to; only available when `type` is `link`.',
-                            },
-                            next: {
-                              type: 'object',
-                              properties: {
-                                description: { type: 'string', nullable: true },
-                                pages: {
-                                  type: 'array',
-                                  items: {
-                                    anyOf: [
-                                      {
-                                        type: 'object',
-                                        properties: {
-                                          slug: { type: 'string' },
-                                          title: { type: 'string', nullable: true },
-                                          type: { type: 'string', enum: ['basic', 'endpoint'] },
-                                        },
-                                        required: ['slug', 'title', 'type'],
-                                        additionalProperties: false,
-                                      },
-                                      {
-                                        type: 'object',
-                                        properties: {
-                                          title: { type: 'string', nullable: true },
-                                          type: { type: 'string', enum: ['link'] },
-                                          url: { type: 'string' },
-                                        },
-                                        required: ['title', 'type', 'url'],
-                                        additionalProperties: false,
-                                      },
-                                    ],
-                                  },
-                                },
-                              },
-                              required: ['description', 'pages'],
-                              additionalProperties: false,
-                            },
-                          },
-                          required: ['body', 'excerpt', 'link', 'next'],
-                          additionalProperties: false,
-                        },
-                        href: {
-                          type: 'object',
-                          properties: {
-                            dash: {
-                              type: 'string',
-                              format: 'uri',
-                              description: 'A URL to this page in your ReadMe Dash.',
-                            },
-                          },
-                          required: ['dash'],
-                          additionalProperties: false,
-                        },
-                        metadata: {
-                          type: 'object',
-                          properties: {
-                            description: { type: 'string', nullable: true },
-                            image: {
-                              type: 'object',
-                              properties: {
-                                uri: {
-                                  type: 'string',
-                                  pattern: '\\/images\\/([a-f\\d]{24})',
-                                  nullable: true,
-                                  description:
-                                    'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
-                                },
-                                url: { type: 'string', format: 'uri', nullable: true },
-                              },
-                              required: ['uri', 'url'],
-                              additionalProperties: false,
-                            },
-                            keywords: {
-                              type: 'string',
-                              nullable: true,
-                              description: 'A comma-separated list of keywords to place into your page metadata.',
-                            },
-                            title: { type: 'string', nullable: true },
-                          },
-                          required: ['description', 'image', 'keywords', 'title'],
-                          additionalProperties: false,
-                        },
-                        parent: {
-                          type: 'object',
-                          properties: {
-                            uri: {
-                              type: 'string',
-                              pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
-                              nullable: true,
-                              description: 'A URI to the parent page resource including the page ID or slug.',
-                            },
-                          },
-                          required: ['uri'],
-                          additionalProperties: false,
-                        },
-                        privacy: {
-                          type: 'object',
-                          properties: {
-                            view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
-                          },
-                          additionalProperties: false,
-                        },
-                        project: {
-                          type: 'object',
-                          properties: {
-                            name: { type: 'string', description: 'The name of the project.' },
-                            subdomain: {
-                              type: 'string',
-                              pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
-                              maxLength: 30,
-                              description: 'The subdomain of the project.',
-                            },
-                            uri: {
-                              type: 'string',
-                              pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)',
-                              description: 'A URI to the project that this page belongs to.',
-                            },
-                          },
-                          required: ['name', 'subdomain', 'uri'],
-                          additionalProperties: false,
-                        },
-                        renderable: {
-                          type: 'object',
-                          properties: {
-                            status: {
-                              type: 'boolean',
-                              default: true,
-                              description: 'A flag for if the page is renderable or not.',
-                            },
-                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
-                            message: {
-                              type: 'string',
-                              nullable: true,
-                              description: 'Additional details about the rendering error.',
-                            },
-                          },
-                          additionalProperties: false,
-                        },
-                        slug: {
-                          allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
-                          description: 'The accessible URL slug for the page.',
-                        },
-                        state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
-                        title: { type: 'string' },
-                        type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
-                        updated_at: {
-                          type: 'string',
-                          format: 'date-time',
-                          description: 'An ISO 8601 formatted date for when the page was updated.',
-                        },
-                        uri: {
-                          type: 'string',
-                          pattern:
-                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
-                          description: 'A URI to the page resource.',
-                        },
-                        api_config: {
-                          type: 'string',
-                          enum: ['authentication', 'getting-started', 'my-requests'],
-                          nullable: true,
-                        },
-                        api: {
-                          type: 'object',
-                          properties: {
-                            method: {
-                              type: 'string',
-                              enum: ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'],
-                              description: 'The endpoint HTTP method.',
-                            },
-                            path: { type: 'string', description: 'The endpoint path.' },
-                            schema: {
-                              nullable: true,
-                              description:
-                                'The API schema for this reference endpoint. This schema is a reduced version of the full API definition and only contains the necessary information for this endpoint.',
-                            },
-                            stats: {
-                              type: 'object',
-                              properties: {
-                                additional_properties: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description:
-                                    'This API operation uses `additionalProperties` for handling extra schema properties.',
-                                },
-                                callbacks: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description: 'This API operation has `callbacks` documented.',
-                                },
-                                circular_references: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description:
-                                    'This API operation contains `$ref` schema pointers that resolve to itself.',
-                                },
-                                common_parameters: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description: 'This API operation utilizes common parameters set at the path level.',
-                                },
-                                discriminators: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description:
-                                    'This API operation utilizes `discriminator` for discriminating between different parts in a polymorphic schema.',
-                                },
-                                links: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description: 'This API operation has `links` documented.',
-                                },
-                                polymorphism: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description: 'This API operation contains polymorphic schemas.',
-                                },
-                                server_variables: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description:
-                                    'This API operation has composable variables configured for its server definition.',
-                                },
-                                style: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description:
-                                    'This API operation has parameters that have specific `style` serializations.',
-                                },
-                                webhooks: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description: 'This API definition has `webhooks` documented.',
-                                },
-                                xml: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description: 'This API operation has parameters or schemas that serialize to XML.',
-                                },
-                                references: {
-                                  type: 'boolean',
-                                  description:
-                                    'This API operation, after being dereferenced, has `x-readme-ref-name` entries defining what the original `$ref` schema pointers were named.',
-                                },
-                              },
-                              required: ['references'],
-                              additionalProperties: false,
-                              description: 'OpenAPI features that are utilized within this API operation.',
-                            },
-                            source: {
-                              type: 'string',
-                              enum: ['api', 'apidesigner', 'apieditor', 'bidi', 'form', 'rdme', 'rdme_github', 'url'],
-                              nullable: true,
-                              description: 'The source by which this API definition was ingested.',
-                            },
-                            uri: {
-                              type: 'string',
-                              pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
-                              nullable: true,
-                              description: 'A URI to the API resource.',
-                            },
-                          },
-                          required: ['method', 'path', 'stats', 'source', 'uri'],
-                          additionalProperties: false,
-                          description: 'Information about the API that this reference page is attached to.',
-                        },
-                        connections: {
-                          type: 'object',
-                          properties: {
-                            recipes: {
-                              type: 'array',
-                              items: {
-                                type: 'object',
-                                properties: {
-                                  uri: {
-                                    type: 'string',
-                                    pattern:
-                                      '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
-                                    description:
-                                      'URI of the recipe that this API reference is connected to. The recipe and API reference must exist within the same version.',
-                                  },
-                                },
-                                required: ['uri'],
-                                additionalProperties: false,
-                              },
-                              nullable: true,
-                              description: 'A collection of recipes that are displayed on this API reference.',
-                            },
-                          },
-                          required: ['recipes'],
-                          additionalProperties: false,
-                        },
-                      },
-                      required: [
-                        'category',
-                        'content',
-                        'href',
-                        'metadata',
-                        'parent',
-                        'privacy',
-                        'project',
-                        'renderable',
-                        'slug',
-                        'title',
-                        'updated_at',
-                        'uri',
-                        'api_config',
-                        'api',
-                        'connections',
                       ],
                       additionalProperties: false,
                     },
@@ -4362,7 +2663,7 @@ export const readmeAPIv2Oas = {
                                       type: 'string',
                                       nullable: true,
                                       description:
-                                        'A block of custom HTML that will be added before the closing `</body>` tag of your **home page**.',
+                                        'A block of custom HTML that will appear in a `<footer>` element on all of your pages',
                                     },
                                     page_footer: {
                                       type: 'string',
@@ -4917,6 +3218,18 @@ export const readmeAPIv2Oas = {
                             logout_url: { type: 'string', format: 'uri', nullable: true },
                           },
                           required: ['jwt_secret', 'login_url', 'logout_url'],
+                          additionalProperties: false,
+                        },
+                        default_version: {
+                          type: 'object',
+                          properties: {
+                            name: {
+                              type: 'string',
+                              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
+                              description: 'The version of your project that users are directed to by default.',
+                            },
+                          },
+                          required: ['name'],
                           additionalProperties: false,
                         },
                         description: {
@@ -5516,6 +3829,7 @@ export const readmeAPIv2Oas = {
                         'appearance',
                         'canonical_url',
                         'custom_login',
+                        'default_version',
                         'description',
                         'health_check',
                         'homepage_url',
@@ -5548,13 +3862,1752 @@ export const readmeAPIv2Oas = {
         },
       },
     },
+    '/versions/{version}/reference': {
+      post: {
+        operationId: 'createReference',
+        summary: 'Create a reference page',
+        tags: ['API Reference'],
+        description:
+          "Create a page in the API Reference section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  allow_crawlers: {
+                    type: 'string',
+                    enum: ['enabled', 'disabled'],
+                    default: 'enabled',
+                    description: 'Allow indexing by robots.',
+                  },
+                  category: {
+                    type: 'object',
+                    properties: {
+                      uri: {
+                        type: 'string',
+                        pattern:
+                          '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/categories\\/(guides|reference)\\/((.*))',
+                        description: 'A URI to the category resource.',
+                      },
+                    },
+                    required: ['uri'],
+                    additionalProperties: false,
+                  },
+                  content: {
+                    type: 'object',
+                    properties: {
+                      body: { type: 'string', nullable: true },
+                      excerpt: { type: 'string', nullable: true },
+                      link: {
+                        type: 'object',
+                        properties: {
+                          url: { type: 'string', nullable: true },
+                          new_tab: { type: 'boolean', nullable: true },
+                        },
+                        additionalProperties: false,
+                        description:
+                          'Information about where this page should redirect to; only available when `type` is `link`.',
+                      },
+                      next: {
+                        type: 'object',
+                        properties: {
+                          description: { type: 'string', nullable: true },
+                          pages: {
+                            type: 'array',
+                            items: {
+                              anyOf: [
+                                {
+                                  type: 'object',
+                                  properties: {
+                                    slug: { type: 'string' },
+                                    title: { type: 'string', nullable: true },
+                                    type: { type: 'string', enum: ['basic', 'endpoint'] },
+                                  },
+                                  required: ['slug', 'title', 'type'],
+                                  additionalProperties: false,
+                                },
+                                {
+                                  type: 'object',
+                                  properties: {
+                                    title: { type: 'string', nullable: true },
+                                    type: { type: 'string', enum: ['link'] },
+                                    url: { type: 'string' },
+                                  },
+                                  required: ['title', 'type', 'url'],
+                                  additionalProperties: false,
+                                },
+                              ],
+                            },
+                          },
+                        },
+                        additionalProperties: false,
+                      },
+                    },
+                    additionalProperties: false,
+                  },
+                  href: {
+                    type: 'object',
+                    properties: {
+                      dash: { type: 'string', format: 'uri', description: 'A URL to this page in your ReadMe Dash.' },
+                    },
+                    additionalProperties: false,
+                  },
+                  metadata: {
+                    type: 'object',
+                    properties: {
+                      description: { type: 'string', nullable: true },
+                      keywords: { type: 'string', nullable: true },
+                      title: { type: 'string', nullable: true },
+                      image: {
+                        type: 'object',
+                        properties: { uri: { type: 'string', pattern: '\\/images\\/([a-f\\d]{24})', nullable: true } },
+                        additionalProperties: false,
+                      },
+                    },
+                    additionalProperties: false,
+                  },
+                  parent: {
+                    type: 'object',
+                    properties: {
+                      uri: {
+                        type: 'string',
+                        pattern:
+                          '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                        nullable: true,
+                      },
+                    },
+                    additionalProperties: false,
+                  },
+                  privacy: {
+                    type: 'object',
+                    properties: {
+                      view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
+                    },
+                    additionalProperties: false,
+                  },
+                  renderable: {
+                    type: 'object',
+                    properties: {
+                      status: {
+                        type: 'boolean',
+                        default: true,
+                        description: 'A flag for if the page is renderable or not.',
+                      },
+                      error: { type: 'string', nullable: true },
+                      message: { type: 'string', nullable: true },
+                    },
+                    additionalProperties: false,
+                  },
+                  slug: {
+                    allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
+                    description: 'The accessible URL slug for the page.',
+                  },
+                  state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
+                  title: { type: 'string' },
+                  type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
+                  connections: {
+                    type: 'object',
+                    properties: {
+                      recipes: {
+                        type: 'array',
+                        items: {
+                          type: 'object',
+                          properties: {
+                            uri: {
+                              type: 'string',
+                              pattern:
+                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                              description:
+                                'URI of the recipe that this API reference is connected to. The recipe and API reference must exist within the same version.',
+                            },
+                          },
+                          additionalProperties: false,
+                        },
+                        nullable: true,
+                      },
+                    },
+                    additionalProperties: false,
+                  },
+                  position: { type: 'number' },
+                  api_config: { type: 'string', enum: ['authentication', 'getting-started', 'my-requests'] },
+                  api: {
+                    type: 'object',
+                    properties: {
+                      method: {
+                        type: 'string',
+                        enum: ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'],
+                        description: 'The endpoint HTTP method.',
+                      },
+                      path: { type: 'string', description: 'The endpoint path.' },
+                      schema: { nullable: true },
+                      stats: {
+                        type: 'object',
+                        properties: {
+                          additional_properties: {
+                            type: 'boolean',
+                            default: false,
+                            description:
+                              'This API operation uses `additionalProperties` for handling extra schema properties.',
+                          },
+                          callbacks: {
+                            type: 'boolean',
+                            default: false,
+                            description: 'This API operation has `callbacks` documented.',
+                          },
+                          circular_references: {
+                            type: 'boolean',
+                            default: false,
+                            description: 'This API operation contains `$ref` schema pointers that resolve to itself.',
+                          },
+                          common_parameters: {
+                            type: 'boolean',
+                            default: false,
+                            description: 'This API operation utilizes common parameters set at the path level.',
+                          },
+                          discriminators: {
+                            type: 'boolean',
+                            default: false,
+                            description:
+                              'This API operation utilizes `discriminator` for discriminating between different parts in a polymorphic schema.',
+                          },
+                          links: {
+                            type: 'boolean',
+                            default: false,
+                            description: 'This API operation has `links` documented.',
+                          },
+                          polymorphism: {
+                            type: 'boolean',
+                            default: false,
+                            description: 'This API operation contains polymorphic schemas.',
+                          },
+                          server_variables: {
+                            type: 'boolean',
+                            default: false,
+                            description:
+                              'This API operation has composable variables configured for its server definition.',
+                          },
+                          style: {
+                            type: 'boolean',
+                            default: false,
+                            description: 'This API operation has parameters that have specific `style` serializations.',
+                          },
+                          webhooks: {
+                            type: 'boolean',
+                            default: false,
+                            description: 'This API definition has `webhooks` documented.',
+                          },
+                          xml: {
+                            type: 'boolean',
+                            default: false,
+                            description: 'This API operation has parameters or schemas that serialize to XML.',
+                          },
+                          references: {
+                            type: 'boolean',
+                            description:
+                              'This API operation, after being dereferenced, has `x-readme-ref-name` entries defining what the original `$ref` schema pointers were named.',
+                          },
+                        },
+                        additionalProperties: false,
+                        description: 'OpenAPI features that are utilized within this API operation.',
+                      },
+                      source: {
+                        type: 'string',
+                        enum: ['api', 'apidesigner', 'apieditor', 'bidi', 'form', 'rdme', 'rdme_github', 'url'],
+                        nullable: true,
+                      },
+                      uri: {
+                        type: 'string',
+                        pattern:
+                          '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
+                        nullable: true,
+                      },
+                    },
+                    additionalProperties: false,
+                  },
+                },
+                required: ['category', 'title'],
+                additionalProperties: false,
+              },
+            },
+          },
+          required: true,
+        },
+        parameters: [
+          {
+            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            in: 'path',
+            name: 'version',
+            required: true,
+            description: 'Project version number or stable.',
+          },
+        ],
+        responses: {
+          '201': {
+            description: 'Created',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    data: {
+                      type: 'object',
+                      properties: {
+                        allow_crawlers: {
+                          type: 'string',
+                          enum: ['enabled', 'disabled'],
+                          default: 'enabled',
+                          description: 'Allow indexing by robots.',
+                        },
+                        category: {
+                          type: 'object',
+                          properties: {
+                            uri: {
+                              type: 'string',
+                              pattern:
+                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/categories\\/(guides|reference)\\/((.*))',
+                              description: 'A URI to the category resource.',
+                            },
+                          },
+                          required: ['uri'],
+                          additionalProperties: false,
+                        },
+                        content: {
+                          type: 'object',
+                          properties: {
+                            body: { type: 'string', nullable: true },
+                            excerpt: { type: 'string', nullable: true },
+                            link: {
+                              type: 'object',
+                              properties: {
+                                url: { type: 'string', nullable: true },
+                                new_tab: {
+                                  type: 'boolean',
+                                  nullable: true,
+                                  description: 'Should this URL be opened up in a new tab?',
+                                },
+                              },
+                              required: ['url', 'new_tab'],
+                              additionalProperties: false,
+                              description:
+                                'Information about where this page should redirect to; only available when `type` is `link`.',
+                            },
+                            next: {
+                              type: 'object',
+                              properties: {
+                                description: { type: 'string', nullable: true },
+                                pages: {
+                                  type: 'array',
+                                  items: {
+                                    anyOf: [
+                                      {
+                                        type: 'object',
+                                        properties: {
+                                          slug: { type: 'string' },
+                                          title: { type: 'string', nullable: true },
+                                          type: { type: 'string', enum: ['basic', 'endpoint'] },
+                                        },
+                                        required: ['slug', 'title', 'type'],
+                                        additionalProperties: false,
+                                      },
+                                      {
+                                        type: 'object',
+                                        properties: {
+                                          title: { type: 'string', nullable: true },
+                                          type: { type: 'string', enum: ['link'] },
+                                          url: { type: 'string' },
+                                        },
+                                        required: ['title', 'type', 'url'],
+                                        additionalProperties: false,
+                                      },
+                                    ],
+                                  },
+                                },
+                              },
+                              required: ['description', 'pages'],
+                              additionalProperties: false,
+                            },
+                          },
+                          required: ['body', 'excerpt', 'link', 'next'],
+                          additionalProperties: false,
+                        },
+                        href: {
+                          type: 'object',
+                          properties: {
+                            dash: {
+                              type: 'string',
+                              format: 'uri',
+                              description: 'A URL to this page in your ReadMe Dash.',
+                            },
+                          },
+                          required: ['dash'],
+                          additionalProperties: false,
+                        },
+                        metadata: {
+                          type: 'object',
+                          properties: {
+                            description: { type: 'string', nullable: true },
+                            image: {
+                              type: 'object',
+                              properties: {
+                                uri: {
+                                  type: 'string',
+                                  pattern: '\\/images\\/([a-f\\d]{24})',
+                                  nullable: true,
+                                  description:
+                                    'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
+                                },
+                                url: { type: 'string', format: 'uri', nullable: true },
+                              },
+                              required: ['uri', 'url'],
+                              additionalProperties: false,
+                            },
+                            keywords: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'A comma-separated list of keywords to place into your page metadata.',
+                            },
+                            title: { type: 'string', nullable: true },
+                          },
+                          required: ['description', 'image', 'keywords', 'title'],
+                          additionalProperties: false,
+                        },
+                        parent: {
+                          type: 'object',
+                          properties: {
+                            uri: {
+                              type: 'string',
+                              pattern:
+                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                              nullable: true,
+                              description: 'A URI to the parent page resource including the page ID or slug.',
+                            },
+                          },
+                          required: ['uri'],
+                          additionalProperties: false,
+                        },
+                        privacy: {
+                          type: 'object',
+                          properties: {
+                            view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
+                          },
+                          additionalProperties: false,
+                        },
+                        project: {
+                          type: 'object',
+                          properties: {
+                            name: { type: 'string', description: 'The name of the project.' },
+                            subdomain: {
+                              type: 'string',
+                              pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
+                              maxLength: 30,
+                              description: 'The subdomain of the project.',
+                            },
+                            uri: {
+                              type: 'string',
+                              pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)',
+                              description: 'A URI to the project that this page belongs to.',
+                            },
+                          },
+                          required: ['name', 'subdomain', 'uri'],
+                          additionalProperties: false,
+                        },
+                        renderable: {
+                          type: 'object',
+                          properties: {
+                            status: {
+                              type: 'boolean',
+                              default: true,
+                              description: 'A flag for if the page is renderable or not.',
+                            },
+                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
+                            message: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'Additional details about the rendering error.',
+                            },
+                          },
+                          additionalProperties: false,
+                        },
+                        slug: {
+                          allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
+                          description: 'The accessible URL slug for the page.',
+                        },
+                        state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
+                        title: { type: 'string' },
+                        type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
+                        updated_at: {
+                          type: 'string',
+                          format: 'date-time',
+                          description: 'An ISO 8601 formatted date for when the page was updated.',
+                        },
+                        uri: {
+                          type: 'string',
+                          pattern:
+                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                          description: 'A URI to the page resource.',
+                        },
+                        api_config: {
+                          type: 'string',
+                          enum: ['authentication', 'getting-started', 'my-requests'],
+                          nullable: true,
+                        },
+                        api: {
+                          type: 'object',
+                          properties: {
+                            method: {
+                              type: 'string',
+                              enum: ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'],
+                              description: 'The endpoint HTTP method.',
+                            },
+                            path: { type: 'string', description: 'The endpoint path.' },
+                            schema: {
+                              nullable: true,
+                              description:
+                                'The API schema for this reference endpoint. This schema may be a reduced (i.e., only contains the necessary information for this endpoint) and/or dereferenced version of the full API definition, depending upon the query parameters used for this request.',
+                            },
+                            stats: {
+                              type: 'object',
+                              properties: {
+                                additional_properties: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description:
+                                    'This API operation uses `additionalProperties` for handling extra schema properties.',
+                                },
+                                callbacks: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description: 'This API operation has `callbacks` documented.',
+                                },
+                                circular_references: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description:
+                                    'This API operation contains `$ref` schema pointers that resolve to itself.',
+                                },
+                                common_parameters: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description: 'This API operation utilizes common parameters set at the path level.',
+                                },
+                                discriminators: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description:
+                                    'This API operation utilizes `discriminator` for discriminating between different parts in a polymorphic schema.',
+                                },
+                                links: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description: 'This API operation has `links` documented.',
+                                },
+                                polymorphism: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description: 'This API operation contains polymorphic schemas.',
+                                },
+                                server_variables: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description:
+                                    'This API operation has composable variables configured for its server definition.',
+                                },
+                                style: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description:
+                                    'This API operation has parameters that have specific `style` serializations.',
+                                },
+                                webhooks: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description: 'This API definition has `webhooks` documented.',
+                                },
+                                xml: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description: 'This API operation has parameters or schemas that serialize to XML.',
+                                },
+                                references: {
+                                  type: 'boolean',
+                                  description:
+                                    'This API operation, after being dereferenced, has `x-readme-ref-name` entries defining what the original `$ref` schema pointers were named.',
+                                },
+                              },
+                              required: ['references'],
+                              additionalProperties: false,
+                              description: 'OpenAPI features that are utilized within this API operation.',
+                            },
+                            source: {
+                              type: 'string',
+                              enum: ['api', 'apidesigner', 'apieditor', 'bidi', 'form', 'rdme', 'rdme_github', 'url'],
+                              nullable: true,
+                              description: 'The source by which this API definition was ingested.',
+                            },
+                            uri: {
+                              type: 'string',
+                              pattern:
+                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
+                              nullable: true,
+                              description: 'A URI to the API resource.',
+                            },
+                          },
+                          required: ['method', 'path', 'stats', 'source', 'uri'],
+                          additionalProperties: false,
+                          description: 'Information about the API that this reference page is attached to.',
+                        },
+                        connections: {
+                          type: 'object',
+                          properties: {
+                            recipes: {
+                              type: 'array',
+                              items: {
+                                type: 'object',
+                                properties: {
+                                  uri: {
+                                    type: 'string',
+                                    pattern:
+                                      '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                                    description:
+                                      'URI of the recipe that this API reference is connected to. The recipe and API reference must exist within the same version.',
+                                  },
+                                },
+                                required: ['uri'],
+                                additionalProperties: false,
+                              },
+                              nullable: true,
+                              description: 'A collection of recipes that are displayed on this API reference.',
+                            },
+                          },
+                          required: ['recipes'],
+                          additionalProperties: false,
+                        },
+                      },
+                      required: [
+                        'category',
+                        'content',
+                        'href',
+                        'metadata',
+                        'parent',
+                        'privacy',
+                        'project',
+                        'renderable',
+                        'slug',
+                        'title',
+                        'updated_at',
+                        'uri',
+                        'api_config',
+                        'api',
+                        'connections',
+                      ],
+                      additionalProperties: false,
+                    },
+                  },
+                  required: ['data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/versions/{version}/reference/{slug}': {
+      get: {
+        operationId: 'getReference',
+        summary: 'Get a reference page',
+        tags: ['API Reference'],
+        description:
+          "Get a page from the API Reference section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        parameters: [
+          {
+            schema: { type: 'string', enum: ['true', 'false'], default: 'false' },
+            in: 'query',
+            name: 'dereference',
+            required: false,
+            description:
+              'Whether or not to dereference the attached API definition. Defaults to `false` if not specified (subject to change while API v2 is still in beta).',
+          },
+          {
+            schema: { type: 'string', enum: ['true', 'false'], default: 'true' },
+            in: 'query',
+            name: 'reduce',
+            required: false,
+            description:
+              'Whether or not to reduce the attached API definition. Defaults to `true` if not specified (subject to change while API v2 is still in beta).',
+          },
+          {
+            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            in: 'path',
+            name: 'version',
+            required: true,
+            description: 'Project version number or stable.',
+          },
+          {
+            schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
+            in: 'path',
+            name: 'slug',
+            required: true,
+            description: 'A URL-safe representation of the resource.',
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    data: {
+                      type: 'object',
+                      properties: {
+                        allow_crawlers: {
+                          type: 'string',
+                          enum: ['enabled', 'disabled'],
+                          default: 'enabled',
+                          description: 'Allow indexing by robots.',
+                        },
+                        category: {
+                          type: 'object',
+                          properties: {
+                            uri: {
+                              type: 'string',
+                              pattern:
+                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/categories\\/(guides|reference)\\/((.*))',
+                              description: 'A URI to the category resource.',
+                            },
+                          },
+                          required: ['uri'],
+                          additionalProperties: false,
+                        },
+                        content: {
+                          type: 'object',
+                          properties: {
+                            body: { type: 'string', nullable: true },
+                            excerpt: { type: 'string', nullable: true },
+                            link: {
+                              type: 'object',
+                              properties: {
+                                url: { type: 'string', nullable: true },
+                                new_tab: {
+                                  type: 'boolean',
+                                  nullable: true,
+                                  description: 'Should this URL be opened up in a new tab?',
+                                },
+                              },
+                              required: ['url', 'new_tab'],
+                              additionalProperties: false,
+                              description:
+                                'Information about where this page should redirect to; only available when `type` is `link`.',
+                            },
+                            next: {
+                              type: 'object',
+                              properties: {
+                                description: { type: 'string', nullable: true },
+                                pages: {
+                                  type: 'array',
+                                  items: {
+                                    anyOf: [
+                                      {
+                                        type: 'object',
+                                        properties: {
+                                          slug: { type: 'string' },
+                                          title: { type: 'string', nullable: true },
+                                          type: { type: 'string', enum: ['basic', 'endpoint'] },
+                                        },
+                                        required: ['slug', 'title', 'type'],
+                                        additionalProperties: false,
+                                      },
+                                      {
+                                        type: 'object',
+                                        properties: {
+                                          title: { type: 'string', nullable: true },
+                                          type: { type: 'string', enum: ['link'] },
+                                          url: { type: 'string' },
+                                        },
+                                        required: ['title', 'type', 'url'],
+                                        additionalProperties: false,
+                                      },
+                                    ],
+                                  },
+                                },
+                              },
+                              required: ['description', 'pages'],
+                              additionalProperties: false,
+                            },
+                          },
+                          required: ['body', 'excerpt', 'link', 'next'],
+                          additionalProperties: false,
+                        },
+                        href: {
+                          type: 'object',
+                          properties: {
+                            dash: {
+                              type: 'string',
+                              format: 'uri',
+                              description: 'A URL to this page in your ReadMe Dash.',
+                            },
+                          },
+                          required: ['dash'],
+                          additionalProperties: false,
+                        },
+                        metadata: {
+                          type: 'object',
+                          properties: {
+                            description: { type: 'string', nullable: true },
+                            image: {
+                              type: 'object',
+                              properties: {
+                                uri: {
+                                  type: 'string',
+                                  pattern: '\\/images\\/([a-f\\d]{24})',
+                                  nullable: true,
+                                  description:
+                                    'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
+                                },
+                                url: { type: 'string', format: 'uri', nullable: true },
+                              },
+                              required: ['uri', 'url'],
+                              additionalProperties: false,
+                            },
+                            keywords: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'A comma-separated list of keywords to place into your page metadata.',
+                            },
+                            title: { type: 'string', nullable: true },
+                          },
+                          required: ['description', 'image', 'keywords', 'title'],
+                          additionalProperties: false,
+                        },
+                        parent: {
+                          type: 'object',
+                          properties: {
+                            uri: {
+                              type: 'string',
+                              pattern:
+                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                              nullable: true,
+                              description: 'A URI to the parent page resource including the page ID or slug.',
+                            },
+                          },
+                          required: ['uri'],
+                          additionalProperties: false,
+                        },
+                        privacy: {
+                          type: 'object',
+                          properties: {
+                            view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
+                          },
+                          additionalProperties: false,
+                        },
+                        project: {
+                          type: 'object',
+                          properties: {
+                            name: { type: 'string', description: 'The name of the project.' },
+                            subdomain: {
+                              type: 'string',
+                              pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
+                              maxLength: 30,
+                              description: 'The subdomain of the project.',
+                            },
+                            uri: {
+                              type: 'string',
+                              pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)',
+                              description: 'A URI to the project that this page belongs to.',
+                            },
+                          },
+                          required: ['name', 'subdomain', 'uri'],
+                          additionalProperties: false,
+                        },
+                        renderable: {
+                          type: 'object',
+                          properties: {
+                            status: {
+                              type: 'boolean',
+                              default: true,
+                              description: 'A flag for if the page is renderable or not.',
+                            },
+                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
+                            message: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'Additional details about the rendering error.',
+                            },
+                          },
+                          additionalProperties: false,
+                        },
+                        slug: {
+                          allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
+                          description: 'The accessible URL slug for the page.',
+                        },
+                        state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
+                        title: { type: 'string' },
+                        type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
+                        updated_at: {
+                          type: 'string',
+                          format: 'date-time',
+                          description: 'An ISO 8601 formatted date for when the page was updated.',
+                        },
+                        uri: {
+                          type: 'string',
+                          pattern:
+                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                          description: 'A URI to the page resource.',
+                        },
+                        api_config: {
+                          type: 'string',
+                          enum: ['authentication', 'getting-started', 'my-requests'],
+                          nullable: true,
+                        },
+                        api: {
+                          type: 'object',
+                          properties: {
+                            method: {
+                              type: 'string',
+                              enum: ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'],
+                              description: 'The endpoint HTTP method.',
+                            },
+                            path: { type: 'string', description: 'The endpoint path.' },
+                            schema: {
+                              nullable: true,
+                              description:
+                                'The API schema for this reference endpoint. This schema may be a reduced (i.e., only contains the necessary information for this endpoint) and/or dereferenced version of the full API definition, depending upon the query parameters used for this request.',
+                            },
+                            stats: {
+                              type: 'object',
+                              properties: {
+                                additional_properties: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description:
+                                    'This API operation uses `additionalProperties` for handling extra schema properties.',
+                                },
+                                callbacks: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description: 'This API operation has `callbacks` documented.',
+                                },
+                                circular_references: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description:
+                                    'This API operation contains `$ref` schema pointers that resolve to itself.',
+                                },
+                                common_parameters: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description: 'This API operation utilizes common parameters set at the path level.',
+                                },
+                                discriminators: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description:
+                                    'This API operation utilizes `discriminator` for discriminating between different parts in a polymorphic schema.',
+                                },
+                                links: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description: 'This API operation has `links` documented.',
+                                },
+                                polymorphism: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description: 'This API operation contains polymorphic schemas.',
+                                },
+                                server_variables: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description:
+                                    'This API operation has composable variables configured for its server definition.',
+                                },
+                                style: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description:
+                                    'This API operation has parameters that have specific `style` serializations.',
+                                },
+                                webhooks: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description: 'This API definition has `webhooks` documented.',
+                                },
+                                xml: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description: 'This API operation has parameters or schemas that serialize to XML.',
+                                },
+                                references: {
+                                  type: 'boolean',
+                                  description:
+                                    'This API operation, after being dereferenced, has `x-readme-ref-name` entries defining what the original `$ref` schema pointers were named.',
+                                },
+                              },
+                              required: ['references'],
+                              additionalProperties: false,
+                              description: 'OpenAPI features that are utilized within this API operation.',
+                            },
+                            source: {
+                              type: 'string',
+                              enum: ['api', 'apidesigner', 'apieditor', 'bidi', 'form', 'rdme', 'rdme_github', 'url'],
+                              nullable: true,
+                              description: 'The source by which this API definition was ingested.',
+                            },
+                            uri: {
+                              type: 'string',
+                              pattern:
+                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
+                              nullable: true,
+                              description: 'A URI to the API resource.',
+                            },
+                          },
+                          required: ['method', 'path', 'stats', 'source', 'uri'],
+                          additionalProperties: false,
+                          description: 'Information about the API that this reference page is attached to.',
+                        },
+                        connections: {
+                          type: 'object',
+                          properties: {
+                            recipes: {
+                              type: 'array',
+                              items: {
+                                type: 'object',
+                                properties: {
+                                  uri: {
+                                    type: 'string',
+                                    pattern:
+                                      '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                                    description:
+                                      'URI of the recipe that this API reference is connected to. The recipe and API reference must exist within the same version.',
+                                  },
+                                },
+                                required: ['uri'],
+                                additionalProperties: false,
+                              },
+                              nullable: true,
+                              description: 'A collection of recipes that are displayed on this API reference.',
+                            },
+                          },
+                          required: ['recipes'],
+                          additionalProperties: false,
+                        },
+                      },
+                      required: [
+                        'category',
+                        'content',
+                        'href',
+                        'metadata',
+                        'parent',
+                        'privacy',
+                        'project',
+                        'renderable',
+                        'slug',
+                        'title',
+                        'updated_at',
+                        'uri',
+                        'api_config',
+                        'api',
+                        'connections',
+                      ],
+                      additionalProperties: false,
+                    },
+                  },
+                  required: ['data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      delete: {
+        operationId: 'deleteReference',
+        summary: 'Delete a reference page',
+        tags: ['API Reference'],
+        description:
+          "Delete a page from the API Reference section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        parameters: [
+          {
+            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            in: 'path',
+            name: 'version',
+            required: true,
+            description: 'Project version number or stable.',
+          },
+          {
+            schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
+            in: 'path',
+            name: 'slug',
+            required: true,
+            description: 'A URL-safe representation of the resource.',
+          },
+        ],
+        responses: { '204': { description: 'No Content' } },
+      },
+      patch: {
+        operationId: 'updateReference',
+        summary: 'Update a reference page',
+        tags: ['API Reference'],
+        description:
+          "Updates an existing page in the API Reference section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  allow_crawlers: {
+                    type: 'string',
+                    enum: ['enabled', 'disabled'],
+                    default: 'enabled',
+                    description: 'Allow indexing by robots.',
+                  },
+                  category: {
+                    type: 'object',
+                    properties: {
+                      uri: {
+                        type: 'string',
+                        pattern:
+                          '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/categories\\/(guides|reference)\\/((.*))',
+                        description: 'A URI to the category resource.',
+                      },
+                    },
+                    additionalProperties: false,
+                  },
+                  content: {
+                    type: 'object',
+                    properties: {
+                      body: { type: 'string', nullable: true },
+                      excerpt: { type: 'string', nullable: true },
+                      link: {
+                        type: 'object',
+                        properties: {
+                          url: { type: 'string', nullable: true },
+                          new_tab: { type: 'boolean', nullable: true },
+                        },
+                        additionalProperties: false,
+                        description:
+                          'Information about where this page should redirect to; only available when `type` is `link`.',
+                      },
+                      next: {
+                        type: 'object',
+                        properties: {
+                          description: { type: 'string', nullable: true },
+                          pages: {
+                            type: 'array',
+                            items: {
+                              anyOf: [
+                                {
+                                  type: 'object',
+                                  properties: {
+                                    slug: { type: 'string' },
+                                    title: { type: 'string', nullable: true },
+                                    type: { type: 'string', enum: ['basic', 'endpoint'] },
+                                  },
+                                  required: ['slug', 'title', 'type'],
+                                  additionalProperties: false,
+                                },
+                                {
+                                  type: 'object',
+                                  properties: {
+                                    title: { type: 'string', nullable: true },
+                                    type: { type: 'string', enum: ['link'] },
+                                    url: { type: 'string' },
+                                  },
+                                  required: ['title', 'type', 'url'],
+                                  additionalProperties: false,
+                                },
+                              ],
+                            },
+                          },
+                        },
+                        additionalProperties: false,
+                      },
+                    },
+                    additionalProperties: false,
+                  },
+                  href: {
+                    type: 'object',
+                    properties: {
+                      dash: { type: 'string', format: 'uri', description: 'A URL to this page in your ReadMe Dash.' },
+                    },
+                    additionalProperties: false,
+                  },
+                  metadata: {
+                    type: 'object',
+                    properties: {
+                      description: { type: 'string', nullable: true },
+                      keywords: { type: 'string', nullable: true },
+                      title: { type: 'string', nullable: true },
+                      image: {
+                        type: 'object',
+                        properties: { uri: { type: 'string', pattern: '\\/images\\/([a-f\\d]{24})', nullable: true } },
+                        additionalProperties: false,
+                      },
+                    },
+                    additionalProperties: false,
+                  },
+                  parent: {
+                    type: 'object',
+                    properties: {
+                      uri: {
+                        type: 'string',
+                        pattern:
+                          '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                        nullable: true,
+                      },
+                    },
+                    additionalProperties: false,
+                  },
+                  privacy: {
+                    type: 'object',
+                    properties: {
+                      view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
+                    },
+                    additionalProperties: false,
+                  },
+                  renderable: {
+                    type: 'object',
+                    properties: {
+                      status: {
+                        type: 'boolean',
+                        default: true,
+                        description: 'A flag for if the page is renderable or not.',
+                      },
+                      error: { type: 'string', nullable: true },
+                      message: { type: 'string', nullable: true },
+                    },
+                    additionalProperties: false,
+                  },
+                  slug: {
+                    allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
+                    description: 'The accessible URL slug for the page.',
+                  },
+                  state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
+                  title: { type: 'string' },
+                  type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
+                  connections: {
+                    type: 'object',
+                    properties: {
+                      recipes: {
+                        type: 'array',
+                        items: {
+                          type: 'object',
+                          properties: {
+                            uri: {
+                              type: 'string',
+                              pattern:
+                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                              description:
+                                'URI of the recipe that this API reference is connected to. The recipe and API reference must exist within the same version.',
+                            },
+                          },
+                          additionalProperties: false,
+                        },
+                        nullable: true,
+                      },
+                    },
+                    additionalProperties: false,
+                  },
+                  api: {
+                    type: 'object',
+                    properties: {
+                      method: {
+                        type: 'string',
+                        enum: ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'],
+                        description: 'The endpoint HTTP method.',
+                      },
+                      path: { type: 'string', description: 'The endpoint path.' },
+                      schema: { nullable: true },
+                      stats: {
+                        type: 'object',
+                        properties: {
+                          additional_properties: {
+                            type: 'boolean',
+                            default: false,
+                            description:
+                              'This API operation uses `additionalProperties` for handling extra schema properties.',
+                          },
+                          callbacks: {
+                            type: 'boolean',
+                            default: false,
+                            description: 'This API operation has `callbacks` documented.',
+                          },
+                          circular_references: {
+                            type: 'boolean',
+                            default: false,
+                            description: 'This API operation contains `$ref` schema pointers that resolve to itself.',
+                          },
+                          common_parameters: {
+                            type: 'boolean',
+                            default: false,
+                            description: 'This API operation utilizes common parameters set at the path level.',
+                          },
+                          discriminators: {
+                            type: 'boolean',
+                            default: false,
+                            description:
+                              'This API operation utilizes `discriminator` for discriminating between different parts in a polymorphic schema.',
+                          },
+                          links: {
+                            type: 'boolean',
+                            default: false,
+                            description: 'This API operation has `links` documented.',
+                          },
+                          polymorphism: {
+                            type: 'boolean',
+                            default: false,
+                            description: 'This API operation contains polymorphic schemas.',
+                          },
+                          server_variables: {
+                            type: 'boolean',
+                            default: false,
+                            description:
+                              'This API operation has composable variables configured for its server definition.',
+                          },
+                          style: {
+                            type: 'boolean',
+                            default: false,
+                            description: 'This API operation has parameters that have specific `style` serializations.',
+                          },
+                          webhooks: {
+                            type: 'boolean',
+                            default: false,
+                            description: 'This API definition has `webhooks` documented.',
+                          },
+                          xml: {
+                            type: 'boolean',
+                            default: false,
+                            description: 'This API operation has parameters or schemas that serialize to XML.',
+                          },
+                          references: {
+                            type: 'boolean',
+                            description:
+                              'This API operation, after being dereferenced, has `x-readme-ref-name` entries defining what the original `$ref` schema pointers were named.',
+                          },
+                        },
+                        additionalProperties: false,
+                        description: 'OpenAPI features that are utilized within this API operation.',
+                      },
+                      source: {
+                        type: 'string',
+                        enum: ['api', 'apidesigner', 'apieditor', 'bidi', 'form', 'rdme', 'rdme_github', 'url'],
+                        nullable: true,
+                      },
+                      uri: {
+                        type: 'string',
+                        pattern:
+                          '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
+                        nullable: true,
+                      },
+                    },
+                    additionalProperties: false,
+                    description:
+                      'Information about the API that this reference page is attached to. If you wish to detach this page from an API definition, making it a stand page, set `api.uri` to `null`.',
+                  },
+                  position: { type: 'number' },
+                },
+                additionalProperties: false,
+              },
+            },
+          },
+        },
+        parameters: [
+          {
+            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            in: 'path',
+            name: 'version',
+            required: true,
+            description: 'Project version number or stable.',
+          },
+          {
+            schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
+            in: 'path',
+            name: 'slug',
+            required: true,
+            description: 'A URL-safe representation of the resource.',
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    data: {
+                      type: 'object',
+                      properties: {
+                        allow_crawlers: {
+                          type: 'string',
+                          enum: ['enabled', 'disabled'],
+                          default: 'enabled',
+                          description: 'Allow indexing by robots.',
+                        },
+                        category: {
+                          type: 'object',
+                          properties: {
+                            uri: {
+                              type: 'string',
+                              pattern:
+                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/categories\\/(guides|reference)\\/((.*))',
+                              description: 'A URI to the category resource.',
+                            },
+                          },
+                          required: ['uri'],
+                          additionalProperties: false,
+                        },
+                        content: {
+                          type: 'object',
+                          properties: {
+                            body: { type: 'string', nullable: true },
+                            excerpt: { type: 'string', nullable: true },
+                            link: {
+                              type: 'object',
+                              properties: {
+                                url: { type: 'string', nullable: true },
+                                new_tab: {
+                                  type: 'boolean',
+                                  nullable: true,
+                                  description: 'Should this URL be opened up in a new tab?',
+                                },
+                              },
+                              required: ['url', 'new_tab'],
+                              additionalProperties: false,
+                              description:
+                                'Information about where this page should redirect to; only available when `type` is `link`.',
+                            },
+                            next: {
+                              type: 'object',
+                              properties: {
+                                description: { type: 'string', nullable: true },
+                                pages: {
+                                  type: 'array',
+                                  items: {
+                                    anyOf: [
+                                      {
+                                        type: 'object',
+                                        properties: {
+                                          slug: { type: 'string' },
+                                          title: { type: 'string', nullable: true },
+                                          type: { type: 'string', enum: ['basic', 'endpoint'] },
+                                        },
+                                        required: ['slug', 'title', 'type'],
+                                        additionalProperties: false,
+                                      },
+                                      {
+                                        type: 'object',
+                                        properties: {
+                                          title: { type: 'string', nullable: true },
+                                          type: { type: 'string', enum: ['link'] },
+                                          url: { type: 'string' },
+                                        },
+                                        required: ['title', 'type', 'url'],
+                                        additionalProperties: false,
+                                      },
+                                    ],
+                                  },
+                                },
+                              },
+                              required: ['description', 'pages'],
+                              additionalProperties: false,
+                            },
+                          },
+                          required: ['body', 'excerpt', 'link', 'next'],
+                          additionalProperties: false,
+                        },
+                        href: {
+                          type: 'object',
+                          properties: {
+                            dash: {
+                              type: 'string',
+                              format: 'uri',
+                              description: 'A URL to this page in your ReadMe Dash.',
+                            },
+                          },
+                          required: ['dash'],
+                          additionalProperties: false,
+                        },
+                        metadata: {
+                          type: 'object',
+                          properties: {
+                            description: { type: 'string', nullable: true },
+                            image: {
+                              type: 'object',
+                              properties: {
+                                uri: {
+                                  type: 'string',
+                                  pattern: '\\/images\\/([a-f\\d]{24})',
+                                  nullable: true,
+                                  description:
+                                    'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
+                                },
+                                url: { type: 'string', format: 'uri', nullable: true },
+                              },
+                              required: ['uri', 'url'],
+                              additionalProperties: false,
+                            },
+                            keywords: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'A comma-separated list of keywords to place into your page metadata.',
+                            },
+                            title: { type: 'string', nullable: true },
+                          },
+                          required: ['description', 'image', 'keywords', 'title'],
+                          additionalProperties: false,
+                        },
+                        parent: {
+                          type: 'object',
+                          properties: {
+                            uri: {
+                              type: 'string',
+                              pattern:
+                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                              nullable: true,
+                              description: 'A URI to the parent page resource including the page ID or slug.',
+                            },
+                          },
+                          required: ['uri'],
+                          additionalProperties: false,
+                        },
+                        privacy: {
+                          type: 'object',
+                          properties: {
+                            view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
+                          },
+                          additionalProperties: false,
+                        },
+                        project: {
+                          type: 'object',
+                          properties: {
+                            name: { type: 'string', description: 'The name of the project.' },
+                            subdomain: {
+                              type: 'string',
+                              pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
+                              maxLength: 30,
+                              description: 'The subdomain of the project.',
+                            },
+                            uri: {
+                              type: 'string',
+                              pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)',
+                              description: 'A URI to the project that this page belongs to.',
+                            },
+                          },
+                          required: ['name', 'subdomain', 'uri'],
+                          additionalProperties: false,
+                        },
+                        renderable: {
+                          type: 'object',
+                          properties: {
+                            status: {
+                              type: 'boolean',
+                              default: true,
+                              description: 'A flag for if the page is renderable or not.',
+                            },
+                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
+                            message: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'Additional details about the rendering error.',
+                            },
+                          },
+                          additionalProperties: false,
+                        },
+                        slug: {
+                          allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
+                          description: 'The accessible URL slug for the page.',
+                        },
+                        state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
+                        title: { type: 'string' },
+                        type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
+                        updated_at: {
+                          type: 'string',
+                          format: 'date-time',
+                          description: 'An ISO 8601 formatted date for when the page was updated.',
+                        },
+                        uri: {
+                          type: 'string',
+                          pattern:
+                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                          description: 'A URI to the page resource.',
+                        },
+                        api_config: {
+                          type: 'string',
+                          enum: ['authentication', 'getting-started', 'my-requests'],
+                          nullable: true,
+                        },
+                        api: {
+                          type: 'object',
+                          properties: {
+                            method: {
+                              type: 'string',
+                              enum: ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'],
+                              description: 'The endpoint HTTP method.',
+                            },
+                            path: { type: 'string', description: 'The endpoint path.' },
+                            schema: {
+                              nullable: true,
+                              description:
+                                'The API schema for this reference endpoint. This schema may be a reduced (i.e., only contains the necessary information for this endpoint) and/or dereferenced version of the full API definition, depending upon the query parameters used for this request.',
+                            },
+                            stats: {
+                              type: 'object',
+                              properties: {
+                                additional_properties: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description:
+                                    'This API operation uses `additionalProperties` for handling extra schema properties.',
+                                },
+                                callbacks: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description: 'This API operation has `callbacks` documented.',
+                                },
+                                circular_references: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description:
+                                    'This API operation contains `$ref` schema pointers that resolve to itself.',
+                                },
+                                common_parameters: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description: 'This API operation utilizes common parameters set at the path level.',
+                                },
+                                discriminators: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description:
+                                    'This API operation utilizes `discriminator` for discriminating between different parts in a polymorphic schema.',
+                                },
+                                links: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description: 'This API operation has `links` documented.',
+                                },
+                                polymorphism: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description: 'This API operation contains polymorphic schemas.',
+                                },
+                                server_variables: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description:
+                                    'This API operation has composable variables configured for its server definition.',
+                                },
+                                style: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description:
+                                    'This API operation has parameters that have specific `style` serializations.',
+                                },
+                                webhooks: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description: 'This API definition has `webhooks` documented.',
+                                },
+                                xml: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description: 'This API operation has parameters or schemas that serialize to XML.',
+                                },
+                                references: {
+                                  type: 'boolean',
+                                  description:
+                                    'This API operation, after being dereferenced, has `x-readme-ref-name` entries defining what the original `$ref` schema pointers were named.',
+                                },
+                              },
+                              required: ['references'],
+                              additionalProperties: false,
+                              description: 'OpenAPI features that are utilized within this API operation.',
+                            },
+                            source: {
+                              type: 'string',
+                              enum: ['api', 'apidesigner', 'apieditor', 'bidi', 'form', 'rdme', 'rdme_github', 'url'],
+                              nullable: true,
+                              description: 'The source by which this API definition was ingested.',
+                            },
+                            uri: {
+                              type: 'string',
+                              pattern:
+                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
+                              nullable: true,
+                              description: 'A URI to the API resource.',
+                            },
+                          },
+                          required: ['method', 'path', 'stats', 'source', 'uri'],
+                          additionalProperties: false,
+                          description: 'Information about the API that this reference page is attached to.',
+                        },
+                        connections: {
+                          type: 'object',
+                          properties: {
+                            recipes: {
+                              type: 'array',
+                              items: {
+                                type: 'object',
+                                properties: {
+                                  uri: {
+                                    type: 'string',
+                                    pattern:
+                                      '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                                    description:
+                                      'URI of the recipe that this API reference is connected to. The recipe and API reference must exist within the same version.',
+                                  },
+                                },
+                                required: ['uri'],
+                                additionalProperties: false,
+                              },
+                              nullable: true,
+                              description: 'A collection of recipes that are displayed on this API reference.',
+                            },
+                          },
+                          required: ['recipes'],
+                          additionalProperties: false,
+                        },
+                      },
+                      required: [
+                        'category',
+                        'content',
+                        'href',
+                        'metadata',
+                        'parent',
+                        'privacy',
+                        'project',
+                        'renderable',
+                        'slug',
+                        'title',
+                        'updated_at',
+                        'uri',
+                        'api_config',
+                        'api',
+                        'connections',
+                      ],
+                      additionalProperties: false,
+                    },
+                  },
+                  required: ['data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
     '/search': {
       get: {
         operationId: 'search',
         summary: 'Perform a search query',
         tags: ['Search'],
         description:
-          "Searches the developer hub.\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Searches the ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
             schema: { type: 'string' },
@@ -5677,6 +5730,166 @@ export const readmeAPIv2Oas = {
         },
       },
     },
+    '/versions': {
+      get: {
+        operationId: 'getVersions',
+        summary: 'Get versions',
+        tags: ['Versions'],
+        description:
+          "Get a collection of versions. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        parameters: [
+          {
+            schema: { type: 'number', minimum: 1, default: 1 },
+            in: 'query',
+            name: 'page',
+            required: false,
+            description: 'Used to specify further pages (starts at 1).',
+          },
+          {
+            schema: { type: 'number', minimum: 1, maximum: 100, default: 10 },
+            in: 'query',
+            name: 'per_page',
+            required: false,
+            description: 'Number of items to include in pagination (up to 100, defaults to 10).',
+          },
+          {
+            schema: { type: 'string', enum: ['created', 'updated', 'semver'], default: 'semver' },
+            in: 'query',
+            name: 'sort_by',
+            required: false,
+            description: 'The sort that should be used for the returned versions list.',
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    total: { type: 'number' },
+                    page: { type: 'number' },
+                    per_page: { type: 'number' },
+                    paging: {
+                      type: 'object',
+                      properties: {
+                        next: { type: 'string', nullable: true },
+                        previous: { type: 'string', nullable: true },
+                        first: { type: 'string', nullable: true },
+                        last: { type: 'string', nullable: true },
+                      },
+                      required: ['next', 'previous', 'first', 'last'],
+                      additionalProperties: false,
+                    },
+                    data: {
+                      type: 'array',
+                      items: {
+                        type: 'object',
+                        properties: {
+                          base: {
+                            type: 'string',
+                            nullable: true,
+                            description: 'The name of the version this version was forked from.',
+                          },
+                          display_name: {
+                            type: 'string',
+                            nullable: true,
+                            description: 'A non-semver display name for the version.',
+                          },
+                          git: {
+                            type: 'object',
+                            properties: {
+                              latest_commit: {
+                                type: 'object',
+                                properties: {
+                                  created_at: {
+                                    type: 'string',
+                                    format: 'date-time',
+                                    description: 'An ISO 8601 formatted date for when the latest commit was created.',
+                                    nullable: true,
+                                  },
+                                  hash: {
+                                    type: 'string',
+                                    nullable: true,
+                                    description: 'The sha for the latest commit.',
+                                  },
+                                },
+                                required: ['created_at', 'hash'],
+                                additionalProperties: false,
+                              },
+                              branch_ref: {
+                                type: 'string',
+                                nullable: true,
+                                description: 'A reference to the associated branch for the version.',
+                              },
+                            },
+                            required: ['latest_commit', 'branch_ref'],
+                            additionalProperties: false,
+                          },
+                          name: {
+                            type: 'string',
+                            pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
+                            description: 'The semver name for the version.',
+                          },
+                          privacy: {
+                            type: 'object',
+                            properties: {
+                              view: {
+                                type: 'string',
+                                enum: ['default', 'hidden', 'public'],
+                                description:
+                                  "Whether the version is public, hidden, or the stable version that's visible by default.",
+                              },
+                            },
+                            required: ['view'],
+                            additionalProperties: false,
+                          },
+                          release_stage: {
+                            type: 'string',
+                            enum: ['beta', 'release'],
+                            description: 'Whether the version is released or in beta',
+                          },
+                          state: {
+                            type: 'string',
+                            enum: ['current', 'deprecated'],
+                            description: 'Whether the version is current or deprecated',
+                          },
+                          updated_at: {
+                            type: 'string',
+                            format: 'date-time',
+                            description: 'An ISO 8601 formatted date for when the version was last updated.',
+                          },
+                          uri: {
+                            type: 'string',
+                            pattern: '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)',
+                            description: 'A URI to the version resource.',
+                          },
+                        },
+                        required: [
+                          'base',
+                          'display_name',
+                          'git',
+                          'name',
+                          'privacy',
+                          'release_stage',
+                          'state',
+                          'updated_at',
+                          'uri',
+                        ],
+                        additionalProperties: false,
+                      },
+                    },
+                  },
+                  required: ['total', 'page', 'per_page', 'paging', 'data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
   },
   servers: [{ url: 'https://api.readme.com/v2', description: 'The ReadMe API' }],
   security: [{ bearer: [] }],
@@ -5689,6 +5902,7 @@ export const readmeAPIv2Oas = {
     { name: 'Guides' },
     { name: 'Projects' },
     { name: 'Search' },
+    { name: 'Versions' },
   ],
 } as const satisfies OASDocument;
 
