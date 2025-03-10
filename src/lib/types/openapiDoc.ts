@@ -5900,7 +5900,7 @@ const document = {
   },
   servers: [{ url: 'https://api.readme.com/v2', description: 'The ReadMe API' }],
   security: [{ bearer: [] }],
-  'x-readme': { 'proxy-enabled': false },
+  'x-readme': { 'proxy-enabled': true },
   tags: [
     { name: 'API Reference' },
     { name: 'APIs' },

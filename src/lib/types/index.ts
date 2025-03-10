@@ -13,6 +13,8 @@ export const parentUriRegexPattern =
 type guidesRequestBodySchema =
   (typeof readmeAPIv2Oas)['paths']['/versions/{version}/guides/{slug}']['patch']['requestBody']['content']['application/json']['schema'];
 
+type projectSchema =
+  (typeof readmeAPIv2Oas)['paths']['/projects/me']['get']['responses']['200']['content']['application/json']['schema'];
 /**
  * Derived from our API documentation, this is the schema for the `guides` object
  * as we send it to the ReadMe API.
@@ -24,3 +26,5 @@ export type GuidesRequestRepresentation = FromSchema<
   guidesRequestBodySchema,
   { keepDefaultedPropertiesOptional: true }
 >;
+
+export type ProjectRepresentation = FromSchema<projectSchema, { keepDefaultedPropertiesOptional: true }>;
