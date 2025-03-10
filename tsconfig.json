@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "experimentalDecorators": true,
     "lib": ["ES2022"],
     "module": "NodeNext",
     "outDir": "dist/",

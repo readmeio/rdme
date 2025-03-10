@@ -445,6 +445,7 @@ describe('rdme openapi upload', () => {
         });
 
       const result = await run(['--version', version, filename, '--key', key, '--confirm-overwrite']);
+
       expect(result.stdout).toContain('was successfully updated in ReadMe!');
 
       mock.done();

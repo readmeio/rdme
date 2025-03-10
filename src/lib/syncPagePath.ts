@@ -1,5 +1,5 @@
 import type { PageMetadata } from './readPage.js';
-import type { GuidesRequestRepresentation, ProjectRepresentation } from './types.js';
+import type { GuidesRequestRepresentation } from './types/index.js';
 import type DocsUploadCommand from '../commands/docs/upload.js';
 
 import fs from 'node:fs/promises';
@@ -17,7 +17,7 @@ import promptTerminal from './promptWrapper.js';
 import readdirRecursive from './readdirRecursive.js';
 import { fetchMappings, fetchSchema } from './readmeAPIFetch.js';
 import readPage from './readPage.js';
-import { categoryUriRegexPattern, parentUriRegexPattern } from './types.js';
+import { categoryUriRegexPattern, parentUriRegexPattern } from './types/index.js';
 
 /**
  * Commands that use this file for syncing Markdown via APIv2.

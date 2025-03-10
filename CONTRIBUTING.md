@@ -2,12 +2,6 @@
 
 ## Running Shell Commands Locally 🐚
 
-To get started, run the `build` script to create a symlink with `package.json` (required for our `oclif` setup to read our commands properly). You only need to do this the first time you clone the repository.
-
-```sh
-npm run build
-```
-
 To run test commands, swap out `rdme` for `bin/dev.js`. For example:
 
 ```sh

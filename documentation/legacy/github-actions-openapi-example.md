@@ -1,6 +1,7 @@
 ---
 title: 'GitHub Actions Example: Syncing OpenAPI'
-category: 62056dee230e07007218be06
+category:
+  uri: documentation
 ---
 
 <!--

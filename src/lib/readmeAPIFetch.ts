@@ -14,7 +14,7 @@ import { git } from './createGHA/index.js';
 import { getPkgVersion } from './getPkg.js';
 import isCI, { ciName, isGHA } from './isCI.js';
 import { debug, warn } from './logger.js';
-import { readmeAPIv2Oas } from './types.js';
+import readmeAPIv2Oas from './types/openapiDoc.js';
 
 const SUCCESS_NO_CONTENT = 204;
 
