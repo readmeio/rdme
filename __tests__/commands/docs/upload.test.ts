@@ -527,13 +527,13 @@ describe('rdme docs upload', () => {
   });
 
   describe('given that ReadMe project has bidirection sync set up', () => {
-    it('should should error if validation is not skipped', async () => {
+    it('should error if validation is not skipped', async () => {
       nock.cleanAll();
 
       const mock = getAPIv2Mock({ authorization })
         .get('/projects/me')
         .reply(200, {
-          data: { git: { connection: { name: 'some-repo' } } },
+          data: { git: { connection: { status: 'active' } } },
         });
 
       const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key]);
@@ -561,7 +561,7 @@ describe('rdme docs upload', () => {
       const projectsMeMock = getAPIv2Mock({ authorization })
         .get('/projects/me')
         .reply(200, {
-          data: { git: { connection: { name: 'some-repo' } } },
+          data: { git: { connection: { status: 'active' } } },
         });
 
       const result = await run([
@@ -578,6 +578,32 @@ describe('rdme docs upload', () => {
 
       mock.done();
       projectsMeMock.done();
+    });
+
+    it('should handle an error if /projects/me returns an error', async () => {
+      nock.cleanAll();
+
+      const mock = getAPIv2Mock({ authorization: 'Bearer bad-api-key' })
+        .get('/projects/me')
+        .reply(401, {
+          title: "The API key couldn't be located.",
+          detail:
+            "The API key you passed in (bad-api-key) doesn't match any keys we have in our system. API keys must be passed in via Bearer token. You can get your API key in Configuration > API Key, or in the docs.",
+          instance: '/reference/intro/authentication',
+          poem: [
+            'The ancient gatekeeper declares:',
+            "'To pass, reveal your API key.'",
+            "'bad-…', you start to ramble",
+            'Oops, you remembered it poorly!',
+          ],
+        });
+
+      const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', 'bad-api-key']);
+
+      expect(result).toMatchSnapshot();
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
+
+      mock.done();
     });
   });
 });
