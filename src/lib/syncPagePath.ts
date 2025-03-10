@@ -221,7 +221,7 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
   const biDiConnection = projectMetadata?.data?.git?.connection?.status === 'active';
   if (biDiConnection && !skipValidation) {
     throw new Error(
-      "Bi-directional syncing is enabled for this project. Uploading these docs will overwrite what's currently synced from Git. To proceed with uploading via `rdme`, please use the `--skip-validation` flag.",
+      "Bi-directional syncing is enabled for this project. Uploading these docs will overwrite what's currently synced from Git. To proceed with the upload, re-run this command with the `--skip-validation` flag.",
     );
   }
 
