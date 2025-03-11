@@ -7330,7 +7330,7 @@ const document = {
     },
   ],
   'x-readme': {
-    'proxy-enabled': false,
+    'proxy-enabled': true,
   },
   tags: [
     {
