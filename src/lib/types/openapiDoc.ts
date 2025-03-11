@@ -15,7 +15,7 @@ const document = {
     version: '2.0.0-beta',
     title: 'ReadMe API v2 🦉 (BETA)',
     // @ts-expect-error custom extension
-    'x-readme-deploy': '5.298.0',
+    'x-readme-deploy': '5.300.0',
     termsOfService: 'https://readme.com/tos',
     contact: {
       name: 'API Support',
@@ -43,7 +43,10 @@ const document = {
           "Get all API definitions from your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
+            },
             in: 'path',
             name: 'version',
             required: true,
@@ -58,7 +61,9 @@ const document = {
                 schema: {
                   type: 'object',
                   properties: {
-                    total: { type: 'number' },
+                    total: {
+                      type: 'number',
+                    },
                     data: {
                       type: 'array',
                       items: {
@@ -149,12 +154,16 @@ const document = {
               schema: {
                 type: 'object',
                 properties: {
-                  schema: { description: 'The API definition.' },
+                  schema: {
+                    description: 'The API definition.',
+                  },
                   upload_source: {
                     default: 'form',
                     description: 'The source that the API definition is being uploaded through.',
                   },
-                  url: { description: 'The URL where the API definition is hosted.' },
+                  url: {
+                    description: 'The URL where the API definition is hosted.',
+                  },
                 },
                 additionalProperties: false,
               },
@@ -163,7 +172,10 @@ const document = {
         },
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
+            },
             in: 'path',
             name: 'version',
             required: true,
@@ -222,14 +234,20 @@ const document = {
           "Get an API definition from your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: { type: 'string', pattern: '(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml))' },
+            schema: {
+              type: 'string',
+              pattern: '(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml))',
+            },
             in: 'path',
             name: 'filename',
             required: true,
             description: 'The filename of the API definition to retrieve.',
           },
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
+            },
             in: 'path',
             name: 'version',
             required: true,
@@ -306,7 +324,11 @@ const document = {
                             '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
                           description: 'A URI to the API definition resource.',
                         },
-                        schema: { type: 'object', additionalProperties: {}, description: 'The API schema.' },
+                        schema: {
+                          type: 'object',
+                          additionalProperties: {},
+                          description: 'The API schema.',
+                        },
                       },
                       required: ['created_at', 'filename', 'source', 'type', 'updated_at', 'upload', 'uri', 'schema'],
                       additionalProperties: false,
@@ -328,21 +350,31 @@ const document = {
           "Delete an API definition from the API Reference section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: { type: 'string', pattern: '(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml))' },
+            schema: {
+              type: 'string',
+              pattern: '(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml))',
+            },
             in: 'path',
             name: 'filename',
             required: true,
             description: 'The filename of the API definition to retrieve.',
           },
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
+            },
             in: 'path',
             name: 'version',
             required: true,
             description: 'Project version number or stable.',
           },
         ],
-        responses: { '204': { description: 'No Content' } },
+        responses: {
+          '204': {
+            description: 'No Content',
+          },
+        },
       },
       put: {
         operationId: 'updateAPI',
@@ -356,12 +388,16 @@ const document = {
               schema: {
                 type: 'object',
                 properties: {
-                  schema: { description: 'The API definition.' },
+                  schema: {
+                    description: 'The API definition.',
+                  },
                   upload_source: {
                     default: 'form',
                     description: 'The source that the API definition is being uploaded through.',
                   },
-                  url: { description: 'The URL where the API definition is hosted.' },
+                  url: {
+                    description: 'The URL where the API definition is hosted.',
+                  },
                 },
                 additionalProperties: false,
               },
@@ -370,14 +406,20 @@ const document = {
         },
         parameters: [
           {
-            schema: { type: 'string', pattern: '(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml))' },
+            schema: {
+              type: 'string',
+              pattern: '(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml))',
+            },
             in: 'path',
             name: 'filename',
             required: true,
             description: 'The filename of the API definition to retrieve.',
           },
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
+            },
             in: 'path',
             name: 'version',
             required: true,
@@ -436,21 +478,34 @@ const document = {
           "Get all changelog entries from your ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: { type: 'number', minimum: 1, default: 1 },
+            schema: {
+              type: 'number',
+              minimum: 1,
+              default: 1,
+            },
             in: 'query',
             name: 'page',
             required: false,
             description: 'Used to specify further pages (starts at 1).',
           },
           {
-            schema: { type: 'number', minimum: 1, maximum: 100, default: 10 },
+            schema: {
+              type: 'number',
+              minimum: 1,
+              maximum: 100,
+              default: 10,
+            },
             in: 'query',
             name: 'per_page',
             required: false,
             description: 'Number of items to include in pagination (up to 100, defaults to 10).',
           },
           {
-            schema: { type: 'string', enum: ['public', 'anyone_with_link', 'all'], default: 'all' },
+            schema: {
+              type: 'string',
+              enum: ['public', 'anyone_with_link', 'all'],
+              default: 'all',
+            },
             in: 'query',
             name: 'visibility',
             required: false,
@@ -466,16 +521,34 @@ const document = {
                 schema: {
                   type: 'object',
                   properties: {
-                    total: { type: 'number' },
-                    page: { type: 'number' },
-                    per_page: { type: 'number' },
+                    total: {
+                      type: 'number',
+                    },
+                    page: {
+                      type: 'number',
+                    },
+                    per_page: {
+                      type: 'number',
+                    },
                     paging: {
                       type: 'object',
                       properties: {
-                        next: { type: 'string', nullable: true },
-                        previous: { type: 'string', nullable: true },
-                        first: { type: 'string', nullable: true },
-                        last: { type: 'string', nullable: true },
+                        next: {
+                          type: 'string',
+                          nullable: true,
+                        },
+                        previous: {
+                          type: 'string',
+                          nullable: true,
+                        },
+                        first: {
+                          type: 'string',
+                          nullable: true,
+                        },
+                        last: {
+                          type: 'string',
+                          nullable: true,
+                        },
                       },
                       required: ['next', 'previous', 'first', 'last'],
                       additionalProperties: false,
@@ -488,7 +561,11 @@ const document = {
                           author: {
                             type: 'object',
                             properties: {
-                              id: { type: 'string', nullable: true, description: 'User ID of the changelog author.' },
+                              id: {
+                                type: 'string',
+                                nullable: true,
+                                description: 'User ID of the changelog author.',
+                              },
                               name: {
                                 type: 'string',
                                 nullable: true,
@@ -500,7 +577,12 @@ const document = {
                           },
                           content: {
                             type: 'object',
-                            properties: { body: { type: 'string', nullable: true } },
+                            properties: {
+                              body: {
+                                type: 'string',
+                                nullable: true,
+                              },
+                            },
                             required: ['body'],
                             additionalProperties: false,
                           },
@@ -512,7 +594,10 @@ const document = {
                           metadata: {
                             type: 'object',
                             properties: {
-                              description: { type: 'string', nullable: true },
+                              description: {
+                                type: 'string',
+                                nullable: true,
+                              },
                               image: {
                                 type: 'object',
                                 properties: {
@@ -523,7 +608,11 @@ const document = {
                                     description:
                                       'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
                                   },
-                                  url: { type: 'string', format: 'uri', nullable: true },
+                                  url: {
+                                    type: 'string',
+                                    format: 'uri',
+                                    nullable: true,
+                                  },
                                 },
                                 required: ['uri', 'url'],
                                 additionalProperties: false,
@@ -534,7 +623,10 @@ const document = {
                                 description:
                                   'A comma-separated list of keywords to place into your changelog metadata.',
                               },
-                              title: { type: 'string', nullable: true },
+                              title: {
+                                type: 'string',
+                                nullable: true,
+                              },
                             },
                             required: ['description', 'image', 'keywords', 'title'],
                             additionalProperties: false,
@@ -551,8 +643,12 @@ const document = {
                             },
                             additionalProperties: false,
                           },
-                          slug: { type: 'string' },
-                          title: { type: 'string' },
+                          slug: {
+                            type: 'string',
+                          },
+                          title: {
+                            type: 'string',
+                          },
                           type: {
                             type: 'string',
                             enum: ['none', 'added', 'fixed', 'improved', 'deprecated', 'removed'],
@@ -617,7 +713,11 @@ const document = {
           {
             schema: {
               anyOf: [
-                { type: 'string', pattern: '[a-f\\d]{24}', description: 'A unique identifier for the resource.' },
+                {
+                  type: 'string',
+                  pattern: '[a-f\\d]{24}',
+                  description: 'A unique identifier for the resource.',
+                },
                 {
                   type: 'string',
                   pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
@@ -644,7 +744,11 @@ const document = {
                         author: {
                           type: 'object',
                           properties: {
-                            id: { type: 'string', nullable: true, description: 'User ID of the changelog author.' },
+                            id: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'User ID of the changelog author.',
+                            },
                             name: {
                               type: 'string',
                               nullable: true,
@@ -656,7 +760,12 @@ const document = {
                         },
                         content: {
                           type: 'object',
-                          properties: { body: { type: 'string', nullable: true } },
+                          properties: {
+                            body: {
+                              type: 'string',
+                              nullable: true,
+                            },
+                          },
                           required: ['body'],
                           additionalProperties: false,
                         },
@@ -668,7 +777,10 @@ const document = {
                         metadata: {
                           type: 'object',
                           properties: {
-                            description: { type: 'string', nullable: true },
+                            description: {
+                              type: 'string',
+                              nullable: true,
+                            },
                             image: {
                               type: 'object',
                               properties: {
@@ -679,7 +791,11 @@ const document = {
                                   description:
                                     'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
                                 },
-                                url: { type: 'string', format: 'uri', nullable: true },
+                                url: {
+                                  type: 'string',
+                                  format: 'uri',
+                                  nullable: true,
+                                },
                               },
                               required: ['uri', 'url'],
                               additionalProperties: false,
@@ -689,7 +805,10 @@ const document = {
                               nullable: true,
                               description: 'A comma-separated list of keywords to place into your changelog metadata.',
                             },
-                            title: { type: 'string', nullable: true },
+                            title: {
+                              type: 'string',
+                              nullable: true,
+                            },
                           },
                           required: ['description', 'image', 'keywords', 'title'],
                           additionalProperties: false,
@@ -706,8 +825,12 @@ const document = {
                           },
                           additionalProperties: false,
                         },
-                        slug: { type: 'string' },
-                        title: { type: 'string' },
+                        slug: {
+                          type: 'string',
+                        },
+                        title: {
+                          type: 'string',
+                        },
                         type: {
                           type: 'string',
                           enum: ['none', 'added', 'fixed', 'improved', 'deprecated', 'removed'],
@@ -787,7 +910,10 @@ const document = {
                   content: {
                     type: 'object',
                     properties: {
-                      body: { type: 'string', nullable: true },
+                      body: {
+                        type: 'string',
+                        nullable: true,
+                      },
                       type: {
                         type: 'string',
                         enum: ['markdown', 'html'],
@@ -800,17 +926,34 @@ const document = {
                   metadata: {
                     type: 'object',
                     properties: {
-                      description: { type: 'string', nullable: true },
+                      description: {
+                        type: 'string',
+                        nullable: true,
+                      },
                       image: {
                         type: 'object',
                         properties: {
-                          uri: { type: 'string', pattern: '\\/images\\/([a-f\\d]{24})', nullable: true },
-                          url: { type: 'string', format: 'uri', nullable: true },
+                          uri: {
+                            type: 'string',
+                            pattern: '\\/images\\/([a-f\\d]{24})',
+                            nullable: true,
+                          },
+                          url: {
+                            type: 'string',
+                            format: 'uri',
+                            nullable: true,
+                          },
                         },
                         additionalProperties: false,
                       },
-                      keywords: { type: 'string', nullable: true },
-                      title: { type: 'string', nullable: true },
+                      keywords: {
+                        type: 'string',
+                        nullable: true,
+                      },
+                      title: {
+                        type: 'string',
+                        nullable: true,
+                      },
                     },
                     additionalProperties: false,
                   },
@@ -826,8 +969,14 @@ const document = {
                     },
                     additionalProperties: false,
                   },
-                  slug: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
-                  title: { type: 'string', nullable: true },
+                  slug: {
+                    type: 'string',
+                    pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
+                  },
+                  title: {
+                    type: 'string',
+                    nullable: true,
+                  },
                 },
                 required: ['title'],
                 additionalProperties: false,
@@ -838,7 +987,10 @@ const document = {
         },
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
+            },
             in: 'path',
             name: 'version',
             required: true,
@@ -870,7 +1022,10 @@ const document = {
                         content: {
                           type: 'object',
                           properties: {
-                            body: { type: 'string', nullable: true },
+                            body: {
+                              type: 'string',
+                              nullable: true,
+                            },
                             type: {
                               type: 'string',
                               enum: ['markdown', 'html'],
@@ -884,7 +1039,10 @@ const document = {
                         metadata: {
                           type: 'object',
                           properties: {
-                            description: { type: 'string', nullable: true },
+                            description: {
+                              type: 'string',
+                              nullable: true,
+                            },
                             image: {
                               type: 'object',
                               properties: {
@@ -895,7 +1053,11 @@ const document = {
                                   description:
                                     'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
                                 },
-                                url: { type: 'string', format: 'uri', nullable: true },
+                                url: {
+                                  type: 'string',
+                                  format: 'uri',
+                                  nullable: true,
+                                },
                               },
                               required: ['uri', 'url'],
                               additionalProperties: false,
@@ -906,7 +1068,10 @@ const document = {
                               description:
                                 'A comma-separated list of keywords to place into your custom page metadata.',
                             },
-                            title: { type: 'string', nullable: true },
+                            title: {
+                              type: 'string',
+                              nullable: true,
+                            },
                           },
                           required: ['description', 'image', 'keywords', 'title'],
                           additionalProperties: false,
@@ -923,8 +1088,14 @@ const document = {
                           },
                           additionalProperties: false,
                         },
-                        slug: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
-                        title: { type: 'string', nullable: true },
+                        slug: {
+                          type: 'string',
+                          pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
+                        },
+                        title: {
+                          type: 'string',
+                          nullable: true,
+                        },
                         links: {
                           type: 'object',
                           properties: {
@@ -979,7 +1150,10 @@ const document = {
           "Get all custom pages from your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
+            },
             in: 'path',
             name: 'version',
             required: true,
@@ -994,7 +1168,9 @@ const document = {
                 schema: {
                   type: 'object',
                   properties: {
-                    total: { type: 'number' },
+                    total: {
+                      type: 'number',
+                    },
                     data: {
                       type: 'array',
                       items: {
@@ -1014,7 +1190,10 @@ const document = {
                           content: {
                             type: 'object',
                             properties: {
-                              body: { type: 'string', nullable: true },
+                              body: {
+                                type: 'string',
+                                nullable: true,
+                              },
                               type: {
                                 type: 'string',
                                 enum: ['markdown', 'html'],
@@ -1028,7 +1207,10 @@ const document = {
                           metadata: {
                             type: 'object',
                             properties: {
-                              description: { type: 'string', nullable: true },
+                              description: {
+                                type: 'string',
+                                nullable: true,
+                              },
                               image: {
                                 type: 'object',
                                 properties: {
@@ -1039,7 +1221,11 @@ const document = {
                                     description:
                                       'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
                                   },
-                                  url: { type: 'string', format: 'uri', nullable: true },
+                                  url: {
+                                    type: 'string',
+                                    format: 'uri',
+                                    nullable: true,
+                                  },
                                 },
                                 required: ['uri', 'url'],
                                 additionalProperties: false,
@@ -1050,7 +1236,10 @@ const document = {
                                 description:
                                   'A comma-separated list of keywords to place into your custom page metadata.',
                               },
-                              title: { type: 'string', nullable: true },
+                              title: {
+                                type: 'string',
+                                nullable: true,
+                              },
                             },
                             required: ['description', 'image', 'keywords', 'title'],
                             additionalProperties: false,
@@ -1067,8 +1256,14 @@ const document = {
                             },
                             additionalProperties: false,
                           },
-                          slug: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
-                          title: { type: 'string', nullable: true },
+                          slug: {
+                            type: 'string',
+                            pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
+                          },
+                          title: {
+                            type: 'string',
+                            nullable: true,
+                          },
                           links: {
                             type: 'object',
                             properties: {
@@ -1126,14 +1321,20 @@ const document = {
           "Get a custom page from your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
+            },
             in: 'path',
             name: 'version',
             required: true,
             description: 'Project version number or stable.',
           },
           {
-            schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
+            schema: {
+              type: 'string',
+              pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
+            },
             in: 'path',
             name: 'slug',
             required: true,
@@ -1165,7 +1366,10 @@ const document = {
                         content: {
                           type: 'object',
                           properties: {
-                            body: { type: 'string', nullable: true },
+                            body: {
+                              type: 'string',
+                              nullable: true,
+                            },
                             type: {
                               type: 'string',
                               enum: ['markdown', 'html'],
@@ -1179,7 +1383,10 @@ const document = {
                         metadata: {
                           type: 'object',
                           properties: {
-                            description: { type: 'string', nullable: true },
+                            description: {
+                              type: 'string',
+                              nullable: true,
+                            },
                             image: {
                               type: 'object',
                               properties: {
@@ -1190,7 +1397,11 @@ const document = {
                                   description:
                                     'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
                                 },
-                                url: { type: 'string', format: 'uri', nullable: true },
+                                url: {
+                                  type: 'string',
+                                  format: 'uri',
+                                  nullable: true,
+                                },
                               },
                               required: ['uri', 'url'],
                               additionalProperties: false,
@@ -1201,7 +1412,10 @@ const document = {
                               description:
                                 'A comma-separated list of keywords to place into your custom page metadata.',
                             },
-                            title: { type: 'string', nullable: true },
+                            title: {
+                              type: 'string',
+                              nullable: true,
+                            },
                           },
                           required: ['description', 'image', 'keywords', 'title'],
                           additionalProperties: false,
@@ -1218,8 +1432,14 @@ const document = {
                           },
                           additionalProperties: false,
                         },
-                        slug: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
-                        title: { type: 'string', nullable: true },
+                        slug: {
+                          type: 'string',
+                          pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
+                        },
+                        title: {
+                          type: 'string',
+                          nullable: true,
+                        },
                         links: {
                           type: 'object',
                           properties: {
@@ -1274,21 +1494,31 @@ const document = {
           "Delete a custom page from your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
+            },
             in: 'path',
             name: 'version',
             required: true,
             description: 'Project version number or stable.',
           },
           {
-            schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
+            schema: {
+              type: 'string',
+              pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
+            },
             in: 'path',
             name: 'slug',
             required: true,
             description: 'A URL-safe representation of the resource.',
           },
         ],
-        responses: { '204': { description: 'No Content' } },
+        responses: {
+          '204': {
+            description: 'No Content',
+          },
+        },
       },
       patch: {
         operationId: 'updateCustomPage',
@@ -1316,7 +1546,10 @@ const document = {
                   content: {
                     type: 'object',
                     properties: {
-                      body: { type: 'string', nullable: true },
+                      body: {
+                        type: 'string',
+                        nullable: true,
+                      },
                       type: {
                         type: 'string',
                         enum: ['markdown', 'html'],
@@ -1329,17 +1562,34 @@ const document = {
                   metadata: {
                     type: 'object',
                     properties: {
-                      description: { type: 'string', nullable: true },
+                      description: {
+                        type: 'string',
+                        nullable: true,
+                      },
                       image: {
                         type: 'object',
                         properties: {
-                          uri: { type: 'string', pattern: '\\/images\\/([a-f\\d]{24})', nullable: true },
-                          url: { type: 'string', format: 'uri', nullable: true },
+                          uri: {
+                            type: 'string',
+                            pattern: '\\/images\\/([a-f\\d]{24})',
+                            nullable: true,
+                          },
+                          url: {
+                            type: 'string',
+                            format: 'uri',
+                            nullable: true,
+                          },
                         },
                         additionalProperties: false,
                       },
-                      keywords: { type: 'string', nullable: true },
-                      title: { type: 'string', nullable: true },
+                      keywords: {
+                        type: 'string',
+                        nullable: true,
+                      },
+                      title: {
+                        type: 'string',
+                        nullable: true,
+                      },
                     },
                     additionalProperties: false,
                   },
@@ -1355,8 +1605,14 @@ const document = {
                     },
                     additionalProperties: false,
                   },
-                  slug: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
-                  title: { type: 'string', nullable: true },
+                  slug: {
+                    type: 'string',
+                    pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
+                  },
+                  title: {
+                    type: 'string',
+                    nullable: true,
+                  },
                 },
                 additionalProperties: false,
               },
@@ -1365,14 +1621,20 @@ const document = {
         },
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
+            },
             in: 'path',
             name: 'version',
             required: true,
             description: 'Project version number or stable.',
           },
           {
-            schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
+            schema: {
+              type: 'string',
+              pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
+            },
             in: 'path',
             name: 'slug',
             required: true,
@@ -1404,7 +1666,10 @@ const document = {
                         content: {
                           type: 'object',
                           properties: {
-                            body: { type: 'string', nullable: true },
+                            body: {
+                              type: 'string',
+                              nullable: true,
+                            },
                             type: {
                               type: 'string',
                               enum: ['markdown', 'html'],
@@ -1418,7 +1683,10 @@ const document = {
                         metadata: {
                           type: 'object',
                           properties: {
-                            description: { type: 'string', nullable: true },
+                            description: {
+                              type: 'string',
+                              nullable: true,
+                            },
                             image: {
                               type: 'object',
                               properties: {
@@ -1429,7 +1697,11 @@ const document = {
                                   description:
                                     'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
                                 },
-                                url: { type: 'string', format: 'uri', nullable: true },
+                                url: {
+                                  type: 'string',
+                                  format: 'uri',
+                                  nullable: true,
+                                },
                               },
                               required: ['uri', 'url'],
                               additionalProperties: false,
@@ -1440,7 +1712,10 @@ const document = {
                               description:
                                 'A comma-separated list of keywords to place into your custom page metadata.',
                             },
-                            title: { type: 'string', nullable: true },
+                            title: {
+                              type: 'string',
+                              nullable: true,
+                            },
                           },
                           required: ['description', 'image', 'keywords', 'title'],
                           additionalProperties: false,
@@ -1457,8 +1732,14 @@ const document = {
                           },
                           additionalProperties: false,
                         },
-                        slug: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
-                        title: { type: 'string', nullable: true },
+                        slug: {
+                          type: 'string',
+                          pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
+                        },
+                        title: {
+                          type: 'string',
+                          nullable: true,
+                        },
                         links: {
                           type: 'object',
                           properties: {
@@ -1541,13 +1822,25 @@ const document = {
                   content: {
                     type: 'object',
                     properties: {
-                      body: { type: 'string', nullable: true },
-                      excerpt: { type: 'string', nullable: true },
+                      body: {
+                        type: 'string',
+                        nullable: true,
+                      },
+                      excerpt: {
+                        type: 'string',
+                        nullable: true,
+                      },
                       link: {
                         type: 'object',
                         properties: {
-                          url: { type: 'string', nullable: true },
-                          new_tab: { type: 'boolean', nullable: true },
+                          url: {
+                            type: 'string',
+                            nullable: true,
+                          },
+                          new_tab: {
+                            type: 'boolean',
+                            nullable: true,
+                          },
                         },
                         additionalProperties: false,
                         description:
@@ -1556,7 +1849,10 @@ const document = {
                       next: {
                         type: 'object',
                         properties: {
-                          description: { type: 'string', nullable: true },
+                          description: {
+                            type: 'string',
+                            nullable: true,
+                          },
                           pages: {
                             type: 'array',
                             items: {
@@ -1564,9 +1860,17 @@ const document = {
                                 {
                                   type: 'object',
                                   properties: {
-                                    slug: { type: 'string' },
-                                    title: { type: 'string', nullable: true },
-                                    type: { type: 'string', enum: ['basic', 'endpoint'] },
+                                    slug: {
+                                      type: 'string',
+                                    },
+                                    title: {
+                                      type: 'string',
+                                      nullable: true,
+                                    },
+                                    type: {
+                                      type: 'string',
+                                      enum: ['basic', 'endpoint'],
+                                    },
                                   },
                                   required: ['slug', 'title', 'type'],
                                   additionalProperties: false,
@@ -1574,9 +1878,17 @@ const document = {
                                 {
                                   type: 'object',
                                   properties: {
-                                    title: { type: 'string', nullable: true },
-                                    type: { type: 'string', enum: ['link'] },
-                                    url: { type: 'string' },
+                                    title: {
+                                      type: 'string',
+                                      nullable: true,
+                                    },
+                                    type: {
+                                      type: 'string',
+                                      enum: ['link'],
+                                    },
+                                    url: {
+                                      type: 'string',
+                                    },
                                   },
                                   required: ['title', 'type', 'url'],
                                   additionalProperties: false,
@@ -1593,19 +1905,38 @@ const document = {
                   href: {
                     type: 'object',
                     properties: {
-                      dash: { type: 'string', format: 'uri', description: 'A URL to this page in your ReadMe Dash.' },
+                      dash: {
+                        type: 'string',
+                        format: 'uri',
+                        description: 'A URL to this page in your ReadMe Dash.',
+                      },
                     },
                     additionalProperties: false,
                   },
                   metadata: {
                     type: 'object',
                     properties: {
-                      description: { type: 'string', nullable: true },
-                      keywords: { type: 'string', nullable: true },
-                      title: { type: 'string', nullable: true },
+                      description: {
+                        type: 'string',
+                        nullable: true,
+                      },
+                      keywords: {
+                        type: 'string',
+                        nullable: true,
+                      },
+                      title: {
+                        type: 'string',
+                        nullable: true,
+                      },
                       image: {
                         type: 'object',
-                        properties: { uri: { type: 'string', pattern: '\\/images\\/([a-f\\d]{24})', nullable: true } },
+                        properties: {
+                          uri: {
+                            type: 'string',
+                            pattern: '\\/images\\/([a-f\\d]{24})',
+                            nullable: true,
+                          },
+                        },
                         additionalProperties: false,
                       },
                     },
@@ -1626,7 +1957,11 @@ const document = {
                   privacy: {
                     type: 'object',
                     properties: {
-                      view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
+                      view: {
+                        type: 'string',
+                        enum: ['public', 'anyone_with_link'],
+                        default: 'anyone_with_link',
+                      },
                     },
                     additionalProperties: false,
                   },
@@ -1638,19 +1973,45 @@ const document = {
                         default: true,
                         description: 'A flag for if the page is renderable or not.',
                       },
-                      error: { type: 'string', nullable: true },
-                      message: { type: 'string', nullable: true },
+                      error: {
+                        type: 'string',
+                        nullable: true,
+                      },
+                      message: {
+                        type: 'string',
+                        nullable: true,
+                      },
                     },
                     additionalProperties: false,
                   },
                   slug: {
-                    allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
+                    allOf: [
+                      {
+                        type: 'string',
+                      },
+                      {
+                        type: 'string',
+                        minLength: 1,
+                      },
+                    ],
                     description: 'The accessible URL slug for the page.',
                   },
-                  state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
-                  title: { type: 'string' },
-                  type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
-                  position: { type: 'number' },
+                  state: {
+                    type: 'string',
+                    enum: ['current', 'deprecated'],
+                    default: 'current',
+                  },
+                  title: {
+                    type: 'string',
+                  },
+                  type: {
+                    type: 'string',
+                    enum: ['api_config', 'basic', 'endpoint', 'link'],
+                    default: 'basic',
+                  },
+                  position: {
+                    type: 'number',
+                  },
                 },
                 required: ['category', 'title'],
                 additionalProperties: false,
@@ -1661,7 +2022,10 @@ const document = {
         },
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
+            },
             in: 'path',
             name: 'version',
             required: true,
@@ -1701,12 +2065,21 @@ const document = {
                         content: {
                           type: 'object',
                           properties: {
-                            body: { type: 'string', nullable: true },
-                            excerpt: { type: 'string', nullable: true },
+                            body: {
+                              type: 'string',
+                              nullable: true,
+                            },
+                            excerpt: {
+                              type: 'string',
+                              nullable: true,
+                            },
                             link: {
                               type: 'object',
                               properties: {
-                                url: { type: 'string', nullable: true },
+                                url: {
+                                  type: 'string',
+                                  nullable: true,
+                                },
                                 new_tab: {
                                   type: 'boolean',
                                   nullable: true,
@@ -1721,7 +2094,10 @@ const document = {
                             next: {
                               type: 'object',
                               properties: {
-                                description: { type: 'string', nullable: true },
+                                description: {
+                                  type: 'string',
+                                  nullable: true,
+                                },
                                 pages: {
                                   type: 'array',
                                   items: {
@@ -1729,9 +2105,17 @@ const document = {
                                       {
                                         type: 'object',
                                         properties: {
-                                          slug: { type: 'string' },
-                                          title: { type: 'string', nullable: true },
-                                          type: { type: 'string', enum: ['basic', 'endpoint'] },
+                                          slug: {
+                                            type: 'string',
+                                          },
+                                          title: {
+                                            type: 'string',
+                                            nullable: true,
+                                          },
+                                          type: {
+                                            type: 'string',
+                                            enum: ['basic', 'endpoint'],
+                                          },
                                         },
                                         required: ['slug', 'title', 'type'],
                                         additionalProperties: false,
@@ -1739,9 +2123,17 @@ const document = {
                                       {
                                         type: 'object',
                                         properties: {
-                                          title: { type: 'string', nullable: true },
-                                          type: { type: 'string', enum: ['link'] },
-                                          url: { type: 'string' },
+                                          title: {
+                                            type: 'string',
+                                            nullable: true,
+                                          },
+                                          type: {
+                                            type: 'string',
+                                            enum: ['link'],
+                                          },
+                                          url: {
+                                            type: 'string',
+                                          },
                                         },
                                         required: ['title', 'type', 'url'],
                                         additionalProperties: false,
@@ -1772,7 +2164,10 @@ const document = {
                         metadata: {
                           type: 'object',
                           properties: {
-                            description: { type: 'string', nullable: true },
+                            description: {
+                              type: 'string',
+                              nullable: true,
+                            },
                             image: {
                               type: 'object',
                               properties: {
@@ -1783,7 +2178,11 @@ const document = {
                                   description:
                                     'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
                                 },
-                                url: { type: 'string', format: 'uri', nullable: true },
+                                url: {
+                                  type: 'string',
+                                  format: 'uri',
+                                  nullable: true,
+                                },
                               },
                               required: ['uri', 'url'],
                               additionalProperties: false,
@@ -1793,7 +2192,10 @@ const document = {
                               nullable: true,
                               description: 'A comma-separated list of keywords to place into your page metadata.',
                             },
-                            title: { type: 'string', nullable: true },
+                            title: {
+                              type: 'string',
+                              nullable: true,
+                            },
                           },
                           required: ['description', 'image', 'keywords', 'title'],
                           additionalProperties: false,
@@ -1815,14 +2217,21 @@ const document = {
                         privacy: {
                           type: 'object',
                           properties: {
-                            view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
+                            view: {
+                              type: 'string',
+                              enum: ['public', 'anyone_with_link'],
+                              default: 'anyone_with_link',
+                            },
                           },
                           additionalProperties: false,
                         },
                         project: {
                           type: 'object',
                           properties: {
-                            name: { type: 'string', description: 'The name of the project.' },
+                            name: {
+                              type: 'string',
+                              description: 'The name of the project.',
+                            },
                             subdomain: {
                               type: 'string',
                               pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
@@ -1846,7 +2255,11 @@ const document = {
                               default: true,
                               description: 'A flag for if the page is renderable or not.',
                             },
-                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
+                            error: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'The rendering error.',
+                            },
                             message: {
                               type: 'string',
                               nullable: true,
@@ -1856,12 +2269,30 @@ const document = {
                           additionalProperties: false,
                         },
                         slug: {
-                          allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
+                          allOf: [
+                            {
+                              type: 'string',
+                            },
+                            {
+                              type: 'string',
+                              minLength: 1,
+                            },
+                          ],
                           description: 'The accessible URL slug for the page.',
                         },
-                        state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
-                        title: { type: 'string' },
-                        type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
+                        state: {
+                          type: 'string',
+                          enum: ['current', 'deprecated'],
+                          default: 'current',
+                        },
+                        title: {
+                          type: 'string',
+                        },
+                        type: {
+                          type: 'string',
+                          enum: ['api_config', 'basic', 'endpoint', 'link'],
+                          default: 'basic',
+                        },
                         updated_at: {
                           type: 'string',
                           format: 'date-time',
@@ -1909,14 +2340,20 @@ const document = {
           "Get a page from the Guides section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
+            },
             in: 'path',
             name: 'version',
             required: true,
             description: 'Project version number or stable.',
           },
           {
-            schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
+            schema: {
+              type: 'string',
+              pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
+            },
             in: 'path',
             name: 'slug',
             required: true,
@@ -1956,12 +2393,21 @@ const document = {
                         content: {
                           type: 'object',
                           properties: {
-                            body: { type: 'string', nullable: true },
-                            excerpt: { type: 'string', nullable: true },
+                            body: {
+                              type: 'string',
+                              nullable: true,
+                            },
+                            excerpt: {
+                              type: 'string',
+                              nullable: true,
+                            },
                             link: {
                               type: 'object',
                               properties: {
-                                url: { type: 'string', nullable: true },
+                                url: {
+                                  type: 'string',
+                                  nullable: true,
+                                },
                                 new_tab: {
                                   type: 'boolean',
                                   nullable: true,
@@ -1976,7 +2422,10 @@ const document = {
                             next: {
                               type: 'object',
                               properties: {
-                                description: { type: 'string', nullable: true },
+                                description: {
+                                  type: 'string',
+                                  nullable: true,
+                                },
                                 pages: {
                                   type: 'array',
                                   items: {
@@ -1984,9 +2433,17 @@ const document = {
                                       {
                                         type: 'object',
                                         properties: {
-                                          slug: { type: 'string' },
-                                          title: { type: 'string', nullable: true },
-                                          type: { type: 'string', enum: ['basic', 'endpoint'] },
+                                          slug: {
+                                            type: 'string',
+                                          },
+                                          title: {
+                                            type: 'string',
+                                            nullable: true,
+                                          },
+                                          type: {
+                                            type: 'string',
+                                            enum: ['basic', 'endpoint'],
+                                          },
                                         },
                                         required: ['slug', 'title', 'type'],
                                         additionalProperties: false,
@@ -1994,9 +2451,17 @@ const document = {
                                       {
                                         type: 'object',
                                         properties: {
-                                          title: { type: 'string', nullable: true },
-                                          type: { type: 'string', enum: ['link'] },
-                                          url: { type: 'string' },
+                                          title: {
+                                            type: 'string',
+                                            nullable: true,
+                                          },
+                                          type: {
+                                            type: 'string',
+                                            enum: ['link'],
+                                          },
+                                          url: {
+                                            type: 'string',
+                                          },
                                         },
                                         required: ['title', 'type', 'url'],
                                         additionalProperties: false,
@@ -2027,7 +2492,10 @@ const document = {
                         metadata: {
                           type: 'object',
                           properties: {
-                            description: { type: 'string', nullable: true },
+                            description: {
+                              type: 'string',
+                              nullable: true,
+                            },
                             image: {
                               type: 'object',
                               properties: {
@@ -2038,7 +2506,11 @@ const document = {
                                   description:
                                     'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
                                 },
-                                url: { type: 'string', format: 'uri', nullable: true },
+                                url: {
+                                  type: 'string',
+                                  format: 'uri',
+                                  nullable: true,
+                                },
                               },
                               required: ['uri', 'url'],
                               additionalProperties: false,
@@ -2048,7 +2520,10 @@ const document = {
                               nullable: true,
                               description: 'A comma-separated list of keywords to place into your page metadata.',
                             },
-                            title: { type: 'string', nullable: true },
+                            title: {
+                              type: 'string',
+                              nullable: true,
+                            },
                           },
                           required: ['description', 'image', 'keywords', 'title'],
                           additionalProperties: false,
@@ -2070,14 +2545,21 @@ const document = {
                         privacy: {
                           type: 'object',
                           properties: {
-                            view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
+                            view: {
+                              type: 'string',
+                              enum: ['public', 'anyone_with_link'],
+                              default: 'anyone_with_link',
+                            },
                           },
                           additionalProperties: false,
                         },
                         project: {
                           type: 'object',
                           properties: {
-                            name: { type: 'string', description: 'The name of the project.' },
+                            name: {
+                              type: 'string',
+                              description: 'The name of the project.',
+                            },
                             subdomain: {
                               type: 'string',
                               pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
@@ -2101,7 +2583,11 @@ const document = {
                               default: true,
                               description: 'A flag for if the page is renderable or not.',
                             },
-                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
+                            error: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'The rendering error.',
+                            },
                             message: {
                               type: 'string',
                               nullable: true,
@@ -2111,12 +2597,30 @@ const document = {
                           additionalProperties: false,
                         },
                         slug: {
-                          allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
+                          allOf: [
+                            {
+                              type: 'string',
+                            },
+                            {
+                              type: 'string',
+                              minLength: 1,
+                            },
+                          ],
                           description: 'The accessible URL slug for the page.',
                         },
-                        state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
-                        title: { type: 'string' },
-                        type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
+                        state: {
+                          type: 'string',
+                          enum: ['current', 'deprecated'],
+                          default: 'current',
+                        },
+                        title: {
+                          type: 'string',
+                        },
+                        type: {
+                          type: 'string',
+                          enum: ['api_config', 'basic', 'endpoint', 'link'],
+                          default: 'basic',
+                        },
                         updated_at: {
                           type: 'string',
                           format: 'date-time',
@@ -2162,21 +2666,31 @@ const document = {
           "Delete a page from the Guides section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
+            },
             in: 'path',
             name: 'version',
             required: true,
             description: 'Project version number or stable.',
           },
           {
-            schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
+            schema: {
+              type: 'string',
+              pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
+            },
             in: 'path',
             name: 'slug',
             required: true,
             description: 'A URL-safe representation of the resource.',
           },
         ],
-        responses: { '204': { description: 'No Content' } },
+        responses: {
+          '204': {
+            description: 'No Content',
+          },
+        },
       },
       patch: {
         operationId: 'updateGuide',
@@ -2211,13 +2725,25 @@ const document = {
                   content: {
                     type: 'object',
                     properties: {
-                      body: { type: 'string', nullable: true },
-                      excerpt: { type: 'string', nullable: true },
+                      body: {
+                        type: 'string',
+                        nullable: true,
+                      },
+                      excerpt: {
+                        type: 'string',
+                        nullable: true,
+                      },
                       link: {
                         type: 'object',
                         properties: {
-                          url: { type: 'string', nullable: true },
-                          new_tab: { type: 'boolean', nullable: true },
+                          url: {
+                            type: 'string',
+                            nullable: true,
+                          },
+                          new_tab: {
+                            type: 'boolean',
+                            nullable: true,
+                          },
                         },
                         additionalProperties: false,
                         description:
@@ -2226,7 +2752,10 @@ const document = {
                       next: {
                         type: 'object',
                         properties: {
-                          description: { type: 'string', nullable: true },
+                          description: {
+                            type: 'string',
+                            nullable: true,
+                          },
                           pages: {
                             type: 'array',
                             items: {
@@ -2234,9 +2763,17 @@ const document = {
                                 {
                                   type: 'object',
                                   properties: {
-                                    slug: { type: 'string' },
-                                    title: { type: 'string', nullable: true },
-                                    type: { type: 'string', enum: ['basic', 'endpoint'] },
+                                    slug: {
+                                      type: 'string',
+                                    },
+                                    title: {
+                                      type: 'string',
+                                      nullable: true,
+                                    },
+                                    type: {
+                                      type: 'string',
+                                      enum: ['basic', 'endpoint'],
+                                    },
                                   },
                                   required: ['slug', 'title', 'type'],
                                   additionalProperties: false,
@@ -2244,9 +2781,17 @@ const document = {
                                 {
                                   type: 'object',
                                   properties: {
-                                    title: { type: 'string', nullable: true },
-                                    type: { type: 'string', enum: ['link'] },
-                                    url: { type: 'string' },
+                                    title: {
+                                      type: 'string',
+                                      nullable: true,
+                                    },
+                                    type: {
+                                      type: 'string',
+                                      enum: ['link'],
+                                    },
+                                    url: {
+                                      type: 'string',
+                                    },
                                   },
                                   required: ['title', 'type', 'url'],
                                   additionalProperties: false,
@@ -2263,19 +2808,38 @@ const document = {
                   href: {
                     type: 'object',
                     properties: {
-                      dash: { type: 'string', format: 'uri', description: 'A URL to this page in your ReadMe Dash.' },
+                      dash: {
+                        type: 'string',
+                        format: 'uri',
+                        description: 'A URL to this page in your ReadMe Dash.',
+                      },
                     },
                     additionalProperties: false,
                   },
                   metadata: {
                     type: 'object',
                     properties: {
-                      description: { type: 'string', nullable: true },
-                      keywords: { type: 'string', nullable: true },
-                      title: { type: 'string', nullable: true },
+                      description: {
+                        type: 'string',
+                        nullable: true,
+                      },
+                      keywords: {
+                        type: 'string',
+                        nullable: true,
+                      },
+                      title: {
+                        type: 'string',
+                        nullable: true,
+                      },
                       image: {
                         type: 'object',
-                        properties: { uri: { type: 'string', pattern: '\\/images\\/([a-f\\d]{24})', nullable: true } },
+                        properties: {
+                          uri: {
+                            type: 'string',
+                            pattern: '\\/images\\/([a-f\\d]{24})',
+                            nullable: true,
+                          },
+                        },
                         additionalProperties: false,
                       },
                     },
@@ -2296,7 +2860,11 @@ const document = {
                   privacy: {
                     type: 'object',
                     properties: {
-                      view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
+                      view: {
+                        type: 'string',
+                        enum: ['public', 'anyone_with_link'],
+                        default: 'anyone_with_link',
+                      },
                     },
                     additionalProperties: false,
                   },
@@ -2308,19 +2876,45 @@ const document = {
                         default: true,
                         description: 'A flag for if the page is renderable or not.',
                       },
-                      error: { type: 'string', nullable: true },
-                      message: { type: 'string', nullable: true },
+                      error: {
+                        type: 'string',
+                        nullable: true,
+                      },
+                      message: {
+                        type: 'string',
+                        nullable: true,
+                      },
                     },
                     additionalProperties: false,
                   },
                   slug: {
-                    allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
+                    allOf: [
+                      {
+                        type: 'string',
+                      },
+                      {
+                        type: 'string',
+                        minLength: 1,
+                      },
+                    ],
                     description: 'The accessible URL slug for the page.',
                   },
-                  state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
-                  title: { type: 'string' },
-                  type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
-                  position: { type: 'number' },
+                  state: {
+                    type: 'string',
+                    enum: ['current', 'deprecated'],
+                    default: 'current',
+                  },
+                  title: {
+                    type: 'string',
+                  },
+                  type: {
+                    type: 'string',
+                    enum: ['api_config', 'basic', 'endpoint', 'link'],
+                    default: 'basic',
+                  },
+                  position: {
+                    type: 'number',
+                  },
                 },
                 additionalProperties: false,
               },
@@ -2329,14 +2923,20 @@ const document = {
         },
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
+            },
             in: 'path',
             name: 'version',
             required: true,
             description: 'Project version number or stable.',
           },
           {
-            schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
+            schema: {
+              type: 'string',
+              pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
+            },
             in: 'path',
             name: 'slug',
             required: true,
@@ -2376,12 +2976,21 @@ const document = {
                         content: {
                           type: 'object',
                           properties: {
-                            body: { type: 'string', nullable: true },
-                            excerpt: { type: 'string', nullable: true },
+                            body: {
+                              type: 'string',
+                              nullable: true,
+                            },
+                            excerpt: {
+                              type: 'string',
+                              nullable: true,
+                            },
                             link: {
                               type: 'object',
                               properties: {
-                                url: { type: 'string', nullable: true },
+                                url: {
+                                  type: 'string',
+                                  nullable: true,
+                                },
                                 new_tab: {
                                   type: 'boolean',
                                   nullable: true,
@@ -2396,7 +3005,10 @@ const document = {
                             next: {
                               type: 'object',
                               properties: {
-                                description: { type: 'string', nullable: true },
+                                description: {
+                                  type: 'string',
+                                  nullable: true,
+                                },
                                 pages: {
                                   type: 'array',
                                   items: {
@@ -2404,9 +3016,17 @@ const document = {
                                       {
                                         type: 'object',
                                         properties: {
-                                          slug: { type: 'string' },
-                                          title: { type: 'string', nullable: true },
-                                          type: { type: 'string', enum: ['basic', 'endpoint'] },
+                                          slug: {
+                                            type: 'string',
+                                          },
+                                          title: {
+                                            type: 'string',
+                                            nullable: true,
+                                          },
+                                          type: {
+                                            type: 'string',
+                                            enum: ['basic', 'endpoint'],
+                                          },
                                         },
                                         required: ['slug', 'title', 'type'],
                                         additionalProperties: false,
@@ -2414,9 +3034,17 @@ const document = {
                                       {
                                         type: 'object',
                                         properties: {
-                                          title: { type: 'string', nullable: true },
-                                          type: { type: 'string', enum: ['link'] },
-                                          url: { type: 'string' },
+                                          title: {
+                                            type: 'string',
+                                            nullable: true,
+                                          },
+                                          type: {
+                                            type: 'string',
+                                            enum: ['link'],
+                                          },
+                                          url: {
+                                            type: 'string',
+                                          },
                                         },
                                         required: ['title', 'type', 'url'],
                                         additionalProperties: false,
@@ -2447,7 +3075,10 @@ const document = {
                         metadata: {
                           type: 'object',
                           properties: {
-                            description: { type: 'string', nullable: true },
+                            description: {
+                              type: 'string',
+                              nullable: true,
+                            },
                             image: {
                               type: 'object',
                               properties: {
@@ -2458,7 +3089,11 @@ const document = {
                                   description:
                                     'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
                                 },
-                                url: { type: 'string', format: 'uri', nullable: true },
+                                url: {
+                                  type: 'string',
+                                  format: 'uri',
+                                  nullable: true,
+                                },
                               },
                               required: ['uri', 'url'],
                               additionalProperties: false,
@@ -2468,7 +3103,10 @@ const document = {
                               nullable: true,
                               description: 'A comma-separated list of keywords to place into your page metadata.',
                             },
-                            title: { type: 'string', nullable: true },
+                            title: {
+                              type: 'string',
+                              nullable: true,
+                            },
                           },
                           required: ['description', 'image', 'keywords', 'title'],
                           additionalProperties: false,
@@ -2490,14 +3128,21 @@ const document = {
                         privacy: {
                           type: 'object',
                           properties: {
-                            view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
+                            view: {
+                              type: 'string',
+                              enum: ['public', 'anyone_with_link'],
+                              default: 'anyone_with_link',
+                            },
                           },
                           additionalProperties: false,
                         },
                         project: {
                           type: 'object',
                           properties: {
-                            name: { type: 'string', description: 'The name of the project.' },
+                            name: {
+                              type: 'string',
+                              description: 'The name of the project.',
+                            },
                             subdomain: {
                               type: 'string',
                               pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
@@ -2521,7 +3166,11 @@ const document = {
                               default: true,
                               description: 'A flag for if the page is renderable or not.',
                             },
-                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
+                            error: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'The rendering error.',
+                            },
                             message: {
                               type: 'string',
                               nullable: true,
@@ -2531,12 +3180,30 @@ const document = {
                           additionalProperties: false,
                         },
                         slug: {
-                          allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
+                          allOf: [
+                            {
+                              type: 'string',
+                            },
+                            {
+                              type: 'string',
+                              minLength: 1,
+                            },
+                          ],
                           description: 'The accessible URL slug for the page.',
                         },
-                        state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
-                        title: { type: 'string' },
-                        type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
+                        state: {
+                          type: 'string',
+                          enum: ['current', 'deprecated'],
+                          default: 'current',
+                        },
+                        title: {
+                          type: 'string',
+                        },
+                        type: {
+                          type: 'string',
+                          enum: ['api_config', 'basic', 'endpoint', 'link'],
+                          default: 'basic',
+                        },
                         updated_at: {
                           type: 'string',
                           format: 'date-time',
@@ -2617,9 +3284,19 @@ const document = {
                             brand: {
                               type: 'object',
                               properties: {
-                                primary_color: { type: 'string', nullable: true },
-                                link_color: { type: 'string', nullable: true },
-                                theme: { type: 'string', enum: ['system', 'light', 'dark'], default: 'light' },
+                                primary_color: {
+                                  type: 'string',
+                                  nullable: true,
+                                },
+                                link_color: {
+                                  type: 'string',
+                                  nullable: true,
+                                },
+                                theme: {
+                                  type: 'string',
+                                  enum: ['system', 'light', 'dark'],
+                                  default: 'light',
+                                },
                               },
                               required: ['primary_color', 'link_color'],
                               additionalProperties: false,
@@ -2627,7 +3304,11 @@ const document = {
                             changelog: {
                               type: 'object',
                               properties: {
-                                layout: { type: 'string', enum: ['collapsed', 'continuous'], default: 'collapsed' },
+                                layout: {
+                                  type: 'string',
+                                  enum: ['collapsed', 'continuous'],
+                                  default: 'collapsed',
+                                },
                                 show_author: {
                                   type: 'boolean',
                                   default: true,
@@ -2688,7 +3369,13 @@ const document = {
                             },
                             footer: {
                               type: 'object',
-                              properties: { readme_logo: { type: 'string', enum: ['hide', 'show'], default: 'show' } },
+                              properties: {
+                                readme_logo: {
+                                  type: 'string',
+                                  enum: ['hide', 'show'],
+                                  default: 'show',
+                                },
+                              },
                               additionalProperties: false,
                             },
                             header: {
@@ -2699,14 +3386,20 @@ const document = {
                                   enum: ['solid', 'gradient', 'line', 'overlay'],
                                   default: 'solid',
                                 },
-                                gradient_color: { type: 'string', nullable: true },
+                                gradient_color: {
+                                  type: 'string',
+                                  nullable: true,
+                                },
                                 overlay: {
                                   type: 'object',
                                   properties: {
                                     image: {
                                       type: 'object',
                                       properties: {
-                                        name: { type: 'string', nullable: true },
+                                        name: {
+                                          type: 'string',
+                                          nullable: true,
+                                        },
                                         width: {
                                           type: 'number',
                                           nullable: true,
@@ -2745,7 +3438,11 @@ const document = {
                                           description:
                                             'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
                                         },
-                                        url: { type: 'string', format: 'uri', nullable: true },
+                                        url: {
+                                          type: 'string',
+                                          format: 'uri',
+                                          nullable: true,
+                                        },
                                       },
                                       required: ['name', 'width', 'height', 'color', 'links', 'uri', 'url'],
                                       additionalProperties: false,
@@ -2795,7 +3492,10 @@ const document = {
                                 dark_mode: {
                                   type: 'object',
                                   properties: {
-                                    name: { type: 'string', nullable: true },
+                                    name: {
+                                      type: 'string',
+                                      nullable: true,
+                                    },
                                     width: {
                                       type: 'number',
                                       nullable: true,
@@ -2833,7 +3533,11 @@ const document = {
                                       description:
                                         'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
                                     },
-                                    url: { type: 'string', format: 'uri', nullable: true },
+                                    url: {
+                                      type: 'string',
+                                      format: 'uri',
+                                      nullable: true,
+                                    },
                                   },
                                   required: ['name', 'width', 'height', 'color', 'links', 'uri', 'url'],
                                   additionalProperties: false,
@@ -2841,7 +3545,10 @@ const document = {
                                 main: {
                                   type: 'object',
                                   properties: {
-                                    name: { type: 'string', nullable: true },
+                                    name: {
+                                      type: 'string',
+                                      nullable: true,
+                                    },
                                     width: {
                                       type: 'number',
                                       nullable: true,
@@ -2879,7 +3586,11 @@ const document = {
                                       description:
                                         'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
                                     },
-                                    url: { type: 'string', format: 'uri', nullable: true },
+                                    url: {
+                                      type: 'string',
+                                      format: 'uri',
+                                      nullable: true,
+                                    },
                                   },
                                   required: ['name', 'width', 'height', 'color', 'links', 'uri', 'url'],
                                   additionalProperties: false,
@@ -2887,7 +3598,10 @@ const document = {
                                 favicon: {
                                   type: 'object',
                                   properties: {
-                                    name: { type: 'string', nullable: true },
+                                    name: {
+                                      type: 'string',
+                                      nullable: true,
+                                    },
                                     width: {
                                       type: 'number',
                                       nullable: true,
@@ -2925,12 +3639,20 @@ const document = {
                                       description:
                                         'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
                                     },
-                                    url: { type: 'string', format: 'uri', nullable: true },
+                                    url: {
+                                      type: 'string',
+                                      format: 'uri',
+                                      nullable: true,
+                                    },
                                   },
                                   required: ['name', 'width', 'height', 'color', 'links', 'uri', 'url'],
                                   additionalProperties: false,
                                 },
-                                size: { type: 'string', enum: ['default', 'large'], default: 'default' },
+                                size: {
+                                  type: 'string',
+                                  enum: ['default', 'large'],
+                                  default: 'default',
+                                },
                               },
                               required: ['dark_mode', 'main', 'favicon'],
                               additionalProperties: false,
@@ -2984,9 +3706,18 @@ const document = {
                                           'recipes',
                                         ],
                                       },
-                                      title: { type: 'string', nullable: true },
-                                      url: { type: 'string', nullable: true },
-                                      custom_page: { type: 'string', nullable: true },
+                                      title: {
+                                        type: 'string',
+                                        nullable: true,
+                                      },
+                                      url: {
+                                        type: 'string',
+                                        nullable: true,
+                                      },
+                                      custom_page: {
+                                        type: 'string',
+                                        nullable: true,
+                                      },
                                     },
                                     required: ['type', 'title', 'url', 'custom_page'],
                                     additionalProperties: false,
@@ -3000,8 +3731,14 @@ const document = {
                                     changelog: {
                                       type: 'object',
                                       properties: {
-                                        label: { type: 'string', enum: ['Changelog'] },
-                                        alias: { type: 'string', nullable: true },
+                                        label: {
+                                          type: 'string',
+                                          enum: ['Changelog'],
+                                        },
+                                        alias: {
+                                          type: 'string',
+                                          nullable: true,
+                                        },
                                         visibility: {
                                           type: 'string',
                                           enum: ['enabled', 'disabled'],
@@ -3014,8 +3751,14 @@ const document = {
                                     discussions: {
                                       type: 'object',
                                       properties: {
-                                        label: { type: 'string', enum: ['Discussions'] },
-                                        alias: { type: 'string', nullable: true },
+                                        label: {
+                                          type: 'string',
+                                          enum: ['Discussions'],
+                                        },
+                                        alias: {
+                                          type: 'string',
+                                          nullable: true,
+                                        },
                                         visibility: {
                                           type: 'string',
                                           enum: ['enabled', 'disabled'],
@@ -3028,7 +3771,10 @@ const document = {
                                     home: {
                                       type: 'object',
                                       properties: {
-                                        label: { type: 'string', enum: ['Home'] },
+                                        label: {
+                                          type: 'string',
+                                          enum: ['Home'],
+                                        },
                                         visibility: {
                                           type: 'string',
                                           enum: ['enabled', 'disabled'],
@@ -3041,7 +3787,10 @@ const document = {
                                     graphql: {
                                       type: 'object',
                                       properties: {
-                                        label: { type: 'string', enum: ['GraphQL'] },
+                                        label: {
+                                          type: 'string',
+                                          enum: ['GraphQL'],
+                                        },
                                         visibility: {
                                           type: 'string',
                                           enum: ['enabled', 'disabled'],
@@ -3055,8 +3804,14 @@ const document = {
                                     guides: {
                                       type: 'object',
                                       properties: {
-                                        label: { type: 'string', enum: ['Guides'] },
-                                        alias: { type: 'string', nullable: true },
+                                        label: {
+                                          type: 'string',
+                                          enum: ['Guides'],
+                                        },
+                                        alias: {
+                                          type: 'string',
+                                          nullable: true,
+                                        },
                                         visibility: {
                                           type: 'string',
                                           enum: ['enabled', 'disabled'],
@@ -3069,8 +3824,14 @@ const document = {
                                     recipes: {
                                       type: 'object',
                                       properties: {
-                                        label: { type: 'string', enum: ['Recipes'] },
-                                        alias: { type: 'string', nullable: true },
+                                        label: {
+                                          type: 'string',
+                                          enum: ['Recipes'],
+                                        },
+                                        alias: {
+                                          type: 'string',
+                                          nullable: true,
+                                        },
                                         visibility: {
                                           type: 'string',
                                           enum: ['enabled', 'disabled'],
@@ -3083,8 +3844,14 @@ const document = {
                                     reference: {
                                       type: 'object',
                                       properties: {
-                                        label: { type: 'string', enum: ['API Reference'] },
-                                        alias: { type: 'string', nullable: true },
+                                        label: {
+                                          type: 'string',
+                                          enum: ['API Reference'],
+                                        },
+                                        alias: {
+                                          type: 'string',
+                                          nullable: true,
+                                        },
                                         visibility: {
                                           type: 'string',
                                           enum: ['enabled', 'disabled'],
@@ -3133,9 +3900,18 @@ const document = {
                                           'recipes',
                                         ],
                                       },
-                                      title: { type: 'string', nullable: true },
-                                      url: { type: 'string', nullable: true },
-                                      custom_page: { type: 'string', nullable: true },
+                                      title: {
+                                        type: 'string',
+                                        nullable: true,
+                                      },
+                                      url: {
+                                        type: 'string',
+                                        nullable: true,
+                                      },
+                                      custom_page: {
+                                        type: 'string',
+                                        nullable: true,
+                                      },
                                     },
                                     required: ['type', 'title', 'url', 'custom_page'],
                                     additionalProperties: false,
@@ -3163,16 +3939,29 @@ const document = {
                                           'recipes',
                                         ],
                                       },
-                                      title: { type: 'string', nullable: true },
-                                      url: { type: 'string', nullable: true },
-                                      custom_page: { type: 'string', nullable: true },
+                                      title: {
+                                        type: 'string',
+                                        nullable: true,
+                                      },
+                                      url: {
+                                        type: 'string',
+                                        nullable: true,
+                                      },
+                                      custom_page: {
+                                        type: 'string',
+                                        nullable: true,
+                                      },
                                     },
                                     required: ['type', 'title', 'url', 'custom_page'],
                                     additionalProperties: false,
                                   },
                                   description: 'The navigation settings for your projects subnavigation bar.',
                                 },
-                                subheader_layout: { type: 'string', enum: ['links', 'dropdown'], default: 'links' },
+                                subheader_layout: {
+                                  type: 'string',
+                                  enum: ['links', 'dropdown'],
+                                  default: 'links',
+                                },
                                 version: {
                                   type: 'string',
                                   enum: ['enabled', 'disabled'],
@@ -3220,9 +4009,19 @@ const document = {
                         custom_login: {
                           type: 'object',
                           properties: {
-                            jwt_secret: { type: 'string' },
-                            login_url: { type: 'string', format: 'uri', nullable: true },
-                            logout_url: { type: 'string', format: 'uri', nullable: true },
+                            jwt_secret: {
+                              type: 'string',
+                            },
+                            login_url: {
+                              type: 'string',
+                              format: 'uri',
+                              nullable: true,
+                            },
+                            logout_url: {
+                              type: 'string',
+                              format: 'uri',
+                              nullable: true,
+                            },
                           },
                           required: ['jwt_secret', 'login_url', 'logout_url'],
                           additionalProperties: false,
@@ -3244,21 +4043,6 @@ const document = {
                           nullable: true,
                           description:
                             'The description of your project. This is used in the page meta description and is seen by search engines and sites like Facebook.',
-                        },
-                        git: {
-                          type: 'object',
-                          properties: {
-                            connection: {
-                              type: 'object',
-                              properties: {
-                                status: {
-                                  type: 'string',
-                                  enum: ['active', 'inactive', 'none'],
-                                  default: 'none',
-                                },
-                              },
-                            },
-                          },
                         },
                         glossary: {
                           type: 'array',
@@ -3352,47 +4136,56 @@ const document = {
                                 readme_webhook_login: {
                                   type: 'object',
                                   properties: {
-                                    external_id: { type: 'string', nullable: true },
+                                    external_id: {
+                                      type: 'string',
+                                      nullable: true,
+                                    },
                                     region: {
                                       type: 'string',
                                       enum: [
-                                        'me-south-1',
-                                        'cn-north-1',
-                                        'ca-west-1',
-                                        'us-west-1',
-                                        'ca-central-1',
                                         'af-south-1',
-                                        'eu-central-1',
                                         'ap-east-1',
-                                        'ap-south-2',
-                                        'eu-west-1',
-                                        'ap-southeast-3',
-                                        'eu-west-2',
-                                        'ap-southeast-5',
-                                        'ap-southeast-4',
-                                        'eu-south-1',
-                                        'ap-south-1',
-                                        'cn-northwest-1',
-                                        'us-east-2',
-                                        'us-west-2',
-                                        'ap-northeast-3',
-                                        'eu-west-3',
-                                        'sa-east-1',
-                                        'ap-northeast-2',
-                                        'ap-southeast-1',
-                                        'eu-south-2',
-                                        'eu-north-1',
-                                        'ap-southeast-2',
-                                        'il-central-1',
                                         'ap-northeast-1',
-                                        'me-central-1',
-                                        'us-east-1',
+                                        'ap-northeast-2',
+                                        'ap-northeast-3',
+                                        'ap-south-1',
+                                        'ap-south-2',
+                                        'ap-southeast-1',
+                                        'ap-southeast-2',
+                                        'ap-southeast-3',
+                                        'ap-southeast-4',
+                                        'ap-southeast-5',
+                                        'ca-central-1',
+                                        'ca-west-1',
+                                        'cn-north-1',
+                                        'cn-northwest-1',
+                                        'eu-central-1',
                                         'eu-central-2',
+                                        'eu-north-1',
+                                        'eu-south-1',
+                                        'eu-south-2',
+                                        'eu-west-1',
+                                        'eu-west-2',
+                                        'eu-west-3',
+                                        'il-central-1',
+                                        'me-central-1',
+                                        'me-south-1',
+                                        'sa-east-1',
+                                        'us-east-1',
+                                        'us-east-2',
+                                        'us-west-1',
+                                        'us-west-2',
                                       ],
                                       nullable: true,
                                     },
-                                    role_arn: { type: 'string', nullable: true },
-                                    usage_plan_id: { type: 'string', nullable: true },
+                                    role_arn: {
+                                      type: 'string',
+                                      nullable: true,
+                                    },
+                                    usage_plan_id: {
+                                      type: 'string',
+                                      nullable: true,
+                                    },
                                   },
                                   required: ['external_id', 'region', 'role_arn', 'usage_plan_id'],
                                   additionalProperties: false,
@@ -3403,7 +4196,12 @@ const document = {
                             },
                             bing: {
                               type: 'object',
-                              properties: { verify: { type: 'string', nullable: true } },
+                              properties: {
+                                verify: {
+                                  type: 'string',
+                                  nullable: true,
+                                },
+                              },
                               required: ['verify'],
                               additionalProperties: false,
                             },
@@ -3416,21 +4214,32 @@ const document = {
                                   description:
                                     "Your Google Analytics ID. If it starts with UA-, we'll use Universal Analytics otherwise Google Analytics 4.",
                                 },
-                                site_verification: { type: 'string', nullable: true },
+                                site_verification: {
+                                  type: 'string',
+                                  nullable: true,
+                                },
                               },
                               required: ['analytics', 'site_verification'],
                               additionalProperties: false,
                             },
                             heap: {
                               type: 'object',
-                              properties: { id: { type: 'string', nullable: true } },
+                              properties: {
+                                id: {
+                                  type: 'string',
+                                  nullable: true,
+                                },
+                              },
                               required: ['id'],
                               additionalProperties: false,
                             },
                             intercom: {
                               type: 'object',
                               properties: {
-                                app_id: { type: 'string', nullable: true },
+                                app_id: {
+                                  type: 'string',
+                                  nullable: true,
+                                },
                                 secure_mode: {
                                   type: 'object',
                                   properties: {
@@ -3456,21 +4265,37 @@ const document = {
                             },
                             koala: {
                               type: 'object',
-                              properties: { key: { type: 'string', nullable: true } },
+                              properties: {
+                                key: {
+                                  type: 'string',
+                                  nullable: true,
+                                },
+                              },
                               required: ['key'],
                               additionalProperties: false,
                             },
                             localize: {
                               type: 'object',
-                              properties: { key: { type: 'string', nullable: true } },
+                              properties: {
+                                key: {
+                                  type: 'string',
+                                  nullable: true,
+                                },
+                              },
                               required: ['key'],
                               additionalProperties: false,
                             },
                             recaptcha: {
                               type: 'object',
                               properties: {
-                                site_key: { type: 'string', nullable: true },
-                                secret_key: { type: 'string', nullable: true },
+                                site_key: {
+                                  type: 'string',
+                                  nullable: true,
+                                },
+                                secret_key: {
+                                  type: 'string',
+                                  nullable: true,
+                                },
                               },
                               required: ['site_key', 'secret_key'],
                               additionalProperties: false,
@@ -3479,7 +4304,10 @@ const document = {
                             segment: {
                               type: 'object',
                               properties: {
-                                key: { type: 'string', nullable: true },
+                                key: {
+                                  type: 'string',
+                                  nullable: true,
+                                },
                                 domain: {
                                   type: 'string',
                                   nullable: true,
@@ -3492,13 +4320,23 @@ const document = {
                             },
                             typekit: {
                               type: 'object',
-                              properties: { key: { type: 'string', nullable: true } },
+                              properties: {
+                                key: {
+                                  type: 'string',
+                                  nullable: true,
+                                },
+                              },
                               required: ['key'],
                               additionalProperties: false,
                             },
                             zendesk: {
                               type: 'object',
-                              properties: { subdomain: { type: 'string', nullable: true } },
+                              properties: {
+                                subdomain: {
+                                  type: 'string',
+                                  nullable: true,
+                                },
+                              },
                               required: ['subdomain'],
                               additionalProperties: false,
                             },
@@ -3518,17 +4356,41 @@ const document = {
                           ],
                           additionalProperties: false,
                         },
-                        name: { type: 'string', description: 'The name of the project.' },
+                        name: {
+                          type: 'string',
+                          description: 'The name of the project.',
+                        },
                         onboarding_completed: {
                           type: 'object',
                           properties: {
-                            api: { type: 'boolean', default: false },
-                            appearance: { type: 'boolean', default: false },
-                            documentation: { type: 'boolean', default: false },
-                            domain: { type: 'boolean', default: false },
-                            jwt: { type: 'boolean', default: false },
-                            logs: { type: 'boolean', default: false },
-                            metricsSDK: { type: 'boolean', default: false },
+                            api: {
+                              type: 'boolean',
+                              default: false,
+                            },
+                            appearance: {
+                              type: 'boolean',
+                              default: false,
+                            },
+                            documentation: {
+                              type: 'boolean',
+                              default: false,
+                            },
+                            domain: {
+                              type: 'boolean',
+                              default: false,
+                            },
+                            jwt: {
+                              type: 'boolean',
+                              default: false,
+                            },
+                            logs: {
+                              type: 'boolean',
+                              default: false,
+                            },
+                            metricsSDK: {
+                              type: 'boolean',
+                              default: false,
+                            },
                           },
                           additionalProperties: false,
                         },
@@ -3575,15 +4437,26 @@ const document = {
                             grace_period: {
                               type: 'object',
                               properties: {
-                                enabled: { type: 'boolean', default: false },
-                                end_date: { type: 'string', format: 'date-time', nullable: true, default: null },
+                                enabled: {
+                                  type: 'boolean',
+                                  default: false,
+                                },
+                                end_date: {
+                                  type: 'string',
+                                  format: 'date-time',
+                                  nullable: true,
+                                  default: null,
+                                },
                               },
                               additionalProperties: false,
                             },
                             trial: {
                               type: 'object',
                               properties: {
-                                expired: { type: 'boolean', default: false },
+                                expired: {
+                                  type: 'boolean',
+                                  default: false,
+                                },
                                 end_date: {
                                   type: 'string',
                                   format: 'date-time',
@@ -3621,30 +4494,19 @@ const document = {
                           type: 'array',
                           items: {
                             type: 'object',
-                            properties: { from: { type: 'string' }, to: { type: 'string' } },
+                            properties: {
+                              from: {
+                                type: 'string',
+                              },
+                              to: {
+                                type: 'string',
+                              },
+                            },
                             required: ['from', 'to'],
                             additionalProperties: false,
                           },
                           description:
                             'A collection of page redirects that ReadMe will permanently redirect users to when attempting to render a 404. Check out our [redirect docs](https://docs.readme.com/main/docs/error-pages#section-redirects) for more information on how they are handled.',
-                        },
-                        refactored: {
-                          type: 'object',
-                          properties: {
-                            status: {
-                              type: 'string',
-                              enum: ['enabled', 'disabled'],
-                              default: 'disabled',
-                              description: 'Indicates if the project has our new Unified UI experience.',
-                            },
-                            migrated: {
-                              type: 'string',
-                              enum: ['failed', 'processing', 'successful', 'unknown'],
-                              default: 'unknown',
-                              description: 'Indicates if the project has been migrated from Dash to Superhub.',
-                            },
-                          },
-                          additionalProperties: false,
                         },
                         reference: {
                           type: 'object',
@@ -3719,7 +4581,11 @@ const document = {
                           default: 'disabled',
                           description: 'Expose a `sitemap.xml` directory on your project.',
                         },
-                        subdomain: { type: 'string', pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*', maxLength: 30 },
+                        subdomain: {
+                          type: 'string',
+                          pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
+                          maxLength: 30,
+                        },
                         suggested_edits: {
                           type: 'string',
                           enum: ['enabled', 'disabled'],
@@ -3731,9 +4597,18 @@ const document = {
                           items: {
                             type: 'object',
                             properties: {
-                              id: { type: 'string', description: 'Variable Identifier' },
-                              name: { type: 'string', description: 'The key name of the variable.' },
-                              default: { type: 'string', description: 'The default value of the variable.' },
+                              id: {
+                                type: 'string',
+                                description: 'Variable Identifier',
+                              },
+                              name: {
+                                type: 'string',
+                                description: 'The key name of the variable.',
+                              },
+                              default: {
+                                type: 'string',
+                                description: 'The default value of the variable.',
+                              },
                               source: {
                                 type: 'string',
                                 enum: ['server', 'security', 'custom', ''],
@@ -3763,9 +4638,19 @@ const document = {
                           items: {
                             type: 'object',
                             properties: {
-                              action: { type: 'string', enum: ['login'], default: 'login' },
-                              timeout: { type: 'number', default: 5000 },
-                              url: { type: 'string', format: 'uri' },
+                              action: {
+                                type: 'string',
+                                enum: ['login'],
+                                default: 'login',
+                              },
+                              timeout: {
+                                type: 'number',
+                                default: 5000,
+                              },
+                              url: {
+                                type: 'string',
+                                format: 'uri',
+                              },
                             },
                             required: ['url'],
                             additionalProperties: false,
@@ -3793,6 +4678,26 @@ const document = {
                               description: 'If this project supports MDX.',
                             },
                           },
+                          additionalProperties: false,
+                        },
+                        git: {
+                          type: 'object',
+                          properties: {
+                            connection: {
+                              type: 'object',
+                              properties: {
+                                status: {
+                                  type: 'string',
+                                  enum: ['active', 'inactive', 'none'],
+                                  default: 'none',
+                                  description:
+                                    'Indicates if the project has a bi-directional sync connection set up. Below is the meaning of each possible value:\n- `active` - the project has an external repository connected and the connection to the repository is active.\n- `inactive` - the project has an external repository connected but the connection to the repository is inactive.\n- `none` - the project is not connected to an external repository.',
+                                },
+                              },
+                              additionalProperties: false,
+                            },
+                          },
+                          required: ['connection'],
                           additionalProperties: false,
                         },
                         permissions: {
@@ -3840,6 +4745,24 @@ const document = {
                           required: ['appearance'],
                           additionalProperties: false,
                         },
+                        refactored: {
+                          type: 'object',
+                          properties: {
+                            status: {
+                              type: 'string',
+                              enum: ['enabled', 'disabled'],
+                              default: 'disabled',
+                              description: 'Indicates if the project has our new Unified UI experience.',
+                            },
+                            migrated: {
+                              type: 'string',
+                              enum: ['failed', 'processing', 'successful', 'unknown'],
+                              default: 'unknown',
+                              description: 'Indicates if the project has been migrated from Dash to Superhub.',
+                            },
+                          },
+                          additionalProperties: false,
+                        },
                         uri: {
                           type: 'string',
                           pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)',
@@ -3863,13 +4786,14 @@ const document = {
                         'plan',
                         'privacy',
                         'redirects',
-                        'refactored',
                         'reference',
                         'seo',
                         'subdomain',
                         'id',
                         'features',
+                        'git',
                         'permissions',
+                        'refactored',
                         'uri',
                       ],
                       additionalProperties: false,
@@ -3919,13 +4843,25 @@ const document = {
                   content: {
                     type: 'object',
                     properties: {
-                      body: { type: 'string', nullable: true },
-                      excerpt: { type: 'string', nullable: true },
+                      body: {
+                        type: 'string',
+                        nullable: true,
+                      },
+                      excerpt: {
+                        type: 'string',
+                        nullable: true,
+                      },
                       link: {
                         type: 'object',
                         properties: {
-                          url: { type: 'string', nullable: true },
-                          new_tab: { type: 'boolean', nullable: true },
+                          url: {
+                            type: 'string',
+                            nullable: true,
+                          },
+                          new_tab: {
+                            type: 'boolean',
+                            nullable: true,
+                          },
                         },
                         additionalProperties: false,
                         description:
@@ -3934,7 +4870,10 @@ const document = {
                       next: {
                         type: 'object',
                         properties: {
-                          description: { type: 'string', nullable: true },
+                          description: {
+                            type: 'string',
+                            nullable: true,
+                          },
                           pages: {
                             type: 'array',
                             items: {
@@ -3942,9 +4881,17 @@ const document = {
                                 {
                                   type: 'object',
                                   properties: {
-                                    slug: { type: 'string' },
-                                    title: { type: 'string', nullable: true },
-                                    type: { type: 'string', enum: ['basic', 'endpoint'] },
+                                    slug: {
+                                      type: 'string',
+                                    },
+                                    title: {
+                                      type: 'string',
+                                      nullable: true,
+                                    },
+                                    type: {
+                                      type: 'string',
+                                      enum: ['basic', 'endpoint'],
+                                    },
                                   },
                                   required: ['slug', 'title', 'type'],
                                   additionalProperties: false,
@@ -3952,9 +4899,17 @@ const document = {
                                 {
                                   type: 'object',
                                   properties: {
-                                    title: { type: 'string', nullable: true },
-                                    type: { type: 'string', enum: ['link'] },
-                                    url: { type: 'string' },
+                                    title: {
+                                      type: 'string',
+                                      nullable: true,
+                                    },
+                                    type: {
+                                      type: 'string',
+                                      enum: ['link'],
+                                    },
+                                    url: {
+                                      type: 'string',
+                                    },
                                   },
                                   required: ['title', 'type', 'url'],
                                   additionalProperties: false,
@@ -3971,19 +4926,38 @@ const document = {
                   href: {
                     type: 'object',
                     properties: {
-                      dash: { type: 'string', format: 'uri', description: 'A URL to this page in your ReadMe Dash.' },
+                      dash: {
+                        type: 'string',
+                        format: 'uri',
+                        description: 'A URL to this page in your ReadMe Dash.',
+                      },
                     },
                     additionalProperties: false,
                   },
                   metadata: {
                     type: 'object',
                     properties: {
-                      description: { type: 'string', nullable: true },
-                      keywords: { type: 'string', nullable: true },
-                      title: { type: 'string', nullable: true },
+                      description: {
+                        type: 'string',
+                        nullable: true,
+                      },
+                      keywords: {
+                        type: 'string',
+                        nullable: true,
+                      },
+                      title: {
+                        type: 'string',
+                        nullable: true,
+                      },
                       image: {
                         type: 'object',
-                        properties: { uri: { type: 'string', pattern: '\\/images\\/([a-f\\d]{24})', nullable: true } },
+                        properties: {
+                          uri: {
+                            type: 'string',
+                            pattern: '\\/images\\/([a-f\\d]{24})',
+                            nullable: true,
+                          },
+                        },
                         additionalProperties: false,
                       },
                     },
@@ -4004,7 +4978,11 @@ const document = {
                   privacy: {
                     type: 'object',
                     properties: {
-                      view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
+                      view: {
+                        type: 'string',
+                        enum: ['public', 'anyone_with_link'],
+                        default: 'anyone_with_link',
+                      },
                     },
                     additionalProperties: false,
                   },
@@ -4016,18 +4994,42 @@ const document = {
                         default: true,
                         description: 'A flag for if the page is renderable or not.',
                       },
-                      error: { type: 'string', nullable: true },
-                      message: { type: 'string', nullable: true },
+                      error: {
+                        type: 'string',
+                        nullable: true,
+                      },
+                      message: {
+                        type: 'string',
+                        nullable: true,
+                      },
                     },
                     additionalProperties: false,
                   },
                   slug: {
-                    allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
+                    allOf: [
+                      {
+                        type: 'string',
+                      },
+                      {
+                        type: 'string',
+                        minLength: 1,
+                      },
+                    ],
                     description: 'The accessible URL slug for the page.',
                   },
-                  state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
-                  title: { type: 'string' },
-                  type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
+                  state: {
+                    type: 'string',
+                    enum: ['current', 'deprecated'],
+                    default: 'current',
+                  },
+                  title: {
+                    type: 'string',
+                  },
+                  type: {
+                    type: 'string',
+                    enum: ['api_config', 'basic', 'endpoint', 'link'],
+                    default: 'basic',
+                  },
                   connections: {
                     type: 'object',
                     properties: {
@@ -4051,8 +5053,13 @@ const document = {
                     },
                     additionalProperties: false,
                   },
-                  position: { type: 'number' },
-                  api_config: { type: 'string', enum: ['authentication', 'getting-started', 'my-requests'] },
+                  position: {
+                    type: 'number',
+                  },
+                  api_config: {
+                    type: 'string',
+                    enum: ['authentication', 'getting-started', 'my-requests'],
+                  },
                   api: {
                     type: 'object',
                     properties: {
@@ -4061,8 +5068,13 @@ const document = {
                         enum: ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'],
                         description: 'The endpoint HTTP method.',
                       },
-                      path: { type: 'string', description: 'The endpoint path.' },
-                      schema: { nullable: true },
+                      path: {
+                        type: 'string',
+                        description: 'The endpoint path.',
+                      },
+                      schema: {
+                        nullable: true,
+                      },
                       stats: {
                         type: 'object',
                         properties: {
@@ -4157,7 +5169,10 @@ const document = {
         },
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
+            },
             in: 'path',
             name: 'version',
             required: true,
@@ -4197,12 +5212,21 @@ const document = {
                         content: {
                           type: 'object',
                           properties: {
-                            body: { type: 'string', nullable: true },
-                            excerpt: { type: 'string', nullable: true },
+                            body: {
+                              type: 'string',
+                              nullable: true,
+                            },
+                            excerpt: {
+                              type: 'string',
+                              nullable: true,
+                            },
                             link: {
                               type: 'object',
                               properties: {
-                                url: { type: 'string', nullable: true },
+                                url: {
+                                  type: 'string',
+                                  nullable: true,
+                                },
                                 new_tab: {
                                   type: 'boolean',
                                   nullable: true,
@@ -4217,7 +5241,10 @@ const document = {
                             next: {
                               type: 'object',
                               properties: {
-                                description: { type: 'string', nullable: true },
+                                description: {
+                                  type: 'string',
+                                  nullable: true,
+                                },
                                 pages: {
                                   type: 'array',
                                   items: {
@@ -4225,9 +5252,17 @@ const document = {
                                       {
                                         type: 'object',
                                         properties: {
-                                          slug: { type: 'string' },
-                                          title: { type: 'string', nullable: true },
-                                          type: { type: 'string', enum: ['basic', 'endpoint'] },
+                                          slug: {
+                                            type: 'string',
+                                          },
+                                          title: {
+                                            type: 'string',
+                                            nullable: true,
+                                          },
+                                          type: {
+                                            type: 'string',
+                                            enum: ['basic', 'endpoint'],
+                                          },
                                         },
                                         required: ['slug', 'title', 'type'],
                                         additionalProperties: false,
@@ -4235,9 +5270,17 @@ const document = {
                                       {
                                         type: 'object',
                                         properties: {
-                                          title: { type: 'string', nullable: true },
-                                          type: { type: 'string', enum: ['link'] },
-                                          url: { type: 'string' },
+                                          title: {
+                                            type: 'string',
+                                            nullable: true,
+                                          },
+                                          type: {
+                                            type: 'string',
+                                            enum: ['link'],
+                                          },
+                                          url: {
+                                            type: 'string',
+                                          },
                                         },
                                         required: ['title', 'type', 'url'],
                                         additionalProperties: false,
@@ -4268,7 +5311,10 @@ const document = {
                         metadata: {
                           type: 'object',
                           properties: {
-                            description: { type: 'string', nullable: true },
+                            description: {
+                              type: 'string',
+                              nullable: true,
+                            },
                             image: {
                               type: 'object',
                               properties: {
@@ -4279,7 +5325,11 @@ const document = {
                                   description:
                                     'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
                                 },
-                                url: { type: 'string', format: 'uri', nullable: true },
+                                url: {
+                                  type: 'string',
+                                  format: 'uri',
+                                  nullable: true,
+                                },
                               },
                               required: ['uri', 'url'],
                               additionalProperties: false,
@@ -4289,7 +5339,10 @@ const document = {
                               nullable: true,
                               description: 'A comma-separated list of keywords to place into your page metadata.',
                             },
-                            title: { type: 'string', nullable: true },
+                            title: {
+                              type: 'string',
+                              nullable: true,
+                            },
                           },
                           required: ['description', 'image', 'keywords', 'title'],
                           additionalProperties: false,
@@ -4311,14 +5364,21 @@ const document = {
                         privacy: {
                           type: 'object',
                           properties: {
-                            view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
+                            view: {
+                              type: 'string',
+                              enum: ['public', 'anyone_with_link'],
+                              default: 'anyone_with_link',
+                            },
                           },
                           additionalProperties: false,
                         },
                         project: {
                           type: 'object',
                           properties: {
-                            name: { type: 'string', description: 'The name of the project.' },
+                            name: {
+                              type: 'string',
+                              description: 'The name of the project.',
+                            },
                             subdomain: {
                               type: 'string',
                               pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
@@ -4342,7 +5402,11 @@ const document = {
                               default: true,
                               description: 'A flag for if the page is renderable or not.',
                             },
-                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
+                            error: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'The rendering error.',
+                            },
                             message: {
                               type: 'string',
                               nullable: true,
@@ -4352,12 +5416,30 @@ const document = {
                           additionalProperties: false,
                         },
                         slug: {
-                          allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
+                          allOf: [
+                            {
+                              type: 'string',
+                            },
+                            {
+                              type: 'string',
+                              minLength: 1,
+                            },
+                          ],
                           description: 'The accessible URL slug for the page.',
                         },
-                        state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
-                        title: { type: 'string' },
-                        type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
+                        state: {
+                          type: 'string',
+                          enum: ['current', 'deprecated'],
+                          default: 'current',
+                        },
+                        title: {
+                          type: 'string',
+                        },
+                        type: {
+                          type: 'string',
+                          enum: ['api_config', 'basic', 'endpoint', 'link'],
+                          default: 'basic',
+                        },
                         updated_at: {
                           type: 'string',
                           format: 'date-time',
@@ -4382,7 +5464,10 @@ const document = {
                               enum: ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'],
                               description: 'The endpoint HTTP method.',
                             },
-                            path: { type: 'string', description: 'The endpoint path.' },
+                            path: {
+                              type: 'string',
+                              description: 'The endpoint path.',
+                            },
                             schema: {
                               nullable: true,
                               description:
@@ -4544,7 +5629,11 @@ const document = {
           "Get a page from the API Reference section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: { type: 'string', enum: ['true', 'false'], default: 'false' },
+            schema: {
+              type: 'string',
+              enum: ['true', 'false'],
+              default: 'false',
+            },
             in: 'query',
             name: 'dereference',
             required: false,
@@ -4552,7 +5641,11 @@ const document = {
               'Whether or not to dereference the attached API definition. Defaults to `false` if not specified (subject to change while API v2 is still in beta).',
           },
           {
-            schema: { type: 'string', enum: ['true', 'false'], default: 'true' },
+            schema: {
+              type: 'string',
+              enum: ['true', 'false'],
+              default: 'true',
+            },
             in: 'query',
             name: 'reduce',
             required: false,
@@ -4560,14 +5653,20 @@ const document = {
               'Whether or not to reduce the attached API definition. Defaults to `true` if not specified (subject to change while API v2 is still in beta).',
           },
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
+            },
             in: 'path',
             name: 'version',
             required: true,
             description: 'Project version number or stable.',
           },
           {
-            schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
+            schema: {
+              type: 'string',
+              pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
+            },
             in: 'path',
             name: 'slug',
             required: true,
@@ -4607,12 +5706,21 @@ const document = {
                         content: {
                           type: 'object',
                           properties: {
-                            body: { type: 'string', nullable: true },
-                            excerpt: { type: 'string', nullable: true },
+                            body: {
+                              type: 'string',
+                              nullable: true,
+                            },
+                            excerpt: {
+                              type: 'string',
+                              nullable: true,
+                            },
                             link: {
                               type: 'object',
                               properties: {
-                                url: { type: 'string', nullable: true },
+                                url: {
+                                  type: 'string',
+                                  nullable: true,
+                                },
                                 new_tab: {
                                   type: 'boolean',
                                   nullable: true,
@@ -4627,7 +5735,10 @@ const document = {
                             next: {
                               type: 'object',
                               properties: {
-                                description: { type: 'string', nullable: true },
+                                description: {
+                                  type: 'string',
+                                  nullable: true,
+                                },
                                 pages: {
                                   type: 'array',
                                   items: {
@@ -4635,9 +5746,17 @@ const document = {
                                       {
                                         type: 'object',
                                         properties: {
-                                          slug: { type: 'string' },
-                                          title: { type: 'string', nullable: true },
-                                          type: { type: 'string', enum: ['basic', 'endpoint'] },
+                                          slug: {
+                                            type: 'string',
+                                          },
+                                          title: {
+                                            type: 'string',
+                                            nullable: true,
+                                          },
+                                          type: {
+                                            type: 'string',
+                                            enum: ['basic', 'endpoint'],
+                                          },
                                         },
                                         required: ['slug', 'title', 'type'],
                                         additionalProperties: false,
@@ -4645,9 +5764,17 @@ const document = {
                                       {
                                         type: 'object',
                                         properties: {
-                                          title: { type: 'string', nullable: true },
-                                          type: { type: 'string', enum: ['link'] },
-                                          url: { type: 'string' },
+                                          title: {
+                                            type: 'string',
+                                            nullable: true,
+                                          },
+                                          type: {
+                                            type: 'string',
+                                            enum: ['link'],
+                                          },
+                                          url: {
+                                            type: 'string',
+                                          },
                                         },
                                         required: ['title', 'type', 'url'],
                                         additionalProperties: false,
@@ -4678,7 +5805,10 @@ const document = {
                         metadata: {
                           type: 'object',
                           properties: {
-                            description: { type: 'string', nullable: true },
+                            description: {
+                              type: 'string',
+                              nullable: true,
+                            },
                             image: {
                               type: 'object',
                               properties: {
@@ -4689,7 +5819,11 @@ const document = {
                                   description:
                                     'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
                                 },
-                                url: { type: 'string', format: 'uri', nullable: true },
+                                url: {
+                                  type: 'string',
+                                  format: 'uri',
+                                  nullable: true,
+                                },
                               },
                               required: ['uri', 'url'],
                               additionalProperties: false,
@@ -4699,7 +5833,10 @@ const document = {
                               nullable: true,
                               description: 'A comma-separated list of keywords to place into your page metadata.',
                             },
-                            title: { type: 'string', nullable: true },
+                            title: {
+                              type: 'string',
+                              nullable: true,
+                            },
                           },
                           required: ['description', 'image', 'keywords', 'title'],
                           additionalProperties: false,
@@ -4721,14 +5858,21 @@ const document = {
                         privacy: {
                           type: 'object',
                           properties: {
-                            view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
+                            view: {
+                              type: 'string',
+                              enum: ['public', 'anyone_with_link'],
+                              default: 'anyone_with_link',
+                            },
                           },
                           additionalProperties: false,
                         },
                         project: {
                           type: 'object',
                           properties: {
-                            name: { type: 'string', description: 'The name of the project.' },
+                            name: {
+                              type: 'string',
+                              description: 'The name of the project.',
+                            },
                             subdomain: {
                               type: 'string',
                               pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
@@ -4752,7 +5896,11 @@ const document = {
                               default: true,
                               description: 'A flag for if the page is renderable or not.',
                             },
-                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
+                            error: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'The rendering error.',
+                            },
                             message: {
                               type: 'string',
                               nullable: true,
@@ -4762,12 +5910,30 @@ const document = {
                           additionalProperties: false,
                         },
                         slug: {
-                          allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
+                          allOf: [
+                            {
+                              type: 'string',
+                            },
+                            {
+                              type: 'string',
+                              minLength: 1,
+                            },
+                          ],
                           description: 'The accessible URL slug for the page.',
                         },
-                        state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
-                        title: { type: 'string' },
-                        type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
+                        state: {
+                          type: 'string',
+                          enum: ['current', 'deprecated'],
+                          default: 'current',
+                        },
+                        title: {
+                          type: 'string',
+                        },
+                        type: {
+                          type: 'string',
+                          enum: ['api_config', 'basic', 'endpoint', 'link'],
+                          default: 'basic',
+                        },
                         updated_at: {
                           type: 'string',
                           format: 'date-time',
@@ -4792,7 +5958,10 @@ const document = {
                               enum: ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'],
                               description: 'The endpoint HTTP method.',
                             },
-                            path: { type: 'string', description: 'The endpoint path.' },
+                            path: {
+                              type: 'string',
+                              description: 'The endpoint path.',
+                            },
                             schema: {
                               nullable: true,
                               description:
@@ -4952,21 +6121,31 @@ const document = {
           "Delete a page from the API Reference section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
+            },
             in: 'path',
             name: 'version',
             required: true,
             description: 'Project version number or stable.',
           },
           {
-            schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
+            schema: {
+              type: 'string',
+              pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
+            },
             in: 'path',
             name: 'slug',
             required: true,
             description: 'A URL-safe representation of the resource.',
           },
         ],
-        responses: { '204': { description: 'No Content' } },
+        responses: {
+          '204': {
+            description: 'No Content',
+          },
+        },
       },
       patch: {
         operationId: 'updateReference',
@@ -5001,13 +6180,25 @@ const document = {
                   content: {
                     type: 'object',
                     properties: {
-                      body: { type: 'string', nullable: true },
-                      excerpt: { type: 'string', nullable: true },
+                      body: {
+                        type: 'string',
+                        nullable: true,
+                      },
+                      excerpt: {
+                        type: 'string',
+                        nullable: true,
+                      },
                       link: {
                         type: 'object',
                         properties: {
-                          url: { type: 'string', nullable: true },
-                          new_tab: { type: 'boolean', nullable: true },
+                          url: {
+                            type: 'string',
+                            nullable: true,
+                          },
+                          new_tab: {
+                            type: 'boolean',
+                            nullable: true,
+                          },
                         },
                         additionalProperties: false,
                         description:
@@ -5016,7 +6207,10 @@ const document = {
                       next: {
                         type: 'object',
                         properties: {
-                          description: { type: 'string', nullable: true },
+                          description: {
+                            type: 'string',
+                            nullable: true,
+                          },
                           pages: {
                             type: 'array',
                             items: {
@@ -5024,9 +6218,17 @@ const document = {
                                 {
                                   type: 'object',
                                   properties: {
-                                    slug: { type: 'string' },
-                                    title: { type: 'string', nullable: true },
-                                    type: { type: 'string', enum: ['basic', 'endpoint'] },
+                                    slug: {
+                                      type: 'string',
+                                    },
+                                    title: {
+                                      type: 'string',
+                                      nullable: true,
+                                    },
+                                    type: {
+                                      type: 'string',
+                                      enum: ['basic', 'endpoint'],
+                                    },
                                   },
                                   required: ['slug', 'title', 'type'],
                                   additionalProperties: false,
@@ -5034,9 +6236,17 @@ const document = {
                                 {
                                   type: 'object',
                                   properties: {
-                                    title: { type: 'string', nullable: true },
-                                    type: { type: 'string', enum: ['link'] },
-                                    url: { type: 'string' },
+                                    title: {
+                                      type: 'string',
+                                      nullable: true,
+                                    },
+                                    type: {
+                                      type: 'string',
+                                      enum: ['link'],
+                                    },
+                                    url: {
+                                      type: 'string',
+                                    },
                                   },
                                   required: ['title', 'type', 'url'],
                                   additionalProperties: false,
@@ -5053,19 +6263,38 @@ const document = {
                   href: {
                     type: 'object',
                     properties: {
-                      dash: { type: 'string', format: 'uri', description: 'A URL to this page in your ReadMe Dash.' },
+                      dash: {
+                        type: 'string',
+                        format: 'uri',
+                        description: 'A URL to this page in your ReadMe Dash.',
+                      },
                     },
                     additionalProperties: false,
                   },
                   metadata: {
                     type: 'object',
                     properties: {
-                      description: { type: 'string', nullable: true },
-                      keywords: { type: 'string', nullable: true },
-                      title: { type: 'string', nullable: true },
+                      description: {
+                        type: 'string',
+                        nullable: true,
+                      },
+                      keywords: {
+                        type: 'string',
+                        nullable: true,
+                      },
+                      title: {
+                        type: 'string',
+                        nullable: true,
+                      },
                       image: {
                         type: 'object',
-                        properties: { uri: { type: 'string', pattern: '\\/images\\/([a-f\\d]{24})', nullable: true } },
+                        properties: {
+                          uri: {
+                            type: 'string',
+                            pattern: '\\/images\\/([a-f\\d]{24})',
+                            nullable: true,
+                          },
+                        },
                         additionalProperties: false,
                       },
                     },
@@ -5086,7 +6315,11 @@ const document = {
                   privacy: {
                     type: 'object',
                     properties: {
-                      view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
+                      view: {
+                        type: 'string',
+                        enum: ['public', 'anyone_with_link'],
+                        default: 'anyone_with_link',
+                      },
                     },
                     additionalProperties: false,
                   },
@@ -5098,18 +6331,42 @@ const document = {
                         default: true,
                         description: 'A flag for if the page is renderable or not.',
                       },
-                      error: { type: 'string', nullable: true },
-                      message: { type: 'string', nullable: true },
+                      error: {
+                        type: 'string',
+                        nullable: true,
+                      },
+                      message: {
+                        type: 'string',
+                        nullable: true,
+                      },
                     },
                     additionalProperties: false,
                   },
                   slug: {
-                    allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
+                    allOf: [
+                      {
+                        type: 'string',
+                      },
+                      {
+                        type: 'string',
+                        minLength: 1,
+                      },
+                    ],
                     description: 'The accessible URL slug for the page.',
                   },
-                  state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
-                  title: { type: 'string' },
-                  type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
+                  state: {
+                    type: 'string',
+                    enum: ['current', 'deprecated'],
+                    default: 'current',
+                  },
+                  title: {
+                    type: 'string',
+                  },
+                  type: {
+                    type: 'string',
+                    enum: ['api_config', 'basic', 'endpoint', 'link'],
+                    default: 'basic',
+                  },
                   connections: {
                     type: 'object',
                     properties: {
@@ -5141,8 +6398,13 @@ const document = {
                         enum: ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'],
                         description: 'The endpoint HTTP method.',
                       },
-                      path: { type: 'string', description: 'The endpoint path.' },
-                      schema: { nullable: true },
+                      path: {
+                        type: 'string',
+                        description: 'The endpoint path.',
+                      },
+                      schema: {
+                        nullable: true,
+                      },
                       stats: {
                         type: 'object',
                         properties: {
@@ -5229,7 +6491,9 @@ const document = {
                     description:
                       'Information about the API that this reference page is attached to. If you wish to detach this page from an API definition, making it a stand page, set `api.uri` to `null`.',
                   },
-                  position: { type: 'number' },
+                  position: {
+                    type: 'number',
+                  },
                 },
                 additionalProperties: false,
               },
@@ -5238,14 +6502,20 @@ const document = {
         },
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
+            },
             in: 'path',
             name: 'version',
             required: true,
             description: 'Project version number or stable.',
           },
           {
-            schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
+            schema: {
+              type: 'string',
+              pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
+            },
             in: 'path',
             name: 'slug',
             required: true,
@@ -5285,12 +6555,21 @@ const document = {
                         content: {
                           type: 'object',
                           properties: {
-                            body: { type: 'string', nullable: true },
-                            excerpt: { type: 'string', nullable: true },
+                            body: {
+                              type: 'string',
+                              nullable: true,
+                            },
+                            excerpt: {
+                              type: 'string',
+                              nullable: true,
+                            },
                             link: {
                               type: 'object',
                               properties: {
-                                url: { type: 'string', nullable: true },
+                                url: {
+                                  type: 'string',
+                                  nullable: true,
+                                },
                                 new_tab: {
                                   type: 'boolean',
                                   nullable: true,
@@ -5305,7 +6584,10 @@ const document = {
                             next: {
                               type: 'object',
                               properties: {
-                                description: { type: 'string', nullable: true },
+                                description: {
+                                  type: 'string',
+                                  nullable: true,
+                                },
                                 pages: {
                                   type: 'array',
                                   items: {
@@ -5313,9 +6595,17 @@ const document = {
                                       {
                                         type: 'object',
                                         properties: {
-                                          slug: { type: 'string' },
-                                          title: { type: 'string', nullable: true },
-                                          type: { type: 'string', enum: ['basic', 'endpoint'] },
+                                          slug: {
+                                            type: 'string',
+                                          },
+                                          title: {
+                                            type: 'string',
+                                            nullable: true,
+                                          },
+                                          type: {
+                                            type: 'string',
+                                            enum: ['basic', 'endpoint'],
+                                          },
                                         },
                                         required: ['slug', 'title', 'type'],
                                         additionalProperties: false,
@@ -5323,9 +6613,17 @@ const document = {
                                       {
                                         type: 'object',
                                         properties: {
-                                          title: { type: 'string', nullable: true },
-                                          type: { type: 'string', enum: ['link'] },
-                                          url: { type: 'string' },
+                                          title: {
+                                            type: 'string',
+                                            nullable: true,
+                                          },
+                                          type: {
+                                            type: 'string',
+                                            enum: ['link'],
+                                          },
+                                          url: {
+                                            type: 'string',
+                                          },
                                         },
                                         required: ['title', 'type', 'url'],
                                         additionalProperties: false,
@@ -5356,7 +6654,10 @@ const document = {
                         metadata: {
                           type: 'object',
                           properties: {
-                            description: { type: 'string', nullable: true },
+                            description: {
+                              type: 'string',
+                              nullable: true,
+                            },
                             image: {
                               type: 'object',
                               properties: {
@@ -5367,7 +6668,11 @@ const document = {
                                   description:
                                     'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
                                 },
-                                url: { type: 'string', format: 'uri', nullable: true },
+                                url: {
+                                  type: 'string',
+                                  format: 'uri',
+                                  nullable: true,
+                                },
                               },
                               required: ['uri', 'url'],
                               additionalProperties: false,
@@ -5377,7 +6682,10 @@ const document = {
                               nullable: true,
                               description: 'A comma-separated list of keywords to place into your page metadata.',
                             },
-                            title: { type: 'string', nullable: true },
+                            title: {
+                              type: 'string',
+                              nullable: true,
+                            },
                           },
                           required: ['description', 'image', 'keywords', 'title'],
                           additionalProperties: false,
@@ -5399,14 +6707,21 @@ const document = {
                         privacy: {
                           type: 'object',
                           properties: {
-                            view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
+                            view: {
+                              type: 'string',
+                              enum: ['public', 'anyone_with_link'],
+                              default: 'anyone_with_link',
+                            },
                           },
                           additionalProperties: false,
                         },
                         project: {
                           type: 'object',
                           properties: {
-                            name: { type: 'string', description: 'The name of the project.' },
+                            name: {
+                              type: 'string',
+                              description: 'The name of the project.',
+                            },
                             subdomain: {
                               type: 'string',
                               pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
@@ -5430,7 +6745,11 @@ const document = {
                               default: true,
                               description: 'A flag for if the page is renderable or not.',
                             },
-                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
+                            error: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'The rendering error.',
+                            },
                             message: {
                               type: 'string',
                               nullable: true,
@@ -5440,12 +6759,30 @@ const document = {
                           additionalProperties: false,
                         },
                         slug: {
-                          allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
+                          allOf: [
+                            {
+                              type: 'string',
+                            },
+                            {
+                              type: 'string',
+                              minLength: 1,
+                            },
+                          ],
                           description: 'The accessible URL slug for the page.',
                         },
-                        state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
-                        title: { type: 'string' },
-                        type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
+                        state: {
+                          type: 'string',
+                          enum: ['current', 'deprecated'],
+                          default: 'current',
+                        },
+                        title: {
+                          type: 'string',
+                        },
+                        type: {
+                          type: 'string',
+                          enum: ['api_config', 'basic', 'endpoint', 'link'],
+                          default: 'basic',
+                        },
                         updated_at: {
                           type: 'string',
                           format: 'date-time',
@@ -5470,7 +6807,10 @@ const document = {
                               enum: ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'],
                               description: 'The endpoint HTTP method.',
                             },
-                            path: { type: 'string', description: 'The endpoint path.' },
+                            path: {
+                              type: 'string',
+                              description: 'The endpoint path.',
+                            },
                             schema: {
                               nullable: true,
                               description:
@@ -5632,7 +6972,9 @@ const document = {
           "Searches the ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: { type: 'string' },
+            schema: {
+              type: 'string',
+            },
             in: 'query',
             name: 'query',
             required: true,
@@ -5649,7 +6991,9 @@ const document = {
             description: 'The section to search within.',
           },
           {
-            schema: { type: 'string' },
+            schema: {
+              type: 'string',
+            },
             in: 'query',
             name: 'version',
             required: false,
@@ -5664,7 +7008,9 @@ const document = {
                 schema: {
                   type: 'object',
                   properties: {
-                    total: { type: 'number' },
+                    total: {
+                      type: 'number',
+                    },
                     data: {
                       type: 'array',
                       items: {
@@ -5673,7 +7019,10 @@ const document = {
                           url: {
                             type: 'object',
                             properties: {
-                              full: { type: 'string', description: 'The full URL of the page.' },
+                              full: {
+                                type: 'string',
+                                description: 'The full URL of the page.',
+                              },
                               relative: {
                                 type: 'string',
                                 description: 'The relative URL of the page without the version or base URL.',
@@ -5682,22 +7031,36 @@ const document = {
                             required: ['full', 'relative'],
                             additionalProperties: false,
                           },
-                          title: { type: 'string' },
-                          excerpt: { type: 'string' },
+                          title: {
+                            type: 'string',
+                          },
+                          excerpt: {
+                            type: 'string',
+                          },
                           highlights: {
                             type: 'array',
                             items: {
                               type: 'object',
                               properties: {
-                                score: { type: 'number' },
-                                path: { type: 'string', enum: ['title', 'excerpt', 'searchContents', 'body'] },
+                                score: {
+                                  type: 'number',
+                                },
+                                path: {
+                                  type: 'string',
+                                  enum: ['title', 'excerpt', 'searchContents', 'body'],
+                                },
                                 texts: {
                                   type: 'array',
                                   items: {
                                     type: 'object',
                                     properties: {
-                                      value: { type: 'string' },
-                                      type: { type: 'string', enum: ['hit', 'text'] },
+                                      value: {
+                                        type: 'string',
+                                      },
+                                      type: {
+                                        type: 'string',
+                                        enum: ['hit', 'text'],
+                                      },
                                     },
                                     required: ['value', 'type'],
                                     additionalProperties: false,
@@ -5708,7 +7071,9 @@ const document = {
                               additionalProperties: false,
                             },
                           },
-                          slug: { type: 'string' },
+                          slug: {
+                            type: 'string',
+                          },
                           section: {
                             type: 'string',
                             enum: ['guides', 'reference', 'recipes', 'custom_pages', 'discuss', 'changelog'],
@@ -5718,14 +7083,23 @@ const document = {
                             nullable: true,
                             description: 'The semver version number this search is scoped to.',
                           },
-                          subdomain: { type: 'string' },
+                          subdomain: {
+                            type: 'string',
+                          },
                           api: {
                             type: 'object',
-                            properties: { method: { type: 'string', nullable: true } },
+                            properties: {
+                              method: {
+                                type: 'string',
+                                nullable: true,
+                              },
+                            },
                             required: ['method'],
                             additionalProperties: false,
                           },
-                          uri: { type: 'string' },
+                          uri: {
+                            type: 'string',
+                          },
                         },
                         required: [
                           'url',
@@ -5761,21 +7135,34 @@ const document = {
           "Get a collection of versions. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: { type: 'number', minimum: 1, default: 1 },
+            schema: {
+              type: 'number',
+              minimum: 1,
+              default: 1,
+            },
             in: 'query',
             name: 'page',
             required: false,
             description: 'Used to specify further pages (starts at 1).',
           },
           {
-            schema: { type: 'number', minimum: 1, maximum: 100, default: 10 },
+            schema: {
+              type: 'number',
+              minimum: 1,
+              maximum: 100,
+              default: 10,
+            },
             in: 'query',
             name: 'per_page',
             required: false,
             description: 'Number of items to include in pagination (up to 100, defaults to 10).',
           },
           {
-            schema: { type: 'string', enum: ['created', 'updated', 'semver'], default: 'semver' },
+            schema: {
+              type: 'string',
+              enum: ['created', 'updated', 'semver'],
+              default: 'semver',
+            },
             in: 'query',
             name: 'sort_by',
             required: false,
@@ -5790,16 +7177,34 @@ const document = {
                 schema: {
                   type: 'object',
                   properties: {
-                    total: { type: 'number' },
-                    page: { type: 'number' },
-                    per_page: { type: 'number' },
+                    total: {
+                      type: 'number',
+                    },
+                    page: {
+                      type: 'number',
+                    },
+                    per_page: {
+                      type: 'number',
+                    },
                     paging: {
                       type: 'object',
                       properties: {
-                        next: { type: 'string', nullable: true },
-                        previous: { type: 'string', nullable: true },
-                        first: { type: 'string', nullable: true },
-                        last: { type: 'string', nullable: true },
+                        next: {
+                          type: 'string',
+                          nullable: true,
+                        },
+                        previous: {
+                          type: 'string',
+                          nullable: true,
+                        },
+                        first: {
+                          type: 'string',
+                          nullable: true,
+                        },
+                        last: {
+                          type: 'string',
+                          nullable: true,
+                        },
                       },
                       required: ['next', 'previous', 'first', 'last'],
                       additionalProperties: false,
@@ -5913,18 +7318,45 @@ const document = {
       },
     },
   },
-  servers: [{ url: 'https://api.readme.com/v2', description: 'The ReadMe API' }],
-  security: [{ bearer: [] }],
-  'x-readme': { 'proxy-enabled': true },
+  servers: [
+    {
+      url: 'http://api.readme.local:3000/v2',
+      description: 'The ReadMe API',
+    },
+  ],
+  security: [
+    {
+      bearer: [],
+    },
+  ],
+  'x-readme': {
+    'proxy-enabled': false,
+  },
   tags: [
-    { name: 'API Reference' },
-    { name: 'APIs' },
-    { name: 'Changelog' },
-    { name: 'Custom Pages' },
-    { name: 'Guides' },
-    { name: 'Projects' },
-    { name: 'Search' },
-    { name: 'Versions' },
+    {
+      name: 'API Reference',
+    },
+    {
+      name: 'APIs',
+    },
+    {
+      name: 'Changelog',
+    },
+    {
+      name: 'Custom Pages',
+    },
+    {
+      name: 'Guides',
+    },
+    {
+      name: 'Projects',
+    },
+    {
+      name: 'Search',
+    },
+    {
+      name: 'Versions',
+    },
   ],
 } as const satisfies OASDocument;
 
