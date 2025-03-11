@@ -7320,7 +7320,7 @@ const document = {
   },
   servers: [
     {
-      url: 'http://api.readme.local:3000/v2',
+      url: 'https://api.readme.com/v2',
       description: 'The ReadMe API',
     },
   ],
