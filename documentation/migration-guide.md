@@ -84,7 +84,7 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
 
    - The `--dryRun` flag has been deprecated in favor of `--dry-run`.
 
-   - Like `openapi upload` above, there is no prompt to select your ReadMe project version if you omit the `--version` flag. It now defaults to `stable` (i.e., your main ReadMe project version).
+   - There is no prompt to select your ReadMe project version if you omit the `--version` flag. It now defaults to `stable` (i.e., your main ReadMe project version).
 
    - `rdme docs upload` will now automatically validate your frontmatter and flag any issues prior to syncing. This is particularly helpful if you're coming from `rdme@9` or earlier, since the shape of certain frontmatter attributes (e.g., `category`, `parent`) have slightly changed. If you run this command in a non-CI environment, any outdated frontmatter will be detected and you'll have the ability to update it automatically.
 
@@ -94,7 +94,7 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
 
    If you previously uploaded API definitions to ReadMe via `rdme openapi`, the command is now `rdme openapi upload`. There are now two main updates:
 
-   - There is no prompt to select your ReadMe project version if you omit the `--version` flag. It now defaults to `stable` (i.e., your main ReadMe project version).
+   - Like `docs upload` above, there is no prompt to select your ReadMe project version if you omit the `--version` flag. It now defaults to `stable` (i.e., your main ReadMe project version).
 
    - The flag paradigms have been simplified based on community feedback. Previously with `openapi`, the `--id` flag was an ObjectId that required an initial upload to ReadMe, which made it difficult to upsert API definitions and manage many at scale (and workarounds were added after the fact in the form of the `--create` and `--update` flags). With `openapi upload`, the `--id` flag has been renamed to `--slug` and is now optional. The slug (i.e., the unique identifier for your API definition resource in ReadMe) is inferred from the file path or URL to your API definition.
 
