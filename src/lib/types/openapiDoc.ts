@@ -1,4 +1,3 @@
-import { stat } from 'node:fs';
 import type { OASDocument } from 'oas/types';
 
 /**
