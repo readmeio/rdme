@@ -226,7 +226,13 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
   }
 
   if (skipValidation) {
-    this.warn('Skipping pre-upload validation of the Markdown file(s). This is not recommended.');
+    if (biDiConnection) {
+      this.warn(
+        "Bi-directional syncing is enabled for this project. Uploading these docs will overwrite what's currently synced from Git.",
+      );
+    } else {
+      this.warn('Skipping pre-upload validation of the Markdown file(s). This is not recommended.');
+    }
   }
 
   let files: string[];

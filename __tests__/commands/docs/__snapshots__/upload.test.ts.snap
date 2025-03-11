@@ -33,8 +33,8 @@ exports[`rdme docs upload > given that ReadMe project has bidirection sync set u
     "skipped": [],
     "updated": [],
   },
-  "stderr": " ›   Warning: Skipping pre-upload validation of the Markdown file(s). This is 
- ›   not recommended.
+  "stderr": " ›   Warning: Bi-directional syncing is enabled for this project. Uploading 
+ ›   these docs will overwrite what's currently synced from Git.
 - 🚀 Uploading files to ReadMe...
 ✔ 🚀 Uploading files to ReadMe... done!
 ",
