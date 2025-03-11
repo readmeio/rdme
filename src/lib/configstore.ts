@@ -1,6 +1,6 @@
 import Configstore from 'configstore';
 
-import { pkg } from './getPkg.js';
+import pkg from '../../package.json' with { type: 'json' };
 
 const configstore = new Configstore(
   /**

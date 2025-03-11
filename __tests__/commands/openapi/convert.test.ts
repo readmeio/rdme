@@ -6,18 +6,16 @@ import prompts from 'prompts';
 import { describe, it, expect, vi, beforeAll, beforeEach, afterEach, type MockInstance } from 'vitest';
 
 import Command from '../../../src/commands/openapi/convert.js';
-import { runCommandAndReturnResult } from '../../helpers/oclif.js';
-
-const successfulConversion = () => 'Your API definition has been converted and bundled and saved to output.json!';
+import { runCommand, type OclifOutput } from '../../helpers/oclif.js';
 
 describe('rdme openapi convert', () => {
   let fsWriteFileSyncSpy: MockInstance<typeof fs.writeFileSync>;
   let reducedSpec: OASDocument;
-  let run: (args?: string[]) => Promise<string>;
+  let run: (args?: string[]) => OclifOutput;
   let testWorkingDir: string;
 
   beforeAll(() => {
-    run = runCommandAndReturnResult(Command);
+    run = runCommand(Command);
   });
 
   beforeEach(() => {
@@ -42,7 +40,8 @@ describe('rdme openapi convert', () => {
 
       prompts.inject(['output.json']);
 
-      await expect(run([spec])).resolves.toBe(successfulConversion());
+      const { result } = await run([spec]);
+      expect(result).toBe('Your API definition has been converted and bundled and saved to output.json!');
 
       expect(fsWriteFileSyncSpy).toHaveBeenCalledWith('output.json', expect.any(String));
       expect(reducedSpec.tags).toHaveLength(1);
@@ -62,7 +61,7 @@ describe('rdme openapi convert', () => {
         '--out',
         'output.json',
       ]),
-    ).resolves.toBe(successfulConversion());
+    ).resolves.toMatchSnapshot();
 
     expect(fsWriteFileSyncSpy).toHaveBeenCalledWith('output.json', expect.any(String));
     expect(Object.keys(reducedSpec.paths)).toStrictEqual(['/pet/{petId}']);
@@ -70,14 +69,18 @@ describe('rdme openapi convert', () => {
   });
 
   describe('error handling', () => {
-    it.each([['json'], ['yaml']])('should fail if given an OpenAPI 3.0 definition (format: %s)', async format => {
-      const spec = require.resolve(`@readme/oas-examples/3.0/${format}/petstore.${format}`);
-
-      const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    it.each([['json'], ['yaml']])('should warn if given an OpenAPI 3.0 definition (format: %s)', async format => {
+      const spec = `petstore.${format}`;
 
       prompts.inject(['output.json']);
 
-      await expect(run([spec])).resolves.toBe(successfulConversion());
+      await expect(
+        run([
+          spec,
+          '--workingDirectory',
+          require.resolve(`@readme/oas-examples/3.0/${format}/${spec}`).replace(spec, ''),
+        ]),
+      ).resolves.toMatchSnapshot();
 
       expect(fsWriteFileSyncSpy).toHaveBeenCalledWith('output.json', expect.any(String));
       expect(reducedSpec.tags).toHaveLength(3);
@@ -98,12 +101,6 @@ describe('rdme openapi convert', () => {
         '/user/{username}',
       ]);
       expect(Object.keys(reducedSpec.paths['/pet/{petId}'])).toStrictEqual(['get', 'post', 'delete']);
-
-      expect(consoleWarnSpy).toHaveBeenCalledWith(
-        '⚠️  Warning! The input file is already OpenAPI, so no conversion is necessary. Any external references will be bundled.',
-      );
-
-      consoleWarnSpy.mockRestore();
     });
   });
 });

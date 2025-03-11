@@ -2,7 +2,7 @@ import nock from 'nock';
 
 import config from '../../src/lib/config.js';
 import { getUserAgent } from '../../src/lib/readmeAPIFetch.js';
-import { readmeAPIv2Oas } from '../../src/lib/types.js';
+import readmeAPIv2Oas from '../../src/lib/types/openapiDoc.js';
 
 import { mockVersion } from './oclif.js';
 

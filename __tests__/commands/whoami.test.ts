@@ -1,15 +1,14 @@
 import { describe, afterEach, it, expect, beforeAll } from 'vitest';
 
-import pkg from '../../package.json' with { type: 'json' };
 import Command from '../../src/commands/whoami.js';
 import configStore from '../../src/lib/configstore.js';
-import { runCommandAndReturnResult } from '../helpers/oclif.js';
+import { runCommand, type OclifOutput } from '../helpers/oclif.js';
 
 describe('rdme whoami', () => {
-  let run: (args?: string[]) => Promise<string>;
+  let run: (args?: string[]) => OclifOutput;
 
   beforeAll(() => {
-    run = runCommandAndReturnResult(Command);
+    run = runCommand(Command);
   });
 
   afterEach(() => {
@@ -20,13 +19,13 @@ describe('rdme whoami', () => {
     configStore.delete('email');
     configStore.delete('project');
 
-    return expect(run()).rejects.toStrictEqual(new Error(`Please login using \`${pkg.name} login\`.`));
+    return expect(run()).resolves.toMatchSnapshot();
   });
 
   it('should return the authenticated user', () => {
     configStore.set('email', 'email@example.com');
     configStore.set('project', 'subdomain');
 
-    return expect(run()).resolves.toBe('You are currently logged in as email@example.com to the subdomain project.');
+    return expect(run()).resolves.toMatchSnapshot();
   });
 });

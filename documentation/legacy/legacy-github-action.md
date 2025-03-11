@@ -1,8 +1,10 @@
 ---
-category: 62056dee230e07007218be06
-hidden: true
+category:
+  uri: documentation
 slug: automatically-sync-api-specification-with-github
-title: OpenAPI + GitHub Sync [DEPRECATED]
+title: 'OpenAPI + GitHub Sync [DEPRECATED]'
+privacy:
+  view: anyone_with_link
 ---
 
 <!--

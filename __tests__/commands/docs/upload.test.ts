@@ -45,6 +45,7 @@ describe('rdme docs upload', () => {
         .reply(201, {});
 
       const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key]);
+
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
 
@@ -64,6 +65,7 @@ describe('rdme docs upload', () => {
         .reply(201, {});
 
       const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key, '--version', '1.2.3']);
+
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
 
@@ -75,6 +77,7 @@ describe('rdme docs upload', () => {
         const mock = getAPIv2Mock({ authorization }).head('/versions/stable/guides/new-doc').reply(404);
 
         const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key, '--dry-run']);
+
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
 
@@ -85,6 +88,7 @@ describe('rdme docs upload', () => {
         const mock = getAPIv2Mock({ authorization }).head('/versions/stable/guides/some-slug').reply(200);
 
         const result = await run(['__tests__/__fixtures__/docs/slug-docs/new-doc-slug.md', '--key', key, '--dry-run']);
+
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
 
@@ -95,6 +99,7 @@ describe('rdme docs upload', () => {
         const mock = getAPIv2Mock({ authorization }).head('/versions/stable/guides/some-slug').reply(500);
 
         const result = await run(['__tests__/__fixtures__/docs/slug-docs/new-doc-slug.md', '--key', key, '--dry-run']);
+
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
 
@@ -116,6 +121,7 @@ describe('rdme docs upload', () => {
           .reply(201, {});
 
         const result = await run(['__tests__/__fixtures__/docs/slug-docs/new-doc-slug.md', '--key', key]);
+
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
 
@@ -134,6 +140,7 @@ describe('rdme docs upload', () => {
           .reply(201, {});
 
         const result = await run(['__tests__/__fixtures__/docs/slug-docs/new-doc-slug.md', '--key', key]);
+
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
 
@@ -157,6 +164,7 @@ describe('rdme docs upload', () => {
         prompts.inject([true]);
 
         const result = await run(['__tests__/__fixtures__/docs/mixed-docs/legacy-category.md', '--key', key]);
+
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).toHaveBeenCalledWith(
           '__tests__/__fixtures__/docs/mixed-docs/legacy-category.md',
@@ -190,6 +198,7 @@ describe('rdme docs upload', () => {
         prompts.inject([true]);
 
         const result = await run(['__tests__/__fixtures__/docs/mixed-docs/legacy-category.md', '--key', key]);
+
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).toHaveBeenCalledWith(
           '__tests__/__fixtures__/docs/mixed-docs/legacy-category.md',
@@ -205,6 +214,7 @@ describe('rdme docs upload', () => {
         prompts.inject([false]);
 
         const result = await run(['__tests__/__fixtures__/docs/mixed-docs/legacy-category.md', '--key', key]);
+
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
       });
@@ -227,6 +237,7 @@ describe('rdme docs upload', () => {
           key,
           '--skip-validation',
         ]);
+
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
 
@@ -249,6 +260,7 @@ describe('rdme docs upload', () => {
           .reply(201, {});
 
         const result = await run(['__tests__/__fixtures__/docs/mixed-docs/invalid-attributes.md', '--key', key]);
+
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
 
@@ -278,6 +290,7 @@ describe('rdme docs upload', () => {
           .reply(201, {});
 
         const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key]);
+
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
 
@@ -287,6 +300,7 @@ describe('rdme docs upload', () => {
 
       it('should error out if the file has validation errors', async () => {
         const result = await run(['__tests__/__fixtures__/docs/mixed-docs/legacy-category.md', '--key', key]);
+
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
       });
@@ -296,6 +310,7 @@ describe('rdme docs upload', () => {
       const mock = getAPIv2Mock({ authorization }).head('/versions/stable/guides/new-doc').reply(500);
 
       const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key]);
+
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
 
@@ -304,12 +319,14 @@ describe('rdme docs upload', () => {
 
     it('should error out if the file does not exist', async () => {
       const result = await run(['non-existent-file', '--key', key]);
+
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
     });
 
     it('should error out if the file has an invalid file extension', async () => {
       const result = await run(['package.json', '--key', key]);
+
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
     });
@@ -337,6 +354,7 @@ describe('rdme docs upload', () => {
         .reply(201, {});
 
       const result = await run(['__tests__/__fixtures__/docs/existing-docs', '--key', key]);
+
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
 
@@ -362,6 +380,7 @@ describe('rdme docs upload', () => {
         .reply(201, {});
 
       const result = await run(['__tests__/__fixtures__/docs/existing-docs', '--key', key]);
+
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
 
@@ -407,6 +426,7 @@ describe('rdme docs upload', () => {
           .reply(201, {});
 
         const result = await run(['__tests__/__fixtures__/docs/multiple-docs', '--key', key]);
+
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
 
@@ -416,6 +436,7 @@ describe('rdme docs upload', () => {
 
     it('should error out if the directory does not contain any Markdown files', async () => {
       const result = await run(['__tests__/__fixtures__/ref-oas', '--key', key]);
+
       expect(result).toMatchSnapshot();
     });
 
@@ -459,6 +480,7 @@ describe('rdme docs upload', () => {
       prompts.inject([true]);
 
       const result = await run(['__tests__/__fixtures__/docs/mixed-docs', '--key', key]);
+
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).toHaveBeenCalledTimes(5);
 
@@ -479,6 +501,7 @@ describe('rdme docs upload', () => {
       prompts.inject([true]);
 
       const result = await run(['__tests__/__fixtures__/docs/mixed-docs', '--key', key, '--dry-run']);
+
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).toHaveBeenCalledTimes(5);
 

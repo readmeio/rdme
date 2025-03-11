@@ -1,7 +1,11 @@
 ---
 title: Syncing Docs via CLI / GitHub
-excerpt: Update your docs automatically with `rdme`, ReadMe's official CLI and GitHub Action!
-category: 62056dee230e07007218be06
+category:
+  uri: documentation
+content:
+  excerpt: >-
+    Update your docs automatically with `rdme`, ReadMe's official CLI and GitHub
+    Action!
 ---
 
 <!--
@@ -161,7 +165,7 @@ This will run through the `openapi` command, ask you a few quick questions, and 
 >
 > Here are the relevant files on GitHub:
 >
-> - [The Markdown source file for the page you're reading](https://github.com/readmeio/rdme/blob/main/documentation/rdme.md) 📜
+> - [The Markdown source file for the page you're reading](https://github.com/readmeio/rdme/blob/main/documentation/legacy/rdme.md) 📜
 > - [The GitHub Actions workflow file that syncs the Markdown to docs.readme.com](https://github.com/readmeio/rdme/blob/main/.github/workflows/docs.yml) 🔄
 > - And finally... [the workflow run results](https://github.com/readmeio/rdme/actions/workflows/docs.yml) ✅
 

@@ -1,15 +1,14 @@
 import { describe, afterEach, beforeAll, it, expect } from 'vitest';
 
-import pkg from '../../package.json' with { type: 'json' };
 import Command from '../../src/commands/logout.js';
 import configStore from '../../src/lib/configstore.js';
-import { runCommandAndReturnResult } from '../helpers/oclif.js';
+import { runCommand, type OclifOutput } from '../helpers/oclif.js';
 
 describe('rdme logout', () => {
-  let run: (args?: string[]) => Promise<string>;
+  let run: (args?: string[]) => OclifOutput;
 
   beforeAll(() => {
-    run = runCommandAndReturnResult(Command);
+    run = runCommand(Command);
   });
 
   afterEach(() => {
@@ -20,18 +19,14 @@ describe('rdme logout', () => {
     configStore.delete('email');
     configStore.delete('project');
 
-    return expect(run()).resolves.toBe(
-      `You have logged out of ReadMe. Please use \`${pkg.name} login\` to login again.`,
-    );
+    return expect(run()).resolves.toMatchSnapshot();
   });
 
   it('should log the user out', async () => {
     configStore.set('email', 'email@example.com');
     configStore.set('project', 'subdomain');
 
-    await expect(run()).resolves.toBe(
-      `You have logged out of ReadMe. Please use \`${pkg.name} login\` to login again.`,
-    );
+    await expect(run()).resolves.toMatchSnapshot();
 
     expect(configStore.get('email')).toBeUndefined();
     expect(configStore.get('project')).toBeUndefined();
