@@ -1,4 +1,5 @@
-import type ChangelogsCommand from '../commands/changelogs.js';
+import type { PageCommand } from './syncDocsPath.legacy.js';
+import type DocsPruneCommand from '../commands/docs/prune.js';
 
 import crypto from 'node:crypto';
 import fs from 'node:fs';
@@ -35,7 +36,7 @@ export interface PageMetadata<T = Record<string, unknown>> {
  * Returns the content, matter and slug of the specified Markdown or HTML file
  */
 export default function readPage(
-  this: ChangelogsCommand,
+  this: DocsPruneCommand | PageCommand,
   /**
    * path to the HTML/Markdown file
    * (file extension must end in `.html`, `.md`., or `.markdown`)

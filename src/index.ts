@@ -1,7 +1,7 @@
-import CategoriesCreateCommand from './commands/categories/create.js';
-import CategoriesCommand from './commands/categories/index.js';
 import type { ValueOf } from 'type-fest';
 
+import CategoriesCreateCommand from './commands/categories/create.js';
+import CategoriesCommand from './commands/categories/index.js';
 import ChangelogsCommand from './commands/changelogs.js';
 import CustomPagesCommand from './commands/custompages.js';
 import DocsCommand from './commands/docs/index.js';

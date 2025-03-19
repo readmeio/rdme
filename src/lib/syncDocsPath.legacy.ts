@@ -17,7 +17,7 @@ import { cleanAPIv1Headers, handleAPIv1Res, readmeAPIv1Fetch } from './readmeAPI
 /** API path within ReadMe to update (e.g. `docs`, `changelogs`, etc.) */
 type PageType = 'changelogs' | 'custompages' | 'docs';
 
-type PageCommand = ChangelogsCommand | CustomPagesCommand | DocsCommand;
+export type PageCommand = ChangelogsCommand | CustomPagesCommand | DocsCommand;
 
 /**
  * Reads the contents of the specified Markdown or HTML file
@@ -141,7 +141,7 @@ const byParentDoc = (left: PageMetadata, right: PageMetadata) => {
  * @see {@link https://github.com/readmeio/rdme/pull/973}
  * @returns An array of sorted PageMetadata objects
  */
-function sortFiles(this: ChangelogsCommand, filePaths: string[]): PageMetadata[] {
+function sortFiles(this: PageCommand, filePaths: string[]): PageMetadata[] {
   const files = filePaths.map(file => readPage.call(this, file)).sort(byParentDoc);
   const filesBySlug = files.reduce<Record<string, PageMetadata>>((bySlug, obj) => {
     // eslint-disable-next-line no-param-reassign

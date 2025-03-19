@@ -11,8 +11,8 @@ import readdirRecursive from '../../lib/readdirRecursive.js';
 import readDoc from '../../lib/readDoc.js';
 import { getProjectVersion } from '../../lib/versionSelect.js';
 
-function getSlug(filename: string): string {
-  const { slug } = readDoc(filename);
+function getSlug(this: DocsPruneCommand, filename: string): string {
+  const { slug } = readDoc.call(this, filename);
   return slug;
 }
 
