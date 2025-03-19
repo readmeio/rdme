@@ -43,27 +43,6 @@ jobs:
           regex: false
           include: documentation/*
 
-      # Since this workflow file is in the `rdme` repository itself,
-      # we need to test the GitHub Action using the current commit.
-      # This step builds the `rdme` action code so we can do that.
-      #
-      # This step is not required for syncing your docs to ReadMe!
-      - name: Rebuild GitHub Action for testing purposes
-        run: npm run build:gha
-
-      # And finally, with our updated documentation,
-      # we run the `rdme` GitHub Action to sync the Markdown file
-      # in the `documentation` directory.
-      # Here's the page we're syncing: https://docs.readme.com/docs/rdme
-
-      # First we're going to perform a dry run of syncing process.
-      # We do this on every push to ensure that an actual sync will work properly
-      - name: Sync docs to ReadMe (dry run)
-        uses: ./
-        with:
-          rdme: docs ./documentation --key=${{ secrets.README_DEVELOPERS_API_KEY }} --version=${{ vars.README_DEVELOPERS_MAIN_VERSION }} --dryRun
-
-      # And finally, we perform an actual sync to ReadMe if we're on the main branch
       - name: Sync docs to ReadMe
         uses: readmeio/rdme@v10.2.0-next.4
         with:
