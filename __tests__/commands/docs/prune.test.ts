@@ -23,7 +23,7 @@ describe('rdme docs prune', () => {
   afterAll(() => nock.cleanAll());
 
   it('should error if no folder provided', () => {
-    return expect(run(['--key', key, '--version', version])).rejects.rejects.toThrow('Missing 1 required arg:\nfolder');
+    return expect(run(['--key', key, '--version', version])).rejects.toThrow('Missing 1 required arg:\nfolder');
   });
 
   it('should error if the argument is not a folder', async () => {
