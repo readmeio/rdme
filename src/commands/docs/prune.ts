@@ -90,7 +90,7 @@ export default class DocsPruneCommand extends BaseCommand<typeof DocsPruneComman
 
     const docs = await getDocs(key, selectedVersion);
     const docSlugs = docs.map(({ slug }: { slug: string }) => slug);
-    const fileSlugs = new Set(files.map(getSlug));
+    const fileSlugs = new Set(files.map(getSlug.bind(this)));
     const slugsToDelete = docSlugs.filter((slug: string) => !fileSlugs.has(slug));
     const deletedDocs = await Promise.all(
       slugsToDelete.map((slug: string) => deleteDoc(key, selectedVersion, dryRun, slug)),

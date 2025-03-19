@@ -124,11 +124,11 @@ describe('rdme custompages (single)', () => {
       getMock.done();
     });
 
-    it('should skip if it does not contain any front matter attributes', async () => {
+    it('should skip if it does not contain any frontmatter attributes', async () => {
       const filePath = `./__tests__/${fixturesBaseDir}/failure-docs/doc-sans-attributes.md`;
 
       await expect(run([filePath, '--key', key])).resolves.toBe(
-        `⏭️  no front matter attributes found for ${filePath}, skipping`,
+        `⏭️  no frontmatter attributes found for ${filePath}, skipping`,
       );
     });
 

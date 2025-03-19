@@ -127,7 +127,7 @@ describe('rdme docs (single)', () => {
       versionMock.done();
     });
 
-    it('should skip doc if it does not contain any front matter attributes', async () => {
+    it('should skip doc if it does not contain any frontmatter attributes', async () => {
       const versionMock = getAPIv1Mock()
         .get(`/api/v1/version/${version}`)
         .basicAuth({ user: key })
@@ -136,7 +136,7 @@ describe('rdme docs (single)', () => {
       const filePath = `./__tests__/${fixturesBaseDir}/failure-docs/doc-sans-attributes.md`;
 
       await expect(run(['--key', key, '--version', version, filePath])).resolves.toBe(
-        `⏭️  no front matter attributes found for ${filePath}, skipping`,
+        `⏭️  no frontmatter attributes found for ${filePath}, skipping`,
       );
 
       versionMock.done();

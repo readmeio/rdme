@@ -171,7 +171,7 @@ npm run build && npm run build:docs
 
 * [`rdme autocomplete`](documentation/commands/autocomplete.md) - Display autocomplete installation instructions.
 * [`rdme categories`](documentation/commands/categories.md) - List or create categories in your ReadMe developer hub.
-* [`rdme changelogs`](documentation/commands/changelogs.md) - Sync Markdown files to your ReadMe project as Changelog posts.
+* [`rdme changelogs`](documentation/commands/changelogs.md) - Upload Markdown files to your ReadMe project as Changelog posts.
 * [`rdme custompages`](documentation/commands/custompages.md) - Sync Markdown/HTML files to your ReadMe project as Custom Pages.
 * [`rdme docs`](documentation/commands/docs.md) - Sync or prune Guides pages in your ReadMe developer hub.
 * [`rdme help`](documentation/commands/help.md) - Display help for rdme.

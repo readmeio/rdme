@@ -29,7 +29,7 @@ DESCRIPTION
   out our docs for more info on setting up your frontmatter: https://docs.readme.com/main/docs/rdme#markdown-file-setup
 
 EXAMPLES
-  Passing in a path to a directory will also upload any Markdown files that are located in subdirectories. The path
+  Passing in a path to a directory will also sync any Markdown files that are located in subdirectories. The path
   input can also be individual Markdown files:
 
     $ rdme changelogs [path] --version={project-version}

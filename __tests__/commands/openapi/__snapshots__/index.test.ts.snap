@@ -297,7 +297,7 @@ REQUIRED must have required property 'name'
   24 |   "components": {
   25 |     "securitySchemes": {
 > 26 |       "tlsAuth": {
-     |                  ^ ☹️  name is missing here!
+     |                  ^ name is missing here!
   27 |         "type": "mutualTLS"
   28 |       }
   29 |     }]

@@ -25,8 +25,8 @@ DESCRIPTION
   Sync Markdown/HTML files to your ReadMe project as Custom Pages.
 
   Syncs Markdown files as Custom Pages in your ReadMe project. The path can either be a directory or a single Markdown
-  file. The Markdown files will require YAML front matter with certain ReadMe documentation attributes. Check out our
-  docs for more info on setting up your front matter: https://docs.readme.com/main/docs/rdme#markdown-file-setup
+  file. The Markdown files will require YAML frontmatter with certain ReadMe documentation attributes. Check out our
+  docs for more info on setting up your frontmatter: https://docs.readme.com/main/docs/rdme#markdown-file-setup
 
 EXAMPLES
   Passing in a path to a directory will also sync any Markdown files that are located in subdirectories. The path
