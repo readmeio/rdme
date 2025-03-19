@@ -287,10 +287,14 @@ jobs:
 "
 `;
 
-exports[`rdme openapi > error handling > should throw an error if an invalid OpenAPI 3.0 definition is supplied 1`] = `[MissingPointerError: Token "Error" does not exist.]`;
+exports[`rdme openapi > error handling > should throw an error if an invalid OpenAPI 3.0 definition is supplied 1`] = `
+[ValidationError: API definition schema validation failed.
+
+Missing $ref pointer "#/components/schemas/Error". Token "Error" does not exist.]
+`;
 
 exports[`rdme openapi > error handling > should throw an error if an invalid OpenAPI 3.1 definition is supplied 1`] = `
-[SyntaxError: OpenAPI schema validation failed.
+[ValidationError: OpenAPI schema validation failed.
 
 REQUIRED must have required property 'name'
 
@@ -303,7 +307,11 @@ REQUIRED must have required property 'name'
   29 |     }]
 `;
 
-exports[`rdme openapi > error handling > should throw an error if an invalid ref is supplied 1`] = `[MissingPointerError: Token "Petty" does not exist.]`;
+exports[`rdme openapi > error handling > should throw an error if an invalid ref is supplied 1`] = `
+[ValidationError: API definition schema validation failed.
+
+Missing $ref pointer "#/requestBodies/Petty". Token "Petty" does not exist.]
+`;
 
 exports[`rdme openapi > updates / resyncs > should use specified working directory and upload the expected content 1`] = `
 {
