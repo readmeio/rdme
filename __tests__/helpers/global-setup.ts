@@ -7,7 +7,10 @@
  */
 import nock from 'nock';
 
-export function setup(): void {
+import setupUndici from '../../src/lib/setup-undici.js';
+
+export async function setup(): Promise<void> {
+  await setupUndici();
   nock.disableNetConnect();
 }
 

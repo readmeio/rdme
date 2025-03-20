@@ -5,8 +5,9 @@ import type { SchemaObject } from 'oas/types';
 
 import path from 'node:path';
 
+import { locate } from 'func-loc';
 import mime from 'mime-types';
-import { ProxyAgent } from 'undici';
+import { EnvHttpProxyAgent, type fetch as undiciFetch } from 'undici';
 
 import { APIv1Error, APIv2Error, type APIv2ErrorResponse } from './apiError.js';
 import config from './config.js';
@@ -203,8 +204,6 @@ export async function readmeAPIv1Fetch(
   return fetch(fullUrl, {
     ...options,
     headers,
-    // @ts-expect-error we need to clean up our undici usage here ASAP
-    dispatcher: proxy ? new ProxyAgent(proxy) : undefined,
   })
     .then(res => {
       const warningHeader = res.headers.get('Warning');
@@ -295,11 +294,12 @@ export async function readmeAPIv2Fetch(
     `making ${(options.method || 'get').toUpperCase()} request to ${fullUrl} ${proxy ? `with proxy ${proxy} and ` : ''}with headers: ${sanitizeHeaders(headers)}`,
   );
 
-  return fetch(fullUrl, {
+  console.log('readmeAPIv2Fetch', await locate(fetch));
+
+  return (fetch as typeof undiciFetch)(fullUrl, {
     ...options,
     headers,
-    // @ts-expect-error we need to clean up our undici usage here ASAP
-    dispatcher: proxy ? new ProxyAgent(proxy) : undefined,
+    dispatcher: new EnvHttpProxyAgent(),
   })
     .then(res => {
       const warningHeader = res.headers.get('Warning');

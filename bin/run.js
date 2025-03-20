@@ -2,7 +2,11 @@
 
 import stringArgv from 'string-argv';
 
+// eslint-disable-next-line import/extensions
+import setupUndici from '../dist/lib/setup-undici.js';
+
 async function main() {
+  await setupUndici();
   const { execute } = await import('@oclif/core');
   const opts = { dir: import.meta.url };
   if (process.env.INPUT_RDME) {

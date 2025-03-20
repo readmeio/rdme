@@ -30,6 +30,9 @@ export default defineConfig({
       '**/__snapshots__/**',
       ...configDefaults.exclude,
     ],
-    globalSetup: '__tests__/helpers/global-setup.ts',
+    globalSetup: [
+      // '__tests__/helpers/global-setup-again.ts',
+      '__tests__/helpers/global-setup.ts',
+    ],
   },
 });

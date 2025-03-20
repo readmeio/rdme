@@ -53,6 +53,7 @@
     "ci-info": "^4.0.0",
     "configstore": "^7.0.0",
     "debug": "^4.3.3",
+    "func-loc": "^0.1.16",
     "gray-matter": "^4.0.1",
     "ignore": "^7.0.0",
     "js-yaml": "^4.1.0",
@@ -68,7 +69,7 @@
     "table": "^6.8.1",
     "tmp-promise": "^3.0.3",
     "toposort": "^2.0.2",
-    "undici": "^5.28.4",
+    "undici": "^7.5.0",
     "validator": "^13.7.0"
   },
   "devDependencies": {
