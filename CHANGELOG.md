@@ -1,3 +1,10 @@
+# [10.2.0-next.7](https://github.com/readmeio/rdme/compare/v10.2.0-next.6...v10.2.0-next.7) (2025-03-20)
+
+
+### Features
+
+* **docs/upload:** support `.mdx` file extension ([#1198](https://github.com/readmeio/rdme/issues/1198)) ([89f43fe](https://github.com/readmeio/rdme/commit/89f43fe5c3eb99f1a1ffb851b2ee1b70409006d2))
+
 # [10.2.0-next.6](https://github.com/readmeio/rdme/compare/v10.2.0-next.5...v10.2.0-next.6) (2025-03-19)
 
 
