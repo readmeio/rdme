@@ -3,7 +3,7 @@
 import setupUndici from '../src/lib/setup-undici.js';
 
 async function main() {
-  await setupUndici();
+  setupUndici();
   const { execute } = await import('@oclif/core');
   await execute({ development: true, dir: import.meta.url }).then(msg => {
     if (msg && typeof msg === 'string') {

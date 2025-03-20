@@ -6,7 +6,7 @@ import stringArgv from 'string-argv';
 import setupUndici from '../dist/lib/setup-undici.js';
 
 async function main() {
-  await setupUndici();
+  setupUndici();
   const { execute } = await import('@oclif/core');
   const opts = { dir: import.meta.url };
   if (process.env.INPUT_RDME) {

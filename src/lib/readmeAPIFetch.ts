@@ -5,9 +5,7 @@ import type { SchemaObject } from 'oas/types';
 
 import path from 'node:path';
 
-import { locate } from 'func-loc';
 import mime from 'mime-types';
-import { EnvHttpProxyAgent, type fetch as undiciFetch } from 'undici';
 
 import { APIv1Error, APIv2Error, type APIv2ErrorResponse } from './apiError.js';
 import config from './config.js';
@@ -294,12 +292,9 @@ export async function readmeAPIv2Fetch(
     `making ${(options.method || 'get').toUpperCase()} request to ${fullUrl} ${proxy ? `with proxy ${proxy} and ` : ''}with headers: ${sanitizeHeaders(headers)}`,
   );
 
-  console.log('readmeAPIv2Fetch', await locate(fetch));
-
-  return (fetch as typeof undiciFetch)(fullUrl, {
+  return fetch(fullUrl, {
     ...options,
     headers,
-    dispatcher: new EnvHttpProxyAgent(),
   })
     .then(res => {
       const warningHeader = res.headers.get('Warning');
