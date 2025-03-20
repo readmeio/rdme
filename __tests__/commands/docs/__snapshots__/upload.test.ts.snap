@@ -86,7 +86,7 @@ exports[`rdme docs upload > given that the file path is a directory > should cre
 
 exports[`rdme docs upload > given that the file path is a directory > should error out if the directory does not contain any Markdown files 1`] = `
 {
-  "error": [Error: The directory you provided (__tests__/__fixtures__/ref-oas) doesn't contain any of the following file extensions: .markdown, .md.],
+  "error": [Error: The directory you provided (__tests__/__fixtures__/ref-oas) doesn't contain any of the following file extensions: .markdown, .md, .mdx.],
   "stderr": "- 🔍 Looking for Markdown files in __tests__/__fixtures__/ref-oas...
 ✖ 🔍 Looking for Markdown files in __tests__/__fixtures__/ref-oas... no files found.
 ",
@@ -114,7 +114,7 @@ exports[`rdme docs upload > given that the file path is a directory > should han
 ⏭️ The following 1 page(s) will be skipped due to no frontmatter data:
    - doc-sans-attributes (__tests__/__fixtures__/docs/mixed-docs/doc-sans-attributes.md)
 🚨 Unable to fetch data about the following 2 page(s):
-   - __tests__/__fixtures__/docs/mixed-docs/new-doc-slug.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+   - __tests__/__fixtures__/docs/mixed-docs/new-doc-slug.mdx: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
    - __tests__/__fixtures__/docs/mixed-docs/simple-doc.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
 ",
 }
@@ -140,7 +140,7 @@ exports[`rdme docs upload > given that the file path is a directory > should han
 ⏭️ Skipped 1 page(s) in ReadMe due to no frontmatter data:
    - doc-sans-attributes (__tests__/__fixtures__/docs/mixed-docs/doc-sans-attributes.md)
 🚨 Received errors when attempting to upload 2 page(s):
-   - __tests__/__fixtures__/docs/mixed-docs/new-doc-slug.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+   - __tests__/__fixtures__/docs/mixed-docs/new-doc-slug.mdx: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
    - __tests__/__fixtures__/docs/mixed-docs/simple-doc.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
 ",
 }
@@ -518,7 +518,7 @@ exports[`rdme docs upload > given that the file path is a single file > should e
 
 exports[`rdme docs upload > given that the file path is a single file > should error out if the file has an invalid file extension 1`] = `
 {
-  "error": [Error: Invalid file extension (.json). Must be one of the following: .markdown, .md],
+  "error": [Error: Invalid file extension (.json). Must be one of the following: .markdown, .md, .mdx],
   "stderr": "",
   "stdout": "",
 }
