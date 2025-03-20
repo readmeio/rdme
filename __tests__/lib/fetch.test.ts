@@ -373,14 +373,6 @@ describe('#cleanAPIv1Headers()', () => {
 });
 
 describe('#fetchSchema', () => {
-  beforeEach(() => {
-    vi.stubEnv('HTTP_PROXY', 'https://proxy.example.com:5678');
-  });
-
-  afterEach(() => {
-    vi.unstubAllEnvs();
-  });
-
   it('should fetch the schema', async () => {
     const mock = oasFetchMock();
 
