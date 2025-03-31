@@ -66,7 +66,7 @@
           "$comment": "https://help.github.com/en/actions/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#jobsjob_idcontainervolumes",
           "description": "Sets an array of volumes for the container to use. You can use volumes to share data between services or other steps in a job. You can specify named Docker volumes, anonymous Docker volumes, or bind mounts on the host.\nTo specify a volume, you specify the source and destination path: <source>:<destinationPath>\nThe <source> is a volume name or an absolute path on the host machine, and <destinationPath> is an absolute path in the container.",
           "type": "array",
-          "items": { "type": "string", "pattern": "^[^:]+:[^:]+$" },
+          "items": { "type": "string" },
           "minItems": 1
         },
         "options": {
@@ -443,7 +443,7 @@
             {
               "$comment": "https://help.github.com/en/actions/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#self-hosted-runners",
               "type": "array",
-              "anyOf": [{ "items": [{ "type": "string" }], "minItems": 1 }]
+              "anyOf": [{ "items": [{ "type": "string" }], "minItems": 1, "additionalItems": { "type": "string" } }]
             },
             {
               "$comment": "https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#choosing-runners-in-a-group",
@@ -1049,10 +1049,6 @@
                         "description": {
                           "$comment": "https://help.github.com/en/github/automating-your-workflow-with-github-actions/metadata-syntax-for-github-actions#inputsinput_iddescription",
                           "description": "A string description of the input parameter.",
-                          "type": "string"
-                        },
-                        "deprecationMessage": {
-                          "description": "A string shown to users using the deprecated input.",
                           "type": "string"
                         },
                         "required": {
