@@ -3245,21 +3245,6 @@ const document = {
                           description:
                             'The description of your project. This is used in the page meta description and is seen by search engines and sites like Facebook.',
                         },
-                        git: {
-                          type: 'object',
-                          properties: {
-                            connection: {
-                              type: 'object',
-                              properties: {
-                                status: {
-                                  type: 'string',
-                                  enum: ['active', 'inactive', 'none'],
-                                  default: 'none',
-                                },
-                              },
-                            },
-                          },
-                        },
                         glossary: {
                           type: 'array',
                           items: {
