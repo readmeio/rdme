@@ -199,7 +199,7 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
   const { path: pathInput }: { path: string } = this.args;
   const { key, 'dry-run': dryRun, 'skip-validation': skipValidation } = this.flags;
 
-  const allowedFileExtensions = ['.markdown', '.md'];
+  const allowedFileExtensions = ['.markdown', '.md', '.mdx'];
 
   const stat = await fs.stat(pathInput).catch(err => {
     if (err.code === 'ENOENT') {

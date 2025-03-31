@@ -1,3 +1,35 @@
+# [10.2.0-next.7](https://github.com/readmeio/rdme/compare/v10.2.0-next.6...v10.2.0-next.7) (2025-03-20)
+
+
+### Features
+
+* **docs/upload:** support `.mdx` file extension ([#1198](https://github.com/readmeio/rdme/issues/1198)) ([89f43fe](https://github.com/readmeio/rdme/commit/89f43fe5c3eb99f1a1ffb851b2ee1b70409006d2))
+
+# [10.2.0-next.6](https://github.com/readmeio/rdme/compare/v10.2.0-next.5...v10.2.0-next.6) (2025-03-19)
+
+
+### Bug Fixes
+
+* more copy edits, snapshot changes, fixes to get tests passing ([5755efa](https://github.com/readmeio/rdme/commit/5755efa1692b83ced734c7add34910b3c14de31c))
+
+
+### Features
+
+* **openapi:** improvements to circular ref detection, validation errors ([#1189](https://github.com/readmeio/rdme/issues/1189)) ([683320f](https://github.com/readmeio/rdme/commit/683320f976c04f196e7ab36cad8acb554ccc38fc))
+
+# [9.2.0](https://github.com/readmeio/rdme/compare/v9.1.1...v9.2.0) (2025-03-19)
+ 
+ 
+ ### Bug Fixes
+ 
+ * more copy edits, snapshot changes, fixes to get tests passing ([5755efa](https://github.com/readmeio/rdme/commit/5755efa1692b83ced734c7add34910b3c14de31c))
+ 
+ 
+ ### Features
+ 
+ * **openapi:** improvements to circular ref detection, validation errors ([#1189](https://github.com/readmeio/rdme/issues/1189)) ([683320f](https://github.com/readmeio/rdme/commit/683320f976c04f196e7ab36cad8acb554ccc38fc))
+
+
 # [10.2.0-next.5](https://github.com/readmeio/rdme/compare/v10.2.0-next.4...v10.2.0-next.5) (2025-03-05)
 
 
