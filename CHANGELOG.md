@@ -1,3 +1,10 @@
+# [10.2.0-next.8](https://github.com/readmeio/rdme/compare/v10.2.0-next.7...v10.2.0-next.8) (2025-03-31)
+
+
+### Bug Fixes
+
+* **docs/upload:** add safeguard if projects have bidi enabled ([#1175](https://github.com/readmeio/rdme/issues/1175)) ([e66b257](https://github.com/readmeio/rdme/commit/e66b257600d0b774da67a4e10eda7c9b9fc8937d))
+
 # [10.2.0-next.7](https://github.com/readmeio/rdme/compare/v10.2.0-next.6...v10.2.0-next.7) (2025-03-20)
 
 
