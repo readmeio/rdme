@@ -1,5 +1,5 @@
 import type { PageMetadata } from './readPage.js';
-import type { GuidesRequestRepresentation } from './types/index.js';
+import type { GuidesRequestRepresentation, ProjectRepresentation } from './types/index.js';
 import type DocsUploadCommand from '../commands/docs/upload.js';
 
 import fs from 'node:fs/promises';
@@ -197,7 +197,7 @@ function sortFiles(files: PageMetadata<PageRepresentation>[]): PageMetadata<Page
  */
 export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
   const { path: pathInput }: { path: string } = this.args;
-  const { 'dry-run': dryRun, 'skip-validation': skipValidation } = this.flags;
+  const { key, 'dry-run': dryRun, 'skip-validation': skipValidation } = this.flags;
 
   const allowedFileExtensions = ['.markdown', '.md', '.mdx'];
 
@@ -208,8 +208,31 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
     throw err;
   });
 
+  // check whether or not the project has bidirection syncing enabled
+  // if it is, validations must be skipped to prevent frontmatter from being overwritten
+  const headers = new Headers({ authorization: `Bearer ${key}` });
+  const projectMetadata: ProjectRepresentation = await this.readmeAPIFetch('/projects/me', {
+    method: 'GET',
+    headers,
+  }).then(res => {
+    return this.handleAPIRes(res);
+  });
+
+  const biDiConnection = projectMetadata?.data?.git?.connection?.status === 'active';
+  if (biDiConnection && !skipValidation) {
+    throw new Error(
+      "Bi-directional syncing is enabled for this project. Uploading these docs will overwrite what's currently synced from Git. To proceed with the upload, re-run this command with the `--skip-validation` flag.",
+    );
+  }
+
   if (skipValidation) {
-    this.warn('Skipping pre-upload validation of the Markdown file(s). This is not recommended.');
+    if (biDiConnection) {
+      this.warn(
+        "Bi-directional syncing is enabled for this project. Uploading these docs will overwrite what's currently synced from Git.",
+      );
+    } else {
+      this.warn('Skipping pre-upload validation of the Markdown file(s). This is not recommended.');
+    }
   }
 
   let files: string[];

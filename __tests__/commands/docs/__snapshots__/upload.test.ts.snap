@@ -1,5 +1,49 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`rdme docs upload > given that ReadMe project has bidirection sync set up > should error if validation is not skipped 1`] = `
+{
+  "error": [Error: Bi-directional syncing is enabled for this project. Uploading these docs will overwrite what's currently synced from Git. To proceed with the upload, re-run this command with the \`--skip-validation\` flag.],
+  "stderr": "",
+  "stdout": "",
+}
+`;
+
+exports[`rdme docs upload > given that ReadMe project has bidirection sync set up > should handle an error if /projects/me returns an error 1`] = `
+{
+  "error": [APIv2Error: ReadMe API error: The API key couldn't be located.
+
+The API key you passed in (bad-api-key) doesn't match any keys we have in our system. API keys must be passed in via Bearer token. You can get your API key in Configuration > API Key, or in the docs.],
+  "stderr": "",
+  "stdout": "",
+}
+`;
+
+exports[`rdme docs upload > given that ReadMe project has bidirection sync set up > should upload if validation is skipped 1`] = `
+{
+  "result": {
+    "created": [
+      {
+        "filePath": "__tests__/__fixtures__/docs/new-docs/new-doc.md",
+        "response": {},
+        "result": "created",
+        "slug": "new-doc",
+      },
+    ],
+    "failed": [],
+    "skipped": [],
+    "updated": [],
+  },
+  "stderr": " ›   Warning: Bi-directional syncing is enabled for this project. Uploading 
+ ›   these docs will overwrite what's currently synced from Git.
+- 🚀 Uploading files to ReadMe...
+✔ 🚀 Uploading files to ReadMe... done!
+",
+  "stdout": "🌱 Successfully created 1 page(s) in ReadMe:
+   - new-doc (__tests__/__fixtures__/docs/new-docs/new-doc.md)
+",
+}
+`;
+
 exports[`rdme docs upload > given that the file path is a directory > given that the directory contains parent/child docs > should upload parents before children 1`] = `
 {
   "result": {

@@ -24,6 +24,9 @@ describe('rdme docs upload', () => {
       categories: {},
       parentPages: {},
     });
+    getAPIv2Mock({ authorization }).get('/projects/me').reply(200, {
+      data: {},
+    });
     vi.spyOn(fs, 'writeFileSync').mockImplementation(() => {});
   });
 
@@ -195,6 +198,10 @@ describe('rdme docs upload', () => {
           })
           .reply(201, {});
 
+        const projectsMeMock = getAPIv2Mock({ authorization }).get('/projects/me').reply(200, {
+          data: {},
+        });
+
         prompts.inject([true]);
 
         const result = await run(['__tests__/__fixtures__/docs/mixed-docs/legacy-category.md', '--key', key]);
@@ -208,6 +215,7 @@ describe('rdme docs upload', () => {
 
         mappingsMock.done();
         mock.done();
+        projectsMeMock.done();
       });
 
       it('should exit if the user declines to fix the issues', async () => {
@@ -289,6 +297,10 @@ describe('rdme docs upload', () => {
           })
           .reply(201, {});
 
+        const projectsMeMock = getAPIv2MockForGHA({ authorization }).get('/projects/me').reply(200, {
+          data: {},
+        });
+
         const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key]);
 
         expect(result).toMatchSnapshot();
@@ -296,13 +308,18 @@ describe('rdme docs upload', () => {
 
         headMock.done();
         postMock.done();
+        projectsMeMock.done();
       });
 
       it('should error out if the file has validation errors', async () => {
+        const projectsMeMock = getAPIv2MockForGHA({ authorization }).get('/projects/me').reply(200, {
+          data: {},
+        });
         const result = await run(['__tests__/__fixtures__/docs/mixed-docs/legacy-category.md', '--key', key]);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
+        projectsMeMock.done();
       });
     });
 
@@ -504,6 +521,87 @@ describe('rdme docs upload', () => {
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).toHaveBeenCalledTimes(5);
+
+      mock.done();
+    });
+  });
+
+  describe('given that ReadMe project has bidirection sync set up', () => {
+    it('should error if validation is not skipped', async () => {
+      nock.cleanAll();
+
+      const mock = getAPIv2Mock({ authorization })
+        .get('/projects/me')
+        .reply(200, {
+          data: { git: { connection: { status: 'active' } } },
+        });
+
+      const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key]);
+
+      expect(result).toMatchSnapshot();
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
+
+      mock.done();
+    });
+
+    it('should upload if validation is skipped', async () => {
+      nock.cleanAll();
+
+      const mock = getAPIv2Mock({ authorization })
+        .head('/versions/1.2.3/guides/new-doc')
+        .reply(404)
+        .post('/versions/1.2.3/guides', {
+          category: { uri: '/versions/1.2.3/categories/guides/category-slug' },
+          slug: 'new-doc',
+          title: 'This is the document title',
+          content: { body: '\nBody\n' },
+        })
+        .reply(201, {});
+
+      const projectsMeMock = getAPIv2Mock({ authorization })
+        .get('/projects/me')
+        .reply(200, {
+          data: { git: { connection: { status: 'active' } } },
+        });
+
+      const result = await run([
+        '__tests__/__fixtures__/docs/new-docs/new-doc.md',
+        '--key',
+        key,
+        '--version',
+        '1.2.3',
+        '--skip-validation',
+      ]);
+
+      expect(result).toMatchSnapshot();
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
+
+      mock.done();
+      projectsMeMock.done();
+    });
+
+    it('should handle an error if /projects/me returns an error', async () => {
+      nock.cleanAll();
+
+      const mock = getAPIv2Mock({ authorization: 'Bearer bad-api-key' })
+        .get('/projects/me')
+        .reply(401, {
+          title: "The API key couldn't be located.",
+          detail:
+            "The API key you passed in (bad-api-key) doesn't match any keys we have in our system. API keys must be passed in via Bearer token. You can get your API key in Configuration > API Key, or in the docs.",
+          instance: '/reference/intro/authentication',
+          poem: [
+            'The ancient gatekeeper declares:',
+            "'To pass, reveal your API key.'",
+            "'bad-…', you start to ramble",
+            'Oops, you remembered it poorly!',
+          ],
+        });
+
+      const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', 'bad-api-key']);
+
+      expect(result).toMatchSnapshot();
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
 
       mock.done();
     });
