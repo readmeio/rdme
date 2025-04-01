@@ -56,7 +56,7 @@
     "gray-matter": "^4.0.1",
     "ignore": "^7.0.0",
     "js-yaml": "^4.1.0",
-    "mime-types": "^2.1.35",
+    "mime-types": "^3.0.1",
     "oas": "^26.0.1",
     "oas-normalize": "^13.0.1",
     "ora": "^8.1.1",
