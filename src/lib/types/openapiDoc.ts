@@ -15,7 +15,7 @@ const document = {
     version: '2.0.0-beta',
     title: 'ReadMe API v2 🦉 (BETA)',
     // @ts-expect-error custom extension
-    'x-readme-deploy': '5.309.0',
+    'x-readme-deploy': '5.319.0',
     termsOfService: 'https://readme.com/tos',
     contact: {
       name: 'API Support',
@@ -3221,8 +3221,8 @@ const document = {
                           type: 'object',
                           properties: {
                             jwt_secret: { type: 'string' },
-                            login_url: { type: 'string', format: 'uri', nullable: true },
-                            logout_url: { type: 'string', format: 'uri', nullable: true },
+                            login_url: { type: 'string', nullable: true },
+                            logout_url: { type: 'string', nullable: true },
                           },
                           required: ['jwt_secret', 'login_url', 'logout_url'],
                           additionalProperties: false,
@@ -3768,6 +3768,34 @@ const document = {
                             connection: {
                               type: 'object',
                               properties: {
+                                repository: {
+                                  type: 'object',
+                                  properties: {
+                                    provider_type: {
+                                      type: 'string',
+                                      enum: ['github', 'github_enterprise_server'],
+                                      description: 'The type of provider for the repository.',
+                                    },
+                                    name: {
+                                      type: 'string',
+                                      description: 'The name of the repository (e.g., `repo-with-content`).',
+                                    },
+                                    full_name: {
+                                      type: 'string',
+                                      description:
+                                        'The full name of the repository (e.g., `owner-org/repo-with-content`).',
+                                    },
+                                    url: {
+                                      type: 'string',
+                                      format: 'uri',
+                                      description:
+                                        'The URL of the repository (e.g., `https://github.com/owner-org/repo-with-content`).',
+                                    },
+                                  },
+                                  required: ['provider_type', 'name', 'full_name', 'url'],
+                                  additionalProperties: false,
+                                  nullable: true,
+                                },
                                 status: {
                                   type: 'string',
                                   enum: ['active', 'inactive', 'none'],
@@ -3776,6 +3804,7 @@ const document = {
                                     'Indicates if the project has a bi-directional sync connection set up. Below is the meaning of each possible value:\n- `active` - the project has an external repository connected and the connection to the repository is active.\n- `inactive` - the project has an external repository connected but the connection to the repository is inactive.\n- `none` - the project is not connected to an external repository.',
                                 },
                               },
+                              required: ['repository'],
                               additionalProperties: false,
                             },
                           },
