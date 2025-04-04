@@ -1,5 +1,7 @@
 ---
 title: Upgrading your ReadMe CLI to rdme@10
+category:
+  uri: Upgrading to ReadMe Refactored
 ---
 
 ### Overview
