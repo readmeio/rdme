@@ -1,6 +1,6 @@
 name: Sync `documentation` directory to ReadMe
 
-# Run workflow for every push
+# Run workflow for every push to the `main` branch
 on:
   push:
     branches:
@@ -44,6 +44,6 @@ jobs:
           include: documentation/*
 
       - name: Sync docs to ReadMe
-        uses: readmeio/rdme@v10.2.0-next.4
+        uses: readmeio/rdme@10.2.0-next.8
         with:
           rdme: docs upload ./documentation/legacy/ --key=${{ secrets.README_DEVELOPERS_API_KEY }} --version=${{ vars.README_DEVELOPERS_MAIN_VERSION }}
