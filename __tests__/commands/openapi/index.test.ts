@@ -12,9 +12,8 @@ import { APIv1Error } from '../../../src/lib/apiError.js';
 import config from '../../../src/lib/config.js';
 import petstoreWeird from '../../__fixtures__/petstore-simple-weird-version.json' with { type: 'json' };
 import { getAPIv1Mock, getAPIv1MockWithVersionHeader } from '../../helpers/get-api-mock.js';
-import { after, before } from '../../helpers/get-gha-setup.js';
+import { githubActionsEnv, gitMock } from '../../helpers/git-mock.js';
 import { runCommandAndReturnResult } from '../../helpers/oclif.js';
-import { after as afterGHAEnv, before as beforeGHAEnv } from '../../helpers/setup-gha-env.js';
 
 let consoleInfoSpy: MockInstance;
 let consoleWarnSpy: MockInstance;
@@ -1044,13 +1043,13 @@ describe('rdme openapi', () => {
     let yamlOutput;
 
     beforeEach(() => {
-      before((fileName, data) => {
+      gitMock.before((fileName, data) => {
         yamlOutput = data;
       });
     });
 
     afterEach(() => {
-      after();
+      gitMock.after();
     });
 
     it('should create GHA workflow (create spec)', async () => {
@@ -1329,10 +1328,12 @@ describe('rdme openapi', () => {
 
   describe('command execution in GitHub Actions runner', () => {
     beforeEach(() => {
-      beforeGHAEnv();
+      githubActionsEnv.before();
     });
 
-    afterEach(afterGHAEnv);
+    afterEach(() => {
+      githubActionsEnv.after();
+    });
 
     it('should error out if multiple possible spec matches were found', () => {
       return expect(run(['--key', key, '--version', version])).rejects.toStrictEqual(
@@ -1431,8 +1432,6 @@ describe('rdme openapi', () => {
           './__tests__/__fixtures__/relative-ref-oas',
         ]),
       ).resolves.toBe(successfulUpload(spec));
-
-      after();
 
       postMock.done();
       return mock.done();

@@ -9,9 +9,9 @@ import { describe, beforeAll, afterAll, beforeEach, afterEach, it, expect } from
 import Command from '../../../src/commands/docs/index.js';
 import { APIv1Error } from '../../../src/lib/apiError.js';
 import { getAPIv1Mock, getAPIv1MockWithVersionHeader } from '../../helpers/get-api-mock.js';
+import { githubActionsEnv } from '../../helpers/git-mock.js';
 import hashFileContents from '../../helpers/hash-file-contents.js';
 import { runCommandAndReturnResult } from '../../helpers/oclif.js';
-import { after as afterGHAEnv, before as beforeGHAEnv } from '../../helpers/setup-gha-env.js';
 
 const fixturesBaseDir = '__fixtures__/docs';
 const fullFixturesDir = `${__dirname}./../../${fixturesBaseDir}`;
@@ -344,10 +344,12 @@ describe('rdme docs (single)', () => {
 
   describe('command execution in GitHub Actions runner', () => {
     beforeEach(() => {
-      beforeGHAEnv();
+      githubActionsEnv.before();
     });
 
-    afterEach(afterGHAEnv);
+    afterEach(() => {
+      githubActionsEnv.after();
+    });
 
     it('should sync new doc with correct headers', async () => {
       const slug = 'new-doc';
