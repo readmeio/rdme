@@ -4,7 +4,7 @@ import prompts from 'prompts';
 import { describe, beforeAll, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
 import Command from '../../../src/commands/openapi/validate.js';
-import { after, before } from '../../helpers/get-gha-setup.js';
+import { gitMock } from '../../helpers/git-mock.js';
 import { runCommand, runCommandWithHooks, type OclifOutput } from '../../helpers/oclif.js';
 
 describe('rdme openapi validate', () => {
@@ -112,13 +112,13 @@ describe('rdme openapi validate', () => {
     let yamlOutput;
 
     beforeEach(() => {
-      before((fileName, data) => {
+      gitMock.before((fileName, data) => {
         yamlOutput = data;
       });
     });
 
     afterEach(() => {
-      after();
+      gitMock.after();
     });
 
     it('should create GHA workflow if user passes in spec via prompts', async () => {

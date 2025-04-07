@@ -5,14 +5,18 @@ import pkg from '../../package.json' with { type: 'json' };
 import DocsUploadCommand from '../../src/commands/docs/upload.js';
 import { cleanAPIv1Headers, fetchSchema, handleAPIv1Res, readmeAPIv1Fetch } from '../../src/lib/readmeAPIFetch.js';
 import { getAPIv1Mock, oasFetchMock } from '../helpers/get-api-mock.js';
+import { githubActionsEnv } from '../helpers/git-mock.js';
 import { setupOclifConfig } from '../helpers/oclif.js';
-import { after, before } from '../helpers/setup-gha-env.js';
 
 describe('#readmeAPIv1Fetch()', () => {
   describe('GitHub Actions environment', () => {
-    beforeEach(before);
+    beforeEach(() => {
+      githubActionsEnv.before();
+    });
 
-    afterEach(after);
+    afterEach(() => {
+      githubActionsEnv.after();
+    });
 
     it('should have correct headers for requests in GitHub Action env', async () => {
       const key = 'API_KEY';
