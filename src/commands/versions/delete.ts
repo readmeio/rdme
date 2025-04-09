@@ -12,7 +12,7 @@ export default class DeleteVersionCommand extends BaseCommand<typeof DeleteVersi
   static state = 'deprecated';
 
   static deprecationOptions = {
-    message: `\`rdme ${this.id}\` is deprecated and will be removed in v10. For more information, please visit our migration guide: https://github.com/readmeio/rdme/tree/v9/documentation/migration-guide.md`,
+    message: `\`rdme ${this.id}\` is deprecated and will be removed in v10.\n\nFor more information, please visit our migration guide: https://github.com/readmeio/rdme/blob/v10/documentation/migration-guide.md#migrating-to-rdme9`,
   };
 
   static description = 'Delete a version associated with your ReadMe project.';

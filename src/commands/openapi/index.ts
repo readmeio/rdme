@@ -27,7 +27,7 @@ export default class OpenAPICommand extends BaseCommand<typeof OpenAPICommand> {
   static state = 'deprecated';
 
   static deprecationOptions = {
-    message: `\`rdme ${this.id}\` is deprecated and v10 will have a replacement command that supports ReadMe Refactored. For more information, please visit our migration guide: https://github.com/readmeio/rdme/tree/v9/documentation/migration-guide.md`,
+    message: `\`rdme ${this.id}\` is deprecated and v10 will have a replacement command that supports ReadMe Refactored.\n\nFor more information, please visit our migration guide: https://github.com/readmeio/rdme/blob/v10/documentation/migration-guide.md#migrating-to-rdme9`,
   };
 
   static args = {
