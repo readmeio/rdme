@@ -7,7 +7,7 @@ Upload Markdown files to the Guides section of your ReadMe project.
 
 ## `rdme docs upload PATH`
 
-> [!WARN]
+> [!WARNING]
 > This command is in an experimental alpha and is likely to change. Use at your own risk!
 
 Upload Markdown files to the Guides section of your ReadMe project.
