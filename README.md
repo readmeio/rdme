@@ -176,6 +176,7 @@ npm run build && npm run build:docs
 * [`rdme login`](documentation/commands/login.md) - Login to a ReadMe project.
 * [`rdme logout`](documentation/commands/logout.md) - Logs the currently authenticated user out of ReadMe.
 * [`rdme openapi`](documentation/commands/openapi.md) - Manage your API definition (e.g., syncing, validation, analysis, conversion, etc.). Supports OpenAPI, Swagger, and Postman collections, in either JSON or YAML formats.
+* [`rdme plugins`](documentation/commands/plugins.md) - List installed plugins.
 * [`rdme whoami`](documentation/commands/whoami.md) - Displays the current user and project authenticated with ReadMe.
 
 <!-- commandsstop -->
