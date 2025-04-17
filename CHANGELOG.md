@@ -1,3 +1,10 @@
+# [10.2.0-next.9](https://github.com/readmeio/rdme/compare/v10.2.0-next.8...v10.2.0-next.9) (2025-04-17)
+
+
+### Features
+
+* **cli:** add support for plugins ([#1213](https://github.com/readmeio/rdme/issues/1213)) ([004c8bc](https://github.com/readmeio/rdme/commit/004c8bc68c8b8af868178b4bf6382fb55023fed8))
+
 # [10.2.0-next.8](https://github.com/readmeio/rdme/compare/v10.2.0-next.7...v10.2.0-next.8) (2025-03-31)
 
 
