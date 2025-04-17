@@ -3,9 +3,7 @@
 exports[`rdme docs upload > given that ReadMe project has bidirection sync set up > should error if validation is not skipped 1`] = `
 {
   "error": [Error: Bi-directional syncing is enabled for this project. Uploading these docs will overwrite what's currently synced from Git. To proceed with the upload, re-run this command with the \`--skip-validation\` flag.],
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-",
+  "stderr": "",
   "stdout": "",
 }
 `;
@@ -15,9 +13,7 @@ exports[`rdme docs upload > given that ReadMe project has bidirection sync set u
   "error": [APIv2Error: ReadMe API error: The API key couldn't be located.
 
 The API key you passed in (bad-api-key) doesn't match any keys we have in our system. API keys must be passed in via Bearer token. You can get your API key in Configuration > API Key, or in the docs.],
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-",
+  "stderr": "",
   "stdout": "",
 }
 `;
@@ -37,9 +33,7 @@ exports[`rdme docs upload > given that ReadMe project has bidirection sync set u
     "skipped": [],
     "updated": [],
   },
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
- ›   Warning: Bi-directional syncing is enabled for this project. Uploading 
+  "stderr": " ›   Warning: Bi-directional syncing is enabled for this project. Uploading 
  ›   these docs will overwrite what's currently synced from Git.
 - 🚀 Uploading files to ReadMe...
 ✔ 🚀 Uploading files to ReadMe... done!
@@ -83,9 +77,7 @@ exports[`rdme docs upload > given that the file path is a directory > given that
     "skipped": [],
     "updated": [],
   },
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔍 Looking for Markdown files in __tests__/__fixtures__/docs/multiple-docs...
+  "stderr": "- 🔍 Looking for Markdown files in __tests__/__fixtures__/docs/multiple-docs...
 ✔ 🔍 Looking for Markdown files in __tests__/__fixtures__/docs/multiple-docs... 4 file(s) found!
 - 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
@@ -122,9 +114,7 @@ exports[`rdme docs upload > given that the file path is a directory > should cre
     "skipped": [],
     "updated": [],
   },
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔍 Looking for Markdown files in __tests__/__fixtures__/docs/existing-docs...
+  "stderr": "- 🔍 Looking for Markdown files in __tests__/__fixtures__/docs/existing-docs...
 ✔ 🔍 Looking for Markdown files in __tests__/__fixtures__/docs/existing-docs... 2 file(s) found!
 - 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
@@ -141,9 +131,7 @@ exports[`rdme docs upload > given that the file path is a directory > should cre
 exports[`rdme docs upload > given that the file path is a directory > should error out if the directory does not contain any Markdown files 1`] = `
 {
   "error": [Error: The directory you provided (__tests__/__fixtures__/ref-oas) doesn't contain any of the following file extensions: .markdown, .md, .mdx.],
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔍 Looking for Markdown files in __tests__/__fixtures__/ref-oas...
+  "stderr": "- 🔍 Looking for Markdown files in __tests__/__fixtures__/ref-oas...
 ✖ 🔍 Looking for Markdown files in __tests__/__fixtures__/ref-oas... no files found.
 ",
   "stdout": "",
@@ -153,9 +141,7 @@ exports[`rdme docs upload > given that the file path is a directory > should err
 exports[`rdme docs upload > given that the file path is a directory > should handle a mix of creates and updates and failures and skipped files (dry run) 1`] = `
 {
   "error": [AggregateError: Multiple dry runs failed. To see more detailed errors for a page, run \`rdme docs upload <path-to-page.md>\` --dry-run.],
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔍 Looking for Markdown files in __tests__/__fixtures__/docs/mixed-docs...
+  "stderr": "- 🔍 Looking for Markdown files in __tests__/__fixtures__/docs/mixed-docs...
 ✔ 🔍 Looking for Markdown files in __tests__/__fixtures__/docs/mixed-docs... 5 file(s) found!
 - 🔬 Validating frontmatter data...
 ⚠ 🔬 Validating frontmatter data... issues found in 2 file(s).
@@ -181,9 +167,7 @@ exports[`rdme docs upload > given that the file path is a directory > should han
 exports[`rdme docs upload > given that the file path is a directory > should handle a mix of creates and updates and failures and skipped files 1`] = `
 {
   "error": [AggregateError: Multiple page uploads failed. To see more detailed errors for a page, run \`rdme docs upload <path-to-page.md>\`.],
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔍 Looking for Markdown files in __tests__/__fixtures__/docs/mixed-docs...
+  "stderr": "- 🔍 Looking for Markdown files in __tests__/__fixtures__/docs/mixed-docs...
 ✔ 🔍 Looking for Markdown files in __tests__/__fixtures__/docs/mixed-docs... 5 file(s) found!
 - 🔬 Validating frontmatter data...
 ⚠ 🔬 Validating frontmatter data... issues found in 2 file(s).
@@ -227,9 +211,7 @@ exports[`rdme docs upload > given that the file path is a directory > should upd
       },
     ],
   },
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔍 Looking for Markdown files in __tests__/__fixtures__/docs/existing-docs...
+  "stderr": "- 🔍 Looking for Markdown files in __tests__/__fixtures__/docs/existing-docs...
 ✔ 🔍 Looking for Markdown files in __tests__/__fixtures__/docs/existing-docs... 2 file(s) found!
 - 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
@@ -258,9 +240,7 @@ exports[`rdme docs upload > given that the file path is a single file > and the 
     "skipped": [],
     "updated": [],
   },
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
 - 🚀 Uploading files to ReadMe...
 ✔ 🚀 Uploading files to ReadMe... done!
@@ -274,9 +254,7 @@ exports[`rdme docs upload > given that the file path is a single file > and the 
 exports[`rdme docs upload > given that the file path is a single file > and the command is being run in a CI environment > should error out if the file has validation errors 1`] = `
 {
   "error": [Error: 1 file(s) have issues that should be fixed before uploading to ReadMe. Please run \`rdme docs upload __tests__/__fixtures__/docs/mixed-docs/legacy-category.md --dry-run\` in a non-CI environment to fix them.],
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ⚠ 🔬 Validating frontmatter data... issues found in 1 file(s).
 ",
   "stdout": "",
@@ -286,9 +264,7 @@ exports[`rdme docs upload > given that the file path is a single file > and the 
 exports[`rdme docs upload > given that the file path is a single file > given that the --dry-run flag is passed > should error out if a non-404 error is returned from the HEAD request 1`] = `
 {
   "error": [APIv2Error: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
 - 🎭 Uploading files to ReadMe (but not really because it's a dry run)...
 ✖ 🎭 Uploading files to ReadMe (but not really because it's a dry run)... 1 file(s) failed.
@@ -314,9 +290,7 @@ exports[`rdme docs upload > given that the file path is a single file > given th
     "skipped": [],
     "updated": [],
   },
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
 - 🎭 Uploading files to ReadMe (but not really because it's a dry run)...
 ✔ 🎭 Uploading files to ReadMe (but not really because it's a dry run)... done!
@@ -342,9 +316,7 @@ exports[`rdme docs upload > given that the file path is a single file > given th
       },
     ],
   },
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
 - 🎭 Uploading files to ReadMe (but not really because it's a dry run)...
 ✔ 🎭 Uploading files to ReadMe (but not really because it's a dry run)... done!
@@ -358,9 +330,7 @@ exports[`rdme docs upload > given that the file path is a single file > given th
 exports[`rdme docs upload > given that the file path is a single file > given that the file has frontmatter issues > should exit if the user declines to fix the issues 1`] = `
 {
   "error": [Error: Aborting upload due to user input.],
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ⚠ 🔬 Validating frontmatter data... issues found in 1 file(s).
 ",
   "stdout": "",
@@ -382,9 +352,7 @@ exports[`rdme docs upload > given that the file path is a single file > given th
     "skipped": [],
     "updated": [],
   },
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ⚠ 🔬 Validating frontmatter data... issues found in 1 file(s).
 - 🚀 Uploading files to ReadMe...
 ✔ 🚀 Uploading files to ReadMe... done!
@@ -410,9 +378,7 @@ exports[`rdme docs upload > given that the file path is a single file > given th
     "skipped": [],
     "updated": [],
   },
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ⚠ 🔬 Validating frontmatter data... issues found in 1 file(s).
 - 🚀 Uploading files to ReadMe...
 ✔ 🚀 Uploading files to ReadMe... done!
@@ -428,9 +394,7 @@ exports[`rdme docs upload > given that the file path is a single file > given th
   "error": [APIv2Error: ReadMe API error: bad request
 
 your category is whack],
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
- ›   Warning: Skipping pre-upload validation of the Markdown file(s). This is 
+  "stderr": " ›   Warning: Skipping pre-upload validation of the Markdown file(s). This is 
  ›   not recommended.
 - 🚀 Uploading files to ReadMe...
 ✖ 🚀 Uploading files to ReadMe... 1 file(s) failed.
@@ -456,9 +420,7 @@ exports[`rdme docs upload > given that the file path is a single file > given th
     "skipped": [],
     "updated": [],
   },
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ⚠ 🔬 Validating frontmatter data... issues found in 1 file(s).
  ›   Warning: 1 file(s) have issues that cannot be fixed automatically. The 
  ›   upload will proceed but we recommend addressing these issues. Please get 
@@ -487,9 +449,7 @@ exports[`rdme docs upload > given that the file path is a single file > given th
     "skipped": [],
     "updated": [],
   },
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
 - 🚀 Uploading files to ReadMe...
 ✔ 🚀 Uploading files to ReadMe... done!
@@ -515,9 +475,7 @@ exports[`rdme docs upload > given that the file path is a single file > given th
       },
     ],
   },
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
 - 🚀 Uploading files to ReadMe...
 ✔ 🚀 Uploading files to ReadMe... done!
@@ -543,9 +501,7 @@ exports[`rdme docs upload > given that the file path is a single file > should a
     "skipped": [],
     "updated": [],
   },
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
 - 🚀 Uploading files to ReadMe...
 ✔ 🚀 Uploading files to ReadMe... done!
@@ -571,9 +527,7 @@ exports[`rdme docs upload > given that the file path is a single file > should c
     "skipped": [],
     "updated": [],
   },
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
 - 🚀 Uploading files to ReadMe...
 ✔ 🚀 Uploading files to ReadMe... done!
@@ -587,9 +541,7 @@ exports[`rdme docs upload > given that the file path is a single file > should c
 exports[`rdme docs upload > given that the file path is a single file > should error out if a non-404 error is returned from the HEAD request 1`] = `
 {
   "error": [APIv2Error: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
 - 🚀 Uploading files to ReadMe...
 ✖ 🚀 Uploading files to ReadMe... 1 file(s) failed.
@@ -603,9 +555,7 @@ exports[`rdme docs upload > given that the file path is a single file > should e
 exports[`rdme docs upload > given that the file path is a single file > should error out if the file does not exist 1`] = `
 {
   "error": [Error: Oops! We couldn't locate a file or directory at the path you provided.],
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-",
+  "stderr": "",
   "stdout": "",
 }
 `;
@@ -613,9 +563,7 @@ exports[`rdme docs upload > given that the file path is a single file > should e
 exports[`rdme docs upload > given that the file path is a single file > should error out if the file has an invalid file extension 1`] = `
 {
   "error": [Error: Invalid file extension (.json). Must be one of the following: .markdown, .md, .mdx],
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-",
+  "stderr": "",
   "stdout": "",
 }
 `;
