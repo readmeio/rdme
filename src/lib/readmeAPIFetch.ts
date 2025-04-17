@@ -10,8 +10,8 @@ import { ProxyAgent } from 'undici';
 
 import { APIv1Error, APIv2Error, type APIv2ErrorResponse } from './apiError.js';
 import config from './config.js';
-import { git } from './createGHA/index.js';
 import { getPkgVersion } from './getPkg.js';
+import { git } from './git.js';
 import isCI, { ciName, isGHA } from './isCI.js';
 import { debug, warn } from './logger.js';
 import readmeAPIv2Oas from './types/openapiDoc.js';

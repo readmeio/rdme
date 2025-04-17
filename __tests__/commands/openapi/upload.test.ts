@@ -6,8 +6,8 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import Command from '../../../src/commands/openapi/upload.js';
 import petstore from '../../__fixtures__/petstore-simple-weird-version.json' with { type: 'json' };
 import { getAPIv2Mock, getAPIv2MockForGHA } from '../../helpers/get-api-mock.js';
+import { githubActionsEnv } from '../../helpers/git-mock.js';
 import { runCommand, type OclifOutput } from '../../helpers/oclif.js';
-import { after, before } from '../../helpers/setup-gha-env.js';
 
 const key = 'rdme_123';
 const version = '1.0.0';
@@ -299,9 +299,9 @@ describe('rdme openapi upload', () => {
     });
 
     describe('and the command is being run in a CI environment', () => {
-      beforeEach(before);
+      beforeEach(githubActionsEnv.before);
 
-      afterEach(after);
+      afterEach(githubActionsEnv.after);
 
       it('should overwrite an existing API definition without asking for confirmation', async () => {
         const mock = getAPIv2MockForGHA({ authorization: `Bearer ${key}` })

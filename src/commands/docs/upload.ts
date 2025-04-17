@@ -4,12 +4,16 @@ import BaseCommand from '../../lib/baseCommand.js';
 import { githubFlag, keyFlag } from '../../lib/flags.js';
 import syncPagePath from '../../lib/syncPagePath.js';
 
+const alphaNotice = 'This command is in an experimental alpha and is likely to change. Use at your own risk!';
+
 export default class DocsUploadCommand extends BaseCommand<typeof DocsUploadCommand> {
   id = 'docs upload' as const;
 
   route = 'guides' as const;
 
-  static summary = 'Upload Markdown files to the Guides section of your ReadMe project.';
+  static hidden = true;
+
+  static summary = `Upload Markdown files to the Guides section of your ReadMe project.\n\nNOTE: ${alphaNotice}`;
 
   static description =
     'The path can either be a directory or a single Markdown file. The Markdown files will require YAML frontmatter with certain ReadMe documentation attributes. Check out our docs for more info on setting up your frontmatter: https://docs.readme.com/main/docs/rdme#markdown-file-setup';
@@ -60,6 +64,7 @@ export default class DocsUploadCommand extends BaseCommand<typeof DocsUploadComm
   };
 
   async run() {
+    this.warn(alphaNotice);
     return syncPagePath.call(this);
   }
 }

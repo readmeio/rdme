@@ -7,6 +7,14 @@ Upload Markdown files to the Guides section of your ReadMe project.
 
 ## `rdme docs upload PATH`
 
+> [!WARNING]
+> This command is in an experimental alpha and is likely to change. Use at your own risk!
+
+<details>
+
+
+<summary>I understand the risks — let's see the docs!</summary>
+
 Upload Markdown files to the Guides section of your ReadMe project.
 
 ```
@@ -57,3 +65,6 @@ FLAG DESCRIPTIONS
 
     Defaults to `stable` (i.e., your main project version).
 ```
+
+
+</details>

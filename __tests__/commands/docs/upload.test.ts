@@ -6,8 +6,8 @@ import { describe, afterEach, it, expect, beforeAll, beforeEach, vi } from 'vite
 
 import Command from '../../../src/commands/docs/upload.js';
 import { getAPIv1Mock, getAPIv2Mock, getAPIv2MockForGHA } from '../../helpers/get-api-mock.js';
+import { githubActionsEnv } from '../../helpers/git-mock.js';
 import { runCommand, type OclifOutput } from '../../helpers/oclif.js';
-import { after, before } from '../../helpers/setup-gha-env.js';
 
 const key = 'rdme_123';
 const authorization = `Bearer ${key}`;
@@ -277,9 +277,9 @@ describe('rdme docs upload', () => {
     });
 
     describe('and the command is being run in a CI environment', () => {
-      beforeEach(before);
+      beforeEach(githubActionsEnv.before);
 
-      afterEach(after);
+      afterEach(githubActionsEnv.after);
 
       it('should create a guides page in ReadMe and include `x-readme-source-url` source header', async () => {
         const headMock = getAPIv2MockForGHA({ authorization }).head('/versions/stable/guides/new-doc').reply(404);
