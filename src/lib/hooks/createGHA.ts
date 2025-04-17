@@ -15,14 +15,14 @@ type CreateGHAHookOpts = Omit<CreateGHAHookOptsInClass, 'parsedOpts'> & {
   parsedOpts: ParsedOpts;
 };
 
-export interface CreateGHAHook {
+export interface CreateGHAHook extends Hooks {
   createGHA: {
     options: CreateGHAHookOpts;
     return: string;
   };
 }
 
-const hook: Hook<'createGHA', CreateGHAHook & Hooks> = async function createGHAHook(options) {
+const hook: Hook<'createGHA', CreateGHAHook> = async function createGHAHook(options) {
   const msg = options.result;
   const command = options.command;
   const parsedOpts = options.parsedOpts;
