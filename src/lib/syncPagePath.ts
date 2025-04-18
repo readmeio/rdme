@@ -239,7 +239,7 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
 
   if (stat.isDirectory()) {
     const fileScanningSpinner = ora({ ...oraOptions() }).start(
-      `🔍 Looking for Markdown files in ${chalk.underline(pathInput)}...`,
+      `🔍 Looking for Markdown files in the \`${pathInput}\` directory...`,
     );
     // Filter out any files that don't match allowedFileExtensions
     files = readdirRecursive(pathInput).filter(file =>
