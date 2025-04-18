@@ -451,6 +451,10 @@ export function cleanAPIv1Headers(
  * Used for migrating frontmatter in Guides pages to the new API v2 format.
  */
 export async function fetchMappings(this: CommandClass['prototype']): Promise<Mappings> {
+  if (!this.flags.key) {
+    this.debug('no API key provided, skipping mappings fetch');
+    return emptyMappings;
+  }
   const mappings = await readmeAPIv1Fetch('/api/v1/migration', {
     method: 'get',
     headers: cleanAPIv1Headers(this.flags.key, undefined, new Headers({ Accept: 'application/json' })),
