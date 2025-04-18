@@ -152,7 +152,7 @@ export function writeFixes(
   this.debug(`writing fixes to ${outputPath}`);
   const outputDir = path.dirname(outputPath);
   if (!fs.existsSync(outputDir)) {
-    fs.mkdirSync(path.dirname(outputDir), { recursive: true });
+    fs.mkdirSync(outputDir, { recursive: true });
   }
   fs.writeFileSync(outputPath, result, { encoding: 'utf-8' });
 
