@@ -1,7 +1,7 @@
 import { Args, Flags } from '@oclif/core';
 
 import BaseCommand from '../../lib/baseCommand.js';
-import { githubFlag, keyFlag } from '../../lib/flags.js';
+import { keyFlag } from '../../lib/flags.js';
 import syncPagePath, { type FailedPushResult, type PushResult } from '../../lib/syncPagePath.js';
 
 const alphaNotice = 'This command is in an experimental alpha and is likely to change. Use at your own risk!';
@@ -44,7 +44,6 @@ export default class DocsUploadCommand extends BaseCommand<typeof DocsUploadComm
   ];
 
   static flags = {
-    github: githubFlag,
     key: keyFlag,
     'dry-run': Flags.boolean({
       description: 'Runs the command without creating nor updating any Guides in ReadMe. Useful for debugging.',
