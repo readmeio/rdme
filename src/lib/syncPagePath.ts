@@ -29,14 +29,14 @@ export type CommandsThatSyncMarkdown = DocsUploadCommand;
 
 type PageRepresentation = GuidesRequestRepresentation;
 
-interface FailedPushResult {
+export interface FailedPushResult {
   error: APIv2Error | Error;
   filePath: string;
   result: 'failed';
   slug: string;
 }
 
-type PushResult =
+export type PushResult =
   | FailedPushResult
   | {
       filePath: string;

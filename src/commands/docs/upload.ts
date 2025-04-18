@@ -2,7 +2,7 @@ import { Args, Flags } from '@oclif/core';
 
 import BaseCommand from '../../lib/baseCommand.js';
 import { githubFlag, keyFlag } from '../../lib/flags.js';
-import syncPagePath from '../../lib/syncPagePath.js';
+import syncPagePath, { type FailedPushResult, type PushResult } from '../../lib/syncPagePath.js';
 
 const alphaNotice = 'This command is in an experimental alpha and is likely to change. Use at your own risk!';
 
@@ -63,7 +63,12 @@ export default class DocsUploadCommand extends BaseCommand<typeof DocsUploadComm
     }),
   };
 
-  async run() {
+  async run(): Promise<{
+    created: PushResult[];
+    failed: FailedPushResult[];
+    skipped: PushResult[];
+    updated: PushResult[];
+  }> {
     this.warn(alphaNotice);
     return syncPagePath.call(this);
   }
