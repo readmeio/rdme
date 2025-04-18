@@ -32,6 +32,9 @@
     "readme",
     "swagger"
   ],
+  "exports": {
+    "./types": "./dist/types.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/readmeio/rdme.git"
