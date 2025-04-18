@@ -5,6 +5,7 @@ import type { ErrorObject } from 'ajv';
 import type { SchemaObject } from 'oas/types';
 
 import fs from 'node:fs';
+import path from 'node:path';
 
 import { Ajv } from 'ajv';
 import _addFormats from 'ajv-formats';
@@ -143,10 +144,17 @@ export function writeFixes(
   metadata: PageMetadata,
   /** frontmatter changes to be applied */
   updatedData: PageMetadata['data'],
+  /** output directory to write to */
+  outputDirArg?: string,
 ) {
-  this.debug(`writing fixes to ${metadata.filePath}`);
   const result = grayMatter.stringify(metadata.content, updatedData);
-  fs.writeFileSync(metadata.filePath, result, { encoding: 'utf-8' });
+  const outputPath = outputDirArg ? path.join(outputDirArg, metadata.filePath) : metadata.filePath;
+  this.debug(`writing fixes to ${outputPath}`);
+  const outputDir = path.dirname(outputPath);
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(path.dirname(outputDir), { recursive: true });
+  }
+  fs.writeFileSync(outputPath, result, { encoding: 'utf-8' });
 
   const updatedMetadata = {
     ...metadata,
