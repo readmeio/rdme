@@ -45,7 +45,6 @@
     "@oclif/core": "^4.0.29",
     "@oclif/plugin-autocomplete": "^3.2.6",
     "@oclif/plugin-help": "^6.2.15",
-    "@oclif/plugin-not-found": "^3.2.28",
     "@oclif/plugin-plugins": "^5.4.36",
     "@oclif/plugin-warn-if-update-available": "^3.1.19",
     "ajv": "^8.17.1",
@@ -170,7 +169,6 @@
     "plugins": [
       "@oclif/plugin-autocomplete",
       "@oclif/plugin-help",
-      "@oclif/plugin-not-found",
       "@oclif/plugin-plugins",
       "@oclif/plugin-warn-if-update-available"
     ],
