@@ -72,8 +72,8 @@ async function pushPage(
   const payload: PageRepresentation = {
     ...data,
     content: {
-      ...(typeof data.content === 'object' ? data.content : {}),
       body: content,
+      ...(typeof data.content === 'object' ? data.content : {}),
     },
     slug,
   };

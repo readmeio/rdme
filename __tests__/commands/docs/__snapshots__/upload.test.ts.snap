@@ -206,6 +206,43 @@ exports[`rdme docs upload > given that the file path is a directory > should han
 }
 `;
 
+exports[`rdme docs upload > given that the file path is a directory > should handle complex frontmatter 1`] = `
+{
+  "result": {
+    "created": [],
+    "failed": [],
+    "skipped": [],
+    "updated": [
+      {
+        "filePath": "__tests__/__fixtures__/docs/complex-frontmatter/basic.md",
+        "response": {},
+        "result": "updated",
+        "slug": "basic",
+      },
+      {
+        "filePath": "__tests__/__fixtures__/docs/complex-frontmatter/link.md",
+        "response": {},
+        "result": "updated",
+        "slug": "link",
+      },
+    ],
+  },
+  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
+ ›    Use at your own risk!
+- 🔍 Looking for Markdown files in the \`__tests__/__fixtures__/docs/complex-frontmatter\` directory...
+✔ 🔍 Looking for Markdown files in the \`__tests__/__fixtures__/docs/complex-frontmatter\` directory... 2 file(s) found!
+- 🔬 Validating frontmatter data...
+✔ 🔬 Validating frontmatter data... no issues found!
+- 🚀 Uploading files to ReadMe...
+✔ 🚀 Uploading files to ReadMe... done!
+",
+  "stdout": "🔄 Successfully updated 2 page(s) in ReadMe:
+   - basic (__tests__/__fixtures__/docs/complex-frontmatter/basic.md)
+   - link (__tests__/__fixtures__/docs/complex-frontmatter/link.md)
+",
+}
+`;
+
 exports[`rdme docs upload > given that the file path is a directory > should update existing guides pages in ReadMe for each file in the directory and its subdirectories 1`] = `
 {
   "result": {
