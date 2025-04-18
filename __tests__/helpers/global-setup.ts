@@ -7,7 +7,10 @@
  */
 import nock from 'nock';
 
+import setupUndici from '../../src/lib/setup-undici.js';
+
 export function setup(): void {
+  setupUndici();
   nock.disableNetConnect();
 }
 
