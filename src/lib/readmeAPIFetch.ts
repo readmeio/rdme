@@ -1,7 +1,6 @@
 import type { SpecFileType } from './prepareOas.js';
 import type { CommandClass } from '../index.js';
 import type { CommandsThatSyncMarkdown } from './syncPagePath.js';
-import type { SchemaObject } from 'oas/types';
 
 import path from 'node:path';
 
@@ -475,7 +474,7 @@ export async function fetchMappings(this: CommandClass['prototype']): Promise<Ma
 /**
  * Fetches the schema for the current route from the OpenAPI description for ReadMe API v2.
  */
-export async function fetchSchema(this: CommandsThatSyncMarkdown): Promise<SchemaObject> {
+export async function fetchSchema(this: CommandsThatSyncMarkdown) {
   const oas = await this.readmeAPIFetch('/openapi.json')
     .then(res => {
       if (!res.ok) {
@@ -493,10 +492,10 @@ export async function fetchSchema(this: CommandsThatSyncMarkdown): Promise<Schem
   const requestBody = oas.paths?.[`/versions/{version}/${this.route}/{slug}`]?.patch?.requestBody;
 
   if (requestBody && 'content' in requestBody) {
-    return requestBody.content['application/json'].schema as SchemaObject;
+    return requestBody.content['application/json'].schema;
   }
 
   this.debug(`unable to find parse out schema for ${JSON.stringify(oas)}`);
   return readmeAPIv2Oas.paths[`/versions/{version}/${this.route}/{slug}`].patch.requestBody.content['application/json']
-    .schema satisfies SchemaObject;
+    .schema;
 }
