@@ -1,3 +1,10 @@
+# [10.2.0-next.10](https://github.com/readmeio/rdme/compare/v10.2.0-next.9...v10.2.0-next.10) (2025-04-18)
+
+
+### Features
+
+* various changes to get us plugin-ready ([#1216](https://github.com/readmeio/rdme/issues/1216)) ([7cbe12b](https://github.com/readmeio/rdme/commit/7cbe12b1dbf1d3fc3776345577c0bf7c16ebf5b7))
+
 # [10.2.0-next.9](https://github.com/readmeio/rdme/compare/v10.2.0-next.8...v10.2.0-next.9) (2025-04-17)
 
 
