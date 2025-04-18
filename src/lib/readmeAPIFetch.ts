@@ -1,6 +1,7 @@
 import type { SpecFileType } from './prepareOas.js';
 import type { CommandClass } from '../index.js';
 import type { CommandsThatSyncMarkdown } from './syncPagePath.js';
+import type { SchemaObject } from 'oas/types';
 
 import path from 'node:path';
 
@@ -501,5 +502,5 @@ export async function fetchSchema(this: CommandsThatSyncMarkdown) {
 
   this.debug(`unable to find parse out schema for ${JSON.stringify(oas)}`);
   return readmeAPIv2Oas.paths[`/versions/{version}/${this.route}/{slug}`].patch.requestBody.content['application/json']
-    .schema;
+    .schema satisfies SchemaObject;
 }
