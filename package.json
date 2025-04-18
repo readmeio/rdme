@@ -32,6 +32,9 @@
     "readme",
     "swagger"
   ],
+  "exports": {
+    "./types": "./dist/types.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/readmeio/rdme.git"
@@ -45,7 +48,6 @@
     "@oclif/core": "^4.0.29",
     "@oclif/plugin-autocomplete": "^3.2.6",
     "@oclif/plugin-help": "^6.2.15",
-    "@oclif/plugin-not-found": "^3.2.28",
     "@oclif/plugin-plugins": "^5.4.36",
     "@oclif/plugin-warn-if-update-available": "^3.1.19",
     "ajv": "^8.17.1",
@@ -57,6 +59,7 @@
     "gray-matter": "^4.0.1",
     "ignore": "^7.0.0",
     "js-yaml": "^4.1.0",
+    "json-schema-to-ts": "^3.1.1",
     "mime-types": "^3.0.1",
     "oas": "^27.0.0",
     "oas-normalize": "^14.0.0",
@@ -96,7 +99,6 @@
     "alex": "^11.0.0",
     "eslint": "^8.47.0",
     "husky": "^9.0.10",
-    "json-schema-to-ts": "^3.1.1",
     "knip": "^5.0.2",
     "nock": "^14.0.0",
     "oclif": "^4.15.12",
@@ -170,7 +172,6 @@
     "plugins": [
       "@oclif/plugin-autocomplete",
       "@oclif/plugin-help",
-      "@oclif/plugin-not-found",
       "@oclif/plugin-plugins",
       "@oclif/plugin-warn-if-update-available"
     ],

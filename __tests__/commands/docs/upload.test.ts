@@ -404,6 +404,39 @@ describe('rdme docs upload', () => {
       mock.done();
     });
 
+    it('should handle complex frontmatter', async () => {
+      const mock = getAPIv2Mock({ authorization })
+        .head('/versions/stable/guides/basic')
+        .reply(200)
+        .patch('/versions/stable/guides/basic', {
+          title: 'This is the document title',
+          category: { uri: '/versions/stable/categories/guides/category-slug' },
+          content: { body: 'frontmatter body', excerpt: 'frontmatter excerpt' },
+          type: 'basic',
+        })
+        .reply(201, {})
+        .head('/versions/stable/guides/link')
+        .reply(200)
+        .patch('/versions/stable/guides/link', {
+          title: 'This is the document title',
+          category: { uri: '/versions/stable/categories/guides/category-slug' },
+          content: {
+            body: '\nBody\n',
+            excerpt: 'frontmatter excerpt',
+            link: { url: 'https://example.com', new_tab: true },
+          },
+          type: 'link',
+        })
+        .reply(201, {});
+
+      const result = await run(['__tests__/__fixtures__/docs/complex-frontmatter', '--key', key]);
+
+      expect(result).toMatchSnapshot();
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
+
+      mock.done();
+    });
+
     describe('given that the directory contains parent/child docs', () => {
       it('should upload parents before children', async () => {
         const mock = getAPIv2Mock({ authorization })

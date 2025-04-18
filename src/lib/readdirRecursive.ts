@@ -40,7 +40,7 @@ export default function readdirRecursive(
     // Some logic to construct pathname the way that `ignore` package consumes it
     // https://github.com/kaelzhang/node-ignore#2-filenames-and-dirnames
     let fullPathName = path.join(folderToSearch, item.name);
-    if (item.isDirectory()) fullPathName = `${fullPathName}/`;
+    if (item.isDirectory()) fullPathName = `${fullPathName}${path.sep}`;
 
     return !ignoreFilter.ignores(fullPathName);
   });

@@ -29,14 +29,14 @@ export type CommandsThatSyncMarkdown = DocsUploadCommand;
 
 type PageRepresentation = GuidesRequestRepresentation;
 
-interface FailedPushResult {
+export interface FailedPushResult {
   error: APIv2Error | Error;
   filePath: string;
   result: 'failed';
   slug: string;
 }
 
-type PushResult =
+export type PushResult =
   | FailedPushResult
   | {
       filePath: string;
@@ -72,8 +72,8 @@ async function pushPage(
   const payload: PageRepresentation = {
     ...data,
     content: {
-      ...(typeof data.content === 'object' ? data.content : {}),
       body: content,
+      ...(typeof data.content === 'object' ? data.content : {}),
     },
     slug,
   };
@@ -239,7 +239,7 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
 
   if (stat.isDirectory()) {
     const fileScanningSpinner = ora({ ...oraOptions() }).start(
-      `🔍 Looking for Markdown files in ${chalk.underline(pathInput)}...`,
+      `🔍 Looking for Markdown files in the \`${pathInput}\` directory...`,
     );
     // Filter out any files that don't match allowedFileExtensions
     files = readdirRecursive(pathInput).filter(file =>
