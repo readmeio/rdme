@@ -1,5 +1,6 @@
 import type { PageMetadata } from './readPage.js';
 import type { GuidesRequestRepresentation, ProjectRepresentation } from './types/index.js';
+import type DocsMigrateCommand from '../commands/docs/migrate.js';
 import type DocsUploadCommand from '../commands/docs/upload.js';
 
 import fs from 'node:fs/promises';
@@ -25,7 +26,7 @@ import { categoryUriRegexPattern, parentUriRegexPattern } from './types/index.js
  * Note that the `changelogs` command is not included here
  * because it is backed by APIv1.
  */
-export type CommandsThatSyncMarkdown = DocsUploadCommand;
+export type CommandsThatSyncMarkdown = DocsMigrateCommand | DocsUploadCommand;
 
 type PageRepresentation = GuidesRequestRepresentation;
 

@@ -1,4 +1,5 @@
 import type ChangelogsCommand from '../commands/changelogs.js';
+import type DocsMigrateCommand from '../commands/docs/migrate.js';
 import type DocsUploadCommand from '../commands/docs/upload.js';
 
 import crypto from 'node:crypto';
@@ -36,7 +37,7 @@ export interface PageMetadata<T = Record<string, unknown>> {
  * Returns the content, matter and slug of the specified Markdown or HTML file
  */
 export default function readPage(
-  this: ChangelogsCommand | DocsUploadCommand,
+  this: ChangelogsCommand | DocsMigrateCommand | DocsUploadCommand,
   /**
    * path to the HTML/Markdown file
    * (file extension must end in `.html`, `.md`., or `.markdown`)
