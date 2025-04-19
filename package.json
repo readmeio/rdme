@@ -33,7 +33,9 @@
     "swagger"
   ],
   "exports": {
-    "./types": "./dist/types.js"
+    ".": "./dist/index.js",
+    "./types": "./dist/types.js",
+    "./utils": "./dist/utils.js"
   },
   "repository": {
     "type": "git",
