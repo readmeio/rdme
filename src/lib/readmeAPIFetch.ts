@@ -1,6 +1,7 @@
 import type { SpecFileType } from './prepareOas.js';
 import type { CommandClass } from '../index.js';
 import type { CommandsThatSyncMarkdown } from './syncPagePath.js';
+import type { Hook } from '@oclif/core';
 import type { SchemaObject } from 'oas/types';
 
 import path from 'node:path';
@@ -227,7 +228,7 @@ export async function readmeAPIv1Fetch(
  * Wrapper for the `fetch` API so we can add rdme-specific headers to all ReadMe API v2 requests.
  */
 export async function readmeAPIv2Fetch(
-  this: CommandClass['prototype'],
+  this: CommandClass['prototype'] | Hook.Context,
   /** The pathname to make the request to. Must have a leading slash. */
   pathname: string,
   options: RequestInit = { headers: new Headers() },
@@ -367,7 +368,7 @@ export async function handleAPIv1Res(
  * If we receive non-JSON responses, we consider them errors and throw them.
  */
 export async function handleAPIv2Res(
-  this: CommandClass['prototype'],
+  this: CommandClass['prototype'] | Hook.Context,
   res: Response,
   /**
    * If we're making a request where we don't care about the body (e.g. a HEAD or DELETE request),
