@@ -1,3 +1,10 @@
+# [10.2.0-next.11](https://github.com/readmeio/rdme/compare/v10.2.0-next.10...v10.2.0-next.11) (2025-04-19)
+
+
+### Features
+
+* expose fetch utils ([#1217](https://github.com/readmeio/rdme/issues/1217)) ([0049a06](https://github.com/readmeio/rdme/commit/0049a06822050b45cf6621b8463df7daff2dceb4))
+
 # [10.2.0-next.10](https://github.com/readmeio/rdme/compare/v10.2.0-next.9...v10.2.0-next.10) (2025-04-18)
 
 
