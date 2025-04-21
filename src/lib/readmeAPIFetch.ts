@@ -371,7 +371,8 @@ export async function handleAPIv1Res(
  *
  * If we receive non-JSON responses, we consider them errors and throw them.
  */
-export async function handleAPIv2Res<T extends Hook.Context = Hook.Context>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function handleAPIv2Res<Data = any, T extends Hook.Context = Hook.Context>(
   /**
    * `this` does not have to be a hook, it can also be a Command class.
    * This type ensures that `this` has the `config` and `debug` properties.
@@ -383,7 +384,7 @@ export async function handleAPIv2Res<T extends Hook.Context = Hook.Context>(
    * we can skip parsing the JSON body using this flag.
    */
   skipJsonParsing = false,
-) {
+): Promise<Data> {
   const contentType = res.headers.get('content-type') || '';
   const extension = mime.extension(contentType) || contentType.includes('json') ? 'json' : false;
   if (res.status === SUCCESS_NO_CONTENT) {
@@ -391,17 +392,15 @@ export async function handleAPIv2Res<T extends Hook.Context = Hook.Context>(
     // https://x.com/cramforce/status/1762142087930433999
     const body = await res.text();
     this.debug(`received status code ${res.status} from ${res.url} with no content: ${body}`);
-    return {};
+    return {} as Data;
   } else if (skipJsonParsing) {
     // to prevent a memory leak, we should still consume the response body? even though we don't use it?
     // https://x.com/cramforce/status/1762142087930433999
     const body = await res.text();
     this.debug(`received status code ${res.status} from ${res.url} and not parsing JSON b/c of flag: ${body}`);
-    return {};
+    return {} as Data;
   } else if (extension === 'json') {
-    // TODO: type this better
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const body = (await res.json()) as any;
+    const body = (await res.json()) as Data;
     this.debug(`received status code ${res.status} from ${res.url} with JSON response: ${JSON.stringify(body)}`);
     if (!res.ok) {
       throw new APIv2Error(body as APIv2ErrorResponse);

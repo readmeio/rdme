@@ -212,11 +212,11 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
   // check whether or not the project has bidirection syncing enabled
   // if it is, validations must be skipped to prevent frontmatter from being overwritten
   const headers = new Headers({ authorization: `Bearer ${key}` });
-  const projectMetadata: ProjectRepresentation = await this.readmeAPIFetch('/projects/me', {
+  const projectMetadata = await this.readmeAPIFetch('/projects/me', {
     method: 'GET',
     headers,
   }).then(res => {
-    return this.handleAPIRes(res);
+    return this.handleAPIRes<ProjectRepresentation>(res);
   });
 
   const biDiConnection = projectMetadata?.data?.git?.connection?.status === 'active';
