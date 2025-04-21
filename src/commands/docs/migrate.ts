@@ -1,8 +1,5 @@
 import type { PluginHooks } from '../../lib/hooks/exported.js';
 
-import fs from 'node:fs/promises';
-import path from 'node:path';
-
 import { Args, Flags, type Hook } from '@oclif/core';
 import chalk from 'chalk';
 import ora from 'ora';
@@ -13,9 +10,8 @@ import { fix, writeFixes } from '../../lib/frontmatter.js';
 import isCI from '../../lib/isCI.js';
 import { oraOptions } from '../../lib/logger.js';
 import promptTerminal from '../../lib/promptWrapper.js';
-import readdirRecursive from '../../lib/readdirRecursive.js';
 import { fetchMappings, fetchSchema } from '../../lib/readmeAPIFetch.js';
-import readPage from '../../lib/readPage.js';
+import { findPages } from '../../lib/readPage.js';
 
 export default class DocsMigrateCommand extends BaseCommand<typeof DocsMigrateCommand> {
   id = 'docs migrate' as const;
@@ -43,8 +39,9 @@ export default class DocsMigrateCommand extends BaseCommand<typeof DocsMigrateCo
 
   async run() {
     const { path: rawPathInput }: { path: string } = this.args;
+    const { out: rawOutputDir } = this.flags;
 
-    const outputDir = this.flags.out || (await dir({ prefix: 'rdme-migration-output' })).path;
+    const outputDir = rawOutputDir || (await dir({ prefix: 'rdme-migration-output' })).path;
 
     let pathInput = rawPathInput;
 
@@ -66,50 +63,7 @@ export default class DocsMigrateCommand extends BaseCommand<typeof DocsMigrateCo
       }
     });
 
-    const allowedFileExtensions = ['.markdown', '.md', '.mdx'];
-
-    const stat = await fs.stat(pathInput).catch(err => {
-      if (err.code === 'ENOENT') {
-        throw new Error("Oops! We couldn't locate a file or directory at the path you provided.");
-      }
-      throw err;
-    });
-
-    let files: string[];
-
-    if (stat.isDirectory()) {
-      const fileScanningSpinner = ora({ ...oraOptions() }).start(
-        `🔍 Looking for Markdown files in the \`${pathInput}\` directory...`,
-      );
-      // Filter out any files that don't match allowedFileExtensions
-      files = readdirRecursive(pathInput).filter(file =>
-        allowedFileExtensions.includes(path.extname(file).toLowerCase()),
-      );
-
-      if (!files.length) {
-        fileScanningSpinner.fail(`${fileScanningSpinner.text} no files found.`);
-        throw new Error(
-          `The directory you provided (${pathInput}) doesn't contain any of the following file extensions: ${allowedFileExtensions.join(
-            ', ',
-          )}.`,
-        );
-      }
-
-      fileScanningSpinner.succeed(`${fileScanningSpinner.text} ${files.length} file(s) found!`);
-    } else {
-      const fileExtension = path.extname(pathInput).toLowerCase();
-      if (!allowedFileExtensions.includes(fileExtension)) {
-        throw new Error(
-          `Invalid file extension (${fileExtension}). Must be one of the following: ${allowedFileExtensions.join(', ')}`,
-        );
-      }
-
-      files = [pathInput];
-    }
-
-    this.debug(`number of files: ${files.length}`);
-
-    let unsortedFiles = files.map(file => readPage.call(this, file));
+    let unsortedFiles = await findPages.call(this, pathInput);
 
     let transformedByHooks = false;
 
