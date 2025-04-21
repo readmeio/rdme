@@ -3,7 +3,7 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import Command from '../../../src/commands/docs/migrate.js';
 import { runCommand, type OclifOutput } from '../../helpers/oclif.js';
 
-describe('rdme docs upload', () => {
+describe('rdme docs migrate', () => {
   let run: (args?: string[]) => OclifOutput;
 
   beforeAll(() => {
