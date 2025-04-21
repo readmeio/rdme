@@ -16,12 +16,12 @@ import { findPages, type PageMetadata } from './readPage.js';
 import { categoryUriRegexPattern, parentUriRegexPattern } from './types/index.js';
 
 /**
- * Commands that use this file for syncing Markdown via APIv2.
+ * Commands that leverage the APIv2 representations for pages (e.g., Guides, API Reference, etc.)
  *
  * Note that the `changelogs` command is not included here
  * because it is backed by APIv1.
  */
-export type CommandsThatSyncMarkdown = DocsMigrateCommand | DocsUploadCommand;
+export type APIv2PageCommands = DocsMigrateCommand | DocsUploadCommand;
 
 type PageRepresentation = GuidesRequestRepresentation;
 
@@ -46,7 +46,7 @@ export type PushResult =
  * and creates/updates the corresponding page in ReadMe
  */
 async function pushPage(
-  this: CommandsThatSyncMarkdown,
+  this: APIv2PageCommands,
   /** the file data */
   fileData: PageMetadata,
 ): Promise<PushResult> {
@@ -191,7 +191,7 @@ function sortFiles(files: PageMetadata<PageRepresentation>[]): PageMetadata<Page
  * and syncs those (either via POST or PATCH) to ReadMe.
  * @returns An array of objects with the results
  */
-export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
+export default async function syncPagePath(this: APIv2PageCommands) {
   const { path: pathInput }: { path: string } = this.args;
   const { key, 'dry-run': dryRun, 'skip-validation': skipValidation } = this.flags;
 
