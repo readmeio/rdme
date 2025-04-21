@@ -1,6 +1,6 @@
 import type { SpecFileType } from './prepareOas.js';
 import type { CommandClass } from '../index.js';
-import type { CommandsThatSyncMarkdown } from './syncPagePath.js';
+import type { APIv2PageCommands } from './syncPagePath.js';
 import type { Hook } from '@oclif/core';
 import type { SchemaObject } from 'oas/types';
 
@@ -487,7 +487,7 @@ export async function fetchMappings(this: CommandClass['prototype']): Promise<Ma
 /**
  * Fetches the schema for the current route from the OpenAPI description for ReadMe API v2.
  */
-export async function fetchSchema(this: CommandsThatSyncMarkdown) {
+export async function fetchSchema(this: APIv2PageCommands) {
   const oas = await this.readmeAPIFetch('/openapi.json')
     .then(res => {
       if (!res.ok) {

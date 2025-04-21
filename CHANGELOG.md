@@ -1,3 +1,10 @@
+# [10.2.0-next.13](https://github.com/readmeio/rdme/compare/v10.2.0-next.12...v10.2.0-next.13) (2025-04-21)
+
+
+### Features
+
+* add `docs migrate` command ([#1220](https://github.com/readmeio/rdme/issues/1220)) ([67bd2ef](https://github.com/readmeio/rdme/commit/67bd2ef684ef1bb6e3ba2a533678a5a5ec85ef01))
+
 # [10.2.0-next.12](https://github.com/readmeio/rdme/compare/v10.2.0-next.11...v10.2.0-next.12) (2025-04-21)
 
 
