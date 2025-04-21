@@ -57,6 +57,9 @@ export interface Mappings {
   parentPages: Record<string, string>;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export interface ResponseBody extends Record<string, any> {}
+
 export const emptyMappings: Mappings = { categories: {}, parentPages: {} };
 
 /**
@@ -371,8 +374,7 @@ export async function handleAPIv1Res(
  *
  * If we receive non-JSON responses, we consider them errors and throw them.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function handleAPIv2Res<Data = any, T extends Hook.Context = Hook.Context>(
+export async function handleAPIv2Res<Data extends ResponseBody = ResponseBody, T extends Hook.Context = Hook.Context>(
   /**
    * `this` does not have to be a hook, it can also be a Command class.
    * This type ensures that `this` has the `config` and `debug` properties.
