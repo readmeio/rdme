@@ -9,7 +9,7 @@ import chalk from 'chalk';
 import debugPkg from 'debug';
 
 import { isGHA, isTest } from './isCI.js';
-import { handleAPIv2Res, readmeAPIv2Fetch } from './readmeAPIFetch.js';
+import { handleAPIv2Res, readmeAPIv2Fetch, type ResponseBody } from './readmeAPIFetch.js';
 
 type Flags<T extends typeof OclifCommand> = Interfaces.InferredFlags<(typeof BaseCommand)['baseFlags'] & T['flags']>;
 type Args<T extends typeof OclifCommand> = Interfaces.InferredArgs<T['args']>;
@@ -116,9 +116,8 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
   /**
    * Wrapper around `handleAPIv2Res` that binds the context of the class to the function.
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public async handleAPIRes<Data = any>(...args: Parameters<typeof handleAPIv2Res>) {
-    return handleAPIv2Res.call(this, ...args) as Promise<Data>;
+  public async handleAPIRes<R extends ResponseBody = ResponseBody>(...args: Parameters<typeof handleAPIv2Res>) {
+    return handleAPIv2Res.call(this, ...args) as Promise<R>;
   }
 
   /**

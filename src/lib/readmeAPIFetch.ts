@@ -57,6 +57,9 @@ export interface Mappings {
   parentPages: Record<string, string>;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export interface ResponseBody extends Record<string, any> {}
+
 export const emptyMappings: Mappings = { categories: {}, parentPages: {} };
 
 /**
@@ -371,8 +374,7 @@ export async function handleAPIv1Res(
  *
  * If we receive non-JSON responses, we consider them errors and throw them.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function handleAPIv2Res<Data = any, T extends Hook.Context = Hook.Context>(
+export async function handleAPIv2Res<R extends ResponseBody = ResponseBody, T extends Hook.Context = Hook.Context>(
   /**
    * `this` does not have to be a hook, it can also be a Command class.
    * This type ensures that `this` has the `config` and `debug` properties.
@@ -384,7 +386,7 @@ export async function handleAPIv2Res<Data = any, T extends Hook.Context = Hook.C
    * we can skip parsing the JSON body using this flag.
    */
   skipJsonParsing = false,
-): Promise<Data> {
+): Promise<R> {
   const contentType = res.headers.get('content-type') || '';
   const extension = mime.extension(contentType) || contentType.includes('json') ? 'json' : false;
   if (res.status === SUCCESS_NO_CONTENT) {
@@ -392,15 +394,15 @@ export async function handleAPIv2Res<Data = any, T extends Hook.Context = Hook.C
     // https://x.com/cramforce/status/1762142087930433999
     const body = await res.text();
     this.debug(`received status code ${res.status} from ${res.url} with no content: ${body}`);
-    return {} as Data;
+    return {} as R;
   } else if (skipJsonParsing) {
     // to prevent a memory leak, we should still consume the response body? even though we don't use it?
     // https://x.com/cramforce/status/1762142087930433999
     const body = await res.text();
     this.debug(`received status code ${res.status} from ${res.url} and not parsing JSON b/c of flag: ${body}`);
-    return {} as Data;
+    return {} as R;
   } else if (extension === 'json') {
-    const body = (await res.json()) as Data;
+    const body = (await res.json()) as R;
     this.debug(`received status code ${res.status} from ${res.url} with JSON response: ${JSON.stringify(body)}`);
     if (!res.ok) {
       throw new APIv2Error(body as APIv2ErrorResponse);
