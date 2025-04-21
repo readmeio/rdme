@@ -25,13 +25,11 @@ export default class DocsMigrateCommand extends BaseCommand<typeof DocsMigrateCo
   static summary = `Migrates a directory of pages to the ReadMe Guides format.\n\n${alphaNotice}`;
 
   static description =
-    "The path can either be a directory or a single Markdown file. The command will transform the Markdown using plugins and validates the frontmatter to conform to ReadMe's standards.";
+    "The path can either be a directory or a single Markdown file. The command will transform the Markdown using plugins and validate the frontmatter to conform to ReadMe's standards.";
 
   static args = {
     path: Args.string({ description: 'Path to a local Markdown file or folder of Markdown files.', required: true }),
   };
-
-  static examples = [];
 
   static flags = {
     out: Flags.string({
