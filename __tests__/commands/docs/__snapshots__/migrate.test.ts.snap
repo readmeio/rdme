@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`rdme docs upload > should error out if no path is passed 1`] = `
+exports[`rdme docs migrate > should error out if no path is passed 1`] = `
 {
   "error": [Error: Missing 1 required arg:
 path  Path to a local Markdown file or folder of Markdown files.
@@ -10,7 +10,7 @@ See more help with --help],
 }
 `;
 
-exports[`rdme docs upload > should error out if no plugins are installed 1`] = `
+exports[`rdme docs migrate > should error out if no plugins are installed 1`] = `
 {
   "error": [Error: This command requires a valid migration plugin.],
   "stderr": "- 🔍 Looking for Markdown files in the \`__tests__/__fixtures__/docs/new-docs\` directory...
