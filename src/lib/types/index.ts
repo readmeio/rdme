@@ -15,6 +15,7 @@ type guidesRequestBodySchema =
 
 type projectSchema =
   (typeof readmeAPIv2Oas)['paths']['/projects/me']['get']['responses']['200']['content']['application/json']['schema'];
+
 /**
  * Derived from our API documentation, this is the schema for the `guides` object
  * as we send it to the ReadMe API.
