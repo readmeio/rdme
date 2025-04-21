@@ -1,11 +1,17 @@
 import type ChangelogsCommand from '../commands/changelogs.js';
+import type DocsMigrateCommand from '../commands/docs/migrate.js';
 import type DocsUploadCommand from '../commands/docs/upload.js';
 
 import crypto from 'node:crypto';
 import fs from 'node:fs';
+import fsPromises from 'node:fs/promises';
 import path from 'node:path';
 
 import grayMatter from 'gray-matter';
+import ora from 'ora';
+
+import { oraOptions } from './logger.js';
+import readdirRecursive from './readdirRecursive.js';
 
 export interface PageMetadata<T = Record<string, unknown>> {
   /**
@@ -35,8 +41,8 @@ export interface PageMetadata<T = Record<string, unknown>> {
 /**
  * Returns the content, matter and slug of the specified Markdown or HTML file
  */
-export default function readPage(
-  this: ChangelogsCommand | DocsUploadCommand,
+export function readPage(
+  this: ChangelogsCommand | DocsMigrateCommand | DocsUploadCommand,
   /**
    * path to the HTML/Markdown file
    * (file extension must end in `.html`, `.md`., or `.markdown`)
@@ -57,4 +63,59 @@ export default function readPage(
 
   const hash = crypto.createHash('sha1').update(rawFileContents).digest('hex');
   return { content, data, filePath, hash, slug };
+}
+
+/**
+ * Takes a path input and finds pages. If the path is a directory, it will recursively search for files with the specified extensions.
+ * If the path is a file, it will check if the file has a valid extension.
+ *
+ * Once the files are found, it reads each file and returns an array of page metadata objects (e.g., the parsed frontmatter data).
+ */
+export async function findPages(
+  this: ChangelogsCommand | DocsMigrateCommand | DocsUploadCommand,
+  pathInput: string,
+  allowedFileExtensions: string[] = ['.markdown', '.md', '.mdx'],
+) {
+  let files: string[];
+
+  const stat = await fsPromises.stat(pathInput).catch(err => {
+    if (err.code === 'ENOENT') {
+      throw new Error("Oops! We couldn't locate a file or directory at the path you provided.");
+    }
+    throw err;
+  });
+
+  if (stat.isDirectory()) {
+    const fileScanningSpinner = ora({ ...oraOptions() }).start(
+      `🔍 Looking for Markdown files in the \`${pathInput}\` directory...`,
+    );
+    // Filter out any files that don't match allowedFileExtensions
+    files = readdirRecursive(pathInput).filter(file =>
+      allowedFileExtensions.includes(path.extname(file).toLowerCase()),
+    );
+
+    if (!files.length) {
+      fileScanningSpinner.fail(`${fileScanningSpinner.text} no files found.`);
+      throw new Error(
+        `The directory you provided (${pathInput}) doesn't contain any of the following file extensions: ${allowedFileExtensions.join(
+          ', ',
+        )}.`,
+      );
+    }
+
+    fileScanningSpinner.succeed(`${fileScanningSpinner.text} ${files.length} file(s) found!`);
+  } else {
+    const fileExtension = path.extname(pathInput).toLowerCase();
+    if (!allowedFileExtensions.includes(fileExtension)) {
+      throw new Error(
+        `Invalid file extension (${fileExtension}). Must be one of the following: ${allowedFileExtensions.join(', ')}`,
+      );
+    }
+
+    files = [pathInput];
+  }
+
+  this.debug(`number of files: ${files.length}`);
+
+  return files.map(file => readPage.call(this, file));
 }
