@@ -13,6 +13,8 @@ import promptTerminal from '../../lib/promptWrapper.js';
 import { fetchMappings, fetchSchema } from '../../lib/readmeAPIFetch.js';
 import { findPages } from '../../lib/readPage.js';
 
+const alphaNotice = 'This command is in an experimental alpha and is likely to change. Use at your own risk!';
+
 export default class DocsMigrateCommand extends BaseCommand<typeof DocsMigrateCommand> {
   id = 'docs migrate' as const;
 
@@ -20,10 +22,10 @@ export default class DocsMigrateCommand extends BaseCommand<typeof DocsMigrateCo
 
   static hidden = true;
 
-  static summary = 'Migrates a directory of pages to the ReadMe Guides format. TKTK';
+  static summary = `Migrates a directory of pages to the ReadMe Guides format.\n\n${alphaNotice}`;
 
   static description =
-    "Takes a directory of Markdown pages, transforms it (if a plugin is in the mix), and validates/autofixes it to conform to ReadMe's standards. TKTK";
+    "The path can either be a directory or a single Markdown file. The command will transform the Markdown using plugins and validates the frontmatter to conform to ReadMe's standards.";
 
   static args = {
     path: Args.string({ description: 'Path to a local Markdown file or folder of Markdown files.', required: true }),
@@ -33,7 +35,7 @@ export default class DocsMigrateCommand extends BaseCommand<typeof DocsMigrateCo
 
   static flags = {
     out: Flags.string({
-      summary: 'an output directory. TKTK',
+      summary: 'The directory to write the migration output to. Defaults to a temporary directory.',
     }),
   };
 
