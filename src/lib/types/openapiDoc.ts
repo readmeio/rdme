@@ -15,7 +15,7 @@ const document = {
     version: '2.0.0-beta',
     title: 'ReadMe API v2 🦉 (BETA)',
     // @ts-expect-error custom extension
-    'x-readme-deploy': '5.319.0',
+    'x-readme-deploy': '5.334.1',
     termsOfService: 'https://readme.com/tos',
     contact: {
       name: 'API Support',
@@ -34,20 +34,343 @@ const document = {
     schemas: {},
   },
   paths: {
+    '/projects/{subdomain}/apikeys': {
+      post: {
+        operationId: 'createAPIKey',
+        summary: 'Create an API key',
+        tags: ['API Keys'],
+        description:
+          "Create an API key for your ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: { label: { allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }] } },
+                required: ['label'],
+                additionalProperties: false,
+              },
+            },
+          },
+          required: true,
+        },
+        parameters: [
+          {
+            schema: { type: 'string', pattern: '(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)', maxLength: 30 },
+            in: 'path',
+            name: 'subdomain',
+            required: true,
+            description: 'The subdomain of your project.',
+          },
+        ],
+        responses: {
+          '201': {
+            description: 'Created',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    data: {
+                      type: 'object',
+                      properties: {
+                        token: { type: 'string', pattern: 'rdme_\\w+' },
+                        label: { type: 'string', nullable: true },
+                        last_accessed_on: {
+                          type: 'string',
+                          format: 'date-time',
+                          nullable: true,
+                          description: 'An ISO 8601 formatted date for when the API key was last accessed.',
+                        },
+                        created_at: {
+                          type: 'string',
+                          format: 'date-time',
+                          description: 'An ISO 8601 formatted date for when the API key was created.',
+                        },
+                        uri: {
+                          type: 'string',
+                          pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)\\/apikeys\\/[a-f\\d]{24}',
+                        },
+                      },
+                      required: ['token', 'label', 'last_accessed_on', 'created_at', 'uri'],
+                      additionalProperties: false,
+                    },
+                  },
+                  required: ['data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      get: {
+        operationId: 'getAPIKeys',
+        summary: 'Get your API keys',
+        tags: ['API Keys'],
+        description:
+          "Get the API keys for your ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        parameters: [
+          {
+            schema: { type: 'number', minimum: 1, default: 1 },
+            in: 'query',
+            name: 'page',
+            required: false,
+            description: 'Used to specify further pages (starts at 1).',
+          },
+          {
+            schema: { type: 'number', minimum: 1, maximum: 100, default: 10 },
+            in: 'query',
+            name: 'per_page',
+            required: false,
+            description: 'Number of items to include in pagination (up to 100, defaults to 10).',
+          },
+          {
+            schema: { type: 'string', pattern: '(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)', maxLength: 30 },
+            in: 'path',
+            name: 'subdomain',
+            required: true,
+            description: 'The subdomain of your project.',
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    total: { type: 'number' },
+                    page: { type: 'number' },
+                    per_page: { type: 'number' },
+                    paging: {
+                      type: 'object',
+                      properties: {
+                        next: { type: 'string', nullable: true },
+                        previous: { type: 'string', nullable: true },
+                        first: { type: 'string', nullable: true },
+                        last: { type: 'string', nullable: true },
+                      },
+                      required: ['next', 'previous', 'first', 'last'],
+                      additionalProperties: false,
+                    },
+                    data: {
+                      type: 'array',
+                      items: {
+                        type: 'object',
+                        properties: {
+                          token: { type: 'string', pattern: 'rdme_\\w+' },
+                          label: { type: 'string', nullable: true },
+                          last_accessed_on: {
+                            type: 'string',
+                            format: 'date-time',
+                            nullable: true,
+                            description: 'An ISO 8601 formatted date for when the API key was last accessed.',
+                          },
+                          created_at: {
+                            type: 'string',
+                            format: 'date-time',
+                            description: 'An ISO 8601 formatted date for when the API key was created.',
+                          },
+                          uri: {
+                            type: 'string',
+                            pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)\\/apikeys\\/[a-f\\d]{24}',
+                          },
+                        },
+                        required: ['token', 'label', 'last_accessed_on', 'created_at', 'uri'],
+                        additionalProperties: false,
+                      },
+                    },
+                  },
+                  required: ['total', 'page', 'per_page', 'paging', 'data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/projects/{subdomain}/apikeys/{api_key_id}': {
+      delete: {
+        operationId: 'deleteAPIKey',
+        summary: 'Delete an API key',
+        tags: ['API Keys'],
+        description:
+          "Delete an API key from your ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        parameters: [
+          {
+            schema: { type: 'string', pattern: '[a-f\\d]{24}' },
+            in: 'path',
+            name: 'api_key_id',
+            required: true,
+            description: 'The unique identifier for your API key.',
+          },
+          {
+            schema: { type: 'string', pattern: '(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)', maxLength: 30 },
+            in: 'path',
+            name: 'subdomain',
+            required: true,
+            description: 'The subdomain of your project.',
+          },
+        ],
+        responses: { '204': { description: 'No Content' } },
+      },
+      get: {
+        operationId: 'getAPIKey',
+        summary: 'Get an API key',
+        tags: ['API Keys'],
+        description:
+          "Get an API key for your ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        parameters: [
+          {
+            schema: { type: 'string', pattern: '[a-f\\d]{24}' },
+            in: 'path',
+            name: 'api_key_id',
+            required: true,
+            description: 'The unique identifier for your API key.',
+          },
+          {
+            schema: { type: 'string', pattern: '(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)', maxLength: 30 },
+            in: 'path',
+            name: 'subdomain',
+            required: true,
+            description: 'The subdomain of your project.',
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    data: {
+                      type: 'object',
+                      properties: {
+                        token: { type: 'string', pattern: 'rdme_\\w+' },
+                        label: { type: 'string', nullable: true },
+                        last_accessed_on: {
+                          type: 'string',
+                          format: 'date-time',
+                          nullable: true,
+                          description: 'An ISO 8601 formatted date for when the API key was last accessed.',
+                        },
+                        created_at: {
+                          type: 'string',
+                          format: 'date-time',
+                          description: 'An ISO 8601 formatted date for when the API key was created.',
+                        },
+                        uri: {
+                          type: 'string',
+                          pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)\\/apikeys\\/[a-f\\d]{24}',
+                        },
+                      },
+                      required: ['token', 'label', 'last_accessed_on', 'created_at', 'uri'],
+                      additionalProperties: false,
+                    },
+                  },
+                  required: ['data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      patch: {
+        operationId: 'updateAPIKey',
+        summary: 'Update an API key',
+        tags: ['API Keys'],
+        description:
+          "Update an API key on your ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: { label: { allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }] } },
+                required: ['label'],
+                additionalProperties: false,
+              },
+            },
+          },
+          required: true,
+        },
+        parameters: [
+          {
+            schema: { type: 'string', pattern: '[a-f\\d]{24}' },
+            in: 'path',
+            name: 'api_key_id',
+            required: true,
+            description: 'The unique identifier for your API key.',
+          },
+          {
+            schema: { type: 'string', pattern: '(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)', maxLength: 30 },
+            in: 'path',
+            name: 'subdomain',
+            required: true,
+            description: 'The subdomain of your project.',
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    data: {
+                      type: 'object',
+                      properties: {
+                        token: { type: 'string', pattern: 'rdme_\\w+' },
+                        label: { type: 'string', nullable: true },
+                        last_accessed_on: {
+                          type: 'string',
+                          format: 'date-time',
+                          nullable: true,
+                          description: 'An ISO 8601 formatted date for when the API key was last accessed.',
+                        },
+                        created_at: {
+                          type: 'string',
+                          format: 'date-time',
+                          description: 'An ISO 8601 formatted date for when the API key was created.',
+                        },
+                        uri: {
+                          type: 'string',
+                          pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)\\/apikeys\\/[a-f\\d]{24}',
+                        },
+                      },
+                      required: ['token', 'label', 'last_accessed_on', 'created_at', 'uri'],
+                      additionalProperties: false,
+                    },
+                  },
+                  required: ['data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
     '/versions/{version}/apis': {
       get: {
         operationId: 'getAPIs',
         summary: 'Get all API definitions',
         tags: ['APIs'],
         description:
-          "Get all API definitions from your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Get all API definitions from your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
             schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
             in: 'path',
             name: 'version',
             required: true,
-            description: 'Project version number or stable.',
+            description: 'Project version number or `stable` for your stable project version.',
           },
         ],
         responses: {
@@ -111,10 +434,16 @@ const document = {
                               reason: {
                                 type: 'string',
                                 nullable: true,
-                                description: 'The reason for the upload failure (if it failed).',
+                                description: 'The reason for the upload failure if it failed.',
+                              },
+                              warnings: {
+                                type: 'string',
+                                nullable: true,
+                                description:
+                                  'Any fixable warnings that may exist within the API definition if the upload was ingested without errors.',
                               },
                             },
-                            required: ['status', 'reason'],
+                            required: ['status', 'reason', 'warnings'],
                             additionalProperties: false,
                           },
                           uri: {
@@ -142,7 +471,7 @@ const document = {
         summary: 'Create an API definition',
         tags: ['APIs'],
         description:
-          "Create an API definition in the API Reference section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Create an API definition in the API Reference section of your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         requestBody: {
           content: {
             'multipart/form-data': {
@@ -167,7 +496,7 @@ const document = {
             in: 'path',
             name: 'version',
             required: true,
-            description: 'Project version number or stable.',
+            description: 'Project version number or `stable` for your stable project version.',
           },
         ],
         responses: {
@@ -219,7 +548,7 @@ const document = {
         summary: 'Get an API definition',
         tags: ['APIs'],
         description:
-          "Get an API definition from your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Get an API definition from your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
             schema: { type: 'string', pattern: '(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml))' },
@@ -233,7 +562,7 @@ const document = {
             in: 'path',
             name: 'version',
             required: true,
-            description: 'Project version number or stable.',
+            description: 'Project version number or `stable` for your stable project version.',
           },
         ],
         responses: {
@@ -294,10 +623,16 @@ const document = {
                             reason: {
                               type: 'string',
                               nullable: true,
-                              description: 'The reason for the upload failure (if it failed).',
+                              description: 'The reason for the upload failure if it failed.',
+                            },
+                            warnings: {
+                              type: 'string',
+                              nullable: true,
+                              description:
+                                'Any fixable warnings that may exist within the API definition if the upload was ingested without errors.',
                             },
                           },
-                          required: ['status', 'reason'],
+                          required: ['status', 'reason', 'warnings'],
                           additionalProperties: false,
                         },
                         uri: {
@@ -325,7 +660,7 @@ const document = {
         summary: 'Delete an API definition',
         tags: ['APIs'],
         description:
-          "Delete an API definition from the API Reference section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Delete an API definition from the API Reference section of your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
             schema: { type: 'string', pattern: '(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml))' },
@@ -339,7 +674,7 @@ const document = {
             in: 'path',
             name: 'version',
             required: true,
-            description: 'Project version number or stable.',
+            description: 'Project version number or `stable` for your stable project version.',
           },
         ],
         responses: { '204': { description: 'No Content' } },
@@ -349,7 +684,7 @@ const document = {
         summary: 'Update an API definition',
         tags: ['APIs'],
         description:
-          "Updates an API definition in the API Reference section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Updates an API definition in the API Reference section of your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         requestBody: {
           content: {
             'multipart/form-data': {
@@ -381,7 +716,7 @@ const document = {
             in: 'path',
             name: 'version',
             required: true,
-            description: 'Project version number or stable.',
+            description: 'Project version number or `stable` for your stable project version.',
           },
         ],
         responses: {
@@ -427,13 +762,231 @@ const document = {
         },
       },
     },
+    '/versions/{version}/categories': {
+      post: {
+        operationId: 'createCategory',
+        summary: 'Create a category',
+        tags: ['Categories'],
+        description:
+          "Create a category in your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  title: { type: 'string', description: "The category's name." },
+                  section: {
+                    type: 'string',
+                    enum: ['guide', 'reference'],
+                    default: 'guide',
+                    description: 'The section of your documentation where the category resides.',
+                  },
+                },
+                required: ['title'],
+                additionalProperties: false,
+              },
+            },
+          },
+          required: true,
+        },
+        parameters: [
+          {
+            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            in: 'path',
+            name: 'version',
+            required: true,
+            description: 'Project version number or `stable` for your stable project version.',
+          },
+        ],
+        responses: {
+          '201': {
+            description: 'Created',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    data: {
+                      type: 'object',
+                      properties: {
+                        title: { type: 'string', description: "The category's name." },
+                        section: {
+                          type: 'string',
+                          enum: ['guide', 'reference'],
+                          default: 'guide',
+                          description: 'The section of your documentation where the category resides.',
+                        },
+                        links: {
+                          type: 'object',
+                          properties: {
+                            project: {
+                              type: 'string',
+                              pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)',
+                              description: 'A URI to the project that this category belongs to.',
+                            },
+                          },
+                          required: ['project'],
+                          additionalProperties: false,
+                        },
+                        uri: {
+                          type: 'string',
+                          pattern:
+                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/categories\\/(guides|reference)\\/((.*))',
+                          description: 'A URI to the category resource.',
+                        },
+                      },
+                      required: ['title', 'links', 'uri'],
+                      additionalProperties: false,
+                    },
+                  },
+                  required: ['data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/versions/{version}/categories/{section}/{title}': {
+      delete: {
+        operationId: 'deleteCategory',
+        summary: 'Delete a category',
+        tags: ['Categories'],
+        description:
+          "Delete a category from your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        parameters: [
+          {
+            schema: { type: 'string', enum: ['guides', 'reference'], default: 'guides' },
+            in: 'path',
+            name: 'section',
+            required: true,
+            description: 'The section of your documentation where the category resides.',
+          },
+          {
+            schema: { type: 'string' },
+            in: 'path',
+            name: 'title',
+            required: true,
+            description: "The category's name.",
+          },
+          {
+            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            in: 'path',
+            name: 'version',
+            required: true,
+            description: 'Project version number or `stable` for your stable project version.',
+          },
+        ],
+        responses: { '204': { description: 'No Content' } },
+      },
+      patch: {
+        operationId: 'updateCategory',
+        summary: 'Update a category',
+        tags: ['Categories'],
+        description:
+          "Update an existing category in your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  title: { type: 'string', description: "The category's name." },
+                  section: {
+                    type: 'string',
+                    enum: ['guide', 'reference'],
+                    default: 'guide',
+                    description: 'The section of your documentation where the category resides.',
+                  },
+                  position: { type: 'number', description: "The position of the category in your project's sidebar." },
+                },
+                additionalProperties: false,
+              },
+            },
+          },
+        },
+        parameters: [
+          {
+            schema: { type: 'string', enum: ['guides', 'reference'], default: 'guides' },
+            in: 'path',
+            name: 'section',
+            required: true,
+            description: 'The section of your documentation where the category resides.',
+          },
+          {
+            schema: { type: 'string' },
+            in: 'path',
+            name: 'title',
+            required: true,
+            description: "The category's name.",
+          },
+          {
+            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            in: 'path',
+            name: 'version',
+            required: true,
+            description: 'Project version number or `stable` for your stable project version.',
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    data: {
+                      type: 'object',
+                      properties: {
+                        title: { type: 'string', description: "The category's name." },
+                        section: {
+                          type: 'string',
+                          enum: ['guide', 'reference'],
+                          default: 'guide',
+                          description: 'The section of your documentation where the category resides.',
+                        },
+                        links: {
+                          type: 'object',
+                          properties: {
+                            project: {
+                              type: 'string',
+                              pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)',
+                              description: 'A URI to the project that this category belongs to.',
+                            },
+                          },
+                          required: ['project'],
+                          additionalProperties: false,
+                        },
+                        uri: {
+                          type: 'string',
+                          pattern:
+                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/categories\\/(guides|reference)\\/((.*))',
+                          description: 'A URI to the category resource.',
+                        },
+                      },
+                      required: ['title', 'links', 'uri'],
+                      additionalProperties: false,
+                    },
+                  },
+                  required: ['data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
     '/changelogs': {
       get: {
         operationId: 'getChangelogs',
         summary: 'Get all changelog entries',
         tags: ['Changelog'],
         description:
-          "Get all changelog entries from your ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Get all changelog entries from your ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
             schema: { type: 'number', minimum: 1, default: 1 },
@@ -612,7 +1165,7 @@ const document = {
         summary: 'Get a changelog entry',
         tags: ['Changelog'],
         description:
-          "Get a changelog entry from your ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Get a changelog entry from your ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
             schema: {
@@ -766,7 +1319,7 @@ const document = {
         summary: 'Create a custom page',
         tags: ['Custom Pages'],
         description:
-          "Create a custom page in your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Create a custom page in your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         requestBody: {
           content: {
             'application/json': {
@@ -842,7 +1395,7 @@ const document = {
             in: 'path',
             name: 'version',
             required: true,
-            description: 'Project version number or stable.',
+            description: 'Project version number or `stable` for your stable project version.',
           },
         ],
         responses: {
@@ -976,14 +1529,14 @@ const document = {
         summary: 'Get all custom pages',
         tags: ['Custom Pages'],
         description:
-          "Get all custom pages from your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Get all custom pages from your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
             schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
             in: 'path',
             name: 'version',
             required: true,
-            description: 'Project version number or stable.',
+            description: 'Project version number or `stable` for your stable project version.',
           },
         ],
         responses: {
@@ -1123,14 +1676,14 @@ const document = {
         summary: 'Get a custom page',
         tags: ['Custom Pages'],
         description:
-          "Get a custom page from your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Get a custom page from your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
             schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
             in: 'path',
             name: 'version',
             required: true,
-            description: 'Project version number or stable.',
+            description: 'Project version number or `stable` for your stable project version.',
           },
           {
             schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
@@ -1271,14 +1824,14 @@ const document = {
         summary: 'Delete a custom page',
         tags: ['Custom Pages'],
         description:
-          "Delete a custom page from your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Delete a custom page from your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
             schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
             in: 'path',
             name: 'version',
             required: true,
-            description: 'Project version number or stable.',
+            description: 'Project version number or `stable` for your stable project version.',
           },
           {
             schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
@@ -1295,7 +1848,7 @@ const document = {
         summary: 'Update a custom page',
         tags: ['Custom Pages'],
         description:
-          "Update an existing custom page in your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Update an existing custom page in your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         requestBody: {
           content: {
             'application/json': {
@@ -1369,7 +1922,7 @@ const document = {
             in: 'path',
             name: 'version',
             required: true,
-            description: 'Project version number or stable.',
+            description: 'Project version number or `stable` for your stable project version.',
           },
           {
             schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
@@ -1512,7 +2065,7 @@ const document = {
         summary: 'Create a guides page',
         tags: ['Guides'],
         description:
-          "Create a page in the Guides section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Create a page in the Guides section of your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         requestBody: {
           content: {
             'application/json': {
@@ -1649,7 +2202,11 @@ const document = {
                   },
                   state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
                   title: { type: 'string' },
-                  type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
+                  type: {
+                    type: 'string',
+                    enum: ['api_config', 'basic', 'endpoint', 'link', 'webhook'],
+                    default: 'basic',
+                  },
                   position: { type: 'number' },
                 },
                 required: ['category', 'title'],
@@ -1665,7 +2222,7 @@ const document = {
             in: 'path',
             name: 'version',
             required: true,
-            description: 'Project version number or stable.',
+            description: 'Project version number or `stable` for your stable project version.',
           },
         ],
         responses: {
@@ -1861,7 +2418,11 @@ const document = {
                         },
                         state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
                         title: { type: 'string' },
-                        type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
+                        type: {
+                          type: 'string',
+                          enum: ['api_config', 'basic', 'endpoint', 'link', 'webhook'],
+                          default: 'basic',
+                        },
                         updated_at: {
                           type: 'string',
                           format: 'date-time',
@@ -1906,14 +2467,14 @@ const document = {
         summary: 'Get a guides page',
         tags: ['Guides'],
         description:
-          "Get a page from the Guides section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Get a page from the Guides section of your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
             schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
             in: 'path',
             name: 'version',
             required: true,
-            description: 'Project version number or stable.',
+            description: 'Project version number or `stable` for your stable project version.',
           },
           {
             schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
@@ -2116,7 +2677,11 @@ const document = {
                         },
                         state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
                         title: { type: 'string' },
-                        type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
+                        type: {
+                          type: 'string',
+                          enum: ['api_config', 'basic', 'endpoint', 'link', 'webhook'],
+                          default: 'basic',
+                        },
                         updated_at: {
                           type: 'string',
                           format: 'date-time',
@@ -2159,14 +2724,14 @@ const document = {
         summary: 'Delete a guides page',
         tags: ['Guides'],
         description:
-          "Delete a page from the Guides section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Delete a page from the Guides section of your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
             schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
             in: 'path',
             name: 'version',
             required: true,
-            description: 'Project version number or stable.',
+            description: 'Project version number or `stable` for your stable project version.',
           },
           {
             schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
@@ -2183,7 +2748,7 @@ const document = {
         summary: 'Update a guides page',
         tags: ['Guides'],
         description:
-          "Updates an existing page in the Guides section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Updates an existing page in the Guides section of your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         requestBody: {
           content: {
             'application/json': {
@@ -2319,7 +2884,11 @@ const document = {
                   },
                   state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
                   title: { type: 'string' },
-                  type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
+                  type: {
+                    type: 'string',
+                    enum: ['api_config', 'basic', 'endpoint', 'link', 'webhook'],
+                    default: 'basic',
+                  },
                   position: { type: 'number' },
                 },
                 additionalProperties: false,
@@ -2333,7 +2902,7 @@ const document = {
             in: 'path',
             name: 'version',
             required: true,
-            description: 'Project version number or stable.',
+            description: 'Project version number or `stable` for your stable project version.',
           },
           {
             schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
@@ -2536,7 +3105,11 @@ const document = {
                         },
                         state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
                         title: { type: 'string' },
-                        type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
+                        type: {
+                          type: 'string',
+                          enum: ['api_config', 'basic', 'endpoint', 'link', 'webhook'],
+                          default: 'basic',
+                        },
                         updated_at: {
                           type: 'string',
                           format: 'date-time',
@@ -2581,7 +3154,7 @@ const document = {
         summary: 'Get project metadata',
         tags: ['Projects'],
         description:
-          "Returns data about your project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Returns data about your project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         responses: {
           '200': {
             description: 'OK',
@@ -2700,6 +3273,13 @@ const document = {
                                   default: 'solid',
                                 },
                                 gradient_color: { type: 'string', nullable: true },
+                                link_style: {
+                                  type: 'string',
+                                  enum: ['buttons', 'tabs'],
+                                  default: 'buttons',
+                                  description:
+                                    'The styling setting of the subnav links. This value is only used if `appearance.header.type` is `line`.',
+                                },
                                 overlay: {
                                   type: 'object',
                                   properties: {
@@ -3686,7 +4266,12 @@ const document = {
                           default: 'disabled',
                           description: 'Expose a `sitemap.xml` directory on your project.',
                         },
-                        subdomain: { type: 'string', pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*', maxLength: 30 },
+                        subdomain: {
+                          type: 'string',
+                          pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
+                          maxLength: 30,
+                          description: 'The subdomain of your project.',
+                        },
                         suggested_edits: {
                           type: 'string',
                           enum: ['enabled', 'disabled'],
@@ -3747,12 +4332,6 @@ const document = {
                         features: {
                           type: 'object',
                           properties: {
-                            custom_components: {
-                              type: 'string',
-                              enum: ['enabled', 'disabled'],
-                              default: 'disabled',
-                              description: 'If this project supports creating custom components.',
-                            },
                             mdx: {
                               type: 'string',
                               enum: ['enabled', 'disabled'],
@@ -3925,7 +4504,7 @@ const document = {
         summary: 'Create a reference page',
         tags: ['API Reference'],
         description:
-          "Create a page in the API Reference section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Create a page in the API Reference section of your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         requestBody: {
           content: {
             'application/json': {
@@ -4062,7 +4641,11 @@ const document = {
                   },
                   state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
                   title: { type: 'string' },
-                  type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
+                  type: {
+                    type: 'string',
+                    enum: ['api_config', 'basic', 'endpoint', 'link', 'webhook'],
+                    default: 'basic',
+                  },
                   connections: {
                     type: 'object',
                     properties: {
@@ -4200,7 +4783,7 @@ const document = {
             in: 'path',
             name: 'version',
             required: true,
-            description: 'Project version number or stable.',
+            description: 'Project version number or `stable` for your stable project version.',
           },
         ],
         responses: {
@@ -4396,7 +4979,11 @@ const document = {
                         },
                         state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
                         title: { type: 'string' },
-                        type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
+                        type: {
+                          type: 'string',
+                          enum: ['api_config', 'basic', 'endpoint', 'link', 'webhook'],
+                          default: 'basic',
+                        },
                         updated_at: {
                           type: 'string',
                           format: 'date-time',
@@ -4580,7 +5167,7 @@ const document = {
         summary: 'Get a reference page',
         tags: ['API Reference'],
         description:
-          "Get a page from the API Reference section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Get a page from the API Reference section of your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
             schema: { type: 'string', enum: ['true', 'false'], default: 'false' },
@@ -4603,7 +5190,7 @@ const document = {
             in: 'path',
             name: 'version',
             required: true,
-            description: 'Project version number or stable.',
+            description: 'Project version number or `stable` for your stable project version.',
           },
           {
             schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
@@ -4806,7 +5393,11 @@ const document = {
                         },
                         state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
                         title: { type: 'string' },
-                        type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
+                        type: {
+                          type: 'string',
+                          enum: ['api_config', 'basic', 'endpoint', 'link', 'webhook'],
+                          default: 'basic',
+                        },
                         updated_at: {
                           type: 'string',
                           format: 'date-time',
@@ -4988,14 +5579,14 @@ const document = {
         summary: 'Delete a reference page',
         tags: ['API Reference'],
         description:
-          "Delete a page from the API Reference section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Delete a page from the API Reference section of your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
             schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
             in: 'path',
             name: 'version',
             required: true,
-            description: 'Project version number or stable.',
+            description: 'Project version number or `stable` for your stable project version.',
           },
           {
             schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
@@ -5012,7 +5603,7 @@ const document = {
         summary: 'Update a reference page',
         tags: ['API Reference'],
         description:
-          "Updates an existing page in the API Reference section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Updates an existing page in the API Reference section of your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         requestBody: {
           content: {
             'application/json': {
@@ -5148,7 +5739,11 @@ const document = {
                   },
                   state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
                   title: { type: 'string' },
-                  type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
+                  type: {
+                    type: 'string',
+                    enum: ['api_config', 'basic', 'endpoint', 'link', 'webhook'],
+                    default: 'basic',
+                  },
                   connections: {
                     type: 'object',
                     properties: {
@@ -5281,7 +5876,7 @@ const document = {
             in: 'path',
             name: 'version',
             required: true,
-            description: 'Project version number or stable.',
+            description: 'Project version number or `stable` for your stable project version.',
           },
           {
             schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
@@ -5484,7 +6079,11 @@ const document = {
                         },
                         state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
                         title: { type: 'string' },
-                        type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
+                        type: {
+                          type: 'string',
+                          enum: ['api_config', 'basic', 'endpoint', 'link', 'webhook'],
+                          default: 'basic',
+                        },
                         updated_at: {
                           type: 'string',
                           format: 'date-time',
@@ -5668,7 +6267,7 @@ const document = {
         summary: 'Perform a search query',
         tags: ['Search'],
         description:
-          "Searches the ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Searches the ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
             schema: { type: 'string' },
@@ -5736,7 +6335,7 @@ const document = {
                               type: 'object',
                               properties: {
                                 score: { type: 'number' },
-                                path: { type: 'string', enum: ['title', 'excerpt', 'searchContents', 'body'] },
+                                path: { type: 'string', enum: ['title', 'excerpt', 'searchContents'] },
                                 texts: {
                                   type: 'array',
                                   items: {
@@ -5809,7 +6408,7 @@ const document = {
         summary: 'Get versions',
         tags: ['Versions'],
         description:
-          "Get a collection of versions. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Get a collection of versions.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
             schema: { type: 'number', minimum: 1, default: 1 },
@@ -5974,8 +6573,10 @@ const document = {
   security: [{ bearer: [] }],
   'x-readme': { 'proxy-enabled': true },
   tags: [
+    { name: 'API Keys' },
     { name: 'API Reference' },
     { name: 'APIs' },
+    { name: 'Categories' },
     { name: 'Changelog' },
     { name: 'Custom Pages' },
     { name: 'Guides' },
