@@ -1,3 +1,10 @@
+# [10.2.0-next.12](https://github.com/readmeio/rdme/compare/v10.2.0-next.11...v10.2.0-next.12) (2025-04-21)
+
+
+### Bug Fixes
+
+* fetch util types ([#1218](https://github.com/readmeio/rdme/issues/1218)) ([453efe9](https://github.com/readmeio/rdme/commit/453efe94d5f6fc51a886de0d06e7de8a15523bd7))
+
 # [10.2.0-next.11](https://github.com/readmeio/rdme/compare/v10.2.0-next.10...v10.2.0-next.11) (2025-04-19)
 
 
