@@ -1,3 +1,10 @@
+# [10.2.0-next.14](https://github.com/readmeio/rdme/compare/v10.2.0-next.13...v10.2.0-next.14) (2025-04-21)
+
+
+### Features
+
+* minor tweaks to plugin extensibility ([#1221](https://github.com/readmeio/rdme/issues/1221)) ([4c72743](https://github.com/readmeio/rdme/commit/4c72743570aebf55e635036ac65e504e5c988c80))
+
 # [10.2.0-next.13](https://github.com/readmeio/rdme/compare/v10.2.0-next.12...v10.2.0-next.13) (2025-04-21)
 
 
