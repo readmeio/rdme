@@ -228,6 +228,10 @@ export async function readmeAPIv1Fetch(
  * Wrapper for the `fetch` API so we can add rdme-specific headers to all ReadMe API v2 requests.
  */
 export async function readmeAPIv2Fetch<T extends Hook.Context = Hook.Context>(
+  /**
+   * `this` does not have to be a hook, it can also be a Command class.
+   * This type ensures that `this` has the `config` and `debug` properties.
+   */
   this: T,
   /** The pathname to make the request to. Must have a leading slash. */
   pathname: string,
@@ -368,6 +372,10 @@ export async function handleAPIv1Res(
  * If we receive non-JSON responses, we consider them errors and throw them.
  */
 export async function handleAPIv2Res<T extends Hook.Context = Hook.Context>(
+  /**
+   * `this` does not have to be a hook, it can also be a Command class.
+   * This type ensures that `this` has the `config` and `debug` properties.
+   */
   this: T,
   res: Response,
   /**
