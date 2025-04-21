@@ -116,8 +116,8 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
   /**
    * Wrapper around `handleAPIv2Res` that binds the context of the class to the function.
    */
-  public async handleAPIRes<Data extends ResponseBody = ResponseBody>(...args: Parameters<typeof handleAPIv2Res>) {
-    return handleAPIv2Res.call(this, ...args) as Promise<Data>;
+  public async handleAPIRes<R extends ResponseBody = ResponseBody>(...args: Parameters<typeof handleAPIv2Res>) {
+    return handleAPIv2Res.call(this, ...args) as Promise<R>;
   }
 
   /**
