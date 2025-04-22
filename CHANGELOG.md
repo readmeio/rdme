@@ -1,3 +1,10 @@
+# [10.2.0-next.17](https://github.com/readmeio/rdme/compare/v10.2.0-next.16...v10.2.0-next.17) (2025-04-22)
+
+
+### Features
+
+* **docs/migrate:** add ability to unzip archives ([#1226](https://github.com/readmeio/rdme/issues/1226)) ([334e125](https://github.com/readmeio/rdme/commit/334e125065f075fc42063d4bf3817adaa7a3f09a))
+
 # [10.2.0-next.16](https://github.com/readmeio/rdme/compare/v10.2.0-next.15...v10.2.0-next.16) (2025-04-22)
 
 
