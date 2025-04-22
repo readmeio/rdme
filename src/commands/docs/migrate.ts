@@ -12,7 +12,7 @@ import { oraOptions } from '../../lib/logger.js';
 import promptTerminal from '../../lib/promptWrapper.js';
 import { fetchMappings, fetchSchema } from '../../lib/readmeAPIFetch.js';
 import { findPages } from '../../lib/readPage.js';
-import { unzip } from '../../lib/unzip.js';
+import { attemptUnzip } from '../../lib/unzip.js';
 
 const alphaNotice = 'This command is in an experimental alpha and is likely to change. Use at your own risk!';
 
@@ -48,7 +48,7 @@ export default class DocsMigrateCommand extends BaseCommand<typeof DocsMigrateCo
 
     const outputDir = rawOutputDir || (await dir({ prefix: 'rdme-migration-output' })).path;
 
-    const zipResults = await unzip(rawPathInput);
+    const zipResults = await attemptUnzip(rawPathInput);
     let { pathInput } = zipResults;
 
     // todo: fix this type once https://github.com/oclif/core/pull/1359 is merged

@@ -9,22 +9,30 @@ import { Open } from 'unzipper';
 
 import { oraOptions } from './logger.js';
 
-export async function unzip(pathInput: string): Promise<MarkdownFileScanResultOpts> {
+/**
+ * If the input is a zip file, unzip it and return the new path.
+ * If the input is not a zip file, pass through the original path.
+ */
+export async function attemptUnzip(pathInput: string): Promise<MarkdownFileScanResultOpts> {
   if (pathInput.endsWith('.zip')) {
-    const outputDir = (await dir({ prefix: 'rdme-migration-zip-contents' })).path;
+    try {
+      const outputDir = (await dir({ prefix: 'rdme-migration-zip-contents' })).path;
 
-    const unzipSpinner = ora({ ...oraOptions() }).start(
-      `🤐 Unzipping contents of ${chalk.underline(pathInput)} to the following directory: ${chalk.underline(outputDir)}...`,
-    );
+      const unzipSpinner = ora({ ...oraOptions() }).start(
+        `🤐 Unzipping contents of ${chalk.underline(pathInput)} to the following directory: ${chalk.underline(outputDir)}...`,
+      );
 
-    const directory = await Open.file(pathInput);
-    await directory.extract({ path: outputDir });
+      const directory = await Open.file(pathInput);
+      await directory.extract({ path: outputDir });
 
-    unzipSpinner.succeed(`${unzipSpinner.text} done!`);
+      unzipSpinner.succeed(`${unzipSpinner.text} done!`);
 
-    const newWorkingDir = path.join(outputDir, path.basename(pathInput, '.zip'));
+      const newWorkingDir = path.join(outputDir, path.basename(pathInput, '.zip'));
 
-    return { pathInput: newWorkingDir, zipped: true as const, unzippedDir: newWorkingDir };
+      return { pathInput: newWorkingDir, zipped: true as const, unzippedDir: newWorkingDir };
+    } catch (e) {
+      return { pathInput, zipped: false as const };
+    }
   }
   return { pathInput, zipped: false as const };
 }
