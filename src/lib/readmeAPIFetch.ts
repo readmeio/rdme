@@ -325,6 +325,7 @@ export async function readmeAPIv2Fetch<T extends Hook.Context = Hook.Context>(
     })
     .catch(e => {
       this.debug(`error making fetch request: ${e}`);
+      this.debug(e.stack);
       throw e;
     });
 }
