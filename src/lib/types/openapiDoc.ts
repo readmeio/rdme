@@ -15,7 +15,7 @@ const document = {
     version: '2.0.0-beta',
     title: 'ReadMe API v2 🦉 (BETA)',
     // @ts-expect-error custom extension
-    'x-readme-deploy': '5.334.1',
+    'x-readme-deploy': '5.336.0',
     termsOfService: 'https://readme.com/tos',
     contact: {
       name: 'API Support',
@@ -401,11 +401,31 @@ const document = {
                             properties: {
                               current: {
                                 type: 'string',
-                                enum: ['api', 'apidesigner', 'apieditor', 'bidi', 'form', 'rdme', 'rdme_github', 'url'],
+                                enum: [
+                                  'api',
+                                  'apidesigner',
+                                  'apieditor',
+                                  'bidi',
+                                  'form',
+                                  'postman',
+                                  'rdme',
+                                  'rdme_github',
+                                  'url',
+                                ],
                               },
                               original: {
                                 type: 'string',
-                                enum: ['api', 'apidesigner', 'apieditor', 'bidi', 'form', 'rdme', 'rdme_github', 'url'],
+                                enum: [
+                                  'api',
+                                  'apidesigner',
+                                  'apieditor',
+                                  'bidi',
+                                  'form',
+                                  'postman',
+                                  'rdme',
+                                  'rdme_github',
+                                  'url',
+                                ],
                               },
                             },
                             required: ['current', 'original'],
@@ -590,11 +610,31 @@ const document = {
                           properties: {
                             current: {
                               type: 'string',
-                              enum: ['api', 'apidesigner', 'apieditor', 'bidi', 'form', 'rdme', 'rdme_github', 'url'],
+                              enum: [
+                                'api',
+                                'apidesigner',
+                                'apieditor',
+                                'bidi',
+                                'form',
+                                'postman',
+                                'rdme',
+                                'rdme_github',
+                                'url',
+                              ],
                             },
                             original: {
                               type: 'string',
-                              enum: ['api', 'apidesigner', 'apieditor', 'bidi', 'form', 'rdme', 'rdme_github', 'url'],
+                              enum: [
+                                'api',
+                                'apidesigner',
+                                'apieditor',
+                                'bidi',
+                                'form',
+                                'postman',
+                                'rdme',
+                                'rdme_github',
+                                'url',
+                              ],
                             },
                           },
                           required: ['current', 'original'],
@@ -2147,6 +2187,7 @@ const document = {
                     type: 'object',
                     properties: {
                       dash: { type: 'string', format: 'uri', description: 'A URL to this page in your ReadMe Dash.' },
+                      hub: { type: 'string', format: 'uri', description: 'A URL to this page on your ReadMe hub.' },
                     },
                     additionalProperties: false,
                   },
@@ -2322,8 +2363,13 @@ const document = {
                               format: 'uri',
                               description: 'A URL to this page in your ReadMe Dash.',
                             },
+                            hub: {
+                              type: 'string',
+                              format: 'uri',
+                              description: 'A URL to this page on your ReadMe hub.',
+                            },
                           },
-                          required: ['dash'],
+                          required: ['dash', 'hub'],
                           additionalProperties: false,
                         },
                         metadata: {
@@ -2581,8 +2627,13 @@ const document = {
                               format: 'uri',
                               description: 'A URL to this page in your ReadMe Dash.',
                             },
+                            hub: {
+                              type: 'string',
+                              format: 'uri',
+                              description: 'A URL to this page on your ReadMe hub.',
+                            },
                           },
-                          required: ['dash'],
+                          required: ['dash', 'hub'],
                           additionalProperties: false,
                         },
                         metadata: {
@@ -2829,6 +2880,7 @@ const document = {
                     type: 'object',
                     properties: {
                       dash: { type: 'string', format: 'uri', description: 'A URL to this page in your ReadMe Dash.' },
+                      hub: { type: 'string', format: 'uri', description: 'A URL to this page on your ReadMe hub.' },
                     },
                     additionalProperties: false,
                   },
@@ -3009,8 +3061,13 @@ const document = {
                               format: 'uri',
                               description: 'A URL to this page in your ReadMe Dash.',
                             },
+                            hub: {
+                              type: 'string',
+                              format: 'uri',
+                              description: 'A URL to this page on your ReadMe hub.',
+                            },
                           },
-                          required: ['dash'],
+                          required: ['dash', 'hub'],
                           additionalProperties: false,
                         },
                         metadata: {
@@ -4586,6 +4643,7 @@ const document = {
                     type: 'object',
                     properties: {
                       dash: { type: 'string', format: 'uri', description: 'A URL to this page in your ReadMe Dash.' },
+                      hub: { type: 'string', format: 'uri', description: 'A URL to this page on your ReadMe hub.' },
                     },
                     additionalProperties: false,
                   },
@@ -4757,7 +4815,17 @@ const document = {
                       },
                       source: {
                         type: 'string',
-                        enum: ['api', 'apidesigner', 'apieditor', 'bidi', 'form', 'rdme', 'rdme_github', 'url'],
+                        enum: [
+                          'api',
+                          'apidesigner',
+                          'apieditor',
+                          'bidi',
+                          'form',
+                          'postman',
+                          'rdme',
+                          'rdme_github',
+                          'url',
+                        ],
                         nullable: true,
                       },
                       uri: {
@@ -4883,8 +4951,13 @@ const document = {
                               format: 'uri',
                               description: 'A URL to this page in your ReadMe Dash.',
                             },
+                            hub: {
+                              type: 'string',
+                              format: 'uri',
+                              description: 'A URL to this page on your ReadMe hub.',
+                            },
                           },
-                          required: ['dash'],
+                          required: ['dash', 'hub'],
                           additionalProperties: false,
                         },
                         metadata: {
@@ -5089,7 +5162,17 @@ const document = {
                             },
                             source: {
                               type: 'string',
-                              enum: ['api', 'apidesigner', 'apieditor', 'bidi', 'form', 'rdme', 'rdme_github', 'url'],
+                              enum: [
+                                'api',
+                                'apidesigner',
+                                'apieditor',
+                                'bidi',
+                                'form',
+                                'postman',
+                                'rdme',
+                                'rdme_github',
+                                'url',
+                              ],
                               nullable: true,
                               description: 'The source by which this API definition was ingested.',
                             },
@@ -5297,8 +5380,13 @@ const document = {
                               format: 'uri',
                               description: 'A URL to this page in your ReadMe Dash.',
                             },
+                            hub: {
+                              type: 'string',
+                              format: 'uri',
+                              description: 'A URL to this page on your ReadMe hub.',
+                            },
                           },
-                          required: ['dash'],
+                          required: ['dash', 'hub'],
                           additionalProperties: false,
                         },
                         metadata: {
@@ -5503,7 +5591,17 @@ const document = {
                             },
                             source: {
                               type: 'string',
-                              enum: ['api', 'apidesigner', 'apieditor', 'bidi', 'form', 'rdme', 'rdme_github', 'url'],
+                              enum: [
+                                'api',
+                                'apidesigner',
+                                'apieditor',
+                                'bidi',
+                                'form',
+                                'postman',
+                                'rdme',
+                                'rdme_github',
+                                'url',
+                              ],
                               nullable: true,
                               description: 'The source by which this API definition was ingested.',
                             },
@@ -5684,6 +5782,7 @@ const document = {
                     type: 'object',
                     properties: {
                       dash: { type: 'string', format: 'uri', description: 'A URL to this page in your ReadMe Dash.' },
+                      hub: { type: 'string', format: 'uri', description: 'A URL to this page on your ReadMe hub.' },
                     },
                     additionalProperties: false,
                   },
@@ -5849,7 +5948,17 @@ const document = {
                       },
                       source: {
                         type: 'string',
-                        enum: ['api', 'apidesigner', 'apieditor', 'bidi', 'form', 'rdme', 'rdme_github', 'url'],
+                        enum: [
+                          'api',
+                          'apidesigner',
+                          'apieditor',
+                          'bidi',
+                          'form',
+                          'postman',
+                          'rdme',
+                          'rdme_github',
+                          'url',
+                        ],
                         nullable: true,
                       },
                       uri: {
@@ -5983,8 +6092,13 @@ const document = {
                               format: 'uri',
                               description: 'A URL to this page in your ReadMe Dash.',
                             },
+                            hub: {
+                              type: 'string',
+                              format: 'uri',
+                              description: 'A URL to this page on your ReadMe hub.',
+                            },
                           },
-                          required: ['dash'],
+                          required: ['dash', 'hub'],
                           additionalProperties: false,
                         },
                         metadata: {
@@ -6189,7 +6303,17 @@ const document = {
                             },
                             source: {
                               type: 'string',
-                              enum: ['api', 'apidesigner', 'apieditor', 'bidi', 'form', 'rdme', 'rdme_github', 'url'],
+                              enum: [
+                                'api',
+                                'apidesigner',
+                                'apieditor',
+                                'bidi',
+                                'form',
+                                'postman',
+                                'rdme',
+                                'rdme_github',
+                                'url',
+                              ],
                               nullable: true,
                               description: 'The source by which this API definition was ingested.',
                             },
@@ -6469,36 +6593,6 @@ const document = {
                             nullable: true,
                             description: 'A non-semver display name for the version.',
                           },
-                          git: {
-                            type: 'object',
-                            properties: {
-                              latest_commit: {
-                                type: 'object',
-                                properties: {
-                                  created_at: {
-                                    type: 'string',
-                                    format: 'date-time',
-                                    description: 'An ISO 8601 formatted date for when the latest commit was created.',
-                                    nullable: true,
-                                  },
-                                  hash: {
-                                    type: 'string',
-                                    nullable: true,
-                                    description: 'The sha for the latest commit.',
-                                  },
-                                },
-                                required: ['created_at', 'hash'],
-                                additionalProperties: false,
-                              },
-                              branch_ref: {
-                                type: 'string',
-                                nullable: true,
-                                description: 'A reference to the associated branch for the version.',
-                              },
-                            },
-                            required: ['latest_commit', 'branch_ref'],
-                            additionalProperties: false,
-                          },
                           name: {
                             type: 'string',
                             pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
@@ -6546,7 +6640,6 @@ const document = {
                         required: [
                           'base',
                           'display_name',
-                          'git',
                           'name',
                           'privacy',
                           'release_stage',
