@@ -13,6 +13,11 @@ import ora from 'ora';
 import { oraOptions } from './logger.js';
 import readdirRecursive from './readdirRecursive.js';
 
+/**
+ * The metadata for a page once it has been read.
+ * This includes the Markdown contents of the file, the parsed frontmatter data,
+ * the file path, and the derived slug.
+ */
 export interface PageMetadata<T = Record<string, unknown>> {
   /**
    * The contents of the Markdown file below the YAML frontmatter
