@@ -57,6 +57,9 @@ export interface Mappings {
   parentPages: Record<string, string>;
 }
 
+/**
+ * A generic response body type for responses from the ReadMe API.
+ */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface ResponseBody extends Record<string, any> {}
 
