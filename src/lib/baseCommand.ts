@@ -14,6 +14,14 @@ import { handleAPIv2Res, readmeAPIv2Fetch, type ResponseBody } from './readmeAPI
 type Flags<T extends typeof OclifCommand> = Interfaces.InferredFlags<(typeof BaseCommand)['baseFlags'] & T['flags']>;
 type Args<T extends typeof OclifCommand> = Interfaces.InferredArgs<T['args']>;
 
+/**
+ * This is a light wrapper around the oclif command class that adds some
+ * additional functionality and standardizes the way we handle logging, error handling,
+ * and API requests.
+ *
+ * @note This class is not meant to be used directly, but rather as a base class for other commands.
+ * It is also experimental and may change in the future.
+ */
 export default abstract class BaseCommand<T extends typeof OclifCommand> extends OclifCommand {
   constructor(argv: string[], config: Config) {
     super(argv, config);
