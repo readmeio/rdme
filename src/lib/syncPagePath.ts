@@ -296,7 +296,7 @@ export default async function syncPagePath(this: APIv2PageCommands) {
       const res = await pushPage.call(this, fileData);
       rawResults.push({
         status: 'fulfilled',
-        value: res
+        value: res,
       });
     } catch (err) {
       rawResults.push({
