@@ -290,7 +290,21 @@ export default async function syncPagePath(this: APIv2PageCommands) {
   const sortedFiles = sortFiles((unsortedFiles as PageMetadata<PageRepresentation>[]).sort(byParentPage));
 
   // push the files to ReadMe
-  const rawResults = await Promise.allSettled(sortedFiles.map(async fileData => pushPage.call(this, fileData)));
+  const rawResults: PromiseSettledResult<PushResult>[] = [];
+  for await (const fileData of sortedFiles) {
+    try {
+      const res = await pushPage.call(this, fileData);
+      rawResults.push({
+        status: 'fulfilled',
+        value: res
+      });
+    } catch (err) {
+      rawResults.push({
+        status: 'rejected',
+        reason: err,
+      });
+    }
+  }
 
   const results = rawResults.reduce<{
     created: PushResult[];
