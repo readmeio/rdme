@@ -1,3 +1,10 @@
+# [10.2.0-next.18](https://github.com/readmeio/rdme/compare/v10.2.0-next.17...v10.2.0-next.18) (2025-04-22)
+
+
+### Bug Fixes
+
+* timeouts on `doc:upload` ([#1227](https://github.com/readmeio/rdme/issues/1227)) ([a7961ce](https://github.com/readmeio/rdme/commit/a7961cea75517548bfaadd2cfb6df2197d9c0106))
+
 # [10.2.0-next.17](https://github.com/readmeio/rdme/compare/v10.2.0-next.16...v10.2.0-next.17) (2025-04-22)
 
 
