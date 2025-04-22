@@ -108,6 +108,21 @@ describe('rdme docs upload', () => {
 
         mock.done();
       });
+
+      it('should error out if a non-404 error is returned from the GET request (with a json body)', async () => {
+        const mock = getAPIv2Mock({ authorization }).get('/versions/stable/guides/some-slug').reply(500, {
+          title: 'bad request',
+          detail: 'something went so so wrong',
+          status: 500,
+        });
+
+        const result = await run(['__tests__/__fixtures__/docs/slug-docs/new-doc-slug.md', '--key', key, '--dry-run']);
+
+        expect(result).toMatchSnapshot();
+        expect(fs.writeFileSync).not.toHaveBeenCalled();
+
+        mock.done();
+      });
     });
 
     describe('given that the slug is passed in the frontmatter', () => {
@@ -325,6 +340,21 @@ describe('rdme docs upload', () => {
 
     it('should error out if a non-404 error is returned from the GET request', async () => {
       const mock = getAPIv2Mock({ authorization }).get('/versions/stable/guides/new-doc').reply(500);
+
+      const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key]);
+
+      expect(result).toMatchSnapshot();
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
+
+      mock.done();
+    });
+
+    it('should error out if a non-404 error is returned from the GET request (with a json body)', async () => {
+      const mock = getAPIv2Mock({ authorization }).get('/versions/stable/guides/new-doc').reply(500, {
+        title: 'bad request',
+        detail: 'something went so so wrong',
+        status: 500,
+      });
 
       const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key]);
 
