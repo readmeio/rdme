@@ -37,4 +37,8 @@ export type GuidesRequestRepresentation = FromSchema<
  */
 export type ProjectRepresentation = FromSchema<projectSchema, { keepDefaultedPropertiesOptional: true }>;
 
+/**
+ * Derived from our API documentation, this is the schema for the API key object
+ * as we receive it to the ReadMe API.
+ */
 export type APIKeyRepresentation = FromSchema<apiKeySchema, { keepDefaultedPropertiesOptional: true }>;
