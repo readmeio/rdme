@@ -1,3 +1,10 @@
+# [10.2.0-next.15](https://github.com/readmeio/rdme/compare/v10.2.0-next.14...v10.2.0-next.15) (2025-04-22)
+
+
+### Bug Fixes
+
+* **docs/upload:** switch from `HEAD` to `GET` for initial page fetch ([#1224](https://github.com/readmeio/rdme/issues/1224)) ([0e657c6](https://github.com/readmeio/rdme/commit/0e657c67058690d50af7de78d957ca4cbd744d45))
+
 # [10.2.0-next.14](https://github.com/readmeio/rdme/compare/v10.2.0-next.13...v10.2.0-next.14) (2025-04-21)
 
 
