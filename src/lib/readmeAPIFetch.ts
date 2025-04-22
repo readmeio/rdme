@@ -381,11 +381,6 @@ export async function handleAPIv2Res<R extends ResponseBody = ResponseBody, T ex
    */
   this: T,
   res: Response,
-  /**
-   * If we're making a request where we don't care about the body (e.g. a HEAD or DELETE request),
-   * we can skip parsing the JSON body using this flag.
-   */
-  skipJsonParsing = false,
 ): Promise<R> {
   const contentType = res.headers.get('content-type') || '';
   const extension = mime.extension(contentType) || contentType.includes('json') ? 'json' : false;
@@ -394,12 +389,6 @@ export async function handleAPIv2Res<R extends ResponseBody = ResponseBody, T ex
     // https://x.com/cramforce/status/1762142087930433999
     const body = await res.text();
     this.debug(`received status code ${res.status} from ${res.url} with no content: ${body}`);
-    return {} as R;
-  } else if (skipJsonParsing) {
-    // to prevent a memory leak, we should still consume the response body? even though we don't use it?
-    // https://x.com/cramforce/status/1762142087930433999
-    const body = await res.text();
-    this.debug(`received status code ${res.status} from ${res.url} and not parsing JSON b/c of flag: ${body}`);
     return {} as R;
   } else if (extension === 'json') {
     const body = (await res.json()) as R;
