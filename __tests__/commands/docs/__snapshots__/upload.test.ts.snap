@@ -322,7 +322,7 @@ exports[`rdme docs upload > given that the file path is a single file > and the 
 
 exports[`rdme docs upload > given that the file path is a single file > given that the --dry-run flag is passed > should error out if a non-404 error is returned from the HEAD request 1`] = `
 {
-  "error": [APIv2Error: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
+  "error": [Error: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
   "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
  ›    Use at your own risk!
 - 🔬 Validating frontmatter data...
@@ -621,9 +621,9 @@ exports[`rdme docs upload > given that the file path is a single file > should c
 }
 `;
 
-exports[`rdme docs upload > given that the file path is a single file > should error out if a non-404 error is returned from the HEAD request 1`] = `
+exports[`rdme docs upload > given that the file path is a single file > should error out if a non-404 error is returned from the GET request 1`] = `
 {
-  "error": [APIv2Error: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
+  "error": [Error: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
   "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
  ›    Use at your own risk!
 - 🔬 Validating frontmatter data...

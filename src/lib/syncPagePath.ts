@@ -139,12 +139,14 @@ async function pushPage(
     };
 
     return this.readmeAPIFetch(`${route}/${slug}`, {
-      method: 'HEAD',
+      method: 'GET',
       headers,
     }).then(async res => {
-      await this.handleAPIRes(res, true);
       if (!res.ok) {
-        if (res.status !== 404) throw new APIv2Error(res);
+        if (res.status !== 404) {
+          const body = await this.handleAPIRes(res);
+          throw new APIv2Error(body);
+        }
         this.debug(`error retrieving data for ${slug}, creating page`);
         return createPage();
       }
