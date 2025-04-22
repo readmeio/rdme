@@ -1,3 +1,10 @@
+# [10.2.0-next.16](https://github.com/readmeio/rdme/compare/v10.2.0-next.15...v10.2.0-next.16) (2025-04-22)
+
+
+### Features
+
+* exposing types for creating API keys to plugins ([#1225](https://github.com/readmeio/rdme/issues/1225)) ([b625d80](https://github.com/readmeio/rdme/commit/b625d80db78ec5696dd0bb055c504f83fcf9c66d))
+
 # [10.2.0-next.15](https://github.com/readmeio/rdme/compare/v10.2.0-next.14...v10.2.0-next.15) (2025-04-22)
 
 
