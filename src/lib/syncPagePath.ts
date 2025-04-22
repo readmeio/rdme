@@ -144,8 +144,7 @@ async function pushPage(
     }).then(async res => {
       if (!res.ok) {
         if (res.status !== 404) {
-          const body = await this.handleAPIRes(res);
-          throw new APIv2Error(body);
+          return this.handleAPIRes(res);
         }
         this.debug(`error retrieving data for ${slug}, creating page`);
         return createPage();
