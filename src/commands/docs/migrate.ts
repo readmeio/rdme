@@ -1,4 +1,4 @@
-import type { PluginHooks } from '../../lib/hooks/exported.js';
+import type { MigrationStats, PluginHooks } from '../../lib/hooks/exported.js';
 
 import { Args, Flags, type Hook } from '@oclif/core';
 import chalk from 'chalk';
@@ -46,7 +46,7 @@ export default class DocsMigrateCommand extends BaseCommand<typeof DocsMigrateCo
     }),
   };
 
-  async run() {
+  async run(): Promise<{ outputDir: string; stats: MigrationStats }> {
     if (!this.flags['hide-experimental-warning']) {
       this.warn(alphaNotice);
     }
@@ -76,6 +76,16 @@ export default class DocsMigrateCommand extends BaseCommand<typeof DocsMigrateCo
       }
     });
 
+    const stats: MigrationStats = {
+      migrationOutputDir: outputDir,
+      results: {},
+      timestamp: new Date().toISOString(),
+    };
+
+    if (zipResults.zipped) {
+      stats.unzippedAssetsDir = zipResults.unzippedDir;
+    }
+
     let unsortedFiles = await findPages.call(this, pathInput);
 
     let transformedByHooks = false;
@@ -89,10 +99,11 @@ export default class DocsMigrateCommand extends BaseCommand<typeof DocsMigrateCo
     }
 
     validationHookResults.successes.forEach(success => {
-      if (success.result && success.result.length) {
+      if (success.result && success.result.pages.length) {
         transformedByHooks = true;
-        this.log(`🔌 ${success.result.length} Markdown files updated via the \`${success.plugin.name}\` plugin`);
-        unsortedFiles = success.result;
+        this.log(`🔌 ${success.result.pages.length} Markdown files updated via the \`${success.plugin.name}\` plugin`);
+        stats.results[success.plugin.name] = success.result.stats;
+        unsortedFiles = success.result.pages;
       }
     });
 
@@ -193,6 +204,6 @@ export default class DocsMigrateCommand extends BaseCommand<typeof DocsMigrateCo
       }
     }
 
-    return { outputDir };
+    return { outputDir, stats };
   }
 }

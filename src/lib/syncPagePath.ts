@@ -25,21 +25,48 @@ export type APIv2PageCommands = DocsMigrateCommand | DocsUploadCommand;
 
 type PageRepresentation = GuidesRequestRepresentation;
 
-export interface FailedPushResult {
-  error: APIv2Error | Error;
+interface BasePushResult {
   filePath: string;
-  result: 'failed';
+
+  /**
+   * The result of the upload operation.
+   * - `created`: The page was created in ReadMe.
+   * - `failed`: There was a failure when attempting to create or update the page.
+   * - `skipped`: The page was skipped due to no frontmatter data.
+   * - `updated`: The page was updated in ReadMe.
+   */
+  result: 'created' | 'failed' | 'skipped' | 'updated';
   slug: string;
 }
 
-export type PushResult =
-  | FailedPushResult
-  | {
-      filePath: string;
-      response: PageRepresentation | null;
-      result: 'created' | 'skipped' | 'updated';
-      slug: string;
-    };
+export interface CreatePushResult extends BasePushResult {
+  /**
+   * The full response from the ReadMe API. If this is `null`,
+   * the page was a dry run and no request was made.
+   */
+  response: PageRepresentation | null;
+  result: 'created';
+}
+
+export interface FailedPushResult extends BasePushResult {
+  error: APIv2Error | Error;
+  result: 'failed';
+}
+
+export interface SkippedPushResult extends BasePushResult {
+  result: 'skipped';
+}
+
+export interface UpdatePushResult extends BasePushResult {
+  /**
+   * The full response from the ReadMe API. If this is `null`,
+   * the page was a dry run and no request was made.
+   */
+  response: PageRepresentation | null;
+  result: 'updated';
+}
+
+export type PushResult = CreatePushResult | FailedPushResult | SkippedPushResult | UpdatePushResult;
 
 /**
  * Reads the contents of the specified Markdown or HTML file
@@ -62,7 +89,7 @@ async function pushPage(
 
   if (!Object.keys(data).length) {
     this.debug(`No frontmatter attributes found for ${filePath}, not syncing`);
-    return { response: null, filePath, result: 'skipped', slug };
+    return { filePath, result: 'skipped', slug };
   }
 
   const payload: PageRepresentation = {
@@ -99,9 +126,9 @@ async function pushPage(
       }
     }
 
-    const createPage = (): Promise<PushResult> | PushResult => {
+    const createPage = (): CreatePushResult | Promise<CreatePushResult> => {
       if (dryRun) {
-        return { filePath, result: 'created', response: null, slug };
+        return { filePath, response: null, result: 'created', slug };
       }
 
       return this.readmeAPIFetch(
@@ -111,13 +138,13 @@ async function pushPage(
       )
         .then(res => this.handleAPIRes(res))
         .then(res => {
-          return { filePath, result: 'created', response: res, slug };
+          return { filePath, response: res?.data || {}, result: 'created', slug };
         });
     };
 
-    const updatePage = (): Promise<PushResult> | PushResult => {
+    const updatePage = (): Promise<UpdatePushResult> | UpdatePushResult => {
       if (dryRun) {
-        return { filePath, result: 'updated', response: null, slug };
+        return { filePath, response: null, result: 'updated', slug };
       }
 
       // omits the slug from the PATCH payload since this would lead to unexpected behavior
@@ -134,7 +161,7 @@ async function pushPage(
       )
         .then(res => this.handleAPIRes(res))
         .then(res => {
-          return { filePath, result: 'updated', response: res, slug };
+          return { filePath, response: res?.data || {}, result: 'updated', slug };
         });
     };
 
@@ -192,9 +219,9 @@ function sortFiles(files: PageMetadata<PageRepresentation>[]): PageMetadata<Page
  * and syncs those (either via POST or PATCH) to ReadMe.
  * @returns An array of objects with the results
  */
-export default async function syncPagePath(this: APIv2PageCommands) {
+export default async function syncPagePath(this: DocsUploadCommand) {
   const { path: pathInput }: { path: string } = this.args;
-  const { key, 'dry-run': dryRun, 'skip-validation': skipValidation } = this.flags;
+  const { key, 'dry-run': dryRun, 'max-errors': maxErrors, 'skip-validation': skipValidation } = this.flags;
 
   // check whether or not the project has bidirection syncing enabled
   // if it is, validations must be skipped to prevent frontmatter from being overwritten
@@ -307,10 +334,10 @@ export default async function syncPagePath(this: APIv2PageCommands) {
   }
 
   const results = rawResults.reduce<{
-    created: PushResult[];
+    created: CreatePushResult[];
     failed: FailedPushResult[];
-    skipped: PushResult[];
-    updated: PushResult[];
+    skipped: SkippedPushResult[];
+    updated: UpdatePushResult[];
   }>(
     (acc, result, index) => {
       if (result.status === 'fulfilled') {
@@ -392,16 +419,19 @@ export default async function syncPagePath(this: APIv2PageCommands) {
 
       this.log(`   - ${chalk.underline(filePath)}: ${errorMessage}`);
     });
-    if (results.failed.length === 1) {
-      throw results.failed[0].error;
-    } else {
-      const errors = results.failed.map(({ error }) => error);
-      throw new AggregateError(
-        errors,
-        dryRun
-          ? `Multiple dry runs failed. To see more detailed errors for a page, run \`${this.config.bin} ${this.id} <path-to-page.md>\` --dry-run.`
-          : `Multiple page uploads failed. To see more detailed errors for a page, run \`${this.config.bin} ${this.id} <path-to-page.md>\`.`,
-      );
+
+    if (results.failed.length >= maxErrors && maxErrors !== -1) {
+      if (results.failed.length === 1) {
+        throw results.failed[0].error;
+      } else {
+        const errors = results.failed.map(({ error }) => error);
+        throw new AggregateError(
+          errors,
+          dryRun
+            ? `Multiple dry runs failed. To see more detailed errors for a page, run \`${this.config.bin} ${this.id} <path-to-page.md>\` --dry-run.`
+            : `Multiple page uploads failed. To see more detailed errors for a page, run \`${this.config.bin} ${this.id} <path-to-page.md>\`.`,
+        );
+      }
     }
   }
 

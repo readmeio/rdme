@@ -41,7 +41,7 @@ export const COMMANDS = {
   'openapi:validate': OpenAPIValidateCommand,
 
   whoami: WhoAmICommand,
-};
+} as const;
 
 export type CommandClass = ValueOf<typeof COMMANDS>;
 
