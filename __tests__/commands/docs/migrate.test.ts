@@ -15,6 +15,11 @@ describe('rdme docs migrate', () => {
     expect(output).toMatchSnapshot();
   });
 
+  it('should hide warning if `--hide-experimental-warning` flag is passed', async () => {
+    const output = await run(['__tests__/__fixtures__/docs/new-docs', '--hide-experimental-warning']);
+    expect(output).toMatchSnapshot();
+  });
+
   it('should error out if no plugins are installed', async () => {
     const output = await run(['__tests__/__fixtures__/docs/new-docs']);
     expect(output).toMatchSnapshot();

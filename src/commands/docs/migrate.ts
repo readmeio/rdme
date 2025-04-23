@@ -33,6 +33,10 @@ export default class DocsMigrateCommand extends BaseCommand<typeof DocsMigrateCo
   };
 
   static flags = {
+    'hide-experimental-warning': Flags.boolean({
+      description: 'Hides the warning message about this command being in an experimental alpha.',
+      hidden: true,
+    }),
     out: Flags.string({
       summary: 'The directory to write the migration output to. Defaults to a temporary directory.',
     }),
@@ -43,6 +47,9 @@ export default class DocsMigrateCommand extends BaseCommand<typeof DocsMigrateCo
   };
 
   async run() {
+    if (!this.flags['hide-experimental-warning']) {
+      this.warn(alphaNotice);
+    }
     const { path: rawPathInput }: { path: string } = this.args;
     const { out: rawOutputDir, 'skip-validation': skipValidation } = this.flags;
 
