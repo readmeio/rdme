@@ -27,6 +27,14 @@ type PageRepresentation = GuidesRequestRepresentation;
 
 interface BasePushResult {
   filePath: string;
+
+  /**
+   * The result of the upload operation.
+   * - `created`: The page was created in ReadMe.
+   * - `failed`: There was a failure when attempting to create or update the page.
+   * - `skipped`: The page was skipped due to no frontmatter data.
+   * - `updated`: The page was updated in ReadMe.
+   */
   result: 'created' | 'failed' | 'skipped' | 'updated';
   slug: string;
 }
@@ -130,7 +138,7 @@ async function pushPage(
       )
         .then(res => this.handleAPIRes(res))
         .then(res => {
-          return { filePath, result: 'created', response: res?.data || {}, slug };
+          return { filePath, response: res?.data || {}, result: 'created', slug };
         });
     };
 
@@ -153,7 +161,7 @@ async function pushPage(
       )
         .then(res => this.handleAPIRes(res))
         .then(res => {
-          return { filePath, result: 'updated', response: res?.data || {}, slug };
+          return { filePath, response: res?.data || {}, result: 'updated', slug };
         });
     };
 

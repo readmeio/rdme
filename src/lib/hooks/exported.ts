@@ -87,6 +87,15 @@ interface BasePageStat {
    */
   title: string;
 
+  /**
+   * The type of page for the sake of migration.
+   * - `empty-parent`: A parent page with no body content. These are generally placeholders used for defining the hierarchy of the docs.
+   * - `link`: A page that links to an external URL. These are generally used for linking to external documentation.
+   * - `migrated`: A page that was migrated from the input directory. This migration workflow generally relies on a configuration file
+   *  to define the hierarchy of the docs, so this means that the page was defined in the configuration file and was found in the input directory.
+   * - `unlisted`: This means that the page was found in the input directory but was **not** defined in the configuration file.
+   *  These will generally be uploaded to as hidden pages in their own category.
+   */
   type: 'empty-parent' | 'link' | 'migrated' | 'unlisted';
 
   /**
@@ -134,7 +143,7 @@ export interface MigrationStats {
   migrationOutputDir: string;
 
   /**
-   * A map where the key is the plugin name and the value is the migration stats for that plugin.
+   * A map where the key is the plugin name and the value is the migration stats object for that plugin.
    */
   results: Record<
     /**
