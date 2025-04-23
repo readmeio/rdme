@@ -389,6 +389,21 @@ describe('rdme docs upload', () => {
       mock.done();
     });
 
+    it('should not throw an error if `max-errors` flag is set to -1', async () => {
+      const mock = getAPIv2Mock({ authorization }).get('/versions/stable/guides/new-doc').reply(500, {
+        title: 'bad request',
+        detail: 'something went so so wrong',
+        status: 500,
+      });
+
+      const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key, '--max-errors', '-1']);
+
+      expect(result).toMatchSnapshot();
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
+
+      mock.done();
+    });
+
     it('should error out if the file does not exist', async () => {
       const result = await run(['non-existent-file', '--key', key]);
 
@@ -585,6 +600,53 @@ describe('rdme docs upload', () => {
       prompts.inject([true]);
 
       const result = await run(['__tests__/__fixtures__/docs/mixed-docs', '--key', key]);
+
+      expect(result).toMatchSnapshot();
+      expect(fs.writeFileSync).toHaveBeenCalledTimes(5);
+
+      mock.done();
+    });
+
+    it('should handle a mix of creates and updates and failures and skipped files and not error out with `max-errors` flag', async () => {
+      const mock = getAPIv2Mock({ authorization })
+        .get('/versions/stable/guides/invalid-attributes')
+        .reply(404)
+        .post('/versions/stable/guides', {
+          category: { uri: '/versions/stable/categories/guides/some-category-uri', 'is-this-a-valid-property': 'nope' },
+          slug: 'invalid-attributes',
+          title: 'This is the document title',
+          content: { body: '\nBody\n' },
+        })
+        .reply(201, {})
+        .get('/versions/stable/guides/legacy-category')
+        .reply(200)
+        .patch('/versions/stable/guides/legacy-category', {
+          category: { uri: '/versions/stable/categories/guides/uri-that-does-not-map-to-5ae122e10fdf4e39bb34db6f' },
+          title: 'This is the document title',
+          content: { body: '\nBody\n' },
+        })
+        .reply(201, {})
+        .get('/versions/stable/guides/some-slug')
+        .reply(404)
+        .post('/versions/stable/guides', {
+          slug: 'some-slug',
+          title: 'This is the document title',
+          category: { uri: '/versions/stable/categories/guides/some-category-uri' },
+          content: { body: '\nBody\n' },
+        })
+        .reply(500, {})
+        .get('/versions/stable/guides/simple-doc')
+        .reply(404)
+        .post('/versions/stable/guides', {
+          slug: 'simple-doc',
+          title: 'This is the document title',
+          content: { body: '\nBody\n' },
+        })
+        .reply(500, {});
+
+      prompts.inject([true]);
+
+      const result = await run(['__tests__/__fixtures__/docs/mixed-docs', '--key', key, '--max-errors', '10']);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).toHaveBeenCalledTimes(5);
