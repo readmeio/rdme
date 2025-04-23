@@ -15,7 +15,7 @@ const document = {
     version: '2.0.0-beta',
     title: 'ReadMe API v2 🦉 (BETA)',
     // @ts-expect-error custom extension
-    'x-readme-deploy': '5.336.0',
+    'x-readme-deploy': '5.337.1',
     termsOfService: 'https://readme.com/tos',
     contact: {
       name: 'API Support',
@@ -6526,141 +6526,6 @@ const document = {
         },
       },
     },
-    '/versions': {
-      get: {
-        operationId: 'getVersions',
-        summary: 'Get versions',
-        tags: ['Versions'],
-        description:
-          "Get a collection of versions.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
-        parameters: [
-          {
-            schema: { type: 'number', minimum: 1, default: 1 },
-            in: 'query',
-            name: 'page',
-            required: false,
-            description: 'Used to specify further pages (starts at 1).',
-          },
-          {
-            schema: { type: 'number', minimum: 1, maximum: 100, default: 10 },
-            in: 'query',
-            name: 'per_page',
-            required: false,
-            description: 'Number of items to include in pagination (up to 100, defaults to 10).',
-          },
-          {
-            schema: { type: 'string', enum: ['created', 'updated', 'semver'], default: 'semver' },
-            in: 'query',
-            name: 'sort_by',
-            required: false,
-            description: 'The sort that should be used for the returned versions list.',
-          },
-        ],
-        responses: {
-          '200': {
-            description: 'OK',
-            content: {
-              'application/json': {
-                schema: {
-                  type: 'object',
-                  properties: {
-                    total: { type: 'number' },
-                    page: { type: 'number' },
-                    per_page: { type: 'number' },
-                    paging: {
-                      type: 'object',
-                      properties: {
-                        next: { type: 'string', nullable: true },
-                        previous: { type: 'string', nullable: true },
-                        first: { type: 'string', nullable: true },
-                        last: { type: 'string', nullable: true },
-                      },
-                      required: ['next', 'previous', 'first', 'last'],
-                      additionalProperties: false,
-                    },
-                    data: {
-                      type: 'array',
-                      items: {
-                        type: 'object',
-                        properties: {
-                          base: {
-                            type: 'string',
-                            nullable: true,
-                            description: 'The name of the version this version was forked from.',
-                          },
-                          display_name: {
-                            type: 'string',
-                            nullable: true,
-                            description: 'A non-semver display name for the version.',
-                          },
-                          name: {
-                            type: 'string',
-                            pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
-                            description: 'The semver name for the version.',
-                          },
-                          privacy: {
-                            type: 'object',
-                            properties: {
-                              view: {
-                                type: 'string',
-                                enum: ['default', 'hidden', 'public'],
-                                description:
-                                  "Whether the version is public, hidden, or the stable version that's visible by default.",
-                              },
-                            },
-                            required: ['view'],
-                            additionalProperties: false,
-                          },
-                          release_stage: {
-                            type: 'string',
-                            enum: ['beta', 'release'],
-                            description: 'Whether the version is released or in beta',
-                          },
-                          source: {
-                            type: 'string',
-                            enum: ['readme', 'bidi'],
-                            description: 'Whether the version was created in ReadMe or via BiDirectional Sync.',
-                          },
-                          state: {
-                            type: 'string',
-                            enum: ['current', 'deprecated'],
-                            description: 'Whether the version is current or deprecated',
-                          },
-                          updated_at: {
-                            type: 'string',
-                            format: 'date-time',
-                            description: 'An ISO 8601 formatted date for when the version was last updated.',
-                          },
-                          uri: {
-                            type: 'string',
-                            pattern: '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)',
-                            description: 'A URI to the version resource.',
-                          },
-                        },
-                        required: [
-                          'base',
-                          'display_name',
-                          'name',
-                          'privacy',
-                          'release_stage',
-                          'source',
-                          'state',
-                          'updated_at',
-                          'uri',
-                        ],
-                        additionalProperties: false,
-                      },
-                    },
-                  },
-                  required: ['total', 'page', 'per_page', 'paging', 'data'],
-                  additionalProperties: false,
-                },
-              },
-            },
-          },
-        },
-      },
-    },
   },
   servers: [{ url: 'https://api.readme.com/v2', description: 'The ReadMe API' }],
   security: [{ bearer: [] }],
@@ -6675,7 +6540,6 @@ const document = {
     { name: 'Guides' },
     { name: 'Projects' },
     { name: 'Search' },
-    { name: 'Versions' },
   ],
 } as const satisfies OASDocument;
 
