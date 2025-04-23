@@ -15,7 +15,7 @@ const document = {
     version: '2.0.0-beta',
     title: 'ReadMe API v2 🦉 (BETA)',
     // @ts-expect-error custom extension
-    'x-readme-deploy': '5.336.0',
+    'x-readme-deploy': '5.337.1',
     termsOfService: 'https://readme.com/tos',
     contact: {
       name: 'API Support',
