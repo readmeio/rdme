@@ -1,3 +1,10 @@
+# [10.2.0-next.19](https://github.com/readmeio/rdme/compare/v10.2.0-next.18...v10.2.0-next.19) (2025-04-23)
+
+
+### Features
+
+* **docs:** add `--hide-experimental-warning` flag ([#1229](https://github.com/readmeio/rdme/issues/1229)) ([250e9ce](https://github.com/readmeio/rdme/commit/250e9ce8900d04b1498f28a2b77c3b5c6eb0ab39))
+
 # [10.2.0-next.18](https://github.com/readmeio/rdme/compare/v10.2.0-next.17...v10.2.0-next.18) (2025-04-22)
 
 
