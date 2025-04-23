@@ -692,3 +692,29 @@ exports[`rdme docs upload > given that the file path is a single file > should e
   "stdout": "",
 }
 `;
+
+exports[`rdme docs upload > given that the file path is a single file > should hide the warning if the \`--hide-experimental-warning\` flag is passed 1`] = `
+{
+  "result": {
+    "created": [
+      {
+        "filePath": "__tests__/__fixtures__/docs/new-docs/new-doc.md",
+        "response": {},
+        "result": "created",
+        "slug": "new-doc",
+      },
+    ],
+    "failed": [],
+    "skipped": [],
+    "updated": [],
+  },
+  "stderr": "- 🔬 Validating frontmatter data...
+✔ 🔬 Validating frontmatter data... no issues found!
+- 🚀 Uploading files to ReadMe...
+✔ 🚀 Uploading files to ReadMe... done!
+",
+  "stdout": "🌱 Successfully created 1 page(s) in ReadMe:
+   - new-doc (__tests__/__fixtures__/docs/new-docs/new-doc.md)
+",
+}
+`;

@@ -50,6 +50,10 @@ export default class DocsUploadCommand extends BaseCommand<typeof DocsUploadComm
       aliases: ['dryRun'],
       deprecateAliases: true,
     }),
+    'hide-experimental-warning': Flags.boolean({
+      description: 'Hides the warning message about this command being in an experimental alpha.',
+      hidden: true,
+    }),
     'skip-validation': Flags.boolean({
       description:
         'Skips the pre-upload validation of the Markdown files. This flag can be a useful escape hatch but its usage is not recommended.',
@@ -68,7 +72,9 @@ export default class DocsUploadCommand extends BaseCommand<typeof DocsUploadComm
     skipped: PushResult[];
     updated: PushResult[];
   }> {
-    this.warn(alphaNotice);
+    if (!this.flags['hide-experimental-warning']) {
+      this.warn(alphaNotice);
+    }
     return syncPagePath.call(this);
   }
 }

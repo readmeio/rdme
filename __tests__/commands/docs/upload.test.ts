@@ -55,6 +55,31 @@ describe('rdme docs upload', () => {
       mock.done();
     });
 
+    it('should hide the warning if the `--hide-experimental-warning` flag is passed', async () => {
+      const mock = getAPIv2Mock({ authorization })
+        .get('/versions/stable/guides/new-doc')
+        .reply(404)
+        .post('/versions/stable/guides', {
+          category: { uri: '/versions/stable/categories/guides/category-slug' },
+          slug: 'new-doc',
+          title: 'This is the document title',
+          content: { body: '\nBody\n' },
+        })
+        .reply(201, {});
+
+      const result = await run([
+        '__tests__/__fixtures__/docs/new-docs/new-doc.md',
+        '--key',
+        key,
+        '--hide-experimental-warning',
+      ]);
+
+      expect(result).toMatchSnapshot();
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
+
+      mock.done();
+    });
+
     it('should allow for user to specify version via --version flag', async () => {
       const mock = getAPIv2Mock({ authorization })
         .get('/versions/1.2.3/guides/new-doc')
