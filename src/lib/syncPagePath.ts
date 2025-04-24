@@ -265,6 +265,7 @@ export default async function syncPagePath(this: DocsUploadCommand) {
     });
 
     const filesWithIssues = validationResults.filter(result => result.hasIssues);
+    this.debug(`found ${filesWithIssues.length} files with issues: ${JSON.stringify(filesWithIssues)}`);
     const filesWithFixableIssues = filesWithIssues.filter(result => result.changeCount);
     const filesWithUnfixableIssues = filesWithIssues.filter(result => result.unfixableErrors.length);
 
