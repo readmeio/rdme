@@ -1,3 +1,10 @@
+# [10.2.0-next.22](https://github.com/readmeio/rdme/compare/v10.2.0-next.21...v10.2.0-next.22) (2025-04-24)
+
+
+### Bug Fixes
+
+* **docs/upload:** upload progress via ora ([#1231](https://github.com/readmeio/rdme/issues/1231)) ([0549f66](https://github.com/readmeio/rdme/commit/0549f66986efc0295568b928eb54a8f56ebd64cb))
+
 # [10.2.0-next.21](https://github.com/readmeio/rdme/compare/v10.2.0-next.20...v10.2.0-next.21) (2025-04-24)
 
 
