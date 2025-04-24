@@ -1,3 +1,10 @@
+# [10.2.0-next.20](https://github.com/readmeio/rdme/compare/v10.2.0-next.19...v10.2.0-next.20) (2025-04-24)
+
+
+### Features
+
+* **docs/migrate:** migration stats ([#1230](https://github.com/readmeio/rdme/issues/1230)) ([ba3f062](https://github.com/readmeio/rdme/commit/ba3f062bb268ca0ed272720e74738d08e9d4fded))
+
 # [10.2.0-next.19](https://github.com/readmeio/rdme/compare/v10.2.0-next.18...v10.2.0-next.19) (2025-04-23)
 
 
