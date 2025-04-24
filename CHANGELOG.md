@@ -1,3 +1,10 @@
+# [10.2.0-next.21](https://github.com/readmeio/rdme/compare/v10.2.0-next.20...v10.2.0-next.21) (2025-04-24)
+
+
+### Features
+
+* expose `readdirRecursive` ([fdf21fa](https://github.com/readmeio/rdme/commit/fdf21faadbecd276d3b4a1f5ed7bdafd0abf288c))
+
 # [10.2.0-next.20](https://github.com/readmeio/rdme/compare/v10.2.0-next.19...v10.2.0-next.20) (2025-04-24)
 
 
