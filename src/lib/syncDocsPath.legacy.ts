@@ -10,7 +10,7 @@ import toposort from 'toposort';
 import { APIv1Error } from './apiError.js';
 import readdirRecursive from './readdirRecursive.js';
 import { cleanAPIv1Headers, handleAPIv1Res, readmeAPIv1Fetch } from './readmeAPIFetch.js';
-import readPage from './readPage.js';
+import { readPage } from './readPage.js';
 
 /** API path within ReadMe to update (e.g. `docs`, `changelogs`, etc.) */
 type PageType = 'changelogs' | 'custompages' | 'docs';

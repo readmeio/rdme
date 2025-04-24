@@ -15,6 +15,10 @@ type guidesRequestBodySchema =
 
 type projectSchema =
   (typeof readmeAPIv2Oas)['paths']['/projects/me']['get']['responses']['200']['content']['application/json']['schema'];
+
+type apiKeySchema =
+  (typeof readmeAPIv2Oas)['paths']['/projects/{subdomain}/apikeys/{api_key_id}']['get']['responses']['200']['content']['application/json']['schema'];
+
 /**
  * Derived from our API documentation, this is the schema for the `guides` object
  * as we send it to the ReadMe API.
@@ -27,4 +31,14 @@ export type GuidesRequestRepresentation = FromSchema<
   { keepDefaultedPropertiesOptional: true }
 >;
 
+/**
+ * Derived from our API documentation, this is the schema for the `project` object
+ * as we receive it to the ReadMe API.
+ */
 export type ProjectRepresentation = FromSchema<projectSchema, { keepDefaultedPropertiesOptional: true }>;
+
+/**
+ * Derived from our API documentation, this is the schema for the API key object
+ * as we receive it to the ReadMe API.
+ */
+export type APIKeyRepresentation = FromSchema<apiKeySchema, { keepDefaultedPropertiesOptional: true }>;

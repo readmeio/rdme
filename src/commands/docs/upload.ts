@@ -1,8 +1,13 @@
 import { Args, Flags } from '@oclif/core';
 
 import BaseCommand from '../../lib/baseCommand.js';
-import { githubFlag, keyFlag } from '../../lib/flags.js';
-import syncPagePath from '../../lib/syncPagePath.js';
+import { keyFlag } from '../../lib/flags.js';
+import syncPagePath, {
+  type FailedPushResult,
+  type SkippedPushResult,
+  type CreatePushResult,
+  type UpdatePushResult,
+} from '../../lib/syncPagePath.js';
 
 export default class DocsUploadCommand extends BaseCommand<typeof DocsUploadCommand> {
   id = 'docs upload' as const;
@@ -40,12 +45,18 @@ export default class DocsUploadCommand extends BaseCommand<typeof DocsUploadComm
   ];
 
   static flags = {
-    github: githubFlag,
     key: keyFlag,
     'dry-run': Flags.boolean({
       description: 'Runs the command without creating nor updating any Guides in ReadMe. Useful for debugging.',
       aliases: ['dryRun'],
       deprecateAliases: true,
+    }),
+    'max-errors': Flags.integer({
+      summary: 'Maximum number of page uploading errors before the command throws an error.',
+      description:
+        'By default, this command will respond with a 1 exit code if any number of the Markdown files fail to upload. This flag allows you to set a maximum number of errors before the command fails. For example, if you set this flag to `5`, the command will respond with an error if 5 or more errors are encountered. If you do not want the command to fail under any circumstances (this could be useful for plugins where you want to handle the error handling yourself), set this flag to `-1`.',
+      default: 0,
+      hidden: true,
     }),
     'skip-validation': Flags.boolean({
       description:
@@ -59,7 +70,12 @@ export default class DocsUploadCommand extends BaseCommand<typeof DocsUploadComm
     }),
   };
 
-  async run() {
+  async run(): Promise<{
+    created: CreatePushResult[];
+    failed: FailedPushResult[];
+    skipped: SkippedPushResult[];
+    updated: UpdatePushResult[];
+  }> {
     return syncPagePath.call(this);
   }
 }

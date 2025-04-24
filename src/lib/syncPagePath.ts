@@ -1,9 +1,6 @@
-import type { PageMetadata } from './readPage.js';
 import type { GuidesRequestRepresentation, ProjectRepresentation } from './types/index.js';
+import type DocsMigrateCommand from '../commands/docs/migrate.js';
 import type DocsUploadCommand from '../commands/docs/upload.js';
-
-import fs from 'node:fs/promises';
-import path from 'node:path';
 
 import chalk from 'chalk';
 import ora from 'ora';
@@ -14,43 +11,69 @@ import { fix, writeFixes } from './frontmatter.js';
 import isCI from './isCI.js';
 import { oraOptions } from './logger.js';
 import promptTerminal from './promptWrapper.js';
-import readdirRecursive from './readdirRecursive.js';
 import { fetchMappings, fetchSchema } from './readmeAPIFetch.js';
-import readPage from './readPage.js';
+import { findPages, type PageMetadata } from './readPage.js';
 import { categoryUriRegexPattern, parentUriRegexPattern } from './types/index.js';
 
 /**
- * Commands that use this file for syncing Markdown via APIv2.
+ * Commands that leverage the APIv2 representations for pages (e.g., Guides, API Reference, etc.)
  *
  * Note that the `changelogs` command is not included here
  * because it is backed by APIv1.
  */
-export type CommandsThatSyncMarkdown = DocsUploadCommand;
+export type APIv2PageCommands = DocsMigrateCommand | DocsUploadCommand;
 
 type PageRepresentation = GuidesRequestRepresentation;
 
-interface FailedPushResult {
-  error: APIv2Error | Error;
+interface BasePushResult {
   filePath: string;
-  result: 'failed';
+
+  /**
+   * The result of the upload operation.
+   * - `created`: The page was created in ReadMe.
+   * - `failed`: There was a failure when attempting to create or update the page.
+   * - `skipped`: The page was skipped due to no frontmatter data.
+   * - `updated`: The page was updated in ReadMe.
+   */
+  result: 'created' | 'failed' | 'skipped' | 'updated';
   slug: string;
 }
 
-type PushResult =
-  | FailedPushResult
-  | {
-      filePath: string;
-      response: PageRepresentation | null;
-      result: 'created' | 'skipped' | 'updated';
-      slug: string;
-    };
+export interface CreatePushResult extends BasePushResult {
+  /**
+   * The full response from the ReadMe API. If this is `null`,
+   * the page was a dry run and no request was made.
+   */
+  response: PageRepresentation | null;
+  result: 'created';
+}
+
+export interface FailedPushResult extends BasePushResult {
+  error: APIv2Error | Error;
+  result: 'failed';
+}
+
+export interface SkippedPushResult extends BasePushResult {
+  result: 'skipped';
+}
+
+export interface UpdatePushResult extends BasePushResult {
+  /**
+   * The full response from the ReadMe API. If this is `null`,
+   * the page was a dry run and no request was made.
+   */
+  response: PageRepresentation | null;
+  result: 'updated';
+}
+
+export type PushResult = CreatePushResult | FailedPushResult | SkippedPushResult | UpdatePushResult;
 
 /**
  * Reads the contents of the specified Markdown or HTML file
  * and creates/updates the corresponding page in ReadMe
  */
 async function pushPage(
-  this: CommandsThatSyncMarkdown,
+  this: APIv2PageCommands,
   /** the file data */
   fileData: PageMetadata,
 ): Promise<PushResult> {
@@ -66,14 +89,14 @@ async function pushPage(
 
   if (!Object.keys(data).length) {
     this.debug(`No frontmatter attributes found for ${filePath}, not syncing`);
-    return { response: null, filePath, result: 'skipped', slug };
+    return { filePath, result: 'skipped', slug };
   }
 
   const payload: PageRepresentation = {
     ...data,
     content: {
-      ...(typeof data.content === 'object' ? data.content : {}),
       body: content,
+      ...(typeof data.content === 'object' ? data.content : {}),
     },
     slug,
   };
@@ -103,9 +126,9 @@ async function pushPage(
       }
     }
 
-    const createPage = (): Promise<PushResult> | PushResult => {
+    const createPage = (): CreatePushResult | Promise<CreatePushResult> => {
       if (dryRun) {
-        return { filePath, result: 'created', response: null, slug };
+        return { filePath, response: null, result: 'created', slug };
       }
 
       return this.readmeAPIFetch(
@@ -115,13 +138,13 @@ async function pushPage(
       )
         .then(res => this.handleAPIRes(res))
         .then(res => {
-          return { filePath, result: 'created', response: res, slug };
+          return { filePath, response: res?.data || {}, result: 'created', slug };
         });
     };
 
-    const updatePage = (): Promise<PushResult> | PushResult => {
+    const updatePage = (): Promise<UpdatePushResult> | UpdatePushResult => {
       if (dryRun) {
-        return { filePath, result: 'updated', response: null, slug };
+        return { filePath, response: null, result: 'updated', slug };
       }
 
       // omits the slug from the PATCH payload since this would lead to unexpected behavior
@@ -138,17 +161,18 @@ async function pushPage(
       )
         .then(res => this.handleAPIRes(res))
         .then(res => {
-          return { filePath, result: 'updated', response: res, slug };
+          return { filePath, response: res?.data || {}, result: 'updated', slug };
         });
     };
 
     return this.readmeAPIFetch(`${route}/${slug}`, {
-      method: 'HEAD',
+      method: 'GET',
       headers,
     }).then(async res => {
-      await this.handleAPIRes(res, true);
       if (!res.ok) {
-        if (res.status !== 404) throw new APIv2Error(res);
+        if (res.status !== 404) {
+          return this.handleAPIRes(res);
+        }
         this.debug(`error retrieving data for ${slug}, creating page`);
         return createPage();
       }
@@ -195,18 +219,9 @@ function sortFiles(files: PageMetadata<PageRepresentation>[]): PageMetadata<Page
  * and syncs those (either via POST or PATCH) to ReadMe.
  * @returns An array of objects with the results
  */
-export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
+export default async function syncPagePath(this: DocsUploadCommand) {
   const { path: pathInput }: { path: string } = this.args;
-  const { key, 'dry-run': dryRun, 'skip-validation': skipValidation } = this.flags;
-
-  const allowedFileExtensions = ['.markdown', '.md', '.mdx'];
-
-  const stat = await fs.stat(pathInput).catch(err => {
-    if (err.code === 'ENOENT') {
-      throw new Error("Oops! We couldn't locate a file or directory at the path you provided.");
-    }
-    throw err;
-  });
+  const { key, 'dry-run': dryRun, 'max-errors': maxErrors, 'skip-validation': skipValidation } = this.flags;
 
   // check whether or not the project has bidirection syncing enabled
   // if it is, validations must be skipped to prevent frontmatter from being overwritten
@@ -235,41 +250,7 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
     }
   }
 
-  let files: string[];
-
-  if (stat.isDirectory()) {
-    const fileScanningSpinner = ora({ ...oraOptions() }).start(
-      `🔍 Looking for Markdown files in ${chalk.underline(pathInput)}...`,
-    );
-    // Filter out any files that don't match allowedFileExtensions
-    files = readdirRecursive(pathInput).filter(file =>
-      allowedFileExtensions.includes(path.extname(file).toLowerCase()),
-    );
-
-    if (!files.length) {
-      fileScanningSpinner.fail(`${fileScanningSpinner.text} no files found.`);
-      throw new Error(
-        `The directory you provided (${pathInput}) doesn't contain any of the following file extensions: ${allowedFileExtensions.join(
-          ', ',
-        )}.`,
-      );
-    }
-
-    fileScanningSpinner.succeed(`${fileScanningSpinner.text} ${files.length} file(s) found!`);
-  } else {
-    const fileExtension = path.extname(pathInput).toLowerCase();
-    if (!allowedFileExtensions.includes(fileExtension)) {
-      throw new Error(
-        `Invalid file extension (${fileExtension}). Must be one of the following: ${allowedFileExtensions.join(', ')}`,
-      );
-    }
-
-    files = [pathInput];
-  }
-
-  this.debug(`number of files: ${files.length}`);
-
-  let unsortedFiles = files.map(file => readPage.call(this, file));
+  let unsortedFiles = await findPages.call(this, pathInput);
 
   if (!skipValidation) {
     const validationSpinner = ora({ ...oraOptions() }).start('🔬 Validating frontmatter data...');
@@ -284,6 +265,7 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
     });
 
     const filesWithIssues = validationResults.filter(result => result.hasIssues);
+    this.debug(`found ${filesWithIssues.length} files with issues: ${JSON.stringify(filesWithIssues)}`);
     const filesWithFixableIssues = filesWithIssues.filter(result => result.changeCount);
     const filesWithUnfixableIssues = filesWithIssues.filter(result => result.unfixableErrors.length);
 
@@ -332,17 +314,37 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
       : '🚀 Uploading files to ReadMe...',
   );
 
+  const count = { succeeded: 0, failed: 0 };
+
   // topological sort the files
   const sortedFiles = sortFiles((unsortedFiles as PageMetadata<PageRepresentation>[]).sort(byParentPage));
 
   // push the files to ReadMe
-  const rawResults = await Promise.allSettled(sortedFiles.map(async fileData => pushPage.call(this, fileData)));
+  const rawResults: PromiseSettledResult<PushResult>[] = [];
+  for await (const fileData of sortedFiles) {
+    try {
+      const res = await pushPage.call(this, fileData);
+      rawResults.push({
+        status: 'fulfilled',
+        value: res,
+      });
+      count.succeeded += 1;
+    } catch (err) {
+      rawResults.push({
+        status: 'rejected',
+        reason: err,
+      });
+      count.failed += 1;
+    } finally {
+      uploadSpinner.suffixText = `(${count.succeeded} succeeded, ${count.failed} failed)`;
+    }
+  }
 
   const results = rawResults.reduce<{
-    created: PushResult[];
+    created: CreatePushResult[];
     failed: FailedPushResult[];
-    skipped: PushResult[];
-    updated: PushResult[];
+    skipped: SkippedPushResult[];
+    updated: UpdatePushResult[];
   }>(
     (acc, result, index) => {
       if (result.status === 'fulfilled') {
@@ -370,6 +372,8 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
     },
     { created: [], updated: [], skipped: [], failed: [] },
   );
+
+  uploadSpinner.suffixText = '';
 
   if (results.failed.length) {
     uploadSpinner.fail(`${uploadSpinner.text} ${results.failed.length} file(s) failed.`);
@@ -424,16 +428,19 @@ export default async function syncPagePath(this: CommandsThatSyncMarkdown) {
 
       this.log(`   - ${chalk.underline(filePath)}: ${errorMessage}`);
     });
-    if (results.failed.length === 1) {
-      throw results.failed[0].error;
-    } else {
-      const errors = results.failed.map(({ error }) => error);
-      throw new AggregateError(
-        errors,
-        dryRun
-          ? `Multiple dry runs failed. To see more detailed errors for a page, run \`${this.config.bin} ${this.id} <path-to-page.md>\` --dry-run.`
-          : `Multiple page uploads failed. To see more detailed errors for a page, run \`${this.config.bin} ${this.id} <path-to-page.md>\`.`,
-      );
+
+    if (results.failed.length >= maxErrors && maxErrors !== -1) {
+      if (results.failed.length === 1) {
+        throw results.failed[0].error;
+      } else {
+        const errors = results.failed.map(({ error }) => error);
+        throw new AggregateError(
+          errors,
+          dryRun
+            ? `Multiple dry runs failed. To see more detailed errors for a page, run \`${this.config.bin} ${this.id} <path-to-page.md>\` --dry-run.`
+            : `Multiple page uploads failed. To see more detailed errors for a page, run \`${this.config.bin} ${this.id} <path-to-page.md>\`.`,
+        );
+      }
     }
   }
 

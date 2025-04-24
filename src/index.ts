@@ -1,6 +1,7 @@
 import type { ValueOf } from 'type-fest';
 
 import ChangelogsCommand from './commands/changelogs.js';
+import DocsMigrateCommand from './commands/docs/migrate.js';
 import DocsUploadCommand from './commands/docs/upload.js';
 import LoginCommand from './commands/login.js';
 import LogoutCommand from './commands/logout.js';
@@ -27,6 +28,7 @@ export { default as prerun } from './lib/hooks/prerun.js';
 export const COMMANDS = {
   changelogs: ChangelogsCommand,
 
+  'docs:migrate': DocsMigrateCommand,
   'docs:upload': DocsUploadCommand,
 
   login: LoginCommand,
@@ -39,7 +41,7 @@ export const COMMANDS = {
   'openapi:validate': OpenAPIValidateCommand,
 
   whoami: WhoAmICommand,
-};
+} as const;
 
 export type CommandClass = ValueOf<typeof COMMANDS>;
 

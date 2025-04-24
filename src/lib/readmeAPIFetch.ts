@@ -1,6 +1,7 @@
 import type { SpecFileType } from './prepareOas.js';
 import type { CommandClass } from '../index.js';
-import type { CommandsThatSyncMarkdown } from './syncPagePath.js';
+import type { APIv2PageCommands } from './syncPagePath.js';
+import type { Hook } from '@oclif/core';
 import type { SchemaObject } from 'oas/types';
 
 import path from 'node:path';
@@ -55,6 +56,12 @@ export interface Mappings {
   categories: Record<string, string>;
   parentPages: Record<string, string>;
 }
+
+/**
+ * A generic response body type for responses from the ReadMe API.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export interface ResponseBody extends Record<string, any> {}
 
 export const emptyMappings: Mappings = { categories: {}, parentPages: {} };
 
@@ -226,8 +233,12 @@ export async function readmeAPIv1Fetch(
 /**
  * Wrapper for the `fetch` API so we can add rdme-specific headers to all ReadMe API v2 requests.
  */
-export async function readmeAPIv2Fetch(
-  this: CommandClass['prototype'],
+export async function readmeAPIv2Fetch<T extends Hook.Context = Hook.Context>(
+  /**
+   * `this` does not have to be a hook, it can also be a Command class.
+   * This type ensures that `this` has the `config` and `debug` properties.
+   */
+  this: T,
   /** The pathname to make the request to. Must have a leading slash. */
   pathname: string,
   options: RequestInit = { headers: new Headers() },
@@ -314,6 +325,7 @@ export async function readmeAPIv2Fetch(
     })
     .catch(e => {
       this.debug(`error making fetch request: ${e}`);
+      this.debug(e.stack);
       throw e;
     });
 }
@@ -366,15 +378,14 @@ export async function handleAPIv1Res(
  *
  * If we receive non-JSON responses, we consider them errors and throw them.
  */
-export async function handleAPIv2Res(
-  this: CommandClass['prototype'],
-  res: Response,
+export async function handleAPIv2Res<R extends ResponseBody = ResponseBody, T extends Hook.Context = Hook.Context>(
   /**
-   * If we're making a request where we don't care about the body (e.g. a HEAD or DELETE request),
-   * we can skip parsing the JSON body using this flag.
+   * `this` does not have to be a hook, it can also be a Command class.
+   * This type ensures that `this` has the `config` and `debug` properties.
    */
-  skipJsonParsing = false,
-) {
+  this: T,
+  res: Response,
+): Promise<R> {
   const contentType = res.headers.get('content-type') || '';
   const extension = mime.extension(contentType) || contentType.includes('json') ? 'json' : false;
   if (res.status === SUCCESS_NO_CONTENT) {
@@ -382,17 +393,9 @@ export async function handleAPIv2Res(
     // https://x.com/cramforce/status/1762142087930433999
     const body = await res.text();
     this.debug(`received status code ${res.status} from ${res.url} with no content: ${body}`);
-    return {};
-  } else if (skipJsonParsing) {
-    // to prevent a memory leak, we should still consume the response body? even though we don't use it?
-    // https://x.com/cramforce/status/1762142087930433999
-    const body = await res.text();
-    this.debug(`received status code ${res.status} from ${res.url} and not parsing JSON b/c of flag: ${body}`);
-    return {};
+    return {} as R;
   } else if (extension === 'json') {
-    // TODO: type this better
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const body = (await res.json()) as any;
+    const body = (await res.json()) as R;
     this.debug(`received status code ${res.status} from ${res.url} with JSON response: ${JSON.stringify(body)}`);
     if (!res.ok) {
       throw new APIv2Error(body as APIv2ErrorResponse);
@@ -452,6 +455,10 @@ export function cleanAPIv1Headers(
  * Used for migrating frontmatter in Guides pages to the new API v2 format.
  */
 export async function fetchMappings(this: CommandClass['prototype']): Promise<Mappings> {
+  if (!this.flags.key) {
+    this.debug('no API key provided, skipping mappings fetch');
+    return emptyMappings;
+  }
   const mappings = await readmeAPIv1Fetch('/api/v1/migration', {
     method: 'get',
     headers: cleanAPIv1Headers(this.flags.key, undefined, new Headers({ Accept: 'application/json' })),
@@ -475,7 +482,7 @@ export async function fetchMappings(this: CommandClass['prototype']): Promise<Ma
 /**
  * Fetches the schema for the current route from the OpenAPI description for ReadMe API v2.
  */
-export async function fetchSchema(this: CommandsThatSyncMarkdown): Promise<SchemaObject> {
+export async function fetchSchema(this: APIv2PageCommands) {
   const oas = await this.readmeAPIFetch('/openapi.json')
     .then(res => {
       if (!res.ok) {
@@ -493,7 +500,7 @@ export async function fetchSchema(this: CommandsThatSyncMarkdown): Promise<Schem
   const requestBody = oas.paths?.[`/versions/{version}/${this.route}/{slug}`]?.patch?.requestBody;
 
   if (requestBody && 'content' in requestBody) {
-    return requestBody.content['application/json'].schema as SchemaObject;
+    return requestBody.content['application/json'].schema;
   }
 
   this.debug(`unable to find parse out schema for ${JSON.stringify(oas)}`);

@@ -1,0 +1,33 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`rdme docs migrate > should error out if no path is passed 1`] = `
+{
+  "error": [Error: Missing 1 required arg:
+path  Path to a local Markdown file or folder of Markdown files.
+See more help with --help],
+  "stderr": "",
+  "stdout": "",
+}
+`;
+
+exports[`rdme docs migrate > should error out if no plugins are installed 1`] = `
+{
+  "error": [Error: This command requires a valid migration plugin.],
+  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
+ ›    Use at your own risk!
+- 🔍 Looking for Markdown files in the \`__tests__/__fixtures__/docs/new-docs\` directory...
+✔ 🔍 Looking for Markdown files in the \`__tests__/__fixtures__/docs/new-docs\` directory... 1 file(s) found!
+",
+  "stdout": "",
+}
+`;
+
+exports[`rdme docs migrate > should hide warning if \`--hide-experimental-warning\` flag is passed 1`] = `
+{
+  "error": [Error: This command requires a valid migration plugin.],
+  "stderr": "- 🔍 Looking for Markdown files in the \`__tests__/__fixtures__/docs/new-docs\` directory...
+✔ 🔍 Looking for Markdown files in the \`__tests__/__fixtures__/docs/new-docs\` directory... 1 file(s) found!
+",
+  "stdout": "",
+}
+`;

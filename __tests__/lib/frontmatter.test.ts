@@ -1,10 +1,13 @@
+import type { PageMetadata } from '../../src/lib/readPage.js';
 import type nock from 'nock';
 import type { SchemaObject } from 'oas/types';
 
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import fs from 'node:fs';
+
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
 import DocsUploadCommand from '../../src/commands/docs/upload.js';
-import { fix } from '../../src/lib/frontmatter.js';
+import { fix, writeFixes } from '../../src/lib/frontmatter.js';
 import { emptyMappings, fetchSchema } from '../../src/lib/readmeAPIFetch.js';
 import { oasFetchMock } from '../helpers/get-api-mock.js';
 import { setupOclifConfig } from '../helpers/oclif.js';
@@ -307,5 +310,63 @@ describe('#fix', () => {
         "title": "Hello, world!",
       }
     `);
+  });
+});
+
+describe('#writeFixes', () => {
+  let command: DocsUploadCommand;
+
+  const mockPageData: PageMetadata = {
+    content: 'some content',
+    data: {
+      updated: false,
+    },
+    filePath: 'docs/page.md',
+    hash: '',
+    slug: 'some-page',
+  };
+
+  beforeEach(async () => {
+    const oclifConfig = await setupOclifConfig();
+    command = new DocsUploadCommand([], oclifConfig);
+    vi.spyOn(fs, 'existsSync').mockImplementation(() => false);
+    vi.spyOn(fs, 'mkdirSync').mockImplementation(() => '');
+    vi.spyOn(fs, 'writeFileSync').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('should write changes', () => {
+    writeFixes.call(command, mockPageData, { updated: true });
+
+    expect(fs.writeFileSync).toHaveBeenCalledWith(mockPageData.filePath, expect.stringContaining('updated: true'), {
+      encoding: 'utf-8',
+    });
+  });
+
+  it('should write changes to current directory', () => {
+    writeFixes.call(command, mockPageData, { updated: true }, '.');
+
+    expect(fs.writeFileSync).toHaveBeenCalledWith(mockPageData.filePath, expect.stringContaining('updated: true'), {
+      encoding: 'utf-8',
+    });
+  });
+
+  it('should write changes to specified output directory', () => {
+    writeFixes.call(command, mockPageData, { updated: true }, 'out');
+
+    expect(fs.writeFileSync).toHaveBeenCalledWith('out/docs/page.md', expect.stringContaining('updated: true'), {
+      encoding: 'utf-8',
+    });
+  });
+
+  it('should write changes to specified output directory (with trailing slash)', () => {
+    writeFixes.call(command, mockPageData, { updated: true }, 'out/');
+
+    expect(fs.writeFileSync).toHaveBeenCalledWith('out/docs/page.md', expect.stringContaining('updated: true'), {
+      encoding: 'utf-8',
+    });
   });
 });
