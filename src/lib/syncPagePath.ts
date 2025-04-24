@@ -314,6 +314,8 @@ export default async function syncPagePath(this: DocsUploadCommand) {
       : '🚀 Uploading files to ReadMe...',
   );
 
+  const count = { succeeded: 0, failed: 0 };
+
   // topological sort the files
   const sortedFiles = sortFiles((unsortedFiles as PageMetadata<PageRepresentation>[]).sort(byParentPage));
 
@@ -326,11 +328,15 @@ export default async function syncPagePath(this: DocsUploadCommand) {
         status: 'fulfilled',
         value: res,
       });
+      count.succeeded += 1;
     } catch (err) {
       rawResults.push({
         status: 'rejected',
         reason: err,
       });
+      count.failed += 1;
+    } finally {
+      uploadSpinner.suffixText = `(${count.succeeded} succeeded, ${count.failed} failed)`;
     }
   }
 
@@ -366,6 +372,8 @@ export default async function syncPagePath(this: DocsUploadCommand) {
     },
     { created: [], updated: [], skipped: [], failed: [] },
   );
+
+  uploadSpinner.suffixText = '';
 
   if (results.failed.length) {
     uploadSpinner.fail(`${uploadSpinner.text} ${results.failed.length} file(s) failed.`);
