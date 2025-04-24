@@ -74,7 +74,6 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
    - Replace: `openapi` → `openapi upload` (see more in step 3 below)
    - Replace: `categories` → use [Git-based workflow](https://docs.readme.com/main/docs/bi-directional-sync)
    - Replace: `custompages` → use [Git-based workflow](https://docs.readme.com/main/docs/bi-directional-sync)
-   - Replace: `docs` (and its `guides` alias) → `docs upload` (see more in step 4 below)
    - Replace: `versions` → use [Git-based workflow](https://docs.readme.com/main/docs/bi-directional-sync)
    - Remove: `open`
 
@@ -87,18 +86,6 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
    - Previously with `openapi`, the `--id` flag was an ObjectId that required an initial upload to ReadMe, which made it difficult to upsert API definitions and manage many at scale. With `openapi upload`, the `--id` flag has been renamed to `--slug` and is now optional. The slug (i.e., the unique identifier for your API definition resource in ReadMe) is inferred from the file path or URL to your API definition.
 
    Read more in [the `openapi upload` command docs](https://github.com/readmeio/rdme/tree/v10/documentation/commands/openapi.md#rdme-openapi-upload-spec) and in [the ReadMe API migration guide](https://docs.readme.com/main/reference/api-migration-guide).
-
-4. **`docs` has been replaced by `docs upload`**
-
-   If you previously uploaded Markdown files to your Guides section via `rdme docs`, the command is now `rdme docs upload`. The command semantics are largely the same, but with a few small changes:
-
-   - The `--dryRun` flag has been deprecated in favor of `--dry-run`.
-
-   - Like `openapi upload` above, there is no prompt to select your ReadMe project version if you omit the `--version` flag. It now defaults to `stable` (i.e., your main ReadMe project version).
-
-   - `rdme docs upload` will now automatically validate your frontmatter and flag any issues prior to syncing. This is particularly helpful if you're coming from `rdme@9` or earlier, since the shape of certain frontmatter attributes (e.g., `category`, `parent`) have slightly changed. If you run this command in a non-CI environment, any outdated frontmatter will be detected and you'll have the ability to update it automatically.
-
-   Read more in [the `docs upload` command docs](https://github.com/readmeio/rdme/tree/v10/documentation/commands/docs.md#rdme-docs-upload-path) and in [the ReadMe API migration guide](https://docs.readme.com/main/reference/api-migration-guide).
 
 ## Migrating to `rdme@9`
 

@@ -20,7 +20,7 @@ With `rdme`, you can manage your API definition (we support [OpenAPI](https://sp
 Not using ReadMe for your docs? No worries. `rdme` has a variety of tools to help you identify issues with your API definition — no ReadMe account required.
 
 > [!NOTE]
-> If you're using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored), you'll want to use `rdme@10` or later. If you're **not** using ReadMe Refactored, you'll want to use `rdme@9`. More info can be found in our [migration guide](https://github.com/readmeio/rdme/blob/next/documentation/migration-guide.md).
+> If you're using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored), you'll want to use `rdme@10` or later. If you're **not** using ReadMe Refactored, you'll want to use `rdme@9`. More info can be found in our [migration guide](https://github.com/readmeio/rdme/blob/v10/documentation/migration-guide.md).
 
 # Table of Contents
 
