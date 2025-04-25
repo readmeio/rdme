@@ -1,3 +1,10 @@
+# [10.2.0-next.23](https://github.com/readmeio/rdme/compare/v10.2.0-next.22...v10.2.0-next.23) (2025-04-25)
+
+
+### Features
+
+* **docs:** add ability to bypass autofix prompt ([#1234](https://github.com/readmeio/rdme/issues/1234)) ([0407330](https://github.com/readmeio/rdme/commit/04073306708be5f641f128843e95f2eed0a8f00d))
+
 # [10.2.0-next.22](https://github.com/readmeio/rdme/compare/v10.2.0-next.21...v10.2.0-next.22) (2025-04-24)
 
 
