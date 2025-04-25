@@ -29,7 +29,7 @@ export function fix(
    */
   mappings: Mappings,
 ): {
-  changeCount: number;
+  fixableErrorCount: number;
   errors: ErrorObject[];
   hasIssues: boolean;
   unfixableErrors: ErrorObject[];
@@ -37,7 +37,7 @@ export function fix(
 } {
   if (!Object.keys(data).length) {
     this.debug('no frontmatter attributes found, skipping validation');
-    return { changeCount: 0, errors: [], hasIssues: false, unfixableErrors: [], updatedData: data };
+    return { fixableErrorCount: 0, errors: [], hasIssues: false, unfixableErrors: [], updatedData: data };
   }
 
   const ajv = new Ajv({ allErrors: true, strictTypes: false, strictTuples: false });
@@ -76,12 +76,12 @@ export function fix(
     }
   }
 
-  let changeCount = 0;
+  let fixableErrorCount = 0;
   const unfixableErrors: ErrorObject[] = [];
   const updatedData = structuredClone(data);
 
   if (typeof errors === 'undefined' || !errors.length) {
-    return { changeCount, errors: [], hasIssues: false, unfixableErrors, updatedData };
+    return { errors: [], fixableErrorCount, hasIssues: false, unfixableErrors, updatedData };
   }
 
   errors.forEach(error => {
@@ -90,14 +90,14 @@ export function fix(
       updatedData.category = {
         uri: uri || `uri-that-does-not-map-to-${data.category}`,
       };
-      changeCount += 1;
+      fixableErrorCount += 1;
     } else if (error.keyword === 'additionalProperties') {
       const badKey = error.params.additionalProperty as string;
       const extractedValue = data[badKey];
       if (error.schemaPath === '#/additionalProperties') {
         // if the bad property is at the root level, delete it
         delete updatedData[badKey];
-        changeCount += 1;
+        fixableErrorCount += 1;
         if (badKey === 'excerpt') {
           // if the `content` object exists, add to it. otherwise, create it
           if (typeof updatedData.content === 'object' && updatedData.content) {
@@ -135,7 +135,7 @@ export function fix(
     }
   });
 
-  return { errors, changeCount, hasIssues: true, unfixableErrors, updatedData };
+  return { errors, fixableErrorCount, hasIssues: true, unfixableErrors, updatedData };
 }
 
 export function writeFixes(
