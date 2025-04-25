@@ -7,13 +7,10 @@ import ora from 'ora';
 import toposort from 'toposort';
 
 import { APIv2Error } from './apiError.js';
-import { fix, writeFixes } from './frontmatter.js';
-import isCI from './isCI.js';
 import { oraOptions } from './logger.js';
-import promptTerminal from './promptWrapper.js';
-import { fetchMappings, fetchSchema } from './readmeAPIFetch.js';
 import { findPages, type PageMetadata } from './readPage.js';
 import { categoryUriRegexPattern, parentUriRegexPattern } from './types/index.js';
+import { validateFrontmatter } from './validateFrontmatter.js';
 
 /**
  * Commands that leverage the APIv2 representations for pages (e.g., Guides, API Reference, etc.)
@@ -220,7 +217,7 @@ function sortFiles(files: PageMetadata<PageRepresentation>[]): PageMetadata<Page
  * @returns An array of objects with the results
  */
 export default async function syncPagePath(this: DocsUploadCommand) {
-  const { path: pathInput }: { path: string } = this.args;
+  const { path: pathInput } = this.args;
   const { key, 'dry-run': dryRun, 'max-errors': maxErrors, 'skip-validation': skipValidation } = this.flags;
 
   // check whether or not the project has bidirection syncing enabled
@@ -240,6 +237,8 @@ export default async function syncPagePath(this: DocsUploadCommand) {
     );
   }
 
+  let unsortedFiles = await findPages.call(this, pathInput);
+
   if (skipValidation) {
     if (biDiConnection) {
       this.warn(
@@ -248,64 +247,12 @@ export default async function syncPagePath(this: DocsUploadCommand) {
     } else {
       this.warn('Skipping pre-upload validation of the Markdown file(s). This is not recommended.');
     }
-  }
-
-  let unsortedFiles = await findPages.call(this, pathInput);
-
-  if (!skipValidation) {
-    const validationSpinner = ora({ ...oraOptions() }).start('🔬 Validating frontmatter data...');
-
-    const schema = await fetchSchema.call(this);
-    const mappings = await fetchMappings.call(this);
-
-    // validate the files, prompt user to fix if necessary
-    const validationResults = unsortedFiles.map(file => {
-      this.debug(`validating frontmatter for ${file.filePath}`);
-      return fix.call(this, file.data, schema, mappings);
-    });
-
-    const filesWithIssues = validationResults.filter(result => result.hasIssues);
-    this.debug(`found ${filesWithIssues.length} files with issues: ${JSON.stringify(filesWithIssues)}`);
-    const filesWithFixableIssues = filesWithIssues.filter(result => result.fixableErrorCount);
-    const filesWithUnfixableIssues = filesWithIssues.filter(result => result.unfixableErrors.length);
-
-    if (filesWithIssues.length) {
-      validationSpinner.warn(`${validationSpinner.text} issues found in ${filesWithIssues.length} file(s).`);
-      if (filesWithFixableIssues.length) {
-        if (isCI()) {
-          throw new Error(
-            `${filesWithIssues.length} file(s) have issues that should be fixed before uploading to ReadMe. Please run \`${this.config.bin} ${this.id} ${pathInput} --dry-run\` in a non-CI environment to fix them.`,
-          );
-        }
-
-        const { confirm } = await promptTerminal([
-          {
-            type: 'confirm',
-            name: 'confirm',
-            message: `${filesWithFixableIssues.length} file(s) have issues that can be fixed automatically. Would you like to make these changes and continue with the upload to ReadMe?`,
-          },
-        ]);
-
-        if (!confirm) {
-          throw new Error('Aborting upload due to user input.');
-        }
-
-        const updatedFiles = unsortedFiles.map((file, index) => {
-          return writeFixes.call(this, file, validationResults[index].updatedData);
-        });
-
-        unsortedFiles = updatedFiles;
-      }
-
-      // also inform the user if there are files with issues that can't be fixed
-      if (filesWithUnfixableIssues.length) {
-        this.warn(
-          `${filesWithUnfixableIssues.length} file(s) have issues that cannot be fixed automatically. The upload will proceed but we recommend addressing these issues. Please get in touch with us at support@readme.io if you need a hand.`,
-        );
-      }
-    } else {
-      validationSpinner.succeed(`${validationSpinner.text} no issues found!`);
-    }
+  } else {
+    unsortedFiles = await validateFrontmatter.call(
+      this,
+      unsortedFiles,
+      'Would you like to make these changes and continue with the upload to ReadMe?',
+    );
   }
 
   const uploadSpinner = ora({ ...oraOptions() }).start(
