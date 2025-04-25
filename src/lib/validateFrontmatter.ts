@@ -36,7 +36,9 @@ export async function validateFrontmatter(
   const filesWithFixableIssues = filesWithIssues.filter(result => result.fixableErrorCount);
   const filesWithUnfixableIssues = filesWithIssues.filter(result => result.unfixableErrors.length);
 
-  if (filesWithIssues.length) {
+  if (!filesWithIssues.length) {
+    validationSpinner.succeed(`${validationSpinner.text} no issues found!`);
+  } else {
     validationSpinner.warn(`${validationSpinner.text} issues found in ${filesWithIssues.length} file(s).`);
     if (filesWithFixableIssues.length) {
       if (isCI()) {
@@ -70,8 +72,6 @@ export async function validateFrontmatter(
         `${filesWithUnfixableIssues.length} file(s) have issues that cannot be fixed automatically. The upload will proceed but we recommend addressing these issues. Please get in touch with us at support@readme.io if you need a hand.`,
       );
     }
-  } else {
-    validationSpinner.succeed(`${validationSpinner.text} no issues found!`);
   }
 
   return pagesToReturn;
