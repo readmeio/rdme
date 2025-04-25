@@ -14,7 +14,8 @@ import { fetchMappings, fetchSchema } from './readmeAPIFetch.js';
 export async function validateFrontmatter(
   this: DocsMigrateCommand | DocsUploadCommand,
   pages: PageMetadata[],
-  promptQuestion = 'Would you like to make these changes?',
+  promptQuestion: string,
+  outputDir?: string,
 ): Promise<PageMetadata<GuidesRequestRepresentation>[]> {
   const { path: pathInput } = this.args;
   let pagesToReturn = pages;
@@ -57,7 +58,7 @@ export async function validateFrontmatter(
       }
 
       const updatedFiles = pagesToReturn.map((file, index) => {
-        return writeFixes.call(this, file, validationResults[index].updatedData);
+        return writeFixes.call(this, file, validationResults[index].updatedData, outputDir);
       });
 
       pagesToReturn = updatedFiles;
