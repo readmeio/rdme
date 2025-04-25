@@ -362,7 +362,7 @@ describe('rdme docs upload', () => {
         projectsMeMock.done();
       });
 
-      it.only('should bypass prompt if `--confirm-autofixes` flag is passed', async () => {
+      it('should bypass prompt if `--confirm-autofixes` flag is passed', async () => {
         const getMock = getAPIv2MockForGHA({ authorization }).get('/versions/stable/guides/legacy-category').reply(404);
 
         const postMock = getAPIv2MockForGHA({
