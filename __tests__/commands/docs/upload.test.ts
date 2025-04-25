@@ -322,7 +322,7 @@ describe('rdme docs upload', () => {
       afterEach(githubActionsEnv.after);
 
       it('should create a guides page in ReadMe and include `x-readme-source-url` source header', async () => {
-        const headMock = getAPIv2MockForGHA({ authorization }).get('/versions/stable/guides/new-doc').reply(404);
+        const getMock = getAPIv2MockForGHA({ authorization }).get('/versions/stable/guides/new-doc').reply(404);
 
         const postMock = getAPIv2MockForGHA({
           authorization,
@@ -346,7 +346,7 @@ describe('rdme docs upload', () => {
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
 
-        headMock.done();
+        getMock.done();
         postMock.done();
         projectsMeMock.done();
       });
@@ -359,6 +359,44 @@ describe('rdme docs upload', () => {
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
+        projectsMeMock.done();
+      });
+
+      it('should bypass prompt if `--confirm-autofixes` flag is passed', async () => {
+        const getMock = getAPIv2MockForGHA({ authorization }).get('/versions/stable/guides/legacy-category').reply(404);
+
+        const postMock = getAPIv2MockForGHA({
+          authorization,
+          'x-readme-source-url':
+            'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/__tests__/__fixtures__/docs/mixed-docs/legacy-category.md',
+        })
+          .post('/versions/stable/guides', {
+            category: { uri: '/versions/stable/categories/guides/uri-that-does-not-map-to-5ae122e10fdf4e39bb34db6f' },
+            slug: 'legacy-category',
+            title: 'This is the document title',
+            content: { body: '\nBody\n' },
+          })
+          .reply(201, {});
+
+        const projectsMeMock = getAPIv2MockForGHA({ authorization }).get('/projects/me').reply(200, {
+          data: {},
+        });
+
+        const result = await run([
+          '__tests__/__fixtures__/docs/mixed-docs/legacy-category.md',
+          '--key',
+          key,
+          '--confirm-autofixes',
+        ]);
+
+        expect(result).toMatchSnapshot();
+        expect(fs.writeFileSync).toHaveBeenCalledWith(
+          '__tests__/__fixtures__/docs/mixed-docs/legacy-category.md',
+          expect.stringContaining('uri: uri-that-does-not-map-to-5ae122e10fdf4e39bb34db6f'),
+          { encoding: 'utf-8' },
+        );
+        getMock.done();
+        postMock.done();
         projectsMeMock.done();
       });
     });

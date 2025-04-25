@@ -346,6 +346,35 @@ exports[`rdme docs upload > given that the file path is a directory > should upd
 }
 `;
 
+exports[`rdme docs upload > given that the file path is a single file > and the command is being run in a CI environment > should bypass prompt if \`--confirm-autofixes\` flag is passed 1`] = `
+{
+  "result": {
+    "created": [
+      {
+        "filePath": "__tests__/__fixtures__/docs/mixed-docs/legacy-category.md",
+        "response": {},
+        "result": "created",
+        "slug": "legacy-category",
+      },
+    ],
+    "failed": [],
+    "skipped": [],
+    "updated": [],
+  },
+  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
+ ›    Use at your own risk!
+- 🔬 Validating frontmatter data...
+⚠ 🔬 Validating frontmatter data... issues found in 1 file(s).
+- 🚀 Uploading files to ReadMe...
+✔ 🚀 Uploading files to ReadMe... done!
+",
+  "stdout": "Automatically fixing issues in 1 file(s)...
+🌱 Successfully created 1 page(s) in ReadMe:
+   - legacy-category (__tests__/__fixtures__/docs/mixed-docs/legacy-category.md)
+",
+}
+`;
+
 exports[`rdme docs upload > given that the file path is a single file > and the command is being run in a CI environment > should create a guides page in ReadMe and include \`x-readme-source-url\` source header 1`] = `
 {
   "result": {
