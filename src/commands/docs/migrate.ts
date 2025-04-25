@@ -6,13 +6,11 @@ import ora from 'ora';
 import { dir } from 'tmp-promise';
 
 import BaseCommand from '../../lib/baseCommand.js';
-import { fix, writeFixes } from '../../lib/frontmatter.js';
-import isCI from '../../lib/isCI.js';
+import { writeFixes } from '../../lib/frontmatter.js';
 import { oraOptions } from '../../lib/logger.js';
-import promptTerminal from '../../lib/promptWrapper.js';
-import { fetchMappings, fetchSchema } from '../../lib/readmeAPIFetch.js';
 import { findPages } from '../../lib/readPage.js';
 import { attemptUnzip } from '../../lib/unzip.js';
+import { validateFrontmatter } from '../../lib/validateFrontmatter.js';
 
 const alphaNotice = 'This command is in an experimental alpha and is likely to change. Use at your own risk!';
 
@@ -113,96 +111,31 @@ export default class DocsMigrateCommand extends BaseCommand<typeof DocsMigrateCo
       }
     });
 
-    // todo: either DRY this validation logic up or remove it entirely
-    if (!skipValidation) {
-      const validationSpinner = ora({ ...oraOptions() }).start('🔬 Validating frontmatter data...');
+    if (skipValidation) {
+      this.debug('skipping validation');
+    } else {
+      unsortedFiles = await validateFrontmatter.call(
+        this,
+        unsortedFiles,
+        'Would you like to make these changes?',
+        outputDir,
+      );
+    }
 
-      const schema = await fetchSchema.call(this);
-      const mappings = await fetchMappings.call(this);
+    if (transformedByHooks) {
+      const fileUpdateSpinner = ora({ ...oraOptions() }).start(
+        `📝 Writing the updated files to the following directory: ${chalk.underline(outputDir)}...`,
+      );
 
-      // validate the files, prompt user to fix if necessary
-      const validationResults = unsortedFiles.map(file => {
-        this.debug(`validating frontmatter for ${file.filePath}`);
-        return fix.call(this, file.data, schema, mappings);
+      const updatedFiles = unsortedFiles.map(file => {
+        // TODO: I think that this `writeFixes` call is redundant if `validateFrontmatter` above also writes to the file,
+        // but it's not even close to being a bottleneck so I'm not going to worry about it for now
+        return writeFixes.call(this, file, file.data, outputDir);
       });
 
-      const filesWithIssues = validationResults.filter(result => result.hasIssues);
-      this.debug(`found ${filesWithIssues.length} files with issues: ${JSON.stringify(filesWithIssues)}`);
-      const filesWithFixableIssues = filesWithIssues.filter(result => result.changeCount);
-      const filesWithUnfixableIssues = filesWithIssues.filter(result => result.unfixableErrors.length);
+      fileUpdateSpinner.succeed(`${fileUpdateSpinner.text} done!`);
 
-      if (filesWithIssues.length) {
-        validationSpinner.warn(`${validationSpinner.text} issues found in ${filesWithIssues.length} file(s).`);
-        if (filesWithFixableIssues.length) {
-          if (isCI()) {
-            throw new Error(
-              `${filesWithIssues.length} file(s) have issues. Please run \`${this.config.bin} ${this.id} ${pathInput} --dry-run\` in a non-CI environment to fix them.`,
-            );
-          }
-
-          const { confirm } = await promptTerminal([
-            {
-              type: 'confirm',
-              name: 'confirm',
-              message: `${filesWithFixableIssues.length} file(s) have issues that can be fixed automatically. Would you like to make these changes?`,
-            },
-          ]);
-
-          if (!confirm) {
-            throw new Error('Aborting fixes due to user input.');
-          }
-
-          const fileUpdateSpinner = ora({ ...oraOptions() }).start(
-            `📝 Writing file changes to the following directory: ${chalk.underline(outputDir)}...`,
-          );
-
-          const updatedFiles = unsortedFiles.map((file, index) => {
-            return writeFixes.call(this, file, validationResults[index].updatedData, outputDir);
-          });
-
-          fileUpdateSpinner.succeed(`${fileUpdateSpinner.text} ${updatedFiles.length} file(s) updated!`);
-
-          unsortedFiles = updatedFiles;
-        }
-
-        // also inform the user if there are files with issues that can't be fixed
-        if (filesWithUnfixableIssues.length) {
-          this.warn(
-            `${filesWithUnfixableIssues.length} file(s) have issues that cannot be fixed automatically. Please get in touch with us at support@readme.io if you need a hand.`,
-          );
-        }
-      } else if (transformedByHooks) {
-        validationSpinner.succeed(`${validationSpinner.text} no issues found!`);
-
-        const fileUpdateSpinner = ora({ ...oraOptions() }).start(
-          `📝 Writing the updated files to the following directory: ${chalk.underline(outputDir)}...`,
-        );
-
-        const updatedFiles = unsortedFiles.map((file, index) => {
-          return writeFixes.call(this, file, validationResults[index].updatedData, outputDir);
-        });
-
-        fileUpdateSpinner.succeed(`${fileUpdateSpinner.text} done!`);
-
-        unsortedFiles = updatedFiles;
-      } else {
-        validationSpinner.succeed(`${validationSpinner.text} no issues found!`);
-      }
-    } else {
-      this.debug('skipping validation');
-      if (transformedByHooks) {
-        const fileUpdateSpinner = ora({ ...oraOptions() }).start(
-          `📝 Writing the updated files to the following directory: ${chalk.underline(outputDir)}...`,
-        );
-
-        const updatedFiles = unsortedFiles.map(file => {
-          return writeFixes.call(this, file, file.data, outputDir);
-        });
-
-        fileUpdateSpinner.succeed(`${fileUpdateSpinner.text} done!`);
-
-        unsortedFiles = updatedFiles;
-      }
+      unsortedFiles = updatedFiles;
     }
 
     return { outputDir, stats };

@@ -245,10 +245,48 @@ describe('#fix', () => {
     `);
   });
 
+  it('should fix privacy (public, `hidden` is a string)', () => {
+    const data = {
+      title: 'Hello, world!',
+      hidden: 'false',
+    };
+
+    const result = fix.call(command, data, schema, emptyMappings);
+
+    expect(result.hasIssues).toBe(true);
+    expect(result.updatedData).toMatchInlineSnapshot(`
+      {
+        "privacy": {
+          "view": "public",
+        },
+        "title": "Hello, world!",
+      }
+    `);
+  });
+
   it('should fix privacy (anyone_with_link)', () => {
     const data = {
       title: 'Hello, world!',
       hidden: true,
+    };
+
+    const result = fix.call(command, data, schema, emptyMappings);
+
+    expect(result.hasIssues).toBe(true);
+    expect(result.updatedData).toMatchInlineSnapshot(`
+      {
+        "privacy": {
+          "view": "anyone_with_link",
+        },
+        "title": "Hello, world!",
+      }
+    `);
+  });
+
+  it('should fix privacy (anyone_with_link, `hidden` is a string)', () => {
+    const data = {
+      title: 'Hello, world!',
+      hidden: 'true',
     };
 
     const result = fix.call(command, data, schema, emptyMappings);
