@@ -1,7 +1,7 @@
 import { Args, Flags } from '@oclif/core';
 
 import BaseCommand from '../../lib/baseCommand.js';
-import { keyFlag } from '../../lib/flags.js';
+import { confirmAutofixesFlag, keyFlag } from '../../lib/flags.js';
 import syncPagePath, {
   type FailedPushResult,
   type SkippedPushResult,
@@ -50,6 +50,7 @@ export default class DocsUploadCommand extends BaseCommand<typeof DocsUploadComm
 
   static flags = {
     key: keyFlag,
+    'confirm-autofixes': confirmAutofixesFlag,
     'dry-run': Flags.boolean({
       description: 'Runs the command without creating nor updating any Guides in ReadMe. Useful for debugging.',
       aliases: ['dryRun'],

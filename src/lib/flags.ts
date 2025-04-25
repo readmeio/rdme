@@ -1,5 +1,12 @@
 import { Args, Flags } from '@oclif/core';
 
+export const confirmAutofixesFlag = Flags.boolean({
+  summary:
+    'Bypasses the prompt and automatically fixes up any autofixable errors that are found in the Markdown files.',
+  description:
+    'This is useful if you are using this command in a CI/CD pipeline and want to ensure that the command does not prompt for user input.',
+});
+
 /**
  * Used in any command where `github` is a `flag.
  */

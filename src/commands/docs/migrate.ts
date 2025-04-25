@@ -6,6 +6,7 @@ import ora from 'ora';
 import { dir } from 'tmp-promise';
 
 import BaseCommand from '../../lib/baseCommand.js';
+import { confirmAutofixesFlag } from '../../lib/flags.js';
 import { writeFixes } from '../../lib/frontmatter.js';
 import { oraOptions } from '../../lib/logger.js';
 import { findPages } from '../../lib/readPage.js';
@@ -31,6 +32,7 @@ export default class DocsMigrateCommand extends BaseCommand<typeof DocsMigrateCo
   };
 
   static flags = {
+    'confirm-autofixes': confirmAutofixesFlag,
     'hide-experimental-warning': Flags.boolean({
       description: 'Hides the warning message about this command being in an experimental alpha.',
       hidden: true,

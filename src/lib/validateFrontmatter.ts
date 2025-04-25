@@ -4,6 +4,7 @@ import type { GuidesRequestRepresentation } from '../types.js';
 import type { PageMetadata } from './readPage.js';
 
 import ora from 'ora';
+import prompts from 'prompts';
 
 import { fix, writeFixes } from './frontmatter.js';
 import isCI from './isCI.js';
@@ -18,6 +19,7 @@ export async function validateFrontmatter(
   outputDir?: string,
 ): Promise<PageMetadata<GuidesRequestRepresentation>[]> {
   const { path: pathInput } = this.args;
+  const { 'confirm-autofixes': confirmAutofixes } = this.flags;
   let pagesToReturn = pages;
 
   const validationSpinner = ora({ ...oraOptions() }).start('🔬 Validating frontmatter data...');
@@ -39,7 +41,10 @@ export async function validateFrontmatter(
   if (filesWithIssues.length) {
     validationSpinner.warn(`${validationSpinner.text} issues found in ${filesWithIssues.length} file(s).`);
     if (filesWithFixableIssues.length) {
-      if (isCI()) {
+      if (confirmAutofixes) {
+        this.log(`Automatically fixing issues in ${filesWithFixableIssues.length} file(s)...`);
+        prompts.override({ confirm: true });
+      } else if (isCI()) {
         throw new Error(
           `${filesWithIssues.length} file(s) have issues that should be fixed before uploading to ReadMe. Please run \`${this.config.bin} ${this.id} ${pathInput} --dry-run\` in a non-CI environment to fix them.`,
         );
