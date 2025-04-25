@@ -123,7 +123,8 @@ export function fix(
             uri: extractedValue,
           };
         } else if (badKey === 'hidden') {
-          updatedData.privacy = { view: extractedValue ? 'anyone_with_link' : 'public' };
+          const hidden = typeof extractedValue === 'boolean' ? extractedValue : extractedValue === 'true';
+          updatedData.privacy = { view: hidden ? 'anyone_with_link' : 'public' };
         } else if (badKey === 'order') {
           updatedData.position = extractedValue;
         }
