@@ -1,4 +1,8 @@
-import type { GuidesRequestRepresentation, ProjectRepresentation } from './types/index.js';
+import type {
+  GuidesRequestRepresentation,
+  GuidesResponseRepresentation,
+  ProjectRepresentation,
+} from './types/index.js';
 import type DocsMigrateCommand from '../commands/docs/migrate.js';
 import type DocsUploadCommand from '../commands/docs/upload.js';
 
@@ -20,7 +24,9 @@ import { validateFrontmatter } from './validateFrontmatter.js';
  */
 export type APIv2PageCommands = DocsMigrateCommand | DocsUploadCommand;
 
-type PageRepresentation = GuidesRequestRepresentation;
+// todo: eventually this type will be used for other page types (e.g., API Reference)
+type PageRequestRepresentation = GuidesRequestRepresentation;
+type PageResponseRepresentation = GuidesResponseRepresentation['data'];
 
 interface BasePushResult {
   filePath: string;
@@ -41,7 +47,7 @@ export interface CreatePushResult extends BasePushResult {
    * The full response from the ReadMe API. If this is `null`,
    * the page was a dry run and no request was made.
    */
-  response: PageRepresentation | null;
+  response: PageResponseRepresentation | null;
   result: 'created';
 }
 
@@ -59,7 +65,7 @@ export interface UpdatePushResult extends BasePushResult {
    * The full response from the ReadMe API. If this is `null`,
    * the page was a dry run and no request was made.
    */
-  response: PageRepresentation | null;
+  response: PageResponseRepresentation | null;
   result: 'updated';
 }
 
@@ -89,7 +95,7 @@ async function pushPage(
     return { filePath, result: 'skipped', slug };
   }
 
-  const payload: PageRepresentation = {
+  const payload: PageRequestRepresentation = {
     ...data,
     content: {
       body: content,
@@ -181,7 +187,10 @@ async function pushPage(
   }
 }
 
-const byParentPage = (left: PageMetadata<PageRepresentation>, right: PageMetadata<PageRepresentation>) => {
+const byParentPage = (
+  left: PageMetadata<PageRequestRepresentation>,
+  right: PageMetadata<PageRequestRepresentation>,
+) => {
   return (right.data.parent?.uri ? 1 : 0) - (left.data.parent?.uri ? 1 : 0);
 };
 
@@ -192,14 +201,14 @@ const byParentPage = (left: PageMetadata<PageRepresentation>, right: PageMetadat
  * @see {@link https://github.com/readmeio/rdme/pull/973}
  * @returns An array of sorted PageMetadata objects
  */
-function sortFiles(files: PageMetadata<PageRepresentation>[]): PageMetadata<PageRepresentation>[] {
-  const filesBySlug = files.reduce<Record<string, PageMetadata<PageRepresentation>>>((bySlug, obj) => {
+function sortFiles(files: PageMetadata<PageRequestRepresentation>[]): PageMetadata<PageRequestRepresentation>[] {
+  const filesBySlug = files.reduce<Record<string, PageMetadata<PageRequestRepresentation>>>((bySlug, obj) => {
     // eslint-disable-next-line no-param-reassign
     bySlug[obj.slug] = obj;
     return bySlug;
   }, {});
   const dependencies = Object.values(filesBySlug).reduce<
-    [PageMetadata<PageRepresentation>, PageMetadata<PageRepresentation>][]
+    [PageMetadata<PageRequestRepresentation>, PageMetadata<PageRequestRepresentation>][]
   >((edges, obj) => {
     if (obj.data.parent?.uri && filesBySlug[obj.data.parent.uri]) {
       edges.push([filesBySlug[obj.data.parent.uri], filesBySlug[obj.slug]]);
@@ -264,7 +273,7 @@ export default async function syncPagePath(this: DocsUploadCommand) {
   const count = { succeeded: 0, failed: 0 };
 
   // topological sort the files
-  const sortedFiles = sortFiles((unsortedFiles as PageMetadata<PageRepresentation>[]).sort(byParentPage));
+  const sortedFiles = sortFiles((unsortedFiles as PageMetadata<PageRequestRepresentation>[]).sort(byParentPage));
 
   // push the files to ReadMe
   const rawResults: PromiseSettledResult<PushResult>[] = [];

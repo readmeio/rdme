@@ -1,4 +1,9 @@
-export type { APIKeyRepresentation, GuidesRequestRepresentation, ProjectRepresentation } from './lib/types/index.js';
+export type {
+  APIKeyRepresentation,
+  GuidesRequestRepresentation,
+  GuidesResponseRepresentation,
+  ProjectRepresentation,
+} from './lib/types/index.js';
 export type { PageMetadata } from './lib/readPage.js';
 export type {
   MarkdownFileScanResultOpts,
