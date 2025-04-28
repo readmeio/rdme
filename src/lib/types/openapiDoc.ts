@@ -15,7 +15,7 @@ const document = {
     version: '2.0.0-beta',
     title: 'ReadMe API v2 🦉 (BETA)',
     // @ts-expect-error custom extension
-    'x-readme-deploy': '5.337.1',
+    'x-readme-deploy': '5.341.0',
     termsOfService: 'https://readme.com/tos',
     contact: {
       name: 'API Support',
@@ -802,6 +802,131 @@ const document = {
         },
       },
     },
+    '/apply': {
+      get: {
+        operationId: 'getOpenRoles',
+        summary: 'Get open roles',
+        tags: ['Apply to ReadMe'],
+        description:
+          "Returns all the roles we're hiring for at ReadMe!\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        security: [],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    total: { type: 'number' },
+                    data: {
+                      type: 'array',
+                      items: {
+                        type: 'object',
+                        properties: {
+                          slug: { type: 'string' },
+                          title: { type: 'string' },
+                          description: {
+                            type: 'string',
+                            description: 'The description for this open position. This content is formatted as HTML.',
+                          },
+                          pullquote: { type: 'string', description: 'A short pullquote for the open position.' },
+                          location: { type: 'string', description: 'Where this position is located at.' },
+                          department: {
+                            type: 'string',
+                            description: "The internal organization you'll be working in.",
+                          },
+                          url: {
+                            type: 'string',
+                            format: 'uri',
+                            description: 'The place where you can apply for the position!',
+                          },
+                        },
+                        required: ['slug', 'title', 'description', 'pullquote', 'location', 'department', 'url'],
+                        additionalProperties: false,
+                      },
+                    },
+                  },
+                  required: ['total', 'data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      post: {
+        operationId: 'applyToReadMe',
+        summary: 'Submit your application!',
+        tags: ['Apply to ReadMe'],
+        description:
+          "This endpoint will let you apply to a job at ReadMe programatically, without having to go through our UI!\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  name: { type: 'string', minLength: 1, description: 'Your full name' },
+                  email: {
+                    type: 'string',
+                    format: 'email',
+                    default: 'you@example.com',
+                    description: 'A valid email we can reach you at.',
+                  },
+                  job: {
+                    type: 'string',
+                    description: "The job you're looking to apply for (https://readme.com/careers).",
+                  },
+                  pronouns: { type: 'string', description: 'Learn more at https://lgbtlifecenter.org/pronouns/' },
+                  linkedin: {
+                    type: 'string',
+                    format: 'uri',
+                    description: 'What have you been up to the past few years?',
+                  },
+                  github: {
+                    type: 'string',
+                    format: 'uri',
+                    description: 'Or Bitbucket, GitLab or anywhere else your code is hosted!',
+                  },
+                  coverLetter: { type: 'string', description: 'What should we know about you?' },
+                  dont_really_apply: {
+                    type: 'boolean',
+                    default: false,
+                    description: 'If you set this to true, we will not actually apply you to the job.',
+                  },
+                },
+                required: ['name', 'job'],
+                additionalProperties: false,
+              },
+            },
+          },
+          required: true,
+        },
+        security: [],
+        responses: {
+          '201': {
+            description: 'Created',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    message: { type: 'string' },
+                    keyvalues: { type: 'string' },
+                    careers: { type: 'string' },
+                    'questions?': { type: 'string' },
+                    poem: { type: 'array', items: { type: 'string' } },
+                  },
+                  required: ['message', 'keyvalues', 'careers', 'questions?', 'poem'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
     '/versions/{version}/categories': {
       post: {
         operationId: 'createCategory',
@@ -1021,6 +1146,207 @@ const document = {
       },
     },
     '/changelogs': {
+      post: {
+        operationId: 'createChangelog',
+        summary: 'Create a changelog entry',
+        tags: ['Changelog'],
+        description:
+          "Create a new changelog entry in your ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  author: {
+                    type: 'object',
+                    properties: { id: { type: 'string', nullable: true } },
+                    additionalProperties: false,
+                  },
+                  content: {
+                    type: 'object',
+                    properties: { body: { type: 'string', nullable: true } },
+                    additionalProperties: false,
+                  },
+                  created_at: {
+                    type: 'string',
+                    format: 'date-time',
+                    description: 'An ISO 8601 formatted date for when the changelog was created.',
+                  },
+                  metadata: {
+                    type: 'object',
+                    properties: {
+                      description: { type: 'string', nullable: true },
+                      image: {
+                        type: 'object',
+                        properties: {
+                          uri: { type: 'string', pattern: '\\/images\\/([a-f\\d]{24})', nullable: true },
+                          url: { type: 'string', format: 'uri', nullable: true },
+                        },
+                        additionalProperties: false,
+                      },
+                      keywords: { type: 'string', nullable: true },
+                      title: { type: 'string', nullable: true },
+                    },
+                    additionalProperties: false,
+                  },
+                  privacy: {
+                    type: 'object',
+                    properties: {
+                      view: {
+                        type: 'string',
+                        enum: ['public', 'anyone_with_link'],
+                        default: 'anyone_with_link',
+                        description: 'The visibility of this changelog.',
+                      },
+                    },
+                    additionalProperties: false,
+                  },
+                  slug: { type: 'string' },
+                  title: { type: 'string' },
+                  type: {
+                    type: 'string',
+                    enum: ['none', 'added', 'fixed', 'improved', 'deprecated', 'removed'],
+                    default: 'none',
+                    description: 'The type of changelog that this is.',
+                  },
+                },
+                required: ['title'],
+                additionalProperties: false,
+              },
+            },
+          },
+          required: true,
+        },
+        responses: {
+          '201': {
+            description: 'Created',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    data: {
+                      type: 'object',
+                      properties: {
+                        author: {
+                          type: 'object',
+                          properties: {
+                            id: { type: 'string', nullable: true, description: 'User ID of the changelog author.' },
+                            name: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'Full name of the user who created the changelog.',
+                            },
+                          },
+                          required: ['id', 'name'],
+                          additionalProperties: false,
+                        },
+                        content: {
+                          type: 'object',
+                          properties: { body: { type: 'string', nullable: true } },
+                          required: ['body'],
+                          additionalProperties: false,
+                        },
+                        created_at: {
+                          type: 'string',
+                          format: 'date-time',
+                          description: 'An ISO 8601 formatted date for when the changelog was created.',
+                        },
+                        metadata: {
+                          type: 'object',
+                          properties: {
+                            description: { type: 'string', nullable: true },
+                            image: {
+                              type: 'object',
+                              properties: {
+                                uri: {
+                                  type: 'string',
+                                  pattern: '\\/images\\/([a-f\\d]{24})',
+                                  nullable: true,
+                                  description:
+                                    'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
+                                },
+                                url: { type: 'string', format: 'uri', nullable: true },
+                              },
+                              required: ['uri', 'url'],
+                              additionalProperties: false,
+                            },
+                            keywords: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'A comma-separated list of keywords to place into your changelog metadata.',
+                            },
+                            title: { type: 'string', nullable: true },
+                          },
+                          required: ['description', 'image', 'keywords', 'title'],
+                          additionalProperties: false,
+                        },
+                        privacy: {
+                          type: 'object',
+                          properties: {
+                            view: {
+                              type: 'string',
+                              enum: ['public', 'anyone_with_link'],
+                              default: 'anyone_with_link',
+                              description: 'The visibility of this changelog.',
+                            },
+                          },
+                          additionalProperties: false,
+                        },
+                        slug: { type: 'string' },
+                        title: { type: 'string' },
+                        type: {
+                          type: 'string',
+                          enum: ['none', 'added', 'fixed', 'improved', 'deprecated', 'removed'],
+                          default: 'none',
+                          description: 'The type of changelog that this is.',
+                        },
+                        links: {
+                          type: 'object',
+                          properties: {
+                            project: {
+                              type: 'string',
+                              pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)',
+                              description: 'A URI to the project that this changelog belongs to.',
+                            },
+                          },
+                          required: ['project'],
+                          additionalProperties: false,
+                        },
+                        updated_at: {
+                          type: 'string',
+                          format: 'date-time',
+                          description: 'An ISO 8601 formatted date for when the changelog was updated.',
+                        },
+                        uri: {
+                          type: 'string',
+                          pattern: '\\/changelogs\\/([a-f\\d]{24}|([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                        },
+                      },
+                      required: [
+                        'author',
+                        'content',
+                        'created_at',
+                        'metadata',
+                        'privacy',
+                        'slug',
+                        'title',
+                        'links',
+                        'updated_at',
+                        'uri',
+                      ],
+                      additionalProperties: false,
+                    },
+                  },
+                  required: ['data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
       get: {
         operationId: 'getChangelogs',
         summary: 'Get all changelog entries',
@@ -1352,6 +1678,247 @@ const document = {
           },
         },
       },
+      delete: {
+        operationId: 'deleteChangelog',
+        summary: 'Delete a changelog entry',
+        tags: ['Changelog'],
+        description:
+          "Delete a changelog entry from your ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        parameters: [
+          {
+            schema: {
+              anyOf: [
+                { type: 'string', pattern: '[a-f\\d]{24}', description: 'A unique identifier for the resource.' },
+                {
+                  type: 'string',
+                  pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
+                  description: 'A URL-safe representation of the resource.',
+                },
+              ],
+            },
+            in: 'path',
+            name: 'identifier',
+            required: true,
+          },
+        ],
+        responses: { '204': { description: 'No Content' } },
+      },
+      patch: {
+        operationId: 'updateChangelog',
+        summary: 'Update a changelog entry',
+        tags: ['Changelog'],
+        description:
+          "Update an existing changelog entry in your ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  author: {
+                    type: 'object',
+                    properties: { id: { type: 'string', nullable: true }, name: { type: 'string', nullable: true } },
+                    additionalProperties: false,
+                  },
+                  content: {
+                    type: 'object',
+                    properties: { body: { type: 'string', nullable: true } },
+                    additionalProperties: false,
+                  },
+                  created_at: {
+                    type: 'string',
+                    format: 'date-time',
+                    description: 'An ISO 8601 formatted date for when the changelog was created.',
+                  },
+                  metadata: {
+                    type: 'object',
+                    properties: {
+                      description: { type: 'string', nullable: true },
+                      image: {
+                        type: 'object',
+                        properties: {
+                          uri: { type: 'string', pattern: '\\/images\\/([a-f\\d]{24})', nullable: true },
+                          url: { type: 'string', format: 'uri', nullable: true },
+                        },
+                        additionalProperties: false,
+                      },
+                      keywords: { type: 'string', nullable: true },
+                      title: { type: 'string', nullable: true },
+                    },
+                    additionalProperties: false,
+                  },
+                  privacy: {
+                    type: 'object',
+                    properties: {
+                      view: {
+                        type: 'string',
+                        enum: ['public', 'anyone_with_link'],
+                        default: 'anyone_with_link',
+                        description: 'The visibility of this changelog.',
+                      },
+                    },
+                    additionalProperties: false,
+                  },
+                  slug: { type: 'string' },
+                  title: { type: 'string' },
+                  type: {
+                    type: 'string',
+                    enum: ['none', 'added', 'fixed', 'improved', 'deprecated', 'removed'],
+                    default: 'none',
+                    description: 'The type of changelog that this is.',
+                  },
+                },
+                additionalProperties: false,
+              },
+            },
+          },
+        },
+        parameters: [
+          {
+            schema: {
+              anyOf: [
+                { type: 'string', pattern: '[a-f\\d]{24}', description: 'A unique identifier for the resource.' },
+                {
+                  type: 'string',
+                  pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
+                  description: 'A URL-safe representation of the resource.',
+                },
+              ],
+            },
+            in: 'path',
+            name: 'identifier',
+            required: true,
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    data: {
+                      type: 'object',
+                      properties: {
+                        author: {
+                          type: 'object',
+                          properties: {
+                            id: { type: 'string', nullable: true, description: 'User ID of the changelog author.' },
+                            name: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'Full name of the user who created the changelog.',
+                            },
+                          },
+                          required: ['id', 'name'],
+                          additionalProperties: false,
+                        },
+                        content: {
+                          type: 'object',
+                          properties: { body: { type: 'string', nullable: true } },
+                          required: ['body'],
+                          additionalProperties: false,
+                        },
+                        created_at: {
+                          type: 'string',
+                          format: 'date-time',
+                          description: 'An ISO 8601 formatted date for when the changelog was created.',
+                        },
+                        metadata: {
+                          type: 'object',
+                          properties: {
+                            description: { type: 'string', nullable: true },
+                            image: {
+                              type: 'object',
+                              properties: {
+                                uri: {
+                                  type: 'string',
+                                  pattern: '\\/images\\/([a-f\\d]{24})',
+                                  nullable: true,
+                                  description:
+                                    'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
+                                },
+                                url: { type: 'string', format: 'uri', nullable: true },
+                              },
+                              required: ['uri', 'url'],
+                              additionalProperties: false,
+                            },
+                            keywords: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'A comma-separated list of keywords to place into your changelog metadata.',
+                            },
+                            title: { type: 'string', nullable: true },
+                          },
+                          required: ['description', 'image', 'keywords', 'title'],
+                          additionalProperties: false,
+                        },
+                        privacy: {
+                          type: 'object',
+                          properties: {
+                            view: {
+                              type: 'string',
+                              enum: ['public', 'anyone_with_link'],
+                              default: 'anyone_with_link',
+                              description: 'The visibility of this changelog.',
+                            },
+                          },
+                          additionalProperties: false,
+                        },
+                        slug: { type: 'string' },
+                        title: { type: 'string' },
+                        type: {
+                          type: 'string',
+                          enum: ['none', 'added', 'fixed', 'improved', 'deprecated', 'removed'],
+                          default: 'none',
+                          description: 'The type of changelog that this is.',
+                        },
+                        links: {
+                          type: 'object',
+                          properties: {
+                            project: {
+                              type: 'string',
+                              pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)',
+                              description: 'A URI to the project that this changelog belongs to.',
+                            },
+                          },
+                          required: ['project'],
+                          additionalProperties: false,
+                        },
+                        updated_at: {
+                          type: 'string',
+                          format: 'date-time',
+                          description: 'An ISO 8601 formatted date for when the changelog was updated.',
+                        },
+                        uri: {
+                          type: 'string',
+                          pattern: '\\/changelogs\\/([a-f\\d]{24}|([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                        },
+                      },
+                      required: [
+                        'author',
+                        'content',
+                        'created_at',
+                        'metadata',
+                        'privacy',
+                        'slug',
+                        'title',
+                        'links',
+                        'updated_at',
+                        'uri',
+                      ],
+                      additionalProperties: false,
+                    },
+                  },
+                  required: ['data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
     },
     '/versions/{version}/custom_pages': {
       post: {
@@ -1530,6 +2097,23 @@ const document = {
                           required: ['project'],
                           additionalProperties: false,
                         },
+                        renderable: {
+                          type: 'object',
+                          properties: {
+                            status: {
+                              type: 'boolean',
+                              default: true,
+                              description: 'A flag for if the resource is renderable or not.',
+                            },
+                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
+                            message: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'Additional details about the rendering error.',
+                            },
+                          },
+                          additionalProperties: false,
+                        },
                         updated_at: {
                           type: 'string',
                           format: 'date-time',
@@ -1550,6 +2134,7 @@ const document = {
                         'slug',
                         'title',
                         'links',
+                        'renderable',
                         'updated_at',
                         'uri',
                       ],
@@ -1674,6 +2259,23 @@ const document = {
                             required: ['project'],
                             additionalProperties: false,
                           },
+                          renderable: {
+                            type: 'object',
+                            properties: {
+                              status: {
+                                type: 'boolean',
+                                default: true,
+                                description: 'A flag for if the resource is renderable or not.',
+                              },
+                              error: { type: 'string', nullable: true, description: 'The rendering error.' },
+                              message: {
+                                type: 'string',
+                                nullable: true,
+                                description: 'Additional details about the rendering error.',
+                              },
+                            },
+                            additionalProperties: false,
+                          },
                           updated_at: {
                             type: 'string',
                             format: 'date-time',
@@ -1694,6 +2296,7 @@ const document = {
                           'slug',
                           'title',
                           'links',
+                          'renderable',
                           'updated_at',
                           'uri',
                         ],
@@ -1825,6 +2428,23 @@ const document = {
                           required: ['project'],
                           additionalProperties: false,
                         },
+                        renderable: {
+                          type: 'object',
+                          properties: {
+                            status: {
+                              type: 'boolean',
+                              default: true,
+                              description: 'A flag for if the resource is renderable or not.',
+                            },
+                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
+                            message: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'Additional details about the rendering error.',
+                            },
+                          },
+                          additionalProperties: false,
+                        },
                         updated_at: {
                           type: 'string',
                           format: 'date-time',
@@ -1845,6 +2465,7 @@ const document = {
                         'slug',
                         'title',
                         'links',
+                        'renderable',
                         'updated_at',
                         'uri',
                       ],
@@ -2064,6 +2685,23 @@ const document = {
                           required: ['project'],
                           additionalProperties: false,
                         },
+                        renderable: {
+                          type: 'object',
+                          properties: {
+                            status: {
+                              type: 'boolean',
+                              default: true,
+                              description: 'A flag for if the resource is renderable or not.',
+                            },
+                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
+                            message: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'Additional details about the rendering error.',
+                            },
+                          },
+                          additionalProperties: false,
+                        },
                         updated_at: {
                           type: 'string',
                           format: 'date-time',
@@ -2084,6 +2722,7 @@ const document = {
                         'slug',
                         'title',
                         'links',
+                        'renderable',
                         'updated_at',
                         'uri',
                       ],
@@ -2183,14 +2822,6 @@ const document = {
                     },
                     additionalProperties: false,
                   },
-                  href: {
-                    type: 'object',
-                    properties: {
-                      dash: { type: 'string', format: 'uri', description: 'A URL to this page in your ReadMe Dash.' },
-                      hub: { type: 'string', format: 'uri', description: 'A URL to this page on your ReadMe hub.' },
-                    },
-                    additionalProperties: false,
-                  },
                   metadata: {
                     type: 'object',
                     properties: {
@@ -2221,19 +2852,6 @@ const document = {
                     type: 'object',
                     properties: {
                       view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
-                    },
-                    additionalProperties: false,
-                  },
-                  renderable: {
-                    type: 'object',
-                    properties: {
-                      status: {
-                        type: 'boolean',
-                        default: true,
-                        description: 'A flag for if the page is renderable or not.',
-                      },
-                      error: { type: 'string', nullable: true },
-                      message: { type: 'string', nullable: true },
                     },
                     additionalProperties: false,
                   },
@@ -2355,23 +2973,6 @@ const document = {
                           required: ['body', 'excerpt', 'link', 'next'],
                           additionalProperties: false,
                         },
-                        href: {
-                          type: 'object',
-                          properties: {
-                            dash: {
-                              type: 'string',
-                              format: 'uri',
-                              description: 'A URL to this page in your ReadMe Dash.',
-                            },
-                            hub: {
-                              type: 'string',
-                              format: 'uri',
-                              description: 'A URL to this page on your ReadMe hub.',
-                            },
-                          },
-                          required: ['dash', 'hub'],
-                          additionalProperties: false,
-                        },
                         metadata: {
                           type: 'object',
                           properties: {
@@ -2422,6 +3023,34 @@ const document = {
                           },
                           additionalProperties: false,
                         },
+                        slug: {
+                          allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
+                          description: 'The accessible URL slug for the page.',
+                        },
+                        state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
+                        title: { type: 'string' },
+                        type: {
+                          type: 'string',
+                          enum: ['api_config', 'basic', 'endpoint', 'link', 'webhook'],
+                          default: 'basic',
+                        },
+                        href: {
+                          type: 'object',
+                          properties: {
+                            dash: {
+                              type: 'string',
+                              format: 'uri',
+                              description: 'A URL to this page in your ReadMe Dash.',
+                            },
+                            hub: {
+                              type: 'string',
+                              format: 'uri',
+                              description: 'A URL to this page on your ReadMe hub.',
+                            },
+                          },
+                          required: ['dash', 'hub'],
+                          additionalProperties: false,
+                        },
                         project: {
                           type: 'object',
                           properties: {
@@ -2447,7 +3076,7 @@ const document = {
                             status: {
                               type: 'boolean',
                               default: true,
-                              description: 'A flag for if the page is renderable or not.',
+                              description: 'A flag for if the resource is renderable or not.',
                             },
                             error: { type: 'string', nullable: true, description: 'The rendering error.' },
                             message: {
@@ -2457,17 +3086,6 @@ const document = {
                             },
                           },
                           additionalProperties: false,
-                        },
-                        slug: {
-                          allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
-                          description: 'The accessible URL slug for the page.',
-                        },
-                        state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
-                        title: { type: 'string' },
-                        type: {
-                          type: 'string',
-                          enum: ['api_config', 'basic', 'endpoint', 'link', 'webhook'],
-                          default: 'basic',
                         },
                         updated_at: {
                           type: 'string',
@@ -2484,14 +3102,14 @@ const document = {
                       required: [
                         'category',
                         'content',
-                        'href',
                         'metadata',
                         'parent',
                         'privacy',
-                        'project',
-                        'renderable',
                         'slug',
                         'title',
+                        'href',
+                        'project',
+                        'renderable',
                         'updated_at',
                         'uri',
                       ],
@@ -2619,23 +3237,6 @@ const document = {
                           required: ['body', 'excerpt', 'link', 'next'],
                           additionalProperties: false,
                         },
-                        href: {
-                          type: 'object',
-                          properties: {
-                            dash: {
-                              type: 'string',
-                              format: 'uri',
-                              description: 'A URL to this page in your ReadMe Dash.',
-                            },
-                            hub: {
-                              type: 'string',
-                              format: 'uri',
-                              description: 'A URL to this page on your ReadMe hub.',
-                            },
-                          },
-                          required: ['dash', 'hub'],
-                          additionalProperties: false,
-                        },
                         metadata: {
                           type: 'object',
                           properties: {
@@ -2686,6 +3287,34 @@ const document = {
                           },
                           additionalProperties: false,
                         },
+                        slug: {
+                          allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
+                          description: 'The accessible URL slug for the page.',
+                        },
+                        state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
+                        title: { type: 'string' },
+                        type: {
+                          type: 'string',
+                          enum: ['api_config', 'basic', 'endpoint', 'link', 'webhook'],
+                          default: 'basic',
+                        },
+                        href: {
+                          type: 'object',
+                          properties: {
+                            dash: {
+                              type: 'string',
+                              format: 'uri',
+                              description: 'A URL to this page in your ReadMe Dash.',
+                            },
+                            hub: {
+                              type: 'string',
+                              format: 'uri',
+                              description: 'A URL to this page on your ReadMe hub.',
+                            },
+                          },
+                          required: ['dash', 'hub'],
+                          additionalProperties: false,
+                        },
                         project: {
                           type: 'object',
                           properties: {
@@ -2711,7 +3340,7 @@ const document = {
                             status: {
                               type: 'boolean',
                               default: true,
-                              description: 'A flag for if the page is renderable or not.',
+                              description: 'A flag for if the resource is renderable or not.',
                             },
                             error: { type: 'string', nullable: true, description: 'The rendering error.' },
                             message: {
@@ -2721,17 +3350,6 @@ const document = {
                             },
                           },
                           additionalProperties: false,
-                        },
-                        slug: {
-                          allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
-                          description: 'The accessible URL slug for the page.',
-                        },
-                        state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
-                        title: { type: 'string' },
-                        type: {
-                          type: 'string',
-                          enum: ['api_config', 'basic', 'endpoint', 'link', 'webhook'],
-                          default: 'basic',
                         },
                         updated_at: {
                           type: 'string',
@@ -2748,14 +3366,14 @@ const document = {
                       required: [
                         'category',
                         'content',
-                        'href',
                         'metadata',
                         'parent',
                         'privacy',
-                        'project',
-                        'renderable',
                         'slug',
                         'title',
+                        'href',
+                        'project',
+                        'renderable',
                         'updated_at',
                         'uri',
                       ],
@@ -2876,14 +3494,6 @@ const document = {
                     },
                     additionalProperties: false,
                   },
-                  href: {
-                    type: 'object',
-                    properties: {
-                      dash: { type: 'string', format: 'uri', description: 'A URL to this page in your ReadMe Dash.' },
-                      hub: { type: 'string', format: 'uri', description: 'A URL to this page on your ReadMe hub.' },
-                    },
-                    additionalProperties: false,
-                  },
                   metadata: {
                     type: 'object',
                     properties: {
@@ -2914,19 +3524,6 @@ const document = {
                     type: 'object',
                     properties: {
                       view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
-                    },
-                    additionalProperties: false,
-                  },
-                  renderable: {
-                    type: 'object',
-                    properties: {
-                      status: {
-                        type: 'boolean',
-                        default: true,
-                        description: 'A flag for if the page is renderable or not.',
-                      },
-                      error: { type: 'string', nullable: true },
-                      message: { type: 'string', nullable: true },
                     },
                     additionalProperties: false,
                   },
@@ -3053,23 +3650,6 @@ const document = {
                           required: ['body', 'excerpt', 'link', 'next'],
                           additionalProperties: false,
                         },
-                        href: {
-                          type: 'object',
-                          properties: {
-                            dash: {
-                              type: 'string',
-                              format: 'uri',
-                              description: 'A URL to this page in your ReadMe Dash.',
-                            },
-                            hub: {
-                              type: 'string',
-                              format: 'uri',
-                              description: 'A URL to this page on your ReadMe hub.',
-                            },
-                          },
-                          required: ['dash', 'hub'],
-                          additionalProperties: false,
-                        },
                         metadata: {
                           type: 'object',
                           properties: {
@@ -3120,6 +3700,34 @@ const document = {
                           },
                           additionalProperties: false,
                         },
+                        slug: {
+                          allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
+                          description: 'The accessible URL slug for the page.',
+                        },
+                        state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
+                        title: { type: 'string' },
+                        type: {
+                          type: 'string',
+                          enum: ['api_config', 'basic', 'endpoint', 'link', 'webhook'],
+                          default: 'basic',
+                        },
+                        href: {
+                          type: 'object',
+                          properties: {
+                            dash: {
+                              type: 'string',
+                              format: 'uri',
+                              description: 'A URL to this page in your ReadMe Dash.',
+                            },
+                            hub: {
+                              type: 'string',
+                              format: 'uri',
+                              description: 'A URL to this page on your ReadMe hub.',
+                            },
+                          },
+                          required: ['dash', 'hub'],
+                          additionalProperties: false,
+                        },
                         project: {
                           type: 'object',
                           properties: {
@@ -3145,7 +3753,7 @@ const document = {
                             status: {
                               type: 'boolean',
                               default: true,
-                              description: 'A flag for if the page is renderable or not.',
+                              description: 'A flag for if the resource is renderable or not.',
                             },
                             error: { type: 'string', nullable: true, description: 'The rendering error.' },
                             message: {
@@ -3155,17 +3763,6 @@ const document = {
                             },
                           },
                           additionalProperties: false,
-                        },
-                        slug: {
-                          allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
-                          description: 'The accessible URL slug for the page.',
-                        },
-                        state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
-                        title: { type: 'string' },
-                        type: {
-                          type: 'string',
-                          enum: ['api_config', 'basic', 'endpoint', 'link', 'webhook'],
-                          default: 'basic',
                         },
                         updated_at: {
                           type: 'string',
@@ -3182,14 +3779,14 @@ const document = {
                       required: [
                         'category',
                         'content',
-                        'href',
                         'metadata',
                         'parent',
                         'privacy',
-                        'project',
-                        'renderable',
                         'slug',
                         'title',
+                        'href',
+                        'project',
+                        'renderable',
                         'updated_at',
                         'uri',
                       ],
@@ -3198,6 +3795,42 @@ const document = {
                   },
                   required: ['data'],
                   additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/outbound_ips': {
+      get: {
+        operationId: 'getOutboundIPs',
+        summary: "Get ReadMe's outbound IP addresses",
+        tags: ['IP Addresses'],
+        description:
+          "Get all of ReadMe's IP addresses used for outbound webhook requests and the \"Try It!\" button on the API Explorer.\n\nAlthough ReadMe's outbound IP addresses may change, the IPs in this API response will be valid for at least 7 days. If you configure your API or webhooks to limit access based on these IPs, you should refresh the IP list from this endpoint weekly.\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        security: [],
+        responses: {
+          '200': {
+            description: 'List of current IP addresses used for webhook and "Try It!" proxy requests.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    data: {
+                      type: 'array',
+                      items: {
+                        type: 'object',
+                        properties: { ip_address: { type: 'string', description: 'The IP address.' } },
+                        required: ['ip_address'],
+                        additionalProperties: false,
+                      },
+                    },
+                  },
+                  required: ['data'],
+                  additionalProperties: false,
+                  description: 'List of current IP addresses used for webhook and "Try It!" proxy requests.',
                 },
               },
             },
@@ -4639,14 +5272,6 @@ const document = {
                     },
                     additionalProperties: false,
                   },
-                  href: {
-                    type: 'object',
-                    properties: {
-                      dash: { type: 'string', format: 'uri', description: 'A URL to this page in your ReadMe Dash.' },
-                      hub: { type: 'string', format: 'uri', description: 'A URL to this page on your ReadMe hub.' },
-                    },
-                    additionalProperties: false,
-                  },
                   metadata: {
                     type: 'object',
                     properties: {
@@ -4677,19 +5302,6 @@ const document = {
                     type: 'object',
                     properties: {
                       view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
-                    },
-                    additionalProperties: false,
-                  },
-                  renderable: {
-                    type: 'object',
-                    properties: {
-                      status: {
-                        type: 'boolean',
-                        default: true,
-                        description: 'A flag for if the page is renderable or not.',
-                      },
-                      error: { type: 'string', nullable: true },
-                      message: { type: 'string', nullable: true },
                     },
                     additionalProperties: false,
                   },
@@ -4943,23 +5555,6 @@ const document = {
                           required: ['body', 'excerpt', 'link', 'next'],
                           additionalProperties: false,
                         },
-                        href: {
-                          type: 'object',
-                          properties: {
-                            dash: {
-                              type: 'string',
-                              format: 'uri',
-                              description: 'A URL to this page in your ReadMe Dash.',
-                            },
-                            hub: {
-                              type: 'string',
-                              format: 'uri',
-                              description: 'A URL to this page on your ReadMe hub.',
-                            },
-                          },
-                          required: ['dash', 'hub'],
-                          additionalProperties: false,
-                        },
                         metadata: {
                           type: 'object',
                           properties: {
@@ -5010,42 +5605,6 @@ const document = {
                           },
                           additionalProperties: false,
                         },
-                        project: {
-                          type: 'object',
-                          properties: {
-                            name: { type: 'string', description: 'The name of the project.' },
-                            subdomain: {
-                              type: 'string',
-                              pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
-                              maxLength: 30,
-                              description: 'The subdomain of the project.',
-                            },
-                            uri: {
-                              type: 'string',
-                              pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)',
-                              description: 'A URI to the project that this page belongs to.',
-                            },
-                          },
-                          required: ['name', 'subdomain', 'uri'],
-                          additionalProperties: false,
-                        },
-                        renderable: {
-                          type: 'object',
-                          properties: {
-                            status: {
-                              type: 'boolean',
-                              default: true,
-                              description: 'A flag for if the page is renderable or not.',
-                            },
-                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
-                            message: {
-                              type: 'string',
-                              nullable: true,
-                              description: 'Additional details about the rendering error.',
-                            },
-                          },
-                          additionalProperties: false,
-                        },
                         slug: {
                           allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
                           description: 'The accessible URL slug for the page.',
@@ -5056,17 +5615,6 @@ const document = {
                           type: 'string',
                           enum: ['api_config', 'basic', 'endpoint', 'link', 'webhook'],
                           default: 'basic',
-                        },
-                        updated_at: {
-                          type: 'string',
-                          format: 'date-time',
-                          description: 'An ISO 8601 formatted date for when the page was updated.',
-                        },
-                        uri: {
-                          type: 'string',
-                          pattern:
-                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
-                          description: 'A URI to the page resource.',
                         },
                         api_config: {
                           type: 'string',
@@ -5214,23 +5762,87 @@ const document = {
                           required: ['recipes'],
                           additionalProperties: false,
                         },
+                        href: {
+                          type: 'object',
+                          properties: {
+                            dash: {
+                              type: 'string',
+                              format: 'uri',
+                              description: 'A URL to this page in your ReadMe Dash.',
+                            },
+                            hub: {
+                              type: 'string',
+                              format: 'uri',
+                              description: 'A URL to this page on your ReadMe hub.',
+                            },
+                          },
+                          required: ['dash', 'hub'],
+                          additionalProperties: false,
+                        },
+                        project: {
+                          type: 'object',
+                          properties: {
+                            name: { type: 'string', description: 'The name of the project.' },
+                            subdomain: {
+                              type: 'string',
+                              pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
+                              maxLength: 30,
+                              description: 'The subdomain of the project.',
+                            },
+                            uri: {
+                              type: 'string',
+                              pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)',
+                              description: 'A URI to the project that this page belongs to.',
+                            },
+                          },
+                          required: ['name', 'subdomain', 'uri'],
+                          additionalProperties: false,
+                        },
+                        renderable: {
+                          type: 'object',
+                          properties: {
+                            status: {
+                              type: 'boolean',
+                              default: true,
+                              description: 'A flag for if the resource is renderable or not.',
+                            },
+                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
+                            message: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'Additional details about the rendering error.',
+                            },
+                          },
+                          additionalProperties: false,
+                        },
+                        updated_at: {
+                          type: 'string',
+                          format: 'date-time',
+                          description: 'An ISO 8601 formatted date for when the page was updated.',
+                        },
+                        uri: {
+                          type: 'string',
+                          pattern:
+                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                          description: 'A URI to the page resource.',
+                        },
                       },
                       required: [
                         'category',
                         'content',
-                        'href',
                         'metadata',
                         'parent',
                         'privacy',
-                        'project',
-                        'renderable',
                         'slug',
                         'title',
-                        'updated_at',
-                        'uri',
                         'api_config',
                         'api',
                         'connections',
+                        'href',
+                        'project',
+                        'renderable',
+                        'updated_at',
+                        'uri',
                       ],
                       additionalProperties: false,
                     },
@@ -5372,23 +5984,6 @@ const document = {
                           required: ['body', 'excerpt', 'link', 'next'],
                           additionalProperties: false,
                         },
-                        href: {
-                          type: 'object',
-                          properties: {
-                            dash: {
-                              type: 'string',
-                              format: 'uri',
-                              description: 'A URL to this page in your ReadMe Dash.',
-                            },
-                            hub: {
-                              type: 'string',
-                              format: 'uri',
-                              description: 'A URL to this page on your ReadMe hub.',
-                            },
-                          },
-                          required: ['dash', 'hub'],
-                          additionalProperties: false,
-                        },
                         metadata: {
                           type: 'object',
                           properties: {
@@ -5439,42 +6034,6 @@ const document = {
                           },
                           additionalProperties: false,
                         },
-                        project: {
-                          type: 'object',
-                          properties: {
-                            name: { type: 'string', description: 'The name of the project.' },
-                            subdomain: {
-                              type: 'string',
-                              pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
-                              maxLength: 30,
-                              description: 'The subdomain of the project.',
-                            },
-                            uri: {
-                              type: 'string',
-                              pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)',
-                              description: 'A URI to the project that this page belongs to.',
-                            },
-                          },
-                          required: ['name', 'subdomain', 'uri'],
-                          additionalProperties: false,
-                        },
-                        renderable: {
-                          type: 'object',
-                          properties: {
-                            status: {
-                              type: 'boolean',
-                              default: true,
-                              description: 'A flag for if the page is renderable or not.',
-                            },
-                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
-                            message: {
-                              type: 'string',
-                              nullable: true,
-                              description: 'Additional details about the rendering error.',
-                            },
-                          },
-                          additionalProperties: false,
-                        },
                         slug: {
                           allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
                           description: 'The accessible URL slug for the page.',
@@ -5485,17 +6044,6 @@ const document = {
                           type: 'string',
                           enum: ['api_config', 'basic', 'endpoint', 'link', 'webhook'],
                           default: 'basic',
-                        },
-                        updated_at: {
-                          type: 'string',
-                          format: 'date-time',
-                          description: 'An ISO 8601 formatted date for when the page was updated.',
-                        },
-                        uri: {
-                          type: 'string',
-                          pattern:
-                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
-                          description: 'A URI to the page resource.',
                         },
                         api_config: {
                           type: 'string',
@@ -5643,23 +6191,87 @@ const document = {
                           required: ['recipes'],
                           additionalProperties: false,
                         },
+                        href: {
+                          type: 'object',
+                          properties: {
+                            dash: {
+                              type: 'string',
+                              format: 'uri',
+                              description: 'A URL to this page in your ReadMe Dash.',
+                            },
+                            hub: {
+                              type: 'string',
+                              format: 'uri',
+                              description: 'A URL to this page on your ReadMe hub.',
+                            },
+                          },
+                          required: ['dash', 'hub'],
+                          additionalProperties: false,
+                        },
+                        project: {
+                          type: 'object',
+                          properties: {
+                            name: { type: 'string', description: 'The name of the project.' },
+                            subdomain: {
+                              type: 'string',
+                              pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
+                              maxLength: 30,
+                              description: 'The subdomain of the project.',
+                            },
+                            uri: {
+                              type: 'string',
+                              pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)',
+                              description: 'A URI to the project that this page belongs to.',
+                            },
+                          },
+                          required: ['name', 'subdomain', 'uri'],
+                          additionalProperties: false,
+                        },
+                        renderable: {
+                          type: 'object',
+                          properties: {
+                            status: {
+                              type: 'boolean',
+                              default: true,
+                              description: 'A flag for if the resource is renderable or not.',
+                            },
+                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
+                            message: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'Additional details about the rendering error.',
+                            },
+                          },
+                          additionalProperties: false,
+                        },
+                        updated_at: {
+                          type: 'string',
+                          format: 'date-time',
+                          description: 'An ISO 8601 formatted date for when the page was updated.',
+                        },
+                        uri: {
+                          type: 'string',
+                          pattern:
+                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                          description: 'A URI to the page resource.',
+                        },
                       },
                       required: [
                         'category',
                         'content',
-                        'href',
                         'metadata',
                         'parent',
                         'privacy',
-                        'project',
-                        'renderable',
                         'slug',
                         'title',
-                        'updated_at',
-                        'uri',
                         'api_config',
                         'api',
                         'connections',
+                        'href',
+                        'project',
+                        'renderable',
+                        'updated_at',
+                        'uri',
                       ],
                       additionalProperties: false,
                     },
@@ -5778,14 +6390,6 @@ const document = {
                     },
                     additionalProperties: false,
                   },
-                  href: {
-                    type: 'object',
-                    properties: {
-                      dash: { type: 'string', format: 'uri', description: 'A URL to this page in your ReadMe Dash.' },
-                      hub: { type: 'string', format: 'uri', description: 'A URL to this page on your ReadMe hub.' },
-                    },
-                    additionalProperties: false,
-                  },
                   metadata: {
                     type: 'object',
                     properties: {
@@ -5816,19 +6420,6 @@ const document = {
                     type: 'object',
                     properties: {
                       view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
-                    },
-                    additionalProperties: false,
-                  },
-                  renderable: {
-                    type: 'object',
-                    properties: {
-                      status: {
-                        type: 'boolean',
-                        default: true,
-                        description: 'A flag for if the page is renderable or not.',
-                      },
-                      error: { type: 'string', nullable: true },
-                      message: { type: 'string', nullable: true },
                     },
                     additionalProperties: false,
                   },
@@ -6084,23 +6675,6 @@ const document = {
                           required: ['body', 'excerpt', 'link', 'next'],
                           additionalProperties: false,
                         },
-                        href: {
-                          type: 'object',
-                          properties: {
-                            dash: {
-                              type: 'string',
-                              format: 'uri',
-                              description: 'A URL to this page in your ReadMe Dash.',
-                            },
-                            hub: {
-                              type: 'string',
-                              format: 'uri',
-                              description: 'A URL to this page on your ReadMe hub.',
-                            },
-                          },
-                          required: ['dash', 'hub'],
-                          additionalProperties: false,
-                        },
                         metadata: {
                           type: 'object',
                           properties: {
@@ -6151,42 +6725,6 @@ const document = {
                           },
                           additionalProperties: false,
                         },
-                        project: {
-                          type: 'object',
-                          properties: {
-                            name: { type: 'string', description: 'The name of the project.' },
-                            subdomain: {
-                              type: 'string',
-                              pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
-                              maxLength: 30,
-                              description: 'The subdomain of the project.',
-                            },
-                            uri: {
-                              type: 'string',
-                              pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)',
-                              description: 'A URI to the project that this page belongs to.',
-                            },
-                          },
-                          required: ['name', 'subdomain', 'uri'],
-                          additionalProperties: false,
-                        },
-                        renderable: {
-                          type: 'object',
-                          properties: {
-                            status: {
-                              type: 'boolean',
-                              default: true,
-                              description: 'A flag for if the page is renderable or not.',
-                            },
-                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
-                            message: {
-                              type: 'string',
-                              nullable: true,
-                              description: 'Additional details about the rendering error.',
-                            },
-                          },
-                          additionalProperties: false,
-                        },
                         slug: {
                           allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
                           description: 'The accessible URL slug for the page.',
@@ -6197,17 +6735,6 @@ const document = {
                           type: 'string',
                           enum: ['api_config', 'basic', 'endpoint', 'link', 'webhook'],
                           default: 'basic',
-                        },
-                        updated_at: {
-                          type: 'string',
-                          format: 'date-time',
-                          description: 'An ISO 8601 formatted date for when the page was updated.',
-                        },
-                        uri: {
-                          type: 'string',
-                          pattern:
-                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
-                          description: 'A URI to the page resource.',
                         },
                         api_config: {
                           type: 'string',
@@ -6355,23 +6882,87 @@ const document = {
                           required: ['recipes'],
                           additionalProperties: false,
                         },
+                        href: {
+                          type: 'object',
+                          properties: {
+                            dash: {
+                              type: 'string',
+                              format: 'uri',
+                              description: 'A URL to this page in your ReadMe Dash.',
+                            },
+                            hub: {
+                              type: 'string',
+                              format: 'uri',
+                              description: 'A URL to this page on your ReadMe hub.',
+                            },
+                          },
+                          required: ['dash', 'hub'],
+                          additionalProperties: false,
+                        },
+                        project: {
+                          type: 'object',
+                          properties: {
+                            name: { type: 'string', description: 'The name of the project.' },
+                            subdomain: {
+                              type: 'string',
+                              pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
+                              maxLength: 30,
+                              description: 'The subdomain of the project.',
+                            },
+                            uri: {
+                              type: 'string',
+                              pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)',
+                              description: 'A URI to the project that this page belongs to.',
+                            },
+                          },
+                          required: ['name', 'subdomain', 'uri'],
+                          additionalProperties: false,
+                        },
+                        renderable: {
+                          type: 'object',
+                          properties: {
+                            status: {
+                              type: 'boolean',
+                              default: true,
+                              description: 'A flag for if the resource is renderable or not.',
+                            },
+                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
+                            message: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'Additional details about the rendering error.',
+                            },
+                          },
+                          additionalProperties: false,
+                        },
+                        updated_at: {
+                          type: 'string',
+                          format: 'date-time',
+                          description: 'An ISO 8601 formatted date for when the page was updated.',
+                        },
+                        uri: {
+                          type: 'string',
+                          pattern:
+                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                          description: 'A URI to the page resource.',
+                        },
                       },
                       required: [
                         'category',
                         'content',
-                        'href',
                         'metadata',
                         'parent',
                         'privacy',
-                        'project',
-                        'renderable',
                         'slug',
                         'title',
-                        'updated_at',
-                        'uri',
                         'api_config',
                         'api',
                         'connections',
+                        'href',
+                        'project',
+                        'renderable',
+                        'updated_at',
+                        'uri',
                       ],
                       additionalProperties: false,
                     },
@@ -6526,6 +7117,49 @@ const document = {
         },
       },
     },
+    '/validate/api': {
+      post: {
+        operationId: 'validateAPI',
+        summary: 'Validate an API',
+        tags: ['APIs'],
+        description:
+          "Validates an API definition for uploading to your ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        requestBody: {
+          content: {
+            'multipart/form-data': {
+              schema: {
+                type: 'object',
+                properties: {
+                  schema: { description: 'The API definition.' },
+                  upload_source: {
+                    default: 'form',
+                    description: 'The source that the API definition is being uploaded through.',
+                  },
+                  url: { description: 'The URL where the API definition is hosted.' },
+                },
+                additionalProperties: false,
+              },
+            },
+          },
+        },
+        security: [],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: { schema: { type: 'object', additionalProperties: {}, description: 'The API schema.' } },
+                  required: ['schema'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
   },
   servers: [{ url: 'https://api.readme.com/v2', description: 'The ReadMe API' }],
   security: [{ bearer: [] }],
@@ -6534,10 +7168,12 @@ const document = {
     { name: 'API Keys' },
     { name: 'API Reference' },
     { name: 'APIs' },
+    { name: 'Apply to ReadMe' },
     { name: 'Categories' },
     { name: 'Changelog' },
     { name: 'Custom Pages' },
     { name: 'Guides' },
+    { name: 'IP Addresses' },
     { name: 'Projects' },
     { name: 'Search' },
   ],
