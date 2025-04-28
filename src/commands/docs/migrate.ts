@@ -1,6 +1,6 @@
 import type { MigrationStats, PluginHooks } from '../../lib/hooks/exported.js';
 
-import { Args, Flags, type Hook } from '@oclif/core';
+import { Args, Flags } from '@oclif/core';
 import chalk from 'chalk';
 import ora from 'ora';
 import { dir } from 'tmp-promise';
@@ -58,8 +58,7 @@ export default class DocsMigrateCommand extends BaseCommand<typeof DocsMigrateCo
     const zipResults = await attemptUnzip(rawPathInput);
     let { pathInput } = zipResults;
 
-    // todo: fix this type once https://github.com/oclif/core/pull/1359 is merged
-    const fileScanHookResults: Hook.Result<PluginHooks['pre_markdown_file_scan']['return']> = await this.config.runHook(
+    const fileScanHookResults = await this.config.runHook<'pre_markdown_file_scan', PluginHooks>(
       'pre_markdown_file_scan',
       zipResults,
     );
@@ -90,9 +89,10 @@ export default class DocsMigrateCommand extends BaseCommand<typeof DocsMigrateCo
 
     let transformedByHooks = false;
 
-    // todo: fix this type once https://github.com/oclif/core/pull/1359 is merged
-    const validationHookResults: Hook.Result<PluginHooks['pre_markdown_validation']['return']> =
-      await this.config.runHook('pre_markdown_validation', { pages: unsortedFiles });
+    const validationHookResults = await this.config.runHook<'pre_markdown_validation', PluginHooks>(
+      'pre_markdown_validation',
+      { pages: unsortedFiles },
+    );
 
     if (!validationHookResults.successes.length && !validationHookResults.failures.length) {
       throw new Error('This command requires a valid migration plugin.');
