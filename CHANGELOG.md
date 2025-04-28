@@ -1,3 +1,10 @@
+# [10.2.0-next.24](https://github.com/readmeio/rdme/compare/v10.2.0-next.23...v10.2.0-next.24) (2025-04-28)
+
+
+### Features
+
+* better guides types, expose page stat type for `renderable` status ([#1236](https://github.com/readmeio/rdme/issues/1236)) ([408253a](https://github.com/readmeio/rdme/commit/408253ad35b2c65409465a230c8a16d90f7540e6))
+
 # [10.2.0-next.23](https://github.com/readmeio/rdme/compare/v10.2.0-next.22...v10.2.0-next.23) (2025-04-25)
 
 
