@@ -171,6 +171,7 @@ npm run build && npm run build:docs
 
 * [`rdme autocomplete`](documentation/commands/autocomplete.md) - Display autocomplete installation instructions.
 * [`rdme changelogs`](documentation/commands/changelogs.md) - Upload Markdown files to your ReadMe project as Changelog posts.
+* [`rdme docs`](documentation/commands/docs.md) - Upload Markdown files to the Guides section of your ReadMe project.
 * [`rdme help`](documentation/commands/help.md) - Display help for rdme.
 * [`rdme login`](documentation/commands/login.md) - Login to a ReadMe project.
 * [`rdme logout`](documentation/commands/logout.md) - Logs the currently authenticated user out of ReadMe.
