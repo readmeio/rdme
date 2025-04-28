@@ -26,7 +26,7 @@ export type APIv2PageCommands = DocsMigrateCommand | DocsUploadCommand;
 
 // todo: eventually this type will be used for other page types (e.g., API Reference)
 type PageRequestRepresentation = GuidesRequestRepresentation;
-type PageResponseRepresentation = GuidesResponseRepresentation;
+type PageResponseRepresentation = GuidesResponseRepresentation['data'];
 
 interface BasePushResult {
   filePath: string;
