@@ -1,3 +1,44 @@
+# [10.2.0](https://github.com/readmeio/rdme/compare/v10.1.1...v10.2.0) (2025-04-29)
+
+
+### Bug Fixes
+
+* **docs/upload:** add safeguard if projects have bidi enabled ([#1175](https://github.com/readmeio/rdme/issues/1175)) ([e66b257](https://github.com/readmeio/rdme/commit/e66b257600d0b774da67a4e10eda7c9b9fc8937d))
+* **docs/upload:** switch from `HEAD` to `GET` for initial page fetch ([#1224](https://github.com/readmeio/rdme/issues/1224)) ([0e657c6](https://github.com/readmeio/rdme/commit/0e657c67058690d50af7de78d957ca4cbd744d45))
+* **docs/upload:** upload progress via ora ([#1231](https://github.com/readmeio/rdme/issues/1231)) ([0549f66](https://github.com/readmeio/rdme/commit/0549f66986efc0295568b928eb54a8f56ebd64cb))
+* fetch util types ([#1218](https://github.com/readmeio/rdme/issues/1218)) ([453efe9](https://github.com/readmeio/rdme/commit/453efe94d5f6fc51a886de0d06e7de8a15523bd7))
+* more copy edits, snapshot changes, fixes to get tests passing ([5755efa](https://github.com/readmeio/rdme/commit/5755efa1692b83ced734c7add34910b3c14de31c))
+* **openapi/upload:** add warning for unexpected slugs ([55e0974](https://github.com/readmeio/rdme/commit/55e09749466b72e68e188aa964c9317000012c39))
+* **openapi/upload:** improved handling for YAML files ([#1154](https://github.com/readmeio/rdme/issues/1154)) ([f1e4d16](https://github.com/readmeio/rdme/commit/f1e4d16a40915c5fa4e8d006420cd9d150d082d3))
+* timeouts on `doc:upload` ([#1227](https://github.com/readmeio/rdme/issues/1227)) ([a7961ce](https://github.com/readmeio/rdme/commit/a7961cea75517548bfaadd2cfb6df2197d9c0106))
+* **v9:** point to correct dist-tag for outdated version notifications ([#1156](https://github.com/readmeio/rdme/issues/1156)) ([099060d](https://github.com/readmeio/rdme/commit/099060d2c9eefb5335277edc5201ca74001f447f))
+
+
+### Features
+
+* `rdme docs upload` ([#1159](https://github.com/readmeio/rdme/issues/1159)) ([69f9c7e](https://github.com/readmeio/rdme/commit/69f9c7e0ae213a91dfb7b0d360cb4d8097156ff5))
+* add `docs migrate` command ([#1220](https://github.com/readmeio/rdme/issues/1220)) ([67bd2ef](https://github.com/readmeio/rdme/commit/67bd2ef684ef1bb6e3ba2a533678a5a5ec85ef01))
+* better guides types, expose page stat type for `renderable` status ([#1236](https://github.com/readmeio/rdme/issues/1236)) ([408253a](https://github.com/readmeio/rdme/commit/408253ad35b2c65409465a230c8a16d90f7540e6))
+* **cli:** add support for plugins ([#1213](https://github.com/readmeio/rdme/issues/1213)) ([004c8bc](https://github.com/readmeio/rdme/commit/004c8bc68c8b8af868178b4bf6382fb55023fed8))
+* **docs/migrate:** add ability to unzip archives ([#1226](https://github.com/readmeio/rdme/issues/1226)) ([334e125](https://github.com/readmeio/rdme/commit/334e125065f075fc42063d4bf3817adaa7a3f09a))
+* **docs/migrate:** migration stats ([#1230](https://github.com/readmeio/rdme/issues/1230)) ([ba3f062](https://github.com/readmeio/rdme/commit/ba3f062bb268ca0ed272720e74738d08e9d4fded))
+* **docs/upload:** support `.mdx` file extension ([#1198](https://github.com/readmeio/rdme/issues/1198)) ([89f43fe](https://github.com/readmeio/rdme/commit/89f43fe5c3eb99f1a1ffb851b2ee1b70409006d2))
+* **docs:** add `--hide-experimental-warning` flag ([#1229](https://github.com/readmeio/rdme/issues/1229)) ([250e9ce](https://github.com/readmeio/rdme/commit/250e9ce8900d04b1498f28a2b77c3b5c6eb0ab39))
+* **docs:** add ability to bypass autofix prompt ([#1234](https://github.com/readmeio/rdme/issues/1234)) ([0407330](https://github.com/readmeio/rdme/commit/04073306708be5f641f128843e95f2eed0a8f00d))
+* expose `readdirRecursive` ([fdf21fa](https://github.com/readmeio/rdme/commit/fdf21faadbecd276d3b4a1f5ed7bdafd0abf288c))
+* expose fetch utils ([#1217](https://github.com/readmeio/rdme/issues/1217)) ([0049a06](https://github.com/readmeio/rdme/commit/0049a06822050b45cf6621b8463df7daff2dceb4))
+* exposing types for creating API keys to plugins ([#1225](https://github.com/readmeio/rdme/issues/1225)) ([b625d80](https://github.com/readmeio/rdme/commit/b625d80db78ec5696dd0bb055c504f83fcf9c66d))
+* minor tweaks to plugin extensibility ([#1221](https://github.com/readmeio/rdme/issues/1221)) ([4c72743](https://github.com/readmeio/rdme/commit/4c72743570aebf55e635036ac65e504e5c988c80))
+* **openapi/upload:** add `--confirm-overwrite` flag ([#1168](https://github.com/readmeio/rdme/issues/1168)) ([59a913f](https://github.com/readmeio/rdme/commit/59a913f9196bd01fe3e17d0dca8965bf609425c1))
+* **openapi:** improvements to circular ref detection, validation errors ([#1189](https://github.com/readmeio/rdme/issues/1189)) ([683320f](https://github.com/readmeio/rdme/commit/683320f976c04f196e7ab36cad8acb554ccc38fc))
+* **openapi:** improvements to circular ref detection, validation errors ([#1189](https://github.com/readmeio/rdme/issues/1189)) ([57b732f](https://github.com/readmeio/rdme/commit/57b732f870680afe2ff7fcda4221468e4763bd7a))
+* various changes to get us plugin-ready ([#1216](https://github.com/readmeio/rdme/issues/1216)) ([7cbe12b](https://github.com/readmeio/rdme/commit/7cbe12b1dbf1d3fc3776345577c0bf7c16ebf5b7))
+
+
+### Reverts
+
+* don't use v9 release channel in v10 ([db80253](https://github.com/readmeio/rdme/commit/db80253bdd0af66057e6ef7bcb367be6de7e0ce5))
+
 # [10.2.0-next.24](https://github.com/readmeio/rdme/compare/v10.2.0-next.23...v10.2.0-next.24) (2025-04-28)
 
 
