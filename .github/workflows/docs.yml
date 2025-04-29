@@ -44,6 +44,6 @@ jobs:
           include: documentation/*
 
       - name: Sync docs to ReadMe
-        uses: readmeio/rdme@10.2.0-next.8
+        uses: readmeio/rdme@v10
         with:
-          rdme: docs upload ./documentation/legacy/ --key=${{ secrets.README_DEVELOPERS_API_KEY }} --version=${{ vars.README_DEVELOPERS_MAIN_VERSION }}
+          rdme: docs upload ./documentation/legacy/ --key=${{ secrets.README_DEVELOPERS_API_KEY }} --version=${{ vars.README_DEVELOPERS_MAIN_VERSION }} --skip-validation
