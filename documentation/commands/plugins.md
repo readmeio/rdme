@@ -123,8 +123,8 @@ ARGUMENTS
 
 FLAGS
   -h, --help          Show CLI help.
-  -v, --verbose
       --[no-]install  Install dependencies after linking the plugin.
+  -v, --verbose
 
 DESCRIPTION
   Links a plugin into the CLI for development.
