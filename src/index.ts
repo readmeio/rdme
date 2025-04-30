@@ -54,3 +54,23 @@ export type CommandIdForTopic<
   T extends 'openapi',
   U extends keyof typeof COMMANDS = keyof typeof COMMANDS,
 > = U extends `${T}:${infer Suffix}` ? `${Suffix}` : never;
+
+/**
+ * Commands that leverage the APIv2 representations for uploading pages
+ * (e.g., Guides, API Reference, etc.).
+ *
+ * Right now this is only the `docs upload` command, but in the future, we'll be adding
+ * support for the API Reference and other page types.
+ *
+ * Note that the `changelogs` command is not included here
+ * because it is backed by APIv1.
+ */
+export type APIv2PageUploadCommands = DocsUploadCommand;
+
+/**
+ * Commands that leverage the APIv2 representations for interfacing with pages
+ * (e.g., Guides, API Reference, etc.).
+ *
+ * These commands can do more than just upload pages, but they are all backed by the APIv2 representations.
+ */
+export type APIv2PageCommands = APIv2PageUploadCommands | DocsMigrateCommand;

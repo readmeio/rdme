@@ -1,6 +1,5 @@
 import type { SpecFileType } from './prepareOas.js';
-import type { CommandClass } from '../index.js';
-import type { APIv2PageCommands } from './syncPagePath.js';
+import type { APIv2PageCommands, CommandClass } from '../index.js';
 import type { Hook } from '@oclif/core';
 import type { SchemaObject } from 'oas/types';
 
