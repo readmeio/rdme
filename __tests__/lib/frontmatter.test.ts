@@ -40,7 +40,7 @@ describe('#fix', () => {
   it('should do nothing for valid frontmatter', () => {
     const data = {
       title: 'Hello, world!',
-      category: { uri: '/versions/stable/categories/guides/sup' },
+      category: { uri: '/branches/stable/categories/guides/sup' },
     };
 
     const result = fix.call(command, data, schema, emptyMappings);
