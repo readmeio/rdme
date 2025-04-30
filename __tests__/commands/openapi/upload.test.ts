@@ -54,6 +54,27 @@ describe('rdme openapi upload', () => {
       mock.done();
     });
 
+    it('should create a new JSON API definition in ReadMe with deprecated `--version` flag', async () => {
+      const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .get(`/branches/${version}/apis`)
+        .reply(200, { data: [] })
+        .post(`/branches/${version}/apis`, body =>
+          body.match(`form-data; name="schema"; filename="${slugifiedFilename}"\r\nContent-Type: application/json`),
+        )
+        .reply(200, {
+          data: {
+            upload: { status: 'done' },
+            uri: `/branches/${version}/apis/${slugifiedFilename}`,
+          },
+        });
+
+      const result = await run(['--version', version, filename, '--key', key]);
+
+      expect(result).toMatchSnapshot();
+
+      mock.done();
+    });
+
     it('should create a new YAML API definition in ReadMe', async () => {
       const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
         .get(`/branches/${version}/apis`)

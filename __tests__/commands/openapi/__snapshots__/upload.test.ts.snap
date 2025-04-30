@@ -252,6 +252,26 @@ exports[`rdme openapi upload > given that the API definition is a local file > s
 }
 `;
 
+exports[`rdme openapi upload > given that the API definition is a local file > should create a new JSON API definition in ReadMe with deprecated \`--version\` flag 1`] = `
+{
+  "result": {
+    "status": "done",
+    "uri": "/branches/1.0.0/apis/__tests____fixtures__petstore-simple-weird-version.json",
+  },
+  "stderr": " ›   Warning: The "--version" flag has been deprecated. Use "--branch" instead.
+- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+ ›   Warning: The slug of your API Definition will be set to 
+ ›   __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This 
+ ›   slug is not visible to your end users. To set this slug to something else,
+ ›    use the \`--slug\` flag.
+- Creating your API definition to ReadMe...
+✔ Creating your API definition to ReadMe... done!
+",
+  "stdout": "🚀 Your API definition (__tests____fixtures__petstore-simple-weird-version.json) was successfully created in ReadMe!
+",
+}
+`;
+
 exports[`rdme openapi upload > given that the API definition is a local file > should create a new YAML API definition in ReadMe 1`] = `
 {
   "result": {
