@@ -736,10 +736,10 @@ describe('rdme docs upload', () => {
       nock.cleanAll();
 
       const mock = getAPIv2Mock({ authorization })
-        .get('/branches/1.2.3/guides/new-doc')
+        .get('/branches/stable/guides/new-doc')
         .reply(404)
-        .post('/branches/1.2.3/guides', {
-          category: { uri: '/branches/1.2.3/categories/guides/category-slug' },
+        .post('/branches/stable/guides', {
+          category: { uri: '/branches/stable/categories/guides/category-slug' },
           slug: 'new-doc',
           title: 'This is the document title',
           content: { body: '\nBody\n' },
@@ -752,14 +752,7 @@ describe('rdme docs upload', () => {
           data: { git: { connection: { status: 'active' } } },
         });
 
-      const result = await run([
-        '__tests__/__fixtures__/docs/new-docs/new-doc.md',
-        '--key',
-        key,
-        '--version',
-        '1.2.3',
-        '--skip-validation',
-      ]);
+      const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key, '--skip-validation']);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
