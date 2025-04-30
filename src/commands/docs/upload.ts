@@ -1,7 +1,7 @@
 import { Args, Flags } from '@oclif/core';
 
 import BaseCommand from '../../lib/baseCommand.js';
-import { confirmAutofixesFlag, keyFlag } from '../../lib/flags.js';
+import { branchFlag, confirmAutofixesFlag, keyFlag } from '../../lib/flags.js';
 import syncPagePath, {
   type FailedPushResult,
   type SkippedPushResult,
@@ -31,14 +31,14 @@ export default class DocsUploadCommand extends BaseCommand<typeof DocsUploadComm
     {
       description:
         'The path input can be a directory. This will also upload any Markdown files that are located in subdirectories:',
-      command: '<%= config.bin %> <%= command.id %> documentation/ --version={project-version}',
+      command: '<%= config.bin %> <%= command.id %> documentation/ --branch={project-branch}',
     },
     {
       description: 'The path input can also be individual Markdown files:',
-      command: '<%= config.bin %> <%= command.id %> documentation/about.md --version={project-version}',
+      command: '<%= config.bin %> <%= command.id %> documentation/about.md --branch={project-branch}',
     },
     {
-      description: 'You can omit the `--version` flag to default to the `stable` version of your project:',
+      description: 'You can omit the `--branch` flag to default to the `stable` branch of your project:',
       command: '<%= config.bin %> <%= command.id %> [path]',
     },
     {
@@ -50,6 +50,7 @@ export default class DocsUploadCommand extends BaseCommand<typeof DocsUploadComm
 
   static flags = {
     key: keyFlag,
+    ...branchFlag(),
     'confirm-autofixes': confirmAutofixesFlag,
     'dry-run': Flags.boolean({
       description: 'Runs the command without creating nor updating any Guides in ReadMe. Useful for debugging.',
@@ -71,11 +72,6 @@ export default class DocsUploadCommand extends BaseCommand<typeof DocsUploadComm
       description:
         'Skips the pre-upload validation of the Markdown files. This flag can be a useful escape hatch but its usage is not recommended.',
       hidden: true,
-    }),
-    version: Flags.string({
-      summary: 'ReadMe project version',
-      description: 'Defaults to `stable` (i.e., your main project version).',
-      default: 'stable',
     }),
   };
 

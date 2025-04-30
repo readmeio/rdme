@@ -1,10 +1,9 @@
+import type { APIv2PageUploadCommands } from '../index.js';
 import type {
   GuidesRequestRepresentation,
   GuidesResponseRepresentation,
   ProjectRepresentation,
 } from './types/index.js';
-import type DocsMigrateCommand from '../commands/docs/migrate.js';
-import type DocsUploadCommand from '../commands/docs/upload.js';
 
 import chalk from 'chalk';
 import ora from 'ora';
@@ -15,14 +14,6 @@ import { oraOptions } from './logger.js';
 import { findPages, type PageMetadata } from './readPage.js';
 import { categoryUriRegexPattern, parentUriRegexPattern } from './types/index.js';
 import { validateFrontmatter } from './validateFrontmatter.js';
-
-/**
- * Commands that leverage the APIv2 representations for pages (e.g., Guides, API Reference, etc.)
- *
- * Note that the `changelogs` command is not included here
- * because it is backed by APIv1.
- */
-export type APIv2PageCommands = DocsMigrateCommand | DocsUploadCommand;
 
 // todo: eventually this type will be used for other page types (e.g., API Reference)
 type PageRequestRepresentation = GuidesRequestRepresentation;
@@ -76,16 +67,16 @@ export type PushResult = CreatePushResult | FailedPushResult | SkippedPushResult
  * and creates/updates the corresponding page in ReadMe
  */
 async function pushPage(
-  this: APIv2PageCommands,
+  this: APIv2PageUploadCommands,
   /** the file data */
   fileData: PageMetadata,
 ): Promise<PushResult> {
-  const { key, 'dry-run': dryRun, version } = this.flags;
+  const { key, 'dry-run': dryRun, branch } = this.flags;
   const { content, filePath, slug } = fileData;
   const data = fileData.data;
   let route = `/${this.route}`;
-  if (version) {
-    route = `/versions/${version}${route}`;
+  if (branch) {
+    route = `/branches/${branch}${route}`;
   }
 
   const headers = new Headers({ authorization: `Bearer ${key}`, 'Content-Type': 'application/json' });
@@ -113,7 +104,7 @@ async function pushPage(
         this.debug(`normalizing category uri ${uri} for ${filePath}`);
         // remove leading and trailing slashes
         uri = uri.replace(/^\/|\/$/g, '');
-        payload.category.uri = `/versions/${version}/categories/${this.route}/${uri}`;
+        payload.category.uri = `/branches/${branch}/categories/${this.route}/${uri}`;
       }
     }
 
@@ -125,7 +116,7 @@ async function pushPage(
         this.debug(`normalizing parent uri ${uri} for ${filePath}`);
         // remove leading and trailing slashes
         uri = uri.replace(/^\/|\/$/g, '');
-        payload.parent.uri = `/versions/${version}/${this.route}/${uri}`;
+        payload.parent.uri = `/branches/${branch}/${this.route}/${uri}`;
       }
     }
 
@@ -225,7 +216,7 @@ function sortFiles(files: PageMetadata<PageRequestRepresentation>[]): PageMetada
  * and syncs those (either via POST or PATCH) to ReadMe.
  * @returns An array of objects with the results
  */
-export default async function syncPagePath(this: DocsUploadCommand) {
+export default async function syncPagePath(this: APIv2PageUploadCommands) {
   const { path: pathInput } = this.args;
   const { key, 'dry-run': dryRun, 'max-errors': maxErrors, 'skip-validation': skipValidation } = this.flags;
 

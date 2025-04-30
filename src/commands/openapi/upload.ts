@@ -9,7 +9,7 @@ import slugify from 'slugify';
 import { file as tmpFile } from 'tmp-promise';
 
 import BaseCommand from '../../lib/baseCommand.js';
-import { keyFlag, specArg } from '../../lib/flags.js';
+import { branchFlag, keyFlag, specArg } from '../../lib/flags.js';
 import isCI, { isTest } from '../../lib/isCI.js';
 import { oraOptions } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
@@ -30,6 +30,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
   static flags = {
     key: keyFlag,
+    ...branchFlag(['This flag is mutually exclusive with `--useSpecVersion`.']),
     'confirm-overwrite': Flags.boolean({
       description:
         'If set, file overwrites will be made without a confirmation prompt. This flag can be a useful in automated environments where prompts cannot be responded to.',
@@ -45,30 +46,24 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     useSpecVersion: Flags.boolean({
       summary: 'Use the OpenAPI `info.version` field for your ReadMe project version',
       description:
-        'If included, use the version specified in the `info.version` field in your OpenAPI definition for your ReadMe project version. This flag is mutually exclusive with `--version`.',
-      exclusive: ['version'],
-    }),
-    version: Flags.string({
-      summary: 'ReadMe project version',
-      description:
-        'Defaults to `stable` (i.e., your main project version). This flag is mutually exclusive with `--useSpecVersion`.',
-      default: 'stable',
+        'If included, use the version specified in the `info.version` field in your OpenAPI definition for your ReadMe project version. This flag is mutually exclusive with `--branch`.',
+      exclusive: ['branch'],
     }),
   };
 
   static examples = [
     {
       description: 'You can pass in a file name like so:',
-      command: '<%= config.bin %> <%= command.id %> --version=1.0.0 openapi.json',
+      command: '<%= config.bin %> <%= command.id %> --branch=1.0.0 openapi.json',
     },
     {
       description:
         'You can also pass in a file in a subdirectory (we recommend always running the CLI from the root of your repository):',
-      command: '<%= config.bin %> <%= command.id %> --version=v1.0.0 example-directory/petstore.json',
+      command: '<%= config.bin %> <%= command.id %> --branch=v1.0.0 example-directory/petstore.json',
     },
     {
       description: 'You can also pass in a URL:',
-      command: '<%= config.bin %> <%= command.id %> --version=1.0.0 https://example.com/openapi.json',
+      command: '<%= config.bin %> <%= command.id %> --branch=1.0.0 https://example.com/openapi.json',
     },
     {
       description:
@@ -109,7 +104,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
     const { preparedSpec, specFileType, specPath, specVersion } = await prepareOas(spec, 'openapi upload');
 
-    const version = this.flags.useSpecVersion ? specVersion : this.flags.version;
+    const branch = this.flags.useSpecVersion ? specVersion : this.flags.branch;
 
     const specFileTypeIsUrl = specFileType === 'url';
 
@@ -136,7 +131,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
     const headers = new Headers({ authorization: `Bearer ${this.flags.key}` });
 
-    const existingAPIDefinitions = await this.readmeAPIFetch(`/versions/${version}/apis`, { headers }).then(res =>
+    const existingAPIDefinitions = await this.readmeAPIFetch(`/branches/${branch}/apis`, { headers }).then(res =>
       this.handleAPIRes(res),
     );
 
@@ -200,7 +195,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     );
 
     const response = await this.readmeAPIFetch(
-      `/versions/${version}/apis${method === 'POST' ? '' : `/${filename}`}`,
+      `/branches/${branch}/apis${method === 'POST' ? '' : `/${filename}`}`,
       options,
     )
       .then(res => this.handleAPIRes(res))

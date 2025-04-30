@@ -14,8 +14,7 @@ const document = {
     description: 'Create beautiful product and API documentation with our developer friendly platform.',
     version: '2.0.0-beta',
     title: 'ReadMe API v2 🦉 (BETA)',
-    // @ts-expect-error custom extension
-    'x-readme-deploy': '5.341.0',
+    'x-readme-deploy': '5.344.0',
     termsOfService: 'https://readme.com/tos',
     contact: {
       name: 'API Support',
@@ -357,7 +356,7 @@ const document = {
         },
       },
     },
-    '/versions/{version}/apis': {
+    '/branches/{branch}/apis': {
       get: {
         operationId: 'getAPIs',
         summary: 'Get all API definitions',
@@ -366,11 +365,14 @@ const document = {
           "Get all API definitions from your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or `stable` for your stable project version.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
         ],
         responses: {
@@ -469,7 +471,7 @@ const document = {
                           uri: {
                             type: 'string',
                             pattern:
-                              '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
+                              '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
                             description: 'A URI to the API definition resource.',
                           },
                         },
@@ -512,11 +514,14 @@ const document = {
         },
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or `stable` for your stable project version.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
         ],
         responses: {
@@ -545,7 +550,7 @@ const document = {
                         uri: {
                           type: 'string',
                           pattern:
-                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
+                            '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
                           description: 'A URI to the API definition resource.',
                         },
                       },
@@ -562,7 +567,7 @@ const document = {
         },
       },
     },
-    '/versions/{version}/apis/{filename}': {
+    '/branches/{branch}/apis/{filename}': {
       get: {
         operationId: 'getAPI',
         summary: 'Get an API definition',
@@ -578,11 +583,14 @@ const document = {
             description: 'The filename of the API definition to retrieve.',
           },
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or `stable` for your stable project version.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
         ],
         responses: {
@@ -678,7 +686,7 @@ const document = {
                         uri: {
                           type: 'string',
                           pattern:
-                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
+                            '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
                           description: 'A URI to the API definition resource.',
                         },
                         schema: { type: 'object', additionalProperties: {}, description: 'The API schema.' },
@@ -710,11 +718,14 @@ const document = {
             description: 'The filename of the API definition to retrieve.',
           },
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or `stable` for your stable project version.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
         ],
         responses: { '204': { description: 'No Content' } },
@@ -752,11 +763,14 @@ const document = {
             description: 'The filename of the API definition to retrieve.',
           },
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or `stable` for your stable project version.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
         ],
         responses: {
@@ -785,7 +799,7 @@ const document = {
                         uri: {
                           type: 'string',
                           pattern:
-                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
+                            '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
                           description: 'A URI to the API definition resource.',
                         },
                       },
@@ -927,7 +941,7 @@ const document = {
         },
       },
     },
-    '/versions/{version}/categories': {
+    '/branches/{branch}/categories': {
       post: {
         operationId: 'createCategory',
         summary: 'Create a category',
@@ -957,11 +971,14 @@ const document = {
         },
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or `stable` for your stable project version.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
         ],
         responses: {
@@ -997,7 +1014,7 @@ const document = {
                         uri: {
                           type: 'string',
                           pattern:
-                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/categories\\/(guides|reference)\\/((.*))',
+                            '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/categories\\/(guides|reference)\\/((.*))',
                           description: 'A URI to the category resource.',
                         },
                       },
@@ -1014,7 +1031,7 @@ const document = {
         },
       },
     },
-    '/versions/{version}/categories/{section}/{title}': {
+    '/branches/{branch}/categories/{section}/{title}': {
       delete: {
         operationId: 'deleteCategory',
         summary: 'Delete a category',
@@ -1037,11 +1054,14 @@ const document = {
             description: "The category's name.",
           },
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or `stable` for your stable project version.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
         ],
         responses: { '204': { description: 'No Content' } },
@@ -1088,11 +1108,14 @@ const document = {
             description: "The category's name.",
           },
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or `stable` for your stable project version.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
         ],
         responses: {
@@ -1128,7 +1151,7 @@ const document = {
                         uri: {
                           type: 'string',
                           pattern:
-                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/categories\\/(guides|reference)\\/((.*))',
+                            '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/categories\\/(guides|reference)\\/((.*))',
                           description: 'A URI to the category resource.',
                         },
                       },
@@ -1920,7 +1943,7 @@ const document = {
         },
       },
     },
-    '/versions/{version}/custom_pages': {
+    '/branches/{branch}/custom_pages': {
       post: {
         operationId: 'createCustomPage',
         summary: 'Create a custom page',
@@ -1998,11 +2021,14 @@ const document = {
         },
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or `stable` for your stable project version.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
         ],
         responses: {
@@ -2123,7 +2149,7 @@ const document = {
                         uri: {
                           type: 'string',
                           pattern:
-                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/custom_pages\\/([a-f\\d]{24}|([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                            '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/custom_pages\\/([a-f\\d]{24}|([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                         },
                       },
                       required: [
@@ -2157,11 +2183,14 @@ const document = {
           "Get all custom pages from your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or `stable` for your stable project version.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
         ],
         responses: {
@@ -2285,7 +2314,7 @@ const document = {
                           uri: {
                             type: 'string',
                             pattern:
-                              '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/custom_pages\\/([a-f\\d]{24}|([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                              '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/custom_pages\\/([a-f\\d]{24}|([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                           },
                         },
                         required: [
@@ -2313,7 +2342,7 @@ const document = {
         },
       },
     },
-    '/versions/{version}/custom_pages/{slug}': {
+    '/branches/{branch}/custom_pages/{slug}': {
       get: {
         operationId: 'getCustomPage',
         summary: 'Get a custom page',
@@ -2322,11 +2351,14 @@ const document = {
           "Get a custom page from your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or `stable` for your stable project version.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
           {
             schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
@@ -2454,7 +2486,7 @@ const document = {
                         uri: {
                           type: 'string',
                           pattern:
-                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/custom_pages\\/([a-f\\d]{24}|([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                            '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/custom_pages\\/([a-f\\d]{24}|([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                         },
                       },
                       required: [
@@ -2488,11 +2520,14 @@ const document = {
           "Delete a custom page from your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or `stable` for your stable project version.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
           {
             schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
@@ -2579,11 +2614,14 @@ const document = {
         },
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or `stable` for your stable project version.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
           {
             schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
@@ -2711,7 +2749,7 @@ const document = {
                         uri: {
                           type: 'string',
                           pattern:
-                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/custom_pages\\/([a-f\\d]{24}|([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                            '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/custom_pages\\/([a-f\\d]{24}|([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                         },
                       },
                       required: [
@@ -2738,7 +2776,7 @@ const document = {
         },
       },
     },
-    '/versions/{version}/guides': {
+    '/branches/{branch}/guides': {
       post: {
         operationId: 'createGuide',
         summary: 'Create a guides page',
@@ -2763,7 +2801,7 @@ const document = {
                       uri: {
                         type: 'string',
                         pattern:
-                          '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/categories\\/(guides|reference)\\/((.*))',
+                          '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/categories\\/(guides|reference)\\/((.*))',
                         description: 'A URI to the category resource.',
                       },
                     },
@@ -2842,7 +2880,7 @@ const document = {
                       uri: {
                         type: 'string',
                         pattern:
-                          '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                          '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                         nullable: true,
                       },
                     },
@@ -2877,11 +2915,14 @@ const document = {
         },
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or `stable` for your stable project version.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
         ],
         responses: {
@@ -2907,7 +2948,7 @@ const document = {
                             uri: {
                               type: 'string',
                               pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/categories\\/(guides|reference)\\/((.*))',
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/categories\\/(guides|reference)\\/((.*))',
                               description: 'A URI to the category resource.',
                             },
                           },
@@ -3008,7 +3049,7 @@ const document = {
                             uri: {
                               type: 'string',
                               pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                               nullable: true,
                               description: 'A URI to the parent page resource including the page ID or slug.',
                             },
@@ -3095,7 +3136,7 @@ const document = {
                         uri: {
                           type: 'string',
                           pattern:
-                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                            '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                           description: 'A URI to the page resource.',
                         },
                       },
@@ -3125,7 +3166,7 @@ const document = {
         },
       },
     },
-    '/versions/{version}/guides/{slug}': {
+    '/branches/{branch}/guides/{slug}': {
       get: {
         operationId: 'getGuide',
         summary: 'Get a guides page',
@@ -3134,11 +3175,14 @@ const document = {
           "Get a page from the Guides section of your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or `stable` for your stable project version.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
           {
             schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
@@ -3171,7 +3215,7 @@ const document = {
                             uri: {
                               type: 'string',
                               pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/categories\\/(guides|reference)\\/((.*))',
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/categories\\/(guides|reference)\\/((.*))',
                               description: 'A URI to the category resource.',
                             },
                           },
@@ -3272,7 +3316,7 @@ const document = {
                             uri: {
                               type: 'string',
                               pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                               nullable: true,
                               description: 'A URI to the parent page resource including the page ID or slug.',
                             },
@@ -3359,7 +3403,7 @@ const document = {
                         uri: {
                           type: 'string',
                           pattern:
-                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                            '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                           description: 'A URI to the page resource.',
                         },
                       },
@@ -3396,11 +3440,14 @@ const document = {
           "Delete a page from the Guides section of your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or `stable` for your stable project version.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
           {
             schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
@@ -3436,7 +3483,7 @@ const document = {
                       uri: {
                         type: 'string',
                         pattern:
-                          '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/categories\\/(guides|reference)\\/((.*))',
+                          '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/categories\\/(guides|reference)\\/((.*))',
                         description: 'A URI to the category resource.',
                       },
                     },
@@ -3514,7 +3561,7 @@ const document = {
                       uri: {
                         type: 'string',
                         pattern:
-                          '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                          '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                         nullable: true,
                       },
                     },
@@ -3547,11 +3594,14 @@ const document = {
         },
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or `stable` for your stable project version.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
           {
             schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
@@ -3584,7 +3634,7 @@ const document = {
                             uri: {
                               type: 'string',
                               pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/categories\\/(guides|reference)\\/((.*))',
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/categories\\/(guides|reference)\\/((.*))',
                               description: 'A URI to the category resource.',
                             },
                           },
@@ -3685,7 +3735,7 @@ const document = {
                             uri: {
                               type: 'string',
                               pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                               nullable: true,
                               description: 'A URI to the parent page resource including the page ID or slug.',
                             },
@@ -3772,7 +3822,7 @@ const document = {
                         uri: {
                           type: 'string',
                           pattern:
-                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                            '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                           description: 'A URI to the page resource.',
                         },
                       },
@@ -4793,7 +4843,7 @@ const document = {
                             not_found: {
                               type: 'string',
                               pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/custom_pages\\/([a-f\\d]{24}|([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/custom_pages\\/([a-f\\d]{24}|([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                               nullable: true,
                               description:
                                 'The page you wish to be served to your users when they encounter a 404. This can either map to the `uri` of a Custom Page on your project or be set to `null`. If `null` then the default ReadMe 404 page will be served. The version within the `uri` must be mapped to your stable version.',
@@ -5188,7 +5238,7 @@ const document = {
         },
       },
     },
-    '/versions/{version}/reference': {
+    '/branches/{branch}/reference': {
       post: {
         operationId: 'createReference',
         summary: 'Create a reference page',
@@ -5213,7 +5263,7 @@ const document = {
                       uri: {
                         type: 'string',
                         pattern:
-                          '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/categories\\/(guides|reference)\\/((.*))',
+                          '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/categories\\/(guides|reference)\\/((.*))',
                         description: 'A URI to the category resource.',
                       },
                     },
@@ -5292,7 +5342,7 @@ const document = {
                       uri: {
                         type: 'string',
                         pattern:
-                          '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                          '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                         nullable: true,
                       },
                     },
@@ -5327,7 +5377,7 @@ const document = {
                             uri: {
                               type: 'string',
                               pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                               description:
                                 'URI of the recipe that this API reference is connected to. The recipe and API reference must exist within the same version.',
                             },
@@ -5443,7 +5493,7 @@ const document = {
                       uri: {
                         type: 'string',
                         pattern:
-                          '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
+                          '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
                         nullable: true,
                       },
                     },
@@ -5459,11 +5509,14 @@ const document = {
         },
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or `stable` for your stable project version.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
         ],
         responses: {
@@ -5489,7 +5542,7 @@ const document = {
                             uri: {
                               type: 'string',
                               pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/categories\\/(guides|reference)\\/((.*))',
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/categories\\/(guides|reference)\\/((.*))',
                               description: 'A URI to the category resource.',
                             },
                           },
@@ -5590,7 +5643,7 @@ const document = {
                             uri: {
                               type: 'string',
                               pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                               nullable: true,
                               description: 'A URI to the parent page resource including the page ID or slug.',
                             },
@@ -5727,7 +5780,7 @@ const document = {
                             uri: {
                               type: 'string',
                               pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
                               nullable: true,
                               description: 'A URI to the API resource.',
                             },
@@ -5747,7 +5800,7 @@ const document = {
                                   uri: {
                                     type: 'string',
                                     pattern:
-                                      '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                                      '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                                     description:
                                       'URI of the recipe that this API reference is connected to. The recipe and API reference must exist within the same version.',
                                   },
@@ -5823,7 +5876,7 @@ const document = {
                         uri: {
                           type: 'string',
                           pattern:
-                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                            '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                           description: 'A URI to the page resource.',
                         },
                       },
@@ -5856,7 +5909,7 @@ const document = {
         },
       },
     },
-    '/versions/{version}/reference/{slug}': {
+    '/branches/{branch}/reference/{slug}': {
       get: {
         operationId: 'getReference',
         summary: 'Get a reference page',
@@ -5881,11 +5934,14 @@ const document = {
               'Whether or not to reduce the attached API definition. Defaults to `true` if not specified (subject to change while API v2 is still in beta).',
           },
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or `stable` for your stable project version.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
           {
             schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
@@ -5918,7 +5974,7 @@ const document = {
                             uri: {
                               type: 'string',
                               pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/categories\\/(guides|reference)\\/((.*))',
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/categories\\/(guides|reference)\\/((.*))',
                               description: 'A URI to the category resource.',
                             },
                           },
@@ -6019,7 +6075,7 @@ const document = {
                             uri: {
                               type: 'string',
                               pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                               nullable: true,
                               description: 'A URI to the parent page resource including the page ID or slug.',
                             },
@@ -6156,7 +6212,7 @@ const document = {
                             uri: {
                               type: 'string',
                               pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
                               nullable: true,
                               description: 'A URI to the API resource.',
                             },
@@ -6176,7 +6232,7 @@ const document = {
                                   uri: {
                                     type: 'string',
                                     pattern:
-                                      '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                                      '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                                     description:
                                       'URI of the recipe that this API reference is connected to. The recipe and API reference must exist within the same version.',
                                   },
@@ -6252,7 +6308,7 @@ const document = {
                         uri: {
                           type: 'string',
                           pattern:
-                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                            '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                           description: 'A URI to the page resource.',
                         },
                       },
@@ -6292,11 +6348,14 @@ const document = {
           "Delete a page from the API Reference section of your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or `stable` for your stable project version.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
           {
             schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
@@ -6332,7 +6391,7 @@ const document = {
                       uri: {
                         type: 'string',
                         pattern:
-                          '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/categories\\/(guides|reference)\\/((.*))',
+                          '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/categories\\/(guides|reference)\\/((.*))',
                         description: 'A URI to the category resource.',
                       },
                     },
@@ -6410,7 +6469,7 @@ const document = {
                       uri: {
                         type: 'string',
                         pattern:
-                          '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                          '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                         nullable: true,
                       },
                     },
@@ -6445,7 +6504,7 @@ const document = {
                             uri: {
                               type: 'string',
                               pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                               description:
                                 'URI of the recipe that this API reference is connected to. The recipe and API reference must exist within the same version.',
                             },
@@ -6555,7 +6614,7 @@ const document = {
                       uri: {
                         type: 'string',
                         pattern:
-                          '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
+                          '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
                         nullable: true,
                       },
                     },
@@ -6572,11 +6631,14 @@ const document = {
         },
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or `stable` for your stable project version.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
           {
             schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
@@ -6609,7 +6671,7 @@ const document = {
                             uri: {
                               type: 'string',
                               pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/categories\\/(guides|reference)\\/((.*))',
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/categories\\/(guides|reference)\\/((.*))',
                               description: 'A URI to the category resource.',
                             },
                           },
@@ -6710,7 +6772,7 @@ const document = {
                             uri: {
                               type: 'string',
                               pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                               nullable: true,
                               description: 'A URI to the parent page resource including the page ID or slug.',
                             },
@@ -6847,7 +6909,7 @@ const document = {
                             uri: {
                               type: 'string',
                               pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
                               nullable: true,
                               description: 'A URI to the API resource.',
                             },
@@ -6867,7 +6929,7 @@ const document = {
                                   uri: {
                                     type: 'string',
                                     pattern:
-                                      '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                                      '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                                     description:
                                       'URI of the recipe that this API reference is connected to. The recipe and API reference must exist within the same version.',
                                   },
@@ -6943,7 +7005,7 @@ const document = {
                         uri: {
                           type: 'string',
                           pattern:
-                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                            '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                           description: 'A URI to the page resource.',
                         },
                       },
@@ -7177,6 +7239,6 @@ const document = {
     { name: 'Projects' },
     { name: 'Search' },
   ],
-} as const satisfies OASDocument;
+} as const satisfies OASDocument & { info: { 'x-readme-deploy': string } };
 
 export default document;

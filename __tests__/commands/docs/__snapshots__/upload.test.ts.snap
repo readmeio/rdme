@@ -678,7 +678,7 @@ exports[`rdme docs upload > given that the file path is a single file > given th
 }
 `;
 
-exports[`rdme docs upload > given that the file path is a single file > should allow for user to specify version via --version flag 1`] = `
+exports[`rdme docs upload > given that the file path is a single file > should allow for user to specify branch via --branch flag 1`] = `
 {
   "result": {
     "created": [
@@ -694,6 +694,35 @@ exports[`rdme docs upload > given that the file path is a single file > should a
     "updated": [],
   },
   "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
+ ›    Use at your own risk!
+- 🔬 Validating frontmatter data...
+✔ 🔬 Validating frontmatter data... no issues found!
+- 🚀 Uploading files to ReadMe...
+✔ 🚀 Uploading files to ReadMe... done!
+",
+  "stdout": "🌱 Successfully created 1 page(s) in ReadMe:
+   - new-doc (__tests__/__fixtures__/docs/new-docs/new-doc.md)
+",
+}
+`;
+
+exports[`rdme docs upload > given that the file path is a single file > should allow for user to specify branch via legacy --version flag 1`] = `
+{
+  "result": {
+    "created": [
+      {
+        "filePath": "__tests__/__fixtures__/docs/new-docs/new-doc.md",
+        "response": {},
+        "result": "created",
+        "slug": "new-doc",
+      },
+    ],
+    "failed": [],
+    "skipped": [],
+    "updated": [],
+  },
+  "stderr": " ›   Warning: The "--version" flag has been deprecated. Use "--branch" instead.
+ ›   Warning: This command is in an experimental alpha and is likely to change.
  ›    Use at your own risk!
 - 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!

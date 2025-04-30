@@ -3,18 +3,18 @@ import type { FromSchema } from 'json-schema-to-ts';
 import readmeAPIv2Oas from './openapiDoc.js';
 
 export const categoryUriRegexPattern =
-  readmeAPIv2Oas.paths['/versions/{version}/guides'].post.requestBody.content['application/json'].schema.properties
+  readmeAPIv2Oas.paths['/branches/{branch}/guides'].post.requestBody.content['application/json'].schema.properties
     .category.properties.uri.pattern;
 
 export const parentUriRegexPattern =
-  readmeAPIv2Oas.paths['/versions/{version}/guides'].post.requestBody.content['application/json'].schema.properties
+  readmeAPIv2Oas.paths['/branches/{branch}/guides'].post.requestBody.content['application/json'].schema.properties
     .parent.properties.uri.pattern;
 
 type guidesRequestBodySchema =
-  (typeof readmeAPIv2Oas)['paths']['/versions/{version}/guides/{slug}']['patch']['requestBody']['content']['application/json']['schema'];
+  (typeof readmeAPIv2Oas)['paths']['/branches/{branch}/guides/{slug}']['patch']['requestBody']['content']['application/json']['schema'];
 
 type guidesResponseBodySchema =
-  (typeof readmeAPIv2Oas)['paths']['/versions/{version}/guides/{slug}']['patch']['responses']['200']['content']['application/json']['schema'];
+  (typeof readmeAPIv2Oas)['paths']['/branches/{branch}/guides/{slug}']['patch']['responses']['200']['content']['application/json']['schema'];
 
 type projectSchema =
   (typeof readmeAPIv2Oas)['paths']['/projects/me']['get']['responses']['200']['content']['application/json']['schema'];
