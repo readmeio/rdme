@@ -497,13 +497,13 @@ export async function fetchSchema(this: APIv2PageCommands) {
       return readmeAPIv2Oas;
     });
 
-  const requestBody = oas.paths?.[`/versions/{version}/${this.route}/{slug}`]?.patch?.requestBody;
+  const requestBody = oas.paths?.[`/branches/{branch}/${this.route}/{slug}`]?.patch?.requestBody;
 
   if (requestBody && 'content' in requestBody) {
     return requestBody.content['application/json'].schema;
   }
 
   this.debug(`unable to find parse out schema for ${JSON.stringify(oas)}`);
-  return readmeAPIv2Oas.paths[`/versions/{version}/${this.route}/{slug}`].patch.requestBody.content['application/json']
+  return readmeAPIv2Oas.paths[`/branches/{branch}/${this.route}/{slug}`].patch.requestBody.content['application/json']
     .schema satisfies SchemaObject;
 }
