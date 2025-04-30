@@ -71,12 +71,12 @@ async function pushPage(
   /** the file data */
   fileData: PageMetadata,
 ): Promise<PushResult> {
-  const { key, 'dry-run': dryRun, version } = this.flags;
+  const { key, 'dry-run': dryRun, branch } = this.flags;
   const { content, filePath, slug } = fileData;
   const data = fileData.data;
   let route = `/${this.route}`;
-  if (version) {
-    route = `/branches/${version}${route}`;
+  if (branch) {
+    route = `/branches/${branch}${route}`;
   }
 
   const headers = new Headers({ authorization: `Bearer ${key}`, 'Content-Type': 'application/json' });
@@ -104,7 +104,7 @@ async function pushPage(
         this.debug(`normalizing category uri ${uri} for ${filePath}`);
         // remove leading and trailing slashes
         uri = uri.replace(/^\/|\/$/g, '');
-        payload.category.uri = `/branches/${version}/categories/${this.route}/${uri}`;
+        payload.category.uri = `/branches/${branch}/categories/${this.route}/${uri}`;
       }
     }
 
@@ -116,7 +116,7 @@ async function pushPage(
         this.debug(`normalizing parent uri ${uri} for ${filePath}`);
         // remove leading and trailing slashes
         uri = uri.replace(/^\/|\/$/g, '');
-        payload.parent.uri = `/branches/${version}/${this.route}/${uri}`;
+        payload.parent.uri = `/branches/${branch}/${this.route}/${uri}`;
       }
     }
 
