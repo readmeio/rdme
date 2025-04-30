@@ -85,7 +85,7 @@ async function pushPage(
   const data = fileData.data;
   let route = `/${this.route}`;
   if (version) {
-    route = `/versions/${version}${route}`;
+    route = `/branches/${version}${route}`;
   }
 
   const headers = new Headers({ authorization: `Bearer ${key}`, 'Content-Type': 'application/json' });
@@ -113,7 +113,7 @@ async function pushPage(
         this.debug(`normalizing category uri ${uri} for ${filePath}`);
         // remove leading and trailing slashes
         uri = uri.replace(/^\/|\/$/g, '');
-        payload.category.uri = `/versions/${version}/categories/${this.route}/${uri}`;
+        payload.category.uri = `/branches/${version}/categories/${this.route}/${uri}`;
       }
     }
 
@@ -125,7 +125,7 @@ async function pushPage(
         this.debug(`normalizing parent uri ${uri} for ${filePath}`);
         // remove leading and trailing slashes
         uri = uri.replace(/^\/|\/$/g, '');
-        payload.parent.uri = `/versions/${version}/${this.route}/${uri}`;
+        payload.parent.uri = `/branches/${version}/${this.route}/${uri}`;
       }
     }
 

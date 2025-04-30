@@ -136,7 +136,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
     const headers = new Headers({ authorization: `Bearer ${this.flags.key}` });
 
-    const existingAPIDefinitions = await this.readmeAPIFetch(`/versions/${version}/apis`, { headers }).then(res =>
+    const existingAPIDefinitions = await this.readmeAPIFetch(`/branches/${version}/apis`, { headers }).then(res =>
       this.handleAPIRes(res),
     );
 
@@ -200,7 +200,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     );
 
     const response = await this.readmeAPIFetch(
-      `/versions/${version}/apis${method === 'POST' ? '' : `/${filename}`}`,
+      `/branches/${version}/apis${method === 'POST' ? '' : `/${filename}`}`,
       options,
     )
       .then(res => this.handleAPIRes(res))
