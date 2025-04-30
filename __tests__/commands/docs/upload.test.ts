@@ -100,6 +100,26 @@ describe('rdme docs upload', () => {
       mock.done();
     });
 
+    it('should allow for user to specify branch via legacy --version flag', async () => {
+      const mock = getAPIv2Mock({ authorization })
+        .get('/branches/4.5.6/guides/new-doc')
+        .reply(404)
+        .post('/branches/4.5.6/guides', {
+          category: { uri: '/branches/4.5.6/categories/guides/category-slug' },
+          slug: 'new-doc',
+          title: 'This is the document title',
+          content: { body: '\nBody\n' },
+        })
+        .reply(201, {});
+
+      const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key, '--version', '4.5.6']);
+
+      expect(result).toMatchSnapshot();
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
+
+      mock.done();
+    });
+
     describe('given that the --dry-run flag is passed', () => {
       it('should not create anything in ReadMe', async () => {
         const mock = getAPIv2Mock({ authorization }).get('/branches/stable/guides/new-doc').reply(404);
