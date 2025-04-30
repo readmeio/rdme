@@ -35,15 +35,15 @@ describe('rdme openapi upload', () => {
   describe('given that the API definition is a local file', () => {
     it('should create a new JSON API definition in ReadMe', async () => {
       const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
-        .get(`/versions/${version}/apis`)
+        .get(`/branches/${version}/apis`)
         .reply(200, { data: [] })
-        .post(`/versions/${version}/apis`, body =>
+        .post(`/branches/${version}/apis`, body =>
           body.match(`form-data; name="schema"; filename="${slugifiedFilename}"\r\nContent-Type: application/json`),
         )
         .reply(200, {
           data: {
             upload: { status: 'done' },
-            uri: `/versions/${version}/apis/${slugifiedFilename}`,
+            uri: `/branches/${version}/apis/${slugifiedFilename}`,
           },
         });
 
@@ -56,15 +56,15 @@ describe('rdme openapi upload', () => {
 
     it('should create a new YAML API definition in ReadMe', async () => {
       const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
-        .get(`/versions/${version}/apis`)
+        .get(`/branches/${version}/apis`)
         .reply(200, { data: [] })
-        .post(`/versions/${version}/apis`, body =>
+        .post(`/branches/${version}/apis`, body =>
           body.match(`form-data; name="schema"; filename="${slugifiedYamlFile}"\r\nContent-Type: application/x-yaml`),
         )
         .reply(200, {
           data: {
             upload: { status: 'done' },
-            uri: `/versions/${version}/apis/${slugifiedYamlFile}`,
+            uri: `/branches/${version}/apis/${slugifiedYamlFile}`,
           },
         });
 
@@ -79,15 +79,15 @@ describe('rdme openapi upload', () => {
       prompts.inject([true]);
 
       const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
-        .get(`/versions/${version}/apis`)
+        .get(`/branches/${version}/apis`)
         .reply(200, { data: [{ filename: slugifiedFilename }] })
-        .put(`/versions/1.0.0/apis/${slugifiedFilename}`, body =>
+        .put(`/branches/1.0.0/apis/${slugifiedFilename}`, body =>
           body.match(`form-data; name="schema"; filename="${slugifiedFilename}"`),
         )
         .reply(200, {
           data: {
             upload: { status: 'done' },
-            uri: `/versions/${version}/apis/${slugifiedFilename}`,
+            uri: `/branches/${version}/apis/${slugifiedFilename}`,
           },
         });
 
@@ -100,15 +100,15 @@ describe('rdme openapi upload', () => {
 
     it('should handle upload failures', async () => {
       const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
-        .get(`/versions/${version}/apis`)
+        .get(`/branches/${version}/apis`)
         .reply(200, { data: [] })
-        .post(`/versions/${version}/apis`, body =>
+        .post(`/branches/${version}/apis`, body =>
           body.match(`form-data; name="schema"; filename="${slugifiedFilename}"`),
         )
         .reply(200, {
           data: {
             upload: { status: 'fail' },
-            uri: `/versions/${version}/apis/${slugifiedFilename}`,
+            uri: `/branches/${version}/apis/${slugifiedFilename}`,
           },
         });
 
@@ -124,15 +124,15 @@ describe('rdme openapi upload', () => {
         const customSlug = 'custom-slug';
         const customSlugWithExtension = `${customSlug}.json`;
         const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
-          .get(`/versions/${version}/apis`)
+          .get(`/branches/${version}/apis`)
           .reply(200, { data: [] })
-          .post(`/versions/${version}/apis`, body =>
+          .post(`/branches/${version}/apis`, body =>
             body.match(`form-data; name="schema"; filename="${customSlugWithExtension}"`),
           )
           .reply(200, {
             data: {
               upload: { status: 'done' },
-              uri: `/versions/${version}/apis/${customSlugWithExtension}`,
+              uri: `/branches/${version}/apis/${customSlugWithExtension}`,
             },
           });
 
@@ -146,13 +146,13 @@ describe('rdme openapi upload', () => {
       it('should use the provided slug (includes file extension) as the filename', async () => {
         const customSlug = 'custom-slug.json';
         const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
-          .get(`/versions/${version}/apis`)
+          .get(`/branches/${version}/apis`)
           .reply(200, { data: [] })
-          .post(`/versions/${version}/apis`, body => body.match(`form-data; name="schema"; filename="${customSlug}"`))
+          .post(`/branches/${version}/apis`, body => body.match(`form-data; name="schema"; filename="${customSlug}"`))
           .reply(200, {
             data: {
               upload: { status: 'done' },
-              uri: `/versions/${version}/apis/${customSlug}`,
+              uri: `/branches/${version}/apis/${customSlug}`,
             },
           });
 
@@ -183,30 +183,30 @@ describe('rdme openapi upload', () => {
     describe('and the upload status initially is a pending state', () => {
       it('should poll the API until the upload is complete', async () => {
         const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
-          .get(`/versions/${version}/apis`)
+          .get(`/branches/${version}/apis`)
           .reply(200, { data: [] })
-          .post(`/versions/${version}/apis`, body =>
+          .post(`/branches/${version}/apis`, body =>
             body.match(`form-data; name="schema"; filename="${slugifiedFilename}"`),
           )
           .reply(200, {
             data: {
               upload: { status: 'pending' },
-              uri: `/versions/${version}/apis/${slugifiedFilename}`,
+              uri: `/branches/${version}/apis/${slugifiedFilename}`,
             },
           })
-          .get(`/versions/${version}/apis/${slugifiedFilename}`)
+          .get(`/branches/${version}/apis/${slugifiedFilename}`)
           .times(9)
           .reply(200, {
             data: {
               upload: { status: 'pending' },
-              uri: `/versions/${version}/apis/${slugifiedFilename}`,
+              uri: `/branches/${version}/apis/${slugifiedFilename}`,
             },
           })
-          .get(`/versions/${version}/apis/${slugifiedFilename}`)
+          .get(`/branches/${version}/apis/${slugifiedFilename}`)
           .reply(200, {
             data: {
               upload: { status: 'done' },
-              uri: `/versions/${version}/apis/${slugifiedFilename}`,
+              uri: `/branches/${version}/apis/${slugifiedFilename}`,
             },
           });
 
@@ -219,23 +219,23 @@ describe('rdme openapi upload', () => {
 
       it('should poll the API and handle timeouts', async () => {
         const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
-          .get(`/versions/${version}/apis`)
+          .get(`/branches/${version}/apis`)
           .reply(200, { data: [] })
-          .post(`/versions/${version}/apis`, body =>
+          .post(`/branches/${version}/apis`, body =>
             body.match(`form-data; name="schema"; filename="${slugifiedFilename}"`),
           )
           .reply(200, {
             data: {
               upload: { status: 'pending' },
-              uri: `/versions/${version}/apis/${slugifiedFilename}`,
+              uri: `/branches/${version}/apis/${slugifiedFilename}`,
             },
           })
-          .get(`/versions/${version}/apis/${slugifiedFilename}`)
+          .get(`/branches/${version}/apis/${slugifiedFilename}`)
           .times(10)
           .reply(200, {
             data: {
               upload: { status: 'pending' },
-              uri: `/versions/${version}/apis/${slugifiedFilename}`,
+              uri: `/branches/${version}/apis/${slugifiedFilename}`,
             },
           });
 
@@ -248,18 +248,18 @@ describe('rdme openapi upload', () => {
 
       it('should poll the API once and handle a failure state with a 4xx', async () => {
         const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
-          .get(`/versions/${version}/apis`)
+          .get(`/branches/${version}/apis`)
           .reply(200, { data: [] })
-          .post(`/versions/${version}/apis`, body =>
+          .post(`/branches/${version}/apis`, body =>
             body.match(`form-data; name="schema"; filename="${slugifiedFilename}"`),
           )
           .reply(200, {
             data: {
               upload: { status: 'pending' },
-              uri: `/versions/${version}/apis/${slugifiedFilename}`,
+              uri: `/branches/${version}/apis/${slugifiedFilename}`,
             },
           })
-          .get(`/versions/${version}/apis/${slugifiedFilename}`)
+          .get(`/branches/${version}/apis/${slugifiedFilename}`)
           .reply(400);
 
         const result = await run(['--version', version, filename, '--key', key]);
@@ -271,22 +271,22 @@ describe('rdme openapi upload', () => {
 
       it('should poll the API once and handle an unexpected state with a 2xx', async () => {
         const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
-          .get(`/versions/${version}/apis`)
+          .get(`/branches/${version}/apis`)
           .reply(200, { data: [] })
-          .post(`/versions/${version}/apis`, body =>
+          .post(`/branches/${version}/apis`, body =>
             body.match(`form-data; name="schema"; filename="${slugifiedFilename}"`),
           )
           .reply(200, {
             data: {
               upload: { status: 'pending' },
-              uri: `/versions/${version}/apis/${slugifiedFilename}`,
+              uri: `/branches/${version}/apis/${slugifiedFilename}`,
             },
           })
-          .get(`/versions/${version}/apis/${slugifiedFilename}`)
+          .get(`/branches/${version}/apis/${slugifiedFilename}`)
           .reply(200, {
             data: {
               upload: { status: 'something-unexpected' },
-              uri: `/versions/${version}/apis/${slugifiedFilename}`,
+              uri: `/branches/${version}/apis/${slugifiedFilename}`,
             },
           });
 
@@ -305,15 +305,15 @@ describe('rdme openapi upload', () => {
 
       it('should overwrite an existing API definition without asking for confirmation', async () => {
         const mock = getAPIv2MockForGHA({ authorization: `Bearer ${key}` })
-          .get(`/versions/${version}/apis`)
+          .get(`/branches/${version}/apis`)
           .reply(200, { data: [{ filename: slugifiedFilename }] })
-          .put(`/versions/1.0.0/apis/${slugifiedFilename}`, body =>
+          .put(`/branches/1.0.0/apis/${slugifiedFilename}`, body =>
             body.match(`form-data; name="schema"; filename="${slugifiedFilename}"`),
           )
           .reply(200, {
             data: {
               upload: { status: 'done' },
-              uri: `/versions/${version}/apis/${slugifiedFilename}`,
+              uri: `/branches/${version}/apis/${slugifiedFilename}`,
             },
           });
 
@@ -328,15 +328,15 @@ describe('rdme openapi upload', () => {
     describe('given that the `--version` flag is not set', () => {
       it('should default to the `stable` version', async () => {
         const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
-          .get('/versions/stable/apis')
+          .get('/branches/stable/apis')
           .reply(200, { data: [] })
-          .post('/versions/stable/apis', body =>
+          .post('/branches/stable/apis', body =>
             body.match(`form-data; name="schema"; filename="${slugifiedFilename}"`),
           )
           .reply(200, {
             data: {
               upload: { status: 'done' },
-              uri: `/versions/stable/apis/${slugifiedFilename}`,
+              uri: `/branches/stable/apis/${slugifiedFilename}`,
             },
           });
 
@@ -350,15 +350,15 @@ describe('rdme openapi upload', () => {
       it('should use the version from the spec file if --`useSpecVersion` is passed', async () => {
         const altVersion = '1.2.3';
         const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
-          .get(`/versions/${altVersion}/apis`)
+          .get(`/branches/${altVersion}/apis`)
           .reply(200, { data: [] })
-          .post(`/versions/${altVersion}/apis`, body =>
+          .post(`/branches/${altVersion}/apis`, body =>
             body.match(`form-data; name="schema"; filename="${slugifiedFilename}"`),
           )
           .reply(200, {
             data: {
               upload: { status: 'done' },
-              uri: `/versions/${altVersion}/apis/${slugifiedFilename}`,
+              uri: `/branches/${altVersion}/apis/${slugifiedFilename}`,
             },
           });
 
@@ -376,13 +376,13 @@ describe('rdme openapi upload', () => {
       const fileMock = nock('https://example.com').get('/openapi.json').reply(200, petstore);
 
       const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
-        .get(`/versions/${version}/apis`)
+        .get(`/branches/${version}/apis`)
         .reply(200, {})
-        .post(`/versions/${version}/apis`, body => body.match(`form-data; name="url"\r\n\r\n${fileUrl}`))
+        .post(`/branches/${version}/apis`, body => body.match(`form-data; name="url"\r\n\r\n${fileUrl}`))
         .reply(200, {
           data: {
             upload: { status: 'done' },
-            uri: `/versions/${version}/apis/openapi.json`,
+            uri: `/branches/${version}/apis/openapi.json`,
           },
         });
 
@@ -400,13 +400,13 @@ describe('rdme openapi upload', () => {
       const fileMock = nock('https://example.com').get('/openapi.json').reply(200, petstore);
 
       const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
-        .get(`/versions/${version}/apis`)
+        .get(`/branches/${version}/apis`)
         .reply(200, { data: [{ filename: 'openapi.json' }] })
-        .put('/versions/1.0.0/apis/openapi.json', body => body.match(`form-data; name="url"\r\n\r\n${fileUrl}`))
+        .put('/branches/1.0.0/apis/openapi.json', body => body.match(`form-data; name="url"\r\n\r\n${fileUrl}`))
         .reply(200, {
           data: {
             upload: { status: 'done' },
-            uri: `/versions/${version}/apis/openapi.json`,
+            uri: `/branches/${version}/apis/openapi.json`,
           },
         });
 
@@ -432,15 +432,15 @@ describe('rdme openapi upload', () => {
   describe('given that the confirm overwrite flag is passed', () => {
     it('should overwrite an existing API definition without asking for confirmation', async () => {
       const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
-        .get(`/versions/${version}/apis`)
+        .get(`/branches/${version}/apis`)
         .reply(200, { data: [{ filename: slugifiedFilename }] })
-        .put(`/versions/${version}/apis/${slugifiedFilename}`, body =>
+        .put(`/branches/${version}/apis/${slugifiedFilename}`, body =>
           body.match(`form-data; name="schema"; filename="${slugifiedFilename}"`),
         )
         .reply(200, {
           data: {
             upload: { status: 'done' },
-            uri: `/versions/${version}/apis/${slugifiedFilename}`,
+            uri: `/branches/${version}/apis/${slugifiedFilename}`,
           },
         });
 
