@@ -1,9 +1,9 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`rdme openapi upload > flag error handling > should throw if an error if both \`--version\` and \`--useSpecVersion\` flags are passed 1`] = `
+exports[`rdme openapi upload > flag error handling > should throw if an error if both \`--branch\` and \`--useSpecVersion\` flags are passed 1`] = `
 {
   "error": [Error: The following error occurred:
-  --version=1.0.0 cannot also be provided when using --useSpecVersion
+  --branch=1.0.0 cannot also be provided when using --useSpecVersion
 See more help with --help],
   "stderr": "",
   "stdout": "",
@@ -195,7 +195,7 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
 }
 `;
 
-exports[`rdme openapi upload > given that the API definition is a local file > given that the \`--version\` flag is not set > should default to the \`stable\` version 1`] = `
+exports[`rdme openapi upload > given that the API definition is a local file > given that the \`--branch\` flag is not set > should default to the \`stable\` version 1`] = `
 {
   "result": {
     "status": "done",
@@ -214,7 +214,7 @@ exports[`rdme openapi upload > given that the API definition is a local file > g
 }
 `;
 
-exports[`rdme openapi upload > given that the API definition is a local file > given that the \`--version\` flag is not set > should use the version from the spec file if --\`useSpecVersion\` is passed 1`] = `
+exports[`rdme openapi upload > given that the API definition is a local file > given that the \`--branch\` flag is not set > should use the version from the spec file if --\`useSpecVersion\` is passed 1`] = `
 {
   "result": {
     "status": "done",

@@ -25,8 +25,8 @@ describe('rdme openapi upload', () => {
   });
 
   describe('flag error handling', () => {
-    it('should throw if an error if both `--version` and `--useSpecVersion` flags are passed', async () => {
-      const result = await run(['--useSpecVersion', '--version', version, filename, '--key', key]);
+    it('should throw if an error if both `--branch` and `--useSpecVersion` flags are passed', async () => {
+      const result = await run(['--useSpecVersion', '--branch', version, filename, '--key', key]);
 
       expect(result).toMatchSnapshot();
     });
@@ -47,7 +47,7 @@ describe('rdme openapi upload', () => {
           },
         });
 
-      const result = await run(['--version', version, filename, '--key', key]);
+      const result = await run(['--branch', version, filename, '--key', key]);
 
       expect(result).toMatchSnapshot();
 
@@ -68,7 +68,7 @@ describe('rdme openapi upload', () => {
           },
         });
 
-      const result = await run(['--version', version, yamlFile, '--key', key]);
+      const result = await run(['--branch', version, yamlFile, '--key', key]);
 
       expect(result).toMatchSnapshot();
 
@@ -91,7 +91,7 @@ describe('rdme openapi upload', () => {
           },
         });
 
-      const result = await run(['--version', version, filename, '--key', key]);
+      const result = await run(['--branch', version, filename, '--key', key]);
 
       expect(result).toMatchSnapshot();
 
@@ -112,7 +112,7 @@ describe('rdme openapi upload', () => {
           },
         });
 
-      const result = await run(['--version', version, filename, '--key', key]);
+      const result = await run(['--branch', version, filename, '--key', key]);
 
       expect(result).toMatchSnapshot();
 
@@ -136,7 +136,7 @@ describe('rdme openapi upload', () => {
             },
           });
 
-        const result = await run(['--version', version, filename, '--key', key, '--slug', customSlug]);
+        const result = await run(['--branch', version, filename, '--key', key, '--slug', customSlug]);
 
         expect(result).toMatchSnapshot();
 
@@ -156,7 +156,7 @@ describe('rdme openapi upload', () => {
             },
           });
 
-        const result = await run(['--version', version, filename, '--key', key, '--slug', customSlug]);
+        const result = await run(['--branch', version, filename, '--key', key, '--slug', customSlug]);
 
         expect(result).toMatchSnapshot();
 
@@ -166,7 +166,7 @@ describe('rdme openapi upload', () => {
       it('should handle a slug with an invalid file extension', async () => {
         const customSlug = 'custom-slug.yikes';
 
-        const result = await run(['--version', version, filename, '--key', key, '--slug', customSlug]);
+        const result = await run(['--branch', version, filename, '--key', key, '--slug', customSlug]);
 
         expect(result).toMatchSnapshot();
       });
@@ -174,7 +174,7 @@ describe('rdme openapi upload', () => {
       it('should handle a slug with a valid but mismatching file extension', async () => {
         const customSlug = 'custom-slug.yml';
 
-        const result = await run(['--version', version, filename, '--key', key, '--slug', customSlug]);
+        const result = await run(['--branch', version, filename, '--key', key, '--slug', customSlug]);
 
         expect(result).toMatchSnapshot();
       });
@@ -210,7 +210,7 @@ describe('rdme openapi upload', () => {
             },
           });
 
-        const result = await run(['--version', version, filename, '--key', key]);
+        const result = await run(['--branch', version, filename, '--key', key]);
 
         expect(result).toMatchSnapshot();
 
@@ -239,7 +239,7 @@ describe('rdme openapi upload', () => {
             },
           });
 
-        const result = await run(['--version', version, filename, '--key', key]);
+        const result = await run(['--branch', version, filename, '--key', key]);
 
         expect(result).toMatchSnapshot();
 
@@ -262,7 +262,7 @@ describe('rdme openapi upload', () => {
           .get(`/branches/${version}/apis/${slugifiedFilename}`)
           .reply(400);
 
-        const result = await run(['--version', version, filename, '--key', key]);
+        const result = await run(['--branch', version, filename, '--key', key]);
 
         expect(result).toMatchSnapshot();
 
@@ -290,7 +290,7 @@ describe('rdme openapi upload', () => {
             },
           });
 
-        const result = await run(['--version', version, filename, '--key', key]);
+        const result = await run(['--branch', version, filename, '--key', key]);
 
         expect(result).toMatchSnapshot();
 
@@ -317,7 +317,7 @@ describe('rdme openapi upload', () => {
             },
           });
 
-        const result = await run(['--version', version, filename, '--key', key]);
+        const result = await run(['--branch', version, filename, '--key', key]);
 
         expect(result).toMatchSnapshot();
 
@@ -325,7 +325,7 @@ describe('rdme openapi upload', () => {
       });
     });
 
-    describe('given that the `--version` flag is not set', () => {
+    describe('given that the `--branch` flag is not set', () => {
       it('should default to the `stable` version', async () => {
         const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
           .get('/branches/stable/apis')
@@ -386,7 +386,7 @@ describe('rdme openapi upload', () => {
           },
         });
 
-      const result = await run(['--version', version, fileUrl, '--key', key]);
+      const result = await run(['--branch', version, fileUrl, '--key', key]);
 
       expect(result).toMatchSnapshot();
 
@@ -410,7 +410,7 @@ describe('rdme openapi upload', () => {
           },
         });
 
-      const result = await run(['--version', version, fileUrl, '--key', key]);
+      const result = await run(['--branch', version, fileUrl, '--key', key]);
 
       expect(result).toMatchSnapshot();
 
@@ -421,7 +421,7 @@ describe('rdme openapi upload', () => {
     it('should handle issues fetching from the URL', async () => {
       const fileMock = nock('https://example.com').get('/openapi.json').reply(400, {});
 
-      const result = await run(['--version', version, fileUrl, '--key', key]);
+      const result = await run(['--branch', version, fileUrl, '--key', key]);
 
       expect(result).toMatchSnapshot();
 
@@ -444,7 +444,7 @@ describe('rdme openapi upload', () => {
           },
         });
 
-      const result = await run(['--version', version, filename, '--key', key, '--confirm-overwrite']);
+      const result = await run(['--branch', version, filename, '--key', key, '--confirm-overwrite']);
 
       expect(result.stdout).toContain('was successfully updated in ReadMe!');
 
