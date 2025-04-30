@@ -678,7 +678,7 @@ exports[`rdme docs upload > given that the file path is a single file > given th
 }
 `;
 
-exports[`rdme docs upload > given that the file path is a single file > should allow for user to specify version via --version flag 1`] = `
+exports[`rdme docs upload > given that the file path is a single file > should allow for user to specify branch via --branch flag 1`] = `
 {
   "result": {
     "created": [

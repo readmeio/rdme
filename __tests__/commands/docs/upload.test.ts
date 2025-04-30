@@ -80,7 +80,7 @@ describe('rdme docs upload', () => {
       mock.done();
     });
 
-    it('should allow for user to specify version via --version flag', async () => {
+    it('should allow for user to specify branch via --branch flag', async () => {
       const mock = getAPIv2Mock({ authorization })
         .get('/branches/1.2.3/guides/new-doc')
         .reply(404)
@@ -92,7 +92,7 @@ describe('rdme docs upload', () => {
         })
         .reply(201, {});
 
-      const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key, '--version', '1.2.3']);
+      const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key, '--branch', '1.2.3']);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
