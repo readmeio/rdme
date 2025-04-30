@@ -11,6 +11,7 @@ export const branchFlag = (additionalDescription: string[] = []) => ({
 });
 
 export const confirmAutofixesFlag = Flags.boolean({
+  hidden: true,
   summary:
     'Bypasses the prompt and automatically fixes up any autofixable errors that are found in the Markdown files.',
   description:
