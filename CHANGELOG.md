@@ -1,3 +1,10 @@
+## [10.2.1](https://github.com/readmeio/rdme/compare/v10.2.0...v10.2.1) (2025-05-05)
+
+
+### Bug Fixes
+
+* remove `/version` API deprecation warnings ([#1238](https://github.com/readmeio/rdme/issues/1238)) ([c0846d5](https://github.com/readmeio/rdme/commit/c0846d576bef4ceca9d550c72bedb860b5e09d91))
+
 ## [10.2.1-next.1](https://github.com/readmeio/rdme/compare/v10.2.0...v10.2.1-next.1) (2025-04-30)
 
 
