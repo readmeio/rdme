@@ -184,7 +184,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
         new File([fs.readFileSync(path)], filename, {
           type: isYaml ? 'application/x-yaml' : 'application/json',
         }),
-        filename
+        filename,
       );
     }
 
