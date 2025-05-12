@@ -1,4 +1,3 @@
-import fs from 'node:fs';
 import nodePath from 'node:path';
 
 import { Flags } from '@oclif/core';
@@ -6,7 +5,6 @@ import yaml from 'js-yaml';
 import ora from 'ora';
 import prompts from 'prompts';
 import slugify from 'slugify';
-import { file as tmpFile } from 'tmp-promise';
 
 import BaseCommand from '../../lib/baseCommand.js';
 import { branchFlag, keyFlag, specArg } from '../../lib/flags.js';
@@ -172,16 +170,11 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       if (isYaml) {
         specToUpload = yaml.dump(JSON.parse(preparedSpec));
       }
-      // Create a temporary file to write the bundled spec to,
-      // which we will then stream into the form data body
-      const { path } = await tmpFile({ prefix: 'rdme-openapi-', postfix: fileExtension });
-      this.debug(`creating temporary file at ${path}`);
-      fs.writeFileSync(path, specToUpload);
 
-      this.debug('temporary file created, processing into form data payload');
+      this.debug('processing file into form data payload');
       body.append(
         'schema',
-        new File([fs.readFileSync(path)], filename, {
+        new File([specToUpload], filename, {
           type: isYaml ? 'application/x-yaml' : 'application/json',
         }),
         filename,
