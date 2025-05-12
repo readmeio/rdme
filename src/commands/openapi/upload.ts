@@ -177,15 +177,15 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       const { path } = await tmpFile({ prefix: 'rdme-openapi-', postfix: fileExtension });
       this.debug(`creating temporary file at ${path}`);
       fs.writeFileSync(path, specToUpload);
-      const stream = fs.createReadStream(path);
 
-      this.debug('file and stream created, streaming into form data payload');
-      body.append('schema', {
-        [Symbol.toStringTag]: 'File',
-        name: filename,
-        stream: () => stream,
-        type: isYaml ? 'application/x-yaml' : 'application/json',
-      });
+      this.debug('temporary file created, processing into form data payload');
+      body.append(
+        'schema',
+        new File([fs.readFileSync(path)], filename, {
+          type: isYaml ? 'application/x-yaml' : 'application/json',
+        }),
+        filename
+      );
     }
 
     const options: RequestInit = { headers, method, body };
