@@ -1,3 +1,10 @@
+## [10.2.2-next.1](https://github.com/readmeio/rdme/compare/v10.2.1...v10.2.2-next.1) (2025-05-12)
+
+
+### Bug Fixes
+
+* **openapi/upload:** problem with `FormData` compositions on Node 24 ([#1241](https://github.com/readmeio/rdme/issues/1241)) ([e358192](https://github.com/readmeio/rdme/commit/e358192a5d611905be8c457ed402e9fe6dcbf766))
+
 ## [10.2.1](https://github.com/readmeio/rdme/compare/v10.2.0...v10.2.1) (2025-05-05)
 
 
