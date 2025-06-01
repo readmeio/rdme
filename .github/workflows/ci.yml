@@ -53,6 +53,8 @@ jobs:
   action:
     name: GitHub Action Dry Run
     runs-on: ubuntu-latest
+    # Dependabot doesn't have access to secrets so this action will always fail.
+    if: github.actor != 'dependabot[bot]'
     steps:
       - name: Checkout GitHub Action
         uses: actions/checkout@v4
