@@ -171,6 +171,8 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
  · You are using 4 media types throughout your API: application/json, application/x-www-form-urlencoded, application/xml, and multipart/form-data
  · You have a total of 20 operations in your API.
  · You are using 2 security types throughout your API: apiKey and oauth2
+ · Your raw file size is 0.01 MB.
+ · Your dereferenced file size is 0.03 MB.
 
 🌲 OpenAPI Features
 ┌────────────────────────────┬───────┬──────────────────────────────────────────────────────────────────────────────────┐
@@ -286,6 +288,8 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
  · You are using 3 media types throughout your API: application/json, multipart/form-data, and text/event-stream
  · You have a total of 39 operations in your API.
  · You are using a single security type throughout your API: http
+ · Your raw file size is 0.05 MB.
+ · Your dereferenced file size is 0.32 MB.
 
 🌲 OpenAPI Features
 ┌────────────────────────────┬───────┬──────────────────────────────────────────────────────────────────────────────────┐
@@ -401,6 +405,8 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
  · You are using a single media type throughout your API: application/json
  · You have a total of 12 operations in your API.
  · You are using a single security type throughout your API: oauth2
+ · Your raw file size is 0.01 MB.
+ · Your dereferenced file size is 0.01 MB.
 
 🌲 OpenAPI Features
 ┌────────────────────────────┬───────┬──────────────────────────────────────────────────────────────────────────────────┐
@@ -516,6 +522,8 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
  · You are using 2 media types throughout your API: application/json and application/xml
  · You have a total of 9 operations in your API.
  · You are using a single security type throughout your API: oauth2
+ · Your raw file size is 0.03 MB.
+ · Your dereferenced file size is 0.15 MB.
 
 🌲 OpenAPI Features
 ┌────────────────────────────┬───────┬──────────────────────────────────────────────────────────────────────────────────┐
