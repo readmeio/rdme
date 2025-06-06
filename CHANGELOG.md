@@ -1,3 +1,10 @@
+# [10.3.0-next.2](https://github.com/readmeio/rdme/compare/v10.3.0-next.1...v10.3.0-next.2) (2025-06-06)
+
+
+### Features
+
+* filter `oas/analyzer` data by allowed keys ([#1259](https://github.com/readmeio/rdme/issues/1259)) ([766fb42](https://github.com/readmeio/rdme/commit/766fb42e246d098f87080abc2cd5af668b37ef03))
+
 # [10.3.0-next.1](https://github.com/readmeio/rdme/compare/v10.2.2...v10.3.0-next.1) (2025-06-05)
 
 
