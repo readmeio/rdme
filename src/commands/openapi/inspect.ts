@@ -106,11 +106,14 @@ function buildFeaturesReport(analysis: Analysis, features: string[]) {
 
 function buildFullReport(analysis: Analysis, definitionVersion: string, tableBorder: Record<string, string>) {
   const report: string[] = ['Here are some interesting things we found in your API definition. 🕵️', ''];
+
+  const allowedKeys = ['dereferencedFileSize', 'mediaTypes', 'operationTotal', 'rawFileSize', 'securityTypes'];
   const sizeKeys = ['rawFileSize', 'dereferencedFileSize'];
 
   // General API definition statistics
   report.push(
     ...(Object.entries(analysis.general || {})
+      .filter(([key]) => allowedKeys.includes(key))
       .map(([key, info]) => {
         if (Array.isArray(info.found)) {
           if (!info.found.length) return false;
