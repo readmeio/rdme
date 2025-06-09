@@ -3,6 +3,7 @@ import type { ValueOf } from 'type-fest';
 import ChangelogsCommand from './commands/changelogs.js';
 import DocsMigrateCommand from './commands/docs/migrate.js';
 import DocsUploadCommand from './commands/docs/upload.js';
+import LintCommand from './commands/lint.js';
 import LoginCommand from './commands/login.js';
 import LogoutCommand from './commands/logout.js';
 import OpenAPIConvertCommand from './commands/openapi/convert.js';
@@ -30,6 +31,8 @@ export const COMMANDS = {
 
   'docs:migrate': DocsMigrateCommand,
   'docs:upload': DocsUploadCommand,
+
+  lint: LintCommand,
 
   login: LoginCommand,
   logout: LogoutCommand,
