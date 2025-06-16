@@ -127,6 +127,10 @@ export function fix(
           updatedData.privacy = { view: hidden ? 'anyone_with_link' : 'public' };
         } else if (badKey === 'order') {
           updatedData.position = extractedValue;
+        } else if (badKey === 'htmlmode') {
+          updatedData.content = { type: extractedValue ? 'html' : 'markdown' };
+        } else if (badKey === 'fullscreen') {
+          updatedData.appearance = { fullscreen: extractedValue };
         }
       } else {
         unfixableErrors.push(error);
