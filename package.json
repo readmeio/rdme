@@ -1,6 +1,6 @@
 {
   "name": "rdme",
-  "version": "10.2.2",
+  "version": "10.3.0-next.2",
   "description": "ReadMe's official CLI and GitHub Action.",
   "license": "MIT",
   "author": "ReadMe <support@readme.io> (https://readme.com)",
@@ -63,8 +63,8 @@
     "js-yaml": "^4.1.0",
     "json-schema-to-ts": "^3.1.1",
     "mime-types": "^3.0.1",
-    "oas": "^27.0.0",
-    "oas-normalize": "^14.0.0",
+    "oas": "^27.1.0",
+    "oas-normalize": "^14.1.0",
     "ora": "^8.1.1",
     "prompts": "^2.4.2",
     "semver": "^7.5.3",

@@ -168,8 +168,10 @@ See more help with --help],
 exports[`rdme openapi inspect > full reports > should generate a report for @readme/oas-examples/3.0/json/petstore.json 1`] = `
 "Here are some interesting things we found in your API definition. 🕵️
 
+ · Your dereferenced file size is 0.03 MB.
  · You are using 4 media types throughout your API: application/json, application/x-www-form-urlencoded, application/xml, and multipart/form-data
  · You have a total of 20 operations in your API.
+ · Your raw file size is 0.01 MB.
  · You are using 2 security types throughout your API: apiKey and oauth2
 
 🌲 OpenAPI Features
@@ -283,8 +285,10 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
 exports[`rdme openapi inspect > full reports > should generate a report for @readme/oas-examples/3.0/json/readme.json 1`] = `
 "Here are some interesting things we found in your API definition. 🕵️
 
+ · Your dereferenced file size is 0.32 MB.
  · You are using 3 media types throughout your API: application/json, multipart/form-data, and text/event-stream
  · You have a total of 39 operations in your API.
+ · Your raw file size is 0.05 MB.
  · You are using a single security type throughout your API: http
 
 🌲 OpenAPI Features
@@ -398,8 +402,10 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
 exports[`rdme openapi inspect > full reports > should generate a report for @readme/oas-examples/3.0/json/readme-extensions.json 1`] = `
 "Here are some interesting things we found in your API definition. 🕵️
 
+ · Your dereferenced file size is 0.01 MB.
  · You are using a single media type throughout your API: application/json
  · You have a total of 12 operations in your API.
+ · Your raw file size is 0.01 MB.
  · You are using a single security type throughout your API: oauth2
 
 🌲 OpenAPI Features
@@ -513,8 +519,10 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
 exports[`rdme openapi inspect > full reports > should generate a report for @readme/oas-examples/3.1/json/train-travel.json 1`] = `
 "Here are some interesting things we found in your API definition. 🕵️
 
+ · Your dereferenced file size is 0.15 MB.
  · You are using 2 media types throughout your API: application/json and application/xml
  · You have a total of 9 operations in your API.
+ · Your raw file size is 0.03 MB.
  · You are using a single security type throughout your API: oauth2
 
 🌲 OpenAPI Features
