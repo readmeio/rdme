@@ -6525,7 +6525,7 @@ const document = {
                         description: 'The endpoint HTTP method.',
                       },
                       path: { type: 'string', description: 'The endpoint path.' },
-                      schema: { nullable: true },
+                      schema: { type: 'object', properties: {}, nullable: true },
                       stats: {
                         type: 'object',
                         properties: {

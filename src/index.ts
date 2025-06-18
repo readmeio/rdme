@@ -10,6 +10,7 @@ import OpenAPIInspectCommand from './commands/openapi/inspect.js';
 import OpenAPIReduceCommand from './commands/openapi/reduce.js';
 import OpenAPIUploadCommand from './commands/openapi/upload.js';
 import OpenAPIValidateCommand from './commands/openapi/validate.js';
+import RefUploadCommand from './commands/reference/upload.js';
 import WhoAmICommand from './commands/whoami.js';
 
 export { default as createGHA } from './lib/hooks/createGHA.js';
@@ -40,6 +41,8 @@ export const COMMANDS = {
   'openapi:upload': OpenAPIUploadCommand,
   'openapi:validate': OpenAPIValidateCommand,
 
+  'reference:upload': RefUploadCommand,
+
   whoami: WhoAmICommand,
 } as const;
 
@@ -65,7 +68,7 @@ export type CommandIdForTopic<
  * Note that the `changelogs` command is not included here
  * because it is backed by APIv1.
  */
-export type APIv2PageUploadCommands = DocsUploadCommand;
+export type APIv2PageUploadCommands = DocsUploadCommand | RefUploadCommand;
 
 /**
  * Commands that leverage the APIv2 representations for interfacing with pages
