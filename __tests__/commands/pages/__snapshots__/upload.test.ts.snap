@@ -1025,7 +1025,7 @@ exports[`rdme reference upload > given that the file path is a directory > shoul
 
 exports[`rdme reference upload > given that the file path is a directory > should handle a mix of creates and updates and failures and skipped files (dry run) 1`] = `
 {
-  "error": [AggregateError: Multiple dry runs failed. To see more detailed errors for a page, run \`rdme references upload <path-to-page.md>\` --dry-run.],
+  "error": [AggregateError: Multiple dry runs failed. To see more detailed errors for a page, run \`rdme reference upload <path-to-page.md>\` --dry-run.],
   "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
  ›    Use at your own risk!
 - 🔍 Looking for Markdown files in the \`__tests__/__fixtures__/docs/mixed-docs\` directory...
@@ -1053,7 +1053,7 @@ exports[`rdme reference upload > given that the file path is a directory > shoul
 
 exports[`rdme reference upload > given that the file path is a directory > should handle a mix of creates and updates and failures and skipped files 1`] = `
 {
-  "error": [AggregateError: Multiple page uploads failed. To see more detailed errors for a page, run \`rdme references upload <path-to-page.md>\`.],
+  "error": [AggregateError: Multiple page uploads failed. To see more detailed errors for a page, run \`rdme reference upload <path-to-page.md>\`.],
   "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
  ›    Use at your own risk!
 - 🔍 Looking for Markdown files in the \`__tests__/__fixtures__/docs/mixed-docs\` directory...
@@ -1278,7 +1278,7 @@ exports[`rdme reference upload > given that the file path is a single file > and
 
 exports[`rdme reference upload > given that the file path is a single file > and the command is being run in a CI environment > should error out if the file has validation errors 1`] = `
 {
-  "error": [Error: 1 file(s) have issues that should be fixed before uploading to ReadMe. Please run \`rdme references upload __tests__/__fixtures__/docs/mixed-docs/legacy-category.md --dry-run\` in a non-CI environment to fix them.],
+  "error": [Error: 1 file(s) have issues that should be fixed before uploading to ReadMe. Please run \`rdme reference upload __tests__/__fixtures__/docs/mixed-docs/legacy-category.md --dry-run\` in a non-CI environment to fix them.],
   "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
  ›    Use at your own risk!
 - 🔬 Validating frontmatter data...
