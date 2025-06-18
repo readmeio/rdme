@@ -98,35 +98,41 @@ export function fix(
         // if the bad property is at the root level, delete it
         delete updatedData[badKey];
         fixableErrorCount += 1;
-        if (badKey === 'excerpt') {
-          // if the `content` object exists, add to it. otherwise, create it
-          if (typeof updatedData.content === 'object' && updatedData.content) {
-            (updatedData.content as Record<string, unknown>).excerpt = extractedValue;
-          } else {
-            updatedData.content = {
-              excerpt: extractedValue,
-            };
-          }
-        } else if (badKey === 'categorySlug') {
-          updatedData.category = {
-            uri: extractedValue,
-          };
-        } else if (badKey === 'parentDoc') {
-          const uri = mappings.parentPages[extractedValue as string];
-          if (uri) {
-            updatedData.parent = {
-              uri,
-            };
-          }
-        } else if (badKey === 'parentDocSlug') {
-          updatedData.parent = {
-            uri: extractedValue,
-          };
-        } else if (badKey === 'hidden') {
+
+        // hidden is the only attribute that is present in all page types
+        if (badKey === 'hidden') {
           const hidden = typeof extractedValue === 'boolean' ? extractedValue : extractedValue === 'true';
           updatedData.privacy = { view: hidden ? 'anyone_with_link' : 'public' };
-        } else if (badKey === 'order') {
-          updatedData.position = extractedValue;
+        } else if (this.route === 'guides' || this.route === 'reference') {
+          if (badKey === 'excerpt') {
+            // if the `content` object exists, add to it. otherwise, create it
+            if (typeof updatedData.content === 'object' && updatedData.content) {
+              (updatedData.content as Record<string, unknown>).excerpt = extractedValue;
+            } else {
+              updatedData.content = {
+                excerpt: extractedValue,
+              };
+            }
+          } else if (badKey === 'categorySlug') {
+            updatedData.category = {
+              uri: extractedValue,
+            };
+          } else if (badKey === 'parentDoc') {
+            const uri = mappings.parentPages[extractedValue as string];
+            if (uri) {
+              updatedData.parent = {
+                uri,
+              };
+            }
+          } else if (badKey === 'parentDocSlug') {
+            updatedData.parent = {
+              uri: extractedValue,
+            };
+          } else if (badKey === 'order') {
+            updatedData.position = extractedValue;
+          }
+        } else {
+          // todo: placeholder for attributes specific to custom pages
         }
       } else {
         unfixableErrors.push(error);
