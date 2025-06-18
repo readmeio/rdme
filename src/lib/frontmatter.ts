@@ -127,6 +127,15 @@ export function fix(
           updatedData.privacy = { view: hidden ? 'anyone_with_link' : 'public' };
         } else if (badKey === 'order') {
           updatedData.position = extractedValue;
+        } else if (badKey === 'htmlmode') {
+          // if the `content` object exists, add to it. otherwise, create it
+          if (typeof updatedData.content === 'object' && updatedData.content) {
+            (updatedData.content as Record<string, unknown>).type = extractedValue ? 'html' : 'markdown';
+          } else {
+            updatedData.content = { type: extractedValue ? 'html' : 'markdown' };
+          }
+        } else if (badKey === 'fullscreen') {
+          updatedData.appearance = { fullscreen: extractedValue };
         }
       } else {
         unfixableErrors.push(error);
