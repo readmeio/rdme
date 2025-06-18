@@ -2,7 +2,7 @@ import type DocsMigrateCommand from '../commands/docs/migrate.js';
 import type DocsUploadCommand from '../commands/docs/upload.js';
 import type { GuidesRequestRepresentation } from '../types.js';
 import type { PageMetadata } from './readPage.js';
-import type RefsUploadCommand from '../commands/references/upload.js';
+import type RefUploadCommand from '../commands/reference/upload.js';
 
 import ora from 'ora';
 import prompts from 'prompts';
@@ -14,7 +14,7 @@ import promptTerminal from './promptWrapper.js';
 import { fetchMappings, fetchSchema } from './readmeAPIFetch.js';
 
 export async function validateFrontmatter(
-  this: DocsMigrateCommand | DocsUploadCommand | RefsUploadCommand,
+  this: DocsMigrateCommand | DocsUploadCommand | RefUploadCommand,
   pages: PageMetadata[],
   promptQuestion: string,
   outputDir?: string,

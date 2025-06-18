@@ -11,8 +11,8 @@ import syncPagePath, {
 
 const alphaNotice = 'This command is in an experimental alpha and is likely to change. Use at your own risk!';
 
-export default class RefsUploadCommand extends BaseCommand<typeof RefsUploadCommand> {
-  id = 'references upload' as const;
+export default class RefUploadCommand extends BaseCommand<typeof RefUploadCommand> {
+  id = 'reference upload' as const;
 
   route = 'reference' as const;
 

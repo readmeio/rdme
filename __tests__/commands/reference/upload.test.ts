@@ -4,7 +4,7 @@ import nock from 'nock';
 import prompts from 'prompts';
 import { describe, afterEach, it, expect, beforeAll, beforeEach, vi } from 'vitest';
 
-import Command from '../../../src/commands/references/upload.js';
+import Command from '../../../src/commands/reference/upload.js';
 import { getAPIv1Mock, getAPIv2Mock, getAPIv2MockForGHA } from '../../helpers/get-api-mock.js';
 import { githubActionsEnv } from '../../helpers/git-mock.js';
 import { runCommand, type OclifOutput } from '../../helpers/oclif.js';
@@ -12,7 +12,7 @@ import { runCommand, type OclifOutput } from '../../helpers/oclif.js';
 const key = 'rdme_123';
 const authorization = `Bearer ${key}`;
 
-describe('rdme references upload', () => {
+describe('rdme reference upload', () => {
   let run: (args?: string[]) => OclifOutput;
 
   beforeAll(() => {
