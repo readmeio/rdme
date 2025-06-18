@@ -40,7 +40,7 @@ describe.each([
   });
 
   describe('given that the file path is a single file', () => {
-    it(`should create a ${route} page in ReadMe`, async () => {
+    it('should create a page in ReadMe', async () => {
       const mock = getAPIv2Mock({ authorization })
         .get(`/branches/stable/${route}/new-doc`)
         .reply(404)
@@ -346,7 +346,7 @@ describe.each([
 
       afterEach(githubActionsEnv.after);
 
-      it(`should create a ${route} page in ReadMe and include \`x-readme-source-url\` source header`, async () => {
+      it('should create a page in ReadMe and include `x-readme-source-url` source header', async () => {
         const getMock = getAPIv2MockForGHA({ authorization }).get(`/branches/stable/${route}/new-doc`).reply(404);
 
         const postMock = getAPIv2MockForGHA({
@@ -485,7 +485,7 @@ describe.each([
   });
 
   describe('given that the file path is a directory', () => {
-    it(`should create a ${route} page in ReadMe for each file in the directory and its subdirectories`, async () => {
+    it('should create a page in ReadMe for each file in the directory and its subdirectories', async () => {
       const mock = getAPIv2Mock({ authorization })
         .get(`/branches/stable/${route}/simple-doc`)
         .reply(404)

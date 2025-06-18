@@ -101,7 +101,7 @@ exports[`rdme docs upload > given that the file path is a directory > given that
 }
 `;
 
-exports[`rdme docs upload > given that the file path is a directory > should create a guides page in ReadMe for each file in the directory and its subdirectories 1`] = `
+exports[`rdme docs upload > given that the file path is a directory > should create a page in ReadMe for each file in the directory and its subdirectories 1`] = `
 {
   "result": {
     "created": [
@@ -375,7 +375,7 @@ exports[`rdme docs upload > given that the file path is a single file > and the 
 }
 `;
 
-exports[`rdme docs upload > given that the file path is a single file > and the command is being run in a CI environment > should create a guides page in ReadMe and include \`x-readme-source-url\` source header 1`] = `
+exports[`rdme docs upload > given that the file path is a single file > and the command is being run in a CI environment > should create a page in ReadMe and include \`x-readme-source-url\` source header 1`] = `
 {
   "result": {
     "created": [
@@ -735,7 +735,7 @@ exports[`rdme docs upload > given that the file path is a single file > should a
 }
 `;
 
-exports[`rdme docs upload > given that the file path is a single file > should create a guides page in ReadMe 1`] = `
+exports[`rdme docs upload > given that the file path is a single file > should create a page in ReadMe 1`] = `
 {
   "result": {
     "created": [
@@ -974,7 +974,7 @@ exports[`rdme reference upload > given that the file path is a directory > given
 }
 `;
 
-exports[`rdme reference upload > given that the file path is a directory > should create a reference page in ReadMe for each file in the directory and its subdirectories 1`] = `
+exports[`rdme reference upload > given that the file path is a directory > should create a page in ReadMe for each file in the directory and its subdirectories 1`] = `
 {
   "result": {
     "created": [
@@ -1248,7 +1248,7 @@ exports[`rdme reference upload > given that the file path is a single file > and
 }
 `;
 
-exports[`rdme reference upload > given that the file path is a single file > and the command is being run in a CI environment > should create a reference page in ReadMe and include \`x-readme-source-url\` source header 1`] = `
+exports[`rdme reference upload > given that the file path is a single file > and the command is being run in a CI environment > should create a page in ReadMe and include \`x-readme-source-url\` source header 1`] = `
 {
   "result": {
     "created": [
@@ -1608,7 +1608,7 @@ exports[`rdme reference upload > given that the file path is a single file > sho
 }
 `;
 
-exports[`rdme reference upload > given that the file path is a single file > should create a reference page in ReadMe 1`] = `
+exports[`rdme reference upload > given that the file path is a single file > should create a page in ReadMe 1`] = `
 {
   "result": {
     "created": [
