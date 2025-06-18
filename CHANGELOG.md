@@ -1,3 +1,10 @@
+# [10.3.0-next.3](https://github.com/readmeio/rdme/compare/v10.3.0-next.2...v10.3.0-next.3) (2025-06-18)
+
+
+### Features
+
+* new `reference upload` command ([#1261](https://github.com/readmeio/rdme/issues/1261)) ([01e8198](https://github.com/readmeio/rdme/commit/01e81989823fb846e1719ab25470bb67c1d9a021))
+
 # [10.3.0-next.2](https://github.com/readmeio/rdme/compare/v10.3.0-next.1...v10.3.0-next.2) (2025-06-06)
 
 
