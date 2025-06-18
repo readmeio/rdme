@@ -1,6 +1,6 @@
 import type { Mappings } from './readmeAPIFetch.js';
 import type { PageMetadata } from './readPage.js';
-import type { CommandClass } from '../index.js';
+import type { APIv2PageCommands } from '../index.js';
 import type { ErrorObject } from 'ajv';
 import type { SchemaObject } from 'oas/types';
 
@@ -18,7 +18,7 @@ const addFormats = _addFormats as unknown as typeof _addFormats.default;
  * Validates the frontmatter data, fixes any issues, and returns the results.
  */
 export function fix(
-  this: CommandClass['prototype'],
+  this: APIv2PageCommands,
   /** frontmatter data to be validated */
   data: PageMetadata['data'],
   /** schema to validate against */
@@ -140,7 +140,7 @@ export function fix(
 }
 
 export function writeFixes(
-  this: CommandClass['prototype'],
+  this: APIv2PageCommands,
   /** all metadata for the page that will be written to */
   metadata: PageMetadata,
   /** frontmatter changes to be applied */
