@@ -1,0 +1,125 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`#fix > should delete legacy parent page id if no mapping is available 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix > should fix excerpt 1`] = `
+{
+  "content": {
+    "excerpt": "This is an excerpt",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix > should fix legacy category id and use fallback mapping 1`] = `
+{
+  "category": {
+    "uri": "uri-that-does-not-map-to-5f92cbf10cf217478ba93561",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix > should fix legacy category id and use mappings 1`] = `
+{
+  "category": {
+    "uri": "some-slug",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix > should fix legacy category slug 1`] = `
+{
+  "category": {
+    "uri": "some-slug",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix > should fix legacy parent page id and use mappings 1`] = `
+{
+  "parent": {
+    "uri": "some-slug",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix > should fix legacy parent page slug 1`] = `
+{
+  "parent": {
+    "uri": "some-slug",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix > should fix multiple issues 1`] = `
+{
+  "category": {
+    "uri": "some-category-slug",
+  },
+  "content": {
+    "body": "This is the body",
+    "excerpt": "This is an excerpt",
+  },
+  "parent": {
+    "uri": "some-parent-slug",
+  },
+  "position": 7,
+  "privacy": {
+    "view": "anyone_with_link",
+  },
+  "slug": "some-slug",
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix > should fix position 1`] = `
+{
+  "position": 5,
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix > should fix privacy (anyone_with_link) 1`] = `
+{
+  "privacy": {
+    "view": "anyone_with_link",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix > should fix privacy (anyone_with_link, \`hidden\` is a string) 1`] = `
+{
+  "privacy": {
+    "view": "anyone_with_link",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix > should fix privacy (public) 1`] = `
+{
+  "privacy": {
+    "view": "public",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix > should fix privacy (public, \`hidden\` is a string) 1`] = `
+{
+  "privacy": {
+    "view": "public",
+  },
+  "title": "Hello, world!",
+}
+`;

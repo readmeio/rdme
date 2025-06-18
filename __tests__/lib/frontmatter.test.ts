@@ -85,14 +85,7 @@ describe('#fix', () => {
     });
 
     expect(result.hasIssues).toBe(true);
-    expect(result.updatedData).toMatchInlineSnapshot(`
-      {
-        "category": {
-          "uri": "some-slug",
-        },
-        "title": "Hello, world!",
-      }
-    `);
+    expect(result.updatedData).toMatchSnapshot();
   });
 
   it('should fix legacy category id and use fallback mapping', () => {
@@ -104,14 +97,7 @@ describe('#fix', () => {
     const result = fix.call(command, data, schema, emptyMappings);
 
     expect(result.hasIssues).toBe(true);
-    expect(result.updatedData).toMatchInlineSnapshot(`
-      {
-        "category": {
-          "uri": "uri-that-does-not-map-to-5f92cbf10cf217478ba93561",
-        },
-        "title": "Hello, world!",
-      }
-    `);
+    expect(result.updatedData).toMatchSnapshot();
   });
 
   it('should fix legacy category slug', () => {
@@ -123,14 +109,7 @@ describe('#fix', () => {
     const result = fix.call(command, data, schema, emptyMappings);
 
     expect(result.hasIssues).toBe(true);
-    expect(result.updatedData).toMatchInlineSnapshot(`
-      {
-        "category": {
-          "uri": "some-slug",
-        },
-        "title": "Hello, world!",
-      }
-    `);
+    expect(result.updatedData).toMatchSnapshot();
   });
 
   it('should fix legacy parent page id and use mappings', () => {
@@ -145,14 +124,7 @@ describe('#fix', () => {
     });
 
     expect(result.hasIssues).toBe(true);
-    expect(result.updatedData).toMatchInlineSnapshot(`
-      {
-        "parent": {
-          "uri": "some-slug",
-        },
-        "title": "Hello, world!",
-      }
-    `);
+    expect(result.updatedData).toMatchSnapshot();
   });
 
   it('should delete legacy parent page id if no mapping is available', () => {
@@ -164,11 +136,7 @@ describe('#fix', () => {
     const result = fix.call(command, data, schema, emptyMappings);
 
     expect(result.hasIssues).toBe(true);
-    expect(result.updatedData).toMatchInlineSnapshot(`
-      {
-        "title": "Hello, world!",
-      }
-    `);
+    expect(result.updatedData).toMatchSnapshot();
   });
 
   it('should fix legacy parent page slug', () => {
@@ -180,14 +148,7 @@ describe('#fix', () => {
     const result = fix.call(command, data, schema, emptyMappings);
 
     expect(result.hasIssues).toBe(true);
-    expect(result.updatedData).toMatchInlineSnapshot(`
-      {
-        "parent": {
-          "uri": "some-slug",
-        },
-        "title": "Hello, world!",
-      }
-    `);
+    expect(result.updatedData).toMatchSnapshot();
   });
 
   it('should fix excerpt', () => {
@@ -199,14 +160,7 @@ describe('#fix', () => {
     const result = fix.call(command, data, schema, emptyMappings);
 
     expect(result.hasIssues).toBe(true);
-    expect(result.updatedData).toMatchInlineSnapshot(`
-      {
-        "content": {
-          "excerpt": "This is an excerpt",
-        },
-        "title": "Hello, world!",
-      }
-    `);
+    expect(result.updatedData).toMatchSnapshot();
   });
 
   it('should fix position', () => {
@@ -218,12 +172,7 @@ describe('#fix', () => {
     const result = fix.call(command, data, schema, emptyMappings);
 
     expect(result.hasIssues).toBe(true);
-    expect(result.updatedData).toMatchInlineSnapshot(`
-      {
-        "position": 5,
-        "title": "Hello, world!",
-      }
-    `);
+    expect(result.updatedData).toMatchSnapshot();
   });
 
   it('should fix privacy (public)', () => {
@@ -235,14 +184,7 @@ describe('#fix', () => {
     const result = fix.call(command, data, schema, emptyMappings);
 
     expect(result.hasIssues).toBe(true);
-    expect(result.updatedData).toMatchInlineSnapshot(`
-      {
-        "privacy": {
-          "view": "public",
-        },
-        "title": "Hello, world!",
-      }
-    `);
+    expect(result.updatedData).toMatchSnapshot();
   });
 
   it('should fix privacy (public, `hidden` is a string)', () => {
@@ -254,14 +196,7 @@ describe('#fix', () => {
     const result = fix.call(command, data, schema, emptyMappings);
 
     expect(result.hasIssues).toBe(true);
-    expect(result.updatedData).toMatchInlineSnapshot(`
-      {
-        "privacy": {
-          "view": "public",
-        },
-        "title": "Hello, world!",
-      }
-    `);
+    expect(result.updatedData).toMatchSnapshot();
   });
 
   it('should fix privacy (anyone_with_link)', () => {
@@ -273,14 +208,7 @@ describe('#fix', () => {
     const result = fix.call(command, data, schema, emptyMappings);
 
     expect(result.hasIssues).toBe(true);
-    expect(result.updatedData).toMatchInlineSnapshot(`
-      {
-        "privacy": {
-          "view": "anyone_with_link",
-        },
-        "title": "Hello, world!",
-      }
-    `);
+    expect(result.updatedData).toMatchSnapshot();
   });
 
   it('should fix privacy (anyone_with_link, `hidden` is a string)', () => {
@@ -292,14 +220,7 @@ describe('#fix', () => {
     const result = fix.call(command, data, schema, emptyMappings);
 
     expect(result.hasIssues).toBe(true);
-    expect(result.updatedData).toMatchInlineSnapshot(`
-      {
-        "privacy": {
-          "view": "anyone_with_link",
-        },
-        "title": "Hello, world!",
-      }
-    `);
+    expect(result.updatedData).toMatchSnapshot();
   });
 
   it.todo('should fix metadata object');
@@ -328,26 +249,7 @@ describe('#fix', () => {
     });
 
     expect(result.hasIssues).toBe(true);
-    expect(result.updatedData).toMatchInlineSnapshot(`
-      {
-        "category": {
-          "uri": "some-category-slug",
-        },
-        "content": {
-          "body": "This is the body",
-          "excerpt": "This is an excerpt",
-        },
-        "parent": {
-          "uri": "some-parent-slug",
-        },
-        "position": 7,
-        "privacy": {
-          "view": "anyone_with_link",
-        },
-        "slug": "some-slug",
-        "title": "Hello, world!",
-      }
-    `);
+    expect(result.updatedData).toMatchSnapshot();
   });
 });
 
