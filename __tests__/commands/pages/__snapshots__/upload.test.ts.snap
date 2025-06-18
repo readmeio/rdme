@@ -309,7 +309,7 @@ exports[`rdme docs upload > given that the file path is a directory > should han
 }
 `;
 
-exports[`rdme docs upload > given that the file path is a directory > should update existing guides pages in ReadMe for each file in the directory and its subdirectories 1`] = `
+exports[`rdme docs upload > given that the file path is a directory > should update existing pages in ReadMe for each file in the directory and its subdirectories 1`] = `
 {
   "result": {
     "created": [],
@@ -650,7 +650,7 @@ exports[`rdme docs upload > given that the file path is a single file > given th
 }
 `;
 
-exports[`rdme docs upload > given that the file path is a single file > given that the slug is passed in the frontmatter > should use that slug update an existing guides page in ReadMe 1`] = `
+exports[`rdme docs upload > given that the file path is a single file > given that the slug is passed in the frontmatter > should use that slug update an existing page in ReadMe 1`] = `
 {
   "result": {
     "created": [],
@@ -1182,7 +1182,7 @@ exports[`rdme reference upload > given that the file path is a directory > shoul
 }
 `;
 
-exports[`rdme reference upload > given that the file path is a directory > should update existing reference pages in ReadMe for each file in the directory and its subdirectories 1`] = `
+exports[`rdme reference upload > given that the file path is a directory > should update existing pages in ReadMe for each file in the directory and its subdirectories 1`] = `
 {
   "result": {
     "created": [],
@@ -1523,7 +1523,7 @@ exports[`rdme reference upload > given that the file path is a single file > giv
 }
 `;
 
-exports[`rdme reference upload > given that the file path is a single file > given that the slug is passed in the frontmatter > should use that slug update an existing reference page in ReadMe 1`] = `
+exports[`rdme reference upload > given that the file path is a single file > given that the slug is passed in the frontmatter > should use that slug update an existing page in ReadMe 1`] = `
 {
   "result": {
     "created": [],

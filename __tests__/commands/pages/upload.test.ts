@@ -196,7 +196,7 @@ describe.each([
         mock.done();
       });
 
-      it(`should use that slug update an existing ${route} page in ReadMe`, async () => {
+      it('should use that slug update an existing page in ReadMe', async () => {
         const mock = getAPIv2Mock({ authorization })
           .get(`/branches/stable/${route}/some-slug`)
           .reply(200)
@@ -513,7 +513,7 @@ describe.each([
       mock.done();
     });
 
-    it(`should update existing ${route} pages in ReadMe for each file in the directory and its subdirectories`, async () => {
+    it('should update existing pages in ReadMe for each file in the directory and its subdirectories', async () => {
       const mock = getAPIv2Mock({ authorization })
         .get(`/branches/stable/${route}/simple-doc`)
         .reply(200)
