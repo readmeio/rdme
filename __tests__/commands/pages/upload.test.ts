@@ -5,7 +5,7 @@ import prompts from 'prompts';
 import { describe, afterEach, it, expect, beforeAll, beforeEach, vi } from 'vitest';
 
 import GuidesCommand from '../../../src/commands/docs/upload.js';
-import ReferenceCommand from '../../../src/commands/references/upload.js';
+import ReferenceCommand from '../../../src/commands/reference/upload.js';
 import { getAPIv1Mock, getAPIv2Mock, getAPIv2MockForGHA } from '../../helpers/get-api-mock.js';
 import { githubActionsEnv } from '../../helpers/git-mock.js';
 import { runCommand, type OclifOutput } from '../../helpers/oclif.js';
