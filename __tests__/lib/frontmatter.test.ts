@@ -230,6 +230,42 @@ describe.each([
     expect(result.updatedData).toMatchSnapshot();
   });
 
+  it('should fix htmlmode (true)', () => {
+    const data = {
+      title: 'Hello, world!',
+      htmlmode: true,
+    };
+
+    const result = fix.call(command, data, schema, emptyMappings);
+
+    expect(result.hasIssues).toBe(true);
+    expect(result.updatedData).toMatchSnapshot();
+  });
+
+  it('should fix htmlmode (false)', () => {
+    const data = {
+      title: 'Hello, world!',
+      htmlmode: false,
+    };
+
+    const result = fix.call(command, data, schema, emptyMappings);
+
+    expect(result.hasIssues).toBe(true);
+    expect(result.updatedData).toMatchSnapshot();
+  });
+
+  it('should fix fullscreen', () => {
+    const data = {
+      title: 'Hello, world!',
+      fullscreen: true,
+    };
+
+    const result = fix.call(command, data, schema, emptyMappings);
+
+    expect(result.hasIssues).toBe(true);
+    expect(result.updatedData).toMatchSnapshot();
+  });
+
   it.todo('should fix metadata object');
 
   it.todo('should fix content.link object');
@@ -248,6 +284,7 @@ describe.each([
       order: 7,
       hidden: true,
       slug: 'some-slug',
+      htmlmode: false,
     };
 
     const result = fix.call(command, data, schema, {

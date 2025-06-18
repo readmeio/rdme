@@ -138,7 +138,22 @@ export function fix(
               break;
           }
         } else {
-          // todo: placeholder for attributes specific to custom pages
+          // todo: change this else to a condition that checks if the route is custom pages
+          switch (badKey) {
+            case 'htmlmode':
+              // if the `content` object exists, add to it. otherwise, create it
+              if (typeof updatedData.content === 'object' && updatedData.content) {
+                (updatedData.content as Record<string, unknown>).type = extractedValue ? 'html' : 'markdown';
+              } else {
+                updatedData.content = { type: extractedValue ? 'html' : 'markdown' };
+              }
+              break;
+            case 'fullscreen':
+              updatedData.appearance = { fullscreen: extractedValue };
+              break;
+            default:
+              break;
+          }
         }
       } else {
         unfixableErrors.push(error);
