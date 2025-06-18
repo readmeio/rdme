@@ -85,7 +85,11 @@ export function fix(
   }
 
   errors.forEach(error => {
-    if (error.instancePath === '/category' && error.keyword === 'type') {
+    if (
+      error.instancePath === '/category' &&
+      error.keyword === 'type' &&
+      (this.route === 'guides' || this.route === 'reference')
+    ) {
       const uri = mappings.categories[data.category as string];
       updatedData.category = {
         uri: uri || `uri-that-does-not-map-to-${data.category}`,
