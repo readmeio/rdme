@@ -15,6 +15,24 @@ exports[`#fix (guides migrate) > should fix excerpt 1`] = `
 }
 `;
 
+exports[`#fix (guides migrate) > should fix fullscreen 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides migrate) > should fix htmlmode (false) 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides migrate) > should fix htmlmode (true) 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
 exports[`#fix (guides migrate) > should fix legacy category id and use fallback mapping 1`] = `
 {
   "category": {
@@ -139,6 +157,24 @@ exports[`#fix (guides upload) > should fix excerpt 1`] = `
 }
 `;
 
+exports[`#fix (guides upload) > should fix fullscreen 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides upload) > should fix htmlmode (false) 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides upload) > should fix htmlmode (true) 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
 exports[`#fix (guides upload) > should fix legacy category id and use fallback mapping 1`] = `
 {
   "category": {
@@ -259,6 +295,24 @@ exports[`#fix (reference upload) > should fix excerpt 1`] = `
   "content": {
     "excerpt": "This is an excerpt",
   },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (reference upload) > should fix fullscreen 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (reference upload) > should fix htmlmode (false) 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (reference upload) > should fix htmlmode (true) 1`] = `
+{
   "title": "Hello, world!",
 }
 `;
