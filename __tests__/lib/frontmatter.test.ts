@@ -377,6 +377,7 @@ describe('#fix', () => {
       order: 7,
       hidden: true,
       slug: 'some-slug',
+      htmlmode: false,
     };
 
     const result = fix.call(command, data, schema, {
@@ -393,6 +394,7 @@ describe('#fix', () => {
         "content": {
           "body": "This is the body",
           "excerpt": "This is an excerpt",
+          "type": "markdown",
         },
         "parent": {
           "uri": "some-parent-slug",
