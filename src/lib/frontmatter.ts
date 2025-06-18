@@ -108,32 +108,34 @@ export function fix(
           const hidden = typeof extractedValue === 'boolean' ? extractedValue : extractedValue === 'true';
           updatedData.privacy = { view: hidden ? 'anyone_with_link' : 'public' };
         } else if (this.route === 'guides' || this.route === 'reference') {
-          if (badKey === 'excerpt') {
-            // if the `content` object exists, add to it. otherwise, create it
-            if (typeof updatedData.content === 'object' && updatedData.content) {
-              (updatedData.content as Record<string, unknown>).excerpt = extractedValue;
-            } else {
-              updatedData.content = {
-                excerpt: extractedValue,
-              };
-            }
-          } else if (badKey === 'categorySlug') {
-            updatedData.category = {
-              uri: extractedValue,
-            };
-          } else if (badKey === 'parentDoc') {
-            const uri = mappings.parentPages[extractedValue as string];
-            if (uri) {
-              updatedData.parent = {
-                uri,
-              };
-            }
-          } else if (badKey === 'parentDocSlug') {
-            updatedData.parent = {
-              uri: extractedValue,
-            };
-          } else if (badKey === 'order') {
-            updatedData.position = extractedValue;
+          switch (badKey) {
+            case 'excerpt':
+              // if the `content` object exists, add to it. otherwise, create it
+              if (typeof updatedData.content === 'object' && updatedData.content) {
+                (updatedData.content as Record<string, unknown>).excerpt = extractedValue;
+              } else {
+                updatedData.content = { excerpt: extractedValue };
+              }
+              break;
+            case 'categorySlug':
+              updatedData.category = { uri: extractedValue };
+              break;
+            case 'parentDoc':
+              {
+                const uri = mappings.parentPages[extractedValue as string];
+                if (uri) {
+                  updatedData.parent = { uri };
+                }
+              }
+              break;
+            case 'parentDocSlug':
+              updatedData.parent = { uri: extractedValue };
+              break;
+            case 'order':
+              updatedData.position = extractedValue;
+              break;
+            default:
+              break;
           }
         } else {
           // todo: placeholder for attributes specific to custom pages
