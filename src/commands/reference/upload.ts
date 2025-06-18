@@ -53,7 +53,8 @@ export default class RefUploadCommand extends BaseCommand<typeof RefUploadComman
     ...branchFlag(),
     'confirm-autofixes': confirmAutofixesFlag,
     'dry-run': Flags.boolean({
-      description: 'Runs the command without creating nor updating any reference pages in ReadMe. Useful for debugging.',
+      description:
+        'Runs the command without creating nor updating any reference pages in ReadMe. Useful for debugging.',
       aliases: ['dryRun'],
       deprecateAliases: true,
     }),
