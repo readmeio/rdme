@@ -237,7 +237,12 @@ export default async function syncPagePath(this: APIv2PageUploadCommands) {
     );
   }
 
-  let unsortedFiles = await findPages.call(this, pathInput);
+  const validFileExtensions = ['.markdown', '.md', '.mdx'];
+  if (this.route === 'custom_pages') {
+    validFileExtensions.push('.html');
+  }
+
+  let unsortedFiles = await findPages.call(this, pathInput, validFileExtensions);
 
   if (skipValidation) {
     if (biDiConnection) {
