@@ -1,7 +1,6 @@
 import type ChangelogsCommand from '../commands/changelogs.js';
 import type DocsMigrateCommand from '../commands/docs/migrate.js';
-import type DocsUploadCommand from '../commands/docs/upload.js';
-import type RefUploadCommand from '../commands/reference/upload.js';
+import type { APIv2PageUploadCommands } from '../index.js';
 
 import crypto from 'node:crypto';
 import fs from 'node:fs';
@@ -48,7 +47,7 @@ export interface PageMetadata<T = Record<string, unknown>> {
  * Returns the content, matter and slug of the specified Markdown or HTML file
  */
 export function readPage(
-  this: ChangelogsCommand | DocsMigrateCommand | DocsUploadCommand | RefUploadCommand,
+  this: APIv2PageUploadCommands | ChangelogsCommand | DocsMigrateCommand,
   /**
    * path to the HTML/Markdown file
    * (file extension must end in `.html`, `.md`., or `.markdown`)
@@ -78,7 +77,7 @@ export function readPage(
  * Once the files are found, it reads each file and returns an array of page metadata objects (e.g., the parsed frontmatter data).
  */
 export async function findPages(
-  this: ChangelogsCommand | DocsMigrateCommand | DocsUploadCommand | RefUploadCommand,
+  this: APIv2PageUploadCommands | ChangelogsCommand | DocsMigrateCommand,
   pathInput: string,
   allowedFileExtensions: string[] = ['.markdown', '.md', '.mdx'],
 ) {
