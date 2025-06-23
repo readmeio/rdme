@@ -3,6 +3,8 @@ import type {
   GuidesRequestRepresentation,
   GuidesResponseRepresentation,
   ProjectRepresentation,
+  ReferenceRequestRepresentation,
+  ReferenceResponseRepresentation,
 } from './types/index.js';
 
 import chalk from 'chalk';
@@ -15,9 +17,8 @@ import { findPages, type PageMetadata } from './readPage.js';
 import { categoryUriRegexPattern, parentUriRegexPattern } from './types/index.js';
 import { validateFrontmatter } from './validateFrontmatter.js';
 
-// todo: eventually this type will be used for other page types (e.g., API Reference)
-type PageRequestRepresentation = GuidesRequestRepresentation;
-type PageResponseRepresentation = GuidesResponseRepresentation['data'];
+type PageRequestRepresentation = GuidesRequestRepresentation | ReferenceRequestRepresentation;
+type PageResponseRepresentation = GuidesResponseRepresentation['data'] | ReferenceResponseRepresentation['data'];
 
 interface BasePushResult {
   filePath: string;
