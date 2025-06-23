@@ -707,7 +707,12 @@ const document = {
                             '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
                           description: 'A URI to the API definition resource.',
                         },
-                        schema: { type: 'object', additionalProperties: {}, nullable: true, description: 'The API schema.' },
+                        schema: {
+                          type: 'object',
+                          additionalProperties: {},
+                          nullable: true,
+                          description: 'The API schema.',
+                        },
                       },
                       required: [
                         'created_at',
