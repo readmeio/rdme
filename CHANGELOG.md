@@ -1,3 +1,10 @@
+# [10.3.0-next.5](https://github.com/readmeio/rdme/compare/v10.3.0-next.4...v10.3.0-next.5) (2025-06-23)
+
+
+### Bug Fixes
+
+* **openapi/upload:** handle `pending_update` ([#1269](https://github.com/readmeio/rdme/issues/1269)) ([9e94ac1](https://github.com/readmeio/rdme/commit/9e94ac1e1318b05b8bb133829805d431fc3f2558))
+
 # [10.3.0-next.4](https://github.com/readmeio/rdme/compare/v10.3.0-next.3...v10.3.0-next.4) (2025-06-23)
 
 
