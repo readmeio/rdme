@@ -1,5 +1,4 @@
 import type { PageMetadata } from '../../src/lib/readPage.js';
-import type nock from 'nock';
 import type { SchemaObject } from 'oas/types';
 
 import fs from 'node:fs';
@@ -9,23 +8,16 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import DocsUploadCommand from '../../src/commands/docs/upload.js';
 import { fix, writeFixes } from '../../src/lib/frontmatter.js';
 import { emptyMappings, fetchSchema } from '../../src/lib/readmeAPIFetch.js';
-import { oasFetchMock } from '../helpers/get-api-mock.js';
 import { setupOclifConfig } from '../helpers/oclif.js';
 
 describe('#fix', () => {
   let command: DocsUploadCommand;
-  let mock: nock.Scope;
   let schema: SchemaObject;
 
   beforeEach(async () => {
     const oclifConfig = await setupOclifConfig();
     command = new DocsUploadCommand([], oclifConfig);
-    mock = oasFetchMock();
-    schema = await fetchSchema.call(command);
-  });
-
-  afterEach(() => {
-    mock.done();
+    schema = fetchSchema.call(command);
   });
 
   it('should do nothing for an empty object', () => {
