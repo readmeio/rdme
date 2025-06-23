@@ -78,7 +78,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
   // eslint-disable-next-line class-methods-use-this
   private isStatusPending(status: APIUploadStatus): status is 'pending_update' | 'pending' {
-    return ['pending_update', 'pending'].includes(status);
+    return status.includes('pending');
   }
 
   /**
