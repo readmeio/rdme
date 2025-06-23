@@ -16,6 +16,12 @@ type projectSchema =
 type apiKeySchema =
   (typeof readmeAPIv2Oas)['paths']['/projects/{subdomain}/apikeys/{api_key_id}']['get']['responses']['200']['content']['application/json']['schema'];
 
+type apiUploadSingleResponseSchema =
+  (typeof readmeAPIv2Oas)['paths']['/branches/{branch}/apis/{filename}']['get']['responses']['200']['content']['application/json']['schema'];
+
+type stagedApiUploadResponseSchema =
+  (typeof readmeAPIv2Oas)['paths']['/branches/{branch}/apis']['post']['responses']['202']['content']['application/json']['schema'];
+
 /** Page schemas */
 type guidesRequestBodySchema =
   (typeof readmeAPIv2Oas)['paths']['/branches/{branch}/guides/{slug}']['patch']['requestBody']['content']['application/json']['schema'];
@@ -31,15 +37,35 @@ type referenceResponseBodySchema =
 
 /**
  * Derived from our API documentation, this is the schema for the `project` object
- * as we receive it to the ReadMe API.
+ * as we receive it from the ReadMe API.
  */
 export type ProjectRepresentation = FromSchema<projectSchema, { keepDefaultedPropertiesOptional: true }>;
 
 /**
  * Derived from our API documentation, this is the schema for the API key object
- * as we receive it to the ReadMe API.
+ * as we receive it from the ReadMe API.
  */
 export type APIKeyRepresentation = FromSchema<apiKeySchema, { keepDefaultedPropertiesOptional: true }>;
+
+/**
+ * Derived from our API documentation, this is the schema for the API upload response
+ * as we receive it from the "Get an API definition" endpoint of the ReadMe API.
+ */
+export type APIUploadSingleResponseRepresentation = FromSchema<
+  apiUploadSingleResponseSchema,
+  { keepDefaultedPropertiesOptional: true }
+>;
+
+/**
+ * Derived from our API documentation, this is the schema for a staged API upload
+ * as we receive it from the `POST` and `PATCH` API definition endpoints of the ReadMe API.
+ */
+export type StagedAPIUploadResponseRepresentation = FromSchema<
+  stagedApiUploadResponseSchema,
+  { keepDefaultedPropertiesOptional: true }
+>;
+
+export type APIUploadStatus = APIUploadSingleResponseRepresentation['data']['upload']['status'];
 
 /**
  * Derived from our API documentation, this is the schema for the `guides` object
@@ -55,7 +81,7 @@ export type GuidesRequestRepresentation = FromSchema<
 
 /**
  * Derived from our API documentation, this is the schema for the `guides` object
- * as we receive it to the ReadMe API.
+ * as we receive from to the ReadMe API.
  */
 export type GuidesResponseRepresentation = FromSchema<
   guidesResponseBodySchema,
@@ -76,7 +102,7 @@ export type ReferenceRequestRepresentation = FromSchema<
 
 /**
  * Derived from our API documentation, this is the schema for the `reference` object
- * as we receive it to the ReadMe API.
+ * as we receive it from the ReadMe API.
  */
 export type ReferenceResponseRepresentation = FromSchema<
   referenceResponseBodySchema,
