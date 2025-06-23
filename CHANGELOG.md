@@ -1,3 +1,10 @@
+# [10.3.0-next.4](https://github.com/readmeio/rdme/compare/v10.3.0-next.3...v10.3.0-next.4) (2025-06-23)
+
+
+### Bug Fixes
+
+* **lib/fetchSchema:** don't fetch OAS schemas from our API ([#1267](https://github.com/readmeio/rdme/issues/1267)) ([7344309](https://github.com/readmeio/rdme/commit/734430959645181e2a85d56a237e58c88fc79347))
+
 # [10.3.0-next.3](https://github.com/readmeio/rdme/compare/v10.3.0-next.2...v10.3.0-next.3) (2025-06-18)
 
 
