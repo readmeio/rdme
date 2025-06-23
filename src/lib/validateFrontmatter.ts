@@ -25,7 +25,7 @@ export async function validateFrontmatter(
 
   const validationSpinner = ora({ ...oraOptions() }).start('🔬 Validating frontmatter data...');
 
-  const schema = await fetchSchema.call(this);
+  const schema = fetchSchema.call(this);
   const mappings = await fetchMappings.call(this);
 
   // validate the files, prompt user to fix if necessary
