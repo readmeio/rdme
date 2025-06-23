@@ -712,12 +712,7 @@ const document = {
                             '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
                           description: 'A URI to the API definition resource.',
                         },
-                        schema: {
-                          type: 'object',
-                          additionalProperties: {},
-                          nullable: true,
-                          description: 'The API schema.',
-                        },
+                        schema: { type: 'object', additionalProperties: {}, description: 'The API schema.' },
                       },
                       required: [
                         'created_at',
@@ -7027,7 +7022,11 @@ const document = {
                         description: 'The endpoint HTTP method.',
                       },
                       path: { type: 'string', description: 'The endpoint path.' },
-                      schema: { nullable: true },
+                      schema: {
+                        type: 'object',
+                        additionalProperties: {},
+                        nullable: true,
+                      },
                       stats: {
                         type: 'object',
                         properties: {
@@ -7331,6 +7330,8 @@ const document = {
                             },
                             path: { type: 'string', description: 'The endpoint path.' },
                             schema: {
+                              type: 'object',
+                              additionalProperties: {},
                               nullable: true,
                               description:
                                 'The API schema for this reference endpoint. This schema may be a reduced (i.e., only contains the necessary information for this endpoint) and/or dereferenced version of the full API definition, depending upon the query parameters used for this request.',
@@ -9154,7 +9155,14 @@ const document = {
               'application/json': {
                 schema: {
                   type: 'object',
-                  properties: { schema: { type: 'object', additionalProperties: {}, description: 'The API schema.' } },
+                  properties: {
+                    schema: {
+                      type: 'object',
+                      additionalProperties: {},
+                      nullable: true,
+                      description: 'The API schema.',
+                    },
+                  },
                   required: ['schema'],
                   additionalProperties: false,
                 },
