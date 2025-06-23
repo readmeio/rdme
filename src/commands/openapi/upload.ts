@@ -154,8 +154,6 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
     this.debug(`making a ${method} request`);
 
-    this.warn(method);
-
     // if the file already exists, ask the user if they want to overwrite it
     if (method === 'PUT') {
       // bypass the prompt if we're in a CI environment

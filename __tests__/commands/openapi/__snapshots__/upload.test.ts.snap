@@ -187,7 +187,6 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
  ›   __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This 
  ›   slug is not visible to your end users. To set this slug to something else,
  ›    use the \`--slug\` flag.
- ›   Warning: PUT
 - Updating your API definition to ReadMe...
 ✔ Updating your API definition to ReadMe... uploaded but not yet processed by ReadMe. Polling for completion... done!
 ",
