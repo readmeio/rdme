@@ -30,13 +30,14 @@ npx markdown-toc documentation/migration-guide.md --maxdepth 2 --bullets="-" -i
 This guide explains how to install `rdme@10` for use with [ReadMe Refactored]{https://docs.readme.com/main/docs/welcome-to-readme-refactored}. In general, we recommend [bi-directional syncing](https://docs.readme.com/main/docs/bi-directional-sync) for tasks like:
 
 - Syncing Markdown files
-- Syncing API definitions
+- Syncing API definitions (and editing them visually with [the API designer](https://docs.readme.com/main/docs/building-apis-from-scratch-with-the-api-designer))
 - Managing project hierarchy (e.g., versions and categories)
 
 However `rdme@10` is useful for more targeted workflows—particularly when syncing happens outside of Git, such as:
 
-- Syncing your API definition (generated via a build process and not tracked via Git)
-- Syncing Markdown files to the Changelog
+- A one-directional sync of an API definition (e.g., if it is generated via a build process and/or is not tracked via your bidirectionally synced Git repo)
+- A one-directional sync of Markdown files (e.g., if they are updated via a build process and/or are not tracked via your bidirectionally synced Git repo)
+- Any non-syncing processing for an API definition (e.g., validating it, reducing it a set of fewer operations)
 
 <!-- prettier-ignore-start -->
 > [!NOTE]
