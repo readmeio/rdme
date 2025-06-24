@@ -90,8 +90,9 @@ export async function findPages(
   });
 
   if (stat.isDirectory()) {
+    const includeHtml = allowedFileExtensions.includes('.html') ? 'and/or HTML ' : '';
     const fileScanningSpinner = ora({ ...oraOptions() }).start(
-      `🔍 Looking for Markdown files in the \`${pathInput}\` directory...`,
+      `🔍 Looking for Markdown ${includeHtml}files in the \`${pathInput}\` directory...`,
     );
     // Filter out any files that don't match allowedFileExtensions
     files = readdirRecursive(pathInput).filter(file =>
