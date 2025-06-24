@@ -35,7 +35,7 @@ type referenceRequestBodySchema =
 type referenceResponseBodySchema =
   (typeof readmeAPIv2Oas)['paths']['/branches/{branch}/reference/{slug}']['patch']['responses']['200']['content']['application/json']['schema'];
 
-  type changelogRequestBodySchema =
+type changelogRequestBodySchema =
   (typeof readmeAPIv2Oas)['paths']['/changelogs/{identifier}']['patch']['requestBody']['content']['application/json']['schema'];
 
 type changelogResponseBodySchema =
