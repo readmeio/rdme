@@ -13,7 +13,7 @@ import toposort from 'toposort';
 
 import { APIv2Error } from './apiError.js';
 import { oraOptions } from './logger.js';
-import { findPages, type PageMetadata } from './readPage.js';
+import { allowedMarkdownExtensions, findPages, type PageMetadata } from './readPage.js';
 import { categoryUriRegexPattern, parentUriRegexPattern } from './types/index.js';
 import { validateFrontmatter } from './validateFrontmatter.js';
 
@@ -238,7 +238,7 @@ export default async function syncPagePath(this: APIv2PageUploadCommands) {
     );
   }
 
-  const validFileExtensions = ['.markdown', '.md', '.mdx'];
+  const validFileExtensions = allowedMarkdownExtensions;
   if (this.route === 'custom_pages') {
     validFileExtensions.push('.html');
   }

@@ -42,6 +42,8 @@ export interface PageMetadata<T = Record<string, unknown>> {
   slug: string;
 }
 
+export const allowedMarkdownExtensions: string[] = ['.markdown', '.md', '.mdx'];
+
 /**
  * Returns the content, matter and slug of the specified Markdown or HTML file
  */
@@ -78,7 +80,7 @@ export function readPage(
 export async function findPages(
   this: APIv2PageCommands | ChangelogsCommand,
   pathInput: string,
-  allowedFileExtensions: string[] = ['.markdown', '.md', '.mdx'],
+  allowedFileExtensions: string[] = allowedMarkdownExtensions,
 ) {
   let files: string[];
 
