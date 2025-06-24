@@ -238,6 +238,44 @@ describe('rdme openapi upload', () => {
         mock.done();
       });
 
+      it('should poll the API until the update is complete', async () => {
+        prompts.inject([true]);
+
+        const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+          .get(`/branches/${branch}/apis`)
+          .reply(200, { data: [{ filename: slugifiedFilename }] })
+          .put(`/branches/1.0.0/apis/${slugifiedFilename}`, body =>
+            body.match(`form-data; name="schema"; filename="${slugifiedFilename}"`),
+          )
+          .reply(200, {
+            data: {
+              upload: { status: 'pending_update' },
+              uri: `/branches/${branch}/apis/${slugifiedFilename}`,
+            },
+          })
+          .get(`/branches/${branch}/apis/${slugifiedFilename}`)
+          .times(4)
+          .reply(200, {
+            data: {
+              upload: { status: 'pending_update' },
+              uri: `/branches/${branch}/apis/${slugifiedFilename}`,
+            },
+          })
+          .get(`/branches/${branch}/apis/${slugifiedFilename}`)
+          .reply(200, {
+            data: {
+              upload: { status: 'done' },
+              uri: `/branches/${branch}/apis/${slugifiedFilename}`,
+            },
+          });
+
+        const result = await run(['--branch', branch, filename, '--key', key]);
+
+        expect(result).toMatchSnapshot();
+
+        mock.done();
+      });
+
       it('should poll the API and handle timeouts', async () => {
         const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
           .get(`/branches/${branch}/apis`)

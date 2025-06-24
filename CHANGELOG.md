@@ -1,3 +1,32 @@
+# [10.3.0](https://github.com/readmeio/rdme/compare/v10.2.2...v10.3.0) (2025-06-24)
+
+
+### Bug Fixes
+
+* **lib/fetchSchema:** don't fetch OAS schemas from our API ([#1267](https://github.com/readmeio/rdme/issues/1267)) ([7344309](https://github.com/readmeio/rdme/commit/734430959645181e2a85d56a237e58c88fc79347))
+* **openapi/upload:** handle `pending_update` ([#1269](https://github.com/readmeio/rdme/issues/1269)) ([9e94ac1](https://github.com/readmeio/rdme/commit/9e94ac1e1318b05b8bb133829805d431fc3f2558))
+
+
+### Features
+
+* filter `oas/analyzer` data by allowed keys ([#1259](https://github.com/readmeio/rdme/issues/1259)) ([766fb42](https://github.com/readmeio/rdme/commit/766fb42e246d098f87080abc2cd5af668b37ef03))
+* new `reference upload` command ([#1261](https://github.com/readmeio/rdme/issues/1261)) ([01e8198](https://github.com/readmeio/rdme/commit/01e81989823fb846e1719ab25470bb67c1d9a021))
+* properly display file size feature in openapi inspect command ([#1257](https://github.com/readmeio/rdme/issues/1257)) ([d957cb2](https://github.com/readmeio/rdme/commit/d957cb2cac078b88bd9ec2737d5358faa05e3449))
+
+# [10.3.0-next.5](https://github.com/readmeio/rdme/compare/v10.3.0-next.4...v10.3.0-next.5) (2025-06-23)
+
+
+### Bug Fixes
+
+* **openapi/upload:** handle `pending_update` ([#1269](https://github.com/readmeio/rdme/issues/1269)) ([9e94ac1](https://github.com/readmeio/rdme/commit/9e94ac1e1318b05b8bb133829805d431fc3f2558))
+
+# [10.3.0-next.4](https://github.com/readmeio/rdme/compare/v10.3.0-next.3...v10.3.0-next.4) (2025-06-23)
+
+
+### Bug Fixes
+
+* **lib/fetchSchema:** don't fetch OAS schemas from our API ([#1267](https://github.com/readmeio/rdme/issues/1267)) ([7344309](https://github.com/readmeio/rdme/commit/734430959645181e2a85d56a237e58c88fc79347))
+
 # [10.3.0-next.3](https://github.com/readmeio/rdme/compare/v10.3.0-next.2...v10.3.0-next.3) (2025-06-18)
 
 

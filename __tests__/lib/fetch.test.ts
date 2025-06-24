@@ -4,7 +4,7 @@ import { describe, beforeEach, afterEach, it, expect, vi, type MockInstance } fr
 import pkg from '../../package.json' with { type: 'json' };
 import DocsUploadCommand from '../../src/commands/docs/upload.js';
 import { cleanAPIv1Headers, fetchSchema, handleAPIv1Res, readmeAPIv1Fetch } from '../../src/lib/readmeAPIFetch.js';
-import { getAPIv1Mock, oasFetchMock } from '../helpers/get-api-mock.js';
+import { getAPIv1Mock } from '../helpers/get-api-mock.js';
 import { githubActionsEnv } from '../helpers/git-mock.js';
 import { setupOclifConfig } from '../helpers/oclif.js';
 
@@ -378,26 +378,10 @@ describe('#cleanAPIv1Headers()', () => {
 
 describe('#fetchSchema', () => {
   it('should fetch the schema', async () => {
-    const mock = oasFetchMock();
-
     const oclifConfig = await setupOclifConfig();
     const command = new DocsUploadCommand([], oclifConfig);
-    const schema = await fetchSchema.call(command);
+    const schema = fetchSchema.call(command);
 
     expect(schema.type).toBe('object');
-
-    mock.done();
-  });
-
-  it('should have a fallback value in case fetch fails', async () => {
-    const mock = oasFetchMock(500);
-
-    const oclifConfig = await setupOclifConfig();
-    const command = new DocsUploadCommand([], oclifConfig);
-    const schema = await fetchSchema.call(command);
-
-    expect(schema.type).toBe('object');
-
-    mock.done();
   });
 });
