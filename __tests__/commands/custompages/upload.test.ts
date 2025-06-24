@@ -41,7 +41,6 @@ describe('custompages upload', () => {
         .get('/branches/stable/custom_pages/new-doc')
         .reply(404)
         .post('/branches/stable/custom_pages', {
-          category: { uri: '/branches/stable/categories/custom_pages/category-slug' },
           slug: 'new-doc',
           title: 'This is the document title',
           content: { body: '\nBody\n' },
@@ -61,7 +60,6 @@ describe('custompages upload', () => {
         .get('/branches/stable/custom_pages/new-doc')
         .reply(404)
         .post('/branches/stable/custom_pages', {
-          category: { uri: '/branches/stable/categories/custom_pages/category-slug' },
           slug: 'new-doc',
           title: 'This is the document title',
           content: { body: '\nBody\n' },
@@ -86,7 +84,6 @@ describe('custompages upload', () => {
         .get('/branches/1.2.3/custom_pages/new-doc')
         .reply(404)
         .post('/branches/1.2.3/custom_pages', {
-          category: { uri: '/branches/1.2.3/categories/custom_pages/category-slug' },
           slug: 'new-doc',
           title: 'This is the document title',
           content: { body: '\nBody\n' },
@@ -112,7 +109,6 @@ describe('custompages upload', () => {
         .get('/branches/4.5.6/custom_pages/new-doc')
         .reply(404)
         .post('/branches/4.5.6/custom_pages', {
-          category: { uri: '/branches/4.5.6/categories/custom_pages/category-slug' },
           slug: 'new-doc',
           title: 'This is the document title',
           content: { body: '\nBody\n' },
@@ -204,7 +200,6 @@ describe('custompages upload', () => {
           .get('/branches/stable/custom_pages/some-slug')
           .reply(404)
           .post('/branches/stable/custom_pages', {
-            category: { uri: '/branches/stable/categories/custom_pages/some-category-uri' },
             title: 'This is the document title',
             content: { body: '\nBody\n' },
             slug: 'some-slug',
@@ -224,7 +219,6 @@ describe('custompages upload', () => {
           .get('/branches/stable/custom_pages/some-slug')
           .reply(200)
           .patch('/branches/stable/custom_pages/some-slug', {
-            category: { uri: '/branches/stable/categories/custom_pages/some-category-uri' },
             title: 'This is the document title',
             content: { body: '\nBody\n' },
           })
@@ -242,76 +236,35 @@ describe('custompages upload', () => {
     describe('given that the file has frontmatter issues', () => {
       it('should fix the frontmatter issues in the file and create the corrected file in ReadMe', async () => {
         const mock = getAPIv2Mock({ authorization })
-          .get('/branches/stable/custom_pages/legacy-category')
+          .get('/branches/stable/custom_pages/legacy-page')
           .reply(404)
           .post('/branches/stable/custom_pages', {
-            category: {
-              uri: '/branches/stable/categories/custom_pages/uri-that-does-not-map-to-5ae122e10fdf4e39bb34db6f',
-            },
-            slug: 'legacy-category',
+            slug: 'legacy-page',
             title: 'This is the document title',
             content: { body: '\nBody\n' },
+            privacy: { view: 'anyone_with_link' },
+            appearance: { fullscreen: true },
           })
           .reply(201, {});
 
         prompts.inject([true]);
 
-        const result = await run(['__tests__/__fixtures__/custompages/mixed-docs/legacy-category.md', '--key', key]);
+        const result = await run(['__tests__/__fixtures__/custompages/mixed-docs/legacy-page.md', '--key', key]);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).toHaveBeenCalledWith(
-          '__tests__/__fixtures__/custompages/mixed-docs/legacy-category.md',
-          expect.stringContaining('uri: uri-that-does-not-map-to-5ae122e10fdf4e39bb34db6f'),
+          '__tests__/__fixtures__/custompages/mixed-docs/legacy-page.md',
+          expect.stringContaining('view: anyone_with_link'),
           { encoding: 'utf-8' },
         );
 
         mock.done();
-      });
-
-      it('should fix the frontmatter issues in the file and insert the proper category mapping', async () => {
-        nock.cleanAll();
-        const mappingsMock = getAPIv1Mock()
-          .get('/api/v1/migration')
-          .basicAuth({ user: key })
-          .reply(201, {
-            categories: { '5ae122e10fdf4e39bb34db6f': 'mapped-uri' },
-          });
-
-        const mock = getAPIv2Mock({ authorization })
-          .get('/branches/stable/custom_pages/legacy-category')
-          .reply(404)
-          .post('/branches/stable/custom_pages', {
-            category: { uri: '/branches/stable/categories/custom_pages/mapped-uri' },
-            slug: 'legacy-category',
-            title: 'This is the document title',
-            content: { body: '\nBody\n' },
-          })
-          .reply(201, {});
-
-        const projectsMeMock = getAPIv2Mock({ authorization }).get('/projects/me').reply(200, {
-          data: {},
-        });
-
-        prompts.inject([true]);
-
-        const result = await run(['__tests__/__fixtures__/custompages/mixed-docs/legacy-category.md', '--key', key]);
-
-        expect(result).toMatchSnapshot();
-        expect(fs.writeFileSync).toHaveBeenCalledWith(
-          '__tests__/__fixtures__/custompages/mixed-docs/legacy-category.md',
-          expect.stringContaining('uri: mapped-uri'),
-          { encoding: 'utf-8' },
-        );
-
-        mappingsMock.done();
-        mock.done();
-        projectsMeMock.done();
       });
 
       it('should exit if the user declines to fix the issues', async () => {
         prompts.inject([false]);
 
-        const result = await run(['__tests__/__fixtures__/custompages/mixed-docs/legacy-category.md', '--key', key]);
+        const result = await run(['__tests__/__fixtures__/custompages/mixed-docs/legacy-page.md', '--key', key]);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -319,18 +272,19 @@ describe('custompages upload', () => {
 
       it('should skip client-side validation if the --skip-validation flag is passed', async () => {
         const mock = getAPIv2Mock({ authorization })
-          .get('/branches/stable/custom_pages/legacy-category')
+          .get('/branches/stable/custom_pages/legacy-page')
           .reply(404)
           .post('/branches/stable/custom_pages', {
-            category: '5ae122e10fdf4e39bb34db6f',
-            slug: 'legacy-category',
+            fullscreen: true,
+            hidden: true,
+            slug: 'legacy-page',
             title: 'This is the document title',
             content: { body: '\nBody\n' },
           })
-          .reply(400, { title: 'bad request', detail: 'your category is whack' });
+          .reply(400, { title: 'bad request', detail: 'your metadata is whack' });
 
         const result = await run([
-          '__tests__/__fixtures__/custompages/mixed-docs/legacy-category.md',
+          '__tests__/__fixtures__/custompages/mixed-docs/legacy-page.md',
           '--key',
           key,
           '--skip-validation',
@@ -347,10 +301,7 @@ describe('custompages upload', () => {
           .get('/branches/stable/custom_pages/invalid-attributes')
           .reply(404)
           .post('/branches/stable/custom_pages', {
-            category: {
-              uri: '/branches/stable/categories/custom_pages/some-category-uri',
-              'is-this-a-valid-property': 'nope',
-            },
+            appearance: { 'is-this-a-valid-property': 'nope' },
             slug: 'invalid-attributes',
             title: 'This is the document title',
             content: { body: '\nBody\n' },
@@ -380,7 +331,6 @@ describe('custompages upload', () => {
             'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/__tests__/__fixtures__/custompages/new-docs/new-doc.md',
         })
           .post('/branches/stable/custom_pages', {
-            category: { uri: '/branches/stable/categories/custom_pages/category-slug' },
             slug: 'new-doc',
             title: 'This is the document title',
             content: { body: '\nBody\n' },
@@ -405,7 +355,7 @@ describe('custompages upload', () => {
         const projectsMeMock = getAPIv2MockForGHA({ authorization }).get('/projects/me').reply(200, {
           data: {},
         });
-        const result = await run(['__tests__/__fixtures__/custompages/mixed-docs/legacy-category.md', '--key', key]);
+        const result = await run(['__tests__/__fixtures__/custompages/mixed-docs/legacy-page.md', '--key', key]);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -414,19 +364,18 @@ describe('custompages upload', () => {
 
       it('should bypass prompt if `--confirm-autofixes` flag is passed', async () => {
         const getMock = getAPIv2MockForGHA({ authorization })
-          .get('/branches/stable/custom_pages/legacy-category')
+          .get('/branches/stable/custom_pages/legacy-page')
           .reply(404);
 
         const postMock = getAPIv2MockForGHA({
           authorization,
           'x-readme-source-url':
-            'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/__tests__/__fixtures__/custompages/mixed-docs/legacy-category.md',
+            'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/__tests__/__fixtures__/custompages/mixed-docs/legacy-page.md',
         })
           .post('/branches/stable/custom_pages', {
-            category: {
-              uri: '/branches/stable/categories/custom_pages/uri-that-does-not-map-to-5ae122e10fdf4e39bb34db6f',
-            },
-            slug: 'legacy-category',
+            privacy: { view: 'anyone_with_link' },
+            appearance: { fullscreen: true },
+            slug: 'legacy-page',
             title: 'This is the document title',
             content: { body: '\nBody\n' },
           })
@@ -437,7 +386,7 @@ describe('custompages upload', () => {
         });
 
         const result = await run([
-          '__tests__/__fixtures__/custompages/mixed-docs/legacy-category.md',
+          '__tests__/__fixtures__/custompages/mixed-docs/legacy-page.md',
           '--key',
           key,
           '--confirm-autofixes',
@@ -445,8 +394,8 @@ describe('custompages upload', () => {
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).toHaveBeenCalledWith(
-          '__tests__/__fixtures__/custompages/mixed-docs/legacy-category.md',
-          expect.stringContaining('uri: uri-that-does-not-map-to-5ae122e10fdf4e39bb34db6f'),
+          '__tests__/__fixtures__/custompages/mixed-docs/legacy-page.md',
+          expect.stringContaining('view: anyone_with_link'),
           { encoding: 'utf-8' },
         );
         getMock.done();
@@ -534,7 +483,17 @@ describe('custompages upload', () => {
           slug: 'another-doc',
           title: 'This is another document title',
           content: { body: '\nAnother body\n' },
-          category: { uri: '/branches/stable/categories/custom_pages/category-slug' },
+        })
+        .reply(201, {})
+        .get('/branches/stable/custom_pages/html-file')
+        .reply(404)
+        .post('/branches/stable/custom_pages', {
+          slug: 'html-file',
+          title: 'This is another document title',
+          content: {
+            body: '\n<h1>Here we have an HTML file</h1>\n<p>This is a paragraph in an HTML file.</p>\n',
+            type: 'html',
+          },
         })
         .reply(201, {});
 
@@ -559,8 +518,17 @@ describe('custompages upload', () => {
         .reply(200)
         .patch('/branches/stable/custom_pages/another-doc', {
           title: 'This is another document title',
-          category: { uri: '/branches/stable/categories/custom_pages/category-slug' },
           content: { body: '\nAnother body\n' },
+        })
+        .reply(201, {})
+        .get('/branches/stable/custom_pages/html-file')
+        .reply(200)
+        .patch('/branches/stable/custom_pages/html-file', {
+          title: 'This is another document title',
+          content: {
+            body: '\n<h1>Here we have an HTML file</h1>\n<p>This is a paragraph in an HTML file.</p>\n',
+            type: 'html',
+          },
         })
         .reply(201, {});
 
@@ -578,22 +546,25 @@ describe('custompages upload', () => {
         .reply(200)
         .patch('/branches/stable/custom_pages/basic', {
           title: 'This is the document title',
-          category: { uri: '/branches/stable/categories/custom_pages/category-slug' },
-          content: { body: 'frontmatter body', excerpt: 'frontmatter excerpt' },
-          type: 'basic',
+          content: { body: 'frontmatter body' },
         })
         .reply(201, {})
-        .get('/branches/stable/custom_pages/link')
+        .get('/branches/stable/custom_pages/complex')
         .reply(200)
-        .patch('/branches/stable/custom_pages/link', {
+        .patch('/branches/stable/custom_pages/complex', {
           title: 'This is the document title',
-          category: { uri: '/branches/stable/categories/custom_pages/category-slug' },
           content: {
             body: '\nBody\n',
-            excerpt: 'frontmatter excerpt',
-            link: { url: 'https://example.com', new_tab: true },
           },
-          type: 'link',
+          appearance: {
+            fullscreen: true,
+          },
+          metadata: {
+            description: 'A description',
+            keywords: 'something, another',
+            title: 'document',
+          },
+          privacy: { view: 'public' },
         })
         .reply(201, {});
 
@@ -605,54 +576,7 @@ describe('custompages upload', () => {
       mock.done();
     });
 
-    describe('given that the directory contains parent/child docs', () => {
-      it('should upload parents before children', async () => {
-        const mock = getAPIv2Mock({ authorization })
-          .get('/branches/stable/custom_pages/child')
-          .reply(404)
-          .post('/branches/stable/custom_pages', {
-            slug: 'child',
-            title: 'Child',
-            parent: { uri: '/branches/stable/custom_pages/parent' },
-            content: { body: '\nBody\n' },
-          })
-          .reply(201, {})
-          .get('/branches/stable/custom_pages/friend')
-          .reply(404)
-          .post('/branches/stable/custom_pages', {
-            slug: 'friend',
-            title: 'Friend',
-            content: { body: '\nBody\n' },
-          })
-          .reply(201, {})
-          .get('/branches/stable/custom_pages/parent')
-          .reply(404)
-          .post('/branches/stable/custom_pages', {
-            slug: 'parent',
-            title: 'Parent',
-            parent: { uri: '/branches/stable/custom_pages/grandparent' },
-            content: { body: '\nBody\n' },
-          })
-          .reply(201, {})
-          .get('/branches/stable/custom_pages/grandparent')
-          .reply(404)
-          .post('/branches/stable/custom_pages', {
-            slug: 'grandparent',
-            title: 'Grandparent',
-            content: { body: '\nBody\n' },
-          })
-          .reply(201, {});
-
-        const result = await run(['__tests__/__fixtures__/custompages/multiple-docs', '--key', key]);
-
-        expect(result).toMatchSnapshot();
-        expect(fs.writeFileSync).not.toHaveBeenCalled();
-
-        mock.done();
-      });
-    });
-
-    it('should error out if the directory does not contain any Markdown files', async () => {
+    it('should error out if the directory does not contain any Markdown or HTML files', async () => {
       const result = await run(['__tests__/__fixtures__/ref-oas', '--key', key]);
 
       expect(result).toMatchSnapshot();
@@ -663,23 +587,19 @@ describe('custompages upload', () => {
         .get('/branches/stable/custom_pages/invalid-attributes')
         .reply(404)
         .post('/branches/stable/custom_pages', {
-          category: {
-            uri: '/branches/stable/categories/custom_pages/some-category-uri',
-            'is-this-a-valid-property': 'nope',
-          },
+          appearance: { 'is-this-a-valid-property': 'nope' },
           slug: 'invalid-attributes',
           title: 'This is the document title',
           content: { body: '\nBody\n' },
         })
         .reply(201, {})
-        .get('/branches/stable/custom_pages/legacy-category')
+        .get('/branches/stable/custom_pages/legacy-page')
         .reply(200)
-        .patch('/branches/stable/custom_pages/legacy-category', {
-          category: {
-            uri: '/branches/stable/categories/custom_pages/uri-that-does-not-map-to-5ae122e10fdf4e39bb34db6f',
-          },
+        .patch('/branches/stable/custom_pages/legacy-page', {
           title: 'This is the document title',
           content: { body: '\nBody\n' },
+          privacy: { view: 'anyone_with_link' },
+          appearance: { fullscreen: true },
         })
         .reply(201, {})
         .get('/branches/stable/custom_pages/some-slug')
@@ -687,7 +607,6 @@ describe('custompages upload', () => {
         .post('/branches/stable/custom_pages', {
           slug: 'some-slug',
           title: 'This is the document title',
-          category: { uri: '/branches/stable/categories/custom_pages/some-category-uri' },
           content: { body: '\nBody\n' },
         })
         .reply(500, {})
@@ -715,23 +634,19 @@ describe('custompages upload', () => {
         .get('/branches/stable/custom_pages/invalid-attributes')
         .reply(404)
         .post('/branches/stable/custom_pages', {
-          category: {
-            uri: '/branches/stable/categories/custom_pages/some-category-uri',
-            'is-this-a-valid-property': 'nope',
-          },
+          appearance: { 'is-this-a-valid-property': 'nope' },
           slug: 'invalid-attributes',
           title: 'This is the document title',
           content: { body: '\nBody\n' },
         })
         .reply(201, {})
-        .get('/branches/stable/custom_pages/legacy-category')
+        .get('/branches/stable/custom_pages/legacy-page')
         .reply(200)
-        .patch('/branches/stable/custom_pages/legacy-category', {
-          category: {
-            uri: '/branches/stable/categories/custom_pages/uri-that-does-not-map-to-5ae122e10fdf4e39bb34db6f',
-          },
+        .patch('/branches/stable/custom_pages/legacy-page', {
           title: 'This is the document title',
           content: { body: '\nBody\n' },
+          privacy: { view: 'anyone_with_link' },
+          appearance: { fullscreen: true },
         })
         .reply(201, {})
         .get('/branches/stable/custom_pages/some-slug')
@@ -739,7 +654,6 @@ describe('custompages upload', () => {
         .post('/branches/stable/custom_pages', {
           slug: 'some-slug',
           title: 'This is the document title',
-          category: { uri: '/branches/stable/categories/custom_pages/some-category-uri' },
           content: { body: '\nBody\n' },
         })
         .reply(500, {})
@@ -766,7 +680,7 @@ describe('custompages upload', () => {
       const mock = getAPIv2Mock({ authorization })
         .get('/branches/stable/custom_pages/invalid-attributes')
         .reply(404)
-        .get('/branches/stable/custom_pages/legacy-category')
+        .get('/branches/stable/custom_pages/legacy-page')
         .reply(200)
         .get('/branches/stable/custom_pages/some-slug')
         .reply(500)
@@ -809,7 +723,6 @@ describe('custompages upload', () => {
         .get('/branches/stable/custom_pages/new-doc')
         .reply(404)
         .post('/branches/stable/custom_pages', {
-          category: { uri: '/branches/stable/categories/custom_pages/category-slug' },
           slug: 'new-doc',
           title: 'This is the document title',
           content: { body: '\nBody\n' },
