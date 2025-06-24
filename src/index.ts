@@ -1,7 +1,7 @@
 import type { ValueOf } from 'type-fest';
 
 import ChangelogsCommand from './commands/changelogs.js';
-import CustomPgsUploadCommand from './commands/custompages/upload.js';
+import CustomPagesUploadCommand from './commands/custompages/upload.js';
 import DocsMigrateCommand from './commands/docs/migrate.js';
 import DocsUploadCommand from './commands/docs/upload.js';
 import LoginCommand from './commands/login.js';
@@ -30,7 +30,7 @@ export { default as prerun } from './lib/hooks/prerun.js';
 export const COMMANDS = {
   changelogs: ChangelogsCommand,
 
-  'custompages:upload': CustomPgsUploadCommand,
+  'custompages:upload': CustomPagesUploadCommand,
 
   'docs:migrate': DocsMigrateCommand,
   'docs:upload': DocsUploadCommand,
@@ -71,7 +71,7 @@ export type CommandIdForTopic<
  * Note that the `changelogs` command is not included here
  * because it is backed by APIv1.
  */
-export type APIv2PageUploadCommands = CustomPgsUploadCommand | DocsUploadCommand | RefUploadCommand;
+export type APIv2PageUploadCommands = CustomPagesUploadCommand | DocsUploadCommand | RefUploadCommand;
 
 /**
  * Commands that leverage the APIv2 representations for interfacing with pages

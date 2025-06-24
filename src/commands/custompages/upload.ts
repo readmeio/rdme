@@ -11,7 +11,7 @@ import syncPagePath, {
 
 const alphaNotice = 'This command is in an experimental alpha and is likely to change. Use at your own risk!';
 
-export default class CustomPgsUploadCommand extends BaseCommand<typeof CustomPgsUploadCommand> {
+export default class CustomPagesUploadCommand extends BaseCommand<typeof CustomPagesUploadCommand> {
   id = 'custompages upload' as const;
 
   route = 'custom_pages' as const;

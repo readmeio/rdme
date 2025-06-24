@@ -4,7 +4,7 @@ import nock from 'nock';
 import prompts from 'prompts';
 import { describe, afterEach, it, expect, beforeAll, beforeEach, vi } from 'vitest';
 
-import CustomPgsCommand from '../../../src/commands/custompages/upload.js';
+import CustomPagesCommand from '../../../src/commands/custompages/upload.js';
 import { getAPIv1Mock, getAPIv2Mock, getAPIv2MockForGHA } from '../../helpers/get-api-mock.js';
 import { githubActionsEnv } from '../../helpers/git-mock.js';
 import { runCommand, type OclifOutput } from '../../helpers/oclif.js';
@@ -16,7 +16,7 @@ describe('custompages upload', () => {
   let run: (args?: string[]) => OclifOutput;
 
   beforeAll(() => {
-    run = runCommand(CustomPgsCommand);
+    run = runCommand(CustomPagesCommand);
   });
 
   beforeEach(() => {
