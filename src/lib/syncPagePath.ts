@@ -238,7 +238,7 @@ export default async function syncPagePath(this: APIv2PageUploadCommands) {
     );
   }
 
-  const validFileExtensions = allowedMarkdownExtensions;
+  const validFileExtensions = [...allowedMarkdownExtensions];
   if (this.route === 'custom_pages') {
     validFileExtensions.push('.html');
   }
