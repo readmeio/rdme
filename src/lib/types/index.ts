@@ -143,7 +143,7 @@ export type ChangelogResponseRepresentation = FromSchema<
 >;
 
 /**
- * Derived from our API documentation, this is the schema for the `changelog` object
+ * Derived from our API documentation, this is the schema for the `custom_page` object
  * as we send it to the ReadMe API.
  *
  * This is only for TypeScript type-checking purposes — we use ajv
@@ -155,7 +155,7 @@ export type CustomPagesRequestRepresentation = FromSchema<
 >;
 
 /**
- * Derived from our API documentation, this is the schema for the `changelog` object
+ * Derived from our API documentation, this is the schema for the `custom_page` object
  * as we receive it from the ReadMe API.
  */
 export type CustomPagesResponseRepresentation = FromSchema<
