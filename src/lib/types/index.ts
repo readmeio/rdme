@@ -26,13 +26,13 @@ type stagedApiUploadResponseSchema =
 /** Page schemas */
 type PageRoute = APIv2PageUploadCommands['route'];
 
-type PageRequestBodySchema<T extends PageRoute> = T extends 'custom_pages' | 'guides' | 'reference'
+type PageRequestSchemaRaw<T extends PageRoute> = T extends 'custom_pages' | 'guides' | 'reference'
   ? (typeof readmeAPIv2Oas)['paths'][`/branches/{branch}/${T}/{slug}`]['patch']['requestBody']['content']['application/json']['schema']
   : T extends 'changelogs'
     ? (typeof readmeAPIv2Oas)['paths']['/changelogs/{identifier}']['patch']['requestBody']['content']['application/json']['schema']
     : never;
 
-type PageResponseBodySchema<T extends PageRoute> = T extends 'custom_pages' | 'guides' | 'reference'
+type PageResponseSchemaRaw<T extends PageRoute> = T extends 'custom_pages' | 'guides' | 'reference'
   ? (typeof readmeAPIv2Oas)['paths'][`/branches/{branch}/${T}/{slug}`]['patch']['responses']['200']['content']['application/json']['schema']
   : T extends 'changelogs'
     ? (typeof readmeAPIv2Oas)['paths']['/changelogs/{identifier}']['patch']['responses']['200']['content']['application/json']['schema']
@@ -78,7 +78,7 @@ export type APIUploadStatus = APIUploadSingleResponseRepresentation['data']['upl
  * to validate the user's schema during runtime.
  */
 export type PageRequestSchema<T extends PageRoute> = FromSchema<
-  PageRequestBodySchema<T>,
+  PageRequestSchemaRaw<T>,
   { keepDefaultedPropertiesOptional: true }
 >;
 
@@ -87,6 +87,6 @@ export type PageRequestSchema<T extends PageRoute> = FromSchema<
  * as we receive them from the ReadMe API.
  */
 export type PageResponseSchema<T extends PageRoute> = FromSchema<
-  PageResponseBodySchema<T>,
+  PageResponseSchemaRaw<T>,
   { keepDefaultedPropertiesOptional: true }
 >;
