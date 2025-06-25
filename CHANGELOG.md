@@ -1,3 +1,10 @@
+# [10.4.0-next.1](https://github.com/readmeio/rdme/compare/v10.3.0...v10.4.0-next.1) (2025-06-25)
+
+
+### Features
+
+* new `custompages upload` command ([#1265](https://github.com/readmeio/rdme/issues/1265)) ([dc4ceb4](https://github.com/readmeio/rdme/commit/dc4ceb48f8baafbfed57d97a6900b392f608023b))
+
 # [10.3.0](https://github.com/readmeio/rdme/compare/v10.2.2...v10.3.0) (2025-06-24)
 
 

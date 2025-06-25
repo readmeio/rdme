@@ -2,6 +2,8 @@ import type { APIv2PageUploadCommands } from '../index.js';
 import type {
   ChangelogRequestRepresentation,
   ChangelogResponseRepresentation,
+  CustomPagesRequestRepresentation,
+  CustomPagesResponseRepresentation,
   GuidesRequestRepresentation,
   GuidesResponseRepresentation,
   ProjectRepresentation,
@@ -9,22 +11,28 @@ import type {
   ReferenceResponseRepresentation,
 } from './types/index.js';
 
+import path from 'node:path';
+
 import chalk from 'chalk';
 import ora from 'ora';
 import toposort from 'toposort';
 
 import { APIv2Error } from './apiError.js';
 import { oraOptions } from './logger.js';
-import { findPages, type PageMetadata } from './readPage.js';
+import { allowedMarkdownExtensions, findPages, type PageMetadata } from './readPage.js';
 import { categoryUriRegexPattern, parentUriRegexPattern } from './types/index.js';
 import { validateFrontmatter } from './validateFrontmatter.js';
 
 type GuidesReferenceRequestRepresentation = GuidesRequestRepresentation | ReferenceRequestRepresentation;
 
-type PageRequestRepresentation = ChangelogRequestRepresentation | GuidesReferenceRequestRepresentation;
+type PageRequestRepresentation =
+  | ChangelogRequestRepresentation
+  | CustomPagesRequestRepresentation
+  | GuidesReferenceRequestRepresentation;
 
 type PageResponseRepresentation =
   | ChangelogResponseRepresentation['data']
+  | CustomPagesResponseRepresentation['data']
   | GuidesResponseRepresentation['data']
   | ReferenceResponseRepresentation['data'];
 
@@ -97,7 +105,7 @@ async function pushPage(
     return { filePath, result: 'skipped', slug };
   }
 
-  const payload: PageRequestRepresentation = {
+  let payload: PageRequestRepresentation = {
     ...data,
     content: {
       body: content,
@@ -129,6 +137,17 @@ async function pushPage(
         uri = uri.replace(/^\/|\/$/g, '');
         payload.parent.uri = `/branches/${branch}/${this.route}/${uri}`;
       }
+    }
+
+    if (this.route === 'custom_pages') {
+      const customPagePayload = structuredClone(payload) as CustomPagesRequestRepresentation;
+      const type = path.extname(filePath).toLowerCase() === '.html' ? 'html' : 'markdown';
+      if (typeof customPagePayload.content === 'object' && customPagePayload.content) {
+        customPagePayload.content.type = type;
+      } else {
+        customPagePayload.content = { type };
+      }
+      payload = customPagePayload;
     }
 
     const createPage = (): CreatePushResult | Promise<CreatePushResult> => {
@@ -253,7 +272,12 @@ export default async function syncPagePath(this: APIv2PageUploadCommands) {
     );
   }
 
-  let unsortedFiles = await findPages.call(this, pathInput);
+  const validFileExtensions = [...allowedMarkdownExtensions];
+  if (this.route === 'custom_pages') {
+    validFileExtensions.push('.html');
+  }
+
+  let unsortedFiles = await findPages.call(this, pathInput, validFileExtensions);
 
   if (skipValidation) {
     if (biDiConnection) {
@@ -281,8 +305,8 @@ export default async function syncPagePath(this: APIv2PageUploadCommands) {
 
   // topological sort the files
   const sortedFiles =
-    this.route === 'changelogs'
-      ? (unsortedFiles as PageMetadata<ChangelogRequestRepresentation>[])
+    this.route === 'changelogs' || this.route === 'custom_pages'
+      ? (unsortedFiles as PageMetadata<ChangelogRequestRepresentation | CustomPagesRequestRepresentation>[])
       : sortFiles((unsortedFiles as PageMetadata<GuidesReferenceRequestRepresentation>[]).sort(byParentPage));
 
   // push the files to ReadMe

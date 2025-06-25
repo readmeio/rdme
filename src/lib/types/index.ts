@@ -41,6 +41,12 @@ type changelogRequestBodySchema =
 type changelogResponseBodySchema =
   (typeof readmeAPIv2Oas)['paths']['/changelogs/{identifier}']['patch']['responses']['200']['content']['application/json']['schema'];
 
+type customPagesRequestBodySchema =
+  (typeof readmeAPIv2Oas)['paths']['/branches/{branch}/custom_pages/{slug}']['patch']['requestBody']['content']['application/json']['schema'];
+
+type customPagesResponseBodySchema =
+  (typeof readmeAPIv2Oas)['paths']['/branches/{branch}/custom_pages/{slug}']['patch']['responses']['200']['content']['application/json']['schema'];
+
 /**
  * Derived from our API documentation, this is the schema for the `project` object
  * as we receive it from the ReadMe API.
@@ -133,5 +139,26 @@ export type ChangelogRequestRepresentation = FromSchema<
  */
 export type ChangelogResponseRepresentation = FromSchema<
   changelogResponseBodySchema,
+  { keepDefaultedPropertiesOptional: true }
+>;
+
+/**
+ * Derived from our API documentation, this is the schema for the `changelog` object
+ * as we send it to the ReadMe API.
+ *
+ * This is only for TypeScript type-checking purposes — we use ajv
+ * to validate the user's schema during runtime.
+ */
+export type CustomPagesRequestRepresentation = FromSchema<
+  customPagesRequestBodySchema,
+  { keepDefaultedPropertiesOptional: true }
+>;
+
+/**
+ * Derived from our API documentation, this is the schema for the `changelog` object
+ * as we receive it from the ReadMe API.
+ */
+export type CustomPagesResponseRepresentation = FromSchema<
+  customPagesResponseBodySchema,
   { keepDefaultedPropertiesOptional: true }
 >;
