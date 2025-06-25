@@ -1,3 +1,4 @@
+import type { APIv2PageUploadCommands } from '../../index.js';
 import type { FromSchema } from 'json-schema-to-ts';
 
 import readmeAPIv2Oas from './openapiDoc.js';
@@ -23,29 +24,19 @@ type stagedApiUploadResponseSchema =
   (typeof readmeAPIv2Oas)['paths']['/branches/{branch}/apis']['post']['responses']['202']['content']['application/json']['schema'];
 
 /** Page schemas */
-type guidesRequestBodySchema =
-  (typeof readmeAPIv2Oas)['paths']['/branches/{branch}/guides/{slug}']['patch']['requestBody']['content']['application/json']['schema'];
+type PageRoute = APIv2PageUploadCommands['route'];
 
-type guidesResponseBodySchema =
-  (typeof readmeAPIv2Oas)['paths']['/branches/{branch}/guides/{slug}']['patch']['responses']['200']['content']['application/json']['schema'];
+type PageRequestBodySchema<T extends PageRoute> = T extends 'custom_pages' | 'guides' | 'reference'
+  ? (typeof readmeAPIv2Oas)['paths'][`/branches/{branch}/${T}/{slug}`]['patch']['requestBody']['content']['application/json']['schema']
+  : T extends 'changelogs'
+    ? (typeof readmeAPIv2Oas)['paths']['/changelogs/{identifier}']['patch']['requestBody']['content']['application/json']['schema']
+    : never;
 
-type referenceRequestBodySchema =
-  (typeof readmeAPIv2Oas)['paths']['/branches/{branch}/reference/{slug}']['patch']['requestBody']['content']['application/json']['schema'];
-
-type referenceResponseBodySchema =
-  (typeof readmeAPIv2Oas)['paths']['/branches/{branch}/reference/{slug}']['patch']['responses']['200']['content']['application/json']['schema'];
-
-type changelogRequestBodySchema =
-  (typeof readmeAPIv2Oas)['paths']['/changelogs/{identifier}']['patch']['requestBody']['content']['application/json']['schema'];
-
-type changelogResponseBodySchema =
-  (typeof readmeAPIv2Oas)['paths']['/changelogs/{identifier}']['patch']['responses']['200']['content']['application/json']['schema'];
-
-type customPagesRequestBodySchema =
-  (typeof readmeAPIv2Oas)['paths']['/branches/{branch}/custom_pages/{slug}']['patch']['requestBody']['content']['application/json']['schema'];
-
-type customPagesResponseBodySchema =
-  (typeof readmeAPIv2Oas)['paths']['/branches/{branch}/custom_pages/{slug}']['patch']['responses']['200']['content']['application/json']['schema'];
+type PageResponseBodySchema<T extends PageRoute> = T extends 'custom_pages' | 'guides' | 'reference'
+  ? (typeof readmeAPIv2Oas)['paths'][`/branches/{branch}/${T}/{slug}`]['patch']['responses']['200']['content']['application/json']['schema']
+  : T extends 'changelogs'
+    ? (typeof readmeAPIv2Oas)['paths']['/changelogs/{identifier}']['patch']['responses']['200']['content']['application/json']['schema']
+    : never;
 
 /**
  * Derived from our API documentation, this is the schema for the `project` object
@@ -80,85 +71,22 @@ export type StagedAPIUploadResponseRepresentation = FromSchema<
 export type APIUploadStatus = APIUploadSingleResponseRepresentation['data']['upload']['status'];
 
 /**
- * Derived from our API documentation, this is the schema for the `guides` object
- * as we send it to the ReadMe API.
+ * Derived from our API documentation, this is the schema for the page objects
+ * as we send them to the ReadMe API.
  *
  * This is only for TypeScript type-checking purposes — we use ajv
  * to validate the user's schema during runtime.
  */
-export type GuidesRequestRepresentation = FromSchema<
-  guidesRequestBodySchema,
+export type PageRequestSchema<T extends PageRoute> = FromSchema<
+  PageRequestBodySchema<T>,
   { keepDefaultedPropertiesOptional: true }
 >;
 
 /**
- * Derived from our API documentation, this is the schema for the `guides` object
- * as we receive from to the ReadMe API.
+ * Derived from our API documentation, this is the schema for the page objects
+ * as we receive them from the ReadMe API.
  */
-export type GuidesResponseRepresentation = FromSchema<
-  guidesResponseBodySchema,
-  { keepDefaultedPropertiesOptional: true }
->;
-
-/**
- * Derived from our API documentation, this is the schema for the `reference` object
- * as we send it to the ReadMe API.
- *
- * This is only for TypeScript type-checking purposes — we use ajv
- * to validate the user's schema during runtime.
- */
-export type ReferenceRequestRepresentation = FromSchema<
-  referenceRequestBodySchema,
-  { keepDefaultedPropertiesOptional: true }
->;
-
-/**
- * Derived from our API documentation, this is the schema for the `reference` object
- * as we receive it from the ReadMe API.
- */
-export type ReferenceResponseRepresentation = FromSchema<
-  referenceResponseBodySchema,
-  { keepDefaultedPropertiesOptional: true }
->;
-
-/**
- * Derived from our API documentation, this is the schema for the `changelog` object
- * as we send it to the ReadMe API.
- *
- * This is only for TypeScript type-checking purposes — we use ajv
- * to validate the user's schema during runtime.
- */
-export type ChangelogRequestRepresentation = FromSchema<
-  changelogRequestBodySchema,
-  { keepDefaultedPropertiesOptional: true }
->;
-
-/**
- * Derived from our API documentation, this is the schema for the `changelog` object
- * as we receive it from the ReadMe API.
- */
-export type ChangelogResponseRepresentation = FromSchema<
-  changelogResponseBodySchema,
-  { keepDefaultedPropertiesOptional: true }
->;
-
-/**
- * Derived from our API documentation, this is the schema for the `custom_page` object
- * as we send it to the ReadMe API.
- *
- * This is only for TypeScript type-checking purposes — we use ajv
- * to validate the user's schema during runtime.
- */
-export type CustomPagesRequestRepresentation = FromSchema<
-  customPagesRequestBodySchema,
-  { keepDefaultedPropertiesOptional: true }
->;
-
-/**
- * Derived from our API documentation, this is the schema for the `custom_page` object
- * as we receive it from the ReadMe API.
- */
-export type CustomPagesResponseRepresentation = FromSchema<
-  customPagesResponseBodySchema,
+export type PageResponseSchema<T extends PageRoute> = FromSchema<
+  PageResponseBodySchema<T>,
   { keepDefaultedPropertiesOptional: true }
 >;

@@ -1,15 +1,5 @@
 import type { APIv2PageUploadCommands } from '../index.js';
-import type {
-  ChangelogRequestRepresentation,
-  ChangelogResponseRepresentation,
-  CustomPagesRequestRepresentation,
-  CustomPagesResponseRepresentation,
-  GuidesRequestRepresentation,
-  GuidesResponseRepresentation,
-  ProjectRepresentation,
-  ReferenceRequestRepresentation,
-  ReferenceResponseRepresentation,
-} from './types/index.js';
+import type { PageRequestSchema, PageResponseSchema, ProjectRepresentation } from './types/index.js';
 
 import path from 'node:path';
 
@@ -23,18 +13,9 @@ import { allowedMarkdownExtensions, findPages, type PageMetadata } from './readP
 import { categoryUriRegexPattern, parentUriRegexPattern } from './types/index.js';
 import { validateFrontmatter } from './validateFrontmatter.js';
 
-type GuidesReferenceRequestRepresentation = GuidesRequestRepresentation | ReferenceRequestRepresentation;
+type GuidesOrReferenceRequestSchema = PageRequestSchema<'guides' | 'reference'>;
 
-type PageRequestRepresentation =
-  | ChangelogRequestRepresentation
-  | CustomPagesRequestRepresentation
-  | GuidesReferenceRequestRepresentation;
-
-type PageResponseRepresentation =
-  | ChangelogResponseRepresentation['data']
-  | CustomPagesResponseRepresentation['data']
-  | GuidesResponseRepresentation['data']
-  | ReferenceResponseRepresentation['data'];
+type PageResponseRepresentation = PageResponseSchema<'changelogs' | 'custom_pages' | 'guides' | 'reference'>['data'];
 
 interface BasePushResult {
   filePath: string;
@@ -105,7 +86,7 @@ async function pushPage(
     return { filePath, result: 'skipped', slug };
   }
 
-  let payload: PageRequestRepresentation = {
+  let payload: PageRequestSchema<typeof this.route> = {
     ...data,
     content: {
       body: content,
@@ -140,7 +121,7 @@ async function pushPage(
     }
 
     if (this.route === 'custom_pages') {
-      const customPagePayload = structuredClone(payload) as CustomPagesRequestRepresentation;
+      const customPagePayload = structuredClone(payload) as PageRequestSchema<typeof this.route>;
       const type = path.extname(filePath).toLowerCase() === '.html' ? 'html' : 'markdown';
       if (typeof customPagePayload.content === 'object' && customPagePayload.content) {
         customPagePayload.content.type = type;
@@ -209,8 +190,8 @@ async function pushPage(
 }
 
 const byParentPage = (
-  left: PageMetadata<GuidesReferenceRequestRepresentation>,
-  right: PageMetadata<GuidesReferenceRequestRepresentation>,
+  left: PageMetadata<GuidesOrReferenceRequestSchema>,
+  right: PageMetadata<GuidesOrReferenceRequestSchema>,
 ) => {
   return (right.data.parent?.uri ? 1 : 0) - (left.data.parent?.uri ? 1 : 0);
 };
@@ -223,18 +204,15 @@ const byParentPage = (
  * @returns An array of sorted PageMetadata objects
  */
 function sortFiles(
-  files: PageMetadata<GuidesReferenceRequestRepresentation>[],
-): PageMetadata<GuidesReferenceRequestRepresentation>[] {
-  const filesBySlug = files.reduce<Record<string, PageMetadata<GuidesReferenceRequestRepresentation>>>(
-    (bySlug, obj) => {
-      // eslint-disable-next-line no-param-reassign
-      bySlug[obj.slug] = obj;
-      return bySlug;
-    },
-    {},
-  );
+  files: PageMetadata<GuidesOrReferenceRequestSchema>[],
+): PageMetadata<GuidesOrReferenceRequestSchema>[] {
+  const filesBySlug = files.reduce<Record<string, PageMetadata<GuidesOrReferenceRequestSchema>>>((bySlug, obj) => {
+    // eslint-disable-next-line no-param-reassign
+    bySlug[obj.slug] = obj;
+    return bySlug;
+  }, {});
   const dependencies = Object.values(filesBySlug).reduce<
-    [PageMetadata<GuidesReferenceRequestRepresentation>, PageMetadata<GuidesReferenceRequestRepresentation>][]
+    [PageMetadata<GuidesOrReferenceRequestSchema>, PageMetadata<GuidesOrReferenceRequestSchema>][]
   >((edges, obj) => {
     if (obj.data.parent?.uri && filesBySlug[obj.data.parent.uri]) {
       edges.push([filesBySlug[obj.data.parent.uri], filesBySlug[obj.slug]]);
@@ -306,8 +284,8 @@ export default async function syncPagePath(this: APIv2PageUploadCommands) {
   // topological sort the files
   const sortedFiles =
     this.route === 'changelogs' || this.route === 'custom_pages'
-      ? (unsortedFiles as PageMetadata<ChangelogRequestRepresentation | CustomPagesRequestRepresentation>[])
-      : sortFiles((unsortedFiles as PageMetadata<GuidesReferenceRequestRepresentation>[]).sort(byParentPage));
+      ? (unsortedFiles as PageMetadata<PageRequestSchema<typeof this.route>>[])
+      : sortFiles((unsortedFiles as PageMetadata<PageRequestSchema<typeof this.route>>[]).sort(byParentPage));
 
   // push the files to ReadMe
   const rawResults: PromiseSettledResult<PushResult>[] = [];
