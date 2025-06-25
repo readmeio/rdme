@@ -279,7 +279,7 @@ describe(`rdme ${topic} upload`, () => {
 
       afterEach(githubActionsEnv.after);
 
-      it.skip('should create a page in ReadMe and include `x-readme-source-url` source header', async () => {
+      it('should create a page in ReadMe and include `x-readme-source-url` source header', async () => {
         const getMock = getAPIv2MockForGHA({ authorization }).get(`/${route}/new-doc`).reply(404);
 
         const postMock = getAPIv2MockForGHA({
@@ -309,7 +309,7 @@ describe(`rdme ${topic} upload`, () => {
         projectsMeMock.done();
       });
 
-      it.skip('should error out if the file has validation errors', async () => {
+      it('should error out if the file has validation errors', async () => {
         const projectsMeMock = getAPIv2MockForGHA({ authorization }).get('/projects/me').reply(200, {
           data: {},
         });
@@ -320,8 +320,8 @@ describe(`rdme ${topic} upload`, () => {
         projectsMeMock.done();
       });
 
-      it.skip('should bypass prompt if `--confirm-autofixes` flag is passed', async () => {
-        const getMock = getAPIv2MockForGHA({ authorization }).get(`/${route}/legacy-category`).reply(404);
+      it('should bypass prompt if `--confirm-autofixes` flag is passed', async () => {
+        const getMock = getAPIv2MockForGHA({ authorization }).get(`/${route}/autofixable`).reply(404);
 
         const postMock = getAPIv2MockForGHA({
           authorization,
@@ -330,9 +330,10 @@ describe(`rdme ${topic} upload`, () => {
         })
           .post(`/${route}`, {
             type: 'added',
-            slug: 'legacy-category',
+            slug: 'autofixable',
             title: 'This is the changelog title',
             content: { body: '\nBody\n' },
+            privacy: { view: 'anyone_with_link' },
           })
           .reply(201, {});
 
@@ -350,7 +351,7 @@ describe(`rdme ${topic} upload`, () => {
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).toHaveBeenCalledWith(
           '__tests__/__fixtures__/changelog/legacy-docs/autofixable.md',
-          expect.stringContaining('uri: uri-that-does-not-map-to-5ae122e10fdf4e39bb34db6f'),
+          expect.stringContaining('view: anyone_with_link'),
           { encoding: 'utf-8' },
         );
         getMock.done();
@@ -359,7 +360,7 @@ describe(`rdme ${topic} upload`, () => {
       });
     });
 
-    it.skip('should error out if a non-404 error is returned from the GET request', async () => {
+    it('should error out if a non-404 error is returned from the GET request', async () => {
       const mock = getAPIv2Mock({ authorization }).get(`/${route}/new-doc`).reply(500);
 
       const result = await run(['__tests__/__fixtures__/changelog/new-docs/new-doc.md', '--key', key]);
@@ -370,7 +371,7 @@ describe(`rdme ${topic} upload`, () => {
       mock.done();
     });
 
-    it.skip('should error out if a non-404 error is returned from the GET request (with a json body)', async () => {
+    it('should error out if a non-404 error is returned from the GET request (with a json body)', async () => {
       const mock = getAPIv2Mock({ authorization }).get(`/${route}/new-doc`).reply(500, {
         title: 'bad request',
         detail: 'something went so so wrong',
@@ -385,7 +386,7 @@ describe(`rdme ${topic} upload`, () => {
       mock.done();
     });
 
-    it.skip('should not throw an error if `max-errors` flag is set to -1', async () => {
+    it('should not throw an error if `max-errors` flag is set to -1', async () => {
       const mock = getAPIv2Mock({ authorization }).get(`/${route}/new-doc`).reply(500, {
         title: 'bad request',
         detail: 'something went so so wrong',
@@ -406,14 +407,14 @@ describe(`rdme ${topic} upload`, () => {
       mock.done();
     });
 
-    it.skip('should error out if the file does not exist', async () => {
+    it('should error out if the file does not exist', async () => {
       const result = await run(['non-existent-file', '--key', key]);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
     });
 
-    it.skip('should error out if the file has an invalid file extension', async () => {
+    it('should error out if the file has an invalid file extension', async () => {
       const result = await run(['package.json', '--key', key]);
 
       expect(result).toMatchSnapshot();

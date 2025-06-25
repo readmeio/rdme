@@ -1,5 +1,74 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`rdme changelog upload > given that the file path is a single file > and the command is being run in a CI environment > should bypass prompt if \`--confirm-autofixes\` flag is passed 1`] = `
+{
+  "result": {
+    "created": [
+      {
+        "filePath": "__tests__/__fixtures__/changelog/legacy-docs/autofixable.md",
+        "response": {},
+        "result": "created",
+        "slug": "autofixable",
+      },
+    ],
+    "failed": [],
+    "skipped": [],
+    "updated": [],
+  },
+  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
+ ›    Use at your own risk!
+- 🔬 Validating frontmatter data...
+⚠ 🔬 Validating frontmatter data... issues found in 1 file(s).
+- 🚀 Uploading files to ReadMe...
+✔ 🚀 Uploading files to ReadMe... done!
+",
+  "stdout": "Automatically fixing issues in 1 file(s)...
+🌱 Successfully created 1 page(s) in ReadMe:
+   - autofixable (__tests__/__fixtures__/changelog/legacy-docs/autofixable.md)
+",
+}
+`;
+
+exports[`rdme changelog upload > given that the file path is a single file > and the command is being run in a CI environment > should create a page in ReadMe and include \`x-readme-source-url\` source header 1`] = `
+{
+  "result": {
+    "created": [
+      {
+        "filePath": "__tests__/__fixtures__/changelog/new-docs/new-doc.md",
+        "response": {},
+        "result": "created",
+        "slug": "new-doc",
+      },
+    ],
+    "failed": [],
+    "skipped": [],
+    "updated": [],
+  },
+  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
+ ›    Use at your own risk!
+- 🔬 Validating frontmatter data...
+✔ 🔬 Validating frontmatter data... no issues found!
+- 🚀 Uploading files to ReadMe...
+✔ 🚀 Uploading files to ReadMe... done!
+",
+  "stdout": "🌱 Successfully created 1 page(s) in ReadMe:
+   - new-doc (__tests__/__fixtures__/changelog/new-docs/new-doc.md)
+",
+}
+`;
+
+exports[`rdme changelog upload > given that the file path is a single file > and the command is being run in a CI environment > should error out if the file has validation errors 1`] = `
+{
+  "error": [Error: 1 file(s) have issues that should be fixed before uploading to ReadMe. Please run \`rdme changelog upload __tests__/__fixtures__/changelog/legacy-docs/autofixable.md --dry-run\` in a non-CI environment to fix them.],
+  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
+ ›    Use at your own risk!
+- 🔬 Validating frontmatter data...
+⚠ 🔬 Validating frontmatter data... issues found in 1 file(s).
+",
+  "stdout": "",
+}
+`;
+
 exports[`rdme changelog upload > given that the file path is a single file > given that the --dry-run flag is passed > should error out if a non-404 error is returned from the GET request (with a json body) 1`] = `
 {
   "error": [APIv2Error: ReadMe API error: bad request
@@ -263,6 +332,60 @@ exports[`rdme changelog upload > given that the file path is a single file > sho
 }
 `;
 
+exports[`rdme changelog upload > given that the file path is a single file > should error out if a non-404 error is returned from the GET request (with a json body) 1`] = `
+{
+  "error": [APIv2Error: ReadMe API error: bad request
+
+something went so so wrong],
+  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
+ ›    Use at your own risk!
+- 🔬 Validating frontmatter data...
+✔ 🔬 Validating frontmatter data... no issues found!
+- 🚀 Uploading files to ReadMe...
+✖ 🚀 Uploading files to ReadMe... 1 file(s) failed.
+",
+  "stdout": "🚨 Received errors when attempting to upload 1 page(s):
+   - __tests__/__fixtures__/changelog/new-docs/new-doc.md: bad request
+",
+}
+`;
+
+exports[`rdme changelog upload > given that the file path is a single file > should error out if a non-404 error is returned from the GET request 1`] = `
+{
+  "error": [Error: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
+  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
+ ›    Use at your own risk!
+- 🔬 Validating frontmatter data...
+✔ 🔬 Validating frontmatter data... no issues found!
+- 🚀 Uploading files to ReadMe...
+✖ 🚀 Uploading files to ReadMe... 1 file(s) failed.
+",
+  "stdout": "🚨 Received errors when attempting to upload 1 page(s):
+   - __tests__/__fixtures__/changelog/new-docs/new-doc.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+",
+}
+`;
+
+exports[`rdme changelog upload > given that the file path is a single file > should error out if the file does not exist 1`] = `
+{
+  "error": [Error: Oops! We couldn't locate a file or directory at the path you provided.],
+  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
+ ›    Use at your own risk!
+",
+  "stdout": "",
+}
+`;
+
+exports[`rdme changelog upload > given that the file path is a single file > should error out if the file has an invalid file extension 1`] = `
+{
+  "error": [Error: Invalid file extension (.json). Must be one of the following: .markdown, .md, .mdx],
+  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
+ ›    Use at your own risk!
+",
+  "stdout": "",
+}
+`;
+
 exports[`rdme changelog upload > given that the file path is a single file > should hide the warning if the \`--hide-experimental-warning\` flag is passed 1`] = `
 {
   "result": {
@@ -285,6 +408,36 @@ exports[`rdme changelog upload > given that the file path is a single file > sho
 ",
   "stdout": "🌱 Successfully created 1 page(s) in ReadMe:
    - new-doc (__tests__/__fixtures__/changelog/new-docs/new-doc.md)
+",
+}
+`;
+
+exports[`rdme changelog upload > given that the file path is a single file > should not throw an error if \`max-errors\` flag is set to -1 1`] = `
+{
+  "result": {
+    "created": [],
+    "failed": [
+      {
+        "error": [APIv2Error: ReadMe API error: bad request
+
+something went so so wrong],
+        "filePath": "__tests__/__fixtures__/changelog/new-docs/new-doc.md",
+        "result": "failed",
+        "slug": "new-doc",
+      },
+    ],
+    "skipped": [],
+    "updated": [],
+  },
+  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
+ ›    Use at your own risk!
+- 🔬 Validating frontmatter data...
+✔ 🔬 Validating frontmatter data... no issues found!
+- 🚀 Uploading files to ReadMe...
+✖ 🚀 Uploading files to ReadMe... 1 file(s) failed.
+",
+  "stdout": "🚨 Received errors when attempting to upload 1 page(s):
+   - __tests__/__fixtures__/changelog/new-docs/new-doc.md: bad request
 ",
 }
 `;
