@@ -21,16 +21,14 @@ import { allowedMarkdownExtensions, findPages, type PageMetadata } from './readP
 import { categoryUriRegexPattern, parentUriRegexPattern } from './types/index.js';
 import { validateFrontmatter } from './validateFrontmatter.js';
 
-type PageRequestRepresentation =
-  | CustomPagesRequestRepresentation
-  | GuidesRequestRepresentation
-  | ReferenceRequestRepresentation;
+type GuidesReferenceRequestRepresentation = GuidesRequestRepresentation | ReferenceRequestRepresentation;
+
+type PageRequestRepresentation = CustomPagesRequestRepresentation | GuidesReferenceRequestRepresentation;
+
 type PageResponseRepresentation =
   | CustomPagesResponseRepresentation['data']
   | GuidesResponseRepresentation['data']
   | ReferenceResponseRepresentation['data'];
-
-type GuidesReferenceRequestRepresentation = GuidesRequestRepresentation | ReferenceRequestRepresentation;
 
 interface BasePushResult {
   filePath: string;
@@ -134,7 +132,7 @@ async function pushPage(
     }
 
     if (this.route === 'custom_pages') {
-      const customPagePayload = { ...payload } as CustomPagesRequestRepresentation;
+      const customPagePayload = structuredClone(payload) as CustomPagesRequestRepresentation;
       const type = path.extname(filePath).toLowerCase() === '.html' ? 'html' : 'markdown';
       if (typeof customPagePayload.content === 'object' && customPagePayload.content) {
         customPagePayload.content.type = type;
@@ -298,9 +296,10 @@ export default async function syncPagePath(this: APIv2PageUploadCommands) {
   const count = { succeeded: 0, failed: 0 };
 
   // topological sort the files
-  const sortedFiles = sortFiles(
-    (unsortedFiles as PageMetadata<GuidesReferenceRequestRepresentation>[]).sort(byParentPage),
-  );
+  const sortedFiles =
+    this.route === 'custom_pages'
+      ? (unsortedFiles as PageMetadata<CustomPagesRequestRepresentation>[])
+      : sortFiles((unsortedFiles as PageMetadata<GuidesReferenceRequestRepresentation>[]).sort(byParentPage));
 
   // push the files to ReadMe
   const rawResults: PromiseSettledResult<PushResult>[] = [];
