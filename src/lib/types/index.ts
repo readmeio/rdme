@@ -35,6 +35,12 @@ type referenceRequestBodySchema =
 type referenceResponseBodySchema =
   (typeof readmeAPIv2Oas)['paths']['/branches/{branch}/reference/{slug}']['patch']['responses']['200']['content']['application/json']['schema'];
 
+type customPagesRequestBodySchema =
+  (typeof readmeAPIv2Oas)['paths']['/branches/{branch}/custom_pages/{slug}']['patch']['requestBody']['content']['application/json']['schema'];
+
+type customPagesResponseBodySchema =
+  (typeof readmeAPIv2Oas)['paths']['/branches/{branch}/custom_pages/{slug}']['patch']['responses']['200']['content']['application/json']['schema'];
+
 /**
  * Derived from our API documentation, this is the schema for the `project` object
  * as we receive it from the ReadMe API.
@@ -106,5 +112,26 @@ export type ReferenceRequestRepresentation = FromSchema<
  */
 export type ReferenceResponseRepresentation = FromSchema<
   referenceResponseBodySchema,
+  { keepDefaultedPropertiesOptional: true }
+>;
+
+/**
+ * Derived from our API documentation, this is the schema for the `custom_page` object
+ * as we send it to the ReadMe API.
+ *
+ * This is only for TypeScript type-checking purposes — we use ajv
+ * to validate the user's schema during runtime.
+ */
+export type CustomPagesRequestRepresentation = FromSchema<
+  customPagesRequestBodySchema,
+  { keepDefaultedPropertiesOptional: true }
+>;
+
+/**
+ * Derived from our API documentation, this is the schema for the `custom_page` object
+ * as we receive it from the ReadMe API.
+ */
+export type CustomPagesResponseRepresentation = FromSchema<
+  customPagesResponseBodySchema,
   { keepDefaultedPropertiesOptional: true }
 >;

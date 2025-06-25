@@ -1,7 +1,5 @@
 import type ChangelogsCommand from '../commands/changelogs.js';
-import type DocsMigrateCommand from '../commands/docs/migrate.js';
-import type DocsUploadCommand from '../commands/docs/upload.js';
-import type RefUploadCommand from '../commands/reference/upload.js';
+import type { APIv2PageCommands } from '../index.js';
 
 import crypto from 'node:crypto';
 import fs from 'node:fs';
@@ -44,11 +42,13 @@ export interface PageMetadata<T = Record<string, unknown>> {
   slug: string;
 }
 
+export const allowedMarkdownExtensions: string[] = ['.markdown', '.md', '.mdx'];
+
 /**
  * Returns the content, matter and slug of the specified Markdown or HTML file
  */
 export function readPage(
-  this: ChangelogsCommand | DocsMigrateCommand | DocsUploadCommand | RefUploadCommand,
+  this: APIv2PageCommands | ChangelogsCommand,
   /**
    * path to the HTML/Markdown file
    * (file extension must end in `.html`, `.md`., or `.markdown`)
@@ -78,9 +78,9 @@ export function readPage(
  * Once the files are found, it reads each file and returns an array of page metadata objects (e.g., the parsed frontmatter data).
  */
 export async function findPages(
-  this: ChangelogsCommand | DocsMigrateCommand | DocsUploadCommand | RefUploadCommand,
+  this: APIv2PageCommands | ChangelogsCommand,
   pathInput: string,
-  allowedFileExtensions: string[] = ['.markdown', '.md', '.mdx'],
+  allowedFileExtensions: string[] = allowedMarkdownExtensions,
 ) {
   let files: string[];
 
@@ -92,8 +92,9 @@ export async function findPages(
   });
 
   if (stat.isDirectory()) {
+    const includeHtml = allowedFileExtensions.includes('.html') ? 'and/or HTML ' : '';
     const fileScanningSpinner = ora({ ...oraOptions() }).start(
-      `🔍 Looking for Markdown files in the \`${pathInput}\` directory...`,
+      `🔍 Looking for Markdown ${includeHtml}files in the \`${pathInput}\` directory...`,
     );
     // Filter out any files that don't match allowedFileExtensions
     files = readdirRecursive(pathInput).filter(file =>

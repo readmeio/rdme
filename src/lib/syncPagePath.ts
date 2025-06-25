@@ -1,5 +1,7 @@
 import type { APIv2PageUploadCommands } from '../index.js';
 import type {
+  CustomPagesRequestRepresentation,
+  CustomPagesResponseRepresentation,
   GuidesRequestRepresentation,
   GuidesResponseRepresentation,
   ProjectRepresentation,
@@ -7,18 +9,26 @@ import type {
   ReferenceResponseRepresentation,
 } from './types/index.js';
 
+import path from 'node:path';
+
 import chalk from 'chalk';
 import ora from 'ora';
 import toposort from 'toposort';
 
 import { APIv2Error } from './apiError.js';
 import { oraOptions } from './logger.js';
-import { findPages, type PageMetadata } from './readPage.js';
+import { allowedMarkdownExtensions, findPages, type PageMetadata } from './readPage.js';
 import { categoryUriRegexPattern, parentUriRegexPattern } from './types/index.js';
 import { validateFrontmatter } from './validateFrontmatter.js';
 
-type PageRequestRepresentation = GuidesRequestRepresentation | ReferenceRequestRepresentation;
-type PageResponseRepresentation = GuidesResponseRepresentation['data'] | ReferenceResponseRepresentation['data'];
+type GuidesReferenceRequestRepresentation = GuidesRequestRepresentation | ReferenceRequestRepresentation;
+
+type PageRequestRepresentation = CustomPagesRequestRepresentation | GuidesReferenceRequestRepresentation;
+
+type PageResponseRepresentation =
+  | CustomPagesResponseRepresentation['data']
+  | GuidesResponseRepresentation['data']
+  | ReferenceResponseRepresentation['data'];
 
 interface BasePushResult {
   filePath: string;
@@ -87,7 +97,7 @@ async function pushPage(
     return { filePath, result: 'skipped', slug };
   }
 
-  const payload: PageRequestRepresentation = {
+  let payload: PageRequestRepresentation = {
     ...data,
     content: {
       body: content,
@@ -98,7 +108,7 @@ async function pushPage(
 
   try {
     // normalize the category uri
-    if (payload.category?.uri) {
+    if ('category' in payload && payload.category?.uri) {
       const regex = new RegExp(categoryUriRegexPattern);
       if (!regex.test(payload.category.uri)) {
         let uri = payload.category.uri;
@@ -110,7 +120,7 @@ async function pushPage(
     }
 
     // normalize the parent uri
-    if (payload.parent?.uri) {
+    if ('parent' in payload && payload.parent?.uri) {
       const regex = new RegExp(parentUriRegexPattern);
       if (!regex.test(payload.parent.uri)) {
         let uri = payload.parent.uri;
@@ -119,6 +129,17 @@ async function pushPage(
         uri = uri.replace(/^\/|\/$/g, '');
         payload.parent.uri = `/branches/${branch}/${this.route}/${uri}`;
       }
+    }
+
+    if (this.route === 'custom_pages') {
+      const customPagePayload = structuredClone(payload) as CustomPagesRequestRepresentation;
+      const type = path.extname(filePath).toLowerCase() === '.html' ? 'html' : 'markdown';
+      if (typeof customPagePayload.content === 'object' && customPagePayload.content) {
+        customPagePayload.content.type = type;
+      } else {
+        customPagePayload.content = { type };
+      }
+      payload = customPagePayload;
     }
 
     const createPage = (): CreatePushResult | Promise<CreatePushResult> => {
@@ -180,8 +201,8 @@ async function pushPage(
 }
 
 const byParentPage = (
-  left: PageMetadata<PageRequestRepresentation>,
-  right: PageMetadata<PageRequestRepresentation>,
+  left: PageMetadata<GuidesReferenceRequestRepresentation>,
+  right: PageMetadata<GuidesReferenceRequestRepresentation>,
 ) => {
   return (right.data.parent?.uri ? 1 : 0) - (left.data.parent?.uri ? 1 : 0);
 };
@@ -193,14 +214,19 @@ const byParentPage = (
  * @see {@link https://github.com/readmeio/rdme/pull/973}
  * @returns An array of sorted PageMetadata objects
  */
-function sortFiles(files: PageMetadata<PageRequestRepresentation>[]): PageMetadata<PageRequestRepresentation>[] {
-  const filesBySlug = files.reduce<Record<string, PageMetadata<PageRequestRepresentation>>>((bySlug, obj) => {
-    // eslint-disable-next-line no-param-reassign
-    bySlug[obj.slug] = obj;
-    return bySlug;
-  }, {});
+function sortFiles(
+  files: PageMetadata<GuidesReferenceRequestRepresentation>[],
+): PageMetadata<GuidesReferenceRequestRepresentation>[] {
+  const filesBySlug = files.reduce<Record<string, PageMetadata<GuidesReferenceRequestRepresentation>>>(
+    (bySlug, obj) => {
+      // eslint-disable-next-line no-param-reassign
+      bySlug[obj.slug] = obj;
+      return bySlug;
+    },
+    {},
+  );
   const dependencies = Object.values(filesBySlug).reduce<
-    [PageMetadata<PageRequestRepresentation>, PageMetadata<PageRequestRepresentation>][]
+    [PageMetadata<GuidesReferenceRequestRepresentation>, PageMetadata<GuidesReferenceRequestRepresentation>][]
   >((edges, obj) => {
     if (obj.data.parent?.uri && filesBySlug[obj.data.parent.uri]) {
       edges.push([filesBySlug[obj.data.parent.uri], filesBySlug[obj.slug]]);
@@ -238,7 +264,12 @@ export default async function syncPagePath(this: APIv2PageUploadCommands) {
     );
   }
 
-  let unsortedFiles = await findPages.call(this, pathInput);
+  const validFileExtensions = [...allowedMarkdownExtensions];
+  if (this.route === 'custom_pages') {
+    validFileExtensions.push('.html');
+  }
+
+  let unsortedFiles = await findPages.call(this, pathInput, validFileExtensions);
 
   if (skipValidation) {
     if (biDiConnection) {
@@ -265,7 +296,10 @@ export default async function syncPagePath(this: APIv2PageUploadCommands) {
   const count = { succeeded: 0, failed: 0 };
 
   // topological sort the files
-  const sortedFiles = sortFiles((unsortedFiles as PageMetadata<PageRequestRepresentation>[]).sort(byParentPage));
+  const sortedFiles =
+    this.route === 'custom_pages'
+      ? (unsortedFiles as PageMetadata<CustomPagesRequestRepresentation>[])
+      : sortFiles((unsortedFiles as PageMetadata<GuidesReferenceRequestRepresentation>[]).sort(byParentPage));
 
   // push the files to ReadMe
   const rawResults: PromiseSettledResult<PushResult>[] = [];
