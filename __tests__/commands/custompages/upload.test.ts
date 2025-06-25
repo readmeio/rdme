@@ -43,7 +43,7 @@ describe('custompages upload', () => {
         .post('/branches/stable/custom_pages', {
           slug: 'new-doc',
           title: 'This is the document title',
-          content: { body: '\nBody\n' },
+          content: { body: '\nBody\n', type: 'markdown' },
         })
         .reply(201, {});
 
@@ -62,7 +62,7 @@ describe('custompages upload', () => {
         .post('/branches/stable/custom_pages', {
           slug: 'new-doc',
           title: 'This is the document title',
-          content: { body: '\nBody\n' },
+          content: { body: '\nBody\n', type: 'markdown' },
         })
         .reply(201, {});
 
@@ -86,7 +86,7 @@ describe('custompages upload', () => {
         .post('/branches/1.2.3/custom_pages', {
           slug: 'new-doc',
           title: 'This is the document title',
-          content: { body: '\nBody\n' },
+          content: { body: '\nBody\n', type: 'markdown' },
         })
         .reply(201, {});
 
@@ -111,7 +111,7 @@ describe('custompages upload', () => {
         .post('/branches/4.5.6/custom_pages', {
           slug: 'new-doc',
           title: 'This is the document title',
-          content: { body: '\nBody\n' },
+          content: { body: '\nBody\n', type: 'markdown' },
         })
         .reply(201, {});
 
@@ -201,7 +201,7 @@ describe('custompages upload', () => {
           .reply(404)
           .post('/branches/stable/custom_pages', {
             title: 'This is the document title',
-            content: { body: '\nBody\n' },
+            content: { body: '\nBody\n', type: 'markdown' },
             slug: 'some-slug',
           })
           .reply(201, {});
@@ -220,7 +220,7 @@ describe('custompages upload', () => {
           .reply(200)
           .patch('/branches/stable/custom_pages/some-slug', {
             title: 'This is the document title',
-            content: { body: '\nBody\n' },
+            content: { body: '\nBody\n', type: 'markdown' },
           })
           .reply(201, {});
 
@@ -241,7 +241,7 @@ describe('custompages upload', () => {
           .post('/branches/stable/custom_pages', {
             slug: 'legacy-page',
             title: 'This is the document title',
-            content: { body: '\nBody\n' },
+            content: { body: '\nBody\n', type: 'markdown' },
             privacy: { view: 'anyone_with_link' },
             appearance: { fullscreen: true },
           })
@@ -279,7 +279,7 @@ describe('custompages upload', () => {
             hidden: true,
             slug: 'legacy-page',
             title: 'This is the document title',
-            content: { body: '\nBody\n' },
+            content: { body: '\nBody\n', type: 'markdown' },
           })
           .reply(400, { title: 'bad request', detail: 'your metadata is whack' });
 
@@ -304,7 +304,7 @@ describe('custompages upload', () => {
             appearance: { 'is-this-a-valid-property': 'nope' },
             slug: 'invalid-attributes',
             title: 'This is the document title',
-            content: { body: '\nBody\n' },
+            content: { body: '\nBody\n', type: 'markdown' },
           })
           .reply(201, {});
 
@@ -333,7 +333,7 @@ describe('custompages upload', () => {
           .post('/branches/stable/custom_pages', {
             slug: 'new-doc',
             title: 'This is the document title',
-            content: { body: '\nBody\n' },
+            content: { body: '\nBody\n', type: 'markdown' },
           })
           .reply(201, {});
 
@@ -377,7 +377,7 @@ describe('custompages upload', () => {
             appearance: { fullscreen: true },
             slug: 'legacy-page',
             title: 'This is the document title',
-            content: { body: '\nBody\n' },
+            content: { body: '\nBody\n', type: 'markdown' },
           })
           .reply(201, {});
 
@@ -474,7 +474,7 @@ describe('custompages upload', () => {
         .post('/branches/stable/custom_pages', {
           slug: 'simple-doc',
           title: 'This is the document title',
-          content: { body: '\nBody\n' },
+          content: { body: '\nBody\n', type: 'markdown' },
         })
         .reply(201, {})
         .get('/branches/stable/custom_pages/another-doc')
@@ -482,7 +482,7 @@ describe('custompages upload', () => {
         .post('/branches/stable/custom_pages', {
           slug: 'another-doc',
           title: 'This is another document title',
-          content: { body: '\nAnother body\n' },
+          content: { body: '\nAnother body\n', type: 'markdown' },
         })
         .reply(201, {})
         .get('/branches/stable/custom_pages/html-file')
@@ -511,14 +511,14 @@ describe('custompages upload', () => {
         .reply(200)
         .patch('/branches/stable/custom_pages/simple-doc', {
           title: 'This is the document title',
-          content: { body: '\nBody\n' },
+          content: { body: '\nBody\n', type: 'markdown' },
         })
         .reply(201, {})
         .get('/branches/stable/custom_pages/another-doc')
         .reply(200)
         .patch('/branches/stable/custom_pages/another-doc', {
           title: 'This is another document title',
-          content: { body: '\nAnother body\n' },
+          content: { body: '\nAnother body\n', type: 'markdown' },
         })
         .reply(201, {})
         .get('/branches/stable/custom_pages/html-file')
@@ -546,7 +546,7 @@ describe('custompages upload', () => {
         .reply(200)
         .patch('/branches/stable/custom_pages/basic', {
           title: 'This is the document title',
-          content: { body: 'frontmatter body' },
+          content: { body: 'frontmatter body', type: 'markdown' },
         })
         .reply(201, {})
         .get('/branches/stable/custom_pages/complex')
@@ -555,6 +555,7 @@ describe('custompages upload', () => {
           title: 'This is the document title',
           content: {
             body: '\nBody\n',
+            type: 'markdown',
           },
           appearance: {
             fullscreen: true,
@@ -590,14 +591,14 @@ describe('custompages upload', () => {
           appearance: { 'is-this-a-valid-property': 'nope' },
           slug: 'invalid-attributes',
           title: 'This is the document title',
-          content: { body: '\nBody\n' },
+          content: { body: '\nBody\n', type: 'markdown' },
         })
         .reply(201, {})
         .get('/branches/stable/custom_pages/legacy-page')
         .reply(200)
         .patch('/branches/stable/custom_pages/legacy-page', {
           title: 'This is the document title',
-          content: { body: '\nBody\n' },
+          content: { body: '\nBody\n', type: 'markdown' },
           privacy: { view: 'anyone_with_link' },
           appearance: { fullscreen: true },
         })
@@ -607,7 +608,7 @@ describe('custompages upload', () => {
         .post('/branches/stable/custom_pages', {
           slug: 'some-slug',
           title: 'This is the document title',
-          content: { body: '\nBody\n' },
+          content: { body: '\nBody\n', type: 'markdown' },
         })
         .reply(500, {})
         .get('/branches/stable/custom_pages/simple-doc')
@@ -615,7 +616,7 @@ describe('custompages upload', () => {
         .post('/branches/stable/custom_pages', {
           slug: 'simple-doc',
           title: 'This is the document title',
-          content: { body: '\nBody\n' },
+          content: { body: '\nBody\n', type: 'markdown' },
         })
         .reply(500, {});
 
@@ -637,14 +638,14 @@ describe('custompages upload', () => {
           appearance: { 'is-this-a-valid-property': 'nope' },
           slug: 'invalid-attributes',
           title: 'This is the document title',
-          content: { body: '\nBody\n' },
+          content: { body: '\nBody\n', type: 'markdown' },
         })
         .reply(201, {})
         .get('/branches/stable/custom_pages/legacy-page')
         .reply(200)
         .patch('/branches/stable/custom_pages/legacy-page', {
           title: 'This is the document title',
-          content: { body: '\nBody\n' },
+          content: { body: '\nBody\n', type: 'markdown' },
           privacy: { view: 'anyone_with_link' },
           appearance: { fullscreen: true },
         })
@@ -654,7 +655,7 @@ describe('custompages upload', () => {
         .post('/branches/stable/custom_pages', {
           slug: 'some-slug',
           title: 'This is the document title',
-          content: { body: '\nBody\n' },
+          content: { body: '\nBody\n', type: 'markdown' },
         })
         .reply(500, {})
         .get('/branches/stable/custom_pages/simple-doc')
@@ -662,7 +663,7 @@ describe('custompages upload', () => {
         .post('/branches/stable/custom_pages', {
           slug: 'simple-doc',
           title: 'This is the document title',
-          content: { body: '\nBody\n' },
+          content: { body: '\nBody\n', type: 'markdown' },
         })
         .reply(500, {});
 
@@ -725,7 +726,7 @@ describe('custompages upload', () => {
         .post('/branches/stable/custom_pages', {
           slug: 'new-doc',
           title: 'This is the document title',
-          content: { body: '\nBody\n' },
+          content: { body: '\nBody\n', type: 'markdown' },
         })
         .reply(201, {});
 
