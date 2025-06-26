@@ -39,8 +39,12 @@ function truthy<T>(value: T): value is Truthy<T> {
 
 type OpenAPIAction = CommandIdForTopic<'openapi'>;
 
-const capitalizeSpecType = (type: string) =>
-  type === 'openapi' ? 'OpenAPI' : type.charAt(0).toUpperCase() + type.slice(1);
+function capitalizeSpecType<T extends 'openapi' | 'postman' | 'swagger' | 'unknown'>(
+  type: T,
+): T extends 'openapi' ? 'OpenAPI' : Capitalize<T> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (type === 'openapi' ? 'OpenAPI' : type.charAt(0).toUpperCase() + type.slice(1)) as any;
+}
 
 /**
  * Normalizes, validates, and (optionally) bundles an OpenAPI definition.

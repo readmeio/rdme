@@ -114,13 +114,20 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
   async run() {
     const { spec } = this.args;
 
-    const { preparedSpec, specFileType, specPath, specVersion } = await prepareOas(spec, 'openapi upload');
+    const { preparedSpec, specFileType, specType, specPath, specVersion } = await prepareOas(spec, 'openapi upload');
 
     const branch = this.flags.useSpecVersion ? specVersion : this.flags.branch;
 
     const specFileTypeIsUrl = specFileType === 'url';
 
     let filename = specFileTypeIsUrl ? nodePath.basename(specPath) : slugify.default(specPath);
+
+    // Our support for Postman collections relies on an internal fork of an archived project and
+    // can be subject to quirks in the conversion. We should let users know that this is all very
+    // experimental.
+    if (specType === 'Postman') {
+      this.warn('Support for Postman collections is currently experimental.');
+    }
 
     if (!specFileTypeIsUrl && filename !== specPath) {
       this.warn(
