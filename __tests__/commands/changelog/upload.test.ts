@@ -629,7 +629,7 @@ describe(`rdme ${topic} upload`, () => {
   });
 
   describe('given that ReadMe project has bidirection sync set up', () => {
-    it.skip('should error if validation is not skipped', async () => {
+    it('should error if validation is not skipped', async () => {
       nock.cleanAll();
 
       const mock = getAPIv2Mock({ authorization })
@@ -680,7 +680,7 @@ describe(`rdme ${topic} upload`, () => {
       projectsMeMock.done();
     });
 
-    it.skip('should handle an error if /projects/me returns an error', async () => {
+    it('should handle an error if /projects/me returns an error', async () => {
       nock.cleanAll();
 
       const mock = getAPIv2Mock({ authorization: 'Bearer bad-api-key' })
