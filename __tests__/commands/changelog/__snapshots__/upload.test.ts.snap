@@ -49,9 +49,103 @@ exports[`rdme changelog upload > given that the file path is a directory > shoul
 }
 `;
 
+exports[`rdme changelog upload > given that the file path is a directory > should handle a mix of creates and updates and failures and skipped files (dry run) 1`] = `
+{
+  "error": [AggregateError: Multiple dry runs failed. To see more detailed errors for a page, run \`rdme changelog upload <path-to-page.md>\` --dry-run.],
+  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
+ ›    Use at your own risk!
+- 🔍 Looking for Markdown files in the \`__tests__/__fixtures__/changelog/mixed-docs\` directory...
+✔ 🔍 Looking for Markdown files in the \`__tests__/__fixtures__/changelog/mixed-docs\` directory... 5 file(s) found!
+- 🔬 Validating frontmatter data...
+⚠ 🔬 Validating frontmatter data... issues found in 2 file(s).
+ ›   Warning: 1 file(s) have issues that cannot be fixed automatically. The 
+ ›   upload will proceed but we recommend addressing these issues. Please get 
+ ›   in touch with us at support@readme.io if you need a hand.
+- 🎭 Uploading files to ReadMe (but not really because it's a dry run)...
+✖ 🎭 Uploading files to ReadMe (but not really because it's a dry run)... 2 file(s) failed.
+",
+  "stdout": "🌱 The following 1 page(s) do not currently exist in ReadMe and will be created:
+   - invalid-attributes (__tests__/__fixtures__/changelog/mixed-docs/invalid-attributes.md)
+🔄 The following 1 page(s) already exist in ReadMe and will be updated:
+   - legacy-flag (__tests__/__fixtures__/changelog/mixed-docs/legacy-flag.md)
+⏭️ The following 1 page(s) will be skipped due to no frontmatter data:
+   - doc-sans-attributes (__tests__/__fixtures__/changelog/mixed-docs/doc-sans-attributes.md)
+🚨 Unable to fetch data about the following 2 page(s):
+   - __tests__/__fixtures__/changelog/mixed-docs/new-doc-slug.mdx: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+   - __tests__/__fixtures__/changelog/mixed-docs/simple-doc.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+",
+}
+`;
+
 exports[`rdme changelog upload > given that the file path is a directory > should handle a mix of creates and updates and failures and skipped files 1`] = `
 {
   "error": [AggregateError: Multiple page uploads failed. To see more detailed errors for a page, run \`rdme changelog upload <path-to-page.md>\`.],
+  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
+ ›    Use at your own risk!
+- 🔍 Looking for Markdown files in the \`__tests__/__fixtures__/changelog/mixed-docs\` directory...
+✔ 🔍 Looking for Markdown files in the \`__tests__/__fixtures__/changelog/mixed-docs\` directory... 5 file(s) found!
+- 🔬 Validating frontmatter data...
+⚠ 🔬 Validating frontmatter data... issues found in 2 file(s).
+ ›   Warning: 1 file(s) have issues that cannot be fixed automatically. The 
+ ›   upload will proceed but we recommend addressing these issues. Please get 
+ ›   in touch with us at support@readme.io if you need a hand.
+- 🚀 Uploading files to ReadMe...
+✖ 🚀 Uploading files to ReadMe... 2 file(s) failed.
+",
+  "stdout": "🌱 Successfully created 1 page(s) in ReadMe:
+   - invalid-attributes (__tests__/__fixtures__/changelog/mixed-docs/invalid-attributes.md)
+🔄 Successfully updated 1 page(s) in ReadMe:
+   - legacy-flag (__tests__/__fixtures__/changelog/mixed-docs/legacy-flag.md)
+⏭️ Skipped 1 page(s) in ReadMe due to no frontmatter data:
+   - doc-sans-attributes (__tests__/__fixtures__/changelog/mixed-docs/doc-sans-attributes.md)
+🚨 Received errors when attempting to upload 2 page(s):
+   - __tests__/__fixtures__/changelog/mixed-docs/new-doc-slug.mdx: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+   - __tests__/__fixtures__/changelog/mixed-docs/simple-doc.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+",
+}
+`;
+
+exports[`rdme changelog upload > given that the file path is a directory > should handle a mix of creates and updates and failures and skipped files and not error out with \`max-errors\` flag 1`] = `
+{
+  "result": {
+    "created": [
+      {
+        "filePath": "__tests__/__fixtures__/changelog/mixed-docs/invalid-attributes.md",
+        "response": {},
+        "result": "created",
+        "slug": "invalid-attributes",
+      },
+    ],
+    "failed": [
+      {
+        "error": [APIv2Error: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
+        "filePath": "__tests__/__fixtures__/changelog/mixed-docs/new-doc-slug.mdx",
+        "result": "failed",
+        "slug": "some-slug",
+      },
+      {
+        "error": [APIv2Error: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
+        "filePath": "__tests__/__fixtures__/changelog/mixed-docs/simple-doc.md",
+        "result": "failed",
+        "slug": "simple-doc",
+      },
+    ],
+    "skipped": [
+      {
+        "filePath": "__tests__/__fixtures__/changelog/mixed-docs/doc-sans-attributes.md",
+        "result": "skipped",
+        "slug": "doc-sans-attributes",
+      },
+    ],
+    "updated": [
+      {
+        "filePath": "__tests__/__fixtures__/changelog/mixed-docs/legacy-flag.md",
+        "response": {},
+        "result": "updated",
+        "slug": "legacy-flag",
+      },
+    ],
+  },
   "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
  ›    Use at your own risk!
 - 🔍 Looking for Markdown files in the \`__tests__/__fixtures__/changelog/mixed-docs\` directory...

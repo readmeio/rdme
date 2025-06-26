@@ -560,26 +560,23 @@ describe(`rdme ${topic} upload`, () => {
       mock.done();
     });
 
-    it.skip('should handle a mix of creates and updates and failures and skipped files and not error out with `max-errors` flag', async () => {
+    it('should handle a mix of creates and updates and failures and skipped files and not error out with `max-errors` flag', async () => {
       const mock = getAPIv2Mock({ authorization })
         .get(`/${route}/invalid-attributes`)
         .reply(404)
         .post(`/${route}`, {
-          category: {
-            uri: `/categories/${route}/some-category-uri`,
-            'is-this-a-valid-property': 'nope',
-          },
+          type: false,
           slug: 'invalid-attributes',
           title: 'This is the changelog title',
           content: { body: '\nBody\n' },
         })
         .reply(201, {})
-        .get(`/${route}/legacy-category`)
+        .get(`/${route}/legacy-flag`)
         .reply(200)
-        .patch(`/${route}/legacy-category`, {
-          type: 'added',
+        .patch(`/${route}/legacy-flag`, {
           title: 'This is the changelog title',
           content: { body: '\nBody\n' },
+          privacy: { view: 'public' },
         })
         .reply(201, {})
         .get(`/${route}/some-slug`)
@@ -587,7 +584,6 @@ describe(`rdme ${topic} upload`, () => {
         .post(`/${route}`, {
           slug: 'some-slug',
           title: 'This is the changelog title',
-          type: 'added',
           content: { body: '\nBody\n' },
         })
         .reply(500, {})
@@ -610,11 +606,11 @@ describe(`rdme ${topic} upload`, () => {
       mock.done();
     });
 
-    it.skip('should handle a mix of creates and updates and failures and skipped files (dry run)', async () => {
+    it('should handle a mix of creates and updates and failures and skipped files (dry run)', async () => {
       const mock = getAPIv2Mock({ authorization })
         .get(`/${route}/invalid-attributes`)
         .reply(404)
-        .get(`/${route}/legacy-category`)
+        .get(`/${route}/legacy-flag`)
         .reply(200)
         .get(`/${route}/some-slug`)
         .reply(500)
