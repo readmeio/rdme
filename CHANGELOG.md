@@ -1,3 +1,10 @@
+# [10.4.0-next.3](https://github.com/readmeio/rdme/compare/v10.4.0-next.2...v10.4.0-next.3) (2025-06-26)
+
+
+### Features
+
+* support for `rdme changelog upload` ([#1272](https://github.com/readmeio/rdme/issues/1272)) ([fd594f3](https://github.com/readmeio/rdme/commit/fd594f31c3025d1c086975eb5d09eae6b04f885e))
+
 # [10.4.0-next.2](https://github.com/readmeio/rdme/compare/v10.4.0-next.1...v10.4.0-next.2) (2025-06-26)
 
 
