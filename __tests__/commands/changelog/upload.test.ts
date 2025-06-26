@@ -646,15 +646,15 @@ describe(`rdme ${topic} upload`, () => {
       mock.done();
     });
 
-    it.skip('should upload if validation is skipped', async () => {
+    it('should upload if validation is skipped', async () => {
       nock.cleanAll();
 
       const mock = getAPIv2Mock({ authorization })
-        .get(`/${route}/new-doc`)
+        .get(`/${route}/invalid-attributes`)
         .reply(404)
         .post(`/${route}`, {
-          type: 'added',
-          slug: 'new-doc',
+          type: false,
+          slug: 'invalid-attributes',
           title: 'This is the changelog title',
           content: { body: '\nBody\n' },
         })
@@ -667,7 +667,7 @@ describe(`rdme ${topic} upload`, () => {
         });
 
       const result = await run([
-        '__tests__/__fixtures__/changelog/new-docs/new-doc.md',
+        '__tests__/__fixtures__/changelog/mixed-docs/invalid-attributes.md',
         '--key',
         key,
         '--skip-validation',

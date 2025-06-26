@@ -22,6 +22,34 @@ The API key you passed in (bad-api-key) doesn't match any keys we have in our sy
 }
 `;
 
+exports[`rdme changelog upload > given that ReadMe project has bidirection sync set up > should upload if validation is skipped 1`] = `
+{
+  "result": {
+    "created": [
+      {
+        "filePath": "__tests__/__fixtures__/changelog/mixed-docs/invalid-attributes.md",
+        "response": {},
+        "result": "created",
+        "slug": "invalid-attributes",
+      },
+    ],
+    "failed": [],
+    "skipped": [],
+    "updated": [],
+  },
+  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
+ ›    Use at your own risk!
+ ›   Warning: Bi-directional syncing is enabled for this project. Uploading 
+ ›   these docs will overwrite what's currently synced from Git.
+- 🚀 Uploading files to ReadMe...
+✔ 🚀 Uploading files to ReadMe... done!
+",
+  "stdout": "🌱 Successfully created 1 page(s) in ReadMe:
+   - invalid-attributes (__tests__/__fixtures__/changelog/mixed-docs/invalid-attributes.md)
+",
+}
+`;
+
 exports[`rdme changelog upload > given that the file path is a directory > should create a page in ReadMe for each file in the directory and its subdirectories 1`] = `
 {
   "result": {
