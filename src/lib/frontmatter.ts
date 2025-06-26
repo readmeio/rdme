@@ -137,8 +137,7 @@ export function fix(
             default:
               break;
           }
-        } else {
-          // todo: change this else to a condition that checks if the route is custom pages
+        } else if (this.route === 'custom_pages') {
           switch (badKey) {
             case 'htmlmode':
               // if the `content` object exists, add to it. otherwise, create it
