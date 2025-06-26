@@ -1,6 +1,6 @@
 import type { Mappings } from './readmeAPIFetch.js';
 import type { PageMetadata } from './readPage.js';
-import type { CommandClass } from '../index.js';
+import type { APIv2PageCommands } from '../index.js';
 import type { ErrorObject } from 'ajv';
 import type { SchemaObject } from 'oas/types';
 
@@ -18,7 +18,7 @@ const addFormats = _addFormats as unknown as typeof _addFormats.default;
  * Validates the frontmatter data, fixes any issues, and returns the results.
  */
 export function fix(
-  this: CommandClass['prototype'],
+  this: APIv2PageCommands,
   /** frontmatter data to be validated */
   data: PageMetadata['data'],
   /** schema to validate against */
@@ -85,7 +85,11 @@ export function fix(
   }
 
   errors.forEach(error => {
-    if (error.instancePath === '/category' && error.keyword === 'type') {
+    if (
+      error.instancePath === '/category' &&
+      error.keyword === 'type' &&
+      (this.route === 'guides' || this.route === 'reference')
+    ) {
       const uri = mappings.categories[data.category as string];
       updatedData.category = {
         uri: uri || `uri-that-does-not-map-to-${data.category}`,
@@ -98,44 +102,65 @@ export function fix(
         // if the bad property is at the root level, delete it
         delete updatedData[badKey];
         fixableErrorCount += 1;
-        if (badKey === 'excerpt') {
-          // if the `content` object exists, add to it. otherwise, create it
-          if (typeof updatedData.content === 'object' && updatedData.content) {
-            (updatedData.content as Record<string, unknown>).excerpt = extractedValue;
-          } else {
-            updatedData.content = {
-              excerpt: extractedValue,
-            };
-          }
-        } else if (badKey === 'categorySlug') {
-          updatedData.category = {
-            uri: extractedValue,
-          };
-        } else if (badKey === 'parentDoc') {
-          const uri = mappings.parentPages[extractedValue as string];
-          if (uri) {
-            updatedData.parent = {
-              uri,
-            };
-          }
-        } else if (badKey === 'parentDocSlug') {
-          updatedData.parent = {
-            uri: extractedValue,
-          };
-        } else if (badKey === 'hidden') {
+
+        // hidden is the only attribute that is present in all page types
+        if (badKey === 'hidden') {
           const hidden = typeof extractedValue === 'boolean' ? extractedValue : extractedValue === 'true';
           updatedData.privacy = { view: hidden ? 'anyone_with_link' : 'public' };
-        } else if (badKey === 'order') {
-          updatedData.position = extractedValue;
-        } else if (badKey === 'htmlmode') {
-          // if the `content` object exists, add to it. otherwise, create it
-          if (typeof updatedData.content === 'object' && updatedData.content) {
-            (updatedData.content as Record<string, unknown>).type = extractedValue ? 'html' : 'markdown';
-          } else {
-            updatedData.content = { type: extractedValue ? 'html' : 'markdown' };
+        } else {
+          switch (this.route) {
+            case 'custom_pages':
+              switch (badKey) {
+                case 'htmlmode':
+                  // if the `content` object exists, add to it. otherwise, create it
+                  if (typeof updatedData.content === 'object' && updatedData.content) {
+                    (updatedData.content as Record<string, unknown>).type = extractedValue ? 'html' : 'markdown';
+                  } else {
+                    updatedData.content = { type: extractedValue ? 'html' : 'markdown' };
+                  }
+                  break;
+                case 'fullscreen':
+                  updatedData.appearance = { fullscreen: extractedValue };
+                  break;
+                default:
+                  break;
+              }
+              break;
+            case 'guides':
+            case 'reference':
+              switch (badKey) {
+                case 'excerpt':
+                  // if the `content` object exists, add to it. otherwise, create it
+                  if (typeof updatedData.content === 'object' && updatedData.content) {
+                    (updatedData.content as Record<string, unknown>).excerpt = extractedValue;
+                  } else {
+                    updatedData.content = { excerpt: extractedValue };
+                  }
+                  break;
+                case 'categorySlug':
+                  updatedData.category = { uri: extractedValue };
+                  break;
+                case 'parentDoc':
+                  {
+                    const uri = mappings.parentPages[extractedValue as string];
+                    if (uri) {
+                      updatedData.parent = { uri };
+                    }
+                  }
+                  break;
+                case 'parentDocSlug':
+                  updatedData.parent = { uri: extractedValue };
+                  break;
+                case 'order':
+                  updatedData.position = extractedValue;
+                  break;
+                default:
+                  break;
+              }
+              break;
+            default:
+              break;
           }
-        } else if (badKey === 'fullscreen') {
-          updatedData.appearance = { fullscreen: extractedValue };
         }
       } else {
         unfixableErrors.push(error);
@@ -149,7 +174,7 @@ export function fix(
 }
 
 export function writeFixes(
-  this: CommandClass['prototype'],
+  this: APIv2PageCommands,
   /** all metadata for the page that will be written to */
   metadata: PageMetadata,
   /** frontmatter changes to be applied */

@@ -482,6 +482,7 @@ export async function fetchMappings(this: CommandClass['prototype']): Promise<Ma
  * Fetches the schema for the current route from the OpenAPI description for ReadMe API v2.
  */
 export function fetchSchema(this: APIv2PageCommands) {
-  return readmeAPIv2Oas.paths[`/branches/{branch}/${this.route}/{slug}`].patch.requestBody.content['application/json']
-    .schema satisfies SchemaObject;
+  const oasPath =
+    this.route === 'changelogs' ? '/changelogs/{identifier}' : (`/branches/{branch}/${this.route}/{slug}` as const);
+  return readmeAPIv2Oas.paths[oasPath].patch.requestBody.content['application/json'].schema satisfies SchemaObject;
 }

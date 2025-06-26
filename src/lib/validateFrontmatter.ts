@@ -1,6 +1,6 @@
-import type { GuidesRequestRepresentation } from '../types.js';
 import type { PageMetadata } from './readPage.js';
 import type { APIv2PageCommands } from '../index.js';
+import type { PageRequestSchema } from './types/index.js';
 
 import ora from 'ora';
 import prompts from 'prompts';
@@ -16,7 +16,7 @@ export async function validateFrontmatter(
   pages: PageMetadata[],
   promptQuestion: string,
   outputDir?: string,
-): Promise<PageMetadata<GuidesRequestRepresentation>[]> {
+): Promise<PageMetadata<PageRequestSchema<typeof this.route>>[]> {
   const { path: pathInput } = this.args;
   const { 'confirm-autofixes': confirmAutofixes } = this.flags;
   let pagesToReturn = pages;

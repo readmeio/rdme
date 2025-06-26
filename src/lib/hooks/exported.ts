@@ -1,6 +1,6 @@
 import type { PageMetadata } from '../readPage.js';
 import type { PushResult } from '../syncPagePath.js';
-import type { GuidesResponseRepresentation } from '../types/index.js';
+import type { PageResponseSchema } from '../types/index.js';
 import type { Hooks } from '@oclif/core/interfaces';
 
 interface MarkdownFileScanResultOptsBase {
@@ -59,7 +59,7 @@ interface BaseSuccessUploadStatus extends BaseUploadStatus {
    * - `error`: The rendering error. This is only present if the validation failed.
    * - `message`: Additional details about the rendering error. This is only present if the validation failed.
    */
-  renderable: GuidesResponseRepresentation['data']['renderable'];
+  renderable: PageResponseSchema<'guides'>['data']['renderable'];
 
   /**
    * The full URL in ReadMe. Only present if the upload was successful.

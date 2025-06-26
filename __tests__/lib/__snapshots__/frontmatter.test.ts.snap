@@ -1,0 +1,784 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`#fix (changelog upload) > should delete legacy parent page id if no mapping is available 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (changelog upload) > should fix excerpt 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (changelog upload) > should fix fullscreen 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (changelog upload) > should fix htmlmode (false) 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (changelog upload) > should fix htmlmode (true) 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (changelog upload) > should fix legacy category id and use fallback mapping 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (changelog upload) > should fix legacy category slug 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (changelog upload) > should fix legacy parent page id and use mappings 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (changelog upload) > should fix legacy parent page slug 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (changelog upload) > should fix multiple issues 1`] = `
+{
+  "content": {
+    "body": "This is the body",
+  },
+  "privacy": {
+    "view": "anyone_with_link",
+  },
+  "slug": "some-slug",
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (changelog upload) > should fix position 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (changelog upload) > should fix privacy (anyone_with_link) 1`] = `
+{
+  "privacy": {
+    "view": "anyone_with_link",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (changelog upload) > should fix privacy (anyone_with_link, \`hidden\` is a string) 1`] = `
+{
+  "privacy": {
+    "view": "anyone_with_link",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (changelog upload) > should fix privacy (public) 1`] = `
+{
+  "privacy": {
+    "view": "public",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (changelog upload) > should fix privacy (public, \`hidden\` is a string) 1`] = `
+{
+  "privacy": {
+    "view": "public",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (changelog upload) > should handle full category URIs 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (changelog upload) > should handle full parent page URIs 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (changelog upload) > should handle partial category URIs 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (changelog upload) > should handle partial parent page URIs 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (custompages upload) > should delete legacy parent page id if no mapping is available 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (custompages upload) > should fix excerpt 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (custompages upload) > should fix fullscreen 1`] = `
+{
+  "appearance": {
+    "fullscreen": true,
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (custompages upload) > should fix htmlmode (false) 1`] = `
+{
+  "content": {
+    "type": "markdown",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (custompages upload) > should fix htmlmode (true) 1`] = `
+{
+  "content": {
+    "type": "html",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (custompages upload) > should fix legacy category id and use fallback mapping 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (custompages upload) > should fix legacy category slug 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (custompages upload) > should fix legacy parent page id and use mappings 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (custompages upload) > should fix legacy parent page slug 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (custompages upload) > should fix multiple issues 1`] = `
+{
+  "content": {
+    "body": "This is the body",
+    "type": "markdown",
+  },
+  "privacy": {
+    "view": "anyone_with_link",
+  },
+  "slug": "some-slug",
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (custompages upload) > should fix position 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (custompages upload) > should fix privacy (anyone_with_link) 1`] = `
+{
+  "privacy": {
+    "view": "anyone_with_link",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (custompages upload) > should fix privacy (anyone_with_link, \`hidden\` is a string) 1`] = `
+{
+  "privacy": {
+    "view": "anyone_with_link",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (custompages upload) > should fix privacy (public) 1`] = `
+{
+  "privacy": {
+    "view": "public",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (custompages upload) > should fix privacy (public, \`hidden\` is a string) 1`] = `
+{
+  "privacy": {
+    "view": "public",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (custompages upload) > should handle full category URIs 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (custompages upload) > should handle full parent page URIs 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (custompages upload) > should handle partial category URIs 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (custompages upload) > should handle partial parent page URIs 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides migrate) > should delete legacy parent page id if no mapping is available 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides migrate) > should fix excerpt 1`] = `
+{
+  "content": {
+    "excerpt": "This is an excerpt",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides migrate) > should fix fullscreen 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides migrate) > should fix htmlmode (false) 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides migrate) > should fix htmlmode (true) 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides migrate) > should fix legacy category id and use fallback mapping 1`] = `
+{
+  "category": {
+    "uri": "uri-that-does-not-map-to-5f92cbf10cf217478ba93561",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides migrate) > should fix legacy category slug 1`] = `
+{
+  "category": {
+    "uri": "some-slug",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides migrate) > should fix legacy parent page id and use mappings 1`] = `
+{
+  "parent": {
+    "uri": "some-slug",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides migrate) > should fix legacy parent page slug 1`] = `
+{
+  "parent": {
+    "uri": "some-slug",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides migrate) > should fix multiple issues 1`] = `
+{
+  "category": {
+    "uri": "some-category-slug",
+  },
+  "content": {
+    "body": "This is the body",
+    "excerpt": "This is an excerpt",
+  },
+  "parent": {
+    "uri": "some-parent-slug",
+  },
+  "position": 7,
+  "privacy": {
+    "view": "anyone_with_link",
+  },
+  "slug": "some-slug",
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides migrate) > should fix position 1`] = `
+{
+  "position": 5,
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides migrate) > should fix privacy (anyone_with_link) 1`] = `
+{
+  "privacy": {
+    "view": "anyone_with_link",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides migrate) > should fix privacy (anyone_with_link, \`hidden\` is a string) 1`] = `
+{
+  "privacy": {
+    "view": "anyone_with_link",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides migrate) > should fix privacy (public) 1`] = `
+{
+  "privacy": {
+    "view": "public",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides migrate) > should fix privacy (public, \`hidden\` is a string) 1`] = `
+{
+  "privacy": {
+    "view": "public",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides migrate) > should handle full category URIs 1`] = `
+{
+  "category": {
+    "uri": "/branches/stable/categories/guides/sup",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides migrate) > should handle full parent page URIs 1`] = `
+{
+  "parent": {
+    "uri": "sup",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides migrate) > should handle partial category URIs 1`] = `
+{
+  "category": {
+    "uri": "sup",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides migrate) > should handle partial parent page URIs 1`] = `
+{
+  "category": {
+    "uri": "some-slug",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides upload) > should delete legacy parent page id if no mapping is available 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides upload) > should fix excerpt 1`] = `
+{
+  "content": {
+    "excerpt": "This is an excerpt",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides upload) > should fix fullscreen 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides upload) > should fix htmlmode (false) 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides upload) > should fix htmlmode (true) 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides upload) > should fix legacy category id and use fallback mapping 1`] = `
+{
+  "category": {
+    "uri": "uri-that-does-not-map-to-5f92cbf10cf217478ba93561",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides upload) > should fix legacy category slug 1`] = `
+{
+  "category": {
+    "uri": "some-slug",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides upload) > should fix legacy parent page id and use mappings 1`] = `
+{
+  "parent": {
+    "uri": "some-slug",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides upload) > should fix legacy parent page slug 1`] = `
+{
+  "parent": {
+    "uri": "some-slug",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides upload) > should fix multiple issues 1`] = `
+{
+  "category": {
+    "uri": "some-category-slug",
+  },
+  "content": {
+    "body": "This is the body",
+    "excerpt": "This is an excerpt",
+  },
+  "parent": {
+    "uri": "some-parent-slug",
+  },
+  "position": 7,
+  "privacy": {
+    "view": "anyone_with_link",
+  },
+  "slug": "some-slug",
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides upload) > should fix position 1`] = `
+{
+  "position": 5,
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides upload) > should fix privacy (anyone_with_link) 1`] = `
+{
+  "privacy": {
+    "view": "anyone_with_link",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides upload) > should fix privacy (anyone_with_link, \`hidden\` is a string) 1`] = `
+{
+  "privacy": {
+    "view": "anyone_with_link",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides upload) > should fix privacy (public) 1`] = `
+{
+  "privacy": {
+    "view": "public",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides upload) > should fix privacy (public, \`hidden\` is a string) 1`] = `
+{
+  "privacy": {
+    "view": "public",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides upload) > should handle full category URIs 1`] = `
+{
+  "category": {
+    "uri": "/branches/stable/categories/guides/sup",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides upload) > should handle full parent page URIs 1`] = `
+{
+  "parent": {
+    "uri": "sup",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides upload) > should handle partial category URIs 1`] = `
+{
+  "category": {
+    "uri": "sup",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides upload) > should handle partial parent page URIs 1`] = `
+{
+  "category": {
+    "uri": "some-slug",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (reference upload) > should delete legacy parent page id if no mapping is available 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (reference upload) > should fix excerpt 1`] = `
+{
+  "content": {
+    "excerpt": "This is an excerpt",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (reference upload) > should fix fullscreen 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (reference upload) > should fix htmlmode (false) 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (reference upload) > should fix htmlmode (true) 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (reference upload) > should fix legacy category id and use fallback mapping 1`] = `
+{
+  "category": {
+    "uri": "uri-that-does-not-map-to-5f92cbf10cf217478ba93561",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (reference upload) > should fix legacy category slug 1`] = `
+{
+  "category": {
+    "uri": "some-slug",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (reference upload) > should fix legacy parent page id and use mappings 1`] = `
+{
+  "parent": {
+    "uri": "some-slug",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (reference upload) > should fix legacy parent page slug 1`] = `
+{
+  "parent": {
+    "uri": "some-slug",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (reference upload) > should fix multiple issues 1`] = `
+{
+  "category": {
+    "uri": "some-category-slug",
+  },
+  "content": {
+    "body": "This is the body",
+    "excerpt": "This is an excerpt",
+  },
+  "parent": {
+    "uri": "some-parent-slug",
+  },
+  "position": 7,
+  "privacy": {
+    "view": "anyone_with_link",
+  },
+  "slug": "some-slug",
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (reference upload) > should fix position 1`] = `
+{
+  "position": 5,
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (reference upload) > should fix privacy (anyone_with_link) 1`] = `
+{
+  "privacy": {
+    "view": "anyone_with_link",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (reference upload) > should fix privacy (anyone_with_link, \`hidden\` is a string) 1`] = `
+{
+  "privacy": {
+    "view": "anyone_with_link",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (reference upload) > should fix privacy (public) 1`] = `
+{
+  "privacy": {
+    "view": "public",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (reference upload) > should fix privacy (public, \`hidden\` is a string) 1`] = `
+{
+  "privacy": {
+    "view": "public",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (reference upload) > should handle full category URIs 1`] = `
+{
+  "category": {
+    "uri": "/branches/stable/categories/guides/sup",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (reference upload) > should handle full parent page URIs 1`] = `
+{
+  "parent": {
+    "uri": "sup",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (reference upload) > should handle partial category URIs 1`] = `
+{
+  "category": {
+    "uri": "sup",
+  },
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (reference upload) > should handle partial parent page URIs 1`] = `
+{
+  "category": {
+    "uri": "some-slug",
+  },
+  "title": "Hello, world!",
+}
+`;

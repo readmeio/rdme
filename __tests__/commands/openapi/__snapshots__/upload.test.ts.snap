@@ -324,6 +324,7 @@ exports[`rdme openapi upload > given that the API definition is a local file > s
     "uri": "/branches/1.0.0/apis/__tests____fixtures__postmanpetstore.collection.yaml",
   },
   "stderr": "- Validating the API definition located at __tests__/__fixtures__/postman/petstore.collection.yaml...
+ ›   Warning: Support for Postman collections is currently experimental.
  ›   Warning: The slug of your API Definition will be set to 
  ›   __tests____fixtures__postmanpetstore.collection.yaml in ReadMe. This slug 
  ›   is not visible to your end users. To set this slug to something else, use 
