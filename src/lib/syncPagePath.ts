@@ -1,9 +1,7 @@
 import type { APIv2PageUploadCommands } from '../index.js';
-import type {
-  GuidesRequestRepresentation,
-  GuidesResponseRepresentation,
-  ProjectRepresentation,
-} from './types/index.js';
+import type { PageRequestSchema, PageResponseSchema, ProjectRepresentation } from './types/index.js';
+
+import path from 'node:path';
 
 import chalk from 'chalk';
 import ora from 'ora';
@@ -11,13 +9,13 @@ import toposort from 'toposort';
 
 import { APIv2Error } from './apiError.js';
 import { oraOptions } from './logger.js';
-import { findPages, type PageMetadata } from './readPage.js';
+import { allowedMarkdownExtensions, findPages, type PageMetadata } from './readPage.js';
 import { categoryUriRegexPattern, parentUriRegexPattern } from './types/index.js';
 import { validateFrontmatter } from './validateFrontmatter.js';
 
-// todo: eventually this type will be used for other page types (e.g., API Reference)
-type PageRequestRepresentation = GuidesRequestRepresentation;
-type PageResponseRepresentation = GuidesResponseRepresentation['data'];
+type GuidesOrReferenceRequestSchema = PageRequestSchema<'guides' | 'reference'>;
+
+type PageResponseRepresentation = PageResponseSchema<'changelogs' | 'custom_pages' | 'guides' | 'reference'>['data'];
 
 interface BasePushResult {
   filePath: string;
@@ -71,10 +69,12 @@ async function pushPage(
   /** the file data */
   fileData: PageMetadata,
 ): Promise<PushResult> {
-  const { key, 'dry-run': dryRun, branch } = this.flags;
+  const { key, 'dry-run': dryRun } = this.flags;
   const { content, filePath, slug } = fileData;
   const data = fileData.data;
   let route = `/${this.route}`;
+  // the changelog route is not versioned
+  const branch = this.route === 'changelogs' ? null : this.flags.branch;
   if (branch) {
     route = `/branches/${branch}${route}`;
   }
@@ -86,7 +86,7 @@ async function pushPage(
     return { filePath, result: 'skipped', slug };
   }
 
-  const payload: PageRequestRepresentation = {
+  let payload: PageRequestSchema<typeof this.route> = {
     ...data,
     content: {
       body: content,
@@ -97,7 +97,7 @@ async function pushPage(
 
   try {
     // normalize the category uri
-    if (payload.category?.uri) {
+    if ('category' in payload && payload.category?.uri) {
       const regex = new RegExp(categoryUriRegexPattern);
       if (!regex.test(payload.category.uri)) {
         let uri = payload.category.uri;
@@ -109,7 +109,7 @@ async function pushPage(
     }
 
     // normalize the parent uri
-    if (payload.parent?.uri) {
+    if ('parent' in payload && payload.parent?.uri) {
       const regex = new RegExp(parentUriRegexPattern);
       if (!regex.test(payload.parent.uri)) {
         let uri = payload.parent.uri;
@@ -118,6 +118,17 @@ async function pushPage(
         uri = uri.replace(/^\/|\/$/g, '');
         payload.parent.uri = `/branches/${branch}/${this.route}/${uri}`;
       }
+    }
+
+    if (this.route === 'custom_pages') {
+      const customPagePayload = structuredClone(payload) as PageRequestSchema<typeof this.route>;
+      const type = path.extname(filePath).toLowerCase() === '.html' ? 'html' : 'markdown';
+      if (typeof customPagePayload.content === 'object' && customPagePayload.content) {
+        customPagePayload.content.type = type;
+      } else {
+        customPagePayload.content = { type };
+      }
+      payload = customPagePayload;
     }
 
     const createPage = (): CreatePushResult | Promise<CreatePushResult> => {
@@ -179,8 +190,8 @@ async function pushPage(
 }
 
 const byParentPage = (
-  left: PageMetadata<PageRequestRepresentation>,
-  right: PageMetadata<PageRequestRepresentation>,
+  left: PageMetadata<GuidesOrReferenceRequestSchema>,
+  right: PageMetadata<GuidesOrReferenceRequestSchema>,
 ) => {
   return (right.data.parent?.uri ? 1 : 0) - (left.data.parent?.uri ? 1 : 0);
 };
@@ -192,14 +203,16 @@ const byParentPage = (
  * @see {@link https://github.com/readmeio/rdme/pull/973}
  * @returns An array of sorted PageMetadata objects
  */
-function sortFiles(files: PageMetadata<PageRequestRepresentation>[]): PageMetadata<PageRequestRepresentation>[] {
-  const filesBySlug = files.reduce<Record<string, PageMetadata<PageRequestRepresentation>>>((bySlug, obj) => {
+function sortFiles(
+  files: PageMetadata<GuidesOrReferenceRequestSchema>[],
+): PageMetadata<GuidesOrReferenceRequestSchema>[] {
+  const filesBySlug = files.reduce<Record<string, PageMetadata<GuidesOrReferenceRequestSchema>>>((bySlug, obj) => {
     // eslint-disable-next-line no-param-reassign
     bySlug[obj.slug] = obj;
     return bySlug;
   }, {});
   const dependencies = Object.values(filesBySlug).reduce<
-    [PageMetadata<PageRequestRepresentation>, PageMetadata<PageRequestRepresentation>][]
+    [PageMetadata<GuidesOrReferenceRequestSchema>, PageMetadata<GuidesOrReferenceRequestSchema>][]
   >((edges, obj) => {
     if (obj.data.parent?.uri && filesBySlug[obj.data.parent.uri]) {
       edges.push([filesBySlug[obj.data.parent.uri], filesBySlug[obj.slug]]);
@@ -237,7 +250,12 @@ export default async function syncPagePath(this: APIv2PageUploadCommands) {
     );
   }
 
-  let unsortedFiles = await findPages.call(this, pathInput);
+  const validFileExtensions = [...allowedMarkdownExtensions];
+  if (this.route === 'custom_pages') {
+    validFileExtensions.push('.html');
+  }
+
+  let unsortedFiles = await findPages.call(this, pathInput, validFileExtensions);
 
   if (skipValidation) {
     if (biDiConnection) {
@@ -264,7 +282,10 @@ export default async function syncPagePath(this: APIv2PageUploadCommands) {
   const count = { succeeded: 0, failed: 0 };
 
   // topological sort the files
-  const sortedFiles = sortFiles((unsortedFiles as PageMetadata<PageRequestRepresentation>[]).sort(byParentPage));
+  const sortedFiles =
+    this.route === 'changelogs' || this.route === 'custom_pages'
+      ? (unsortedFiles as PageMetadata<PageRequestSchema<typeof this.route>>[])
+      : sortFiles((unsortedFiles as PageMetadata<PageRequestSchema<typeof this.route>>[]).sort(byParentPage));
 
   // push the files to ReadMe
   const rawResults: PromiseSettledResult<PushResult>[] = [];

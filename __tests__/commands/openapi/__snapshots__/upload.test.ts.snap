@@ -176,6 +176,25 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
 }
 `;
 
+exports[`rdme openapi upload > given that the API definition is a local file > and the upload status initially is a pending state > should poll the API until the update is complete 1`] = `
+{
+  "result": {
+    "status": "done",
+    "uri": "/branches/1.0.0/apis/__tests____fixtures__petstore-simple-weird-version.json",
+  },
+  "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+ ›   Warning: The slug of your API Definition will be set to 
+ ›   __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This 
+ ›   slug is not visible to your end users. To set this slug to something else,
+ ›    use the \`--slug\` flag.
+- Updating your API definition to ReadMe...
+✔ Updating your API definition to ReadMe... uploaded but not yet processed by ReadMe. Polling for completion... done!
+",
+  "stdout": "🚀 Your API definition (__tests____fixtures__petstore-simple-weird-version.json) was successfully updated in ReadMe!
+",
+}
+`;
+
 exports[`rdme openapi upload > given that the API definition is a local file > and the upload status initially is a pending state > should poll the API until the upload is complete 1`] = `
 {
   "result": {
@@ -279,6 +298,7 @@ exports[`rdme openapi upload > given that the API definition is a local file > s
     "uri": "/branches/1.0.0/apis/__tests____fixtures__postmanpetstore.collection.yaml",
   },
   "stderr": "- Validating the API definition located at __tests__/__fixtures__/postman/petstore.collection.yaml...
+ ›   Warning: Support for Postman collections is currently experimental.
  ›   Warning: The slug of your API Definition will be set to 
  ›   __tests____fixtures__postmanpetstore.collection.yaml in ReadMe. This slug 
  ›   is not visible to your end users. To set this slug to something else, use 

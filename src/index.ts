@@ -1,6 +1,8 @@
 import type { ValueOf } from 'type-fest';
 
+import ChangelogUploadCommand from './commands/changelog/upload.js';
 import ChangelogsCommand from './commands/changelogs.js';
+import CustomPagesUploadCommand from './commands/custompages/upload.js';
 import DocsMigrateCommand from './commands/docs/migrate.js';
 import DocsUploadCommand from './commands/docs/upload.js';
 import LoginCommand from './commands/login.js';
@@ -27,7 +29,14 @@ export { default as prerun } from './lib/hooks/prerun.js';
  * @see {@link https://oclif.io/docs/command_discovery_strategies/#explicit-strategy}
  */
 export const COMMANDS = {
+  'changelog:upload': ChangelogUploadCommand,
+
+  /**
+   * @deprecated
+   */
   changelogs: ChangelogsCommand,
+
+  'custompages:upload': CustomPagesUploadCommand,
 
   'docs:migrate': DocsMigrateCommand,
   'docs:upload': DocsUploadCommand,
@@ -68,7 +77,11 @@ export type CommandIdForTopic<
  * Note that the `changelogs` command is not included here
  * because it is backed by APIv1.
  */
-export type APIv2PageUploadCommands = DocsUploadCommand | RefUploadCommand;
+export type APIv2PageUploadCommands =
+  | ChangelogUploadCommand
+  | CustomPagesUploadCommand
+  | DocsUploadCommand
+  | RefUploadCommand;
 
 /**
  * Commands that leverage the APIv2 representations for interfacing with pages

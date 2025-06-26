@@ -481,28 +481,8 @@ export async function fetchMappings(this: CommandClass['prototype']): Promise<Ma
 /**
  * Fetches the schema for the current route from the OpenAPI description for ReadMe API v2.
  */
-export async function fetchSchema(this: APIv2PageCommands) {
-  const oas = await this.readmeAPIFetch('/openapi.json')
-    .then(res => {
-      if (!res.ok) {
-        this.debug(`received the following error when attempting to fetch the readme OAS: ${res.status}`);
-        return readmeAPIv2Oas;
-      }
-      this.debug('received a successful response when fetching schema');
-      return res.json() as Promise<typeof readmeAPIv2Oas>;
-    })
-    .catch(e => {
-      this.debug(`error fetching readme OAS: ${e}`);
-      return readmeAPIv2Oas;
-    });
-
-  const requestBody = oas.paths?.[`/branches/{branch}/${this.route}/{slug}`]?.patch?.requestBody;
-
-  if (requestBody && 'content' in requestBody) {
-    return requestBody.content['application/json'].schema;
-  }
-
-  this.debug(`unable to find parse out schema for ${JSON.stringify(oas)}`);
-  return readmeAPIv2Oas.paths[`/branches/{branch}/${this.route}/{slug}`].patch.requestBody.content['application/json']
-    .schema satisfies SchemaObject;
+export function fetchSchema(this: APIv2PageCommands) {
+  const oasPath =
+    this.route === 'changelogs' ? '/changelogs/{identifier}' : (`/branches/{branch}/${this.route}/{slug}` as const);
+  return readmeAPIv2Oas.paths[oasPath].patch.requestBody.content['application/json'].schema satisfies SchemaObject;
 }

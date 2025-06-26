@@ -29,12 +29,17 @@ npx markdown-toc documentation/migration-guide.md --maxdepth 2 --bullets="-" -i
 
 ### Overview
 
-A [bi-directional syncing](https://docs.readme.com/main/docs/bi-directional-sync) workflow with [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored) mostly eliminates the need for a tool like `rdme`. For syncing Markdown files, syncing API definitions, and managing project hierarchy (e.g., project versions and categories) with ReadMe Refactored, you'll want to set up bi-directional syncing.
+This guide explains how to install `rdme@10` for use with [ReadMe Refactored]{https://docs.readme.com/main/docs/welcome-to-readme-refactored}. In general, we recommend [bi-directional syncing](https://docs.readme.com/main/docs/bi-directional-sync) for tasks like:
 
-`rdme@10` is recommended for the following use cases:
+- Syncing Markdown files
+- Syncing API definitions (and editing them visually with [the API designer](https://docs.readme.com/main/docs/building-apis-from-scratch-with-the-api-designer))
+- Managing project hierarchy (e.g., versions and categories)
 
-- Syncing your API definition (generated via a build process and not tracked via Git) to your ReadMe Refactored-enabled project
-- Syncing Markdown files to the Changelog for your ReadMe Refactored-enabled project
+However `rdme@10` is useful for more targeted workflows—particularly when syncing happens outside of Git, such as:
+
+- A one-directional sync of an API definition (e.g., if it is generated via a build process and/or is not tracked via your bidirectionally synced Git repo)
+- A one-directional sync of Markdown files (e.g., if they are updated via a build process and/or are not tracked via your bidirectionally synced Git repo)
+- Any non-syncing processing for an API definition (e.g., validating it, reducing it a set of fewer operations)
 
 <!-- prettier-ignore-start -->
 > [!NOTE]
@@ -70,7 +75,6 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
    We recommend setting up [bi-directional syncing](https://docs.readme.com/main/docs/bi-directional-sync) for managing your Markdown files, API definitions and project hierarchy.
 
 2. **Command Replacements**
-
    - Replace: `openapi` → `openapi upload` (see more in step 3 below)
    - Replace: `categories` → use [Git-based workflow](https://docs.readme.com/main/docs/bi-directional-sync)
    - Replace: `custompages` → use [Git-based workflow](https://docs.readme.com/main/docs/bi-directional-sync)
@@ -80,7 +84,6 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
 3. **`openapi` has been replaced by `openapi upload`**
 
    If you previously uploaded API definitions to ReadMe via `rdme openapi`, the command is now `rdme openapi upload`. There are now two main updates:
-
    - There is no prompt to select your ReadMe project version if you omit the `--version` flag. It now defaults to `stable` (i.e., your main ReadMe project version).
 
    - Previously with `openapi`, the `--id` flag was an ObjectId that required an initial upload to ReadMe, which made it difficult to upsert API definitions and manage many at scale. With `openapi upload`, the `--id` flag has been renamed to `--slug` and is now optional. The slug (i.e., the unique identifier for your API definition resource in ReadMe) is inferred from the file path or URL to your API definition.
@@ -94,13 +97,11 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
 This release adds a few features that make it even easier to get started with `rdme`:
 
 1. **Enhanced Command Documentation**
-
    - Complete command reference in [the `documentation/commands` directory](https://github.com/readmeio/rdme/tree/v9/documentation/commands)
    - Detailed usage examples and parameter descriptions
    - Structured by command category for intuitive navigation
 
 2. **Improved CLI Experience**
-
    - Overhauled help screens with detailed examples to improve readability and ease of use
    - Set up CLI autocompletions with [the `autocomplete` command](https://github.com/readmeio/rdme/tree/v9/documentation/commands/autocomplete.md)
    - Smart command discovery that helps catch and correct typos
@@ -136,17 +137,14 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
 #### Step 3: Address `v9` Breaking Changes
 
 1. **Verify your runtime**
-
    - For CLI users, make sure your Node.js version is up-to-date. The minimum required Node.js version for `rdme@9` is **v20.10.0**.
    - The `rdme` release process is no longer publishing Docker images and the GitHub Action is now a JavaScript action. This change should not affect any GitHub Actions users.
 
 2. **Topic separator changes**
-
    - The topic separator (i.e., what separates a command from its subcommand) has changed from a colon to a space by default. For example, `rdme openapi:validate` is now `rdme openapi validate`.
    - The colon topic separator will continue to be supported so there is no need to change any existing commands, but all documentation and help screens will reflect the space topic separator.
 
 3. **Command replacements**
-
    - Replace `swagger` → [`openapi`](https://github.com/readmeio/rdme/tree/v9/documentation/commands/openapi.md#rdme-openapi-spec)
    - Replace `validate` → [`openapi validate`](https://github.com/readmeio/rdme/tree/v9/documentation/commands/openapi.md#rdme-openapi-validate-spec)
    - Remove: `docs:edit`, `oas`
@@ -170,7 +168,6 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
 5. **Deprecated commands**
 
    The following commands (and their subcommands) will be removed in `rdme@10`:
-
    - `categories`
    - `custompages`
    - `docs` (and its `guides` alias)
@@ -180,7 +177,6 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
    The `openapi` command will be replaced by `openapi upload` and will have a simpler flag setup based on community feedback.
 
 6. **Verify any scripts that utilize raw CLI outputs**
-
    - The underlying architecture for the CLI has been rewritten with [`oclif`](https://oclif.io/), so some command outputs and error messages may look different.
    - With the exception of the `--raw` flag on `openapi`, we recommend relying on CLI exit codes in your workflows rather than raw command outputs.
 

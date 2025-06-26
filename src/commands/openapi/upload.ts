@@ -1,3 +1,9 @@
+import type {
+  APIUploadSingleResponseRepresentation,
+  APIUploadStatus,
+  StagedAPIUploadResponseRepresentation,
+} from '../../lib/types/index.js';
+
 import nodePath from 'node:path';
 
 import { Flags } from '@oclif/core';
@@ -70,14 +76,19 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     },
   ];
 
+  // eslint-disable-next-line class-methods-use-this
+  private isStatusPending(status: APIUploadStatus): status is 'pending_update' | 'pending' {
+    return status.includes('pending');
+  }
+
   /**
    * Poll the ReadMe API until the upload is complete.
    */
   private async pollAPIUntilUploadIsComplete(slug: string, headers: Headers) {
     let count = 0;
-    let status = 'pending';
+    let status: APIUploadStatus = 'pending';
 
-    while (status === 'pending' && count < 10) {
+    while (this.isStatusPending(status) && count < 10) {
       // eslint-disable-next-line no-await-in-loop, no-loop-func
       await new Promise(resolve => {
         // exponential backoff — wait 1s, 2s, 4s, 8s, 16s, 32s, 30s, 30s, 30s, 30s, etc.
@@ -85,12 +96,15 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       });
       this.debug(`polling API for status of ${slug}, count is ${count}`);
       // eslint-disable-next-line no-await-in-loop
-      const response = await this.readmeAPIFetch(slug, { headers }).then(res => this.handleAPIRes(res));
+      const response = (await this.readmeAPIFetch(slug, { headers }).then(res =>
+        this.handleAPIRes(res),
+      )) as APIUploadSingleResponseRepresentation;
+
       status = response?.data?.upload?.status;
       count += 1;
     }
 
-    if (status === 'pending') {
+    if (this.isStatusPending(status)) {
       throw new Error('Sorry, this upload timed out. Please try again later.');
     }
 
@@ -100,13 +114,20 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
   async run() {
     const { spec } = this.args;
 
-    const { preparedSpec, specFileType, specPath, specVersion } = await prepareOas(spec, 'openapi upload');
+    const { preparedSpec, specFileType, specType, specPath, specVersion } = await prepareOas(spec, 'openapi upload');
 
     const branch = this.flags.useSpecVersion ? specVersion : this.flags.branch;
 
     const specFileTypeIsUrl = specFileType === 'url';
 
     let filename = specFileTypeIsUrl ? nodePath.basename(specPath) : slugify.default(specPath);
+
+    // Our support for Postman collections relies on an internal fork of an archived project and
+    // can be subject to quirks in the conversion. We should let users know that this is all very
+    // experimental.
+    if (specType === 'Postman') {
+      this.warn('Support for Postman collections is currently experimental.');
+    }
 
     if (!specFileTypeIsUrl && filename !== specPath) {
       this.warn(
@@ -187,7 +208,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       `${method === 'POST' ? 'Creating' : 'Updating'} your API definition to ReadMe...`,
     );
 
-    const response = await this.readmeAPIFetch(
+    const response = (await this.readmeAPIFetch(
       `/branches/${branch}/apis${method === 'POST' ? '' : `/${filename}`}`,
       options,
     )
@@ -195,12 +216,12 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       .catch((err: Error) => {
         spinner.fail();
         throw err;
-      });
+      })) as StagedAPIUploadResponseRepresentation;
 
     if (response?.data?.upload?.status && response?.data?.uri) {
       let status = response.data.upload.status;
 
-      if (status === 'pending') {
+      if (this.isStatusPending(status)) {
         spinner.text = `${spinner.text} uploaded but not yet processed by ReadMe. Polling for completion...`;
         status = await this.pollAPIUntilUploadIsComplete(response.data.uri, headers);
       }

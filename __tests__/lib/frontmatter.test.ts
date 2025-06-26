@@ -1,6 +1,5 @@
 import type { APIv2PageCommands } from '../../src/index.js';
 import type { PageMetadata } from '../../src/lib/readPage.js';
-import type nock from 'nock';
 import type { SchemaObject } from 'oas/types';
 
 import fs from 'node:fs';
@@ -12,7 +11,6 @@ import DocsUploadCommand from '../../src/commands/docs/upload.js';
 import RefUploadCommand from '../../src/commands/reference/upload.js';
 import { fix, writeFixes } from '../../src/lib/frontmatter.js';
 import { emptyMappings, fetchSchema } from '../../src/lib/readmeAPIFetch.js';
-import { oasFetchMock } from '../helpers/get-api-mock.js';
 import { setupOclifConfig } from '../helpers/oclif.js';
 
 describe.each([

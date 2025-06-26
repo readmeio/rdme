@@ -5,11 +5,19 @@ import { githubFlag, keyFlag } from '../lib/flags.js';
 import syncDocsPath from '../lib/syncDocsPath.legacy.js';
 
 export default class ChangelogsCommand extends BaseCommand<typeof ChangelogsCommand> {
+  static hidden = true;
+
+  static state = 'deprecated';
+
   // we need this as a const for syncDocsPath
   id = 'changelogs' as const;
 
   // needed for unit tests, even though we also specify this in src/index.ts
   static id = 'changelogs' as const;
+
+  static deprecationOptions = {
+    message: `\`rdme ${this.id}\` is deprecated in favor of \`rdme changelog upload\`. For more information, please visit our migration guide: https://github.com/readmeio/rdme/tree/v9/documentation/migration-guide.md`,
+  };
 
   static summary = 'Upload Markdown files to your ReadMe project as Changelog posts.';
 
