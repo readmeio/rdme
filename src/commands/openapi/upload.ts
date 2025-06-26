@@ -130,6 +130,24 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
     let filename = specFileTypeIsUrl ? nodePath.basename(specPath) : slugify.default(specPath);
 
+    const headers = new Headers({ authorization: `Bearer ${this.flags.key}` });
+
+    const existingAPIDefinitions = await this.readmeAPIFetch(`/branches/${branch}/apis`, { headers }).then(res =>
+      this.handleAPIRes(res),
+    );
+
+    const matchingAPIDefinition = existingAPIDefinitions?.data?.find((d: { filename: string; legacy_id: string }) => {
+      if (this.flags['legacy-id']) {
+        return d.legacy_id === this.flags['legacy-id'];
+      }
+      return d.filename === filename;
+    });
+
+    if (matchingAPIDefinition?.legacy_id && this.flags['legacy-id']) {
+      filename = matchingAPIDefinition.filename;
+      this.debug(`using existing legacy ID ${this.flags['legacy-id']} with filename ${filename}`);
+    }
+
     if (!specFileTypeIsUrl && filename !== specPath) {
       this.warn(
         `The slug of your API Definition will be set to ${filename} in ReadMe. This slug is not visible to your end users. To set this slug to something else, use the \`--slug\` flag.`,
@@ -149,16 +167,8 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       filename = `${this.flags.slug.replace(slugExtension, '')}${fileExtension}`;
     }
 
-    const headers = new Headers({ authorization: `Bearer ${this.flags.key}` });
-
-    const existingAPIDefinitions = await this.readmeAPIFetch(`/branches/${branch}/apis`, { headers }).then(res =>
-      this.handleAPIRes(res),
-    );
-
-    // if the current slug already exists, we'll use PUT to update it. otherwise, we'll use POST to create it
-    const method = existingAPIDefinitions?.data?.some((d: { filename: string }) => d.filename === filename)
-      ? 'PUT'
-      : 'POST';
+    // if we have a matching API definition based on legacy-id or slug, we'll use PUT to update it. otherwise, we'll use POST to create it
+    const method = matchingAPIDefinition ? 'PUT' : 'POST';
 
     this.debug(`making a ${method} request`);
 
@@ -201,11 +211,6 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
         }),
         filename,
       );
-    }
-
-    if (this.flags['legacy-id']) {
-      this.debug('attaching legacy ID to form data payload');
-      body.append('legacy_id', this.flags['legacy-id']);
     }
 
     const options: RequestInit = { headers, method, body };

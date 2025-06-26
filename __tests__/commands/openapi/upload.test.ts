@@ -193,19 +193,27 @@ describe('rdme openapi upload', () => {
       });
 
       it('should handle a slug with an invalid file extension', async () => {
+        const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+          .get(`/branches/${branch}/apis`)
+          .reply(200, { data: [] });
         const customSlug = 'custom-slug.yikes';
 
         const result = await run(['--branch', branch, filename, '--key', key, '--slug', customSlug]);
 
         expect(result).toMatchSnapshot();
+        mock.done();
       });
 
       it('should handle a slug with a valid but mismatching file extension', async () => {
+        const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+          .get(`/branches/${branch}/apis`)
+          .reply(200, { data: [] });
         const customSlug = 'custom-slug.yml';
 
         const result = await run(['--branch', branch, filename, '--key', key, '--slug', customSlug]);
 
         expect(result).toMatchSnapshot();
+        mock.done();
       });
     });
 
@@ -520,23 +528,22 @@ describe('rdme openapi upload', () => {
   });
 
   describe('given that the "--legacy-id" flag is passed', () => {
-    it('should include legacy_id', async () => {
+    it('should update an existing spec with matching legacy_id', async () => {
       const legacyId = '1234567890';
+      const existingFilename = 'legacy-spec.json';
+      prompts.inject([true]);
       const getMock = getAPIv2Mock({ authorization: `Bearer ${key}` })
         .get(`/branches/${branch}/apis`)
-        .reply(200, { data: [] });
+        .reply(200, { data: [{ legacy_id: legacyId, filename: existingFilename }] });
 
-      const postMock = getAPIv2Mock({ authorization: `Bearer ${key}` })
-        .post(
-          `/branches/${branch}/apis`,
-          body =>
-            body.match(`form-data; name="schema"; filename="${slugifiedFilename}"`) &&
-            body.match(`"legacy_id\\"\\r\\n\\r\\n${legacyId}`),
+      const putMock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .put(`/branches/${branch}/apis/${existingFilename}`, body =>
+          body.match(`form-data; name="schema"; filename="${existingFilename}"`),
         )
         .reply(200, {
           data: {
             upload: { status: 'done' },
-            uri: `/branches/${branch}/apis/${slugifiedFilename}`,
+            uri: `/branches/${branch}/apis/${existingFilename}`,
           },
         });
 
@@ -545,7 +552,7 @@ describe('rdme openapi upload', () => {
       expect(result).toMatchSnapshot();
 
       getMock.done();
-      postMock.done();
+      putMock.done();
     });
   });
 });

@@ -20,22 +20,21 @@ See more help with --help],
 }
 `;
 
-exports[`rdme openapi upload > given that the "--legacy-id" flag is passed > should include legacy_id 1`] = `
+exports[`rdme openapi upload > given that the "--legacy-id" flag is passed > should update an existing spec with matching legacy_id 1`] = `
 {
   "result": {
     "status": "done",
-    "uri": "/branches/1.0.0/apis/__tests____fixtures__petstore-simple-weird-version.json",
+    "uri": "/branches/1.0.0/apis/legacy-spec.json",
   },
   "stderr": " ›   Warning: The "legacy-id" flag has been deprecated.
 - Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
- ›   Warning: The slug of your API Definition will be set to 
- ›   __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This 
- ›   slug is not visible to your end users. To set this slug to something else,
- ›    use the \`--slug\` flag.
-- Creating your API definition to ReadMe...
-✔ Creating your API definition to ReadMe... done!
+ ›   Warning: The slug of your API Definition will be set to legacy-spec.json 
+ ›   in ReadMe. This slug is not visible to your end users. To set this slug to
+ ›    something else, use the \`--slug\` flag.
+- Updating your API definition to ReadMe...
+✔ Updating your API definition to ReadMe... done!
 ",
-  "stdout": "🚀 Your API definition (__tests____fixtures__petstore-simple-weird-version.json) was successfully created in ReadMe!
+  "stdout": "🚀 Your API definition (legacy-spec.json) was successfully updated in ReadMe!
 ",
 }
 `;
