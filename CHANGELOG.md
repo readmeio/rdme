@@ -1,3 +1,10 @@
+# [10.4.0-next.2](https://github.com/readmeio/rdme/compare/v10.4.0-next.1...v10.4.0-next.2) (2025-06-26)
+
+
+### Features
+
+* **openapi:** adding a warning for our experimental postman support ([#1277](https://github.com/readmeio/rdme/issues/1277)) ([ac0b068](https://github.com/readmeio/rdme/commit/ac0b068bcbe738c2fdbd306b66ec7ec1514f5766))
+
 # [10.4.0-next.1](https://github.com/readmeio/rdme/compare/v10.3.0...v10.4.0-next.1) (2025-06-25)
 
 
