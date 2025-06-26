@@ -107,48 +107,56 @@ export function fix(
         if (badKey === 'hidden') {
           const hidden = typeof extractedValue === 'boolean' ? extractedValue : extractedValue === 'true';
           updatedData.privacy = { view: hidden ? 'anyone_with_link' : 'public' };
-        } else if (this.route === 'guides' || this.route === 'reference') {
-          switch (badKey) {
-            case 'excerpt':
-              // if the `content` object exists, add to it. otherwise, create it
-              if (typeof updatedData.content === 'object' && updatedData.content) {
-                (updatedData.content as Record<string, unknown>).excerpt = extractedValue;
-              } else {
-                updatedData.content = { excerpt: extractedValue };
+        } else {
+          switch (this.route) {
+            case 'custom_pages':
+              switch (badKey) {
+                case 'htmlmode':
+                  // if the `content` object exists, add to it. otherwise, create it
+                  if (typeof updatedData.content === 'object' && updatedData.content) {
+                    (updatedData.content as Record<string, unknown>).type = extractedValue ? 'html' : 'markdown';
+                  } else {
+                    updatedData.content = { type: extractedValue ? 'html' : 'markdown' };
+                  }
+                  break;
+                case 'fullscreen':
+                  updatedData.appearance = { fullscreen: extractedValue };
+                  break;
+                default:
+                  break;
               }
               break;
-            case 'categorySlug':
-              updatedData.category = { uri: extractedValue };
-              break;
-            case 'parentDoc':
-              {
-                const uri = mappings.parentPages[extractedValue as string];
-                if (uri) {
-                  updatedData.parent = { uri };
-                }
+            case 'guides':
+            case 'reference':
+              switch (badKey) {
+                case 'excerpt':
+                  // if the `content` object exists, add to it. otherwise, create it
+                  if (typeof updatedData.content === 'object' && updatedData.content) {
+                    (updatedData.content as Record<string, unknown>).excerpt = extractedValue;
+                  } else {
+                    updatedData.content = { excerpt: extractedValue };
+                  }
+                  break;
+                case 'categorySlug':
+                  updatedData.category = { uri: extractedValue };
+                  break;
+                case 'parentDoc':
+                  {
+                    const uri = mappings.parentPages[extractedValue as string];
+                    if (uri) {
+                      updatedData.parent = { uri };
+                    }
+                  }
+                  break;
+                case 'parentDocSlug':
+                  updatedData.parent = { uri: extractedValue };
+                  break;
+                case 'order':
+                  updatedData.position = extractedValue;
+                  break;
+                default:
+                  break;
               }
-              break;
-            case 'parentDocSlug':
-              updatedData.parent = { uri: extractedValue };
-              break;
-            case 'order':
-              updatedData.position = extractedValue;
-              break;
-            default:
-              break;
-          }
-        } else if (this.route === 'custom_pages') {
-          switch (badKey) {
-            case 'htmlmode':
-              // if the `content` object exists, add to it. otherwise, create it
-              if (typeof updatedData.content === 'object' && updatedData.content) {
-                (updatedData.content as Record<string, unknown>).type = extractedValue ? 'html' : 'markdown';
-              } else {
-                updatedData.content = { type: extractedValue ? 'html' : 'markdown' };
-              }
-              break;
-            case 'fullscreen':
-              updatedData.appearance = { fullscreen: extractedValue };
               break;
             default:
               break;
