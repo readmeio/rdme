@@ -28,9 +28,6 @@ exports[`rdme openapi upload > given that the "--legacy-id" flag is passed > sho
   },
   "stderr": " ›   Warning: The "legacy-id" flag has been deprecated.
 - Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
- ›   Warning: The slug of your API Definition will be set to legacy-spec.json 
- ›   in ReadMe. This slug is not visible to your end users. To set this slug to
- ›    something else, use the \`--slug\` flag.
 - Updating your API definition to ReadMe...
 ✔ Updating your API definition to ReadMe... done!
 ",

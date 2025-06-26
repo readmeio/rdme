@@ -193,27 +193,19 @@ describe('rdme openapi upload', () => {
       });
 
       it('should handle a slug with an invalid file extension', async () => {
-        const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
-          .get(`/branches/${branch}/apis`)
-          .reply(200, { data: [] });
         const customSlug = 'custom-slug.yikes';
 
         const result = await run(['--branch', branch, filename, '--key', key, '--slug', customSlug]);
 
         expect(result).toMatchSnapshot();
-        mock.done();
       });
 
       it('should handle a slug with a valid but mismatching file extension', async () => {
-        const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
-          .get(`/branches/${branch}/apis`)
-          .reply(200, { data: [] });
         const customSlug = 'custom-slug.yml';
 
         const result = await run(['--branch', branch, filename, '--key', key, '--slug', customSlug]);
 
         expect(result).toMatchSnapshot();
-        mock.done();
       });
     });
 
