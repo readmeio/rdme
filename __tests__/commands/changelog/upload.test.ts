@@ -423,7 +423,7 @@ describe(`rdme ${topic} upload`, () => {
   });
 
   describe('given that the file path is a directory', () => {
-    it.skip('should create a page in ReadMe for each file in the directory and its subdirectories', async () => {
+    it('should create a page in ReadMe for each file in the directory and its subdirectories', async () => {
       const mock = getAPIv2Mock({ authorization })
         .get(`/${route}/simple-doc`)
         .reply(404)
@@ -437,9 +437,8 @@ describe(`rdme ${topic} upload`, () => {
         .reply(404)
         .post(`/${route}`, {
           slug: 'another-doc',
-          title: 'This is another document title',
+          title: 'This is another changelog title',
           content: { body: '\nAnother body\n' },
-          type: 'added',
         })
         .reply(201, {});
 
@@ -451,7 +450,7 @@ describe(`rdme ${topic} upload`, () => {
       mock.done();
     });
 
-    it.skip('should update existing pages in ReadMe for each file in the directory and its subdirectories', async () => {
+    it('should update existing pages in ReadMe for each file in the directory and its subdirectories', async () => {
       const mock = getAPIv2Mock({ authorization })
         .get(`/${route}/simple-doc`)
         .reply(200)
@@ -463,8 +462,7 @@ describe(`rdme ${topic} upload`, () => {
         .get(`/${route}/another-doc`)
         .reply(200)
         .patch(`/${route}/another-doc`, {
-          title: 'This is another document title',
-          type: 'added',
+          title: 'This is another changelog title',
           content: { body: '\nAnother body\n' },
         })
         .reply(201, {});
@@ -477,25 +475,27 @@ describe(`rdme ${topic} upload`, () => {
       mock.done();
     });
 
-    it.skip('should handle complex frontmatter', async () => {
+    it('should handle complex frontmatter', async () => {
       const mock = getAPIv2Mock({ authorization })
         .get(`/${route}/basic`)
         .reply(200)
         .patch(`/${route}/basic`, {
           title: 'This is the changelog title',
           type: 'added',
-          content: { body: 'frontmatter body', excerpt: 'frontmatter excerpt' },
+          content: { body: 'frontmatter body' },
         })
         .reply(201, {})
-        .get(`/${route}/link`)
+        .get(`/${route}/complex`)
         .reply(200)
-        .patch(`/${route}/link`, {
+        .patch(`/${route}/complex`, {
           title: 'This is the changelog title',
           type: 'added',
-          content: {
-            body: '\nBody\n',
-            excerpt: 'frontmatter excerpt',
-            link: { url: 'https://example.com', new_tab: true },
+          content: { body: 'frontmatter body' },
+          metadata: {
+            keywords: 'some-keyword',
+          },
+          author: {
+            id: 'some-author-id',
           },
         })
         .reply(201, {});
@@ -508,79 +508,29 @@ describe(`rdme ${topic} upload`, () => {
       mock.done();
     });
 
-    describe('given that the directory contains parent/child docs', () => {
-      it.skip('should upload parents before children', async () => {
-        const mock = getAPIv2Mock({ authorization })
-          .get(`/${route}/child`)
-          .reply(404)
-          .post(`/${route}`, {
-            slug: 'child',
-            title: 'Child',
-            parent: { uri: `/${route}/parent` },
-            content: { body: '\nBody\n' },
-          })
-          .reply(201, {})
-          .get(`/${route}/friend`)
-          .reply(404)
-          .post(`/${route}`, {
-            slug: 'friend',
-            title: 'Friend',
-            content: { body: '\nBody\n' },
-          })
-          .reply(201, {})
-          .get(`/${route}/parent`)
-          .reply(404)
-          .post(`/${route}`, {
-            slug: 'parent',
-            title: 'Parent',
-            parent: { uri: `/${route}/grandparent` },
-            content: { body: '\nBody\n' },
-          })
-          .reply(201, {})
-          .get(`/${route}/grandparent`)
-          .reply(404)
-          .post(`/${route}`, {
-            slug: 'grandparent',
-            title: 'Grandparent',
-            content: { body: '\nBody\n' },
-          })
-          .reply(201, {});
-
-        const result = await run(['__tests__/__fixtures__/changelog/multiple-docs', '--key', key]);
-
-        expect(result).toMatchSnapshot();
-        expect(fs.writeFileSync).not.toHaveBeenCalled();
-
-        mock.done();
-      });
-    });
-
-    it.skip('should error out if the directory does not contain any Markdown files', async () => {
+    it('should error out if the directory does not contain any Markdown files', async () => {
       const result = await run(['__tests__/__fixtures__/ref-oas', '--key', key]);
 
       expect(result).toMatchSnapshot();
     });
 
-    it.skip('should handle a mix of creates and updates and failures and skipped files', async () => {
+    it('should handle a mix of creates and updates and failures and skipped files', async () => {
       const mock = getAPIv2Mock({ authorization })
         .get(`/${route}/invalid-attributes`)
         .reply(404)
         .post(`/${route}`, {
-          category: {
-            uri: `/categories/${route}/some-category-uri`,
-            'is-this-a-valid-property': 'nope',
-          },
+          type: false,
           slug: 'invalid-attributes',
           title: 'This is the changelog title',
           content: { body: '\nBody\n' },
         })
         .reply(201, {})
-        .get(`/${route}/legacy-category`)
+        .get(`/${route}/legacy-flag`)
         .reply(200)
-        .patch(`/${route}/legacy-category`, {
-          type: 'added',
+        .patch(`/${route}/legacy-flag`, {
           title: 'This is the changelog title',
           content: { body: '\nBody\n' },
+          privacy: { view: 'public' },
         })
         .reply(201, {})
         .get(`/${route}/some-slug`)
@@ -588,7 +538,6 @@ describe(`rdme ${topic} upload`, () => {
         .post(`/${route}`, {
           slug: 'some-slug',
           title: 'This is the changelog title',
-          type: 'added',
           content: { body: '\nBody\n' },
         })
         .reply(500, {})
