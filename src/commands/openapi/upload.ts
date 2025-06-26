@@ -40,6 +40,14 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
         'If set, file overwrites will be made without a confirmation prompt. This flag can be a useful in automated environments where prompts cannot be responded to.',
       hidden: true,
     }),
+    'legacy-id': Flags.string({
+      summary: 'The legacy ID for your API definition.',
+      description:
+        'This is only used for legacy rdme CLI workflows and only applies if your project, and this API definition, predates ReadMe Refactored. We consider this value to be deprecated and recommend against relying on it going forward.',
+      hidden: true,
+      deprecated: true,
+      exclusive: ['slug'],
+    }),
     slug: Flags.string({
       summary: 'Override the slug (i.e., the unique identifier) for your API definition.',
       description: [
@@ -193,6 +201,11 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
         }),
         filename,
       );
+    }
+
+    if (this.flags['legacy-id']) {
+      this.debug('attaching legacy ID to form data payload');
+      body.append('legacy_id', this.flags['legacy-id']);
     }
 
     const options: RequestInit = { headers, method, body };

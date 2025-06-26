@@ -10,6 +10,36 @@ See more help with --help],
 }
 `;
 
+exports[`rdme openapi upload > flag error handling > should throw if an error if both \`--slug\` and \`--legacy-id\` flags are passed 1`] = `
+{
+  "error": [Error: The following error occurred:
+  --slug=custom-slug cannot also be provided when using --legacy-id
+See more help with --help],
+  "stderr": "",
+  "stdout": "",
+}
+`;
+
+exports[`rdme openapi upload > given that the "--legacy-id" flag is passed > should include legacy_id 1`] = `
+{
+  "result": {
+    "status": "done",
+    "uri": "/branches/1.0.0/apis/__tests____fixtures__petstore-simple-weird-version.json",
+  },
+  "stderr": " ›   Warning: The "legacy-id" flag has been deprecated.
+- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+ ›   Warning: The slug of your API Definition will be set to 
+ ›   __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This 
+ ›   slug is not visible to your end users. To set this slug to something else,
+ ›    use the \`--slug\` flag.
+- Creating your API definition to ReadMe...
+✔ Creating your API definition to ReadMe... done!
+",
+  "stdout": "🚀 Your API definition (__tests____fixtures__petstore-simple-weird-version.json) was successfully created in ReadMe!
+",
+}
+`;
+
 exports[`rdme openapi upload > given that the API definition is a URL > should create a new API definition in ReadMe 1`] = `
 {
   "result": {

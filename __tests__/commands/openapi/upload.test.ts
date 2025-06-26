@@ -30,6 +30,14 @@ describe('rdme openapi upload', () => {
 
       expect(result).toMatchSnapshot();
     });
+
+    it('should throw if an error if both `--slug` and `--legacy-id` flags are passed', async () => {
+      const customSlug = 'custom-slug';
+      const legacyId = '1234567890';
+      const result = await run(['--slug', customSlug, '--legacy-id', legacyId, filename, '--key', key]);
+
+      expect(result).toMatchSnapshot();
+    });
   });
 
   describe('given that the API definition is a local file', () => {
@@ -508,6 +516,36 @@ describe('rdme openapi upload', () => {
       expect(result.stdout).toContain('was successfully updated in ReadMe!');
 
       mock.done();
+    });
+  });
+
+  describe('given that the "--legacy-id" flag is passed', () => {
+    it('should include legacy_id', async () => {
+      const legacyId = '1234567890';
+      const getMock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .get(`/branches/${branch}/apis`)
+        .reply(200, { data: [] });
+
+      const postMock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .post(
+          `/branches/${branch}/apis`,
+          body =>
+            body.match(`form-data; name="schema"; filename="${slugifiedFilename}"`) &&
+            body.match(`"legacy_id\\"\\r\\n\\r\\n${legacyId}`),
+        )
+        .reply(200, {
+          data: {
+            upload: { status: 'done' },
+            uri: `/branches/${branch}/apis/${slugifiedFilename}`,
+          },
+        });
+
+      const result = await run(['--branch', branch, filename, '--key', key, '--legacy-id', legacyId]);
+
+      expect(result).toMatchSnapshot();
+
+      getMock.done();
+      postMock.done();
     });
   });
 });
