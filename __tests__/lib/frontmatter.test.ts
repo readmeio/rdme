@@ -1,3 +1,4 @@
+import type { APIv2PageCommands } from '../../src/index.js';
 import type { PageMetadata } from '../../src/lib/readPage.js';
 import type { SchemaObject } from 'oas/types';
 
@@ -5,18 +6,28 @@ import fs from 'node:fs';
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
+import ChangelogUploadCommand from '../../src/commands/changelog/upload.js';
+import CustomPagesUploadCommand from '../../src/commands/custompages/upload.js';
+import DocsMigrateCommand from '../../src/commands/docs/migrate.js';
 import DocsUploadCommand from '../../src/commands/docs/upload.js';
+import RefUploadCommand from '../../src/commands/reference/upload.js';
 import { fix, writeFixes } from '../../src/lib/frontmatter.js';
 import { emptyMappings, fetchSchema } from '../../src/lib/readmeAPIFetch.js';
 import { setupOclifConfig } from '../helpers/oclif.js';
 
-describe('#fix', () => {
-  let command: DocsUploadCommand;
+describe.each([
+  ['guides upload', DocsUploadCommand],
+  ['guides migrate', DocsMigrateCommand],
+  ['reference upload', RefUploadCommand],
+  ['changelog upload', ChangelogUploadCommand],
+  ['custompages upload', CustomPagesUploadCommand],
+] as const)('#fix (%s)', (_c, Command) => {
+  let command: APIv2PageCommands;
   let schema: SchemaObject;
 
   beforeEach(async () => {
     const oclifConfig = await setupOclifConfig();
-    command = new DocsUploadCommand([], oclifConfig);
+    command = new Command([], oclifConfig);
     schema = fetchSchema.call(command);
   });
 
@@ -29,7 +40,7 @@ describe('#fix', () => {
     expect(result.updatedData).toStrictEqual(data);
   });
 
-  it('should do nothing for valid frontmatter', () => {
+  it('should handle full category URIs', () => {
     const data = {
       title: 'Hello, world!',
       category: { uri: '/branches/stable/categories/guides/sup' },
@@ -37,11 +48,11 @@ describe('#fix', () => {
 
     const result = fix.call(command, data, schema, emptyMappings);
 
-    expect(result.hasIssues).toBe(false);
-    expect(result.updatedData).toStrictEqual(data);
+    expect(result.hasIssues).toBe(command.route === 'changelogs' || command.route === 'custom_pages');
+    expect(result.updatedData).toMatchSnapshot();
   });
 
-  it('should do nothing for valid frontmatter (with invalid category uri)', () => {
+  it('should handle partial category URIs', () => {
     const data = {
       title: 'Hello, world!',
       category: { uri: 'sup' },
@@ -49,11 +60,11 @@ describe('#fix', () => {
 
     const result = fix.call(command, data, schema, emptyMappings);
 
-    expect(result.hasIssues).toBe(false);
-    expect(result.updatedData).toStrictEqual(data);
+    expect(result.hasIssues).toBe(command.route === 'changelogs' || command.route === 'custom_pages');
+    expect(result.updatedData).toMatchSnapshot();
   });
 
-  it('should do nothing for valid frontmatter (with invalid parent uri)', () => {
+  it('should handle full parent page URIs', () => {
     const data = {
       title: 'Hello, world!',
       parent: { uri: 'sup' },
@@ -61,11 +72,11 @@ describe('#fix', () => {
 
     const result = fix.call(command, data, schema, emptyMappings);
 
-    expect(result.hasIssues).toBe(false);
-    expect(result.updatedData).toStrictEqual(data);
+    expect(result.hasIssues).toBe(command.route === 'changelogs' || command.route === 'custom_pages');
+    expect(result.updatedData).toMatchSnapshot();
   });
 
-  it('should fix legacy category id and use mappings', () => {
+  it('should handle partial parent page URIs', () => {
     const data = {
       title: 'Hello, world!',
       category: '5f92cbf10cf217478ba93561',
@@ -77,14 +88,7 @@ describe('#fix', () => {
     });
 
     expect(result.hasIssues).toBe(true);
-    expect(result.updatedData).toMatchInlineSnapshot(`
-      {
-        "category": {
-          "uri": "some-slug",
-        },
-        "title": "Hello, world!",
-      }
-    `);
+    expect(result.updatedData).toMatchSnapshot();
   });
 
   it('should fix legacy category id and use fallback mapping', () => {
@@ -96,14 +100,7 @@ describe('#fix', () => {
     const result = fix.call(command, data, schema, emptyMappings);
 
     expect(result.hasIssues).toBe(true);
-    expect(result.updatedData).toMatchInlineSnapshot(`
-      {
-        "category": {
-          "uri": "uri-that-does-not-map-to-5f92cbf10cf217478ba93561",
-        },
-        "title": "Hello, world!",
-      }
-    `);
+    expect(result.updatedData).toMatchSnapshot();
   });
 
   it('should fix legacy category slug', () => {
@@ -115,14 +112,7 @@ describe('#fix', () => {
     const result = fix.call(command, data, schema, emptyMappings);
 
     expect(result.hasIssues).toBe(true);
-    expect(result.updatedData).toMatchInlineSnapshot(`
-      {
-        "category": {
-          "uri": "some-slug",
-        },
-        "title": "Hello, world!",
-      }
-    `);
+    expect(result.updatedData).toMatchSnapshot();
   });
 
   it('should fix legacy parent page id and use mappings', () => {
@@ -137,14 +127,7 @@ describe('#fix', () => {
     });
 
     expect(result.hasIssues).toBe(true);
-    expect(result.updatedData).toMatchInlineSnapshot(`
-      {
-        "parent": {
-          "uri": "some-slug",
-        },
-        "title": "Hello, world!",
-      }
-    `);
+    expect(result.updatedData).toMatchSnapshot();
   });
 
   it('should delete legacy parent page id if no mapping is available', () => {
@@ -156,11 +139,7 @@ describe('#fix', () => {
     const result = fix.call(command, data, schema, emptyMappings);
 
     expect(result.hasIssues).toBe(true);
-    expect(result.updatedData).toMatchInlineSnapshot(`
-      {
-        "title": "Hello, world!",
-      }
-    `);
+    expect(result.updatedData).toMatchSnapshot();
   });
 
   it('should fix legacy parent page slug', () => {
@@ -172,14 +151,7 @@ describe('#fix', () => {
     const result = fix.call(command, data, schema, emptyMappings);
 
     expect(result.hasIssues).toBe(true);
-    expect(result.updatedData).toMatchInlineSnapshot(`
-      {
-        "parent": {
-          "uri": "some-slug",
-        },
-        "title": "Hello, world!",
-      }
-    `);
+    expect(result.updatedData).toMatchSnapshot();
   });
 
   it('should fix excerpt', () => {
@@ -191,14 +163,7 @@ describe('#fix', () => {
     const result = fix.call(command, data, schema, emptyMappings);
 
     expect(result.hasIssues).toBe(true);
-    expect(result.updatedData).toMatchInlineSnapshot(`
-      {
-        "content": {
-          "excerpt": "This is an excerpt",
-        },
-        "title": "Hello, world!",
-      }
-    `);
+    expect(result.updatedData).toMatchSnapshot();
   });
 
   it('should fix position', () => {
@@ -210,12 +175,7 @@ describe('#fix', () => {
     const result = fix.call(command, data, schema, emptyMappings);
 
     expect(result.hasIssues).toBe(true);
-    expect(result.updatedData).toMatchInlineSnapshot(`
-      {
-        "position": 5,
-        "title": "Hello, world!",
-      }
-    `);
+    expect(result.updatedData).toMatchSnapshot();
   });
 
   it('should fix privacy (public)', () => {
@@ -227,14 +187,7 @@ describe('#fix', () => {
     const result = fix.call(command, data, schema, emptyMappings);
 
     expect(result.hasIssues).toBe(true);
-    expect(result.updatedData).toMatchInlineSnapshot(`
-      {
-        "privacy": {
-          "view": "public",
-        },
-        "title": "Hello, world!",
-      }
-    `);
+    expect(result.updatedData).toMatchSnapshot();
   });
 
   it('should fix privacy (public, `hidden` is a string)', () => {
@@ -246,14 +199,7 @@ describe('#fix', () => {
     const result = fix.call(command, data, schema, emptyMappings);
 
     expect(result.hasIssues).toBe(true);
-    expect(result.updatedData).toMatchInlineSnapshot(`
-      {
-        "privacy": {
-          "view": "public",
-        },
-        "title": "Hello, world!",
-      }
-    `);
+    expect(result.updatedData).toMatchSnapshot();
   });
 
   it('should fix privacy (anyone_with_link)', () => {
@@ -265,14 +211,7 @@ describe('#fix', () => {
     const result = fix.call(command, data, schema, emptyMappings);
 
     expect(result.hasIssues).toBe(true);
-    expect(result.updatedData).toMatchInlineSnapshot(`
-      {
-        "privacy": {
-          "view": "anyone_with_link",
-        },
-        "title": "Hello, world!",
-      }
-    `);
+    expect(result.updatedData).toMatchSnapshot();
   });
 
   it('should fix privacy (anyone_with_link, `hidden` is a string)', () => {
@@ -284,14 +223,7 @@ describe('#fix', () => {
     const result = fix.call(command, data, schema, emptyMappings);
 
     expect(result.hasIssues).toBe(true);
-    expect(result.updatedData).toMatchInlineSnapshot(`
-      {
-        "privacy": {
-          "view": "anyone_with_link",
-        },
-        "title": "Hello, world!",
-      }
-    `);
+    expect(result.updatedData).toMatchSnapshot();
   });
 
   it('should fix htmlmode (true)', () => {
@@ -303,14 +235,7 @@ describe('#fix', () => {
     const result = fix.call(command, data, schema, emptyMappings);
 
     expect(result.hasIssues).toBe(true);
-    expect(result.updatedData).toMatchInlineSnapshot(`
-      {
-        "content": {
-          "type": "html",
-        },
-        "title": "Hello, world!",
-      }
-    `);
+    expect(result.updatedData).toMatchSnapshot();
   });
 
   it('should fix htmlmode (false)', () => {
@@ -322,14 +247,7 @@ describe('#fix', () => {
     const result = fix.call(command, data, schema, emptyMappings);
 
     expect(result.hasIssues).toBe(true);
-    expect(result.updatedData).toMatchInlineSnapshot(`
-      {
-        "content": {
-          "type": "markdown",
-        },
-        "title": "Hello, world!",
-      }
-    `);
+    expect(result.updatedData).toMatchSnapshot();
   });
 
   it('should fix fullscreen', () => {
@@ -341,14 +259,7 @@ describe('#fix', () => {
     const result = fix.call(command, data, schema, emptyMappings);
 
     expect(result.hasIssues).toBe(true);
-    expect(result.updatedData).toMatchInlineSnapshot(`
-      {
-        "appearance": {
-          "fullscreen": true,
-        },
-        "title": "Hello, world!",
-      }
-    `);
+    expect(result.updatedData).toMatchSnapshot();
   });
 
   it.todo('should fix metadata object');
@@ -378,27 +289,7 @@ describe('#fix', () => {
     });
 
     expect(result.hasIssues).toBe(true);
-    expect(result.updatedData).toMatchInlineSnapshot(`
-      {
-        "category": {
-          "uri": "some-category-slug",
-        },
-        "content": {
-          "body": "This is the body",
-          "excerpt": "This is an excerpt",
-          "type": "markdown",
-        },
-        "parent": {
-          "uri": "some-parent-slug",
-        },
-        "position": 7,
-        "privacy": {
-          "view": "anyone_with_link",
-        },
-        "slug": "some-slug",
-        "title": "Hello, world!",
-      }
-    `);
+    expect(result.updatedData).toMatchSnapshot();
   });
 });
 
