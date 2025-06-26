@@ -6,6 +6,8 @@ import fs from 'node:fs';
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
+import ChangelogUploadCommand from '../../src/commands/changelog/upload.js';
+import CustomPagesUploadCommand from '../../src/commands/custompages/upload.js';
 import DocsMigrateCommand from '../../src/commands/docs/migrate.js';
 import DocsUploadCommand from '../../src/commands/docs/upload.js';
 import RefUploadCommand from '../../src/commands/reference/upload.js';
@@ -17,20 +19,16 @@ describe.each([
   ['guides upload', DocsUploadCommand],
   ['guides migrate', DocsMigrateCommand],
   ['reference upload', RefUploadCommand],
+  ['changelog upload', ChangelogUploadCommand],
+  ['custompages upload', CustomPagesUploadCommand],
 ] as const)('#fix (%s)', (_c, Command) => {
   let command: APIv2PageCommands;
-  let mock: nock.Scope;
   let schema: SchemaObject;
 
   beforeEach(async () => {
     const oclifConfig = await setupOclifConfig();
     command = new Command([], oclifConfig);
-    mock = oasFetchMock();
-    schema = await fetchSchema.call(command);
-  });
-
-  afterEach(() => {
-    mock.done();
+    schema = fetchSchema.call(command);
   });
 
   it('should do nothing for an empty object', () => {
@@ -42,7 +40,7 @@ describe.each([
     expect(result.updatedData).toStrictEqual(data);
   });
 
-  it('should do nothing for valid frontmatter', () => {
+  it('should handle full category URIs', () => {
     const data = {
       title: 'Hello, world!',
       category: { uri: '/branches/stable/categories/guides/sup' },
@@ -50,11 +48,11 @@ describe.each([
 
     const result = fix.call(command, data, schema, emptyMappings);
 
-    expect(result.hasIssues).toBe(false);
-    expect(result.updatedData).toStrictEqual(data);
+    expect(result.hasIssues).toBe(command.route === 'changelogs' || command.route === 'custom_pages');
+    expect(result.updatedData).toMatchSnapshot();
   });
 
-  it('should do nothing for valid frontmatter (with invalid category uri)', () => {
+  it('should handle partial category URIs', () => {
     const data = {
       title: 'Hello, world!',
       category: { uri: 'sup' },
@@ -62,11 +60,11 @@ describe.each([
 
     const result = fix.call(command, data, schema, emptyMappings);
 
-    expect(result.hasIssues).toBe(false);
-    expect(result.updatedData).toStrictEqual(data);
+    expect(result.hasIssues).toBe(command.route === 'changelogs' || command.route === 'custom_pages');
+    expect(result.updatedData).toMatchSnapshot();
   });
 
-  it('should do nothing for valid frontmatter (with invalid parent uri)', () => {
+  it('should handle full parent page URIs', () => {
     const data = {
       title: 'Hello, world!',
       parent: { uri: 'sup' },
@@ -74,11 +72,11 @@ describe.each([
 
     const result = fix.call(command, data, schema, emptyMappings);
 
-    expect(result.hasIssues).toBe(false);
-    expect(result.updatedData).toStrictEqual(data);
+    expect(result.hasIssues).toBe(command.route === 'changelogs' || command.route === 'custom_pages');
+    expect(result.updatedData).toMatchSnapshot();
   });
 
-  it('should fix legacy category id and use mappings', () => {
+  it('should handle partial parent page URIs', () => {
     const data = {
       title: 'Hello, world!',
       category: '5f92cbf10cf217478ba93561',
