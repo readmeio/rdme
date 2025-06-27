@@ -4,20 +4,30 @@
     "title": "Cyclic Schema Example",
     "version": "1.0.0"
   },
-  "paths": {},
+  "paths": {
+    "/example": {
+      "get": {
+        "summary": "Example endpoint with cyclic references",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          }
+        }
+      }
+    }
+  },
   "components": {
     "schemas": {
       "ObjectA": {
         "type": "object",
         "properties": {
           "referenceToB": {
-            "$ref": "#/components/schemas/ObjectB"
+            "$ref": "#/components/schemas/ObjectARef"
           }
         }
       },
       "ObjectB": {
-        "title": "Cyclic Schema Example",
-        "$ref": "#/components/schemas/ObjectARef"
+        "$ref": "#/components/schemas/ObjectA"
       },
       "ObjectARef": {
         "type": "object",

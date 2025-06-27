@@ -5,15 +5,15 @@ import type { OpenAPIV3_1 as OpenAPIV31 } from 'openapi-types';
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { Args, Flags } from '@oclif/core';
+import { Flags } from '@oclif/core';
 import chalk from 'chalk';
 import ora from 'ora';
 import prompts from 'prompts';
 
 import analyzeOas from '../../lib/analyzeOas.js';
 import BaseCommand from '../../lib/baseCommand.js';
-import { workingDirectoryFlag } from '../../lib/flags.js';
-import { info, warn, debug, oraOptions } from '../../lib/logger.js';
+import { specArg, workingDirectoryFlag } from '../../lib/flags.js';
+import { oraOptions } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
 import { validateFilePath } from '../../lib/validatePromptInput.js';
@@ -22,14 +22,14 @@ type Schema = OpenAPIV31.ReferenceObject | OpenAPIV31.SchemaObject;
 
 type SchemaCollection = Record<string, Schema>;
 
-export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCommand> {
+export default class OpenAPIResolveCommand extends BaseCommand<typeof OpenAPIResolveCommand> {
   static summary = 'Resolves circular and recursive references in OpenAPI by replacing them with object schemas.';
 
   static description =
     'This command provides a workaround for circular or recursive references within OpenAPI definitions so they can render properly in ReadMe. It automatically identifies and replaces these references with simplified object schemas, ensuring compatibility for seamless display in the ReadMe API Reference. As a result, instead of displaying an empty form, as would occur with schemas containing such references, you will receive a flattened representation of the object, showing what the object can potentially contain, including references to itself. Complex circular references may require manual inspection and may not be fully resolved.';
 
   static args = {
-    spec: Args.string({ description: 'A file/URL to your API definition' }),
+    spec: specArg,
   };
 
   static examples = [
@@ -50,39 +50,37 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
   ];
 
   static flags = {
-    out: Flags.string({ description: 'Output file path to write processed file to' }),
+    out: Flags.string({ description: 'Output file path to write resolved file to' }),
     workingDirectory: workingDirectoryFlag,
   };
 
   /**
    * Identifies circular references in the OpenAPI document.
-   * @returns A list of circular reference paths.
+   *
    */
-  static async getCircularRefsFromOas(
+  // eslint-disable-next-line class-methods-use-this
+  private async getCircularRefs(
     /** The OpenAPI document to analyze. */
-    document: OASDocument,
+    spec: OASDocument,
   ): Promise<string[]> {
-    try {
-      const analysis = await analyzeOas(document);
-      const circularRefs = analysis.openapi.circularRefs;
-      return Array.isArray(circularRefs.locations) ? circularRefs.locations : [];
-    } catch (error) {
-      return [`Error analyzing OpenAPI document: ${error}`];
-    }
+    const analysis = await analyzeOas(spec);
+    const circularRefs = analysis.openapi.circularRefs;
+    return Array.isArray(circularRefs.locations) ? circularRefs.locations : [];
   }
 
   /**
    * Replaces a reference in a schema with an object if it's circular or recursive.
-   * @returns The modified schema or the original.
+   *
    */
-  static replaceRefWithObjectProxySchemes(
+  // eslint-disable-next-line class-methods-use-this
+  private replaceRefWithObjectProxySchemes(
     /** The schema to process. */
     schema: Schema,
     /** List of circular reference paths. */
     circularRefs: string[],
     /** The name of the schema being processed. */
     schemaName: string,
-  ) {
+  ): Schema {
     if ('$ref' in schema) {
       const refSchemaName = schema.$ref.split('/').pop();
       if (!refSchemaName) {
@@ -102,14 +100,14 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
   /**
    * Recursively replaces references in schemas, transforming circular references to objects.
    */
-  static replaceRefsInSchema(
+  private replaceRefsInSchema(
     /** The schema to process. */
     schema: Schema,
     /** List of circular reference paths. */
     circularRefs: string[],
     /** The name of the schema being processed. */
     schemaName: string,
-  ) {
+  ): void {
     if ('$ref' in schema) {
       return;
     }
@@ -117,18 +115,15 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
     if (schema.type === 'object' && schema.properties) {
       for (const prop of Object.keys(schema.properties)) {
         let property = JSON.parse(JSON.stringify(schema.properties[prop]));
-        property = OpenAPIRefsCommand.replaceRefWithObjectProxySchemes(property, circularRefs, schemaName);
+        property = this.replaceRefWithObjectProxySchemes(property, circularRefs, schemaName);
         schema.properties[prop] = property;
 
         // Handle arrays with item references
         if (property.type === 'array' && property.items) {
           property.items = JSON.parse(JSON.stringify(property.items));
-          property.items = OpenAPIRefsCommand.replaceRefWithObjectProxySchemes(
-            property.items,
-            circularRefs,
-            schemaName,
-          );
-          OpenAPIRefsCommand.replaceRefsInSchema(property.items, circularRefs, schemaName);
+          property.items = this.replaceRefWithObjectProxySchemes(property.items, circularRefs, schemaName);
+
+          this.replaceRefsInSchema(property.items, circularRefs, schemaName);
         }
       }
     }
@@ -136,13 +131,16 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
 
   /**
    * Replaces circular references within a collection of schemas.
+   *
    */
-  static replaceCircularRefs(
+  private replaceCircularRefs(
     /** Collection of schemas to modify. */
     schemas: SchemaCollection,
     /** List of circular reference paths. */
     circularRefs: string[],
   ): void {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const self = this;
     const createdRefs = new Set<string>();
 
     function replaceRef(schemaName: string, propertyName: string, refSchemaName: string) {
@@ -168,10 +166,10 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
             $ref: schema.$ref,
           };
         } else {
-          throw new Error(`Unsupported schema type for ${originalSchemaName}. Please contact support@readme.io.`);
+          throw new Error(`Unsupported schema type detected in: ${originalSchemaName}`);
         }
 
-        OpenAPIRefsCommand.replaceRefsInSchema(schemas[refSchemaName], circularRefs, refSchemaName);
+        self.replaceRefsInSchema(schemas[refSchemaName], circularRefs, refSchemaName);
         createdRefs.add(refSchemaName);
       }
     }
@@ -179,7 +177,7 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
     circularRefs.forEach(refPath => {
       const refParts = refPath.split('/');
       if (refParts.length < 4) {
-        throw new Error(`Invalid reference path: ${refPath}. Please contact support@readme.io.`);
+        throw new Error(`Invalid reference path: ${refPath}`);
       }
 
       const schemaName = refParts[3];
@@ -193,13 +191,11 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
       } else if ('$ref' in schema && schema.$ref) {
         property = { $ref: schema.$ref };
       } else {
-        throw new Error(
-          `Property "${propertyName}" is not found or schema is invalid. Please contact support@readme.io.`,
-        );
+        throw new Error(`Property "${propertyName}" is not found or schema is invalid.`);
       }
 
       if (!schema || !property) {
-        throw new Error(`Schema or property not found for path: ${refPath}. Please contact support@readme.io.`);
+        throw new Error(`Schema or property not found for path: ${refPath}`);
       }
 
       if ('$ref' in property) {
@@ -207,14 +203,15 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
         if (refSchemaName) {
           const newRefSchemaName = `${refSchemaName}Ref`;
           if (refSchemaName.includes('Ref')) {
-            debug(`Skipping proxy schema for ${refSchemaName}.`);
+            this.debug(`Skipping proxy schema for ${refSchemaName}.`);
             return;
           }
           replaceRef(schemaName, propertyName, newRefSchemaName);
           createRefSchema(refSchemaName, newRefSchemaName);
           return;
         }
-        throw new Error(`Invalid $ref in property: ${JSON.stringify(property)}. Please contact support@readme.io.`);
+
+        throw new Error(`Invalid \`$ref\` in property: ${JSON.stringify(property)}`);
       }
 
       // Handle references within items in an array
@@ -232,9 +229,10 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
           if (itemsRefSchemaName) {
             refSchemaName = `${itemsRefSchemaName}Ref`;
             if (itemsRefSchemaName.includes('Ref')) {
-              debug(`Skipping proxy schema for ${itemsRefSchemaName} in array items.`);
+              this.debug(`Skipping proxy schema for ${itemsRefSchemaName} in array items.`);
               return;
             }
+
             property.items = { $ref: `#/components/schemas/${refSchemaName}` };
             createRefSchema(itemsRefSchemaName, refSchemaName);
           }
@@ -244,9 +242,10 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
   }
 
   /**
-   * Replaces all remaining circular references ($ref) in the schema with { type: 'object' }.
+   * Replaces all remaining circular references in the schema with `{ type: "object" }`.
+   *
    */
-  static replaceAllRefsWithObject(
+  private replaceAllRefsWithObject(
     /** Collection of schemas to modify. */
     schemas: SchemaCollection,
     /** List of circular reference paths. */
@@ -255,15 +254,15 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
     circularRefs.forEach(refPath => {
       const refParts = refPath.split('/');
       if (refParts.length < 4) {
-        throw new Error(`Invalid reference path: ${refPath}. Please contact support@readme.io.`);
+        throw new Error(`Invalid reference path: ${refPath}`);
       }
 
       const schemaName = refParts[3];
       const propertyName = refParts[5];
 
-      let schema: Schema = schemas?.[schemaName];
+      let schema = schemas?.[schemaName];
       if (!schema) {
-        warn(`Schema not found for: ${schemaName}`);
+        this.warn(`Schema not found for: ${schemaName}`);
         return;
       }
 
@@ -274,7 +273,7 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
       } else if ('$ref' in schema && typeof schema.$ref === 'string') {
         schema = { type: 'object' };
       } else {
-        throw new Error(`Invalid schema format: ${JSON.stringify(schema)}. Please contact support@readme.io.`);
+        throw new Error(`Invalid schema format: ${JSON.stringify(schema)}`);
       }
     });
   }
@@ -282,71 +281,67 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
   /**
    * Resolves circular references in the provided OpenAPI document.
    */
-  static async resolveCircularRefs(
+  private async resolveCircularRefs(
     /** The OpenAPI document to analyze. */
-    openApiData: OASDocument,
+    spec: OASDocument,
     /** Collection of schemas to modify. */
     schemas: SchemaCollection,
-  ) {
-    const initialCircularRefs = await OpenAPIRefsCommand.getCircularRefsFromOas(openApiData);
-
-    if (initialCircularRefs.length === 0) {
+  ): Promise<void> {
+    const initialCircularRefs = await this.getCircularRefs(spec);
+    if (!initialCircularRefs.length) {
       throw new Error('The file does not contain circular or recursive references.');
     }
 
-    debug(`Found ${initialCircularRefs.length} circular references. Attempting resolution.`);
+    this.debug(`Found ${initialCircularRefs.length} circular references. Attempting resolution.`);
 
-    OpenAPIRefsCommand.replaceCircularRefs(schemas, initialCircularRefs);
+    this.replaceCircularRefs(schemas, initialCircularRefs);
 
-    let remainingCircularRefs = await OpenAPIRefsCommand.getCircularRefsFromOas(openApiData);
+    let remainingCircularRefs = await this.getCircularRefs(spec);
     let iterationCount = 0;
     const maxIterations = 10;
 
     while (remainingCircularRefs.length > 0 && iterationCount < maxIterations) {
-      debug(
+      this.debug(
         `Iteration ${iterationCount + 1}: Resolving ${remainingCircularRefs.length} remaining circular references.`,
       );
-      OpenAPIRefsCommand.replaceCircularRefs(schemas, remainingCircularRefs);
+      this.replaceCircularRefs(schemas, remainingCircularRefs);
 
       // eslint-disable-next-line no-await-in-loop
-      remainingCircularRefs = await OpenAPIRefsCommand.getCircularRefsFromOas(openApiData);
+      remainingCircularRefs = await this.getCircularRefs(spec);
       iterationCount += 1;
     }
 
     if (remainingCircularRefs.length > 0) {
-      info(
-        'Unresolved circular references remain. These references will be replaced with empty objects for schema display purposes.',
-        { includeEmojiPrefix: true },
-      );
-      debug(`Remaining circular references: ${JSON.stringify(remainingCircularRefs, null, 2)}`);
+      this.info('Unresolved circular references remain. These references will be replaced with empty objects.', {
+        includeEmojiPrefix: true,
+      });
+      this.debug(`Remaining circular references: ${JSON.stringify(remainingCircularRefs, null, 2)}`);
 
       const maxObjectReplacementIterations = 5;
       let objectReplacementIterationCount = 0;
 
       while (remainingCircularRefs.length > 0 && objectReplacementIterationCount < maxObjectReplacementIterations) {
-        debug(
+        this.debug(
           `Object replacement iteration ${objectReplacementIterationCount + 1}: replacing remaining circular references.`,
         );
-        OpenAPIRefsCommand.replaceAllRefsWithObject(schemas, remainingCircularRefs);
+        this.replaceAllRefsWithObject(schemas, remainingCircularRefs);
 
         // eslint-disable-next-line no-await-in-loop
-        remainingCircularRefs = await OpenAPIRefsCommand.getCircularRefsFromOas(openApiData);
-        debug(
+        remainingCircularRefs = await this.getCircularRefs(spec);
+        this.debug(
           `After iteration ${objectReplacementIterationCount + 1}, remaining circular references: ${remainingCircularRefs.length}`,
         );
         objectReplacementIterationCount += 1;
       }
 
       if (remainingCircularRefs.length > 0) {
-        debug(`Final unresolved circular references: ${JSON.stringify(remainingCircularRefs, null, 2)}`);
-        throw new Error(
-          'Unable to resolve all circular references, even with fallback replacements. Please contact support@readme.io.',
-        );
+        this.debug(`Final unresolved circular references: ${JSON.stringify(remainingCircularRefs, null, 2)}`);
+        throw new Error('Unable to resolve all circular references, even with fallback replacements.');
       } else {
-        debug('All remaining circular references successfully replaced with empty objects.');
+        this.debug('All remaining circular references successfully replaced with empty objects.');
       }
     } else {
-      debug('All circular references successfully resolved.');
+      this.debug('All circular references successfully resolved.');
     }
   }
 
@@ -360,24 +355,23 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
       this.debug(`Switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
     }
 
-    const { preparedSpec, specPath, specType } = await prepareOas(spec, 'openapi refs');
+    const { preparedSpec, specPath, specType } = await prepareOas(spec, 'openapi resolve');
     if (specType !== 'OpenAPI') {
-      throw new Error('Sorry, this ref resolver feature in rdme only supports OpenAPI 3.0+ definitions.');
+      throw new Error('Sorry, this command only supports OpenAPI 3.0+ definitions.');
     }
 
-    const openApiData: OASDocument = JSON.parse(preparedSpec);
-
-    if (!openApiData.components?.schemas) {
-      throw new Error('Schemas not found in OpenAPI data');
+    const parsedSpec: OASDocument = JSON.parse(preparedSpec);
+    if (!parsedSpec.components?.schemas) {
+      throw new Error('The file does not contain component schemas.');
     }
 
-    const schemas: SchemaCollection = openApiData.components?.schemas;
+    const schemas: SchemaCollection = parsedSpec.components?.schemas;
 
     const spinner = ora({ ...oraOptions() });
     spinner.start('Identifying and resolving circular/recursive references in your API definition...');
 
     try {
-      await OpenAPIRefsCommand.resolveCircularRefs(openApiData, schemas);
+      await this.resolveCircularRefs(parsedSpec, schemas);
       spinner.succeed(`${spinner.text} done! ✅`);
     } catch (err) {
       this.debug(`${err.message}`);
@@ -398,7 +392,8 @@ export default class OpenAPIRefsCommand extends BaseCommand<typeof OpenAPIRefsCo
 
     const outputPath = promptResults.outputPath;
     this.debug(`Saving processed spec to ${outputPath}...`);
-    fs.writeFileSync(outputPath, JSON.stringify(openApiData, null, 2));
+    fs.writeFileSync(outputPath, JSON.stringify(parsedSpec, null, 2));
+    this.debug('resolved spec saved');
 
     return Promise.resolve(chalk.green(`Your API definition has been processed and saved to ${outputPath}!`));
   }

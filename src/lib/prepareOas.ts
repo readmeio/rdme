@@ -222,8 +222,8 @@ export default async function prepareOas(
   const commandsThatBundle: (typeof command)[] = [
     'openapi inspect',
     'openapi reduce',
+    'openapi resolve',
     'openapi upload',
-    'openapi refs',
   ];
 
   if (commandsThatBundle.includes(command)) {
