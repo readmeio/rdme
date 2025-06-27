@@ -20,6 +20,16 @@ See more help with --help],
 }
 `;
 
+exports[`rdme openapi upload > given that the "--legacy-id" flag is passed > should error if no matching API definition found 1`] = `
+{
+  "error": [Error: No API definition found with legacy ID 1234567890.],
+  "stderr": " ›   Warning: The "legacy-id" flag has been deprecated.
+- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+",
+  "stdout": "",
+}
+`;
+
 exports[`rdme openapi upload > given that the "--legacy-id" flag is passed > should update an existing spec with matching legacy_id 1`] = `
 {
   "result": {

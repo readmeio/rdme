@@ -169,7 +169,10 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       return d?.filename === filename;
     });
 
-    if (matchingAPIDefinition?.legacy_id && this.flags['legacy-id']) {
+    if (this.flags['legacy-id']) {
+      if (!matchingAPIDefinition) {
+        throw new Error(`No API definition found with legacy ID ${this.flags['legacy-id']}.`);
+      }
       filename = matchingAPIDefinition.filename;
       this.debug(`using existing legacy ID ${this.flags['legacy-id']} with filename ${filename}`);
     }

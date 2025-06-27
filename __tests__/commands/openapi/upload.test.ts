@@ -546,5 +546,19 @@ describe('rdme openapi upload', () => {
       getMock.done();
       putMock.done();
     });
+
+    it('should error if no matching API definition found', async () => {
+      const legacyId = '1234567890';
+      prompts.inject([true]);
+      const getMock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .get(`/branches/${branch}/apis`)
+        .reply(200, { data: [] });
+
+      const result = await run(['--branch', branch, filename, '--key', key, '--legacy-id', legacyId]);
+
+      expect(result).toMatchSnapshot();
+
+      getMock.done();
+    });
   });
 });
