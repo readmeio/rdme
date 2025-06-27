@@ -6,7 +6,7 @@ Manage your API definition (e.g., syncing, validation, analysis, conversion, etc
 * [`rdme openapi convert [SPEC]`](#rdme-openapi-convert-spec)
 * [`rdme openapi inspect [SPEC]`](#rdme-openapi-inspect-spec)
 * [`rdme openapi reduce [SPEC]`](#rdme-openapi-reduce-spec)
-* [`rdme openapi refs [SPEC]`](#rdme-openapi-refs-spec)
+* [`rdme openapi resolve [SPEC]`](#rdme-openapi-resolve-spec)
 * [`rdme openapi upload [SPEC]`](#rdme-openapi-upload-spec)
 * [`rdme openapi validate [SPEC]`](#rdme-openapi-validate-spec)
 
@@ -135,19 +135,20 @@ EXAMPLES
     $ rdme openapi reduce petstore.json --path /pet/{id} --method get --method put --out petstore.reduced.json
 ```
 
-## `rdme openapi refs [SPEC]`
+## `rdme openapi resolve [SPEC]`
 
 Resolves circular and recursive references in OpenAPI by replacing them with object schemas.
 
 ```
 USAGE
-  $ rdme openapi refs [SPEC] [--out <value>] [--workingDirectory <value>]
+  $ rdme openapi resolve [SPEC] [--out <value>] [--workingDirectory <value>]
 
 ARGUMENTS
-  SPEC  A file/URL to your API definition
+  SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
+        subdirectories contain a single OpenAPI file, you can omit the path.
 
 FLAGS
-  --out=<value>               Output file path to write processed file to
+  --out=<value>               Output file path to write resolved file to
   --workingDirectory=<value>  Working directory (for usage with relative external references)
 
 DESCRIPTION
@@ -163,16 +164,16 @@ DESCRIPTION
 EXAMPLES
   This will resolve circular and recursive references in the OpenAPI definition at the given file or URL:
 
-    $ rdme openapi refs [url-or-local-path-to-file]
+    $ rdme openapi resolve [url-or-local-path-to-file]
 
   You can omit the file name and `rdme` will scan your working directory (and any subdirectories) for OpenAPI files.
   This approach will provide you with CLI prompts, so we do not recommend this technique in CI environments.
 
-    $ rdme openapi refs
+    $ rdme openapi resolve
 
   If you wish to automate this command, you can pass in CLI arguments to bypass the prompts:
 
-    $ rdme openapi refs petstore.json --out petstore.openapi.json
+    $ rdme openapi resolve petstore.json --out petstore.openapi.json
 ```
 
 ## `rdme openapi upload [SPEC]`
