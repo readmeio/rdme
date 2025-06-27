@@ -43,7 +43,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     'legacy-id': Flags.string({
       summary: 'The legacy ID for your API definition.',
       description:
-        'This is only used for legacy rdme CLI workflows and only applies if your project, and this API definition, predates ReadMe Refactored. We consider this value to be deprecated and recommend against relying on it going forward.',
+        'This is only used for legacy `rdme` CLI workflows and only applies if your project, and this API definition, predate ReadMe Refactored. This flag is considered deprecated and we recommend using `--slug` instead.',
       hidden: true,
       deprecated: true,
       exclusive: ['slug'],
@@ -137,7 +137,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       this.warn('Support for Postman collections is currently experimental.');
     }
 
-    if (!specFileTypeIsUrl && filename !== specPath && !this.flags['legacy-id']) {
+    if (!specFileTypeIsUrl && filename !== specPath && !this.flags['legacy-id'] && !this.flags.slug) {
       this.warn(
         `The slug of your API Definition will be set to ${filename} in ReadMe. This slug is not visible to your end users. To set this slug to something else, use the \`--slug\` flag.`,
       );
