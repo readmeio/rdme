@@ -1,3 +1,10 @@
+# [10.4.0-next.4](https://github.com/readmeio/rdme/compare/v10.4.0-next.3...v10.4.0-next.4) (2025-06-27)
+
+
+### Features
+
+* add legacy id flag to openapi upload ([#1278](https://github.com/readmeio/rdme/issues/1278)) ([7871f31](https://github.com/readmeio/rdme/commit/7871f310c86e8b5e17399cff4215a6f69cc9d06d))
+
 # [10.4.0-next.3](https://github.com/readmeio/rdme/compare/v10.4.0-next.2...v10.4.0-next.3) (2025-06-26)
 
 
