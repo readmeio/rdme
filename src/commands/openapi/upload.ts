@@ -1,4 +1,5 @@
 import type {
+  APIDefinitionData,
   APIUploadSingleResponseRepresentation,
   APIUploadStatus,
   StagedAPIUploadResponseRepresentation,
@@ -162,7 +163,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       this.handleAPIRes(res),
     );
 
-    const matchingAPIDefinition = existingAPIDefinitions?.data?.find((d: { filename: string; legacy_id: string }) => {
+    const matchingAPIDefinition = existingAPIDefinitions?.data?.find((d: APIDefinitionData) => {
       if (this.flags['legacy-id']) {
         return d?.legacy_id === this.flags['legacy-id'];
       }
