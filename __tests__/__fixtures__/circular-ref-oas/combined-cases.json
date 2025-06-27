@@ -1,0 +1,138 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "API with Cyclic References",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/example": {
+      "get": {
+        "summary": "Retrieve data with cyclic references",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "nodeA": {
+                      "$ref": "#/components/schemas/NodeA"
+                    },
+                    "nodeC": {
+                      "$ref": "#/components/schemas/NodeC"
+                    },
+                    "nodeD": {
+                      "$ref": "#/components/schemas/NodeD"
+                    },
+                    "complexNode": {
+                      "$ref": "#/components/schemas/ComplexNode"
+                    },
+                    "selfReferencingNode": {
+                      "$ref": "#/components/schemas/SelfReferencingNode"
+                    },
+                    "deepRecursiveNode": {
+                      "$ref": "#/components/schemas/DeepRecursiveNode"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "NodeA": {
+        "type": "object",
+        "properties": {
+          "nodeB": {
+            "$ref": "#/components/schemas/NodeB"
+          }
+        }
+      },
+      "NodeB": {
+        "type": "object",
+        "properties": {
+          "nodeA": {
+            "$ref": "#/components/schemas/NodeA"
+          }
+        }
+      },
+      "NodeC": {
+        "type": "object",
+        "properties": {
+          "self": {
+            "$ref": "#/components/schemas/NodeC"
+          }
+        }
+      },
+      "NodeD": {
+        "type": "object",
+        "properties": {
+          "nodeE": {
+            "$ref": "#/components/schemas/NodeE"
+          }
+        }
+      },
+      "NodeE": {
+        "type": "object",
+        "properties": {
+          "nodeD": {
+            "$ref": "#/components/schemas/NodeD"
+          }
+        }
+      },
+      "ComplexNode": {
+        "type": "object",
+        "properties": {
+          "nodeF": {
+            "$ref": "#/components/schemas/NodeF"
+          }
+        }
+      },
+      "NodeF": {
+        "type": "object",
+        "properties": {
+          "nodeG": {
+            "$ref": "#/components/schemas/NodeG"
+          }
+        }
+      },
+      "NodeG": {
+        "type": "object",
+        "properties": {
+          "nodeH": {
+            "$ref": "#/components/schemas/NodeH"
+          }
+        }
+      },
+      "NodeH": {
+        "type": "object",
+        "properties": {
+          "complexNode": {
+            "$ref": "#/components/schemas/ComplexNode"
+          }
+        }
+      },
+      "SelfReferencingNode": {
+        "type": "object",
+        "properties": {
+          "node": {
+            "$ref": "#/components/schemas/SelfReferencingNode"
+          }
+        }
+      },
+      "DeepRecursiveNode": {
+        "type": "object",
+        "properties": {
+          "child": {
+            "$ref": "#/components/schemas/DeepRecursiveNode"
+          }
+        }
+      }
+    }
+  }
+}

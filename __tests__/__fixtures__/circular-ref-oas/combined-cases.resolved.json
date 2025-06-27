@@ -1,0 +1,202 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "API with Cyclic References",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/example": {
+      "get": {
+        "summary": "Retrieve data with cyclic references",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "nodeA": {
+                      "$ref": "#/components/schemas/NodeA"
+                    },
+                    "nodeC": {
+                      "$ref": "#/components/schemas/NodeC"
+                    },
+                    "nodeD": {
+                      "$ref": "#/components/schemas/NodeD"
+                    },
+                    "complexNode": {
+                      "$ref": "#/components/schemas/ComplexNode"
+                    },
+                    "selfReferencingNode": {
+                      "$ref": "#/components/schemas/SelfReferencingNode"
+                    },
+                    "deepRecursiveNode": {
+                      "$ref": "#/components/schemas/DeepRecursiveNode"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "NodeA": {
+        "type": "object",
+        "properties": {
+          "nodeB": {
+            "$ref": "#/components/schemas/NodeB"
+          }
+        }
+      },
+      "NodeB": {
+        "type": "object",
+        "properties": {
+          "nodeA": {
+            "$ref": "#/components/schemas/NodeARef"
+          }
+        }
+      },
+      "NodeC": {
+        "type": "object",
+        "properties": {
+          "self": {
+            "$ref": "#/components/schemas/NodeCRef"
+          }
+        }
+      },
+      "NodeD": {
+        "type": "object",
+        "properties": {
+          "nodeE": {
+            "$ref": "#/components/schemas/NodeE"
+          }
+        }
+      },
+      "NodeE": {
+        "type": "object",
+        "properties": {
+          "nodeD": {
+            "$ref": "#/components/schemas/NodeDRef"
+          }
+        }
+      },
+      "ComplexNode": {
+        "type": "object",
+        "properties": {
+          "nodeF": {
+            "$ref": "#/components/schemas/NodeF"
+          }
+        }
+      },
+      "NodeF": {
+        "type": "object",
+        "properties": {
+          "nodeG": {
+            "$ref": "#/components/schemas/NodeG"
+          }
+        }
+      },
+      "NodeG": {
+        "type": "object",
+        "properties": {
+          "nodeH": {
+            "$ref": "#/components/schemas/NodeH"
+          }
+        }
+      },
+      "NodeH": {
+        "type": "object",
+        "properties": {
+          "complexNode": {
+            "$ref": "#/components/schemas/ComplexNodeRef"
+          }
+        }
+      },
+      "SelfReferencingNode": {
+        "type": "object",
+        "properties": {
+          "node": {
+            "type": "object"
+          }
+        }
+      },
+      "DeepRecursiveNode": {
+        "type": "object",
+        "properties": {
+          "child": {
+            "$ref": "#/components/schemas/DeepRecursiveNodeRef"
+          }
+        }
+      },
+      "DeepRecursiveNodeRef": {
+        "type": "object",
+        "properties": {
+          "child": {
+            "type": "object"
+          }
+        }
+      },
+      "NodeARef": {
+        "type": "object",
+        "properties": {
+          "nodeB": {
+            "type": "object"
+          }
+        }
+      },
+      "NodeCRef": {
+        "type": "object",
+        "properties": {
+          "self": {
+            "type": "object"
+          }
+        }
+      },
+      "NodeDRef": {
+        "type": "object",
+        "properties": {
+          "nodeE": {
+            "type": "object"
+          }
+        }
+      },
+      "ComplexNodeRef": {
+        "type": "object",
+        "properties": {
+          "nodeF": {
+            "$ref": "#/components/schemas/NodeFRef"
+          }
+        }
+      },
+      "NodeFRef": {
+        "type": "object",
+        "properties": {
+          "nodeG": {
+            "$ref": "#/components/schemas/NodeGRef"
+          }
+        }
+      },
+      "NodeGRef": {
+        "type": "object",
+        "properties": {
+          "nodeH": {
+            "$ref": "#/components/schemas/NodeHRef"
+          }
+        }
+      },
+      "NodeHRef": {
+        "type": "object",
+        "properties": {
+          "complexNode": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  }
+}
