@@ -9,6 +9,8 @@ polymorphism:
  · #/components/schemas/error_APIKEY_EMPTY
  · #/components/schemas/error_APIKEY_MISMATCH
  · #/components/schemas/error_APIKEY_NOTFOUND
+ · #/components/schemas/error_API_ACCESS_REVOKED
+ · #/components/schemas/error_API_ACCESS_UNAVAILABLE
  · #/components/schemas/error_APPLY_INVALID_EMAIL
  · #/components/schemas/error_APPLY_INVALID_JOB
  · #/components/schemas/error_APPLY_INVALID_NAME
@@ -16,14 +18,19 @@ polymorphism:
  · #/components/schemas/error_CATEGORY_NOTFOUND
  · #/components/schemas/error_CHANGELOG_INVALID
  · #/components/schemas/error_CHANGELOG_NOTFOUND
+ · #/components/schemas/error_CUSTOMBLOCK_NOTFOUND
  · #/components/schemas/error_CUSTOMPAGE_INVALID
  · #/components/schemas/error_CUSTOMPAGE_NOTFOUND
  · #/components/schemas/error_DOC_INVALID
  · #/components/schemas/error_DOC_NOTFOUND
  · #/components/schemas/error_ENDPOINT_NOTFOUND
  · #/components/schemas/error_INTERNAL_ERROR
+ · #/components/schemas/error_OWLBOT_INVALID
+ · #/components/schemas/error_OWLBOT_NOT_ENABLED
+ · #/components/schemas/error_OWLBOT_NOT_ENTERPRISE
  · #/components/schemas/error_PROJECT_NEEDSSTAGING
  · #/components/schemas/error_PROJECT_NOTFOUND
+ · #/components/schemas/error_PROJECT_NOT_CHILD
  · #/components/schemas/error_RATE_LIMITED
  · #/components/schemas/error_REGISTRY_INVALID
  · #/components/schemas/error_REGISTRY_NOTFOUND
@@ -32,12 +39,14 @@ polymorphism:
  · #/components/schemas/error_SPEC_ID_INVALID
  · #/components/schemas/error_SPEC_INVALID
  · #/components/schemas/error_SPEC_INVALID_SCHEMA
+ · #/components/schemas/error_SPEC_INVALID_SUPERHUB
  · #/components/schemas/error_SPEC_NOTFOUND
  · #/components/schemas/error_SPEC_TIMEOUT
  · #/components/schemas/error_SPEC_VERSION_NOTFOUND
  · #/components/schemas/error_UNEXPECTED_ERROR
  · #/components/schemas/error_VERSION_CANT_DEMOTE_STABLE
  · #/components/schemas/error_VERSION_CANT_REMOVE_STABLE
+ · #/components/schemas/error_VERSION_CONFLICTING_FLAGS
  · #/components/schemas/error_VERSION_DUPLICATE
  · #/components/schemas/error_VERSION_EMPTY
  · #/components/schemas/error_VERSION_FORK_EMPTY
@@ -46,12 +55,13 @@ polymorphism:
  · #/components/schemas/error_VERSION_NOTFOUND
  · #/paths/~1api-specification/post/responses/400/content/application~1json/schema
  · #/paths/~1api-specification~1{id}/put/responses/400/content/application~1json/schema
+ · #/paths/~1api-validation/post/responses/400/content/application~1json/schema
  · #/paths/~1categories/post/requestBody/content/application~1json/schema
  · #/paths/~1version/post/responses/400/content/application~1json/schema"
 `;
 
 exports[`rdme openapi inspect > feature reports > should generate a report for '@readme/oas-examples/3.0/json/readme-…' (w/ [ 'readme' ]) 1`] = `
-"
+[SoftError: 
 x-default: You do not use this.
 x-readme.code-samples:
  · #/paths/~1x-code-samples/get/x-code-samples
@@ -73,7 +83,7 @@ x-readme.samples-languages:
  · node
  · python
  · shell
- · swift"
+ · swift]
 `;
 
 exports[`rdme openapi inspect > feature reports > should generate a report for '@readme/oas-examples/3.0/json/schema-…' (w/ [ 'additionalProperties', …(1) ]) 1`] = `
@@ -98,7 +108,7 @@ circularRefs:
 `;
 
 exports[`rdme openapi inspect > feature reports > should generate a report for '@readme/oas-examples/3.0/json/schema-…' (w/ [ 'additionalProperties', …(2) ]) 1`] = `
-"
+[SoftError: 
 additionalProperties:
  · #/components/schemas/BodyPart/properties/headers/additionalProperties
  · #/components/schemas/BodyPart/properties/mediaType/properties/parameters/additionalProperties
@@ -122,11 +132,11 @@ x-readme.code-samples: You do not use this.
 x-readme.headers: You do not use this.
 x-readme.explorer-enabled: You do not use this.
 x-readme.proxy-enabled: You do not use this.
-x-readme.samples-languages: You do not use this."
+x-readme.samples-languages: You do not use this.]
 `;
 
 exports[`rdme openapi inspect > feature reports > should generate a report for '@readme/oas-examples/3.0/json/schema-…' (w/ [ 'circularRefs', 'readme' ]) 1`] = `
-"
+[SoftError: 
 circularRefs:
  · #/components/schemas/MultiPart/properties/parent
  · #/components/schemas/ZoneOffset/properties/rules
@@ -136,7 +146,7 @@ x-readme.code-samples: You do not use this.
 x-readme.headers: You do not use this.
 x-readme.explorer-enabled: You do not use this.
 x-readme.proxy-enabled: You do not use this.
-x-readme.samples-languages: You do not use this."
+x-readme.samples-languages: You do not use this.]
 `;
 
 exports[`rdme openapi inspect > feature reports > should generate a report for '@readme/oas-examples/3.1/json/train-t…' (w/ [ 'commonParameters' ]) 1`] = `
@@ -146,11 +156,22 @@ commonParameters:
  · #/paths/~1bookings~1{bookingId}~1payment/parameters"
 `;
 
+exports[`rdme openapi inspect > feature reports > should throw an error if an invalid feature is supplied 1`] = `
+{
+  "error": [Error: Expected --feature=reamde to be one of: additionalProperties, callbacks, circularRefs, commonParameters, discriminators, links, style, polymorphism, serverVariables, webhooks, xml, readme
+See more help with --help],
+  "stderr": "",
+  "stdout": "",
+}
+`;
+
 exports[`rdme openapi inspect > full reports > should generate a report for @readme/oas-examples/3.0/json/petstore.json 1`] = `
 "Here are some interesting things we found in your API definition. 🕵️
 
+ · Your dereferenced file size is 0.03 MB.
  · You are using 4 media types throughout your API: application/json, application/x-www-form-urlencoded, application/xml, and multipart/form-data
  · You have a total of 20 operations in your API.
+ · Your raw file size is 0.01 MB.
  · You are using 2 security types throughout your API: apiKey and oauth2
 
 🌲 OpenAPI Features
@@ -264,8 +285,10 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
 exports[`rdme openapi inspect > full reports > should generate a report for @readme/oas-examples/3.0/json/readme.json 1`] = `
 "Here are some interesting things we found in your API definition. 🕵️
 
- · You are using 2 media types throughout your API: application/json and multipart/form-data
- · You have a total of 36 operations in your API.
+ · Your dereferenced file size is 0.32 MB.
+ · You are using 3 media types throughout your API: application/json, multipart/form-data, and text/event-stream
+ · You have a total of 39 operations in your API.
+ · Your raw file size is 0.05 MB.
  · You are using a single security type throughout your API: http
 
 🌲 OpenAPI Features
@@ -379,8 +402,10 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
 exports[`rdme openapi inspect > full reports > should generate a report for @readme/oas-examples/3.0/json/readme-extensions.json 1`] = `
 "Here are some interesting things we found in your API definition. 🕵️
 
+ · Your dereferenced file size is 0.01 MB.
  · You are using a single media type throughout your API: application/json
  · You have a total of 12 operations in your API.
+ · Your raw file size is 0.01 MB.
  · You are using a single security type throughout your API: oauth2
 
 🌲 OpenAPI Features
@@ -494,8 +519,10 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
 exports[`rdme openapi inspect > full reports > should generate a report for @readme/oas-examples/3.1/json/train-travel.json 1`] = `
 "Here are some interesting things we found in your API definition. 🕵️
 
+ · Your dereferenced file size is 0.15 MB.
  · You are using 2 media types throughout your API: application/json and application/xml
  · You have a total of 9 operations in your API.
+ · Your raw file size is 0.03 MB.
  · You are using a single security type throughout your API: oauth2
 
 🌲 OpenAPI Features

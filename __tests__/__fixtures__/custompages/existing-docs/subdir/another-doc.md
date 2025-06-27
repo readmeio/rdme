@@ -1,5 +1,5 @@
 ---
-title: This is another custom page title
+title: This is another document title
 ---
 
 Another body

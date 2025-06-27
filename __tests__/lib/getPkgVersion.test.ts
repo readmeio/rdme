@@ -9,12 +9,13 @@ describe('#getNodeVersion()', () => {
   it('should extract version that matches range in package.json', () => {
     const version = getNodeVersion();
     const cleanedVersion = semver.valid(semver.coerce(version));
+
     expect(semver.satisfies(cleanedVersion as string, pkg.engines.node)).toBe(true);
   });
 });
 
 describe('#getPkgVersion()', () => {
-  let consoleErrorSpy: MockInstance;
+  let consoleErrorSpy: MockInstance<typeof console.error>;
 
   beforeEach(() => {
     consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -22,8 +23,6 @@ describe('#getPkgVersion()', () => {
 
   afterEach(() => {
     consoleErrorSpy.mockRestore();
-
-    nock.cleanAll();
   });
 
   it('should grab version from package.json by default', () => {

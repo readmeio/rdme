@@ -5,10 +5,10 @@ import path from 'node:path';
 
 import chalk from 'chalk';
 import prompts from 'prompts';
-import { simpleGit } from 'simple-git';
 
 import configstore from '../configstore.js';
 import { getMajorPkgVersion } from '../getPkg.js';
+import { getGitData } from '../git.js';
 import isCI, { isNpmScript, isTest } from '../isCI.js';
 import { info } from '../logger.js';
 import promptTerminal from '../promptWrapper.js';
@@ -22,9 +22,11 @@ type ParsedOpts = Record<string, unknown>;
 
 /**
  * Generates the key for storing info in `configstore` object.
- * @param repoRoot The root of the repo
  */
-export const getConfigStoreKey = (repoRoot: string) => `createGHA.${repoRoot}`;
+export const getConfigStoreKey = (
+  /** the root of the repository */
+  repoRoot: string,
+) => `createGHA.${repoRoot}`;
 /**
  * The directory where GitHub Actions workflow files are stored.
  *
@@ -35,14 +37,14 @@ export const getConfigStoreKey = (repoRoot: string) => `createGHA.${repoRoot}`;
 const GITHUB_WORKFLOW_DIR = '.github/workflows';
 const GITHUB_SECRET_NAME = 'README_API_KEY';
 
-export const git = simpleGit();
-
 /**
  * Removes any non-file-friendly characters and adds
  * the full path + file extension for GitHub Workflow files.
- * @param fileName raw file name to clean up
  */
-export const getGHAFileName = (fileName: string) => {
+export const getGHAFileName = (
+  /** raw file name to clean up */
+  fileName: string,
+) => {
   return path.join(GITHUB_WORKFLOW_DIR, `${cleanFileName(fileName).toLowerCase()}.yml`);
 };
 
@@ -84,65 +86,6 @@ function constructCommandString(commandId: string, args: CommandArg, flags: Comm
     .join(' ');
 
   return `${commandId} ${argsString} ${flagsString}`.trim();
-}
-
-/**
- * Function to return various git attributes needed for running GitHub Action
- */
-async function getGitData(this: Hook.Context) {
-  // Expressions to search raw output of `git remote show origin`
-  const headRegEx = /^ {2}HEAD branch: /g;
-  const headLineRegEx = /^ {2}HEAD branch:.*/gm;
-
-  const isRepo = await git.checkIsRepo().catch(e => {
-    this.debug(`[getGitData] error running git repo check: ${e.message}`);
-    return false;
-  });
-
-  this.debug(`[getGitData] isRepo result: ${isRepo}`);
-
-  let containsGitHubRemote;
-  let defaultBranch;
-  const rawRemotes = await git.remote([]).catch(e => {
-    this.debug(`[getGitData] error grabbing git remotes: ${e.message}`);
-    return '';
-  });
-
-  this.debug(`[getGitData] rawRemotes result: ${rawRemotes}`);
-
-  if (rawRemotes) {
-    const remote = rawRemotes.split('\n')[0];
-    this.debug(`[getGitData] remote result: ${remote}`);
-    const rawRemote = await git.remote(['show', remote]).catch(e => {
-      this.debug(`[getGitData] error accessing remote: ${e.message}`);
-      return '';
-    });
-
-    this.debug(`[getGitData] rawRemote result: ${rawRemote}`);
-    // Extract head branch from git output
-    const rawHead = headLineRegEx.exec(rawRemote as string)?.[0];
-    this.debug(`[getGitData] rawHead result: ${rawHead}`);
-    if (rawHead) defaultBranch = rawHead.replace(headRegEx, '');
-
-    // Extract the word 'github' from git output
-    const remotesList = (await git.remote(['-v'])) as string;
-    this.debug(`[getGitData] remotesList result: ${remotesList}`);
-    // This is a bit hairy but we want to keep it fairly general here
-    // in case of GitHub Enterprise, etc.
-    containsGitHubRemote = /github/.test(remotesList);
-  }
-
-  this.debug(`[getGitData] containsGitHubRemote result: ${containsGitHubRemote}`);
-  this.debug(`[getGitData] defaultBranch result: ${defaultBranch}`);
-
-  const repoRoot = await git.revparse(['--show-toplevel']).catch(e => {
-    this.debug(`[getGitData] error grabbing git root: ${e.message}`);
-    return '';
-  });
-
-  this.debug(`[getGitData] repoRoot result: ${repoRoot}`);
-
-  return { containsGitHubRemote, defaultBranch, isRepo, repoRoot };
 }
 
 /**

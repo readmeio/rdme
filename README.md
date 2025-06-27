@@ -20,7 +20,7 @@ With `rdme`, you can manage your API definition (we support [OpenAPI](https://sp
 Not using ReadMe for your docs? No worries. `rdme` has a variety of tools to help you identify issues with your API definition — no ReadMe account required.
 
 > [!NOTE]
-> If you're using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored), you'll want to use `rdme@10` or later. If you're **not** using ReadMe Refactored, you'll want to use `rdme@9`. More info can be found in our [migration guide](https://github.com/readmeio/rdme/blob/next/documentation/migration-guide.md).
+> If you're using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored), you'll want to use `rdme@10` or later. If you're **not** using ReadMe Refactored, you'll want to use `rdme@9`. More info can be found in our [migration guide](https://github.com/readmeio/rdme/blob/v10/documentation/migration-guide.md).
 
 # Table of Contents
 
@@ -170,11 +170,11 @@ npm run build && npm run build:docs
 # Command Topics
 
 * [`rdme autocomplete`](documentation/commands/autocomplete.md) - Display autocomplete installation instructions.
-* [`rdme changelogs`](documentation/commands/changelogs.md) - Sync Markdown files to your ReadMe project as Changelog posts.
 * [`rdme help`](documentation/commands/help.md) - Display help for rdme.
 * [`rdme login`](documentation/commands/login.md) - Login to a ReadMe project.
 * [`rdme logout`](documentation/commands/logout.md) - Logs the currently authenticated user out of ReadMe.
 * [`rdme openapi`](documentation/commands/openapi.md) - Manage your API definition (e.g., syncing, validation, analysis, conversion, etc.). Supports OpenAPI, Swagger, and Postman collections, in either JSON or YAML formats.
+* [`rdme plugins`](documentation/commands/plugins.md) - List installed plugins.
 * [`rdme whoami`](documentation/commands/whoami.md) - Displays the current user and project authenticated with ReadMe.
 
 <!-- commandsstop -->

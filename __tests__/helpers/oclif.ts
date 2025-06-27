@@ -1,4 +1,4 @@
-import type { Command as OclifCommand } from '@oclif/core';
+import type { CommandClass } from '../../src/index.js';
 
 import path from 'node:path';
 
@@ -36,11 +36,11 @@ export function setupOclifConfig() {
  *
  * @example runCommand(LoginCommand)(['--email', 'owlbert@example.com', '--password', 'password'])
  */
-export function runCommand<T extends typeof OclifCommand>(Command: T) {
+export function runCommand(Command: CommandClass) {
   return async function runCommandAgainstArgs(args?: string[]) {
     const oclifConfig = await setupOclifConfig();
-    // @ts-expect-error this is the pattern recommended by the @oclif/test docs.
-    // Not sure how to get this working with type generics.
+    // @ts-expect-error currently we have mismatching return types in our commands.
+    // we can fix this later but it's not a priority right now.
     return captureOutput<string>(() => Command.run(args, oclifConfig), { testNodeEnv });
   };
 }
@@ -50,9 +50,11 @@ export function runCommand<T extends typeof OclifCommand>(Command: T) {
  * an error if the command throws one. Mainly a helper to minimize the amount of refactoring
  * in our existing tests.
  *
+ * @deprecated This is a legacy helper to aid with the initial migration to `oclif`.
+ * Use `runCommand` for all new tests instead.
  * @example runCommandAndReturnResult(LoginCommand)(['--email', 'owlbert@example.com', '--password', 'password'])
  */
-export function runCommandAndReturnResult<T extends typeof OclifCommand>(Command: T) {
+export function runCommandAndReturnResult(Command: CommandClass) {
   return async function runCommandAgainstArgs(args?: string[]) {
     const { error, result } = await runCommand(Command)(args);
     if (error) {

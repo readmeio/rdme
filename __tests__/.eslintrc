@@ -3,6 +3,8 @@
   "rules": {
     // vitest currently allows for __dirname, require, etc.
     // see https://github.com/vitest-dev/vitest/issues/2841
-    "unicorn/prefer-module": "off"
+    "unicorn/prefer-module": "off",
+
+    "@vitest/require-mock-type-parameters": "off",
   }
 }

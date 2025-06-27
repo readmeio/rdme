@@ -1,5 +1,23 @@
 import { Args, Flags } from '@oclif/core';
 
+export const branchFlag = (additionalDescription: string[] = []) => ({
+  branch: Flags.string({
+    aliases: ['version'],
+    default: 'stable',
+    deprecateAliases: true,
+    description: ['Defaults to `stable` (i.e., your main project version).'].concat(additionalDescription).join(' '),
+    summary: 'ReadMe project version',
+  }),
+});
+
+export const confirmAutofixesFlag = Flags.boolean({
+  hidden: true,
+  summary:
+    'Bypasses the prompt and automatically fixes up any autofixable errors that are found in the Markdown files.',
+  description:
+    'This is useful if you are using this command in a CI/CD pipeline and want to ensure that the command does not prompt for user input.',
+});
+
 /**
  * Used in any command where `github` is a `flag.
  */

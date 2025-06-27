@@ -1,13 +1,37 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`rdme openapi validate > CI tests > should fail if user attempts to pass \`--github\` flag in CI environment 1`] = `
+[Error: Parsing --github 
+	The \`--github\` flag is only for usage in non-CI environments.
+See more help with --help]
+`;
+
+exports[`rdme openapi validate > CI tests > should successfully validate prompt and not run GHA onboarding 1`] = `
+{
+  "result": "__tests__/__fixtures__/petstore-simple-weird-version.json is a valid OpenAPI API definition!",
+  "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+",
+  "stdout": "",
+}
+`;
+
 exports[`rdme openapi validate > GHA onboarding E2E tests > should create GHA workflow if user passes in spec via opt (github flag enabled) 1`] = `
-"
+{
+  "result": "
 Your GitHub Actions workflow file has been created! ✨
 
 Almost done! Push your newly created file (.github/workflows/validate-test-opt-spec-github-file.yml) to GitHub and you're all set 🚀
 
 🦉 If you have any more questions, feel free to drop us a line! support@readme.io
-"
+",
+  "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+",
+  "stdout": "__tests__/__fixtures__/petstore-simple-weird-version.json is a valid OpenAPI API definition!
+
+🚀 Let's get you set up with GitHub Actions! 🚀
+
+",
+}
 `;
 
 exports[`rdme openapi validate > GHA onboarding E2E tests > should create GHA workflow if user passes in spec via opt (github flag enabled) 2`] = `
@@ -38,13 +62,26 @@ jobs:
 `;
 
 exports[`rdme openapi validate > GHA onboarding E2E tests > should create GHA workflow if user passes in spec via opt (including workingDirectory) 1`] = `
-"
+{
+  "result": "
 Your GitHub Actions workflow file has been created! ✨
 
 Almost done! Push your newly created file (.github/workflows/validate-test-opt-spec-workdir-file.yml) to GitHub and you're all set 🚀
 
 🦉 If you have any more questions, feel free to drop us a line! support@readme.io
-"
+",
+  "stderr": "- Validating the API definition located at petstore.json...
+",
+  "stdout": "petstore.json is a valid OpenAPI API definition!
+
+🐙 Looks like you're running this command in a GitHub Repository! 🐙
+
+🚀 With a few quick clicks, you can run this \`openapi validate\` command via GitHub Actions (https://github.com/features/actions)
+
+✨ This means it will run automagically with every push to a branch of your choice!
+
+",
+}
 `;
 
 exports[`rdme openapi validate > GHA onboarding E2E tests > should create GHA workflow if user passes in spec via opt (including workingDirectory) 2`] = `
@@ -75,13 +112,26 @@ jobs:
 `;
 
 exports[`rdme openapi validate > GHA onboarding E2E tests > should create GHA workflow if user passes in spec via opt 1`] = `
-"
+{
+  "result": "
 Your GitHub Actions workflow file has been created! ✨
 
 Almost done! Push your newly created file (.github/workflows/validate-test-opt-spec-file.yml) to GitHub and you're all set 🚀
 
 🦉 If you have any more questions, feel free to drop us a line! support@readme.io
-"
+",
+  "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+",
+  "stdout": "__tests__/__fixtures__/petstore-simple-weird-version.json is a valid OpenAPI API definition!
+
+🐙 Looks like you're running this command in a GitHub Repository! 🐙
+
+🚀 With a few quick clicks, you can run this \`openapi validate\` command via GitHub Actions (https://github.com/features/actions)
+
+✨ This means it will run automagically with every push to a branch of your choice!
+
+",
+}
 `;
 
 exports[`rdme openapi validate > GHA onboarding E2E tests > should create GHA workflow if user passes in spec via opt 2`] = `
@@ -112,13 +162,27 @@ jobs:
 `;
 
 exports[`rdme openapi validate > GHA onboarding E2E tests > should create GHA workflow if user passes in spec via prompts 1`] = `
-"
+{
+  "result": "
 Your GitHub Actions workflow file has been created! ✨
 
 Almost done! Push your newly created file (.github/workflows/validate-test-file.yml) to GitHub and you're all set 🚀
 
 🦉 If you have any more questions, feel free to drop us a line! support@readme.io
-"
+",
+  "stderr": "- Looking for API definitions...
+- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+",
+  "stdout": "__tests__/__fixtures__/petstore-simple-weird-version.json is a valid OpenAPI API definition!
+
+🐙 Looks like you're running this command in a GitHub Repository! 🐙
+
+🚀 With a few quick clicks, you can run this \`openapi validate\` command via GitHub Actions (https://github.com/features/actions)
+
+✨ This means it will run automagically with every push to a branch of your choice!
+
+",
+}
 `;
 
 exports[`rdme openapi validate > GHA onboarding E2E tests > should create GHA workflow if user passes in spec via prompts 2`] = `
@@ -148,15 +212,34 @@ jobs:
 "
 `;
 
+exports[`rdme openapi validate > GHA onboarding E2E tests > should reject if user says no to creating GHA workflow 1`] = `
+{
+  "error": [Error: GitHub Actions workflow creation cancelled. If you ever change your mind, you can run this command again with the \`--github\` flag.],
+  "stderr": "- Looking for API definitions...
+- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+",
+  "stdout": "__tests__/__fixtures__/petstore-simple-weird-version.json is a valid OpenAPI API definition!
+
+🐙 Looks like you're running this command in a GitHub Repository! 🐙
+
+🚀 With a few quick clicks, you can run this \`openapi validate\` command via GitHub Actions (https://github.com/features/actions)
+
+✨ This means it will run automagically with every push to a branch of your choice!
+
+",
+}
+`;
+
 exports[`rdme openapi validate > error handling > should throw an error if an invalid API definition has many errors 1`] = `
-[SyntaxError: OpenAPI schema validation failed.
+{
+  "error": [ValidationError: OpenAPI schema validation failed.
 
 REQUIRED must have required property 'url'
 
    7 |   },
    8 |   "servers": [
 >  9 |     {
-     |     ^ ☹️  url is missing here!
+     |     ^ url is missing here!
   10 |       "urll": "http://petstore.swagger.io/v2"
   11 |     }
   12 |   ],
@@ -166,38 +249,106 @@ ADDITIONAL PROPERTY must NOT have additional properties
   24 |     "/pet/findByStatus": {
   25 |       "get": {
 > 26 |         "tagss": [
-     |         ^^^^^^^ 😲  tagss is not expected to be here!
+     |         ^^^^^^^ tagss is not expected to be here!
   27 |           "pet"
   28 |         ],
-  29 |         "summary": "Finds Pets by status",]
+  29 |         "summary": "Finds Pets by status",],
+  "stderr": "- Validating the API definition located at ./__tests__/__fixtures__/very-invalid-oas.json...
+✖ Validating the API definition located at ./__tests__/__fixtures__/very-invalid-oas.json...
+",
+  "stdout": "",
+}
 `;
 
-exports[`rdme openapi validate > error handling > should throw an error if an invalid OpenAPI 3.0 definition is supplied 1`] = `[MissingPointerError: Token "Error" does not exist.]`;
+exports[`rdme openapi validate > error handling > should throw an error if an invalid OpenAPI 3.0 definition is supplied 1`] = `
+{
+  "error": [ValidationError: API definition schema validation failed.
+
+Missing $ref pointer "#/components/schemas/Error". Token "Error" does not exist.],
+  "stderr": "- Validating the API definition located at ./__tests__/__fixtures__/invalid-oas.json...
+✖ Validating the API definition located at ./__tests__/__fixtures__/invalid-oas.json...
+",
+  "stdout": "",
+}
+`;
 
 exports[`rdme openapi validate > error handling > should throw an error if an invalid OpenAPI 3.1 definition is supplied 1`] = `
-[SyntaxError: OpenAPI schema validation failed.
+{
+  "error": [ValidationError: OpenAPI schema validation failed.
 
 REQUIRED must have required property 'name'
 
   24 |   "components": {
   25 |     "securitySchemes": {
 > 26 |       "tlsAuth": {
-     |                  ^ ☹️  name is missing here!
+     |                  ^ name is missing here!
   27 |         "type": "mutualTLS"
   28 |       }
-  29 |     }]
+  29 |     }],
+  "stderr": "- Validating the API definition located at ./__tests__/__fixtures__/invalid-oas-3.1.json...
+✖ Validating the API definition located at ./__tests__/__fixtures__/invalid-oas-3.1.json...
+",
+  "stdout": "",
+}
 `;
 
 exports[`rdme openapi validate > error handling > should throw an error if an invalid Swagger definition is supplied 1`] = `
-[SyntaxError: Swagger schema validation failed.
+{
+  "error": [ValidationError: Swagger schema validation failed.
 
 ADDITIONAL PROPERTY must NOT have additional properties
 
   23 |         "description": "Find out more",
   24 |         "url": "http://swagger.io",
 > 25 |         "this-shouldnt-be-here": true
-     |         ^^^^^^^^^^^^^^^^^^^^^^^ 😲  this-shouldnt-be-here is not expected to be here!
+     |         ^^^^^^^^^^^^^^^^^^^^^^^ this-shouldnt-be-here is not expected to be here!
   26 |       }
   27 |     }
-  28 |   ],]
+  28 |   ],],
+  "stderr": "- Validating the API definition located at ./__tests__/__fixtures__/invalid-swagger.json...
+✖ Validating the API definition located at ./__tests__/__fixtures__/invalid-swagger.json...
+",
+  "stdout": "",
+}
+`;
+
+exports[`rdme openapi validate > error handling > should throw an error if invalid JSON is supplied 1`] = `
+{
+  "error": [SyntaxError: Unexpected end of JSON input],
+  "stderr": "- Validating the API definition located at ./__tests__/__fixtures__/invalid-json/yikes.json...
+✖ Validating the API definition located at ./__tests__/__fixtures__/invalid-json/yikes.json...
+",
+  "stdout": "",
+}
+`;
+
+exports[`rdme openapi validate > should adhere to .gitignore in subdirectories 1`] = `
+{
+  "result": "nest/petstore.json is a valid OpenAPI API definition!",
+  "stderr": "- Looking for API definitions...
+- Validating the API definition located at nest/petstore.json...
+",
+  "stdout": "ℹ️  We found nest/petstore.json and are attempting to validate it.
+",
+}
+`;
+
+exports[`rdme openapi validate > should discover and upload an API definition if none is provided 1`] = `
+{
+  "result": "petstore.json is a valid OpenAPI API definition!",
+  "stderr": "- Looking for API definitions...
+- Validating the API definition located at petstore.json...
+",
+  "stdout": "ℹ️  We found petstore.json and are attempting to validate it.
+",
+}
+`;
+
+exports[`rdme openapi validate > should use specified working directory 1`] = `
+{
+  "result": "petstore.json is a valid OpenAPI API definition!",
+  "stderr": "- Validating the API definition located at petstore.json...
+",
+  "stdout": "",
+}
 `;

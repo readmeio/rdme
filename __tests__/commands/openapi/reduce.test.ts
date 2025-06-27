@@ -1,37 +1,33 @@
-/* eslint-disable no-console */
+import type { OASDocument } from 'oas/types';
+
 import fs from 'node:fs';
 
-import chalk from 'chalk';
 import prompts from 'prompts';
 import { describe, beforeAll, beforeEach, afterEach, it, expect, vi, type MockInstance } from 'vitest';
 
 import Command from '../../../src/commands/openapi/reduce.js';
-import { runCommandAndReturnResult } from '../../helpers/oclif.js';
-
-const successfulReduction = () => 'Your reduced API definition has been saved to output.json! 🤏';
-
-let consoleInfoSpy: MockInstance;
-const getCommandOutput = () => consoleInfoSpy.mock.calls.join('\n\n');
+import { runCommand, type OclifOutput } from '../../helpers/oclif.js';
 
 describe('rdme openapi reduce', () => {
-  let run: (args?: string[]) => Promise<unknown>;
+  let fsWriteFileSyncSpy: MockInstance<typeof fs.writeFileSync>;
+  let reducedSpec: OASDocument;
+  let run: (args?: string[]) => OclifOutput;
   let testWorkingDir: string;
 
   beforeAll(() => {
-    run = runCommandAndReturnResult(Command);
+    run = runCommand(Command);
   });
 
   beforeEach(() => {
-    consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     testWorkingDir = process.cwd();
+    fsWriteFileSyncSpy = vi.spyOn(fs, 'writeFileSync').mockImplementationOnce((filename, data) => {
+      reducedSpec = JSON.parse(data as string);
+    });
   });
 
   afterEach(() => {
-    consoleInfoSpy.mockRestore();
-
     process.chdir(testWorkingDir);
-
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('reducing', () => {
@@ -44,16 +40,12 @@ describe('rdme openapi reduce', () => {
       ])('should support reducing a %s definition (format: %s)', async (_, format, specVersion) => {
         const spec = require.resolve(`@readme/oas-examples/${specVersion}/${format}/petstore.${format}`);
 
-        let reducedSpec;
-        fs.writeFileSync = vi.fn((fileName, data) => {
-          reducedSpec = JSON.parse(data as string);
-        });
-
         prompts.inject(['tags', ['pet'], 'output.json']);
 
-        await expect(run([spec])).resolves.toBe(successfulReduction());
+        const { result } = await run([spec]);
+        expect(result).toBe('Your reduced API definition has been saved to output.json! 🤏');
 
-        expect(fs.writeFileSync).toHaveBeenCalledWith('output.json', expect.any(String));
+        expect(fsWriteFileSyncSpy).toHaveBeenCalledWith('output.json', expect.any(String));
         expect(reducedSpec.tags).toHaveLength(1);
         expect(Object.keys(reducedSpec.paths)).toStrictEqual([
           '/pet',
@@ -65,35 +57,16 @@ describe('rdme openapi reduce', () => {
       });
 
       it('should discover and upload an API definition if none is provided', async () => {
-        const spec = 'petstore.json';
-
-        let reducedSpec;
-        fs.writeFileSync = vi.fn((fileName, data) => {
-          reducedSpec = JSON.parse(data as string);
-        });
-
         prompts.inject(['tags', ['user'], 'output.json']);
 
-        await expect(run(['--workingDirectory', './__tests__/__fixtures__/relative-ref-oas'])).resolves.toBe(
-          successfulReduction(),
-        );
-
-        expect(console.info).toHaveBeenCalledTimes(1);
-
-        const output = getCommandOutput();
-        expect(output).toBe(chalk.yellow(`ℹ️  We found ${spec} and are attempting to reduce it.`));
+        await expect(
+          run(['--workingDirectory', './__tests__/__fixtures__/relative-ref-oas']),
+        ).resolves.toMatchSnapshot();
 
         expect(Object.keys(reducedSpec.paths)).toStrictEqual(['/user']);
       });
 
       it('should reduce with no prompts via opts', async () => {
-        const spec = 'petstore.json';
-
-        let reducedSpec;
-        fs.writeFileSync = vi.fn((fileName, data) => {
-          reducedSpec = JSON.parse(data as string);
-        });
-
         await expect(
           run([
             '--workingDirectory',
@@ -103,12 +76,7 @@ describe('rdme openapi reduce', () => {
             '--out',
             'output.json',
           ]),
-        ).resolves.toBe(successfulReduction());
-
-        expect(console.info).toHaveBeenCalledTimes(1);
-
-        const output = getCommandOutput();
-        expect(output).toBe(chalk.yellow(`ℹ️  We found ${spec} and are attempting to reduce it.`));
+        ).resolves.toMatchSnapshot();
 
         expect(Object.keys(reducedSpec.paths)).toStrictEqual(['/user']);
       });
@@ -123,16 +91,12 @@ describe('rdme openapi reduce', () => {
       ])('should support reducing a %s definition (format: %s)', async (_, format, specVersion) => {
         const spec = require.resolve(`@readme/oas-examples/${specVersion}/${format}/petstore.${format}`);
 
-        let reducedSpec;
-        fs.writeFileSync = vi.fn((fileName, data) => {
-          reducedSpec = JSON.parse(data as string);
-        });
-
         prompts.inject(['paths', ['/pet', '/pet/findByStatus'], ['get', 'post'], 'output.json']);
 
-        await expect(run([spec])).resolves.toBe(successfulReduction());
+        const { result } = await run([spec]);
+        expect(result).toBe('Your reduced API definition has been saved to output.json! 🤏');
 
-        expect(fs.writeFileSync).toHaveBeenCalledWith('output.json', expect.any(String));
+        expect(fsWriteFileSyncSpy).toHaveBeenCalledWith('output.json', expect.any(String));
         expect(reducedSpec.tags).toHaveLength(1);
         expect(Object.keys(reducedSpec.paths)).toStrictEqual(['/pet', '/pet/findByStatus']);
         expect(Object.keys(reducedSpec.paths['/pet'])).toStrictEqual(['post']);
@@ -140,13 +104,6 @@ describe('rdme openapi reduce', () => {
       });
 
       it('should reduce with no prompts via opts', async () => {
-        const spec = 'petstore.json';
-
-        let reducedSpec;
-        fs.writeFileSync = vi.fn((fileName, data) => {
-          reducedSpec = JSON.parse(data as string);
-        });
-
         await expect(
           run([
             '--workingDirectory',
@@ -162,27 +119,16 @@ describe('rdme openapi reduce', () => {
             '--out',
             'output.json',
           ]),
-        ).resolves.toBe(successfulReduction());
+        ).resolves.toMatchSnapshot();
 
-        expect(console.info).toHaveBeenCalledTimes(1);
-
-        const output = getCommandOutput();
-        expect(output).toBe(chalk.yellow(`ℹ️  We found ${spec} and are attempting to reduce it.`));
-
-        expect(fs.writeFileSync).toHaveBeenCalledWith('output.json', expect.any(String));
+        expect(fsWriteFileSyncSpy).toHaveBeenCalledWith('output.json', expect.any(String));
         expect(Object.keys(reducedSpec.paths)).toStrictEqual(['/pet', '/pet/{petId}']);
         expect(Object.keys(reducedSpec.paths['/pet'])).toStrictEqual(['post']);
         expect(Object.keys(reducedSpec.paths['/pet/{petId}'])).toStrictEqual(['get']);
       });
 
       it('should reduce and update title with no prompts via opts', async () => {
-        const spec = 'petstore.json';
         const title = 'some alternative title';
-
-        let reducedSpec;
-        fs.writeFileSync = vi.fn((fileName, data) => {
-          reducedSpec = JSON.parse(data as string);
-        });
 
         await expect(
           run([
@@ -201,14 +147,9 @@ describe('rdme openapi reduce', () => {
             '--out',
             'output.json',
           ]),
-        ).resolves.toBe(successfulReduction());
+        ).resolves.toMatchSnapshot();
 
-        expect(console.info).toHaveBeenCalledTimes(1);
-
-        const output = getCommandOutput();
-        expect(output).toBe(chalk.yellow(`ℹ️  We found ${spec} and are attempting to reduce it.`));
-
-        expect(fs.writeFileSync).toHaveBeenCalledWith('output.json', expect.any(String));
+        expect(fsWriteFileSyncSpy).toHaveBeenCalledWith('output.json', expect.any(String));
         expect(Object.keys(reducedSpec.paths)).toStrictEqual(['/pet', '/pet/{petId}']);
         expect(Object.keys(reducedSpec.paths['/pet'])).toStrictEqual(['post']);
         expect(Object.keys(reducedSpec.paths['/pet/{petId}'])).toStrictEqual(['get']);
@@ -221,9 +162,8 @@ describe('rdme openapi reduce', () => {
     it.each([['json'], ['yaml']])('should fail if given a Swagger 2.0 definition (format: %s)', async format => {
       const spec = require.resolve(`@readme/oas-examples/2.0/${format}/petstore.${format}`);
 
-      await expect(run([spec])).rejects.toStrictEqual(
-        new Error('Sorry, this reducer feature in rdme only supports OpenAPI 3.0+ definitions.'),
-      );
+      const { error } = await run([spec]);
+      expect(error).toMatchSnapshot();
     });
 
     it('should fail if you attempt to reduce a spec to nothing via tags', async () => {
@@ -231,9 +171,8 @@ describe('rdme openapi reduce', () => {
 
       prompts.inject(['tags', ['unknown-tag'], 'output.json']);
 
-      await expect(run([spec])).rejects.toStrictEqual(
-        new Error('All paths in the API definition were removed. Did you supply the right path name to reduce by?'),
-      );
+      const { error } = await run([spec]);
+      expect(error).toMatchSnapshot();
     });
 
     it('should fail if you attempt to reduce a spec to nothing via paths', async () => {
@@ -241,33 +180,29 @@ describe('rdme openapi reduce', () => {
 
       prompts.inject(['paths', ['unknown-path'], 'output.json']);
 
-      await expect(run([spec])).rejects.toStrictEqual(
-        new Error('All paths in the API definition were removed. Did you supply the right path name to reduce by?'),
-      );
+      const { error } = await run([spec]);
+      expect(error).toMatchSnapshot();
     });
 
     it('should fail if you attempt to pass both tags and paths as opts', async () => {
       const spec = require.resolve('@readme/oas-examples/3.0/json/petstore.json');
 
-      await expect(run([spec, '--tag', 'tag1', '--tag', 'tag2', '--path', '/path'])).rejects.toStrictEqual(
-        new Error('You can pass in either tags or paths/methods, but not both.'),
-      );
+      const { error } = await run([spec, '--tag', 'tag1', '--tag', 'tag2', '--path', '/path']);
+      expect(error).toMatchSnapshot();
     });
 
     it('should fail if you attempt to pass both tags and methods as opts', async () => {
       const spec = require.resolve('@readme/oas-examples/3.0/json/petstore.json');
 
-      await expect(run([spec, '--tag', 'tag1', '--tag', 'tag2', '--method', 'get'])).rejects.toStrictEqual(
-        new Error('You can pass in either tags or paths/methods, but not both.'),
-      );
+      const { error } = await run([spec, '--tag', 'tag1', '--tag', 'tag2', '--method', 'get']);
+      expect(error).toMatchSnapshot();
     });
 
     it('should fail if you attempt to pass non-existent path and no method', async () => {
       const spec = require.resolve('@readme/oas-examples/3.0/json/petstore.json');
 
-      await expect(run([spec, '--path', 'unknown-path'])).rejects.toStrictEqual(
-        new Error('All paths in the API definition were removed. Did you supply the right path name to reduce by?'),
-      );
+      const { error } = await run([spec, '--path', '/unknown-path']);
+      expect(error).toMatchSnapshot();
     });
   });
 });

@@ -22,8 +22,6 @@ export default defineConfig({
        * tool in a testing environment.
        */
       NODE_ENV: 'rdme-test',
-      // Node emits ExperimentalWarnings because we import JSON modules, so this hides that output.
-      NODE_OPTIONS: '--disable-warning=ExperimentalWarning',
     },
     exclude: [
       '**/__fixtures__/**',
@@ -31,6 +29,23 @@ export default defineConfig({
       '**/helpers/**',
       '**/__snapshots__/**',
       ...configDefaults.exclude,
+    ],
+    globalSetup: '__tests__/helpers/global-setup.ts',
+    watchTriggerPatterns: [
+      {
+        pattern: /__tests__\/__fixtures__\/([A-z,-]+)\/([A-z,-/.]+)/g,
+        testsToRun: (_file, match) => {
+          const fixtureDirectory = match[1];
+          if (['docs', 'reference', 'changelog'].includes(fixtureDirectory)) {
+            if (fixtureDirectory === 'changelog') {
+              return '__tests__/commands/changelog/upload.test.ts';
+            }
+            return '__tests__/commands/page/upload.test.ts';
+          }
+
+          return null;
+        },
+      },
     ],
   },
 });

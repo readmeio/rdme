@@ -8,7 +8,7 @@ import isCI, { isTest } from '../isCI.js';
 import { info } from '../logger.js';
 import loginFlow from '../loginFlow.js';
 
-const hook: Hook<'prerun'> = async function run(options) {
+const hook: Hook.Prerun = async function run(options) {
   this.debug('configstore location:', configstore.path);
   if (options.Command?.flags?.key) {
     this.debug('current command has --key flag');

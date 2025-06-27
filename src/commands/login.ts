@@ -10,8 +10,8 @@ export default class LoginCommand extends BaseCommand<typeof LoginCommand> {
   static flags = {
     email: Flags.string({ description: 'Your email address' }),
     password: Flags.string({ description: 'Your password' }),
-    otp: Flags.string({ description: 'Your one-time password (if you have two-factor authentication enabled)' }),
     project: Flags.string({ description: 'The subdomain of the project you wish to log into' }),
+    otp: Flags.string({ description: 'Your one-time password (if you have two-factor authentication enabled)' }),
   };
 
   async run() {

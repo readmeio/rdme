@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "experimentalDecorators": true,
+    "declaration": true,
+    "erasableSyntaxOnly": true,
     "lib": ["ES2022"],
-    "module": "NodeNext",
+    "module": "Node18",
     "outDir": "dist/",
     "resolveJsonModule": true,
     "rootDir": "src",
     "skipLibCheck": true,
     "strict": true,
-    "target": "ES2022",
     "useUnknownInCatchVariables": false,
     "verbatimModuleSyntax": true
   },

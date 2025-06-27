@@ -2,4 +2,4 @@
 title: Friend
 ---
 
-# Friend Body
+Body

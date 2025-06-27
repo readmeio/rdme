@@ -66,7 +66,7 @@
           "$comment": "https://help.github.com/en/actions/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#jobsjob_idcontainervolumes",
           "description": "Sets an array of volumes for the container to use. You can use volumes to share data between services or other steps in a job. You can specify named Docker volumes, anonymous Docker volumes, or bind mounts on the host.\nTo specify a volume, you specify the source and destination path: <source>:<destinationPath>\nThe <source> is a volume name or an absolute path on the host machine, and <destinationPath> is an absolute path in the container.",
           "type": "array",
-          "items": { "type": "string", "pattern": "^[^:]+:[^:]+$" },
+          "items": { "type": "string" },
           "minItems": 1
         },
         "options": {
@@ -111,6 +111,7 @@
         "discussions": { "$ref": "#/definitions/permissions-level" },
         "id-token": { "$ref": "#/definitions/permissions-level" },
         "issues": { "$ref": "#/definitions/permissions-level" },
+        "models": { "type": "string", "enum": ["read", "none"] },
         "packages": { "$ref": "#/definitions/permissions-level" },
         "pages": { "$ref": "#/definitions/permissions-level" },
         "pull-requests": { "$ref": "#/definitions/permissions-level" },
@@ -311,8 +312,7 @@
     "types": {
       "$comment": "https://help.github.com/en/github/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#onevent_nametypes",
       "description": "Selects the types of activity that will trigger a workflow run. Most GitHub events are triggered by more than one type of activity. For example, the event for the release resource is triggered when a release is published, unpublished, created, edited, deleted, or prereleased. The types keyword enables you to narrow down activity that causes the workflow to run. When only one activity type triggers a webhook event, the types keyword is unnecessary.\nYou can use an array of event types. For more information about each event and their activity types, see https://help.github.com/en/articles/events-that-trigger-workflows#webhook-events.",
-      "type": "array",
-      "minItems": 1
+      "oneOf": [{ "type": "array", "minItems": 1 }, { "type": "string" }]
     },
     "working-directory": {
       "$comment": "https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idstepsrun",
@@ -443,7 +443,7 @@
             {
               "$comment": "https://help.github.com/en/actions/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#self-hosted-runners",
               "type": "array",
-              "anyOf": [{ "items": [{ "type": "string" }], "minItems": 1 }]
+              "anyOf": [{ "items": [{ "type": "string" }], "minItems": 1, "additionalItems": { "type": "string" } }]
             },
             {
               "$comment": "https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#choosing-runners-in-a-group",
@@ -541,6 +541,68 @@
         }
       },
       "required": ["runs-on"],
+      "additionalProperties": false
+    },
+    "workflowDispatchInput": {
+      "$comment": "https://help.github.com/en/github/automating-your-workflow-with-github-actions/metadata-syntax-for-github-actions#inputsinput_id",
+      "description": "A string identifier to associate with the input. The value of <input_id> is a map of the input's metadata. The <input_id> must be a unique identifier within the inputs object. The <input_id> must start with a letter or _ and contain only alphanumeric characters, -, or _.",
+      "type": "object",
+      "properties": {
+        "description": {
+          "$comment": "https://help.github.com/en/github/automating-your-workflow-with-github-actions/metadata-syntax-for-github-actions#inputsinput_iddescription",
+          "description": "A string description of the input parameter.",
+          "type": "string"
+        },
+        "deprecationMessage": {
+          "description": "A string shown to users using the deprecated input.",
+          "type": "string"
+        },
+        "required": {
+          "$comment": "https://help.github.com/en/github/automating-your-workflow-with-github-actions/metadata-syntax-for-github-actions#inputsinput_idrequired",
+          "description": "A boolean to indicate whether the action requires the input parameter. Set to true when the parameter is required.",
+          "type": "boolean"
+        },
+        "default": {
+          "$comment": "https://help.github.com/en/github/automating-your-workflow-with-github-actions/metadata-syntax-for-github-actions#inputsinput_iddefault",
+          "description": "A string representing the default value. The default value is used when an input parameter isn't specified in a workflow file."
+        },
+        "type": {
+          "$comment": "https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#onworkflow_dispatchinputsinput_idtype",
+          "description": "A string representing the type of the input.",
+          "type": "string",
+          "enum": ["string", "choice", "boolean", "number", "environment"]
+        },
+        "options": {
+          "$comment": "https://github.blog/changelog/2021-11-10-github-actions-input-types-for-manual-workflows",
+          "description": "The options of the dropdown list, if the type is a choice.",
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "type": { "const": "string" } }, "required": ["type"] },
+          "then": { "properties": { "default": { "type": "string" } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "boolean" } }, "required": ["type"] },
+          "then": { "properties": { "default": { "type": "boolean" } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "number" } }, "required": ["type"] },
+          "then": { "properties": { "default": { "type": "number" } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "environment" } }, "required": ["type"] },
+          "then": { "properties": { "default": { "type": "string" } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "choice" } }, "required": ["type"] },
+          "then": { "required": ["options"] }
+        }
+      ],
+      "required": ["description"],
       "additionalProperties": false
     }
   },
@@ -989,10 +1051,6 @@
                           "description": "A string description of the input parameter.",
                           "type": "string"
                         },
-                        "deprecationMessage": {
-                          "description": "A string shown to users using the deprecated input.",
-                          "type": "string"
-                        },
                         "required": {
                           "$comment": "https://help.github.com/en/github/automating-your-workflow-with-github-actions/metadata-syntax-for-github-actions#inputsinput_idrequired",
                           "description": "A boolean to indicate whether the action requires the input parameter. Set to true when the parameter is required.",
@@ -1016,6 +1074,33 @@
                   },
                   "additionalProperties": false
                 },
+                "outputs": {
+                  "$comment": "https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#onworkflow_calloutputs",
+                  "description": "When using the workflow_call keyword, you can optionally specify inputs that are passed to the called workflow from the caller workflow.",
+                  "type": "object",
+                  "patternProperties": {
+                    "^[_a-zA-Z][a-zA-Z0-9_-]*$": {
+                      "$comment": "https://docs.github.com/en/actions/sharing-automations/creating-actions/metadata-syntax-for-github-actions#outputsoutput_id",
+                      "description": "A string identifier to associate with the output. The value of <output_id> is a map of the output's metadata. The <output_id> must be a unique identifier within the outputs object. The <output_id> must start with a letter or _ and contain only alphanumeric characters, -, or _.",
+                      "type": "object",
+                      "properties": {
+                        "description": {
+                          "$comment": "https://docs.github.com/en/actions/sharing-automations/creating-actions/metadata-syntax-for-github-actions#outputsoutput_iddescription",
+                          "description": "A string description of the output parameter.",
+                          "type": "string"
+                        },
+                        "value": {
+                          "$comment": "https://docs.github.com/en/actions/sharing-automations/creating-actions/metadata-syntax-for-github-actions#outputsoutput_idvalue",
+                          "description": "The value that the output parameter will be mapped to. You can set this to a string or an expression with context. For example, you can use the steps context to set the value of an output to the output value of a step.",
+                          "type": "string"
+                        }
+                      },
+                      "required": ["value"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "additionalProperties": false
+                },
                 "secrets": {
                   "$comment": "https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#onworkflow_callsecrets",
                   "description": "A map of the secrets that can be used in the called workflow. Within the called workflow, you can use the secrets context to refer to a secret.",
@@ -1034,7 +1119,6 @@
                           "type": "boolean"
                         }
                       },
-                      "required": ["required"],
                       "additionalProperties": false
                     }
                   },
@@ -1051,68 +1135,7 @@
                   "description": "Input parameters allow you to specify data that the action expects to use during runtime. GitHub stores input parameters as environment variables. Input ids with uppercase letters are converted to lowercase during runtime. We recommended using lowercase input ids.",
                   "type": "object",
                   "patternProperties": {
-                    "^[_a-zA-Z][a-zA-Z0-9_-]*$": {
-                      "$comment": "https://help.github.com/en/github/automating-your-workflow-with-github-actions/metadata-syntax-for-github-actions#inputsinput_id",
-                      "description": "A string identifier to associate with the input. The value of <input_id> is a map of the input's metadata. The <input_id> must be a unique identifier within the inputs object. The <input_id> must start with a letter or _ and contain only alphanumeric characters, -, or _.",
-                      "type": "object",
-                      "properties": {
-                        "description": {
-                          "$comment": "https://help.github.com/en/github/automating-your-workflow-with-github-actions/metadata-syntax-for-github-actions#inputsinput_iddescription",
-                          "description": "A string description of the input parameter.",
-                          "type": "string"
-                        },
-                        "deprecationMessage": {
-                          "description": "A string shown to users using the deprecated input.",
-                          "type": "string"
-                        },
-                        "required": {
-                          "$comment": "https://help.github.com/en/github/automating-your-workflow-with-github-actions/metadata-syntax-for-github-actions#inputsinput_idrequired",
-                          "description": "A boolean to indicate whether the action requires the input parameter. Set to true when the parameter is required.",
-                          "type": "boolean"
-                        },
-                        "default": {
-                          "$comment": "https://help.github.com/en/github/automating-your-workflow-with-github-actions/metadata-syntax-for-github-actions#inputsinput_iddefault",
-                          "description": "A string representing the default value. The default value is used when an input parameter isn't specified in a workflow file."
-                        },
-                        "type": {
-                          "$comment": "https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#onworkflow_dispatchinputsinput_idtype",
-                          "description": "A string representing the type of the input.",
-                          "type": "string",
-                          "enum": ["string", "choice", "boolean", "number", "environment"]
-                        },
-                        "options": {
-                          "$comment": "https://github.blog/changelog/2021-11-10-github-actions-input-types-for-manual-workflows",
-                          "description": "The options of the dropdown list, if the type is a choice.",
-                          "type": "array",
-                          "items": { "type": "string" },
-                          "minItems": 1
-                        }
-                      },
-                      "allOf": [
-                        {
-                          "if": { "properties": { "type": { "const": "string" } }, "required": ["type"] },
-                          "then": { "properties": { "default": { "type": "string" } } }
-                        },
-                        {
-                          "if": { "properties": { "type": { "const": "boolean" } }, "required": ["type"] },
-                          "then": { "properties": { "default": { "type": "boolean" } } }
-                        },
-                        {
-                          "if": { "properties": { "type": { "const": "number" } }, "required": ["type"] },
-                          "then": { "properties": { "default": { "type": "number" } } }
-                        },
-                        {
-                          "if": { "properties": { "type": { "const": "environment" } }, "required": ["type"] },
-                          "then": { "properties": { "default": { "type": "string" } } }
-                        },
-                        {
-                          "if": { "properties": { "type": { "const": "choice" } }, "required": ["type"] },
-                          "then": { "required": ["options"] }
-                        }
-                      ],
-                      "required": ["description"],
-                      "additionalProperties": false
-                    }
+                    "^[_a-zA-Z][a-zA-Z0-9_-]*$": { "$ref": "#/definitions/workflowDispatchInput" }
                   },
                   "additionalProperties": false
                 }
@@ -1142,7 +1165,11 @@
               "$comment": "https://help.github.com/en/github/automating-your-workflow-with-github-actions/events-that-trigger-workflows#scheduled-events-schedule",
               "description": "You can schedule a workflow to run at specific UTC times using POSIX cron syntax (https://pubs.opengroup.org/onlinepubs/9699919799/utilities/crontab.html#tag_20_25_07). Scheduled workflows run on the latest commit on the default or base branch. The shortest interval you can run scheduled workflows is once every 5 minutes.\nNote: GitHub Actions does not support the non-standard syntax @yearly, @monthly, @weekly, @daily, @hourly, and @reboot.\nYou can use crontab guru (https://crontab.guru/). to help generate your cron syntax and confirm what time it will run. To help you get started, there is also a list of crontab guru examples (https://crontab.guru/examples.html).",
               "type": "array",
-              "items": { "properties": { "cron": { "type": "string" } }, "additionalProperties": false },
+              "items": {
+                "type": "object",
+                "properties": { "cron": { "type": "string" } },
+                "additionalProperties": false
+              },
               "minItems": 1
             }
           },

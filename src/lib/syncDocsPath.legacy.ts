@@ -1,4 +1,4 @@
-import type { ReadDocMetadata } from './readDoc.js';
+import type { PageMetadata } from './readPage.js';
 import type ChangelogsCommand from '../commands/changelogs.js';
 
 import fs from 'node:fs/promises';
@@ -9,8 +9,8 @@ import toposort from 'toposort';
 
 import { APIv1Error } from './apiError.js';
 import readdirRecursive from './readdirRecursive.js';
-import readDoc from './readDoc.js';
 import { cleanAPIv1Headers, handleAPIv1Res, readmeAPIv1Fetch } from './readmeAPIFetch.js';
+import { readPage } from './readPage.js';
 
 /** API path within ReadMe to update (e.g. `docs`, `changelogs`, etc.) */
 type PageType = 'changelogs' | 'custompages' | 'docs';
@@ -25,17 +25,17 @@ async function pushDoc(
   this: ChangelogsCommand,
   /** the project version */
   selectedVersion: string | undefined,
-  fileData: ReadDocMetadata,
+  fileData: PageMetadata,
 ) {
   const type: PageType = this.id;
   const { key, dryRun }: { dryRun: boolean; key: string } = this.flags;
   const { content, data, filePath, hash, slug } = fileData;
 
   // TODO: ideally we should offer a zero-configuration approach that doesn't
-  // require YAML front matter, but that will have to be a breaking change
+  // require YAML frontmatter, but that will have to be a breaking change
   if (!Object.keys(data).length) {
-    this.debug(`No front matter attributes found for ${filePath}, not syncing`);
-    return `⏭️  no front matter attributes found for ${filePath}, skipping`;
+    this.debug(`No frontmatter attributes found for ${filePath}, not syncing`);
+    return `⏭️  no frontmatter attributes found for ${filePath}, skipping`;
   }
 
   const payload: {
@@ -118,18 +118,25 @@ async function pushDoc(
     });
 }
 
-const byParentDoc = (left: ReadDocMetadata, right: ReadDocMetadata) => {
+const byParentDoc = (left: PageMetadata, right: PageMetadata) => {
   return (right.data.parentDoc ? 1 : 0) - (left.data.parentDoc ? 1 : 0);
 };
 
-function sortFiles(filePaths: string[]): ReadDocMetadata[] {
-  const files = filePaths.map(readDoc).sort(byParentDoc);
-  const filesBySlug = files.reduce<Record<string, ReadDocMetadata>>((bySlug, obj) => {
+/**
+ * Sorts files based on their parentDoc attribute. If a file has a parentDoc attribute,
+ * it will be sorted after the file it references.
+ *
+ * @see {@link https://github.com/readmeio/rdme/pull/973}
+ * @returns An array of sorted PageMetadata objects
+ */
+function sortFiles(this: ChangelogsCommand, filePaths: string[]): PageMetadata[] {
+  const files = filePaths.map(file => readPage.call(this, file)).sort(byParentDoc);
+  const filesBySlug = files.reduce<Record<string, PageMetadata>>((bySlug, obj) => {
     // eslint-disable-next-line no-param-reassign
     bySlug[obj.slug] = obj;
     return bySlug;
   }, {});
-  const dependencies = Object.values(filesBySlug).reduce<[ReadDocMetadata, ReadDocMetadata][]>((edges, obj) => {
+  const dependencies = Object.values(filesBySlug).reduce<[PageMetadata, PageMetadata][]>((edges, obj) => {
     if (obj.data.parentDocSlug && filesBySlug[obj.data.parentDocSlug as string]) {
       edges.push([filesBySlug[obj.data.parentDocSlug as string], filesBySlug[obj.slug]]);
     }
@@ -185,7 +192,7 @@ export default async function syncDocsPath(
     let sortedFiles;
 
     try {
-      sortedFiles = sortFiles(files);
+      sortedFiles = sortFiles.call(this, files);
     } catch (e) {
       return Promise.reject(e);
     }
@@ -209,7 +216,7 @@ export default async function syncDocsPath(
       );
     }
 
-    const fileData = readDoc(pathInput);
+    const fileData = readPage.call(this, pathInput);
     output = await pushDoc.call(this, selectedVersion, fileData);
   }
   return Promise.resolve(chalk.green(output));

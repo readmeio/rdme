@@ -31,6 +31,8 @@ export type APIv2ErrorResponse = Partial<{
 
 /**
  * Error class for handling ReadMe API v1 errors.
+ *
+ * @deprecated Use {@link APIv2Error} instead.
  */
 export class APIv1Error extends Error {
   code: string;
@@ -85,7 +87,7 @@ export class APIv2Error extends Error {
       'The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.';
 
     if (res.title) {
-      stringified = `The ReadMe API returned the following error:\n\n${chalk.bold(res.title)}`;
+      stringified = `ReadMe API error: ${chalk.bold(res.title)}`;
     }
 
     if (res.detail) {
@@ -93,7 +95,7 @@ export class APIv2Error extends Error {
     }
 
     if (res.errors?.length) {
-      stringified += `\n\n${res.errors.map((e, i) => `${i + 1}. ${chalk.bold(e.key)}: ${e.message}`).join('\n')}`;
+      stringified += `\n\n${res.errors.map((e, i) => `${i + 1}. ${chalk.underline(e.key)}: ${e.message}`).join('\n')}`;
     }
 
     super(stringified);

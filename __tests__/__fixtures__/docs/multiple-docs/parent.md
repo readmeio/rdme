@@ -1,6 +1,7 @@
 ---
 title: Parent
-parentDocSlug: grandparent
+parent:
+  uri: grandparent
 ---
 
-# Parent Body
+Body

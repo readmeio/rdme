@@ -1,6 +1,5 @@
 ---
-htmlmode: true
-title: This is the custom page title
+title: This is the document title
 ---
 
 Body

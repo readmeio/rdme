@@ -181,17 +181,17 @@ Upload (or re-upload) your API definition to ReadMe.
 
 ```
 USAGE
-  $ rdme openapi upload [SPEC] --key <value> [--slug <value>] [--useSpecVersion | --version <value>]
+  $ rdme openapi upload [SPEC] --key <value> [--slug <value>] [--useSpecVersion | --branch <value>]
 
 ARGUMENTS
   SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
         subdirectories contain a single OpenAPI file, you can omit the path.
 
 FLAGS
-  --key=<value>      (required) ReadMe project API key
-  --slug=<value>     Override the slug (i.e., the unique identifier) for your API definition.
-  --useSpecVersion   Use the OpenAPI `info.version` field for your ReadMe project version
-  --version=<value>  [default: stable] ReadMe project version
+  --key=<value>     (required) ReadMe project API key
+  --branch=<value>  [default: stable] ReadMe project version
+  --slug=<value>    Override the slug (i.e., the unique identifier) for your API definition.
+  --useSpecVersion  Use the OpenAPI `info.version` field for your ReadMe project version
 
 DESCRIPTION
   Upload (or re-upload) your API definition to ReadMe.
@@ -210,16 +210,16 @@ DESCRIPTION
 EXAMPLES
   You can pass in a file name like so:
 
-    $ rdme openapi upload --version=1.0.0 openapi.json
+    $ rdme openapi upload --branch=1.0.0 openapi.json
 
   You can also pass in a file in a subdirectory (we recommend always running the CLI from the root of your
   repository):
 
-    $ rdme openapi upload --version=v1.0.0 example-directory/petstore.json
+    $ rdme openapi upload --branch=v1.0.0 example-directory/petstore.json
 
   You can also pass in a URL:
 
-    $ rdme openapi upload --version=1.0.0 https://example.com/openapi.json
+    $ rdme openapi upload --branch=1.0.0 https://example.com/openapi.json
 
   If you specify your ReadMe project version in the `info.version` field in your OpenAPI definition, you can use that:
 
@@ -230,6 +230,10 @@ FLAG DESCRIPTIONS
 
     An API key for your ReadMe project. Note that API authentication is required despite being omitted from the example
     usage. See our docs for more information: https://github.com/readmeio/rdme/tree/v10#authentication
+
+  --branch=<value>  ReadMe project version
+
+    Defaults to `stable` (i.e., your main project version). This flag is mutually exclusive with `--useSpecVersion`.
 
   --slug=<value>  Override the slug (i.e., the unique identifier) for your API definition.
 
@@ -242,11 +246,7 @@ FLAG DESCRIPTIONS
   --useSpecVersion  Use the OpenAPI `info.version` field for your ReadMe project version
 
     If included, use the version specified in the `info.version` field in your OpenAPI definition for your ReadMe
-    project version. This flag is mutually exclusive with `--version`.
-
-  --version=<value>  ReadMe project version
-
-    Defaults to `stable` (i.e., your main project version). This flag is mutually exclusive with `--useSpecVersion`.
+    project version. This flag is mutually exclusive with `--branch`.
 ```
 
 ## `rdme openapi validate [SPEC]`

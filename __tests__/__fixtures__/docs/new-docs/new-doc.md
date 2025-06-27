@@ -1,5 +1,6 @@
 ---
-category: 5ae122e10fdf4e39bb34db6f
+category:
+  uri: category-slug
 title: This is the document title
 ---
 

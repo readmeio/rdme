@@ -1,0 +1,366 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`rdme openapi upload > flag error handling > should throw if an error if both \`--branch\` and \`--useSpecVersion\` flags are passed 1`] = `
+{
+  "error": [Error: The following error occurred:
+  --branch=1.0.0 cannot also be provided when using --useSpecVersion
+See more help with --help],
+  "stderr": "",
+  "stdout": "",
+}
+`;
+
+exports[`rdme openapi upload > flag error handling > should throw if an error if both \`--slug\` and \`--legacy-id\` flags are passed 1`] = `
+{
+  "error": [Error: The following error occurred:
+  --slug=custom-slug cannot also be provided when using --legacy-id
+See more help with --help],
+  "stderr": "",
+  "stdout": "",
+}
+`;
+
+exports[`rdme openapi upload > given that the "--legacy-id" flag is passed > should error if no matching API definition found 1`] = `
+{
+  "error": [Error: No API definition found with legacy ID 1234567890.],
+  "stderr": " ›   Warning: The "legacy-id" flag has been deprecated.
+- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+",
+  "stdout": "",
+}
+`;
+
+exports[`rdme openapi upload > given that the "--legacy-id" flag is passed > should update an existing spec with matching legacy_id 1`] = `
+{
+  "result": {
+    "status": "done",
+    "uri": "/branches/1.0.0/apis/legacy-spec.json",
+  },
+  "stderr": " ›   Warning: The "legacy-id" flag has been deprecated.
+- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+- Updating your API definition to ReadMe...
+✔ Updating your API definition to ReadMe... done!
+",
+  "stdout": "🚀 Your API definition (legacy-spec.json) was successfully updated in ReadMe!
+",
+}
+`;
+
+exports[`rdme openapi upload > given that the API definition is a URL > should create a new API definition in ReadMe 1`] = `
+{
+  "result": {
+    "status": "done",
+    "uri": "/branches/1.0.0/apis/openapi.json",
+  },
+  "stderr": "- Validating the API definition located at https://example.com/openapi.json...
+- Creating your API definition to ReadMe...
+✔ Creating your API definition to ReadMe... done!
+",
+  "stdout": "🚀 Your API definition (openapi.json) was successfully created in ReadMe!
+",
+}
+`;
+
+exports[`rdme openapi upload > given that the API definition is a URL > should handle issues fetching from the URL 1`] = `
+{
+  "error": [Error: Unknown file detected.],
+  "stderr": "- Validating the API definition located at https://example.com/openapi.json...
+✖ Validating the API definition located at https://example.com/openapi.json...
+",
+  "stdout": "",
+}
+`;
+
+exports[`rdme openapi upload > given that the API definition is a URL > should update an existing API definition in ReadMe 1`] = `
+{
+  "result": {
+    "status": "done",
+    "uri": "/branches/1.0.0/apis/openapi.json",
+  },
+  "stderr": "- Validating the API definition located at https://example.com/openapi.json...
+- Updating your API definition to ReadMe...
+✔ Updating your API definition to ReadMe... done!
+",
+  "stdout": "🚀 Your API definition (openapi.json) was successfully updated in ReadMe!
+",
+}
+`;
+
+exports[`rdme openapi upload > given that the API definition is a local file > and the \`--slug\` flag is passed > should handle a slug with a valid but mismatching file extension 1`] = `
+{
+  "error": [Error: Please provide a valid file extension that matches the extension on the file you provided. Must be \`.json\`, \`.yaml\`, or \`.yml\`.],
+  "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+",
+  "stdout": "",
+}
+`;
+
+exports[`rdme openapi upload > given that the API definition is a local file > and the \`--slug\` flag is passed > should handle a slug with an invalid file extension 1`] = `
+{
+  "error": [Error: Please provide a valid file extension that matches the extension on the file you provided. Must be \`.json\`, \`.yaml\`, or \`.yml\`.],
+  "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+",
+  "stdout": "",
+}
+`;
+
+exports[`rdme openapi upload > given that the API definition is a local file > and the \`--slug\` flag is passed > should use the provided slug (includes file extension) as the filename 1`] = `
+{
+  "result": {
+    "status": "done",
+    "uri": "/branches/1.0.0/apis/custom-slug.json",
+  },
+  "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+- Creating your API definition to ReadMe...
+✔ Creating your API definition to ReadMe... done!
+",
+  "stdout": "🚀 Your API definition (custom-slug.json) was successfully created in ReadMe!
+",
+}
+`;
+
+exports[`rdme openapi upload > given that the API definition is a local file > and the \`--slug\` flag is passed > should use the provided slug (no file extension) as the filename 1`] = `
+{
+  "result": {
+    "status": "done",
+    "uri": "/branches/1.0.0/apis/custom-slug.json",
+  },
+  "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+- Creating your API definition to ReadMe...
+✔ Creating your API definition to ReadMe... done!
+",
+  "stdout": "🚀 Your API definition (custom-slug.json) was successfully created in ReadMe!
+",
+}
+`;
+
+exports[`rdme openapi upload > given that the API definition is a local file > and the command is being run in a CI environment > should overwrite an existing API definition without asking for confirmation 1`] = `
+{
+  "result": {
+    "status": "done",
+    "uri": "/branches/1.0.0/apis/__tests____fixtures__petstore-simple-weird-version.json",
+  },
+  "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+ ›   Warning: The slug of your API Definition will be set to 
+ ›   __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This 
+ ›   slug is not visible to your end users. To set this slug to something else,
+ ›    use the \`--slug\` flag.
+- Updating your API definition to ReadMe...
+✔ Updating your API definition to ReadMe... done!
+",
+  "stdout": "🚀 Your API definition (__tests____fixtures__petstore-simple-weird-version.json) was successfully updated in ReadMe!
+",
+}
+`;
+
+exports[`rdme openapi upload > given that the API definition is a local file > and the upload status initially is a pending state > should poll the API and handle timeouts 1`] = `
+{
+  "error": [Error: Sorry, this upload timed out. Please try again later.],
+  "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+ ›   Warning: The slug of your API Definition will be set to 
+ ›   __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This 
+ ›   slug is not visible to your end users. To set this slug to something else,
+ ›    use the \`--slug\` flag.
+- Creating your API definition to ReadMe...
+",
+  "stdout": "",
+}
+`;
+
+exports[`rdme openapi upload > given that the API definition is a local file > and the upload status initially is a pending state > should poll the API once and handle a failure state with a 4xx 1`] = `
+{
+  "error": [Error: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
+  "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+ ›   Warning: The slug of your API Definition will be set to 
+ ›   __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This 
+ ›   slug is not visible to your end users. To set this slug to something else,
+ ›    use the \`--slug\` flag.
+- Creating your API definition to ReadMe...
+",
+  "stdout": "",
+}
+`;
+
+exports[`rdme openapi upload > given that the API definition is a local file > and the upload status initially is a pending state > should poll the API once and handle an unexpected state with a 2xx 1`] = `
+{
+  "error": [Error: Your API definition upload failed with an unexpected error. Please get in touch with us at support@readme.io.],
+  "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+ ›   Warning: The slug of your API Definition will be set to 
+ ›   __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This 
+ ›   slug is not visible to your end users. To set this slug to something else,
+ ›    use the \`--slug\` flag.
+- Creating your API definition to ReadMe...
+✖ Creating your API definition to ReadMe... uploaded but not yet processed by ReadMe. Polling for completion...
+",
+  "stdout": "",
+}
+`;
+
+exports[`rdme openapi upload > given that the API definition is a local file > and the upload status initially is a pending state > should poll the API until the update is complete 1`] = `
+{
+  "result": {
+    "status": "done",
+    "uri": "/branches/1.0.0/apis/__tests____fixtures__petstore-simple-weird-version.json",
+  },
+  "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+ ›   Warning: The slug of your API Definition will be set to 
+ ›   __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This 
+ ›   slug is not visible to your end users. To set this slug to something else,
+ ›    use the \`--slug\` flag.
+- Updating your API definition to ReadMe...
+✔ Updating your API definition to ReadMe... uploaded but not yet processed by ReadMe. Polling for completion... done!
+",
+  "stdout": "🚀 Your API definition (__tests____fixtures__petstore-simple-weird-version.json) was successfully updated in ReadMe!
+",
+}
+`;
+
+exports[`rdme openapi upload > given that the API definition is a local file > and the upload status initially is a pending state > should poll the API until the upload is complete 1`] = `
+{
+  "result": {
+    "status": "done",
+    "uri": "/branches/1.0.0/apis/__tests____fixtures__petstore-simple-weird-version.json",
+  },
+  "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+ ›   Warning: The slug of your API Definition will be set to 
+ ›   __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This 
+ ›   slug is not visible to your end users. To set this slug to something else,
+ ›    use the \`--slug\` flag.
+- Creating your API definition to ReadMe...
+✔ Creating your API definition to ReadMe... uploaded but not yet processed by ReadMe. Polling for completion... done!
+",
+  "stdout": "🚀 Your API definition (__tests____fixtures__petstore-simple-weird-version.json) was successfully created in ReadMe!
+",
+}
+`;
+
+exports[`rdme openapi upload > given that the API definition is a local file > given that the \`--branch\` flag is not set > should default to the \`stable\` version 1`] = `
+{
+  "result": {
+    "status": "done",
+    "uri": "/branches/stable/apis/__tests____fixtures__petstore-simple-weird-version.json",
+  },
+  "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+ ›   Warning: The slug of your API Definition will be set to 
+ ›   __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This 
+ ›   slug is not visible to your end users. To set this slug to something else,
+ ›    use the \`--slug\` flag.
+- Creating your API definition to ReadMe...
+✔ Creating your API definition to ReadMe... done!
+",
+  "stdout": "🚀 Your API definition (__tests____fixtures__petstore-simple-weird-version.json) was successfully created in ReadMe!
+",
+}
+`;
+
+exports[`rdme openapi upload > given that the API definition is a local file > given that the \`--branch\` flag is not set > should use the version from the spec file if --\`useSpecVersion\` is passed 1`] = `
+{
+  "result": {
+    "status": "done",
+    "uri": "/branches/1.2.3/apis/__tests____fixtures__petstore-simple-weird-version.json",
+  },
+  "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+ ›   Warning: The slug of your API Definition will be set to 
+ ›   __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This 
+ ›   slug is not visible to your end users. To set this slug to something else,
+ ›    use the \`--slug\` flag.
+- Creating your API definition to ReadMe...
+✔ Creating your API definition to ReadMe... done!
+",
+  "stdout": "🚀 Your API definition (__tests____fixtures__petstore-simple-weird-version.json) was successfully created in ReadMe!
+",
+}
+`;
+
+exports[`rdme openapi upload > given that the API definition is a local file > should create a new JSON API definition in ReadMe 1`] = `
+{
+  "result": {
+    "status": "done",
+    "uri": "/branches/1.0.0/apis/__tests____fixtures__petstore-simple-weird-version.json",
+  },
+  "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+ ›   Warning: The slug of your API Definition will be set to 
+ ›   __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This 
+ ›   slug is not visible to your end users. To set this slug to something else,
+ ›    use the \`--slug\` flag.
+- Creating your API definition to ReadMe...
+✔ Creating your API definition to ReadMe... done!
+",
+  "stdout": "🚀 Your API definition (__tests____fixtures__petstore-simple-weird-version.json) was successfully created in ReadMe!
+",
+}
+`;
+
+exports[`rdme openapi upload > given that the API definition is a local file > should create a new JSON API definition in ReadMe with deprecated \`--version\` flag 1`] = `
+{
+  "result": {
+    "status": "done",
+    "uri": "/branches/1.0.0/apis/__tests____fixtures__petstore-simple-weird-version.json",
+  },
+  "stderr": " ›   Warning: The "--version" flag has been deprecated. Use "--branch" instead.
+- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+ ›   Warning: The slug of your API Definition will be set to 
+ ›   __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This 
+ ›   slug is not visible to your end users. To set this slug to something else,
+ ›    use the \`--slug\` flag.
+- Creating your API definition to ReadMe...
+✔ Creating your API definition to ReadMe... done!
+",
+  "stdout": "🚀 Your API definition (__tests____fixtures__petstore-simple-weird-version.json) was successfully created in ReadMe!
+",
+}
+`;
+
+exports[`rdme openapi upload > given that the API definition is a local file > should create a new YAML API definition in ReadMe 1`] = `
+{
+  "result": {
+    "status": "done",
+    "uri": "/branches/1.0.0/apis/__tests____fixtures__postmanpetstore.collection.yaml",
+  },
+  "stderr": "- Validating the API definition located at __tests__/__fixtures__/postman/petstore.collection.yaml...
+ ›   Warning: Support for Postman collections is currently experimental.
+ ›   Warning: The slug of your API Definition will be set to 
+ ›   __tests____fixtures__postmanpetstore.collection.yaml in ReadMe. This slug 
+ ›   is not visible to your end users. To set this slug to something else, use 
+ ›   the \`--slug\` flag.
+- Creating your API definition to ReadMe...
+✔ Creating your API definition to ReadMe... done!
+",
+  "stdout": "🚀 Your API definition (__tests____fixtures__postmanpetstore.collection.yaml) was successfully created in ReadMe!
+",
+}
+`;
+
+exports[`rdme openapi upload > given that the API definition is a local file > should handle upload failures 1`] = `
+{
+  "error": [Error: Your API definition upload failed with an unexpected error. Please get in touch with us at support@readme.io.],
+  "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+ ›   Warning: The slug of your API Definition will be set to 
+ ›   __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This 
+ ›   slug is not visible to your end users. To set this slug to something else,
+ ›    use the \`--slug\` flag.
+- Creating your API definition to ReadMe...
+✖ Creating your API definition to ReadMe...
+",
+  "stdout": "",
+}
+`;
+
+exports[`rdme openapi upload > given that the API definition is a local file > should update an existing API definition in ReadMe 1`] = `
+{
+  "result": {
+    "status": "done",
+    "uri": "/branches/1.0.0/apis/__tests____fixtures__petstore-simple-weird-version.json",
+  },
+  "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+ ›   Warning: The slug of your API Definition will be set to 
+ ›   __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This 
+ ›   slug is not visible to your end users. To set this slug to something else,
+ ›    use the \`--slug\` flag.
+- Updating your API definition to ReadMe...
+✔ Updating your API definition to ReadMe... done!
+",
+  "stdout": "🚀 Your API definition (__tests____fixtures__petstore-simple-weird-version.json) was successfully updated in ReadMe!
+",
+}
+`;

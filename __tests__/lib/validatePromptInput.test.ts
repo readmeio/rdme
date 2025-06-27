@@ -15,6 +15,7 @@ describe('#validateFilePath', () => {
 
   it('should return error if path already exists', () => {
     expect.assertions(2);
+
     const testPath = 'path-that-already-exists';
 
     fs.existsSync = vi.fn(() => true);
@@ -25,6 +26,7 @@ describe('#validateFilePath', () => {
 
   it("should return true if the path doesn't exist", () => {
     expect.assertions(2);
+
     const testPath = 'path-that-does-not-exist';
 
     fs.existsSync = vi.fn(() => false);

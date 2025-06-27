@@ -1,14 +1,20 @@
-import fs from 'node:fs';
+import type {
+  APIDefinitionsRepresentation,
+  APIUploadSingleResponseRepresentation,
+  APIUploadStatus,
+  StagedAPIUploadResponseRepresentation,
+} from '../../lib/types/index.js';
+
 import nodePath from 'node:path';
 
 import { Flags } from '@oclif/core';
+import yaml from 'js-yaml';
 import ora from 'ora';
 import prompts from 'prompts';
 import slugify from 'slugify';
-import { file as tmpFile } from 'tmp-promise';
 
 import BaseCommand from '../../lib/baseCommand.js';
-import { keyFlag, specArg } from '../../lib/flags.js';
+import { branchFlag, keyFlag, specArg } from '../../lib/flags.js';
 import isCI, { isTest } from '../../lib/isCI.js';
 import { oraOptions } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
@@ -29,6 +35,20 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
   static flags = {
     key: keyFlag,
+    ...branchFlag(['This flag is mutually exclusive with `--useSpecVersion`.']),
+    'confirm-overwrite': Flags.boolean({
+      description:
+        'If set, file overwrites will be made without a confirmation prompt. This flag can be a useful in automated environments where prompts cannot be responded to.',
+      hidden: true,
+    }),
+    'legacy-id': Flags.string({
+      summary: 'The legacy ID for your API definition.',
+      description:
+        'This is only used for legacy `rdme` CLI workflows and only applies if your project, and this API definition, predate ReadMe Refactored. This flag is considered deprecated and we recommend using `--slug` instead.',
+      hidden: true,
+      deprecated: true,
+      exclusive: ['slug'],
+    }),
     slug: Flags.string({
       summary: 'Override the slug (i.e., the unique identifier) for your API definition.',
       description: [
@@ -39,30 +59,24 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     useSpecVersion: Flags.boolean({
       summary: 'Use the OpenAPI `info.version` field for your ReadMe project version',
       description:
-        'If included, use the version specified in the `info.version` field in your OpenAPI definition for your ReadMe project version. This flag is mutually exclusive with `--version`.',
-      exclusive: ['version'],
-    }),
-    version: Flags.string({
-      summary: 'ReadMe project version',
-      description:
-        'Defaults to `stable` (i.e., your main project version). This flag is mutually exclusive with `--useSpecVersion`.',
-      default: 'stable',
+        'If included, use the version specified in the `info.version` field in your OpenAPI definition for your ReadMe project version. This flag is mutually exclusive with `--branch`.',
+      exclusive: ['branch'],
     }),
   };
 
   static examples = [
     {
       description: 'You can pass in a file name like so:',
-      command: '<%= config.bin %> <%= command.id %> --version=1.0.0 openapi.json',
+      command: '<%= config.bin %> <%= command.id %> --branch=1.0.0 openapi.json',
     },
     {
       description:
         'You can also pass in a file in a subdirectory (we recommend always running the CLI from the root of your repository):',
-      command: '<%= config.bin %> <%= command.id %> --version=v1.0.0 example-directory/petstore.json',
+      command: '<%= config.bin %> <%= command.id %> --branch=v1.0.0 example-directory/petstore.json',
     },
     {
       description: 'You can also pass in a URL:',
-      command: '<%= config.bin %> <%= command.id %> --version=1.0.0 https://example.com/openapi.json',
+      command: '<%= config.bin %> <%= command.id %> --branch=1.0.0 https://example.com/openapi.json',
     },
     {
       description:
@@ -71,14 +85,19 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     },
   ];
 
+  // eslint-disable-next-line class-methods-use-this
+  private isStatusPending(status: APIUploadStatus): status is 'pending_update' | 'pending' {
+    return status.includes('pending');
+  }
+
   /**
    * Poll the ReadMe API until the upload is complete.
    */
   private async pollAPIUntilUploadIsComplete(slug: string, headers: Headers) {
     let count = 0;
-    let status = 'pending';
+    let status: APIUploadStatus = 'pending';
 
-    while (status === 'pending' && count < 10) {
+    while (this.isStatusPending(status) && count < 10) {
       // eslint-disable-next-line no-await-in-loop, no-loop-func
       await new Promise(resolve => {
         // exponential backoff — wait 1s, 2s, 4s, 8s, 16s, 32s, 30s, 30s, 30s, 30s, etc.
@@ -86,12 +105,15 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       });
       this.debug(`polling API for status of ${slug}, count is ${count}`);
       // eslint-disable-next-line no-await-in-loop
-      const response = await this.readmeAPIFetch(slug, { headers }).then(res => this.handleAPIRes(res));
+      const response = (await this.readmeAPIFetch(slug, { headers }).then(res =>
+        this.handleAPIRes(res),
+      )) as APIUploadSingleResponseRepresentation;
+
       status = response?.data?.upload?.status;
       count += 1;
     }
 
-    if (status === 'pending') {
+    if (this.isStatusPending(status)) {
       throw new Error('Sorry, this upload timed out. Please try again later.');
     }
 
@@ -101,14 +123,29 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
   async run() {
     const { spec } = this.args;
 
-    const { preparedSpec, specFileType, specPath, specVersion } = await prepareOas(spec, 'openapi upload');
+    const { preparedSpec, specFileType, specType, specPath, specVersion } = await prepareOas(spec, 'openapi upload');
 
-    const version = this.flags.useSpecVersion ? specVersion : this.flags.version;
+    const branch = this.flags.useSpecVersion ? specVersion : this.flags.branch;
 
-    let filename = specFileType === 'url' ? nodePath.basename(specPath) : slugify.default(specPath);
+    const specFileTypeIsUrl = specFileType === 'url';
 
+    let filename = specFileTypeIsUrl ? nodePath.basename(specPath) : slugify.default(specPath);
+
+    // Our support for Postman collections relies on an internal fork of an archived project and
+    // can be subject to quirks in the conversion. We should let users know that this is all very
+    // experimental.
+    if (specType === 'Postman') {
+      this.warn('Support for Postman collections is currently experimental.');
+    }
+
+    if (!specFileTypeIsUrl && filename !== specPath && !this.flags['legacy-id'] && !this.flags.slug) {
+      this.warn(
+        `The slug of your API Definition will be set to ${filename} in ReadMe. This slug is not visible to your end users. To set this slug to something else, use the \`--slug\` flag.`,
+      );
+    }
+
+    const fileExtension = nodePath.extname(filename);
     if (this.flags.slug) {
-      const fileExtension = nodePath.extname(filename);
       const slugExtension = nodePath.extname(this.flags.slug);
       if (slugExtension && (!['.json', '.yaml', '.yml'].includes(slugExtension) || fileExtension !== slugExtension)) {
         throw new Error(
@@ -122,14 +159,27 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
     const headers = new Headers({ authorization: `Bearer ${this.flags.key}` });
 
-    const existingAPIDefinitions = await this.readmeAPIFetch(`/versions/${version}/apis`, { headers }).then(res =>
+    const existingAPIDefinitions = (await this.readmeAPIFetch(`/branches/${branch}/apis`, { headers }).then(res =>
       this.handleAPIRes(res),
-    );
+    )) as APIDefinitionsRepresentation;
 
-    // if the current slug already exists, we'll use PUT to update it. otherwise, we'll use POST to create it
-    const method = existingAPIDefinitions?.data?.some((d: { filename: string }) => d.filename === filename)
-      ? 'PUT'
-      : 'POST';
+    const matchingAPIDefinition = existingAPIDefinitions?.data?.find(d => {
+      if (this.flags['legacy-id']) {
+        return d?.legacy_id === this.flags['legacy-id'];
+      }
+      return d?.filename === filename;
+    });
+
+    if (this.flags['legacy-id']) {
+      if (!matchingAPIDefinition) {
+        throw new Error(`No API definition found with legacy ID ${this.flags['legacy-id']}.`);
+      }
+      filename = matchingAPIDefinition.filename;
+      this.debug(`using existing legacy ID ${this.flags['legacy-id']} with filename ${filename}`);
+    }
+
+    // if we have a matching API definition based on legacy-id or slug, we'll use PUT to update it. otherwise, we'll use POST to create it
+    const method = matchingAPIDefinition ? 'PUT' : 'POST';
 
     this.debug(`making a ${method} request`);
 
@@ -137,7 +187,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     if (method === 'PUT') {
       // bypass the prompt if we're in a CI environment
       prompts.override({
-        confirm: isCI() ? true : undefined,
+        confirm: isCI() || this.flags['confirm-overwrite'] ? true : undefined,
       });
 
       const { confirm } = await promptTerminal({
@@ -157,20 +207,21 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       this.debug('attaching URL to form data payload');
       body.append('url', specPath);
     } else {
-      // Create a temporary file to write the bundled spec to,
-      // which we will then stream into the form data body
-      const { path } = await tmpFile({ prefix: 'rdme-openapi-', postfix: '.json' });
-      this.debug(`creating temporary file at ${path}`);
-      fs.writeFileSync(path, preparedSpec);
-      const stream = fs.createReadStream(path);
+      const isYaml = fileExtension === '.yaml' || fileExtension === '.yml';
+      // Convert YAML files back to YAML before uploading
+      let specToUpload = preparedSpec;
+      if (isYaml) {
+        specToUpload = yaml.dump(JSON.parse(preparedSpec));
+      }
 
-      this.debug('file and stream created, streaming into form data payload');
-      body.append('schema', {
-        [Symbol.toStringTag]: 'File',
-        name: filename,
-        stream: () => stream,
-        type: 'application/json',
-      });
+      this.debug('processing file into form data payload');
+      body.append(
+        'schema',
+        new File([specToUpload], filename, {
+          type: isYaml ? 'application/x-yaml' : 'application/json',
+        }),
+        filename,
+      );
     }
 
     const options: RequestInit = { headers, method, body };
@@ -179,20 +230,20 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       `${method === 'POST' ? 'Creating' : 'Updating'} your API definition to ReadMe...`,
     );
 
-    const response = await this.readmeAPIFetch(
-      `/versions/${version}/apis${method === 'POST' ? '' : `/${filename}`}`,
+    const response = (await this.readmeAPIFetch(
+      `/branches/${branch}/apis${method === 'POST' ? '' : `/${filename}`}`,
       options,
     )
       .then(res => this.handleAPIRes(res))
       .catch((err: Error) => {
         spinner.fail();
         throw err;
-      });
+      })) as StagedAPIUploadResponseRepresentation;
 
     if (response?.data?.upload?.status && response?.data?.uri) {
       let status = response.data.upload.status;
 
-      if (status === 'pending') {
+      if (this.isStatusPending(status)) {
         spinner.text = `${spinner.text} uploaded but not yet processed by ReadMe. Polling for completion...`;
         status = await this.pollAPIUntilUploadIsComplete(response.data.uri, headers);
       }

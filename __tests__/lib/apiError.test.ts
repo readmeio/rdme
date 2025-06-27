@@ -16,7 +16,7 @@ const response = {
   ],
 };
 
-describe('APIv1Error', () => {
+describe('#APIv1Error', () => {
   it('should handle ReadMe API errors', () => {
     const error = new APIv1Error(response);
 

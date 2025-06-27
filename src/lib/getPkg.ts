@@ -1,8 +1,8 @@
 import type { Hook } from '@oclif/core';
 
-import { readFileSync } from 'node:fs';
-
 import semver from 'semver';
+
+import pkg from '../../package.json' with { type: 'json' };
 
 import { error } from './logger.js';
 
@@ -12,15 +12,6 @@ const registryUrl = 'https://registry.npmjs.com/rdme';
  * @see {@link https://docs.npmjs.com/adding-dist-tags-to-packages}
  */
 type npmDistTag = 'latest';
-
-/**
- * A synchronous function that reads the `package.json` file for use elsewhere.
- * Until we drop support Node.js 20, we need to import this way to avoid ExperimentalWarning outputs.
- *
- * @see {@link https://nodejs.org/docs/latest-v20.x/api/esm.html#import-attributes}
- * @see {@link https://www.stefanjudis.com/snippets/how-to-import-json-files-in-es-modules-node-js/}
- */
-export const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), { encoding: 'utf-8' }));
 
 /**
  * Return the major Node.js version specified in our `package.json` config.
@@ -51,14 +42,19 @@ export function getPkgVersion(this: Hook.Context | void): string {
 /**
  * The current `rdme` version
  *
- * @param npmDistTag the `npm` dist tag to retrieve. If this value is omitted,
- * the version from the `package.json` is returned.
  * @example "8.0.0"
  * @see {@link https://docs.npmjs.com/adding-dist-tags-to-packages}
  * @note we mock this function in our snapshots
  * @see {@link https://stackoverflow.com/a/54245672}
  */
-export async function getPkgVersionFromNPM(this: Hook.Context | void, npmDistTag?: npmDistTag): Promise<string> {
+export async function getPkgVersionFromNPM(
+  this: Hook.Context | void,
+  /**
+   * The `npm` dist tag to retrieve. If this value is omitted,
+   * the version from the `package.json` is returned.
+   */
+  npmDistTag?: npmDistTag,
+): Promise<string> {
   if (npmDistTag) {
     return fetch(registryUrl)
       .then(res => res.json() as Promise<{ 'dist-tags': Record<string, string> }>)

@@ -10,12 +10,18 @@ import { debug } from './logger.js';
 /**
  * Recursively grabs all files within a given directory
  * (including subdirectories)
- * @param folderToSearch path to directory
- * @param ignoreGit boolean to indicate whether or not to ignore
- * `.git` directory plus any files specified in `.gitignore`
+ *
  * @returns array of file names
  */
-export default function readdirRecursive(folderToSearch: string, ignoreGit = false): string[] {
+export default function readdirRecursive(
+  /** path to directory */
+  folderToSearch: string,
+  /**
+   * Boolean to indicate whether or not to ignore `.git` directory
+   * as well as any files specified in `.gitignore`
+   */
+  ignoreGit = false,
+): string[] {
   debug(`current readdirRecursive folder: ${folderToSearch}`);
 
   let ignoreFilter: Ignore;
@@ -34,7 +40,7 @@ export default function readdirRecursive(folderToSearch: string, ignoreGit = fal
     // Some logic to construct pathname the way that `ignore` package consumes it
     // https://github.com/kaelzhang/node-ignore#2-filenames-and-dirnames
     let fullPathName = path.join(folderToSearch, item.name);
-    if (item.isDirectory()) fullPathName = `${fullPathName}/`;
+    if (item.isDirectory()) fullPathName = `${fullPathName}${path.sep}`;
 
     return !ignoreFilter.ignores(fullPathName);
   });
@@ -45,7 +51,9 @@ export default function readdirRecursive(folderToSearch: string, ignoreGit = fal
 
   const folders = filesInFolder.filter(fileHandle => fileHandle.isDirectory());
 
-  const subFiles = (<string[]>[]).concat(
+  const emptyFilesArray: string[] = [];
+
+  const subFiles = emptyFilesArray.concat(
     ...folders.map(fileHandle => readdirRecursive(path.join(folderToSearch, fileHandle.name), ignoreGit)),
   );
 
