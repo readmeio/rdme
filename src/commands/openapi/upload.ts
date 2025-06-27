@@ -1,5 +1,5 @@
 import type {
-  APIDefinitionData,
+  APIDefinitionsRepresentation,
   APIUploadSingleResponseRepresentation,
   APIUploadStatus,
   StagedAPIUploadResponseRepresentation,
@@ -159,11 +159,11 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
     const headers = new Headers({ authorization: `Bearer ${this.flags.key}` });
 
-    const existingAPIDefinitions = await this.readmeAPIFetch(`/branches/${branch}/apis`, { headers }).then(res =>
+    const existingAPIDefinitions = (await this.readmeAPIFetch(`/branches/${branch}/apis`, { headers }).then(res =>
       this.handleAPIRes(res),
-    );
+    )) as APIDefinitionsRepresentation;
 
-    const matchingAPIDefinition = existingAPIDefinitions?.data?.find((d: APIDefinitionData) => {
+    const matchingAPIDefinition = existingAPIDefinitions?.data?.find(d => {
       if (this.flags['legacy-id']) {
         return d?.legacy_id === this.flags['legacy-id'];
       }

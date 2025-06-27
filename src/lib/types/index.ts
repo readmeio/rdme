@@ -98,6 +98,4 @@ export type PageResponseSchema<T extends PageRoute> = FromSchema<
  * Derived from our API documentation, this is the schema for the get APIs response
  * as we receive it from the ReadMe API.
  */
-type APIDefinitionsRepresentation = FromSchema<apiDefinitionsSchema, { keepDefaultedPropertiesOptional: true }>;
-
-export type APIDefinitionData = APIDefinitionsRepresentation['data'][0];
+export type APIDefinitionsRepresentation = FromSchema<apiDefinitionsSchema, { keepDefaultedPropertiesOptional: true }>;
