@@ -1,4 +1,5 @@
 import type {
+  APIDefinitionsRepresentation,
   APIUploadSingleResponseRepresentation,
   APIUploadStatus,
   StagedAPIUploadResponseRepresentation,
@@ -39,6 +40,14 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       description:
         'If set, file overwrites will be made without a confirmation prompt. This flag can be a useful in automated environments where prompts cannot be responded to.',
       hidden: true,
+    }),
+    'legacy-id': Flags.string({
+      summary: 'The legacy ID for your API definition.',
+      description:
+        'This is only used for legacy `rdme` CLI workflows and only applies if your project, and this API definition, predate ReadMe Refactored. This flag is considered deprecated and we recommend using `--slug` instead.',
+      hidden: true,
+      deprecated: true,
+      exclusive: ['slug'],
     }),
     slug: Flags.string({
       summary: 'Override the slug (i.e., the unique identifier) for your API definition.',
@@ -129,7 +138,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       this.warn('Support for Postman collections is currently experimental.');
     }
 
-    if (!specFileTypeIsUrl && filename !== specPath) {
+    if (!specFileTypeIsUrl && filename !== specPath && !this.flags['legacy-id'] && !this.flags.slug) {
       this.warn(
         `The slug of your API Definition will be set to ${filename} in ReadMe. This slug is not visible to your end users. To set this slug to something else, use the \`--slug\` flag.`,
       );
@@ -150,14 +159,27 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
     const headers = new Headers({ authorization: `Bearer ${this.flags.key}` });
 
-    const existingAPIDefinitions = await this.readmeAPIFetch(`/branches/${branch}/apis`, { headers }).then(res =>
+    const existingAPIDefinitions = (await this.readmeAPIFetch(`/branches/${branch}/apis`, { headers }).then(res =>
       this.handleAPIRes(res),
-    );
+    )) as APIDefinitionsRepresentation;
 
-    // if the current slug already exists, we'll use PUT to update it. otherwise, we'll use POST to create it
-    const method = existingAPIDefinitions?.data?.some((d: { filename: string }) => d.filename === filename)
-      ? 'PUT'
-      : 'POST';
+    const matchingAPIDefinition = existingAPIDefinitions?.data?.find(d => {
+      if (this.flags['legacy-id']) {
+        return d?.legacy_id === this.flags['legacy-id'];
+      }
+      return d?.filename === filename;
+    });
+
+    if (this.flags['legacy-id']) {
+      if (!matchingAPIDefinition) {
+        throw new Error(`No API definition found with legacy ID ${this.flags['legacy-id']}.`);
+      }
+      filename = matchingAPIDefinition.filename;
+      this.debug(`using existing legacy ID ${this.flags['legacy-id']} with filename ${filename}`);
+    }
+
+    // if we have a matching API definition based on legacy-id or slug, we'll use PUT to update it. otherwise, we'll use POST to create it
+    const method = matchingAPIDefinition ? 'PUT' : 'POST';
 
     this.debug(`making a ${method} request`);
 

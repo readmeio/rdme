@@ -30,6 +30,14 @@ describe('rdme openapi upload', () => {
 
       expect(result).toMatchSnapshot();
     });
+
+    it('should throw if an error if both `--slug` and `--legacy-id` flags are passed', async () => {
+      const customSlug = 'custom-slug';
+      const legacyId = '1234567890';
+      const result = await run(['--slug', customSlug, '--legacy-id', legacyId, filename, '--key', key]);
+
+      expect(result).toMatchSnapshot();
+    });
   });
 
   describe('given that the API definition is a local file', () => {
@@ -508,6 +516,49 @@ describe('rdme openapi upload', () => {
       expect(result.stdout).toContain('was successfully updated in ReadMe!');
 
       mock.done();
+    });
+  });
+
+  describe('given that the "--legacy-id" flag is passed', () => {
+    it('should update an existing spec with matching legacy_id', async () => {
+      const legacyId = '1234567890';
+      const existingFilename = 'legacy-spec.json';
+      prompts.inject([true]);
+      const getMock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .get(`/branches/${branch}/apis`)
+        .reply(200, { data: [{ legacy_id: legacyId, filename: existingFilename }] });
+
+      const putMock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .put(`/branches/${branch}/apis/${existingFilename}`, body =>
+          body.match(`form-data; name="schema"; filename="${existingFilename}"`),
+        )
+        .reply(200, {
+          data: {
+            upload: { status: 'done' },
+            uri: `/branches/${branch}/apis/${existingFilename}`,
+          },
+        });
+
+      const result = await run(['--branch', branch, filename, '--key', key, '--legacy-id', legacyId]);
+
+      expect(result).toMatchSnapshot();
+
+      getMock.done();
+      putMock.done();
+    });
+
+    it('should error if no matching API definition found', async () => {
+      const legacyId = '1234567890';
+      prompts.inject([true]);
+      const getMock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .get(`/branches/${branch}/apis`)
+        .reply(200, { data: [] });
+
+      const result = await run(['--branch', branch, filename, '--key', key, '--legacy-id', legacyId]);
+
+      expect(result).toMatchSnapshot();
+
+      getMock.done();
     });
   });
 });

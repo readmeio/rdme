@@ -23,6 +23,9 @@ type apiUploadSingleResponseSchema =
 type stagedApiUploadResponseSchema =
   (typeof readmeAPIv2Oas)['paths']['/branches/{branch}/apis']['post']['responses']['202']['content']['application/json']['schema'];
 
+type apiDefinitionsSchema =
+  (typeof readmeAPIv2Oas)['paths']['/branches/{branch}/apis']['get']['responses']['200']['content']['application/json']['schema'];
+
 /** Page schemas */
 type PageRoute = APIv2PageUploadCommands['route'];
 
@@ -90,3 +93,9 @@ export type PageResponseSchema<T extends PageRoute> = FromSchema<
   PageResponseSchemaRaw<T>,
   { keepDefaultedPropertiesOptional: true }
 >;
+
+/**
+ * Derived from our API documentation, this is the schema for the get APIs response
+ * as we receive it from the ReadMe API.
+ */
+export type APIDefinitionsRepresentation = FromSchema<apiDefinitionsSchema, { keepDefaultedPropertiesOptional: true }>;
