@@ -24,9 +24,9 @@ describe('openapi refs', () => {
 
   describe('comparison of OpenAPI files', () => {
     it('should process circular references', async () => {
-      const inputFile = path.resolve('__tests__/__fixtures__/circular-references-oas/circular-references.json');
+      const inputFile = path.resolve('__tests__/__fixtures__/circular-ref-oas/circular-references.json');
       const expectedOutputFile = path.resolve(
-        '__tests__/__fixtures__/circular-references-oas/circular-references-resolved.json',
+        '__tests__/__fixtures__/circular-ref-oas/circular-references-resolved.json',
       );
       const defaultOutputFilePath = 'circular-references.openapi.json';
 
@@ -48,9 +48,9 @@ describe('openapi refs', () => {
     });
 
     it('should process recursive references', async () => {
-      const inputFile = path.resolve('__tests__/__fixtures__/circular-references-oas/recursive-reference.json');
+      const inputFile = path.resolve('__tests__/__fixtures__/circular-ref-oas/recursive-reference.json');
       const expectedOutputFile = path.resolve(
-        '__tests__/__fixtures__/circular-references-oas/recursive-reference-resolved.json',
+        '__tests__/__fixtures__/circular-ref-oas/recursive-reference-resolved.json',
       );
       const defaultOutputFilePath = 'recursive-reference.openapi.json';
 
@@ -73,10 +73,10 @@ describe('openapi refs', () => {
 
     it('should replace circularity that cannot be processed with empty objects', async () => {
       const inputFile = path.resolve(
-        '__tests__/__fixtures__/circular-references-oas/unresolvable-circular-references.json',
+        '__tests__/__fixtures__/circular-ref-oas/unresolvable-circular-references.json',
       );
       const expectedOutputFile = path.resolve(
-        '__tests__/__fixtures__/circular-references-oas/unresolvable-circular-reference-resolved.json',
+        '__tests__/__fixtures__/circular-ref-oas/unresolvable-circular-reference-resolved.json',
       );
       const defaultOutputFilePath = 'unresolvable-circular-references.openapi.json';
 
@@ -98,9 +98,9 @@ describe('openapi refs', () => {
     });
 
     it('should process circular references if the schema contains only $ref', async () => {
-      const inputFile = path.resolve('__tests__/__fixtures__/circular-references-oas/circular-reference-ref-only.json');
+      const inputFile = path.resolve('__tests__/__fixtures__/circular-ref-oas/circular-reference-ref-only.json');
       const expectedOutputFile = path.resolve(
-        '__tests__/__fixtures__/circular-references-oas/circular-reference-ref-only-resolved.json',
+        '__tests__/__fixtures__/circular-ref-oas/circular-reference-ref-only-resolved.json',
       );
       const defaultOutputFilePath = 'circular-reference-ref-only.openapi.json';
 
@@ -123,10 +123,10 @@ describe('openapi refs', () => {
 
     it('should process circular references if the schema contains only $ref with the title', async () => {
       const inputFile = path.resolve(
-        '__tests__/__fixtures__/circular-references-oas/circular-reference-ref-only-title.json',
+        '__tests__/__fixtures__/circular-ref-oas/circular-reference-ref-only-title.json',
       );
       const expectedOutputFile = path.resolve(
-        '__tests__/__fixtures__/circular-references-oas/circular-reference-ref-only-title-resolved.json',
+        '__tests__/__fixtures__/circular-ref-oas/circular-reference-ref-only-title-resolved.json',
       );
       const defaultOutputFilePath = 'circular-reference-ref-only.openapi.json';
 
@@ -148,9 +148,9 @@ describe('openapi refs', () => {
     });
 
     it('should handle a combination of recursiveness/nested circularity within a single file', async () => {
-      const inputFile = path.resolve('__tests__/__fixtures__/circular-references-oas/combined-cases.json');
+      const inputFile = path.resolve('__tests__/__fixtures__/circular-ref-oas/combined-cases.json');
       const expectedOutputFile = path.resolve(
-        '__tests__/__fixtures__/circular-references-oas/combined-cases-resolved.json',
+        '__tests__/__fixtures__/circular-ref-oas/combined-cases-resolved.json',
       );
       const defaultOutputFilePath = 'combined-cases.openapi.json';
 
