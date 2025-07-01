@@ -45,9 +45,8 @@ describe('openapi resolve', () => {
 
       prompts.inject(['output.json']);
 
-      const { result, error } = await run([spec]);
-      expect(error).toBeUndefined();
-      expect(result).toMatch('Your API definition has been processed and saved to output.json!');
+      const result = await run([spec]);
+      expect(result).toMatchSnapshot();
 
       expect(fsWriteFileSyncSpy).toHaveBeenCalledWith('output.json', expect.any(String));
       expect(resolvedSpec).toStrictEqual(JSON.parse(fs.readFileSync(expectedOutput, 'utf8')));

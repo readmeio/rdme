@@ -395,6 +395,7 @@ export default class OpenAPIResolveCommand extends BaseCommand<typeof OpenAPIRes
     fs.writeFileSync(outputPath, JSON.stringify(parsedSpec, null, 2));
     this.debug('resolved spec saved');
 
-    return Promise.resolve(chalk.green(`Your API definition has been processed and saved to ${outputPath}!`));
+    this.log(chalk.green(`Your API definition has been processed and saved to ${outputPath}!`))
+    return { success: true, outputPath };
   }
 }
