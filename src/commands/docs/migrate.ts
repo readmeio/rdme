@@ -6,9 +6,9 @@ import ora from 'ora';
 import { dir } from 'tmp-promise';
 
 import BaseCommand from '../../lib/baseCommand.js';
-import { confirmAutofixesFlag } from '../../lib/flags.js';
 import { writeFixes } from '../../lib/frontmatter.js';
 import { oraOptions } from '../../lib/logger.js';
+import { baseFlags } from '../../lib/pageCommandProperties.js';
 import { findPages } from '../../lib/readPage.js';
 import { attemptUnzip } from '../../lib/unzip.js';
 import { validateFrontmatter } from '../../lib/validateFrontmatter.js';
@@ -32,18 +32,13 @@ export default class DocsMigrateCommand extends BaseCommand<typeof DocsMigrateCo
   };
 
   static flags = {
-    'confirm-autofixes': confirmAutofixesFlag,
-    'hide-experimental-warning': Flags.boolean({
-      description: 'Hides the warning message about this command being in an experimental alpha.',
-      hidden: true,
-    }),
     out: Flags.string({
       summary: 'The directory to write the migration output to. Defaults to a temporary directory.',
     }),
-    'skip-validation': Flags.boolean({
-      description:
-        'Skips the validation of the Markdown files. Useful if this command is as part of a chain of commands that includes `docs upload`.',
-    }),
+    // NOTE: the `baseFlags` function contains a handful of properties (e.g., `dry-run`, `max-errors`)
+    // that aren't actually used in this command, but are included for consistency/simplicity
+    // since this command is purely for internal use.
+    ...baseFlags('Guides'),
   };
 
   async run(): Promise<{ outputDir: string; stats: MigrationStats }> {
