@@ -1,3 +1,10 @@
+# [10.4.0-next.5](https://github.com/readmeio/rdme/compare/v10.4.0-next.4...v10.4.0-next.5) (2025-07-01)
+
+
+### Features
+
+* **openapi:** add `openapi resolve` ([#1063](https://github.com/readmeio/rdme/issues/1063)) ([987e103](https://github.com/readmeio/rdme/commit/987e1039813744738d73c0396d045e1d2a5349bf))
+
 # [10.4.0-next.4](https://github.com/readmeio/rdme/compare/v10.4.0-next.3...v10.4.0-next.4) (2025-06-27)
 
 
