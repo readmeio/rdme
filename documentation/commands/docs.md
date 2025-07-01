@@ -27,7 +27,7 @@ ARGUMENTS
 FLAGS
   --key=<value>     (required) ReadMe project API key
   --branch=<value>  [default: stable] ReadMe project version
-  --dry-run         Runs the command without creating nor updating any Guides in ReadMe. Useful for debugging.
+  --dry-run         Runs the command without creating nor updating any guides in ReadMe. Useful for debugging.
 
 DESCRIPTION
   Upload Markdown files to the Guides section of your ReadMe project.
