@@ -1,6 +1,6 @@
 import type { PageMetadata } from './readPage.js';
 import type { APIv2PageCommands } from '../index.js';
-import type { PageRequestSchema } from './types/index.js';
+import type { PageRequestSchema, PageRoute } from './types/index.js';
 
 import ora from 'ora';
 import prompts from 'prompts';
@@ -11,15 +11,18 @@ import { oraOptions } from './logger.js';
 import promptTerminal from './promptWrapper.js';
 import { fetchMappings, fetchSchema } from './readmeAPIFetch.js';
 
+type ValidationStatus = 'autofixed-with-issues' | 'autofixed' | 'has-issues' | 'valid';
+
 export async function validateFrontmatter(
   this: APIv2PageCommands,
   pages: PageMetadata[],
   promptQuestion: string,
   outputDir?: string,
-): Promise<PageMetadata<PageRequestSchema<typeof this.route>>[]> {
+): Promise<{ pages: PageMetadata<PageRequestSchema<PageRoute>>[]; status: ValidationStatus }> {
   const { path: pathInput } = this.args;
   const { 'confirm-autofixes': confirmAutofixes } = this.flags;
   let pagesToReturn = pages;
+  let status: ValidationStatus = 'valid';
 
   const validationSpinner = ora({ ...oraOptions() }).start('🔬 Validating frontmatter data...');
 
@@ -40,6 +43,7 @@ export async function validateFrontmatter(
   if (!filesWithIssues.length) {
     validationSpinner.succeed(`${validationSpinner.text} no issues found!`);
   } else {
+    status = 'has-issues';
     validationSpinner.warn(`${validationSpinner.text} issues found in ${filesWithIssues.length} file(s).`);
     if (filesWithFixableIssues.length) {
       if (confirmAutofixes) {
@@ -68,15 +72,36 @@ export async function validateFrontmatter(
       });
 
       pagesToReturn = updatedFiles;
+      status = 'autofixed';
+      this.log('✅ The following files have been automatically fixed:');
+      pagesToReturn.forEach((file, index) => {
+        const currentValidationResult = validationResults[index];
+        if (currentValidationResult.fixableErrorCount) {
+          this.log(
+            `- ${file.filePath} (${currentValidationResult.fixableErrorCount} issue${currentValidationResult.fixableErrorCount > 1 ? 's' : ''})`,
+          );
+        }
+      });
+      this.log();
+      this.log(
+        'Please review the changes. Once everything looks good, run the command again to upload these files to ReadMe.',
+      );
     }
 
     // also inform the user if there are files with issues that can't be fixed
     if (filesWithUnfixableIssues.length) {
-      this.warn(
-        `${filesWithUnfixableIssues.length} file(s) have issues that cannot be fixed automatically. The upload will proceed but we recommend addressing these issues. Please get in touch with us at support@readme.io if you need a hand.`,
-      );
+      if (status !== 'autofixed') {
+        this.warn(
+          `${filesWithUnfixableIssues.length} file(s) have issues that cannot be fixed automatically. The upload will proceed but we recommend addressing these issues. Please get in touch with us at support@readme.io if you need a hand.`,
+        );
+      } else {
+        status = 'autofixed-with-issues';
+        this.warn(
+          `${filesWithUnfixableIssues.length} file(s) have issues that cannot be fixed automatically. Autofixable issues have been addressed but we also recommend addressing these issues as well. Please get in touch with us at support@readme.io if you need a hand.`,
+        );
+      }
     }
   }
 
-  return pagesToReturn;
+  return { pages: pagesToReturn, status };
 }
