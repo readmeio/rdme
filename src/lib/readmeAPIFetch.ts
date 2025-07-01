@@ -6,7 +6,6 @@ import type { SchemaObject } from 'oas/types';
 import path from 'node:path';
 
 import mime from 'mime-types';
-import { ProxyAgent } from 'undici';
 
 import { APIv1Error, APIv2Error, type APIv2ErrorResponse } from './apiError.js';
 import config from './config.js';
@@ -209,8 +208,6 @@ export async function readmeAPIv1Fetch(
   return fetch(fullUrl, {
     ...options,
     headers,
-    // @ts-expect-error we need to clean up our undici usage here ASAP
-    dispatcher: proxy ? new ProxyAgent(proxy) : undefined,
   })
     .then(res => {
       const warningHeader = res.headers.get('Warning');
@@ -308,8 +305,6 @@ export async function readmeAPIv2Fetch<T extends Hook.Context = Hook.Context>(
   return fetch(fullUrl, {
     ...options,
     headers,
-    // @ts-expect-error we need to clean up our undici usage here ASAP
-    dispatcher: proxy ? new ProxyAgent(proxy) : undefined,
   })
     .then(res => {
       const warningHeader = res.headers.get('Warning');
