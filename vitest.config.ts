@@ -46,6 +46,17 @@ export default defineConfig({
           return null;
         },
       },
+      {
+        pattern: /__tests__\/__fixtures__\/([A-z,-]+)\/(.*).json/g,
+        testsToRun: (_file, match) => {
+          const fixtureDirectory = match[1];
+          if (fixtureDirectory === 'circular-ref-oas') {
+            return '__tests__/commands/openapi/resolve.test.ts';
+          }
+
+          return null;
+        },
+      },
     ],
   },
 });

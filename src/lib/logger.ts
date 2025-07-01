@@ -42,7 +42,7 @@ function error(input: string) {
 function info(
   input: string,
   opts = {
-    /** whether or not to prefix * the statement with this emoji: ℹ️ */
+    /** whether or not to prefix the statement with this emoji: ℹ️ */
     includeEmojiPrefix: true,
   },
 ) {

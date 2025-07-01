@@ -1,0 +1,42 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Cyclic Schema Example",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/example": {
+      "get": {
+        "summary": "Example endpoint with cyclic references",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ObjectA": {
+        "type": "object",
+        "properties": {
+          "referenceToB": {
+            "$ref": "#/components/schemas/ObjectARef"
+          }
+        }
+      },
+      "ObjectB": {
+        "$ref": "#/components/schemas/ObjectA"
+      },
+      "ObjectARef": {
+        "type": "object",
+        "properties": {
+          "referenceToB": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  }
+}

@@ -6,6 +6,7 @@ Manage your API definition (e.g., syncing, validation, analysis, conversion, etc
 * [`rdme openapi convert [SPEC]`](#rdme-openapi-convert-spec)
 * [`rdme openapi inspect [SPEC]`](#rdme-openapi-inspect-spec)
 * [`rdme openapi reduce [SPEC]`](#rdme-openapi-reduce-spec)
+* [`rdme openapi resolve [SPEC]`](#rdme-openapi-resolve-spec)
 * [`rdme openapi upload [SPEC]`](#rdme-openapi-upload-spec)
 * [`rdme openapi validate [SPEC]`](#rdme-openapi-validate-spec)
 
@@ -132,6 +133,47 @@ EXAMPLES
   If you wish to automate this command, you can pass in CLI arguments to bypass the prompts:
 
     $ rdme openapi reduce petstore.json --path /pet/{id} --method get --method put --out petstore.reduced.json
+```
+
+## `rdme openapi resolve [SPEC]`
+
+Resolves circular and recursive references in OpenAPI by replacing them with object schemas.
+
+```
+USAGE
+  $ rdme openapi resolve [SPEC] [--out <value>] [--workingDirectory <value>]
+
+ARGUMENTS
+  SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
+        subdirectories contain a single OpenAPI file, you can omit the path.
+
+FLAGS
+  --out=<value>               Output file path to write resolved file to
+  --workingDirectory=<value>  Working directory (for usage with relative external references)
+
+DESCRIPTION
+  Resolves circular and recursive references in OpenAPI by replacing them with object schemas.
+
+  This command provides a workaround for circular or recursive references within OpenAPI definitions so they can render
+  properly in ReadMe. It automatically identifies and replaces these references with simplified object schemas, ensuring
+  compatibility for seamless display in the ReadMe API Reference. As a result, instead of displaying an empty form, as
+  would occur with schemas containing such references, you will receive a flattened representation of the object,
+  showing what the object can potentially contain, including references to itself. Complex circular references may
+  require manual inspection and may not be fully resolved.
+
+EXAMPLES
+  This will resolve circular and recursive references in the OpenAPI definition at the given file or URL:
+
+    $ rdme openapi resolve [url-or-local-path-to-file]
+
+  You can omit the file name and `rdme` will scan your working directory (and any subdirectories) for OpenAPI files.
+  This approach will provide you with CLI prompts, so we do not recommend this technique in CI environments.
+
+    $ rdme openapi resolve
+
+  If you wish to automate this command, you can pass in CLI arguments to bypass the prompts:
+
+    $ rdme openapi resolve petstore.json --out petstore.openapi.json
 ```
 
 ## `rdme openapi upload [SPEC]`

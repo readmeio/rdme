@@ -1,0 +1,92 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`openapi resolve > resolving > should support resolving circular references (case: recursive and nested circularity in a single file) 1`] = `
+{
+  "result": {
+    "outputPath": "output.json",
+    "success": true,
+  },
+  "stderr": "- Validating the API definition located at ./__tests__/__fixtures__/circular-ref-oas/combined-cases.json...
+- Identifying and resolving circular/recursive references in your API definition...
+✔ Identifying and resolving circular/recursive references in your API definition... done! ✅
+",
+  "stdout": "ℹ️  Unresolved circular references remain. These references will be replaced with empty objects.
+Your API definition has been processed and saved to output.json!
+",
+}
+`;
+
+exports[`openapi resolve > resolving > should support resolving circular references (case: recursive) 1`] = `
+{
+  "result": {
+    "outputPath": "output.json",
+    "success": true,
+  },
+  "stderr": "- Validating the API definition located at ./__tests__/__fixtures__/circular-ref-oas/recursive-reference.json...
+- Identifying and resolving circular/recursive references in your API definition...
+✔ Identifying and resolving circular/recursive references in your API definition... done! ✅
+",
+  "stdout": "Your API definition has been processed and saved to output.json!
+",
+}
+`;
+
+exports[`openapi resolve > resolving > should support resolving circular references (case: replace unprocessable circularity with empty objects) 1`] = `
+{
+  "result": {
+    "outputPath": "output.json",
+    "success": true,
+  },
+  "stderr": "- Validating the API definition located at ./__tests__/__fixtures__/circular-ref-oas/unresolvable-circular-references.json...
+- Identifying and resolving circular/recursive references in your API definition...
+✔ Identifying and resolving circular/recursive references in your API definition... done! ✅
+",
+  "stdout": "Your API definition has been processed and saved to output.json!
+",
+}
+`;
+
+exports[`openapi resolve > resolving > should support resolving circular references (case: schema only contains $refs with a \`title\`) 1`] = `
+{
+  "result": {
+    "outputPath": "output.json",
+    "success": true,
+  },
+  "stderr": "- Validating the API definition located at ./__tests__/__fixtures__/circular-ref-oas/circular-reference-ref-only-title.json...
+- Identifying and resolving circular/recursive references in your API definition...
+✔ Identifying and resolving circular/recursive references in your API definition... done! ✅
+",
+  "stdout": "Your API definition has been processed and saved to output.json!
+",
+}
+`;
+
+exports[`openapi resolve > resolving > should support resolving circular references (case: schema only contains $refs) 1`] = `
+{
+  "result": {
+    "outputPath": "output.json",
+    "success": true,
+  },
+  "stderr": "- Validating the API definition located at ./__tests__/__fixtures__/circular-ref-oas/circular-reference-ref-only.json...
+- Identifying and resolving circular/recursive references in your API definition...
+✔ Identifying and resolving circular/recursive references in your API definition... done! ✅
+",
+  "stdout": "Your API definition has been processed and saved to output.json!
+",
+}
+`;
+
+exports[`openapi resolve > resolving > should support resolving circular references (case: standard) 1`] = `
+{
+  "result": {
+    "outputPath": "output.json",
+    "success": true,
+  },
+  "stderr": "- Validating the API definition located at ./__tests__/__fixtures__/circular-ref-oas/circular-references.json...
+- Identifying and resolving circular/recursive references in your API definition...
+✔ Identifying and resolving circular/recursive references in your API definition... done! ✅
+",
+  "stdout": "Your API definition has been processed and saved to output.json!
+",
+}
+`;

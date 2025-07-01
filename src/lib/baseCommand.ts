@@ -9,6 +9,7 @@ import chalk from 'chalk';
 import debugPkg from 'debug';
 
 import { isGHA, isTest } from './isCI.js';
+import { info } from './logger.js';
 import { handleAPIv2Res, readmeAPIv2Fetch, type ResponseBody } from './readmeAPIFetch.js';
 
 type Flags<T extends typeof OclifCommand> = Interfaces.InferredFlags<(typeof BaseCommand)['baseFlags'] & T['flags']>;
@@ -51,6 +52,12 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
   // we need the declare statement here since `debug` is a
   // protected property in the base oclif class
   declare debug: (...args: unknown[]) => void;
+
+  protected info(input: Parameters<typeof info>[0], opts: Parameters<typeof info>[1]): void {
+    if (!this.jsonEnabled()) {
+      info(input, opts);
+    }
+  }
 
   protected async catch(err: Error & { exitCode?: number }) {
     if (isTest()) {

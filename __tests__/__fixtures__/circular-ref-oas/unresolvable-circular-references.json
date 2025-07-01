@@ -1,0 +1,45 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Complex Cyclic Example",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/example": {
+      "get": {
+        "summary": "Example endpoint with unresolved references",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Entity": {
+        "type": "object",
+        "properties": {
+          "relatedEntity": {
+            "$ref": "#/components/schemas/RelatedEntity"
+          },
+          "Entity": {
+            "$ref": "#/components/schemas/Entity"
+          }
+        }
+      },
+      "RelatedEntity": {
+        "type": "object",
+        "properties": {
+          "entity": {
+            "$ref": "#/components/schemas/Entity"
+          },
+          "RelatedEntity": {
+            "$ref": "#/components/schemas/RelatedEntity"
+          }
+        }
+      }
+    }
+  }
+}
