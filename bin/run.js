@@ -2,7 +2,6 @@
 
 import stringArgv from 'string-argv';
 
-// eslint-disable-next-line import/extensions
 import setupUndici from '../dist/lib/setup-undici.js';
 
 async function main() {
