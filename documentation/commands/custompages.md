@@ -3,11 +3,17 @@
 
 Upload Markdown or HTML files to the Custom Pages section of your ReadMe project.
 
-NOTE: This command is in an experimental alpha and is likely to change. Use at your own risk!
-
 * [`rdme custompages upload PATH`](#rdme-custompages-upload-path)
 
 ## `rdme custompages upload PATH`
+
+> [!WARNING]
+> This command is in an experimental alpha and is likely to change. Use at your own risk!
+
+<details>
+
+
+<summary>I understand the risks — let's see the docs!</summary>
 
 Upload Markdown or HTML files to the Custom Pages section of your ReadMe project.
 
@@ -60,3 +66,6 @@ FLAG DESCRIPTIONS
 
     Defaults to `stable` (i.e., your main project version).
 ```
+
+
+</details>

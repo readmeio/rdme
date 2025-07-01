@@ -3,11 +3,17 @@
 
 Upload Markdown files to the Changelog section of your ReadMe project.
 
-NOTE: This command is in an experimental alpha and is likely to change. Use at your own risk!
-
 * [`rdme changelog upload PATH`](#rdme-changelog-upload-path)
 
 ## `rdme changelog upload PATH`
+
+> [!WARNING]
+> This command is in an experimental alpha and is likely to change. Use at your own risk!
+
+<details>
+
+
+<summary>I understand the risks — let's see the docs!</summary>
 
 Upload Markdown files to the Changelog section of your ReadMe project.
 
@@ -51,3 +57,6 @@ FLAG DESCRIPTIONS
     An API key for your ReadMe project. Note that API authentication is required despite being omitted from the example
     usage. See our docs for more information: https://github.com/readmeio/rdme/tree/v10#authentication
 ```
+
+
+</details>
