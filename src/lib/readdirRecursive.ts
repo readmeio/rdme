@@ -40,7 +40,7 @@ export default function readdirRecursive(
     // Some logic to construct pathname the way that `ignore` package consumes it
     // https://github.com/kaelzhang/node-ignore#2-filenames-and-dirnames
     let fullPathName = path.join(folderToSearch, item.name);
-    if (item.isDirectory()) fullPathName = `${fullPathName}/`;
+    if (item.isDirectory()) fullPathName = `${fullPathName}${path.sep}`;
 
     return !ignoreFilter.ignores(fullPathName);
   });
@@ -51,7 +51,9 @@ export default function readdirRecursive(
 
   const folders = filesInFolder.filter(fileHandle => fileHandle.isDirectory());
 
-  const subFiles = (<string[]>[]).concat(
+  const emptyFilesArray: string[] = [];
+
+  const subFiles = emptyFilesArray.concat(
     ...folders.map(fileHandle => readdirRecursive(path.join(folderToSearch, fileHandle.name), ignoreGit)),
   );
 

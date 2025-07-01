@@ -6,6 +6,7 @@ Manage your API definition (e.g., syncing, validation, analysis, conversion, etc
 * [`rdme openapi convert [SPEC]`](#rdme-openapi-convert-spec)
 * [`rdme openapi inspect [SPEC]`](#rdme-openapi-inspect-spec)
 * [`rdme openapi reduce [SPEC]`](#rdme-openapi-reduce-spec)
+* [`rdme openapi resolve [SPEC]`](#rdme-openapi-resolve-spec)
 * [`rdme openapi upload [SPEC]`](#rdme-openapi-upload-spec)
 * [`rdme openapi validate [SPEC]`](#rdme-openapi-validate-spec)
 
@@ -134,23 +135,64 @@ EXAMPLES
     $ rdme openapi reduce petstore.json --path /pet/{id} --method get --method put --out petstore.reduced.json
 ```
 
-## `rdme openapi upload [SPEC]`
+## `rdme openapi resolve [SPEC]`
 
-Upload (or re-upload) your API definition to ReadMe.
+Resolves circular and recursive references in OpenAPI by replacing them with object schemas.
 
 ```
 USAGE
-  $ rdme openapi upload [SPEC] --key <value> [--slug <value>] [--useSpecVersion | --version <value>]
+  $ rdme openapi resolve [SPEC] [--out <value>] [--workingDirectory <value>]
 
 ARGUMENTS
   SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
         subdirectories contain a single OpenAPI file, you can omit the path.
 
 FLAGS
-  --key=<value>      (required) ReadMe project API key
-  --slug=<value>     Override the slug (i.e., the unique identifier) for your API definition.
-  --useSpecVersion   Use the OpenAPI `info.version` field for your ReadMe project version
-  --version=<value>  [default: stable] ReadMe project version
+  --out=<value>               Output file path to write resolved file to
+  --workingDirectory=<value>  Working directory (for usage with relative external references)
+
+DESCRIPTION
+  Resolves circular and recursive references in OpenAPI by replacing them with object schemas.
+
+  This command provides a workaround for circular or recursive references within OpenAPI definitions so they can render
+  properly in ReadMe. It automatically identifies and replaces these references with simplified object schemas, ensuring
+  compatibility for seamless display in the ReadMe API Reference. As a result, instead of displaying an empty form, as
+  would occur with schemas containing such references, you will receive a flattened representation of the object,
+  showing what the object can potentially contain, including references to itself. Complex circular references may
+  require manual inspection and may not be fully resolved.
+
+EXAMPLES
+  This will resolve circular and recursive references in the OpenAPI definition at the given file or URL:
+
+    $ rdme openapi resolve [url-or-local-path-to-file]
+
+  You can omit the file name and `rdme` will scan your working directory (and any subdirectories) for OpenAPI files.
+  This approach will provide you with CLI prompts, so we do not recommend this technique in CI environments.
+
+    $ rdme openapi resolve
+
+  If you wish to automate this command, you can pass in CLI arguments to bypass the prompts:
+
+    $ rdme openapi resolve petstore.json --out petstore.openapi.json
+```
+
+## `rdme openapi upload [SPEC]`
+
+Upload (or re-upload) your API definition to ReadMe.
+
+```
+USAGE
+  $ rdme openapi upload [SPEC] --key <value> [--slug <value>] [--useSpecVersion | --branch <value>]
+
+ARGUMENTS
+  SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
+        subdirectories contain a single OpenAPI file, you can omit the path.
+
+FLAGS
+  --key=<value>     (required) ReadMe project API key
+  --branch=<value>  [default: stable] ReadMe project version
+  --slug=<value>    Override the slug (i.e., the unique identifier) for your API definition.
+  --useSpecVersion  Use the OpenAPI `info.version` field for your ReadMe project version
 
 DESCRIPTION
   Upload (or re-upload) your API definition to ReadMe.
@@ -169,16 +211,16 @@ DESCRIPTION
 EXAMPLES
   You can pass in a file name like so:
 
-    $ rdme openapi upload --version=1.0.0 openapi.json
+    $ rdme openapi upload --branch=1.0.0 openapi.json
 
   You can also pass in a file in a subdirectory (we recommend always running the CLI from the root of your
   repository):
 
-    $ rdme openapi upload --version=v1.0.0 example-directory/petstore.json
+    $ rdme openapi upload --branch=v1.0.0 example-directory/petstore.json
 
   You can also pass in a URL:
 
-    $ rdme openapi upload --version=1.0.0 https://example.com/openapi.json
+    $ rdme openapi upload --branch=1.0.0 https://example.com/openapi.json
 
   If you specify your ReadMe project version in the `info.version` field in your OpenAPI definition, you can use that:
 
@@ -189,6 +231,10 @@ FLAG DESCRIPTIONS
 
     An API key for your ReadMe project. Note that API authentication is required despite being omitted from the example
     usage. See our docs for more information: https://github.com/readmeio/rdme/tree/v10#authentication
+
+  --branch=<value>  ReadMe project version
+
+    Defaults to `stable` (i.e., your main project version). This flag is mutually exclusive with `--useSpecVersion`.
 
   --slug=<value>  Override the slug (i.e., the unique identifier) for your API definition.
 
@@ -201,11 +247,7 @@ FLAG DESCRIPTIONS
   --useSpecVersion  Use the OpenAPI `info.version` field for your ReadMe project version
 
     If included, use the version specified in the `info.version` field in your OpenAPI definition for your ReadMe
-    project version. This flag is mutually exclusive with `--version`.
-
-  --version=<value>  ReadMe project version
-
-    Defaults to `stable` (i.e., your main project version). This flag is mutually exclusive with `--useSpecVersion`.
+    project version. This flag is mutually exclusive with `--branch`.
 ```
 
 ## `rdme openapi validate [SPEC]`

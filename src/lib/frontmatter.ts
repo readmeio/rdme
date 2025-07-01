@@ -1,10 +1,11 @@
 import type { Mappings } from './readmeAPIFetch.js';
 import type { PageMetadata } from './readPage.js';
-import type { CommandClass } from '../index.js';
+import type { APIv2PageCommands } from '../index.js';
 import type { ErrorObject } from 'ajv';
 import type { SchemaObject } from 'oas/types';
 
 import fs from 'node:fs';
+import path from 'node:path';
 
 import { Ajv } from 'ajv';
 import _addFormats from 'ajv-formats';
@@ -17,7 +18,7 @@ const addFormats = _addFormats as unknown as typeof _addFormats.default;
  * Validates the frontmatter data, fixes any issues, and returns the results.
  */
 export function fix(
-  this: CommandClass['prototype'],
+  this: APIv2PageCommands,
   /** frontmatter data to be validated */
   data: PageMetadata['data'],
   /** schema to validate against */
@@ -28,7 +29,7 @@ export function fix(
    */
   mappings: Mappings,
 ): {
-  changeCount: number;
+  fixableErrorCount: number;
   errors: ErrorObject[];
   hasIssues: boolean;
   unfixableErrors: ErrorObject[];
@@ -36,7 +37,7 @@ export function fix(
 } {
   if (!Object.keys(data).length) {
     this.debug('no frontmatter attributes found, skipping validation');
-    return { changeCount: 0, errors: [], hasIssues: false, unfixableErrors: [], updatedData: data };
+    return { fixableErrorCount: 0, errors: [], hasIssues: false, unfixableErrors: [], updatedData: data };
   }
 
   const ajv = new Ajv({ allErrors: true, strictTypes: false, strictTuples: false });
@@ -75,56 +76,91 @@ export function fix(
     }
   }
 
-  let changeCount = 0;
+  let fixableErrorCount = 0;
   const unfixableErrors: ErrorObject[] = [];
   const updatedData = structuredClone(data);
 
   if (typeof errors === 'undefined' || !errors.length) {
-    return { changeCount, errors: [], hasIssues: false, unfixableErrors, updatedData };
+    return { errors: [], fixableErrorCount, hasIssues: false, unfixableErrors, updatedData };
   }
 
   errors.forEach(error => {
-    if (error.instancePath === '/category' && error.keyword === 'type') {
+    if (
+      error.instancePath === '/category' &&
+      error.keyword === 'type' &&
+      (this.route === 'guides' || this.route === 'reference')
+    ) {
       const uri = mappings.categories[data.category as string];
       updatedData.category = {
         uri: uri || `uri-that-does-not-map-to-${data.category}`,
       };
-      changeCount += 1;
+      fixableErrorCount += 1;
     } else if (error.keyword === 'additionalProperties') {
       const badKey = error.params.additionalProperty as string;
       const extractedValue = data[badKey];
       if (error.schemaPath === '#/additionalProperties') {
         // if the bad property is at the root level, delete it
         delete updatedData[badKey];
-        changeCount += 1;
-        if (badKey === 'excerpt') {
-          // if the `content` object exists, add to it. otherwise, create it
-          if (typeof updatedData.content === 'object' && updatedData.content) {
-            (updatedData.content as Record<string, unknown>).excerpt = extractedValue;
-          } else {
-            updatedData.content = {
-              excerpt: extractedValue,
-            };
+        fixableErrorCount += 1;
+
+        // hidden is the only attribute that is present in all page types
+        if (badKey === 'hidden') {
+          const hidden = typeof extractedValue === 'boolean' ? extractedValue : extractedValue === 'true';
+          updatedData.privacy = { view: hidden ? 'anyone_with_link' : 'public' };
+        } else {
+          switch (this.route) {
+            case 'custom_pages':
+              switch (badKey) {
+                case 'htmlmode':
+                  // if the `content` object exists, add to it. otherwise, create it
+                  if (typeof updatedData.content === 'object' && updatedData.content) {
+                    (updatedData.content as Record<string, unknown>).type = extractedValue ? 'html' : 'markdown';
+                  } else {
+                    updatedData.content = { type: extractedValue ? 'html' : 'markdown' };
+                  }
+                  break;
+                case 'fullscreen':
+                  updatedData.appearance = { fullscreen: extractedValue };
+                  break;
+                default:
+                  break;
+              }
+              break;
+            case 'guides':
+            case 'reference':
+              switch (badKey) {
+                case 'excerpt':
+                  // if the `content` object exists, add to it. otherwise, create it
+                  if (typeof updatedData.content === 'object' && updatedData.content) {
+                    (updatedData.content as Record<string, unknown>).excerpt = extractedValue;
+                  } else {
+                    updatedData.content = { excerpt: extractedValue };
+                  }
+                  break;
+                case 'categorySlug':
+                  updatedData.category = { uri: extractedValue };
+                  break;
+                case 'parentDoc':
+                  {
+                    const uri = mappings.parentPages[extractedValue as string];
+                    if (uri) {
+                      updatedData.parent = { uri };
+                    }
+                  }
+                  break;
+                case 'parentDocSlug':
+                  updatedData.parent = { uri: extractedValue };
+                  break;
+                case 'order':
+                  updatedData.position = extractedValue;
+                  break;
+                default:
+                  break;
+              }
+              break;
+            default:
+              break;
           }
-        } else if (badKey === 'categorySlug') {
-          updatedData.category = {
-            uri: extractedValue,
-          };
-        } else if (badKey === 'parentDoc') {
-          const uri = mappings.parentPages[extractedValue as string];
-          if (uri) {
-            updatedData.parent = {
-              uri,
-            };
-          }
-        } else if (badKey === 'parentDocSlug') {
-          updatedData.parent = {
-            uri: extractedValue,
-          };
-        } else if (badKey === 'hidden') {
-          updatedData.privacy = { view: extractedValue ? 'anyone_with_link' : 'public' };
-        } else if (badKey === 'order') {
-          updatedData.position = extractedValue;
         }
       } else {
         unfixableErrors.push(error);
@@ -134,19 +170,26 @@ export function fix(
     }
   });
 
-  return { errors, changeCount, hasIssues: true, unfixableErrors, updatedData };
+  return { errors, fixableErrorCount, hasIssues: true, unfixableErrors, updatedData };
 }
 
 export function writeFixes(
-  this: CommandClass['prototype'],
+  this: APIv2PageCommands,
   /** all metadata for the page that will be written to */
   metadata: PageMetadata,
   /** frontmatter changes to be applied */
   updatedData: PageMetadata['data'],
+  /** output directory to write to */
+  outputDirArg?: string,
 ) {
-  this.debug(`writing fixes to ${metadata.filePath}`);
   const result = grayMatter.stringify(metadata.content, updatedData);
-  fs.writeFileSync(metadata.filePath, result, { encoding: 'utf-8' });
+  const outputPath = outputDirArg ? path.join(outputDirArg, metadata.filePath) : metadata.filePath;
+  this.debug(`writing fixes to ${outputPath}`);
+  const outputDir = path.dirname(outputPath);
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir, { recursive: true });
+  }
+  fs.writeFileSync(outputPath, result, { encoding: 'utf-8' });
 
   const updatedMetadata = {
     ...metadata,

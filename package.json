@@ -1,6 +1,6 @@
 {
   "name": "rdme",
-  "version": "10.2.0-next.6",
+  "version": "10.4.0-next.5",
   "description": "ReadMe's official CLI and GitHub Action.",
   "license": "MIT",
   "author": "ReadMe <support@readme.io> (https://readme.com)",
@@ -32,6 +32,11 @@
     "readme",
     "swagger"
   ],
+  "exports": {
+    ".": "./dist/index.js",
+    "./types": "./dist/types.js",
+    "./utils": "./dist/utils.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/readmeio/rdme.git"
@@ -45,7 +50,7 @@
     "@oclif/core": "^4.0.29",
     "@oclif/plugin-autocomplete": "^3.2.6",
     "@oclif/plugin-help": "^6.2.15",
-    "@oclif/plugin-not-found": "^3.2.28",
+    "@oclif/plugin-plugins": "^5.4.36",
     "@oclif/plugin-warn-if-update-available": "^3.1.19",
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
@@ -56,9 +61,10 @@
     "gray-matter": "^4.0.1",
     "ignore": "^7.0.0",
     "js-yaml": "^4.1.0",
-    "mime-types": "^2.1.35",
-    "oas": "^26.0.1",
-    "oas-normalize": "^13.0.1",
+    "json-schema-to-ts": "^3.1.1",
+    "mime-types": "^3.0.1",
+    "oas": "^27.1.0",
+    "oas-normalize": "^14.1.0",
     "ora": "^8.1.1",
     "prompts": "^2.4.2",
     "semver": "^7.5.3",
@@ -69,6 +75,7 @@
     "tmp-promise": "^3.0.3",
     "toposort": "^2.0.2",
     "undici": "^7.5.0",
+    "unzipper": "^0.12.3",
     "validator": "^13.7.0"
   },
   "devDependencies": {
@@ -76,8 +83,8 @@
     "@commitlint/config-conventional": "^19.0.3",
     "@oclif/test": "^4.1.0",
     "@readme/better-ajv-errors": "^2.3.2",
-    "@readme/eslint-config": "^14.3.0",
-    "@readme/oas-examples": "^5.19.1",
+    "@readme/eslint-config": "^14.7.2",
+    "@readme/oas-examples": "^6.0.0",
     "@rollup/plugin-commonjs": "^28.0.0",
     "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-node-resolve": "^16.0.0",
@@ -85,17 +92,17 @@
     "@types/configstore": "^6.0.0",
     "@types/debug": "^4.1.7",
     "@types/js-yaml": "^4.0.5",
-    "@types/mime-types": "^2.1.1",
+    "@types/mime-types": "^3.0.0",
     "@types/prompts": "^2.4.2",
     "@types/semver": "^7.3.12",
     "@types/toposort": "^2.0.7",
+    "@types/unzipper": "^0.10.11",
     "@types/validator": "^13.7.6",
     "@vitest/coverage-v8": "^3.0.0",
     "@vitest/expect": "^3.0.0",
     "alex": "^11.0.0",
     "eslint": "^8.47.0",
     "husky": "^9.0.10",
-    "json-schema-to-ts": "^3.1.1",
     "knip": "^5.0.2",
     "nock": "^14.0.0",
     "oclif": "^4.15.12",
@@ -169,9 +176,11 @@
     "plugins": [
       "@oclif/plugin-autocomplete",
       "@oclif/plugin-help",
-      "@oclif/plugin-not-found",
+      "@oclif/plugin-plugins",
       "@oclif/plugin-warn-if-update-available"
     ],
+    "pluginPrefix": "rdme-plugin",
+    "scope": "readme",
     "topics": {
       "openapi": {
         "description": "Manage your API definition (e.g., syncing, validation, analysis, conversion, etc.). Supports OpenAPI, Swagger, and Postman collections, in either JSON or YAML formats."

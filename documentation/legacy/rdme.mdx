@@ -8,7 +8,8 @@ content:
     Action!
 ---
 
-<!--
+{/* prettier-ignore */}
+{/* <!--
 
 Hello curious raw Markdown reader! 👋
 This Markdown page is syncing to ReadMe via the `rdme` GitHub Action 🦉
@@ -18,23 +19,37 @@ We also do some fancy little find-and-replace action to swap out every instance
 of `RDME_VERSION` below with the latest version of rdme.
 Check out `.github/workflows/docs.yml` for more info on this!
 
--->
+--> \*/}
 
 [![rdme](https://user-images.githubusercontent.com/8854718/195465739-0f0f83d5-2e18-4e6c-96ae-944e3bb6880a.png)](https://readme.com)
 
 <p align="center">
-  <a href="https://readme.com">ReadMe</a>'s official command-line interface (CLI) and <a href="#github-actions-usage">GitHub Action</a> 🌊
+  <a href="https://readme.com">ReadMe</a>'s official command-line interface (CLI) and{' '}
+  <a href="#github-actions-usage">GitHub Action</a> 🌊
 </p>
 
 <p align="center">
-  <a href="https://npm.im/rdme"><img src="https://img.shields.io/npm/v/rdme?style=for-the-badge" alt="NPM Version"></a>
-  <a href="https://npm.im/rdme"><img src="https://img.shields.io/node/v/rdme?style=for-the-badge" alt="Node Version"></a>
-  <a href="https://npm.im/rdme"><img src="https://img.shields.io/npm/l/rdme?style=for-the-badge" alt="MIT License"></a>
-  <a href="https://github.com/readmeio/rdme"><img src="https://img.shields.io/github/actions/workflow/status/readmeio/rdme/ci.yml?branch=main&style=for-the-badge" alt="Build status"></a>
+  <a href="https://npm.im/rdme">
+    <img src="https://img.shields.io/npm/v/rdme?style=for-the-badge" alt="NPM Version" />
+  </a>
+  <a href="https://npm.im/rdme">
+    <img src="https://img.shields.io/node/v/rdme?style=for-the-badge" alt="Node Version" />
+  </a>
+  <a href="https://npm.im/rdme">
+    <img src="https://img.shields.io/npm/l/rdme?style=for-the-badge" alt="MIT License" />
+  </a>
+  <a href="https://github.com/readmeio/rdme">
+    <img
+      src="https://img.shields.io/github/actions/workflow/status/readmeio/rdme/ci.yml?branch=main&style=for-the-badge"
+      alt="Build status"
+    />
+  </a>
 </p>
 
 <p align="center">
-  <a href="https://readme.com"><img src="https://raw.githubusercontent.com/readmeio/.github/main/oss-badge.svg" /></a>
+  <a href="https://readme.com">
+    <img src="https://raw.githubusercontent.com/readmeio/.github/main/oss-badge.svg" />
+  </a>
 </p>
 
 If you're anything like us, your documentation process may be a part of a broader CI/CD process. For example, you may want to automatically update your Guides or API reference on ReadMe every time you ship new code. Enter `rdme`: ReadMe's official command-line interface (CLI) and GitHub Action!
@@ -53,7 +68,7 @@ To see detailed CLI setup instructions and all available commands, check out [th
 
 > 🚧 Deprecated Guidance
 >
-> This guidance is only applicable for projects that have yet to migrate to [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored), which requires `rdme@9`. You can find more info in [our `rdme` migration guide](https://github.com/readmeio/rdme/blob/next/documentation/migration-guide.md) or by reaching out to us at [support@readme.io](mailto:support@readme.io).
+> This guidance is only applicable for projects that are still on our legacy project architecture and have not yet migrated to [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored). The legacy project architecture requires `rdme@9`. You can find more info in [our `rdme` migration guide](https://github.com/readmeio/rdme/blob/v10/documentation/migration-guide.md) or by reaching out to us at [support@readme.io](mailto:support@readme.io).
 >
 > We will be updating this document with our latest guidance soon. Thanks for your patience!
 
@@ -143,7 +158,7 @@ While there are [dozens of event options available](https://docs.github.com/acti
 
 > 🚧 Deprecated Guidance
 >
-> This guidance is only applicable for projects that have yet to migrate to [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored), which requires `rdme@9`. You can find more info in [our `rdme` migration guide](https://github.com/readmeio/rdme/blob/next/documentation/migration-guide.md) or by reaching out to us at [support@readme.io](mailto:support@readme.io).
+> This guidance is only applicable for projects that are still on our legacy project architecture and have not yet migrated to [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored). The legacy project architecture requires `rdme@9`. You can find more info in [our `rdme` migration guide](https://github.com/readmeio/rdme/blob/v10/documentation/migration-guide.md) or by reaching out to us at [support@readme.io](mailto:support@readme.io).
 >
 > We will be updating this document with our latest guidance soon. Thanks for your patience!
 
@@ -223,7 +238,7 @@ The following section has links to full GitHub Actions workflow file examples.
 
 > 🚧 Deprecated Guidance
 >
-> This guidance is only applicable for projects that have yet to migrate to [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored), which requires `rdme@9`. You can find more info in [our `rdme` migration guide](https://github.com/readmeio/rdme/blob/next/documentation/migration-guide.md) or by reaching out to us at [support@readme.io](mailto:support@readme.io).
+> This guidance is only applicable for projects that are still on our legacy project architecture and have not yet migrated to [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored). The legacy project architecture requires `rdme@9`. You can find more info in [our `rdme` migration guide](https://github.com/readmeio/rdme/blob/v10/documentation/migration-guide.md) or by reaching out to us at [support@readme.io](mailto:support@readme.io).
 >
 > We will be updating this document with our latest guidance soon. Thanks for your patience!
 
@@ -236,13 +251,14 @@ Want to start syncing? We have several example workflow files available:
 
 Since `rdme` is a command-line tool at its core, you can use `rdme` to sync your documentation from virtually any CI/CD environment that runs shell commands—[Bitbucket Pipelines](https://support.atlassian.com/bitbucket-cloud/docs/get-started-with-bitbucket-pipelines/), [GitLab CI/CD](https://docs.gitlab.com/ee/ci/), you name it! You can do this by invoking `rdme` with `npx rdme@RDME_VERSION` in a Node.js environment. See below for several examples.
 
-<!--
+{/* prettier-ignore */}
+{/* <!--
 The two code blocks below must be joined (i.e. no newline in between) in order to render as tabbed code blocks in ReadMe.
 
 Unfortunately we need to ignore both code blocks entirely so Prettier doesn't separate them.
--->
+--> \*/}
 
-<!-- prettier-ignore-start -->
+{/* prettier-ignore-start */}
 ```yml Bitbucket Pipelines (bitbucket-pipelines.yml)
 # Official framework image. Look for the different tagged releases at:
 # https://hub.docker.com/r/library/node/tags/
@@ -282,7 +298,7 @@ node_js:
 
 script: npx rdme@RDME_VERSION openapi validate [url-or-local-path-to-file] --key=$README_API_KEY --id=API_DEFINITION_ID
 ```
-<!-- prettier-ignore-end -->
+{/* prettier-ignore-end */}
 
 If you notice any issues with any of these examples, please open up an issue on [the `rdme` repository on GitHub](https://github.com/readmeio/rdme).
 

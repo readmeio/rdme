@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "allowJs": true,
+    "declaration": true,
     "erasableSyntaxOnly": true,
     "lib": ["ES2022"],
     "module": "Node18",

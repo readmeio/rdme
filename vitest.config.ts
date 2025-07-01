@@ -31,5 +31,32 @@ export default defineConfig({
       ...configDefaults.exclude,
     ],
     globalSetup: '__tests__/helpers/global-setup.ts',
+    watchTriggerPatterns: [
+      {
+        pattern: /__tests__\/__fixtures__\/([A-z,-]+)\/([A-z,-/.]+)/g,
+        testsToRun: (_file, match) => {
+          const fixtureDirectory = match[1];
+          if (['docs', 'reference', 'changelog'].includes(fixtureDirectory)) {
+            if (fixtureDirectory === 'changelog') {
+              return '__tests__/commands/changelog/upload.test.ts';
+            }
+            return '__tests__/commands/page/upload.test.ts';
+          }
+
+          return null;
+        },
+      },
+      {
+        pattern: /__tests__\/__fixtures__\/([A-z,-]+)\/(.*).json/g,
+        testsToRun: (_file, match) => {
+          const fixtureDirectory = match[1];
+          if (fixtureDirectory === 'circular-ref-oas') {
+            return '__tests__/commands/openapi/resolve.test.ts';
+          }
+
+          return null;
+        },
+      },
+    ],
   },
 });

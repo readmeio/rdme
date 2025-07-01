@@ -1,0 +1,51 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Recursive Reference Example",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/example": {
+      "get": {
+        "summary": "Example endpoint with cyclic references",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ObjectB": {
+        "type": "object",
+        "properties": {
+          "test": {
+            "type": "string"
+          },
+          "relatedObject": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ObjectBRef"
+            }
+          }
+        }
+      },
+      "ObjectBRef": {
+        "type": "object",
+        "properties": {
+          "test": {
+            "type": "string"
+          },
+          "relatedObject": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -4,7 +4,8 @@ category:
   uri: documentation
 ---
 
-<!--
+{/* prettier-ignore */}
+{/*
 
 Hello curious raw Markdown reader! 👋
 This Markdown page is syncing to ReadMe via the `rdme` GitHub Action 🦉
@@ -14,11 +15,11 @@ We also do some fancy little find-and-replace action to swap out every instance
 of `RDME_VERSION` below with the latest version of rdme.
 Check out `.github/workflows/docs.yml` for more info on this!
 
--->
+\*/}
 
 > 🚧 Deprecated Guidance
 >
-> This example is only applicable for projects that have yet to migrate to [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored), which requires `rdme@9`. You can find more info in [our `rdme` migration guide](https://github.com/readmeio/rdme/blob/next/documentation/migration-guide.md) or by reaching out to us at [support@readme.io](mailto:support@readme.io).
+> This example is only applicable for projects that are still on our legacy project architecture and have not yet migrated to [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored). The legacy project architecture requires `rdme@9`. You can find more info in [our `rdme` migration guide](https://github.com/readmeio/rdme/blob/v10/documentation/migration-guide.md) or by reaching out to us at [support@readme.io](mailto:support@readme.io).
 >
 > We will be updating this document with our latest guidance soon. Thanks for your patience!
 
@@ -73,20 +74,9 @@ To update your OpenAPI definition, run the following:
 
 </details>
 
-We have a walkthrough video available which goes over the whole end-to-end process of obtaining the API definition ID and constructing the GitHub Actions workflow file:
+We have a walkthrough video available which goes over the whole end-to-end process of obtaining the API definition ID and constructing the GitHub Actions workflow file.
 
-<!--
-This is a custom HTML block that we use in ReadMe.
-We'll need this to render an iframe of the Loom video demo.
-Using our embedly-powered embed block renders an iframe that's way too tall, hence we're using HTML.
-You can see the video here: https://www.loom.com/share/e32c20a9dc2f4eeeab42d0c18ba24478
--->
-
-[block:html]
-{
-"html": "<div style=\"position: relative; padding-bottom: 62.5%; height: 0;\"><iframe src=\"https://www.loom.com/embed/e32c20a9dc2f4eeeab42d0c18ba24478\" frameborder=\"0\" webkitallowfullscreen mozallowfullscreen allowfullscreen style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%;\"></iframe></div>"
-}
-[/block]
+You can find the video here: [https://www.loom.com/share/e32c20a9dc2f4eeeab42d0c18ba24478](https://www.loom.com/share/e32c20a9dc2f4eeeab42d0c18ba24478).
 
 Once you've obtained your API definition ID (let's call it `API_DEFINITION_ID`), your full GitHub Workflow file will look something like this:
 

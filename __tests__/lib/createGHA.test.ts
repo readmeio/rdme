@@ -9,10 +9,10 @@ import prompts from 'prompts';
 import { describe, beforeEach, afterEach, it, expect, vi, type MockInstance, beforeAll } from 'vitest';
 
 import configstore from '../../src/lib/configstore.js';
-import { getConfigStoreKey, getGHAFileName, git } from '../../src/lib/createGHA/index.js';
+import { getConfigStoreKey, getGHAFileName } from '../../src/lib/createGHA/index.js';
 import { getMajorPkgVersion } from '../../src/lib/getPkg.js';
-import { after, before } from '../helpers/get-gha-setup.js';
-import getGitRemoteMock from '../helpers/get-git-mock.js';
+import { git } from '../../src/lib/git.js';
+import { getGitRemoteMock, gitMock } from '../helpers/git-mock.js';
 import ghaWorkflowSchema from '../helpers/github-workflow-schema.json' with { type: 'json' };
 import { setupOclifConfig } from '../helpers/oclif.js';
 import { toBeValidSchema } from '../helpers/vitest.matchers.js';
@@ -36,13 +36,13 @@ describe('#createGHA', () => {
     consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     oclifConfig = await setupOclifConfig();
 
-    before((fileName, data) => {
+    gitMock.before((fileName, data) => {
       yamlOutput = data;
     });
   });
 
   afterEach(() => {
-    after();
+    gitMock.after();
 
     consoleInfoSpy.mockRestore();
     process.chdir(testWorkingDir);

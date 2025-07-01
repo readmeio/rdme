@@ -9,11 +9,20 @@ import chalk from 'chalk';
 import debugPkg from 'debug';
 
 import { isGHA, isTest } from './isCI.js';
-import { handleAPIv2Res, readmeAPIv2Fetch } from './readmeAPIFetch.js';
+import { info } from './logger.js';
+import { handleAPIv2Res, readmeAPIv2Fetch, type ResponseBody } from './readmeAPIFetch.js';
 
 type Flags<T extends typeof OclifCommand> = Interfaces.InferredFlags<(typeof BaseCommand)['baseFlags'] & T['flags']>;
 type Args<T extends typeof OclifCommand> = Interfaces.InferredArgs<T['args']>;
 
+/**
+ * This is a light wrapper around the oclif command class that adds some
+ * additional functionality and standardizes the way we handle logging, error handling,
+ * and API requests.
+ *
+ * @note This class is not meant to be used directly, but rather as a base class for other commands.
+ * It is also experimental and may change in the future.
+ */
 export default abstract class BaseCommand<T extends typeof OclifCommand> extends OclifCommand {
   constructor(argv: string[], config: Config) {
     super(argv, config);
@@ -43,6 +52,12 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
   // we need the declare statement here since `debug` is a
   // protected property in the base oclif class
   declare debug: (...args: unknown[]) => void;
+
+  protected info(input: Parameters<typeof info>[0], opts: Parameters<typeof info>[1]): void {
+    if (!this.jsonEnabled()) {
+      info(input, opts);
+    }
+  }
 
   protected async catch(err: Error & { exitCode?: number }) {
     if (isTest()) {
@@ -116,8 +131,8 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
   /**
    * Wrapper around `handleAPIv2Res` that binds the context of the class to the function.
    */
-  public async handleAPIRes(...args: Parameters<typeof handleAPIv2Res>) {
-    return handleAPIv2Res.call(this, ...args);
+  public async handleAPIRes<R extends ResponseBody = ResponseBody>(...args: Parameters<typeof handleAPIv2Res>) {
+    return handleAPIv2Res.call(this, ...args) as Promise<R>;
   }
 
   /**

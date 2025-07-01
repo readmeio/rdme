@@ -1,5 +1,15 @@
 import { Args, Flags } from '@oclif/core';
 
+export const branchFlag = (additionalDescription: string[] = []) => ({
+  branch: Flags.string({
+    aliases: ['version'],
+    default: 'stable',
+    deprecateAliases: true,
+    description: ['Defaults to `stable` (i.e., your main project version).'].concat(additionalDescription).join(' '),
+    summary: 'ReadMe project version',
+  }),
+});
+
 /**
  * Used in any command where `github` is a `flag.
  */

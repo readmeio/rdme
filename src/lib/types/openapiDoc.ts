@@ -4,7 +4,7 @@ import type { OASDocument } from 'oas/types';
  * This is a snapshot of the OpenAPI description for ReadMe APIv2.
  *
  * This is used both for typechecking as well as for runtime validation.
- * We use  ajv to validate the user data against schemas in this document.
+ * We use ajv to validate the user data against schemas in this document.
  *
  * @see {@link https://docs.readme.com/main/openapi/readme-api-v2-beta.json}
  */
@@ -14,8 +14,7 @@ const document = {
     description: 'Create beautiful product and API documentation with our developer friendly platform.',
     version: '2.0.0-beta',
     title: 'ReadMe API v2 🦉 (BETA)',
-    // @ts-expect-error custom extension
-    'x-readme-deploy': '5.298.0',
+    'x-readme-deploy': '5.395.0',
     termsOfService: 'https://readme.com/tos',
     contact: {
       name: 'API Support',
@@ -34,20 +33,346 @@ const document = {
     schemas: {},
   },
   paths: {
-    '/versions/{version}/apis': {
+    '/projects/{subdomain}/apikeys': {
+      post: {
+        operationId: 'createAPIKey',
+        summary: 'Create an API key',
+        tags: ['API Keys'],
+        description:
+          "Create an API key for your ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: { label: { allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }] } },
+                required: ['label'],
+                additionalProperties: false,
+              },
+            },
+          },
+          required: true,
+        },
+        parameters: [
+          {
+            schema: { type: 'string', pattern: '(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)', maxLength: 30 },
+            in: 'path',
+            name: 'subdomain',
+            required: true,
+            description: 'The subdomain of your project.',
+          },
+        ],
+        responses: {
+          '201': {
+            description: 'Created',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    data: {
+                      type: 'object',
+                      properties: {
+                        token: { type: 'string', pattern: 'rdme_\\w+' },
+                        label: { type: 'string', nullable: true },
+                        last_accessed_on: {
+                          type: 'string',
+                          format: 'date-time',
+                          nullable: true,
+                          description: 'An ISO 8601 formatted date for when the API key was last accessed.',
+                        },
+                        created_at: {
+                          type: 'string',
+                          format: 'date-time',
+                          description: 'An ISO 8601 formatted date for when the API key was created.',
+                        },
+                        uri: {
+                          type: 'string',
+                          pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)\\/apikeys\\/[a-f\\d]{24}',
+                        },
+                      },
+                      required: ['token', 'label', 'last_accessed_on', 'created_at', 'uri'],
+                      additionalProperties: false,
+                    },
+                  },
+                  required: ['data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      get: {
+        operationId: 'getAPIKeys',
+        summary: 'Get your API keys',
+        tags: ['API Keys'],
+        description:
+          "Get the API keys for your ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        parameters: [
+          {
+            schema: { type: 'number', minimum: 1, default: 1 },
+            in: 'query',
+            name: 'page',
+            required: false,
+            description: 'Used to specify further pages (starts at 1).',
+          },
+          {
+            schema: { type: 'number', minimum: 1, maximum: 100, default: 10 },
+            in: 'query',
+            name: 'per_page',
+            required: false,
+            description: 'Number of items to include in pagination (up to 100, defaults to 10).',
+          },
+          {
+            schema: { type: 'string', pattern: '(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)', maxLength: 30 },
+            in: 'path',
+            name: 'subdomain',
+            required: true,
+            description: 'The subdomain of your project.',
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    total: { type: 'number' },
+                    page: { type: 'number' },
+                    per_page: { type: 'number' },
+                    paging: {
+                      type: 'object',
+                      properties: {
+                        next: { type: 'string', nullable: true },
+                        previous: { type: 'string', nullable: true },
+                        first: { type: 'string', nullable: true },
+                        last: { type: 'string', nullable: true },
+                      },
+                      required: ['next', 'previous', 'first', 'last'],
+                      additionalProperties: false,
+                    },
+                    data: {
+                      type: 'array',
+                      items: {
+                        type: 'object',
+                        properties: {
+                          token: { type: 'string', pattern: 'rdme_\\w+' },
+                          label: { type: 'string', nullable: true },
+                          last_accessed_on: {
+                            type: 'string',
+                            format: 'date-time',
+                            nullable: true,
+                            description: 'An ISO 8601 formatted date for when the API key was last accessed.',
+                          },
+                          created_at: {
+                            type: 'string',
+                            format: 'date-time',
+                            description: 'An ISO 8601 formatted date for when the API key was created.',
+                          },
+                          uri: {
+                            type: 'string',
+                            pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)\\/apikeys\\/[a-f\\d]{24}',
+                          },
+                        },
+                        required: ['token', 'label', 'last_accessed_on', 'created_at', 'uri'],
+                        additionalProperties: false,
+                      },
+                    },
+                  },
+                  required: ['total', 'page', 'per_page', 'paging', 'data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/projects/{subdomain}/apikeys/{api_key_id}': {
+      delete: {
+        operationId: 'deleteAPIKey',
+        summary: 'Delete an API key',
+        tags: ['API Keys'],
+        description:
+          "Delete an API key from your ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        parameters: [
+          {
+            schema: { type: 'string', pattern: '[a-f\\d]{24}' },
+            in: 'path',
+            name: 'api_key_id',
+            required: true,
+            description: 'The unique identifier for your API key.',
+          },
+          {
+            schema: { type: 'string', pattern: '(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)', maxLength: 30 },
+            in: 'path',
+            name: 'subdomain',
+            required: true,
+            description: 'The subdomain of your project.',
+          },
+        ],
+        responses: { '204': { description: 'No Content' } },
+      },
+      get: {
+        operationId: 'getAPIKey',
+        summary: 'Get an API key',
+        tags: ['API Keys'],
+        description:
+          "Get an API key for your ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        parameters: [
+          {
+            schema: { type: 'string', pattern: '[a-f\\d]{24}' },
+            in: 'path',
+            name: 'api_key_id',
+            required: true,
+            description: 'The unique identifier for your API key.',
+          },
+          {
+            schema: { type: 'string', pattern: '(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)', maxLength: 30 },
+            in: 'path',
+            name: 'subdomain',
+            required: true,
+            description: 'The subdomain of your project.',
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    data: {
+                      type: 'object',
+                      properties: {
+                        token: { type: 'string', pattern: 'rdme_\\w+' },
+                        label: { type: 'string', nullable: true },
+                        last_accessed_on: {
+                          type: 'string',
+                          format: 'date-time',
+                          nullable: true,
+                          description: 'An ISO 8601 formatted date for when the API key was last accessed.',
+                        },
+                        created_at: {
+                          type: 'string',
+                          format: 'date-time',
+                          description: 'An ISO 8601 formatted date for when the API key was created.',
+                        },
+                        uri: {
+                          type: 'string',
+                          pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)\\/apikeys\\/[a-f\\d]{24}',
+                        },
+                      },
+                      required: ['token', 'label', 'last_accessed_on', 'created_at', 'uri'],
+                      additionalProperties: false,
+                    },
+                  },
+                  required: ['data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      patch: {
+        operationId: 'updateAPIKey',
+        summary: 'Update an API key',
+        tags: ['API Keys'],
+        description:
+          "Update an API key on your ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: { label: { allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }] } },
+                required: ['label'],
+                additionalProperties: false,
+              },
+            },
+          },
+          required: true,
+        },
+        parameters: [
+          {
+            schema: { type: 'string', pattern: '[a-f\\d]{24}' },
+            in: 'path',
+            name: 'api_key_id',
+            required: true,
+            description: 'The unique identifier for your API key.',
+          },
+          {
+            schema: { type: 'string', pattern: '(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)', maxLength: 30 },
+            in: 'path',
+            name: 'subdomain',
+            required: true,
+            description: 'The subdomain of your project.',
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    data: {
+                      type: 'object',
+                      properties: {
+                        token: { type: 'string', pattern: 'rdme_\\w+' },
+                        label: { type: 'string', nullable: true },
+                        last_accessed_on: {
+                          type: 'string',
+                          format: 'date-time',
+                          nullable: true,
+                          description: 'An ISO 8601 formatted date for when the API key was last accessed.',
+                        },
+                        created_at: {
+                          type: 'string',
+                          format: 'date-time',
+                          description: 'An ISO 8601 formatted date for when the API key was created.',
+                        },
+                        uri: {
+                          type: 'string',
+                          pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)\\/apikeys\\/[a-f\\d]{24}',
+                        },
+                      },
+                      required: ['token', 'label', 'last_accessed_on', 'created_at', 'uri'],
+                      additionalProperties: false,
+                    },
+                  },
+                  required: ['data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/branches/{branch}/apis': {
       get: {
         operationId: 'getAPIs',
         summary: 'Get all API definitions',
         tags: ['APIs'],
         description:
-          "Get all API definitions from your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Get all API definitions from your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or stable.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
         ],
         responses: {
@@ -73,16 +398,43 @@ const document = {
                             type: 'string',
                             description: 'This is the unique identifier, its filename, for the API definition.',
                           },
+                          legacy_id: {
+                            type: 'string',
+                            pattern: '[a-f\\d]{24}',
+                            nullable: true,
+                            description:
+                              'The legacy ID of your API definition. This is only used for legacy rdme CLI workflows and only applies if your project, and this API definition, predates ReadMe Refactored. We consider this value to be deprecated and recommend against relying on it going forward.',
+                          },
                           source: {
                             type: 'object',
                             properties: {
                               current: {
                                 type: 'string',
-                                enum: ['api', 'apidesigner', 'apieditor', 'bidi', 'form', 'rdme', 'rdme_github', 'url'],
+                                enum: [
+                                  'api',
+                                  'apidesigner',
+                                  'apieditor',
+                                  'bidi',
+                                  'form',
+                                  'postman',
+                                  'rdme',
+                                  'rdme_github',
+                                  'url',
+                                ],
                               },
                               original: {
                                 type: 'string',
-                                enum: ['api', 'apidesigner', 'apieditor', 'bidi', 'form', 'rdme', 'rdme_github', 'url'],
+                                enum: [
+                                  'api',
+                                  'apidesigner',
+                                  'apieditor',
+                                  'bidi',
+                                  'form',
+                                  'postman',
+                                  'rdme',
+                                  'rdme_github',
+                                  'url',
+                                ],
                               },
                             },
                             required: ['current', 'original'],
@@ -111,20 +463,35 @@ const document = {
                               reason: {
                                 type: 'string',
                                 nullable: true,
-                                description: 'The reason for the upload failure (if it failed).',
+                                description: 'The reason for the upload failure if it failed.',
+                              },
+                              warnings: {
+                                type: 'string',
+                                nullable: true,
+                                description:
+                                  'Any fixable warnings that may exist within the API definition if the upload was ingested without errors.',
                               },
                             },
-                            required: ['status', 'reason'],
+                            required: ['status', 'reason', 'warnings'],
                             additionalProperties: false,
                           },
                           uri: {
                             type: 'string',
                             pattern:
-                              '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
+                              '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
                             description: 'A URI to the API definition resource.',
                           },
                         },
-                        required: ['created_at', 'filename', 'source', 'type', 'updated_at', 'upload', 'uri'],
+                        required: [
+                          'created_at',
+                          'filename',
+                          'legacy_id',
+                          'source',
+                          'type',
+                          'updated_at',
+                          'upload',
+                          'uri',
+                        ],
                         additionalProperties: false,
                       },
                     },
@@ -142,7 +509,7 @@ const document = {
         summary: 'Create an API definition',
         tags: ['APIs'],
         description:
-          "Create an API definition in the API Reference section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Create an API definition in the API Reference section of your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         requestBody: {
           content: {
             'multipart/form-data': {
@@ -163,11 +530,14 @@ const document = {
         },
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or stable.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
         ],
         responses: {
@@ -196,7 +566,7 @@ const document = {
                         uri: {
                           type: 'string',
                           pattern:
-                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
+                            '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
                           description: 'A URI to the API definition resource.',
                         },
                       },
@@ -213,13 +583,13 @@ const document = {
         },
       },
     },
-    '/versions/{version}/apis/{filename}': {
+    '/branches/{branch}/apis/{filename}': {
       get: {
         operationId: 'getAPI',
         summary: 'Get an API definition',
         tags: ['APIs'],
         description:
-          "Get an API definition from your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Get an API definition from your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
             schema: { type: 'string', pattern: '(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml))' },
@@ -229,11 +599,14 @@ const document = {
             description: 'The filename of the API definition to retrieve.',
           },
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or stable.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
         ],
         responses: {
@@ -256,16 +629,43 @@ const document = {
                           type: 'string',
                           description: 'This is the unique identifier, its filename, for the API definition.',
                         },
+                        legacy_id: {
+                          type: 'string',
+                          pattern: '[a-f\\d]{24}',
+                          nullable: true,
+                          description:
+                            'The legacy ID of your API definition. This is only used for legacy rdme CLI workflows and only applies if your project, and this API definition, predates ReadMe Refactored. We consider this value to be deprecated and recommend against relying on it going forward.',
+                        },
                         source: {
                           type: 'object',
                           properties: {
                             current: {
                               type: 'string',
-                              enum: ['api', 'apidesigner', 'apieditor', 'bidi', 'form', 'rdme', 'rdme_github', 'url'],
+                              enum: [
+                                'api',
+                                'apidesigner',
+                                'apieditor',
+                                'bidi',
+                                'form',
+                                'postman',
+                                'rdme',
+                                'rdme_github',
+                                'url',
+                              ],
                             },
                             original: {
                               type: 'string',
-                              enum: ['api', 'apidesigner', 'apieditor', 'bidi', 'form', 'rdme', 'rdme_github', 'url'],
+                              enum: [
+                                'api',
+                                'apidesigner',
+                                'apieditor',
+                                'bidi',
+                                'form',
+                                'postman',
+                                'rdme',
+                                'rdme_github',
+                                'url',
+                              ],
                             },
                           },
                           required: ['current', 'original'],
@@ -294,21 +694,36 @@ const document = {
                             reason: {
                               type: 'string',
                               nullable: true,
-                              description: 'The reason for the upload failure (if it failed).',
+                              description: 'The reason for the upload failure if it failed.',
+                            },
+                            warnings: {
+                              type: 'string',
+                              nullable: true,
+                              description:
+                                'Any fixable warnings that may exist within the API definition if the upload was ingested without errors.',
                             },
                           },
-                          required: ['status', 'reason'],
+                          required: ['status', 'reason', 'warnings'],
                           additionalProperties: false,
                         },
                         uri: {
                           type: 'string',
                           pattern:
-                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
+                            '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
                           description: 'A URI to the API definition resource.',
                         },
                         schema: { type: 'object', additionalProperties: {}, description: 'The API schema.' },
                       },
-                      required: ['created_at', 'filename', 'source', 'type', 'updated_at', 'upload', 'uri', 'schema'],
+                      required: [
+                        'created_at',
+                        'filename',
+                        'legacy_id',
+                        'source',
+                        'type',
+                        'updated_at',
+                        'upload',
+                        'uri',
+                      ],
                       additionalProperties: false,
                     },
                   },
@@ -325,7 +740,7 @@ const document = {
         summary: 'Delete an API definition',
         tags: ['APIs'],
         description:
-          "Delete an API definition from the API Reference section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Delete an API definition from the API Reference section of your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
             schema: { type: 'string', pattern: '(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml))' },
@@ -335,11 +750,14 @@ const document = {
             description: 'The filename of the API definition to retrieve.',
           },
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or stable.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
         ],
         responses: { '204': { description: 'No Content' } },
@@ -349,7 +767,7 @@ const document = {
         summary: 'Update an API definition',
         tags: ['APIs'],
         description:
-          "Updates an API definition in the API Reference section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Updates an API definition in the API Reference section of your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         requestBody: {
           content: {
             'multipart/form-data': {
@@ -377,11 +795,14 @@ const document = {
             description: 'The filename of the API definition to retrieve.',
           },
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or stable.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
         ],
         responses: {
@@ -410,7 +831,7 @@ const document = {
                         uri: {
                           type: 'string',
                           pattern:
-                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
+                            '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
                           description: 'A URI to the API definition resource.',
                         },
                       },
@@ -427,13 +848,832 @@ const document = {
         },
       },
     },
+    '/apply': {
+      get: {
+        operationId: 'getOpenRoles',
+        summary: 'Get open roles',
+        tags: ['Apply to ReadMe'],
+        description:
+          "Returns all the roles we're hiring for at ReadMe!\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        security: [],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    total: { type: 'number' },
+                    data: {
+                      type: 'array',
+                      items: {
+                        type: 'object',
+                        properties: {
+                          slug: { type: 'string' },
+                          title: { type: 'string' },
+                          description: {
+                            type: 'string',
+                            description: 'The description for this open position. This content is formatted as HTML.',
+                          },
+                          pullquote: { type: 'string', description: 'A short pullquote for the open position.' },
+                          location: { type: 'string', description: 'Where this position is located at.' },
+                          department: {
+                            type: 'string',
+                            description: "The internal organization you'll be working in.",
+                          },
+                          url: {
+                            type: 'string',
+                            format: 'uri',
+                            description: 'The place where you can apply for the position!',
+                          },
+                        },
+                        required: ['slug', 'title', 'description', 'pullquote', 'location', 'department', 'url'],
+                        additionalProperties: false,
+                      },
+                    },
+                  },
+                  required: ['total', 'data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      post: {
+        operationId: 'applyToReadMe',
+        summary: 'Submit your application!',
+        tags: ['Apply to ReadMe'],
+        description:
+          "This endpoint will let you apply to a job at ReadMe programatically, without having to go through our UI!\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  name: { type: 'string', minLength: 1, description: 'Your full name' },
+                  email: {
+                    type: 'string',
+                    format: 'email',
+                    default: 'you@example.com',
+                    description: 'A valid email we can reach you at.',
+                  },
+                  job: {
+                    type: 'string',
+                    description: "The job you're looking to apply for (https://readme.com/careers).",
+                  },
+                  pronouns: { type: 'string', description: 'Learn more at https://lgbtlifecenter.org/pronouns/' },
+                  linkedin: {
+                    type: 'string',
+                    format: 'uri',
+                    description: 'What have you been up to the past few years?',
+                  },
+                  github: {
+                    type: 'string',
+                    format: 'uri',
+                    description: 'Or Bitbucket, GitLab or anywhere else your code is hosted!',
+                  },
+                  coverLetter: { type: 'string', description: 'What should we know about you?' },
+                  dont_really_apply: {
+                    type: 'boolean',
+                    default: false,
+                    description: 'If you set this to true, we will not actually apply you to the job.',
+                  },
+                },
+                required: ['name', 'job'],
+                additionalProperties: false,
+              },
+            },
+          },
+          required: true,
+        },
+        security: [],
+        responses: {
+          '201': {
+            description: 'Created',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    message: { type: 'string' },
+                    keyvalues: { type: 'string' },
+                    careers: { type: 'string' },
+                    'questions?': { type: 'string' },
+                    poem: { type: 'array', items: { type: 'string' } },
+                  },
+                  required: ['message', 'keyvalues', 'careers', 'questions?', 'poem'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/branches/{branch}/categories': {
+      post: {
+        operationId: 'createCategory',
+        summary: 'Create a category',
+        tags: ['Categories'],
+        description:
+          "Create a category in your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  title: { type: 'string', description: "The category's name." },
+                  section: {
+                    type: 'string',
+                    enum: ['guide', 'reference'],
+                    default: 'guide',
+                    description: 'The section of your documentation where the category resides.',
+                  },
+                },
+                required: ['title'],
+                additionalProperties: false,
+              },
+            },
+          },
+          required: true,
+        },
+        parameters: [
+          {
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
+            in: 'path',
+            name: 'branch',
+            required: true,
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
+          },
+        ],
+        responses: {
+          '201': {
+            description: 'Created',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    data: {
+                      type: 'object',
+                      properties: {
+                        title: { type: 'string', description: "The category's name." },
+                        section: {
+                          type: 'string',
+                          enum: ['guide', 'reference'],
+                          default: 'guide',
+                          description: 'The section of your documentation where the category resides.',
+                        },
+                        links: {
+                          type: 'object',
+                          properties: {
+                            project: {
+                              type: 'string',
+                              pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)',
+                              description: 'A URI to the project that this category belongs to.',
+                            },
+                          },
+                          required: ['project'],
+                          additionalProperties: false,
+                        },
+                        uri: {
+                          type: 'string',
+                          pattern:
+                            '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/categories\\/(guides|reference)\\/((.*))',
+                          description: 'A URI to the category resource.',
+                        },
+                      },
+                      required: ['title', 'links', 'uri'],
+                      additionalProperties: false,
+                    },
+                  },
+                  required: ['data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/branches/{branch}/categories/{section}': {
+      get: {
+        operationId: 'getCategories',
+        summary: 'Get all categories',
+        tags: ['Categories'],
+        description:
+          "Get all categories within a section of your ReadMe project.\n\nThe sorting of this data is dependent upon the order of the categories in your sidebar.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        parameters: [
+          {
+            schema: { type: 'string', enum: ['guides', 'reference'] },
+            in: 'path',
+            name: 'section',
+            required: true,
+            description: 'The section of your documentation to get categories from.',
+          },
+          {
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
+            in: 'path',
+            name: 'branch',
+            required: true,
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    total: { type: 'number' },
+                    data: {
+                      type: 'array',
+                      items: {
+                        type: 'object',
+                        properties: {
+                          title: { type: 'string', description: "The category's name." },
+                          section: {
+                            type: 'string',
+                            enum: ['guide', 'reference'],
+                            default: 'guide',
+                            description: 'The section of your documentation where the category resides.',
+                          },
+                          links: {
+                            type: 'object',
+                            properties: {
+                              project: {
+                                type: 'string',
+                                pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)',
+                                description: 'A URI to the project that this category belongs to.',
+                              },
+                            },
+                            required: ['project'],
+                            additionalProperties: false,
+                          },
+                          uri: {
+                            type: 'string',
+                            pattern:
+                              '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/categories\\/(guides|reference)\\/((.*))',
+                            description: 'A URI to the category resource.',
+                          },
+                        },
+                        required: ['title', 'links', 'uri'],
+                        additionalProperties: false,
+                      },
+                    },
+                  },
+                  required: ['total', 'data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/branches/{branch}/categories/{section}/{title}': {
+      get: {
+        operationId: 'getCategory',
+        summary: 'Get a category',
+        tags: ['Categories'],
+        description:
+          "Get a category in your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        parameters: [
+          {
+            schema: { type: 'string', enum: ['guides', 'reference'], default: 'guides' },
+            in: 'path',
+            name: 'section',
+            required: true,
+            description: 'The section of your documentation where the category resides.',
+          },
+          {
+            schema: { type: 'string' },
+            in: 'path',
+            name: 'title',
+            required: true,
+            description: "The category's name.",
+          },
+          {
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
+            in: 'path',
+            name: 'branch',
+            required: true,
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    data: {
+                      type: 'object',
+                      properties: {
+                        title: { type: 'string', description: "The category's name." },
+                        section: {
+                          type: 'string',
+                          enum: ['guide', 'reference'],
+                          default: 'guide',
+                          description: 'The section of your documentation where the category resides.',
+                        },
+                        links: {
+                          type: 'object',
+                          properties: {
+                            project: {
+                              type: 'string',
+                              pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)',
+                              description: 'A URI to the project that this category belongs to.',
+                            },
+                          },
+                          required: ['project'],
+                          additionalProperties: false,
+                        },
+                        uri: {
+                          type: 'string',
+                          pattern:
+                            '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/categories\\/(guides|reference)\\/((.*))',
+                          description: 'A URI to the category resource.',
+                        },
+                      },
+                      required: ['title', 'links', 'uri'],
+                      additionalProperties: false,
+                    },
+                  },
+                  required: ['data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      delete: {
+        operationId: 'deleteCategory',
+        summary: 'Delete a category',
+        tags: ['Categories'],
+        description:
+          "Delete a category from your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        parameters: [
+          {
+            schema: { type: 'string', enum: ['guides', 'reference'], default: 'guides' },
+            in: 'path',
+            name: 'section',
+            required: true,
+            description: 'The section of your documentation where the category resides.',
+          },
+          {
+            schema: { type: 'string' },
+            in: 'path',
+            name: 'title',
+            required: true,
+            description: "The category's name.",
+          },
+          {
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
+            in: 'path',
+            name: 'branch',
+            required: true,
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
+          },
+        ],
+        responses: { '204': { description: 'No Content' } },
+      },
+      patch: {
+        operationId: 'updateCategory',
+        summary: 'Update a category',
+        tags: ['Categories'],
+        description:
+          "Update an existing category in your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  title: { type: 'string', description: "The category's name." },
+                  section: {
+                    type: 'string',
+                    enum: ['guide', 'reference'],
+                    default: 'guide',
+                    description: 'The section of your documentation where the category resides.',
+                  },
+                  position: { type: 'number', description: "The position of the category in your project's sidebar." },
+                },
+                additionalProperties: false,
+              },
+            },
+          },
+        },
+        parameters: [
+          {
+            schema: { type: 'string', enum: ['guides', 'reference'], default: 'guides' },
+            in: 'path',
+            name: 'section',
+            required: true,
+            description: 'The section of your documentation where the category resides.',
+          },
+          {
+            schema: { type: 'string' },
+            in: 'path',
+            name: 'title',
+            required: true,
+            description: "The category's name.",
+          },
+          {
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
+            in: 'path',
+            name: 'branch',
+            required: true,
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    data: {
+                      type: 'object',
+                      properties: {
+                        title: { type: 'string', description: "The category's name." },
+                        section: {
+                          type: 'string',
+                          enum: ['guide', 'reference'],
+                          default: 'guide',
+                          description: 'The section of your documentation where the category resides.',
+                        },
+                        links: {
+                          type: 'object',
+                          properties: {
+                            project: {
+                              type: 'string',
+                              pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)',
+                              description: 'A URI to the project that this category belongs to.',
+                            },
+                          },
+                          required: ['project'],
+                          additionalProperties: false,
+                        },
+                        uri: {
+                          type: 'string',
+                          pattern:
+                            '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/categories\\/(guides|reference)\\/((.*))',
+                          description: 'A URI to the category resource.',
+                        },
+                      },
+                      required: ['title', 'links', 'uri'],
+                      additionalProperties: false,
+                    },
+                  },
+                  required: ['data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/branches/{branch}/categories/{section}/{title}/pages': {
+      get: {
+        operationId: 'getCategoryPages',
+        summary: 'Get the pages within a category',
+        tags: ['Categories'],
+        description:
+          "Get a pages that exist within a category in your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        parameters: [
+          {
+            schema: { type: 'string', enum: ['guides', 'reference'], default: 'guides' },
+            in: 'path',
+            name: 'section',
+            required: true,
+            description: 'The section of your documentation where the category resides.',
+          },
+          {
+            schema: { type: 'string' },
+            in: 'path',
+            name: 'title',
+            required: true,
+            description: "The category's name.",
+          },
+          {
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
+            in: 'path',
+            name: 'branch',
+            required: true,
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    total: { type: 'number' },
+                    data: {
+                      type: 'array',
+                      items: {
+                        type: 'object',
+                        properties: {
+                          category: {
+                            type: 'object',
+                            properties: {
+                              uri: {
+                                type: 'string',
+                                pattern:
+                                  '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/categories\\/(guides|reference)\\/((.*))',
+                                description: 'A URI to the category resource.',
+                              },
+                            },
+                            required: ['uri'],
+                            additionalProperties: false,
+                          },
+                          parent: {
+                            type: 'object',
+                            properties: {
+                              uri: {
+                                type: 'string',
+                                pattern:
+                                  '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                                nullable: true,
+                                description: 'A URI to the parent page resource including the page ID or slug.',
+                              },
+                            },
+                            required: ['uri'],
+                            additionalProperties: false,
+                          },
+                          slug: {
+                            allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
+                            description: 'The accessible URL slug for the page.',
+                          },
+                          title: { type: 'string' },
+                          updated_at: {
+                            type: 'string',
+                            format: 'date-time',
+                            description: 'An ISO 8601 formatted date for when the page was updated.',
+                          },
+                          uri: {
+                            type: 'string',
+                            pattern:
+                              '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                            description: 'A URI to the page resource.',
+                          },
+                        },
+                        required: ['category', 'parent', 'slug', 'title', 'updated_at', 'uri'],
+                        additionalProperties: false,
+                      },
+                    },
+                  },
+                  required: ['total', 'data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
     '/changelogs': {
+      post: {
+        operationId: 'createChangelog',
+        summary: 'Create a changelog entry',
+        tags: ['Changelog'],
+        description:
+          "Create a new changelog entry in your ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  author: {
+                    type: 'object',
+                    properties: { id: { type: 'string', nullable: true } },
+                    additionalProperties: false,
+                  },
+                  content: {
+                    type: 'object',
+                    properties: { body: { type: 'string', nullable: true } },
+                    additionalProperties: false,
+                  },
+                  created_at: {
+                    type: 'string',
+                    format: 'date-time',
+                    description: 'An ISO 8601 formatted date for when the changelog was created.',
+                  },
+                  metadata: {
+                    type: 'object',
+                    properties: {
+                      description: { type: 'string', nullable: true },
+                      image: {
+                        type: 'object',
+                        properties: {
+                          uri: { type: 'string', pattern: '\\/images\\/([a-f\\d]{24})', nullable: true },
+                          url: { type: 'string', format: 'uri', nullable: true },
+                        },
+                        additionalProperties: false,
+                      },
+                      keywords: { type: 'string', nullable: true },
+                      title: { type: 'string', nullable: true },
+                    },
+                    additionalProperties: false,
+                  },
+                  privacy: {
+                    type: 'object',
+                    properties: {
+                      view: {
+                        type: 'string',
+                        enum: ['public', 'anyone_with_link'],
+                        default: 'anyone_with_link',
+                        description: 'The visibility of this changelog.',
+                      },
+                    },
+                    additionalProperties: false,
+                  },
+                  slug: { type: 'string' },
+                  title: { type: 'string' },
+                  type: {
+                    type: 'string',
+                    enum: ['none', 'added', 'fixed', 'improved', 'deprecated', 'removed'],
+                    default: 'none',
+                    description: 'The type of changelog that this is.',
+                  },
+                },
+                required: ['title'],
+                additionalProperties: false,
+              },
+            },
+          },
+          required: true,
+        },
+        responses: {
+          '201': {
+            description: 'Created',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    data: {
+                      type: 'object',
+                      properties: {
+                        author: {
+                          type: 'object',
+                          properties: {
+                            id: { type: 'string', nullable: true, description: 'User ID of the changelog author.' },
+                            name: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'Full name of the user who created the changelog.',
+                            },
+                          },
+                          required: ['id', 'name'],
+                          additionalProperties: false,
+                        },
+                        content: {
+                          type: 'object',
+                          properties: { body: { type: 'string', nullable: true } },
+                          required: ['body'],
+                          additionalProperties: false,
+                        },
+                        created_at: {
+                          type: 'string',
+                          format: 'date-time',
+                          description: 'An ISO 8601 formatted date for when the changelog was created.',
+                        },
+                        metadata: {
+                          type: 'object',
+                          properties: {
+                            description: { type: 'string', nullable: true },
+                            image: {
+                              type: 'object',
+                              properties: {
+                                uri: {
+                                  type: 'string',
+                                  pattern: '\\/images\\/([a-f\\d]{24})',
+                                  nullable: true,
+                                  description:
+                                    'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
+                                },
+                                url: { type: 'string', format: 'uri', nullable: true },
+                              },
+                              required: ['uri', 'url'],
+                              additionalProperties: false,
+                            },
+                            keywords: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'A comma-separated list of keywords to place into your changelog metadata.',
+                            },
+                            title: { type: 'string', nullable: true },
+                          },
+                          required: ['description', 'image', 'keywords', 'title'],
+                          additionalProperties: false,
+                        },
+                        privacy: {
+                          type: 'object',
+                          properties: {
+                            view: {
+                              type: 'string',
+                              enum: ['public', 'anyone_with_link'],
+                              default: 'anyone_with_link',
+                              description: 'The visibility of this changelog.',
+                            },
+                          },
+                          additionalProperties: false,
+                        },
+                        slug: { type: 'string' },
+                        title: { type: 'string' },
+                        type: {
+                          type: 'string',
+                          enum: ['none', 'added', 'fixed', 'improved', 'deprecated', 'removed'],
+                          default: 'none',
+                          description: 'The type of changelog that this is.',
+                        },
+                        links: {
+                          type: 'object',
+                          properties: {
+                            project: {
+                              type: 'string',
+                              pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)',
+                              description: 'A URI to the project that this changelog belongs to.',
+                            },
+                          },
+                          required: ['project'],
+                          additionalProperties: false,
+                        },
+                        updated_at: {
+                          type: 'string',
+                          format: 'date-time',
+                          description: 'An ISO 8601 formatted date for when the changelog was updated.',
+                        },
+                        uri: {
+                          type: 'string',
+                          pattern: '\\/changelogs\\/([a-f\\d]{24}|([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                        },
+                      },
+                      required: [
+                        'author',
+                        'content',
+                        'created_at',
+                        'metadata',
+                        'privacy',
+                        'slug',
+                        'title',
+                        'links',
+                        'updated_at',
+                        'uri',
+                      ],
+                      additionalProperties: false,
+                    },
+                  },
+                  required: ['data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
       get: {
         operationId: 'getChangelogs',
         summary: 'Get all changelog entries',
         tags: ['Changelog'],
         description:
-          "Get all changelog entries from your ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Get all changelog entries from your ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
             schema: { type: 'number', minimum: 1, default: 1 },
@@ -612,7 +1852,248 @@ const document = {
         summary: 'Get a changelog entry',
         tags: ['Changelog'],
         description:
-          "Get a changelog entry from your ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Get a changelog entry from your ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        parameters: [
+          {
+            schema: {
+              anyOf: [
+                { type: 'string', pattern: '[a-f\\d]{24}', description: 'A unique identifier for the resource.' },
+                {
+                  type: 'string',
+                  pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
+                  description: 'A URL-safe representation of the resource.',
+                },
+              ],
+            },
+            in: 'path',
+            name: 'identifier',
+            required: true,
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    data: {
+                      type: 'object',
+                      properties: {
+                        author: {
+                          type: 'object',
+                          properties: {
+                            id: { type: 'string', nullable: true, description: 'User ID of the changelog author.' },
+                            name: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'Full name of the user who created the changelog.',
+                            },
+                          },
+                          required: ['id', 'name'],
+                          additionalProperties: false,
+                        },
+                        content: {
+                          type: 'object',
+                          properties: { body: { type: 'string', nullable: true } },
+                          required: ['body'],
+                          additionalProperties: false,
+                        },
+                        created_at: {
+                          type: 'string',
+                          format: 'date-time',
+                          description: 'An ISO 8601 formatted date for when the changelog was created.',
+                        },
+                        metadata: {
+                          type: 'object',
+                          properties: {
+                            description: { type: 'string', nullable: true },
+                            image: {
+                              type: 'object',
+                              properties: {
+                                uri: {
+                                  type: 'string',
+                                  pattern: '\\/images\\/([a-f\\d]{24})',
+                                  nullable: true,
+                                  description:
+                                    'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
+                                },
+                                url: { type: 'string', format: 'uri', nullable: true },
+                              },
+                              required: ['uri', 'url'],
+                              additionalProperties: false,
+                            },
+                            keywords: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'A comma-separated list of keywords to place into your changelog metadata.',
+                            },
+                            title: { type: 'string', nullable: true },
+                          },
+                          required: ['description', 'image', 'keywords', 'title'],
+                          additionalProperties: false,
+                        },
+                        privacy: {
+                          type: 'object',
+                          properties: {
+                            view: {
+                              type: 'string',
+                              enum: ['public', 'anyone_with_link'],
+                              default: 'anyone_with_link',
+                              description: 'The visibility of this changelog.',
+                            },
+                          },
+                          additionalProperties: false,
+                        },
+                        slug: { type: 'string' },
+                        title: { type: 'string' },
+                        type: {
+                          type: 'string',
+                          enum: ['none', 'added', 'fixed', 'improved', 'deprecated', 'removed'],
+                          default: 'none',
+                          description: 'The type of changelog that this is.',
+                        },
+                        links: {
+                          type: 'object',
+                          properties: {
+                            project: {
+                              type: 'string',
+                              pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)',
+                              description: 'A URI to the project that this changelog belongs to.',
+                            },
+                          },
+                          required: ['project'],
+                          additionalProperties: false,
+                        },
+                        updated_at: {
+                          type: 'string',
+                          format: 'date-time',
+                          description: 'An ISO 8601 formatted date for when the changelog was updated.',
+                        },
+                        uri: {
+                          type: 'string',
+                          pattern: '\\/changelogs\\/([a-f\\d]{24}|([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                        },
+                      },
+                      required: [
+                        'author',
+                        'content',
+                        'created_at',
+                        'metadata',
+                        'privacy',
+                        'slug',
+                        'title',
+                        'links',
+                        'updated_at',
+                        'uri',
+                      ],
+                      additionalProperties: false,
+                    },
+                  },
+                  required: ['data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      delete: {
+        operationId: 'deleteChangelog',
+        summary: 'Delete a changelog entry',
+        tags: ['Changelog'],
+        description:
+          "Delete a changelog entry from your ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        parameters: [
+          {
+            schema: {
+              anyOf: [
+                { type: 'string', pattern: '[a-f\\d]{24}', description: 'A unique identifier for the resource.' },
+                {
+                  type: 'string',
+                  pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+',
+                  description: 'A URL-safe representation of the resource.',
+                },
+              ],
+            },
+            in: 'path',
+            name: 'identifier',
+            required: true,
+          },
+        ],
+        responses: { '204': { description: 'No Content' } },
+      },
+      patch: {
+        operationId: 'updateChangelog',
+        summary: 'Update a changelog entry',
+        tags: ['Changelog'],
+        description:
+          "Update an existing changelog entry in your ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  author: {
+                    type: 'object',
+                    properties: { id: { type: 'string', nullable: true }, name: { type: 'string', nullable: true } },
+                    additionalProperties: false,
+                  },
+                  content: {
+                    type: 'object',
+                    properties: { body: { type: 'string', nullable: true } },
+                    additionalProperties: false,
+                  },
+                  created_at: {
+                    type: 'string',
+                    format: 'date-time',
+                    description: 'An ISO 8601 formatted date for when the changelog was created.',
+                  },
+                  metadata: {
+                    type: 'object',
+                    properties: {
+                      description: { type: 'string', nullable: true },
+                      image: {
+                        type: 'object',
+                        properties: {
+                          uri: { type: 'string', pattern: '\\/images\\/([a-f\\d]{24})', nullable: true },
+                          url: { type: 'string', format: 'uri', nullable: true },
+                        },
+                        additionalProperties: false,
+                      },
+                      keywords: { type: 'string', nullable: true },
+                      title: { type: 'string', nullable: true },
+                    },
+                    additionalProperties: false,
+                  },
+                  privacy: {
+                    type: 'object',
+                    properties: {
+                      view: {
+                        type: 'string',
+                        enum: ['public', 'anyone_with_link'],
+                        default: 'anyone_with_link',
+                        description: 'The visibility of this changelog.',
+                      },
+                    },
+                    additionalProperties: false,
+                  },
+                  slug: { type: 'string' },
+                  title: { type: 'string' },
+                  type: {
+                    type: 'string',
+                    enum: ['none', 'added', 'fixed', 'improved', 'deprecated', 'removed'],
+                    default: 'none',
+                    description: 'The type of changelog that this is.',
+                  },
+                },
+                additionalProperties: false,
+              },
+            },
+          },
+        },
         parameters: [
           {
             schema: {
@@ -760,13 +2241,13 @@ const document = {
         },
       },
     },
-    '/versions/{version}/custom_pages': {
+    '/branches/{branch}/custom_pages': {
       post: {
         operationId: 'createCustomPage',
         summary: 'Create a custom page',
         tags: ['Custom Pages'],
         description:
-          "Create a custom page in your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Create a custom page in your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         requestBody: {
           content: {
             'application/json': {
@@ -838,11 +2319,14 @@ const document = {
         },
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or stable.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
         ],
         responses: {
@@ -937,6 +2421,23 @@ const document = {
                           required: ['project'],
                           additionalProperties: false,
                         },
+                        renderable: {
+                          type: 'object',
+                          properties: {
+                            status: {
+                              type: 'boolean',
+                              default: true,
+                              description: 'A flag for if the resource is renderable or not.',
+                            },
+                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
+                            message: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'Additional details about the rendering error.',
+                            },
+                          },
+                          additionalProperties: false,
+                        },
                         updated_at: {
                           type: 'string',
                           format: 'date-time',
@@ -946,7 +2447,7 @@ const document = {
                         uri: {
                           type: 'string',
                           pattern:
-                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/custom_pages\\/([a-f\\d]{24}|([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                            '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/custom_pages\\/([a-f\\d]{24}|([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                         },
                       },
                       required: [
@@ -957,6 +2458,7 @@ const document = {
                         'slug',
                         'title',
                         'links',
+                        'renderable',
                         'updated_at',
                         'uri',
                       ],
@@ -976,14 +2478,17 @@ const document = {
         summary: 'Get all custom pages',
         tags: ['Custom Pages'],
         description:
-          "Get all custom pages from your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Get all custom pages from your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or stable.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
         ],
         responses: {
@@ -1081,6 +2586,23 @@ const document = {
                             required: ['project'],
                             additionalProperties: false,
                           },
+                          renderable: {
+                            type: 'object',
+                            properties: {
+                              status: {
+                                type: 'boolean',
+                                default: true,
+                                description: 'A flag for if the resource is renderable or not.',
+                              },
+                              error: { type: 'string', nullable: true, description: 'The rendering error.' },
+                              message: {
+                                type: 'string',
+                                nullable: true,
+                                description: 'Additional details about the rendering error.',
+                              },
+                            },
+                            additionalProperties: false,
+                          },
                           updated_at: {
                             type: 'string',
                             format: 'date-time',
@@ -1090,7 +2612,7 @@ const document = {
                           uri: {
                             type: 'string',
                             pattern:
-                              '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/custom_pages\\/([a-f\\d]{24}|([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                              '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/custom_pages\\/([a-f\\d]{24}|([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                           },
                         },
                         required: [
@@ -1101,6 +2623,7 @@ const document = {
                           'slug',
                           'title',
                           'links',
+                          'renderable',
                           'updated_at',
                           'uri',
                         ],
@@ -1117,20 +2640,23 @@ const document = {
         },
       },
     },
-    '/versions/{version}/custom_pages/{slug}': {
+    '/branches/{branch}/custom_pages/{slug}': {
       get: {
         operationId: 'getCustomPage',
         summary: 'Get a custom page',
         tags: ['Custom Pages'],
         description:
-          "Get a custom page from your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Get a custom page from your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or stable.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
           {
             schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
@@ -1232,6 +2758,23 @@ const document = {
                           required: ['project'],
                           additionalProperties: false,
                         },
+                        renderable: {
+                          type: 'object',
+                          properties: {
+                            status: {
+                              type: 'boolean',
+                              default: true,
+                              description: 'A flag for if the resource is renderable or not.',
+                            },
+                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
+                            message: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'Additional details about the rendering error.',
+                            },
+                          },
+                          additionalProperties: false,
+                        },
                         updated_at: {
                           type: 'string',
                           format: 'date-time',
@@ -1241,7 +2784,7 @@ const document = {
                         uri: {
                           type: 'string',
                           pattern:
-                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/custom_pages\\/([a-f\\d]{24}|([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                            '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/custom_pages\\/([a-f\\d]{24}|([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                         },
                       },
                       required: [
@@ -1252,6 +2795,7 @@ const document = {
                         'slug',
                         'title',
                         'links',
+                        'renderable',
                         'updated_at',
                         'uri',
                       ],
@@ -1271,14 +2815,17 @@ const document = {
         summary: 'Delete a custom page',
         tags: ['Custom Pages'],
         description:
-          "Delete a custom page from your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Delete a custom page from your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or stable.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
           {
             schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
@@ -1295,7 +2842,7 @@ const document = {
         summary: 'Update a custom page',
         tags: ['Custom Pages'],
         description:
-          "Update an existing custom page in your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Update an existing custom page in your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         requestBody: {
           content: {
             'application/json': {
@@ -1365,11 +2912,14 @@ const document = {
         },
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or stable.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
           {
             schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
@@ -1471,6 +3021,23 @@ const document = {
                           required: ['project'],
                           additionalProperties: false,
                         },
+                        renderable: {
+                          type: 'object',
+                          properties: {
+                            status: {
+                              type: 'boolean',
+                              default: true,
+                              description: 'A flag for if the resource is renderable or not.',
+                            },
+                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
+                            message: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'Additional details about the rendering error.',
+                            },
+                          },
+                          additionalProperties: false,
+                        },
                         updated_at: {
                           type: 'string',
                           format: 'date-time',
@@ -1480,7 +3047,7 @@ const document = {
                         uri: {
                           type: 'string',
                           pattern:
-                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/custom_pages\\/([a-f\\d]{24}|([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                            '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/custom_pages\\/([a-f\\d]{24}|([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                         },
                       },
                       required: [
@@ -1491,6 +3058,7 @@ const document = {
                         'slug',
                         'title',
                         'links',
+                        'renderable',
                         'updated_at',
                         'uri',
                       ],
@@ -1506,13 +3074,13 @@ const document = {
         },
       },
     },
-    '/versions/{version}/guides': {
+    '/branches/{branch}/guides': {
       post: {
         operationId: 'createGuide',
         summary: 'Create a guides page',
         tags: ['Guides'],
         description:
-          "Create a page in the Guides section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Create a page in the Guides section of your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         requestBody: {
           content: {
             'application/json': {
@@ -1525,13 +3093,27 @@ const document = {
                     default: 'enabled',
                     description: 'Allow indexing by robots.',
                   },
+                  appearance: {
+                    type: 'object',
+                    properties: {
+                      icon: {
+                        type: 'object',
+                        properties: {
+                          name: { type: 'string', nullable: true },
+                          type: { type: 'string', enum: ['icon', 'emoji'], nullable: true },
+                        },
+                        additionalProperties: false,
+                      },
+                    },
+                    additionalProperties: false,
+                  },
                   category: {
                     type: 'object',
                     properties: {
                       uri: {
                         type: 'string',
                         pattern:
-                          '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/categories\\/(guides|reference)\\/((.*))',
+                          '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/categories\\/(guides|reference)\\/((.*))',
                         description: 'A URI to the category resource.',
                       },
                     },
@@ -1590,13 +3172,6 @@ const document = {
                     },
                     additionalProperties: false,
                   },
-                  href: {
-                    type: 'object',
-                    properties: {
-                      dash: { type: 'string', format: 'uri', description: 'A URL to this page in your ReadMe Dash.' },
-                    },
-                    additionalProperties: false,
-                  },
                   metadata: {
                     type: 'object',
                     properties: {
@@ -1617,7 +3192,7 @@ const document = {
                       uri: {
                         type: 'string',
                         pattern:
-                          '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                          '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                         nullable: true,
                       },
                     },
@@ -1630,26 +3205,17 @@ const document = {
                     },
                     additionalProperties: false,
                   },
-                  renderable: {
-                    type: 'object',
-                    properties: {
-                      status: {
-                        type: 'boolean',
-                        default: true,
-                        description: 'A flag for if the page is renderable or not.',
-                      },
-                      error: { type: 'string', nullable: true },
-                      message: { type: 'string', nullable: true },
-                    },
-                    additionalProperties: false,
-                  },
                   slug: {
                     allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
                     description: 'The accessible URL slug for the page.',
                   },
                   state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
                   title: { type: 'string' },
-                  type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
+                  type: {
+                    type: 'string',
+                    enum: ['api_config', 'basic', 'endpoint', 'link', 'webhook'],
+                    default: 'basic',
+                  },
                   position: { type: 'number' },
                 },
                 required: ['category', 'title'],
@@ -1661,11 +3227,14 @@ const document = {
         },
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or stable.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
         ],
         responses: {
@@ -1685,13 +3254,29 @@ const document = {
                           default: 'enabled',
                           description: 'Allow indexing by robots.',
                         },
+                        appearance: {
+                          type: 'object',
+                          properties: {
+                            icon: {
+                              type: 'object',
+                              properties: {
+                                name: { type: 'string', nullable: true },
+                                type: { type: 'string', enum: ['icon', 'emoji'], nullable: true },
+                              },
+                              required: ['name', 'type'],
+                              additionalProperties: false,
+                            },
+                          },
+                          required: ['icon'],
+                          additionalProperties: false,
+                        },
                         category: {
                           type: 'object',
                           properties: {
                             uri: {
                               type: 'string',
                               pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/categories\\/(guides|reference)\\/((.*))',
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/categories\\/(guides|reference)\\/((.*))',
                               description: 'A URI to the category resource.',
                             },
                           },
@@ -1757,18 +3342,6 @@ const document = {
                           required: ['body', 'excerpt', 'link', 'next'],
                           additionalProperties: false,
                         },
-                        href: {
-                          type: 'object',
-                          properties: {
-                            dash: {
-                              type: 'string',
-                              format: 'uri',
-                              description: 'A URL to this page in your ReadMe Dash.',
-                            },
-                          },
-                          required: ['dash'],
-                          additionalProperties: false,
-                        },
                         metadata: {
                           type: 'object',
                           properties: {
@@ -1804,7 +3377,7 @@ const document = {
                             uri: {
                               type: 'string',
                               pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                               nullable: true,
                               description: 'A URI to the parent page resource including the page ID or slug.',
                             },
@@ -1817,6 +3390,34 @@ const document = {
                           properties: {
                             view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
                           },
+                          additionalProperties: false,
+                        },
+                        slug: {
+                          allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
+                          description: 'The accessible URL slug for the page.',
+                        },
+                        state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
+                        title: { type: 'string' },
+                        type: {
+                          type: 'string',
+                          enum: ['api_config', 'basic', 'endpoint', 'link', 'webhook'],
+                          default: 'basic',
+                        },
+                        href: {
+                          type: 'object',
+                          properties: {
+                            dash: {
+                              type: 'string',
+                              format: 'uri',
+                              description: 'A URL to this page in your ReadMe Dash.',
+                            },
+                            hub: {
+                              type: 'string',
+                              format: 'uri',
+                              description: 'A URL to this page on your ReadMe hub.',
+                            },
+                          },
+                          required: ['dash', 'hub'],
                           additionalProperties: false,
                         },
                         project: {
@@ -1844,7 +3445,7 @@ const document = {
                             status: {
                               type: 'boolean',
                               default: true,
-                              description: 'A flag for if the page is renderable or not.',
+                              description: 'A flag for if the resource is renderable or not.',
                             },
                             error: { type: 'string', nullable: true, description: 'The rendering error.' },
                             message: {
@@ -1855,13 +3456,6 @@ const document = {
                           },
                           additionalProperties: false,
                         },
-                        slug: {
-                          allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
-                          description: 'The accessible URL slug for the page.',
-                        },
-                        state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
-                        title: { type: 'string' },
-                        type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
                         updated_at: {
                           type: 'string',
                           format: 'date-time',
@@ -1870,21 +3464,22 @@ const document = {
                         uri: {
                           type: 'string',
                           pattern:
-                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                            '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                           description: 'A URI to the page resource.',
                         },
                       },
                       required: [
+                        'appearance',
                         'category',
                         'content',
-                        'href',
                         'metadata',
                         'parent',
                         'privacy',
-                        'project',
-                        'renderable',
                         'slug',
                         'title',
+                        'href',
+                        'project',
+                        'renderable',
                         'updated_at',
                         'uri',
                       ],
@@ -1900,20 +3495,23 @@ const document = {
         },
       },
     },
-    '/versions/{version}/guides/{slug}': {
+    '/branches/{branch}/guides/{slug}': {
       get: {
         operationId: 'getGuide',
         summary: 'Get a guides page',
         tags: ['Guides'],
         description:
-          "Get a page from the Guides section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Get a page from the Guides section of your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or stable.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
           {
             schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
@@ -1940,13 +3538,29 @@ const document = {
                           default: 'enabled',
                           description: 'Allow indexing by robots.',
                         },
+                        appearance: {
+                          type: 'object',
+                          properties: {
+                            icon: {
+                              type: 'object',
+                              properties: {
+                                name: { type: 'string', nullable: true },
+                                type: { type: 'string', enum: ['icon', 'emoji'], nullable: true },
+                              },
+                              required: ['name', 'type'],
+                              additionalProperties: false,
+                            },
+                          },
+                          required: ['icon'],
+                          additionalProperties: false,
+                        },
                         category: {
                           type: 'object',
                           properties: {
                             uri: {
                               type: 'string',
                               pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/categories\\/(guides|reference)\\/((.*))',
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/categories\\/(guides|reference)\\/((.*))',
                               description: 'A URI to the category resource.',
                             },
                           },
@@ -2012,18 +3626,6 @@ const document = {
                           required: ['body', 'excerpt', 'link', 'next'],
                           additionalProperties: false,
                         },
-                        href: {
-                          type: 'object',
-                          properties: {
-                            dash: {
-                              type: 'string',
-                              format: 'uri',
-                              description: 'A URL to this page in your ReadMe Dash.',
-                            },
-                          },
-                          required: ['dash'],
-                          additionalProperties: false,
-                        },
                         metadata: {
                           type: 'object',
                           properties: {
@@ -2059,7 +3661,7 @@ const document = {
                             uri: {
                               type: 'string',
                               pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                               nullable: true,
                               description: 'A URI to the parent page resource including the page ID or slug.',
                             },
@@ -2072,6 +3674,34 @@ const document = {
                           properties: {
                             view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
                           },
+                          additionalProperties: false,
+                        },
+                        slug: {
+                          allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
+                          description: 'The accessible URL slug for the page.',
+                        },
+                        state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
+                        title: { type: 'string' },
+                        type: {
+                          type: 'string',
+                          enum: ['api_config', 'basic', 'endpoint', 'link', 'webhook'],
+                          default: 'basic',
+                        },
+                        href: {
+                          type: 'object',
+                          properties: {
+                            dash: {
+                              type: 'string',
+                              format: 'uri',
+                              description: 'A URL to this page in your ReadMe Dash.',
+                            },
+                            hub: {
+                              type: 'string',
+                              format: 'uri',
+                              description: 'A URL to this page on your ReadMe hub.',
+                            },
+                          },
+                          required: ['dash', 'hub'],
                           additionalProperties: false,
                         },
                         project: {
@@ -2099,7 +3729,7 @@ const document = {
                             status: {
                               type: 'boolean',
                               default: true,
-                              description: 'A flag for if the page is renderable or not.',
+                              description: 'A flag for if the resource is renderable or not.',
                             },
                             error: { type: 'string', nullable: true, description: 'The rendering error.' },
                             message: {
@@ -2110,13 +3740,6 @@ const document = {
                           },
                           additionalProperties: false,
                         },
-                        slug: {
-                          allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
-                          description: 'The accessible URL slug for the page.',
-                        },
-                        state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
-                        title: { type: 'string' },
-                        type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
                         updated_at: {
                           type: 'string',
                           format: 'date-time',
@@ -2125,21 +3748,22 @@ const document = {
                         uri: {
                           type: 'string',
                           pattern:
-                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                            '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                           description: 'A URI to the page resource.',
                         },
                       },
                       required: [
+                        'appearance',
                         'category',
                         'content',
-                        'href',
                         'metadata',
                         'parent',
                         'privacy',
-                        'project',
-                        'renderable',
                         'slug',
                         'title',
+                        'href',
+                        'project',
+                        'renderable',
                         'updated_at',
                         'uri',
                       ],
@@ -2159,14 +3783,17 @@ const document = {
         summary: 'Delete a guides page',
         tags: ['Guides'],
         description:
-          "Delete a page from the Guides section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Delete a page from the Guides section of your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or stable.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
           {
             schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
@@ -2183,7 +3810,7 @@ const document = {
         summary: 'Update a guides page',
         tags: ['Guides'],
         description:
-          "Updates an existing page in the Guides section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Updates an existing page in the Guides section of your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         requestBody: {
           content: {
             'application/json': {
@@ -2196,13 +3823,27 @@ const document = {
                     default: 'enabled',
                     description: 'Allow indexing by robots.',
                   },
+                  appearance: {
+                    type: 'object',
+                    properties: {
+                      icon: {
+                        type: 'object',
+                        properties: {
+                          name: { type: 'string', nullable: true },
+                          type: { type: 'string', enum: ['icon', 'emoji'], nullable: true },
+                        },
+                        additionalProperties: false,
+                      },
+                    },
+                    additionalProperties: false,
+                  },
                   category: {
                     type: 'object',
                     properties: {
                       uri: {
                         type: 'string',
                         pattern:
-                          '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/categories\\/(guides|reference)\\/((.*))',
+                          '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/categories\\/(guides|reference)\\/((.*))',
                         description: 'A URI to the category resource.',
                       },
                     },
@@ -2260,13 +3901,6 @@ const document = {
                     },
                     additionalProperties: false,
                   },
-                  href: {
-                    type: 'object',
-                    properties: {
-                      dash: { type: 'string', format: 'uri', description: 'A URL to this page in your ReadMe Dash.' },
-                    },
-                    additionalProperties: false,
-                  },
                   metadata: {
                     type: 'object',
                     properties: {
@@ -2287,7 +3921,7 @@ const document = {
                       uri: {
                         type: 'string',
                         pattern:
-                          '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                          '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                         nullable: true,
                       },
                     },
@@ -2300,26 +3934,17 @@ const document = {
                     },
                     additionalProperties: false,
                   },
-                  renderable: {
-                    type: 'object',
-                    properties: {
-                      status: {
-                        type: 'boolean',
-                        default: true,
-                        description: 'A flag for if the page is renderable or not.',
-                      },
-                      error: { type: 'string', nullable: true },
-                      message: { type: 'string', nullable: true },
-                    },
-                    additionalProperties: false,
-                  },
                   slug: {
                     allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
                     description: 'The accessible URL slug for the page.',
                   },
                   state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
                   title: { type: 'string' },
-                  type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
+                  type: {
+                    type: 'string',
+                    enum: ['api_config', 'basic', 'endpoint', 'link', 'webhook'],
+                    default: 'basic',
+                  },
                   position: { type: 'number' },
                 },
                 additionalProperties: false,
@@ -2329,11 +3954,14 @@ const document = {
         },
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or stable.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
           {
             schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
@@ -2360,13 +3988,29 @@ const document = {
                           default: 'enabled',
                           description: 'Allow indexing by robots.',
                         },
+                        appearance: {
+                          type: 'object',
+                          properties: {
+                            icon: {
+                              type: 'object',
+                              properties: {
+                                name: { type: 'string', nullable: true },
+                                type: { type: 'string', enum: ['icon', 'emoji'], nullable: true },
+                              },
+                              required: ['name', 'type'],
+                              additionalProperties: false,
+                            },
+                          },
+                          required: ['icon'],
+                          additionalProperties: false,
+                        },
                         category: {
                           type: 'object',
                           properties: {
                             uri: {
                               type: 'string',
                               pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/categories\\/(guides|reference)\\/((.*))',
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/categories\\/(guides|reference)\\/((.*))',
                               description: 'A URI to the category resource.',
                             },
                           },
@@ -2432,18 +4076,6 @@ const document = {
                           required: ['body', 'excerpt', 'link', 'next'],
                           additionalProperties: false,
                         },
-                        href: {
-                          type: 'object',
-                          properties: {
-                            dash: {
-                              type: 'string',
-                              format: 'uri',
-                              description: 'A URL to this page in your ReadMe Dash.',
-                            },
-                          },
-                          required: ['dash'],
-                          additionalProperties: false,
-                        },
                         metadata: {
                           type: 'object',
                           properties: {
@@ -2479,7 +4111,7 @@ const document = {
                             uri: {
                               type: 'string',
                               pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                               nullable: true,
                               description: 'A URI to the parent page resource including the page ID or slug.',
                             },
@@ -2492,6 +4124,34 @@ const document = {
                           properties: {
                             view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
                           },
+                          additionalProperties: false,
+                        },
+                        slug: {
+                          allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
+                          description: 'The accessible URL slug for the page.',
+                        },
+                        state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
+                        title: { type: 'string' },
+                        type: {
+                          type: 'string',
+                          enum: ['api_config', 'basic', 'endpoint', 'link', 'webhook'],
+                          default: 'basic',
+                        },
+                        href: {
+                          type: 'object',
+                          properties: {
+                            dash: {
+                              type: 'string',
+                              format: 'uri',
+                              description: 'A URL to this page in your ReadMe Dash.',
+                            },
+                            hub: {
+                              type: 'string',
+                              format: 'uri',
+                              description: 'A URL to this page on your ReadMe hub.',
+                            },
+                          },
+                          required: ['dash', 'hub'],
                           additionalProperties: false,
                         },
                         project: {
@@ -2519,7 +4179,7 @@ const document = {
                             status: {
                               type: 'boolean',
                               default: true,
-                              description: 'A flag for if the page is renderable or not.',
+                              description: 'A flag for if the resource is renderable or not.',
                             },
                             error: { type: 'string', nullable: true, description: 'The rendering error.' },
                             message: {
@@ -2530,13 +4190,6 @@ const document = {
                           },
                           additionalProperties: false,
                         },
-                        slug: {
-                          allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
-                          description: 'The accessible URL slug for the page.',
-                        },
-                        state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
-                        title: { type: 'string' },
-                        type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
                         updated_at: {
                           type: 'string',
                           format: 'date-time',
@@ -2545,24 +4198,399 @@ const document = {
                         uri: {
                           type: 'string',
                           pattern:
-                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                            '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                           description: 'A URI to the page resource.',
                         },
                       },
                       required: [
+                        'appearance',
                         'category',
                         'content',
-                        'href',
                         'metadata',
                         'parent',
                         'privacy',
-                        'project',
-                        'renderable',
                         'slug',
                         'title',
+                        'href',
+                        'project',
+                        'renderable',
                         'updated_at',
                         'uri',
                       ],
+                      additionalProperties: false,
+                    },
+                  },
+                  required: ['data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/images': {
+      get: {
+        operationId: 'getImages',
+        summary: 'Get uploaded images',
+        tags: ['Images'],
+        description:
+          "Get a collection of images that were uploaded to your ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        parameters: [
+          {
+            schema: { type: 'number', minimum: 1, default: 1 },
+            in: 'query',
+            name: 'page',
+            required: false,
+            description: 'Used to specify further pages (starts at 1).',
+          },
+          {
+            schema: { type: 'number', minimum: 1, maximum: 100, default: 10 },
+            in: 'query',
+            name: 'per_page',
+            required: false,
+            description: 'Number of items to include in pagination (up to 100, defaults to 10).',
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    total: { type: 'number' },
+                    page: { type: 'number' },
+                    per_page: { type: 'number' },
+                    paging: {
+                      type: 'object',
+                      properties: {
+                        next: { type: 'string', nullable: true },
+                        previous: { type: 'string', nullable: true },
+                        first: { type: 'string', nullable: true },
+                        last: { type: 'string', nullable: true },
+                      },
+                      required: ['next', 'previous', 'first', 'last'],
+                      additionalProperties: false,
+                    },
+                    data: {
+                      type: 'array',
+                      items: {
+                        type: 'object',
+                        properties: {
+                          name: { type: 'string', nullable: true },
+                          width: {
+                            type: 'number',
+                            nullable: true,
+                            description: 'The pixel width of the image. This is not present for SVGs.',
+                          },
+                          height: {
+                            type: 'number',
+                            nullable: true,
+                            description: 'The pixel height of the image. This is not present for SVGs.',
+                          },
+                          color: {
+                            type: 'string',
+                            pattern: '^(?:#[0-9a-fA-F]{3}|#[0-9a-fA-F]{4}|#[0-9a-fA-F]{6}|#[0-9a-fA-F]{8})$',
+                            nullable: true,
+                            description: 'The primary color contained within your image.',
+                          },
+                          links: {
+                            type: 'object',
+                            properties: {
+                              original_url: {
+                                type: 'string',
+                                format: 'uri',
+                                nullable: true,
+                                description:
+                                  'If your image was resized upon upload this will be a URL to the original file.',
+                              },
+                            },
+                            required: ['original_url'],
+                            additionalProperties: false,
+                          },
+                          uri: {
+                            type: 'string',
+                            pattern: '\\/images\\/([a-f\\d]{24})',
+                            nullable: true,
+                            description:
+                              'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
+                          },
+                          url: { type: 'string', format: 'uri', nullable: true },
+                        },
+                        required: ['name', 'width', 'height', 'color', 'links', 'uri', 'url'],
+                        additionalProperties: false,
+                      },
+                    },
+                  },
+                  required: ['total', 'page', 'per_page', 'paging', 'data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      post: {
+        operationId: 'uploadImage',
+        summary: 'Upload an image',
+        tags: ['Images'],
+        description:
+          "Upload an image to your ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        requestBody: {
+          content: {
+            'multipart/form-data': {
+              schema: { type: 'object', properties: { file: {} }, additionalProperties: false },
+            },
+          },
+        },
+        parameters: [
+          {
+            schema: { type: 'string' },
+            in: 'query',
+            name: 'resize_height',
+            required: false,
+            description:
+              'If you wish to resize this image, supply a new height in pixels. Please note that GIFs are exempt and cannot be resized.',
+          },
+        ],
+        responses: {
+          '201': {
+            description: 'Created',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    data: {
+                      type: 'object',
+                      properties: {
+                        name: { type: 'string', nullable: true },
+                        width: {
+                          type: 'number',
+                          nullable: true,
+                          description: 'The pixel width of the image. This is not present for SVGs.',
+                        },
+                        height: {
+                          type: 'number',
+                          nullable: true,
+                          description: 'The pixel height of the image. This is not present for SVGs.',
+                        },
+                        color: {
+                          type: 'string',
+                          pattern: '^(?:#[0-9a-fA-F]{3}|#[0-9a-fA-F]{4}|#[0-9a-fA-F]{6}|#[0-9a-fA-F]{8})$',
+                          nullable: true,
+                          description: 'The primary color contained within your image.',
+                        },
+                        links: {
+                          type: 'object',
+                          properties: {
+                            original_url: {
+                              type: 'string',
+                              format: 'uri',
+                              nullable: true,
+                              description:
+                                'If your image was resized upon upload this will be a URL to the original file.',
+                            },
+                          },
+                          required: ['original_url'],
+                          additionalProperties: false,
+                        },
+                        uri: {
+                          type: 'string',
+                          pattern: '\\/images\\/([a-f\\d]{24})',
+                          nullable: true,
+                          description:
+                            'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
+                        },
+                        url: { type: 'string', format: 'uri', nullable: true },
+                      },
+                      required: ['name', 'width', 'height', 'color', 'links', 'uri', 'url'],
+                      additionalProperties: false,
+                    },
+                  },
+                  required: ['data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/images/{identifier}': {
+      get: {
+        operationId: 'getImage',
+        summary: 'Get an image',
+        tags: ['Images'],
+        description:
+          "Get an image that was uploaded to your ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        parameters: [
+          {
+            schema: { type: 'string', pattern: '[a-f\\d]{24}' },
+            in: 'path',
+            name: 'identifier',
+            required: true,
+            description: 'A unique identifier for the image.',
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    data: {
+                      type: 'object',
+                      properties: {
+                        name: { type: 'string', nullable: true },
+                        width: {
+                          type: 'number',
+                          nullable: true,
+                          description: 'The pixel width of the image. This is not present for SVGs.',
+                        },
+                        height: {
+                          type: 'number',
+                          nullable: true,
+                          description: 'The pixel height of the image. This is not present for SVGs.',
+                        },
+                        color: {
+                          type: 'string',
+                          pattern: '^(?:#[0-9a-fA-F]{3}|#[0-9a-fA-F]{4}|#[0-9a-fA-F]{6}|#[0-9a-fA-F]{8})$',
+                          nullable: true,
+                          description: 'The primary color contained within your image.',
+                        },
+                        links: {
+                          type: 'object',
+                          properties: {
+                            original_url: {
+                              type: 'string',
+                              format: 'uri',
+                              nullable: true,
+                              description:
+                                'If your image was resized upon upload this will be a URL to the original file.',
+                            },
+                          },
+                          required: ['original_url'],
+                          additionalProperties: false,
+                        },
+                        uri: {
+                          type: 'string',
+                          pattern: '\\/images\\/([a-f\\d]{24})',
+                          nullable: true,
+                          description:
+                            'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
+                        },
+                        url: { type: 'string', format: 'uri', nullable: true },
+                      },
+                      required: ['name', 'width', 'height', 'color', 'links', 'uri', 'url'],
+                      additionalProperties: false,
+                    },
+                  },
+                  required: ['data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/outbound_ips': {
+      get: {
+        operationId: 'getOutboundIPs',
+        summary: "Get ReadMe's outbound IP addresses",
+        tags: ['IP Addresses'],
+        description:
+          "Get all of ReadMe's IP addresses used for outbound webhook requests and the \"Try It!\" button on the API Explorer.\n\nAlthough ReadMe's outbound IP addresses may change, the IPs in this API response will be valid for at least 7 days. If you configure your API or webhooks to limit access based on these IPs, you should refresh the IP list from this endpoint weekly.\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        security: [],
+        responses: {
+          '200': {
+            description: 'List of current IP addresses used for webhook and "Try It!" proxy requests.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    data: {
+                      type: 'array',
+                      items: {
+                        type: 'object',
+                        properties: { ip_address: { type: 'string', description: 'The IP address.' } },
+                        required: ['ip_address'],
+                        additionalProperties: false,
+                      },
+                    },
+                  },
+                  required: ['data'],
+                  additionalProperties: false,
+                  description: 'List of current IP addresses used for webhook and "Try It!" proxy requests.',
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/owlbot/ask': {
+      post: {
+        operationId: 'askOwlbot',
+        summary: 'Ask Owlbot AI a question',
+        tags: ['Owlbot AI'],
+        description:
+          "Ask Owlbot a question about the content of your docs.\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: { question: { type: 'string', description: 'The question being asked to Owlbot.' } },
+                required: ['question'],
+                additionalProperties: false,
+              },
+            },
+          },
+          required: true,
+        },
+        parameters: [
+          {
+            schema: { type: 'string', enum: ['application/json', 'text/event-stream'], default: 'application/json' },
+            in: 'header',
+            name: 'accept',
+            required: false,
+            description:
+              'The format the response should be returned in. If `text/event-stream` then the response will be streamed as it is generated.',
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    data: {
+                      type: 'object',
+                      properties: {
+                        answer: { type: 'string' },
+                        sources: {
+                          type: 'array',
+                          items: {
+                            type: 'object',
+                            properties: {
+                              title: { type: 'string', description: 'The page title for the given source.' },
+                              url: { type: 'string', description: 'A link to the source.' },
+                            },
+                            required: ['title', 'url'],
+                            additionalProperties: false,
+                          },
+                        },
+                      },
+                      required: ['answer', 'sources'],
                       additionalProperties: false,
                     },
                   },
@@ -2581,7 +4609,7 @@ const document = {
         summary: 'Get project metadata',
         tags: ['Projects'],
         description:
-          "Returns data about your project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Returns data about your project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         responses: {
           '200': {
             description: 'OK',
@@ -2700,6 +4728,13 @@ const document = {
                                   default: 'solid',
                                 },
                                 gradient_color: { type: 'string', nullable: true },
+                                link_style: {
+                                  type: 'string',
+                                  enum: ['buttons', 'tabs'],
+                                  default: 'buttons',
+                                  description:
+                                    'The styling setting of the subnav links. This value is only used if `appearance.header.type` is `line`.',
+                                },
                                 overlay: {
                                   type: 'object',
                                   properties: {
@@ -2787,6 +4822,24 @@ const document = {
                                 },
                               },
                               required: ['gradient_color', 'overlay'],
+                              additionalProperties: false,
+                            },
+                            layout: {
+                              type: 'object',
+                              properties: {
+                                full_width: {
+                                  type: 'string',
+                                  enum: ['enabled', 'disabled'],
+                                  default: 'disabled',
+                                  description: 'Should the page layout stretch to use the full page width?',
+                                },
+                                style: {
+                                  type: 'string',
+                                  enum: ['classic', 'modern', 'compact', 'sidebar'],
+                                  default: 'classic',
+                                  description: 'The shape and style of your documentation hub pages.',
+                                },
+                              },
                               additionalProperties: false,
                             },
                             logo: {
@@ -3113,6 +5166,12 @@ const document = {
                                   description:
                                     'Where users will be directed to when they click on your logo in the navigation bar.',
                                 },
+                                page_icons: {
+                                  type: 'string',
+                                  enum: ['enabled', 'disabled'],
+                                  default: 'enabled',
+                                  description: 'Should the links in your project navigation bar include icons?',
+                                },
                                 right: {
                                   type: 'array',
                                   items: {
@@ -3190,6 +5249,55 @@ const document = {
                               default: 'enabled',
                               description: 'Should your guides show a table of contents?',
                             },
+                            ai: {
+                              type: 'object',
+                              properties: {
+                                dropdown: {
+                                  type: 'string',
+                                  enum: ['enabled', 'disabled'],
+                                  default: 'disabled',
+                                  description: 'Should your pages show a share with AI dropdown?',
+                                },
+                                options: {
+                                  type: 'object',
+                                  properties: {
+                                    chatgpt: {
+                                      type: 'string',
+                                      enum: ['enabled', 'disabled'],
+                                      default: 'enabled',
+                                      description: 'Enable ChatGPT in the AI dropdown.',
+                                    },
+                                    claude: {
+                                      type: 'string',
+                                      enum: ['enabled', 'disabled'],
+                                      default: 'enabled',
+                                      description: 'Enable Claude in the AI dropdown.',
+                                    },
+                                    clipboard: {
+                                      type: 'string',
+                                      enum: ['enabled', 'disabled'],
+                                      default: 'enabled',
+                                      description: 'Enable "Copy to Clipboard" within in the AI dropdown.',
+                                    },
+                                    copilot: {
+                                      type: 'string',
+                                      enum: ['enabled', 'disabled'],
+                                      default: 'enabled',
+                                      description: 'Enable Copilot in the AI dropdown.',
+                                    },
+                                    view_as_markdown: {
+                                      type: 'string',
+                                      enum: ['enabled', 'disabled'],
+                                      default: 'enabled',
+                                      description: 'Enable "View as Markdown" in the AI dropdown.',
+                                    },
+                                  },
+                                  additionalProperties: false,
+                                },
+                              },
+                              required: ['options'],
+                              additionalProperties: false,
+                            },
                             whats_next_label: {
                               type: 'string',
                               nullable: true,
@@ -3203,9 +5311,11 @@ const document = {
                             'custom_code',
                             'footer',
                             'header',
+                            'layout',
                             'logo',
                             'markdown',
                             'navigation',
+                            'ai',
                             'whats_next_label',
                           ],
                           additionalProperties: false,
@@ -3221,8 +5331,8 @@ const document = {
                           type: 'object',
                           properties: {
                             jwt_secret: { type: 'string' },
-                            login_url: { type: 'string', format: 'uri', nullable: true },
-                            logout_url: { type: 'string', format: 'uri', nullable: true },
+                            login_url: { type: 'string', nullable: true },
+                            logout_url: { type: 'string', nullable: true },
                           },
                           required: ['jwt_secret', 'login_url', 'logout_url'],
                           additionalProperties: false,
@@ -3341,38 +5451,38 @@ const document = {
                                     region: {
                                       type: 'string',
                                       enum: [
-                                        'me-south-1',
-                                        'cn-north-1',
-                                        'ca-west-1',
-                                        'us-west-1',
-                                        'ca-central-1',
                                         'af-south-1',
-                                        'eu-central-1',
                                         'ap-east-1',
-                                        'ap-south-2',
-                                        'eu-west-1',
-                                        'ap-southeast-3',
-                                        'eu-west-2',
-                                        'ap-southeast-5',
-                                        'ap-southeast-4',
-                                        'eu-south-1',
-                                        'ap-south-1',
-                                        'cn-northwest-1',
-                                        'us-east-2',
-                                        'us-west-2',
-                                        'ap-northeast-3',
-                                        'eu-west-3',
-                                        'sa-east-1',
-                                        'ap-northeast-2',
-                                        'ap-southeast-1',
-                                        'eu-south-2',
-                                        'eu-north-1',
-                                        'ap-southeast-2',
-                                        'il-central-1',
                                         'ap-northeast-1',
-                                        'me-central-1',
-                                        'us-east-1',
+                                        'ap-northeast-2',
+                                        'ap-northeast-3',
+                                        'ap-south-1',
+                                        'ap-south-2',
+                                        'ap-southeast-1',
+                                        'ap-southeast-2',
+                                        'ap-southeast-3',
+                                        'ap-southeast-4',
+                                        'ap-southeast-5',
+                                        'ca-central-1',
+                                        'ca-west-1',
+                                        'cn-north-1',
+                                        'cn-northwest-1',
+                                        'eu-central-1',
                                         'eu-central-2',
+                                        'eu-north-1',
+                                        'eu-south-1',
+                                        'eu-south-2',
+                                        'eu-west-1',
+                                        'eu-west-2',
+                                        'eu-west-3',
+                                        'il-central-1',
+                                        'me-central-1',
+                                        'me-south-1',
+                                        'sa-east-1',
+                                        'us-east-1',
+                                        'us-east-2',
+                                        'us-west-1',
+                                        'us-west-2',
                                       ],
                                       nullable: true,
                                     },
@@ -3439,6 +5549,16 @@ const document = {
                               required: ['app_id', 'secure_mode'],
                               additionalProperties: false,
                             },
+                            postman: {
+                              type: 'object',
+                              properties: {
+                                key: { type: 'string', nullable: true },
+                                client_id: { type: 'string', nullable: true },
+                                client_secret: { type: 'string', nullable: true },
+                              },
+                              required: ['key', 'client_id', 'client_secret'],
+                              additionalProperties: false,
+                            },
                             koala: {
                               type: 'object',
                               properties: { key: { type: 'string', nullable: true } },
@@ -3475,6 +5595,27 @@ const document = {
                               required: ['key', 'domain'],
                               additionalProperties: false,
                             },
+                            speakeasy: {
+                              type: 'object',
+                              properties: {
+                                key: { type: 'string', nullable: true, description: 'The API key for Speakeasy.' },
+                              },
+                              required: ['key'],
+                              additionalProperties: false,
+                            },
+                            stainless: {
+                              type: 'object',
+                              properties: {
+                                key: { type: 'string', nullable: true, description: 'The API key for Stainless.' },
+                                name: {
+                                  type: 'string',
+                                  nullable: true,
+                                  description: 'The name of the Stainless project.',
+                                },
+                              },
+                              required: ['key', 'name'],
+                              additionalProperties: false,
+                            },
                             typekit: {
                               type: 'object',
                               properties: { key: { type: 'string', nullable: true } },
@@ -3494,14 +5635,30 @@ const document = {
                             'google',
                             'heap',
                             'intercom',
+                            'postman',
                             'koala',
                             'localize',
                             'recaptcha',
                             'segment',
+                            'speakeasy',
+                            'stainless',
                             'typekit',
                             'zendesk',
                           ],
                           additionalProperties: false,
+                        },
+                        mcp: {
+                          type: 'object',
+                          properties: {
+                            state: {
+                              type: 'string',
+                              enum: ['active', 'enabled', 'disabled'],
+                              default: 'disabled',
+                              description: "The availability of the project's MCP server.",
+                            },
+                          },
+                          additionalProperties: false,
+                          description: "Configuration for the project's Model Context Protocol (MCP) server.",
                         },
                         name: { type: 'string', description: 'The name of the project.' },
                         onboarding_completed: {
@@ -3523,7 +5680,7 @@ const document = {
                             not_found: {
                               type: 'string',
                               pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/custom_pages\\/([a-f\\d]{24}|([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/custom_pages\\/([a-f\\d]{24}|([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                               nullable: true,
                               description:
                                 'The page you wish to be served to your users when they encounter a 404. This can either map to the `uri` of a Custom Page on your project or be set to `null`. If `null` then the default ReadMe 404 page will be served. The version within the `uri` must be mapped to your stable version.',
@@ -3585,18 +5742,24 @@ const document = {
                         privacy: {
                           type: 'object',
                           properties: {
-                            view: {
+                            openapi: {
                               type: 'string',
-                              enum: ['public', 'admin', 'password', 'custom_login'],
-                              default: 'public',
-                              description:
-                                '* `public` - Site is available to the public.\n* `admin` - Site is only available to users that have project permissions.\n* `password` - Site is gated behind a password authentication system.\n* `custom_login` - Users who view your site will be forwarded to a URL of your choice, having them login there and be forwarded back to your ReadMe site.',
+                              enum: ['public', 'admin'],
+                              default: 'admin',
+                              description: "The visibility your OpenAPI definitions on your project's `/openapi` page.",
                             },
                             password: {
                               type: 'string',
                               nullable: true,
                               description:
                                 "The project's password for when `privacy.view` is `password`. This field can be set, but it will not be returned by the API.",
+                            },
+                            view: {
+                              type: 'string',
+                              enum: ['public', 'admin', 'password', 'custom_login'],
+                              default: 'public',
+                              description:
+                                '* `public` - Site is available to the public.\n* `admin` - Site is only available to users that have project permissions.\n* `password` - Site is gated behind a password authentication system.\n* `custom_login` - Users who view your site will be forwarded to a URL of your choice, having them login there and be forwarded back to your ReadMe site.',
                             },
                           },
                           required: ['password'],
@@ -3613,24 +5776,6 @@ const document = {
                           description:
                             'A collection of page redirects that ReadMe will permanently redirect users to when attempting to render a 404. Check out our [redirect docs](https://docs.readme.com/main/docs/error-pages#section-redirects) for more information on how they are handled.',
                         },
-                        refactored: {
-                          type: 'object',
-                          properties: {
-                            status: {
-                              type: 'string',
-                              enum: ['enabled', 'disabled'],
-                              default: 'disabled',
-                              description: 'Indicates if the project has our new Unified UI experience.',
-                            },
-                            migrated: {
-                              type: 'string',
-                              enum: ['failed', 'processing', 'successful', 'unknown'],
-                              default: 'unknown',
-                              description: 'Indicates if the project has been migrated from Dash to Superhub.',
-                            },
-                          },
-                          additionalProperties: false,
-                        },
                         reference: {
                           type: 'object',
                           properties: {
@@ -3639,6 +5784,18 @@ const document = {
                               enum: ['enabled', 'disabled'],
                               default: 'enabled',
                               description: 'Enable SDK-generated request code snippets.',
+                            },
+                            sdk_snippets: {
+                              type: 'object',
+                              properties: {
+                                external: {
+                                  type: 'string',
+                                  enum: ['active', 'disabled', 'enabled'],
+                                  default: 'disabled',
+                                  description: 'State of external SDK snippets feature.',
+                                },
+                              },
+                              additionalProperties: false,
                             },
                             defaults: {
                               type: 'string',
@@ -3681,6 +5838,7 @@ const document = {
                                 'When `expanded`, response schemas will be expanded by default if a 200 level response schema exists.',
                             },
                           },
+                          required: ['sdk_snippets'],
                           additionalProperties: false,
                           description:
                             'Contains options to configure interactive sections on your API Reference pages.',
@@ -3704,7 +5862,19 @@ const document = {
                           default: 'disabled',
                           description: 'Expose a `sitemap.xml` directory on your project.',
                         },
-                        subdomain: { type: 'string', pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*', maxLength: 30 },
+                        llms_txt: {
+                          type: 'string',
+                          enum: ['enabled', 'disabled'],
+                          default: 'disabled',
+                          description:
+                            'Expose an `llms.txt` file to help AI assistants understand your documentation structure.',
+                        },
+                        subdomain: {
+                          type: 'string',
+                          pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
+                          maxLength: 30,
+                          description: 'The subdomain of your project.',
+                        },
                         suggested_edits: {
                           type: 'string',
                           enum: ['enabled', 'disabled'],
@@ -3765,12 +5935,6 @@ const document = {
                         features: {
                           type: 'object',
                           properties: {
-                            custom_components: {
-                              type: 'string',
-                              enum: ['enabled', 'disabled'],
-                              default: 'disabled',
-                              description: 'If this project supports creating custom components.',
-                            },
                             mdx: {
                               type: 'string',
                               enum: ['enabled', 'disabled'],
@@ -3778,6 +5942,73 @@ const document = {
                               description: 'If this project supports MDX.',
                             },
                           },
+                          additionalProperties: false,
+                        },
+                        git: {
+                          type: 'object',
+                          properties: {
+                            connection: {
+                              type: 'object',
+                              properties: {
+                                repository: {
+                                  type: 'object',
+                                  properties: {
+                                    provider_type: {
+                                      type: 'string',
+                                      enum: ['github', 'github_enterprise_server'],
+                                      description: 'The type of provider for the repository.',
+                                    },
+                                    name: {
+                                      type: 'string',
+                                      description: 'The name of the repository (e.g., `repo-with-content`).',
+                                    },
+                                    full_name: {
+                                      type: 'string',
+                                      description:
+                                        'The full name of the repository (e.g., `owner-org/repo-with-content`).',
+                                    },
+                                    url: {
+                                      type: 'string',
+                                      format: 'uri',
+                                      description:
+                                        'The URL of the repository (e.g., `https://github.com/owner-org/repo-with-content`).',
+                                    },
+                                  },
+                                  required: ['provider_type', 'name', 'full_name', 'url'],
+                                  additionalProperties: false,
+                                  nullable: true,
+                                },
+                                organization: {
+                                  type: 'object',
+                                  properties: {
+                                    name: {
+                                      type: 'string',
+                                      description:
+                                        'The name of the organization the linked repository is a part of (e.g., `owner-org`).',
+                                    },
+                                    provider_type: {
+                                      type: 'string',
+                                      enum: ['github', 'github_enterprise_server'],
+                                      description: 'The type of provider for the organization.',
+                                    },
+                                  },
+                                  required: ['name', 'provider_type'],
+                                  additionalProperties: false,
+                                  nullable: true,
+                                },
+                                status: {
+                                  type: 'string',
+                                  enum: ['active', 'inactive', 'none'],
+                                  default: 'none',
+                                  description:
+                                    'Indicates if the project has a bi-directional sync connection set up. Below is the meaning of each possible value:\n- `active` - the project has an external repository connected and the connection to the repository is active.\n- `inactive` - the project has an external repository connected but the connection to the repository is inactive.\n- `none` - the project is not connected to an external repository.',
+                                },
+                              },
+                              required: ['repository', 'organization'],
+                              additionalProperties: false,
+                            },
+                          },
+                          required: ['connection'],
                           additionalProperties: false,
                         },
                         permissions: {
@@ -3825,6 +6056,24 @@ const document = {
                           required: ['appearance'],
                           additionalProperties: false,
                         },
+                        refactored: {
+                          type: 'object',
+                          properties: {
+                            status: {
+                              type: 'string',
+                              enum: ['enabled', 'disabled'],
+                              default: 'disabled',
+                              description: 'Indicates if the project has our new Unified UI experience.',
+                            },
+                            migrated: {
+                              type: 'string',
+                              enum: ['failed', 'processing', 'successful', 'unknown'],
+                              default: 'unknown',
+                              description: 'Indicates if the project has been migrated from Dash to Superhub.',
+                            },
+                          },
+                          additionalProperties: false,
+                        },
                         uri: {
                           type: 'string',
                           pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)',
@@ -3841,6 +6090,7 @@ const document = {
                         'health_check',
                         'homepage_url',
                         'integrations',
+                        'mcp',
                         'name',
                         'onboarding_completed',
                         'pages',
@@ -3848,13 +6098,14 @@ const document = {
                         'plan',
                         'privacy',
                         'redirects',
-                        'refactored',
                         'reference',
                         'seo',
                         'subdomain',
                         'id',
                         'features',
+                        'git',
                         'permissions',
+                        'refactored',
                         'uri',
                       ],
                       additionalProperties: false,
@@ -3869,13 +6120,13 @@ const document = {
         },
       },
     },
-    '/versions/{version}/reference': {
+    '/branches/{branch}/reference': {
       post: {
         operationId: 'createReference',
         summary: 'Create a reference page',
         tags: ['API Reference'],
         description:
-          "Create a page in the API Reference section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Create a page in the API Reference section of your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         requestBody: {
           content: {
             'application/json': {
@@ -3888,13 +6139,27 @@ const document = {
                     default: 'enabled',
                     description: 'Allow indexing by robots.',
                   },
+                  appearance: {
+                    type: 'object',
+                    properties: {
+                      icon: {
+                        type: 'object',
+                        properties: {
+                          name: { type: 'string', nullable: true },
+                          type: { type: 'string', enum: ['icon', 'emoji'], nullable: true },
+                        },
+                        additionalProperties: false,
+                      },
+                    },
+                    additionalProperties: false,
+                  },
                   category: {
                     type: 'object',
                     properties: {
                       uri: {
                         type: 'string',
                         pattern:
-                          '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/categories\\/(guides|reference)\\/((.*))',
+                          '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/categories\\/(guides|reference)\\/((.*))',
                         description: 'A URI to the category resource.',
                       },
                     },
@@ -3953,13 +6218,6 @@ const document = {
                     },
                     additionalProperties: false,
                   },
-                  href: {
-                    type: 'object',
-                    properties: {
-                      dash: { type: 'string', format: 'uri', description: 'A URL to this page in your ReadMe Dash.' },
-                    },
-                    additionalProperties: false,
-                  },
                   metadata: {
                     type: 'object',
                     properties: {
@@ -3980,7 +6238,7 @@ const document = {
                       uri: {
                         type: 'string',
                         pattern:
-                          '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                          '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                         nullable: true,
                       },
                     },
@@ -3993,26 +6251,17 @@ const document = {
                     },
                     additionalProperties: false,
                   },
-                  renderable: {
-                    type: 'object',
-                    properties: {
-                      status: {
-                        type: 'boolean',
-                        default: true,
-                        description: 'A flag for if the page is renderable or not.',
-                      },
-                      error: { type: 'string', nullable: true },
-                      message: { type: 'string', nullable: true },
-                    },
-                    additionalProperties: false,
-                  },
                   slug: {
                     allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
                     description: 'The accessible URL slug for the page.',
                   },
                   state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
                   title: { type: 'string' },
-                  type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
+                  type: {
+                    type: 'string',
+                    enum: ['api_config', 'basic', 'endpoint', 'link', 'webhook'],
+                    default: 'basic',
+                  },
                   connections: {
                     type: 'object',
                     properties: {
@@ -4024,7 +6273,7 @@ const document = {
                             uri: {
                               type: 'string',
                               pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                               description:
                                 'URI of the recipe that this API reference is connected to. The recipe and API reference must exist within the same version.',
                             },
@@ -4037,7 +6286,11 @@ const document = {
                     additionalProperties: false,
                   },
                   position: { type: 'number' },
-                  api_config: { type: 'string', enum: ['authentication', 'getting-started', 'my-requests'] },
+                  api_config: {
+                    type: 'string',
+                    enum: ['authentication', 'getting-started', 'my-requests'],
+                    nullable: true,
+                  },
                   api: {
                     type: 'object',
                     properties: {
@@ -4120,13 +6373,23 @@ const document = {
                       },
                       source: {
                         type: 'string',
-                        enum: ['api', 'apidesigner', 'apieditor', 'bidi', 'form', 'rdme', 'rdme_github', 'url'],
+                        enum: [
+                          'api',
+                          'apidesigner',
+                          'apieditor',
+                          'bidi',
+                          'form',
+                          'postman',
+                          'rdme',
+                          'rdme_github',
+                          'url',
+                        ],
                         nullable: true,
                       },
                       uri: {
                         type: 'string',
                         pattern:
-                          '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
+                          '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
                         nullable: true,
                       },
                     },
@@ -4142,11 +6405,14 @@ const document = {
         },
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or stable.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
         ],
         responses: {
@@ -4166,13 +6432,29 @@ const document = {
                           default: 'enabled',
                           description: 'Allow indexing by robots.',
                         },
+                        appearance: {
+                          type: 'object',
+                          properties: {
+                            icon: {
+                              type: 'object',
+                              properties: {
+                                name: { type: 'string', nullable: true },
+                                type: { type: 'string', enum: ['icon', 'emoji'], nullable: true },
+                              },
+                              required: ['name', 'type'],
+                              additionalProperties: false,
+                            },
+                          },
+                          required: ['icon'],
+                          additionalProperties: false,
+                        },
                         category: {
                           type: 'object',
                           properties: {
                             uri: {
                               type: 'string',
                               pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/categories\\/(guides|reference)\\/((.*))',
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/categories\\/(guides|reference)\\/((.*))',
                               description: 'A URI to the category resource.',
                             },
                           },
@@ -4238,18 +6520,6 @@ const document = {
                           required: ['body', 'excerpt', 'link', 'next'],
                           additionalProperties: false,
                         },
-                        href: {
-                          type: 'object',
-                          properties: {
-                            dash: {
-                              type: 'string',
-                              format: 'uri',
-                              description: 'A URL to this page in your ReadMe Dash.',
-                            },
-                          },
-                          required: ['dash'],
-                          additionalProperties: false,
-                        },
                         metadata: {
                           type: 'object',
                           properties: {
@@ -4285,7 +6555,7 @@ const document = {
                             uri: {
                               type: 'string',
                               pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                               nullable: true,
                               description: 'A URI to the parent page resource including the page ID or slug.',
                             },
@@ -4300,59 +6570,16 @@ const document = {
                           },
                           additionalProperties: false,
                         },
-                        project: {
-                          type: 'object',
-                          properties: {
-                            name: { type: 'string', description: 'The name of the project.' },
-                            subdomain: {
-                              type: 'string',
-                              pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
-                              maxLength: 30,
-                              description: 'The subdomain of the project.',
-                            },
-                            uri: {
-                              type: 'string',
-                              pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)',
-                              description: 'A URI to the project that this page belongs to.',
-                            },
-                          },
-                          required: ['name', 'subdomain', 'uri'],
-                          additionalProperties: false,
-                        },
-                        renderable: {
-                          type: 'object',
-                          properties: {
-                            status: {
-                              type: 'boolean',
-                              default: true,
-                              description: 'A flag for if the page is renderable or not.',
-                            },
-                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
-                            message: {
-                              type: 'string',
-                              nullable: true,
-                              description: 'Additional details about the rendering error.',
-                            },
-                          },
-                          additionalProperties: false,
-                        },
                         slug: {
                           allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
                           description: 'The accessible URL slug for the page.',
                         },
                         state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
                         title: { type: 'string' },
-                        type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
-                        updated_at: {
+                        type: {
                           type: 'string',
-                          format: 'date-time',
-                          description: 'An ISO 8601 formatted date for when the page was updated.',
-                        },
-                        uri: {
-                          type: 'string',
-                          pattern:
-                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
-                          description: 'A URI to the page resource.',
+                          enum: ['api_config', 'basic', 'endpoint', 'link', 'webhook'],
+                          default: 'basic',
                         },
                         api_config: {
                           type: 'string',
@@ -4448,14 +6675,24 @@ const document = {
                             },
                             source: {
                               type: 'string',
-                              enum: ['api', 'apidesigner', 'apieditor', 'bidi', 'form', 'rdme', 'rdme_github', 'url'],
+                              enum: [
+                                'api',
+                                'apidesigner',
+                                'apieditor',
+                                'bidi',
+                                'form',
+                                'postman',
+                                'rdme',
+                                'rdme_github',
+                                'url',
+                              ],
                               nullable: true,
                               description: 'The source by which this API definition was ingested.',
                             },
                             uri: {
                               type: 'string',
                               pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
                               nullable: true,
                               description: 'A URI to the API resource.',
                             },
@@ -4475,7 +6712,7 @@ const document = {
                                   uri: {
                                     type: 'string',
                                     pattern:
-                                      '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                                      '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                                     description:
                                       'URI of the recipe that this API reference is connected to. The recipe and API reference must exist within the same version.',
                                   },
@@ -4490,23 +6727,88 @@ const document = {
                           required: ['recipes'],
                           additionalProperties: false,
                         },
+                        href: {
+                          type: 'object',
+                          properties: {
+                            dash: {
+                              type: 'string',
+                              format: 'uri',
+                              description: 'A URL to this page in your ReadMe Dash.',
+                            },
+                            hub: {
+                              type: 'string',
+                              format: 'uri',
+                              description: 'A URL to this page on your ReadMe hub.',
+                            },
+                          },
+                          required: ['dash', 'hub'],
+                          additionalProperties: false,
+                        },
+                        project: {
+                          type: 'object',
+                          properties: {
+                            name: { type: 'string', description: 'The name of the project.' },
+                            subdomain: {
+                              type: 'string',
+                              pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
+                              maxLength: 30,
+                              description: 'The subdomain of the project.',
+                            },
+                            uri: {
+                              type: 'string',
+                              pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)',
+                              description: 'A URI to the project that this page belongs to.',
+                            },
+                          },
+                          required: ['name', 'subdomain', 'uri'],
+                          additionalProperties: false,
+                        },
+                        renderable: {
+                          type: 'object',
+                          properties: {
+                            status: {
+                              type: 'boolean',
+                              default: true,
+                              description: 'A flag for if the resource is renderable or not.',
+                            },
+                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
+                            message: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'Additional details about the rendering error.',
+                            },
+                          },
+                          additionalProperties: false,
+                        },
+                        updated_at: {
+                          type: 'string',
+                          format: 'date-time',
+                          description: 'An ISO 8601 formatted date for when the page was updated.',
+                        },
+                        uri: {
+                          type: 'string',
+                          pattern:
+                            '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                          description: 'A URI to the page resource.',
+                        },
                       },
                       required: [
+                        'appearance',
                         'category',
                         'content',
-                        'href',
                         'metadata',
                         'parent',
                         'privacy',
-                        'project',
-                        'renderable',
                         'slug',
                         'title',
-                        'updated_at',
-                        'uri',
                         'api_config',
                         'api',
                         'connections',
+                        'href',
+                        'project',
+                        'renderable',
+                        'updated_at',
+                        'uri',
                       ],
                       additionalProperties: false,
                     },
@@ -4520,428 +6822,23 @@ const document = {
         },
       },
     },
-    '/versions/{version}/reference/{slug}': {
-      get: {
-        operationId: 'getReference',
-        summary: 'Get a reference page',
-        tags: ['API Reference'],
-        description:
-          "Get a page from the API Reference section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
-        parameters: [
-          {
-            schema: { type: 'string', enum: ['true', 'false'], default: 'false' },
-            in: 'query',
-            name: 'dereference',
-            required: false,
-            description:
-              'Whether or not to dereference the attached API definition. Defaults to `false` if not specified (subject to change while API v2 is still in beta).',
-          },
-          {
-            schema: { type: 'string', enum: ['true', 'false'], default: 'true' },
-            in: 'query',
-            name: 'reduce',
-            required: false,
-            description:
-              'Whether or not to reduce the attached API definition. Defaults to `true` if not specified (subject to change while API v2 is still in beta).',
-          },
-          {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
-            in: 'path',
-            name: 'version',
-            required: true,
-            description: 'Project version number or stable.',
-          },
-          {
-            schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
-            in: 'path',
-            name: 'slug',
-            required: true,
-            description: 'A URL-safe representation of the resource.',
-          },
-        ],
-        responses: {
-          '200': {
-            description: 'OK',
-            content: {
-              'application/json': {
-                schema: {
-                  type: 'object',
-                  properties: {
-                    data: {
-                      type: 'object',
-                      properties: {
-                        allow_crawlers: {
-                          type: 'string',
-                          enum: ['enabled', 'disabled'],
-                          default: 'enabled',
-                          description: 'Allow indexing by robots.',
-                        },
-                        category: {
-                          type: 'object',
-                          properties: {
-                            uri: {
-                              type: 'string',
-                              pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/categories\\/(guides|reference)\\/((.*))',
-                              description: 'A URI to the category resource.',
-                            },
-                          },
-                          required: ['uri'],
-                          additionalProperties: false,
-                        },
-                        content: {
-                          type: 'object',
-                          properties: {
-                            body: { type: 'string', nullable: true },
-                            excerpt: { type: 'string', nullable: true },
-                            link: {
-                              type: 'object',
-                              properties: {
-                                url: { type: 'string', nullable: true },
-                                new_tab: {
-                                  type: 'boolean',
-                                  nullable: true,
-                                  description: 'Should this URL be opened up in a new tab?',
-                                },
-                              },
-                              required: ['url', 'new_tab'],
-                              additionalProperties: false,
-                              description:
-                                'Information about where this page should redirect to; only available when `type` is `link`.',
-                            },
-                            next: {
-                              type: 'object',
-                              properties: {
-                                description: { type: 'string', nullable: true },
-                                pages: {
-                                  type: 'array',
-                                  items: {
-                                    anyOf: [
-                                      {
-                                        type: 'object',
-                                        properties: {
-                                          slug: { type: 'string' },
-                                          title: { type: 'string', nullable: true },
-                                          type: { type: 'string', enum: ['basic', 'endpoint'] },
-                                        },
-                                        required: ['slug', 'title', 'type'],
-                                        additionalProperties: false,
-                                      },
-                                      {
-                                        type: 'object',
-                                        properties: {
-                                          title: { type: 'string', nullable: true },
-                                          type: { type: 'string', enum: ['link'] },
-                                          url: { type: 'string' },
-                                        },
-                                        required: ['title', 'type', 'url'],
-                                        additionalProperties: false,
-                                      },
-                                    ],
-                                  },
-                                },
-                              },
-                              required: ['description', 'pages'],
-                              additionalProperties: false,
-                            },
-                          },
-                          required: ['body', 'excerpt', 'link', 'next'],
-                          additionalProperties: false,
-                        },
-                        href: {
-                          type: 'object',
-                          properties: {
-                            dash: {
-                              type: 'string',
-                              format: 'uri',
-                              description: 'A URL to this page in your ReadMe Dash.',
-                            },
-                          },
-                          required: ['dash'],
-                          additionalProperties: false,
-                        },
-                        metadata: {
-                          type: 'object',
-                          properties: {
-                            description: { type: 'string', nullable: true },
-                            image: {
-                              type: 'object',
-                              properties: {
-                                uri: {
-                                  type: 'string',
-                                  pattern: '\\/images\\/([a-f\\d]{24})',
-                                  nullable: true,
-                                  description:
-                                    'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
-                                },
-                                url: { type: 'string', format: 'uri', nullable: true },
-                              },
-                              required: ['uri', 'url'],
-                              additionalProperties: false,
-                            },
-                            keywords: {
-                              type: 'string',
-                              nullable: true,
-                              description: 'A comma-separated list of keywords to place into your page metadata.',
-                            },
-                            title: { type: 'string', nullable: true },
-                          },
-                          required: ['description', 'image', 'keywords', 'title'],
-                          additionalProperties: false,
-                        },
-                        parent: {
-                          type: 'object',
-                          properties: {
-                            uri: {
-                              type: 'string',
-                              pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
-                              nullable: true,
-                              description: 'A URI to the parent page resource including the page ID or slug.',
-                            },
-                          },
-                          required: ['uri'],
-                          additionalProperties: false,
-                        },
-                        privacy: {
-                          type: 'object',
-                          properties: {
-                            view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
-                          },
-                          additionalProperties: false,
-                        },
-                        project: {
-                          type: 'object',
-                          properties: {
-                            name: { type: 'string', description: 'The name of the project.' },
-                            subdomain: {
-                              type: 'string',
-                              pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
-                              maxLength: 30,
-                              description: 'The subdomain of the project.',
-                            },
-                            uri: {
-                              type: 'string',
-                              pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)',
-                              description: 'A URI to the project that this page belongs to.',
-                            },
-                          },
-                          required: ['name', 'subdomain', 'uri'],
-                          additionalProperties: false,
-                        },
-                        renderable: {
-                          type: 'object',
-                          properties: {
-                            status: {
-                              type: 'boolean',
-                              default: true,
-                              description: 'A flag for if the page is renderable or not.',
-                            },
-                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
-                            message: {
-                              type: 'string',
-                              nullable: true,
-                              description: 'Additional details about the rendering error.',
-                            },
-                          },
-                          additionalProperties: false,
-                        },
-                        slug: {
-                          allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
-                          description: 'The accessible URL slug for the page.',
-                        },
-                        state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
-                        title: { type: 'string' },
-                        type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
-                        updated_at: {
-                          type: 'string',
-                          format: 'date-time',
-                          description: 'An ISO 8601 formatted date for when the page was updated.',
-                        },
-                        uri: {
-                          type: 'string',
-                          pattern:
-                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
-                          description: 'A URI to the page resource.',
-                        },
-                        api_config: {
-                          type: 'string',
-                          enum: ['authentication', 'getting-started', 'my-requests'],
-                          nullable: true,
-                        },
-                        api: {
-                          type: 'object',
-                          properties: {
-                            method: {
-                              type: 'string',
-                              enum: ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'],
-                              description: 'The endpoint HTTP method.',
-                            },
-                            path: { type: 'string', description: 'The endpoint path.' },
-                            schema: {
-                              nullable: true,
-                              description:
-                                'The API schema for this reference endpoint. This schema may be a reduced (i.e., only contains the necessary information for this endpoint) and/or dereferenced version of the full API definition, depending upon the query parameters used for this request.',
-                            },
-                            stats: {
-                              type: 'object',
-                              properties: {
-                                additional_properties: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description:
-                                    'This API operation uses `additionalProperties` for handling extra schema properties.',
-                                },
-                                callbacks: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description: 'This API operation has `callbacks` documented.',
-                                },
-                                circular_references: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description:
-                                    'This API operation contains `$ref` schema pointers that resolve to itself.',
-                                },
-                                common_parameters: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description: 'This API operation utilizes common parameters set at the path level.',
-                                },
-                                discriminators: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description:
-                                    'This API operation utilizes `discriminator` for discriminating between different parts in a polymorphic schema.',
-                                },
-                                links: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description: 'This API operation has `links` documented.',
-                                },
-                                polymorphism: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description: 'This API operation contains polymorphic schemas.',
-                                },
-                                server_variables: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description:
-                                    'This API operation has composable variables configured for its server definition.',
-                                },
-                                style: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description:
-                                    'This API operation has parameters that have specific `style` serializations.',
-                                },
-                                webhooks: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description: 'This API definition has `webhooks` documented.',
-                                },
-                                xml: {
-                                  type: 'boolean',
-                                  default: false,
-                                  description: 'This API operation has parameters or schemas that serialize to XML.',
-                                },
-                                references: {
-                                  type: 'boolean',
-                                  description:
-                                    'This API operation, after being dereferenced, has `x-readme-ref-name` entries defining what the original `$ref` schema pointers were named.',
-                                },
-                              },
-                              required: ['references'],
-                              additionalProperties: false,
-                              description: 'OpenAPI features that are utilized within this API operation.',
-                            },
-                            source: {
-                              type: 'string',
-                              enum: ['api', 'apidesigner', 'apieditor', 'bidi', 'form', 'rdme', 'rdme_github', 'url'],
-                              nullable: true,
-                              description: 'The source by which this API definition was ingested.',
-                            },
-                            uri: {
-                              type: 'string',
-                              pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
-                              nullable: true,
-                              description: 'A URI to the API resource.',
-                            },
-                          },
-                          required: ['method', 'path', 'stats', 'source', 'uri'],
-                          additionalProperties: false,
-                          description: 'Information about the API that this reference page is attached to.',
-                        },
-                        connections: {
-                          type: 'object',
-                          properties: {
-                            recipes: {
-                              type: 'array',
-                              items: {
-                                type: 'object',
-                                properties: {
-                                  uri: {
-                                    type: 'string',
-                                    pattern:
-                                      '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
-                                    description:
-                                      'URI of the recipe that this API reference is connected to. The recipe and API reference must exist within the same version.',
-                                  },
-                                },
-                                required: ['uri'],
-                                additionalProperties: false,
-                              },
-                              nullable: true,
-                              description: 'A collection of recipes that are displayed on this API reference.',
-                            },
-                          },
-                          required: ['recipes'],
-                          additionalProperties: false,
-                        },
-                      },
-                      required: [
-                        'category',
-                        'content',
-                        'href',
-                        'metadata',
-                        'parent',
-                        'privacy',
-                        'project',
-                        'renderable',
-                        'slug',
-                        'title',
-                        'updated_at',
-                        'uri',
-                        'api_config',
-                        'api',
-                        'connections',
-                      ],
-                      additionalProperties: false,
-                    },
-                  },
-                  required: ['data'],
-                  additionalProperties: false,
-                },
-              },
-            },
-          },
-        },
-      },
+    '/branches/{branch}/reference/{slug}': {
       delete: {
         operationId: 'deleteReference',
         summary: 'Delete a reference page',
         tags: ['API Reference'],
         description:
-          "Delete a page from the API Reference section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Delete a page from the API Reference section of your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or stable.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
           {
             schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
@@ -4958,7 +6855,7 @@ const document = {
         summary: 'Update a reference page',
         tags: ['API Reference'],
         description:
-          "Updates an existing page in the API Reference section of your ReadMe project. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Updates an existing page in the API Reference section of your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         requestBody: {
           content: {
             'application/json': {
@@ -4971,13 +6868,27 @@ const document = {
                     default: 'enabled',
                     description: 'Allow indexing by robots.',
                   },
+                  appearance: {
+                    type: 'object',
+                    properties: {
+                      icon: {
+                        type: 'object',
+                        properties: {
+                          name: { type: 'string', nullable: true },
+                          type: { type: 'string', enum: ['icon', 'emoji'], nullable: true },
+                        },
+                        additionalProperties: false,
+                      },
+                    },
+                    additionalProperties: false,
+                  },
                   category: {
                     type: 'object',
                     properties: {
                       uri: {
                         type: 'string',
                         pattern:
-                          '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/categories\\/(guides|reference)\\/((.*))',
+                          '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/categories\\/(guides|reference)\\/((.*))',
                         description: 'A URI to the category resource.',
                       },
                     },
@@ -5035,13 +6946,6 @@ const document = {
                     },
                     additionalProperties: false,
                   },
-                  href: {
-                    type: 'object',
-                    properties: {
-                      dash: { type: 'string', format: 'uri', description: 'A URL to this page in your ReadMe Dash.' },
-                    },
-                    additionalProperties: false,
-                  },
                   metadata: {
                     type: 'object',
                     properties: {
@@ -5062,7 +6966,7 @@ const document = {
                       uri: {
                         type: 'string',
                         pattern:
-                          '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                          '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                         nullable: true,
                       },
                     },
@@ -5075,26 +6979,17 @@ const document = {
                     },
                     additionalProperties: false,
                   },
-                  renderable: {
-                    type: 'object',
-                    properties: {
-                      status: {
-                        type: 'boolean',
-                        default: true,
-                        description: 'A flag for if the page is renderable or not.',
-                      },
-                      error: { type: 'string', nullable: true },
-                      message: { type: 'string', nullable: true },
-                    },
-                    additionalProperties: false,
-                  },
                   slug: {
                     allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
                     description: 'The accessible URL slug for the page.',
                   },
                   state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
                   title: { type: 'string' },
-                  type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
+                  type: {
+                    type: 'string',
+                    enum: ['api_config', 'basic', 'endpoint', 'link', 'webhook'],
+                    default: 'basic',
+                  },
                   connections: {
                     type: 'object',
                     properties: {
@@ -5106,7 +7001,7 @@ const document = {
                             uri: {
                               type: 'string',
                               pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                               description:
                                 'URI of the recipe that this API reference is connected to. The recipe and API reference must exist within the same version.',
                             },
@@ -5127,7 +7022,11 @@ const document = {
                         description: 'The endpoint HTTP method.',
                       },
                       path: { type: 'string', description: 'The endpoint path.' },
-                      schema: { nullable: true },
+                      schema: {
+                        type: 'object',
+                        additionalProperties: {},
+                        nullable: true,
+                      },
                       stats: {
                         type: 'object',
                         properties: {
@@ -5200,13 +7099,23 @@ const document = {
                       },
                       source: {
                         type: 'string',
-                        enum: ['api', 'apidesigner', 'apieditor', 'bidi', 'form', 'rdme', 'rdme_github', 'url'],
+                        enum: [
+                          'api',
+                          'apidesigner',
+                          'apieditor',
+                          'bidi',
+                          'form',
+                          'postman',
+                          'rdme',
+                          'rdme_github',
+                          'url',
+                        ],
                         nullable: true,
                       },
                       uri: {
                         type: 'string',
                         pattern:
-                          '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
+                          '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
                         nullable: true,
                       },
                     },
@@ -5223,11 +7132,14 @@ const document = {
         },
         parameters: [
           {
-            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
             in: 'path',
-            name: 'version',
+            name: 'branch',
             required: true,
-            description: 'Project version number or stable.',
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
           },
           {
             schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
@@ -5254,13 +7166,29 @@ const document = {
                           default: 'enabled',
                           description: 'Allow indexing by robots.',
                         },
+                        appearance: {
+                          type: 'object',
+                          properties: {
+                            icon: {
+                              type: 'object',
+                              properties: {
+                                name: { type: 'string', nullable: true },
+                                type: { type: 'string', enum: ['icon', 'emoji'], nullable: true },
+                              },
+                              required: ['name', 'type'],
+                              additionalProperties: false,
+                            },
+                          },
+                          required: ['icon'],
+                          additionalProperties: false,
+                        },
                         category: {
                           type: 'object',
                           properties: {
                             uri: {
                               type: 'string',
                               pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/categories\\/(guides|reference)\\/((.*))',
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/categories\\/(guides|reference)\\/((.*))',
                               description: 'A URI to the category resource.',
                             },
                           },
@@ -5326,6 +7254,215 @@ const document = {
                           required: ['body', 'excerpt', 'link', 'next'],
                           additionalProperties: false,
                         },
+                        metadata: {
+                          type: 'object',
+                          properties: {
+                            description: { type: 'string', nullable: true },
+                            image: {
+                              type: 'object',
+                              properties: {
+                                uri: {
+                                  type: 'string',
+                                  pattern: '\\/images\\/([a-f\\d]{24})',
+                                  nullable: true,
+                                  description:
+                                    'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
+                                },
+                                url: { type: 'string', format: 'uri', nullable: true },
+                              },
+                              required: ['uri', 'url'],
+                              additionalProperties: false,
+                            },
+                            keywords: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'A comma-separated list of keywords to place into your page metadata.',
+                            },
+                            title: { type: 'string', nullable: true },
+                          },
+                          required: ['description', 'image', 'keywords', 'title'],
+                          additionalProperties: false,
+                        },
+                        parent: {
+                          type: 'object',
+                          properties: {
+                            uri: {
+                              type: 'string',
+                              pattern:
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                              nullable: true,
+                              description: 'A URI to the parent page resource including the page ID or slug.',
+                            },
+                          },
+                          required: ['uri'],
+                          additionalProperties: false,
+                        },
+                        privacy: {
+                          type: 'object',
+                          properties: {
+                            view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
+                          },
+                          additionalProperties: false,
+                        },
+                        slug: {
+                          allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
+                          description: 'The accessible URL slug for the page.',
+                        },
+                        state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
+                        title: { type: 'string' },
+                        type: {
+                          type: 'string',
+                          enum: ['api_config', 'basic', 'endpoint', 'link', 'webhook'],
+                          default: 'basic',
+                        },
+                        api_config: {
+                          type: 'string',
+                          enum: ['authentication', 'getting-started', 'my-requests'],
+                          nullable: true,
+                        },
+                        api: {
+                          type: 'object',
+                          properties: {
+                            method: {
+                              type: 'string',
+                              enum: ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'],
+                              description: 'The endpoint HTTP method.',
+                            },
+                            path: { type: 'string', description: 'The endpoint path.' },
+                            schema: {
+                              type: 'object',
+                              additionalProperties: {},
+                              nullable: true,
+                              description:
+                                'The API schema for this reference endpoint. This schema may be a reduced (i.e., only contains the necessary information for this endpoint) and/or dereferenced version of the full API definition, depending upon the query parameters used for this request.',
+                            },
+                            stats: {
+                              type: 'object',
+                              properties: {
+                                additional_properties: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description:
+                                    'This API operation uses `additionalProperties` for handling extra schema properties.',
+                                },
+                                callbacks: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description: 'This API operation has `callbacks` documented.',
+                                },
+                                circular_references: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description:
+                                    'This API operation contains `$ref` schema pointers that resolve to itself.',
+                                },
+                                common_parameters: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description: 'This API operation utilizes common parameters set at the path level.',
+                                },
+                                discriminators: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description:
+                                    'This API operation utilizes `discriminator` for discriminating between different parts in a polymorphic schema.',
+                                },
+                                links: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description: 'This API operation has `links` documented.',
+                                },
+                                polymorphism: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description: 'This API operation contains polymorphic schemas.',
+                                },
+                                server_variables: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description:
+                                    'This API operation has composable variables configured for its server definition.',
+                                },
+                                style: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description:
+                                    'This API operation has parameters that have specific `style` serializations.',
+                                },
+                                webhooks: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description: 'This API definition has `webhooks` documented.',
+                                },
+                                xml: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description: 'This API operation has parameters or schemas that serialize to XML.',
+                                },
+                                references: {
+                                  type: 'boolean',
+                                  description:
+                                    'This API operation, after being dereferenced, has `x-readme-ref-name` entries defining what the original `$ref` schema pointers were named.',
+                                },
+                              },
+                              required: ['references'],
+                              additionalProperties: false,
+                              description: 'OpenAPI features that are utilized within this API operation.',
+                            },
+                            source: {
+                              type: 'string',
+                              enum: [
+                                'api',
+                                'apidesigner',
+                                'apieditor',
+                                'bidi',
+                                'form',
+                                'postman',
+                                'rdme',
+                                'rdme_github',
+                                'url',
+                              ],
+                              nullable: true,
+                              description: 'The source by which this API definition was ingested.',
+                            },
+                            uri: {
+                              type: 'string',
+                              pattern:
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
+                              nullable: true,
+                              description: 'A URI to the API resource.',
+                            },
+                          },
+                          required: ['method', 'path', 'stats', 'source', 'uri'],
+                          additionalProperties: false,
+                          description: 'Information about the API that this reference page is attached to.',
+                        },
+                        connections: {
+                          type: 'object',
+                          properties: {
+                            recipes: {
+                              type: 'array',
+                              items: {
+                                type: 'object',
+                                properties: {
+                                  uri: {
+                                    type: 'string',
+                                    pattern:
+                                      '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                                    description:
+                                      'URI of the recipe that this API reference is connected to. The recipe and API reference must exist within the same version.',
+                                  },
+                                },
+                                required: ['uri'],
+                                additionalProperties: false,
+                              },
+                              nullable: true,
+                              description: 'A collection of recipes that are displayed on this API reference.',
+                            },
+                          },
+                          required: ['recipes'],
+                          additionalProperties: false,
+                        },
                         href: {
                           type: 'object',
                           properties: {
@@ -5334,8 +7471,236 @@ const document = {
                               format: 'uri',
                               description: 'A URL to this page in your ReadMe Dash.',
                             },
+                            hub: {
+                              type: 'string',
+                              format: 'uri',
+                              description: 'A URL to this page on your ReadMe hub.',
+                            },
                           },
-                          required: ['dash'],
+                          required: ['dash', 'hub'],
+                          additionalProperties: false,
+                        },
+                        project: {
+                          type: 'object',
+                          properties: {
+                            name: { type: 'string', description: 'The name of the project.' },
+                            subdomain: {
+                              type: 'string',
+                              pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
+                              maxLength: 30,
+                              description: 'The subdomain of the project.',
+                            },
+                            uri: {
+                              type: 'string',
+                              pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)',
+                              description: 'A URI to the project that this page belongs to.',
+                            },
+                          },
+                          required: ['name', 'subdomain', 'uri'],
+                          additionalProperties: false,
+                        },
+                        renderable: {
+                          type: 'object',
+                          properties: {
+                            status: {
+                              type: 'boolean',
+                              default: true,
+                              description: 'A flag for if the resource is renderable or not.',
+                            },
+                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
+                            message: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'Additional details about the rendering error.',
+                            },
+                          },
+                          additionalProperties: false,
+                        },
+                        updated_at: {
+                          type: 'string',
+                          format: 'date-time',
+                          description: 'An ISO 8601 formatted date for when the page was updated.',
+                        },
+                        uri: {
+                          type: 'string',
+                          pattern:
+                            '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                          description: 'A URI to the page resource.',
+                        },
+                      },
+                      required: [
+                        'appearance',
+                        'category',
+                        'content',
+                        'metadata',
+                        'parent',
+                        'privacy',
+                        'slug',
+                        'title',
+                        'api_config',
+                        'api',
+                        'connections',
+                        'href',
+                        'project',
+                        'renderable',
+                        'updated_at',
+                        'uri',
+                      ],
+                      additionalProperties: false,
+                    },
+                  },
+                  required: ['data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      get: {
+        operationId: 'getReference',
+        summary: 'Get a reference page',
+        tags: ['API Reference'],
+        description:
+          "Get a page from the API Reference section of your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        parameters: [
+          {
+            schema: { type: 'string', enum: ['true', 'false'], default: 'false' },
+            in: 'query',
+            name: 'dereference',
+            required: false,
+            description:
+              'Whether or not to dereference the attached API definition. Defaults to `false` if not specified (subject to change while API v2 is still in beta).',
+          },
+          {
+            schema: { type: 'string', enum: ['true', 'false'], default: 'true' },
+            in: 'query',
+            name: 'reduce',
+            required: false,
+            description:
+              'Whether or not to reduce the attached API definition. Defaults to `true` if not specified (subject to change while API v2 is still in beta).',
+          },
+          {
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
+            in: 'path',
+            name: 'branch',
+            required: true,
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
+          },
+          {
+            schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
+            in: 'path',
+            name: 'slug',
+            required: true,
+            description: 'A URL-safe representation of the resource.',
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    data: {
+                      type: 'object',
+                      properties: {
+                        allow_crawlers: {
+                          type: 'string',
+                          enum: ['enabled', 'disabled'],
+                          default: 'enabled',
+                          description: 'Allow indexing by robots.',
+                        },
+                        appearance: {
+                          type: 'object',
+                          properties: {
+                            icon: {
+                              type: 'object',
+                              properties: {
+                                name: { type: 'string', nullable: true },
+                                type: { type: 'string', enum: ['icon', 'emoji'], nullable: true },
+                              },
+                              required: ['name', 'type'],
+                              additionalProperties: false,
+                            },
+                          },
+                          required: ['icon'],
+                          additionalProperties: false,
+                        },
+                        category: {
+                          type: 'object',
+                          properties: {
+                            uri: {
+                              type: 'string',
+                              pattern:
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/categories\\/(guides|reference)\\/((.*))',
+                              description: 'A URI to the category resource.',
+                            },
+                          },
+                          required: ['uri'],
+                          additionalProperties: false,
+                        },
+                        content: {
+                          type: 'object',
+                          properties: {
+                            body: { type: 'string', nullable: true },
+                            excerpt: { type: 'string', nullable: true },
+                            link: {
+                              type: 'object',
+                              properties: {
+                                url: { type: 'string', nullable: true },
+                                new_tab: {
+                                  type: 'boolean',
+                                  nullable: true,
+                                  description: 'Should this URL be opened up in a new tab?',
+                                },
+                              },
+                              required: ['url', 'new_tab'],
+                              additionalProperties: false,
+                              description:
+                                'Information about where this page should redirect to; only available when `type` is `link`.',
+                            },
+                            next: {
+                              type: 'object',
+                              properties: {
+                                description: { type: 'string', nullable: true },
+                                pages: {
+                                  type: 'array',
+                                  items: {
+                                    anyOf: [
+                                      {
+                                        type: 'object',
+                                        properties: {
+                                          slug: { type: 'string' },
+                                          title: { type: 'string', nullable: true },
+                                          type: { type: 'string', enum: ['basic', 'endpoint'] },
+                                        },
+                                        required: ['slug', 'title', 'type'],
+                                        additionalProperties: false,
+                                      },
+                                      {
+                                        type: 'object',
+                                        properties: {
+                                          title: { type: 'string', nullable: true },
+                                          type: { type: 'string', enum: ['link'] },
+                                          url: { type: 'string' },
+                                        },
+                                        required: ['title', 'type', 'url'],
+                                        additionalProperties: false,
+                                      },
+                                    ],
+                                  },
+                                },
+                              },
+                              required: ['description', 'pages'],
+                              additionalProperties: false,
+                            },
+                          },
+                          required: ['body', 'excerpt', 'link', 'next'],
                           additionalProperties: false,
                         },
                         metadata: {
@@ -5373,7 +7738,7 @@ const document = {
                             uri: {
                               type: 'string',
                               pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                               nullable: true,
                               description: 'A URI to the parent page resource including the page ID or slug.',
                             },
@@ -5388,59 +7753,16 @@ const document = {
                           },
                           additionalProperties: false,
                         },
-                        project: {
-                          type: 'object',
-                          properties: {
-                            name: { type: 'string', description: 'The name of the project.' },
-                            subdomain: {
-                              type: 'string',
-                              pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
-                              maxLength: 30,
-                              description: 'The subdomain of the project.',
-                            },
-                            uri: {
-                              type: 'string',
-                              pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)',
-                              description: 'A URI to the project that this page belongs to.',
-                            },
-                          },
-                          required: ['name', 'subdomain', 'uri'],
-                          additionalProperties: false,
-                        },
-                        renderable: {
-                          type: 'object',
-                          properties: {
-                            status: {
-                              type: 'boolean',
-                              default: true,
-                              description: 'A flag for if the page is renderable or not.',
-                            },
-                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
-                            message: {
-                              type: 'string',
-                              nullable: true,
-                              description: 'Additional details about the rendering error.',
-                            },
-                          },
-                          additionalProperties: false,
-                        },
                         slug: {
                           allOf: [{ type: 'string' }, { type: 'string', minLength: 1 }],
                           description: 'The accessible URL slug for the page.',
                         },
                         state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
                         title: { type: 'string' },
-                        type: { type: 'string', enum: ['api_config', 'basic', 'endpoint', 'link'], default: 'basic' },
-                        updated_at: {
+                        type: {
                           type: 'string',
-                          format: 'date-time',
-                          description: 'An ISO 8601 formatted date for when the page was updated.',
-                        },
-                        uri: {
-                          type: 'string',
-                          pattern:
-                            '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
-                          description: 'A URI to the page resource.',
+                          enum: ['api_config', 'basic', 'endpoint', 'link', 'webhook'],
+                          default: 'basic',
                         },
                         api_config: {
                           type: 'string',
@@ -5536,14 +7858,24 @@ const document = {
                             },
                             source: {
                               type: 'string',
-                              enum: ['api', 'apidesigner', 'apieditor', 'bidi', 'form', 'rdme', 'rdme_github', 'url'],
+                              enum: [
+                                'api',
+                                'apidesigner',
+                                'apieditor',
+                                'bidi',
+                                'form',
+                                'postman',
+                                'rdme',
+                                'rdme_github',
+                                'url',
+                              ],
                               nullable: true,
                               description: 'The source by which this API definition was ingested.',
                             },
                             uri: {
                               type: 'string',
                               pattern:
-                                '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
                               nullable: true,
                               description: 'A URI to the API resource.',
                             },
@@ -5563,7 +7895,7 @@ const document = {
                                   uri: {
                                     type: 'string',
                                     pattern:
-                                      '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                                      '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                                     description:
                                       'URI of the recipe that this API reference is connected to. The recipe and API reference must exist within the same version.',
                                   },
@@ -5578,23 +7910,1064 @@ const document = {
                           required: ['recipes'],
                           additionalProperties: false,
                         },
+                        href: {
+                          type: 'object',
+                          properties: {
+                            dash: {
+                              type: 'string',
+                              format: 'uri',
+                              description: 'A URL to this page in your ReadMe Dash.',
+                            },
+                            hub: {
+                              type: 'string',
+                              format: 'uri',
+                              description: 'A URL to this page on your ReadMe hub.',
+                            },
+                          },
+                          required: ['dash', 'hub'],
+                          additionalProperties: false,
+                        },
+                        project: {
+                          type: 'object',
+                          properties: {
+                            name: { type: 'string', description: 'The name of the project.' },
+                            subdomain: {
+                              type: 'string',
+                              pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
+                              maxLength: 30,
+                              description: 'The subdomain of the project.',
+                            },
+                            uri: {
+                              type: 'string',
+                              pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)',
+                              description: 'A URI to the project that this page belongs to.',
+                            },
+                          },
+                          required: ['name', 'subdomain', 'uri'],
+                          additionalProperties: false,
+                        },
+                        renderable: {
+                          type: 'object',
+                          properties: {
+                            status: {
+                              type: 'boolean',
+                              default: true,
+                              description: 'A flag for if the resource is renderable or not.',
+                            },
+                            error: { type: 'string', nullable: true, description: 'The rendering error.' },
+                            message: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'Additional details about the rendering error.',
+                            },
+                          },
+                          additionalProperties: false,
+                        },
+                        updated_at: {
+                          type: 'string',
+                          format: 'date-time',
+                          description: 'An ISO 8601 formatted date for when the page was updated.',
+                        },
+                        uri: {
+                          type: 'string',
+                          pattern:
+                            '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                          description: 'A URI to the page resource.',
+                        },
                       },
                       required: [
+                        'appearance',
                         'category',
                         'content',
-                        'href',
                         'metadata',
                         'parent',
                         'privacy',
-                        'project',
-                        'renderable',
                         'slug',
                         'title',
-                        'updated_at',
-                        'uri',
                         'api_config',
                         'api',
                         'connections',
+                        'href',
+                        'project',
+                        'renderable',
+                        'updated_at',
+                        'uri',
+                      ],
+                      additionalProperties: false,
+                    },
+                  },
+                  required: ['data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/branches/{branch}/recipes': {
+      get: {
+        operationId: 'getRecipes',
+        summary: 'Get all recipes',
+        tags: ['Recipes'],
+        description:
+          "Get all recipes from your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        parameters: [
+          {
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
+            in: 'path',
+            name: 'branch',
+            required: true,
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    total: { type: 'number' },
+                    data: {
+                      type: 'array',
+                      items: {
+                        type: 'object',
+                        properties: {
+                          appearance: {
+                            type: 'object',
+                            properties: {
+                              background_color: {
+                                type: 'string',
+                                pattern: '^(?:#[0-9a-fA-F]{3}|#[0-9a-fA-F]{4}|#[0-9a-fA-F]{6}|#[0-9a-fA-F]{8})$',
+                                default: '#000000',
+                                description: 'The color of the recipe card.',
+                              },
+                              emoji: {
+                                type: 'string',
+                                nullable: true,
+                                description: 'The Unicode emoji to be displayed within the recipe card.',
+                              },
+                            },
+                            required: ['emoji'],
+                            additionalProperties: false,
+                          },
+                          connections: {
+                            type: 'object',
+                            properties: {
+                              references: {
+                                type: 'array',
+                                items: {
+                                  type: 'object',
+                                  properties: {
+                                    uri: {
+                                      type: 'string',
+                                      pattern:
+                                        '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                                      description:
+                                        'URI of the API reference page that this recipe will be connected to. The API reference and recipe must exist within the same version.',
+                                    },
+                                  },
+                                  required: ['uri'],
+                                  additionalProperties: false,
+                                },
+                                nullable: true,
+                                description:
+                                  'A collection of API reference pages that this recipe will be displayed on.',
+                              },
+                            },
+                            required: ['references'],
+                            additionalProperties: false,
+                          },
+                          content: {
+                            type: 'object',
+                            properties: {
+                              steps: {
+                                type: 'array',
+                                items: {
+                                  type: 'object',
+                                  properties: {
+                                    title: { type: 'string', description: 'Title of the step.' },
+                                    body: { type: 'string', nullable: true, description: 'Content of the step.' },
+                                    line_numbers: {
+                                      type: 'array',
+                                      items: { type: 'string' },
+                                      description:
+                                        'Line numbers to highlight in the code snippet. (e.g. `["1-5", "10"]).',
+                                    },
+                                  },
+                                  required: ['title', 'body', 'line_numbers'],
+                                  additionalProperties: false,
+                                },
+                              },
+                              snippet: {
+                                type: 'object',
+                                properties: {
+                                  code_options: {
+                                    type: 'array',
+                                    items: {
+                                      type: 'object',
+                                      properties: {
+                                        code: {
+                                          type: 'string',
+                                          nullable: true,
+                                          description: 'Code to display for the specific language.',
+                                        },
+                                        language: { type: 'string', description: 'Language of the code snippet.' },
+                                        name: {
+                                          type: 'string',
+                                          nullable: true,
+                                          description: 'Name of the code snippet.',
+                                        },
+                                        highlighted_syntax: {
+                                          type: 'string',
+                                          description: 'Actual syntax highlighter to use on the code snippet.',
+                                        },
+                                      },
+                                      required: ['code', 'language'],
+                                      additionalProperties: false,
+                                    },
+                                    description: 'Array of code snippets to display in the recipe.',
+                                  },
+                                },
+                                required: ['code_options'],
+                                additionalProperties: false,
+                              },
+                              response: {
+                                type: 'string',
+                                nullable: true,
+                                description: 'Example response to display in the recipe.',
+                              },
+                            },
+                            required: ['steps', 'snippet', 'response'],
+                            additionalProperties: false,
+                          },
+                          description: { type: 'string', nullable: true },
+                          privacy: {
+                            type: 'object',
+                            properties: {
+                              view: {
+                                type: 'string',
+                                enum: ['public', 'anyone_with_link'],
+                                description: 'Who can view the recipe.',
+                              },
+                            },
+                            required: ['view'],
+                            additionalProperties: false,
+                          },
+                          title: { type: 'string' },
+                          slug: { type: 'string' },
+                          uri: {
+                            type: 'string',
+                            pattern:
+                              '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                          },
+                        },
+                        required: [
+                          'appearance',
+                          'connections',
+                          'content',
+                          'description',
+                          'privacy',
+                          'title',
+                          'slug',
+                          'uri',
+                        ],
+                        additionalProperties: false,
+                      },
+                    },
+                  },
+                  required: ['total', 'data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      post: {
+        operationId: 'createRecipe',
+        summary: 'Create a recipe',
+        tags: ['Recipes'],
+        description:
+          "Create a new recipe in your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  appearance: {
+                    type: 'object',
+                    properties: {
+                      background_color: {
+                        type: 'string',
+                        pattern: '^(?:#[0-9a-fA-F]{3}|#[0-9a-fA-F]{4}|#[0-9a-fA-F]{6}|#[0-9a-fA-F]{8})$',
+                        default: '#000000',
+                        description: 'The color of the recipe card.',
+                      },
+                      emoji: { type: 'string', nullable: true },
+                    },
+                    additionalProperties: false,
+                  },
+                  connections: {
+                    type: 'object',
+                    properties: {
+                      references: {
+                        type: 'array',
+                        items: {
+                          type: 'object',
+                          properties: {
+                            uri: {
+                              type: 'string',
+                              pattern:
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                              description:
+                                'URI of the API reference page that this recipe will be connected to. The API reference and recipe must exist within the same version.',
+                            },
+                          },
+                          additionalProperties: false,
+                        },
+                        nullable: true,
+                      },
+                    },
+                    additionalProperties: false,
+                  },
+                  content: {
+                    type: 'object',
+                    properties: {
+                      steps: {
+                        type: 'array',
+                        items: {
+                          type: 'object',
+                          properties: {
+                            title: { type: 'string', description: 'Title of the step.' },
+                            body: { type: 'string', nullable: true },
+                            line_numbers: {
+                              type: 'array',
+                              items: { type: 'string' },
+                              description: 'Line numbers to highlight in the code snippet. (e.g. `["1-5", "10"]).',
+                            },
+                          },
+                          additionalProperties: false,
+                        },
+                      },
+                      snippet: {
+                        type: 'object',
+                        properties: {
+                          code_options: {
+                            type: 'array',
+                            items: {
+                              type: 'object',
+                              properties: {
+                                code: { type: 'string', nullable: true },
+                                language: { type: 'string', description: 'Language of the code snippet.' },
+                                name: { type: 'string', nullable: true },
+                                highlighted_syntax: { type: 'string' },
+                              },
+                              additionalProperties: false,
+                            },
+                            description: 'Array of code snippets to display in the recipe.',
+                          },
+                        },
+                        additionalProperties: false,
+                      },
+                      response: { type: 'string', nullable: true },
+                    },
+                    additionalProperties: false,
+                  },
+                  description: { type: 'string', nullable: true },
+                  privacy: {
+                    type: 'object',
+                    properties: {
+                      view: {
+                        type: 'string',
+                        enum: ['public', 'anyone_with_link'],
+                        description: 'Who can view the recipe.',
+                      },
+                    },
+                    additionalProperties: false,
+                  },
+                  title: { type: 'string' },
+                },
+                required: ['content', 'description', 'title'],
+                additionalProperties: false,
+              },
+            },
+          },
+          required: true,
+        },
+        parameters: [
+          {
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
+            in: 'path',
+            name: 'branch',
+            required: true,
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
+          },
+        ],
+        responses: {
+          '201': {
+            description: 'Created',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    data: {
+                      type: 'object',
+                      properties: {
+                        appearance: {
+                          type: 'object',
+                          properties: {
+                            background_color: {
+                              type: 'string',
+                              pattern: '^(?:#[0-9a-fA-F]{3}|#[0-9a-fA-F]{4}|#[0-9a-fA-F]{6}|#[0-9a-fA-F]{8})$',
+                              default: '#000000',
+                              description: 'The color of the recipe card.',
+                            },
+                            emoji: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'The Unicode emoji to be displayed within the recipe card.',
+                            },
+                          },
+                          required: ['emoji'],
+                          additionalProperties: false,
+                        },
+                        connections: {
+                          type: 'object',
+                          properties: {
+                            references: {
+                              type: 'array',
+                              items: {
+                                type: 'object',
+                                properties: {
+                                  uri: {
+                                    type: 'string',
+                                    pattern:
+                                      '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                                    description:
+                                      'URI of the API reference page that this recipe will be connected to. The API reference and recipe must exist within the same version.',
+                                  },
+                                },
+                                required: ['uri'],
+                                additionalProperties: false,
+                              },
+                              nullable: true,
+                              description: 'A collection of API reference pages that this recipe will be displayed on.',
+                            },
+                          },
+                          required: ['references'],
+                          additionalProperties: false,
+                        },
+                        content: {
+                          type: 'object',
+                          properties: {
+                            steps: {
+                              type: 'array',
+                              items: {
+                                type: 'object',
+                                properties: {
+                                  title: { type: 'string', description: 'Title of the step.' },
+                                  body: { type: 'string', nullable: true, description: 'Content of the step.' },
+                                  line_numbers: {
+                                    type: 'array',
+                                    items: { type: 'string' },
+                                    description:
+                                      'Line numbers to highlight in the code snippet. (e.g. `["1-5", "10"]).',
+                                  },
+                                },
+                                required: ['title', 'body', 'line_numbers'],
+                                additionalProperties: false,
+                              },
+                            },
+                            snippet: {
+                              type: 'object',
+                              properties: {
+                                code_options: {
+                                  type: 'array',
+                                  items: {
+                                    type: 'object',
+                                    properties: {
+                                      code: {
+                                        type: 'string',
+                                        nullable: true,
+                                        description: 'Code to display for the specific language.',
+                                      },
+                                      language: { type: 'string', description: 'Language of the code snippet.' },
+                                      name: {
+                                        type: 'string',
+                                        nullable: true,
+                                        description: 'Name of the code snippet.',
+                                      },
+                                      highlighted_syntax: {
+                                        type: 'string',
+                                        description: 'Actual syntax highlighter to use on the code snippet.',
+                                      },
+                                    },
+                                    required: ['code', 'language'],
+                                    additionalProperties: false,
+                                  },
+                                  description: 'Array of code snippets to display in the recipe.',
+                                },
+                              },
+                              required: ['code_options'],
+                              additionalProperties: false,
+                            },
+                            response: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'Example response to display in the recipe.',
+                            },
+                          },
+                          required: ['steps', 'snippet', 'response'],
+                          additionalProperties: false,
+                        },
+                        description: { type: 'string', nullable: true },
+                        privacy: {
+                          type: 'object',
+                          properties: {
+                            view: {
+                              type: 'string',
+                              enum: ['public', 'anyone_with_link'],
+                              description: 'Who can view the recipe.',
+                            },
+                          },
+                          required: ['view'],
+                          additionalProperties: false,
+                        },
+                        title: { type: 'string' },
+                        slug: { type: 'string' },
+                        uri: {
+                          type: 'string',
+                          pattern:
+                            '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                        },
+                      },
+                      required: [
+                        'appearance',
+                        'connections',
+                        'content',
+                        'description',
+                        'privacy',
+                        'title',
+                        'slug',
+                        'uri',
+                      ],
+                      additionalProperties: false,
+                    },
+                  },
+                  required: ['data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/branches/{branch}/recipes/{slug}': {
+      get: {
+        operationId: 'getRecipe',
+        summary: 'Get a recipe',
+        tags: ['Recipes'],
+        description:
+          "Get a recipe from your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        parameters: [
+          {
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
+            in: 'path',
+            name: 'branch',
+            required: true,
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
+          },
+          {
+            schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
+            in: 'path',
+            name: 'slug',
+            required: true,
+            description: 'A URL-safe representation of the resource.',
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    data: {
+                      type: 'object',
+                      properties: {
+                        appearance: {
+                          type: 'object',
+                          properties: {
+                            background_color: {
+                              type: 'string',
+                              pattern: '^(?:#[0-9a-fA-F]{3}|#[0-9a-fA-F]{4}|#[0-9a-fA-F]{6}|#[0-9a-fA-F]{8})$',
+                              default: '#000000',
+                              description: 'The color of the recipe card.',
+                            },
+                            emoji: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'The Unicode emoji to be displayed within the recipe card.',
+                            },
+                          },
+                          required: ['emoji'],
+                          additionalProperties: false,
+                        },
+                        connections: {
+                          type: 'object',
+                          properties: {
+                            references: {
+                              type: 'array',
+                              items: {
+                                type: 'object',
+                                properties: {
+                                  uri: {
+                                    type: 'string',
+                                    pattern:
+                                      '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                                    description:
+                                      'URI of the API reference page that this recipe will be connected to. The API reference and recipe must exist within the same version.',
+                                  },
+                                },
+                                required: ['uri'],
+                                additionalProperties: false,
+                              },
+                              nullable: true,
+                              description: 'A collection of API reference pages that this recipe will be displayed on.',
+                            },
+                          },
+                          required: ['references'],
+                          additionalProperties: false,
+                        },
+                        content: {
+                          type: 'object',
+                          properties: {
+                            steps: {
+                              type: 'array',
+                              items: {
+                                type: 'object',
+                                properties: {
+                                  title: { type: 'string', description: 'Title of the step.' },
+                                  body: { type: 'string', nullable: true, description: 'Content of the step.' },
+                                  line_numbers: {
+                                    type: 'array',
+                                    items: { type: 'string' },
+                                    description:
+                                      'Line numbers to highlight in the code snippet. (e.g. `["1-5", "10"]).',
+                                  },
+                                },
+                                required: ['title', 'body', 'line_numbers'],
+                                additionalProperties: false,
+                              },
+                            },
+                            snippet: {
+                              type: 'object',
+                              properties: {
+                                code_options: {
+                                  type: 'array',
+                                  items: {
+                                    type: 'object',
+                                    properties: {
+                                      code: {
+                                        type: 'string',
+                                        nullable: true,
+                                        description: 'Code to display for the specific language.',
+                                      },
+                                      language: { type: 'string', description: 'Language of the code snippet.' },
+                                      name: {
+                                        type: 'string',
+                                        nullable: true,
+                                        description: 'Name of the code snippet.',
+                                      },
+                                      highlighted_syntax: {
+                                        type: 'string',
+                                        description: 'Actual syntax highlighter to use on the code snippet.',
+                                      },
+                                    },
+                                    required: ['code', 'language'],
+                                    additionalProperties: false,
+                                  },
+                                  description: 'Array of code snippets to display in the recipe.',
+                                },
+                              },
+                              required: ['code_options'],
+                              additionalProperties: false,
+                            },
+                            response: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'Example response to display in the recipe.',
+                            },
+                          },
+                          required: ['steps', 'snippet', 'response'],
+                          additionalProperties: false,
+                        },
+                        description: { type: 'string', nullable: true },
+                        privacy: {
+                          type: 'object',
+                          properties: {
+                            view: {
+                              type: 'string',
+                              enum: ['public', 'anyone_with_link'],
+                              description: 'Who can view the recipe.',
+                            },
+                          },
+                          required: ['view'],
+                          additionalProperties: false,
+                        },
+                        title: { type: 'string' },
+                        slug: { type: 'string' },
+                        uri: {
+                          type: 'string',
+                          pattern:
+                            '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                        },
+                      },
+                      required: [
+                        'appearance',
+                        'connections',
+                        'content',
+                        'description',
+                        'privacy',
+                        'title',
+                        'slug',
+                        'uri',
+                      ],
+                      additionalProperties: false,
+                    },
+                  },
+                  required: ['data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      delete: {
+        operationId: 'deleteRecipe',
+        summary: 'Delete a recipe',
+        tags: ['Recipes'],
+        description:
+          "Delete a recipe from your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        parameters: [
+          {
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
+            in: 'path',
+            name: 'branch',
+            required: true,
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
+          },
+          {
+            schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
+            in: 'path',
+            name: 'slug',
+            required: true,
+            description: 'A URL-safe representation of the resource.',
+          },
+        ],
+        responses: { '204': { description: 'No Content' } },
+      },
+      patch: {
+        operationId: 'updateRecipe',
+        summary: 'Update an existing recipe',
+        tags: ['Recipes'],
+        description:
+          "Update an existing recipe in your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  appearance: {
+                    type: 'object',
+                    properties: {
+                      background_color: {
+                        type: 'string',
+                        pattern: '^(?:#[0-9a-fA-F]{3}|#[0-9a-fA-F]{4}|#[0-9a-fA-F]{6}|#[0-9a-fA-F]{8})$',
+                        default: '#000000',
+                        description: 'The color of the recipe card.',
+                      },
+                      emoji: { type: 'string', nullable: true },
+                    },
+                    additionalProperties: false,
+                  },
+                  connections: {
+                    type: 'object',
+                    properties: {
+                      references: {
+                        type: 'array',
+                        items: {
+                          type: 'object',
+                          properties: {
+                            uri: {
+                              type: 'string',
+                              pattern:
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                              description:
+                                'URI of the API reference page that this recipe will be connected to. The API reference and recipe must exist within the same version.',
+                            },
+                          },
+                          additionalProperties: false,
+                        },
+                        nullable: true,
+                      },
+                    },
+                    additionalProperties: false,
+                  },
+                  content: {
+                    type: 'object',
+                    properties: {
+                      steps: {
+                        type: 'array',
+                        items: {
+                          type: 'object',
+                          properties: {
+                            title: { type: 'string', description: 'Title of the step.' },
+                            body: { type: 'string', nullable: true },
+                            line_numbers: {
+                              type: 'array',
+                              items: { type: 'string' },
+                              description: 'Line numbers to highlight in the code snippet. (e.g. `["1-5", "10"]).',
+                            },
+                          },
+                          additionalProperties: false,
+                        },
+                      },
+                      snippet: {
+                        type: 'object',
+                        properties: {
+                          code_options: {
+                            type: 'array',
+                            items: {
+                              type: 'object',
+                              properties: {
+                                code: { type: 'string', nullable: true },
+                                language: { type: 'string', description: 'Language of the code snippet.' },
+                                name: { type: 'string', nullable: true },
+                                highlighted_syntax: { type: 'string' },
+                              },
+                              additionalProperties: false,
+                            },
+                            description: 'Array of code snippets to display in the recipe.',
+                          },
+                        },
+                        additionalProperties: false,
+                      },
+                      response: { type: 'string', nullable: true },
+                    },
+                    additionalProperties: false,
+                  },
+                  description: { type: 'string', nullable: true },
+                  privacy: {
+                    type: 'object',
+                    properties: {
+                      view: {
+                        type: 'string',
+                        enum: ['public', 'anyone_with_link'],
+                        description: 'Who can view the recipe.',
+                      },
+                    },
+                    additionalProperties: false,
+                  },
+                  title: { type: 'string' },
+                  position: {
+                    type: 'number',
+                    description: 'The position where this recipe should be displayed on your recipe landing page.',
+                  },
+                },
+                additionalProperties: false,
+              },
+            },
+          },
+        },
+        parameters: [
+          {
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
+            in: 'path',
+            name: 'branch',
+            required: true,
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
+          },
+          {
+            schema: { type: 'string', pattern: '([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+' },
+            in: 'path',
+            name: 'slug',
+            required: true,
+            description: 'A URL-safe representation of the resource.',
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    data: {
+                      type: 'object',
+                      properties: {
+                        appearance: {
+                          type: 'object',
+                          properties: {
+                            background_color: {
+                              type: 'string',
+                              pattern: '^(?:#[0-9a-fA-F]{3}|#[0-9a-fA-F]{4}|#[0-9a-fA-F]{6}|#[0-9a-fA-F]{8})$',
+                              default: '#000000',
+                              description: 'The color of the recipe card.',
+                            },
+                            emoji: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'The Unicode emoji to be displayed within the recipe card.',
+                            },
+                          },
+                          required: ['emoji'],
+                          additionalProperties: false,
+                        },
+                        connections: {
+                          type: 'object',
+                          properties: {
+                            references: {
+                              type: 'array',
+                              items: {
+                                type: 'object',
+                                properties: {
+                                  uri: {
+                                    type: 'string',
+                                    pattern:
+                                      '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/(guides|reference)\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                                    description:
+                                      'URI of the API reference page that this recipe will be connected to. The API reference and recipe must exist within the same version.',
+                                  },
+                                },
+                                required: ['uri'],
+                                additionalProperties: false,
+                              },
+                              nullable: true,
+                              description: 'A collection of API reference pages that this recipe will be displayed on.',
+                            },
+                          },
+                          required: ['references'],
+                          additionalProperties: false,
+                        },
+                        content: {
+                          type: 'object',
+                          properties: {
+                            steps: {
+                              type: 'array',
+                              items: {
+                                type: 'object',
+                                properties: {
+                                  title: { type: 'string', description: 'Title of the step.' },
+                                  body: { type: 'string', nullable: true, description: 'Content of the step.' },
+                                  line_numbers: {
+                                    type: 'array',
+                                    items: { type: 'string' },
+                                    description:
+                                      'Line numbers to highlight in the code snippet. (e.g. `["1-5", "10"]).',
+                                  },
+                                },
+                                required: ['title', 'body', 'line_numbers'],
+                                additionalProperties: false,
+                              },
+                            },
+                            snippet: {
+                              type: 'object',
+                              properties: {
+                                code_options: {
+                                  type: 'array',
+                                  items: {
+                                    type: 'object',
+                                    properties: {
+                                      code: {
+                                        type: 'string',
+                                        nullable: true,
+                                        description: 'Code to display for the specific language.',
+                                      },
+                                      language: { type: 'string', description: 'Language of the code snippet.' },
+                                      name: {
+                                        type: 'string',
+                                        nullable: true,
+                                        description: 'Name of the code snippet.',
+                                      },
+                                      highlighted_syntax: {
+                                        type: 'string',
+                                        description: 'Actual syntax highlighter to use on the code snippet.',
+                                      },
+                                    },
+                                    required: ['code', 'language'],
+                                    additionalProperties: false,
+                                  },
+                                  description: 'Array of code snippets to display in the recipe.',
+                                },
+                              },
+                              required: ['code_options'],
+                              additionalProperties: false,
+                            },
+                            response: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'Example response to display in the recipe.',
+                            },
+                          },
+                          required: ['steps', 'snippet', 'response'],
+                          additionalProperties: false,
+                        },
+                        description: { type: 'string', nullable: true },
+                        privacy: {
+                          type: 'object',
+                          properties: {
+                            view: {
+                              type: 'string',
+                              enum: ['public', 'anyone_with_link'],
+                              description: 'Who can view the recipe.',
+                            },
+                          },
+                          required: ['view'],
+                          additionalProperties: false,
+                        },
+                        title: { type: 'string' },
+                        slug: { type: 'string' },
+                        uri: {
+                          type: 'string',
+                          pattern:
+                            '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                        },
+                      },
+                      required: [
+                        'appearance',
+                        'connections',
+                        'content',
+                        'description',
+                        'privacy',
+                        'title',
+                        'slug',
+                        'uri',
                       ],
                       additionalProperties: false,
                     },
@@ -5614,7 +8987,7 @@ const document = {
         summary: 'Perform a search query',
         tags: ['Search'],
         description:
-          "Searches the ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Searches the ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
             schema: { type: 'string' },
@@ -5639,6 +9012,13 @@ const document = {
             name: 'version',
             required: false,
             description: 'The version to search within. For enterprise, this only applies to the current project.',
+          },
+          {
+            schema: { type: 'array', items: { type: 'string' } },
+            in: 'query',
+            name: 'projects',
+            required: false,
+            description: 'Limit search to only these projects in an Enterprise group.',
           },
         ],
         responses: {
@@ -5675,7 +9055,7 @@ const document = {
                               type: 'object',
                               properties: {
                                 score: { type: 'number' },
-                                path: { type: 'string', enum: ['title', 'excerpt', 'searchContents', 'body'] },
+                                path: { type: 'string', enum: ['title', 'excerpt', 'searchContents'] },
                                 texts: {
                                   type: 'array',
                                   items: {
@@ -5703,7 +9083,12 @@ const document = {
                             nullable: true,
                             description: 'The semver version number this search is scoped to.',
                           },
-                          subdomain: { type: 'string' },
+                          project: {
+                            type: 'object',
+                            properties: { subdomain: { type: 'string' }, name: { type: 'string' } },
+                            required: ['subdomain', 'name'],
+                            additionalProperties: false,
+                          },
                           api: {
                             type: 'object',
                             properties: { method: { type: 'string', nullable: true } },
@@ -5720,7 +9105,7 @@ const document = {
                           'slug',
                           'section',
                           'version',
-                          'subdomain',
+                          'project',
                           'api',
                           'uri',
                         ],
@@ -5737,13 +9122,63 @@ const document = {
         },
       },
     },
-    '/versions': {
-      get: {
-        operationId: 'getVersions',
-        summary: 'Get versions',
-        tags: ['Versions'],
+    '/validate/api': {
+      post: {
+        operationId: 'validateAPI',
+        summary: 'Validate an API',
+        tags: ['APIs'],
         description:
-          "Get a collection of versions. \n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n> This API and its docs are a work in progress. While we don’t expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+          "Validates an API definition for uploading to your ReadMe project.\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        requestBody: {
+          content: {
+            'multipart/form-data': {
+              schema: {
+                type: 'object',
+                properties: {
+                  schema: { description: 'The API definition.' },
+                  upload_source: {
+                    default: 'form',
+                    description: 'The source that the API definition is being uploaded through.',
+                  },
+                  url: { description: 'The URL where the API definition is hosted.' },
+                },
+                additionalProperties: false,
+              },
+            },
+          },
+        },
+        security: [],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    schema: {
+                      type: 'object',
+                      additionalProperties: {},
+                      nullable: true,
+                      description: 'The API schema.',
+                    },
+                  },
+                  required: ['schema'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/branches': {
+      get: {
+        operationId: 'getBranches',
+        summary: 'Get branches',
+        tags: ['Branches'],
+        description:
+          "Get a collection of branches in your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
         parameters: [
           {
             schema: { type: 'number', minimum: 1, default: 1 },
@@ -5764,7 +9199,13 @@ const document = {
             in: 'query',
             name: 'sort_by',
             required: false,
-            description: 'The sort that should be used for the returned versions list.',
+            description: 'The sort that should be used for the returned collection.',
+          },
+          {
+            schema: { type: 'string', pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?' },
+            in: 'query',
+            name: 'prefix',
+            required: false,
           },
         ],
         responses: {
@@ -5773,123 +9214,490 @@ const document = {
             content: {
               'application/json': {
                 schema: {
-                  type: 'object',
-                  properties: {
-                    total: { type: 'number' },
-                    page: { type: 'number' },
-                    per_page: { type: 'number' },
-                    paging: {
+                  anyOf: [
+                    {
                       type: 'object',
                       properties: {
-                        next: { type: 'string', nullable: true },
-                        previous: { type: 'string', nullable: true },
-                        first: { type: 'string', nullable: true },
-                        last: { type: 'string', nullable: true },
-                      },
-                      required: ['next', 'previous', 'first', 'last'],
-                      additionalProperties: false,
-                    },
-                    data: {
-                      type: 'array',
-                      items: {
-                        type: 'object',
-                        properties: {
-                          base: {
-                            type: 'string',
-                            nullable: true,
-                            description: 'The name of the version this version was forked from.',
+                        total: { type: 'number' },
+                        page: { type: 'number' },
+                        per_page: { type: 'number' },
+                        paging: {
+                          type: 'object',
+                          properties: {
+                            next: { type: 'string', nullable: true },
+                            previous: { type: 'string', nullable: true },
+                            first: { type: 'string', nullable: true },
+                            last: { type: 'string', nullable: true },
                           },
-                          display_name: {
-                            type: 'string',
-                            nullable: true,
-                            description: 'A non-semver display name for the version.',
-                          },
-                          git: {
+                          required: ['next', 'previous', 'first', 'last'],
+                          additionalProperties: false,
+                        },
+                        data: {
+                          type: 'array',
+                          items: {
                             type: 'object',
                             properties: {
-                              latest_commit: {
-                                type: 'object',
-                                properties: {
-                                  created_at: {
-                                    type: 'string',
-                                    format: 'date-time',
-                                    description: 'An ISO 8601 formatted date for when the latest commit was created.',
-                                    nullable: true,
-                                  },
-                                  hash: {
-                                    type: 'string',
-                                    nullable: true,
-                                    description: 'The sha for the latest commit.',
-                                  },
-                                },
-                                required: ['created_at', 'hash'],
-                                additionalProperties: false,
-                              },
-                              branch_ref: {
+                              base: {
                                 type: 'string',
                                 nullable: true,
-                                description: 'A reference to the associated branch for the version.',
+                                description: 'The name of the version this version was based off of.',
                               },
-                            },
-                            required: ['latest_commit', 'branch_ref'],
-                            additionalProperties: false,
-                          },
-                          name: {
-                            type: 'string',
-                            pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
-                            description: 'The semver name for the version.',
-                          },
-                          privacy: {
-                            type: 'object',
-                            properties: {
-                              view: {
+                              display_name: {
                                 type: 'string',
-                                enum: ['default', 'hidden', 'public'],
-                                description:
-                                  "Whether the version is public, hidden, or the stable version that's visible by default.",
+                                nullable: true,
+                                description: 'A non-semver display name for the version.',
+                              },
+                              name: {
+                                type: 'string',
+                                pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
+                                description: 'The semver name for the version.',
+                              },
+                              privacy: {
+                                type: 'object',
+                                properties: {
+                                  view: {
+                                    type: 'string',
+                                    enum: ['default', 'hidden', 'public'],
+                                    description:
+                                      "Whether the version is public, hidden, or the stable version that's visible by default.",
+                                  },
+                                },
+                                required: ['view'],
+                                additionalProperties: false,
+                              },
+                              release_stage: {
+                                type: 'string',
+                                enum: ['beta', 'release'],
+                                description: 'Whether the version is released or in beta.',
+                              },
+                              source: {
+                                type: 'string',
+                                enum: ['readme', 'bidi'],
+                                description: 'Whether the version was created in ReadMe or via Bi-Directional Sync.',
+                              },
+                              state: {
+                                type: 'string',
+                                enum: ['current', 'deprecated'],
+                                description: 'Whether the version is current or deprecated.',
+                              },
+                              updated_at: {
+                                type: 'string',
+                                format: 'date-time',
+                                description: 'An ISO 8601 formatted date for when the version was last updated.',
+                              },
+                              uri: {
+                                type: 'string',
+                                pattern:
+                                  '\\/branches\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)',
+                                description: 'A URI to the version resource.',
                               },
                             },
-                            required: ['view'],
+                            required: [
+                              'base',
+                              'display_name',
+                              'name',
+                              'privacy',
+                              'release_stage',
+                              'source',
+                              'state',
+                              'updated_at',
+                              'uri',
+                            ],
                             additionalProperties: false,
-                          },
-                          release_stage: {
-                            type: 'string',
-                            enum: ['beta', 'release'],
-                            description: 'Whether the version is released or in beta',
-                          },
-                          state: {
-                            type: 'string',
-                            enum: ['current', 'deprecated'],
-                            description: 'Whether the version is current or deprecated',
-                          },
-                          updated_at: {
-                            type: 'string',
-                            format: 'date-time',
-                            description: 'An ISO 8601 formatted date for when the version was last updated.',
-                          },
-                          uri: {
-                            type: 'string',
-                            pattern: '\\/versions\\/(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)',
-                            description: 'A URI to the version resource.',
                           },
                         },
-                        required: [
-                          'base',
-                          'display_name',
-                          'git',
-                          'name',
-                          'privacy',
-                          'release_stage',
-                          'state',
-                          'updated_at',
-                          'uri',
-                        ],
+                        type: { type: 'string', enum: ['version'] },
+                      },
+                      required: ['total', 'page', 'per_page', 'paging', 'data', 'type'],
+                      additionalProperties: false,
+                    },
+                    {
+                      type: 'object',
+                      properties: {
+                        total: { type: 'number' },
+                        page: { type: 'number' },
+                        per_page: { type: 'number' },
+                        paging: {
+                          type: 'object',
+                          properties: {
+                            next: { type: 'string', nullable: true },
+                            previous: { type: 'string', nullable: true },
+                            first: { type: 'string', nullable: true },
+                            last: { type: 'string', nullable: true },
+                          },
+                          required: ['next', 'previous', 'first', 'last'],
+                          additionalProperties: false,
+                        },
+                        data: {
+                          type: 'array',
+                          items: {
+                            type: 'object',
+                            properties: {
+                              base: {
+                                type: 'object',
+                                properties: {
+                                  base: {
+                                    type: 'string',
+                                    nullable: true,
+                                    description: 'The name of the version this version was based off of.',
+                                  },
+                                  display_name: {
+                                    type: 'string',
+                                    nullable: true,
+                                    description: 'A non-semver display name for the version.',
+                                  },
+                                  name: {
+                                    type: 'string',
+                                    pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
+                                    description: 'The semver name for the version.',
+                                  },
+                                  privacy: {
+                                    type: 'object',
+                                    properties: {
+                                      view: {
+                                        type: 'string',
+                                        enum: ['default', 'hidden', 'public'],
+                                        description:
+                                          "Whether the version is public, hidden, or the stable version that's visible by default.",
+                                      },
+                                    },
+                                    required: ['view'],
+                                    additionalProperties: false,
+                                  },
+                                  release_stage: {
+                                    type: 'string',
+                                    enum: ['beta', 'release'],
+                                    description: 'Whether the version is released or in beta.',
+                                  },
+                                  source: {
+                                    type: 'string',
+                                    enum: ['readme', 'bidi'],
+                                    description:
+                                      'Whether the version was created in ReadMe or via Bi-Directional Sync.',
+                                  },
+                                  state: {
+                                    type: 'string',
+                                    enum: ['current', 'deprecated'],
+                                    description: 'Whether the version is current or deprecated.',
+                                  },
+                                  updated_at: {
+                                    type: 'string',
+                                    format: 'date-time',
+                                    description: 'An ISO 8601 formatted date for when the version was last updated.',
+                                  },
+                                  uri: {
+                                    type: 'string',
+                                    pattern:
+                                      '\\/branches\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)',
+                                    description: 'A URI to the version resource.',
+                                  },
+                                },
+                                required: [
+                                  'base',
+                                  'display_name',
+                                  'name',
+                                  'privacy',
+                                  'release_stage',
+                                  'source',
+                                  'state',
+                                  'updated_at',
+                                  'uri',
+                                ],
+                                additionalProperties: false,
+                                description:
+                                  'The representation of the version the branch was created from or the stable version.',
+                              },
+                              name: {
+                                type: 'string',
+                                pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+                                description: 'The name of the branch and its version prefix.',
+                              },
+                              updated_at: {
+                                type: 'string',
+                                format: 'date-time',
+                                description: 'An ISO 8601 formatted date for when the branch was last updated.',
+                              },
+                              uri: {
+                                type: 'string',
+                                pattern:
+                                  '\\/branches\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)',
+                                description: 'A URI to the branch resource.',
+                              },
+                            },
+                            required: ['base', 'name', 'updated_at', 'uri'],
+                            additionalProperties: false,
+                          },
+                        },
+                        type: { type: 'string', enum: ['branch'] },
+                      },
+                      required: ['total', 'page', 'per_page', 'paging', 'data', 'type'],
+                      additionalProperties: false,
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        },
+      },
+      post: {
+        operationId: 'createBranch',
+        summary: 'Create a branch',
+        tags: ['Branches'],
+        description:
+          "Create a new branch in your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                anyOf: [
+                  {
+                    type: 'object',
+                    properties: {
+                      base: { type: 'string', description: 'The clean string of version we are basing off of.' },
+                      display_name: { type: 'string', description: 'A non-semver display name for the version.' },
+                      name: {
+                        type: 'string',
+                        pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
+                        description: 'The semver name for the version.',
+                      },
+                      privacy: {
+                        type: 'object',
+                        properties: {
+                          view: {
+                            type: 'string',
+                            enum: ['default', 'hidden', 'public'],
+                            default: 'hidden',
+                            description:
+                              "Whether the version is public, hidden, or the stable version that's visible by default.",
+                          },
+                        },
                         additionalProperties: false,
                       },
+                      release_stage: {
+                        type: 'string',
+                        enum: ['beta', 'release'],
+                        default: 'release',
+                        description: 'Whether the version is released or in beta.',
+                      },
+                      state: {
+                        type: 'string',
+                        enum: ['current', 'deprecated'],
+                        default: 'current',
+                        description: 'Whether the version is current or deprecated.',
+                      },
                     },
+                    required: ['base', 'name'],
+                    additionalProperties: false,
                   },
-                  required: ['total', 'page', 'per_page', 'paging', 'data'],
-                  additionalProperties: false,
+                  {
+                    type: 'object',
+                    properties: {
+                      name: {
+                        type: 'string',
+                        pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+                        description: 'The name of the branch.',
+                      },
+                    },
+                    required: ['name'],
+                    additionalProperties: false,
+                  },
+                ],
+              },
+            },
+          },
+        },
+        responses: {
+          '201': {
+            description: 'Created',
+            content: {
+              'application/json': {
+                schema: {
+                  anyOf: [
+                    {
+                      type: 'object',
+                      properties: {
+                        data: {
+                          type: 'object',
+                          properties: {
+                            base: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'The name of the version this version was based off of.',
+                            },
+                            display_name: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'A non-semver display name for the version.',
+                            },
+                            name: {
+                              type: 'string',
+                              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
+                              description: 'The semver name for the version.',
+                            },
+                            privacy: {
+                              type: 'object',
+                              properties: {
+                                view: {
+                                  type: 'string',
+                                  enum: ['default', 'hidden', 'public'],
+                                  description:
+                                    "Whether the version is public, hidden, or the stable version that's visible by default.",
+                                },
+                              },
+                              required: ['view'],
+                              additionalProperties: false,
+                            },
+                            release_stage: {
+                              type: 'string',
+                              enum: ['beta', 'release'],
+                              description: 'Whether the version is released or in beta.',
+                            },
+                            source: {
+                              type: 'string',
+                              enum: ['readme', 'bidi'],
+                              description: 'Whether the version was created in ReadMe or via Bi-Directional Sync.',
+                            },
+                            state: {
+                              type: 'string',
+                              enum: ['current', 'deprecated'],
+                              description: 'Whether the version is current or deprecated.',
+                            },
+                            updated_at: {
+                              type: 'string',
+                              format: 'date-time',
+                              description: 'An ISO 8601 formatted date for when the version was last updated.',
+                            },
+                            uri: {
+                              type: 'string',
+                              pattern:
+                                '\\/branches\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)',
+                              description: 'A URI to the version resource.',
+                            },
+                          },
+                          required: [
+                            'base',
+                            'display_name',
+                            'name',
+                            'privacy',
+                            'release_stage',
+                            'source',
+                            'state',
+                            'updated_at',
+                            'uri',
+                          ],
+                          additionalProperties: false,
+                        },
+                        type: { type: 'string', enum: ['version'] },
+                      },
+                      required: ['data', 'type'],
+                      additionalProperties: false,
+                    },
+                    {
+                      type: 'object',
+                      properties: {
+                        data: {
+                          type: 'object',
+                          properties: {
+                            base: {
+                              type: 'object',
+                              properties: {
+                                base: {
+                                  type: 'string',
+                                  nullable: true,
+                                  description: 'The name of the version this version was based off of.',
+                                },
+                                display_name: {
+                                  type: 'string',
+                                  nullable: true,
+                                  description: 'A non-semver display name for the version.',
+                                },
+                                name: {
+                                  type: 'string',
+                                  pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
+                                  description: 'The semver name for the version.',
+                                },
+                                privacy: {
+                                  type: 'object',
+                                  properties: {
+                                    view: {
+                                      type: 'string',
+                                      enum: ['default', 'hidden', 'public'],
+                                      description:
+                                        "Whether the version is public, hidden, or the stable version that's visible by default.",
+                                    },
+                                  },
+                                  required: ['view'],
+                                  additionalProperties: false,
+                                },
+                                release_stage: {
+                                  type: 'string',
+                                  enum: ['beta', 'release'],
+                                  description: 'Whether the version is released or in beta.',
+                                },
+                                source: {
+                                  type: 'string',
+                                  enum: ['readme', 'bidi'],
+                                  description: 'Whether the version was created in ReadMe or via Bi-Directional Sync.',
+                                },
+                                state: {
+                                  type: 'string',
+                                  enum: ['current', 'deprecated'],
+                                  description: 'Whether the version is current or deprecated.',
+                                },
+                                updated_at: {
+                                  type: 'string',
+                                  format: 'date-time',
+                                  description: 'An ISO 8601 formatted date for when the version was last updated.',
+                                },
+                                uri: {
+                                  type: 'string',
+                                  pattern:
+                                    '\\/branches\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)',
+                                  description: 'A URI to the version resource.',
+                                },
+                              },
+                              required: [
+                                'base',
+                                'display_name',
+                                'name',
+                                'privacy',
+                                'release_stage',
+                                'source',
+                                'state',
+                                'updated_at',
+                                'uri',
+                              ],
+                              additionalProperties: false,
+                              description:
+                                'The representation of the version the branch was created from or the stable version.',
+                            },
+                            name: {
+                              type: 'string',
+                              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+                              description: 'The name of the branch and its version prefix.',
+                            },
+                            updated_at: {
+                              type: 'string',
+                              format: 'date-time',
+                              description: 'An ISO 8601 formatted date for when the branch was last updated.',
+                            },
+                            uri: {
+                              type: 'string',
+                              pattern:
+                                '\\/branches\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)',
+                              description: 'A URI to the branch resource.',
+                            },
+                          },
+                          required: ['base', 'name', 'updated_at', 'uri'],
+                          additionalProperties: false,
+                        },
+                        type: { type: 'string', enum: ['branch'] },
+                      },
+                      required: ['data', 'type'],
+                      additionalProperties: false,
+                    },
+                  ],
                 },
               },
             },
@@ -5897,20 +9705,532 @@ const document = {
         },
       },
     },
+    '/branches/{branch}': {
+      get: {
+        operationId: 'getBranch',
+        summary: 'Get a branch',
+        tags: ['Branches'],
+        description:
+          "Get a branch of your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        parameters: [
+          {
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
+            in: 'path',
+            name: 'branch',
+            required: true,
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  anyOf: [
+                    {
+                      type: 'object',
+                      properties: {
+                        data: {
+                          type: 'object',
+                          properties: {
+                            base: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'The name of the version this version was based off of.',
+                            },
+                            display_name: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'A non-semver display name for the version.',
+                            },
+                            name: {
+                              type: 'string',
+                              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
+                              description: 'The semver name for the version.',
+                            },
+                            privacy: {
+                              type: 'object',
+                              properties: {
+                                view: {
+                                  type: 'string',
+                                  enum: ['default', 'hidden', 'public'],
+                                  description:
+                                    "Whether the version is public, hidden, or the stable version that's visible by default.",
+                                },
+                              },
+                              required: ['view'],
+                              additionalProperties: false,
+                            },
+                            release_stage: {
+                              type: 'string',
+                              enum: ['beta', 'release'],
+                              description: 'Whether the version is released or in beta.',
+                            },
+                            source: {
+                              type: 'string',
+                              enum: ['readme', 'bidi'],
+                              description: 'Whether the version was created in ReadMe or via Bi-Directional Sync.',
+                            },
+                            state: {
+                              type: 'string',
+                              enum: ['current', 'deprecated'],
+                              description: 'Whether the version is current or deprecated.',
+                            },
+                            updated_at: {
+                              type: 'string',
+                              format: 'date-time',
+                              description: 'An ISO 8601 formatted date for when the version was last updated.',
+                            },
+                            uri: {
+                              type: 'string',
+                              pattern:
+                                '\\/branches\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)',
+                              description: 'A URI to the version resource.',
+                            },
+                          },
+                          required: [
+                            'base',
+                            'display_name',
+                            'name',
+                            'privacy',
+                            'release_stage',
+                            'source',
+                            'state',
+                            'updated_at',
+                            'uri',
+                          ],
+                          additionalProperties: false,
+                        },
+                        type: { type: 'string', enum: ['version'] },
+                      },
+                      required: ['data', 'type'],
+                      additionalProperties: false,
+                    },
+                    {
+                      type: 'object',
+                      properties: {
+                        data: {
+                          type: 'object',
+                          properties: {
+                            base: {
+                              type: 'object',
+                              properties: {
+                                base: {
+                                  type: 'string',
+                                  nullable: true,
+                                  description: 'The name of the version this version was based off of.',
+                                },
+                                display_name: {
+                                  type: 'string',
+                                  nullable: true,
+                                  description: 'A non-semver display name for the version.',
+                                },
+                                name: {
+                                  type: 'string',
+                                  pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
+                                  description: 'The semver name for the version.',
+                                },
+                                privacy: {
+                                  type: 'object',
+                                  properties: {
+                                    view: {
+                                      type: 'string',
+                                      enum: ['default', 'hidden', 'public'],
+                                      description:
+                                        "Whether the version is public, hidden, or the stable version that's visible by default.",
+                                    },
+                                  },
+                                  required: ['view'],
+                                  additionalProperties: false,
+                                },
+                                release_stage: {
+                                  type: 'string',
+                                  enum: ['beta', 'release'],
+                                  description: 'Whether the version is released or in beta.',
+                                },
+                                source: {
+                                  type: 'string',
+                                  enum: ['readme', 'bidi'],
+                                  description: 'Whether the version was created in ReadMe or via Bi-Directional Sync.',
+                                },
+                                state: {
+                                  type: 'string',
+                                  enum: ['current', 'deprecated'],
+                                  description: 'Whether the version is current or deprecated.',
+                                },
+                                updated_at: {
+                                  type: 'string',
+                                  format: 'date-time',
+                                  description: 'An ISO 8601 formatted date for when the version was last updated.',
+                                },
+                                uri: {
+                                  type: 'string',
+                                  pattern:
+                                    '\\/branches\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)',
+                                  description: 'A URI to the version resource.',
+                                },
+                              },
+                              required: [
+                                'base',
+                                'display_name',
+                                'name',
+                                'privacy',
+                                'release_stage',
+                                'source',
+                                'state',
+                                'updated_at',
+                                'uri',
+                              ],
+                              additionalProperties: false,
+                              description:
+                                'The representation of the version the branch was created from or the stable version.',
+                            },
+                            name: {
+                              type: 'string',
+                              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+                              description: 'The name of the branch and its version prefix.',
+                            },
+                            updated_at: {
+                              type: 'string',
+                              format: 'date-time',
+                              description: 'An ISO 8601 formatted date for when the branch was last updated.',
+                            },
+                            uri: {
+                              type: 'string',
+                              pattern:
+                                '\\/branches\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)',
+                              description: 'A URI to the branch resource.',
+                            },
+                          },
+                          required: ['base', 'name', 'updated_at', 'uri'],
+                          additionalProperties: false,
+                        },
+                        type: { type: 'string', enum: ['branch'] },
+                      },
+                      required: ['data', 'type'],
+                      additionalProperties: false,
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        },
+      },
+      patch: {
+        operationId: 'updateBranch',
+        summary: 'Updates an existing branch',
+        tags: ['Branches'],
+        description:
+          "Update an existing branch in your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                anyOf: [
+                  {
+                    type: 'object',
+                    properties: {
+                      display_name: { type: 'string', description: 'A non-semver display name for the version.' },
+                      name: {
+                        type: 'string',
+                        pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
+                        description: 'The semver name for the version.',
+                      },
+                      privacy: {
+                        type: 'object',
+                        properties: {
+                          view: {
+                            type: 'string',
+                            enum: ['default', 'hidden', 'public'],
+                            default: 'hidden',
+                            description:
+                              "Whether the version is public, hidden, or the stable version that's visible by default.",
+                          },
+                        },
+                        additionalProperties: false,
+                      },
+                      release_stage: { type: 'string', enum: ['beta', 'release'], default: 'release' },
+                      state: { type: 'string', enum: ['current', 'deprecated'], default: 'current' },
+                    },
+                    additionalProperties: false,
+                  },
+                  {
+                    type: 'object',
+                    properties: {
+                      name: {
+                        type: 'string',
+                        pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+                        description: 'The target rename of the branch and its version prefix.',
+                      },
+                    },
+                    required: ['name'],
+                    additionalProperties: false,
+                  },
+                ],
+                description:
+                  'Dependent upon the type of resource you are updating this is the representation for a branch or version.',
+              },
+            },
+          },
+          description:
+            'Dependent upon the type of resource you are updating this is the representation for a branch or version.',
+        },
+        parameters: [
+          {
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
+            in: 'path',
+            name: 'branch',
+            required: true,
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  anyOf: [
+                    {
+                      type: 'object',
+                      properties: {
+                        data: {
+                          type: 'object',
+                          properties: {
+                            base: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'The name of the version this version was based off of.',
+                            },
+                            display_name: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'A non-semver display name for the version.',
+                            },
+                            name: {
+                              type: 'string',
+                              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
+                              description: 'The semver name for the version.',
+                            },
+                            privacy: {
+                              type: 'object',
+                              properties: {
+                                view: {
+                                  type: 'string',
+                                  enum: ['default', 'hidden', 'public'],
+                                  description:
+                                    "Whether the version is public, hidden, or the stable version that's visible by default.",
+                                },
+                              },
+                              required: ['view'],
+                              additionalProperties: false,
+                            },
+                            release_stage: {
+                              type: 'string',
+                              enum: ['beta', 'release'],
+                              description: 'Whether the version is released or in beta.',
+                            },
+                            source: {
+                              type: 'string',
+                              enum: ['readme', 'bidi'],
+                              description: 'Whether the version was created in ReadMe or via Bi-Directional Sync.',
+                            },
+                            state: {
+                              type: 'string',
+                              enum: ['current', 'deprecated'],
+                              description: 'Whether the version is current or deprecated.',
+                            },
+                            updated_at: {
+                              type: 'string',
+                              format: 'date-time',
+                              description: 'An ISO 8601 formatted date for when the version was last updated.',
+                            },
+                            uri: {
+                              type: 'string',
+                              pattern:
+                                '\\/branches\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)',
+                              description: 'A URI to the version resource.',
+                            },
+                          },
+                          required: [
+                            'base',
+                            'display_name',
+                            'name',
+                            'privacy',
+                            'release_stage',
+                            'source',
+                            'state',
+                            'updated_at',
+                            'uri',
+                          ],
+                          additionalProperties: false,
+                        },
+                        type: { type: 'string', enum: ['version'] },
+                      },
+                      required: ['data', 'type'],
+                      additionalProperties: false,
+                    },
+                    {
+                      type: 'object',
+                      properties: {
+                        data: {
+                          type: 'object',
+                          properties: {
+                            base: {
+                              type: 'object',
+                              properties: {
+                                base: {
+                                  type: 'string',
+                                  nullable: true,
+                                  description: 'The name of the version this version was based off of.',
+                                },
+                                display_name: {
+                                  type: 'string',
+                                  nullable: true,
+                                  description: 'A non-semver display name for the version.',
+                                },
+                                name: {
+                                  type: 'string',
+                                  pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
+                                  description: 'The semver name for the version.',
+                                },
+                                privacy: {
+                                  type: 'object',
+                                  properties: {
+                                    view: {
+                                      type: 'string',
+                                      enum: ['default', 'hidden', 'public'],
+                                      description:
+                                        "Whether the version is public, hidden, or the stable version that's visible by default.",
+                                    },
+                                  },
+                                  required: ['view'],
+                                  additionalProperties: false,
+                                },
+                                release_stage: {
+                                  type: 'string',
+                                  enum: ['beta', 'release'],
+                                  description: 'Whether the version is released or in beta.',
+                                },
+                                source: {
+                                  type: 'string',
+                                  enum: ['readme', 'bidi'],
+                                  description: 'Whether the version was created in ReadMe or via Bi-Directional Sync.',
+                                },
+                                state: {
+                                  type: 'string',
+                                  enum: ['current', 'deprecated'],
+                                  description: 'Whether the version is current or deprecated.',
+                                },
+                                updated_at: {
+                                  type: 'string',
+                                  format: 'date-time',
+                                  description: 'An ISO 8601 formatted date for when the version was last updated.',
+                                },
+                                uri: {
+                                  type: 'string',
+                                  pattern:
+                                    '\\/branches\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)',
+                                  description: 'A URI to the version resource.',
+                                },
+                              },
+                              required: [
+                                'base',
+                                'display_name',
+                                'name',
+                                'privacy',
+                                'release_stage',
+                                'source',
+                                'state',
+                                'updated_at',
+                                'uri',
+                              ],
+                              additionalProperties: false,
+                              description:
+                                'The representation of the version the branch was created from or the stable version.',
+                            },
+                            name: {
+                              type: 'string',
+                              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+                              description: 'The name of the branch and its version prefix.',
+                            },
+                            updated_at: {
+                              type: 'string',
+                              format: 'date-time',
+                              description: 'An ISO 8601 formatted date for when the branch was last updated.',
+                            },
+                            uri: {
+                              type: 'string',
+                              pattern:
+                                '\\/branches\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)',
+                              description: 'A URI to the branch resource.',
+                            },
+                          },
+                          required: ['base', 'name', 'updated_at', 'uri'],
+                          additionalProperties: false,
+                        },
+                        type: { type: 'string', enum: ['branch'] },
+                      },
+                      required: ['data', 'type'],
+                      additionalProperties: false,
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        },
+      },
+      delete: {
+        operationId: 'deleteBranch',
+        summary: 'Delete a branch',
+        tags: ['Branches'],
+        description:
+          "Delete a branch from your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>🚧 ReadMe's API v2 is currently in beta.\n >This API and its documentation are a work in progress. While we don't expect any major breaking changes, you may encounter occasional issues as we work toward a stable release. Make sure to [check out our API migration guide](https://docs.readme.com/main/reference/api-migration-guide), and [feel free to reach out](mailto:support@readme.io) if you have any questions or feedback!",
+        parameters: [
+          {
+            schema: {
+              type: 'string',
+              pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
+            },
+            in: 'path',
+            name: 'branch',
+            required: true,
+            description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
+          },
+        ],
+        responses: { '204': { description: 'No Content' } },
+      },
+    },
   },
   servers: [{ url: 'https://api.readme.com/v2', description: 'The ReadMe API' }],
   security: [{ bearer: [] }],
   'x-readme': { 'proxy-enabled': true },
   tags: [
+    { name: 'API Keys' },
     { name: 'API Reference' },
     { name: 'APIs' },
+    { name: 'Apply to ReadMe' },
+    { name: 'Branches' },
+    { name: 'Categories' },
     { name: 'Changelog' },
     { name: 'Custom Pages' },
     { name: 'Guides' },
+    { name: 'Images' },
+    { name: 'IP Addresses' },
+    { name: 'Owlbot AI' },
     { name: 'Projects' },
+    { name: 'Recipes' },
     { name: 'Search' },
-    { name: 'Versions' },
   ],
-} as const satisfies OASDocument;
+} as const satisfies OASDocument & { info: { 'x-readme-deploy': string } };
 
 export default document;

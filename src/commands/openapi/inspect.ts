@@ -107,10 +107,14 @@ function buildFeaturesReport(analysis: Analysis, features: string[]) {
 function buildFullReport(analysis: Analysis, definitionVersion: string, tableBorder: Record<string, string>) {
   const report: string[] = ['Here are some interesting things we found in your API definition. 🕵️', ''];
 
+  const allowedKeys = ['dereferencedFileSize', 'mediaTypes', 'operationTotal', 'rawFileSize', 'securityTypes'];
+  const sizeKeys = ['rawFileSize', 'dereferencedFileSize'];
+
   // General API definition statistics
   report.push(
     ...(Object.entries(analysis.general || {})
-      .map(([, info]) => {
+      .filter(([key]) => allowedKeys.includes(key))
+      .map(([key, info]) => {
         if (Array.isArray(info.found)) {
           if (!info.found.length) return false;
 
@@ -121,17 +125,25 @@ function buildFullReport(analysis: Analysis, definitionVersion: string, tableBor
           }
 
           return `You are using a single ${info.name.toLowerCase()} throughout your API: ${highlightedData[0]}`;
-        } else if (info.found > 1) {
-          let msg: string;
-          msg = `You have a total of ${chalk.bold(info.found)} ${pluralize(info.name.toLowerCase(), info.found)} in your API.`;
-          if (info.found > 200) {
-            msg += ` ${chalk.cyanBright('Wow! 🤯')}`;
-          }
-
-          return msg;
         }
 
-        return `You have a single ${info.name.toLowerCase()} in your API.`;
+        if (info.found === 0) return false;
+
+        const isSizeKey = sizeKeys.includes(key);
+        const isPlural = info.found > 1;
+
+        let baseMessage = isSizeKey
+          ? `Your ${info.name.toLowerCase()} is ${chalk.bold(info.found)} MB.`
+          : isPlural
+            ? `You have a total of ${chalk.bold(info.found)} ${pluralize(info.name.toLowerCase(), info.found)} in your API.`
+            : `You have a single ${info.name.toLowerCase()} in your API.`;
+
+        const wowThreshold = isSizeKey ? 10 : 200;
+        if (info.found > wowThreshold) {
+          baseMessage += ` ${chalk.cyanBright('Wow! 🤯')}`;
+        }
+
+        return baseMessage;
       })
       .filter(Boolean)
       .map(msg => ` · ${msg}`) as string[]),

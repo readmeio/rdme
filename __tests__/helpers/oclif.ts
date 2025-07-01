@@ -39,8 +39,8 @@ export function setupOclifConfig() {
 export function runCommand(Command: CommandClass) {
   return async function runCommandAgainstArgs(args?: string[]) {
     const oclifConfig = await setupOclifConfig();
-    // @ts-expect-error this is the pattern recommended by the @oclif/test docs.
-    // Not sure how to get this working with type generics.
+    // @ts-expect-error currently we have mismatching return types in our commands.
+    // we can fix this later but it's not a priority right now.
     return captureOutput<string>(() => Command.run(args, oclifConfig), { testNodeEnv });
   };
 }
