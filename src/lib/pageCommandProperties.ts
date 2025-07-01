@@ -5,7 +5,8 @@ type Section = 'Changelog' | 'Custom Pages' | 'Guides' | 'Reference';
 export const alphaNotice = 'This command is in an experimental alpha and is likely to change. Use at your own risk!';
 
 export function summary(section: Section): string {
-  return `Upload Markdown files to the ${section} section of your ReadMe project.\n\nNOTE: ${alphaNotice}`;
+  const fileType = section === 'Custom Pages' ? 'Markdown or HTML' : 'Markdown';
+  return `Upload ${fileType} files to the ${section} section of your ReadMe project.\n\nNOTE: ${alphaNotice}`;
 }
 
 export function description(section: Section): string {
@@ -25,14 +26,16 @@ export function args(section: Section) {
 
 export function examples(section: Section) {
   const fileType = section === 'Custom Pages' ? 'Markdown/HTML' : 'Markdown';
-  return [
+  const usesBranch = section !== 'Changelog';
+  const branchFlag = usesBranch ? ' --branch={project-branch}' : '';
+  const allExamples = [
     {
       description: `The path input can be a directory. This will also upload any ${fileType} files that are located in subdirectories:`,
-      command: '<%= config.bin %> <%= command.id %> documentation/ --branch={project-branch}',
+      command: `<%= config.bin %> <%= command.id %> documentation/${branchFlag}`,
     },
     {
       description: `The path input can also be individual ${fileType} files:`,
-      command: '<%= config.bin %> <%= command.id %> documentation/about.md --branch={project-branch}',
+      command: `<%= config.bin %> <%= command.id %> documentation/about.md${branchFlag}`,
     },
     {
       description: 'You can omit the `--branch` flag to default to the `stable` branch of your project:',
@@ -44,6 +47,12 @@ export function examples(section: Section) {
       command: '<%= config.bin %> <%= command.id %> [path] --dry-run',
     },
   ];
+
+  if (!usesBranch) {
+    // remove the third example since it uses the branch flag
+    allExamples.splice(2, 1);
+  }
+  return allExamples;
 }
 
 export function baseFlags(section: Section) {
