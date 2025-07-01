@@ -38,11 +38,8 @@ describe('openapi resolve', () => {
       ['schema only contains $refs', 'circular-reference-ref-only.json'],
       ['schema only contains $refs with a `title`', 'circular-reference-ref-only-title.json'],
     ])('should support resolving circular references (case: %s)', async (_, specFile) => {
-      const spec = require.resolve(`../../__fixtures__/circular-ref-oas/${specFile}`);
-      const expectedOutput = require.resolve(
-        `../../__fixtures__/circular-ref-oas/${specFile.replace('.json', '.resolved.json')}`,
-      );
-
+      const spec = `./__tests__/__fixtures__/circular-ref-oas/${specFile}`;
+      const expectedOutput = `./__tests__/__fixtures__/circular-ref-oas/${specFile.replace('.json', '.resolved.json')}`;
       prompts.inject(['output.json']);
 
       const result = await run([spec]);
