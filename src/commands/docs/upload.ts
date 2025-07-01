@@ -2,12 +2,7 @@ import { Args, Flags } from '@oclif/core';
 
 import BaseCommand from '../../lib/baseCommand.js';
 import { branchFlag, confirmAutofixesFlag, keyFlag } from '../../lib/flags.js';
-import syncPagePath, {
-  type FailedPushResult,
-  type SkippedPushResult,
-  type CreatePushResult,
-  type UpdatePushResult,
-} from '../../lib/syncPagePath.js';
+import syncPagePath, { type FullUploadResults } from '../../lib/syncPagePath.js';
 
 const alphaNotice = 'This command is in an experimental alpha and is likely to change. Use at your own risk!';
 
@@ -75,12 +70,7 @@ export default class DocsUploadCommand extends BaseCommand<typeof DocsUploadComm
     }),
   };
 
-  async run(): Promise<{
-    created: CreatePushResult[];
-    failed: FailedPushResult[];
-    skipped: SkippedPushResult[];
-    updated: UpdatePushResult[];
-  }> {
+  async run(): Promise<FullUploadResults> {
     if (!this.flags['hide-experimental-warning']) {
       this.warn(alphaNotice);
     }

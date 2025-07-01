@@ -30,8 +30,7 @@ interface BasePushResult {
   result: 'created' | 'failed' | 'skipped' | 'updated';
   slug: string;
 }
-
-export interface CreatePushResult extends BasePushResult {
+interface CreatePushResult extends BasePushResult {
   /**
    * The full response from the ReadMe API. If this is `null`,
    * the page was a dry run and no request was made.
@@ -39,17 +38,14 @@ export interface CreatePushResult extends BasePushResult {
   response: PageResponseRepresentation | null;
   result: 'created';
 }
-
-export interface FailedPushResult extends BasePushResult {
+interface FailedPushResult extends BasePushResult {
   error: APIv2Error | Error;
   result: 'failed';
 }
-
-export interface SkippedPushResult extends BasePushResult {
+interface SkippedPushResult extends BasePushResult {
   result: 'skipped';
 }
-
-export interface UpdatePushResult extends BasePushResult {
+interface UpdatePushResult extends BasePushResult {
   /**
    * The full response from the ReadMe API. If this is `null`,
    * the page was a dry run and no request was made.
@@ -59,6 +55,13 @@ export interface UpdatePushResult extends BasePushResult {
 }
 
 export type PushResult = CreatePushResult | FailedPushResult | SkippedPushResult | UpdatePushResult;
+
+export interface FullUploadResults {
+  created: CreatePushResult[];
+  failed: FailedPushResult[];
+  skipped: SkippedPushResult[];
+  updated: UpdatePushResult[];
+}
 
 /**
  * Reads the contents of the specified Markdown or HTML file
@@ -229,7 +232,7 @@ function sortFiles(
  * and syncs those (either via POST or PATCH) to ReadMe.
  * @returns An array of objects with the results
  */
-export default async function syncPagePath(this: APIv2PageUploadCommands) {
+export default async function syncPagePath(this: APIv2PageUploadCommands): Promise<FullUploadResults> {
   const { path: pathInput } = this.args;
   const { key, 'dry-run': dryRun, 'max-errors': maxErrors, 'skip-validation': skipValidation } = this.flags;
 
@@ -308,12 +311,7 @@ export default async function syncPagePath(this: APIv2PageUploadCommands) {
     }
   }
 
-  const results = rawResults.reduce<{
-    created: CreatePushResult[];
-    failed: FailedPushResult[];
-    skipped: SkippedPushResult[];
-    updated: UpdatePushResult[];
-  }>(
+  const results = rawResults.reduce<FullUploadResults>(
     (acc, result, index) => {
       if (result.status === 'fulfilled') {
         const pushResult = result.value;
