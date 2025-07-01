@@ -53,9 +53,10 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
   // protected property in the base oclif class
   declare debug: (...args: unknown[]) => void;
 
-  // eslint-disable-next-line consistent-return
   protected info(input: Parameters<typeof info>[0], opts: Parameters<typeof info>[1]): void {
-    if (!this.jsonEnabled()) return info(input, opts);
+    if (!this.jsonEnabled()) {
+      info(input, opts);
+    }
   }
 
   protected async catch(err: Error & { exitCode?: number }) {
