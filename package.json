@@ -74,7 +74,7 @@
     "table": "^6.8.1",
     "tmp-promise": "^3.0.3",
     "toposort": "^2.0.2",
-    "undici": "^7.5.0",
+    "undici": "^7.11.0",
     "unzipper": "^0.12.3",
     "validator": "^13.7.0"
   },
