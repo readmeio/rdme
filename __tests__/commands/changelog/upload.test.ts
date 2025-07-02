@@ -535,8 +535,6 @@ describe(`rdme ${topic} upload`, () => {
         })
         .reply(500, {});
 
-      prompts.inject([true]);
-
       const result = await run(['__tests__/__fixtures__/changelog/mixed-docs', '--key', key, '--skip-validation']);
 
       expect(result).toMatchSnapshot();
@@ -581,8 +579,6 @@ describe(`rdme ${topic} upload`, () => {
         })
         .reply(500, {});
 
-      prompts.inject([true]);
-
       const result = await run([
         '__tests__/__fixtures__/changelog/mixed-docs',
         '--key',
@@ -608,8 +604,6 @@ describe(`rdme ${topic} upload`, () => {
         .reply(500)
         .get(`/${route}/simple-doc`)
         .reply(500);
-
-      prompts.inject([true]);
 
       const result = await run([
         '__tests__/__fixtures__/changelog/mixed-docs',

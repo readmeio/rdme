@@ -603,8 +603,6 @@ describe('custompages upload', () => {
         })
         .reply(500, {});
 
-      prompts.inject([true]);
-
       const result = await run(['__tests__/__fixtures__/custompages/mixed-docs', '--key', key, '--skip-validation']);
 
       expect(result).toMatchSnapshot();
@@ -650,8 +648,6 @@ describe('custompages upload', () => {
         })
         .reply(500, {});
 
-      prompts.inject([true]);
-
       const result = await run([
         '__tests__/__fixtures__/custompages/mixed-docs',
         '--key',
@@ -677,8 +673,6 @@ describe('custompages upload', () => {
         .reply(500)
         .get('/branches/stable/custom_pages/simple-doc')
         .reply(500);
-
-      prompts.inject([true]);
 
       const result = await run([
         '__tests__/__fixtures__/custompages/mixed-docs',

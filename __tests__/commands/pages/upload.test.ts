@@ -265,7 +265,7 @@ describe.each([
         projectsMeMock.done();
       });
 
-      it.skip('should exit if the user declines to fix the issues', async () => {
+      it('should exit if the user declines to fix the issues', async () => {
         prompts.inject([false]);
 
         const result = await run(['__tests__/__fixtures__/docs/mixed-docs/legacy-category.md', '--key', key]);
@@ -638,8 +638,6 @@ describe.each([
         })
         .reply(500, {});
 
-      prompts.inject([true]);
-
       const result = await run(['__tests__/__fixtures__/docs/mixed-docs', '--key', key, '--skip-validation']);
 
       expect(result).toMatchSnapshot();
@@ -688,8 +686,6 @@ describe.each([
         })
         .reply(500, {});
 
-      prompts.inject([true]);
-
       const result = await run([
         '__tests__/__fixtures__/docs/mixed-docs',
         '--key',
@@ -715,8 +711,6 @@ describe.each([
         .reply(500)
         .get(`/branches/stable/${route}/simple-doc`)
         .reply(500);
-
-      prompts.inject([true]);
 
       const result = await run([
         '__tests__/__fixtures__/docs/mixed-docs',
