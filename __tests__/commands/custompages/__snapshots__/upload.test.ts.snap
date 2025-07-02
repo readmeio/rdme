@@ -260,7 +260,7 @@ exports[`custompages upload > given that the file path is a directory > should h
 - 🔬 Validating frontmatter data...
 ⚠ 🔬 Validating frontmatter data... issues found in 2 file(s).
  ›   Warning: 1 file(s) have issues that cannot be fixed automatically. 
- ›   Autofixable issues have been addressed but we also recommend addressing 
+ ›   Autofixable issues have been corrected but we also recommend addressing 
  ›   these issues as well. Please get in touch with us at support@readme.io if 
  ›   you need a hand.
 ",
