@@ -16,7 +16,6 @@ type ValidationStatus = 'autofixed-with-issues' | 'autofixed' | 'has-issues' | '
 export async function validateFrontmatter(
   this: APIv2PageCommands,
   pages: PageMetadata[],
-  promptQuestion: string,
   outputDir?: string,
 ): Promise<{ pages: PageMetadata<PageRequestSchema<PageRoute>>[]; status: ValidationStatus }> {
   const { path: pathInput } = this.args;
@@ -59,7 +58,7 @@ export async function validateFrontmatter(
         {
           type: 'confirm',
           name: 'confirm',
-          message: `${filesWithFixableIssues.length} file(s) have issues that can be fixed automatically. ${promptQuestion}`,
+          message: `${filesWithFixableIssues.length} file(s) have issues that can be fixed automatically. Would you like to make these changes`,
         },
       ]);
 

@@ -269,11 +269,7 @@ export default async function syncPagePath(this: APIv2PageUploadCommands): Promi
       this.warn('Skipping pre-upload validation of the Markdown file(s). This is not recommended.');
     }
   } else {
-    const validationResults = await validateFrontmatter.call(
-      this,
-      unsortedFiles,
-      'Would you like to make these changes and continue with the upload to ReadMe?',
-    );
+    const validationResults = await validateFrontmatter.call(this, unsortedFiles);
 
     // if autofixes were applied, we return the results immediately
     if (validationResults.status.includes('autofixed')) {
