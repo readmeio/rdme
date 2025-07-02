@@ -355,7 +355,7 @@ Body
 ✅ The following files have been automatically fixed:
 - __tests__/__fixtures__/docs/mixed-docs/legacy-category.md (1 issue)
 
-Please review the changes. Once everything looks good, run the command again to upload these files to ReadMe.
+Please review the changes. Once everything looks good, re-run \`rdme docs upload\` to upload these files to ReadMe.
 ",
 }
 `;
@@ -467,7 +467,7 @@ Body
 ✅ The following files have been automatically fixed:
 - __tests__/__fixtures__/docs/mixed-docs/legacy-category.md (1 issue)
 
-Please review the changes. Once everything looks good, run the command again to upload these files to ReadMe.
+Please review the changes. Once everything looks good, re-run \`rdme docs upload\` to upload these files to ReadMe.
 ",
 }
 `;
@@ -646,7 +646,7 @@ Body
 ✅ The following files have been automatically fixed:
 - __tests__/__fixtures__/docs/mixed-docs/legacy-category.md (1 issue)
 
-Please review the changes. Once everything looks good, run the command again to upload these files to ReadMe.
+Please review the changes. Once everything looks good, re-run \`rdme docs upload\` to upload these files to ReadMe.
 ",
 }
 `;
@@ -683,7 +683,7 @@ Body
 ✅ The following files have been automatically fixed:
 - __tests__/__fixtures__/docs/mixed-docs/legacy-category.md (1 issue)
 
-Please review the changes. Once everything looks good, run the command again to upload these files to ReadMe.
+Please review the changes. Once everything looks good, re-run \`rdme docs upload\` to upload these files to ReadMe.
 ",
 }
 `;
@@ -1343,7 +1343,7 @@ Body
 ✅ The following files have been automatically fixed:
 - __tests__/__fixtures__/docs/mixed-docs/legacy-category.md (1 issue)
 
-Please review the changes. Once everything looks good, run the command again to upload these files to ReadMe.
+Please review the changes. Once everything looks good, re-run \`rdme reference upload\` to upload these files to ReadMe.
 ",
 }
 `;
@@ -1455,7 +1455,7 @@ Body
 ✅ The following files have been automatically fixed:
 - __tests__/__fixtures__/docs/mixed-docs/legacy-category.md (1 issue)
 
-Please review the changes. Once everything looks good, run the command again to upload these files to ReadMe.
+Please review the changes. Once everything looks good, re-run \`rdme reference upload\` to upload these files to ReadMe.
 ",
 }
 `;
@@ -1634,7 +1634,7 @@ Body
 ✅ The following files have been automatically fixed:
 - __tests__/__fixtures__/docs/mixed-docs/legacy-category.md (1 issue)
 
-Please review the changes. Once everything looks good, run the command again to upload these files to ReadMe.
+Please review the changes. Once everything looks good, re-run \`rdme reference upload\` to upload these files to ReadMe.
 ",
 }
 `;
@@ -1671,7 +1671,7 @@ Body
 ✅ The following files have been automatically fixed:
 - __tests__/__fixtures__/docs/mixed-docs/legacy-category.md (1 issue)
 
-Please review the changes. Once everything looks good, run the command again to upload these files to ReadMe.
+Please review the changes. Once everything looks good, re-run \`rdme reference upload\` to upload these files to ReadMe.
 ",
 }
 `;

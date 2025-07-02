@@ -310,7 +310,7 @@ Body
 ✅ The following files have been automatically fixed:
 - __tests__/__fixtures__/custompages/mixed-docs/legacy-page.md (2 issues)
 
-Please review the changes. Once everything looks good, run the command again to upload these files to ReadMe.
+Please review the changes. Once everything looks good, re-run \`rdme custompages upload\` to upload these files to ReadMe.
 ",
 }
 `;
@@ -431,7 +431,7 @@ Body
 ✅ The following files have been automatically fixed:
 - __tests__/__fixtures__/custompages/mixed-docs/legacy-page.md (2 issues)
 
-Please review the changes. Once everything looks good, run the command again to upload these files to ReadMe.
+Please review the changes. Once everything looks good, re-run \`rdme custompages upload\` to upload these files to ReadMe.
 ",
 }
 `;
@@ -612,7 +612,7 @@ Body
 ✅ The following files have been automatically fixed:
 - __tests__/__fixtures__/custompages/mixed-docs/legacy-page.md (2 issues)
 
-Please review the changes. Once everything looks good, run the command again to upload these files to ReadMe.
+Please review the changes. Once everything looks good, re-run \`rdme custompages upload\` to upload these files to ReadMe.
 ",
 }
 `;

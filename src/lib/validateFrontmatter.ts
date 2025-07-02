@@ -10,6 +10,7 @@ import isCI from './isCI.js';
 import { oraOptions } from './logger.js';
 import promptTerminal from './promptWrapper.js';
 import { fetchMappings, fetchSchema } from './readmeAPIFetch.js';
+import chalk from 'chalk';
 
 type ValidationStatus = 'autofixed-with-issues' | 'autofixed' | 'has-issues' | 'valid';
 
@@ -84,7 +85,7 @@ export async function validateFrontmatter(
 
       this.log();
       this.log(
-        'Please review the changes. Once everything looks good, run the command again to upload these files to ReadMe.',
+        `Please review the changes. Once everything looks good, re-run \`${chalk.blue(`${this.config.bin} ${this.id}`)}\` to upload these files to ReadMe.`,
       );
     }
 
