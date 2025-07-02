@@ -111,12 +111,9 @@ export default class DocsMigrateCommand extends BaseCommand<typeof DocsMigrateCo
     if (skipValidation) {
       this.debug('skipping validation');
     } else {
-      unsortedFiles = await validateFrontmatter.call(
-        this,
-        unsortedFiles,
-        'Would you like to make these changes?',
-        outputDir,
-      );
+      unsortedFiles = (
+        await validateFrontmatter.call(this, unsortedFiles, 'Would you like to make these changes?', outputDir)
+      ).pages;
     }
 
     if (transformedByHooks) {
