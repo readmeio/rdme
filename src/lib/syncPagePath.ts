@@ -234,20 +234,7 @@ function sortFiles(
  */
 export default async function syncPagePath(this: APIv2PageUploadCommands): Promise<FullUploadResults> {
   const { path: pathInput } = this.args;
-  const { key, 'dry-run': dryRun, 'max-errors': maxErrors, 'skip-validation': skipValidation } = this.flags;
-
-  // check whether or not the project has bidirection syncing enabled
-  // if it is, validations must be skipped to prevent frontmatter from being overwritten
-  const headers = new Headers({ authorization: `Bearer ${key}` });
-  const projectMetadata: ProjectRepresentation = await this.readmeAPIFetch('/projects/me', {
-    method: 'GET',
-    headers,
-  }).then(res => {
-    return this.handleAPIRes(res);
-  });
-
-  const biDiConnection = projectMetadata?.data?.git?.connection?.status === 'active';
-  this.debug(`bi-directional syncing is ${biDiConnection ? 'enabled' : 'disabled'}`);
+  const { 'dry-run': dryRun, 'max-errors': maxErrors, 'skip-validation': skipValidation } = this.flags;
 
   const validFileExtensions = [...allowedMarkdownExtensions];
   if (this.route === 'custom_pages') {

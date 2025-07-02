@@ -1,6 +1,5 @@
 import fs from 'node:fs';
 
-import nock from 'nock';
 import prompts from 'prompts';
 import { describe, afterEach, it, expect, beforeAll, beforeEach, vi } from 'vitest';
 
@@ -23,9 +22,6 @@ describe('custompages upload', () => {
     getAPIv1Mock().get('/api/v1/migration').basicAuth({ user: key }).reply(201, {
       categories: {},
       parentPages: {},
-    });
-    getAPIv2Mock({ authorization }).get('/projects/me').reply(200, {
-      data: {},
     });
     vi.spyOn(fs, 'writeFileSync').mockImplementation((file, data) => {
       // eslint-disable-next-line no-console
@@ -330,10 +326,6 @@ describe('custompages upload', () => {
           })
           .reply(201, {});
 
-        const projectsMeMock = getAPIv2MockForGHA({ authorization }).get('/projects/me').reply(200, {
-          data: {},
-        });
-
         const result = await run(['__tests__/__fixtures__/custompages/new-docs/new-doc.md', '--key', key]);
 
         expect(result).toMatchSnapshot();
@@ -341,25 +333,16 @@ describe('custompages upload', () => {
 
         getMock.done();
         postMock.done();
-        projectsMeMock.done();
       });
 
       it('should error out if the file has validation errors', async () => {
-        const projectsMeMock = getAPIv2MockForGHA({ authorization }).get('/projects/me').reply(200, {
-          data: {},
-        });
         const result = await run(['__tests__/__fixtures__/custompages/mixed-docs/legacy-page.md', '--key', key]);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
-        projectsMeMock.done();
       });
 
       it('should bypass prompt if `--confirm-autofixes` flag is passed', async () => {
-        const projectsMeMock = getAPIv2MockForGHA({ authorization }).get('/projects/me').reply(200, {
-          data: {},
-        });
-
         const result = await run([
           '__tests__/__fixtures__/custompages/mixed-docs/legacy-page.md',
           '--key',
@@ -373,8 +356,6 @@ describe('custompages upload', () => {
           expect.stringContaining('view: anyone_with_link'),
           { encoding: 'utf-8' },
         );
-
-        projectsMeMock.done();
       });
     });
 
@@ -681,84 +662,6 @@ describe('custompages upload', () => {
         '--dry-run',
         '--skip-validation',
       ]);
-
-      expect(result).toMatchSnapshot();
-      expect(fs.writeFileSync).not.toHaveBeenCalled();
-
-      mock.done();
-    });
-  });
-
-  describe('given that ReadMe project has bidirection sync set up', () => {
-    it('should error if validation is not skipped', async () => {
-      nock.cleanAll();
-
-      const mock = getAPIv2Mock({ authorization })
-        .get('/projects/me')
-        .reply(200, {
-          data: { git: { connection: { status: 'active' } } },
-        });
-
-      const result = await run(['__tests__/__fixtures__/custompages/new-docs/new-doc.md', '--key', key]);
-
-      expect(result).toMatchSnapshot();
-      expect(fs.writeFileSync).not.toHaveBeenCalled();
-
-      mock.done();
-    });
-
-    it('should upload if validation is skipped', async () => {
-      nock.cleanAll();
-
-      const mock = getAPIv2Mock({ authorization })
-        .get('/branches/stable/custom_pages/new-doc')
-        .reply(404)
-        .post('/branches/stable/custom_pages', {
-          slug: 'new-doc',
-          title: 'This is the document title',
-          content: { body: '\nBody\n', type: 'markdown' },
-        })
-        .reply(201, {});
-
-      const projectsMeMock = getAPIv2Mock({ authorization })
-        .get('/projects/me')
-        .reply(200, {
-          data: { git: { connection: { status: 'active' } } },
-        });
-
-      const result = await run([
-        '__tests__/__fixtures__/custompages/new-docs/new-doc.md',
-        '--key',
-        key,
-        '--skip-validation',
-      ]);
-
-      expect(result).toMatchSnapshot();
-      expect(fs.writeFileSync).not.toHaveBeenCalled();
-
-      mock.done();
-      projectsMeMock.done();
-    });
-
-    it('should handle an error if /projects/me returns an error', async () => {
-      nock.cleanAll();
-
-      const mock = getAPIv2Mock({ authorization: 'Bearer bad-api-key' })
-        .get('/projects/me')
-        .reply(401, {
-          title: "The API key couldn't be located.",
-          detail:
-            "The API key you passed in (bad-api-key) doesn't match any keys we have in our system. API keys must be passed in via Bearer token. You can get your API key in Configuration > API Key, or in the docs.",
-          instance: '/reference/intro/authentication',
-          poem: [
-            'The ancient gatekeeper declares:',
-            "'To pass, reveal your API key.'",
-            "'bad-…', you start to ramble",
-            'Oops, you remembered it poorly!',
-          ],
-        });
-
-      const result = await run(['__tests__/__fixtures__/custompages/new-docs/new-doc.md', '--key', 'bad-api-key']);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
