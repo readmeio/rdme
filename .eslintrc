@@ -59,7 +59,8 @@
       },
     ],
 
-    // This rule is only really applicable for OSS libraries and doesn't apply to rdme's case.
+    // These rules are only really applicable for OSS libraries and don't apply to rdme's case.
     "readme/no-dual-exports": "off",
+    "readme/no-wildcard-imports": "off",
   },
 }
