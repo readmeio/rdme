@@ -23,18 +23,10 @@ export default async function streamSpecToRegistry(
   const { path } = await tmpFile({ prefix: 'rdme-openapi-', postfix: '.json' });
   debug(`creating temporary file at ${path}`);
   await fs.writeFileSync(path, spec);
-  const stream = fs.createReadStream(path);
 
-  debug('file and stream created, streaming into form data payload');
+  debug('temporary file, created, constructed form data');
   const formData = new FormData();
-  formData.append('spec', {
-    type: 'application/json',
-    name: 'openapi.json',
-    [Symbol.toStringTag]: 'File',
-    stream() {
-      return stream;
-    },
-  });
+  formData.append('spec', new File([fs.readFileSync(path)], path, { type: 'application/json' }), path);
 
   const options = {
     body: formData,

@@ -1,3 +1,10 @@
+## [9.2.1](https://github.com/readmeio/rdme/compare/v9.2.0...v9.2.1) (2025-05-13)
+
+
+### Bug Fixes
+
+* **v9/openapi:** problem with `FormData` compositions on Node 24 ([#1242](https://github.com/readmeio/rdme/issues/1242)) ([046842f](https://github.com/readmeio/rdme/commit/046842f7898ccdf6ce6cd910b8622b6ab9a380c6))
+
 # [9.2.0](https://github.com/readmeio/rdme/compare/v9.1.1...v9.2.0) (2025-03-19)
 
 

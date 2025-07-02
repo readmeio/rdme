@@ -5,6 +5,8 @@ import path from 'node:path';
 import { Config } from '@oclif/core';
 import { captureOutput, runCommand as oclifRunCommand } from '@oclif/test';
 
+export type OclifOutput<T = string> = ReturnType<typeof captureOutput<T>>;
+
 const testNodeEnv = process.env.NODE_ENV;
 
 /**
@@ -35,8 +37,6 @@ export function setupOclifConfig() {
 export function runCommand(Command: CommandClass) {
   return async function runCommandAgainstArgs(args?: string[]) {
     const oclifConfig = await setupOclifConfig();
-    // @ts-expect-error this is the pattern recommended by the @oclif/test docs.
-    // Not sure how to get this working with type generics.
     return captureOutput<string>(() => Command.run(args, oclifConfig), { testNodeEnv });
   };
 }

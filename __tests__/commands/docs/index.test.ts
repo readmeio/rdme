@@ -12,10 +12,9 @@ import { describe, beforeAll, afterAll, beforeEach, afterEach, it, expect, vi, t
 import Command from '../../../src/commands/docs/index.js';
 import { APIv1Error } from '../../../src/lib/apiError.js';
 import { getAPIv1Mock, getAPIv1MockWithVersionHeader } from '../../helpers/get-api-mock.js';
-import { after, before } from '../../helpers/get-gha-setup.js';
+import { gitMock, githubActionsEnv } from '../../helpers/git-mock.js';
 import hashFileContents from '../../helpers/hash-file-contents.js';
 import { runCommandAndReturnResult, runCommandWithHooks } from '../../helpers/oclif.js';
-import { after as afterGHAEnv, before as beforeGHAEnv } from '../../helpers/setup-gha-env.js';
 
 const fixturesBaseDir = '__fixtures__/docs';
 const fullFixturesDir = `${__dirname}./../../${fixturesBaseDir}`;
@@ -405,13 +404,13 @@ describe('rdme docs', () => {
     beforeEach(() => {
       consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
 
-      before((fileName, data) => {
+      gitMock.before((fileName, data) => {
         yamlOutput = data;
       });
     });
 
     afterEach(() => {
-      after();
+      gitMock.after();
 
       consoleInfoSpy.mockRestore();
     });
@@ -589,10 +588,12 @@ describe('rdme docs', () => {
 
   describe('command execution in GitHub Actions runner', () => {
     beforeEach(() => {
-      beforeGHAEnv();
+      githubActionsEnv.before();
     });
 
-    afterEach(afterGHAEnv);
+    afterEach(() => {
+      githubActionsEnv.after();
+    });
 
     it('should sync new docs directory with correct headers', async () => {
       const slug = 'new-doc';
