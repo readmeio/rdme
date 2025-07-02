@@ -1,3 +1,10 @@
+# [10.4.0-next.6](https://github.com/readmeio/rdme/compare/v10.4.0-next.5...v10.4.0-next.6) (2025-07-02)
+
+
+### Bug Fixes
+
+* **pages/upload:** decouple autofixing and uploads ([#1282](https://github.com/readmeio/rdme/issues/1282)) ([d5a6fe9](https://github.com/readmeio/rdme/commit/d5a6fe9a7e0dc541a3ff4196d4f17413505a0ada))
+
 # [10.4.0-next.5](https://github.com/readmeio/rdme/compare/v10.4.0-next.4...v10.4.0-next.5) (2025-07-01)
 
 
