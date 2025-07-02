@@ -247,11 +247,7 @@ export default async function syncPagePath(this: APIv2PageUploadCommands): Promi
   });
 
   const biDiConnection = projectMetadata?.data?.git?.connection?.status === 'active';
-  if (biDiConnection && !skipValidation) {
-    throw new Error(
-      "Bi-directional syncing is enabled for this project. Uploading these docs will overwrite what's currently synced from Git. To proceed with the upload, re-run this command with the `--skip-validation` flag.",
-    );
-  }
+  this.debug(`bi-directional syncing is ${biDiConnection ? 'enabled' : 'disabled'}`);
 
   const validFileExtensions = [...allowedMarkdownExtensions];
   if (this.route === 'custom_pages') {
@@ -261,13 +257,7 @@ export default async function syncPagePath(this: APIv2PageUploadCommands): Promi
   let unsortedFiles = await findPages.call(this, pathInput, validFileExtensions);
 
   if (skipValidation) {
-    if (biDiConnection) {
-      this.warn(
-        "Bi-directional syncing is enabled for this project. Uploading these docs will overwrite what's currently synced from Git.",
-      );
-    } else {
-      this.warn('Skipping pre-upload validation of the Markdown file(s). This is not recommended.');
-    }
+    this.warn('Skipping pre-upload validation of the Markdown file(s). This is not recommended.');
   } else {
     unsortedFiles = await validateFrontmatter.call(
       this,
