@@ -82,6 +82,7 @@ export async function validateFrontmatter(
           );
         }
       });
+
       this.log();
       this.log(
         'Please review the changes. Once everything looks good, run the command again to upload these files to ReadMe.',
