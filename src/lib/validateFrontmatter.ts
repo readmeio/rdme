@@ -98,7 +98,7 @@ export async function validateFrontmatter(
       } else {
         status = 'autofixed-with-issues';
         this.warn(
-          `${filesWithUnfixableIssues.length} file(s) have issues that cannot be fixed automatically. Autofixable issues have been addressed but we also recommend addressing these issues as well. Please get in touch with us at support@readme.io if you need a hand.`,
+          `${filesWithUnfixableIssues.length} file(s) have issues that cannot be fixed automatically. Autofixable issues have been corrected but we also recommend addressing these issues as well. Please get in touch with us at support@readme.io if you need a hand.`,
         );
       }
     }
