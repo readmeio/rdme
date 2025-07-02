@@ -1,5 +1,5 @@
 import type { APIv2PageUploadCommands } from '../index.js';
-import type { PageRequestSchema, PageResponseSchema, ProjectRepresentation } from './types/index.js';
+import type { PageRequestSchema, PageResponseSchema } from './types/index.js';
 
 import path from 'node:path';
 
