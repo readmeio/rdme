@@ -2,6 +2,7 @@ import type { PageMetadata } from './readPage.js';
 import type { APIv2PageCommands } from '../index.js';
 import type { PageRequestSchema, PageRoute } from './types/index.js';
 
+import chalk from 'chalk';
 import ora from 'ora';
 import prompts from 'prompts';
 
@@ -10,7 +11,6 @@ import isCI from './isCI.js';
 import { oraOptions } from './logger.js';
 import promptTerminal from './promptWrapper.js';
 import { fetchMappings, fetchSchema } from './readmeAPIFetch.js';
-import chalk from 'chalk';
 
 type ValidationStatus = 'autofixed-with-issues' | 'autofixed' | 'has-issues' | 'valid';
 
