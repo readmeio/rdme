@@ -1,4 +1,5 @@
-import ci from 'ci-info'; // eslint-disable-line no-restricted-imports
+// biome-ignore lint/style/noRestrictedImports: `ci-info` is safe to use here but nowhere else.
+import ci from 'ci-info';
 
 /**
  * Wrapper function that returns the name of the current CI environment

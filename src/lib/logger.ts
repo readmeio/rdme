@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noConsole: This is our wrapper for `console.*`. */
 import type { Options as OraOptions } from 'ora';
 import type { Writable } from 'type-fest';
 
@@ -31,7 +32,6 @@ function debug(input: unknown) {
 function error(input: string) {
   /* istanbul ignore next */
   if (isGHA() && !isTest()) return core.error(input);
-  // eslint-disable-next-line no-console
   return console.error(chalk.red(input));
 }
 
@@ -49,8 +49,7 @@ function info(
   /* istanbul ignore next */
   if (isGHA() && !isTest()) return core.notice(input);
   /* istanbul ignore next */
-  if (!opts.includeEmojiPrefix) return console.info(input); // eslint-disable-line no-console
-  // eslint-disable-next-line no-console
+  if (!opts.includeEmojiPrefix) return console.info(input);
   return console.info(`ℹ️  ${input}`);
 }
 
@@ -76,7 +75,6 @@ function warn(
 ) {
   /* istanbul ignore next */
   if (isGHA() && !isTest()) return core.warning(input);
-  // eslint-disable-next-line no-console
   return console.warn(chalk.yellow(`⚠️  ${prefix} ${input}`));
 }
 

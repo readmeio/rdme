@@ -94,7 +94,7 @@ export default class DocsMigrateCommand extends BaseCommand<typeof DocsMigrateCo
     }
 
     validationHookResults.successes.forEach(success => {
-      if (success.result && success.result.pages.length) {
+      if (success.result?.pages.length) {
         transformedByHooks = true;
         this.log(`🔌 ${success.result.pages.length} Markdown files updated via the \`${success.plugin.name}\` plugin`);
         stats.results[success.plugin.name] = success.result.stats;

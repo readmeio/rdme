@@ -27,10 +27,6 @@ updates:
       prefix: chore(deps)
       prefix-development: chore(deps-dev)
     ignore:
-      # Blocked on this until we can bump our shared ESLint config to support ESLint 9
-      - dependency-name: eslint
-        versions:
-          - '>= 8'
       # There are ProxyAgent discrepancies between undici@6 and
       # the Node.js fetch implementation (which uses undici@5).
       # Until we use undici itself for fetch calls, we should
