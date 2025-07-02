@@ -39,13 +39,11 @@ npx markdown-toc documentation/migration-guide.md --maxdepth 2 --bullets="-" -i
 This release adds a few features that make it even easier to get started with `rdme`:
 
 1. **Enhanced Command Documentation**
-
    - Complete command reference in [the `documentation/commands` directory](https://github.com/readmeio/rdme/tree/v9/documentation/commands)
    - Detailed usage examples and parameter descriptions
    - Structured by command category for intuitive navigation
 
 2. **Improved CLI Experience**
-
    - Overhauled help screens with detailed examples to improve readability and ease of use
    - Set up CLI autocompletions with [the `autocomplete` command](https://github.com/readmeio/rdme/tree/v9/documentation/commands/autocomplete.md)
    - Smart command discovery that helps catch and correct typos
@@ -81,17 +79,14 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
 #### Step 3: Address `v9` Breaking Changes
 
 1. **Verify your runtime**
-
    - For CLI users, make sure your Node.js version is up-to-date. The minimum required Node.js version for `rdme@9` is **v20.10.0**.
    - The `rdme` release process is no longer publishing Docker images and the GitHub Action is now a JavaScript action. This change should not affect any GitHub Actions users.
 
 2. **Topic separator changes**
-
    - The topic separator (i.e., what separates a command from its subcommand) has changed from a colon to a space by default. For example, `rdme openapi:validate` is now `rdme openapi validate`.
    - The colon topic separator will continue to be supported so there is no need to change any existing commands, but all documentation and help screens will reflect the space topic separator.
 
 3. **Command replacements**
-
    - Replace `swagger` → [`openapi`](https://github.com/readmeio/rdme/tree/v9/documentation/commands/openapi.md#rdme-openapi-spec)
    - Replace `validate` → [`openapi validate`](https://github.com/readmeio/rdme/tree/v9/documentation/commands/openapi.md#rdme-openapi-validate-spec)
    - Remove: `docs:edit`, `oas`
@@ -115,7 +110,6 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
 5. **Deprecated commands**
 
    The following commands (and their subcommands) will be removed in `rdme@10`:
-
    - `categories`
    - `custompages`
    - `docs` (and its `guides` alias)
@@ -125,7 +119,6 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
    The `openapi` command is deprecated and will be replaced in `rdme@10` by a command with a simpler flag setup based on community feedback.
 
 6. **Verify any scripts that utilize raw CLI outputs**
-
    - The underlying architecture for the CLI has been rewritten with [`oclif`](https://oclif.io/), so some command outputs and error messages may look different.
    - With the exception of the `--raw` flag on `openapi`, we recommend relying on CLI exit codes in your workflows rather than raw command outputs.
 

@@ -12,7 +12,7 @@ interface Document {
 
 function flatten(data: Document[][]): Document[] {
   const allDocs: Document[] = [];
-  const docs: Document[] = (<Document[]>[]).concat(...data);
+  const docs: Document[] = ([] as Document[]).concat(...data);
   docs.forEach(doc => {
     allDocs.push(doc);
     if (doc.children) {
