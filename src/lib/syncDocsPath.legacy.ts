@@ -1,5 +1,5 @@
-import type { PageMetadata } from './readPage.js';
 import type ChangelogsCommand from '../commands/changelogs.js';
+import type { PageMetadata } from './readPage.js';
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -52,23 +52,20 @@ async function pushDoc(
       )}`;
     }
 
-    return (
-      readmeAPIv1Fetch(
-        `/api/v1/${type}`,
-        {
-          method: 'post',
-          headers: cleanAPIv1Headers(key, selectedVersion, new Headers({ 'Content-Type': 'application/json' })),
-          body: JSON.stringify({
-            slug,
-            ...payload,
-          }),
-        },
-        { filePath, fileType: 'path' },
-      )
-        .then(handleAPIv1Res)
-        // eslint-disable-next-line no-underscore-dangle
-        .then(res => `🌱 successfully created '${res.slug}' (ID: ${res._id}) with contents from ${filePath}`)
-    );
+    return readmeAPIv1Fetch(
+      `/api/v1/${type}`,
+      {
+        method: 'post',
+        headers: cleanAPIv1Headers(key, selectedVersion, new Headers({ 'Content-Type': 'application/json' })),
+        body: JSON.stringify({
+          slug,
+          ...payload,
+        }),
+      },
+      { filePath, fileType: 'path' },
+    )
+      .then(handleAPIv1Res)
+      .then(res => `🌱 successfully created '${res.slug}' (ID: ${res._id}) with contents from ${filePath}`);
   }
 
   function updateDoc(existingDoc: typeof payload) {
@@ -112,7 +109,6 @@ async function pushDoc(
       return updateDoc(body);
     })
     .catch(err => {
-      // eslint-disable-next-line no-param-reassign
       err.message = `Error uploading ${chalk.underline(filePath)}:\n\n${err.message}`;
       throw err;
     });
@@ -132,7 +128,6 @@ const byParentDoc = (left: PageMetadata, right: PageMetadata) => {
 function sortFiles(this: ChangelogsCommand, filePaths: string[]): PageMetadata[] {
   const files = filePaths.map(file => readPage.call(this, file)).sort(byParentDoc);
   const filesBySlug = files.reduce<Record<string, PageMetadata>>((bySlug, obj) => {
-    // eslint-disable-next-line no-param-reassign
     bySlug[obj.slug] = obj;
     return bySlug;
   }, {});
@@ -189,8 +184,8 @@ export default async function syncDocsPath(
         ),
       );
     }
-    let sortedFiles;
 
+    let sortedFiles: PageMetadata[];
     try {
       sortedFiles = sortFiles.call(this, files);
     } catch (e) {

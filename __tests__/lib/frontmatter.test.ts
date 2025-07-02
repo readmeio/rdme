@@ -1,10 +1,10 @@
+import type { SchemaObject } from 'oas/types';
 import type { APIv2PageCommands } from '../../src/index.js';
 import type { PageMetadata } from '../../src/lib/readPage.js';
-import type { SchemaObject } from 'oas/types';
 
 import fs from 'node:fs';
 
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import ChangelogUploadCommand from '../../src/commands/changelog/upload.js';
 import CustomPagesUploadCommand from '../../src/commands/custompages/upload.js';

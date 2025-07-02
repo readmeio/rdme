@@ -210,7 +210,6 @@ function sortFiles(
   files: PageMetadata<GuidesOrReferenceRequestSchema>[],
 ): PageMetadata<GuidesOrReferenceRequestSchema>[] {
   const filesBySlug = files.reduce<Record<string, PageMetadata<GuidesOrReferenceRequestSchema>>>((bySlug, obj) => {
-    // eslint-disable-next-line no-param-reassign
     bySlug[obj.slug] = obj;
     return bySlug;
   }, {});

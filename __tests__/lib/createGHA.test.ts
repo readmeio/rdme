@@ -1,12 +1,10 @@
-/* eslint-disable @vitest/no-disabled-tests */
-/* eslint-disable no-console */
 import type { Command, Config } from '@oclif/core';
 import type { Response } from 'simple-git';
 
 import fs from 'node:fs';
 
 import prompts from 'prompts';
-import { describe, beforeEach, afterEach, it, expect, vi, type MockInstance, beforeAll } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, type MockInstance, vi } from 'vitest';
 
 import configstore from '../../src/lib/configstore.js';
 import { getConfigStoreKey, getGHAFileName } from '../../src/lib/createGHA/index.js';
@@ -26,7 +24,7 @@ const key = 'API_KEY';
 
 describe('#createGHA', () => {
   let oclifConfig: Config;
-  let yamlOutput;
+  let yamlOutput: string;
 
   beforeAll(() => {
     expect.extend({ toBeValidSchema });
@@ -36,7 +34,7 @@ describe('#createGHA', () => {
     consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     oclifConfig = await setupOclifConfig();
 
-    gitMock.before((fileName, data) => {
+    gitMock.before((fileName, data: string) => {
       yamlOutput = data;
     });
   });
@@ -86,7 +84,7 @@ describe('#createGHA', () => {
         expect(yamlOutput).toBeValidSchema(ghaWorkflowSchema);
         expect(yamlOutput).toMatchSnapshot();
         expect(fs.writeFileSync).toHaveBeenCalledWith(getGHAFileName(fileName), expect.any(String));
-        expect(console.info).toHaveBeenCalledTimes(1);
+        expect(consoleInfoSpy).toHaveBeenCalledTimes(1);
 
         const output = getCommandOutput();
 

@@ -57,20 +57,20 @@ export function examples(section: Section) {
 
 export function baseFlags(section: Section) {
   const fileType = section === 'Custom Pages' ? 'Markdown/HTML' : 'Markdown';
-  let items;
+  let items: string;
 
   switch (section) {
     case 'Changelog':
-      items = 'Changelog entries' as const;
+      items = 'Changelog entries';
       break;
     case 'Custom Pages':
-      items = 'custom pages' as const;
+      items = 'custom pages';
       break;
     case 'Guides':
-      items = 'guides' as const;
+      items = 'guides';
       break;
     case 'Reference':
-      items = 'reference pages' as const;
+      items = 'reference pages';
       break;
     default:
       throw new Error(`Unknown section: ${section}`);

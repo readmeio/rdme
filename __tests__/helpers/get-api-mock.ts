@@ -2,7 +2,6 @@ import nock from 'nock';
 
 import config from '../../src/lib/config.js';
 import { getUserAgent } from '../../src/lib/readmeAPIFetch.js';
-
 import { mockVersion } from './oclif.js';
 
 /**

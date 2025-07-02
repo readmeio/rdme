@@ -1,6 +1,6 @@
 import BaseCommand from '../../lib/baseCommand.js';
 import { branchFlag, keyFlag } from '../../lib/flags.js';
-import { args, description, examples, baseFlags, summary, alphaNotice } from '../../lib/pageCommandProperties.js';
+import { alphaNotice, args, baseFlags, description, examples, summary } from '../../lib/pageCommandProperties.js';
 import syncPagePath, { type FullUploadResults } from '../../lib/syncPagePath.js';
 
 export default class DocsUploadCommand extends BaseCommand<typeof DocsUploadCommand> {

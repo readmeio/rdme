@@ -85,7 +85,6 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     },
   ];
 
-  // eslint-disable-next-line class-methods-use-this
   private isStatusPending(status: APIUploadStatus): status is 'pending_update' | 'pending' {
     return status.includes('pending');
   }
@@ -98,13 +97,12 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     let status: APIUploadStatus = 'pending';
 
     while (this.isStatusPending(status) && count < 10) {
-      // eslint-disable-next-line no-await-in-loop, no-loop-func
       await new Promise(resolve => {
         // exponential backoff — wait 1s, 2s, 4s, 8s, 16s, 32s, 30s, 30s, 30s, 30s, etc.
         setTimeout(resolve, Math.min(isTest() ? 1 : 1000 * 2 ** count, 30000));
       });
+
       this.debug(`polling API for status of ${slug}, count is ${count}`);
-      // eslint-disable-next-line no-await-in-loop
       const response = (await this.readmeAPIFetch(slug, { headers }).then(res =>
         this.handleAPIRes(res),
       )) as APIUploadSingleResponseRepresentation;

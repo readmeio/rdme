@@ -1,8 +1,8 @@
-import { describe, afterEach, beforeAll, it, expect } from 'vitest';
+import { afterEach, beforeAll, describe, expect, it } from 'vitest';
 
 import Command from '../../src/commands/logout.js';
 import configStore from '../../src/lib/configstore.js';
-import { runCommand, type OclifOutput } from '../helpers/oclif.js';
+import { type OclifOutput, runCommand } from '../helpers/oclif.js';
 
 describe('rdme logout', () => {
   let run: (args?: string[]) => OclifOutput;

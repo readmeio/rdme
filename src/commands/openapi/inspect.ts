@@ -1,5 +1,5 @@
-import type { Analysis, AnalyzedFeature } from '../../lib/analyzeOas.js';
 import type { OASDocument } from 'oas/types';
+import type { Analysis, AnalyzedFeature } from '../../lib/analyzeOas.js';
 
 import { Flags } from '@oclif/core';
 import chalk from 'chalk';
@@ -242,6 +242,7 @@ export default class OpenAPIInspectCommand extends BaseCommand<typeof OpenAPIIns
 
     const tableBorder = Object.entries(getBorderCharacters('norc'))
       .map(([border, char]) => ({ [border]: chalk.gray(char) }))
+      // biome-ignore lint/performance/noAccumulatingSpread: @todo can this be improved?
       .reduce((prev, next) => Object.assign(prev, next));
 
     if (workingDirectory) {

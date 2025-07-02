@@ -1,5 +1,5 @@
-/* eslint-disable no-console */
-import { describe, beforeEach, afterEach, it, expect, vi, type MockInstance } from 'vitest';
+/** biome-ignore-all lint/suspicious/noConsole: We're testing console output. */
+import { afterEach, beforeEach, describe, expect, it, type MockInstance, vi } from 'vitest';
 
 import pkg from '../../package.json' with { type: 'json' };
 import DocsUploadCommand from '../../src/commands/docs/upload.js';

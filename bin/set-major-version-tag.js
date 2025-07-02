@@ -1,4 +1,5 @@
 #! /usr/bin/env node
+
 // @ts-check
 import { execFile as unpromisifiedExecFile } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -18,12 +19,10 @@ async function runGitCmd(args) {
   const child = execCmd.child;
 
   child.stdout?.on('data', chunk => {
-    // eslint-disable-next-line no-console
     console.log(chunk.toString());
   });
 
   child.stderr?.on('data', chunk => {
-    // eslint-disable-next-line no-console
     console.error(chunk.toString());
   });
 
@@ -39,7 +38,6 @@ async function setMajorVersionTag() {
   try {
     // The major version tag should only be set when releasing on the `main` branch
     if (process.env.GITHUB_REF !== 'refs/heads/main') {
-      // eslint-disable-next-line no-console
       console.warn(`Running with the following ref: ${process.env.GITHUB_REF || 'n/a'}, not setting major version tag`);
       return;
     }
@@ -51,7 +49,6 @@ async function setMajorVersionTag() {
     }
 
     if (parsedVersion.prerelease.length) {
-      // eslint-disable-next-line no-console
       console.warn('Pre-release version, not setting major version tag');
       return;
     }
@@ -60,7 +57,6 @@ async function setMajorVersionTag() {
 
     // we maintain a v9 branch, this just ensures that we don't attempt to also push a tag with the same ref
     if (majorTag === 'v9') {
-      // eslint-disable-next-line no-console
       console.warn('A `v9` ref already exists, not setting major version tag');
       return;
     }
@@ -71,16 +67,12 @@ async function setMajorVersionTag() {
 
     if (args[0] === 'push') {
       await runGitCmd(['push', 'origin', majorTag, '--force']);
-      // eslint-disable-next-line no-console
       console.log(`🏷️  Created and pushed ${majorTag}`);
     } else {
-      // eslint-disable-next-line no-console
       console.log("Not pushing, missing 'push' argument");
     }
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.error('Error running git major version tagging script!');
-    // eslint-disable-next-line no-console
     console.error(e);
     process.exit(1);
   }

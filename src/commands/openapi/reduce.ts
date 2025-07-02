@@ -131,8 +131,7 @@ export default class OpenAPIReduceCommand extends BaseCommand<typeof OpenAPIRedu
         choices: (prev, values) => {
           const paths: string[] = values.paths;
           let methods = paths
-            .map((p: string) => Object.keys(parsedPreparedSpec.paths?.[p] || {}))
-            .flat()
+            .flatMap((p: string) => Object.keys(parsedPreparedSpec.paths?.[p] || {}))
             .filter((method: string) => method.toLowerCase() !== 'parameters');
 
           // We have to catch this case so prompt doesn't crash
@@ -177,7 +176,7 @@ export default class OpenAPIReduceCommand extends BaseCommand<typeof OpenAPIRedu
     const spinner = ora({ ...oraOptions() });
     spinner.start('Reducing your API definition...');
 
-    let reducedSpec;
+    let reducedSpec: OASDocument;
 
     try {
       reducedSpec = oasReducer(parsedPreparedSpec, {

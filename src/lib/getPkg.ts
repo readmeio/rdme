@@ -3,7 +3,6 @@ import type { Hook } from '@oclif/core';
 import semver from 'semver';
 
 import pkg from '../../package.json' with { type: 'json' };
-
 import { error } from './logger.js';
 
 const registryUrl = 'https://registry.npmjs.com/rdme';
@@ -35,6 +34,7 @@ export function getNodeVersion(): string {
  * @note we mock this function in our snapshots
  * @see {@link https://stackoverflow.com/a/54245672}
  */
+// biome-ignore lint/suspicious/noConfusingVoidType: This function can be invoked with `.call()`.
 export function getPkgVersion(this: Hook.Context | void): string {
   return this?.config?.version || pkg.version;
 }
@@ -48,6 +48,7 @@ export function getPkgVersion(this: Hook.Context | void): string {
  * @see {@link https://stackoverflow.com/a/54245672}
  */
 export async function getPkgVersionFromNPM(
+  // biome-ignore lint/suspicious/noConfusingVoidType: This function can be invoked with `.call()`.
   this: Hook.Context | void,
   /**
    * The `npm` dist tag to retrieve. If this value is omitted,
@@ -72,6 +73,7 @@ export async function getPkgVersionFromNPM(
  *
  * @example 8
  */
+// biome-ignore lint/suspicious/noConfusingVoidType: This function can be invoked with `.call()`.
 export async function getMajorPkgVersion(this: Hook.Context | void, npmDistTag?: npmDistTag): Promise<number> {
   return semver.major(await getPkgVersionFromNPM.call(this, npmDistTag));
 }

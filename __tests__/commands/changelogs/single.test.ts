@@ -1,9 +1,11 @@
+import type { PageObject } from '../../helpers/page.types.js';
+
 import fs from 'node:fs';
 import path from 'node:path';
 
 import chalk from 'chalk';
 import grayMatter from 'gray-matter';
-import { describe, beforeAll, beforeEach, it, expect } from 'vitest';
+import { beforeAll, beforeEach, describe, expect, it } from 'vitest';
 
 import Command from '../../../src/commands/changelogs.js';
 import { APIv1Error } from '../../../src/lib/apiError.js';
@@ -156,7 +158,7 @@ describe('rdme changelogs (single)', () => {
   });
 
   describe('existing changelogs', () => {
-    let simpleDoc;
+    let simpleDoc: PageObject;
 
     beforeEach(() => {
       const fileContents = fs.readFileSync(path.join(fullFixturesDir, '/existing-docs/simple-doc.md'));

@@ -1,8 +1,7 @@
-/* eslint-disable @vitest/no-conditional-expect */
-import { describe, it, expect, beforeAll } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 
 import Command from '../../../src/commands/openapi/inspect.js';
-import { runCommand, type OclifOutput } from '../../helpers/oclif.js';
+import { type OclifOutput, runCommand } from '../../helpers/oclif.js';
 
 describe('rdme openapi inspect', () => {
   let run: (args?: string[]) => OclifOutput;
