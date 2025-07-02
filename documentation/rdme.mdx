@@ -1,11 +1,13 @@
 ---
-title: Syncing Docs via CLI / GitHub (Legacy)
+title: Syncing Docs via CLI / GitHub (Refactored)
 category:
   uri: documentation
 content:
   excerpt: >-
     Update your docs automatically with `rdme`, ReadMe's official CLI and GitHub
     Action!
+privacy:
+  view: anyone_with_link
 ---
 
 {/* prettier-ignore */}
@@ -66,27 +68,29 @@ To see detailed CLI setup instructions and all available commands, check out [th
 
 ### Markdown File Setup
 
-> 🚧 Deprecated Guidance
+> 🚧 ReadMe Refactored Guidance
 >
-> This guidance is only applicable for projects that are still on our legacy project architecture and have not yet migrated to [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored). The legacy project architecture requires `rdme@9`. You can find more info in [our `rdme` migration guide](https://github.com/readmeio/rdme/blob/v10/documentation/migration-guide.md) or by reaching out to us at [support@readme.io](mailto:support@readme.io).
+> This guidance is only applicable for projects that have been migrated to [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored). The Refactored project architecture requires `rdme@10`, while the legacy project architecture requires `rdme@9`.
 >
-> We will be updating this document with our latest guidance soon. Thanks for your patience!
+> If you are still on our legacy project architecture, please see [our documentation for `rdme@9`](https://docs.readme.com/docs/rdme-legacy).
 
-> 📘 Guides, Changelog, Custom Pages... you name it!
+> 📘 Guides, Reference, Changelog, Custom Pages... you name it!
 >
-> The following guidance on Markdown file setup is nearly identical for Guides (i.e. the `docs` command), Changelog (i.e. the `changelogs` command), and Custom Pages (i.e. the `custompages` command). There are a couple of small differences:
+> The following guidance on Markdown file setup is nearly identical for Guides (i.e. the `docs upload` command), Reference (i.e. the `reference upload` command), Changelog (i.e. the `changelog upload` command), and Custom Pages (i.e. the `custompages upload` command). There are a couple of small differences:
 >
-> - Guides are tied to project versions and therefore require a `--version` parameter. Changelog and Custom Pages are the same across project versions and therefore do not have a `--version` parameter.
+> - Guides and Reference pages are tied to project versions/branches and therefore require a `--branch` parameter. Changelog and Custom Pages are the same across project branches and therefore do not have a `--branch` parameter.
 > - There are slight variations in the YAML frontmatter attributes for each respective section of your documentation. For example, Changelog has a `type` attribute which you can set to `added`. See [Specifying Other Attributes](#specifying-other-attributes) for more information.
-> - In addition to Markdown, Custom Pages also supports HTML files. If you pass an HTML file into the `custompages` commands, the page will have the `htmlmode` flag set to `true` and it will conversely be set to `false` for Markdown files. You can override this in the YAML frontmatter.
+> - In addition to Markdown, Custom Pages also supports HTML files. If you pass an HTML file into the `custompages` commands, the page will have the `content.type` attribute set to `html` and it will conversely be set to `markdown` for Markdown files. You can override this in the YAML frontmatter.
 
-In order to sync Markdown files to your Guides, your Changelog, or your Custom Pages, you'll need to add certain attributes to the top of each page via a [YAML frontmatter block](https://jekyllrb.com/docs/front-matter/). See below for an example (using the page you're currently reading!):
+In order to sync Markdown files to your Guides, your Reference, your Changelog, or your Custom Pages, you'll need to add certain attributes to the top of each page via a [YAML frontmatter block](https://jekyllrb.com/docs/front-matter/). See below for an example (using the page you're currently reading!):
 
 ```markdown
 ---
 title: Syncing Docs via CLI / GitHub
-excerpt: Update your docs automatically with `rdme`, ReadMe's official CLI and GitHub Action!
-category: 62056dee230e07007218be06
+content:
+  excerpt: Update your docs automatically with `rdme`, ReadMe's official CLI and GitHub Action!
+category:
+  uri: documentation
 ---
 
 If you're anything like us...
@@ -96,12 +100,12 @@ If you're anything like us...
 
 See below for a table detailing the required YAML frontmatter attributes:
 
-| Attribute  | Required for `changelogs`? | Required for `custompages`? | Required for `docs`? |
-| :--------- | :------------------------- | :-------------------------- | :------------------- |
-| `title`    | Yes                        | Yes                         | Yes                  |
-| `category` | No                         | No                          | Yes                  |
+| Attribute      | Required for `changelogs`? | Required for `custompages`? | Required for `docs`? | Required for `reference`? |
+| :------------- | :------------------------- | :-------------------------- | :------------------- | :------------------------ |
+| `title`        | Yes                        | Yes                         | Yes                  | Yes                       |
+| `category.uri` | No                         | No                          | Yes                  | Yes                       |
 
-To determine what your `category` value should be, you can use [the `Get all categories` endpoint](https://docs.readme.com/reference/getcategories) and grab the `id` value from the response.
+To determine what your `uri` value should be, you can use [the `Get all categories` endpoint](https://docs.readme.com/reference/getcategories-1) and grab the `uri` value from the response.
 
 > 📘
 >
@@ -114,28 +118,32 @@ By default, we automatically derive the page's slug via the file name (e.g. the 
 ```markdown
 ---
 title: Syncing Docs via CLI / GitHub
-excerpt: Update your docs automatically with `rdme`, ReadMe's official CLI and GitHub Action!
-category: 62056dee230e07007218be06
+content:
+  excerpt: Update your docs automatically with `rdme`, ReadMe's official CLI and GitHub Action!
+category:
+  uri: documentation
 slug: an-alternative-page-slug-example
 ---
 ```
 
 #### Specifying Other Attributes
 
-You can also specify several other page attributes in your YAML frontmatter, such as `hidden` (a boolean which denotes whether your page is published or unpublished). Any attributes you omit will remain unchanged on `rdme` runs. To view the full list of attributes, check out the `POST` endpoints for respective section of your documentation that you're syncing:
+You can also specify several other page attributes in your YAML frontmatter, such as `privacy` (an object that sets a `view` attribute to `public` or `anyone_with_link` to denote whether your page is published or unpublished). Any attributes you omit will remain unchanged on `rdme` runs. To view the full list of attributes, check out the `POST` endpoints for respective section of your documentation that you're syncing:
 
-- [`Create doc`](https://docs.readme.com/reference/createdoc)
-- [`Create changelog`](https://docs.readme.com/reference/createchangelog)
-- [`Create custom page`](https://docs.readme.com/reference/createcustompage)
+- [`Create doc`](https://docs.readme.com/main/reference/createguide/)
+- [`Create reference`](https://docs.readme.com/reference/createreference)
+- [`Create changelog`](https://docs.readme.com/reference/createchangelog-1)
+- [`Create custom page`](https://docs.readme.com/reference/createcustompage-1)
 
 #### Dry Run Mode
 
 If you're setting up new pages or if you're generally unsure if you've set up your page attributes correctly, each command has a dry run mode. This will allow you preview the changes without actually creating/updating any docs in ReadMe, which can be extremely useful for initial setup (oh, and we have [comprehensive debugging options](#troubleshooting) available as well!). To enable dry run mode, use the `--dryRun` flag:
 
 ```sh
-rdme docs [path] --version={project-version} --dryRun
-rdme changelogs [path] --dryRun
-rdme custompages [path] --dryRun
+rdme docs upload [path] --branch={project-version} --dryRun
+rdme reference upload [path] --branch={project-version} --dryRun
+rdme changelog upload [path] --dryRun
+rdme custompages upload [path] --dryRun
 ```
 
 The command output will indicate whether each page is being created or updated alongside all processed page attributes.
@@ -154,53 +162,9 @@ While there are [dozens of event options available](https://docs.github.com/acti
 >
 > Note that `@RDME_VERSION` (used in the examples on this page) is the latest version of `rdme`. We recommend [configuring Dependabot to keep your actions up-to-date](https://docs.github.com/code-security/dependabot/working-with-dependabot/keeping-your-actions-up-to-date-with-dependabot).
 
-### Quick Start
-
-> 🚧 Deprecated Guidance
->
-> This guidance is only applicable for projects that are still on our legacy project architecture and have not yet migrated to [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored). The legacy project architecture requires `rdme@9`. You can find more info in [our `rdme` migration guide](https://github.com/readmeio/rdme/blob/v10/documentation/migration-guide.md) or by reaching out to us at [support@readme.io](mailto:support@readme.io).
->
-> We will be updating this document with our latest guidance soon. Thanks for your patience!
-
-The fastest way to create a GitHub Actions workflow file is by doing the following:
-
-1. Download `rdme` to your local machine (see [our setup instructions](https://github.com/readmeio/rdme#setup))
-2. Open your command line at the root of your GitHub repository
-3. Run the command you wish to automate on your local machine with the `--github` flag tacked on at the end. For example:
-
-```sh
-rdme openapi validate --github
-```
-
-This will run through the `openapi` command, ask you a few quick questions, and then automatically create a fully functional GitHub Actions workflow file for you. 🪄
-
-> 👍 Did you know?
->
-> Not to get too meta on you, but... the page that you're currently reading is actually being synced from the `rdme` GitHub repository via the `rdme` GitHub Action 🤯
->
-> Here are the relevant files on GitHub:
->
-> - [The Markdown source file for the page you're reading](https://github.com/readmeio/rdme/blob/main/documentation/legacy/rdme.md) 📜
-> - [The GitHub Actions workflow file that syncs the Markdown to docs.readme.com](https://github.com/readmeio/rdme/blob/main/.github/workflows/docs.yml) 🔄
-> - And finally... [the workflow run results](https://github.com/readmeio/rdme/actions/workflows/docs.yml) ✅
-
-### Securely Using Your API Key
-
-> 🚧 Secretly store your ReadMe API Key!
->
-> GitHub Actions has [secrets](https://docs.github.com/actions/security-guides/encrypted-secrets) to securely store sensitive information so it isn't publicly visible. We **strongly** recommend using these for storing your ReadMe API Key and any other secret keys—whether your repository is public or private. You can read more about setting these up [in their documentation](https://docs.github.com/actions/security-guides/encrypted-secrets).
-
-To use sensitive information (like your ReadMe API key) in your `rdme` GitHub Action, first [create a new repository secret](https://docs.github.com/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository). Let's say you create a new secret key called `README_API_KEY`. The usage in the `rdme` step will look something like this:
-
-```yml
-- uses: readmeio/rdme@RDME_VERSION
-  with:
-    rdme: openapi validate [url-or-local-path-to-file] --key=${{ secrets.README_API_KEY }} --id=API_DEFINITION_ID
-```
-
 ### Manually Configuring a GitHub Actions Workflow
 
-We recommend using the [quick start](#quick-start) to get started with GitHub Actions. But if you are familiar with the [workflow syntax](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions) and wish to manually configure a workflow, follow these steps:
+Follow these steps to manually configure a GitHub Actions Workflow. This will require some familiarity with the [workflow syntax](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions)
 
 1. Create a new [GitHub Actions workflow file](https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions) in the `.github/workflows` directory of your repository (or use an existing workflow file)
 
@@ -234,18 +198,44 @@ To execute this command via GitHub Actions, the step would look like this:
 
 The following section has links to full GitHub Actions workflow file examples.
 
+> 👍 Did you know?
+>
+> Not to get too meta on you, but... the page that you're currently reading is actually being synced from the `rdme` GitHub repository via the `rdme` GitHub Action 🤯
+>
+> Here are the relevant files on GitHub:
+>
+> - [The Markdown source file for the page you're reading](https://github.com/readmeio/rdme/blob/main/documentation/rdme.md) 📜
+> - [The GitHub Actions workflow file that syncs the Markdown to docs.readme.com](https://github.com/readmeio/rdme/blob/main/.github/workflows/docs.yml) 🔄
+> - And finally... [the workflow run results](https://github.com/readmeio/rdme/actions/workflows/docs.yml) ✅
+
 ### GitHub Actions Examples
 
-> 🚧 Deprecated Guidance
+> 🚧 ReadMe Refactored Guidance
 >
-> This guidance is only applicable for projects that are still on our legacy project architecture and have not yet migrated to [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored). The legacy project architecture requires `rdme@9`. You can find more info in [our `rdme` migration guide](https://github.com/readmeio/rdme/blob/v10/documentation/migration-guide.md) or by reaching out to us at [support@readme.io](mailto:support@readme.io).
+> This guidance is only applicable for projects that have been migrated to [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored). The Refactored project architecture requires `rdme@10`, while the legacy project architecture requires `rdme@9`.
 >
-> We will be updating this document with our latest guidance soon. Thanks for your patience!
+> If you are still on our legacy project architecture, please see [our documentation for `rdme@9`](https://docs.readme.com/docs/rdme-legacy).
 
 Want to start syncing? We have several example workflow files available:
 
+// TODO: create new guides for GHA with `rdme@10` and update these links
+
 - [Syncing an OpenAPI definition](https://docs.readme.com/docs/github-actions-openapi-example)
 - [Syncing a directory of Markdown files](https://docs.readme.com/docs/github-actions-docs-example)
+
+### Securely Using Your API Key
+
+> 🚧 Secretly store your ReadMe API Key!
+>
+> GitHub Actions has [secrets](https://docs.github.com/actions/security-guides/encrypted-secrets) to securely store sensitive information so it isn't publicly visible. We **strongly** recommend using these for storing your ReadMe API Key and any other secret keys—whether your repository is public or private. You can read more about setting these up [in their documentation](https://docs.github.com/actions/security-guides/encrypted-secrets).
+
+To use sensitive information (like your ReadMe API key) in your `rdme` GitHub Action, first [create a new repository secret](https://docs.github.com/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository). Let's say you create a new secret key called `README_API_KEY`. The usage in the `rdme` step will look something like this:
+
+```yml
+- uses: readmeio/rdme@RDME_VERSION
+  with:
+    rdme: openapi validate [url-or-local-path-to-file] --key=${{ secrets.README_API_KEY }} --id=API_DEFINITION_ID
+```
 
 ## Usage in Other CI Environments
 
