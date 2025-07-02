@@ -1,3 +1,10 @@
+# [10.4.0-next.7](https://github.com/readmeio/rdme/compare/v10.4.0-next.6...v10.4.0-next.7) (2025-07-02)
+
+
+### Bug Fixes
+
+* **v9/openapi:** problem with `FormData` compositions on Node 24 ([#1242](https://github.com/readmeio/rdme/issues/1242)) ([046842f](https://github.com/readmeio/rdme/commit/046842f7898ccdf6ce6cd910b8622b6ab9a380c6))
+
 # [10.4.0-next.6](https://github.com/readmeio/rdme/compare/v10.4.0-next.5...v10.4.0-next.6) (2025-07-02)
 
 
