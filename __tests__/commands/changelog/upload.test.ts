@@ -30,7 +30,14 @@ describe(`rdme ${topic} upload`, () => {
     getAPIv2Mock({ authorization }).get('/projects/me').reply(200, {
       data: {},
     });
-    vi.spyOn(fs, 'writeFileSync').mockImplementation(() => {});
+    vi.spyOn(fs, 'writeFileSync').mockImplementation((file, data) => {
+      // eslint-disable-next-line no-console
+      console.log(`=== BEGIN writeFileSync to file: ${file} ===`);
+      // eslint-disable-next-line no-console
+      console.log(data);
+      // eslint-disable-next-line no-console
+      console.log(`=== END writeFileSync to file: ${file} ===`);
+    });
   });
 
   afterEach(() => {
@@ -191,19 +198,7 @@ describe(`rdme ${topic} upload`, () => {
     });
 
     describe('given that the file has frontmatter issues', () => {
-      it('should fix the frontmatter issues in the file and create the corrected file in ReadMe', async () => {
-        const mock = getAPIv2Mock({ authorization })
-          .get(`/${route}/autofixable`)
-          .reply(404)
-          .post(`/${route}`, {
-            type: 'added',
-            slug: 'autofixable',
-            privacy: { view: 'anyone_with_link' },
-            title: 'This is the changelog title',
-            content: { body: '\nBody\n' },
-          })
-          .reply(201, {});
-
+      it('should fix the frontmatter issues in the file', async () => {
         prompts.inject([true]);
 
         const result = await run(['__tests__/__fixtures__/changelog/legacy-docs/autofixable.md', '--key', key]);
@@ -214,8 +209,6 @@ describe(`rdme ${topic} upload`, () => {
           expect.stringContaining('view: anyone_with_link'),
           { encoding: 'utf-8' },
         );
-
-        mock.done();
       });
 
       it('should exit if the user declines to fix the issues', async () => {
@@ -321,22 +314,6 @@ describe(`rdme ${topic} upload`, () => {
       });
 
       it('should bypass prompt if `--confirm-autofixes` flag is passed', async () => {
-        const getMock = getAPIv2MockForGHA({ authorization }).get(`/${route}/autofixable`).reply(404);
-
-        const postMock = getAPIv2MockForGHA({
-          authorization,
-          'x-readme-source-url':
-            'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/__tests__/__fixtures__/changelog/legacy-docs/autofixable.md',
-        })
-          .post(`/${route}`, {
-            type: 'added',
-            slug: 'autofixable',
-            title: 'This is the changelog title',
-            content: { body: '\nBody\n' },
-            privacy: { view: 'anyone_with_link' },
-          })
-          .reply(201, {});
-
         const projectsMeMock = getAPIv2MockForGHA({ authorization }).get('/projects/me').reply(200, {
           data: {},
         });
@@ -354,8 +331,7 @@ describe(`rdme ${topic} upload`, () => {
           expect.stringContaining('view: anyone_with_link'),
           { encoding: 'utf-8' },
         );
-        getMock.done();
-        postMock.done();
+
         projectsMeMock.done();
       });
     });
@@ -514,6 +490,15 @@ describe(`rdme ${topic} upload`, () => {
       expect(result).toMatchSnapshot();
     });
 
+    it('should handle a mix of valid and invalid and autofixable files', async () => {
+      prompts.inject([true]);
+
+      const result = await run(['__tests__/__fixtures__/changelog/mixed-docs', '--key', key]);
+
+      expect(result).toMatchSnapshot();
+      expect(fs.writeFileSync).toHaveBeenCalledTimes(5);
+    });
+
     it('should handle a mix of creates and updates and failures and skipped files', async () => {
       const mock = getAPIv2Mock({ authorization })
         .get(`/${route}/invalid-attributes`)
@@ -530,7 +515,7 @@ describe(`rdme ${topic} upload`, () => {
         .patch(`/${route}/legacy-flag`, {
           title: 'This is the changelog title',
           content: { body: '\nBody\n' },
-          privacy: { view: 'public' },
+          hidden: false,
         })
         .reply(201, {})
         .get(`/${route}/some-slug`)
@@ -550,12 +535,10 @@ describe(`rdme ${topic} upload`, () => {
         })
         .reply(500, {});
 
-      prompts.inject([true]);
-
-      const result = await run(['__tests__/__fixtures__/changelog/mixed-docs', '--key', key]);
+      const result = await run(['__tests__/__fixtures__/changelog/mixed-docs', '--key', key, '--skip-validation']);
 
       expect(result).toMatchSnapshot();
-      expect(fs.writeFileSync).toHaveBeenCalledTimes(5);
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
 
       mock.done();
     });
@@ -576,7 +559,7 @@ describe(`rdme ${topic} upload`, () => {
         .patch(`/${route}/legacy-flag`, {
           title: 'This is the changelog title',
           content: { body: '\nBody\n' },
-          privacy: { view: 'public' },
+          hidden: false,
         })
         .reply(201, {})
         .get(`/${route}/some-slug`)
@@ -596,12 +579,17 @@ describe(`rdme ${topic} upload`, () => {
         })
         .reply(500, {});
 
-      prompts.inject([true]);
-
-      const result = await run(['__tests__/__fixtures__/changelog/mixed-docs', '--key', key, '--max-errors', '10']);
+      const result = await run([
+        '__tests__/__fixtures__/changelog/mixed-docs',
+        '--key',
+        key,
+        '--max-errors',
+        '10',
+        '--skip-validation',
+      ]);
 
       expect(result).toMatchSnapshot();
-      expect(fs.writeFileSync).toHaveBeenCalledTimes(5);
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
 
       mock.done();
     });
@@ -617,12 +605,16 @@ describe(`rdme ${topic} upload`, () => {
         .get(`/${route}/simple-doc`)
         .reply(500);
 
-      prompts.inject([true]);
-
-      const result = await run(['__tests__/__fixtures__/changelog/mixed-docs', '--key', key, '--dry-run']);
+      const result = await run([
+        '__tests__/__fixtures__/changelog/mixed-docs',
+        '--key',
+        key,
+        '--dry-run',
+        '--skip-validation',
+      ]);
 
       expect(result).toMatchSnapshot();
-      expect(fs.writeFileSync).toHaveBeenCalledTimes(5);
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
 
       mock.done();
     });

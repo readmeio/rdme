@@ -31,7 +31,14 @@ describe.each([
     getAPIv2Mock({ authorization }).get('/projects/me').reply(200, {
       data: {},
     });
-    vi.spyOn(fs, 'writeFileSync').mockImplementation(() => {});
+    vi.spyOn(fs, 'writeFileSync').mockImplementation((file, data) => {
+      // eslint-disable-next-line no-console
+      console.log(`=== BEGIN writeFileSync to file: ${file} ===`);
+      // eslint-disable-next-line no-console
+      console.log(data);
+      // eslint-disable-next-line no-console
+      console.log(`=== END writeFileSync to file: ${file} ===`);
+    });
   });
 
   afterEach(() => {
@@ -217,18 +224,7 @@ describe.each([
     });
 
     describe('given that the file has frontmatter issues', () => {
-      it('should fix the frontmatter issues in the file and create the corrected file in ReadMe', async () => {
-        const mock = getAPIv2Mock({ authorization })
-          .get(`/branches/stable/${route}/legacy-category`)
-          .reply(404)
-          .post(`/branches/stable/${route}`, {
-            category: { uri: `/branches/stable/categories/${route}/uri-that-does-not-map-to-5ae122e10fdf4e39bb34db6f` },
-            slug: 'legacy-category',
-            title: 'This is the document title',
-            content: { body: '\nBody\n' },
-          })
-          .reply(201, {});
-
+      it('should fix the frontmatter issues in the file', async () => {
         prompts.inject([true]);
 
         const result = await run(['__tests__/__fixtures__/docs/mixed-docs/legacy-category.md', '--key', key]);
@@ -239,8 +235,6 @@ describe.each([
           expect.stringContaining('uri: uri-that-does-not-map-to-5ae122e10fdf4e39bb34db6f'),
           { encoding: 'utf-8' },
         );
-
-        mock.done();
       });
 
       it('should fix the frontmatter issues in the file and insert the proper category mapping', async () => {
@@ -251,17 +245,6 @@ describe.each([
           .reply(201, {
             categories: { '5ae122e10fdf4e39bb34db6f': 'mapped-uri' },
           });
-
-        const mock = getAPIv2Mock({ authorization })
-          .get(`/branches/stable/${route}/legacy-category`)
-          .reply(404)
-          .post(`/branches/stable/${route}`, {
-            category: { uri: `/branches/stable/categories/${route}/mapped-uri` },
-            slug: 'legacy-category',
-            title: 'This is the document title',
-            content: { body: '\nBody\n' },
-          })
-          .reply(201, {});
 
         const projectsMeMock = getAPIv2Mock({ authorization }).get('/projects/me').reply(200, {
           data: {},
@@ -279,7 +262,6 @@ describe.each([
         );
 
         mappingsMock.done();
-        mock.done();
         projectsMeMock.done();
       });
 
@@ -388,23 +370,6 @@ describe.each([
       });
 
       it('should bypass prompt if `--confirm-autofixes` flag is passed', async () => {
-        const getMock = getAPIv2MockForGHA({ authorization })
-          .get(`/branches/stable/${route}/legacy-category`)
-          .reply(404);
-
-        const postMock = getAPIv2MockForGHA({
-          authorization,
-          'x-readme-source-url':
-            'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/__tests__/__fixtures__/docs/mixed-docs/legacy-category.md',
-        })
-          .post(`/branches/stable/${route}`, {
-            category: { uri: `/branches/stable/categories/${route}/uri-that-does-not-map-to-5ae122e10fdf4e39bb34db6f` },
-            slug: 'legacy-category',
-            title: 'This is the document title',
-            content: { body: '\nBody\n' },
-          })
-          .reply(201, {});
-
         const projectsMeMock = getAPIv2MockForGHA({ authorization }).get('/projects/me').reply(200, {
           data: {},
         });
@@ -422,8 +387,7 @@ describe.each([
           expect.stringContaining('uri: uri-that-does-not-map-to-5ae122e10fdf4e39bb34db6f'),
           { encoding: 'utf-8' },
         );
-        getMock.done();
-        postMock.done();
+
         projectsMeMock.done();
       });
     });
@@ -625,6 +589,15 @@ describe.each([
       expect(result).toMatchSnapshot();
     });
 
+    it('should handle a mix of valid and invalid and autofixable files', async () => {
+      prompts.inject([true]);
+
+      const result = await run(['__tests__/__fixtures__/docs/mixed-docs', '--key', key]);
+
+      expect(result).toMatchSnapshot();
+      expect(fs.writeFileSync).toHaveBeenCalledTimes(5);
+    });
+
     it('should handle a mix of creates and updates and failures and skipped files', async () => {
       const mock = getAPIv2Mock({ authorization })
         .get(`/branches/stable/${route}/invalid-attributes`)
@@ -642,7 +615,7 @@ describe.each([
         .get(`/branches/stable/${route}/legacy-category`)
         .reply(200)
         .patch(`/branches/stable/${route}/legacy-category`, {
-          category: { uri: `/branches/stable/categories/${route}/uri-that-does-not-map-to-5ae122e10fdf4e39bb34db6f` },
+          category: '5ae122e10fdf4e39bb34db6f',
           title: 'This is the document title',
           content: { body: '\nBody\n' },
         })
@@ -665,12 +638,10 @@ describe.each([
         })
         .reply(500, {});
 
-      prompts.inject([true]);
-
-      const result = await run(['__tests__/__fixtures__/docs/mixed-docs', '--key', key]);
+      const result = await run(['__tests__/__fixtures__/docs/mixed-docs', '--key', key, '--skip-validation']);
 
       expect(result).toMatchSnapshot();
-      expect(fs.writeFileSync).toHaveBeenCalledTimes(5);
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
 
       mock.done();
     });
@@ -692,7 +663,7 @@ describe.each([
         .get(`/branches/stable/${route}/legacy-category`)
         .reply(200)
         .patch(`/branches/stable/${route}/legacy-category`, {
-          category: { uri: `/branches/stable/categories/${route}/uri-that-does-not-map-to-5ae122e10fdf4e39bb34db6f` },
+          category: '5ae122e10fdf4e39bb34db6f',
           title: 'This is the document title',
           content: { body: '\nBody\n' },
         })
@@ -715,12 +686,17 @@ describe.each([
         })
         .reply(500, {});
 
-      prompts.inject([true]);
-
-      const result = await run(['__tests__/__fixtures__/docs/mixed-docs', '--key', key, '--max-errors', '10']);
+      const result = await run([
+        '__tests__/__fixtures__/docs/mixed-docs',
+        '--key',
+        key,
+        '--max-errors',
+        '10',
+        '--skip-validation',
+      ]);
 
       expect(result).toMatchSnapshot();
-      expect(fs.writeFileSync).toHaveBeenCalledTimes(5);
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
 
       mock.done();
     });
@@ -736,12 +712,16 @@ describe.each([
         .get(`/branches/stable/${route}/simple-doc`)
         .reply(500);
 
-      prompts.inject([true]);
-
-      const result = await run(['__tests__/__fixtures__/docs/mixed-docs', '--key', key, '--dry-run']);
+      const result = await run([
+        '__tests__/__fixtures__/docs/mixed-docs',
+        '--key',
+        key,
+        '--dry-run',
+        '--skip-validation',
+      ]);
 
       expect(result).toMatchSnapshot();
-      expect(fs.writeFileSync).toHaveBeenCalledTimes(5);
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
 
       mock.done();
     });
