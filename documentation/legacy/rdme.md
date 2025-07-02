@@ -57,7 +57,7 @@ To see detailed CLI setup instructions and all available commands, check out [th
 
 > 🚧 Deprecated Guidance
 >
-> This guidance is only applicable for projects that have yet to migrate to [ReadMe Refactored](https://docs.readme.com/main/docs/migration), which requires `rdme@9`. You can find more info in [our `rdme` migration guide](https://github.com/readmeio/rdme/blob/next/documentation/migration-guide.md) or by reaching out to us at [support@readme.io](mailto:support@readme.io).
+> This guidance is only applicable for projects that have yet to migrate to [ReadMe Refactored](https://docs.readme.com/main/docs/migration), which requires `rdme@9`. You can find more info in [our `rdme` migration guide](https://github.com/readmeio/rdme/blob/v10/documentation/migration-guide.md) or by reaching out to us at [support@readme.io](mailto:support@readme.io).
 >
 > We will be updating this document with our latest guidance soon. Thanks for your patience!
 
@@ -147,7 +147,7 @@ While there are [dozens of event options available](https://docs.github.com/acti
 
 > 🚧 Deprecated Guidance
 >
-> This guidance is only applicable for projects that have yet to migrate to [ReadMe Refactored](https://docs.readme.com/main/docs/migration), which requires `rdme@9`. You can find more info in [our `rdme` migration guide](https://github.com/readmeio/rdme/blob/next/documentation/migration-guide.md) or by reaching out to us at [support@readme.io](mailto:support@readme.io).
+> This guidance is only applicable for projects that have yet to migrate to [ReadMe Refactored](https://docs.readme.com/main/docs/migration), which requires `rdme@9`. You can find more info in [our `rdme` migration guide](https://github.com/readmeio/rdme/blob/v10/documentation/migration-guide.md) or by reaching out to us at [support@readme.io](mailto:support@readme.io).
 >
 > We will be updating this document with our latest guidance soon. Thanks for your patience!
 
@@ -227,7 +227,7 @@ The following section has links to full GitHub Actions workflow file examples.
 
 > 🚧 Deprecated Guidance
 >
-> This guidance is only applicable for projects that have yet to migrate to [ReadMe Refactored](https://docs.readme.com/main/docs/migration), which requires `rdme@9`. You can find more info in [our `rdme` migration guide](https://github.com/readmeio/rdme/blob/next/documentation/migration-guide.md) or by reaching out to us at [support@readme.io](mailto:support@readme.io).
+> This guidance is only applicable for projects that have yet to migrate to [ReadMe Refactored](https://docs.readme.com/main/docs/migration), which requires `rdme@9`. You can find more info in [our `rdme` migration guide](https://github.com/readmeio/rdme/blob/v10/documentation/migration-guide.md) or by reaching out to us at [support@readme.io](mailto:support@readme.io).
 >
 > We will be updating this document with our latest guidance soon. Thanks for your patience!
 
