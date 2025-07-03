@@ -75,20 +75,42 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
    We recommend setting up [bi-directional syncing](https://docs.readme.com/main/docs/bi-directional-sync) for managing your Markdown files, API definitions and project hierarchy.
 
 2. **Command Replacements**
-   - Replace: `openapi` → `openapi upload` (see more in step 3 below)
+   - Replace: `changelogs` → `changelog upload` (see more in step 3 below)
+   - Replace: `custompages` → `custompages upload` (see more in step 3 below)
+   - Replace: `docs` (and its `guides` alias) → `docs upload` (see more in step 3 below)
+     - **Note**: if you previously used this command to upload Markdown to the API reference section, you should use `rdme reference upload` instead.
+   - Replace: `openapi` → `openapi upload` (see more in step 4 below)
    - Replace: `categories` → use [Git-based workflow](https://docs.readme.com/main/docs/bi-directional-sync)
-   - Replace: `custompages` → use [Git-based workflow](https://docs.readme.com/main/docs/bi-directional-sync)
    - Replace: `versions` → use [Git-based workflow](https://docs.readme.com/main/docs/bi-directional-sync)
    - Remove: `open`
 
-3. **`openapi` has been replaced by `openapi upload`**
+3. Updates to commands that upload Markdown
+
+   If you previously uploaded Markdown files to your ReadMe project via one of the following commands:
+   1. `rdme docs`,
+   2. `rdme changelogs`
+   3. `rdme custompages` (**note**: this command supported the uploading of HTML files)
+
+   The commands are have been updated to the following:
+   1. `rdme docs upload` (or `rdme reference upload` if you're uploading Markdown to your API Reference section)
+   2. `rdme changelog upload`
+   3. `rdme custompages upload` (**note**: this new command still supports the uploading of HTML files)
+
+   The command semantics are largely the same, but with a few small changes:
+   - The `--dryRun` flag has been deprecated in favor of `--dry-run`.
+
+   - There is no prompt to select your ReadMe project version if you omit the `--version` flag. It now defaults to `stable` (i.e., your main ReadMe project version). This flag has also been renamed to `--branch`.
+
+   - These commands will now automatically validate your frontmatter and flag any issues prior to syncing. This is particularly helpful if you're coming from `rdme@9` or earlier, since the shape of certain frontmatter attributes (e.g., `category`, `parent`, `hidden`) have slightly changed. If you run this command in a non-CI environment, any outdated frontmatter will be detected and you'll have the ability to migrate it to the new format automatically.
+
+   Read more in [the `docs upload` command docs](https://github.com/readmeio/rdme/tree/v10/documentation/commands/docs.md#rdme-docs-upload-path) and in [the ReadMe API migration guide](https://docs.readme.com/main/reference/api-migration-guide).
+
+4. **`openapi` has been replaced by `openapi upload`**
 
    If you previously uploaded API definitions to ReadMe via `rdme openapi`, the command is now `rdme openapi upload`. There are now two main updates:
-   - There is no prompt to select your ReadMe project version if you omit the `--version` flag. It now defaults to `stable` (i.e., your main ReadMe project version).
+   - Like `docs upload` above, there is no prompt to select your ReadMe project version if you omit the `--version` flag. It now defaults to `stable` (i.e., your main ReadMe project version). This flag has also been renamed to `--branch`.
 
-   - Previously with `openapi`, the `--id` flag was an ObjectId that required an initial upload to ReadMe, which made it difficult to upsert API definitions and manage many at scale. With `openapi upload`, the `--id` flag has been renamed to `--slug` and is now optional. The slug (i.e., the unique identifier for your API definition resource in ReadMe) is inferred from the file path or URL to your API definition.
-
-   Read more in [the `openapi upload` command docs](https://github.com/readmeio/rdme/tree/v10/documentation/commands/openapi.md#rdme-openapi-upload-spec) and in [the ReadMe API migration guide](https://docs.readme.com/main/reference/api-migration-guide).
+   - The flag paradigms have been simplified based on community feedback. Previously with `openapi`, the `--id` flag was an ObjectId that required an initial upload to ReadMe, which made it difficult to upsert API definitions and manage many at scale (and workarounds were added after the fact in the form of the `--create` and `--update` flags). With `openapi upload`, the `--id` flag has been renamed to `--slug` and is now optional. The slug (i.e., the unique identifier for your API definition resource in ReadMe) is inferred from the file path or URL to your API definition.
 
 ## Migrating to `rdme@9`
 
