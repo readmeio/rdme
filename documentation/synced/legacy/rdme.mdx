@@ -153,7 +153,7 @@ While there are [dozens of event options available](https://docs.github.com/acti
 
 > 📘 Keeping `rdme` up-to-date
 >
-> Note that `@RDME_VERSION` (used in the examples on this page) is the latest version of `rdme`. We recommend [configuring Dependabot to keep your actions up-to-date](https://docs.github.com/code-security/dependabot/working-with-dependabot/keeping-your-actions-up-to-date-with-dependabot).
+> Note that `@RDME_VERSION` is the latest version of `rdme`, which only supports projects on ReadMe Refactored. The examples on this page use `@v9`, which is only applicable for legacy projects. We recommend [configuring Dependabot to keep your actions up-to-date](https://docs.github.com/code-security/dependabot/working-with-dependabot/keeping-your-actions-up-to-date-with-dependabot).
 
 ### Quick Start
 
@@ -194,7 +194,7 @@ This will run through the `openapi` command, ask you a few quick questions, and 
 To use sensitive information (like your ReadMe API key) in your `rdme` GitHub Action, first [create a new repository secret](https://docs.github.com/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository). Let's say you create a new secret key called `README_API_KEY`. The usage in the `rdme` step will look something like this:
 
 ```yml
-- uses: readmeio/rdme@RDME_VERSION
+- uses: readmeio/rdme@v9
   with:
     rdme: openapi validate [url-or-local-path-to-file] --key=${{ secrets.README_API_KEY }} --id=API_DEFINITION_ID
 ```
@@ -214,7 +214,7 @@ We recommend using the [quick start](#quick-start) to get started with GitHub Ac
 - uses: actions/checkout@v4
 
 # Runs the `rdme` command on your repo's contents
-- uses: readmeio/rdme@RDME_VERSION
+- uses: readmeio/rdme@v9
   with:
     rdme: [your command here]
 ```
@@ -228,7 +228,7 @@ rdme openapi validate [url-or-local-path-to-file]
 To execute this command via GitHub Actions, the step would look like this:
 
 ```yml
-- uses: readmeio/rdme@RDME_VERSION
+- uses: readmeio/rdme@v9
   with:
     rdme: openapi validate [url-or-local-path-to-file]
 ```
@@ -250,7 +250,7 @@ Want to start syncing? We have several example workflow files available:
 
 ## Usage in Other CI Environments
 
-Since `rdme` is a command-line tool at its core, you can use `rdme` to sync your documentation from virtually any CI/CD environment that runs shell commands—[Bitbucket Pipelines](https://support.atlassian.com/bitbucket-cloud/docs/get-started-with-bitbucket-pipelines/), [GitLab CI/CD](https://docs.gitlab.com/ee/ci/), you name it! You can do this by invoking `rdme` with `npx rdme@RDME_VERSION` in a Node.js environment. See below for several examples.
+Since `rdme` is a command-line tool at its core, you can use `rdme` to sync your documentation from virtually any CI/CD environment that runs shell commands—[Bitbucket Pipelines](https://support.atlassian.com/bitbucket-cloud/docs/get-started-with-bitbucket-pipelines/), [GitLab CI/CD](https://docs.gitlab.com/ee/ci/), you name it! You can do this by invoking `rdme` with `npx rdme@v9` in a Node.js environment. See below for several examples.
 
 {/* prettier-ignore */}
 {/* <!--
@@ -268,7 +268,7 @@ pipelines:
   default:
     - step:
         script:
-          - npx rdme@RDME_VERSION openapi validate [url-or-local-path-to-file] --key=$README_API_KEY --id=API_DEFINITION_ID
+          - npx rdme@v9 openapi validate [url-or-local-path-to-file] --key=$README_API_KEY --id=API_DEFINITION_ID
 ```
 ```yml CircleCI (.circleci/config.yml)
 version: 2.1
@@ -280,7 +280,7 @@ jobs:
       - image: node:NODE_VERSION
     steps:
       - run:
-          command: npx rdme@RDME_VERSION openapi validate [url-or-local-path-to-file] --key=$README_API_KEY --id=API_DEFINITION_ID
+          command: npx rdme@v9 openapi validate [url-or-local-path-to-file] --key=$README_API_KEY --id=API_DEFINITION_ID
 ```
 ```yml GitLab CI (rdme-sync.gitlab-ci.yml)
 # Official framework image. Look for the different tagged releases at:
@@ -289,7 +289,7 @@ image: node:NODE_VERSION
 
 sync-via-rdme:
   script:
-    - npx rdme@RDME_VERSION openapi validate [url-or-local-path-to-file] --key=$README_API_KEY --id=API_DEFINITION_ID
+    - npx rdme@v9 openapi validate [url-or-local-path-to-file] --key=$README_API_KEY --id=API_DEFINITION_ID
 ```
 ```yml Travis CI (.travis.yml)
 # https://docs.travis-ci.com/user/languages/javascript-with-nodejs/#specifying-nodejs-versions
@@ -297,7 +297,7 @@ language: node_js
 node_js:
   - NODE_VERSION
 
-script: npx rdme@RDME_VERSION openapi validate [url-or-local-path-to-file] --key=$README_API_KEY --id=API_DEFINITION_ID
+script: npx rdme@v9 openapi validate [url-or-local-path-to-file] --key=$README_API_KEY --id=API_DEFINITION_ID
 ```
 {/* prettier-ignore-end */}
 
