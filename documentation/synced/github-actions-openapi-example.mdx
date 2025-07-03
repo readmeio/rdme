@@ -2,7 +2,7 @@
 title: 'GitHub Actions Example: Syncing OpenAPI'
 category:
   uri: documentation
-slug: github-actions-openapi-example-legacy
+slug: github-actions-openapi-example
 ---
 
 {/* prettier-ignore */}
@@ -25,16 +25,6 @@ Check out `.github/workflows/docs.yml` for more info on this!
 > We will be updating this document with our latest guidance soon. Thanks for your patience!
 
 Is your OpenAPI definition stored on GitHub? With [the `rdme` GitHub Action](https://docs.readme.com/docs/rdme), you can sync it to ReadMe every time it's updated in GitHub. Let's go over how to set this up!
-
-## "Automagical" Workflow File Generation
-
-To set up a GitHub Actions workflow for syncing an OpenAPI or Swagger definition, the fastest and easiest way to do so is by running the following command on your local machine:
-
-```sh
-rdme openapi --github
-```
-
-This will locate your OpenAPI definition, sync it to ReadMe, and then create your GitHub Actions workflow file. Once that's done, create your [repository secret](https://docs.github.com/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository), push your workflow file to GitHub, and get syncing! 🎊
 
 ## Constructing a GitHub Actions Workflow File By Hand
 
@@ -99,9 +89,9 @@ jobs:
 
       # Run GitHub Action to sync OpenAPI file at ./path-to-file.json
       - name: GitHub Action
-        # We recommend specifying a fixed version, i.e. @v9
+        # We recommend specifying a fixed version, i.e. @RDME_VERSION
         # Docs: https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#example-using-versioned-actions
-        uses: readmeio/rdme@v9
+        uses: readmeio/rdme@RDME_VERSION
         with:
           rdme: openapi ./path-to-file.json --key=${{ secrets.README_API_KEY }} --id=API_DEFINITION_ID
 ```
@@ -110,4 +100,4 @@ In the example above, every push to the `main` branch will sync the OpenAPI file
 
 > 📘 Keeping `rdme` up-to-date
 >
-> Note that `@RDME_VERSION` is the latest version of `rdme`, which only supports projects on ReadMe Refactored. The examples on this page use `@v9`, which is only applicable for legacy projects. We recommend [configuring Dependabot to keep your actions up-to-date](https://docs.github.com/code-security/dependabot/working-with-dependabot/keeping-your-actions-up-to-date-with-dependabot).
+> Note that `@RDME_VERSION` (used in the above example) is the latest version of `rdme`. We recommend [configuring Dependabot to keep your actions up-to-date](https://docs.github.com/code-security/dependabot/working-with-dependabot/keeping-your-actions-up-to-date-with-dependabot).
