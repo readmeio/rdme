@@ -7,14 +7,6 @@ Upload Markdown files to the Reference section of your ReadMe project.
 
 ## `rdme reference upload PATH`
 
-> [!WARNING]
-> This command is in an experimental alpha and is likely to change. Use at your own risk!
-
-<details>
-
-
-<summary>I understand the risks — let's see the docs!</summary>
-
 Upload Markdown files to the Reference section of your ReadMe project.
 
 ```
@@ -31,8 +23,6 @@ FLAGS
 
 DESCRIPTION
   Upload Markdown files to the Reference section of your ReadMe project.
-
-  NOTE: This command is in an experimental alpha and is likely to change. Use at your own risk!
 
   The path can either be a directory or a single Markdown file. The Markdown files will require YAML frontmatter with
   certain ReadMe documentation attributes. Check out our docs for more info on setting up your frontmatter:
@@ -66,6 +56,3 @@ FLAG DESCRIPTIONS
 
     Defaults to `stable` (i.e., your main project version).
 ```
-
-
-</details>

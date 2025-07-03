@@ -27,9 +27,7 @@ exports[`custompages upload > given that the file path is a directory > should c
     "skipped": [],
     "updated": [],
   },
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/existing-docs\` directory...
+  "stderr": "- 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/existing-docs\` directory...
 ✔ 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/existing-docs\` directory... 3 file(s) found!
 - 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
@@ -47,9 +45,7 @@ exports[`custompages upload > given that the file path is a directory > should c
 exports[`custompages upload > given that the file path is a directory > should error out if the directory does not contain any Markdown or HTML files 1`] = `
 {
   "error": [Error: The directory you provided (__tests__/__fixtures__/ref-oas) doesn't contain any of the following file extensions: .markdown, .md, .mdx, .html.],
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/ref-oas\` directory...
+  "stderr": "- 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/ref-oas\` directory...
 ✖ 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/ref-oas\` directory... no files found.
 ",
   "stdout": "",
@@ -59,9 +55,7 @@ exports[`custompages upload > given that the file path is a directory > should e
 exports[`custompages upload > given that the file path is a directory > should handle a mix of creates and updates and failures and skipped files (dry run) 1`] = `
 {
   "error": [AggregateError: Multiple dry runs failed. To see more detailed errors for a page, run \`rdme custompages upload <path-to-page.md>\` --dry-run.],
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/mixed-docs\` directory...
+  "stderr": "- 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/mixed-docs\` directory...
 ✔ 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/mixed-docs\` directory... 5 file(s) found!
  ›   Warning: Skipping pre-upload validation of the Markdown file(s). This is 
  ›   not recommended.
@@ -84,9 +78,7 @@ exports[`custompages upload > given that the file path is a directory > should h
 exports[`custompages upload > given that the file path is a directory > should handle a mix of creates and updates and failures and skipped files 1`] = `
 {
   "error": [AggregateError: Multiple page uploads failed. To see more detailed errors for a page, run \`rdme custompages upload <path-to-page.md>\`.],
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/mixed-docs\` directory...
+  "stderr": "- 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/mixed-docs\` directory...
 ✔ 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/mixed-docs\` directory... 5 file(s) found!
  ›   Warning: Skipping pre-upload validation of the Markdown file(s). This is 
  ›   not recommended.
@@ -147,9 +139,7 @@ exports[`custompages upload > given that the file path is a directory > should h
       },
     ],
   },
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/mixed-docs\` directory...
+  "stderr": "- 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/mixed-docs\` directory...
 ✔ 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/mixed-docs\` directory... 5 file(s) found!
  ›   Warning: Skipping pre-upload validation of the Markdown file(s). This is 
  ›   not recommended.
@@ -203,9 +193,7 @@ exports[`custompages upload > given that the file path is a directory > should h
     ],
     "updated": [],
   },
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/mixed-docs\` directory...
+  "stderr": "- 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/mixed-docs\` directory...
 ✔ 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/mixed-docs\` directory... 5 file(s) found!
 - 🔬 Validating frontmatter data...
 ⚠ 🔬 Validating frontmatter data... issues found in 2 file(s).
@@ -286,9 +274,7 @@ exports[`custompages upload > given that the file path is a directory > should h
       },
     ],
   },
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/complex-frontmatter\` directory...
+  "stderr": "- 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/complex-frontmatter\` directory...
 ✔ 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/complex-frontmatter\` directory... 2 file(s) found!
 - 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
@@ -329,9 +315,7 @@ exports[`custompages upload > given that the file path is a directory > should u
       },
     ],
   },
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/existing-docs\` directory...
+  "stderr": "- 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/existing-docs\` directory...
 ✔ 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/existing-docs\` directory... 3 file(s) found!
 - 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
@@ -360,9 +344,7 @@ exports[`custompages upload > given that the file path is a single file > and th
     ],
     "updated": [],
   },
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ⚠ 🔬 Validating frontmatter data... issues found in 1 file(s).
 ",
   "stdout": "Automatically fixing issues in 1 file(s)...
@@ -401,9 +383,7 @@ exports[`custompages upload > given that the file path is a single file > and th
     "skipped": [],
     "updated": [],
   },
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
 - 🚀 Uploading files to ReadMe...
 ✔ 🚀 Uploading files to ReadMe... done!
@@ -417,9 +397,7 @@ exports[`custompages upload > given that the file path is a single file > and th
 exports[`custompages upload > given that the file path is a single file > and the command is being run in a CI environment > should error out if the file has validation errors 1`] = `
 {
   "error": [Error: 1 file(s) have issues that should be fixed before uploading to ReadMe. Please run \`rdme custompages upload __tests__/__fixtures__/custompages/mixed-docs/legacy-page.md --dry-run\` in a non-CI environment to fix them.],
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ⚠ 🔬 Validating frontmatter data... issues found in 1 file(s).
 ",
   "stdout": "",
@@ -431,9 +409,7 @@ exports[`custompages upload > given that the file path is a single file > given 
   "error": [APIv2Error: ReadMe API error: bad request
 
 something went so so wrong],
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
 - 🎭 Uploading files to ReadMe (but not really because it's a dry run)...
 ✖ 🎭 Uploading files to ReadMe (but not really because it's a dry run)... 1 file(s) failed.
@@ -447,9 +423,7 @@ something went so so wrong],
 exports[`custompages upload > given that the file path is a single file > given that the --dry-run flag is passed > should error out if a non-404 error is returned from the GET request 1`] = `
 {
   "error": [Error: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
 - 🎭 Uploading files to ReadMe (but not really because it's a dry run)...
 ✖ 🎭 Uploading files to ReadMe (but not really because it's a dry run)... 1 file(s) failed.
@@ -475,9 +449,7 @@ exports[`custompages upload > given that the file path is a single file > given 
     "skipped": [],
     "updated": [],
   },
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
 - 🎭 Uploading files to ReadMe (but not really because it's a dry run)...
 ✔ 🎭 Uploading files to ReadMe (but not really because it's a dry run)... done!
@@ -503,9 +475,7 @@ exports[`custompages upload > given that the file path is a single file > given 
       },
     ],
   },
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
 - 🎭 Uploading files to ReadMe (but not really because it's a dry run)...
 ✔ 🎭 Uploading files to ReadMe (but not really because it's a dry run)... done!
@@ -519,9 +489,7 @@ exports[`custompages upload > given that the file path is a single file > given 
 exports[`custompages upload > given that the file path is a single file > given that the file has frontmatter issues > should exit if the user declines to fix the issues 1`] = `
 {
   "error": [Error: Aborting upload due to user input.],
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ⚠ 🔬 Validating frontmatter data... issues found in 1 file(s).
 ",
   "stdout": "",
@@ -542,9 +510,7 @@ exports[`custompages upload > given that the file path is a single file > given 
     ],
     "updated": [],
   },
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ⚠ 🔬 Validating frontmatter data... issues found in 1 file(s).
 ",
   "stdout": "=== BEGIN writeFileSync to file: __tests__/__fixtures__/custompages/mixed-docs/legacy-page.md ===
@@ -572,9 +538,7 @@ exports[`custompages upload > given that the file path is a single file > given 
   "error": [APIv2Error: ReadMe API error: bad request
 
 your metadata is whack],
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
- ›   Warning: Skipping pre-upload validation of the Markdown file(s). This is 
+  "stderr": " ›   Warning: Skipping pre-upload validation of the Markdown file(s). This is 
  ›   not recommended.
 - 🚀 Uploading files to ReadMe...
 ✖ 🚀 Uploading files to ReadMe... 1 file(s) failed.
@@ -600,9 +564,7 @@ exports[`custompages upload > given that the file path is a single file > given 
     "skipped": [],
     "updated": [],
   },
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ⚠ 🔬 Validating frontmatter data... issues found in 1 file(s).
  ›   Warning: 1 file(s) have issues that cannot be fixed automatically. The 
  ›   upload will proceed but we recommend addressing these issues. Please get 
@@ -631,9 +593,7 @@ exports[`custompages upload > given that the file path is a single file > given 
     "skipped": [],
     "updated": [],
   },
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
 - 🚀 Uploading files to ReadMe...
 ✔ 🚀 Uploading files to ReadMe... done!
@@ -659,9 +619,7 @@ exports[`custompages upload > given that the file path is a single file > given 
       },
     ],
   },
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
 - 🚀 Uploading files to ReadMe...
 ✔ 🚀 Uploading files to ReadMe... done!
@@ -687,9 +645,7 @@ exports[`custompages upload > given that the file path is a single file > should
     "skipped": [],
     "updated": [],
   },
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
 - 🚀 Uploading files to ReadMe...
 ✔ 🚀 Uploading files to ReadMe... done!
@@ -716,8 +672,6 @@ exports[`custompages upload > given that the file path is a single file > should
     "updated": [],
   },
   "stderr": " ›   Warning: The "--version" flag has been deprecated. Use "--branch" instead.
- ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
 - 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
 - 🚀 Uploading files to ReadMe...
@@ -744,9 +698,7 @@ exports[`custompages upload > given that the file path is a single file > should
     "skipped": [],
     "updated": [],
   },
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
 - 🚀 Uploading files to ReadMe...
 ✔ 🚀 Uploading files to ReadMe... done!
@@ -762,9 +714,7 @@ exports[`custompages upload > given that the file path is a single file > should
   "error": [APIv2Error: ReadMe API error: bad request
 
 something went so so wrong],
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
 - 🚀 Uploading files to ReadMe...
 ✖ 🚀 Uploading files to ReadMe... 1 file(s) failed.
@@ -778,9 +728,7 @@ something went so so wrong],
 exports[`custompages upload > given that the file path is a single file > should error out if a non-404 error is returned from the GET request 1`] = `
 {
   "error": [Error: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
 - 🚀 Uploading files to ReadMe...
 ✖ 🚀 Uploading files to ReadMe... 1 file(s) failed.
@@ -794,9 +742,7 @@ exports[`custompages upload > given that the file path is a single file > should
 exports[`custompages upload > given that the file path is a single file > should error out if the file does not exist 1`] = `
 {
   "error": [Error: Oops! We couldn't locate a file or directory at the path you provided.],
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-",
+  "stderr": "",
   "stdout": "",
 }
 `;
@@ -804,36 +750,8 @@ exports[`custompages upload > given that the file path is a single file > should
 exports[`custompages upload > given that the file path is a single file > should error out if the file has an invalid file extension 1`] = `
 {
   "error": [Error: Invalid file extension (.json). Must be one of the following: .markdown, .md, .mdx, .html],
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-",
+  "stderr": "",
   "stdout": "",
-}
-`;
-
-exports[`custompages upload > given that the file path is a single file > should hide the warning if the \`--hide-experimental-warning\` flag is passed 1`] = `
-{
-  "result": {
-    "created": [
-      {
-        "filePath": "__tests__/__fixtures__/custompages/new-docs/new-doc.md",
-        "response": {},
-        "result": "created",
-        "slug": "new-doc",
-      },
-    ],
-    "failed": [],
-    "skipped": [],
-    "updated": [],
-  },
-  "stderr": "- 🔬 Validating frontmatter data...
-✔ 🔬 Validating frontmatter data... no issues found!
-- 🚀 Uploading files to ReadMe...
-✔ 🚀 Uploading files to ReadMe... done!
-",
-  "stdout": "🌱 Successfully created 1 page(s) in ReadMe:
-   - new-doc (__tests__/__fixtures__/custompages/new-docs/new-doc.md)
-",
 }
 `;
 
@@ -854,9 +772,7 @@ something went so so wrong],
     "skipped": [],
     "updated": [],
   },
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
 - 🚀 Uploading files to ReadMe...
 ✖ 🚀 Uploading files to ReadMe... 1 file(s) failed.

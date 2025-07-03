@@ -58,30 +58,6 @@ describe('custompages upload', () => {
       mock.done();
     });
 
-    it('should hide the warning if the `--hide-experimental-warning` flag is passed', async () => {
-      const mock = getAPIv2Mock({ authorization })
-        .get('/branches/stable/custom_pages/new-doc')
-        .reply(404)
-        .post('/branches/stable/custom_pages', {
-          slug: 'new-doc',
-          title: 'This is the document title',
-          content: { body: '\nBody\n', type: 'markdown' },
-        })
-        .reply(201, {});
-
-      const result = await run([
-        '__tests__/__fixtures__/custompages/new-docs/new-doc.md',
-        '--key',
-        key,
-        '--hide-experimental-warning',
-      ]);
-
-      expect(result).toMatchSnapshot();
-      expect(fs.writeFileSync).not.toHaveBeenCalled();
-
-      mock.done();
-    });
-
     it('should allow for user to specify branch via --branch flag', async () => {
       const mock = getAPIv2Mock({ authorization })
         .get('/branches/1.2.3/custom_pages/new-doc')

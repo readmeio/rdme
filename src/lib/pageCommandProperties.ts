@@ -2,11 +2,9 @@ import { Args, Flags } from '@oclif/core';
 
 type Section = 'Changelog' | 'Custom Pages' | 'Guides' | 'Reference';
 
-export const alphaNotice = 'This command is in an experimental alpha and is likely to change. Use at your own risk!';
-
 export function summary(section: Section): string {
   const fileType = section === 'Custom Pages' ? 'Markdown or HTML' : 'Markdown';
-  return `Upload ${fileType} files to the ${section} section of your ReadMe project.\n\nNOTE: ${alphaNotice}`;
+  return `Upload ${fileType} files to the ${section} section of your ReadMe project.`;
 }
 
 export function description(section: Section): string {
@@ -87,10 +85,6 @@ export function baseFlags(section: Section) {
       description: `Runs the command without creating nor updating any ${items} in ReadMe. Useful for debugging.`,
       aliases: ['dryRun'],
       deprecateAliases: true,
-    }),
-    'hide-experimental-warning': Flags.boolean({
-      description: 'Hides the warning message about this command being in an experimental alpha.',
-      hidden: true,
     }),
     'max-errors': Flags.integer({
       summary: 'Maximum number of page uploading errors before the command throws an error.',
