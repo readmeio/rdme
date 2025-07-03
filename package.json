@@ -117,7 +117,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "build:docs": "oclif readme --multi --output-dir docs/commands --no-aliases",
+    "build:docs": "oclif readme --multi --output-dir documentation/commands --no-aliases",
     "build:gha": "npm run build && rollup --config",
     "lint": "alex . && knip && npm run lint:ts && npm run prettier && npm run schemas:check",
     "lint:ts": "eslint . --ext .js,.ts",
