@@ -43,6 +43,9 @@ npx markdown-toc documentation/migration-guide.md --maxdepth 2 --bullets="-" -i
 
 Please see [the `rdme@8.0.0` release notes](https://github.com/readmeio/rdme/releases/tag/8.0.0).
 
+> [!WARNING]
+> `rdme@8` is deprecated and is no longer maintained. If your project has not upgraded to ReadMe Refactored, we still recommend [upgrading to `rdme@9`](#migrating-to-rdme9) to ensure that your CLI installation remains free of security vulnerabilities. `rdme@9` should be a fairly painless upgrade for most users. More information can be found in the [version compatibility matrix](#version-compatibility-matrix) below.
+
 ## Version Compatibility Matrix
 
 | Feature                                                                                                                  | `v8`   | `v9`        | `v10`       |
