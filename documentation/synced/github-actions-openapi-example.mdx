@@ -22,16 +22,16 @@ Check out `.github/workflows/docs.yml` for more info on this!
 >
 > This guidance is only applicable for projects that have been migrated to [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored). The Refactored project architecture requires `rdme@10`, while the legacy project architecture requires `rdme@9`.
 >
-> If you are still on our legacy project architecture, please see [our documentation for `rdme@9`](https://docs.readme.com/main/docs/rdme-legacy).
+> If you are still on our legacy project architecture, please see [our documentation for `rdme@9`](https://docs.readme.com/main/docs/rdme-legacy). //todo: update callout
 
 Is your OpenAPI definition stored on GitHub? With [the `rdme` GitHub Action](https://docs.readme.com/main/docs/rdme), you can sync it to ReadMe every time it's updated in GitHub. Let's go over how to set this up!
 
-In order to construct the file by hand, you'll first want to obtain a unique API definition slug from ReadMe so we know which definition you want to update on subsequent re-syncs. You can obtain this API definition slug in one of several ways, but we'll dive into two below: uploading a file directly into the ReadMe dashboard and using the `rdme` CLI locally.
+In order to construct the file by hand, you'll first want to obtain a unique API definition slug from ReadMe so we know which definition you want to update on subsequent re-syncs. You can obtain this API definition slug in one of several ways, but we'll dive into two below: uploading a file directly to your API Reference section in ReadMe and using the `rdme` CLI locally.
 
 <details>
 <summary>Uploading a file</summary>
 
-Follow [these instructions](https://docs.readme.com/main/docs/openapi) on uploading a new OpenAPI file in the dashboard. Once the file is uploaded, you'll see the following in the API Reference settings of your dashboard (the red outline is where you'll find your API definition slug):
+Follow [these instructions](https://docs.readme.com/main/docs/openapi) on uploading a new OpenAPI file in "edit" mode in your project's API Reference section. Once the file is uploaded, you'll see the following in the API Definitions list (the red outline is where you'll find your API definition slug):
 
 ![](https://files.readme.io/01836ba5f771634a81e1ca704e76aec2ab05c836a26c4a40f45a4147794d0161-Screenshot_2025-07-03_at_3.49.14_PM.png)
 
@@ -39,7 +39,7 @@ Follow [these instructions](https://docs.readme.com/main/docs/openapi) on upload
 <details>
 <summary>Using the <code>rdme</code> CLI</summary>
 
-Alternatively, you can obtain the API definition ID by running the following `rdme` CLI command on your local machine:
+Alternatively, you can obtain the API definition slug by running the following `rdme` CLI command on your local machine:
 
 ```sh
 rdme openapi upload [url-or-local-path-to-file]
@@ -52,11 +52,6 @@ Your API definition ([your-slug-here.json]) was successfully created in ReadMe!
 ```
 
 </details>
-
-We have a walkthrough video available which goes over the whole end-to-end process of obtaining the API definition slug and constructing the GitHub Actions workflow file.
-
-// todo: oh no there's a loom???
-You can find the video here: [https://www.loom.com/share/e32c20a9dc2f4eeeab42d0c18ba24478](https://www.loom.com/share/e32c20a9dc2f4eeeab42d0c18ba24478).
 
 Once you've obtained your API definition slug (let's call it `API_DEFINITION_SLUG`), your full GitHub Workflow file will look something like this:
 
