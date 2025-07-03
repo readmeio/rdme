@@ -170,11 +170,15 @@ npm run build && npm run build:docs
 # Command Topics
 
 * [`rdme autocomplete`](documentation/commands/autocomplete.md) - Display autocomplete installation instructions.
+* [`rdme changelog`](documentation/commands/changelog.md) - Upload Markdown files to the Changelog section of your ReadMe project.
+* [`rdme custompages`](documentation/commands/custompages.md) - Upload Markdown or HTML files to the Custom Pages section of your ReadMe project.
+* [`rdme docs`](documentation/commands/docs.md) - Upload Markdown files to the Guides section of your ReadMe project.
 * [`rdme help`](documentation/commands/help.md) - Display help for rdme.
 * [`rdme login`](documentation/commands/login.md) - Login to a ReadMe project.
 * [`rdme logout`](documentation/commands/logout.md) - Logs the currently authenticated user out of ReadMe.
 * [`rdme openapi`](documentation/commands/openapi.md) - Manage your API definition (e.g., syncing, validation, analysis, conversion, etc.). Supports OpenAPI, Swagger, and Postman collections, in either JSON or YAML formats.
 * [`rdme plugins`](documentation/commands/plugins.md) - List installed plugins.
+* [`rdme reference`](documentation/commands/reference.md) - Upload Markdown files to the Reference section of your ReadMe project.
 * [`rdme whoami`](documentation/commands/whoami.md) - Displays the current user and project authenticated with ReadMe.
 
 <!-- commandsstop -->
