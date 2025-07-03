@@ -189,14 +189,17 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
 
 5. **Deprecated commands**
 
-   The following commands (and their subcommands) will be removed in `rdme@10`:
+   The following commands (and their subcommands, if applicable) will be removed in `rdme@10`:
    - `categories`
-   - `custompages`
-   - `docs` (and its `guides` alias)
+   - `docs:prune` (and its `guides:prune` alias)
    - `versions`
    - `open`
 
-   The `openapi` command will be replaced by `openapi upload` and will have a simpler flag setup based on community feedback.
+   The following commands will be replaced in `v10`. See "Command Replacements" in [the `v10` migration guide above](#migrating-to-rdme10) for more info:
+   - `docs` (and its `guides` alias) → `docs upload`
+   - `changelogs` → `changelog upload`
+   - `custompages` → `custompages upload`
+   - `openapi` → `openapi upload`
 
 6. **Verify any scripts that utilize raw CLI outputs**
    - The underlying architecture for the CLI has been rewritten with [`oclif`](https://oclif.io/), so some command outputs and error messages may look different.
