@@ -91,7 +91,7 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
    2. `rdme changelogs`
    3. `rdme custompages` (**note**: this command also supports the uploading of HTML files)
 
-   The commands are have been updated to the following:
+   The commands have been updated to the following:
    1. `rdme docs upload` (or `rdme reference upload` if you're uploading Markdown to your API Reference section)
    2. `rdme changelog upload`
    3. `rdme custompages upload` (**note**: this new command still supports the uploading of HTML files)
@@ -99,7 +99,7 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
    The command semantics are largely the same, but with a few small changes:
    - The `--dryRun` flag has been deprecated in favor of `--dry-run`.
 
-   - The new git-backed ReadMe backend has a clearer separation between Guides pages and API reference pages. This means that:
+   - The new git-backed ReadMe backend has a clearer separation between the Guides and API reference sections. This means that:
      - Markdown pages that live in the Guides section should be synced with `rdme docs upload`
      - Conversely, Markdown pages that live in the API reference should be synced with `rdme reference upload`.
 
@@ -112,7 +112,7 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
 4. **`openapi` has been replaced by `openapi upload`**
 
    If you previously uploaded API definitions to ReadMe via `rdme openapi`, the command is now `rdme openapi upload`. There are now two main updates:
-   - Like `docs upload` above, there is no prompt to select your ReadMe project version if you omit the `--version` flag. It now defaults to `stable` (i.e., your main ReadMe project version). This flag has also been renamed to `--branch`.
+   - Like the Markdown uploading commands above, there is no prompt to select your ReadMe project version if you omit the `--version` flag. It now defaults to `stable` (i.e., your main ReadMe project version). This flag has also been renamed to `--branch`.
 
    - The flag paradigms have been simplified based on community feedback. Previously with `openapi`, the `--id` flag was a hexadecimal object ID that required an initial upload to ReadMe, which made it difficult to upsert API definitions and manage many at scale (and workarounds were added after the fact in the form of the `--create` and `--update` flags). With `openapi upload`, the `--id` flag has been renamed to `--slug` and is now optional. The slug (i.e., the unique identifier for your API definition resource in ReadMe) is inferred from the file path or URL to your API definition.
 
