@@ -1,8 +1,8 @@
 # Migration Guide
 
-This guide helps you migrate your ReadMe CLI (`rdme`) setup to the latest version and prepare for future versions. Choose your migration path based on whether you're using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).
+This guide helps you migrate your ReadMe CLI (`rdme`) setup to the latest version and prepare for future versions. Choose your migration path based on whether you're using [ReadMe Refactored](https://docs.readme.com/main/docs/migration).
 
-1. If your project is using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored), [use `rdme@v10`](#migrating-to-rdme10) and beyond.
+1. If your project is using [ReadMe Refactored](https://docs.readme.com/main/docs/migration), [use `rdme@v10`](#migrating-to-rdme10) and beyond.
 2. If your project is **not** yet using ReadMe Refactored, [use `rdme@v9`](#migrating-to-rdme9). The `v9` channel will continue to be maintained while we focus on making sure that everybody can upgrade their ReadMe projects to ReadMe Refactored.
 
 ## Table of Contents
@@ -29,7 +29,7 @@ npx markdown-toc documentation/migration-guide.md --maxdepth 2 --bullets="-" -i
 
 ### Overview
 
-This guide explains how to install `rdme@10` for use with [ReadMe Refactored]{https://docs.readme.com/main/docs/welcome-to-readme-refactored}. In general, we recommend [bi-directional syncing](https://docs.readme.com/main/docs/bi-directional-sync) for tasks like:
+This guide explains how to install `rdme@10` for use with [ReadMe Refactored]{https://docs.readme.com/main/docs/migration}. In general, we recommend [bi-directional syncing](https://docs.readme.com/main/docs/bi-directional-sync) for tasks like:
 
 - Syncing Markdown files
 - Syncing API definitions (and editing them visually with [the API designer](https://docs.readme.com/main/docs/building-apis-from-scratch-with-the-api-designer))
@@ -43,7 +43,7 @@ However `rdme@10` is useful for more targeted workflows—particularly when sync
 
 <!-- prettier-ignore-start -->
 > [!NOTE]
-> `rdme@10` only works with ReadMe projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored). If you are not yet using ReadMe Refactored, [you'll want to use `rdme@9`](#migrating-to-rdme9).
+> `rdme@10` only works with ReadMe projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/migration). If you are not yet using ReadMe Refactored, [you'll want to use `rdme@9`](#migrating-to-rdme9).
 <!-- prettier-ignore-end -->
 
 ### Upgrading to `v10`
@@ -103,7 +103,7 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
 
    - These commands will now automatically validate your frontmatter and flag any issues prior to syncing. This is particularly helpful if you're coming from `rdme@9` or earlier, since the shape of certain frontmatter attributes (e.g., `category`, `parent`, `hidden`) have slightly changed. If you run this command in a non-CI environment, any outdated frontmatter will be detected and you'll have the ability to migrate it to the new format automatically.
 
-   Read more in [the `docs upload` command docs](https://github.com/readmeio/rdme/tree/v10/documentation/commands/docs.md#rdme-docs-upload-path) and in [the ReadMe API migration guide](https://docs.readme.com/main/reference/api-migration-guide).
+   Read more in [the `docs upload` command docs](https://github.com/readmeio/rdme/blob/v10/documentation/commands/docs.md#rdme-docs-upload-path) and in [the ReadMe API migration guide](https://docs.readme.com/main/reference/api-migration-guide).
 
 4. **`openapi` has been replaced by `openapi upload`**
 
@@ -131,7 +131,7 @@ This release adds a few features that make it even easier to get started with `r
 
 <!-- prettier-ignore-start -->
 > [!NOTE]
-> `rdme@9` only works with ReadMe projects that are **not** using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored). If you are using ReadMe Refactored, [you'll want to use `rdme@10`](#migrating-to-rdme10).
+> `rdme@9` only works with ReadMe projects that are **not** using [ReadMe Refactored](https://docs.readme.com/main/docs/migration). If you are using ReadMe Refactored, [you'll want to use `rdme@10`](#migrating-to-rdme10).
 <!-- prettier-ignore-end -->
 
 ### Upgrading to `v9`
@@ -214,9 +214,9 @@ Please see [the `rdme@8.0.0` release notes](https://github.com/readmeio/rdme/rel
 | Feature                                                                                                                                     | `v8`   | `v9`        | `v10`       |
 | ------------------------------------------------------------------------------------------------------------------------------------------- | ------ | ----------- | ----------- |
 | Actively Maintained?                                                                                                                        | ❌     | ✅          | ✅          |
-| Support for [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored)\*                                           | ❌     | ❌          | ✅          |
+| Support for [ReadMe Refactored](https://docs.readme.com/main/docs/migration)\*                                           | ❌     | ❌          | ✅          |
 | Supports Bi-Directional Sync                                                                                                                | ❌     | ❌          | ✅          |
-| Support for Legacy Projects (i.e., not yet migrated to [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored)) | ✅     | ✅          | ❌          |
+| Support for Legacy Projects (i.e., not yet migrated to [ReadMe Refactored](https://docs.readme.com/main/docs/migration)) | ✅     | ✅          | ❌          |
 | Node.js Requirements                                                                                                                        | `>=14` | `>=20.10.0` | `>=20.10.0` |
 
 \*If you uploaded an API definition prior to migrating your project to ReadMe Refactored, any existing workflows for syncing these files that use a legacy `rdme` version (i.e., `v9` or earlier) should continue to work, even after migrating. **For new workflows, we recommend following this migration guide and upgrading to the latest version.**

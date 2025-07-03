@@ -20,7 +20,7 @@ With `rdme`, you can manage your API definition (we support [OpenAPI](https://sp
 Not using ReadMe for your docs? No worries. `rdme` has a variety of tools to help you identify issues with your API definition — no ReadMe account required.
 
 > [!NOTE]
-> If you're using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored), you'll want to use `rdme@10` or later. If you're **not** using ReadMe Refactored, you'll want to use `rdme@9`. More info can be found in our [migration guide](https://github.com/readmeio/rdme/blob/v10/documentation/migration-guide.md).
+> If you're using [ReadMe Refactored](https://docs.readme.com/main/docs/migration), you'll want to use `rdme@10` or later. If you're **not** using ReadMe Refactored, you'll want to use `rdme@9`. More info can be found in our [migration guide](https://github.com/readmeio/rdme/blob/v10/documentation/migration-guide.md).
 
 # Table of Contents
 
@@ -185,4 +185,4 @@ npm run build && npm run build:docs
 <!-- prettier-ignore-end -->
 
 > [!IMPORTANT]
-> You'll notice that several previous `rdme` commands are no longer present. That's because this version is for projects that use [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored) and [bi-directional syncing](https://docs.readme.com/main/docs/bi-directional-sync) is the recommended approach for most workflows previously managed via `rdme`. See more in [our migration guide](./documentation/migration-guide.md).
+> You'll notice that several previous `rdme` commands are no longer present. That's because this version is for projects that use [ReadMe Refactored](https://docs.readme.com/main/docs/migration) and [bi-directional syncing](https://docs.readme.com/main/docs/bi-directional-sync) is the recommended approach for most workflows previously managed via `rdme`. See more in [our migration guide](./documentation/migration-guide.md).
