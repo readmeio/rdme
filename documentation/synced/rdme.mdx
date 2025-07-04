@@ -105,10 +105,10 @@ In this section, we'll go over how to set these Markdown files up so you can syn
 
 See below for a table detailing the required YAML frontmatter attributes:
 
-| Attribute      | Required for Changelog? | Required for Custom Pages? | Required for Guides? | Required for API Reference? |
-| :------------- | :---------------------- | :------------------------- | :------------------- | :-------------------------- |
-| `title`        | Yes                     | Yes                        | Yes                  | Yes                         |
-| `category.uri` | No                      | No                         | Yes                  | Yes                         |
+| Attribute      | Required for `changelog upload`? | Required for `custompages upload`? | Required for `docs upload`? | Required for `reference upload`? |
+| :------------- | :------------------------------- | :--------------------------------- | :-------------------------- | :------------------------------- |
+| `title`        | Yes                              | Yes                                | Yes                         | Yes                              |
+| `category.uri` | No                               | No                                 | Yes                         | Yes                              |
 
 To determine what your `uri` value should be, you can use [the `Get all categories` endpoint](https://docs.readme.com/reference/getcategories-1) and grab the `uri` value from the response.
 
