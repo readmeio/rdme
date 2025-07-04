@@ -50,9 +50,9 @@ Check out `.github/workflows/docs.yml` for more info on this!
   </a>
 </p>
 
-If you're anything like us, your documentation process may be a part of a broader CI/CD process. For example, you may want to automatically update your Guides or API reference on ReadMe every time you ship new code. Enter `rdme`: ReadMe's official command-line interface (CLI) and GitHub Action!
+Thanks to ReadMe's support [for bi-directional syncing](https://docs.readme.com/main/docs/bi-directional-sync), technical and nontechnical content writers alike can collaborate on docs using a workflow of their choice. But if you're anything like us, your documentation process may be a part of a broader CI/CD process that necessitates a more complex workflow. For example, you may want to automatically update your Guides or API reference on ReadMe every time you ship new code.
 
-With `rdme`, you can create workflows for a variety of use cases, including:
+That's where `rdme` — ReadMe's official command-line interface (CLI) and GitHub Action — comes in! With `rdme`, you can create workflows for a variety of use cases, including:
 
 - Syncing [OpenAPI/Swagger](https://docs.readme.com/docs/openapi) definitions (with support for bundling external references) 📦
 - Pre-upload validation (including OpenAPI 3.1) ✅
@@ -68,17 +68,16 @@ To see detailed CLI setup instructions and all available commands, check out [th
 >
 > This guidance is only applicable for projects that have been migrated to [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored). The Refactored project architecture requires `rdme@10`, while the legacy project architecture requires `rdme@9`.
 >
-> If you are still on our legacy project architecture, please see [our documentation for `rdme@9`](https://docs.readme.com/docs/rdme-legacy).
+> For more information, check out our [migration guide](https://github.com/readmeio/rdme/blob/v10/documentation/migration-guide.md)
 
-> 📘 Guides, Reference, Changelog, Custom Pages... you name it!
->
-> The following guidance on Markdown file setup is nearly identical for Guides (i.e. the `docs upload` command), Reference (i.e. the `reference upload` command), Changelog (i.e. the `changelog upload` command), and Custom Pages (i.e. the `custompages upload` command). There are a couple of small differences:
->
-> - Guides and Reference pages are tied to project versions/branches and therefore require a `--branch` parameter. Changelog and Custom Pages are the same across project branches and therefore do not have a `--branch` parameter.
-> - There are slight variations in the YAML frontmatter attributes for each respective section of your documentation. For example, Changelog has a `type` attribute which you can set to `added`. See [Specifying Other Attributes](#specifying-other-attributes) for more information.
-> - In addition to Markdown, Custom Pages also supports HTML files. If you pass an HTML file into the `custompages` commands, the page will have the `content.type` attribute set to `html` and it will conversely be set to `markdown` for Markdown files. You can override this in the YAML frontmatter.
+With `rdme`, you can sync Markdown files to any of the following sections:
 
-In order to sync Markdown files to your Guides, your Reference, your Changelog, or your Custom Pages, you'll need to add certain attributes to the top of each page via a [YAML frontmatter block](https://jekyllrb.com/docs/front-matter/). See below for an example (using the page you're currently reading!):
+- Guides (using the `docs upload` command)
+- API Reference (using the `reference upload` command)
+- Changelog (using the `changelog upload` command)
+- Custom Pages (using the `custompages upload` command)
+
+These Markdown files require [YAML frontmatter](https://jekyllrb.com/docs/front-matter/) attributes at the top of each page. See below for an example in the Guides section (using the page you're currently reading!):
 
 ```markdown
 ---
@@ -89,17 +88,27 @@ category:
   uri: documentation
 ---
 
-If you're anything like us...
+With ReadMe's support for...
 ```
+
+In this section, we'll go over how to set these Markdown files up so you can sync them to ReadMe.
+
+> 📘 Guides, Reference, Changelog, Custom Pages... you name it!
+>
+> The guidance on Markdown file setup is nearly identical for all of the above sections. There are a few small differences:
+>
+> - Guides, API Reference, and Custom Pages are tied to project branches (f.k.a. versions) and therefore have a `--branch` flag (when omitted, your default version is used). Changelog entries are not versioned and therefore the command does not accept the `--branch` flag.
+> - There are slight variations in the YAML frontmatter attributes for each respective section of your documentation. For example, Changelog entries have a `type` attribute which you can set to `added`. See [Specifying Other Attributes](#specifying-other-attributes) for more information.
+> - In addition to Markdown, Custom Pages also supports HTML files. If you pass an HTML file into the `custompages` commands, the page will have the `content.type` attribute set to `html` and it will conversely be set to `markdown` for Markdown files. You can override this in the YAML frontmatter.
 
 #### Required Attributes
 
 See below for a table detailing the required YAML frontmatter attributes:
 
-| Attribute      | Required for `changelogs`? | Required for `custompages`? | Required for `docs`? | Required for `reference`? |
-| :------------- | :------------------------- | :-------------------------- | :------------------- | :------------------------ |
-| `title`        | Yes                        | Yes                         | Yes                  | Yes                       |
-| `category.uri` | No                         | No                          | Yes                  | Yes                       |
+| Attribute      | Required for Changelog? | Required for Custom Pages? | Required for Guides? | Required for API Reference? |
+| :------------- | :---------------------- | :------------------------- | :------------------- | :-------------------------- |
+| `title`        | Yes                     | Yes                        | Yes                  | Yes                         |
+| `category.uri` | No                      | No                         | Yes                  | Yes                         |
 
 To determine what your `uri` value should be, you can use [the `Get all categories` endpoint](https://docs.readme.com/reference/getcategories-1) and grab the `uri` value from the response.
 
@@ -107,9 +116,35 @@ To determine what your `uri` value should be, you can use [the `Get all categori
 >
 > Any Markdown/HTML files that lack YAML frontmatter attributes will be skipped.
 
+#### Page Hierarchy Attributes
+
+`rdme` is directory-agnostic by design, meaning that you can organize your Markdown files in your local directory however you'd like and it will not impact how ReadMe displays them in the sidebar. This also means that any page hierarchy attributes should be specified in the frontmatter of each Markdown file.
+
+> 📘
+>
+> If you'd prefer a workflow where the directory structure of your Markdown files matches your ReadMe documentation, check out [bi-directional sync](https://docs.readme.com/main/docs/bi-directional-sync).
+
+Here are a few attributes that describe page hierarchy (applicable only to the Guides and API reference sections, since these are the only sections with a proper sidebar):
+
+- category (specified using the `category.uri` attribute)
+- page order within a category (specified using the `position` attribute)
+- parent/child page hierarchy (specified in the child page using the `parent.uri` attribute)
+
+For example, let's say I have a parent and child page (called `parent.md` and `child.md`, respectively), both located within the "Documentation" category of my Guides. Here's what the frontmatter for `child.md` would look like:
+
+```markdown
+---
+title: Example child page
+category:
+  uri: documentation
+parent:
+  uri: parent
+---
+```
+
 #### Specifying Page Slugs
 
-By default, we automatically derive the page's slug via the file name (e.g. the file name `rdme.md` would become `/docs/rdme` in your ReadMe project). Note that our API uses [`slugify`](https://www.npmjs.com/package/slugify) to automatically handle certain characters (e.g. spaces), which may lead to unexpected syncing behavior if your file names don't match your page slugs. If you prefer to keep your page slugs different from your file names, you can manually set the `slug` value in the YAML frontmatter:
+By default, we automatically derive the page's slug via the file name (e.g., a page that is synced to your Guides section with the file name `rdme.md` would become `https://docs.example.com/docs/rdme` in your ReadMe project). Note that our API uses [`slugify`](https://www.npmjs.com/package/slugify) to automatically handle certain characters (e.g., spaces), which may lead to unexpected syncing behavior if your file names don't match your page slugs. If you prefer to keep your page slugs different from your file names, you can manually set the `slug` value in the YAML frontmatter:
 
 ```markdown
 ---
@@ -124,7 +159,7 @@ slug: an-alternative-page-slug-example
 
 #### Specifying Other Attributes
 
-You can also specify several other page attributes in your YAML frontmatter, such as `privacy` (an object that sets a `view` attribute to `public` or `anyone_with_link` to denote whether your page is published or unpublished). Any attributes you omit will remain unchanged on `rdme` runs. To view the full list of attributes, check out the `POST` endpoints for respective section of your documentation that you're syncing:
+You can also specify several other page attributes in your YAML frontmatter, such as `privacy` (an object that sets a `view` attribute to `public` or `anyone_with_link` to denote whether your page is published or unpublished). Any attributes you omit will remain unchanged on subsequent `rdme` updates. To view the full list of attributes, check out the `POST` endpoints for respective section of your documentation that you're syncing:
 
 - [`Create doc`](https://docs.readme.com/main/reference/createguide/)
 - [`Create reference`](https://docs.readme.com/reference/createreference)
@@ -133,20 +168,20 @@ You can also specify several other page attributes in your YAML frontmatter, suc
 
 #### Dry Run Mode
 
-If you're setting up new pages or if you're generally unsure if you've set up your page attributes correctly, each command has a dry run mode. This will allow you preview the changes without actually creating/updating any docs in ReadMe, which can be extremely useful for initial setup (oh, and we have [comprehensive debugging options](#troubleshooting) available as well!). To enable dry run mode, use the `--dryRun` flag:
+If you're setting up new pages or if you're generally unsure if you've set up your page attributes correctly, each command has a dry run mode. This will allow you to validate the frontmatter and preview the changes without actually creating/updating any docs in ReadMe, which can be extremely useful for initial setup (oh, and we have [comprehensive debugging options](#troubleshooting) available as well!). To enable dry run mode, use the `--dry-run` flag:
 
 ```sh
-rdme docs upload [path] --branch={project-version} --dryRun
-rdme reference upload [path] --branch={project-version} --dryRun
-rdme changelog upload [path] --dryRun
-rdme custompages upload [path] --dryRun
+rdme docs upload [path] --dry-run
+rdme reference upload [path] --dry-run
+rdme changelog upload [path] --dry-run
+rdme custompages upload [path] --dry-run
 ```
 
-The command output will indicate whether each page is being created or updated alongside all processed page attributes.
+The command output will validate the frontmatter attributes and indicate whether each page is being created or updated alongside all processed page attributes.
 
 ## GitHub Actions Usage
 
-With [GitHub Actions](https://docs.github.com/actions), you can automatically execute workflows when certain events take place in your GitHub repository (e.g. code is pushed to the default branch, a new pull request is opened, etc.).
+With [GitHub Actions](https://docs.github.com/actions), you can automatically execute workflows when certain events take place in your GitHub repository (e.g., code is pushed to the default branch, a new pull request is opened, etc.).
 
 While there are [dozens of event options available](https://docs.github.com/actions/using-workflows/events-that-trigger-workflows), you'll typically want to sync your OpenAPI definition and Markdown docs to ReadMe when one of the following events takes place:
 
@@ -210,7 +245,7 @@ The following section has links to full GitHub Actions workflow file examples.
 >
 > This guidance is only applicable for projects that have been migrated to [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored). The Refactored project architecture requires `rdme@10`, while the legacy project architecture requires `rdme@9`.
 >
-> If you are still on our legacy project architecture, please see [our documentation for `rdme@9`](https://docs.readme.com/docs/rdme-legacy).
+> For more information, check out our [migration guide](https://github.com/readmeio/rdme/blob/v10/documentation/migration-guide.md)
 
 Want to start syncing? We have several example workflow files available:
 
@@ -228,7 +263,7 @@ To use sensitive information (like your ReadMe API key) in your `rdme` GitHub Ac
 ```yml
 - uses: readmeio/rdme@RDME_VERSION
   with:
-    rdme: openapi validate [url-or-local-path-to-file] --key=${{ secrets.README_API_KEY }} --id=API_DEFINITION_ID
+    rdme: openapi upload [url-or-local-path-to-file] --key=${{ secrets.README_API_KEY }}
 ```
 
 ## Usage in Other CI Environments
@@ -251,7 +286,7 @@ pipelines:
   default:
     - step:
         script:
-          - npx rdme@RDME_VERSION openapi validate [url-or-local-path-to-file] --key=$README_API_KEY --id=API_DEFINITION_ID
+          - npx rdme@RDME_VERSION openapi upload [url-or-local-path-to-file] --key=$README_API_KEY
 ```
 ```yml CircleCI (.circleci/config.yml)
 version: 2.1
@@ -263,7 +298,7 @@ jobs:
       - image: node:NODE_VERSION
     steps:
       - run:
-          command: npx rdme@RDME_VERSION openapi validate [url-or-local-path-to-file] --key=$README_API_KEY --id=API_DEFINITION_ID
+          command: npx rdme@RDME_VERSION openapi upload [url-or-local-path-to-file] --key=$README_API_KEY
 ```
 ```yml GitLab CI (rdme-sync.gitlab-ci.yml)
 # Official framework image. Look for the different tagged releases at:
@@ -272,7 +307,7 @@ image: node:NODE_VERSION
 
 sync-via-rdme:
   script:
-    - npx rdme@RDME_VERSION openapi validate [url-or-local-path-to-file] --key=$README_API_KEY --id=API_DEFINITION_ID
+    - npx rdme@RDME_VERSION openapi upload [url-or-local-path-to-file] --key=$README_API_KEY
 ```
 ```yml Travis CI (.travis.yml)
 # https://docs.travis-ci.com/user/languages/javascript-with-nodejs/#specifying-nodejs-versions
@@ -280,7 +315,7 @@ language: node_js
 node_js:
   - NODE_VERSION
 
-script: npx rdme@RDME_VERSION openapi validate [url-or-local-path-to-file] --key=$README_API_KEY --id=API_DEFINITION_ID
+script: npx rdme@RDME_VERSION openapi upload [url-or-local-path-to-file] --key=$README_API_KEY
 ```
 {/* prettier-ignore-end */}
 
@@ -297,9 +332,9 @@ If you notice any issues with any of these examples, please open up an issue on 
 
 ## Troubleshooting
 
-If you're running into unexpected behavior with `rdme` and need to troubleshoot the issue, you have several debug logging options available. We may ask for these logs (as well as a copy of your OpenAPI definition) when you contact our support team.
+If you're running into unexpected behavior with `rdme` and need to troubleshoot the issue, you have several debug logging options available. We may ask for these logs (as well as a copy of any files you're attempting to upload) when you contact our support team.
 
-If you're working with the `docs` command specifically, we recommend using [dry run mode](#dry-run-mode) first so your docs don't get overwritten. If you're still seeing unexpected results (or are running into issues with any other command), check out the debugging options described below.
+If you're working with the Markdown upload commands (e.g., `docs upload`, `reference upload`, etc.) specifically, we recommend using [dry run mode](#dry-run-mode) first so your docs don't get overwritten. If you're still seeing unexpected results (or are running into issues with any other command), check out the debugging options described below.
 
 ### Troubleshooting CLI
 
