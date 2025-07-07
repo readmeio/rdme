@@ -25,7 +25,9 @@ Is your OpenAPI definition stored on GitHub? With [the `rdme` GitHub Action](htt
 
 ## Constructing a GitHub Actions Workflow
 
-In order to construct the workflow file, you'll first want to obtain a unique API definition slug from ReadMe so we know which definition you want to update on subsequent re-syncs. You can obtain this API definition slug in one of several ways, but we'll dive into two below: uploading a file directly to your API Reference section in ReadMe and using the `rdme` CLI locally.
+In order to construct the workflow file, you'll first want to determine a unique API definition slug from ReadMe so we know which definition you want to update on subsequent re-syncs. The slug value is technically optional and can be inferred from the file name — you can learn more about how we handle this [in the command documentation](https://github.com/readmeio/rdme/blob/v10/documentation/commands/openapi.md#rdme-openapi-upload-spec).
+
+If you've already uploaded an existing file (either via uploading a file directly to your API Reference section in ReadMe or via `rdme`) and you'd like to update it, see below to determine what the slug of that API definition is.
 
 <details>
 <summary>Uploading a file</summary>
