@@ -1,5 +1,7 @@
 ---
 title: Syncing Docs via CLI / GitHub
+category:
+  uri: Syncing Your Content
 content:
   excerpt: Update your docs automatically with `rdme`, ReadMe's official CLI and GitHub Action!
 ---
@@ -67,10 +69,10 @@ These Markdown files require [YAML frontmatter](https://jekyllrb.com/docs/front-
 ```markdown
 ---
 title: Syncing Docs via CLI / GitHub
+category:
+  uri: Syncing Your Content
 content:
   excerpt: Update your docs automatically with `rdme`, ReadMe's official CLI and GitHub Action!
-category:
-  uri: documentation
 ---
 
 With ReadMe's support for...
@@ -95,15 +97,35 @@ See below for a table detailing the required YAML frontmatter attributes:
 | `title`        | Yes                              | Yes                                | Yes                         | Yes                              |
 | `category.uri` | No                               | No                                 | Yes                         | Yes                              |
 
-To determine what your `uri` value should be, you can use [the `Get all categories` endpoint](https://docs.readme.com/reference/getcategories-1) and grab the `uri` value from the response.
-
 > 📘
 >
-> Any Markdown/HTML files that lack YAML frontmatter attributes will be skipped.
+> Note that the above attributes are only required for the initial page creation and are not required for any subsequent updates. Any Markdown/HTML files that lack YAML frontmatter attributes will be skipped.
+
+To determine what your `category.uri` value should be, you can use [the `Get all categories` endpoint](https://docs.readme.com/reference/getcategories-1) and grab the `uri` value from one of the category objects. With `rdme`, you can do either of the following formats to denote the category URI:
+
+- The full URI, exactly as denoted in the [the `Get all categories` endpoint](https://docs.readme.com/reference/getcategories-1) response:
+
+  ```markdown
+  ---
+  category:
+    uri: /branches/3.0/categories/guides/documentation
+  title: ...
+  ---
+  ```
+
+- The category title (i.e., the very last part of the URI)
+
+  ```markdown
+  ---
+  category:
+    uri: documentation
+  title: ...
+  ---
+  ```
 
 #### Page Hierarchy Attributes
 
-`rdme` is directory-agnostic by design, meaning that you can organize your Markdown files in your local directory however you'd like and it will not impact how ReadMe displays them in the sidebar. This also means that any page hierarchy attributes should be specified in the frontmatter of each Markdown file.
+`rdme` is directory-agnostic by design, meaning that you can organize your local directory of Markdown files however you'd like and it will not impact how ReadMe displays them in the sidebar. This also means that any page hierarchy attributes must be specified in the frontmatter of each Markdown file.
 
 > 📘
 >
@@ -133,9 +155,7 @@ By default, we automatically derive the page's slug via the file name (e.g., a p
 
 ```markdown
 ---
-title: Syncing Docs via CLI / GitHub
-content:
-  excerpt: Update your docs automatically with `rdme`, ReadMe's official CLI and GitHub Action!
+title: Example page
 category:
   uri: documentation
 slug: an-alternative-page-slug-example
