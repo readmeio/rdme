@@ -398,12 +398,11 @@ exports[`rdme docs upload > given that the file path is a single file > and the 
     ],
     "updated": [],
   },
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ⚠ 🔬 Validating frontmatter data... issues found in 1 file(s).
 ",
-  "stdout": "Automatically fixing issues in 1 file(s)...
+  "stdout": "::warning::This command is in an experimental alpha and is likely to change. Use at your own risk!
+Automatically fixing issues in 1 file(s)...
 === BEGIN writeFileSync to file: __tests__/__fixtures__/docs/mixed-docs/legacy-category.md ===
 ---
 category:
@@ -437,14 +436,13 @@ exports[`rdme docs upload > given that the file path is a single file > and the 
     "skipped": [],
     "updated": [],
   },
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
 - 🚀 Uploading files to ReadMe...
 ✔ 🚀 Uploading files to ReadMe... done!
 ",
-  "stdout": "🌱 Successfully created 1 page(s) in ReadMe:
+  "stdout": "::warning::This command is in an experimental alpha and is likely to change. Use at your own risk!
+🌱 Successfully created 1 page(s) in ReadMe:
    - new-doc (__tests__/__fixtures__/docs/new-docs/new-doc.md)
 ",
 }
@@ -453,12 +451,11 @@ exports[`rdme docs upload > given that the file path is a single file > and the 
 exports[`rdme docs upload > given that the file path is a single file > and the command is being run in a CI environment > should error out if the file has validation errors 1`] = `
 {
   "error": [Error: 1 file(s) have issues that should be fixed before uploading to ReadMe. Please run \`rdme docs upload __tests__/__fixtures__/docs/mixed-docs/legacy-category.md --dry-run\` in a non-CI environment to fix them.],
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ⚠ 🔬 Validating frontmatter data... issues found in 1 file(s).
 ",
-  "stdout": "",
+  "stdout": "::warning::This command is in an experimental alpha and is likely to change. Use at your own risk!
+",
 }
 `;
 
@@ -1336,12 +1333,11 @@ exports[`rdme reference upload > given that the file path is a single file > and
     ],
     "updated": [],
   },
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ⚠ 🔬 Validating frontmatter data... issues found in 1 file(s).
 ",
-  "stdout": "Automatically fixing issues in 1 file(s)...
+  "stdout": "::warning::This command is in an experimental alpha and is likely to change. Use at your own risk!
+Automatically fixing issues in 1 file(s)...
 === BEGIN writeFileSync to file: __tests__/__fixtures__/docs/mixed-docs/legacy-category.md ===
 ---
 category:
@@ -1375,14 +1371,13 @@ exports[`rdme reference upload > given that the file path is a single file > and
     "skipped": [],
     "updated": [],
   },
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
 - 🚀 Uploading files to ReadMe...
 ✔ 🚀 Uploading files to ReadMe... done!
 ",
-  "stdout": "🌱 Successfully created 1 page(s) in ReadMe:
+  "stdout": "::warning::This command is in an experimental alpha and is likely to change. Use at your own risk!
+🌱 Successfully created 1 page(s) in ReadMe:
    - new-doc (__tests__/__fixtures__/docs/new-docs/new-doc.md)
 ",
 }
@@ -1391,12 +1386,11 @@ exports[`rdme reference upload > given that the file path is a single file > and
 exports[`rdme reference upload > given that the file path is a single file > and the command is being run in a CI environment > should error out if the file has validation errors 1`] = `
 {
   "error": [Error: 1 file(s) have issues that should be fixed before uploading to ReadMe. Please run \`rdme reference upload __tests__/__fixtures__/docs/mixed-docs/legacy-category.md --dry-run\` in a non-CI environment to fix them.],
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
- ›    Use at your own risk!
-- 🔬 Validating frontmatter data...
+  "stderr": "- 🔬 Validating frontmatter data...
 ⚠ 🔬 Validating frontmatter data... issues found in 1 file(s).
 ",
-  "stdout": "",
+  "stdout": "::warning::This command is in an experimental alpha and is likely to change. Use at your own risk!
+",
 }
 `;
 
