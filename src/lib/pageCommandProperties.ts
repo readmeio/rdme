@@ -2,16 +2,17 @@ import { Args, Flags } from '@oclif/core';
 
 type Section = 'Changelog' | 'Custom Pages' | 'Guides' | 'Reference';
 
-export const alphaNotice = 'This command is in an experimental alpha and is likely to change. Use at your own risk!';
-
 export function summary(section: Section): string {
   const fileType = section === 'Custom Pages' ? 'Markdown or HTML' : 'Markdown';
-  return `Upload ${fileType} files to the ${section} section of your ReadMe project.\n\nNOTE: ${alphaNotice}`;
+  return `Upload ${fileType} files to the ${section} section of your ReadMe project.`;
 }
 
 export function description(section: Section): string {
   const fileType = section === 'Custom Pages' ? 'Markdown/HTML' : 'Markdown';
-  return `The path can either be a directory or a single ${fileType} file. The ${fileType} files will require YAML frontmatter with certain ReadMe documentation attributes. Check out our docs for more info on setting up your frontmatter: https://docs.readme.com/main/docs/rdme#markdown-file-setup`;
+  return [
+    `The path can either be a directory or a single ${fileType} file.`,
+    `The ${fileType} files will require YAML frontmatter with certain ReadMe documentation attributes. Check out our docs for more info on setting up your frontmatter: https://docs.readme.com/main/docs/rdme#markdown-file-setup`,
+  ].join('\n\n');
 }
 
 export function args(section: Section) {
@@ -87,10 +88,6 @@ export function baseFlags(section: Section) {
       description: `Runs the command without creating nor updating any ${items} in ReadMe. Useful for debugging.`,
       aliases: ['dryRun'],
       deprecateAliases: true,
-    }),
-    'hide-experimental-warning': Flags.boolean({
-      description: 'Hides the warning message about this command being in an experimental alpha.',
-      hidden: true,
     }),
     'max-errors': Flags.integer({
       summary: 'Maximum number of page uploading errors before the command throws an error.',

@@ -7,14 +7,6 @@ Upload Markdown or HTML files to the Custom Pages section of your ReadMe project
 
 ## `rdme custompages upload PATH`
 
-> [!WARNING]
-> This command is in an experimental alpha and is likely to change. Use at your own risk!
-
-<details>
-
-
-<summary>I understand the risks — let's see the docs!</summary>
-
 Upload Markdown or HTML files to the Custom Pages section of your ReadMe project.
 
 ```
@@ -32,11 +24,10 @@ FLAGS
 DESCRIPTION
   Upload Markdown or HTML files to the Custom Pages section of your ReadMe project.
 
-  NOTE: This command is in an experimental alpha and is likely to change. Use at your own risk!
+  The path can either be a directory or a single Markdown/HTML file.
 
-  The path can either be a directory or a single Markdown/HTML file. The Markdown/HTML files will require YAML
-  frontmatter with certain ReadMe documentation attributes. Check out our docs for more info on setting up your
-  frontmatter: https://docs.readme.com/main/docs/rdme#markdown-file-setup
+  The Markdown/HTML files will require YAML frontmatter with certain ReadMe documentation attributes. Check out our docs
+  for more info on setting up your frontmatter: https://docs.readme.com/main/docs/rdme#markdown-file-setup
 
 EXAMPLES
   The path input can be a directory. This will also upload any Markdown/HTML files that are located in subdirectories:
@@ -66,6 +57,3 @@ FLAG DESCRIPTIONS
 
     Defaults to `stable` (i.e., your main project version).
 ```
-
-
-</details>
