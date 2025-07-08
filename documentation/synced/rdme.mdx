@@ -221,7 +221,7 @@ Follow these steps to manually configure a GitHub Actions Workflow. This will re
 The command syntax in GitHub Actions is functionally equivalent to the CLI. For example, take the following CLI command:
 
 ```sh
-rdme openapi validate [url-or-local-path-to-file]
+rdme openapi upload [url-or-local-path-to-file] --key=$README_API_KEY
 ```
 
 To execute this command via GitHub Actions, the step would look like this:
@@ -229,7 +229,7 @@ To execute this command via GitHub Actions, the step would look like this:
 ```yml
 - uses: readmeio/rdme@RDME_VERSION
   with:
-    rdme: openapi validate [url-or-local-path-to-file]
+    rdme: openapi upload [url-or-local-path-to-file] --key=${{ secrets.README_API_KEY }}
 ```
 
 The following section has links to full GitHub Actions workflow file examples.
@@ -346,7 +346,7 @@ If you're working with the Markdown upload commands (e.g., `docs upload`, `refer
 If you're troubleshooting issues with the CLI (or in some non-GitHub Actions environment), you can use the `DEBUG` environmental variable to print helpful debugging info to the console:
 
 ```sh
-DEBUG=rdme* rdme openapi validate [url-or-local-path-to-file]
+DEBUG=rdme* rdme openapi upload [url-or-local-path-to-file] --key=...
 ```
 
 Note that this should only be used for development/debugging purposes and should not be enabled in production environments.
