@@ -1,3 +1,10 @@
+# [10.4.0-next.9](https://github.com/readmeio/rdme/compare/v10.4.0-next.8...v10.4.0-next.9) (2025-07-08)
+
+
+### Features
+
+* mark page upload commands as stable, update migration guide ([#1287](https://github.com/readmeio/rdme/issues/1287)) ([0a03bd6](https://github.com/readmeio/rdme/commit/0a03bd6974b55807c400d9b98ec619f385f4aa0e))
+
 # [10.4.0-next.8](https://github.com/readmeio/rdme/compare/v10.4.0-next.7...v10.4.0-next.8) (2025-07-08)
 
 

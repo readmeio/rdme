@@ -40,6 +40,8 @@ npm run build && npm run build:docs
 * [Quick Start](#quick-start)
 * [CLI Configuration](#cli-configuration)
 * [GitHub Actions Configuration](#github-actions-configuration)
+* [Required in order for the GitHub Action to access your repo's contents](#required-in-order-for-the-github-action-to-access-your-repos-contents)
+* [Runs the `rdme openapi validate petstore.json` command with the root directory being your repo](#runs-the-rdme-openapi-validate-petstorejson-command-with-the-root-directory-being-your-repo)
 * [Command Topics](#command-topics)
 <!-- tocstop -->
 <!-- prettier-ignore-end -->
