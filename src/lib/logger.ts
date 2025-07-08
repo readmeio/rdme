@@ -37,7 +37,8 @@ function error(input: string) {
 
 /**
  * Wrapper for info/notice statements.
-
+ *
+ * @deprecated use the base command's `this.info` method instead.
  */
 function info(
   input: string,
@@ -65,6 +66,8 @@ function oraOptions() {
 
 /**
  * Wrapper for warn statements.
+ *
+ * @deprecated use the base command's `this.warn` method instead.
  */
 function warn(
   /**
