@@ -1,5 +1,5 @@
 import type { APIv2PageUploadCommands } from '../index.js';
-import type { PageRequestSchema, PageResponseSchema, ProjectRepresentation } from './types/index.js';
+import type { PageRequestSchema, PageResponseSchema } from './types/index.js';
 
 import path from 'node:path';
 
@@ -233,24 +233,7 @@ function sortFiles(
  */
 export default async function syncPagePath(this: APIv2PageUploadCommands): Promise<FullUploadResults> {
   const { path: pathInput } = this.args;
-  const { key, 'dry-run': dryRun, 'max-errors': maxErrors, 'skip-validation': skipValidation } = this.flags;
-
-  // check whether or not the project has bidirection syncing enabled
-  // if it is, validations must be skipped to prevent frontmatter from being overwritten
-  const headers = new Headers({ authorization: `Bearer ${key}` });
-  const projectMetadata: ProjectRepresentation = await this.readmeAPIFetch('/projects/me', {
-    method: 'GET',
-    headers,
-  }).then(res => {
-    return this.handleAPIRes(res);
-  });
-
-  const biDiConnection = projectMetadata?.data?.git?.connection?.status === 'active';
-  if (biDiConnection && !skipValidation) {
-    throw new Error(
-      "Bi-directional syncing is enabled for this project. Uploading these docs will overwrite what's currently synced from Git. To proceed with the upload, re-run this command with the `--skip-validation` flag.",
-    );
-  }
+  const { 'dry-run': dryRun, 'max-errors': maxErrors, 'skip-validation': skipValidation } = this.flags;
 
   const validFileExtensions = [...allowedMarkdownExtensions];
   if (this.route === 'custom_pages') {
@@ -260,19 +243,25 @@ export default async function syncPagePath(this: APIv2PageUploadCommands): Promi
   let unsortedFiles = await findPages.call(this, pathInput, validFileExtensions);
 
   if (skipValidation) {
-    if (biDiConnection) {
-      this.warn(
-        "Bi-directional syncing is enabled for this project. Uploading these docs will overwrite what's currently synced from Git.",
-      );
-    } else {
-      this.warn('Skipping pre-upload validation of the Markdown file(s). This is not recommended.');
-    }
+    this.warn('Skipping pre-upload validation of the Markdown file(s). This is not recommended.');
   } else {
-    unsortedFiles = await validateFrontmatter.call(
-      this,
-      unsortedFiles,
-      'Would you like to make these changes and continue with the upload to ReadMe?',
-    );
+    const validationResults = await validateFrontmatter.call(this, unsortedFiles);
+
+    // if autofixes were applied, we return the results immediately
+    if (validationResults.status.includes('autofixed')) {
+      return {
+        created: [],
+        updated: [],
+        skipped: validationResults.pages.map(page => ({
+          filePath: page.filePath,
+          result: 'skipped',
+          slug: page.slug,
+        })),
+        failed: [],
+      };
+    }
+
+    unsortedFiles = validationResults.pages;
   }
 
   const uploadSpinner = ora({ ...oraOptions() }).start(

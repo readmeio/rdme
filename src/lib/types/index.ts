@@ -27,7 +27,7 @@ type apiDefinitionsSchema =
   (typeof readmeAPIv2Oas)['paths']['/branches/{branch}/apis']['get']['responses']['200']['content']['application/json']['schema'];
 
 /** Page schemas */
-type PageRoute = APIv2PageUploadCommands['route'];
+export type PageRoute = APIv2PageUploadCommands['route'];
 
 type PageRequestSchemaRaw<T extends PageRoute> = T extends 'custom_pages' | 'guides' | 'reference'
   ? (typeof readmeAPIv2Oas)['paths'][`/branches/{branch}/${T}/{slug}`]['patch']['requestBody']['content']['application/json']['schema']

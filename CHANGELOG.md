@@ -1,3 +1,17 @@
+# [10.4.0-next.7](https://github.com/readmeio/rdme/compare/v10.4.0-next.6...v10.4.0-next.7) (2025-07-02)
+
+
+### Bug Fixes
+
+* **v9/openapi:** problem with `FormData` compositions on Node 24 ([#1242](https://github.com/readmeio/rdme/issues/1242)) ([046842f](https://github.com/readmeio/rdme/commit/046842f7898ccdf6ce6cd910b8622b6ab9a380c6))
+
+# [10.4.0-next.6](https://github.com/readmeio/rdme/compare/v10.4.0-next.5...v10.4.0-next.6) (2025-07-02)
+
+
+### Bug Fixes
+
+* **pages/upload:** decouple autofixing and uploads ([#1282](https://github.com/readmeio/rdme/issues/1282)) ([d5a6fe9](https://github.com/readmeio/rdme/commit/d5a6fe9a7e0dc541a3ff4196d4f17413505a0ada))
+
 # [10.4.0-next.5](https://github.com/readmeio/rdme/compare/v10.4.0-next.4...v10.4.0-next.5) (2025-07-01)
 
 
@@ -82,6 +96,13 @@
 ### Features
 
 * properly display file size feature in openapi inspect command ([#1257](https://github.com/readmeio/rdme/issues/1257)) ([d957cb2](https://github.com/readmeio/rdme/commit/d957cb2cac078b88bd9ec2737d5358faa05e3449))
+
+## [9.2.1](https://github.com/readmeio/rdme/compare/v9.2.0...v9.2.1) (2025-05-13)
+
+
+### Bug Fixes
+
+* **v9/openapi:** problem with `FormData` compositions on Node 24 ([#1242](https://github.com/readmeio/rdme/issues/1242)) ([046842f](https://github.com/readmeio/rdme/commit/046842f7898ccdf6ce6cd910b8622b6ab9a380c6))
 
 ## [10.2.2](https://github.com/readmeio/rdme/compare/v10.2.1...v10.2.2) (2025-05-12)
 
