@@ -28,7 +28,8 @@ DESCRIPTION
 
   Syncs Markdown files to the Guides section of your ReadMe project. The path can either be a directory or a single
   Markdown file. The Markdown files will require YAML frontmatter with certain ReadMe documentation attributes. Check
-  out our docs for more info on setting up your frontmatter: https://docs.readme.com/main/docs/rdme#markdown-file-setup
+  out our docs for more info on setting up your frontmatter:
+  https://docs.readme.com/main/docs/rdme-legacy#markdown-file-setup
 
 ALIASES
   $ rdme guides
