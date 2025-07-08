@@ -1,3 +1,10 @@
+## [10.4.1-next.1](https://github.com/readmeio/rdme/compare/v10.4.0...v10.4.1-next.1) (2025-07-08)
+
+
+### Bug Fixes
+
+* **v9/docs:** migration guide + deprecation notice updates ([#1208](https://github.com/readmeio/rdme/issues/1208)) ([1fa6adb](https://github.com/readmeio/rdme/commit/1fa6adb78adde4e8a6deb8fcbb2e12f8a0327052))
+
 ## [9.2.2](https://github.com/readmeio/rdme/compare/v9.2.1...v9.2.2) (2025-07-08)
 
 
