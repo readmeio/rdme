@@ -16,13 +16,13 @@ export default class CustomPagesCommand extends BaseCommand<typeof CustomPagesCo
   static state = 'deprecated';
 
   static deprecationOptions = {
-    message: `\`rdme ${this.id}\` is deprecated and will be removed in v10. For more information, please visit our migration guide: https://github.com/readmeio/rdme/tree/v9/documentation/migration-guide.md`,
+    message: `\`rdme ${this.id}\` is deprecated and v10 will have a replacement command that supports ReadMe Refactored.\n\nFor more information, please visit our migration guide: https://github.com/readmeio/rdme/blob/v10/documentation/migration-guide.md#migrating-to-rdme9`,
   };
 
   static summary = 'Sync Markdown/HTML files to your ReadMe project as Custom Pages.';
 
   static description =
-    'Syncs Markdown files as Custom Pages in your ReadMe project. The path can either be a directory or a single Markdown file. The Markdown files will require YAML frontmatter with certain ReadMe documentation attributes. Check out our docs for more info on setting up your frontmatter: https://docs.readme.com/main/docs/rdme#markdown-file-setup';
+    'Syncs Markdown files as Custom Pages in your ReadMe project. The path can either be a directory or a single Markdown file. The Markdown files will require YAML frontmatter with certain ReadMe documentation attributes. Check out our docs for more info on setting up your frontmatter: https://docs.readme.com/main/docs/rdme-legacy#markdown-file-setup';
 
   static args = {
     path: Args.string({ description: 'Path to a local Markdown file or folder of Markdown files.', required: true }),
