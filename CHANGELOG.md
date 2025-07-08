@@ -1,3 +1,10 @@
+# [10.4.0-next.8](https://github.com/readmeio/rdme/compare/v10.4.0-next.7...v10.4.0-next.8) (2025-07-08)
+
+
+### Features
+
+* **logger:** improved warnings for GHA users ([#1290](https://github.com/readmeio/rdme/issues/1290)) ([ec138c5](https://github.com/readmeio/rdme/commit/ec138c57037b7d3498ef3245e63842a4b37b415b))
+
 # [10.4.0-next.7](https://github.com/readmeio/rdme/compare/v10.4.0-next.6...v10.4.0-next.7) (2025-07-02)
 
 
