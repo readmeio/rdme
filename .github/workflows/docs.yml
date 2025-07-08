@@ -68,7 +68,7 @@ jobs:
       - name: Sync docs to ReadMe (dry run)
         uses: ./
         with:
-          rdme: docs upload ./documentation/synced --key=${{ secrets.README_DEVELOPERS_API_KEY }} --version=${{ vars.README_DEVELOPERS_MAIN_VERSION }} --dryRun
+          rdme: docs upload ./documentation/synced --key=${{ secrets.README_DEVELOPERS_API_KEY }} --branch=${{ vars.README_DEVELOPERS_MAIN_VERSION }} --dry-run
 
       - name: Sync docs to ReadMe
         # And finally, we perform an actual sync to ReadMe if we're on the main branch
