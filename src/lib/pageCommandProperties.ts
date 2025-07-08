@@ -9,7 +9,10 @@ export function summary(section: Section): string {
 
 export function description(section: Section): string {
   const fileType = section === 'Custom Pages' ? 'Markdown/HTML' : 'Markdown';
-  return `The path can either be a directory or a single ${fileType} file. The ${fileType} files will require YAML frontmatter with certain ReadMe documentation attributes. Check out our docs for more info on setting up your frontmatter: https://docs.readme.com/main/docs/rdme#markdown-file-setup`;
+  return [
+    `The path can either be a directory or a single ${fileType} file.`,
+    `The ${fileType} files will require YAML frontmatter with certain ReadMe documentation attributes. Check out our docs for more info on setting up your frontmatter: https://docs.readme.com/main/docs/rdme#markdown-file-setup`,
+  ].join('\n\n');
 }
 
 export function args(section: Section) {
