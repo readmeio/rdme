@@ -1,25 +1,9 @@
 ---
-title: Syncing Docs via CLI / GitHub
-category:
-  uri: documentation
+title: Syncing Docs via CLI / GitHub (Legacy)
 content:
-  excerpt: >-
-    Update your docs automatically with `rdme`, ReadMe's official CLI and GitHub
-    Action!
+  excerpt: Update your docs automatically with `rdme`, ReadMe's official CLI and GitHub Action!
+slug: rdme-legacy
 ---
-
-{/* prettier-ignore */}
-{/* <!--
-
-Hello curious raw Markdown reader! 👋
-This Markdown page is syncing to ReadMe via the `rdme` GitHub Action 🦉
-Peep the resulting page in our docs: https://docs.readme.com/docs/rdme
-
-We also do some fancy little find-and-replace action to swap out every instance
-of `RDME_VERSION` below with the latest version of rdme.
-Check out `.github/workflows/docs.yml` for more info on this!
-
---> \*/}
 
 [![rdme](https://user-images.githubusercontent.com/8854718/195465739-0f0f83d5-2e18-4e6c-96ae-944e3bb6880a.png)](https://readme.com)
 
@@ -70,7 +54,7 @@ To see detailed CLI setup instructions and all available commands, check out [th
 >
 > This guidance is only applicable for projects that are still on our legacy project architecture and have not yet migrated to [ReadMe Refactored](https://docs.readme.com/main/docs/migration). The legacy project architecture requires `rdme@9`. You can find more info in [our `rdme` migration guide](https://github.com/readmeio/rdme/blob/v10/documentation/migration-guide.md) or by reaching out to us at [support@readme.io](mailto:support@readme.io).
 >
-> We will be updating this document with our latest guidance soon. Thanks for your patience!
+> Please check out [this page](https://docs.readme.com/main/docs/rdme) for the updated guidance.
 
 > 📘 Guides, Changelog, Custom Pages... you name it!
 >
@@ -152,7 +136,7 @@ While there are [dozens of event options available](https://docs.github.com/acti
 
 > 📘 Keeping `rdme` up-to-date
 >
-> Note that `@RDME_VERSION` (used in the examples on this page) is the latest version of `rdme`. We recommend [configuring Dependabot to keep your actions up-to-date](https://docs.github.com/code-security/dependabot/working-with-dependabot/keeping-your-actions-up-to-date-with-dependabot).
+> Note that `@RDME_VERSION` is the latest version of `rdme`, which only supports projects on ReadMe Refactored. The examples on this page use `@v9`, which is only applicable for legacy projects. We recommend [configuring Dependabot to keep your actions up-to-date](https://docs.github.com/code-security/dependabot/working-with-dependabot/keeping-your-actions-up-to-date-with-dependabot).
 
 ### Quick Start
 
@@ -160,7 +144,7 @@ While there are [dozens of event options available](https://docs.github.com/acti
 >
 > This guidance is only applicable for projects that are still on our legacy project architecture and have not yet migrated to [ReadMe Refactored](https://docs.readme.com/main/docs/migration). The legacy project architecture requires `rdme@9`. You can find more info in [our `rdme` migration guide](https://github.com/readmeio/rdme/blob/v10/documentation/migration-guide.md) or by reaching out to us at [support@readme.io](mailto:support@readme.io).
 >
-> We will be updating this document with our latest guidance soon. Thanks for your patience!
+> Please check out [this page](https://docs.readme.com/main/docs/rdme) for the updated guidance.
 
 The fastest way to create a GitHub Actions workflow file is by doing the following:
 
@@ -174,16 +158,6 @@ rdme openapi validate --github
 
 This will run through the `openapi` command, ask you a few quick questions, and then automatically create a fully functional GitHub Actions workflow file for you. 🪄
 
-> 👍 Did you know?
->
-> Not to get too meta on you, but... the page that you're currently reading is actually being synced from the `rdme` GitHub repository via the `rdme` GitHub Action 🤯
->
-> Here are the relevant files on GitHub:
->
-> - [The Markdown source file for the page you're reading](https://github.com/readmeio/rdme/blob/main/documentation/legacy/rdme.md) 📜
-> - [The GitHub Actions workflow file that syncs the Markdown to docs.readme.com](https://github.com/readmeio/rdme/blob/main/.github/workflows/docs.yml) 🔄
-> - And finally... [the workflow run results](https://github.com/readmeio/rdme/actions/workflows/docs.yml) ✅
-
 ### Securely Using Your API Key
 
 > 🚧 Secretly store your ReadMe API Key!
@@ -193,7 +167,7 @@ This will run through the `openapi` command, ask you a few quick questions, and 
 To use sensitive information (like your ReadMe API key) in your `rdme` GitHub Action, first [create a new repository secret](https://docs.github.com/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository). Let's say you create a new secret key called `README_API_KEY`. The usage in the `rdme` step will look something like this:
 
 ```yml
-- uses: readmeio/rdme@RDME_VERSION
+- uses: readmeio/rdme@v9
   with:
     rdme: openapi validate [url-or-local-path-to-file] --key=${{ secrets.README_API_KEY }} --id=API_DEFINITION_ID
 ```
@@ -213,7 +187,7 @@ We recommend using the [quick start](#quick-start) to get started with GitHub Ac
 - uses: actions/checkout@v4
 
 # Runs the `rdme` command on your repo's contents
-- uses: readmeio/rdme@RDME_VERSION
+- uses: readmeio/rdme@v9
   with:
     rdme: [your command here]
 ```
@@ -227,7 +201,7 @@ rdme openapi validate [url-or-local-path-to-file]
 To execute this command via GitHub Actions, the step would look like this:
 
 ```yml
-- uses: readmeio/rdme@RDME_VERSION
+- uses: readmeio/rdme@v9
   with:
     rdme: openapi validate [url-or-local-path-to-file]
 ```
@@ -240,7 +214,7 @@ The following section has links to full GitHub Actions workflow file examples.
 >
 > This guidance is only applicable for projects that are still on our legacy project architecture and have not yet migrated to [ReadMe Refactored](https://docs.readme.com/main/docs/migration). The legacy project architecture requires `rdme@9`. You can find more info in [our `rdme` migration guide](https://github.com/readmeio/rdme/blob/v10/documentation/migration-guide.md) or by reaching out to us at [support@readme.io](mailto:support@readme.io).
 >
-> We will be updating this document with our latest guidance soon. Thanks for your patience!
+> Please check out [this page](https://docs.readme.com/main/docs/rdme) for the updated guidance.
 
 Want to start syncing? We have several example workflow files available:
 
@@ -249,7 +223,7 @@ Want to start syncing? We have several example workflow files available:
 
 ## Usage in Other CI Environments
 
-Since `rdme` is a command-line tool at its core, you can use `rdme` to sync your documentation from virtually any CI/CD environment that runs shell commands—[Bitbucket Pipelines](https://support.atlassian.com/bitbucket-cloud/docs/get-started-with-bitbucket-pipelines/), [GitLab CI/CD](https://docs.gitlab.com/ee/ci/), you name it! You can do this by invoking `rdme` with `npx rdme@RDME_VERSION` in a Node.js environment. See below for several examples.
+Since `rdme` is a command-line tool at its core, you can use `rdme` to sync your documentation from virtually any CI/CD environment that runs shell commands—[Bitbucket Pipelines](https://support.atlassian.com/bitbucket-cloud/docs/get-started-with-bitbucket-pipelines/), [GitLab CI/CD](https://docs.gitlab.com/ee/ci/), you name it! You can do this by invoking `rdme` with `npx rdme@v9` in a Node.js environment. See below for several examples.
 
 {/* prettier-ignore */}
 {/* <!--
@@ -267,7 +241,7 @@ pipelines:
   default:
     - step:
         script:
-          - npx rdme@RDME_VERSION openapi validate [url-or-local-path-to-file] --key=$README_API_KEY --id=API_DEFINITION_ID
+          - npx rdme@v9 openapi validate [url-or-local-path-to-file] --key=$README_API_KEY --id=API_DEFINITION_ID
 ```
 ```yml CircleCI (.circleci/config.yml)
 version: 2.1
@@ -279,7 +253,7 @@ jobs:
       - image: node:NODE_VERSION
     steps:
       - run:
-          command: npx rdme@RDME_VERSION openapi validate [url-or-local-path-to-file] --key=$README_API_KEY --id=API_DEFINITION_ID
+          command: npx rdme@v9 openapi validate [url-or-local-path-to-file] --key=$README_API_KEY --id=API_DEFINITION_ID
 ```
 ```yml GitLab CI (rdme-sync.gitlab-ci.yml)
 # Official framework image. Look for the different tagged releases at:
@@ -288,7 +262,7 @@ image: node:NODE_VERSION
 
 sync-via-rdme:
   script:
-    - npx rdme@RDME_VERSION openapi validate [url-or-local-path-to-file] --key=$README_API_KEY --id=API_DEFINITION_ID
+    - npx rdme@v9 openapi validate [url-or-local-path-to-file] --key=$README_API_KEY --id=API_DEFINITION_ID
 ```
 ```yml Travis CI (.travis.yml)
 # https://docs.travis-ci.com/user/languages/javascript-with-nodejs/#specifying-nodejs-versions
@@ -296,7 +270,7 @@ language: node_js
 node_js:
   - NODE_VERSION
 
-script: npx rdme@RDME_VERSION openapi validate [url-or-local-path-to-file] --key=$README_API_KEY --id=API_DEFINITION_ID
+script: npx rdme@v9 openapi validate [url-or-local-path-to-file] --key=$README_API_KEY --id=API_DEFINITION_ID
 ```
 {/* prettier-ignore-end */}
 

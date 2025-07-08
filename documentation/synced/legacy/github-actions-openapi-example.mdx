@@ -1,29 +1,15 @@
 ---
 title: 'GitHub Actions Example: Syncing OpenAPI'
-category:
-  uri: documentation
+slug: github-actions-openapi-example-legacy
 ---
-
-{/* prettier-ignore */}
-{/*
-
-Hello curious raw Markdown reader! 👋
-This Markdown page is syncing to ReadMe via the `rdme` GitHub Action 🦉
-Peep the resulting page in our docs: https://docs.readme.com/docs/github-actions-openapi-example
-
-We also do some fancy little find-and-replace action to swap out every instance
-of `RDME_VERSION` below with the latest version of rdme.
-Check out `.github/workflows/docs.yml` for more info on this!
-
-\*/}
 
 > 🚧 Deprecated Guidance
 >
 > This example is only applicable for projects that are still on our legacy project architecture and have not yet migrated to [ReadMe Refactored](https://docs.readme.com/main/docs/migration). The legacy project architecture requires `rdme@9`. You can find more info in [our `rdme` migration guide](https://github.com/readmeio/rdme/blob/v10/documentation/migration-guide.md) or by reaching out to us at [support@readme.io](mailto:support@readme.io).
 >
-> We will be updating this document with our latest guidance soon. Thanks for your patience!
+> Please check out [this page](https://docs.readme.com/main/docs/github-actions-openapi-example) for an updated example.
 
-Is your OpenAPI definition stored on GitHub? With [the `rdme` GitHub Action](https://docs.readme.com/docs/rdme), you can sync it to ReadMe every time it's updated in GitHub. Let's go over how to set this up!
+Is your OpenAPI definition stored on GitHub? With [the `rdme` GitHub Action](https://docs.readme.com/main/docs/rdme), you can sync it to ReadMe every time it's updated in GitHub. Let's go over how to set this up!
 
 ## "Automagical" Workflow File Generation
 
@@ -46,7 +32,7 @@ In order to construct the file by hand, you'll first want to obtain a unique API
 <details>
 <summary>Uploading a file</summary>
 
-Follow [these instructions](https://docs.readme.com/docs/openapi#file-upload) on uploading a new OpenAPI file in the dashboard. Once the file is uploaded, you'll see the following in the API Reference settings of your dashboard (the red outline is where you'll find your API definition ID):
+Follow [these instructions](https://docs.readme.com/main/docs/openapi) on uploading a new OpenAPI file in the dashboard. Once the file is uploaded, you'll see the following in the API Reference settings of your dashboard (the red outline is where you'll find your API definition ID):
 
 ![](https://files.readme.io/d57b7c8-Screen_Shot_2022-02-23_at_11.54.21_AM.png)
 
@@ -98,9 +84,9 @@ jobs:
 
       # Run GitHub Action to sync OpenAPI file at ./path-to-file.json
       - name: GitHub Action
-        # We recommend specifying a fixed version, i.e. @RDME_VERSION
+        # We recommend specifying a fixed version, i.e. @v9
         # Docs: https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#example-using-versioned-actions
-        uses: readmeio/rdme@RDME_VERSION
+        uses: readmeio/rdme@v9
         with:
           rdme: openapi ./path-to-file.json --key=${{ secrets.README_API_KEY }} --id=API_DEFINITION_ID
 ```
@@ -109,4 +95,4 @@ In the example above, every push to the `main` branch will sync the OpenAPI file
 
 > 📘 Keeping `rdme` up-to-date
 >
-> Note that `@RDME_VERSION` (used in the above example) is the latest version of `rdme`. We recommend [configuring Dependabot to keep your actions up-to-date](https://docs.github.com/code-security/dependabot/working-with-dependabot/keeping-your-actions-up-to-date-with-dependabot).
+> Note that `@RDME_VERSION` is the latest version of `rdme`, which only supports projects on ReadMe Refactored. The examples on this page use `@v9`, which is only applicable for legacy projects. We recommend [configuring Dependabot to keep your actions up-to-date](https://docs.github.com/code-security/dependabot/working-with-dependabot/keeping-your-actions-up-to-date-with-dependabot).
