@@ -347,7 +347,8 @@ exports[`custompages upload > given that the file path is a single file > and th
   "stderr": "- 🔬 Validating frontmatter data...
 ⚠ 🔬 Validating frontmatter data... issues found in 1 file(s).
 ",
-  "stdout": "Automatically fixing issues in 1 file(s)...
+  "stdout": "::warning::This command is in an experimental alpha and is likely to change. Use at your own risk!
+Automatically fixing issues in 1 file(s)...
 === BEGIN writeFileSync to file: __tests__/__fixtures__/custompages/mixed-docs/legacy-page.md ===
 ---
 title: This is the document title
@@ -388,7 +389,8 @@ exports[`custompages upload > given that the file path is a single file > and th
 - 🚀 Uploading files to ReadMe...
 ✔ 🚀 Uploading files to ReadMe... done!
 ",
-  "stdout": "🌱 Successfully created 1 page(s) in ReadMe:
+  "stdout": "::warning::This command is in an experimental alpha and is likely to change. Use at your own risk!
+🌱 Successfully created 1 page(s) in ReadMe:
    - new-doc (__tests__/__fixtures__/custompages/new-docs/new-doc.md)
 ",
 }
@@ -400,7 +402,8 @@ exports[`custompages upload > given that the file path is a single file > and th
   "stderr": "- 🔬 Validating frontmatter data...
 ⚠ 🔬 Validating frontmatter data... issues found in 1 file(s).
 ",
-  "stdout": "",
+  "stdout": "::warning::This command is in an experimental alpha and is likely to change. Use at your own risk!
+",
 }
 `;
 

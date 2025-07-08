@@ -9,7 +9,6 @@ import prompts from 'prompts';
 
 import BaseCommand from '../../lib/baseCommand.js';
 import { specArg, titleFlag, workingDirectoryFlag } from '../../lib/flags.js';
-import { warn } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
 import { validateFilePath } from '../../lib/validatePromptInput.js';
@@ -59,7 +58,7 @@ export default class OpenAPIConvertCommand extends BaseCommand<typeof OpenAPICon
     const parsedPreparedSpec: OASDocument = JSON.parse(preparedSpec);
 
     if (specType === 'OpenAPI') {
-      warn(
+      this.warn(
         'The input file is already OpenAPI, so no conversion is necessary. Any external references will be bundled.',
       );
     }

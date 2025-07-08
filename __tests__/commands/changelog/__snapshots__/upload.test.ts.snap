@@ -330,7 +330,8 @@ exports[`rdme changelog upload > given that the file path is a single file > and
   "stderr": "- 🔬 Validating frontmatter data...
 ⚠ 🔬 Validating frontmatter data... issues found in 1 file(s).
 ",
-  "stdout": "Automatically fixing issues in 1 file(s)...
+  "stdout": "::warning::This command is in an experimental alpha and is likely to change. Use at your own risk!
+Automatically fixing issues in 1 file(s)...
 === BEGIN writeFileSync to file: __tests__/__fixtures__/changelog/legacy-docs/autofixable.md ===
 ---
 type: added
@@ -370,7 +371,8 @@ exports[`rdme changelog upload > given that the file path is a single file > and
 - 🚀 Uploading files to ReadMe...
 ✔ 🚀 Uploading files to ReadMe... done!
 ",
-  "stdout": "🌱 Successfully created 1 page(s) in ReadMe:
+  "stdout": "::warning::This command is in an experimental alpha and is likely to change. Use at your own risk!
+🌱 Successfully created 1 page(s) in ReadMe:
    - new-doc (__tests__/__fixtures__/changelog/new-docs/new-doc.md)
 ",
 }
@@ -382,7 +384,8 @@ exports[`rdme changelog upload > given that the file path is a single file > and
   "stderr": "- 🔬 Validating frontmatter data...
 ⚠ 🔬 Validating frontmatter data... issues found in 1 file(s).
 ",
-  "stdout": "",
+  "stdout": "::warning::This command is in an experimental alpha and is likely to change. Use at your own risk!
+",
 }
 `;
 

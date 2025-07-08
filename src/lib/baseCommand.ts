@@ -4,7 +4,7 @@ import type { Config, Hook, Interfaces } from '@oclif/core';
 import { format } from 'node:util';
 
 import * as core from '@actions/core';
-import { Command as OclifCommand } from '@oclif/core';
+import { Errors, Command as OclifCommand } from '@oclif/core';
 import chalk from 'chalk';
 import debugPkg from 'debug';
 
@@ -57,6 +57,17 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
     if (!this.jsonEnabled()) {
       info(input, opts);
     }
+  }
+
+  public warn(input: Error | string): Error | string {
+    if (!this.jsonEnabled()) {
+      if (isGHA()) {
+        core.warning(input);
+      } else {
+        Errors.warn(input);
+      }
+    }
+    return input;
   }
 
   protected async catch(err: Error & { exitCode?: number }) {
