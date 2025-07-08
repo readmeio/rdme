@@ -74,15 +74,19 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
 
    We recommend setting up [bi-directional syncing](https://docs.readme.com/main/docs/bi-directional-sync) for managing your Markdown files, API definitions and project hierarchy.
 
+<div id="v10-command-replacements"></div>
+
 2. **Command Replacements**
-   - Replace: `changelogs` → `changelog upload` (see more in step 3 below)
-   - Replace: `custompages` → `custompages upload` (see more in step 3 below)
-   - Replace: `docs` (and its `guides` alias) → `docs upload` (see more in step 3 below)
-     - **Note**: if you previously used this command to upload Markdown to the API reference section, you should use `rdme reference upload` instead. See more in step 3 below.
-   - Replace: `openapi` → `openapi upload` (see more in step 4 below)
+   - Replace: `changelogs` → `changelog upload` (see more in [step 3](#v10-page-upload-command-updates) below)
+   - Replace: `custompages` → `custompages upload` (see more in [step 3](#v10-page-upload-command-updates) below)
+   - Replace: `docs` (and its `guides` alias) → `docs upload` (see more in [step 3](#v10-page-upload-command-updates) below)
+     - **Note**: if you previously used this command to upload Markdown to the API reference section, you should use `rdme reference upload` instead. See more in [step 3](#v10-page-upload-command-updates) below.
+   - Replace: `openapi` → `openapi upload` (see more in [step 4](#v10-openapi-upload-command-updates) below)
    - Replace: `categories` → use [Git-based workflow](https://docs.readme.com/main/docs/bi-directional-sync)
    - Replace: `versions` → use [Git-based workflow](https://docs.readme.com/main/docs/bi-directional-sync)
    - Remove: `open`
+
+<div id="v10-page-upload-command-updates"></div>
 
 3. **Updates to Markdown uploading commands**
 
@@ -108,6 +112,8 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
    - These commands will now automatically validate your frontmatter and flag any issues prior to syncing. This is particularly helpful if you're coming from `rdme@9` or earlier, since the shape of certain frontmatter attributes (e.g., `category`, `parent`, `hidden`) have slightly changed. If you run this command in a non-CI environment, any outdated frontmatter will be detected and you'll have the ability to migrate it to the new format automatically.
 
    Read more in the respective command docs ([`rdme docs upload`](https://github.com/readmeio/rdme/blob/v10/documentation/commands/docs.md#rdme-docs-upload-path), [`rdme reference upload`](https://github.com/readmeio/rdme/blob/v10/documentation/commands/reference.md#rdme-reference-upload-path), [`rdme changelog upload`](https://github.com/readmeio/rdme/blob/v10/documentation/commands/changelog.md#rdme-changelog-upload-path), [`rdme custompages upload`](https://github.com/readmeio/rdme/blob/v10/documentation/commands/custompages.md#rdme-custompages-upload-path)) and in [the ReadMe API migration guide](https://docs.readme.com/main/reference/api-migration-guide).
+
+<div id="v10-openapi-upload-command-updates"></div>
 
 4. **`openapi` has been replaced by `openapi upload`**
 
