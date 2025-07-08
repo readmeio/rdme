@@ -65,7 +65,7 @@ jobs:
         # Docs: https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#example-using-versioned-actions
         uses: readmeio/rdme@RDME_VERSION
         with:
-          rdme: openapi ./path-to-file.json --key=${{ secrets.README_API_KEY }} --slug=API_DEFINITION_SLUG
+          rdme: openapi upload ./path-to-file.json --key=${{ secrets.README_API_KEY }} --slug=API_DEFINITION_SLUG
 ```
 
 In the example above, every push to the `main` branch will sync the OpenAPI file located at `./path-to-file.json` to the API specification `API_DEFINITION_SLUG` in your ReadMe project.
