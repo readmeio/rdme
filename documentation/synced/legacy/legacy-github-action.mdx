@@ -1,20 +1,9 @@
 ---
-category:
-  uri: documentation
 slug: automatically-sync-api-specification-with-github
 title: 'OpenAPI + GitHub Sync [DEPRECATED]'
 privacy:
   view: anyone_with_link
 ---
-
-{/* prettier-ignore */}
-{/* <!--
-
-Hello curious raw Markdown reader! 👋
-This Markdown page is syncing to ReadMe via the `rdme` GitHub Action 🦉
-Read more [on our main documentation page](rdme.md)
-
---> \*/}
 
 > ❗️Deprecated in favor of [our new GitHub Action, `rdme`](https://docs.readme.com/docs/rdme) 🔄
 >
@@ -29,19 +18,19 @@ If you previously had a GitHub Workflow file set up that used this action to syn
 ```yml
 - uses: readmeio/github-readme-sync@v2
   with:
-    readme-oas-key: <<user>>:API_DEFINITION_ID
+    readme-oas-key: API_KEY:API_DEFINITION_ID
     oas-file-path: path/to/file.json
     api-version: 'v1.0.0'
 ```
 
-where the `readme-oas-key` was a concatenation of `<<user>>` (the API key for <<name>>) and `API_DEFINITION_ID` (your API definition ID), separated by a colon.
+where the `readme-oas-key` was a concatenation of `API_KEY` (your project API key) and `API_DEFINITION_ID` (your API definition ID), separated by a colon.
 
 For migrating to [the `rdme`-based GitHub Action](https://docs.readme.com/docs/rdme), modify the step to look like this:
 
 ```yml
 - uses: readmeio/rdme@RDME_VERSION
   with:
-    rdme: openapi path/to/file.json --key=<<user>> --id=API_DEFINITION_ID
+    rdme: openapi path/to/file.json --key=API_KEY --id=API_DEFINITION_ID
 ```
 
 There are a few things to note:
@@ -126,3 +115,5 @@ If you're seeing failures with the GitHub Action and need to troubleshoot the is
 Want to see the GitHub Action in action? Check out this example repository: [kanadgupta/metrotransit-nextrip-oas](https://github.com/kanadgupta/metrotransit-nextrip-oas)
 
 To see an example where multiple OpenAPI/Swagger files are synced in the same repository, check out [jesseyowell/oas-test-files](https://github.com/jesseyowell/oas-test-files).
+
+</details>

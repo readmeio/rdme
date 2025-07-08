@@ -1,0 +1,46 @@
+---
+title: 'GitHub Actions Example: Syncing Markdown'
+---
+
+> 🚧 ReadMe Refactored Guidance
+>
+> This guidance is only applicable for projects that have been migrated to [ReadMe Refactored](https://docs.readme.com/main/docs/migration). The Refactored project architecture requires `rdme@10`, while the legacy project architecture requires `rdme@9`.
+>
+> For more information, check out our [migration guide](https://github.com/readmeio/rdme/blob/v10/documentation/migration-guide.md)
+
+Do you have Markdown files stored on GitHub? With [the `rdme` GitHub Action](https://docs.readme.com/main/docs/rdme), you can sync them to ReadMe every time they're updated in GitHub. Let's go over how to set this up!
+
+## Constructing a GitHub Actions Workflow
+
+In order to construct the workflow file, you'll first want to grab a project version or branch to ensure that your docs sync to the right place in your developer hub. That version or branch will be passed via the `--branch` flag. See below for a full example:
+
+```yml
+name: Sync `documentation` directory to ReadMe
+
+# Run workflow for every push to the `main` branch
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+
+      # Run GitHub Action to sync docs in `documentation` directory
+      - name: GitHub Action
+        # We recommend specifying a fixed version, i.e. @RDME_VERSION
+        # Docs: https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#example-using-versioned-actions
+        uses: readmeio/rdme@RDME_VERSION
+        with:
+          rdme: docs upload ./documentation --key=${{ secrets.README_API_KEY }} --branch=2.0
+```
+
+In the example above, every push to the `main` branch will sync the Markdown contents of the `documentation` directory to version 2.0 of your ReadMe project.
+
+> 📘 Keeping `rdme` up-to-date
+>
+> Note that `@RDME_VERSION` (used in the above example) is the latest version of `rdme`. We recommend [configuring Dependabot to keep your actions up-to-date](https://docs.github.com/code-security/dependabot/working-with-dependabot/keeping-your-actions-up-to-date-with-dependabot).
