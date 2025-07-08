@@ -46,7 +46,7 @@ export default class DocsCommand extends BaseCommand<typeof DocsCommand> {
     },
     {
       description:
-        'This command also has a dry run mode, which can be useful for initial setup and debugging. You can read more about dry run mode in our docs: https://docs.readme.com/main/docs/rdme#dry-run-mode',
+        'This command also has a dry run mode, which can be useful for initial setup and debugging. You can read more about dry run mode in our docs: https://docs.readme.com/main/docs/rdme-legacy#dry-run-mode',
       command: '<%= config.bin %> <%= command.id %> [path] --version={project-version} --dryRun',
     },
   ];

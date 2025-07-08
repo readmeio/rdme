@@ -35,7 +35,7 @@ EXAMPLES
     $ rdme custompages [path] --version={project-version}
 
   This command also has a dry run mode, which can be useful for initial setup and debugging. You can read more about
-  dry run mode in our docs: https://docs.readme.com/main/docs/rdme#dry-run-mode
+  dry run mode in our docs: https://docs.readme.com/main/docs/rdme-legacy#dry-run-mode
 
     $ rdme custompages [path] --version={project-version} --dryRun
 
