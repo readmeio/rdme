@@ -58,20 +58,21 @@ export function examples(section: Section) {
 
 export function baseFlags(section: Section) {
   const fileType = section === 'Custom Pages' ? 'Markdown/HTML' : 'Markdown';
-  let items: string;
+  // biome-ignore lint/suspicious/noImplicitAnyLet: This has an implicit `any` but we're filling it with constants below.
+  let items;
 
   switch (section) {
     case 'Changelog':
-      items = 'Changelog entries';
+      items = 'Changelog entries' as const;
       break;
     case 'Custom Pages':
-      items = 'custom pages';
+      items = 'custom pages' as const;
       break;
     case 'Guides':
-      items = 'guides';
+      items = 'guides' as const;
       break;
     case 'Reference':
-      items = 'reference pages';
+      items = 'reference pages' as const;
       break;
     default:
       throw new Error(`Unknown section: ${section}`);
