@@ -3,6 +3,7 @@
 // @ts-check
 import * as core from '@actions/core';
 
+// biome-ignore lint/correctness/useImportExtensions: This file exists but Biome wants to use the `.d.ts` file instead.
 import { getMajorPkgVersion, getNodeVersion } from '../dist/lib/getPkg.js';
 
 /**

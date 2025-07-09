@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.0.6/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.1.1/schema.json",
   "root": true,
   "vcs": {
     "enabled": false,
@@ -25,14 +25,15 @@
   },
   "linter": {
     "enabled": true,
+    "domains": {
+      "project": "all",
+      "test": "all",
+    },
     "rules": {
       "recommended": true,
       "correctness": {
         // Don't warn about unused function parameters or recommend they're prefixed with an `_`.
         "noUnusedFunctionParameters": "off",
-      },
-      "nursery": {
-        "noImportCycles": "error",
       },
       "style": {
         "noParameterAssign": "error",
