@@ -81,6 +81,7 @@ function parseWarningHeader(
     let previous: WarningHeader;
 
     return warnings.reduce<WarningHeader[]>((all, w) => {
+      // biome-ignore lint/style/noParameterAssign: We need to mutate this variable for reducing.
       w = w.trim();
       const newError = w.match(/^([0-9]{3}) (.*)/);
       if (newError) {

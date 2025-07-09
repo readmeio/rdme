@@ -23,18 +23,6 @@
     // We still use Prettier for formatting.
     "enabled": false,
   },
-  "overrides": [
-    {
-      "includes": ["bin/**"],
-      "linter": {
-        "rules": {
-          "suspicious": {
-            "noConsole": "off",
-          },
-        },
-      },
-    },
-  ],
   "linter": {
     "enabled": true,
     "rules": {
@@ -43,7 +31,11 @@
         // Don't warn about unused function parameters or recommend they're prefixed with an `_`.
         "noUnusedFunctionParameters": "off",
       },
+      "nursery": {
+        "noImportCycles": "error",
+      },
       "style": {
+        "noParameterAssign": "error",
         "noRestrictedImports": {
           "level": "error",
           "options": {

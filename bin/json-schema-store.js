@@ -45,9 +45,11 @@ async function refreshSchemas() {
       }),
     );
 
+    // biome-ignore lint/suspicious/noConsole: This is in an executable.
     console.log(isUpdate ? 'JSON Schema files updated!' : 'JSON Schema files are up-to-date!');
     process.exit(0);
   } catch (e) {
+    // biome-ignore lint/suspicious/noConsole: This is in an executable.
     console.error(e.message);
     process.exit(1);
   }

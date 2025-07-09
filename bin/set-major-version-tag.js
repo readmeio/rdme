@@ -19,10 +19,13 @@ async function runGitCmd(args) {
   const child = execCmd.child;
 
   child.stdout?.on('data', chunk => {
+    // biome-ignore lint/suspicious/noConsole: This is in an executable.
     console.log(chunk.toString());
   });
 
   child.stderr?.on('data', chunk => {
+
+    // biome-ignore lint/suspicious/noConsole: This is in an executable.
     console.error(chunk.toString());
   });
 
@@ -38,6 +41,8 @@ async function setMajorVersionTag() {
   try {
     // The major version tag should only be set when releasing on the `main` branch
     if (process.env.GITHUB_REF !== 'refs/heads/main') {
+
+    // biome-ignore lint/suspicious/noConsole: This is in an executable.
       console.warn(`Running with the following ref: ${process.env.GITHUB_REF || 'n/a'}, not setting major version tag`);
       return;
     }
@@ -49,6 +54,8 @@ async function setMajorVersionTag() {
     }
 
     if (parsedVersion.prerelease.length) {
+
+    // biome-ignore lint/suspicious/noConsole: This is in an executable.
       console.warn('Pre-release version, not setting major version tag');
       return;
     }
@@ -57,6 +64,8 @@ async function setMajorVersionTag() {
 
     // we maintain a v9 branch, this just ensures that we don't attempt to also push a tag with the same ref
     if (majorTag === 'v9') {
+
+    // biome-ignore lint/suspicious/noConsole: This is in an executable.
       console.warn('A `v9` ref already exists, not setting major version tag');
       return;
     }
@@ -67,12 +76,20 @@ async function setMajorVersionTag() {
 
     if (args[0] === 'push') {
       await runGitCmd(['push', 'origin', majorTag, '--force']);
+
+    // biome-ignore lint/suspicious/noConsole: This is in an executable.
       console.log(`🏷️  Created and pushed ${majorTag}`);
     } else {
+
+    // biome-ignore lint/suspicious/noConsole: This is in an executable.
       console.log("Not pushing, missing 'push' argument");
     }
   } catch (e) {
+
+    // biome-ignore lint/suspicious/noConsole: This is in an executable.
     console.error('Error running git major version tagging script!');
+
+    // biome-ignore lint/suspicious/noConsole: This is in an executable.
     console.error(e);
     process.exit(1);
   }
