@@ -46,6 +46,28 @@ exports[`rdme openapi upload > given that the "--legacy-id" flag is passed > sho
 }
 `;
 
+exports[`rdme openapi upload > given that the API definition is a URL > and the \`--slug\` flag is passed > should create a new API definition in ReadMe with the specified slug 1`] = `
+{
+  "error": [Error: Nock: No match for request {
+  "method": "POST",
+  "url": "https://api.readme.com/v2/branches/1.0.0/apis",
+  "headers": {
+    "accept": "application/json",
+    "authorization": "Bearer rdme_123",
+    "content-type": "multipart/form-data; boundary=----formdata-undici-060212201707",
+    "user-agent": "rdme/7.0.0 darwin-arm64 node-v20.19.0",
+    "x-readme-source": "cli"
+  },
+  "body": "------formdata-undici-060212201707\\r\\nContent-Disposition: form-data; name=\\"url\\"\\r\\n\\r\\nhttps://example.com/openapi.json\\r\\n------formdata-undici-060212201707--"
+}],
+  "stderr": "- Validating the API definition located at https://example.com/openapi.json...
+- Creating your API definition to ReadMe...
+✖ Creating your API definition to ReadMe...
+",
+  "stdout": "",
+}
+`;
+
 exports[`rdme openapi upload > given that the API definition is a URL > should create a new API definition in ReadMe 1`] = `
 {
   "result": {
