@@ -1,3 +1,50 @@
+## [10.4.1-next.1](https://github.com/readmeio/rdme/compare/v10.4.0...v10.4.1-next.1) (2025-07-08)
+
+
+### Bug Fixes
+
+* **v9/docs:** migration guide + deprecation notice updates ([#1208](https://github.com/readmeio/rdme/issues/1208)) ([1fa6adb](https://github.com/readmeio/rdme/commit/1fa6adb78adde4e8a6deb8fcbb2e12f8a0327052))
+
+## [9.2.2](https://github.com/readmeio/rdme/compare/v9.2.1...v9.2.2) (2025-07-08)
+
+
+### Bug Fixes
+
+* **v9/docs:** migration guide + deprecation notice updates ([#1208](https://github.com/readmeio/rdme/issues/1208)) ([1fa6adb](https://github.com/readmeio/rdme/commit/1fa6adb78adde4e8a6deb8fcbb2e12f8a0327052))
+
+# [10.4.0](https://github.com/readmeio/rdme/compare/v10.3.0...v10.4.0) (2025-07-08)
+
+
+### Bug Fixes
+
+* **pages/upload:** decouple autofixing and uploads ([#1282](https://github.com/readmeio/rdme/issues/1282)) ([d5a6fe9](https://github.com/readmeio/rdme/commit/d5a6fe9a7e0dc541a3ff4196d4f17413505a0ada))
+* **v9/openapi:** problem with `FormData` compositions on Node 24 ([#1242](https://github.com/readmeio/rdme/issues/1242)) ([046842f](https://github.com/readmeio/rdme/commit/046842f7898ccdf6ce6cd910b8622b6ab9a380c6))
+
+
+### Features
+
+* add legacy id flag to openapi upload ([#1278](https://github.com/readmeio/rdme/issues/1278)) ([7871f31](https://github.com/readmeio/rdme/commit/7871f310c86e8b5e17399cff4215a6f69cc9d06d))
+* **logger:** improved warnings for GHA users ([#1290](https://github.com/readmeio/rdme/issues/1290)) ([ec138c5](https://github.com/readmeio/rdme/commit/ec138c57037b7d3498ef3245e63842a4b37b415b))
+* mark page upload commands as stable, update migration guide ([#1287](https://github.com/readmeio/rdme/issues/1287)) ([0a03bd6](https://github.com/readmeio/rdme/commit/0a03bd6974b55807c400d9b98ec619f385f4aa0e))
+* new `custompages upload` command ([#1265](https://github.com/readmeio/rdme/issues/1265)) ([dc4ceb4](https://github.com/readmeio/rdme/commit/dc4ceb48f8baafbfed57d97a6900b392f608023b))
+* **openapi:** add `openapi resolve` ([#1063](https://github.com/readmeio/rdme/issues/1063)) ([987e103](https://github.com/readmeio/rdme/commit/987e1039813744738d73c0396d045e1d2a5349bf))
+* **openapi:** adding a warning for our experimental postman support ([#1277](https://github.com/readmeio/rdme/issues/1277)) ([ac0b068](https://github.com/readmeio/rdme/commit/ac0b068bcbe738c2fdbd306b66ec7ec1514f5766))
+* support for `rdme changelog upload` ([#1272](https://github.com/readmeio/rdme/issues/1272)) ([fd594f3](https://github.com/readmeio/rdme/commit/fd594f31c3025d1c086975eb5d09eae6b04f885e))
+
+# [10.4.0-next.9](https://github.com/readmeio/rdme/compare/v10.4.0-next.8...v10.4.0-next.9) (2025-07-08)
+
+
+### Features
+
+* mark page upload commands as stable, update migration guide ([#1287](https://github.com/readmeio/rdme/issues/1287)) ([0a03bd6](https://github.com/readmeio/rdme/commit/0a03bd6974b55807c400d9b98ec619f385f4aa0e))
+
+# [10.4.0-next.8](https://github.com/readmeio/rdme/compare/v10.4.0-next.7...v10.4.0-next.8) (2025-07-08)
+
+
+### Features
+
+* **logger:** improved warnings for GHA users ([#1290](https://github.com/readmeio/rdme/issues/1290)) ([ec138c5](https://github.com/readmeio/rdme/commit/ec138c57037b7d3498ef3245e63842a4b37b415b))
+
 # [10.4.0-next.7](https://github.com/readmeio/rdme/compare/v10.4.0-next.6...v10.4.0-next.7) (2025-07-02)
 
 

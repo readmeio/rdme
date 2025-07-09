@@ -1,6 +1,6 @@
 import BaseCommand from '../../lib/baseCommand.js';
 import { branchFlag, keyFlag } from '../../lib/flags.js';
-import { alphaNotice, args, baseFlags, description, examples, summary } from '../../lib/pageCommandProperties.js';
+import { args, baseFlags, description, examples, summary } from '../../lib/pageCommandProperties.js';
 import syncPagePath, { type FullUploadResults } from '../../lib/syncPagePath.js';
 
 export default class DocsUploadCommand extends BaseCommand<typeof DocsUploadCommand> {
@@ -9,8 +9,6 @@ export default class DocsUploadCommand extends BaseCommand<typeof DocsUploadComm
   route = 'guides' as const;
 
   static section = 'Guides' as const;
-
-  static hidden = true;
 
   static summary = summary(this.section);
 
@@ -23,9 +21,6 @@ export default class DocsUploadCommand extends BaseCommand<typeof DocsUploadComm
   static flags = { key: keyFlag, ...branchFlag(), ...baseFlags(this.section) };
 
   async run(): Promise<FullUploadResults> {
-    if (!this.flags['hide-experimental-warning']) {
-      this.warn(alphaNotice);
-    }
     return syncPagePath.call(this);
   }
 }
