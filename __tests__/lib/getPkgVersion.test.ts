@@ -5,7 +5,6 @@ import pkg from '../../package.json' with { type: 'json' };
 import { getNodeVersion, getPkgVersion, getPkgVersionFromNPM } from '../../src/lib/getPkg.js';
 
 describe('#getNodeVersion()', () => {
-
   it('should return a major version', () => {
     const version = getNodeVersion();
 
