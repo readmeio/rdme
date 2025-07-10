@@ -141,14 +141,11 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
     "uri": "/branches/1.0.0/apis/__tests____fixtures__petstore-simple-weird-version.json",
   },
   "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
- ›   Warning: The slug of your API Definition will be set to 
- ›   __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This 
- ›   slug is not visible to your end users. To set this slug to something else,
- ›    use the \`--slug\` flag.
 - Updating your API definition to ReadMe...
 ✔ Updating your API definition to ReadMe... done!
 ",
-  "stdout": "🚀 Your API definition (__tests____fixtures__petstore-simple-weird-version.json) was successfully updated in ReadMe!
+  "stdout": "::warning::The slug of your API Definition will be set to __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This slug is not visible to your end users. To set this slug to something else, use the \`--slug\` flag.
+🚀 Your API definition (__tests____fixtures__petstore-simple-weird-version.json) was successfully updated in ReadMe!
 ",
 }
 `;

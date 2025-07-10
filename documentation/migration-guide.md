@@ -1,8 +1,8 @@
 # Migration Guide
 
-This guide helps you migrate your ReadMe CLI (`rdme`) setup to the latest version and prepare for future versions. Choose your migration path based on whether you're using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).
+This guide helps you migrate your ReadMe CLI (`rdme`) setup to the latest version and prepare for future versions. Choose your migration path based on whether you're using [ReadMe Refactored](https://docs.readme.com/main/docs/migration).
 
-1. If your project is using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored), [use `rdme@v10`](#migrating-to-rdme10) and beyond.
+1. If your project is using [ReadMe Refactored](https://docs.readme.com/main/docs/migration), [use `rdme@v10`](#migrating-to-rdme10) and beyond.
 2. If your project is **not** yet using ReadMe Refactored, [use `rdme@v9`](#migrating-to-rdme9). The `v9` channel will continue to be maintained while we focus on making sure that everybody can upgrade their ReadMe projects to ReadMe Refactored.
 
 ## Table of Contents
@@ -29,7 +29,7 @@ npx markdown-toc documentation/migration-guide.md --maxdepth 2 --bullets="-" -i
 
 ### Overview
 
-This guide explains how to install `rdme@10` for use with [ReadMe Refactored]{https://docs.readme.com/main/docs/welcome-to-readme-refactored}. In general, we recommend [bi-directional syncing](https://docs.readme.com/main/docs/bi-directional-sync) for tasks like:
+This guide explains how to install `rdme@10` for use with [ReadMe Refactored](https://docs.readme.com/main/docs/migration). In general, we recommend [bi-directional syncing](https://docs.readme.com/main/docs/bi-directional-sync) for tasks like:
 
 - Syncing Markdown files
 - Syncing API definitions (and editing them visually with [the API designer](https://docs.readme.com/main/docs/building-apis-from-scratch-with-the-api-designer))
@@ -43,14 +43,14 @@ However `rdme@10` is useful for more targeted workflows—particularly when sync
 
 <!-- prettier-ignore-start -->
 > [!NOTE]
-> `rdme@10` only works with ReadMe projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored). If you are not yet using ReadMe Refactored, [you'll want to use `rdme@9`](#migrating-to-rdme9).
+> `rdme@10` only works with ReadMe projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/migration). If you are not yet using ReadMe Refactored, [you'll want to use `rdme@9`](#migrating-to-rdme9).
 <!-- prettier-ignore-end -->
 
 ### Upgrading to `v10`
 
-#### Step 1: Upgrade via `npm`
+#### Step 1(a): Upgrade your CLI version
 
-To install this version of the `rdme` CLI globally, run the following command:
+If you're using the `rdme` CLI and it is installed globally via `npm`, update it by running the following command:
 
 ```sh
 npm install -g rdme@10
@@ -58,7 +58,7 @@ npm install -g rdme@10
 
 More installation options can be found in [our docs](https://github.com/readmeio/rdme/tree/v10?tab=readme-ov-file#setup).
 
-#### Step 2: Update GitHub Actions Workflow
+#### Step 1(b): Update GitHub Actions Workflow version
 
 If you're using the `rdme` GitHub Action, update your GitHub Actions workflow file so your `rdme` usage uses the `v10` reference like so:
 
@@ -68,27 +68,61 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
     rdme: openapi validate petstore.json
 ```
 
-#### Step 3: Address `v10` Breaking Changes
+#### Step 2: Address `v10` Breaking Changes
 
 1. **Enable Bi-Directional Syncing** _(recommended)_
 
    We recommend setting up [bi-directional syncing](https://docs.readme.com/main/docs/bi-directional-sync) for managing your Markdown files, API definitions and project hierarchy.
 
+<div id="v10-command-replacements"></div>
+
 2. **Command Replacements**
-   - Replace: `openapi` → `openapi upload` (see more in step 3 below)
+   - Replace: `changelogs` → `changelog upload` (see more in [step 3](#v10-page-upload-command-updates) below)
+   - Replace: `custompages` → `custompages upload` (see more in [step 3](#v10-page-upload-command-updates) below)
+   - Replace: `docs` (and its `guides` alias) → `docs upload` (see more in [step 3](#v10-page-upload-command-updates) below)
+     - **Note**: if you previously used this command to upload Markdown to the API reference section, you should use `rdme reference upload` instead. See more in [step 3](#v10-page-upload-command-updates) below.
+   - Replace: `openapi` → `openapi upload` (see more in [step 4](#v10-openapi-upload-command-updates) below)
    - Replace: `categories` → use [Git-based workflow](https://docs.readme.com/main/docs/bi-directional-sync)
-   - Replace: `custompages` → use [Git-based workflow](https://docs.readme.com/main/docs/bi-directional-sync)
    - Replace: `versions` → use [Git-based workflow](https://docs.readme.com/main/docs/bi-directional-sync)
    - Remove: `open`
 
-3. **`openapi` has been replaced by `openapi upload`**
+<div id="v10-page-upload-command-updates"></div>
+
+3. **Updates to Markdown uploading commands**
+
+   If you previously uploaded Markdown files to your ReadMe project via one of the following commands:
+   1. `rdme docs`,
+   2. `rdme changelogs`
+   3. `rdme custompages` (**note**: this command also supports the uploading of HTML files)
+
+   The commands have been updated to the following:
+   1. `rdme docs upload` (or `rdme reference upload` if you're uploading Markdown to your API Reference section)
+   2. `rdme changelog upload`
+   3. `rdme custompages upload` (**note**: this new command still supports the uploading of HTML files)
+
+   The command semantics are largely the same, but with a few small changes:
+   - The `--dryRun` flag has been deprecated in favor of `--dry-run`.
+
+   - The new git-backed ReadMe backend has a clearer separation between the Guides and API reference sections. This means that:
+     - Markdown pages that live in the Guides section should be synced with `rdme docs upload`
+     - Conversely, Markdown pages that live in the API reference should be synced with `rdme reference upload`.
+
+   - There is no prompt to select your ReadMe project version if you omit the `--version` flag. It now defaults to `stable` (i.e., your main ReadMe project version). This flag has also been renamed to `--branch`.
+
+   - These commands will now automatically validate your frontmatter and flag any issues prior to syncing. This is particularly helpful if you're coming from `rdme@9` or earlier, since the shape of certain frontmatter attributes (e.g., `category`, `parent`, `hidden`) have slightly changed. If you run this command in a non-CI environment, any outdated frontmatter will be detected and you'll have the ability to migrate it to the new format automatically.
+
+   Read more in the respective command docs ([`rdme docs upload`](https://github.com/readmeio/rdme/blob/v10/documentation/commands/docs.md#rdme-docs-upload-path), [`rdme reference upload`](https://github.com/readmeio/rdme/blob/v10/documentation/commands/reference.md#rdme-reference-upload-path), [`rdme changelog upload`](https://github.com/readmeio/rdme/blob/v10/documentation/commands/changelog.md#rdme-changelog-upload-path), [`rdme custompages upload`](https://github.com/readmeio/rdme/blob/v10/documentation/commands/custompages.md#rdme-custompages-upload-path)) and in [the ReadMe API migration guide](https://docs.readme.com/main/reference/api-migration-guide).
+
+<div id="v10-openapi-upload-command-updates"></div>
+
+4. **`openapi` has been replaced by `openapi upload`**
 
    If you previously uploaded API definitions to ReadMe via `rdme openapi`, the command is now `rdme openapi upload`. There are now two main updates:
-   - There is no prompt to select your ReadMe project version if you omit the `--version` flag. It now defaults to `stable` (i.e., your main ReadMe project version).
+   - Like the Markdown uploading commands above, there is no prompt to select your ReadMe project version if you omit the `--version` flag. It now defaults to `stable` (i.e., your main ReadMe project version). This flag has also been renamed to `--branch`.
 
-   - Previously with `openapi`, the `--id` flag was an ObjectId that required an initial upload to ReadMe, which made it difficult to upsert API definitions and manage many at scale. With `openapi upload`, the `--id` flag has been renamed to `--slug` and is now optional. The slug (i.e., the unique identifier for your API definition resource in ReadMe) is inferred from the file path or URL to your API definition.
+   - The flag paradigms have been simplified based on community feedback. Previously with `openapi`, the `--id` flag was a hexadecimal object ID that required an initial upload to ReadMe, which made it difficult to upsert API definitions and manage many at scale (and workarounds were added after the fact in the form of the `--create` and `--update` flags). With `openapi upload`, the `--id` flag has been renamed to `--slug` and is now optional. The slug (i.e., the unique identifier for your API definition resource in ReadMe) is inferred from the file path or URL to your API definition.
 
-   Read more in [the `openapi upload` command docs](https://github.com/readmeio/rdme/tree/v10/documentation/commands/openapi.md#rdme-openapi-upload-spec) and in [the ReadMe API migration guide](https://docs.readme.com/main/reference/api-migration-guide).
+   Read more in [the `rdme openapi upload` command docs](https://github.com/readmeio/rdme/blob/v10/documentation/commands/openapi.md#rdme-openapi-upload-spec) and in [the ReadMe API migration guide](https://docs.readme.com/main/reference/api-migration-guide).
 
 ## Migrating to `rdme@9`
 
@@ -98,8 +132,8 @@ This release adds a few features that make it even easier to get started with `r
 
 1. **Enhanced Command Documentation**
    - Complete command reference in [the `documentation/commands` directory](https://github.com/readmeio/rdme/tree/v9/documentation/commands)
-   - Detailed usage examples and parameter descriptions
-   - Structured by command category for intuitive navigation
+   - Command reference pages are split out by topic for intuitive organization and ease of access
+   - Each command reference contains detailed usage examples and parameter descriptions
 
 2. **Improved CLI Experience**
    - Overhauled help screens with detailed examples to improve readability and ease of use
@@ -109,14 +143,14 @@ This release adds a few features that make it even easier to get started with `r
 
 <!-- prettier-ignore-start -->
 > [!NOTE]
-> `rdme@9` only works with ReadMe projects that are **not** using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored). If you are using ReadMe Refactored, [you'll want to use `rdme@10`](#migrating-to-rdme10).
+> `rdme@9` only works with ReadMe projects that are **not** using [ReadMe Refactored](https://docs.readme.com/main/docs/migration). If you are using ReadMe Refactored, [you'll want to use `rdme@10`](#migrating-to-rdme10).
 <!-- prettier-ignore-end -->
 
 ### Upgrading to `v9`
 
-#### Step 1: Upgrade via `npm`
+#### Step 1(a): Upgrade your CLI version
 
-To install this version of the `rdme` CLI globally, run the following command:
+If you're using the `rdme` CLI and it is installed globally via `npm`, update it by running the following command:
 
 ```sh
 npm install -g rdme@9
@@ -124,7 +158,7 @@ npm install -g rdme@9
 
 More installation options can be found in [our docs](https://github.com/readmeio/rdme/tree/v9?tab=readme-ov-file#setup).
 
-#### Step 2: Update GitHub Actions Workflow
+#### Step 1(b): Update GitHub Actions Workflow version
 
 If you're using the `rdme` GitHub Action, update your GitHub Actions workflow file so your `rdme` usage uses the `v9` reference like so:
 
@@ -134,7 +168,7 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
     rdme: openapi validate petstore.json
 ```
 
-#### Step 3: Address `v9` Breaking Changes
+#### Step 2: Address `v9` Breaking Changes
 
 1. **Verify your runtime**
    - For CLI users, make sure your Node.js version is up-to-date. The minimum required Node.js version for `rdme@9` is **v20.10.0**.
@@ -142,7 +176,7 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
 
 2. **Topic separator changes**
    - The topic separator (i.e., what separates a command from its subcommand) has changed from a colon to a space by default. For example, `rdme openapi:validate` is now `rdme openapi validate`.
-   - The colon topic separator will continue to be supported so there is no need to change any existing commands, but all documentation and help screens will reflect the space topic separator.
+   - The colon topic separator will continue to be supported so **this is not a breaking change in terms of the CLI itself**, but all documentation and help screens will reflect the space topic separator going forward.
 
 3. **Command replacements**
    - Replace `swagger` → [`openapi`](https://github.com/readmeio/rdme/tree/v9/documentation/commands/openapi.md#rdme-openapi-spec)
@@ -167,14 +201,17 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
 
 5. **Deprecated commands**
 
-   The following commands (and their subcommands) will be removed in `rdme@10`:
+   The following commands (and their subcommands, if applicable) will be removed in `rdme@10`:
    - `categories`
-   - `custompages`
-   - `docs` (and its `guides` alias)
+   - `docs:prune` (and its `guides:prune` alias)
    - `versions`
    - `open`
 
-   The `openapi` command will be replaced by `openapi upload` and will have a simpler flag setup based on community feedback.
+   The following commands will be replaced in `v10`. See "Command Replacements" in [the `v10` migration guide above](#migrating-to-rdme10) for more info:
+   - `docs` (and its `guides` alias) → `docs upload`
+   - `changelogs` → `changelog upload`
+   - `custompages` → `custompages upload`
+   - `openapi` → `openapi upload`
 
 6. **Verify any scripts that utilize raw CLI outputs**
    - The underlying architecture for the CLI has been rewritten with [`oclif`](https://oclif.io/), so some command outputs and error messages may look different.
@@ -184,15 +221,18 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
 
 Please see [the `rdme@8.0.0` release notes](https://github.com/readmeio/rdme/releases/tag/8.0.0).
 
+> [!WARNING]
+> `rdme@8` is deprecated and is no longer maintained. If your project has not upgraded to ReadMe Refactored, we still recommend [upgrading to `rdme@9`](#migrating-to-rdme9) to ensure that your CLI installation remains free of security vulnerabilities. `rdme@9` should be a fairly painless upgrade for most users. More information can be found in the [version compatibility matrix](#version-compatibility-matrix) below.
+
 ## Version Compatibility Matrix
 
-| Feature                                                                                                                                     | `v8`   | `v9`        | `v10`       |
-| ------------------------------------------------------------------------------------------------------------------------------------------- | ------ | ----------- | ----------- |
-| Actively Maintained?                                                                                                                        | ❌     | ✅          | ✅          |
-| Support for [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored)\*                                           | ❌     | ❌          | ✅          |
-| Supports Bi-Directional Sync                                                                                                                | ❌     | ❌          | ✅          |
-| Support for Legacy Projects (i.e., not yet migrated to [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored)) | ✅     | ✅          | ❌          |
-| Node.js Requirements                                                                                                                        | `>=14` | `>=20.10.0` | `>=20.10.0` |
+| Feature                                                                                                                  | `v8`   | `v9`        | `v10`       |
+| ------------------------------------------------------------------------------------------------------------------------ | ------ | ----------- | ----------- |
+| Actively Maintained?                                                                                                     | ❌     | ✅          | ✅          |
+| Support for [ReadMe Refactored](https://docs.readme.com/main/docs/migration)\*                                           | ❌     | ❌          | ✅          |
+| Supports Bi-Directional Sync                                                                                             | ❌     | ❌          | ✅          |
+| Support for Legacy Projects (i.e., not yet migrated to [ReadMe Refactored](https://docs.readme.com/main/docs/migration)) | ✅     | ✅          | ❌          |
+| Node.js Requirements                                                                                                     | `>=14` | `>=20.10.0` | `>=20.10.0` |
 
 \*If you uploaded an API definition prior to migrating your project to ReadMe Refactored, any existing workflows for syncing these files that use a legacy `rdme` version (i.e., `v9` or earlier) should continue to work, even after migrating. **For new workflows, we recommend following this migration guide and upgrading to the latest version.**
 

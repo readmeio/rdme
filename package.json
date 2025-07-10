@@ -1,6 +1,6 @@
 {
   "name": "rdme",
-  "version": "10.4.0-next.5",
+  "version": "10.4.1-next.1",
   "description": "ReadMe's official CLI and GitHub Action.",
   "license": "MIT",
   "author": "ReadMe <support@readme.io> (https://readme.com)",
@@ -119,7 +119,7 @@
     "build": "tsc",
     "build:docs": "oclif readme --multi --output-dir documentation/commands --no-aliases",
     "build:gha": "npm run build && rollup --config",
-    "lint": "alex . && knip && npm run lint:ts && npm run prettier && npm run schemas:check",
+    "lint": "alex . && alex . --mdx && knip && npm run lint:ts && npm run prettier && npm run schemas:check",
     "lint:ts": "eslint . --ext .js,.ts",
     "prebuild": "rm -rf dist/",
     "prepack": "npm run build",

@@ -4,7 +4,8 @@ exports[`rdme openapi convert > error handling > should warn if given an OpenAPI
 {
   "result": "Your API definition has been converted and bundled and saved to output.json!",
   "stderr": "- Validating the API definition located at petstore.json...
-⚠️  Warning! The input file is already OpenAPI, so no conversion is necessary. Any external references will be bundled.
+ ›   Warning: The input file is already OpenAPI, so no conversion is necessary.
+ ›    Any external references will be bundled.
 ",
   "stdout": "",
 }
@@ -14,7 +15,8 @@ exports[`rdme openapi convert > error handling > should warn if given an OpenAPI
 {
   "result": "Your API definition has been converted and bundled and saved to output.json!",
   "stderr": "- Validating the API definition located at petstore.yaml...
-⚠️  Warning! The input file is already OpenAPI, so no conversion is necessary. Any external references will be bundled.
+ ›   Warning: The input file is already OpenAPI, so no conversion is necessary.
+ ›    Any external references will be bundled.
 ",
   "stdout": "",
 }

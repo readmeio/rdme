@@ -39,6 +39,10 @@ export default class DocsMigrateCommand extends BaseCommand<typeof DocsMigrateCo
     // that aren't actually used in this command, but are included for consistency/simplicity
     // since this command is purely for internal use.
     ...baseFlags('Guides'),
+    'hide-experimental-warning': Flags.boolean({
+      description: 'Hides the warning message about this command being in an experimental alpha.',
+      hidden: true,
+    }),
   };
 
   async run(): Promise<{ outputDir: string; stats: MigrationStats }> {
@@ -111,12 +115,7 @@ export default class DocsMigrateCommand extends BaseCommand<typeof DocsMigrateCo
     if (skipValidation) {
       this.debug('skipping validation');
     } else {
-      unsortedFiles = await validateFrontmatter.call(
-        this,
-        unsortedFiles,
-        'Would you like to make these changes?',
-        outputDir,
-      );
+      unsortedFiles = (await validateFrontmatter.call(this, unsortedFiles, outputDir)).pages;
     }
 
     if (transformedByHooks) {

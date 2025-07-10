@@ -312,7 +312,7 @@ export async function readmeAPIv2Fetch<T extends Hook.Context = Hook.Context>(
         this.debug(`received warning header: ${warningHeader}`);
         const warnings = parseWarningHeader(warningHeader);
         warnings.forEach(warning => {
-          warn(warning.message, 'ReadMe API Warning:');
+          this.warn(`⚠️ ReadMe API Warning: ${warning.message}`);
         });
       }
       return res;

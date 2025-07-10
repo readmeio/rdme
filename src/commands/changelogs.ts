@@ -16,7 +16,7 @@ export default class ChangelogsCommand extends BaseCommand<typeof ChangelogsComm
   static id = 'changelogs' as const;
 
   static deprecationOptions = {
-    message: `\`rdme ${this.id}\` is deprecated in favor of \`rdme changelog upload\`. For more information, please visit our migration guide: https://github.com/readmeio/rdme/tree/v9/documentation/migration-guide.md`,
+    message: `\`rdme ${this.id}\` is deprecated in favor of \`rdme changelog upload\`. For more information, please visit our migration guide: https://github.com/readmeio/rdme/blob/v10/documentation/migration-guide.md`,
   };
 
   static summary = 'Upload Markdown files to your ReadMe project as Changelog posts.';
