@@ -1,16 +1,14 @@
 import nock from 'nock';
-import semver from 'semver';
 import { afterEach, beforeEach, describe, expect, it, type MockInstance, vi } from 'vitest';
 
 import pkg from '../../package.json' with { type: 'json' };
 import { getNodeVersion, getPkgVersion, getPkgVersionFromNPM } from '../../src/lib/getPkg.js';
 
 describe('#getNodeVersion()', () => {
-  it('should extract version that matches range in package.json', () => {
+  it('should return a major version', () => {
     const version = getNodeVersion();
-    const cleanedVersion = semver.valid(semver.coerce(version));
 
-    expect(semver.satisfies(cleanedVersion as string, pkg.engines.node)).toBe(true);
+    expect(version).toHaveLength(2);
   });
 });
 

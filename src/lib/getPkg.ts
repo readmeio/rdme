@@ -23,7 +23,7 @@ export function getNodeVersion(): string {
   if (!parsedVersion) {
     throw new Error('`version` value in package.json is invalid');
   }
-  return parsedVersion.version;
+  return parsedVersion.major.toString();
 }
 
 /**
