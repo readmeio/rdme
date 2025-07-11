@@ -1,7 +1,7 @@
+import type { Hooks } from '@oclif/core/interfaces';
 import type { PageMetadata } from '../readPage.js';
 import type { PushResult } from '../syncPagePath.js';
 import type { PageResponseSchema } from '../types/index.js';
-import type { Hooks } from '@oclif/core/interfaces';
 
 interface MarkdownFileScanResultOptsBase {
   // required for the oclif hook types

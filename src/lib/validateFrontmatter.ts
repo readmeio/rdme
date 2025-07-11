@@ -1,5 +1,5 @@
-import type { PageMetadata } from './readPage.js';
 import type { APIv2PageCommands } from '../index.js';
+import type { PageMetadata } from './readPage.js';
 import type { PageRequestSchema, PageRoute } from './types/index.js';
 
 import chalk from 'chalk';

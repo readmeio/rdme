@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 /**
  * APIv1ErrorResponse is the shape of the error response we get from ReadMe API v1.
  */

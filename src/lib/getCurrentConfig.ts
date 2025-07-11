@@ -6,12 +6,12 @@ import configstore from './configstore.js';
  * Retrieves stored user data values from env variables or configstore,
  * with env variables taking precedent
  */
+// biome-ignore lint/suspicious/noConfusingVoidType: This function can be invoked with `.call()`.
 export default function getCurrentConfig(this: Hook.Context | void): {
   apiKey?: string;
   email?: string;
   project?: string;
 } {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let debug = (...args: unknown[]) => {};
   if (this?.debug && typeof this.debug === 'function') {
     debug = this.debug;

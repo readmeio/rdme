@@ -1,0 +1,89 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.1.1/schema.json",
+  "root": true,
+  "vcs": {
+    "enabled": false,
+    "clientKind": "git",
+    "useIgnoreFile": false,
+  },
+  "files": {
+    "ignoreUnknown": false,
+    "includes": [
+      "**/*.{js,ts}",
+
+      // Biome's `vcs.useIgnoreFile` config should be able to pick these up but it doesn't.
+      "!coverage/**",
+      "!dist/**",
+      "!dist-gha/**",
+    ],
+  },
+  "formatter": {
+    // We still use Prettier for formatting.
+    "enabled": false,
+  },
+  "linter": {
+    "enabled": true,
+    "domains": {
+      "project": "all",
+      "test": "all",
+    },
+    "rules": {
+      "recommended": true,
+      "correctness": {
+        // Don't warn about unused function parameters or recommend they're prefixed with an `_`.
+        "noUnusedFunctionParameters": "off",
+      },
+      "style": {
+        "noParameterAssign": "error",
+        "noRestrictedImports": {
+          "level": "error",
+          "options": {
+            "paths": {
+              "ci-info": "The `ci-info` package is difficult to test because misleading results will appear when running tests in the GitHub Actions runner. Instead of importing this package directly, create a wrapper function in `lib/isCI.ts` and import that instead.",
+            },
+          },
+        },
+      },
+
+      "suspicious": {
+        /**
+         * This is a small rule to prevent us from using console.log() statements in our commands.
+         *
+         * We've had troubles in the past where our test coverage required us to use Vitest mocks
+         * for `console.log()` calls, hurting our ability to write resilient tests and easily debug
+         * issues.
+         *
+         * We should be returning Promise-wrapped values in our main command functions
+         * so we can write robust tests and take advantage of `bin/run.js` and `src/baseCommand.ts`,
+         * which we use for printing function outputs and returning correct exit codes.
+         *
+         * Furthermore, we should also be using our custom loggers (see `src/lib/logger.js`)
+         * instead of using console.info() or console.warn() statements.
+         */
+        "noConsole": "warn",
+      },
+    },
+  },
+  "assist": {
+    "enabled": true,
+    "actions": {
+      "source": {
+        "organizeImports": {
+          "level": "on",
+          "options": {
+            // Import order: `type` -> Node builtins -> URL -> Package -> Local paths
+            "groups": [
+              { "type": true },
+              ":BLANK_LINE:", // We add blank lines between the groups to improve readability.
+              { "source": [":BUN:", ":NODE:"] },
+              ":BLANK_LINE:",
+              { "source": [":URL", ":PACKAGE:", ":PACKAGE_WITH_PROTOCOL:"] },
+              ":BLANK_LINE:",
+              ":PATH:",
+            ],
+          },
+        },
+      },
+    },
+  },
+}

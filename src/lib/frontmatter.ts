@@ -1,8 +1,8 @@
-import type { Mappings } from './readmeAPIFetch.js';
-import type { PageMetadata } from './readPage.js';
-import type { APIv2PageCommands } from '../index.js';
 import type { ErrorObject } from 'ajv';
 import type { SchemaObject } from 'oas/types';
+import type { APIv2PageCommands } from '../index.js';
+import type { Mappings } from './readmeAPIFetch.js';
+import type { PageMetadata } from './readPage.js';
 
 import fs from 'node:fs';
 import path from 'node:path';

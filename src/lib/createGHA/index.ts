@@ -13,7 +13,6 @@ import isCI, { isNpmScript, isTest } from '../isCI.js';
 import { info } from '../logger.js';
 import promptTerminal from '../promptWrapper.js';
 import { cleanFileName, validateFilePath } from '../validatePromptInput.js';
-
 import yamlBase from './baseFile.js';
 
 type CommandArg = Record<string, Command.Arg.Cached>;

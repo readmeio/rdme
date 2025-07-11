@@ -58,6 +58,7 @@ export function examples(section: Section) {
 
 export function baseFlags(section: Section) {
   const fileType = section === 'Custom Pages' ? 'Markdown/HTML' : 'Markdown';
+  // biome-ignore lint/suspicious/noImplicitAnyLet: This has an implicit `any` but we're filling it with constants below.
   let items;
 
   switch (section) {

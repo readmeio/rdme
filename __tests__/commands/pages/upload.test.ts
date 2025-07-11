@@ -2,13 +2,13 @@ import fs from 'node:fs';
 
 import nock from 'nock';
 import prompts from 'prompts';
-import { describe, afterEach, it, expect, beforeAll, beforeEach, vi } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import GuidesCommand from '../../../src/commands/docs/upload.js';
 import ReferenceCommand from '../../../src/commands/reference/upload.js';
 import { getAPIv1Mock, getAPIv2Mock, getAPIv2MockForGHA } from '../../helpers/get-api-mock.js';
 import { githubActionsEnv } from '../../helpers/git-mock.js';
-import { runCommand, type OclifOutput } from '../../helpers/oclif.js';
+import { type OclifOutput, runCommand } from '../../helpers/oclif.js';
 
 const key = 'rdme_123';
 const authorization = `Bearer ${key}`;
@@ -29,11 +29,11 @@ describe.each([
       parentPages: {},
     });
     vi.spyOn(fs, 'writeFileSync').mockImplementation((file, data) => {
-      // eslint-disable-next-line no-console
+      // biome-ignore lint/suspicious/noConsole: useful testing output
       console.log(`=== BEGIN writeFileSync to file: ${file} ===`);
-      // eslint-disable-next-line no-console
+      // biome-ignore lint/suspicious/noConsole: useful testing output
       console.log(data);
-      // eslint-disable-next-line no-console
+      // biome-ignore lint/suspicious/noConsole: useful testing output
       console.log(`=== END writeFileSync to file: ${file} ===`);
     });
   });

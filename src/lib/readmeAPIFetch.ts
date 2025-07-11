@@ -1,7 +1,7 @@
-import type { SpecFileType } from './prepareOas.js';
-import type { APIv2PageCommands, CommandClass } from '../index.js';
 import type { Hook } from '@oclif/core';
 import type { SchemaObject } from 'oas/types';
+import type { APIv2PageCommands, CommandClass } from '../index.js';
+import type { SpecFileType } from './prepareOas.js';
 
 import path from 'node:path';
 
@@ -59,7 +59,7 @@ export interface Mappings {
 /**
  * A generic response body type for responses from the ReadMe API.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: Generic typing for responses.
 export interface ResponseBody extends Record<string, any> {}
 
 export const emptyMappings: Mappings = { categories: {}, parentPages: {} };
@@ -81,7 +81,7 @@ function parseWarningHeader(
     let previous: WarningHeader;
 
     return warnings.reduce<WarningHeader[]>((all, w) => {
-      // eslint-disable-next-line no-param-reassign
+      // biome-ignore lint/style/noParameterAssign: We need to mutate this variable for reducing.
       w = w.trim();
       const newError = w.match(/^([0-9]{3}) (.*)/);
       if (newError) {
@@ -133,7 +133,6 @@ async function normalizeFilePath(opts: FilePathDetails) {
  */
 function sanitizeHeaders(headers: Headers) {
   const raw = Array.from(headers.entries()).reduce<Record<string, string>>((prev, current) => {
-    // eslint-disable-next-line no-param-reassign
     prev[current[0]] = current[0].toLowerCase() === 'authorization' ? 'redacted' : current[1];
     return prev;
   }, {});
@@ -351,7 +350,7 @@ export async function handleAPIv1Res(
   const extension = mime.extension(contentType);
   if (extension === 'json') {
     // TODO: type this better
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // biome-ignore lint/suspicious/noExplicitAny: We do not have TS types for APIv1 responses.
     const body = (await res.json()) as any;
     debug(`received status code ${res.status} from ${res.url} with JSON response: ${JSON.stringify(body)}`);
     if (body.error && rejectOnJsonError) {

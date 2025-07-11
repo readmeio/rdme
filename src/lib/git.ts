@@ -19,8 +19,8 @@ export async function getGitData(this: Hook.Context) {
 
   this.debug(`[getGitData] isRepo result: ${isRepo}`);
 
-  let containsGitHubRemote;
-  let defaultBranch;
+  let containsGitHubRemote: boolean | undefined;
+  let defaultBranch: string | undefined;
   const rawRemotes = await git.remote([]).catch(e => {
     this.debug(`[getGitData] error grabbing git remotes: ${e.message}`);
     return '';

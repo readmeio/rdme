@@ -1,5 +1,5 @@
 import nock from 'nock';
-import { describe, beforeEach, afterEach, it, expect, vi, type MockInstance } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, type MockInstance, vi } from 'vitest';
 
 import pkg from '../../package.json' with { type: 'json' };
 import { getNodeVersion, getPkgVersion, getPkgVersionFromNPM } from '../../src/lib/getPkg.js';

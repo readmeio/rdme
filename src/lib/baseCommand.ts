@@ -1,5 +1,5 @@
-import type { CreateGHAHook, CreateGHAHookOptsInClass } from './hooks/createGHA.js';
 import type { Config, Hook, Interfaces } from '@oclif/core';
+import type { CreateGHAHook, CreateGHAHookOptsInClass } from './hooks/createGHA.js';
 
 import { format } from 'node:util';
 
@@ -10,7 +10,7 @@ import debugPkg from 'debug';
 
 import { isGHA, isTest } from './isCI.js';
 import { info } from './logger.js';
-import { handleAPIv2Res, readmeAPIv2Fetch, type ResponseBody } from './readmeAPIFetch.js';
+import { handleAPIv2Res, type ResponseBody, readmeAPIv2Fetch } from './readmeAPIFetch.js';
 
 type Flags<T extends typeof OclifCommand> = Interfaces.InferredFlags<(typeof BaseCommand)['baseFlags'] & T['flags']>;
 type Args<T extends typeof OclifCommand> = Interfaces.InferredArgs<T['args']>;
@@ -96,10 +96,10 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
     // If this is a soft error then we should output the result as a regular log but exit the CLI
     // with an error status code.
     if (err.name === 'SoftError') {
-      // eslint-disable-next-line no-console
+      // biome-ignore lint/suspicious/noConsole: We are printing errors to the terminal.
       console.log(err.message);
     } else {
-      // eslint-disable-next-line no-console
+      // biome-ignore lint/suspicious/noConsole: We are printing errors to the terminal.
       console.error(chalk.red(`\n${message}\n`));
     }
 
@@ -111,9 +111,7 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
    * that takes the result and sets a GitHub step output parameter to the result
    * when being run from a GitHub Actions runner.
    */
-  // eslint-disable-next-line no-underscore-dangle
   protected async _run<U>(): Promise<U> {
-    // eslint-disable-next-line no-underscore-dangle
     const result: U = await super._run();
     if (isGHA() && !isTest() && result) {
       core.setOutput('rdme', result);
