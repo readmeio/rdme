@@ -11,10 +11,8 @@
     "includes": [
       "**/*.{js,ts}",
 
-      // test result artifacts
+      // Biome's `vcs.useIgnoreFile` config should be able to pick these up but it doesn't.
       "!coverage/**",
-
-      // release build artifacts
       "!dist/**",
       "!dist-gha/**",
     ],
