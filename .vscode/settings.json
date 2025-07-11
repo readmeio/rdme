@@ -1,5 +1,10 @@
 {
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit"
+  },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
+  // explicitly disable ESLint to avoid conflicts with Biome
+  "eslint.enable": false,
   "search.exclude": {
     "**/dist-gha": true,
     "CHANGELOG.md": true,
