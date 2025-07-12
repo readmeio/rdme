@@ -45,7 +45,7 @@ const hook: Hook.Prerun = async function run(options) {
           }
           // if in non-CI and the user hasn't passed in a key, we prompt them to log in
           info("Looks like you're missing a ReadMe API key, let's fix that! 🦉", { includeEmojiPrefix: false });
-          const result = await loginFlow();
+          const result = await loginFlow.call(this);
           info(result, { includeEmojiPrefix: false });
           // loginFlow sets the configstore value, so let's use that
           return configstore.get('apiKey');
