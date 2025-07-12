@@ -2,7 +2,7 @@ import { Flags, type Hook } from '@oclif/core';
 import chalk from 'chalk';
 
 import configstore from '../configstore.js';
-import { githubFlag, keyFlag } from '../flags.js';
+import { keyFlag } from '../flags.js';
 import getCurrentConfig from '../getCurrentConfig.js';
 import isCI, { isTest } from '../isCI.js';
 import { info } from '../logger.js';
@@ -54,26 +54,6 @@ const hook: Hook.Prerun = async function run(options) {
     }
   } else {
     this.debug('current command does not have --key flag');
-  }
-
-  // the logic in this block is a little weird it does two things:
-  // 1. throws if the user is attempting to use --github in a CI environment
-  // 2. resets the --github flag options to the default in certain tests
-  if (options.Command?.flags?.github) {
-    this.debug('current command has --github flag');
-    if (isCI()) {
-      this.debug('in CI environment');
-      options.Command.flags.github = Flags.boolean({
-        parse: () => {
-          throw new Error('The `--github` flag is only for usage in non-CI environments.');
-        },
-      });
-    }
-    if (process.env.TEST_RDME_CREATEGHA) {
-      options.Command.flags.github = githubFlag;
-    }
-  } else {
-    this.debug('current command does not have --github flag');
   }
 };
 
