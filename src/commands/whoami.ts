@@ -7,7 +7,7 @@ export default class WhoAmICommand extends BaseCommand<typeof WhoAmICommand> {
   static description = 'Displays the current user and project authenticated with ReadMe.';
 
   async run() {
-    const { email, project } = getCurrentConfig();
+    const { email, project } = getCurrentConfig.call(this);
 
     if (!email || !project) {
       return Promise.reject(new Error(`Please login using \`${this.config.bin} login\`.`));

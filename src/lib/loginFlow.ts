@@ -1,9 +1,10 @@
+import type { Hook } from '@oclif/core';
+
 import chalk from 'chalk';
 import isEmail from 'validator/lib/isEmail.js';
 
 import configStore from './configstore.js';
 import getCurrentConfig from './getCurrentConfig.js';
-import { debug } from './logger.js';
 import promptTerminal from './promptWrapper.js';
 import { handleAPIv1Res, readmeAPIv1Fetch } from './readmeAPIFetch.js';
 import { validateSubdomain } from './validatePromptInput.js';
@@ -31,13 +32,14 @@ function loginFetch(body: LoginBody) {
  * @returns A Promise-wrapped string with the logged-in user's credentials
  */
 export default async function loginFlow(
+  this: Hook.Context,
   /**
    * An optional one-time passcode, if the user passes one in
    * via a flag to the the `login` command
    */
   otp?: string,
 ) {
-  const storedConfig = getCurrentConfig();
+  const storedConfig = getCurrentConfig.call(this);
   const { email, password, project } = await promptTerminal([
     {
       type: 'text',
@@ -80,7 +82,7 @@ export default async function loginFlow(
     .catch(async err => {
       // if the user's login requires 2FA, let's prompt them for the token!
       if (err.code === 'LOGIN_TWOFACTOR') {
-        debug('2FA error response, prompting for 2FA code');
+        this.debug('2FA error response, prompting for 2FA code');
         const otpPrompt = await promptTerminal({
           type: 'text',
           name: 'otp',

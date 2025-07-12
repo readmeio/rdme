@@ -84,7 +84,6 @@
     "@commitlint/config-conventional": "^19.0.3",
     "@oclif/test": "^4.1.0",
     "@readme/better-ajv-errors": "^2.3.2",
-    "@readme/eslint-config": "^14.7.2",
     "@readme/oas-examples": "^6.0.0",
     "@rollup/plugin-commonjs": "^28.0.0",
     "@rollup/plugin-json": "^6.0.0",
@@ -187,5 +186,9 @@
       }
     }
   },
-  "prettier": "@readme/eslint-config/prettier"
+  "prettier": {
+    "arrowParens": "avoid",
+    "printWidth": 120,
+    "singleQuote": true
+  }
 }

@@ -1,9 +1,13 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`rdme openapi validate > CI tests > should fail if user attempts to pass \`--github\` flag in CI environment 1`] = `
-[Error: Parsing --github 
+{
+  "error": [Error: Parsing --github 
 	The \`--github\` flag is only for usage in non-CI environments.
-See more help with --help]
+See more help with --help],
+  "stderr": "",
+  "stdout": "",
+}
 `;
 
 exports[`rdme openapi validate > CI tests > should successfully validate prompt and not run GHA onboarding 1`] = `

@@ -5,7 +5,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vite
 
 import Command from '../../../src/commands/openapi/validate.js';
 import { gitMock } from '../../helpers/git-mock.js';
-import { type OclifOutput, runCommand, runCommandWithHooks } from '../../helpers/oclif.js';
+import { type OclifOutput, runCommand } from '../../helpers/oclif.js';
 
 describe('rdme openapi validate', () => {
   let run: (args?: string[]) => OclifOutput;
@@ -96,15 +96,9 @@ describe('rdme openapi validate', () => {
     });
 
     it('should fail if user attempts to pass `--github` flag in CI environment', async () => {
-      return expect(
-        (
-          await runCommandWithHooks([
-            'openapi validate',
-            '__tests__/__fixtures__/petstore-simple-weird-version.json',
-            '--github',
-          ])
-        ).error,
-      ).toMatchSnapshot();
+      const spec = '__tests__/__fixtures__/petstore-simple-weird-version.json';
+
+      await expect(run([spec, '--github'])).resolves.toMatchSnapshot();
     });
   });
 

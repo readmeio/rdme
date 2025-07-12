@@ -1,5 +1,7 @@
 import { Args, Flags } from '@oclif/core';
 
+import isCI from './isCI.js';
+
 export const branchFlag = (additionalDescription: string[] = []) => ({
   branch: Flags.string({
     aliases: ['version'],
@@ -13,7 +15,15 @@ export const branchFlag = (additionalDescription: string[] = []) => ({
 /**
  * Used in any command where `github` is a `flag.
  */
-export const githubFlag = Flags.boolean({ description: 'Create a new GitHub Actions workflow for this command.' });
+export const githubFlag = Flags.boolean({
+  description: 'Create a new GitHub Actions workflow for this command.',
+  async parse(input) {
+    if (isCI()) {
+      throw new Error('The `--github` flag is only for usage in non-CI environments.');
+    }
+    return input;
+  },
+});
 
 /**
  * Used in any command where `key` is a `flag.

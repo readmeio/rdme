@@ -3,7 +3,7 @@ import type { CommandClass } from '../../src/index.js';
 import path from 'node:path';
 
 import { Config } from '@oclif/core';
-import { captureOutput, runCommand as oclifRunCommand } from '@oclif/test';
+import { captureOutput } from '@oclif/test';
 
 export type OclifOutput<T = string> = ReturnType<typeof captureOutput<T>>;
 
@@ -62,14 +62,4 @@ export function runCommandAndReturnResult(Command: CommandClass) {
     }
     return result;
   };
-}
-
-/**
- * This runs the command you pass in against the args you pass in.
- * This helper is not ideal in that `vitest --watch` won't reload,
- * but it's helpful if you need to run assertions against the command's hooks.
- */
-export async function runCommandWithHooks(args?: string[]) {
-  const oclifConfig = await setupOclifConfig();
-  return oclifRunCommand(args, oclifConfig, { testNodeEnv });
 }
