@@ -121,7 +121,9 @@ exports[`#analyzeOas > should analyze an OpenAPI definition 1`] = `
       },
     },
     "xml": {
-      "description": "Any parameter and/or request body that accepts XML or responses that return XML payloads.",
+      "description": "Any schema that utilizes the XML object for defining its shape in an XML payload, or a request or response that defines an XML payload.
+
+This is deprecated in favor of \`xmlSchemas\`, \`xmlRequests\`, and \`xmlResponses\`.",
       "locations": [
         "#/components/schemas/Category",
         "#/components/schemas/Order",
@@ -137,6 +139,49 @@ exports[`#analyzeOas > should analyze an OpenAPI definition 1`] = `
         "#/paths/~1store~1order~1{orderId}/get/responses/200/content/application~1xml",
         "#/paths/~1user~1login/get/responses/200/content/application~1xml",
         "#/paths/~1user~1{username}/get/responses/200/content/application~1xml",
+      ],
+      "present": true,
+      "url": {
+        "3.0": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#xml-object",
+        "3.1": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#xml-object",
+      },
+    },
+    "xmlRequests": {
+      "description": "Any request body that accepts an XML payload.",
+      "locations": [],
+      "present": false,
+      "url": {
+        "3.0": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#media-type-object",
+        "3.1": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#media-type-object",
+      },
+    },
+    "xmlResponses": {
+      "description": "Any response that returns an XML payload.",
+      "locations": [
+        "#/paths/~1pet~1findByStatus/get/responses/200/content/application~1xml",
+        "#/paths/~1pet~1findByTags/get/responses/200/content/application~1xml",
+        "#/paths/~1pet~1{petId}/get/responses/200/content/application~1xml",
+        "#/paths/~1store~1order/post/responses/200/content/application~1xml",
+        "#/paths/~1store~1order~1{orderId}/get/responses/200/content/application~1xml",
+        "#/paths/~1user~1login/get/responses/200/content/application~1xml",
+        "#/paths/~1user~1{username}/get/responses/200/content/application~1xml",
+      ],
+      "present": true,
+      "url": {
+        "3.0": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#media-type-object",
+        "3.1": "https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#media-type-object",
+      },
+    },
+    "xmlSchemas": {
+      "description": "Any schema that utilizes the XML object for defining its shape in an XML payload.",
+      "locations": [
+        "#/components/schemas/Category",
+        "#/components/schemas/Order",
+        "#/components/schemas/Pet",
+        "#/components/schemas/Pet/properties/photoUrls",
+        "#/components/schemas/Pet/properties/tags",
+        "#/components/schemas/Tag",
+        "#/components/schemas/User",
       ],
       "present": true,
       "url": {

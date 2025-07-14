@@ -27,6 +27,9 @@ describe('#getSupportedFeatures', () => {
       'serverVariables',
       'webhooks',
       'xml',
+      'xmlSchemas',
+      'xmlRequests',
+      'xmlResponses',
       'readme',
     ]);
   });

@@ -136,7 +136,8 @@ const OPENAPI_FEATURE_DOCS: Record<keyof Analysis['openapi'], Pick<AnalyzedFeatu
     },
   },
   xml: {
-    description: 'Any schema that utilizes the XML object for defining its shape in an XML payload, or a request or response that defines an XML payload.\n\nThis is deprecated in favor of `xmlSchemas`, `xmlRequests`, and `xmlResponses`.',
+    description:
+      'Any schema that utilizes the XML object for defining its shape in an XML payload, or a request or response that defines an XML payload.\n\nThis is deprecated in favor of `xmlSchemas`, `xmlRequests`, and `xmlResponses`.',
     url: {
       '3.0': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#xml-object',
       '3.1': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#xml-object',
