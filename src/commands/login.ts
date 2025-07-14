@@ -17,6 +17,6 @@ export default class LoginCommand extends BaseCommand<typeof LoginCommand> {
   async run() {
     prompts.override(this.flags);
 
-    return loginFlow(this.flags.otp);
+    return loginFlow.call(this, this.flags.otp);
   }
 }
