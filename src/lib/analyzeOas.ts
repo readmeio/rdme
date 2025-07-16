@@ -146,8 +146,8 @@ const OPENAPI_FEATURE_DOCS: Record<keyof Analysis['openapi'], Pick<AnalyzedFeatu
   xmlRequests: {
     description: 'Any request body that accepts an XML payload.',
     url: {
-      '3.0': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#media-type-object',
-      '3.1': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#media-type-object',
+      '3.0': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#request-body-object',
+      '3.1': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#request-body-object',
     },
   },
   xmlResponses: {
