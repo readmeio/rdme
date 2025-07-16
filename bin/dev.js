@@ -11,4 +11,5 @@ async function main() {
   });
 }
 
-await main();
+// biome-ignore lint/nursery/noFloatingPromises: We use rollup to bundle this file and it doesn't play well with top-level await.
+main();

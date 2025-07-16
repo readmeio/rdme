@@ -16,4 +16,5 @@ async function setOutputs() {
   core.setOutput('NODE_VERSION', getNodeVersion());
 }
 
-await setOutputs();
+// biome-ignore lint/nursery/noFloatingPromises: We use rollup to bundle this file and it doesn't play well with top-level await.
+setOutputs();
