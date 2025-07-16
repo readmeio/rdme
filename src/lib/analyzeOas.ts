@@ -35,12 +35,12 @@ export interface Analysis extends OASAnalysis {
     style: AnalyzedFeature;
     webhooks: AnalyzedFeature;
     /**
-     * @deprecated The data contained within this has been split apart into `xmlSchemas`, `xmlRequests`, and `xmlResponses`. This property will be removed in a future release.
+     * @deprecated The data contained within this has been split apart into `xmlRequests`, `xmlResponses`, and `xmlSchemas`. This property will be removed in a future release.
      */
     xml: AnalyzedFeature;
-    xmlSchemas: AnalyzedFeature;
     xmlRequests: AnalyzedFeature;
     xmlResponses: AnalyzedFeature;
+    xmlSchemas: AnalyzedFeature;
   };
   readme: {
     /**
@@ -137,14 +137,7 @@ const OPENAPI_FEATURE_DOCS: Record<keyof Analysis['openapi'], Pick<AnalyzedFeatu
   },
   xml: {
     description:
-      'Any schema that utilizes the XML object for defining its shape in an XML payload, or a request or response that defines an XML payload.\n\nThis is deprecated in favor of `xmlSchemas`, `xmlRequests`, and `xmlResponses`.',
-    url: {
-      '3.0': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#xml-object',
-      '3.1': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#xml-object',
-    },
-  },
-  xmlSchemas: {
-    description: 'Any schema that utilizes the XML object for defining its shape in an XML payload.',
+      'Any schema that utilizes the XML object for defining its shape in an XML payload, or a request or response that defines an XML payload.\n\nThis is deprecated in favor of `xmlRequests`, `xmlResponses`, and `xmlSchemas`.',
     url: {
       '3.0': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#xml-object',
       '3.1': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#xml-object',
@@ -162,6 +155,13 @@ const OPENAPI_FEATURE_DOCS: Record<keyof Analysis['openapi'], Pick<AnalyzedFeatu
     url: {
       '3.0': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#media-type-object',
       '3.1': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#media-type-object',
+    },
+  },
+  xmlSchemas: {
+    description: 'Any schema that utilizes the XML object for defining its shape in an XML payload.',
+    url: {
+      '3.0': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#xml-object',
+      '3.1': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#xml-object',
     },
   },
 };
