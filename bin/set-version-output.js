@@ -16,4 +16,4 @@ async function setOutputs() {
   core.setOutput('NODE_VERSION', getNodeVersion());
 }
 
-setOutputs();
+await setOutputs();

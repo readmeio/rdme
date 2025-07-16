@@ -55,4 +55,4 @@ async function refreshSchemas() {
   }
 }
 
-refreshSchemas();
+await refreshSchemas();

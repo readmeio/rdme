@@ -89,4 +89,4 @@ async function setMajorVersionTag() {
   }
 }
 
-setMajorVersionTag();
+await setMajorVersionTag();
