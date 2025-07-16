@@ -123,7 +123,7 @@ exports[`#analyzeOas > should analyze an OpenAPI definition 1`] = `
     "xml": {
       "description": "Any schema that utilizes the XML object for defining its shape in an XML payload, or a request or response that defines an XML payload.
 
-This is deprecated in favor of \`xmlSchemas\`, \`xmlRequests\`, and \`xmlResponses\`.",
+This is deprecated in favor of \`xmlRequests\`, \`xmlResponses\`, and \`xmlSchemas\`.",
       "locations": [
         "#/components/schemas/Category",
         "#/components/schemas/Order",
