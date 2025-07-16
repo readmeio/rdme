@@ -1,3 +1,10 @@
+# [10.5.0-next.1](https://github.com/readmeio/rdme/compare/v10.4.1-next.1...v10.5.0-next.1) (2025-07-16)
+
+
+### Features
+
+* **inspect:** splitting apart `xml` into three fine-tuned datasets ([#1305](https://github.com/readmeio/rdme/issues/1305)) ([2e10328](https://github.com/readmeio/rdme/commit/2e103289b484584c666ff0dc8bd47ffba3cf9e9c))
+
 ## [10.4.1-next.1](https://github.com/readmeio/rdme/compare/v10.4.0...v10.4.1-next.1) (2025-07-08)
 
 
