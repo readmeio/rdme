@@ -141,8 +141,23 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       );
     }
 
+    const headers = new Headers({ authorization: `Bearer ${this.flags.key}` });
+
+    const existingAPIDefinitions: APIDefinitionsRepresentation['data'] =
+      (await this.readmeAPIFetch(`/branches/${branch}/apis`, { headers }).then(res => this.handleAPIRes(res)))?.data ||
+      [];
+
+    /**
+     * If the user provided a slug that matches an existing legacy API definition ID,
+     * we'll prompt them to confirm that they want to update the file.
+     * We store this in a variable so we can use it later so we can bypass the other prompt
+     * to confirm the file overwrite.
+     */
+    let updateLegacyIdViaSlug = false;
+
     const fileExtension = nodePath.extname(filename);
     if (this.flags.slug) {
+      // verify that the slug's extension matches the file's extension
       const slugExtension = nodePath.extname(this.flags.slug);
       if (slugExtension && (!['.json', '.yaml', '.yml'].includes(slugExtension) || fileExtension !== slugExtension)) {
         throw new Error(
@@ -152,16 +167,42 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
       // the API expects a file extension, so keep it if it's there, add it if it's not
       filename = `${this.flags.slug.replace(slugExtension, '')}${fileExtension}`;
+      // handling in the event that the slug is an object ID, in which case it's likely a faulty migration
+      const objectIdRegex = /^[0-9a-fA-F]{24}$/;
+      if (objectIdRegex.test(this.flags.slug)) {
+        const matchedLegacyAPIDefinition = existingAPIDefinitions.find(d => d.legacy_id === this.flags.slug);
+        if (matchedLegacyAPIDefinition) {
+          if (isCI()) {
+            throw new Error(
+              `The slug you provided matches a legacy API definition ID, which have been deprecated in ReadMe. To fix this, update your \`--slug\` flag to  \`${matchedLegacyAPIDefinition.filename}\`.`,
+            );
+          }
+
+          // if the slug matches an existing legacy API definition, we'll prompt the user before making that change
+          const { legacyConfirm } = await promptTerminal({
+            type: 'confirm',
+            name: 'legacyConfirm',
+            message: `The slug you provided matches the ID of a legacy API definition (${matchedLegacyAPIDefinition.filename}). Would you like to update this file?`,
+          });
+
+          if (!legacyConfirm) {
+            throw new Error('Aborting, no changes were made.');
+          }
+
+          updateLegacyIdViaSlug = true;
+
+          this.warn(
+            `The slug you provided matches a legacy API definition ID and these IDs are now deprecated in ReadMe. To ensure maximum compatibility going forward, we recommend updating your \`--slug\` flag to  \`${matchedLegacyAPIDefinition.filename}\`.`,
+          );
+
+          filename = matchedLegacyAPIDefinition.filename;
+        } else {
+          this.warn(
+            'The slug you provided looks like a legacy API definition ID, and these IDs are now deprecated in ReadMe. More info here: https://github.com/readmeio/rdme/blob/v10/documentation/migration-guide.md#v10-openapi-upload-command-updates',
+          );
+        }
+      }
     }
-
-    const headers = new Headers({ authorization: `Bearer ${this.flags.key}` });
-
-    const existingAPIDefinitions =
-      (
-        (await this.readmeAPIFetch(`/branches/${branch}/apis`, { headers }).then(res =>
-          this.handleAPIRes(res),
-        )) as APIDefinitionsRepresentation
-      )?.data || [];
 
     const filenames = new Intl.ListFormat('en', {
       style: 'long',
@@ -206,7 +247,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     if (method === 'PUT') {
       // bypass the prompt if we're in a CI environment
       prompts.override({
-        confirm: isCI() || this.flags['confirm-overwrite'] ? true : undefined,
+        confirm: isCI() || this.flags['confirm-overwrite'] || updateLegacyIdViaSlug ? true : undefined,
       });
 
       const { confirm } = await promptTerminal({
