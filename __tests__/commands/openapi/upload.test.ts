@@ -547,7 +547,7 @@ describe('rdme openapi upload', () => {
       putMock.done();
     });
 
-    it('should error if no matching API definition found', async () => {
+    it('should error if no matching API definition found (and there are no existing definitions)', async () => {
       const legacyId = '1234567890';
       prompts.inject([true]);
       const getMock = getAPIv2Mock({ authorization: `Bearer ${key}` })

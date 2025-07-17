@@ -20,7 +20,7 @@ See more help with --help],
 }
 `;
 
-exports[`rdme openapi upload > given that the "--legacy-id" flag is passed > should error if no matching API definition found 1`] = `
+exports[`rdme openapi upload > given that the "--legacy-id" flag is passed > should error if no matching API definition found (and there are no existing definitions) 1`] = `
 {
   "error": [Error: No API definition found with legacy ID 1234567890.],
   "stderr": " ›   Warning: The "legacy-id" flag has been deprecated.
