@@ -210,6 +210,9 @@ DESCRIPTION
   If the spec is a URL, the inferred slug is the base file name from the URL (e.g., the slug for
   `https://example.com/docs/petstore.json` will be `petstore.json`).
 
+  For the best and most explicit results, we recommend using the `--slug` flag to set a slug for your API definition,
+  especially if you're managing many API definitions at scale.
+
 EXAMPLES
   You can pass in a file name like so:
 

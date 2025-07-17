@@ -27,6 +27,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     'By default, the slug (i.e., the unique identifier for your API definition resource in ReadMe) will be inferred from the spec name and path. As long as you maintain these directory/file names and run `rdme` from the same location relative to your file, the inferred slug will be preserved and any updates you make to this file will be synced to the same resource in ReadMe.',
     'If the spec is a local file, the inferred slug takes the relative path and slugifies it (e.g., the slug for `docs/api/petstore.json` will be `docs-api-petstore.json`).',
     'If the spec is a URL, the inferred slug is the base file name from the URL (e.g., the slug for `https://example.com/docs/petstore.json` will be `petstore.json`).',
+    "For the best and most explicit results, we recommend using the `--slug` flag to set a slug for your API definition, especially if you're managing many API definitions at scale.",
   ].join('\n\n');
 
   static args = {
