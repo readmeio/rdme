@@ -561,12 +561,34 @@ describe('rdme openapi upload', () => {
       getMock.done();
     });
 
-    it('should error if no matching API definition found (and there are existing definitions)', async () => {
+    it('should error if no matching API definition found (and there is a single existing definition)', async () => {
       const legacyId = '1234567890';
       prompts.inject([true]);
       const getMock = getAPIv2Mock({ authorization: `Bearer ${key}` })
         .get(`/branches/${branch}/apis`)
-        .reply(200, { data: [{ legacy_id: 'some-mismatching-id' }] });
+        .reply(200, {
+          data: [{ legacy_id: 'some-mismatching-id1', filename: 'file1.json' }],
+        });
+
+      const result = await run(['--branch', branch, filename, '--key', key, '--legacy-id', legacyId]);
+
+      expect(result).toMatchSnapshot();
+
+      getMock.done();
+    });
+
+    it('should error if no matching API definition found (and there are several existing definitions)', async () => {
+      const legacyId = '1234567890';
+      prompts.inject([true]);
+      const getMock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .get(`/branches/${branch}/apis`)
+        .reply(200, {
+          data: [
+            { legacy_id: 'some-mismatching-id1', filename: 'file1.json' },
+            { legacy_id: 'some-mismatching-id2', filename: 'file2.json' },
+            { legacy_id: 'some-mismatching-id3', filename: 'file3.json' },
+          ],
+        });
 
       const result = await run(['--branch', branch, filename, '--key', key, '--legacy-id', legacyId]);
 

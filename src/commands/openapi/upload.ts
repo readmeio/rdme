@@ -46,7 +46,6 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       description:
         'This is only used for legacy `rdme` CLI workflows and only applies if your project, and this API definition, predate ReadMe Refactored. This flag is considered deprecated and we recommend using `--slug` instead.',
       hidden: true,
-      deprecated: true,
       exclusive: ['slug'],
     }),
     slug: Flags.string({
@@ -157,11 +156,21 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
     const headers = new Headers({ authorization: `Bearer ${this.flags.key}` });
 
-    const existingAPIDefinitions = (await this.readmeAPIFetch(`/branches/${branch}/apis`, { headers }).then(res =>
-      this.handleAPIRes(res),
-    )) as APIDefinitionsRepresentation;
+    const existingAPIDefinitions =
+      (
+        (await this.readmeAPIFetch(`/branches/${branch}/apis`, { headers }).then(res =>
+          this.handleAPIRes(res),
+        )) as APIDefinitionsRepresentation
+      )?.data || [];
 
-    const matchingAPIDefinition = existingAPIDefinitions?.data?.find(d => {
+    const filenames = new Intl.ListFormat('en', {
+      style: 'long',
+      type: 'unit',
+    }).format(existingAPIDefinitions.map(d => `\`${d.filename}\``));
+
+    this.debug(`found ${existingAPIDefinitions.length} existing API definitions: ${filenames}`);
+
+    const matchingAPIDefinition = existingAPIDefinitions.find(d => {
       if (this.flags['legacy-id']) {
         return d?.legacy_id === this.flags['legacy-id'];
       }
@@ -170,9 +179,21 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
     if (this.flags['legacy-id']) {
       if (!matchingAPIDefinition) {
-        throw new Error(`No API definition found with legacy ID ${this.flags['legacy-id']}.`);
+        let existingDefinitionSuggestion = ' Did you mean to use the `--slug` flag instead?';
+        if (existingAPIDefinitions.length === 1) {
+          existingDefinitionSuggestion = ` 1 file was found — try replacing \`--legacy-id ${this.flags['legacy-id']}\` with \`--slug ${existingAPIDefinitions[0].filename}\`.`;
+        } else if (existingAPIDefinitions.length > 1) {
+          existingDefinitionSuggestion = ` ${existingAPIDefinitions.length} file(s) were found — try passing one of them via the \`--slug\` flag instead: ${filenames}.`;
+        }
+
+        throw new Error(
+          `No API definition found with legacy ID ${this.flags['legacy-id']}.${existingDefinitionSuggestion}`,
+        );
       }
       filename = matchingAPIDefinition.filename;
+      this.warn(
+        `The \`--legacy-id\` flag will be removed in a future version. We recommend passing \`--slug ${filename}\` for maximum compatibility and readability.`,
+      );
       this.debug(`using existing legacy ID ${this.flags['legacy-id']} with filename ${filename}`);
     }
 
