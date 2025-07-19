@@ -43,8 +43,7 @@ export default class OpenAPIConvertCommand extends BaseCommand<typeof OpenAPICon
   ];
 
   async run() {
-    const { spec } = this.args;
-    const { out, title, workingDirectory } = this.flags;
+    const { out, workingDirectory } = this.flags;
 
     if (workingDirectory) {
       const previousWorkingDirectory = process.cwd();
@@ -52,9 +51,7 @@ export default class OpenAPIConvertCommand extends BaseCommand<typeof OpenAPICon
       this.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
     }
 
-    const { preparedSpec, specPath, specType } = await prepareOas(spec, 'openapi convert', {
-      title,
-    });
+    const { preparedSpec, specPath, specType } = await prepareOas.call(this, 'openapi convert');
     const parsedPreparedSpec: OASDocument = JSON.parse(preparedSpec);
 
     if (specType === 'OpenAPI') {

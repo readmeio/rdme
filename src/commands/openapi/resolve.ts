@@ -11,7 +11,7 @@ import prompts from 'prompts';
 
 import analyzeOas from '../../lib/analyzeOas.js';
 import BaseCommand from '../../lib/baseCommand.js';
-import { specArg, workingDirectoryFlag } from '../../lib/flags.js';
+import { specArg, titleFlag, workingDirectoryFlag } from '../../lib/flags.js';
 import { oraOptions } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
@@ -50,6 +50,7 @@ export default class OpenAPIResolveCommand extends BaseCommand<typeof OpenAPIRes
 
   static flags = {
     out: Flags.string({ description: 'Output file path to write resolved file to' }),
+    title: titleFlag,
     workingDirectory: workingDirectoryFlag,
   };
 
@@ -349,7 +350,7 @@ export default class OpenAPIResolveCommand extends BaseCommand<typeof OpenAPIRes
       this.debug(`Switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
     }
 
-    const { preparedSpec, specPath, specType } = await prepareOas(spec, 'openapi resolve');
+    const { preparedSpec, specPath, specType } = await prepareOas.call(this, 'openapi resolve');
     if (specType !== 'OpenAPI') {
       throw new Error('Sorry, this command only supports OpenAPI 3.0+ definitions.');
     }
