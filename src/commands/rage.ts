@@ -14,7 +14,7 @@ export default class RageCommand extends BaseCommand<typeof RageCommand> {
   async run() {
     const { apiKey, email, project } = getCurrentConfig.call(this);
 
-    const rage = Object.entries({
+    const rage = {
       CLI: {
         Version: this.config.version,
         // This `supports-color` logic is the same that `@oclif/core/ux` uses for `colorize` they
@@ -36,12 +36,20 @@ export default class RageCommand extends BaseCommand<typeof RageCommand> {
         'Loaded successfully': Boolean(apiKey || email || project),
         Path: configstore.path,
       },
-    }).flatMap(([section, values]) => {
-      const sectionData = Object.entries(values).map(([key, value]) => [`  ${key}:`, value]);
-      return [[`${section}:`, ''], ...sectionData, ['', '']];
-    });
+    };
 
-    const output = table(rage, {
+    const data = Object.entries(rage).flatMap(([section, values], idx) => {
+      const sectionData = Object.entries(values).map(([key, value]) => [`  ${key}:`, value]);
+      return [
+        [`${section}:`, ''],
+        ...sectionData,
+
+        // Only add a group separator if this isn't the last section.
+        idx !== (Object.keys(rage).length - 1) ? ['', ''] : false
+      ];
+    }).filter(Boolean) as [string, string][];
+
+    const output = table(data, {
       border: getBorderCharacters('void'),
       drawHorizontalLine: () => false,
       columnDefault: {
