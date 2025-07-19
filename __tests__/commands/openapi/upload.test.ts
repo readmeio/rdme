@@ -498,6 +498,31 @@ describe('rdme openapi upload', () => {
 
       fileMock.done();
     });
+
+    describe('and the `--slug` flag is passed', () => {
+      it('should create a new API definition in ReadMe with the specified slug', async () => {
+        const customFilename = 'custom-slug';
+        const fileMock = nock('https://example.com').get('/openapi.json').reply(200, petstore);
+
+        const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+          .get(`/branches/${branch}/apis`)
+          .reply(200, {})
+          .post(`/branches/${branch}/apis`, body => body.match(`form-data; name="schema"; filename="${customFilename}.json"`))
+          .reply(200, {
+            data: {
+              upload: { status: 'done' },
+              uri: `/branches/${branch}/apis/${customFilename}.json`,
+            },
+          });
+
+        const result = await run(['--branch', branch, fileUrl, '--key', key, '--slug', 'custom-slug']);
+
+        expect(result).toMatchSnapshot();
+
+        fileMock.done();
+        mock.done();
+      });
+    });
   });
 
   describe('given that the confirm overwrite flag is passed', () => {
