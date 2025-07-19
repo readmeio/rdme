@@ -92,3 +92,14 @@ export type APIv2PageUploadCommands =
  * These commands can do more than just upload pages, but they are all backed by the APIv2 representations.
  */
 export type APIv2PageCommands = APIv2PageUploadCommands | DocsMigrateCommand;
+
+/**
+ * Every command that deals with OpenAPI definitions.
+ */
+export type OpenAPICommands =
+  | OpenAPIConvertCommand
+  | OpenAPIInspectCommand
+  | OpenAPIReduceCommand
+  | OpenAPIResolveCommand
+  | OpenAPIUploadCommand
+  | OpenAPIValidateCommand;

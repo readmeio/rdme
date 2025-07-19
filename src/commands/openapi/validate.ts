@@ -41,7 +41,7 @@ export default class OpenAPIValidateCommand extends BaseCommand<typeof OpenAPIVa
       this.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
     }
 
-    const { specPath, specType } = await prepareOas(this.args.spec, OpenAPIValidateCommand.id);
+    const { specPath, specType } = await prepareOas.call(this, OpenAPIValidateCommand.id);
 
     return this.runCreateGHAHook({
       parsedOpts: { ...this.flags, spec: specPath },

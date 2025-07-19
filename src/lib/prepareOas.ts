@@ -1,5 +1,5 @@
 import type { OpenAPI } from 'openapi-types';
-import type { CommandIdForTopic } from '../index.js';
+import type { CommandIdForTopic, OpenAPICommands } from '../index.js';
 
 import chalk from 'chalk';
 import OASNormalize from 'oas-normalize';
@@ -7,7 +7,7 @@ import { getAPIDefinitionType } from 'oas-normalize/lib/utils';
 import ora from 'ora';
 
 import isCI from './isCI.js';
-import { debug, info, oraOptions } from './logger.js';
+import { oraOptions } from './logger.js';
 import promptTerminal from './promptWrapper.js';
 import readdirRecursive from './readdirRecursive.js';
 
@@ -50,25 +50,14 @@ function capitalizeSpecType<T extends 'openapi' | 'postman' | 'swagger' | 'unkno
  * Normalizes, validates, and (optionally) bundles an OpenAPI definition.
  */
 export default async function prepareOas(
-  /**
-   * Path to a spec file. If this is missing, the current directory is searched for
-   * certain file names.
-   */
-  path: string | undefined,
+  this: OpenAPICommands,
   /**
    * The command context in which this is being run within (uploading a spec,
    * validation, or reducing one).
    */
   command: `openapi ${OpenAPIAction}`,
-  opts: {
-    /**
-     * An optional title to replace the value in the `info.title` field.
-     * @see {@link https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#info-object}
-     */
-    title?: string;
-  } = {},
 ) {
-  let specPath = path;
+  let specPath = this.args.spec;
 
   if (!specPath) {
     /**
@@ -97,31 +86,31 @@ export default async function prepareOas(
         file.toLowerCase().endsWith('.yml'),
     );
 
-    debug(`number of JSON or YAML files found: ${jsonAndYamlFiles.length}`);
+    this.debug(`number of JSON or YAML files found: ${jsonAndYamlFiles.length}`);
 
     const possibleSpecFiles: FoundSpecFile[] = (
       await Promise.all(
         jsonAndYamlFiles.map(file => {
-          debug(`attempting to oas-normalize ${file}`);
+          this.debug(`attempting to oas-normalize ${file}`);
           const oas = new OASNormalize(file, { enablePaths: true });
           return oas
             .version()
             .then(({ specification, version }) => {
-              debug(`specification type for ${file}: ${specification}`);
-              debug(`version for ${file}: ${version}`);
+              this.debug(`specification type for ${file}: ${specification}`);
+              this.debug(`version for ${file}: ${version}`);
               return ['openapi', 'swagger', 'postman'].includes(specification)
                 ? { filePath: file, specType: capitalizeSpecType(specification) as SpecType, version }
                 : null;
             })
             .catch(e => {
-              debug(`error extracting API definition specification version for ${file}: ${e.message}`);
+              this.debug(`error extracting API definition specification version for ${file}: ${e.message}`);
               return null;
             });
         }),
       )
     ).filter(truthy);
 
-    debug(`number of possible OpenAPI/Swagger files found: ${possibleSpecFiles.length}`);
+    this.debug(`number of possible OpenAPI/Swagger files found: ${possibleSpecFiles.length}`);
 
     if (!possibleSpecFiles.length) {
       fileFindingSpinner.fail();
@@ -134,7 +123,7 @@ export default async function prepareOas(
 
     if (possibleSpecFiles.length === 1) {
       fileFindingSpinner.stop();
-      info(chalk.yellow(`We found ${specPath} and are attempting to ${action} it.`));
+      this.info(chalk.yellow(`We found ${specPath} and are attempting to ${action} it.`));
     } else if (possibleSpecFiles.length > 1) {
       if (isCI()) {
         fileFindingSpinner.fail();
@@ -160,9 +149,9 @@ export default async function prepareOas(
 
   const spinner = ora({ text: `Validating the API definition located at ${specPath}...`, ...oraOptions() }).start();
 
-  debug(`about to normalize spec located at ${specPath}`);
+  this.debug(`about to normalize spec located at ${specPath}`);
   const oas = new OASNormalize(specPath, { colorizeErrors: true, enablePaths: true });
-  debug('spec normalized');
+  this.debug('spec normalized');
 
   // We're retrieving the original specification type here instead of after validation because if
   // they give us a Postman collection we should tell them that we handled a Postman collection, not
@@ -182,42 +171,42 @@ export default async function prepareOas(
     })
     .catch((err: Error) => {
       spinner.fail();
-      debug(`raw oas load error object: ${JSON.stringify(err)}`);
+      this.debug(`raw oas load error object: ${JSON.stringify(err)}`);
       throw err;
     });
 
   let api: OpenAPI.Document;
   await oas.validate().catch((err: Error) => {
     spinner.fail();
-    debug(`raw validation error object: ${JSON.stringify(err)}`);
+    this.debug(`raw validation error object: ${JSON.stringify(err)}`);
     throw err;
   });
 
   // If we were supplied a Postman collection this will **always** convert it to OpenAPI 3.0.
-  debug('converting the spec to OpenAPI 3.0 (if necessary)');
+  this.debug('converting the spec to OpenAPI 3.0 (if necessary)');
   api = await oas.convert().catch((err: Error) => {
     spinner.fail();
-    debug(`raw openapi conversion error object: ${JSON.stringify(err)}`);
+    this.debug(`raw openapi conversion error object: ${JSON.stringify(err)}`);
     throw err;
   });
 
   spinner.stop();
 
-  debug('👇👇👇👇👇 spec validated! logging spec below 👇👇👇👇👇');
-  debug(api);
-  debug('👆👆👆👆👆 finished logging spec 👆👆👆👆👆');
-  debug(`spec type: ${specType}`);
+  this.debug('👇👇👇👇👇 spec validated! logging spec below 👇👇👇👇👇');
+  this.debug(api);
+  this.debug('👆👆👆👆👆 finished logging spec 👆👆👆👆👆');
+  this.debug(`spec type: ${specType}`);
 
-  if (opts.title) {
-    debug(`renaming title field to ${opts.title}`);
-    api.info.title = opts.title;
+  if (this.flags.title) {
+    this.debug(`renaming title field to ${this.flags.title}`);
+    api.info.title = this.flags.title;
   }
 
   const specFileType = oas.type;
 
   // No need to optional chain here since `info.version` is required to pass validation
   const specVersion: string = api.info.version;
-  debug(`version in spec: ${specVersion}`);
+  this.debug(`version in spec: ${specVersion}`);
 
   const commandsThatBundle: (typeof command)[] = [
     'openapi inspect',
@@ -229,7 +218,7 @@ export default async function prepareOas(
   if (commandsThatBundle.includes(command)) {
     api = await oas.bundle();
 
-    debug('spec bundled');
+    this.debug('spec bundled');
   }
 
   return {
