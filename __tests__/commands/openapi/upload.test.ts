@@ -440,12 +440,13 @@ describe('rdme openapi upload', () => {
 
   describe('given that the API definition is a URL', () => {
     it('should create a new API definition in ReadMe', async () => {
-      const fileMock = nock('https://example.com').get('/openapi.json').reply(200, petstore);
+      const filename = 'openapi.json';
+      const fileMock = nock('https://example.com').get(`/${filename}`).reply(200, petstore);
 
       const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
         .get(`/branches/${branch}/apis`)
         .reply(200, {})
-        .post(`/branches/${branch}/apis`, body => body.match(`form-data; name="url"\r\n\r\n${fileUrl}`))
+        .post(`/branches/${branch}/apis`, body => body.match(`form-data; name="schema"; filename="${filename}"`))
         .reply(200, {
           data: {
             upload: { status: 'done' },
@@ -464,12 +465,15 @@ describe('rdme openapi upload', () => {
     it('should update an existing API definition in ReadMe', async () => {
       prompts.inject([true]);
 
-      const fileMock = nock('https://example.com').get('/openapi.json').reply(200, petstore);
+      const filename = 'openapi.json';
+      const fileMock = nock('https://example.com').get(`/${filename}`).reply(200, petstore);
 
       const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
         .get(`/branches/${branch}/apis`)
         .reply(200, { data: [{ filename: 'openapi.json' }] })
-        .put('/branches/1.0.0/apis/openapi.json', body => body.match(`form-data; name="url"\r\n\r\n${fileUrl}`))
+        .put('/branches/1.0.0/apis/openapi.json', body =>
+          body.match(`form-data; name="schema"; filename="${filename}"`),
+        )
         .reply(200, {
           data: {
             upload: { status: 'done' },

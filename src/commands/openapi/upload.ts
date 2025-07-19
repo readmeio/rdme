@@ -202,26 +202,20 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
     const body = new FormData();
 
-    if (specFileType === 'url') {
-      this.debug('attaching URL to form data payload');
-      body.append('url', specPath);
-    } else {
-      const isYaml = fileExtension === '.yaml' || fileExtension === '.yml';
-      // Convert YAML files back to YAML before uploading
-      let specToUpload = preparedSpec;
-      if (isYaml) {
-        specToUpload = yaml.dump(JSON.parse(preparedSpec));
-      }
-
-      this.debug('processing file into form data payload');
-      body.append(
-        'schema',
-        new File([specToUpload], filename, {
-          type: isYaml ? 'application/x-yaml' : 'application/json',
-        }),
-        filename,
-      );
+    const isYaml = fileExtension === '.yaml' || fileExtension === '.yml';
+    // Convert YAML files back to YAML before uploading
+    let specToUpload = preparedSpec;
+    if (isYaml) {
+      specToUpload = yaml.dump(JSON.parse(preparedSpec));
     }
+
+    this.debug('processing file into form data payload');
+    body.append(
+      'schema',
+      new File([specToUpload], filename, {
+        type: isYaml ? 'application/x-yaml' : 'application/json',
+      })
+    );
 
     const options: RequestInit = { headers, method, body };
 
