@@ -71,6 +71,7 @@
     "simple-git": "^3.19.1",
     "slugify": "^1.6.6",
     "string-argv": "^0.3.2",
+    "supports-color": "^10.0.0",
     "table": "^6.8.1",
     "tmp-promise": "^3.0.3",
     "toposort": "^2.0.2",

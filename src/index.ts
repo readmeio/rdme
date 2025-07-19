@@ -13,6 +13,7 @@ import OpenAPIReduceCommand from './commands/openapi/reduce.js';
 import OpenAPIResolveCommand from './commands/openapi/resolve.js';
 import OpenAPIUploadCommand from './commands/openapi/upload.js';
 import OpenAPIValidateCommand from './commands/openapi/validate.js';
+import RageCommand from './commands/rage.js';
 import RefUploadCommand from './commands/reference/upload.js';
 import WhoAmICommand from './commands/whoami.js';
 
@@ -51,6 +52,8 @@ export const COMMANDS = {
   'openapi:resolve': OpenAPIResolveCommand,
   'openapi:upload': OpenAPIUploadCommand,
   'openapi:validate': OpenAPIValidateCommand,
+
+  'rage': RageCommand,
 
   'reference:upload': RefUploadCommand,
 
