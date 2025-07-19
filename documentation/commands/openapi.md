@@ -143,7 +143,7 @@ Resolves circular and recursive references in OpenAPI by replacing them with obj
 
 ```
 USAGE
-  $ rdme openapi resolve [SPEC] [--out <value>] [--workingDirectory <value>]
+  $ rdme openapi resolve [SPEC] [--out <value>] [--title <value>] [--workingDirectory <value>]
 
 ARGUMENTS
   SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
@@ -151,6 +151,7 @@ ARGUMENTS
 
 FLAGS
   --out=<value>               Output file path to write resolved file to
+  --title=<value>             An override value for the `info.title` field in the API definition
   --workingDirectory=<value>  Working directory (for usage with relative external references)
 
 DESCRIPTION
@@ -184,7 +185,7 @@ Upload (or re-upload) your API definition to ReadMe.
 
 ```
 USAGE
-  $ rdme openapi upload [SPEC] --key <value> [--slug <value>] [--useSpecVersion | --branch <value>]
+  $ rdme openapi upload [SPEC] --key <value> [--slug <value>] [--title <value>] [--useSpecVersion | --branch <value>]
 
 ARGUMENTS
   SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
@@ -194,6 +195,7 @@ FLAGS
   --key=<value>     (required) ReadMe project API key
   --branch=<value>  [default: stable] ReadMe project version
   --slug=<value>    Override the slug (i.e., the unique identifier) for your API definition.
+  --title=<value>   An override value for the `info.title` field in the API definition
   --useSpecVersion  Use the OpenAPI `info.version` field for your ReadMe project version
 
 DESCRIPTION
