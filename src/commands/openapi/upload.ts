@@ -278,7 +278,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       'schema',
       new File([specToUpload], filename, {
         type: isYaml ? 'application/x-yaml' : 'application/json',
-      })
+      }),
     );
 
     const options: RequestInit = { headers, method, body };
