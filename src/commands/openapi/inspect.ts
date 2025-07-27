@@ -198,6 +198,8 @@ function buildFullReport(analysis: Analysis, definitionVersion: string, tableBor
 }
 
 export default class OpenAPIInspectCommand extends BaseCommand<typeof OpenAPIInspectCommand> {
+  id = 'openapi inspect' as const;
+
   static summary = 'Analyze an OpenAPI/Swagger definition for various OpenAPI and ReadMe feature usage.';
 
   static description =
@@ -251,7 +253,7 @@ export default class OpenAPIInspectCommand extends BaseCommand<typeof OpenAPIIns
       this.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
     }
 
-    const { preparedSpec, definitionVersion } = await prepareOas.call(this, 'openapi inspect');
+    const { preparedSpec, definitionVersion } = await prepareOas.call(this);
     const parsedPreparedSpec: OASDocument = JSON.parse(preparedSpec);
 
     const spinner = ora({ ...oraOptions() });

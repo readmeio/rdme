@@ -22,6 +22,8 @@ type Schema = OpenAPIV31.ReferenceObject | OpenAPIV31.SchemaObject;
 type SchemaCollection = Record<string, Schema>;
 
 export default class OpenAPIResolveCommand extends BaseCommand<typeof OpenAPIResolveCommand> {
+  id = 'openapi resolve' as const;
+
   static summary = 'Resolves circular and recursive references in OpenAPI by replacing them with object schemas.';
 
   static description =
@@ -350,7 +352,7 @@ export default class OpenAPIResolveCommand extends BaseCommand<typeof OpenAPIRes
       this.debug(`Switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
     }
 
-    const { preparedSpec, specPath, specType } = await prepareOas.call(this, 'openapi resolve');
+    const { preparedSpec, specPath, specType } = await prepareOas.call(this);
     if (specType !== 'OpenAPI') {
       throw new Error('Sorry, this command only supports OpenAPI 3.0+ definitions.');
     }

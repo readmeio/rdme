@@ -5,6 +5,8 @@ import { githubFlag, specArg, workingDirectoryFlag } from '../../lib/flags.js';
 import prepareOas from '../../lib/prepareOas.js';
 
 export default class OpenAPIValidateCommand extends BaseCommand<typeof OpenAPIValidateCommand> {
+  id = 'openapi validate' as const;
+
   static summary = 'Validate your OpenAPI/Swagger definition.';
 
   static description =
@@ -41,7 +43,7 @@ export default class OpenAPIValidateCommand extends BaseCommand<typeof OpenAPIVa
       this.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
     }
 
-    const { specPath, specType } = await prepareOas.call(this, OpenAPIValidateCommand.id);
+    const { specPath, specType } = await prepareOas.call(this);
 
     return this.runCreateGHAHook({
       parsedOpts: { ...this.flags, spec: specPath },

@@ -21,6 +21,8 @@ import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
 
 export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUploadCommand> {
+  id = 'openapi upload' as const;
+
   static summary = 'Upload (or re-upload) your API definition to ReadMe.';
 
   static description = [
@@ -120,10 +122,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
   }
 
   async run() {
-    const { preparedSpec, specFileType, specType, specPath, specVersion } = await prepareOas.call(
-      this,
-      'openapi upload',
-    );
+    const { preparedSpec, specFileType, specType, specPath, specVersion } = await prepareOas.call(this);
 
     const branch = this.flags.useSpecVersion ? specVersion : this.flags.branch;
 
