@@ -49,15 +49,9 @@ function capitalizeSpecType<T extends 'openapi' | 'postman' | 'swagger' | 'unkno
 /**
  * Normalizes, validates, and (optionally) bundles an OpenAPI definition.
  */
-export default async function prepareOas(
-  this: OpenAPICommands,
-  /**
-   * The command context in which this is being run within (uploading a spec,
-   * validation, or reducing one).
-   */
-  command: `openapi ${OpenAPIAction}`,
-) {
+export default async function prepareOas(this: OpenAPICommands) {
   let specPath = this.args.spec;
+  const command = this.id satisfies `openapi ${OpenAPIAction}`;
 
   if (!specPath) {
     /**
