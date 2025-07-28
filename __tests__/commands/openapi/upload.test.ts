@@ -440,12 +440,13 @@ describe('rdme openapi upload', () => {
 
   describe('given that the API definition is a URL', () => {
     it('should create a new API definition in ReadMe', async () => {
-      const fileMock = nock('https://example.com').get('/openapi.json').reply(200, petstore);
+      const urlFilename = 'openapi.json';
+      const fileMock = nock('https://example.com').get(`/${urlFilename}`).reply(200, petstore);
 
       const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
         .get(`/branches/${branch}/apis`)
         .reply(200, {})
-        .post(`/branches/${branch}/apis`, body => body.match(`form-data; name="url"\r\n\r\n${fileUrl}`))
+        .post(`/branches/${branch}/apis`, body => body.match(`form-data; name="schema"; filename="${urlFilename}"`))
         .reply(200, {
           data: {
             upload: { status: 'done' },
@@ -464,12 +465,15 @@ describe('rdme openapi upload', () => {
     it('should update an existing API definition in ReadMe', async () => {
       prompts.inject([true]);
 
-      const fileMock = nock('https://example.com').get('/openapi.json').reply(200, petstore);
+      const urlFilename = 'openapi.json';
+      const fileMock = nock('https://example.com').get(`/${urlFilename}`).reply(200, petstore);
 
       const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
         .get(`/branches/${branch}/apis`)
         .reply(200, { data: [{ filename: 'openapi.json' }] })
-        .put('/branches/1.0.0/apis/openapi.json', body => body.match(`form-data; name="url"\r\n\r\n${fileUrl}`))
+        .put('/branches/1.0.0/apis/openapi.json', body =>
+          body.match(`form-data; name="schema"; filename="${urlFilename}"`),
+        )
         .reply(200, {
           data: {
             upload: { status: 'done' },
@@ -493,6 +497,33 @@ describe('rdme openapi upload', () => {
       expect(result).toMatchSnapshot();
 
       fileMock.done();
+    });
+
+    describe('and the `--slug` flag is passed', () => {
+      it('should create a new API definition in ReadMe with the specified slug', async () => {
+        const customFilename = 'custom-slug';
+        const fileMock = nock('https://example.com').get('/openapi.json').reply(200, petstore);
+
+        const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+          .get(`/branches/${branch}/apis`)
+          .reply(200, {})
+          .post(`/branches/${branch}/apis`, body =>
+            body.match(`form-data; name="schema"; filename="${customFilename}.json"`),
+          )
+          .reply(200, {
+            data: {
+              upload: { status: 'done' },
+              uri: `/branches/${branch}/apis/${customFilename}.json`,
+            },
+          });
+
+        const result = await run(['--branch', branch, fileUrl, '--key', key, '--slug', 'custom-slug']);
+
+        expect(result).toMatchSnapshot();
+
+        fileMock.done();
+        mock.done();
+      });
     });
   });
 
