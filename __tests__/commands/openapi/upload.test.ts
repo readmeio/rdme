@@ -507,7 +507,9 @@ describe('rdme openapi upload', () => {
         const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
           .get(`/branches/${branch}/apis`)
           .reply(200, {})
-          .post(`/branches/${branch}/apis`, body => body.match(`form-data; name="schema"; filename="${customFilename}.json"`))
+          .post(`/branches/${branch}/apis`, body =>
+            body.match(`form-data; name="schema"; filename="${customFilename}.json"`),
+          )
           .reply(200, {
             data: {
               upload: { status: 'done' },
