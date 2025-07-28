@@ -40,7 +40,7 @@ export default class RageCommand extends BaseCommand<typeof RageCommand> {
         // If we didn't find any data in their config file then it's either empty or doens't exist
         // so it seems reasonable to ascertain if we were able to successfully load it or not by
         // that.
-        'Loaded successfully': Boolean(apiKey || email || project),
+        'Contains data': Boolean(apiKey || email || project),
         Path: configstore.path,
       },
       Plugins: {
