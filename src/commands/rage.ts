@@ -14,23 +14,12 @@ export default class RageCommand extends BaseCommand<typeof RageCommand> {
   async run() {
     const { apiKey, email, project } = getCurrentConfig.call(this);
 
-    const plugins = Object.entries(this.config.versionDetails?.pluginVersions || {})
-      .map(([name, details]) => ({ [name]: details.version }))
-      .reduce(
-        (acc, plugin) => {
-          const [name, version] = Object.entries(plugin)[0];
-
-          // Neither the main bin or any Oclif plugin that we load for normal rdme usage should be
-          // included in this list as they ship with rdme.
-          if (name === this.config.bin || name.startsWith('@oclif')) {
-            return acc;
-          }
-
-          acc[name] = version;
-          return acc;
-        },
-        {} as Record<string, string>,
-      );
+    const plugins: Record<string, string> = {};
+    for (const [pluginName, plugin] of this.config.plugins.entries()) {
+      // Don't report core plugins as being installed because they ship with rdme.
+      if (plugin.type === 'core') continue;
+      plugins[pluginName] = plugin.version;
+    }
 
     const rage = {
       CLI: {
