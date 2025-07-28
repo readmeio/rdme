@@ -1,3 +1,10 @@
+# [10.5.0-next.2](https://github.com/readmeio/rdme/compare/v10.5.0-next.1...v10.5.0-next.2) (2025-07-28)
+
+
+### Bug Fixes
+
+* **openapi/upload:** custom slugs for URL uploads ([#1313](https://github.com/readmeio/rdme/issues/1313)) ([ab48677](https://github.com/readmeio/rdme/commit/ab486770a95accc0f557351a300067bcf94b248e))
+
 # [10.5.0-next.1](https://github.com/readmeio/rdme/compare/v10.4.1-next.1...v10.5.0-next.1) (2025-07-16)
 
 
