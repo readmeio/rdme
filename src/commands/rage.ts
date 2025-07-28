@@ -1,4 +1,4 @@
-import supportsColor from 'supports-color';
+import { supportsColor } from 'chalk';
 import { getBorderCharacters, table } from 'table';
 
 import BaseCommand from '../lib/baseCommand.js';
@@ -14,20 +14,38 @@ export default class RageCommand extends BaseCommand<typeof RageCommand> {
   async run() {
     const { apiKey, email, project } = getCurrentConfig.call(this);
 
+    const plugins = Object.entries(this.config.versionDetails?.pluginVersions || {})
+      .map(([name, details]) => ({ [name]: details.version }))
+      .reduce(
+        (acc, plugin) => {
+          const [name, version] = Object.entries(plugin)[0];
+
+          // Neither the main bin or any Oclif plugin that we load for normal rdme usage should be
+          // included in this list as they ship with rdme.
+          if (name === this.config.bin || name.startsWith('@oclif')) {
+            return acc;
+          }
+
+          acc[name] = version;
+          return acc;
+        },
+        {} as Record<string, string>,
+      );
+
     const rage = {
       CLI: {
         Version: this.config.version,
-        // This `supports-color` logic is the same that `@oclif/core/ux` uses for `colorize` they
-        // just don't expose their internal `supportsColor` library.
-        'Color support': Boolean(supportsColor.stdout) && Boolean(supportsColor.stderr),
+        'Color support': Boolean(supportsColor),
       },
       Platform: {
-        'CPU Architecture': process.arch,
-        OS: process.platform,
+        'CPU Architecture': this.config.arch,
+        OS: this.config.platform,
+        'OS Version': this.config.versionDetails.osVersion,
       },
       Environment: {
         CI: isCI() ? ciName() : false,
         'GitHub Actions': isGHA(),
+        'Node Version': this.config.versionDetails.nodeVersion,
       },
       Configuration: {
         // If we didn't find any data in their config file then it's either empty or doens't exist
@@ -36,18 +54,24 @@ export default class RageCommand extends BaseCommand<typeof RageCommand> {
         'Loaded successfully': Boolean(apiKey || email || project),
         Path: configstore.path,
       },
+      Plugins: {
+        'Loaded plugins': Object.keys(plugins).length,
+        ...plugins,
+      },
     };
 
-    const data = Object.entries(rage).flatMap(([section, values], idx) => {
-      const sectionData = Object.entries(values).map(([key, value]) => [`  ${key}:`, value]);
-      return [
-        [`${section}:`, ''],
-        ...sectionData,
+    const data = Object.entries(rage)
+      .flatMap(([section, values], idx) => {
+        const sectionData = Object.entries(values).map(([key, value]) => [`  ${key}:`, value]);
+        return [
+          [`${section}:`, ''],
+          ...sectionData,
 
-        // Only add a group separator if this isn't the last section.
-        idx !== (Object.keys(rage).length - 1) ? ['', ''] : false
-      ];
-    }).filter(Boolean) as [string, string][];
+          // Only add a group separator if this isn't the last section.
+          idx !== Object.keys(rage).length - 1 ? ['', ''] : false,
+        ];
+      })
+      .filter(Boolean) as [string, string][];
 
     const output = table(data, {
       border: getBorderCharacters('void'),

@@ -53,7 +53,7 @@ export const COMMANDS = {
   'openapi:upload': OpenAPIUploadCommand,
   'openapi:validate': OpenAPIValidateCommand,
 
-  'rage': RageCommand,
+  rage: RageCommand,
 
   'reference:upload': RefUploadCommand,
 
