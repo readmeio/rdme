@@ -37,7 +37,7 @@ export default class RageCommand extends BaseCommand<typeof RageCommand> {
         'Node Version': this.config.versionDetails.nodeVersion,
       },
       Configuration: {
-        // If we didn't find any data in their config file then it's either empty or doens't exist
+        // If we didn't find any data in their config file then it's either empty or doesn't exist
         // so it seems reasonable to ascertain if we were able to successfully load it or not by
         // that.
         'Contains data': Boolean(apiKey || email || project),
