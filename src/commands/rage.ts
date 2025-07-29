@@ -27,9 +27,8 @@ export default class RageCommand extends BaseCommand<typeof RageCommand> {
         'Color support': Boolean(supportsColor),
       },
       Platform: {
-        'CPU Architecture': this.config.arch,
-        OS: this.config.platform,
-        'OS Version': this.config.versionDetails.osVersion,
+        'CPU architecture': this.config.arch,
+        OS: this.config.versionDetails.osVersion,
       },
       Environment: {
         CI: isCI() ? ciName() : false,
