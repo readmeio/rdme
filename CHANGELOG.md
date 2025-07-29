@@ -1,3 +1,10 @@
+# [10.5.0-next.3](https://github.com/readmeio/rdme/compare/v10.5.0-next.2...v10.5.0-next.3) (2025-07-29)
+
+
+### Features
+
+* new `rage` command for printing out environment data for debugging ([#1310](https://github.com/readmeio/rdme/issues/1310)) ([c773af8](https://github.com/readmeio/rdme/commit/c773af8b0217ab0e201970bc7f478b40b423f753))
+
 # [10.5.0-next.2](https://github.com/readmeio/rdme/compare/v10.5.0-next.1...v10.5.0-next.2) (2025-07-28)
 
 
