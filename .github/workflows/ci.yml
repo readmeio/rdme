@@ -11,7 +11,6 @@ on:
 jobs:
   build:
     name: Test Suite
-    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
@@ -22,6 +21,11 @@ jobs:
           - lts/-1
           - lts/*
           - latest
+        os-version:
+          - ubuntu-latest
+          - windows-latest
+
+    runs-on: ${{ matrix.os-version }}
 
     steps:
       - uses: actions/checkout@v4
