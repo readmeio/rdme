@@ -1,3 +1,10 @@
+# [10.5.0-next.4](https://github.com/readmeio/rdme/compare/v10.5.0-next.3...v10.5.0-next.4) (2025-07-29)
+
+
+### Features
+
+* **openapi/upload:** docs + DX enhancements for slugs vs. legacy IDs ([#1309](https://github.com/readmeio/rdme/issues/1309)) ([5272a7e](https://github.com/readmeio/rdme/commit/5272a7e8c03fde24c9912a0dc677d2177415464c))
+
 # [10.5.0-next.3](https://github.com/readmeio/rdme/compare/v10.5.0-next.2...v10.5.0-next.3) (2025-07-29)
 
 
