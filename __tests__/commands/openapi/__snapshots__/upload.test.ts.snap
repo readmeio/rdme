@@ -65,6 +65,21 @@ exports[`rdme openapi upload > given that the "--legacy-id" flag is passed > sho
 }
 `;
 
+exports[`rdme openapi upload > given that the API definition is a URL > and the \`--slug\` flag is passed > should create a new API definition in ReadMe with the specified slug 1`] = `
+{
+  "result": {
+    "status": "done",
+    "uri": "/branches/1.0.0/apis/custom-slug.json",
+  },
+  "stderr": "- Validating the API definition located at https://example.com/openapi.json...
+- Creating your API definition to ReadMe...
+✔ Creating your API definition to ReadMe... done!
+",
+  "stdout": "🚀 Your API definition (custom-slug.json) was successfully created in ReadMe!
+",
+}
+`;
+
 exports[`rdme openapi upload > given that the API definition is a URL > should create a new API definition in ReadMe 1`] = `
 {
   "result": {

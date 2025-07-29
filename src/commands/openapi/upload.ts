@@ -14,13 +14,15 @@ import prompts from 'prompts';
 import slugify from 'slugify';
 
 import BaseCommand from '../../lib/baseCommand.js';
-import { branchFlag, keyFlag, specArg } from '../../lib/flags.js';
+import { branchFlag, keyFlag, specArg, titleFlag } from '../../lib/flags.js';
 import isCI, { isTest } from '../../lib/isCI.js';
 import { oraOptions } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
 
 export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUploadCommand> {
+  id = 'openapi upload' as const;
+
   static summary = 'Upload (or re-upload) your API definition to ReadMe.';
 
   static description = [
@@ -56,6 +58,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
         "You do not need to include a file extension (i.e., either `custom-slug.json` or `custom-slug` will work). If you do, it must match the file extension of the file you're uploading.",
       ].join('\n\n'),
     }),
+    title: titleFlag,
     useSpecVersion: Flags.boolean({
       summary: 'Use the OpenAPI `info.version` field for your ReadMe project version',
       description:
@@ -119,9 +122,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
   }
 
   async run() {
-    const { spec } = this.args;
-
-    const { preparedSpec, specFileType, specType, specPath, specVersion } = await prepareOas(spec, 'openapi upload');
+    const { preparedSpec, specFileType, specType, specPath, specVersion } = await prepareOas.call(this);
 
     const branch = this.flags.useSpecVersion ? specVersion : this.flags.branch;
 
@@ -267,26 +268,20 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
     const body = new FormData();
 
-    if (specFileType === 'url') {
-      this.debug('attaching URL to form data payload');
-      body.append('url', specPath);
-    } else {
-      const isYaml = fileExtension === '.yaml' || fileExtension === '.yml';
-      // Convert YAML files back to YAML before uploading
-      let specToUpload = preparedSpec;
-      if (isYaml) {
-        specToUpload = yaml.dump(JSON.parse(preparedSpec));
-      }
-
-      this.debug('processing file into form data payload');
-      body.append(
-        'schema',
-        new File([specToUpload], filename, {
-          type: isYaml ? 'application/x-yaml' : 'application/json',
-        }),
-        filename,
-      );
+    const isYaml = fileExtension === '.yaml' || fileExtension === '.yml';
+    // Convert YAML files back to YAML before uploading
+    let specToUpload = preparedSpec;
+    if (isYaml) {
+      specToUpload = yaml.dump(JSON.parse(preparedSpec));
     }
+
+    this.debug('processing file into form data payload');
+    body.append(
+      'schema',
+      new File([specToUpload], filename, {
+        type: isYaml ? 'application/x-yaml' : 'application/json',
+      }),
+    );
 
     const options: RequestInit = { headers, method, body };
 
