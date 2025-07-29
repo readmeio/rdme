@@ -29,6 +29,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     'By default, the slug (i.e., the unique identifier for your API definition resource in ReadMe) will be inferred from the spec name and path. As long as you maintain these directory/file names and run `rdme` from the same location relative to your file, the inferred slug will be preserved and any updates you make to this file will be synced to the same resource in ReadMe.',
     'If the spec is a local file, the inferred slug takes the relative path and slugifies it (e.g., the slug for `docs/api/petstore.json` will be `docs-api-petstore.json`).',
     'If the spec is a URL, the inferred slug is the base file name from the URL (e.g., the slug for `https://example.com/docs/petstore.json` will be `petstore.json`).',
+    "For the best and most explicit results, we recommend using the `--slug` flag to set a slug for your API definition, especially if you're managing many API definitions at scale.",
   ].join('\n\n');
 
   static args = {
@@ -48,7 +49,6 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       description:
         'This is only used for legacy `rdme` CLI workflows and only applies if your project, and this API definition, predate ReadMe Refactored. This flag is considered deprecated and we recommend using `--slug` instead.',
       hidden: true,
-      deprecated: true,
       exclusive: ['slug'],
     }),
     slug: Flags.string({
@@ -143,8 +143,23 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       );
     }
 
+    const headers = new Headers({ authorization: `Bearer ${this.flags.key}` });
+
+    const existingAPIDefinitions: APIDefinitionsRepresentation['data'] =
+      (await this.readmeAPIFetch(`/branches/${branch}/apis`, { headers }).then(res => this.handleAPIRes(res)))?.data ||
+      [];
+
+    /**
+     * If the user provided a slug that matches an existing legacy API definition ID,
+     * we'll prompt them to confirm that they want to update the file.
+     * We store this in a variable so we can use it later so we can bypass the other prompt
+     * to confirm the file overwrite.
+     */
+    let updateLegacyIdViaSlug = false;
+
     const fileExtension = nodePath.extname(filename);
     if (this.flags.slug) {
+      // verify that the slug's extension matches the file's extension
       const slugExtension = nodePath.extname(this.flags.slug);
       if (slugExtension && (!['.json', '.yaml', '.yml'].includes(slugExtension) || fileExtension !== slugExtension)) {
         throw new Error(
@@ -154,15 +169,51 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
       // the API expects a file extension, so keep it if it's there, add it if it's not
       filename = `${this.flags.slug.replace(slugExtension, '')}${fileExtension}`;
+      // handling in the event that the slug is an object ID, in which case it's likely a faulty migration
+      const objectIdRegex = /^[0-9a-fA-F]{24}$/;
+      if (objectIdRegex.test(this.flags.slug)) {
+        const matchedLegacyAPIDefinition = existingAPIDefinitions.find(d => d.legacy_id === this.flags.slug);
+        if (matchedLegacyAPIDefinition) {
+          if (isCI()) {
+            throw new Error(
+              `The slug you provided matches a legacy API definition ID, which have been deprecated in ReadMe. To fix this, update your \`--slug\` flag to  \`${matchedLegacyAPIDefinition.filename}\`.`,
+            );
+          }
+
+          // if the slug matches an existing legacy API definition, we'll prompt the user before making that change
+          const { legacyConfirm } = await promptTerminal({
+            type: 'confirm',
+            name: 'legacyConfirm',
+            message: `The slug you provided matches the ID of a legacy API definition (${matchedLegacyAPIDefinition.filename}). Would you like to update this file?`,
+          });
+
+          if (!legacyConfirm) {
+            throw new Error('Aborting, no changes were made.');
+          }
+
+          updateLegacyIdViaSlug = true;
+
+          this.warn(
+            `The slug you provided matches a legacy API definition ID and these IDs are now deprecated in ReadMe. To ensure maximum compatibility going forward, we recommend updating your \`--slug\` flag to  \`${matchedLegacyAPIDefinition.filename}\`.`,
+          );
+
+          filename = matchedLegacyAPIDefinition.filename;
+        } else {
+          this.warn(
+            'The slug you provided looks like a legacy API definition ID, and these IDs are now deprecated in ReadMe. More info here: https://github.com/readmeio/rdme/blob/v10/documentation/migration-guide.md#v10-openapi-upload-command-updates',
+          );
+        }
+      }
     }
 
-    const headers = new Headers({ authorization: `Bearer ${this.flags.key}` });
+    const filenames = new Intl.ListFormat('en', {
+      style: 'long',
+      type: 'unit',
+    }).format(existingAPIDefinitions.map(d => `\`${d.filename}\``));
 
-    const existingAPIDefinitions = (await this.readmeAPIFetch(`/branches/${branch}/apis`, { headers }).then(res =>
-      this.handleAPIRes(res),
-    )) as APIDefinitionsRepresentation;
+    this.debug(`found ${existingAPIDefinitions.length} existing API definitions: ${filenames}`);
 
-    const matchingAPIDefinition = existingAPIDefinitions?.data?.find(d => {
+    const matchingAPIDefinition = existingAPIDefinitions.find(d => {
       if (this.flags['legacy-id']) {
         return d?.legacy_id === this.flags['legacy-id'];
       }
@@ -171,9 +222,24 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
     if (this.flags['legacy-id']) {
       if (!matchingAPIDefinition) {
-        throw new Error(`No API definition found with legacy ID ${this.flags['legacy-id']}.`);
+        let existingDefinitionSuggestion =
+          'No existing definitions were found. Did you mean to use the `--slug` flag instead?';
+        if (existingAPIDefinitions.length === 1) {
+          existingDefinitionSuggestion = `1 file was found — did you mean to update that? If so, try replacing \`--legacy-id ${this.flags['legacy-id']}\` with \`--slug ${existingAPIDefinitions[0].filename}\`.`;
+        } else if (existingAPIDefinitions.length > 1) {
+          existingDefinitionSuggestion = `${existingAPIDefinitions.length} file(s) were found — if you meant to update one of those, pass in one of these slugs via the \`--slug\` flag: ${filenames}.`;
+        }
+
+        throw new Error(
+          [`No API definition found with legacy ID ${this.flags['legacy-id']}.`, existingDefinitionSuggestion].join(
+            ' ',
+          ),
+        );
       }
       filename = matchingAPIDefinition.filename;
+      this.warn(
+        `The \`--legacy-id\` flag will be removed in a future version. We recommend passing \`--slug ${filename}\` for maximum compatibility and readability.`,
+      );
       this.debug(`using existing legacy ID ${this.flags['legacy-id']} with filename ${filename}`);
     }
 
@@ -186,7 +252,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     if (method === 'PUT') {
       // bypass the prompt if we're in a CI environment
       prompts.override({
-        confirm: isCI() || this.flags['confirm-overwrite'] ? true : undefined,
+        confirm: isCI() || this.flags['confirm-overwrite'] || updateLegacyIdViaSlug ? true : undefined,
       });
 
       const { confirm } = await promptTerminal({

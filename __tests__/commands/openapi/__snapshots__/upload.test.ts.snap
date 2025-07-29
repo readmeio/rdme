@@ -20,11 +20,28 @@ See more help with --help],
 }
 `;
 
-exports[`rdme openapi upload > given that the "--legacy-id" flag is passed > should error if no matching API definition found 1`] = `
+exports[`rdme openapi upload > given that the "--legacy-id" flag is passed > should error if no matching API definition found (and there are no existing definitions) 1`] = `
 {
-  "error": [Error: No API definition found with legacy ID 1234567890.],
-  "stderr": " ›   Warning: The "legacy-id" flag has been deprecated.
-- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+  "error": [Error: No API definition found with legacy ID 1234567890. No existing definitions were found. Did you mean to use the \`--slug\` flag instead?],
+  "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+",
+  "stdout": "",
+}
+`;
+
+exports[`rdme openapi upload > given that the "--legacy-id" flag is passed > should error if no matching API definition found (and there are several existing definitions) 1`] = `
+{
+  "error": [Error: No API definition found with legacy ID 1234567890. 3 file(s) were found — if you meant to update one of those, pass in one of these slugs via the \`--slug\` flag: \`file1.json\`, \`file2.json\`, \`file3.json\`.],
+  "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+",
+  "stdout": "",
+}
+`;
+
+exports[`rdme openapi upload > given that the "--legacy-id" flag is passed > should error if no matching API definition found (and there is a single existing definition) 1`] = `
+{
+  "error": [Error: No API definition found with legacy ID 1234567890. 1 file was found — did you mean to update that? If so, try replacing \`--legacy-id 1234567890\` with \`--slug file1.json\`.],
+  "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
 ",
   "stdout": "",
 }
@@ -36,8 +53,10 @@ exports[`rdme openapi upload > given that the "--legacy-id" flag is passed > sho
     "status": "done",
     "uri": "/branches/1.0.0/apis/legacy-spec.json",
   },
-  "stderr": " ›   Warning: The "legacy-id" flag has been deprecated.
-- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+  "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+ ›   Warning: The \`--legacy-id\` flag will be removed in a future version. We 
+ ›   recommend passing \`--slug legacy-spec.json\` for maximum compatibility and 
+ ›   readability.
 - Updating your API definition to ReadMe...
 ✔ Updating your API definition to ReadMe... done!
 ",
@@ -101,6 +120,34 @@ exports[`rdme openapi upload > given that the API definition is a URL > should u
 }
 `;
 
+exports[`rdme openapi upload > given that the API definition is a local file > and the \`--slug\` flag is passed > should emit a warning if an object ID is passed and no legacy match is found 1`] = `
+{
+  "result": {
+    "status": "done",
+    "uri": "/branches/1.0.0/apis/687855c3600c6e14c79a94cb.json",
+  },
+  "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+ ›   Warning: The slug you provided looks like a legacy API definition ID, and 
+ ›   these IDs are now deprecated in ReadMe. More info here: 
+ ›   https://github.com/readmeio/rdme/blob/v10/documentation/migration-guide.md
+ ›   #v10-openapi-upload-command-updates
+- Creating your API definition to ReadMe...
+✔ Creating your API definition to ReadMe... done!
+",
+  "stdout": "🚀 Your API definition (687855c3600c6e14c79a94cb.json) was successfully created in ReadMe!
+",
+}
+`;
+
+exports[`rdme openapi upload > given that the API definition is a local file > and the \`--slug\` flag is passed > should exit if an object ID is passed and a legacy match is found but the user declines the prompt 1`] = `
+{
+  "error": [Error: Aborting, no changes were made.],
+  "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+",
+  "stdout": "",
+}
+`;
+
 exports[`rdme openapi upload > given that the API definition is a local file > and the \`--slug\` flag is passed > should handle a slug with a valid but mismatching file extension 1`] = `
 {
   "error": [Error: Please provide a valid file extension that matches the extension on the file you provided. Must be \`.json\`, \`.yaml\`, or \`.yml\`.],
@@ -116,6 +163,25 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
   "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
 ",
   "stdout": "",
+}
+`;
+
+exports[`rdme openapi upload > given that the API definition is a local file > and the \`--slug\` flag is passed > should prompt the user before updating if an object ID is passed and a legacy match is found 1`] = `
+{
+  "result": {
+    "status": "done",
+    "uri": "/branches/1.0.0/apis/legacy-spec.json",
+  },
+  "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+ ›   Warning: The slug you provided matches a legacy API definition ID and 
+ ›   these IDs are now deprecated in ReadMe. To ensure maximum compatibility 
+ ›   going forward, we recommend updating your \`--slug\` flag to  
+ ›   \`legacy-spec.json\`.
+- Updating your API definition to ReadMe...
+✔ Updating your API definition to ReadMe... done!
+",
+  "stdout": "🚀 Your API definition (legacy-spec.json) was successfully updated in ReadMe!
+",
 }
 `;
 
@@ -146,6 +212,15 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
 ",
   "stdout": "🚀 Your API definition (custom-slug.json) was successfully created in ReadMe!
 ",
+}
+`;
+
+exports[`rdme openapi upload > given that the API definition is a local file > and the command is being run in a CI environment > should error out if an object ID is passed and there is a legacy match found 1`] = `
+{
+  "error": [Error: The slug you provided matches a legacy API definition ID, which have been deprecated in ReadMe. To fix this, update your \`--slug\` flag to  \`legacy-spec.json\`.],
+  "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+",
+  "stdout": "",
 }
 `;
 
