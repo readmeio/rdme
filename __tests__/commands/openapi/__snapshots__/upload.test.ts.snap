@@ -22,7 +22,7 @@ See more help with --help],
 
 exports[`rdme openapi upload > given that the "--legacy-id" flag is passed > should error if no matching API definition found (and there are no existing definitions) 1`] = `
 {
-  "error": [Error: No API definition found with legacy ID 1234567890. Did you mean to use the \`--slug\` flag instead?],
+  "error": [Error: No API definition found with legacy ID 1234567890. No existing definitions were found. Did you mean to use the \`--slug\` flag instead?],
   "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
 ",
   "stdout": "",
@@ -31,7 +31,7 @@ exports[`rdme openapi upload > given that the "--legacy-id" flag is passed > sho
 
 exports[`rdme openapi upload > given that the "--legacy-id" flag is passed > should error if no matching API definition found (and there are several existing definitions) 1`] = `
 {
-  "error": [Error: No API definition found with legacy ID 1234567890. 3 file(s) were found — try passing one of them via the \`--slug\` flag instead: \`file1.json\`, \`file2.json\`, \`file3.json\`.],
+  "error": [Error: No API definition found with legacy ID 1234567890. 3 file(s) were found — if you meant to update one of those, pass in one of these slugs via the \`--slug\` flag: \`file1.json\`, \`file2.json\`, \`file3.json\`.],
   "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
 ",
   "stdout": "",
@@ -40,7 +40,7 @@ exports[`rdme openapi upload > given that the "--legacy-id" flag is passed > sho
 
 exports[`rdme openapi upload > given that the "--legacy-id" flag is passed > should error if no matching API definition found (and there is a single existing definition) 1`] = `
 {
-  "error": [Error: No API definition found with legacy ID 1234567890. 1 file was found — try replacing \`--legacy-id 1234567890\` with \`--slug file1.json\`.],
+  "error": [Error: No API definition found with legacy ID 1234567890. 1 file was found — did you mean to update that? If so, try replacing \`--legacy-id 1234567890\` with \`--slug file1.json\`.],
   "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
 ",
   "stdout": "",

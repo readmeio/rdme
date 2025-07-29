@@ -221,11 +221,12 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
     if (this.flags['legacy-id']) {
       if (!matchingAPIDefinition) {
-        let existingDefinitionSuggestion = ' Did you mean to use the `--slug` flag instead?';
+        let existingDefinitionSuggestion =
+          ' No existing definitions were found. Did you mean to use the `--slug` flag instead?';
         if (existingAPIDefinitions.length === 1) {
-          existingDefinitionSuggestion = ` 1 file was found — try replacing \`--legacy-id ${this.flags['legacy-id']}\` with \`--slug ${existingAPIDefinitions[0].filename}\`.`;
+          existingDefinitionSuggestion = ` 1 file was found — did you mean to update that? If so, try replacing \`--legacy-id ${this.flags['legacy-id']}\` with \`--slug ${existingAPIDefinitions[0].filename}\`.`;
         } else if (existingAPIDefinitions.length > 1) {
-          existingDefinitionSuggestion = ` ${existingAPIDefinitions.length} file(s) were found — try passing one of them via the \`--slug\` flag instead: ${filenames}.`;
+          existingDefinitionSuggestion = ` ${existingAPIDefinitions.length} file(s) were found — if you meant to update one of those, pass in one of these slugs via the \`--slug\` flag: ${filenames}.`;
         }
 
         throw new Error(
