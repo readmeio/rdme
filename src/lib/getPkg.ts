@@ -10,7 +10,7 @@ const registryUrl = 'https://registry.npmjs.com/rdme';
 /**
  * @see {@link https://docs.npmjs.com/adding-dist-tags-to-packages}
  */
-type npmDistTag = 'latest';
+type NPMDistTag = 'latest';
 
 /**
  * Return the major Node.js version specified in our `package.json` config.
@@ -54,7 +54,7 @@ export async function getPkgVersionFromNPM(
    * The `npm` dist tag to retrieve. If this value is omitted,
    * the version from the `package.json` is returned.
    */
-  npmDistTag?: npmDistTag,
+  npmDistTag?: NPMDistTag,
 ): Promise<string> {
   if (npmDistTag) {
     return fetch(registryUrl)
@@ -74,6 +74,6 @@ export async function getPkgVersionFromNPM(
  * @example 8
  */
 // biome-ignore lint/suspicious/noConfusingVoidType: This function can be invoked with `.call()`.
-export async function getMajorPkgVersion(this: Hook.Context | void, npmDistTag?: npmDistTag): Promise<number> {
+export async function getMajorPkgVersion(this: Hook.Context | void, npmDistTag?: NPMDistTag): Promise<number> {
   return semver.major(await getPkgVersionFromNPM.call(this, npmDistTag));
 }

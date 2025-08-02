@@ -215,8 +215,8 @@ export default async function createGHA(
 
   let output = yamlBase;
 
-  Object.keys(data).forEach(key => {
-    output = output.replace(new RegExp(`{{${key}}}`, 'g'), data[key as keyof typeof data]);
+  Object.keys(data).forEach(attr => {
+    output = output.replace(new RegExp(`{{${attr}}}`, 'g'), data[attr as keyof typeof data]);
   });
 
   if (!fs.existsSync(GITHUB_WORKFLOW_DIR)) {
