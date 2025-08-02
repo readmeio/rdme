@@ -305,6 +305,7 @@ export default class OpenAPIResolveCommand extends BaseCommand<typeof OpenAPIRes
       );
       this.replaceCircularRefs(schemas, remainingCircularRefs);
 
+      // biome-ignore lint/nursery/noAwaitInLoop: Awaiting here is necessary to ensure we get all of the remaining circular references
       remainingCircularRefs = await this.getCircularRefs(spec);
       iterationCount += 1;
     }
@@ -324,6 +325,7 @@ export default class OpenAPIResolveCommand extends BaseCommand<typeof OpenAPIRes
         );
         this.replaceAllRefsWithObject(schemas, remainingCircularRefs);
 
+        // biome-ignore lint/nursery/noAwaitInLoop: Awaiting here is necessary to ensure we get all of the remaining circular references
         remainingCircularRefs = await this.getCircularRefs(spec);
         this.debug(
           `After iteration ${objectReplacementIterationCount + 1}, remaining circular references: ${remainingCircularRefs.length}`,
