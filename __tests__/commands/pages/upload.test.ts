@@ -104,6 +104,26 @@ describe.each([
       mock.done();
     });
 
+    it('should gracefully handle errors that claim they are JSON but are not', async () => {
+      const mock = getAPIv2Mock({ authorization })
+        .get(`/branches/stable/${route}/new-doc`)
+        .reply(404)
+        .post(`/branches/stable/${route}`, {
+          category: { uri: `/branches/stable/categories/${route}/category-slug` },
+          slug: 'new-doc',
+          title: 'This is the document title',
+          content: { body: '\nBody\n' },
+        })
+        .reply(201, '<>yikes</>', { 'content-type': 'application/json' });
+
+      const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key]);
+
+      expect(result).toMatchSnapshot();
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
+
+      mock.done();
+    });
+
     describe('given that the --dry-run flag is passed', () => {
       it('should not create anything in ReadMe', async () => {
         const mock = getAPIv2Mock({ authorization }).get(`/branches/stable/${route}/new-doc`).reply(404);

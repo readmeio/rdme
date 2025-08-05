@@ -348,6 +348,7 @@ export async function handleAPIv1Res(
 ) {
   const contentType = res.headers.get('content-type') || '';
   const extension = mime.extension(contentType);
+  debug(`received status code ${res.status} from ${res.url} with content type: ${contentType}`);
   if (extension === 'json') {
     // TODO: type this better
     // biome-ignore lint/suspicious/noExplicitAny: We do not have TS types for APIv1 responses.
@@ -386,6 +387,7 @@ export async function handleAPIv2Res<R extends ResponseBody = ResponseBody, T ex
 ): Promise<R> {
   const contentType = res.headers.get('content-type') || '';
   const extension = mime.extension(contentType) || contentType.includes('json') ? 'json' : false;
+  this.debug(`received status code ${res.status} from ${res.url} with content type: ${contentType}`);
   if (res.status === SUCCESS_NO_CONTENT) {
     // to prevent a memory leak, we should still consume the response body? even though we don't use it?
     // https://x.com/cramforce/status/1762142087930433999
@@ -393,12 +395,24 @@ export async function handleAPIv2Res<R extends ResponseBody = ResponseBody, T ex
     this.debug(`received status code ${res.status} from ${res.url} with no content: ${body}`);
     return {} as R;
   } else if (extension === 'json') {
-    const body = (await res.json()) as R;
-    this.debug(`received status code ${res.status} from ${res.url} with JSON response: ${JSON.stringify(body)}`);
-    if (!res.ok) {
-      throw new APIv2Error(body as APIv2ErrorResponse);
+    // Just to be safe, we parse the response as text first in case the response is not valid JSON.
+    const text = await res.text();
+    this.debug(`received status code ${res.status} from ${res.url} with JSON response: ${text}`);
+    try {
+      const body = JSON.parse(text) as R;
+      if (!res.ok) {
+        throw new APIv2Error(body as APIv2ErrorResponse);
+      }
+      return body;
+    } catch (e) {
+      if (e instanceof APIv2Error) {
+        throw e;
+      }
+      this.debug(`received the following error when attempting to parse JSON response: ${e.message}`);
+      throw new Error(
+        'The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.',
+      );
     }
-    return body;
   }
 
   // If we receive a non-JSON response, it's likely an error.
