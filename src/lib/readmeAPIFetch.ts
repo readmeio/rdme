@@ -350,14 +350,25 @@ export async function handleAPIv1Res(
   const extension = mime.extension(contentType);
   debug(`received status code ${res.status} from ${res.url} with content type: ${contentType}`);
   if (extension === 'json') {
-    // TODO: type this better
-    // biome-ignore lint/suspicious/noExplicitAny: We do not have TS types for APIv1 responses.
-    const body = (await res.json()) as any;
-    debug(`received status code ${res.status} from ${res.url} with JSON response: ${JSON.stringify(body)}`);
-    if (body.error && rejectOnJsonError) {
-      return Promise.reject(new APIv1Error(body));
+    // Just to be safe, we parse the response as text first in case the response is not valid JSON.
+    const text = await res.text();
+    debug(`received status code ${res.status} from ${res.url} with JSON response: ${text}`);
+    try {
+      // biome-ignore lint/suspicious/noExplicitAny: We do not have TS types for APIv1 responses.
+      const body = JSON.parse(text) as any;
+      if (body.error && rejectOnJsonError) {
+        throw new APIv1Error(body);
+      }
+      return body;
+    } catch (e) {
+      if (e instanceof APIv1Error) {
+        throw e;
+      }
+      debug(`received the following error when attempting to parse JSON response: ${e.message}`);
+      throw new Error(
+        'The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.',
+      );
     }
-    return body;
   }
   if (res.status === SUCCESS_NO_CONTENT) {
     debug(`received status code ${res.status} from ${res.url} with no content`);
