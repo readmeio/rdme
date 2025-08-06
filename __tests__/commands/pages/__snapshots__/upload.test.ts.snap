@@ -822,6 +822,20 @@ exports[`rdme docs upload > given that the file path is a single file > should e
 }
 `;
 
+exports[`rdme docs upload > given that the file path is a single file > should gracefully handle errors that claim they are JSON but are not 1`] = `
+{
+  "error": [Error: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
+  "stderr": "- 🔬 Validating frontmatter data...
+✔ 🔬 Validating frontmatter data... no issues found!
+- 🚀 Uploading files to ReadMe...
+✖ 🚀 Uploading files to ReadMe... 1 file(s) failed.
+",
+  "stdout": "🚨 Received errors when attempting to upload 1 page(s):
+   - __tests__/__fixtures__/docs/new-docs/new-doc.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+",
+}
+`;
+
 exports[`rdme docs upload > given that the file path is a single file > should not throw an error if \`max-errors\` flag is set to -1 1`] = `
 {
   "result": {
@@ -1669,6 +1683,20 @@ exports[`rdme reference upload > given that the file path is a single file > sho
   "error": [Error: Invalid file extension (.json). Must be one of the following: .markdown, .md, .mdx],
   "stderr": "",
   "stdout": "",
+}
+`;
+
+exports[`rdme reference upload > given that the file path is a single file > should gracefully handle errors that claim they are JSON but are not 1`] = `
+{
+  "error": [Error: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
+  "stderr": "- 🔬 Validating frontmatter data...
+✔ 🔬 Validating frontmatter data... no issues found!
+- 🚀 Uploading files to ReadMe...
+✖ 🚀 Uploading files to ReadMe... 1 file(s) failed.
+",
+  "stdout": "🚨 Received errors when attempting to upload 1 page(s):
+   - __tests__/__fixtures__/docs/new-docs/new-doc.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+",
 }
 `;
 
