@@ -1,3 +1,10 @@
+# [10.5.0-next.5](https://github.com/readmeio/rdme/compare/v10.5.0-next.4...v10.5.0-next.5) (2025-08-06)
+
+
+### Bug Fixes
+
+* **fetch:** handle non-JSON error responses better ([#1324](https://github.com/readmeio/rdme/issues/1324)) ([383123f](https://github.com/readmeio/rdme/commit/383123f3821f4578321c9f88e306e69513db6ee6))
+
 # [10.5.0-next.4](https://github.com/readmeio/rdme/compare/v10.5.0-next.3...v10.5.0-next.4) (2025-07-29)
 
 
