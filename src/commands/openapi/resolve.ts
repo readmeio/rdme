@@ -345,7 +345,6 @@ export default class OpenAPIResolveCommand extends BaseCommand<typeof OpenAPIRes
   }
 
   async run() {
-    const { spec } = this.args;
     const { out, workingDirectory } = this.flags;
 
     if (workingDirectory) {

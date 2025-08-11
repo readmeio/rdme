@@ -239,7 +239,6 @@ export default class OpenAPIInspectCommand extends BaseCommand<typeof OpenAPIIns
   ];
 
   async run() {
-    const { spec } = this.args;
     const { workingDirectory, feature: features } = this.flags;
 
     const tableBorder = Object.entries(getBorderCharacters('norc'))
