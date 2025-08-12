@@ -1,3 +1,10 @@
+# [10.5.0-next.6](https://github.com/readmeio/rdme/compare/v10.5.0-next.5...v10.5.0-next.6) (2025-08-12)
+
+
+### Features
+
+* **plugins:** add `runRdmeCommand` helper ([#1292](https://github.com/readmeio/rdme/issues/1292)) ([12fea84](https://github.com/readmeio/rdme/commit/12fea840a355b88177878041bd19f57878c2ca96))
+
 # [10.5.0-next.5](https://github.com/readmeio/rdme/compare/v10.5.0-next.4...v10.5.0-next.5) (2025-08-06)
 
 
