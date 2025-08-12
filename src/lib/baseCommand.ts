@@ -61,7 +61,7 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
   }
 
   /**
-   * A typesafe handler for running another `rdme` command.
+   * A type-safe handler for running another `rdme` command.
    *
    * @example
    * ```ts
