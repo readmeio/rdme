@@ -34,7 +34,13 @@ export interface Analysis extends OASAnalysis {
     serverVariables: AnalyzedFeature;
     style: AnalyzedFeature;
     webhooks: AnalyzedFeature;
+    /**
+     * @deprecated The data contained within this has been split apart into `xmlRequests`, `xmlResponses`, and `xmlSchemas`. This property will be removed in a future release.
+     */
     xml: AnalyzedFeature;
+    xmlRequests: AnalyzedFeature;
+    xmlResponses: AnalyzedFeature;
+    xmlSchemas: AnalyzedFeature;
   };
   readme: {
     /**
@@ -130,7 +136,29 @@ const OPENAPI_FEATURE_DOCS: Record<keyof Analysis['openapi'], Pick<AnalyzedFeatu
     },
   },
   xml: {
-    description: 'Any parameter and/or request body that accepts XML or responses that return XML payloads.',
+    description:
+      'Any schema that utilizes the XML object for defining its shape in an XML payload, or a request or response that defines an XML payload.\n\nThis is deprecated in favor of `xmlRequests`, `xmlResponses`, and `xmlSchemas`.',
+    url: {
+      '3.0': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#xml-object',
+      '3.1': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#xml-object',
+    },
+  },
+  xmlRequests: {
+    description: 'Any request body that accepts an XML payload.',
+    url: {
+      '3.0': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#request-body-object',
+      '3.1': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#request-body-object',
+    },
+  },
+  xmlResponses: {
+    description: 'Any response that returns an XML payload.',
+    url: {
+      '3.0': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#media-type-object',
+      '3.1': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#media-type-object',
+    },
+  },
+  xmlSchemas: {
+    description: 'Any schema that utilizes the XML object for defining its shape in an XML payload.',
     url: {
       '3.0': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#xml-object',
       '3.1': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#xml-object',

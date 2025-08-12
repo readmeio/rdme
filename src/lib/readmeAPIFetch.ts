@@ -1,7 +1,7 @@
-import type { SpecFileType } from './prepareOas.js';
-import type { APIv2PageCommands, CommandClass } from '../index.js';
 import type { Hook } from '@oclif/core';
 import type { SchemaObject } from 'oas/types';
+import type { APIv2PageCommands, CommandClass } from '../index.js';
+import type { SpecFileType } from './prepareOas.js';
 
 import path from 'node:path';
 
@@ -59,7 +59,7 @@ export interface Mappings {
 /**
  * A generic response body type for responses from the ReadMe API.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: Generic typing for responses.
 export interface ResponseBody extends Record<string, any> {}
 
 export const emptyMappings: Mappings = { categories: {}, parentPages: {} };
@@ -81,7 +81,7 @@ function parseWarningHeader(
     let previous: WarningHeader;
 
     return warnings.reduce<WarningHeader[]>((all, w) => {
-      // eslint-disable-next-line no-param-reassign
+      // biome-ignore lint/style/noParameterAssign: We need to mutate this variable for reducing.
       w = w.trim();
       const newError = w.match(/^([0-9]{3}) (.*)/);
       if (newError) {
@@ -133,7 +133,6 @@ async function normalizeFilePath(opts: FilePathDetails) {
  */
 function sanitizeHeaders(headers: Headers) {
   const raw = Array.from(headers.entries()).reduce<Record<string, string>>((prev, current) => {
-    // eslint-disable-next-line no-param-reassign
     prev[current[0]] = current[0].toLowerCase() === 'authorization' ? 'redacted' : current[1];
     return prev;
   }, {});
@@ -349,15 +348,27 @@ export async function handleAPIv1Res(
 ) {
   const contentType = res.headers.get('content-type') || '';
   const extension = mime.extension(contentType);
+  debug(`received status code ${res.status} from ${res.url} with content type: ${contentType}`);
   if (extension === 'json') {
-    // TODO: type this better
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const body = (await res.json()) as any;
-    debug(`received status code ${res.status} from ${res.url} with JSON response: ${JSON.stringify(body)}`);
-    if (body.error && rejectOnJsonError) {
-      return Promise.reject(new APIv1Error(body));
+    // Just to be safe, we parse the response as text first in case the response is not valid JSON.
+    const text = await res.text();
+    debug(`received status code ${res.status} from ${res.url} with JSON response: ${text}`);
+    try {
+      // biome-ignore lint/suspicious/noExplicitAny: We do not have TS types for APIv1 responses.
+      const body = JSON.parse(text) as any;
+      if (body.error && rejectOnJsonError) {
+        throw new APIv1Error(body);
+      }
+      return body;
+    } catch (e) {
+      if (e instanceof APIv1Error) {
+        throw e;
+      }
+      debug(`received the following error when attempting to parse JSON response: ${e.message}`);
+      throw new Error(
+        'The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.',
+      );
     }
-    return body;
   }
   if (res.status === SUCCESS_NO_CONTENT) {
     debug(`received status code ${res.status} from ${res.url} with no content`);
@@ -387,6 +398,7 @@ export async function handleAPIv2Res<R extends ResponseBody = ResponseBody, T ex
 ): Promise<R> {
   const contentType = res.headers.get('content-type') || '';
   const extension = mime.extension(contentType) || contentType.includes('json') ? 'json' : false;
+  this.debug(`received status code ${res.status} from ${res.url} with content type: ${contentType}`);
   if (res.status === SUCCESS_NO_CONTENT) {
     // to prevent a memory leak, we should still consume the response body? even though we don't use it?
     // https://x.com/cramforce/status/1762142087930433999
@@ -394,12 +406,24 @@ export async function handleAPIv2Res<R extends ResponseBody = ResponseBody, T ex
     this.debug(`received status code ${res.status} from ${res.url} with no content: ${body}`);
     return {} as R;
   } else if (extension === 'json') {
-    const body = (await res.json()) as R;
-    this.debug(`received status code ${res.status} from ${res.url} with JSON response: ${JSON.stringify(body)}`);
-    if (!res.ok) {
-      throw new APIv2Error(body as APIv2ErrorResponse);
+    // Just to be safe, we parse the response as text first in case the response is not valid JSON.
+    const text = await res.text();
+    this.debug(`received status code ${res.status} from ${res.url} with JSON response: ${text}`);
+    try {
+      const body = JSON.parse(text) as R;
+      if (!res.ok) {
+        throw new APIv2Error(body as APIv2ErrorResponse);
+      }
+      return body;
+    } catch (e) {
+      if (e instanceof APIv2Error) {
+        throw e;
+      }
+      this.debug(`received the following error when attempting to parse JSON response: ${e.message}`);
+      throw new Error(
+        'The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.',
+      );
     }
-    return body;
   }
 
   // If we receive a non-JSON response, it's likely an error.

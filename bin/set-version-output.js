@@ -1,8 +1,9 @@
 #! /usr/bin/env node
+
 // @ts-check
 import * as core from '@actions/core';
 
-import { getNodeVersion, getMajorPkgVersion } from '../dist/lib/getPkg.js';
+import { getMajorPkgVersion, getNodeVersion } from '../dist/lib/getPkg.js';
 
 /**
  * Sets output parameters for GitHub Actions workflow so we can do
@@ -14,4 +15,4 @@ async function setOutputs() {
   core.setOutput('NODE_VERSION', getNodeVersion());
 }
 
-setOutputs();
+await setOutputs();

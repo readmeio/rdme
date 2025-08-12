@@ -1,5 +1,5 @@
-import type { APIv2PageUploadCommands } from '../../index.js';
 import type { FromSchema } from 'json-schema-to-ts';
+import type { APIv2PageUploadCommands } from '../../index.js';
 
 import readmeAPIv2Oas from './openapiDoc.js';
 

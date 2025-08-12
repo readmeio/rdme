@@ -13,7 +13,6 @@ import isCI, { isNpmScript, isTest } from '../isCI.js';
 import { info } from '../logger.js';
 import promptTerminal from '../promptWrapper.js';
 import { cleanFileName, validateFilePath } from '../validatePromptInput.js';
-
 import yamlBase from './baseFile.js';
 
 type CommandArg = Record<string, Command.Arg.Cached>;
@@ -216,8 +215,8 @@ export default async function createGHA(
 
   let output = yamlBase;
 
-  Object.keys(data).forEach(key => {
-    output = output.replace(new RegExp(`{{${key}}}`, 'g'), data[key as keyof typeof data]);
+  Object.keys(data).forEach(attr => {
+    output = output.replace(new RegExp(`{{${attr}}}`, 'g'), data[attr as keyof typeof data]);
   });
 
   if (!fs.existsSync(GITHUB_WORKFLOW_DIR)) {

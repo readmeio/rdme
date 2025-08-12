@@ -10,10 +10,11 @@ async function main() {
   }
   await execute(opts).then(msg => {
     if (msg && typeof msg === 'string') {
-      // eslint-disable-next-line no-console
+      // biome-ignore lint/suspicious/noConsole: This is in an executable.
       console.log(msg);
     }
   });
 }
 
+// biome-ignore lint/nursery/noFloatingPromises: We use rollup to bundle this file and it doesn't play well with top-level await.
 main();

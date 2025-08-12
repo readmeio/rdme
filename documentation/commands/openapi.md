@@ -54,19 +54,21 @@ Analyze an OpenAPI/Swagger definition for various OpenAPI and ReadMe feature usa
 USAGE
   $ rdme openapi inspect [SPEC] [--feature
     additionalProperties|callbacks|circularRefs|commonParameters|discriminators|links|style|polymorphism|serverVariables
-    |webhooks|xml|readme...] [--workingDirectory <value>]
+    |webhooks|xml|xmlRequests|xmlResponses|xmlSchemas|readme...] [--workingDirectory <value>]
 
 ARGUMENTS
   SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
         subdirectories contain a single OpenAPI file, you can omit the path.
 
 FLAGS
-  --feature=<option>...       A specific OpenAPI or ReadMe feature you wish to see detailed information on (if it
-                              exists). If any features supplied do not exist within the API definition an exit(1) code
-                              will be returned alongside the report.
-                              <options: additionalProperties|callbacks|circularRefs|commonParameters|discriminators|link
-                              s|style|polymorphism|serverVariables|webhooks|xml|readme>
-  --workingDirectory=<value>  Working directory (for usage with relative external references)
+  --feature=<option>...
+      A specific OpenAPI or ReadMe feature you wish to see detailed information on (if it exists). If any features
+      supplied do not exist within the API definition an exit(1) code will be returned alongside the report.
+      <options: additionalProperties|callbacks|circularRefs|commonParameters|discriminators|links|style|polymorphism|serve
+      rVariables|webhooks|xml|xmlRequests|xmlResponses|xmlSchemas|readme>
+
+  --workingDirectory=<value>
+      Working directory (for usage with relative external references)
 
 DESCRIPTION
   Analyze an OpenAPI/Swagger definition for various OpenAPI and ReadMe feature usage.
@@ -141,7 +143,7 @@ Resolves circular and recursive references in OpenAPI by replacing them with obj
 
 ```
 USAGE
-  $ rdme openapi resolve [SPEC] [--out <value>] [--workingDirectory <value>]
+  $ rdme openapi resolve [SPEC] [--out <value>] [--title <value>] [--workingDirectory <value>]
 
 ARGUMENTS
   SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
@@ -149,6 +151,7 @@ ARGUMENTS
 
 FLAGS
   --out=<value>               Output file path to write resolved file to
+  --title=<value>             An override value for the `info.title` field in the API definition
   --workingDirectory=<value>  Working directory (for usage with relative external references)
 
 DESCRIPTION
@@ -182,7 +185,7 @@ Upload (or re-upload) your API definition to ReadMe.
 
 ```
 USAGE
-  $ rdme openapi upload [SPEC] --key <value> [--slug <value>] [--useSpecVersion | --branch <value>]
+  $ rdme openapi upload [SPEC] --key <value> [--slug <value>] [--title <value>] [--useSpecVersion | --branch <value>]
 
 ARGUMENTS
   SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
@@ -192,6 +195,7 @@ FLAGS
   --key=<value>     (required) ReadMe project API key
   --branch=<value>  [default: stable] ReadMe project version
   --slug=<value>    Override the slug (i.e., the unique identifier) for your API definition.
+  --title=<value>   An override value for the `info.title` field in the API definition
   --useSpecVersion  Use the OpenAPI `info.version` field for your ReadMe project version
 
 DESCRIPTION
@@ -207,6 +211,9 @@ DESCRIPTION
 
   If the spec is a URL, the inferred slug is the base file name from the URL (e.g., the slug for
   `https://example.com/docs/petstore.json` will be `petstore.json`).
+
+  For the best and most explicit results, we recommend using the `--slug` flag to set a slug for your API definition,
+  especially if you're managing many API definitions at scale.
 
 EXAMPLES
   You can pass in a file name like so:

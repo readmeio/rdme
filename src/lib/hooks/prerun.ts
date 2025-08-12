@@ -2,7 +2,7 @@ import { Flags, type Hook } from '@oclif/core';
 import chalk from 'chalk';
 
 import configstore from '../configstore.js';
-import { githubFlag, keyFlag } from '../flags.js';
+import { keyFlag } from '../flags.js';
 import getCurrentConfig from '../getCurrentConfig.js';
 import isCI, { isTest } from '../isCI.js';
 import { info } from '../logger.js';
@@ -13,10 +13,8 @@ const hook: Hook.Prerun = async function run(options) {
   if (options.Command?.flags?.key) {
     this.debug('current command has --key flag');
     if (isTest()) {
-      // eslint-disable-next-line no-param-reassign
       options.Command.flags.key = keyFlag;
     } else {
-      // eslint-disable-next-line no-param-reassign
       options.Command.flags.key = Flags.string({
         // `parse` is run if the user passes in a `--key` flag
         parse: async input => {
@@ -47,7 +45,7 @@ const hook: Hook.Prerun = async function run(options) {
           }
           // if in non-CI and the user hasn't passed in a key, we prompt them to log in
           info("Looks like you're missing a ReadMe API key, let's fix that! 🦉", { includeEmojiPrefix: false });
-          const result = await loginFlow();
+          const result = await loginFlow.call(this);
           info(result, { includeEmojiPrefix: false });
           // loginFlow sets the configstore value, so let's use that
           return configstore.get('apiKey');
@@ -56,28 +54,6 @@ const hook: Hook.Prerun = async function run(options) {
     }
   } else {
     this.debug('current command does not have --key flag');
-  }
-
-  // the logic in this block is a little weird it does two things:
-  // 1. throws if the user is attempting to use --github in a CI environment
-  // 2. resets the --github flag options to the default in certain tests
-  if (options.Command?.flags?.github) {
-    this.debug('current command has --github flag');
-    if (isCI()) {
-      this.debug('in CI environment');
-      // eslint-disable-next-line no-param-reassign
-      options.Command.flags.github = Flags.boolean({
-        parse: () => {
-          throw new Error('The `--github` flag is only for usage in non-CI environments.');
-        },
-      });
-    }
-    if (process.env.TEST_RDME_CREATEGHA) {
-      // eslint-disable-next-line no-param-reassign
-      options.Command.flags.github = githubFlag;
-    }
-  } else {
-    this.debug('current command does not have --github flag');
   }
 };
 

@@ -1,5 +1,5 @@
-import type { Analysis, AnalyzedFeature } from '../../lib/analyzeOas.js';
 import type { OASDocument } from 'oas/types';
+import type { Analysis, AnalyzedFeature } from '../../lib/analyzeOas.js';
 
 import { Flags } from '@oclif/core';
 import chalk from 'chalk';
@@ -198,6 +198,8 @@ function buildFullReport(analysis: Analysis, definitionVersion: string, tableBor
 }
 
 export default class OpenAPIInspectCommand extends BaseCommand<typeof OpenAPIInspectCommand> {
+  id = 'openapi inspect' as const;
+
   static summary = 'Analyze an OpenAPI/Swagger definition for various OpenAPI and ReadMe feature usage.';
 
   static description =
@@ -237,11 +239,11 @@ export default class OpenAPIInspectCommand extends BaseCommand<typeof OpenAPIIns
   ];
 
   async run() {
-    const { spec } = this.args;
     const { workingDirectory, feature: features } = this.flags;
 
     const tableBorder = Object.entries(getBorderCharacters('norc'))
       .map(([border, char]) => ({ [border]: chalk.gray(char) }))
+      // biome-ignore lint/performance/noAccumulatingSpread: @todo can this be improved?
       .reduce((prev, next) => Object.assign(prev, next));
 
     if (workingDirectory) {
@@ -250,7 +252,7 @@ export default class OpenAPIInspectCommand extends BaseCommand<typeof OpenAPIIns
       this.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
     }
 
-    const { preparedSpec, definitionVersion } = await prepareOas(spec, 'openapi inspect');
+    const { preparedSpec, definitionVersion } = await prepareOas.call(this);
     const parsedPreparedSpec: OASDocument = JSON.parse(preparedSpec);
 
     const spinner = ora({ ...oraOptions() });

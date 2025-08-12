@@ -14,6 +14,8 @@ import promptTerminal from '../../lib/promptWrapper.js';
 import { validateFilePath } from '../../lib/validatePromptInput.js';
 
 export default class OpenAPIConvertCommand extends BaseCommand<typeof OpenAPIConvertCommand> {
+  id = 'openapi convert' as const;
+
   static summary = 'Converts an API definition to OpenAPI and bundles any external references.';
 
   static description =
@@ -43,8 +45,7 @@ export default class OpenAPIConvertCommand extends BaseCommand<typeof OpenAPICon
   ];
 
   async run() {
-    const { spec } = this.args;
-    const { out, title, workingDirectory } = this.flags;
+    const { out, workingDirectory } = this.flags;
 
     if (workingDirectory) {
       const previousWorkingDirectory = process.cwd();
@@ -52,9 +53,7 @@ export default class OpenAPIConvertCommand extends BaseCommand<typeof OpenAPICon
       this.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
     }
 
-    const { preparedSpec, specPath, specType } = await prepareOas(spec, 'openapi convert', {
-      title,
-    });
+    const { preparedSpec, specPath, specType } = await prepareOas.call(this);
     const parsedPreparedSpec: OASDocument = JSON.parse(preparedSpec);
 
     if (specType === 'OpenAPI') {

@@ -1,6 +1,6 @@
 import { exec } from 'node:child_process';
 
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 describe('bin', () => {
   it('should show our help screen', async () => {

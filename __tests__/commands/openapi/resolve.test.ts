@@ -1,10 +1,10 @@
 import fs from 'node:fs';
 
 import prompts from 'prompts';
-import { describe, beforeAll, beforeEach, afterEach, it, expect, vi, type MockInstance } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, type MockInstance, vi } from 'vitest';
 
 import Command from '../../../src/commands/openapi/resolve.js';
-import { runCommand, type OclifOutput } from '../../helpers/oclif.js';
+import { type OclifOutput, runCommand } from '../../helpers/oclif.js';
 
 describe('openapi resolve', () => {
   let fsWriteFileSyncSpy: MockInstance<typeof fs.writeFileSync>;

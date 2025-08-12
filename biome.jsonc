@@ -1,0 +1,54 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": ["@readme/standards/biome"],
+  "root": true,
+  "files": {
+    "ignoreUnknown": false,
+    "includes": [
+      "**/*.{js,ts}",
+
+      // Biome's `vcs.useIgnoreFile` config should be able to pick these up but it doesn't.
+      "!coverage/**",
+      "!dist/**",
+      "!dist-gha/**",
+    ],
+  },
+  "linter": {
+    "domains": {
+      // These domains are configured in our core standards package but Biome `extends` seems to
+      // not load it in so we have to redefine them.
+      "project": "all",
+      "test": "all",
+    },
+    "rules": {
+      "style": {
+        "noRestrictedImports": {
+          "level": "error",
+          "options": {
+            "paths": {
+              "ci-info": "The `ci-info` package is difficult to test because misleading results will appear when running tests in the GitHub Actions runner. Instead of importing this package directly, create a wrapper function in `lib/isCI.ts` and import that instead.",
+            },
+          },
+        },
+      },
+
+      "suspicious": {
+        /**
+         * This is a small rule to prevent us from using console.log() statements in our commands.
+         *
+         * We've had troubles in the past where our test coverage required us to use Vitest mocks
+         * for `console.log()` calls, hurting our ability to write resilient tests and easily debug
+         * issues.
+         *
+         * We should be returning Promise-wrapped values in our main command functions
+         * so we can write robust tests and take advantage of `bin/run.js` and `src/baseCommand.ts`,
+         * which we use for printing function outputs and returning correct exit codes.
+         *
+         * Furthermore, we should also be using our custom loggers (see `src/lib/logger.js`)
+         * instead of using console.info() or console.warn() statements.
+         */
+        "noConsole": "warn",
+      },
+    },
+  },
+}

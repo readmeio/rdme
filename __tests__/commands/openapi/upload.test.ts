@@ -7,7 +7,7 @@ import Command from '../../../src/commands/openapi/upload.js';
 import petstore from '../../__fixtures__/petstore-simple-weird-version.json' with { type: 'json' };
 import { getAPIv2Mock, getAPIv2MockForGHA } from '../../helpers/get-api-mock.js';
 import { githubActionsEnv } from '../../helpers/git-mock.js';
-import { runCommand, type OclifOutput } from '../../helpers/oclif.js';
+import { type OclifOutput, runCommand } from '../../helpers/oclif.js';
 
 const key = 'rdme_123';
 const branch = '1.0.0';
@@ -192,20 +192,94 @@ describe('rdme openapi upload', () => {
         mock.done();
       });
 
-      it('should handle a slug with an invalid file extension', async () => {
-        const customSlug = 'custom-slug.yikes';
+      it('should emit a warning if an object ID is passed and no legacy match is found', async () => {
+        const customSlug = '687855c3600c6e14c79a94cb';
+        const customSlugWithExtension = `${customSlug}.json`;
+        const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+          .get(`/branches/${branch}/apis`)
+          .reply(200, { data: [] })
+          .post(`/branches/${branch}/apis`, body =>
+            body.match(`form-data; name="schema"; filename="${customSlugWithExtension}"`),
+          )
+          .reply(200, {
+            data: {
+              upload: { status: 'done' },
+              uri: `/branches/${branch}/apis/${customSlugWithExtension}`,
+            },
+          });
 
         const result = await run(['--branch', branch, filename, '--key', key, '--slug', customSlug]);
 
         expect(result).toMatchSnapshot();
+
+        mock.done();
+      });
+
+      it('should prompt the user before updating if an object ID is passed and a legacy match is found', async () => {
+        prompts.inject([true]);
+        const customSlug = '687855c3600c6e14c79a94cb';
+        const existingFilename = 'legacy-spec.json';
+        const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+          .get(`/branches/${branch}/apis`)
+          .reply(200, { data: [{ legacy_id: customSlug, filename: existingFilename }] })
+          .put(`/branches/${branch}/apis/${existingFilename}`, body =>
+            body.match(`form-data; name="schema"; filename="${existingFilename}"`),
+          )
+          .reply(200, {
+            data: {
+              upload: { status: 'done' },
+              uri: `/branches/${branch}/apis/${existingFilename}`,
+            },
+          });
+
+        const result = await run(['--branch', branch, filename, '--key', key, '--slug', customSlug]);
+
+        expect(result).toMatchSnapshot();
+
+        mock.done();
+      });
+
+      it('should exit if an object ID is passed and a legacy match is found but the user declines the prompt', async () => {
+        prompts.inject([false]);
+        const customSlug = '687855c3600c6e14c79a94cb';
+        const existingFilename = 'legacy-spec.json';
+        const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+          .get(`/branches/${branch}/apis`)
+          .reply(200, { data: [{ legacy_id: customSlug, filename: existingFilename }] });
+
+        const result = await run(['--branch', branch, filename, '--key', key, '--slug', customSlug]);
+
+        expect(result).toMatchSnapshot();
+
+        mock.done();
+      });
+
+      it('should handle a slug with an invalid file extension', async () => {
+        const customSlug = 'custom-slug.yikes';
+
+        const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+          .get(`/branches/${branch}/apis`)
+          .reply(200, { data: [] });
+
+        const result = await run(['--branch', branch, filename, '--key', key, '--slug', customSlug]);
+
+        expect(result).toMatchSnapshot();
+
+        mock.done();
       });
 
       it('should handle a slug with a valid but mismatching file extension', async () => {
         const customSlug = 'custom-slug.yml';
 
+        const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+          .get(`/branches/${branch}/apis`)
+          .reply(200, { data: [] });
+
         const result = await run(['--branch', branch, filename, '--key', key, '--slug', customSlug]);
 
         expect(result).toMatchSnapshot();
+
+        mock.done();
       });
     });
 
@@ -390,6 +464,20 @@ describe('rdme openapi upload', () => {
 
         mock.done();
       });
+
+      it('should error out if an object ID is passed and there is a legacy match found', async () => {
+        const customSlug = '687855c3600c6e14c79a94cb';
+        const existingFilename = 'legacy-spec.json';
+        const mock = getAPIv2MockForGHA({ authorization: `Bearer ${key}` })
+          .get(`/branches/${branch}/apis`)
+          .reply(200, { data: [{ legacy_id: customSlug, filename: existingFilename }] });
+
+        const result = await run(['--branch', branch, filename, '--key', key, '--slug', customSlug]);
+
+        expect(result).toMatchSnapshot();
+
+        mock.done();
+      });
     });
 
     describe('given that the `--branch` flag is not set', () => {
@@ -440,12 +528,13 @@ describe('rdme openapi upload', () => {
 
   describe('given that the API definition is a URL', () => {
     it('should create a new API definition in ReadMe', async () => {
-      const fileMock = nock('https://example.com').get('/openapi.json').reply(200, petstore);
+      const urlFilename = 'openapi.json';
+      const fileMock = nock('https://example.com').get(`/${urlFilename}`).reply(200, petstore);
 
       const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
         .get(`/branches/${branch}/apis`)
         .reply(200, {})
-        .post(`/branches/${branch}/apis`, body => body.match(`form-data; name="url"\r\n\r\n${fileUrl}`))
+        .post(`/branches/${branch}/apis`, body => body.match(`form-data; name="schema"; filename="${urlFilename}"`))
         .reply(200, {
           data: {
             upload: { status: 'done' },
@@ -464,12 +553,15 @@ describe('rdme openapi upload', () => {
     it('should update an existing API definition in ReadMe', async () => {
       prompts.inject([true]);
 
-      const fileMock = nock('https://example.com').get('/openapi.json').reply(200, petstore);
+      const urlFilename = 'openapi.json';
+      const fileMock = nock('https://example.com').get(`/${urlFilename}`).reply(200, petstore);
 
       const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
         .get(`/branches/${branch}/apis`)
         .reply(200, { data: [{ filename: 'openapi.json' }] })
-        .put('/branches/1.0.0/apis/openapi.json', body => body.match(`form-data; name="url"\r\n\r\n${fileUrl}`))
+        .put('/branches/1.0.0/apis/openapi.json', body =>
+          body.match(`form-data; name="schema"; filename="${urlFilename}"`),
+        )
         .reply(200, {
           data: {
             upload: { status: 'done' },
@@ -493,6 +585,33 @@ describe('rdme openapi upload', () => {
       expect(result).toMatchSnapshot();
 
       fileMock.done();
+    });
+
+    describe('and the `--slug` flag is passed', () => {
+      it('should create a new API definition in ReadMe with the specified slug', async () => {
+        const customFilename = 'custom-slug';
+        const fileMock = nock('https://example.com').get('/openapi.json').reply(200, petstore);
+
+        const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+          .get(`/branches/${branch}/apis`)
+          .reply(200, {})
+          .post(`/branches/${branch}/apis`, body =>
+            body.match(`form-data; name="schema"; filename="${customFilename}.json"`),
+          )
+          .reply(200, {
+            data: {
+              upload: { status: 'done' },
+              uri: `/branches/${branch}/apis/${customFilename}.json`,
+            },
+          });
+
+        const result = await run(['--branch', branch, fileUrl, '--key', key, '--slug', 'custom-slug']);
+
+        expect(result).toMatchSnapshot();
+
+        fileMock.done();
+        mock.done();
+      });
     });
   });
 
@@ -547,12 +666,48 @@ describe('rdme openapi upload', () => {
       putMock.done();
     });
 
-    it('should error if no matching API definition found', async () => {
+    it('should error if no matching API definition found (and there are no existing definitions)', async () => {
       const legacyId = '1234567890';
       prompts.inject([true]);
       const getMock = getAPIv2Mock({ authorization: `Bearer ${key}` })
         .get(`/branches/${branch}/apis`)
         .reply(200, { data: [] });
+
+      const result = await run(['--branch', branch, filename, '--key', key, '--legacy-id', legacyId]);
+
+      expect(result).toMatchSnapshot();
+
+      getMock.done();
+    });
+
+    it('should error if no matching API definition found (and there is a single existing definition)', async () => {
+      const legacyId = '1234567890';
+      prompts.inject([true]);
+      const getMock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .get(`/branches/${branch}/apis`)
+        .reply(200, {
+          data: [{ legacy_id: 'some-mismatching-id1', filename: 'file1.json' }],
+        });
+
+      const result = await run(['--branch', branch, filename, '--key', key, '--legacy-id', legacyId]);
+
+      expect(result).toMatchSnapshot();
+
+      getMock.done();
+    });
+
+    it('should error if no matching API definition found (and there are several existing definitions)', async () => {
+      const legacyId = '1234567890';
+      prompts.inject([true]);
+      const getMock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .get(`/branches/${branch}/apis`)
+        .reply(200, {
+          data: [
+            { legacy_id: 'some-mismatching-id1', filename: 'file1.json' },
+            { legacy_id: 'some-mismatching-id2', filename: 'file2.json' },
+            { legacy_id: 'some-mismatching-id3', filename: 'file3.json' },
+          ],
+        });
 
       const result = await run(['--branch', branch, filename, '--key', key, '--legacy-id', legacyId]);
 

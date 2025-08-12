@@ -1,3 +1,38 @@
+# [10.5.0-next.5](https://github.com/readmeio/rdme/compare/v10.5.0-next.4...v10.5.0-next.5) (2025-08-06)
+
+
+### Bug Fixes
+
+* **fetch:** handle non-JSON error responses better ([#1324](https://github.com/readmeio/rdme/issues/1324)) ([383123f](https://github.com/readmeio/rdme/commit/383123f3821f4578321c9f88e306e69513db6ee6))
+
+# [10.5.0-next.4](https://github.com/readmeio/rdme/compare/v10.5.0-next.3...v10.5.0-next.4) (2025-07-29)
+
+
+### Features
+
+* **openapi/upload:** docs + DX enhancements for slugs vs. legacy IDs ([#1309](https://github.com/readmeio/rdme/issues/1309)) ([5272a7e](https://github.com/readmeio/rdme/commit/5272a7e8c03fde24c9912a0dc677d2177415464c))
+
+# [10.5.0-next.3](https://github.com/readmeio/rdme/compare/v10.5.0-next.2...v10.5.0-next.3) (2025-07-29)
+
+
+### Features
+
+* new `rage` command for printing out environment data for debugging ([#1310](https://github.com/readmeio/rdme/issues/1310)) ([c773af8](https://github.com/readmeio/rdme/commit/c773af8b0217ab0e201970bc7f478b40b423f753))
+
+# [10.5.0-next.2](https://github.com/readmeio/rdme/compare/v10.5.0-next.1...v10.5.0-next.2) (2025-07-28)
+
+
+### Bug Fixes
+
+* **openapi/upload:** custom slugs for URL uploads ([#1313](https://github.com/readmeio/rdme/issues/1313)) ([ab48677](https://github.com/readmeio/rdme/commit/ab486770a95accc0f557351a300067bcf94b248e))
+
+# [10.5.0-next.1](https://github.com/readmeio/rdme/compare/v10.4.1-next.1...v10.5.0-next.1) (2025-07-16)
+
+
+### Features
+
+* **inspect:** splitting apart `xml` into three fine-tuned datasets ([#1305](https://github.com/readmeio/rdme/issues/1305)) ([2e10328](https://github.com/readmeio/rdme/commit/2e103289b484584c666ff0dc8bd47ffba3cf9e9c))
+
 ## [10.4.1-next.1](https://github.com/readmeio/rdme/compare/v10.4.0...v10.4.1-next.1) (2025-07-08)
 
 

@@ -1,11 +1,11 @@
 import fs from 'node:fs';
 
 import prompts from 'prompts';
-import { describe, beforeAll, beforeEach, afterEach, it, expect, vi } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import Command from '../../../src/commands/openapi/validate.js';
 import { gitMock } from '../../helpers/git-mock.js';
-import { runCommand, runCommandWithHooks, type OclifOutput } from '../../helpers/oclif.js';
+import { type OclifOutput, runCommand } from '../../helpers/oclif.js';
 
 describe('rdme openapi validate', () => {
   let run: (args?: string[]) => OclifOutput;
@@ -96,23 +96,17 @@ describe('rdme openapi validate', () => {
     });
 
     it('should fail if user attempts to pass `--github` flag in CI environment', async () => {
-      return expect(
-        (
-          await runCommandWithHooks([
-            'openapi validate',
-            '__tests__/__fixtures__/petstore-simple-weird-version.json',
-            '--github',
-          ])
-        ).error,
-      ).toMatchSnapshot();
+      const spec = '__tests__/__fixtures__/petstore-simple-weird-version.json';
+
+      await expect(run([spec, '--github'])).resolves.toMatchSnapshot();
     });
   });
 
   describe('GHA onboarding E2E tests', () => {
-    let yamlOutput;
+    let yamlOutput: string;
 
     beforeEach(() => {
-      gitMock.before((fileName, data) => {
+      gitMock.before((fileName, data: string) => {
         yamlOutput = data;
       });
     });

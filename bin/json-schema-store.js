@@ -1,6 +1,6 @@
 #! /usr/bin/env node
+
 // @ts-check
-/* eslint-disable import/no-extraneous-dependencies */
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
@@ -44,14 +44,15 @@ async function refreshSchemas() {
         }
       }),
     );
-    // eslint-disable-next-line no-console
+
+    // biome-ignore lint/suspicious/noConsole: This is in an executable.
     console.log(isUpdate ? 'JSON Schema files updated!' : 'JSON Schema files are up-to-date!');
     process.exit(0);
   } catch (e) {
-    // eslint-disable-next-line no-console
+    // biome-ignore lint/suspicious/noConsole: This is in an executable.
     console.error(e.message);
     process.exit(1);
   }
 }
 
-refreshSchemas();
+await refreshSchemas();

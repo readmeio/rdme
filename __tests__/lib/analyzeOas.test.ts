@@ -1,7 +1,7 @@
 import type { OASDocument } from 'oas/types';
 
 import petstore from '@readme/oas-examples/3.0/json/petstore.json' with { type: 'json' };
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import analyzeOas, { getSupportedFeatures } from '../../src/lib/analyzeOas.js';
 
@@ -27,6 +27,9 @@ describe('#getSupportedFeatures', () => {
       'serverVariables',
       'webhooks',
       'xml',
+      'xmlRequests',
+      'xmlResponses',
+      'xmlSchemas',
       'readme',
     ]);
   });

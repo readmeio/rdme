@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import type { OASDocument } from 'oas/types';
 import type { OpenAPIV3_1 as OpenAPIV31 } from 'openapi-types';
 
@@ -12,7 +11,7 @@ import prompts from 'prompts';
 
 import analyzeOas from '../../lib/analyzeOas.js';
 import BaseCommand from '../../lib/baseCommand.js';
-import { specArg, workingDirectoryFlag } from '../../lib/flags.js';
+import { specArg, titleFlag, workingDirectoryFlag } from '../../lib/flags.js';
 import { oraOptions } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
@@ -23,6 +22,8 @@ type Schema = OpenAPIV31.ReferenceObject | OpenAPIV31.SchemaObject;
 type SchemaCollection = Record<string, Schema>;
 
 export default class OpenAPIResolveCommand extends BaseCommand<typeof OpenAPIResolveCommand> {
+  id = 'openapi resolve' as const;
+
   static summary = 'Resolves circular and recursive references in OpenAPI by replacing them with object schemas.';
 
   static description =
@@ -51,6 +52,7 @@ export default class OpenAPIResolveCommand extends BaseCommand<typeof OpenAPIRes
 
   static flags = {
     out: Flags.string({ description: 'Output file path to write resolved file to' }),
+    title: titleFlag,
     workingDirectory: workingDirectoryFlag,
   };
 
@@ -58,7 +60,6 @@ export default class OpenAPIResolveCommand extends BaseCommand<typeof OpenAPIRes
    * Identifies circular references in the OpenAPI document.
    *
    */
-  // eslint-disable-next-line class-methods-use-this
   private async getCircularRefs(
     /** The OpenAPI document to analyze. */
     spec: OASDocument,
@@ -72,7 +73,6 @@ export default class OpenAPIResolveCommand extends BaseCommand<typeof OpenAPIRes
    * Replaces a reference in a schema with an object if it's circular or recursive.
    *
    */
-  // eslint-disable-next-line class-methods-use-this
   private replaceRefWithObjectProxySchemes(
     /** The schema to process. */
     schema: Schema,
@@ -139,14 +139,13 @@ export default class OpenAPIResolveCommand extends BaseCommand<typeof OpenAPIRes
     /** List of circular reference paths. */
     circularRefs: string[],
   ): void {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
     const createdRefs = new Set<string>();
 
     function replaceRef(schemaName: string, propertyName: string, refSchemaName: string) {
       const schema = schemas[schemaName];
-      if ('properties' in schema) {
-        schema.properties![propertyName] = { $ref: `#/components/schemas/${refSchemaName}` };
+      if ('properties' in schema && typeof schema.properties !== 'undefined') {
+        schema.properties[propertyName] = { $ref: `#/components/schemas/${refSchemaName}` };
       } else if ('$ref' in schema) {
         schema.$ref = `#/components/schemas/${refSchemaName}`;
       }
@@ -306,7 +305,7 @@ export default class OpenAPIResolveCommand extends BaseCommand<typeof OpenAPIRes
       );
       this.replaceCircularRefs(schemas, remainingCircularRefs);
 
-      // eslint-disable-next-line no-await-in-loop
+      // biome-ignore lint/nursery/noAwaitInLoop: Awaiting here is necessary to ensure we get all of the remaining circular references
       remainingCircularRefs = await this.getCircularRefs(spec);
       iterationCount += 1;
     }
@@ -326,7 +325,7 @@ export default class OpenAPIResolveCommand extends BaseCommand<typeof OpenAPIRes
         );
         this.replaceAllRefsWithObject(schemas, remainingCircularRefs);
 
-        // eslint-disable-next-line no-await-in-loop
+        // biome-ignore lint/nursery/noAwaitInLoop: Awaiting here is necessary to ensure we get all of the remaining circular references
         remainingCircularRefs = await this.getCircularRefs(spec);
         this.debug(
           `After iteration ${objectReplacementIterationCount + 1}, remaining circular references: ${remainingCircularRefs.length}`,
@@ -346,7 +345,6 @@ export default class OpenAPIResolveCommand extends BaseCommand<typeof OpenAPIRes
   }
 
   async run() {
-    const { spec } = this.args;
     const { out, workingDirectory } = this.flags;
 
     if (workingDirectory) {
@@ -355,7 +353,7 @@ export default class OpenAPIResolveCommand extends BaseCommand<typeof OpenAPIRes
       this.debug(`Switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
     }
 
-    const { preparedSpec, specPath, specType } = await prepareOas(spec, 'openapi resolve');
+    const { preparedSpec, specPath, specType } = await prepareOas.call(this);
     if (specType !== 'OpenAPI') {
       throw new Error('Sorry, this command only supports OpenAPI 3.0+ definitions.');
     }

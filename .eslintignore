@@ -1,6 +1,0 @@
-# test result artifacts
-coverage/
-
-# release build artifacts
-dist/
-dist-gha/
