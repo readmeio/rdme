@@ -1,4 +1,5 @@
 import type { Config, Hook, Interfaces } from '@oclif/core';
+import type { COMMANDS } from '../index.js';
 import type { CreateGHAHook, CreateGHAHookOptsInClass } from './hooks/createGHA.js';
 
 import { format } from 'node:util';
@@ -57,6 +58,18 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
     if (!this.jsonEnabled()) {
       info(input, opts);
     }
+  }
+
+  /**
+   * A type-safe handler for running another `rdme` command.
+   *
+   * @example
+   * ```ts
+   * await this.runRdmeCommand('docs:upload', [this.flags.dir, '--skip-validation', '--key', this.flags.key]);
+   * ```
+   */
+  async runRdmeCommand<C extends keyof typeof COMMANDS>(command: C, argv?: string[]) {
+    return this.config.runCommand<Awaited<ReturnType<(typeof COMMANDS)[C]['prototype']['run']>>>(command, argv);
   }
 
   public warn(input: Error | string): Error | string {
