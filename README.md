@@ -145,10 +145,10 @@ rdme login
 `rdme` has a thin wrapper that allows the CLI to be used as a proper action in a GitHub Actions workflow. For example, say you wanted to run `rdme openapi validate petstore.json` in a GitHub Actions environment. Here's what the corresponding steps would look like in a GitHub Actions workflow file:
 
 ```yml
-## Required in order for the GitHub Action to access your repo's contents ##
+## Required in order for the GitHub Action to access your repo's contents
 - uses: actions/checkout@v4
 
-## Runs the `rdme openapi validate petstore.json` command with the root directory being your repo ##
+## Runs the `rdme openapi validate petstore.json` command with the root directory being your repo
 - uses: readmeio/rdme@v10
   with:
     rdme: openapi validate petstore.json
