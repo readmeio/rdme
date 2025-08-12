@@ -1,0 +1,10 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`BaseCommand > #runRdmeCommand > should run another rdme command 1`] = `
+{
+  "error": [Error: Please login using \`rdme login\`.],
+  "stderr": "",
+  "stdout": "ℹ️  Running test command
+",
+}
+`;
