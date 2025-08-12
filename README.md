@@ -40,8 +40,6 @@ npm run build && npm run build:docs
 * [Quick Start](#quick-start)
 * [CLI Configuration](#cli-configuration)
 * [GitHub Actions Configuration](#github-actions-configuration)
-* [Required in order for the GitHub Action to access your repo's contents](#required-in-order-for-the-github-action-to-access-your-repos-contents)
-* [Runs the `rdme openapi validate petstore.json` command with the root directory being your repo](#runs-the-rdme-openapi-validate-petstorejson-command-with-the-root-directory-being-your-repo)
 * [Command Topics](#command-topics)
 <!-- tocstop -->
 <!-- prettier-ignore-end -->
@@ -147,10 +145,10 @@ rdme login
 `rdme` has a thin wrapper that allows the CLI to be used as a proper action in a GitHub Actions workflow. For example, say you wanted to run `rdme openapi validate petstore.json` in a GitHub Actions environment. Here's what the corresponding steps would look like in a GitHub Actions workflow file:
 
 ```yml
-# Required in order for the GitHub Action to access your repo's contents
+## Required in order for the GitHub Action to access your repo's contents
 - uses: actions/checkout@v4
 
-# Runs the `rdme openapi validate petstore.json` command with the root directory being your repo
+## Runs the `rdme openapi validate petstore.json` command with the root directory being your repo
 - uses: readmeio/rdme@v10
   with:
     rdme: openapi validate petstore.json
