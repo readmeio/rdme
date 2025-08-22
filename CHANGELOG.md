@@ -1,3 +1,20 @@
+# [10.5.0](https://github.com/readmeio/rdme/compare/v10.4.0...v10.5.0) (2025-08-22)
+
+
+### Bug Fixes
+
+* **fetch:** handle non-JSON error responses better ([#1324](https://github.com/readmeio/rdme/issues/1324)) ([383123f](https://github.com/readmeio/rdme/commit/383123f3821f4578321c9f88e306e69513db6ee6))
+* **openapi/upload:** custom slugs for URL uploads ([#1313](https://github.com/readmeio/rdme/issues/1313)) ([ab48677](https://github.com/readmeio/rdme/commit/ab486770a95accc0f557351a300067bcf94b248e))
+* **v9/docs:** migration guide + deprecation notice updates ([#1208](https://github.com/readmeio/rdme/issues/1208)) ([1fa6adb](https://github.com/readmeio/rdme/commit/1fa6adb78adde4e8a6deb8fcbb2e12f8a0327052))
+
+
+### Features
+
+* **inspect:** splitting apart `xml` into three fine-tuned datasets ([#1305](https://github.com/readmeio/rdme/issues/1305)) ([2e10328](https://github.com/readmeio/rdme/commit/2e103289b484584c666ff0dc8bd47ffba3cf9e9c))
+* new `rage` command for printing out environment data for debugging ([#1310](https://github.com/readmeio/rdme/issues/1310)) ([c773af8](https://github.com/readmeio/rdme/commit/c773af8b0217ab0e201970bc7f478b40b423f753))
+* **openapi/upload:** docs + DX enhancements for slugs vs. legacy IDs ([#1309](https://github.com/readmeio/rdme/issues/1309)) ([5272a7e](https://github.com/readmeio/rdme/commit/5272a7e8c03fde24c9912a0dc677d2177415464c))
+* **plugins:** add `runRdmeCommand` helper ([#1292](https://github.com/readmeio/rdme/issues/1292)) ([12fea84](https://github.com/readmeio/rdme/commit/12fea840a355b88177878041bd19f57878c2ca96))
+
 # [10.5.0-next.6](https://github.com/readmeio/rdme/compare/v10.5.0-next.5...v10.5.0-next.6) (2025-08-12)
 
 
