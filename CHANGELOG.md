@@ -1,3 +1,10 @@
+## [10.5.1-next.1](https://github.com/readmeio/rdme/compare/v10.5.0...v10.5.1-next.1) (2025-08-28)
+
+
+### Bug Fixes
+
+* **oclif:** disable engine warning ([#1333](https://github.com/readmeio/rdme/issues/1333)) ([f731713](https://github.com/readmeio/rdme/commit/f73171369a9628a7ad7f83550e8955249a8cfdbf))
+
 # [10.5.0](https://github.com/readmeio/rdme/compare/v10.4.0...v10.5.0) (2025-08-22)
 
 
