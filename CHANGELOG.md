@@ -1,3 +1,10 @@
+## [10.5.1-next.2](https://github.com/readmeio/rdme/compare/v10.5.1-next.1...v10.5.1-next.2) (2025-08-28)
+
+
+### Bug Fixes
+
+* **openapi/upload:** unhide `--confirm-overwrite` ([#1332](https://github.com/readmeio/rdme/issues/1332)) ([5f4abb4](https://github.com/readmeio/rdme/commit/5f4abb4b759ea4f3aa3ff09b4bcafab9eea7e837))
+
 ## [10.5.1-next.1](https://github.com/readmeio/rdme/compare/v10.5.0...v10.5.1-next.1) (2025-08-28)
 
 
