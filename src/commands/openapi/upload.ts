@@ -42,7 +42,6 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     'confirm-overwrite': Flags.boolean({
       description:
         'If set, file overwrites will be made without a confirmation prompt. This flag can be a useful in automated environments where prompts cannot be responded to.',
-      hidden: true,
     }),
     'legacy-id': Flags.string({
       summary: 'The legacy ID for your API definition.',

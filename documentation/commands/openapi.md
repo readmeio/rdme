@@ -185,18 +185,21 @@ Upload (or re-upload) your API definition to ReadMe.
 
 ```
 USAGE
-  $ rdme openapi upload [SPEC] --key <value> [--slug <value>] [--title <value>] [--useSpecVersion | --branch <value>]
+  $ rdme openapi upload [SPEC] --key <value> [--confirm-overwrite] [--slug <value>] [--title <value>]
+    [--useSpecVersion | --branch <value>]
 
 ARGUMENTS
   SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
         subdirectories contain a single OpenAPI file, you can omit the path.
 
 FLAGS
-  --key=<value>     (required) ReadMe project API key
-  --branch=<value>  [default: stable] ReadMe project version
-  --slug=<value>    Override the slug (i.e., the unique identifier) for your API definition.
-  --title=<value>   An override value for the `info.title` field in the API definition
-  --useSpecVersion  Use the OpenAPI `info.version` field for your ReadMe project version
+  --key=<value>        (required) ReadMe project API key
+  --branch=<value>     [default: stable] ReadMe project version
+  --confirm-overwrite  If set, file overwrites will be made without a confirmation prompt. This flag can be a useful in
+                       automated environments where prompts cannot be responded to.
+  --slug=<value>       Override the slug (i.e., the unique identifier) for your API definition.
+  --title=<value>      An override value for the `info.title` field in the API definition
+  --useSpecVersion     Use the OpenAPI `info.version` field for your ReadMe project version
 
 DESCRIPTION
   Upload (or re-upload) your API definition to ReadMe.
