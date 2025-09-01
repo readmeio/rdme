@@ -85,7 +85,7 @@
     "@oclif/test": "^4.1.0",
     "@readme/better-ajv-errors": "^2.3.2",
     "@readme/oas-examples": "^6.1.2",
-    "@readme/standards": "^1.4.0",
+    "@readme/standards": "^2.1.1",
     "@rollup/plugin-commonjs": "^28.0.0",
     "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-node-resolve": "^16.0.0",
