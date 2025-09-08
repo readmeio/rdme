@@ -1,3 +1,11 @@
+## [10.5.1](https://github.com/readmeio/rdme/compare/v10.5.0...v10.5.1) (2025-09-08)
+
+
+### Bug Fixes
+
+* **oclif:** disable engine warning ([#1333](https://github.com/readmeio/rdme/issues/1333)) ([f731713](https://github.com/readmeio/rdme/commit/f73171369a9628a7ad7f83550e8955249a8cfdbf))
+* **openapi/upload:** unhide `--confirm-overwrite` ([#1332](https://github.com/readmeio/rdme/issues/1332)) ([5f4abb4](https://github.com/readmeio/rdme/commit/5f4abb4b759ea4f3aa3ff09b4bcafab9eea7e837))
+
 ## [10.5.1-next.2](https://github.com/readmeio/rdme/compare/v10.5.1-next.1...v10.5.1-next.2) (2025-08-28)
 
 
