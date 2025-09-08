@@ -73,7 +73,7 @@ function constructCommandString(commandId: string, args: CommandArg, flags: Comm
     .map(flag => {
       const val = opts[flag];
       // obfuscate the key in a GitHub secret
-      if (flag === 'key') return `--key=$\{{ secrets.${GITHUB_SECRET_NAME} }}`;
+      if (flag === 'key') return `--key=\${{ secrets.${GITHUB_SECRET_NAME} }}`;
       // remove the GitHub flag
       if (flag === 'github') return false;
       // if a boolean value, return the flag

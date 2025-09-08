@@ -86,7 +86,7 @@ export default class DocsMigrateCommand extends BaseCommand<typeof DocsMigrateCo
 
     let unsortedFiles = await findPages.call(this, pathInput);
 
-    let transformedByHooks = false;
+    let transformedByHooks: boolean = false;
 
     const validationHookResults = await this.config.runHook<'pre_markdown_validation', PluginHooks>(
       'pre_markdown_validation',

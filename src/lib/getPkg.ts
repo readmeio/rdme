@@ -56,6 +56,7 @@ export async function getPkgVersionFromNPM(
    */
   npmDistTag?: NPMDistTag,
 ): Promise<string> {
+  // biome-ignore lint/nursery/noUnnecessaryConditions: this is a false positive, biome is clowning for this
   if (npmDistTag) {
     return fetch(registryUrl)
       .then(res => res.json() as Promise<{ 'dist-tags': Record<string, string> }>)
