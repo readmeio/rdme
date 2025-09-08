@@ -61,6 +61,7 @@ export function baseFlags(section: Section) {
   // biome-ignore lint/suspicious/noImplicitAnyLet: This has an implicit `any` but we're filling it with constants below.
   let items;
 
+  // biome-ignore lint/nursery/noUnnecessaryConditions: we're using a switch for type narrowing. biome is clowning here.
   switch (section) {
     case 'Changelog':
       items = 'Changelog entries' as const;

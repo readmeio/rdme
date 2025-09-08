@@ -99,7 +99,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     let status: APIUploadStatus = 'pending';
 
     while (this.isStatusPending(status) && count < 10) {
-      // biome-ignore lint/nursery/noAwaitInLoop: We need to wait between requests to avoid hitting rate limits.
+      // biome-ignore lint/performance/noAwaitInLoops: We need to wait between requests to avoid hitting rate limits.
       await new Promise(resolve => {
         // exponential backoff — wait 1s, 2s, 4s, 8s, 16s, 32s, 30s, 30s, 30s, 30s, etc.
         setTimeout(resolve, Math.min(isTest() ? 1 : 1000 * 2 ** count, 30000));

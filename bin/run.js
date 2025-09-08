@@ -16,6 +16,7 @@ async function main() {
     opts.args = stringArgv(process.env.INPUT_RDME);
   }
   await execute(opts).then(msg => {
+    // biome-ignore lint/nursery/noUnnecessaryConditions: this is a false positive, biome is clowning for this
     if (msg && typeof msg === 'string') {
       // biome-ignore lint/suspicious/noConsole: This is in an executable.
       console.log(msg);

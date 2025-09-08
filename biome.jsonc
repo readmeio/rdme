@@ -8,9 +8,9 @@
       "**/*.{js,ts}",
 
       // Biome's `vcs.useIgnoreFile` config should be able to pick these up but it doesn't.
-      "!coverage/**",
-      "!dist/**",
-      "!dist-gha/**",
+      "!coverage",
+      "!dist",
+      "!dist-gha",
     ],
   },
   "linter": {

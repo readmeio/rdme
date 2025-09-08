@@ -13,7 +13,7 @@ describe('rdme openapi inspect', () => {
   describe('full reports', () => {
     it.each([
       '@readme/oas-examples/3.0/json/petstore.json',
-      '@readme/oas-examples/3.0/json/readme.json',
+      '@readme/oas-examples/3.0/json/readme-legacy.json',
       '@readme/oas-examples/3.0/json/readme-extensions.json',
       '@readme/oas-examples/3.1/json/train-travel.json',
     ])('should generate a report for %s', async spec => {
@@ -30,7 +30,7 @@ describe('rdme openapi inspect', () => {
 
     const cases: { feature: string[]; shouldSoftError?: true; spec: string }[] = [
       {
-        spec: '@readme/oas-examples/3.0/json/readme.json',
+        spec: '@readme/oas-examples/3.0/json/readme-legacy.json',
         feature: ['polymorphism'],
       },
       {
