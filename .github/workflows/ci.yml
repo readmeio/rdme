@@ -24,7 +24,7 @@ jobs:
           - latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
@@ -39,7 +39,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Install deps
         run: npm ci
@@ -55,12 +55,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout GitHub Action
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           path: rdme-repo
 
       - name: Checkout external repo containing OpenAPI file
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           path: oas-examples-repo
           repository: readmeio/oas-examples
