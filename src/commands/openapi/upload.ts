@@ -162,6 +162,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     let specToUpload = preparedSpec;
     const fileExtension = nodePath.extname(filename);
     let extensionsMatch = true;
+    const isFileYaml = yamlFileTypes.includes(fileExtension);
     if (this.flags.slug) {
       // verify that the slug's extension matches the file's extension
       const slugExtension = nodePath.extname(this.flags.slug);
@@ -173,13 +174,10 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
         }
 
         if (fileExtension !== slugExtension) {
-          if (yamlFileTypes.includes(fileExtension) && yamlFileTypes.includes(slugExtension)) {
+          if (isFileYaml && yamlFileTypes.includes(slugExtension)) {
             // treat .yaml and .yml as interchangeable
           } else {
             extensionsMatch = false;
-            if (fileExtension === '.json' || yamlFileTypes.includes(slugExtension)) {
-              specToUpload = yaml.dump(JSON.parse(preparedSpec));
-            }
           }
         }
       }
@@ -286,9 +284,12 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
     const body = new FormData();
 
-    const isYaml = fileExtension === '.yaml' || fileExtension === '.yml';
+    // we're sending YAML to the API if:
+    // - the file is YAML and the extension matches
+    // - the file is JSON and the slug has a YAML extension (meaning we need to convert the file back to YAML)
+    const sendYaml = (isFileYaml && extensionsMatch) || (!isFileYaml && !extensionsMatch);
     // Convert YAML files back to YAML before uploading
-    if (isYaml && extensionsMatch) {
+    if (sendYaml) {
       specToUpload = yaml.dump(JSON.parse(preparedSpec));
     }
 
@@ -296,7 +297,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     body.append(
       'schema',
       new File([specToUpload], filename, {
-        type: isYaml && extensionsMatch ? 'application/x-yaml' : 'application/json',
+        type: sendYaml ? 'application/x-yaml' : 'application/json',
       }),
     );
 
