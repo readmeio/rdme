@@ -276,7 +276,7 @@ describe('rdme openapi upload', () => {
           .get(`/branches/${branch}/apis`)
           .reply(200, { data: [{ filename: customSlug }] })
           .put(`/branches/${branch}/apis/${customSlug}`, body =>
-            body.match(`form-data; name="schema"; filename="${customSlug}"`),
+            body.match(`form-data; name="schema"; filename="${customSlug}"\r\nContent-Type: application/x-yaml`),
           )
           .reply(200, {
             data: {
@@ -286,6 +286,30 @@ describe('rdme openapi upload', () => {
           });
 
         const result = await run(['--branch', branch, filename, '--key', key, '--slug', customSlug]);
+
+        expect(result).toMatchSnapshot();
+
+        mock.done();
+      });
+
+      it('should handle a slug with a valid but mismatching file extension (.json slug, YAML file)', async () => {
+        prompts.inject([true]);
+        const customSlug = 'custom-slug.json';
+
+        const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+          .get(`/branches/${branch}/apis`)
+          .reply(200, { data: [{ filename: customSlug }] })
+          .put(`/branches/${branch}/apis/${customSlug}`, body =>
+            body.match(`form-data; name="schema"; filename="${customSlug}"\r\nContent-Type: application/json`),
+          )
+          .reply(200, {
+            data: {
+              upload: { status: 'done' },
+              uri: `/branches/${branch}/apis/${customSlug}`,
+            },
+          });
+
+        const result = await run(['--branch', branch, yamlFile, '--key', key, '--slug', customSlug]);
 
         expect(result).toMatchSnapshot();
 

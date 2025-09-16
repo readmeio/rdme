@@ -148,6 +148,22 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
 }
 `;
 
+exports[`rdme openapi upload > given that the API definition is a local file > and the \`--slug\` flag is passed > should handle a slug with a valid but mismatching file extension (.json slug, YAML file) 1`] = `
+{
+  "result": {
+    "status": "done",
+    "uri": "/branches/1.0.0/apis/custom-slug.json",
+  },
+  "stderr": "- Validating the API definition located at __tests__/__fixtures__/postman/petstore.collection.yaml...
+ ›   Warning: Support for Postman collections is currently experimental.
+- Updating your API definition to ReadMe...
+✔ Updating your API definition to ReadMe... done!
+",
+  "stdout": "🚀 Your API definition (custom-slug.json) was successfully updated in ReadMe!
+",
+}
+`;
+
 exports[`rdme openapi upload > given that the API definition is a local file > and the \`--slug\` flag is passed > should handle a slug with a valid but mismatching file extension (.yml slug, JSON file) 1`] = `
 {
   "result": {
