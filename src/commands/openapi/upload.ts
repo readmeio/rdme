@@ -173,9 +173,12 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
           );
         }
 
-        // if the file is JSON, the slug must be JSON. if the file is YAML, the slug must be YAML-like
+        // this means that the user is trying to upload a YAML file but provided a JSON slug, or vice versa
         if (fileExtension !== slugExtension && !(isFileYaml && yamlExtensions.includes(slugExtension))) {
           extensionsMatch = false;
+          this.warn(
+            `The file extension in your provided slug (${slugExtension}) does not match the file extension of the file you're uploading (${fileExtension}). Your API definition will be uploaded as ${isFileYaml ? 'JSON' : 'YAML'}.`,
+          );
         }
       }
 
