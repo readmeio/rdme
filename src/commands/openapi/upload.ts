@@ -20,7 +20,7 @@ import { oraOptions } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
 
-const yamlFileTypes = ['.yaml', '.yml'];
+const yamlExtensions = ['.yaml', '.yml'];
 
 export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUploadCommand> {
   id = 'openapi upload' as const;
@@ -162,23 +162,20 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     let specToUpload = preparedSpec;
     const fileExtension = nodePath.extname(filename);
     let extensionsMatch = true;
-    const isFileYaml = yamlFileTypes.includes(fileExtension);
+    const isFileYaml = yamlExtensions.includes(fileExtension);
     if (this.flags.slug) {
       // verify that the slug's extension matches the file's extension
       const slugExtension = nodePath.extname(this.flags.slug);
       if (slugExtension) {
-        if (!['.json', ...yamlFileTypes].includes(slugExtension)) {
+        if (!['.json', ...yamlExtensions].includes(slugExtension)) {
           throw new Error(
             'Please provide a valid file extension that matches the extension on the file you provided. Must be `.json`, `.yaml`, or `.yml`.',
           );
         }
 
-        if (fileExtension !== slugExtension) {
-          if (isFileYaml && yamlFileTypes.includes(slugExtension)) {
-            // treat .yaml and .yml as interchangeable
-          } else {
-            extensionsMatch = false;
-          }
+        // if the file is JSON, the slug must be JSON. if the file is YAML, the slug must be YAML-like
+        if (fileExtension !== slugExtension && !(isFileYaml && yamlExtensions.includes(slugExtension))) {
+          extensionsMatch = false;
         }
       }
 
