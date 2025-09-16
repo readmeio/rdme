@@ -20,6 +20,8 @@ import { oraOptions } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
 
+const yamlFileTypes = ['.yaml', '.yml'];
+
 export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUploadCommand> {
   id = 'openapi upload' as const;
 
@@ -157,18 +159,34 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
      */
     let updateLegacyIdViaSlug = false;
 
+    let specToUpload = preparedSpec;
     const fileExtension = nodePath.extname(filename);
+    let extensionsMatch = true;
     if (this.flags.slug) {
       // verify that the slug's extension matches the file's extension
       const slugExtension = nodePath.extname(this.flags.slug);
-      if (slugExtension && (!['.json', '.yaml', '.yml'].includes(slugExtension) || fileExtension !== slugExtension)) {
-        throw new Error(
-          'Please provide a valid file extension that matches the extension on the file you provided. Must be `.json`, `.yaml`, or `.yml`.',
-        );
+      if (slugExtension) {
+        if (!['.json', ...yamlFileTypes].includes(slugExtension)) {
+          throw new Error(
+            'Please provide a valid file extension that matches the extension on the file you provided. Must be `.json`, `.yaml`, or `.yml`.',
+          );
+        }
+
+        if (fileExtension !== slugExtension) {
+          if (yamlFileTypes.includes(fileExtension) && yamlFileTypes.includes(slugExtension)) {
+            // treat .yaml and .yml as interchangeable
+          } else {
+            extensionsMatch = false;
+            if (fileExtension === '.json' || yamlFileTypes.includes(slugExtension)) {
+              specToUpload = yaml.dump(JSON.parse(preparedSpec));
+            }
+          }
+        }
       }
 
       // the API expects a file extension, so keep it if it's there, add it if it's not
-      filename = `${this.flags.slug.replace(slugExtension, '')}${fileExtension}`;
+      // biome-ignore lint/nursery/noUnnecessaryConditions: false positive
+      filename = extensionsMatch ? `${this.flags.slug.replace(slugExtension, '')}${fileExtension}` : this.flags.slug;
       // handling in the event that the slug is an object ID, in which case it's likely a faulty migration
       const objectIdRegex = /^[0-9a-fA-F]{24}$/;
       if (objectIdRegex.test(this.flags.slug)) {
@@ -270,8 +288,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
     const isYaml = fileExtension === '.yaml' || fileExtension === '.yml';
     // Convert YAML files back to YAML before uploading
-    let specToUpload = preparedSpec;
-    if (isYaml) {
+    if (isYaml && extensionsMatch) {
       specToUpload = yaml.dump(JSON.parse(preparedSpec));
     }
 
@@ -279,7 +296,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     body.append(
       'schema',
       new File([specToUpload], filename, {
-        type: isYaml ? 'application/x-yaml' : 'application/json',
+        type: isYaml && extensionsMatch ? 'application/x-yaml' : 'application/json',
       }),
     );
 
