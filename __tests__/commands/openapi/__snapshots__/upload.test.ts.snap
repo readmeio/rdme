@@ -148,12 +148,18 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
 }
 `;
 
-exports[`rdme openapi upload > given that the API definition is a local file > and the \`--slug\` flag is passed > should handle a slug with a valid but mismatching file extension 1`] = `
+exports[`rdme openapi upload > given that the API definition is a local file > and the \`--slug\` flag is passed > should handle a slug with a valid but mismatching file extension (.yml slug, JSON file) 1`] = `
 {
-  "error": [Error: Please provide a valid file extension that matches the extension on the file you provided. Must be \`.json\`, \`.yaml\`, or \`.yml\`.],
+  "result": {
+    "status": "done",
+    "uri": "/branches/1.0.0/apis/custom-slug.yml",
+  },
   "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+- Updating your API definition to ReadMe...
+✔ Updating your API definition to ReadMe... done!
 ",
-  "stdout": "",
+  "stdout": "🚀 Your API definition (custom-slug.yml) was successfully updated in ReadMe!
+",
 }
 `;
 

@@ -268,12 +268,22 @@ describe('rdme openapi upload', () => {
         mock.done();
       });
 
-      it('should handle a slug with a valid but mismatching file extension', async () => {
+      it('should handle a slug with a valid but mismatching file extension (.yml slug, JSON file)', async () => {
+        prompts.inject([true]);
         const customSlug = 'custom-slug.yml';
 
         const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
           .get(`/branches/${branch}/apis`)
-          .reply(200, { data: [] });
+          .reply(200, { data: [{ filename: customSlug }] })
+          .put(`/branches/${branch}/apis/${customSlug}`, body =>
+            body.match(`form-data; name="schema"; filename="${customSlug}"`),
+          )
+          .reply(200, {
+            data: {
+              upload: { status: 'done' },
+              uri: `/branches/${branch}/apis/${customSlug}`,
+            },
+          });
 
         const result = await run(['--branch', branch, filename, '--key', key, '--slug', customSlug]);
 
