@@ -183,8 +183,12 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       }
 
       // the API expects a file extension, so keep it if it's there, add it if it's not
-      // biome-ignore lint/nursery/noUnnecessaryConditions: false positive
-      filename = extensionsMatch ? `${this.flags.slug.replace(slugExtension, '')}${fileExtension}` : this.flags.slug;
+      filename =
+        // biome-ignore lint/nursery/noUnnecessaryConditions: false positive
+        extensionsMatch && fileExtension
+          ? `${this.flags.slug.replace(slugExtension, '')}${fileExtension}`
+          : this.flags.slug;
+
       // handling in the event that the slug is an object ID, in which case it's likely a faulty migration
       const objectIdRegex = /^[0-9a-fA-F]{24}$/;
       if (objectIdRegex.test(this.flags.slug)) {
