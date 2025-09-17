@@ -171,8 +171,14 @@ describe('rdme openapi upload', () => {
         const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
           .get(`/branches/${branch}/apis`)
           .reply(200, { data: [] })
-          .post(`/branches/${branch}/apis`, body =>
-            body.match(`form-data; name="schema"; filename="${customSlugWithExtension}"`),
+          .post(
+            `/branches/${branch}/apis`,
+            body =>
+              body.match(
+                `form-data; name="schema"; filename="${customSlugWithExtension}"\r\nContent-Type: application/json`,
+              ) &&
+              // asserts that we're sending JSON
+              body.match(`{"openapi":"3.0.0","info":{"version":"1.2.3","title":"Single Path",`),
           )
           .reply(200, {
             data: {
@@ -214,8 +220,14 @@ describe('rdme openapi upload', () => {
         const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
           .get(`/branches/${branch}/apis`)
           .reply(200, { data: [] })
-          .post(`/branches/${branch}/apis`, body =>
-            body.match(`form-data; name="schema"; filename="${customSlugWithExtension}"`),
+          .post(
+            `/branches/${branch}/apis`,
+            body =>
+              body.match(
+                `form-data; name="schema"; filename="${customSlugWithExtension}"\r\nContent-Type: application/json`,
+              ) &&
+              // asserts that we're sending JSON
+              body.match(`{"openapi":"3.0.0","info":{"version":"1.2.3","title":"Single Path",`),
           )
           .reply(200, {
             data: {
@@ -238,8 +250,14 @@ describe('rdme openapi upload', () => {
         const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
           .get(`/branches/${branch}/apis`)
           .reply(200, { data: [{ legacy_id: customSlug, filename: existingFilename }] })
-          .put(`/branches/${branch}/apis/${existingFilename}`, body =>
-            body.match(`form-data; name="schema"; filename="${existingFilename}"`),
+          .put(
+            `/branches/${branch}/apis/${existingFilename}`,
+            body =>
+              body.match(
+                `form-data; name="schema"; filename="${existingFilename}"\r\nContent-Type: application/json`,
+              ) &&
+              // asserts that we're sending JSON
+              body.match(`{"openapi":"3.0.0","info":{"version":"1.2.3","title":"Single Path",`),
           )
           .reply(200, {
             data: {
@@ -669,8 +687,12 @@ describe('rdme openapi upload', () => {
       const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
         .get(`/branches/${branch}/apis`)
         .reply(200, { data: [{ filename: 'openapi.json' }] })
-        .put('/branches/1.0.0/apis/openapi.json', body =>
-          body.match(`form-data; name="schema"; filename="${urlFilename}"`),
+        .put(
+          '/branches/1.0.0/apis/openapi.json',
+          body =>
+            body.match(`form-data; name="schema"; filename="${urlFilename}"\r\nContent-Type: application/json`) &&
+            // asserts that we're sending JSON
+            body.match(`{"openapi":"3.0.0","info":{"version":"1.2.3","title":"Single Path",`),
         )
         .reply(200, {
           data: {
@@ -705,8 +727,14 @@ describe('rdme openapi upload', () => {
         const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
           .get(`/branches/${branch}/apis`)
           .reply(200, {})
-          .post(`/branches/${branch}/apis`, body =>
-            body.match(`form-data; name="schema"; filename="${customFilename}.json"`),
+          .post(
+            `/branches/${branch}/apis`,
+            body =>
+              body.match(
+                `form-data; name="schema"; filename="${customFilename}.json"\r\nContent-Type: application/json`,
+              ) &&
+              // asserts that we're sending JSON
+              body.match(`{"openapi":"3.0.0","info":{"version":"1.2.3","title":"Single Path",`),
           )
           .reply(200, {
             data: {
@@ -730,8 +758,12 @@ describe('rdme openapi upload', () => {
         const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
           .get(`/branches/${branch}/apis`)
           .reply(200, {})
-          .post(`/branches/${branch}/apis`, body =>
-            body.match(`form-data; name="schema"; filename="${customFilename}"`),
+          .post(
+            `/branches/${branch}/apis`,
+            body =>
+              body.match(`form-data; name="schema"; filename="${customFilename}"\r\nContent-Type: application/json`) &&
+              // asserts that we're sending JSON
+              body.match(`{"openapi":"3.0.0","info":{"version":"1.2.3","title":"Single Path",`),
           )
           .reply(200, {
             data: {
@@ -763,8 +795,12 @@ describe('rdme openapi upload', () => {
         const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
           .get(`/branches/${branch}/apis`)
           .reply(200, {})
-          .post(`/branches/${branch}/apis`, body =>
-            body.match(`form-data; name="schema"; filename="${customFilename}"`),
+          .post(
+            `/branches/${branch}/apis`,
+            body =>
+              body.match(`form-data; name="schema"; filename="${customFilename}"\r\nContent-Type: application/json`) &&
+              // asserts that we're sending JSON
+              body.match(`{"openapi":"3.0.0","info":{"version":"1.2.3","title":"Single Path",`),
           )
           .reply(200, {
             data: {
@@ -820,8 +856,12 @@ describe('rdme openapi upload', () => {
         .reply(200, { data: [{ legacy_id: legacyId, filename: existingFilename }] });
 
       const putMock = getAPIv2Mock({ authorization: `Bearer ${key}` })
-        .put(`/branches/${branch}/apis/${existingFilename}`, body =>
-          body.match(`form-data; name="schema"; filename="${existingFilename}"`),
+        .put(
+          `/branches/${branch}/apis/${existingFilename}`,
+          body =>
+            body.match(`form-data; name="schema"; filename="${existingFilename}"\r\nContent-Type: application/json`) &&
+            // asserts that we're sending JSON
+            body.match(`{"openapi":"3.0.0","info":{"version":"1.2.3","title":"Single Path",`),
         )
         .reply(200, {
           data: {
