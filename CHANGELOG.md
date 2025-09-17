@@ -1,3 +1,10 @@
+## [10.5.2-next.2](https://github.com/readmeio/rdme/compare/v10.5.2-next.1...v10.5.2-next.2) (2025-09-17)
+
+
+### Bug Fixes
+
+* **openapi/upload:** better handling for mismatching files/slugs ([#1345](https://github.com/readmeio/rdme/issues/1345)) ([a16fcae](https://github.com/readmeio/rdme/commit/a16fcaec8f6481ecda8e11f89dce7972a14fd2ed))
+
 ## [10.5.2-next.1](https://github.com/readmeio/rdme/compare/v10.5.1...v10.5.2-next.1) (2025-09-17)
 
 
