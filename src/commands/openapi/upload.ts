@@ -20,6 +20,8 @@ import { oraOptions } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
 
+const yamlExtensions = ['.yaml', '.yml'];
+
 export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUploadCommand> {
   id = 'openapi upload' as const;
 
@@ -157,18 +159,36 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
      */
     let updateLegacyIdViaSlug = false;
 
-    const fileExtension = nodePath.extname(filename) || '.json';
+    const fileExtension = nodePath.extname(filename) || '.json'; // default to .json if no extension is found
+    const isFileYaml = yamlExtensions.includes(fileExtension);
+
+    let extensionsMatch = true;
     if (this.flags.slug) {
       // verify that the slug's extension matches the file's extension
       const slugExtension = nodePath.extname(this.flags.slug);
-      if (slugExtension && (!['.json', '.yaml', '.yml'].includes(slugExtension) || fileExtension !== slugExtension)) {
-        throw new Error(
-          'Please provide a valid file extension that matches the extension on the file you provided. Must be `.json`, `.yaml`, or `.yml`.',
-        );
+      if (slugExtension) {
+        if (!['.json', ...yamlExtensions].includes(slugExtension)) {
+          throw new Error(
+            'Please provide a valid file extension that matches the extension on the file you provided. Must be `.json`, `.yaml`, or `.yml`.',
+          );
+        }
+
+        // this means that the user is trying to upload a YAML file but provided a JSON slug, or vice versa
+        if (fileExtension !== slugExtension && !(isFileYaml && yamlExtensions.includes(slugExtension))) {
+          extensionsMatch = false;
+          this.warn(
+            `The file extension in your provided slug (${slugExtension}) does not match the file extension of the file you're uploading (${fileExtension}). Your API definition will be converted to ${isFileYaml ? 'JSON' : 'YAML'} prior to upload.`,
+          );
+        }
       }
 
       // the API expects a file extension, so keep it if it's there, add it if it's not
-      filename = `${this.flags.slug.replace(slugExtension, '')}${fileExtension}`;
+      filename =
+        // biome-ignore lint/nursery/noUnnecessaryConditions: false positive
+        extensionsMatch && fileExtension
+          ? `${this.flags.slug.replace(slugExtension, '')}${fileExtension}`
+          : this.flags.slug;
+
       // handling in the event that the slug is an object ID, in which case it's likely a faulty migration
       const objectIdRegex = /^[0-9a-fA-F]{24}$/;
       if (objectIdRegex.test(this.flags.slug)) {
@@ -268,10 +288,13 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
     const body = new FormData();
 
-    const isYaml = fileExtension === '.yaml' || fileExtension === '.yml';
+    // we're sending YAML to the API if:
+    // - the file is YAML and the extension matches
+    // - the file is JSON and the slug has a YAML extension (meaning we need to convert the file back to YAML)
+    const sendYaml = (isFileYaml && extensionsMatch) || (!isFileYaml && !extensionsMatch);
     // Convert YAML files back to YAML before uploading
     let specToUpload = preparedSpec;
-    if (isYaml) {
+    if (sendYaml) {
       specToUpload = yaml.dump(JSON.parse(preparedSpec));
     }
 
@@ -279,7 +302,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     body.append(
       'schema',
       new File([specToUpload], filename, {
-        type: isYaml ? 'application/x-yaml' : 'application/json',
+        type: sendYaml ? 'application/x-yaml' : 'application/json',
       }),
     );
 
