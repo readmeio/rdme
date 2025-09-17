@@ -139,12 +139,6 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       this.warn('Support for Postman collections is currently experimental.');
     }
 
-    if (!specFileTypeIsUrl && filename !== specPath && !this.flags['legacy-id'] && !this.flags.slug) {
-      this.warn(
-        `The slug of your API Definition will be set to ${filename} in ReadMe. This slug is not visible to your end users. To set this slug to something else, use the \`--slug\` flag.`,
-      );
-    }
-
     const headers = new Headers({ authorization: `Bearer ${this.flags.key}` });
 
     const existingAPIDefinitions: APIDefinitionsRepresentation['data'] =
@@ -300,12 +294,25 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       specToUpload = yaml.dump(JSON.parse(preparedSpec));
     }
 
+    // final check to ensure the filename has an extension
+    if (filename && !nodePath.extname(filename)) {
+      const extension = sendYaml ? '.yml' : '.json';
+      filename = `${filename}${extension}`;
+    }
+
     // if the filename is empty (which happens in the event that the URL doesn't have a pathname and no slug is specified)
     // we'll default it to openapi.json or openapi.yml depending on the file type
     if (!filename) {
       filename = `openapi${sendYaml ? '.yml' : '.json'}`;
       this.warn(
         `No filename could be inferred from the provided URL, so the slug will default to ${filename}. To set a custom slug, use the \`--slug\` flag.`,
+      );
+    }
+    // if the resulting file name is different than the original path input and the user hasn't provided a slug or legacy ID,
+    // warn them that the slug may not be what they expect
+    else if (filename !== specPath && !this.flags['legacy-id'] && !this.flags.slug) {
+      this.warn(
+        `The slug of your API Definition will be set to ${filename} in ReadMe. This slug is not visible to your end users. To set this slug to something else, use the \`--slug\` flag.`,
       );
     }
 

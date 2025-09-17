@@ -692,6 +692,34 @@ describe('rdme openapi upload', () => {
       mock.done();
     });
 
+    it('should create a new API definition in ReadMe if there is no file extension and the file is JSON', async () => {
+      const fileMock = nock('https://example.com').get(`/no-extension`).reply(200, petstore);
+
+      const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .get(`/branches/${branch}/apis`)
+        .reply(200, {})
+        .post(
+          `/branches/${branch}/apis`,
+          body =>
+            body.match(`form-data; name="schema"; filename="no-extension.json"`) &&
+            // asserts that we're sending JSON
+            body.match(`{"openapi":"3.0.0","info":{"version":"1.2.3","title":"Single Path",`),
+        )
+        .reply(200, {
+          data: {
+            upload: { status: 'done' },
+            uri: `/branches/${branch}/apis/openapi.json`,
+          },
+        });
+
+      const result = await run(['--branch', branch, 'https://example.com/no-extension', '--key', key]);
+
+      expect(result).toMatchSnapshot();
+
+      fileMock.done();
+      mock.done();
+    });
+
     it('should create a new API definition in ReadMe if there is no path and the file is JSON', async () => {
       const fileMock = nock('https://example.com').get(`/`).reply(200, petstore);
 
