@@ -837,6 +837,37 @@ describe('rdme openapi upload', () => {
       mock.done();
     });
 
+    it('should update an existing API definition in ReadMe and the URL lacks an extension', async () => {
+      prompts.inject([true]);
+
+      const urlFilename = 'no-extension';
+      const fileMock = nock('https://example.com').get(`/${urlFilename}`).reply(200, petstore);
+
+      const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .get(`/branches/${branch}/apis`)
+        .reply(200, { data: [{ filename: 'no-extension.json' }] })
+        .put(
+          '/branches/1.0.0/apis/no-extension.json',
+          body =>
+            body.match(`form-data; name="schema"; filename="${urlFilename}.json"\r\nContent-Type: application/json`) &&
+            // asserts that we're sending JSON
+            body.match(`{"openapi":"3.0.0","info":{"version":"1.2.3","title":"Single Path",`),
+        )
+        .reply(200, {
+          data: {
+            upload: { status: 'done' },
+            uri: `/branches/${branch}/apis/openapi.json`,
+          },
+        });
+
+      const result = await run(['--branch', branch, 'https://example.com/no-extension', '--key', key]);
+
+      expect(result).toMatchSnapshot();
+
+      fileMock.done();
+      mock.done();
+    });
+
     it('should handle issues fetching from the URL', async () => {
       const fileMock = nock('https://example.com').get('/openapi.json').reply(400, {});
 

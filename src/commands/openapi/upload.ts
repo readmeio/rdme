@@ -145,6 +145,13 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       (await this.readmeAPIFetch(`/branches/${branch}/apis`, { headers }).then(res => this.handleAPIRes(res)))?.data ||
       [];
 
+    const filenames = new Intl.ListFormat('en', {
+      style: 'long',
+      type: 'unit',
+    }).format(existingAPIDefinitions.map(d => `\`${d.filename}\``));
+
+    this.debug(`found ${existingAPIDefinitions.length} existing API definitions: ${filenames}`);
+
     /**
      * If the user provided a slug that matches an existing legacy API definition ID,
      * we'll prompt them to confirm that they want to update the file.
@@ -222,12 +229,38 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       }
     }
 
-    const filenames = new Intl.ListFormat('en', {
-      style: 'long',
-      type: 'unit',
-    }).format(existingAPIDefinitions.map(d => `\`${d.filename}\``));
+    // we're sending YAML to the API if:
+    // - the file is YAML and the extension matches
+    // - the file is JSON and the slug has a YAML extension (meaning we need to convert the file back to YAML)
+    const sendYaml = (isFileYaml && extensionsMatch) || (!isFileYaml && !extensionsMatch);
+    // Convert YAML files back to YAML before uploading
+    let specToUpload = preparedSpec;
+    if (sendYaml) {
+      specToUpload = yaml.dump(JSON.parse(preparedSpec));
+    }
 
-    this.debug(`found ${existingAPIDefinitions.length} existing API definitions: ${filenames}`);
+    const fallbackExtension = sendYaml ? '.yml' : '.json';
+
+    // final check to ensure the filename has an extension
+    if (filename && !nodePath.extname(filename)) {
+      filename = `${filename}${fallbackExtension}`;
+    }
+
+    // if the filename is empty (which happens in the event that the URL doesn't have a pathname and no slug is specified)
+    // we'll default it to openapi.json or openapi.yml depending on the file type
+    if (!filename) {
+      filename = `openapi${fallbackExtension}`;
+      this.warn(
+        `No filename could be inferred from the provided URL, so the slug will default to ${filename}. To set a custom slug, use the \`--slug\` flag.`,
+      );
+    }
+    // if the resulting file name is different than the original path input and the user hasn't provided a slug or legacy ID,
+    // warn them that the slug may not be what they expect
+    else if (filename !== specPath && !this.flags['legacy-id'] && !this.flags.slug) {
+      this.warn(
+        `The slug of your API Definition will be set to ${filename} in ReadMe. This slug is not visible to your end users. To set this slug to something else, use the \`--slug\` flag.`,
+      );
+    }
 
     const matchingAPIDefinition = existingAPIDefinitions.find(d => {
       if (this.flags['legacy-id']) {
@@ -283,38 +316,6 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     }
 
     const body = new FormData();
-
-    // we're sending YAML to the API if:
-    // - the file is YAML and the extension matches
-    // - the file is JSON and the slug has a YAML extension (meaning we need to convert the file back to YAML)
-    const sendYaml = (isFileYaml && extensionsMatch) || (!isFileYaml && !extensionsMatch);
-    // Convert YAML files back to YAML before uploading
-    let specToUpload = preparedSpec;
-    if (sendYaml) {
-      specToUpload = yaml.dump(JSON.parse(preparedSpec));
-    }
-
-    // final check to ensure the filename has an extension
-    if (filename && !nodePath.extname(filename)) {
-      const extension = sendYaml ? '.yml' : '.json';
-      filename = `${filename}${extension}`;
-    }
-
-    // if the filename is empty (which happens in the event that the URL doesn't have a pathname and no slug is specified)
-    // we'll default it to openapi.json or openapi.yml depending on the file type
-    if (!filename) {
-      filename = `openapi${sendYaml ? '.yml' : '.json'}`;
-      this.warn(
-        `No filename could be inferred from the provided URL, so the slug will default to ${filename}. To set a custom slug, use the \`--slug\` flag.`,
-      );
-    }
-    // if the resulting file name is different than the original path input and the user hasn't provided a slug or legacy ID,
-    // warn them that the slug may not be what they expect
-    else if (filename !== specPath && !this.flags['legacy-id'] && !this.flags.slug) {
-      this.warn(
-        `The slug of your API Definition will be set to ${filename} in ReadMe. This slug is not visible to your end users. To set this slug to something else, use the \`--slug\` flag.`,
-      );
-    }
 
     const type = sendYaml ? 'application/x-yaml' : 'application/json';
 
