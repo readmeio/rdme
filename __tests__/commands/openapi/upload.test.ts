@@ -708,7 +708,36 @@ describe('rdme openapi upload', () => {
         .reply(200, {
           data: {
             upload: { status: 'done' },
-            uri: `/branches/${branch}/apis/openapi.json`,
+            uri: `/branches/${branch}/apis/no-extension.json`,
+          },
+        });
+
+      const result = await run(['--branch', branch, 'https://example.com/no-extension', '--key', key]);
+
+      expect(result).toMatchSnapshot();
+
+      fileMock.done();
+      mock.done();
+    });
+
+    it('should create a new API definition in ReadMe if there is no file extension and the file is YAML', async () => {
+      const petstoreYAML = await fs.readFile(yamlFile, 'utf-8');
+      const fileMock = nock('https://example.com').get(`/no-extension`).reply(200, petstoreYAML);
+
+      const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .get(`/branches/${branch}/apis`)
+        .reply(200, {})
+        .post(
+          `/branches/${branch}/apis`,
+          body =>
+            body.match(`form-data; name="schema"; filename="no-extension.json"`) &&
+            // asserts that we're sending JSON
+            body.match(`{"title":"Swagger Petstore","description":"This is a sample server Petstore server.`),
+        )
+        .reply(200, {
+          data: {
+            upload: { status: 'done' },
+            uri: `/branches/${branch}/apis/no-extension.json`,
           },
         });
 

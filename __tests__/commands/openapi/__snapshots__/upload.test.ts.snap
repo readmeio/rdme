@@ -164,9 +164,28 @@ exports[`rdme openapi upload > given that the API definition is a URL > should c
 {
   "result": {
     "status": "done",
-    "uri": "/branches/1.0.0/apis/openapi.json",
+    "uri": "/branches/1.0.0/apis/no-extension.json",
   },
   "stderr": "- Validating the API definition located at https://example.com/no-extension...
+ ›   Warning: The slug of your API Definition will be set to no-extension.json 
+ ›   in ReadMe. This slug is not visible to your end users. To set this slug to
+ ›    something else, use the \`--slug\` flag.
+- Creating your API definition to ReadMe...
+✔ Creating your API definition to ReadMe... done!
+",
+  "stdout": "🚀 Your API definition (no-extension.json) was successfully created in ReadMe!
+",
+}
+`;
+
+exports[`rdme openapi upload > given that the API definition is a URL > should create a new API definition in ReadMe if there is no file extension and the file is YAML 1`] = `
+{
+  "result": {
+    "status": "done",
+    "uri": "/branches/1.0.0/apis/no-extension.json",
+  },
+  "stderr": "- Validating the API definition located at https://example.com/no-extension...
+ ›   Warning: Support for Postman collections is currently experimental.
  ›   Warning: The slug of your API Definition will be set to no-extension.json 
  ›   in ReadMe. This slug is not visible to your end users. To set this slug to
  ›    something else, use the \`--slug\` flag.
