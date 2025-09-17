@@ -158,7 +158,7 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
  ›   Warning: Support for Postman collections is currently experimental.
  ›   Warning: The file extension in your provided slug (.json) does not match 
  ›   the file extension of the file you're uploading (.yaml). Your API 
- ›   definition will be uploaded as JSON.
+ ›   definition will be converted to JSON prior to upload.
 - Updating your API definition to ReadMe...
 ✔ Updating your API definition to ReadMe... done!
 ",
@@ -176,7 +176,7 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
   "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
  ›   Warning: The file extension in your provided slug (.yml) does not match 
  ›   the file extension of the file you're uploading (.json). Your API 
- ›   definition will be uploaded as YAML.
+ ›   definition will be converted to YAML prior to upload.
 - Updating your API definition to ReadMe...
 ✔ Updating your API definition to ReadMe... done!
 ",

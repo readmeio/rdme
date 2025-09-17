@@ -177,7 +177,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
         if (fileExtension !== slugExtension && !(isFileYaml && yamlExtensions.includes(slugExtension))) {
           extensionsMatch = false;
           this.warn(
-            `The file extension in your provided slug (${slugExtension}) does not match the file extension of the file you're uploading (${fileExtension}). Your API definition will be uploaded as ${isFileYaml ? 'JSON' : 'YAML'}.`,
+            `The file extension in your provided slug (${slugExtension}) does not match the file extension of the file you're uploading (${fileExtension}). Your API definition will be converted to ${isFileYaml ? 'JSON' : 'YAML'} prior to upload.`,
           );
         }
       }
