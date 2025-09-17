@@ -130,7 +130,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
     const specFileTypeIsUrl = specFileType === 'url';
 
-    let filename = specFileTypeIsUrl ? nodePath.basename(specPath) : slugify.default(specPath);
+    let filename = specFileTypeIsUrl ? nodePath.basename(new URL(specPath).pathname) : slugify.default(specPath);
 
     // Our support for Postman collections relies on an internal fork of an archived project and
     // can be subject to quirks in the conversion. We should let users know that this is all very
@@ -160,7 +160,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     let updateLegacyIdViaSlug = false;
 
     let specToUpload = preparedSpec;
-    const fileExtension = nodePath.extname(filename);
+    const fileExtension = nodePath.extname(filename) || '.json'; // default to .json if no extension is found
     let extensionsMatch = true;
     const isFileYaml = yamlExtensions.includes(fileExtension);
     if (this.flags.slug) {

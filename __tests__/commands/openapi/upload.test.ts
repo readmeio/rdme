@@ -722,6 +722,64 @@ describe('rdme openapi upload', () => {
         fileMock.done();
         mock.done();
       });
+
+      it('should create a new API definition in ReadMe with the specified slug where URL is a query param', async () => {
+        const customFilename = 'custom-slug.json';
+        const fileMock = nock('https://example.com').get('/openapi.json?somequery=true').reply(200, petstore);
+
+        const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+          .get(`/branches/${branch}/apis`)
+          .reply(200, {})
+          .post(`/branches/${branch}/apis`, body =>
+            body.match(`form-data; name="schema"; filename="${customFilename}"`),
+          )
+          .reply(200, {
+            data: {
+              upload: { status: 'done' },
+              uri: `/branches/${branch}/apis/${customFilename}.json`,
+            },
+          });
+
+        const result = await run([
+          '--branch',
+          branch,
+          `${fileUrl}?somequery=true`,
+          '--key',
+          key,
+          '--slug',
+          'custom-slug',
+        ]);
+
+        expect(result).toMatchSnapshot();
+
+        fileMock.done();
+        mock.done();
+      });
+
+      it('should create a new API definition in ReadMe with the specified slug where URL has no path', async () => {
+        const customFilename = 'custom-slug.json';
+        const fileMock = nock('https://example.com').get('/').reply(200, petstore);
+
+        const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+          .get(`/branches/${branch}/apis`)
+          .reply(200, {})
+          .post(`/branches/${branch}/apis`, body =>
+            body.match(`form-data; name="schema"; filename="${customFilename}"`),
+          )
+          .reply(200, {
+            data: {
+              upload: { status: 'done' },
+              uri: `/branches/${branch}/apis/${customFilename}.json`,
+            },
+          });
+
+        const result = await run(['--branch', branch, `https://example.com`, '--key', key, '--slug', 'custom-slug']);
+
+        expect(result).toMatchSnapshot();
+
+        fileMock.done();
+        mock.done();
+      });
     });
   });
 
