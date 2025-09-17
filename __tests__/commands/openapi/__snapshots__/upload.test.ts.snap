@@ -65,6 +65,22 @@ exports[`rdme openapi upload > given that the "--legacy-id" flag is passed > sho
 }
 `;
 
+exports[`rdme openapi upload > given that the API definition is a URL > and the \`--slug\` flag is passed > should create a new API definition in ReadMe with a custom slug with YAML file extension where URL has no path and the file is YAML 1`] = `
+{
+  "result": {
+    "status": "done",
+    "uri": "/branches/1.0.0/apis/custom-slug.yml",
+  },
+  "stderr": "- Validating the API definition located at https://example.com...
+ ›   Warning: Support for Postman collections is currently experimental.
+- Creating your API definition to ReadMe...
+✔ Creating your API definition to ReadMe... done!
+",
+  "stdout": "🚀 Your API definition (custom-slug.yml) was successfully created in ReadMe!
+",
+}
+`;
+
 exports[`rdme openapi upload > given that the API definition is a URL > and the \`--slug\` flag is passed > should create a new API definition in ReadMe with the specified slug 1`] = `
 {
   "result": {
@@ -80,13 +96,29 @@ exports[`rdme openapi upload > given that the API definition is a URL > and the 
 }
 `;
 
-exports[`rdme openapi upload > given that the API definition is a URL > and the \`--slug\` flag is passed > should create a new API definition in ReadMe with the specified slug where URL has no path 1`] = `
+exports[`rdme openapi upload > given that the API definition is a URL > and the \`--slug\` flag is passed > should create a new API definition in ReadMe with the specified slug where URL has no path and the file is JSON 1`] = `
 {
   "result": {
     "status": "done",
-    "uri": "/branches/1.0.0/apis/custom-slug.json.json",
+    "uri": "/branches/1.0.0/apis/custom-slug.json",
   },
   "stderr": "- Validating the API definition located at https://example.com...
+- Creating your API definition to ReadMe...
+✔ Creating your API definition to ReadMe... done!
+",
+  "stdout": "🚀 Your API definition (custom-slug.json) was successfully created in ReadMe!
+",
+}
+`;
+
+exports[`rdme openapi upload > given that the API definition is a URL > and the \`--slug\` flag is passed > should create a new API definition in ReadMe with the specified slug where URL has no path and the file is YAML 1`] = `
+{
+  "result": {
+    "status": "done",
+    "uri": "/branches/1.0.0/apis/custom-slug.json",
+  },
+  "stderr": "- Validating the API definition located at https://example.com...
+ ›   Warning: Support for Postman collections is currently experimental.
 - Creating your API definition to ReadMe...
 ✔ Creating your API definition to ReadMe... done!
 ",
@@ -99,7 +131,7 @@ exports[`rdme openapi upload > given that the API definition is a URL > and the 
 {
   "result": {
     "status": "done",
-    "uri": "/branches/1.0.0/apis/custom-slug.json.json",
+    "uri": "/branches/1.0.0/apis/custom-slug.json",
   },
   "stderr": "- Validating the API definition located at https://example.com/openapi.json?somequery=true...
 - Creating your API definition to ReadMe...
@@ -125,16 +157,33 @@ exports[`rdme openapi upload > given that the API definition is a URL > should c
 }
 `;
 
-exports[`rdme openapi upload > given that the API definition is a URL > should create a new API definition in ReadMe if there is no path 1`] = `
+exports[`rdme openapi upload > given that the API definition is a URL > should create a new API definition in ReadMe if there is no path and the file is JSON 1`] = `
 {
   "result": {
     "status": "done",
     "uri": "/branches/1.0.0/apis/openapi.json",
   },
   "stderr": "- Validating the API definition located at https://example.com...
- ›   Warning: No filename could be inferred from the provided URL, so it's 
- ›   being defaulted to openapi.json. To set a custom slug, use the \`--slug\` 
- ›   flag.
+ ›   Warning: No filename could be inferred from the provided URL, so the slug 
+ ›   will default to openapi.json. To set a custom slug, use the \`--slug\` flag.
+- Creating your API definition to ReadMe...
+✔ Creating your API definition to ReadMe... done!
+",
+  "stdout": "🚀 Your API definition (openapi.json) was successfully created in ReadMe!
+",
+}
+`;
+
+exports[`rdme openapi upload > given that the API definition is a URL > should create a new API definition in ReadMe if there is no path and the file is YAML 1`] = `
+{
+  "result": {
+    "status": "done",
+    "uri": "/branches/1.0.0/apis/openapi.json",
+  },
+  "stderr": "- Validating the API definition located at https://example.com...
+ ›   Warning: Support for Postman collections is currently experimental.
+ ›   Warning: No filename could be inferred from the provided URL, so the slug 
+ ›   will default to openapi.json. To set a custom slug, use the \`--slug\` flag.
 - Creating your API definition to ReadMe...
 ✔ Creating your API definition to ReadMe... done!
 ",

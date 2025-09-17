@@ -159,7 +159,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
      */
     let updateLegacyIdViaSlug = false;
 
-    const fileExtension = nodePath.extname(filename) || '.json'; // default to .json if no extension is found
+    const fileExtension = nodePath.extname(filename);
     const isFileYaml = yamlExtensions.includes(fileExtension);
 
     let extensionsMatch = true;
@@ -176,18 +176,20 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
         // this means that the user is trying to upload a YAML file but provided a JSON slug, or vice versa
         if (fileExtension !== slugExtension && !(isFileYaml && yamlExtensions.includes(slugExtension))) {
           extensionsMatch = false;
-          this.warn(
-            `The file extension in your provided slug (${slugExtension}) does not match the file extension of the file you're uploading (${fileExtension}). Your API definition will be converted to ${isFileYaml ? 'JSON' : 'YAML'} prior to upload.`,
-          );
+          if (fileExtension) {
+            this.warn(
+              `The file extension in your provided slug (${slugExtension}) does not match the file extension of the file you're uploading (${fileExtension}). Your API definition will be converted to ${isFileYaml ? 'JSON' : 'YAML'} prior to upload.`,
+            );
+          }
         }
-      }
 
-      // the API expects a file extension, so keep it if it's there, add it if it's not
-      filename =
-        // biome-ignore lint/nursery/noUnnecessaryConditions: false positive
-        extensionsMatch && fileExtension
-          ? `${this.flags.slug.replace(slugExtension, '')}${fileExtension}`
-          : this.flags.slug;
+        // if the slug has an extension we set the filename to the slug directly
+        filename = this.flags.slug;
+      } else {
+        // if the slug has no extension, we'll append the file's extension
+        // (or .json if the file has no extension, since oas-normalize will have converted the file to JSON)
+        filename = `${this.flags.slug}${fileExtension || '.json'}`;
+      }
 
       // handling in the event that the slug is an object ID, in which case it's likely a faulty migration
       const objectIdRegex = /^[0-9a-fA-F]{24}$/;
@@ -303,7 +305,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     if (!filename) {
       filename = `openapi${sendYaml ? '.yml' : '.json'}`;
       this.warn(
-        `No filename could be inferred from the provided URL, so it's being defaulted to ${filename}. To set a custom slug, use the \`--slug\` flag.`,
+        `No filename could be inferred from the provided URL, so the slug will default to ${filename}. To set a custom slug, use the \`--slug\` flag.`,
       );
     }
 
