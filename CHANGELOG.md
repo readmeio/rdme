@@ -1,3 +1,10 @@
+## [10.5.2-next.1](https://github.com/readmeio/rdme/compare/v10.5.1...v10.5.2-next.1) (2025-09-17)
+
+
+### Bug Fixes
+
+* **openapi/upload:** handle funky URLs ([#1344](https://github.com/readmeio/rdme/issues/1344)) ([9a827ab](https://github.com/readmeio/rdme/commit/9a827ab24c828eb80de7afa530b96e6c6cd86526))
+
 ## [10.5.1](https://github.com/readmeio/rdme/compare/v10.5.0...v10.5.1) (2025-09-08)
 
 
