@@ -917,7 +917,7 @@ describe('rdme openapi upload', () => {
         mock.done();
       });
 
-      it.only('should create a new API definition in ReadMe with a custom slug with YAML file extension where URL has no path and the file is YAML', async () => {
+      it('should create a new API definition in ReadMe with a custom slug with YAML file extension where URL has no path and the file is YAML', async () => {
         const customSlug = 'custom-slug';
         const customFilename = `${customSlug}.yml`;
         const petstoreYAML = await fs.readFile(yamlFile, 'utf-8');
