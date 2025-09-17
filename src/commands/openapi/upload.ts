@@ -298,13 +298,19 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       specToUpload = yaml.dump(JSON.parse(preparedSpec));
     }
 
-    this.debug('processing file into form data payload');
-    body.append(
-      'schema',
-      new File([specToUpload], filename, {
-        type: sendYaml ? 'application/x-yaml' : 'application/json',
-      }),
-    );
+    // if the filename is empty (which happens in the event that the URL doesn't have a pathname and no slug is specified)
+    // we'll default it to openapi.json or openapi.yml depending on the file type
+    if (!filename) {
+      filename = `openapi${sendYaml ? '.yml' : '.json'}`;
+      this.warn(
+        `No filename could be inferred from the provided URL, so it's being defaulted to ${filename}. To set a custom slug, use the \`--slug\` flag.`,
+      );
+    }
+
+    const type = sendYaml ? 'application/x-yaml' : 'application/json';
+
+    this.debug(`initializing form data payload with filename "${filename}" and content type "${type}"`);
+    body.append('schema', new File([specToUpload], filename, { type }));
 
     const options: RequestInit = { headers, method, body };
 

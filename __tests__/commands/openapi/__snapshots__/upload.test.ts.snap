@@ -125,6 +125,24 @@ exports[`rdme openapi upload > given that the API definition is a URL > should c
 }
 `;
 
+exports[`rdme openapi upload > given that the API definition is a URL > should create a new API definition in ReadMe if there is no path 1`] = `
+{
+  "result": {
+    "status": "done",
+    "uri": "/branches/1.0.0/apis/openapi.json",
+  },
+  "stderr": "- Validating the API definition located at https://example.com...
+ ›   Warning: No filename could be inferred from the provided URL, so it's 
+ ›   being defaulted to openapi.json. To set a custom slug, use the \`--slug\` 
+ ›   flag.
+- Creating your API definition to ReadMe...
+✔ Creating your API definition to ReadMe... done!
+",
+  "stdout": "🚀 Your API definition (openapi.json) was successfully created in ReadMe!
+",
+}
+`;
+
 exports[`rdme openapi upload > given that the API definition is a URL > should handle issues fetching from the URL 1`] = `
 {
   "error": [Error: Unknown file detected.],

@@ -678,6 +678,28 @@ describe('rdme openapi upload', () => {
       mock.done();
     });
 
+    it('should create a new API definition in ReadMe if there is no path', async () => {
+      const fileMock = nock('https://example.com').get(`/`).reply(200, petstore);
+
+      const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .get(`/branches/${branch}/apis`)
+        .reply(200, {})
+        .post(`/branches/${branch}/apis`, body => body.match(`form-data; name="schema"; filename="openapi.json"`))
+        .reply(200, {
+          data: {
+            upload: { status: 'done' },
+            uri: `/branches/${branch}/apis/openapi.json`,
+          },
+        });
+
+      const result = await run(['--branch', branch, 'https://example.com', '--key', key]);
+
+      expect(result).toMatchSnapshot();
+
+      fileMock.done();
+      mock.done();
+    });
+
     it('should update an existing API definition in ReadMe', async () => {
       prompts.inject([true]);
 
