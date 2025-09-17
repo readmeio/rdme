@@ -159,10 +159,10 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
      */
     let updateLegacyIdViaSlug = false;
 
-    let specToUpload = preparedSpec;
     const fileExtension = nodePath.extname(filename) || '.json'; // default to .json if no extension is found
-    let extensionsMatch = true;
     const isFileYaml = yamlExtensions.includes(fileExtension);
+
+    let extensionsMatch = true;
     if (this.flags.slug) {
       // verify that the slug's extension matches the file's extension
       const slugExtension = nodePath.extname(this.flags.slug);
@@ -293,6 +293,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     // - the file is JSON and the slug has a YAML extension (meaning we need to convert the file back to YAML)
     const sendYaml = (isFileYaml && extensionsMatch) || (!isFileYaml && !extensionsMatch);
     // Convert YAML files back to YAML before uploading
+    let specToUpload = preparedSpec;
     if (sendYaml) {
       specToUpload = yaml.dump(JSON.parse(preparedSpec));
     }
