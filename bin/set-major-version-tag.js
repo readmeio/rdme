@@ -12,6 +12,8 @@ const execFile = promisify(unpromisifiedExecFile);
 
 /**
  * Runs command and logs all output
+ *
+ * @param {string[]} args arguments to pass to git command
  */
 async function runGitCmd(args) {
   // Promise-based approach grabbed from here: https://stackoverflow.com/a/63027900
