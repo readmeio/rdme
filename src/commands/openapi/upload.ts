@@ -139,17 +139,18 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       this.warn('Support for Postman collections is currently experimental.');
     }
 
-    if (!specFileTypeIsUrl && filename !== specPath && !this.flags['legacy-id'] && !this.flags.slug) {
-      this.warn(
-        `The slug of your API Definition will be set to ${filename} in ReadMe. This slug is not visible to your end users. To set this slug to something else, use the \`--slug\` flag.`,
-      );
-    }
-
     const headers = new Headers({ authorization: `Bearer ${this.flags.key}` });
 
     const existingAPIDefinitions: APIDefinitionsRepresentation['data'] =
       (await this.readmeAPIFetch(`/branches/${branch}/apis`, { headers }).then(res => this.handleAPIRes(res)))?.data ||
       [];
+
+    const filenames = new Intl.ListFormat('en', {
+      style: 'long',
+      type: 'unit',
+    }).format(existingAPIDefinitions.map(d => `\`${d.filename}\``));
+
+    this.debug(`found ${existingAPIDefinitions.length} existing API definitions: ${filenames}`);
 
     /**
      * If the user provided a slug that matches an existing legacy API definition ID,
@@ -159,7 +160,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
      */
     let updateLegacyIdViaSlug = false;
 
-    const fileExtension = nodePath.extname(filename) || '.json'; // default to .json if no extension is found
+    const fileExtension = nodePath.extname(filename);
     const isFileYaml = yamlExtensions.includes(fileExtension);
 
     let extensionsMatch = true;
@@ -176,18 +177,20 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
         // this means that the user is trying to upload a YAML file but provided a JSON slug, or vice versa
         if (fileExtension !== slugExtension && !(isFileYaml && yamlExtensions.includes(slugExtension))) {
           extensionsMatch = false;
-          this.warn(
-            `The file extension in your provided slug (${slugExtension}) does not match the file extension of the file you're uploading (${fileExtension}). Your API definition will be converted to ${isFileYaml ? 'JSON' : 'YAML'} prior to upload.`,
-          );
+          if (fileExtension) {
+            this.warn(
+              `The file extension in your provided slug (${slugExtension}) does not match the file extension of the file you're uploading (${fileExtension}). Your API definition will be converted to ${isFileYaml ? 'JSON' : 'YAML'} prior to upload.`,
+            );
+          }
         }
-      }
 
-      // the API expects a file extension, so keep it if it's there, add it if it's not
-      filename =
-        // biome-ignore lint/nursery/noUnnecessaryConditions: false positive
-        extensionsMatch && fileExtension
-          ? `${this.flags.slug.replace(slugExtension, '')}${fileExtension}`
-          : this.flags.slug;
+        // if the slug has an extension we set the filename to the slug directly
+        filename = this.flags.slug;
+      } else {
+        // if the slug has no extension, we'll append the file's extension
+        // (or .json if the file has no extension, since oas-normalize will have converted the file to JSON)
+        filename = `${this.flags.slug}${fileExtension || '.json'}`;
+      }
 
       // handling in the event that the slug is an object ID, in which case it's likely a faulty migration
       const objectIdRegex = /^[0-9a-fA-F]{24}$/;
@@ -226,12 +229,38 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       }
     }
 
-    const filenames = new Intl.ListFormat('en', {
-      style: 'long',
-      type: 'unit',
-    }).format(existingAPIDefinitions.map(d => `\`${d.filename}\``));
+    // we're sending YAML to the API if:
+    // - the file is YAML and the extension matches
+    // - the file is JSON and the slug has a YAML extension (meaning we need to convert the file back to YAML)
+    const sendYaml = (isFileYaml && extensionsMatch) || (!isFileYaml && !extensionsMatch);
+    // Convert YAML files back to YAML before uploading
+    let specToUpload = preparedSpec;
+    if (sendYaml) {
+      specToUpload = yaml.dump(JSON.parse(preparedSpec));
+    }
 
-    this.debug(`found ${existingAPIDefinitions.length} existing API definitions: ${filenames}`);
+    const fallbackExtension = sendYaml ? '.yml' : '.json';
+
+    // final check to ensure the filename has an extension
+    if (filename && !nodePath.extname(filename)) {
+      filename = `${filename}${fallbackExtension}`;
+    }
+
+    // if the filename is empty (which happens in the event that the URL doesn't have a pathname and no slug is specified)
+    // we'll default it to openapi.json or openapi.yml depending on the file type
+    if (!filename) {
+      filename = `openapi${fallbackExtension}`;
+      this.warn(
+        `No filename could be inferred from the provided URL, so the slug will default to ${filename}. To set a custom slug, use the \`--slug\` flag.`,
+      );
+    }
+    // if the resulting file name is different than the original path input and the user hasn't provided a slug or legacy ID,
+    // warn them that the slug may not be what they expect
+    else if (filename !== specPath && !this.flags['legacy-id'] && !this.flags.slug) {
+      this.warn(
+        `The slug of your API Definition will be set to ${filename} in ReadMe. This slug is not visible to your end users. To set this slug to something else, use the \`--slug\` flag.`,
+      );
+    }
 
     const matchingAPIDefinition = existingAPIDefinitions.find(d => {
       if (this.flags['legacy-id']) {
@@ -288,23 +317,10 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
     const body = new FormData();
 
-    // we're sending YAML to the API if:
-    // - the file is YAML and the extension matches
-    // - the file is JSON and the slug has a YAML extension (meaning we need to convert the file back to YAML)
-    const sendYaml = (isFileYaml && extensionsMatch) || (!isFileYaml && !extensionsMatch);
-    // Convert YAML files back to YAML before uploading
-    let specToUpload = preparedSpec;
-    if (sendYaml) {
-      specToUpload = yaml.dump(JSON.parse(preparedSpec));
-    }
+    const type = sendYaml ? 'application/x-yaml' : 'application/json';
 
-    this.debug('processing file into form data payload');
-    body.append(
-      'schema',
-      new File([specToUpload], filename, {
-        type: sendYaml ? 'application/x-yaml' : 'application/json',
-      }),
-    );
+    this.debug(`initializing form data payload with filename "${filename}" and content type "${type}"`);
+    body.append('schema', new File([specToUpload], filename, { type }));
 
     const options: RequestInit = { headers, method, body };
 
