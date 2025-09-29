@@ -13,6 +13,7 @@
   "files": [
     "/bin/run*",
     "/dist",
+    "/documentation",
     "/oclif.manifest.json"
   ],
   "keywords": [
