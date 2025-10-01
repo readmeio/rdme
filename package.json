@@ -81,7 +81,7 @@
   "devDependencies": {
     "@biomejs/biome": "^2.1.4",
     "@commitlint/cli": "^19.0.3",
-    "@commitlint/config-conventional": "^19.0.3",
+    "@commitlint/config-conventional": "^20.0.0",
     "@oclif/test": "^4.1.0",
     "@readme/better-ajv-errors": "^2.3.2",
     "@readme/oas-examples": "^7.0.0",
