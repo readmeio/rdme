@@ -1,3 +1,5 @@
+import type { OclifOutput, } from '../../helpers/oclif.js';
+
 import fs from 'node:fs';
 
 import nock from 'nock';
@@ -8,7 +10,7 @@ import GuidesCommand from '../../../src/commands/docs/upload.js';
 import ReferenceCommand from '../../../src/commands/reference/upload.js';
 import { getAPIv1Mock, getAPIv2Mock, getAPIv2MockForGHA } from '../../helpers/get-api-mock.js';
 import { githubActionsEnv } from '../../helpers/git-mock.js';
-import { type OclifOutput, runCommand } from '../../helpers/oclif.js';
+import { runCommand } from '../../helpers/oclif.js';
 
 const key = 'rdme_123';
 const authorization = `Bearer ${key}`;

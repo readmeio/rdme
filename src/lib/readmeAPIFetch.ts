@@ -1,6 +1,7 @@
 import type { Hook } from '@oclif/core';
 import type { SchemaObject } from 'oas/types';
 import type { APIv2PageCommands, CommandClass } from '../index.js';
+import type { APIv2ErrorResponse } from './apiError.js';
 import type { SpecFileType } from './prepareOas.js';
 
 import path from 'node:path';
@@ -8,7 +9,7 @@ import path from 'node:path';
 import mime from 'mime-types';
 import { ProxyAgent } from 'undici';
 
-import { APIv1Error, APIv2Error, type APIv2ErrorResponse } from './apiError.js';
+import { APIv1Error, APIv2Error, } from './apiError.js';
 import config from './config.js';
 import { getPkgVersion } from './getPkg.js';
 import { git } from './git.js';

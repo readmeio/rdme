@@ -1,5 +1,7 @@
 /** biome-ignore-all lint/suspicious/noConsole: We're testing console output. */
-import { afterEach, beforeEach, describe, expect, it, type MockInstance, vi } from 'vitest';
+import type { MockInstance, } from 'vitest';
+
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import pkg from '../../package.json' with { type: 'json' };
 import DocsUploadCommand from '../../src/commands/docs/upload.js';

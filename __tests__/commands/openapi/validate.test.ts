@@ -1,3 +1,5 @@
+import type { OclifOutput, } from '../../helpers/oclif.js';
+
 import fs from 'node:fs';
 
 import prompts from 'prompts';
@@ -5,7 +7,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vite
 
 import Command from '../../../src/commands/openapi/validate.js';
 import { gitMock } from '../../helpers/git-mock.js';
-import { type OclifOutput, runCommand } from '../../helpers/oclif.js';
+import { runCommand } from '../../helpers/oclif.js';
 
 describe('rdme openapi validate', () => {
   let run: (args?: string[]) => OclifOutput;
