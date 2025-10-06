@@ -1,6 +1,3 @@
-import type { Options as OraOptions } from 'ora';
-import type { Writable } from 'type-fest';
-
 import * as core from '@actions/core';
 import chalk from 'chalk';
 import debugModule from 'debug';
@@ -56,8 +53,11 @@ function info(
   return console.info(`ℹ️  ${input}`);
 }
 
+/**
+ * Options for ora spinners.
+ */
 function oraOptions() {
-  const opts: Writable<OraOptions> = {};
+  const opts: { isEnabled?: false } = {};
 
   // Cleans up ora output so it prints nicely alongside debug logs
   /* istanbul ignore next */
