@@ -184,7 +184,6 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
       // the API expects a file extension, so keep it if it's there, add it if it's not
       filename =
-        // biome-ignore lint/nursery/noUnnecessaryConditions: false positive
         extensionsMatch && fileExtension
           ? `${this.flags.slug.replace(slugExtension, '')}${fileExtension}`
           : this.flags.slug;
