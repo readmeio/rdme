@@ -1,6 +1,6 @@
 import type { Command, Config } from '@oclif/core';
 import type { Response } from 'simple-git';
-import type { MockInstance, } from 'vitest';
+import type { MockInstance } from 'vitest';
 
 import fs from 'node:fs';
 

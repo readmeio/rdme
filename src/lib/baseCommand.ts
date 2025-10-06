@@ -1,7 +1,7 @@
 import type { Config, Hook, Interfaces } from '@oclif/core';
 import type { COMMANDS } from '../index.js';
 import type { CreateGHAHook, CreateGHAHookOptsInClass } from './hooks/createGHA.js';
-import type { ResponseBody, } from './readmeAPIFetch.js';
+import type { ResponseBody } from './readmeAPIFetch.js';
 
 import { format } from 'node:util';
 

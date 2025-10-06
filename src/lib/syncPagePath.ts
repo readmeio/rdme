@@ -10,7 +10,7 @@ import toposort from 'toposort';
 
 import { APIv2Error } from './apiError.js';
 import { oraOptions } from './logger.js';
-import { allowedMarkdownExtensions, findPages, } from './readPage.js';
+import { allowedMarkdownExtensions, findPages } from './readPage.js';
 import { categoryUriRegexPattern, parentUriRegexPattern } from './types/index.js';
 import { validateFrontmatter } from './validateFrontmatter.js';
 

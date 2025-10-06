@@ -1,5 +1,5 @@
 import type { CommandClass } from '../../src/index.js';
-import type { OclifOutput, } from '../helpers/oclif.js';
+import type { OclifOutput } from '../helpers/oclif.js';
 
 import { beforeEach, describe, expect, it } from 'vitest';
 

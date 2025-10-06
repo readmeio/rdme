@@ -1,6 +1,6 @@
 import type { OASDocument } from 'oas/types';
-import type { MockInstance, } from 'vitest';
-import type { OclifOutput, } from '../../helpers/oclif.js';
+import type { MockInstance } from 'vitest';
+import type { OclifOutput } from '../../helpers/oclif.js';
 
 import fs from 'node:fs';
 

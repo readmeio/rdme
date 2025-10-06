@@ -1,4 +1,4 @@
-import type { MockInstance, } from 'vitest';
+import type { MockInstance } from 'vitest';
 
 import nock from 'nock';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';

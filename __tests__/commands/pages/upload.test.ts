@@ -1,4 +1,4 @@
-import type { OclifOutput, } from '../../helpers/oclif.js';
+import type { OclifOutput } from '../../helpers/oclif.js';
 
 import fs from 'node:fs';
 

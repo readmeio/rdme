@@ -1,4 +1,4 @@
-import type { OclifOutput, } from '../helpers/oclif.js';
+import type { OclifOutput } from '../helpers/oclif.js';
 
 import prompts from 'prompts';
 import { afterEach, beforeAll, describe, expect, it } from 'vitest';
