@@ -1,10 +1,12 @@
+import type { OclifOutput } from '../helpers/oclif.js';
+
 import prompts from 'prompts';
 import { afterEach, beforeAll, describe, expect, it } from 'vitest';
 
 import Command from '../../src/commands/login.js';
 import configStore from '../../src/lib/configstore.js';
 import { getAPIv1Mock } from '../helpers/get-api-mock.js';
-import { type OclifOutput, runCommand } from '../helpers/oclif.js';
+import { runCommand } from '../helpers/oclif.js';
 
 const apiKey = 'abcdefg';
 const email = 'user@example.com';

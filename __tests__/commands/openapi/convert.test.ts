@@ -1,12 +1,14 @@
 import type { OASDocument } from 'oas/types';
+import type { MockInstance } from 'vitest';
+import type { OclifOutput } from '../../helpers/oclif.js';
 
 import fs from 'node:fs';
 
 import prompts from 'prompts';
-import { afterEach, beforeAll, beforeEach, describe, expect, it, type MockInstance, vi } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import Command from '../../../src/commands/openapi/convert.js';
-import { type OclifOutput, runCommand } from '../../helpers/oclif.js';
+import { runCommand } from '../../helpers/oclif.js';
 
 describe('rdme openapi convert', () => {
   let fsWriteFileSyncSpy: MockInstance<typeof fs.writeFileSync>;
