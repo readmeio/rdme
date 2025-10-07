@@ -80,6 +80,36 @@ exports[`rdme openapi upload > given that the API definition is a URL > and the 
 }
 `;
 
+exports[`rdme openapi upload > given that the API definition is a URL > and the \`--slug\` flag is passed > should create a new API definition in ReadMe with the specified slug where URL has no path 1`] = `
+{
+  "result": {
+    "status": "done",
+    "uri": "/branches/1.0.0/apis/custom-slug.json.json",
+  },
+  "stderr": "- Validating the API definition located at https://example.com...
+- Creating your API definition to ReadMe...
+✔ Creating your API definition to ReadMe... done!
+",
+  "stdout": "🚀 Your API definition (custom-slug.json) was successfully created in ReadMe!
+",
+}
+`;
+
+exports[`rdme openapi upload > given that the API definition is a URL > and the \`--slug\` flag is passed > should create a new API definition in ReadMe with the specified slug where URL is a query param 1`] = `
+{
+  "result": {
+    "status": "done",
+    "uri": "/branches/1.0.0/apis/custom-slug.json.json",
+  },
+  "stderr": "- Validating the API definition located at https://example.com/openapi.json?somequery=true...
+- Creating your API definition to ReadMe...
+✔ Creating your API definition to ReadMe... done!
+",
+  "stdout": "🚀 Your API definition (custom-slug.json) was successfully created in ReadMe!
+",
+}
+`;
+
 exports[`rdme openapi upload > given that the API definition is a URL > should create a new API definition in ReadMe 1`] = `
 {
   "result": {
@@ -148,12 +178,40 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
 }
 `;
 
-exports[`rdme openapi upload > given that the API definition is a local file > and the \`--slug\` flag is passed > should handle a slug with a valid but mismatching file extension 1`] = `
+exports[`rdme openapi upload > given that the API definition is a local file > and the \`--slug\` flag is passed > should handle a slug with a valid but mismatching file extension (.json slug, YAML file) 1`] = `
 {
-  "error": [Error: Please provide a valid file extension that matches the extension on the file you provided. Must be \`.json\`, \`.yaml\`, or \`.yml\`.],
-  "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+  "result": {
+    "status": "done",
+    "uri": "/branches/1.0.0/apis/custom-slug.json",
+  },
+  "stderr": "- Validating the API definition located at __tests__/__fixtures__/postman/petstore.collection.yaml...
+ ›   Warning: Support for Postman collections is currently experimental.
+ ›   Warning: The file extension in your provided slug (.json) does not match 
+ ›   the file extension of the file you're uploading (.yaml). Your API 
+ ›   definition will be converted to JSON prior to upload.
+- Updating your API definition to ReadMe...
+✔ Updating your API definition to ReadMe... done!
 ",
-  "stdout": "",
+  "stdout": "🚀 Your API definition (custom-slug.json) was successfully updated in ReadMe!
+",
+}
+`;
+
+exports[`rdme openapi upload > given that the API definition is a local file > and the \`--slug\` flag is passed > should handle a slug with a valid but mismatching file extension (.yml slug, JSON file) 1`] = `
+{
+  "result": {
+    "status": "done",
+    "uri": "/branches/1.0.0/apis/custom-slug.yml",
+  },
+  "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+ ›   Warning: The file extension in your provided slug (.yml) does not match 
+ ›   the file extension of the file you're uploading (.json). Your API 
+ ›   definition will be converted to YAML prior to upload.
+- Updating your API definition to ReadMe...
+✔ Updating your API definition to ReadMe... done!
+",
+  "stdout": "🚀 Your API definition (custom-slug.yml) was successfully updated in ReadMe!
+",
 }
 `;
 

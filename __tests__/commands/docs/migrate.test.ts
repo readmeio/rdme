@@ -1,7 +1,9 @@
+import type { OclifOutput } from '../../helpers/oclif.js';
+
 import { beforeAll, describe, expect, it } from 'vitest';
 
 import Command from '../../../src/commands/docs/migrate.js';
-import { type OclifOutput, runCommand } from '../../helpers/oclif.js';
+import { runCommand } from '../../helpers/oclif.js';
 
 describe('rdme docs migrate', () => {
   let run: (args?: string[]) => OclifOutput;

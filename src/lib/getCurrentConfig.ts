@@ -20,7 +20,7 @@ export default function getCurrentConfig(this: Hook.Context): {
       return process.env.README_API_KEY;
     } else {
       this.debug('falling back to configstore value for api key');
-      return configstore.get('apiKey');
+      return configstore.get<string>('apiKey');
     }
   })();
 
@@ -30,7 +30,7 @@ export default function getCurrentConfig(this: Hook.Context): {
       return process.env.RDME_EMAIL;
     } else {
       this.debug('falling back to configstore value for email');
-      return configstore.get('email');
+      return configstore.get<string>('email');
     }
   })();
 
@@ -40,7 +40,7 @@ export default function getCurrentConfig(this: Hook.Context): {
       return process.env.RDME_PROJECT;
     } else {
       this.debug('falling back to configstore value for project');
-      return configstore.get('project');
+      return configstore.get<string>('project');
     }
   })();
 
