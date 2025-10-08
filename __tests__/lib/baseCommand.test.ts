@@ -1,10 +1,11 @@
 import type { CommandClass } from '../../src/index.js';
+import type { OclifOutput } from '../helpers/oclif.js';
 
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import BaseCommand from '../../src/lib/baseCommand.js';
 import configStore from '../../src/lib/configstore.js';
-import { type OclifOutput, runCommand } from '../helpers/oclif.js';
+import { runCommand } from '../helpers/oclif.js';
 
 class TestCommand extends BaseCommand<typeof BaseCommand> {
   async run() {

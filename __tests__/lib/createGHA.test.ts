@@ -1,10 +1,11 @@
 import type { Command, Config } from '@oclif/core';
 import type { Response } from 'simple-git';
+import type { MockInstance } from 'vitest';
 
 import fs from 'node:fs';
 
 import prompts from 'prompts';
-import { afterEach, beforeAll, beforeEach, describe, expect, it, type MockInstance, vi } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import configstore from '../../src/lib/configstore.js';
 import { getConfigStoreKey, getGHAFileName } from '../../src/lib/createGHA/index.js';

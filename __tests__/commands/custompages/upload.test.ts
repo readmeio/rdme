@@ -1,3 +1,5 @@
+import type { OclifOutput } from '../../helpers/oclif.js';
+
 import fs from 'node:fs';
 
 import prompts from 'prompts';
@@ -6,7 +8,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vite
 import CustomPagesCommand from '../../../src/commands/custompages/upload.js';
 import { getAPIv1Mock, getAPIv2Mock, getAPIv2MockForGHA } from '../../helpers/get-api-mock.js';
 import { githubActionsEnv } from '../../helpers/git-mock.js';
-import { type OclifOutput, runCommand } from '../../helpers/oclif.js';
+import { runCommand } from '../../helpers/oclif.js';
 
 const key = 'rdme_123';
 const authorization = `Bearer ${key}`;
