@@ -114,11 +114,11 @@ For local CLI usage with a single project, you can authenticate `rdme` to your R
 > [!WARNING]
 > For security reasons, we strongly recommend providing a project API key via the `--key` option in automations or CI environments (GitHub Actions, CircleCI, Travis CI, etc.). It's also recommended if you're working with multiple ReadMe projects to avoid accidentally overwriting existing data.
 
-You can also pass in your API key via environmental variable. Here is the order of precedence when passing your API key into `rdme`:
+You can also pass in your API key via environment variable. Here is the order of precedence when passing your API key into `rdme`:
 
 1. The `--key` option. If that isn't present, we look for...
-1. The `RDME_API_KEY` environmental variable. If that isn't present, we look for...
-1. The `README_API_KEY` environmental variable. If that isn't present, we look for...
+1. The `RDME_API_KEY` environment variable. If that isn't present, we look for...
+1. The `README_API_KEY` environment variable. If that isn't present, we look for...
 1. The API key value stored in your local configuration file (i.e., the one set via `rdme login`)
 
 `rdme whoami` is also available to you to determine who is logged in, and to what project. You can clear your stored credentials with `rdme logout`.
@@ -133,7 +133,7 @@ To set this up, check out [1Password's documentation on the ReadMe shell plugin]
 
 ## Proxy
 
-`rdme` makes API requests to the ReadMe API, which is located at [dash.readme.com](https://dash.readme.com). If you need to configure a proxy for these requests, you can do so by setting the `HTTPS_PROXY` environmental variable.
+`rdme` makes API requests to the ReadMe API, which is located at [dash.readme.com](https://dash.readme.com). If you need to configure a proxy for these requests, you can do so by setting the `HTTPS_PROXY` environment variable.
 
 ```sh
 export HTTPS_PROXY=https://proxy.example.com:5678
