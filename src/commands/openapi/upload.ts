@@ -162,7 +162,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     let updateLegacyIdViaSlug = false;
 
     const fileExtension = nodePath.extname(filename);
-    const isFileYaml = yamlExtensions.includes(fileExtension);
+    const isFileYaml = yamlExtensions.includes(fileExtension) || specFileType === 'string-yaml';
 
     let extensionsMatch = true;
     if (this.flags.slug) {
