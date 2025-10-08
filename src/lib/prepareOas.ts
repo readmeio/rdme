@@ -53,9 +53,11 @@ export default async function prepareOas(this: OpenAPICommands) {
   let specPath = this.args.spec;
   const command = this.id satisfies `openapi ${OpenAPIAction}`;
 
-  if (this.flags.workingDirectory) {
+  const workingDirectory = this.flags['working-directory'];
+
+  if (workingDirectory) {
     const previousWorkingDirectory = process.cwd();
-    process.chdir(this.flags.workingDirectory);
+    process.chdir(workingDirectory);
     this.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
   }
 
