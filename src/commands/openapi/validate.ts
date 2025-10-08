@@ -33,16 +33,10 @@ export default class OpenAPIValidateCommand extends BaseCommand<typeof OpenAPIVa
 
   static flags = {
     github: githubFlag,
-    workingDirectory: workingDirectoryFlag,
+    'working-directory': workingDirectoryFlag,
   };
 
   async run() {
-    if (this.flags.workingDirectory) {
-      const previousWorkingDirectory = process.cwd();
-      process.chdir(this.flags.workingDirectory);
-      this.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
-    }
-
     const { specPath, specType } = await prepareOas.call(this);
 
     return this.runCreateGHAHook({

@@ -38,7 +38,7 @@ export default class OpenAPIReduceCommand extends BaseCommand<typeof OpenAPIRedu
     path: Flags.string({ description: 'Paths to reduce by', multiple: true }),
     tag: Flags.string({ description: 'Tags to reduce by', multiple: true }),
     title: titleFlag,
-    workingDirectory: workingDirectoryFlag,
+    'working-directory': workingDirectoryFlag,
   };
 
   static examples = [
@@ -61,13 +61,6 @@ export default class OpenAPIReduceCommand extends BaseCommand<typeof OpenAPIRedu
 
   async run() {
     const opts = this.flags;
-    const { workingDirectory } = opts;
-
-    if (workingDirectory) {
-      const previousWorkingDirectory = process.cwd();
-      process.chdir(workingDirectory);
-      this.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
-    }
 
     const { preparedSpec, specPath, specType } = await prepareOas.call(this);
     const parsedPreparedSpec: OASDocument = JSON.parse(preparedSpec);
