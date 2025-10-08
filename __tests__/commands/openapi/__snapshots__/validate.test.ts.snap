@@ -74,7 +74,9 @@ Almost done! Push your newly created file (.github/workflows/validate-test-opt-s
 
 🦉 If you have any more questions, feel free to drop us a line! support@readme.io
 ",
-  "stderr": "- Validating the API definition located at petstore.json...
+  "stderr": " ›   Warning: The "--workingDirectory" flag has been deprecated. Use 
+ ›   "--working-directory" instead.
+- Validating the API definition located at petstore.json...
 ",
   "stdout": "petstore.json is a valid OpenAPI API definition!
 
@@ -111,7 +113,7 @@ jobs:
       - name: Run \`openapi validate\` command 🚀
         uses: readmeio/rdme@v7
         with:
-          rdme: openapi validate petstore.json --workingDirectory=./__tests__/__fixtures__/relative-ref-oas
+          rdme: openapi validate petstore.json --working-directory=./__tests__/__fixtures__/relative-ref-oas
 "
 `;
 
@@ -329,7 +331,9 @@ exports[`rdme openapi validate > error handling > should throw an error if inval
 exports[`rdme openapi validate > should adhere to .gitignore in subdirectories 1`] = `
 {
   "result": "nest/petstore.json is a valid OpenAPI API definition!",
-  "stderr": "- Looking for API definitions...
+  "stderr": " ›   Warning: The "--workingDirectory" flag has been deprecated. Use 
+ ›   "--working-directory" instead.
+- Looking for API definitions...
 - Validating the API definition located at nest/petstore.json...
 ",
   "stdout": "ℹ️  We found nest/petstore.json and are attempting to validate it.
@@ -340,7 +344,9 @@ exports[`rdme openapi validate > should adhere to .gitignore in subdirectories 1
 exports[`rdme openapi validate > should discover and upload an API definition if none is provided 1`] = `
 {
   "result": "petstore.json is a valid OpenAPI API definition!",
-  "stderr": "- Looking for API definitions...
+  "stderr": " ›   Warning: The "--workingDirectory" flag has been deprecated. Use 
+ ›   "--working-directory" instead.
+- Looking for API definitions...
 - Validating the API definition located at petstore.json...
 ",
   "stdout": "ℹ️  We found petstore.json and are attempting to validate it.
@@ -351,7 +357,9 @@ exports[`rdme openapi validate > should discover and upload an API definition if
 exports[`rdme openapi validate > should use specified working directory 1`] = `
 {
   "result": "petstore.json is a valid OpenAPI API definition!",
-  "stderr": "- Validating the API definition located at petstore.json...
+  "stderr": " ›   Warning: The "--workingDirectory" flag has been deprecated. Use 
+ ›   "--working-directory" instead.
+- Validating the API definition located at petstore.json...
 ",
   "stdout": "",
 }
