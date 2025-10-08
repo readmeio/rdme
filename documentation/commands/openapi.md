@@ -16,16 +16,16 @@ Converts an API definition to OpenAPI and bundles any external references.
 
 ```
 USAGE
-  $ rdme openapi convert [SPEC] [--out <value>] [--title <value>] [--workingDirectory <value>]
+  $ rdme openapi convert [SPEC] [--out <value>] [--title <value>] [--working-directory <value>]
 
 ARGUMENTS
   SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
         subdirectories contain a single OpenAPI file, you can omit the path.
 
 FLAGS
-  --out=<value>               Output file path to write converted file to
-  --title=<value>             An override value for the `info.title` field in the API definition
-  --workingDirectory=<value>  Working directory (for usage with relative external references)
+  --out=<value>                Output file path to write converted file to
+  --title=<value>              An override value for the `info.title` field in the API definition
+  --working-directory=<value>  Working directory (for usage with relative external references)
 
 DESCRIPTION
   Converts an API definition to OpenAPI and bundles any external references.
@@ -54,7 +54,7 @@ Analyze an OpenAPI/Swagger definition for various OpenAPI and ReadMe feature usa
 USAGE
   $ rdme openapi inspect [SPEC] [--feature
     additionalProperties|callbacks|circularRefs|commonParameters|discriminators|links|style|polymorphism|serverVariables
-    |webhooks|xml|xmlRequests|xmlResponses|xmlSchemas|readme...] [--workingDirectory <value>]
+    |webhooks|xml|xmlRequests|xmlResponses|xmlSchemas|readme...] [--working-directory <value>]
 
 ARGUMENTS
   SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
@@ -67,7 +67,7 @@ FLAGS
       <options: additionalProperties|callbacks|circularRefs|commonParameters|discriminators|links|style|polymorphism|serve
       rVariables|webhooks|xml|xmlRequests|xmlResponses|xmlSchemas|readme>
 
-  --workingDirectory=<value>
+  --working-directory=<value>
       Working directory (for usage with relative external references)
 
 DESCRIPTION
@@ -102,19 +102,19 @@ Reduce an OpenAPI definition into a smaller subset.
 ```
 USAGE
   $ rdme openapi reduce [SPEC] [--method <value>...] [--out <value>] [--path <value>...] [--tag <value>...] [--title
-    <value>] [--workingDirectory <value>]
+    <value>] [--working-directory <value>]
 
 ARGUMENTS
   SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
         subdirectories contain a single OpenAPI file, you can omit the path.
 
 FLAGS
-  --method=<value>...         Methods to reduce by (can only be used alongside the `path` option)
-  --out=<value>               Output file path to write reduced file to
-  --path=<value>...           Paths to reduce by
-  --tag=<value>...            Tags to reduce by
-  --title=<value>             An override value for the `info.title` field in the API definition
-  --workingDirectory=<value>  Working directory (for usage with relative external references)
+  --method=<value>...          Methods to reduce by (can only be used alongside the `path` option)
+  --out=<value>                Output file path to write reduced file to
+  --path=<value>...            Paths to reduce by
+  --tag=<value>...             Tags to reduce by
+  --title=<value>              An override value for the `info.title` field in the API definition
+  --working-directory=<value>  Working directory (for usage with relative external references)
 
 DESCRIPTION
   Reduce an OpenAPI definition into a smaller subset.
@@ -143,16 +143,16 @@ Resolves circular and recursive references in OpenAPI by replacing them with obj
 
 ```
 USAGE
-  $ rdme openapi resolve [SPEC] [--out <value>] [--title <value>] [--workingDirectory <value>]
+  $ rdme openapi resolve [SPEC] [--out <value>] [--title <value>] [--working-directory <value>]
 
 ARGUMENTS
   SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
         subdirectories contain a single OpenAPI file, you can omit the path.
 
 FLAGS
-  --out=<value>               Output file path to write resolved file to
-  --title=<value>             An override value for the `info.title` field in the API definition
-  --workingDirectory=<value>  Working directory (for usage with relative external references)
+  --out=<value>                Output file path to write resolved file to
+  --title=<value>              An override value for the `info.title` field in the API definition
+  --working-directory=<value>  Working directory (for usage with relative external references)
 
 DESCRIPTION
   Resolves circular and recursive references in OpenAPI by replacing them with object schemas.
@@ -186,20 +186,21 @@ Upload (or re-upload) your API definition to ReadMe.
 ```
 USAGE
   $ rdme openapi upload [SPEC] --key <value> [--confirm-overwrite] [--slug <value>] [--title <value>]
-    [--useSpecVersion | --branch <value>]
+    [--useSpecVersion | --branch <value>] [--working-directory <value>]
 
 ARGUMENTS
   SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
         subdirectories contain a single OpenAPI file, you can omit the path.
 
 FLAGS
-  --key=<value>        (required) ReadMe project API key
-  --branch=<value>     [default: stable] ReadMe project version
-  --confirm-overwrite  If set, file overwrites will be made without a confirmation prompt. This flag can be a useful in
-                       automated environments where prompts cannot be responded to.
-  --slug=<value>       Override the slug (i.e., the unique identifier) for your API definition.
-  --title=<value>      An override value for the `info.title` field in the API definition
-  --useSpecVersion     Use the OpenAPI `info.version` field for your ReadMe project version
+  --key=<value>                (required) ReadMe project API key
+  --branch=<value>             [default: stable] ReadMe project version
+  --confirm-overwrite          If set, file overwrites will be made without a confirmation prompt. This flag can be a
+                               useful in automated environments where prompts cannot be responded to.
+  --slug=<value>               Override the slug (i.e., the unique identifier) for your API definition.
+  --title=<value>              An override value for the `info.title` field in the API definition
+  --useSpecVersion             Use the OpenAPI `info.version` field for your ReadMe project version
+  --working-directory=<value>  Working directory (for usage with relative external references)
 
 DESCRIPTION
   Upload (or re-upload) your API definition to ReadMe.
@@ -266,15 +267,15 @@ Validate your OpenAPI/Swagger definition.
 
 ```
 USAGE
-  $ rdme openapi validate [SPEC] [--github] [--workingDirectory <value>]
+  $ rdme openapi validate [SPEC] [--github] [--working-directory <value>]
 
 ARGUMENTS
   SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
         subdirectories contain a single OpenAPI file, you can omit the path.
 
 FLAGS
-  --github                    Create a new GitHub Actions workflow for this command.
-  --workingDirectory=<value>  Working directory (for usage with relative external references)
+  --github                     Create a new GitHub Actions workflow for this command.
+  --working-directory=<value>  Working directory (for usage with relative external references)
 
 DESCRIPTION
   Validate your OpenAPI/Swagger definition.
