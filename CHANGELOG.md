@@ -1,3 +1,10 @@
+## [10.5.4-next.1](https://github.com/readmeio/rdme/compare/v10.5.3...v10.5.4-next.1) (2025-10-08)
+
+
+### Bug Fixes
+
+* **openapi/upload:** more edge case handling for URL uploads ([#1348](https://github.com/readmeio/rdme/issues/1348)) ([76e60b3](https://github.com/readmeio/rdme/commit/76e60b35897aac87aa4720d6c7711228d05c1f82))
+
 ## [10.5.3](https://github.com/readmeio/rdme/compare/v10.5.2...v10.5.3) (2025-10-08)
 
 
