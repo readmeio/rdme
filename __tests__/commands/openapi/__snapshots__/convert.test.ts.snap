@@ -3,9 +3,7 @@
 exports[`rdme openapi convert > error handling > should warn if given an OpenAPI 3.0 definition (format: json) 1`] = `
 {
   "result": "Your API definition has been converted and bundled and saved to output.json!",
-  "stderr": " ›   Warning: The "--workingDirectory" flag has been deprecated. Use 
- ›   "--working-directory" instead.
-- Validating the API definition located at petstore.json...
+  "stderr": "- Validating the API definition located at petstore.json...
  ›   Warning: The input file is already OpenAPI, so no conversion is necessary.
  ›    Any external references will be bundled.
 ",
@@ -16,9 +14,7 @@ exports[`rdme openapi convert > error handling > should warn if given an OpenAPI
 exports[`rdme openapi convert > error handling > should warn if given an OpenAPI 3.0 definition (format: yaml) 1`] = `
 {
   "result": "Your API definition has been converted and bundled and saved to output.json!",
-  "stderr": " ›   Warning: The "--workingDirectory" flag has been deprecated. Use 
- ›   "--working-directory" instead.
-- Validating the API definition located at petstore.yaml...
+  "stderr": "- Validating the API definition located at petstore.yaml...
  ›   Warning: The input file is already OpenAPI, so no conversion is necessary.
  ›    Any external references will be bundled.
 ",
@@ -29,9 +25,7 @@ exports[`rdme openapi convert > error handling > should warn if given an OpenAPI
 exports[`rdme openapi convert > should convert with no prompts via opts 1`] = `
 {
   "result": "Your API definition has been converted and bundled and saved to output.json!",
-  "stderr": " ›   Warning: The "--workingDirectory" flag has been deprecated. Use 
- ›   "--working-directory" instead.
-- Validating the API definition located at petstore-simple.json...
+  "stderr": "- Validating the API definition located at petstore-simple.json...
 ",
   "stdout": "",
 }

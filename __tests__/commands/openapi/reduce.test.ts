@@ -62,7 +62,7 @@ describe('rdme openapi reduce', () => {
         prompts.inject(['tags', ['user'], 'output.json']);
 
         await expect(
-          run(['--workingDirectory', './__tests__/__fixtures__/relative-ref-oas']),
+          run(['--working-directory', './__tests__/__fixtures__/relative-ref-oas']),
         ).resolves.toMatchSnapshot();
 
         expect(Object.keys(reducedSpec.paths)).toStrictEqual(['/user']);
@@ -71,7 +71,7 @@ describe('rdme openapi reduce', () => {
       it('should reduce with no prompts via opts', async () => {
         await expect(
           run([
-            '--workingDirectory',
+            '--working-directory',
             './__tests__/__fixtures__/relative-ref-oas',
             '--tag',
             'user',
@@ -108,7 +108,7 @@ describe('rdme openapi reduce', () => {
       it('should reduce with no prompts via opts', async () => {
         await expect(
           run([
-            '--workingDirectory',
+            '--working-directory',
             './__tests__/__fixtures__/relative-ref-oas',
             '--path',
             '/pet',
@@ -134,7 +134,7 @@ describe('rdme openapi reduce', () => {
 
         await expect(
           run([
-            '--workingDirectory',
+            '--working-directory',
             './__tests__/__fixtures__/relative-ref-oas',
             '--path',
             '/pet',
