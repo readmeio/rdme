@@ -43,7 +43,7 @@ export const titleFlag = Flags.string({
 });
 
 /**
- * Used in the `openapi` family of commands where `workingDirectory` is an option.
+ * Used in the `openapi` family of commands.
  */
 export const workingDirectoryFlag = Flags.string({
   aliases: ['workingDirectory'],
