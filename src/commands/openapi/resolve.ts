@@ -53,7 +53,7 @@ export default class OpenAPIResolveCommand extends BaseCommand<typeof OpenAPIRes
   static flags = {
     out: Flags.string({ description: 'Output file path to write resolved file to' }),
     title: titleFlag,
-    workingDirectory: workingDirectoryFlag,
+    'working-directory': workingDirectoryFlag,
   };
 
   /**
@@ -345,13 +345,7 @@ export default class OpenAPIResolveCommand extends BaseCommand<typeof OpenAPIRes
   }
 
   async run() {
-    const { out, workingDirectory } = this.flags;
-
-    if (workingDirectory) {
-      const previousWorkingDirectory = process.cwd();
-      process.chdir(workingDirectory);
-      this.debug(`Switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
-    }
+    const { out } = this.flags;
 
     const { preparedSpec, specPath, specType } = await prepareOas.call(this);
     if (specType !== 'OpenAPI') {

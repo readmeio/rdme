@@ -53,6 +53,12 @@ export default async function prepareOas(this: OpenAPICommands) {
   let specPath = this.args.spec;
   const command = this.id satisfies `openapi ${OpenAPIAction}`;
 
+  if (this.flags.workingDirectory) {
+    const previousWorkingDirectory = process.cwd();
+    process.chdir(this.flags.workingDirectory);
+    this.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
+  }
+
   if (!specPath) {
     /**
      * Scans working directory for a potential OpenAPI or Swagger file.
