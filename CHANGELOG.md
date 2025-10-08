@@ -1,3 +1,10 @@
+## [10.5.3-next.1](https://github.com/readmeio/rdme/compare/v10.5.2...v10.5.3-next.1) (2025-10-08)
+
+
+### Bug Fixes
+
+* **openapi/upload:** restore `--working-directory` ([#1369](https://github.com/readmeio/rdme/issues/1369)) ([f8cd895](https://github.com/readmeio/rdme/commit/f8cd895d527dec83044f45d5096cfacaadc7fb86))
+
 ## [10.5.2](https://github.com/readmeio/rdme/compare/v10.5.1...v10.5.2) (2025-09-24)
 
 
