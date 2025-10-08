@@ -26,6 +26,10 @@ bin/run.js openapi validate __tests__/__fixtures__/ref-oas/petstore.json
 
 Your changes to the command code may make changes to [the command reference documents](./documentation/commands) — it is up to you whether you include those changes in your PR or if you let the release process take care of it. More information on that can be found in [`MAINTAINERS.md`](./MAINTAINERS.md).
 
+## ReadMe Development 🦉
+
+If you're a ReadMe team member that's testing `rdme` against a non-production ReadMe environment, you can either set the `RDME_LOCALHOST=true` environment variable (which points your CLI to the localhost version of ReadMe) or modify the URLs in `src/lib/config.ts` directly.
+
 ## Running GitHub Actions Locally 🐳
 
 To run GitHub Actions locally, we'll be using [`act`](https://github.com/nektos/act) (make sure to read their [prerequisites list](https://github.com/nektos/act#necessary-prerequisites-for-running-act) and have that ready to go before installing `act`)!

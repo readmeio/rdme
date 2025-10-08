@@ -216,7 +216,7 @@ export default class OpenAPIInspectCommand extends BaseCommand<typeof OpenAPIIns
       multiple: true,
       options: getSupportedFeatures(),
     }),
-    workingDirectory: workingDirectoryFlag,
+    'working-directory': workingDirectoryFlag,
   };
 
   static examples = [
@@ -239,18 +239,12 @@ export default class OpenAPIInspectCommand extends BaseCommand<typeof OpenAPIIns
   ];
 
   async run() {
-    const { workingDirectory, feature: features } = this.flags;
+    const { feature: features } = this.flags;
 
     const tableBorder = Object.entries(getBorderCharacters('norc'))
       .map(([border, char]) => ({ [border]: chalk.gray(char) }))
       // biome-ignore lint/performance/noAccumulatingSpread: @todo can this be improved?
       .reduce((prev, next) => Object.assign(prev, next));
-
-    if (workingDirectory) {
-      const previousWorkingDirectory = process.cwd();
-      process.chdir(workingDirectory);
-      this.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
-    }
 
     const { preparedSpec, definitionVersion } = await prepareOas.call(this);
     const parsedPreparedSpec: OASDocument = JSON.parse(preparedSpec);

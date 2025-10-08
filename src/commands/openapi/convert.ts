@@ -28,7 +28,7 @@ export default class OpenAPIConvertCommand extends BaseCommand<typeof OpenAPICon
   static flags = {
     out: Flags.string({ description: 'Output file path to write converted file to' }),
     title: titleFlag,
-    workingDirectory: workingDirectoryFlag,
+    'working-directory': workingDirectoryFlag,
   };
 
   static examples = [
@@ -45,13 +45,7 @@ export default class OpenAPIConvertCommand extends BaseCommand<typeof OpenAPICon
   ];
 
   async run() {
-    const { out, workingDirectory } = this.flags;
-
-    if (workingDirectory) {
-      const previousWorkingDirectory = process.cwd();
-      process.chdir(workingDirectory);
-      this.debug(`switching working directory from ${previousWorkingDirectory} to ${process.cwd()}`);
-    }
+    const { out } = this.flags;
 
     const { preparedSpec, specPath, specType } = await prepareOas.call(this);
     const parsedPreparedSpec: OASDocument = JSON.parse(preparedSpec);

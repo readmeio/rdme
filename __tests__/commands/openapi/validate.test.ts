@@ -40,11 +40,16 @@ describe('rdme openapi validate', () => {
   });
 
   it('should discover and upload an API definition if none is provided', async () => {
-    const result = await run(['--workingDirectory', './__tests__/__fixtures__/relative-ref-oas']);
+    const result = await run(['--working-directory', './__tests__/__fixtures__/relative-ref-oas']);
     expect(result).toMatchSnapshot();
   });
 
   it('should use specified working directory', async () => {
+    const result = await run(['petstore.json', '--working-directory', './__tests__/__fixtures__/relative-ref-oas']);
+    expect(result).toMatchSnapshot();
+  });
+
+  it('should use specified working directory (legacy flag)', async () => {
     const result = await run(['petstore.json', '--workingDirectory', './__tests__/__fixtures__/relative-ref-oas']);
     expect(result).toMatchSnapshot();
   });
@@ -55,7 +60,7 @@ describe('rdme openapi validate', () => {
       './__tests__/__fixtures__/nested-gitignored-oas/nest/petstore-ignored.json',
     );
 
-    const result = await run(['--workingDirectory', './__tests__/__fixtures__/nested-gitignored-oas']);
+    const result = await run(['--working-directory', './__tests__/__fixtures__/nested-gitignored-oas']);
     expect(result).toMatchSnapshot();
   });
 
@@ -138,13 +143,13 @@ describe('rdme openapi validate', () => {
       expect(fs.writeFileSync).toHaveBeenCalledWith(`.github/workflows/${fileName}.yml`, expect.any(String));
     });
 
-    it('should create GHA workflow if user passes in spec via opt (including workingDirectory)', async () => {
+    it('should create GHA workflow if user passes in spec via opt (including working directory)', async () => {
       const spec = 'petstore.json';
       const fileName = 'validate-test-opt-spec-workdir-file';
       prompts.inject([true, 'validate-test-opt-spec-github-branch', fileName]);
 
       await expect(
-        run([spec, '--workingDirectory', './__tests__/__fixtures__/relative-ref-oas']),
+        run([spec, '--working-directory', './__tests__/__fixtures__/relative-ref-oas']),
       ).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();

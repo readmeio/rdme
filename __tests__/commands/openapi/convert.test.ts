@@ -58,7 +58,7 @@ describe('rdme openapi convert', () => {
     await expect(
       run([
         spec,
-        '--workingDirectory',
+        '--working-directory',
         require.resolve(`@readme/oas-examples/2.0/json/${spec}`).replace(spec, ''),
         '--out',
         'output.json',
@@ -79,7 +79,7 @@ describe('rdme openapi convert', () => {
       await expect(
         run([
           spec,
-          '--workingDirectory',
+          '--working-directory',
           require.resolve(`@readme/oas-examples/3.0/${format}/${spec}`).replace(spec, ''),
         ]),
       ).resolves.toMatchSnapshot();

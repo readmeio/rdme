@@ -14,7 +14,7 @@ import prompts from 'prompts';
 import slugify from 'slugify';
 
 import BaseCommand from '../../lib/baseCommand.js';
-import { branchFlag, keyFlag, specArg, titleFlag } from '../../lib/flags.js';
+import { branchFlag, keyFlag, specArg, titleFlag, workingDirectoryFlag } from '../../lib/flags.js';
 import isCI, { isTest } from '../../lib/isCI.js';
 import { oraOptions } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
@@ -66,6 +66,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
         'If included, use the version specified in the `info.version` field in your OpenAPI definition for your ReadMe project version. This flag is mutually exclusive with `--branch`.',
       exclusive: ['branch'],
     }),
+    'working-directory': workingDirectoryFlag,
   };
 
   static examples = [
