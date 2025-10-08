@@ -354,12 +354,21 @@ exports[`rdme openapi validate > should discover and upload an API definition if
 }
 `;
 
-exports[`rdme openapi validate > should use specified working directory 1`] = `
+exports[`rdme openapi validate > should use specified working directory (legacy flag) 1`] = `
 {
   "result": "petstore.json is a valid OpenAPI API definition!",
   "stderr": " ›   Warning: The "--workingDirectory" flag has been deprecated. Use 
  ›   "--working-directory" instead.
 - Validating the API definition located at petstore.json...
+",
+  "stdout": "",
+}
+`;
+
+exports[`rdme openapi validate > should use specified working directory 1`] = `
+{
+  "result": "petstore.json is a valid OpenAPI API definition!",
+  "stderr": "- Validating the API definition located at petstore.json...
 ",
   "stdout": "",
 }

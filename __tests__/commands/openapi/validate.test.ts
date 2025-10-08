@@ -45,6 +45,11 @@ describe('rdme openapi validate', () => {
   });
 
   it('should use specified working directory', async () => {
+    const result = await run(['petstore.json', '--working-directory', './__tests__/__fixtures__/relative-ref-oas']);
+    expect(result).toMatchSnapshot();
+  });
+
+  it('should use specified working directory (legacy flag)', async () => {
     const result = await run(['petstore.json', '--workingDirectory', './__tests__/__fixtures__/relative-ref-oas']);
     expect(result).toMatchSnapshot();
   });
