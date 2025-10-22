@@ -61,7 +61,7 @@ function oraOptions() {
 
   // Cleans up ora output so it prints nicely alongside debug logs
   /* istanbul ignore next */
-  if (debugPackage.enabled) opts.isEnabled = false;
+  if (debugPackage.enabled || isTest()) opts.isEnabled = false;
   return opts;
 }
 
