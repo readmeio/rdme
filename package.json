@@ -76,8 +76,7 @@
     "tmp-promise": "^3.0.3",
     "toposort": "^2.0.2",
     "undici": "^5.28.4",
-    "unzipper": "^0.12.3",
-    "validator": "^13.7.0"
+    "unzipper": "^0.12.3"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.1.4",
@@ -98,7 +97,6 @@
     "@types/semver": "^7.3.12",
     "@types/toposort": "^2.0.7",
     "@types/unzipper": "^0.10.11",
-    "@types/validator": "^13.7.6",
     "@vitest/coverage-v8": "^4.0.1",
     "@vitest/expect": "^4.0.1",
     "alex": "^11.0.0",

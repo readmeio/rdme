@@ -1,7 +1,6 @@
 import type { Hook } from '@oclif/core';
 
 import chalk from 'chalk';
-import isEmail from 'validator/lib/isEmail.js';
 
 import configStore from './configstore.js';
 import getCurrentConfig from './getCurrentConfig.js';
@@ -22,6 +21,14 @@ function loginFetch(body: LoginBody) {
     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
   });
+}
+
+function isEmail(value: string) {
+  // Simple email regex sourced from https://emailregex.com/
+  const emailRegex =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+  return emailRegex.test(value);
 }
 
 /**
@@ -47,7 +54,7 @@ export default async function loginFlow(
       message: 'What is your email address?',
       initial: storedConfig.email,
       validate(val) {
-        return isEmail.default(val) ? true : 'Please provide a valid email address.';
+        return isEmail(val) ? true : 'Please provide a valid email address.';
       },
     },
     {
@@ -68,7 +75,7 @@ export default async function loginFlow(
     return Promise.reject(new Error('No project subdomain provided. Please use `--project`.'));
   }
 
-  if (!isEmail.default(email)) {
+  if (!isEmail(email)) {
     return Promise.reject(new Error('You must provide a valid email address.'));
   }
 
