@@ -57,7 +57,8 @@ exports[`custompages upload > given that the file path is a directory > should h
   "error": [AggregateError: Multiple dry runs failed. To see more detailed errors for a page, run \`rdme custompages upload <path-to-page.md>\` --dry-run.],
   "stderr": "- 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/mixed-docs\` directory...
 ✔ 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/mixed-docs\` directory... 5 file(s) found!
- ›   Warning: Skipping pre-upload validation of the Markdown file(s). This is not recommended.
+ ›   Warning: Skipping pre-upload validation of the Markdown file(s). This is 
+ ›   not recommended.
 - 🎭 Uploading files to ReadMe (but not really because it's a dry run)...
 ✖ 🎭 Uploading files to ReadMe (but not really because it's a dry run)... 2 file(s) failed.
 ",
@@ -79,7 +80,8 @@ exports[`custompages upload > given that the file path is a directory > should h
   "error": [AggregateError: Multiple page uploads failed. To see more detailed errors for a page, run \`rdme custompages upload <path-to-page.md>\`.],
   "stderr": "- 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/mixed-docs\` directory...
 ✔ 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/mixed-docs\` directory... 5 file(s) found!
- ›   Warning: Skipping pre-upload validation of the Markdown file(s). This is not recommended.
+ ›   Warning: Skipping pre-upload validation of the Markdown file(s). This is 
+ ›   not recommended.
 - 🚀 Uploading files to ReadMe...
 ✖ 🚀 Uploading files to ReadMe... 2 file(s) failed.
 ",
@@ -139,7 +141,8 @@ exports[`custompages upload > given that the file path is a directory > should h
   },
   "stderr": "- 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/mixed-docs\` directory...
 ✔ 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/mixed-docs\` directory... 5 file(s) found!
- ›   Warning: Skipping pre-upload validation of the Markdown file(s). This is not recommended.
+ ›   Warning: Skipping pre-upload validation of the Markdown file(s). This is 
+ ›   not recommended.
 - 🚀 Uploading files to ReadMe...
 ✖ 🚀 Uploading files to ReadMe... 2 file(s) failed.
 ",
@@ -194,7 +197,10 @@ exports[`custompages upload > given that the file path is a directory > should h
 ✔ 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/mixed-docs\` directory... 5 file(s) found!
 - 🔬 Validating frontmatter data...
 ⚠ 🔬 Validating frontmatter data... issues found in 2 file(s).
- ›   Warning: 1 file(s) have issues that cannot be fixed automatically. Autofixable issues have been corrected but we also recommend addressing these issues as well. Please get in touch with us at support@readme.io if you need a hand.
+ ›   Warning: 1 file(s) have issues that cannot be fixed automatically. 
+ ›   Autofixable issues have been corrected but we also recommend addressing 
+ ›   these issues as well. Please get in touch with us at support@readme.io if 
+ ›   you need a hand.
 ",
   "stdout": "=== BEGIN writeFileSync to file: __tests__/__fixtures__/custompages/mixed-docs/doc-sans-attributes.md ===
 Body
@@ -532,7 +538,8 @@ exports[`custompages upload > given that the file path is a single file > given 
   "error": [APIv2Error: ReadMe API error: bad request
 
 your metadata is whack],
-  "stderr": " ›   Warning: Skipping pre-upload validation of the Markdown file(s). This is not recommended.
+  "stderr": " ›   Warning: Skipping pre-upload validation of the Markdown file(s). This is 
+ ›   not recommended.
 - 🚀 Uploading files to ReadMe...
 ✖ 🚀 Uploading files to ReadMe... 1 file(s) failed.
 ",
@@ -559,7 +566,9 @@ exports[`custompages upload > given that the file path is a single file > given 
   },
   "stderr": "- 🔬 Validating frontmatter data...
 ⚠ 🔬 Validating frontmatter data... issues found in 1 file(s).
- ›   Warning: 1 file(s) have issues that cannot be fixed automatically. The upload will proceed but we recommend addressing these issues. Please get in touch with us at support@readme.io if you need a hand.
+ ›   Warning: 1 file(s) have issues that cannot be fixed automatically. The 
+ ›   upload will proceed but we recommend addressing these issues. Please get 
+ ›   in touch with us at support@readme.io if you need a hand.
 - 🚀 Uploading files to ReadMe...
 ✔ 🚀 Uploading files to ReadMe... done!
 ",

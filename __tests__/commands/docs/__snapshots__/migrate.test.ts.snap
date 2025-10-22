@@ -13,7 +13,8 @@ See more help with --help],
 exports[`rdme docs migrate > should error out if no plugins are installed 1`] = `
 {
   "error": [Error: This command requires a valid migration plugin.],
-  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change. Use at your own risk!
+  "stderr": " ›   Warning: This command is in an experimental alpha and is likely to change.
+ ›    Use at your own risk!
 - 🔍 Looking for Markdown files in the \`__tests__/__fixtures__/docs/new-docs\` directory...
 ✔ 🔍 Looking for Markdown files in the \`__tests__/__fixtures__/docs/new-docs\` directory... 1 file(s) found!
 ",

@@ -54,7 +54,9 @@ exports[`rdme openapi upload > given that the "--legacy-id" flag is passed > sho
     "uri": "/branches/1.0.0/apis/legacy-spec.json",
   },
   "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
- ›   Warning: The \`--legacy-id\` flag will be removed in a future version. We recommend passing \`--slug legacy-spec.json\` for maximum compatibility and readability.
+ ›   Warning: The \`--legacy-id\` flag will be removed in a future version. We 
+ ›   recommend passing \`--slug legacy-spec.json\` for maximum compatibility and 
+ ›   readability.
 - Updating your API definition to ReadMe...
 ✔ Updating your API definition to ReadMe... done!
 ",
@@ -147,7 +149,9 @@ exports[`rdme openapi upload > given that the API definition is a URL > should c
     "uri": "/branches/1.0.0/apis/openapi.json",
   },
   "stderr": "- Validating the API definition located at https://example.com/openapi.json...
- ›   Warning: The slug of your API Definition will be set to openapi.json in ReadMe. This slug is not visible to your end users. To set this slug to something else, use the \`--slug\` flag.
+ ›   Warning: The slug of your API Definition will be set to openapi.json in 
+ ›   ReadMe. This slug is not visible to your end users. To set this slug to 
+ ›   something else, use the \`--slug\` flag.
 - Creating your API definition to ReadMe...
 ✔ Creating your API definition to ReadMe... done!
 ",
@@ -163,7 +167,9 @@ exports[`rdme openapi upload > given that the API definition is a URL > should c
     "uri": "/branches/1.0.0/apis/no-extension.json",
   },
   "stderr": "- Validating the API definition located at https://example.com/no-extension...
- ›   Warning: The slug of your API Definition will be set to no-extension.json in ReadMe. This slug is not visible to your end users. To set this slug to something else, use the \`--slug\` flag.
+ ›   Warning: The slug of your API Definition will be set to no-extension.json 
+ ›   in ReadMe. This slug is not visible to your end users. To set this slug to
+ ›    something else, use the \`--slug\` flag.
 - Creating your API definition to ReadMe...
 ✔ Creating your API definition to ReadMe... done!
 ",
@@ -180,7 +186,9 @@ exports[`rdme openapi upload > given that the API definition is a URL > should c
   },
   "stderr": "- Validating the API definition located at https://example.com/no-extension...
  ›   Warning: Support for Postman collections is currently experimental.
- ›   Warning: The slug of your API Definition will be set to no-extension.json in ReadMe. This slug is not visible to your end users. To set this slug to something else, use the \`--slug\` flag.
+ ›   Warning: The slug of your API Definition will be set to no-extension.json 
+ ›   in ReadMe. This slug is not visible to your end users. To set this slug to
+ ›    something else, use the \`--slug\` flag.
 - Creating your API definition to ReadMe...
 ✔ Creating your API definition to ReadMe... done!
 ",
@@ -196,7 +204,8 @@ exports[`rdme openapi upload > given that the API definition is a URL > should c
     "uri": "/branches/1.0.0/apis/openapi.json",
   },
   "stderr": "- Validating the API definition located at https://example.com...
- ›   Warning: No filename could be inferred from the provided URL, so the slug will default to openapi.json. To set a custom slug, use the \`--slug\` flag.
+ ›   Warning: No filename could be inferred from the provided URL, so the slug 
+ ›   will default to openapi.json. To set a custom slug, use the \`--slug\` flag.
 - Creating your API definition to ReadMe...
 ✔ Creating your API definition to ReadMe... done!
 ",
@@ -213,7 +222,8 @@ exports[`rdme openapi upload > given that the API definition is a URL > should c
   },
   "stderr": "- Validating the API definition located at https://example.com...
  ›   Warning: Support for Postman collections is currently experimental.
- ›   Warning: No filename could be inferred from the provided URL, so the slug will default to openapi.json. To set a custom slug, use the \`--slug\` flag.
+ ›   Warning: No filename could be inferred from the provided URL, so the slug 
+ ›   will default to openapi.json. To set a custom slug, use the \`--slug\` flag.
 - Creating your API definition to ReadMe...
 ✔ Creating your API definition to ReadMe... done!
 ",
@@ -239,7 +249,9 @@ exports[`rdme openapi upload > given that the API definition is a URL > should u
     "uri": "/branches/1.0.0/apis/openapi.json",
   },
   "stderr": "- Validating the API definition located at https://example.com/openapi.json...
- ›   Warning: The slug of your API Definition will be set to openapi.json in ReadMe. This slug is not visible to your end users. To set this slug to something else, use the \`--slug\` flag.
+ ›   Warning: The slug of your API Definition will be set to openapi.json in 
+ ›   ReadMe. This slug is not visible to your end users. To set this slug to 
+ ›   something else, use the \`--slug\` flag.
 - Updating your API definition to ReadMe...
 ✔ Updating your API definition to ReadMe... done!
 ",
@@ -255,7 +267,9 @@ exports[`rdme openapi upload > given that the API definition is a URL > should u
     "uri": "/branches/1.0.0/apis/openapi.json",
   },
   "stderr": "- Validating the API definition located at https://example.com/no-extension...
- ›   Warning: The slug of your API Definition will be set to no-extension.json in ReadMe. This slug is not visible to your end users. To set this slug to something else, use the \`--slug\` flag.
+ ›   Warning: The slug of your API Definition will be set to no-extension.json 
+ ›   in ReadMe. This slug is not visible to your end users. To set this slug to
+ ›    something else, use the \`--slug\` flag.
 - Updating your API definition to ReadMe...
 ✔ Updating your API definition to ReadMe... done!
 ",
@@ -271,7 +285,10 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
     "uri": "/branches/1.0.0/apis/687855c3600c6e14c79a94cb.json",
   },
   "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
- ›   Warning: The slug you provided looks like a legacy API definition ID, and these IDs are now deprecated in ReadMe. More info here: https://github.com/readmeio/rdme/blob/v10/documentation/migration-guide.md#v10-openapi-upload-command-updates
+ ›   Warning: The slug you provided looks like a legacy API definition ID, and 
+ ›   these IDs are now deprecated in ReadMe. More info here: 
+ ›   https://github.com/readmeio/rdme/blob/v10/documentation/migration-guide.md
+ ›   #v10-openapi-upload-command-updates
 - Creating your API definition to ReadMe...
 ✔ Creating your API definition to ReadMe... done!
 ",
@@ -297,7 +314,9 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
   },
   "stderr": "- Validating the API definition located at __tests__/__fixtures__/postman/petstore.collection.yaml...
  ›   Warning: Support for Postman collections is currently experimental.
- ›   Warning: The file extension in your provided slug (.json) does not match the file extension of the file you're uploading (.yaml). Your API definition will be converted to JSON prior to upload.
+ ›   Warning: The file extension in your provided slug (.json) does not match 
+ ›   the file extension of the file you're uploading (.yaml). Your API 
+ ›   definition will be converted to JSON prior to upload.
 - Updating your API definition to ReadMe...
 ✔ Updating your API definition to ReadMe... done!
 ",
@@ -313,7 +332,9 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
     "uri": "/branches/1.0.0/apis/custom-slug.yml",
   },
   "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
- ›   Warning: The file extension in your provided slug (.yml) does not match the file extension of the file you're uploading (.json). Your API definition will be converted to YAML prior to upload.
+ ›   Warning: The file extension in your provided slug (.yml) does not match 
+ ›   the file extension of the file you're uploading (.json). Your API 
+ ›   definition will be converted to YAML prior to upload.
 - Updating your API definition to ReadMe...
 ✔ Updating your API definition to ReadMe... done!
 ",
@@ -338,7 +359,10 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
     "uri": "/branches/1.0.0/apis/legacy-spec.json",
   },
   "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
- ›   Warning: The slug you provided matches a legacy API definition ID and these IDs are now deprecated in ReadMe. To ensure maximum compatibility going forward, we recommend updating your \`--slug\` flag to  \`legacy-spec.json\`.
+ ›   Warning: The slug you provided matches a legacy API definition ID and 
+ ›   these IDs are now deprecated in ReadMe. To ensure maximum compatibility 
+ ›   going forward, we recommend updating your \`--slug\` flag to  
+ ›   \`legacy-spec.json\`.
 - Updating your API definition to ReadMe...
 ✔ Updating your API definition to ReadMe... done!
 ",
@@ -406,7 +430,10 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
 {
   "error": [Error: Sorry, this upload timed out. Please try again later.],
   "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
- ›   Warning: The slug of your API Definition will be set to __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This slug is not visible to your end users. To set this slug to something else, use the \`--slug\` flag.
+ ›   Warning: The slug of your API Definition will be set to 
+ ›   __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This 
+ ›   slug is not visible to your end users. To set this slug to something else,
+ ›    use the \`--slug\` flag.
 - Creating your API definition to ReadMe...
 ",
   "stdout": "",
@@ -417,7 +444,10 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
 {
   "error": [Error: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
   "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
- ›   Warning: The slug of your API Definition will be set to __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This slug is not visible to your end users. To set this slug to something else, use the \`--slug\` flag.
+ ›   Warning: The slug of your API Definition will be set to 
+ ›   __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This 
+ ›   slug is not visible to your end users. To set this slug to something else,
+ ›    use the \`--slug\` flag.
 - Creating your API definition to ReadMe...
 ",
   "stdout": "",
@@ -428,7 +458,10 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
 {
   "error": [Error: Your API definition upload failed with an unexpected error. Please get in touch with us at support@readme.io.],
   "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
- ›   Warning: The slug of your API Definition will be set to __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This slug is not visible to your end users. To set this slug to something else, use the \`--slug\` flag.
+ ›   Warning: The slug of your API Definition will be set to 
+ ›   __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This 
+ ›   slug is not visible to your end users. To set this slug to something else,
+ ›    use the \`--slug\` flag.
 - Creating your API definition to ReadMe...
 ✖ Creating your API definition to ReadMe... uploaded but not yet processed by ReadMe. Polling for completion...
 ",
@@ -443,7 +476,10 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
     "uri": "/branches/1.0.0/apis/__tests____fixtures__petstore-simple-weird-version.json",
   },
   "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
- ›   Warning: The slug of your API Definition will be set to __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This slug is not visible to your end users. To set this slug to something else, use the \`--slug\` flag.
+ ›   Warning: The slug of your API Definition will be set to 
+ ›   __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This 
+ ›   slug is not visible to your end users. To set this slug to something else,
+ ›    use the \`--slug\` flag.
 - Updating your API definition to ReadMe...
 ✔ Updating your API definition to ReadMe... uploaded but not yet processed by ReadMe. Polling for completion... done!
 ",
@@ -459,7 +495,10 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
     "uri": "/branches/1.0.0/apis/__tests____fixtures__petstore-simple-weird-version.json",
   },
   "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
- ›   Warning: The slug of your API Definition will be set to __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This slug is not visible to your end users. To set this slug to something else, use the \`--slug\` flag.
+ ›   Warning: The slug of your API Definition will be set to 
+ ›   __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This 
+ ›   slug is not visible to your end users. To set this slug to something else,
+ ›    use the \`--slug\` flag.
 - Creating your API definition to ReadMe...
 ✔ Creating your API definition to ReadMe... uploaded but not yet processed by ReadMe. Polling for completion... done!
 ",
@@ -475,7 +514,10 @@ exports[`rdme openapi upload > given that the API definition is a local file > g
     "uri": "/branches/stable/apis/__tests____fixtures__petstore-simple-weird-version.json",
   },
   "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
- ›   Warning: The slug of your API Definition will be set to __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This slug is not visible to your end users. To set this slug to something else, use the \`--slug\` flag.
+ ›   Warning: The slug of your API Definition will be set to 
+ ›   __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This 
+ ›   slug is not visible to your end users. To set this slug to something else,
+ ›    use the \`--slug\` flag.
 - Creating your API definition to ReadMe...
 ✔ Creating your API definition to ReadMe... done!
 ",
@@ -491,7 +533,10 @@ exports[`rdme openapi upload > given that the API definition is a local file > g
     "uri": "/branches/1.2.3/apis/__tests____fixtures__petstore-simple-weird-version.json",
   },
   "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
- ›   Warning: The slug of your API Definition will be set to __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This slug is not visible to your end users. To set this slug to something else, use the \`--slug\` flag.
+ ›   Warning: The slug of your API Definition will be set to 
+ ›   __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This 
+ ›   slug is not visible to your end users. To set this slug to something else,
+ ›    use the \`--slug\` flag.
 - Creating your API definition to ReadMe...
 ✔ Creating your API definition to ReadMe... done!
 ",
@@ -507,7 +552,10 @@ exports[`rdme openapi upload > given that the API definition is a local file > s
     "uri": "/branches/1.0.0/apis/__tests____fixtures__petstore-simple-weird-version.json",
   },
   "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
- ›   Warning: The slug of your API Definition will be set to __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This slug is not visible to your end users. To set this slug to something else, use the \`--slug\` flag.
+ ›   Warning: The slug of your API Definition will be set to 
+ ›   __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This 
+ ›   slug is not visible to your end users. To set this slug to something else,
+ ›    use the \`--slug\` flag.
 - Creating your API definition to ReadMe...
 ✔ Creating your API definition to ReadMe... done!
 ",
@@ -524,7 +572,10 @@ exports[`rdme openapi upload > given that the API definition is a local file > s
   },
   "stderr": " ›   Warning: The "--version" flag has been deprecated. Use "--branch" instead.
 - Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
- ›   Warning: The slug of your API Definition will be set to __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This slug is not visible to your end users. To set this slug to something else, use the \`--slug\` flag.
+ ›   Warning: The slug of your API Definition will be set to 
+ ›   __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This 
+ ›   slug is not visible to your end users. To set this slug to something else,
+ ›    use the \`--slug\` flag.
 - Creating your API definition to ReadMe...
 ✔ Creating your API definition to ReadMe... done!
 ",
@@ -541,7 +592,10 @@ exports[`rdme openapi upload > given that the API definition is a local file > s
   },
   "stderr": "- Validating the API definition located at __tests__/__fixtures__/postman/petstore.collection.yaml...
  ›   Warning: Support for Postman collections is currently experimental.
- ›   Warning: The slug of your API Definition will be set to __tests____fixtures__postmanpetstore.collection.yaml in ReadMe. This slug is not visible to your end users. To set this slug to something else, use the \`--slug\` flag.
+ ›   Warning: The slug of your API Definition will be set to 
+ ›   __tests____fixtures__postmanpetstore.collection.yaml in ReadMe. This slug 
+ ›   is not visible to your end users. To set this slug to something else, use 
+ ›   the \`--slug\` flag.
 - Creating your API definition to ReadMe...
 ✔ Creating your API definition to ReadMe... done!
 ",
@@ -554,7 +608,10 @@ exports[`rdme openapi upload > given that the API definition is a local file > s
 {
   "error": [Error: Your API definition upload failed with an unexpected error. Please get in touch with us at support@readme.io.],
   "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
- ›   Warning: The slug of your API Definition will be set to __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This slug is not visible to your end users. To set this slug to something else, use the \`--slug\` flag.
+ ›   Warning: The slug of your API Definition will be set to 
+ ›   __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This 
+ ›   slug is not visible to your end users. To set this slug to something else,
+ ›    use the \`--slug\` flag.
 - Creating your API definition to ReadMe...
 ✖ Creating your API definition to ReadMe...
 ",
@@ -569,7 +626,10 @@ exports[`rdme openapi upload > given that the API definition is a local file > s
     "uri": "/branches/1.0.0/apis/__tests____fixtures__petstore-simple-weird-version.json",
   },
   "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
- ›   Warning: The slug of your API Definition will be set to __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This slug is not visible to your end users. To set this slug to something else, use the \`--slug\` flag.
+ ›   Warning: The slug of your API Definition will be set to 
+ ›   __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This 
+ ›   slug is not visible to your end users. To set this slug to something else,
+ ›    use the \`--slug\` flag.
 - Updating your API definition to ReadMe...
 ✔ Updating your API definition to ReadMe... done!
 ",
