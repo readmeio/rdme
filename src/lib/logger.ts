@@ -45,7 +45,7 @@ function info(
   },
 ) {
   /* istanbul ignore next */
-  if (isGHA() && !isTest()) return core.notice(input);
+  if (isGHA()) return core.notice(input);
   /* istanbul ignore next */
   // biome-ignore lint/suspicious/noConsole: This is our wrapper for `console.info()`.
   if (!opts.includeEmojiPrefix) return console.info(input);
