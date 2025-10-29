@@ -45,7 +45,7 @@ function info(
   },
 ) {
   /* istanbul ignore next */
-  if (isGHA()) return core.notice(input);
+  if (isGHA() && !isTest()) return core.notice(input);
   /* istanbul ignore next */
   // biome-ignore lint/suspicious/noConsole: This is our wrapper for `console.info()`.
   if (!opts.includeEmojiPrefix) return console.info(input);
@@ -61,7 +61,7 @@ function oraOptions() {
 
   // Cleans up ora output so it prints nicely alongside debug logs
   /* istanbul ignore next */
-  if (debugPackage.enabled || isTest()) opts.isEnabled = false;
+  if (debugPackage.enabled) opts.isEnabled = false;
   return opts;
 }
 
