@@ -97,8 +97,8 @@
     "@types/semver": "^7.3.12",
     "@types/toposort": "^2.0.7",
     "@types/unzipper": "^0.10.11",
-    "@vitest/coverage-v8": "^4.0.4",
-    "@vitest/expect": "^4.0.4",
+    "@vitest/coverage-v8": "^4.0.5",
+    "@vitest/expect": "^4.0.5",
     "alex": "^11.0.0",
     "husky": "^9.0.10",
     "knip": "^5.0.2",
@@ -111,7 +111,7 @@
     "tsx": "^4.19.2",
     "type-fest": "^5.0.1",
     "typescript": "^5.8.2",
-    "vitest": "^4.0.4"
+    "vitest": "^4.0.5"
   },
   "scripts": {
     "build": "tsc",
