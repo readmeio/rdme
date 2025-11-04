@@ -1151,4 +1151,30 @@ describe('rdme openapi upload', () => {
       getMock.done();
     });
   });
+
+  describe('given that the --dry-run flag is passed', () => {
+    it('should output the expected dry run result but not make the actual API request', async () => {
+      const getMock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .get(`/branches/${branch}/apis`)
+        .reply(200, { data: [] });
+
+      const result = await run(['--branch', branch, filename, '--key', key, '--dry-run']);
+
+      expect(result).toMatchSnapshot();
+
+      getMock.done();
+    });
+
+    it('should show Overwrite Existing: Yes when an existing API definition exists', async () => {
+      const getMock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .get(`/branches/${branch}/apis`)
+        .reply(200, { data: [{ filename: slugifiedFilename }] });
+
+      const result = await run(['--branch', branch, filename, '--key', key, '--dry-run']);
+
+      expect(result).toMatchSnapshot();
+
+      getMock.done();
+    });
+  });
 });
