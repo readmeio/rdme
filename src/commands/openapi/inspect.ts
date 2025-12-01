@@ -243,7 +243,6 @@ export default class OpenAPIInspectCommand extends BaseCommand<typeof OpenAPIIns
 
     const tableBorder = Object.entries(getBorderCharacters('norc'))
       .map(([border, char]) => ({ [border]: chalk.gray(char) }))
-      // biome-ignore lint/performance/noAccumulatingSpread: @todo can this be improved?
       .reduce((prev, next) => Object.assign(prev, next));
 
     const { preparedSpec, definitionVersion } = await prepareOas.call(this);
