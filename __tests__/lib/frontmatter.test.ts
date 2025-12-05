@@ -13,6 +13,7 @@ import DocsUploadCommand from '../../src/commands/docs/upload.js';
 import RefUploadCommand from '../../src/commands/reference/upload.js';
 import { fix, writeFixes } from '../../src/lib/frontmatter.js';
 import { emptyMappings, fetchSchema } from '../../src/lib/readmeAPIFetch.js';
+import { readPage } from '../../src/lib/readPage.js';
 import { setupOclifConfig } from '../helpers/oclif.js';
 
 describe.each([
@@ -348,5 +349,65 @@ describe('#writeFixes', () => {
     expect(fs.writeFileSync).toHaveBeenCalledWith('out/docs/page.md', expect.stringContaining('updated: true'), {
       encoding: 'utf-8',
     });
+  });
+});
+
+describe('#readPage', () => {
+  let command: DocsUploadCommand;
+
+  beforeEach(async () => {
+    const oclifConfig = await setupOclifConfig();
+    command = new DocsUploadCommand([], oclifConfig);
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('should not execute JavaScript in frontmatter', () => {
+    const maliciousContent = `---js
+{
+  title: "Test",
+  malicious: (function() { 
+    // This should never execute
+    return "executed"; 
+  })()
+}
+---
+
+# Page content`;
+
+    const testFilePath = 'test-malicious.md';
+
+    // Mock the file system to return our malicious content
+    vi.spyOn(fs, 'readFileSync').mockReturnValue(maliciousContent);
+
+    const result = readPage.call(command, testFilePath);
+
+    // The data should be empty because we disabled the javascript engine
+    // by providing a parse function that returns an empty object
+    expect(result.data).toEqual({});
+    expect(result.content).toContain('# Page content');
+  });
+
+  it('should still parse regular YAML frontmatter', () => {
+    const normalContent = `---
+title: "Normal Page"
+category: some-category
+---
+
+# Page content`;
+
+    const testFilePath = 'test-normal.md';
+
+    vi.spyOn(fs, 'readFileSync').mockReturnValue(normalContent);
+
+    const result = readPage.call(command, testFilePath);
+
+    expect(result.data).toEqual({
+      title: 'Normal Page',
+      category: 'some-category',
+    });
+    expect(result.content).toContain('# Page content');
   });
 });
