@@ -45,6 +45,13 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       description:
         'If set, file overwrites will be made without a confirmation prompt. This flag can be a useful in automated environments where prompts cannot be responded to.',
     }),
+    'dry-run': Flags.boolean({
+      summary: 'Outputs what would be done, but does not actually upload anything.',
+      description:
+        'If set, the command will output what would be done, but does not actually upload anything. This can be useful to verify that the correct file will be uploaded and the correct branch will be used.',
+      deprecateAliases: true,
+      aliases: ['dryRun'],
+    }),
     'legacy-id': Flags.string({
       summary: 'The legacy ID for your API definition.',
       description:
@@ -291,6 +298,24 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
         `The \`--legacy-id\` flag will be removed in a future version. We recommend passing \`--slug ${filename}\` for maximum compatibility and readability.`,
       );
       this.debug(`using existing legacy ID ${this.flags['legacy-id']} with filename ${filename}`);
+    }
+
+    // this is where we return early if the --dry-run flag is provided
+    if (this.flags['dry-run']) {
+      this.log('--- Dry Run Result 🌵 ---');
+      this.log(`File slug: ${filename}`);
+      this.log(`Branch: ${branch}`);
+      this.log(`Spec Type: ${specType}`);
+      this.log(`Spec File Type: ${specFileType}`);
+      this.log(`Spec Path: ${specPath}`);
+      this.log(`Spec Version: ${specVersion}`);
+      this.log(`Send as YAML: ${sendYaml}`);
+      this.log(`Overwrite Existing: ${matchingAPIDefinition ? 'Yes' : 'No'}`);
+      if (existingAPIDefinitions.length) {
+        this.log(`Existing API Definitions: ${filenames}`);
+      }
+      this.log('---------------------');
+      return;
     }
 
     // if we have a matching API definition based on legacy-id or slug, we'll use PUT to update it. otherwise, we'll use POST to create it

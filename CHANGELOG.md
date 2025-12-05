@@ -1,3 +1,17 @@
+# [10.6.0-next.1](https://github.com/readmeio/rdme/compare/v10.5.4-next.2...v10.6.0-next.1) (2025-12-05)
+
+
+### Features
+
+* add dry run flag to upload command ([#1394](https://github.com/readmeio/rdme/issues/1394)) ([558aa50](https://github.com/readmeio/rdme/commit/558aa507214745800bfb5602e59db3abf898adc4))
+
+## [10.5.4-next.2](https://github.com/readmeio/rdme/compare/v10.5.4-next.1...v10.5.4-next.2) (2025-12-05)
+
+
+### Bug Fixes
+
+* disable javascript execution in frontmatter ([#1396](https://github.com/readmeio/rdme/issues/1396)) ([0032a7a](https://github.com/readmeio/rdme/commit/0032a7a7309d8454ec01b8ac706d69328bc6ee51)), closes [#readPage](https://github.com/readmeio/rdme/issues/readPage)
+
 ## [10.5.4-next.1](https://github.com/readmeio/rdme/compare/v10.5.3...v10.5.4-next.1) (2025-10-08)
 
 

@@ -19,8 +19,8 @@ USAGE
   $ rdme openapi convert [SPEC] [--out <value>] [--title <value>] [--working-directory <value>]
 
 ARGUMENTS
-  SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
-        subdirectories contain a single OpenAPI file, you can omit the path.
+  [SPEC]  A path to your API definition — either a local file path or a URL. If your working directory and all
+          subdirectories contain a single OpenAPI file, you can omit the path.
 
 FLAGS
   --out=<value>                Output file path to write converted file to
@@ -57,8 +57,8 @@ USAGE
     |webhooks|xml|xmlRequests|xmlResponses|xmlSchemas|readme...] [--working-directory <value>]
 
 ARGUMENTS
-  SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
-        subdirectories contain a single OpenAPI file, you can omit the path.
+  [SPEC]  A path to your API definition — either a local file path or a URL. If your working directory and all
+          subdirectories contain a single OpenAPI file, you can omit the path.
 
 FLAGS
   --feature=<option>...
@@ -105,8 +105,8 @@ USAGE
     <value>] [--working-directory <value>]
 
 ARGUMENTS
-  SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
-        subdirectories contain a single OpenAPI file, you can omit the path.
+  [SPEC]  A path to your API definition — either a local file path or a URL. If your working directory and all
+          subdirectories contain a single OpenAPI file, you can omit the path.
 
 FLAGS
   --method=<value>...          Methods to reduce by (can only be used alongside the `path` option)
@@ -146,8 +146,8 @@ USAGE
   $ rdme openapi resolve [SPEC] [--out <value>] [--title <value>] [--working-directory <value>]
 
 ARGUMENTS
-  SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
-        subdirectories contain a single OpenAPI file, you can omit the path.
+  [SPEC]  A path to your API definition — either a local file path or a URL. If your working directory and all
+          subdirectories contain a single OpenAPI file, you can omit the path.
 
 FLAGS
   --out=<value>                Output file path to write resolved file to
@@ -185,18 +185,19 @@ Upload (or re-upload) your API definition to ReadMe.
 
 ```
 USAGE
-  $ rdme openapi upload [SPEC] --key <value> [--confirm-overwrite] [--slug <value>] [--title <value>]
+  $ rdme openapi upload [SPEC] --key <value> [--confirm-overwrite] [--dry-run] [--slug <value>] [--title <value>]
     [--useSpecVersion | --branch <value>] [--working-directory <value>]
 
 ARGUMENTS
-  SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
-        subdirectories contain a single OpenAPI file, you can omit the path.
+  [SPEC]  A path to your API definition — either a local file path or a URL. If your working directory and all
+          subdirectories contain a single OpenAPI file, you can omit the path.
 
 FLAGS
   --key=<value>                (required) ReadMe project API key
   --branch=<value>             [default: stable] ReadMe project version
   --confirm-overwrite          If set, file overwrites will be made without a confirmation prompt. This flag can be a
                                useful in automated environments where prompts cannot be responded to.
+  --dry-run                    Outputs what would be done, but does not actually upload anything.
   --slug=<value>               Override the slug (i.e., the unique identifier) for your API definition.
   --title=<value>              An override value for the `info.title` field in the API definition
   --useSpecVersion             Use the OpenAPI `info.version` field for your ReadMe project version
@@ -247,6 +248,11 @@ FLAG DESCRIPTIONS
 
     Defaults to `stable` (i.e., your main project version). This flag is mutually exclusive with `--useSpecVersion`.
 
+  --dry-run  Outputs what would be done, but does not actually upload anything.
+
+    If set, the command will output what would be done, but does not actually upload anything. This can be useful to
+    verify that the correct file will be uploaded and the correct branch will be used.
+
   --slug=<value>  Override the slug (i.e., the unique identifier) for your API definition.
 
     Allows you to override the slug (i.e., the unique identifier for your API definition resource in ReadMe) that's
@@ -270,8 +276,8 @@ USAGE
   $ rdme openapi validate [SPEC] [--github] [--working-directory <value>]
 
 ARGUMENTS
-  SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
-        subdirectories contain a single OpenAPI file, you can omit the path.
+  [SPEC]  A path to your API definition — either a local file path or a URL. If your working directory and all
+          subdirectories contain a single OpenAPI file, you can omit the path.
 
 FLAGS
   --github                     Create a new GitHub Actions workflow for this command.

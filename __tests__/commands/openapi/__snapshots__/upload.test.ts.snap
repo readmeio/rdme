@@ -65,6 +65,53 @@ exports[`rdme openapi upload > given that the "--legacy-id" flag is passed > sho
 }
 `;
 
+exports[`rdme openapi upload > given that the --dry-run flag is passed > should output the expected dry run result but not make the actual API request 1`] = `
+{
+  "result": undefined,
+  "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+ ›   Warning: The slug of your API Definition will be set to 
+ ›   __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This 
+ ›   slug is not visible to your end users. To set this slug to something else,
+ ›    use the \`--slug\` flag.
+",
+  "stdout": "--- Dry Run Result 🌵 ---
+File slug: __tests____fixtures__petstore-simple-weird-version.json
+Branch: 1.0.0
+Spec Type: OpenAPI
+Spec File Type: path
+Spec Path: __tests__/__fixtures__/petstore-simple-weird-version.json
+Spec Version: 1.2.3
+Send as YAML: false
+Overwrite Existing: No
+---------------------
+",
+}
+`;
+
+exports[`rdme openapi upload > given that the --dry-run flag is passed > should show Overwrite Existing: Yes when an existing API definition exists 1`] = `
+{
+  "result": undefined,
+  "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+ ›   Warning: The slug of your API Definition will be set to 
+ ›   __tests____fixtures__petstore-simple-weird-version.json in ReadMe. This 
+ ›   slug is not visible to your end users. To set this slug to something else,
+ ›    use the \`--slug\` flag.
+",
+  "stdout": "--- Dry Run Result 🌵 ---
+File slug: __tests____fixtures__petstore-simple-weird-version.json
+Branch: 1.0.0
+Spec Type: OpenAPI
+Spec File Type: path
+Spec Path: __tests__/__fixtures__/petstore-simple-weird-version.json
+Spec Version: 1.2.3
+Send as YAML: false
+Overwrite Existing: Yes
+Existing API Definitions: \`__tests____fixtures__petstore-simple-weird-version.json\`
+---------------------
+",
+}
+`;
+
 exports[`rdme openapi upload > given that the API definition is a URL > and the \`--slug\` flag is passed > should create a new API definition in ReadMe with a custom slug with YAML file extension where URL has no path and the file is YAML 1`] = `
 {
   "result": {

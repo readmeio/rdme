@@ -60,7 +60,13 @@ export function readPage(
   // by default, grayMatter maintains a buggy cache with the page data,
   // so we pass an empty object as second argument to avoid it entirely
   // (so far we've seen this issue crop up in tests)
-  const matter = grayMatter(rawFileContents, {});
+  const matter = grayMatter(rawFileContents, {
+    // disable the javascript engine, which is a built-in RCE
+    //
+    // * @see https://github.com/readmeio/rdme/security/advisories/GHSA-f65r-8r74-m6v5
+    // * @see https://github.com/jonschlinkert/gray-matter/issues/131#issuecomment-3566662412
+    engines: { javascript: { parse: () => ({}) } },
+  });
   const { content, data } = matter;
   this.debug(`frontmatter for ${filePath}: ${JSON.stringify(matter)}`);
 
