@@ -65,7 +65,7 @@ export function readPage(
     //
     // * @see https://github.com/readmeio/rdme/security/advisories/GHSA-f65r-8r74-m6v5
     // * @see https://github.com/jonschlinkert/gray-matter/issues/131#issuecomment-3566662412
-    // engines: { javascript: { parse: () => ({}) }, },
+    engines: { javascript: { parse: () => ({}) } },
   });
   const { content, data } = matter;
   this.debug(`frontmatter for ${filePath}: ${JSON.stringify(matter)}`);

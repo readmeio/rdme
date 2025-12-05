@@ -12,8 +12,8 @@ import DocsMigrateCommand from '../../src/commands/docs/migrate.js';
 import DocsUploadCommand from '../../src/commands/docs/upload.js';
 import RefUploadCommand from '../../src/commands/reference/upload.js';
 import { fix, writeFixes } from '../../src/lib/frontmatter.js';
-import { readPage } from '../../src/lib/readPage.js';
 import { emptyMappings, fetchSchema } from '../../src/lib/readmeAPIFetch.js';
+import { readPage } from '../../src/lib/readPage.js';
 import { setupOclifConfig } from '../helpers/oclif.js';
 
 describe.each([
