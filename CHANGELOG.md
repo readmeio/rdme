@@ -1,3 +1,10 @@
+## [9.2.3](https://github.com/readmeio/rdme/compare/v9.2.2...v9.2.3) (2025-12-05)
+
+
+### Bug Fixes
+
+* backporting fixes from v10 to v9 ([#1397](https://github.com/readmeio/rdme/issues/1397)) ([e767f79](https://github.com/readmeio/rdme/commit/e767f795414fab7812123e2aef8686dbb5be2e20))
+
 ## [9.2.2](https://github.com/readmeio/rdme/compare/v9.2.1...v9.2.2) (2025-07-08)
 
 
