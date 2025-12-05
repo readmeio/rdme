@@ -1,3 +1,10 @@
+# [10.6.0-next.1](https://github.com/readmeio/rdme/compare/v10.5.4-next.2...v10.6.0-next.1) (2025-12-05)
+
+
+### Features
+
+* add dry run flag to upload command ([#1394](https://github.com/readmeio/rdme/issues/1394)) ([558aa50](https://github.com/readmeio/rdme/commit/558aa507214745800bfb5602e59db3abf898adc4))
+
 ## [10.5.4-next.2](https://github.com/readmeio/rdme/compare/v10.5.4-next.1...v10.5.4-next.2) (2025-12-05)
 
 
