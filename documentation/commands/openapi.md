@@ -19,8 +19,8 @@ USAGE
   $ rdme openapi convert [SPEC] [--out <value>] [--title <value>] [--working-directory <value>]
 
 ARGUMENTS
-  SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
-        subdirectories contain a single OpenAPI file, you can omit the path.
+  [SPEC]  A path to your API definition — either a local file path or a URL. If your working directory and all
+          subdirectories contain a single OpenAPI file, you can omit the path.
 
 FLAGS
   --out=<value>                Output file path to write converted file to
@@ -57,8 +57,8 @@ USAGE
     |webhooks|xml|xmlRequests|xmlResponses|xmlSchemas|readme...] [--working-directory <value>]
 
 ARGUMENTS
-  SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
-        subdirectories contain a single OpenAPI file, you can omit the path.
+  [SPEC]  A path to your API definition — either a local file path or a URL. If your working directory and all
+          subdirectories contain a single OpenAPI file, you can omit the path.
 
 FLAGS
   --feature=<option>...
@@ -105,8 +105,8 @@ USAGE
     <value>] [--working-directory <value>]
 
 ARGUMENTS
-  SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
-        subdirectories contain a single OpenAPI file, you can omit the path.
+  [SPEC]  A path to your API definition — either a local file path or a URL. If your working directory and all
+          subdirectories contain a single OpenAPI file, you can omit the path.
 
 FLAGS
   --method=<value>...          Methods to reduce by (can only be used alongside the `path` option)
@@ -146,8 +146,8 @@ USAGE
   $ rdme openapi resolve [SPEC] [--out <value>] [--title <value>] [--working-directory <value>]
 
 ARGUMENTS
-  SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
-        subdirectories contain a single OpenAPI file, you can omit the path.
+  [SPEC]  A path to your API definition — either a local file path or a URL. If your working directory and all
+          subdirectories contain a single OpenAPI file, you can omit the path.
 
 FLAGS
   --out=<value>                Output file path to write resolved file to
@@ -189,8 +189,8 @@ USAGE
     [--useSpecVersion | --branch <value>] [--working-directory <value>]
 
 ARGUMENTS
-  SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
-        subdirectories contain a single OpenAPI file, you can omit the path.
+  [SPEC]  A path to your API definition — either a local file path or a URL. If your working directory and all
+          subdirectories contain a single OpenAPI file, you can omit the path.
 
 FLAGS
   --key=<value>                (required) ReadMe project API key
@@ -270,8 +270,8 @@ USAGE
   $ rdme openapi validate [SPEC] [--github] [--working-directory <value>]
 
 ARGUMENTS
-  SPEC  A path to your API definition — either a local file path or a URL. If your working directory and all
-        subdirectories contain a single OpenAPI file, you can omit the path.
+  [SPEC]  A path to your API definition — either a local file path or a URL. If your working directory and all
+          subdirectories contain a single OpenAPI file, you can omit the path.
 
 FLAGS
   --github                     Create a new GitHub Actions workflow for this command.
