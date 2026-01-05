@@ -93,7 +93,8 @@ describe(`rdme ${topic} upload`, () => {
       });
 
       it('should error out if a non-404 error is returned from the GET request', async () => {
-        const mock = getAPIv2Mock({ authorization }).get(`/${route}/some-slug`).reply(500);
+        // .times(4) accounts for initial request + 3 retries
+        const mock = getAPIv2Mock({ authorization }).get(`/${route}/some-slug`).times(4).reply(500);
 
         const result = await run([
           '__tests__/__fixtures__/changelog/slug-docs/new-doc-slug.md',
@@ -109,7 +110,8 @@ describe(`rdme ${topic} upload`, () => {
       });
 
       it('should error out if a non-404 error is returned from the GET request (with a json body)', async () => {
-        const mock = getAPIv2Mock({ authorization }).get(`/${route}/some-slug`).reply(500, {
+        // .times(4) accounts for initial request + 3 retries
+        const mock = getAPIv2Mock({ authorization }).get(`/${route}/some-slug`).times(4).reply(500, {
           title: 'bad request',
           detail: 'something went so so wrong',
           status: 500,
@@ -295,7 +297,8 @@ describe(`rdme ${topic} upload`, () => {
     });
 
     it('should error out if a non-404 error is returned from the GET request', async () => {
-      const mock = getAPIv2Mock({ authorization }).get(`/${route}/new-doc`).reply(500);
+      // .times(4) accounts for initial request + 3 retries
+      const mock = getAPIv2Mock({ authorization }).get(`/${route}/new-doc`).times(4).reply(500);
 
       const result = await run(['__tests__/__fixtures__/changelog/new-docs/new-doc.md', '--key', key]);
 
@@ -306,7 +309,8 @@ describe(`rdme ${topic} upload`, () => {
     });
 
     it('should error out if a non-404 error is returned from the GET request (with a json body)', async () => {
-      const mock = getAPIv2Mock({ authorization }).get(`/${route}/new-doc`).reply(500, {
+      // .times(4) accounts for initial request + 3 retries
+      const mock = getAPIv2Mock({ authorization }).get(`/${route}/new-doc`).times(4).reply(500, {
         title: 'bad request',
         detail: 'something went so so wrong',
         status: 500,
@@ -321,7 +325,8 @@ describe(`rdme ${topic} upload`, () => {
     });
 
     it('should not throw an error if `max-errors` flag is set to -1', async () => {
-      const mock = getAPIv2Mock({ authorization }).get(`/${route}/new-doc`).reply(500, {
+      // .times(4) accounts for initial request + 3 retries
+      const mock = getAPIv2Mock({ authorization }).get(`/${route}/new-doc`).times(4).reply(500, {
         title: 'bad request',
         detail: 'something went so so wrong',
         status: 500,
@@ -458,6 +463,7 @@ describe(`rdme ${topic} upload`, () => {
     });
 
     it('should handle a mix of creates and updates and failures and skipped files', async () => {
+      // Note: .times(4) on 500 responses accounts for initial request + 3 retries
       const mock = getAPIv2Mock({ authorization })
         .get(`/${route}/invalid-attributes`)
         .reply(404)
@@ -483,6 +489,7 @@ describe(`rdme ${topic} upload`, () => {
           title: 'This is the changelog title',
           content: { body: '\nBody\n' },
         })
+        .times(4)
         .reply(500, {})
         .get(`/${route}/simple-doc`)
         .reply(404)
@@ -491,6 +498,7 @@ describe(`rdme ${topic} upload`, () => {
           title: 'This is the changelog title',
           content: { body: '\nBody\n' },
         })
+        .times(4)
         .reply(500, {});
 
       const result = await run(['__tests__/__fixtures__/changelog/mixed-docs', '--key', key, '--skip-validation']);
@@ -502,6 +510,7 @@ describe(`rdme ${topic} upload`, () => {
     });
 
     it('should handle a mix of creates and updates and failures and skipped files and not error out with `max-errors` flag', async () => {
+      // Note: .times(4) on 500 responses accounts for initial request + 3 retries
       const mock = getAPIv2Mock({ authorization })
         .get(`/${route}/invalid-attributes`)
         .reply(404)
@@ -527,6 +536,7 @@ describe(`rdme ${topic} upload`, () => {
           title: 'This is the changelog title',
           content: { body: '\nBody\n' },
         })
+        .times(4)
         .reply(500, {})
         .get(`/${route}/simple-doc`)
         .reply(404)
@@ -535,6 +545,7 @@ describe(`rdme ${topic} upload`, () => {
           title: 'This is the changelog title',
           content: { body: '\nBody\n' },
         })
+        .times(4)
         .reply(500, {});
 
       const result = await run([
@@ -553,14 +564,17 @@ describe(`rdme ${topic} upload`, () => {
     });
 
     it('should handle a mix of creates and updates and failures and skipped files (dry run)', async () => {
+      // Note: .times(4) on 500 responses accounts for initial request + 3 retries
       const mock = getAPIv2Mock({ authorization })
         .get(`/${route}/invalid-attributes`)
         .reply(404)
         .get(`/${route}/legacy-flag`)
         .reply(200)
         .get(`/${route}/some-slug`)
+        .times(4)
         .reply(500)
         .get(`/${route}/simple-doc`)
+        .times(4)
         .reply(500);
 
       const result = await run([

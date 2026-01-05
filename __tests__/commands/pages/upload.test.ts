@@ -150,7 +150,8 @@ describe.each([
       });
 
       it('should error out if a non-404 error is returned from the GET request', async () => {
-        const mock = getAPIv2Mock({ authorization }).get(`/branches/stable/${route}/some-slug`).reply(500);
+        // .times(4) accounts for initial request + 3 retries
+        const mock = getAPIv2Mock({ authorization }).get(`/branches/stable/${route}/some-slug`).times(4).reply(500);
 
         const result = await run(['__tests__/__fixtures__/docs/slug-docs/new-doc-slug.md', '--key', key, '--dry-run']);
 
@@ -161,7 +162,8 @@ describe.each([
       });
 
       it('should error out if a non-404 error is returned from the GET request (with a json body)', async () => {
-        const mock = getAPIv2Mock({ authorization }).get(`/branches/stable/${route}/some-slug`).reply(500, {
+        // .times(4) accounts for initial request + 3 retries
+        const mock = getAPIv2Mock({ authorization }).get(`/branches/stable/${route}/some-slug`).times(4).reply(500, {
           title: 'bad request',
           detail: 'something went so so wrong',
           status: 500,
@@ -367,7 +369,8 @@ describe.each([
     });
 
     it('should error out if a non-404 error is returned from the GET request', async () => {
-      const mock = getAPIv2Mock({ authorization }).get(`/branches/stable/${route}/new-doc`).reply(500);
+      // .times(4) accounts for initial request + 3 retries
+      const mock = getAPIv2Mock({ authorization }).get(`/branches/stable/${route}/new-doc`).times(4).reply(500);
 
       const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key]);
 
@@ -378,7 +381,8 @@ describe.each([
     });
 
     it('should error out if a non-404 error is returned from the GET request (with a json body)', async () => {
-      const mock = getAPIv2Mock({ authorization }).get(`/branches/stable/${route}/new-doc`).reply(500, {
+      // .times(4) accounts for initial request + 3 retries
+      const mock = getAPIv2Mock({ authorization }).get(`/branches/stable/${route}/new-doc`).times(4).reply(500, {
         title: 'bad request',
         detail: 'something went so so wrong',
         status: 500,
@@ -393,7 +397,8 @@ describe.each([
     });
 
     it('should not throw an error if `max-errors` flag is set to -1', async () => {
-      const mock = getAPIv2Mock({ authorization }).get(`/branches/stable/${route}/new-doc`).reply(500, {
+      // .times(4) accounts for initial request + 3 retries
+      const mock = getAPIv2Mock({ authorization }).get(`/branches/stable/${route}/new-doc`).times(4).reply(500, {
         title: 'bad request',
         detail: 'something went so so wrong',
         status: 500,
@@ -573,6 +578,7 @@ describe.each([
     });
 
     it('should handle a mix of creates and updates and failures and skipped files', async () => {
+      // Note: .times(4) on 500 responses accounts for initial request + 3 retries
       const mock = getAPIv2Mock({ authorization })
         .get(`/branches/stable/${route}/invalid-attributes`)
         .reply(404)
@@ -602,6 +608,7 @@ describe.each([
           category: { uri: `/branches/stable/categories/${route}/some-category-uri` },
           content: { body: '\nBody\n' },
         })
+        .times(4)
         .reply(500, {})
         .get(`/branches/stable/${route}/simple-doc`)
         .reply(404)
@@ -610,6 +617,7 @@ describe.each([
           title: 'This is the document title',
           content: { body: '\nBody\n' },
         })
+        .times(4)
         .reply(500, {});
 
       const result = await run(['__tests__/__fixtures__/docs/mixed-docs', '--key', key, '--skip-validation']);
@@ -621,6 +629,7 @@ describe.each([
     });
 
     it('should handle a mix of creates and updates and failures and skipped files and not error out with `max-errors` flag', async () => {
+      // Note: .times(4) on 500 responses accounts for initial request + 3 retries
       const mock = getAPIv2Mock({ authorization })
         .get(`/branches/stable/${route}/invalid-attributes`)
         .reply(404)
@@ -650,6 +659,7 @@ describe.each([
           category: { uri: `/branches/stable/categories/${route}/some-category-uri` },
           content: { body: '\nBody\n' },
         })
+        .times(4)
         .reply(500, {})
         .get(`/branches/stable/${route}/simple-doc`)
         .reply(404)
@@ -658,6 +668,7 @@ describe.each([
           title: 'This is the document title',
           content: { body: '\nBody\n' },
         })
+        .times(4)
         .reply(500, {});
 
       const result = await run([
@@ -676,14 +687,17 @@ describe.each([
     });
 
     it('should handle a mix of creates and updates and failures and skipped files (dry run)', async () => {
+      // Note: .times(4) on 500 responses accounts for initial request + 3 retries
       const mock = getAPIv2Mock({ authorization })
         .get(`/branches/stable/${route}/invalid-attributes`)
         .reply(404)
         .get(`/branches/stable/${route}/legacy-category`)
         .reply(200)
         .get(`/branches/stable/${route}/some-slug`)
+        .times(4)
         .reply(500)
         .get(`/branches/stable/${route}/simple-doc`)
+        .times(4)
         .reply(500);
 
       const result = await run([

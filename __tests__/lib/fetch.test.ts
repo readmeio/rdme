@@ -5,8 +5,14 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import pkg from '../../package.json' with { type: 'json' };
 import DocsUploadCommand from '../../src/commands/docs/upload.js';
-import { cleanAPIv1Headers, fetchSchema, handleAPIv1Res, readmeAPIv1Fetch } from '../../src/lib/readmeAPIFetch.js';
-import { getAPIv1Mock } from '../helpers/get-api-mock.js';
+import {
+  cleanAPIv1Headers,
+  fetchSchema,
+  handleAPIv1Res,
+  readmeAPIv1Fetch,
+  readmeAPIv2Fetch,
+} from '../../src/lib/readmeAPIFetch.js';
+import { getAPIv1Mock, getAPIv2Mock } from '../helpers/get-api-mock.js';
 import { githubActionsEnv } from '../helpers/git-mock.js';
 import { setupOclifConfig } from '../helpers/oclif.js';
 
@@ -385,5 +391,88 @@ describe('#fetchSchema', () => {
     const schema = fetchSchema.call(command);
 
     expect(schema.type).toBe('object');
+  });
+});
+
+describe('#readmeAPIv2Fetch()', () => {
+  describe('retry logic', () => {
+    it('should retry on 5xx errors with exponential backoff', async () => {
+      const oclifConfig = await setupOclifConfig();
+      const command = new DocsUploadCommand([], oclifConfig);
+      // Silence debug output during tests
+      vi.spyOn(command, 'debug').mockImplementation(() => {});
+
+      // First two requests return 502, third succeeds
+      const mock = getAPIv2Mock()
+        .get('/test-retry')
+        .reply(502, 'Bad Gateway')
+        .get('/test-retry')
+        .reply(503, 'Service Unavailable')
+        .get('/test-retry')
+        .reply(200, { success: true });
+
+      const res = await readmeAPIv2Fetch.call(command, '/test-retry', { method: 'get' });
+
+      expect(res.status).toBe(200);
+      const body = await res.json();
+      expect(body).toStrictEqual({ success: true });
+
+      mock.done();
+    });
+
+    it('should return final response after exhausting all retries on persistent 5xx errors', async () => {
+      const oclifConfig = await setupOclifConfig();
+      const command = new DocsUploadCommand([], oclifConfig);
+      vi.spyOn(command, 'debug').mockImplementation(() => {});
+
+      // All requests return 502 (initial + 3 retries = 4 total)
+      const mock = getAPIv2Mock()
+        .get('/test-retry-fail')
+        .reply(502, 'Bad Gateway')
+        .get('/test-retry-fail')
+        .reply(502, 'Bad Gateway')
+        .get('/test-retry-fail')
+        .reply(502, 'Bad Gateway')
+        .get('/test-retry-fail')
+        .reply(502, 'Bad Gateway');
+
+      const res = await readmeAPIv2Fetch.call(command, '/test-retry-fail', { method: 'get' });
+
+      // After all retries exhausted, should return the final 502 response
+      expect(res.status).toBe(502);
+
+      mock.done();
+    });
+
+    it('should not retry on 4xx errors', async () => {
+      const oclifConfig = await setupOclifConfig();
+      const command = new DocsUploadCommand([], oclifConfig);
+      vi.spyOn(command, 'debug').mockImplementation(() => {});
+
+      // Single 404 request - should not retry
+      const mock = getAPIv2Mock().get('/test-no-retry').reply(404, { error: 'Not found' });
+
+      const res = await readmeAPIv2Fetch.call(command, '/test-no-retry', { method: 'get' });
+
+      expect(res.status).toBe(404);
+
+      mock.done();
+    });
+
+    it('should succeed on first attempt when no errors occur', async () => {
+      const oclifConfig = await setupOclifConfig();
+      const command = new DocsUploadCommand([], oclifConfig);
+      vi.spyOn(command, 'debug').mockImplementation(() => {});
+
+      const mock = getAPIv2Mock().get('/test-success').reply(200, { data: 'test' });
+
+      const res = await readmeAPIv2Fetch.call(command, '/test-success', { method: 'get' });
+
+      expect(res.status).toBe(200);
+      const body = await res.json();
+      expect(body).toStrictEqual({ data: 'test' });
+
+      mock.done();
+    });
   });
 });
