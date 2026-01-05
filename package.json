@@ -47,7 +47,7 @@
   },
   "type": "module",
   "dependencies": {
-    "@actions/core": "^1.6.0",
+    "@actions/core": "^2.0.1",
     "@oclif/core": "^4.0.29",
     "@oclif/plugin-autocomplete": "^3.2.39",
     "@oclif/plugin-help": "^6.2.35",
