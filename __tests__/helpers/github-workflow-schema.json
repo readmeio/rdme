@@ -608,7 +608,6 @@
           "then": { "required": ["options"] }
         }
       ],
-      "required": ["description"],
       "additionalProperties": false
     }
   },
