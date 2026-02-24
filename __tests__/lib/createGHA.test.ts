@@ -111,7 +111,7 @@ describe('#createGHA', () => {
         expect(fs.writeFileSync).toHaveBeenCalledWith(getGHAFileName(fileName), expect.any(String));
       });
 
-      // skipping because these mocks aren't playing nicely with oclif
+      // biome-ignore lint/suspicious/noSkippedTests: skipping because these mocks aren't playing nicely with oclif
       it.skip('should create workflow directory if it does not exist', async () => {
         expect.assertions(3);
 
@@ -170,7 +170,7 @@ describe('#createGHA', () => {
         expect(configstore.get(getConfigStoreKey(repoRoot))).toBe(await getMajorPkgVersion());
       });
 
-      // skipping because these mocks aren't playing nicely with oclif
+      // biome-ignore lint/suspicious/noSkippedTests: skipping because these mocks aren't playing nicely with oclif
       it.skip('should not run if not a repo', async () => {
         git.checkIsRepo = vi.fn(() => {
           return Promise.reject(new Error('not a repo')) as unknown as Response<boolean>;
@@ -187,7 +187,7 @@ describe('#createGHA', () => {
         return expect(res.successes[0].result).toBe('success!');
       });
 
-      // skipping because these mocks aren't playing nicely with oclif
+      // biome-ignore lint/suspicious/noSkippedTests: skipping because these mocks aren't playing nicely with oclif
       it.skip('should not run if a repo with no remote', async () => {
         git.remote = getGitRemoteMock('', '', '');
 
@@ -200,7 +200,7 @@ describe('#createGHA', () => {
         return expect(res.successes[0].result).toBe('success!');
       });
 
-      // skipping because these mocks aren't playing nicely with oclif
+      // biome-ignore lint/suspicious/noSkippedTests: skipping because these mocks aren't playing nicely with oclif
       it.skip('should not run if unable to connect to remote', async () => {
         git.remote = getGitRemoteMock('bad-remote', 'http://somebadurl.git');
 
@@ -257,7 +257,7 @@ describe('#createGHA', () => {
         delete process.env.TEST_RDME_NPM_SCRIPT;
       });
 
-      // skipping because these mocks aren't playing nicely with oclif
+      // biome-ignore lint/suspicious/noSkippedTests: skipping because these mocks aren't playing nicely with oclif
       it.skip('should not run if repo solely contains non-GitHub remotes', async () => {
         git.remote = getGitRemoteMock('origin', 'https://gitlab.com', 'main');
 

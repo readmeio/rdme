@@ -30,6 +30,9 @@
             "forceJsExtensions": true,
           },
         },
+
+        // This rule is flagging hundreds of false positives. https://github.com/biomejs/biome/issues/9143
+        "noUnresolvedImports": "off",
       },
 
       "style": {
@@ -59,6 +62,8 @@
          * instead of using console.info() or console.warn() statements.
          */
         "noConsole": "warn",
+
+        "noDeprecatedImports": "off",
       },
     },
   },
