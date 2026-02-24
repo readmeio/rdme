@@ -1,3 +1,10 @@
+## [10.6.2](https://github.com/readmeio/rdme/compare/v10.6.1...v10.6.2) (2026-02-24)
+
+
+### Bug Fixes
+
+* empty commit to trigger release ([9ccc6d8](https://github.com/readmeio/rdme/commit/9ccc6d862fa986508983971d5ab36963f4acdb85))
+
 ## [10.6.1](https://github.com/readmeio/rdme/compare/v10.6.0...v10.6.1) (2026-02-24)
 
 
