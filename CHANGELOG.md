@@ -1,3 +1,10 @@
+## [10.6.1](https://github.com/readmeio/rdme/compare/v10.6.0...v10.6.1) (2026-02-24)
+
+
+### Bug Fixes
+
+* **ci:** update release workflow for new npm publishing process ([74318ac](https://github.com/readmeio/rdme/commit/74318ac30877b8ab3b2248bc2278f44f1b976773))
+
 # [10.6.0](https://github.com/readmeio/rdme/compare/v10.5.3...v10.6.0) (2025-12-05)
 
 
