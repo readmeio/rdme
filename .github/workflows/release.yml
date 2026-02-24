@@ -6,6 +6,10 @@ on:
       - next
       - v9
 
+permissions:
+  id-token: write
+  contents: write
+
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
