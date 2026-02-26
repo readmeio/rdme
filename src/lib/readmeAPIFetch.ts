@@ -363,10 +363,8 @@ export async function readmeAPIv2Fetch<T extends Hook.Context = Hook.Context>(
       return res;
     } catch (e) {
       this.debug(`error making fetch request (attempt ${attempt + 1}/${MAX_RETRIES + 1}): ${e}`);
-      if (e instanceof Error && e.stack) {
-        this.debug(e.stack);
-      }
-      lastError = e instanceof Error ? e : new Error(String(e));
+      this.debug(e.stack);
+      lastError = e;
 
       // If we've exhausted all retries, throw the error
       if (attempt >= MAX_RETRIES) {
