@@ -3,6 +3,7 @@
 import type { ValueOf } from 'type-fest';
 
 import ChangelogUploadCommand from './commands/changelog/upload.js';
+import BranchCreateCommand from './commands/branch/create.js';
 import ChangelogsCommand from './commands/changelogs.js';
 import CustomPagesUploadCommand from './commands/custompages/upload.js';
 import DocsMigrateCommand from './commands/docs/migrate.js';
@@ -10,6 +11,7 @@ import DocsUploadCommand from './commands/docs/upload.js';
 import LoginCommand from './commands/login.js';
 import LogoutCommand from './commands/logout.js';
 import OpenAPIConvertCommand from './commands/openapi/convert.js';
+import OpenAPIDeleteCommand from './commands/openapi/delete.js';
 import OpenAPIInspectCommand from './commands/openapi/inspect.js';
 import OpenAPIReduceCommand from './commands/openapi/reduce.js';
 import OpenAPIResolveCommand from './commands/openapi/resolve.js';
@@ -34,6 +36,7 @@ export { default as prerun } from './lib/hooks/prerun.js';
  */
 export const COMMANDS = {
   'changelog:upload': ChangelogUploadCommand,
+  'branch:create': BranchCreateCommand,
 
   /**
    * @deprecated
@@ -49,6 +52,7 @@ export const COMMANDS = {
   logout: LogoutCommand,
 
   'openapi:convert': OpenAPIConvertCommand,
+  'openapi:delete': OpenAPIDeleteCommand,
   'openapi:inspect': OpenAPIInspectCommand,
   'openapi:reduce': OpenAPIReduceCommand,
   'openapi:resolve': OpenAPIResolveCommand,
