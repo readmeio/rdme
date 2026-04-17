@@ -93,7 +93,7 @@ describe(`rdme ${topic} upload`, () => {
       });
 
       it('should error out if a non-404 error is returned from the GET request', async () => {
-        const mock = getAPIv2Mock({ authorization }).get(`/${route}/some-slug`).reply(500);
+        const mock = getAPIv2Mock({ authorization }).get(`/${route}/some-slug`).times(3).reply(500);
 
         const result = await run([
           '__tests__/__fixtures__/changelog/slug-docs/new-doc-slug.md',
@@ -109,7 +109,7 @@ describe(`rdme ${topic} upload`, () => {
       });
 
       it('should error out if a non-404 error is returned from the GET request (with a json body)', async () => {
-        const mock = getAPIv2Mock({ authorization }).get(`/${route}/some-slug`).reply(500, {
+        const mock = getAPIv2Mock({ authorization }).get(`/${route}/some-slug`).times(3).reply(500, {
           title: 'bad request',
           detail: 'something went so so wrong',
           status: 500,
@@ -295,7 +295,7 @@ describe(`rdme ${topic} upload`, () => {
     });
 
     it('should error out if a non-404 error is returned from the GET request', async () => {
-      const mock = getAPIv2Mock({ authorization }).get(`/${route}/new-doc`).reply(500);
+      const mock = getAPIv2Mock({ authorization }).get(`/${route}/new-doc`).times(3).reply(500);
 
       const result = await run(['__tests__/__fixtures__/changelog/new-docs/new-doc.md', '--key', key]);
 
@@ -306,7 +306,7 @@ describe(`rdme ${topic} upload`, () => {
     });
 
     it('should error out if a non-404 error is returned from the GET request (with a json body)', async () => {
-      const mock = getAPIv2Mock({ authorization }).get(`/${route}/new-doc`).reply(500, {
+      const mock = getAPIv2Mock({ authorization }).get(`/${route}/new-doc`).times(3).reply(500, {
         title: 'bad request',
         detail: 'something went so so wrong',
         status: 500,
@@ -321,7 +321,7 @@ describe(`rdme ${topic} upload`, () => {
     });
 
     it('should not throw an error if `max-errors` flag is set to -1', async () => {
-      const mock = getAPIv2Mock({ authorization }).get(`/${route}/new-doc`).reply(500, {
+      const mock = getAPIv2Mock({ authorization }).get(`/${route}/new-doc`).times(3).reply(500, {
         title: 'bad request',
         detail: 'something went so so wrong',
         status: 500,
@@ -552,15 +552,17 @@ describe(`rdme ${topic} upload`, () => {
       mock.done();
     });
 
-    it('should handle a mix of creates and updates and failures and skipped files (dry run)', async () => {
+    it('should handle a mix of creates and updates and failures and skipped files (dry run)', { timeout: 30000 }, async () => {
       const mock = getAPIv2Mock({ authorization })
         .get(`/${route}/invalid-attributes`)
         .reply(404)
         .get(`/${route}/legacy-flag`)
         .reply(200)
         .get(`/${route}/some-slug`)
+        .times(3)
         .reply(500)
         .get(`/${route}/simple-doc`)
+        .times(3)
         .reply(500);
 
       const result = await run([

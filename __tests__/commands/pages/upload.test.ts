@@ -150,7 +150,7 @@ describe.each([
       });
 
       it('should error out if a non-404 error is returned from the GET request', async () => {
-        const mock = getAPIv2Mock({ authorization }).get(`/branches/stable/${route}/some-slug`).reply(500);
+        const mock = getAPIv2Mock({ authorization }).get(`/branches/stable/${route}/some-slug`).times(3).reply(500);
 
         const result = await run(['__tests__/__fixtures__/docs/slug-docs/new-doc-slug.md', '--key', key, '--dry-run']);
 
@@ -161,7 +161,7 @@ describe.each([
       });
 
       it('should error out if a non-404 error is returned from the GET request (with a json body)', async () => {
-        const mock = getAPIv2Mock({ authorization }).get(`/branches/stable/${route}/some-slug`).reply(500, {
+        const mock = getAPIv2Mock({ authorization }).get(`/branches/stable/${route}/some-slug`).times(3).reply(500, {
           title: 'bad request',
           detail: 'something went so so wrong',
           status: 500,
@@ -367,7 +367,7 @@ describe.each([
     });
 
     it('should error out if a non-404 error is returned from the GET request', async () => {
-      const mock = getAPIv2Mock({ authorization }).get(`/branches/stable/${route}/new-doc`).reply(500);
+      const mock = getAPIv2Mock({ authorization }).get(`/branches/stable/${route}/new-doc`).times(3).reply(500);
 
       const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key]);
 
@@ -378,7 +378,7 @@ describe.each([
     });
 
     it('should error out if a non-404 error is returned from the GET request (with a json body)', async () => {
-      const mock = getAPIv2Mock({ authorization }).get(`/branches/stable/${route}/new-doc`).reply(500, {
+      const mock = getAPIv2Mock({ authorization }).get(`/branches/stable/${route}/new-doc`).times(3).reply(500, {
         title: 'bad request',
         detail: 'something went so so wrong',
         status: 500,
@@ -393,7 +393,7 @@ describe.each([
     });
 
     it('should not throw an error if `max-errors` flag is set to -1', async () => {
-      const mock = getAPIv2Mock({ authorization }).get(`/branches/stable/${route}/new-doc`).reply(500, {
+      const mock = getAPIv2Mock({ authorization }).get(`/branches/stable/${route}/new-doc`).times(3).reply(500, {
         title: 'bad request',
         detail: 'something went so so wrong',
         status: 500,
@@ -675,15 +675,17 @@ describe.each([
       mock.done();
     });
 
-    it('should handle a mix of creates and updates and failures and skipped files (dry run)', async () => {
+    it('should handle a mix of creates and updates and failures and skipped files (dry run)', { timeout: 30000 }, async () => {
       const mock = getAPIv2Mock({ authorization })
         .get(`/branches/stable/${route}/invalid-attributes`)
         .reply(404)
         .get(`/branches/stable/${route}/legacy-category`)
         .reply(200)
         .get(`/branches/stable/${route}/some-slug`)
+        .times(3)
         .reply(500)
         .get(`/branches/stable/${route}/simple-doc`)
+        .times(3)
         .reply(500);
 
       const result = await run([

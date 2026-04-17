@@ -139,7 +139,7 @@ describe('custompages upload', () => {
       });
 
       it('should error out if a non-404 error is returned from the GET request', async () => {
-        const mock = getAPIv2Mock({ authorization }).get('/branches/stable/custom_pages/some-slug').reply(500);
+        const mock = getAPIv2Mock({ authorization }).get('/branches/stable/custom_pages/some-slug').times(3).reply(500);
 
         const result = await run([
           '__tests__/__fixtures__/custompages/slug-docs/new-doc-slug.md',
@@ -155,7 +155,7 @@ describe('custompages upload', () => {
       });
 
       it('should error out if a non-404 error is returned from the GET request (with a json body)', async () => {
-        const mock = getAPIv2Mock({ authorization }).get('/branches/stable/custom_pages/some-slug').reply(500, {
+        const mock = getAPIv2Mock({ authorization }).get('/branches/stable/custom_pages/some-slug').times(3).reply(500, {
           title: 'bad request',
           detail: 'something went so so wrong',
           status: 500,
@@ -338,7 +338,7 @@ describe('custompages upload', () => {
     });
 
     it('should error out if a non-404 error is returned from the GET request', async () => {
-      const mock = getAPIv2Mock({ authorization }).get('/branches/stable/custom_pages/new-doc').reply(500);
+      const mock = getAPIv2Mock({ authorization }).get('/branches/stable/custom_pages/new-doc').times(3).reply(500);
 
       const result = await run(['__tests__/__fixtures__/custompages/new-docs/new-doc.md', '--key', key]);
 
@@ -349,7 +349,7 @@ describe('custompages upload', () => {
     });
 
     it('should error out if a non-404 error is returned from the GET request (with a json body)', async () => {
-      const mock = getAPIv2Mock({ authorization }).get('/branches/stable/custom_pages/new-doc').reply(500, {
+      const mock = getAPIv2Mock({ authorization }).get('/branches/stable/custom_pages/new-doc').times(3).reply(500, {
         title: 'bad request',
         detail: 'something went so so wrong',
         status: 500,
@@ -364,7 +364,7 @@ describe('custompages upload', () => {
     });
 
     it('should not throw an error if `max-errors` flag is set to -1', async () => {
-      const mock = getAPIv2Mock({ authorization }).get('/branches/stable/custom_pages/new-doc').reply(500, {
+      const mock = getAPIv2Mock({ authorization }).get('/branches/stable/custom_pages/new-doc').times(3).reply(500, {
         title: 'bad request',
         detail: 'something went so so wrong',
         status: 500,
@@ -622,15 +622,17 @@ describe('custompages upload', () => {
       mock.done();
     });
 
-    it('should handle a mix of creates and updates and failures and skipped files (dry run)', async () => {
+    it('should handle a mix of creates and updates and failures and skipped files (dry run)', { timeout: 30000 }, async () => {
       const mock = getAPIv2Mock({ authorization })
         .get('/branches/stable/custom_pages/invalid-attributes')
         .reply(404)
         .get('/branches/stable/custom_pages/legacy-page')
         .reply(200)
         .get('/branches/stable/custom_pages/some-slug')
+        .times(3)
         .reply(500)
         .get('/branches/stable/custom_pages/simple-doc')
+        .times(3)
         .reply(500);
 
       const result = await run([
