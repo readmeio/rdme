@@ -55,7 +55,7 @@ describe.each([
         })
         .reply(201, {});
 
-      const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key]);
+      const result = await run(['test/__fixtures__/docs/new-docs/new-doc.md', '--key', key]);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -75,7 +75,7 @@ describe.each([
         })
         .reply(201, {});
 
-      const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key, '--branch', '1.2.3']);
+      const result = await run(['test/__fixtures__/docs/new-docs/new-doc.md', '--key', key, '--branch', '1.2.3']);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -95,7 +95,7 @@ describe.each([
         })
         .reply(201, {});
 
-      const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key, '--version', '4.5.6']);
+      const result = await run(['test/__fixtures__/docs/new-docs/new-doc.md', '--key', key, '--version', '4.5.6']);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -115,7 +115,7 @@ describe.each([
         })
         .reply(201, '<>yikes</>', { 'content-type': 'application/json' });
 
-      const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key]);
+      const result = await run(['test/__fixtures__/docs/new-docs/new-doc.md', '--key', key]);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -127,7 +127,7 @@ describe.each([
       it('should not create anything in ReadMe', async () => {
         const mock = getAPIv2Mock({ authorization }).get(`/branches/stable/${route}/new-doc`).reply(404);
 
-        const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key, '--dry-run']);
+        const result = await run(['test/__fixtures__/docs/new-docs/new-doc.md', '--key', key, '--dry-run']);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -138,7 +138,7 @@ describe.each([
       it('should not update anything in ReadMe', async () => {
         const mock = getAPIv2Mock({ authorization }).get(`/branches/stable/${route}/some-slug`).reply(200);
 
-        const result = await run(['__tests__/__fixtures__/docs/slug-docs/new-doc-slug.md', '--key', key, '--dry-run']);
+        const result = await run(['test/__fixtures__/docs/slug-docs/new-doc-slug.md', '--key', key, '--dry-run']);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -149,7 +149,7 @@ describe.each([
       it('should error out if a non-404 error is returned from the GET request', async () => {
         const mock = getAPIv2Mock({ authorization }).get(`/branches/stable/${route}/some-slug`).reply(500);
 
-        const result = await run(['__tests__/__fixtures__/docs/slug-docs/new-doc-slug.md', '--key', key, '--dry-run']);
+        const result = await run(['test/__fixtures__/docs/slug-docs/new-doc-slug.md', '--key', key, '--dry-run']);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -164,7 +164,7 @@ describe.each([
           status: 500,
         });
 
-        const result = await run(['__tests__/__fixtures__/docs/slug-docs/new-doc-slug.md', '--key', key, '--dry-run']);
+        const result = await run(['test/__fixtures__/docs/slug-docs/new-doc-slug.md', '--key', key, '--dry-run']);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -186,7 +186,7 @@ describe.each([
           })
           .reply(201, {});
 
-        const result = await run(['__tests__/__fixtures__/docs/slug-docs/new-doc-slug.md', '--key', key]);
+        const result = await run(['test/__fixtures__/docs/slug-docs/new-doc-slug.md', '--key', key]);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -205,7 +205,7 @@ describe.each([
           })
           .reply(201, {});
 
-        const result = await run(['__tests__/__fixtures__/docs/slug-docs/new-doc-slug.md', '--key', key]);
+        const result = await run(['test/__fixtures__/docs/slug-docs/new-doc-slug.md', '--key', key]);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -218,11 +218,11 @@ describe.each([
       it('should fix the frontmatter issues in the file', async () => {
         prompts.inject([true]);
 
-        const result = await run(['__tests__/__fixtures__/docs/mixed-docs/legacy-category.md', '--key', key]);
+        const result = await run(['test/__fixtures__/docs/mixed-docs/legacy-category.md', '--key', key]);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).toHaveBeenCalledWith(
-          '__tests__/__fixtures__/docs/mixed-docs/legacy-category.md',
+          'test/__fixtures__/docs/mixed-docs/legacy-category.md',
           expect.stringContaining('uri: uri-that-does-not-map-to-5ae122e10fdf4e39bb34db6f'),
           { encoding: 'utf-8' },
         );
@@ -239,11 +239,11 @@ describe.each([
 
         prompts.inject([true]);
 
-        const result = await run(['__tests__/__fixtures__/docs/mixed-docs/legacy-category.md', '--key', key]);
+        const result = await run(['test/__fixtures__/docs/mixed-docs/legacy-category.md', '--key', key]);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).toHaveBeenCalledWith(
-          '__tests__/__fixtures__/docs/mixed-docs/legacy-category.md',
+          'test/__fixtures__/docs/mixed-docs/legacy-category.md',
           expect.stringContaining('uri: mapped-uri'),
           { encoding: 'utf-8' },
         );
@@ -254,7 +254,7 @@ describe.each([
       it('should exit if the user declines to fix the issues', async () => {
         prompts.inject([false]);
 
-        const result = await run(['__tests__/__fixtures__/docs/mixed-docs/legacy-category.md', '--key', key]);
+        const result = await run(['test/__fixtures__/docs/mixed-docs/legacy-category.md', '--key', key]);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -273,7 +273,7 @@ describe.each([
           .reply(400, { title: 'bad request', detail: 'your category is whack' });
 
         const result = await run([
-          '__tests__/__fixtures__/docs/mixed-docs/legacy-category.md',
+          'test/__fixtures__/docs/mixed-docs/legacy-category.md',
           '--key',
           key,
           '--skip-validation',
@@ -300,7 +300,7 @@ describe.each([
           })
           .reply(201, {});
 
-        const result = await run(['__tests__/__fixtures__/docs/mixed-docs/invalid-attributes.md', '--key', key]);
+        const result = await run(['test/__fixtures__/docs/mixed-docs/invalid-attributes.md', '--key', key]);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -320,7 +320,7 @@ describe.each([
         const postMock = getAPIv2MockForGHA({
           authorization,
           'x-readme-source-url':
-            'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/__tests__/__fixtures__/docs/new-docs/new-doc.md',
+            'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/test/__fixtures__/docs/new-docs/new-doc.md',
         })
           .post(`/branches/stable/${route}`, {
             category: { uri: `/branches/stable/categories/${route}/category-slug` },
@@ -330,7 +330,7 @@ describe.each([
           })
           .reply(201, {});
 
-        const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key]);
+        const result = await run(['test/__fixtures__/docs/new-docs/new-doc.md', '--key', key]);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -340,7 +340,7 @@ describe.each([
       });
 
       it('should error out if the file has validation errors', async () => {
-        const result = await run(['__tests__/__fixtures__/docs/mixed-docs/legacy-category.md', '--key', key]);
+        const result = await run(['test/__fixtures__/docs/mixed-docs/legacy-category.md', '--key', key]);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -348,7 +348,7 @@ describe.each([
 
       it('should bypass prompt if `--confirm-autofixes` flag is passed', async () => {
         const result = await run([
-          '__tests__/__fixtures__/docs/mixed-docs/legacy-category.md',
+          'test/__fixtures__/docs/mixed-docs/legacy-category.md',
           '--key',
           key,
           '--confirm-autofixes',
@@ -356,7 +356,7 @@ describe.each([
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).toHaveBeenCalledWith(
-          '__tests__/__fixtures__/docs/mixed-docs/legacy-category.md',
+          'test/__fixtures__/docs/mixed-docs/legacy-category.md',
           expect.stringContaining('uri: uri-that-does-not-map-to-5ae122e10fdf4e39bb34db6f'),
           { encoding: 'utf-8' },
         );
@@ -366,7 +366,7 @@ describe.each([
     it('should error out if a non-404 error is returned from the GET request', async () => {
       const mock = getAPIv2Mock({ authorization }).get(`/branches/stable/${route}/new-doc`).reply(500);
 
-      const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key]);
+      const result = await run(['test/__fixtures__/docs/new-docs/new-doc.md', '--key', key]);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -381,7 +381,7 @@ describe.each([
         status: 500,
       });
 
-      const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key]);
+      const result = await run(['test/__fixtures__/docs/new-docs/new-doc.md', '--key', key]);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -396,7 +396,7 @@ describe.each([
         status: 500,
       });
 
-      const result = await run(['__tests__/__fixtures__/docs/new-docs/new-doc.md', '--key', key, '--max-errors', '-1']);
+      const result = await run(['test/__fixtures__/docs/new-docs/new-doc.md', '--key', key, '--max-errors', '-1']);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -440,7 +440,7 @@ describe.each([
         })
         .reply(201, {});
 
-      const result = await run([`__tests__/__fixtures__/${topic}/existing-docs`, '--key', key]);
+      const result = await run([`test/__fixtures__/${topic}/existing-docs`, '--key', key]);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -466,7 +466,7 @@ describe.each([
         })
         .reply(201, {});
 
-      const result = await run([`__tests__/__fixtures__/${topic}/existing-docs`, '--key', key]);
+      const result = await run([`test/__fixtures__/${topic}/existing-docs`, '--key', key]);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -499,7 +499,7 @@ describe.each([
         })
         .reply(201, {});
 
-      const result = await run(['__tests__/__fixtures__/docs/complex-frontmatter', '--key', key]);
+      const result = await run(['test/__fixtures__/docs/complex-frontmatter', '--key', key]);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -545,7 +545,7 @@ describe.each([
           })
           .reply(201, {});
 
-        const result = await run(['__tests__/__fixtures__/docs/multiple-docs', '--key', key]);
+        const result = await run(['test/__fixtures__/docs/multiple-docs', '--key', key]);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -555,7 +555,7 @@ describe.each([
     });
 
     it('should error out if the directory does not contain any Markdown files', async () => {
-      const result = await run(['__tests__/__fixtures__/ref-oas', '--key', key]);
+      const result = await run(['test/__fixtures__/ref-oas', '--key', key]);
 
       expect(result).toMatchSnapshot();
     });
@@ -563,7 +563,7 @@ describe.each([
     it('should handle a mix of valid and invalid and autofixable files', async () => {
       prompts.inject([true]);
 
-      const result = await run(['__tests__/__fixtures__/docs/mixed-docs', '--key', key]);
+      const result = await run(['test/__fixtures__/docs/mixed-docs', '--key', key]);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).toHaveBeenCalledTimes(5);
@@ -609,7 +609,7 @@ describe.each([
         })
         .reply(500, {});
 
-      const result = await run(['__tests__/__fixtures__/docs/mixed-docs', '--key', key, '--skip-validation']);
+      const result = await run(['test/__fixtures__/docs/mixed-docs', '--key', key, '--skip-validation']);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -658,7 +658,7 @@ describe.each([
         .reply(500, {});
 
       const result = await run([
-        '__tests__/__fixtures__/docs/mixed-docs',
+        'test/__fixtures__/docs/mixed-docs',
         '--key',
         key,
         '--max-errors',
@@ -683,13 +683,7 @@ describe.each([
         .get(`/branches/stable/${route}/simple-doc`)
         .reply(500);
 
-      const result = await run([
-        '__tests__/__fixtures__/docs/mixed-docs',
-        '--key',
-        key,
-        '--dry-run',
-        '--skip-validation',
-      ]);
+      const result = await run(['test/__fixtures__/docs/mixed-docs', '--key', key, '--dry-run', '--skip-validation']);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();

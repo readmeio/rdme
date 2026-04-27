@@ -5,19 +5,19 @@ exports[`custompages upload > given that the file path is a directory > should c
   "result": {
     "created": [
       {
-        "filePath": "__tests__/__fixtures__/custompages/existing-docs/simple-doc.md",
+        "filePath": "test/__fixtures__/custompages/existing-docs/simple-doc.md",
         "response": {},
         "result": "created",
         "slug": "simple-doc",
       },
       {
-        "filePath": "__tests__/__fixtures__/custompages/existing-docs/subdir/another-doc.md",
+        "filePath": "test/__fixtures__/custompages/existing-docs/subdir/another-doc.md",
         "response": {},
         "result": "created",
         "slug": "another-doc",
       },
       {
-        "filePath": "__tests__/__fixtures__/custompages/existing-docs/subdir/html-file.html",
+        "filePath": "test/__fixtures__/custompages/existing-docs/subdir/html-file.html",
         "response": {},
         "result": "created",
         "slug": "html-file",
@@ -27,26 +27,26 @@ exports[`custompages upload > given that the file path is a directory > should c
     "skipped": [],
     "updated": [],
   },
-  "stderr": "- 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/existing-docs\` directory...
-✔ 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/existing-docs\` directory... 3 file(s) found!
+  "stderr": "- 🔍 Looking for Markdown and/or HTML files in the \`test/__fixtures__/custompages/existing-docs\` directory...
+✔ 🔍 Looking for Markdown and/or HTML files in the \`test/__fixtures__/custompages/existing-docs\` directory... 3 file(s) found!
 - 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
 - 🚀 Uploading files to ReadMe...
 ✔ 🚀 Uploading files to ReadMe... done!
 ",
   "stdout": "🌱 Successfully created 3 page(s) in ReadMe:
-   - simple-doc (__tests__/__fixtures__/custompages/existing-docs/simple-doc.md)
-   - another-doc (__tests__/__fixtures__/custompages/existing-docs/subdir/another-doc.md)
-   - html-file (__tests__/__fixtures__/custompages/existing-docs/subdir/html-file.html)
+   - simple-doc (test/__fixtures__/custompages/existing-docs/simple-doc.md)
+   - another-doc (test/__fixtures__/custompages/existing-docs/subdir/another-doc.md)
+   - html-file (test/__fixtures__/custompages/existing-docs/subdir/html-file.html)
 ",
 }
 `;
 
 exports[`custompages upload > given that the file path is a directory > should error out if the directory does not contain any Markdown or HTML files 1`] = `
 {
-  "error": [Error: The directory you provided (__tests__/__fixtures__/ref-oas) doesn't contain any of the following file extensions: .markdown, .md, .mdx, .html.],
-  "stderr": "- 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/ref-oas\` directory...
-✖ 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/ref-oas\` directory... no files found.
+  "error": [Error: The directory you provided (test/__fixtures__/ref-oas) doesn't contain any of the following file extensions: .markdown, .md, .mdx, .html.],
+  "stderr": "- 🔍 Looking for Markdown and/or HTML files in the \`test/__fixtures__/ref-oas\` directory...
+✖ 🔍 Looking for Markdown and/or HTML files in the \`test/__fixtures__/ref-oas\` directory... no files found.
 ",
   "stdout": "",
 }
@@ -55,22 +55,22 @@ exports[`custompages upload > given that the file path is a directory > should e
 exports[`custompages upload > given that the file path is a directory > should handle a mix of creates and updates and failures and skipped files (dry run) 1`] = `
 {
   "error": [AggregateError: Multiple dry runs failed. To see more detailed errors for a page, run \`rdme custompages upload <path-to-page.md>\` --dry-run.],
-  "stderr": "- 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/mixed-docs\` directory...
-✔ 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/mixed-docs\` directory... 5 file(s) found!
+  "stderr": "- 🔍 Looking for Markdown and/or HTML files in the \`test/__fixtures__/custompages/mixed-docs\` directory...
+✔ 🔍 Looking for Markdown and/or HTML files in the \`test/__fixtures__/custompages/mixed-docs\` directory... 5 file(s) found!
  ›   Warning: Skipping pre-upload validation of the Markdown file(s). This is 
  ›   not recommended.
 - 🎭 Uploading files to ReadMe (but not really because it's a dry run)...
 ✖ 🎭 Uploading files to ReadMe (but not really because it's a dry run)... 2 file(s) failed.
 ",
   "stdout": "🌱 The following 1 page(s) do not currently exist in ReadMe and will be created:
-   - invalid-attributes (__tests__/__fixtures__/custompages/mixed-docs/invalid-attributes.md)
+   - invalid-attributes (test/__fixtures__/custompages/mixed-docs/invalid-attributes.md)
 🔄 The following 1 page(s) already exist in ReadMe and will be updated:
-   - legacy-page (__tests__/__fixtures__/custompages/mixed-docs/legacy-page.md)
+   - legacy-page (test/__fixtures__/custompages/mixed-docs/legacy-page.md)
 ⏭️ The following 1 page(s) will be skipped due to no frontmatter data:
-   - doc-sans-attributes (__tests__/__fixtures__/custompages/mixed-docs/doc-sans-attributes.md)
+   - doc-sans-attributes (test/__fixtures__/custompages/mixed-docs/doc-sans-attributes.md)
 🚨 Unable to fetch data about the following 2 page(s):
-   - __tests__/__fixtures__/custompages/mixed-docs/new-doc-slug.mdx: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
-   - __tests__/__fixtures__/custompages/mixed-docs/simple-doc.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+   - test/__fixtures__/custompages/mixed-docs/new-doc-slug.mdx: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+   - test/__fixtures__/custompages/mixed-docs/simple-doc.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
 ",
 }
 `;
@@ -78,22 +78,22 @@ exports[`custompages upload > given that the file path is a directory > should h
 exports[`custompages upload > given that the file path is a directory > should handle a mix of creates and updates and failures and skipped files 1`] = `
 {
   "error": [AggregateError: Multiple page uploads failed. To see more detailed errors for a page, run \`rdme custompages upload <path-to-page.md>\`.],
-  "stderr": "- 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/mixed-docs\` directory...
-✔ 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/mixed-docs\` directory... 5 file(s) found!
+  "stderr": "- 🔍 Looking for Markdown and/or HTML files in the \`test/__fixtures__/custompages/mixed-docs\` directory...
+✔ 🔍 Looking for Markdown and/or HTML files in the \`test/__fixtures__/custompages/mixed-docs\` directory... 5 file(s) found!
  ›   Warning: Skipping pre-upload validation of the Markdown file(s). This is 
  ›   not recommended.
 - 🚀 Uploading files to ReadMe...
 ✖ 🚀 Uploading files to ReadMe... 2 file(s) failed.
 ",
   "stdout": "🌱 Successfully created 1 page(s) in ReadMe:
-   - invalid-attributes (__tests__/__fixtures__/custompages/mixed-docs/invalid-attributes.md)
+   - invalid-attributes (test/__fixtures__/custompages/mixed-docs/invalid-attributes.md)
 🔄 Successfully updated 1 page(s) in ReadMe:
-   - legacy-page (__tests__/__fixtures__/custompages/mixed-docs/legacy-page.md)
+   - legacy-page (test/__fixtures__/custompages/mixed-docs/legacy-page.md)
 ⏭️ Skipped 1 page(s) in ReadMe due to no frontmatter data:
-   - doc-sans-attributes (__tests__/__fixtures__/custompages/mixed-docs/doc-sans-attributes.md)
+   - doc-sans-attributes (test/__fixtures__/custompages/mixed-docs/doc-sans-attributes.md)
 🚨 Received errors when attempting to upload 2 page(s):
-   - __tests__/__fixtures__/custompages/mixed-docs/new-doc-slug.mdx: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
-   - __tests__/__fixtures__/custompages/mixed-docs/simple-doc.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+   - test/__fixtures__/custompages/mixed-docs/new-doc-slug.mdx: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+   - test/__fixtures__/custompages/mixed-docs/simple-doc.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
 ",
 }
 `;
@@ -103,7 +103,7 @@ exports[`custompages upload > given that the file path is a directory > should h
   "result": {
     "created": [
       {
-        "filePath": "__tests__/__fixtures__/custompages/mixed-docs/invalid-attributes.md",
+        "filePath": "test/__fixtures__/custompages/mixed-docs/invalid-attributes.md",
         "response": {},
         "result": "created",
         "slug": "invalid-attributes",
@@ -112,49 +112,49 @@ exports[`custompages upload > given that the file path is a directory > should h
     "failed": [
       {
         "error": [APIv2Error: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
-        "filePath": "__tests__/__fixtures__/custompages/mixed-docs/new-doc-slug.mdx",
+        "filePath": "test/__fixtures__/custompages/mixed-docs/new-doc-slug.mdx",
         "result": "failed",
         "slug": "some-slug",
       },
       {
         "error": [APIv2Error: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
-        "filePath": "__tests__/__fixtures__/custompages/mixed-docs/simple-doc.md",
+        "filePath": "test/__fixtures__/custompages/mixed-docs/simple-doc.md",
         "result": "failed",
         "slug": "simple-doc",
       },
     ],
     "skipped": [
       {
-        "filePath": "__tests__/__fixtures__/custompages/mixed-docs/doc-sans-attributes.md",
+        "filePath": "test/__fixtures__/custompages/mixed-docs/doc-sans-attributes.md",
         "result": "skipped",
         "slug": "doc-sans-attributes",
       },
     ],
     "updated": [
       {
-        "filePath": "__tests__/__fixtures__/custompages/mixed-docs/legacy-page.md",
+        "filePath": "test/__fixtures__/custompages/mixed-docs/legacy-page.md",
         "response": {},
         "result": "updated",
         "slug": "legacy-page",
       },
     ],
   },
-  "stderr": "- 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/mixed-docs\` directory...
-✔ 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/mixed-docs\` directory... 5 file(s) found!
+  "stderr": "- 🔍 Looking for Markdown and/or HTML files in the \`test/__fixtures__/custompages/mixed-docs\` directory...
+✔ 🔍 Looking for Markdown and/or HTML files in the \`test/__fixtures__/custompages/mixed-docs\` directory... 5 file(s) found!
  ›   Warning: Skipping pre-upload validation of the Markdown file(s). This is 
  ›   not recommended.
 - 🚀 Uploading files to ReadMe...
 ✖ 🚀 Uploading files to ReadMe... 2 file(s) failed.
 ",
   "stdout": "🌱 Successfully created 1 page(s) in ReadMe:
-   - invalid-attributes (__tests__/__fixtures__/custompages/mixed-docs/invalid-attributes.md)
+   - invalid-attributes (test/__fixtures__/custompages/mixed-docs/invalid-attributes.md)
 🔄 Successfully updated 1 page(s) in ReadMe:
-   - legacy-page (__tests__/__fixtures__/custompages/mixed-docs/legacy-page.md)
+   - legacy-page (test/__fixtures__/custompages/mixed-docs/legacy-page.md)
 ⏭️ Skipped 1 page(s) in ReadMe due to no frontmatter data:
-   - doc-sans-attributes (__tests__/__fixtures__/custompages/mixed-docs/doc-sans-attributes.md)
+   - doc-sans-attributes (test/__fixtures__/custompages/mixed-docs/doc-sans-attributes.md)
 🚨 Received errors when attempting to upload 2 page(s):
-   - __tests__/__fixtures__/custompages/mixed-docs/new-doc-slug.mdx: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
-   - __tests__/__fixtures__/custompages/mixed-docs/simple-doc.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+   - test/__fixtures__/custompages/mixed-docs/new-doc-slug.mdx: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+   - test/__fixtures__/custompages/mixed-docs/simple-doc.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
 ",
 }
 `;
@@ -166,35 +166,35 @@ exports[`custompages upload > given that the file path is a directory > should h
     "failed": [],
     "skipped": [
       {
-        "filePath": "__tests__/__fixtures__/custompages/mixed-docs/doc-sans-attributes.md",
+        "filePath": "test/__fixtures__/custompages/mixed-docs/doc-sans-attributes.md",
         "result": "skipped",
         "slug": "doc-sans-attributes",
       },
       {
-        "filePath": "__tests__/__fixtures__/custompages/mixed-docs/invalid-attributes.md",
+        "filePath": "test/__fixtures__/custompages/mixed-docs/invalid-attributes.md",
         "result": "skipped",
         "slug": "invalid-attributes",
       },
       {
-        "filePath": "__tests__/__fixtures__/custompages/mixed-docs/legacy-page.md",
+        "filePath": "test/__fixtures__/custompages/mixed-docs/legacy-page.md",
         "result": "skipped",
         "slug": "legacy-page",
       },
       {
-        "filePath": "__tests__/__fixtures__/custompages/mixed-docs/new-doc-slug.mdx",
+        "filePath": "test/__fixtures__/custompages/mixed-docs/new-doc-slug.mdx",
         "result": "skipped",
         "slug": "some-slug",
       },
       {
-        "filePath": "__tests__/__fixtures__/custompages/mixed-docs/simple-doc.md",
+        "filePath": "test/__fixtures__/custompages/mixed-docs/simple-doc.md",
         "result": "skipped",
         "slug": "simple-doc",
       },
     ],
     "updated": [],
   },
-  "stderr": "- 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/mixed-docs\` directory...
-✔ 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/mixed-docs\` directory... 5 file(s) found!
+  "stderr": "- 🔍 Looking for Markdown and/or HTML files in the \`test/__fixtures__/custompages/mixed-docs\` directory...
+✔ 🔍 Looking for Markdown and/or HTML files in the \`test/__fixtures__/custompages/mixed-docs\` directory... 5 file(s) found!
 - 🔬 Validating frontmatter data...
 ⚠ 🔬 Validating frontmatter data... issues found in 2 file(s).
  ›   Warning: 1 file(s) have issues that cannot be fixed automatically. 
@@ -202,11 +202,11 @@ exports[`custompages upload > given that the file path is a directory > should h
  ›   these issues as well. Please get in touch with us at support@readme.io if 
  ›   you need a hand.
 ",
-  "stdout": "=== BEGIN writeFileSync to file: __tests__/__fixtures__/custompages/mixed-docs/doc-sans-attributes.md ===
+  "stdout": "=== BEGIN writeFileSync to file: test/__fixtures__/custompages/mixed-docs/doc-sans-attributes.md ===
 Body
 
-=== END writeFileSync to file: __tests__/__fixtures__/custompages/mixed-docs/doc-sans-attributes.md ===
-=== BEGIN writeFileSync to file: __tests__/__fixtures__/custompages/mixed-docs/invalid-attributes.md ===
+=== END writeFileSync to file: test/__fixtures__/custompages/mixed-docs/doc-sans-attributes.md ===
+=== BEGIN writeFileSync to file: test/__fixtures__/custompages/mixed-docs/invalid-attributes.md ===
 ---
 title: This is the document title
 appearance:
@@ -215,8 +215,8 @@ appearance:
 
 Body
 
-=== END writeFileSync to file: __tests__/__fixtures__/custompages/mixed-docs/invalid-attributes.md ===
-=== BEGIN writeFileSync to file: __tests__/__fixtures__/custompages/mixed-docs/legacy-page.md ===
+=== END writeFileSync to file: test/__fixtures__/custompages/mixed-docs/invalid-attributes.md ===
+=== BEGIN writeFileSync to file: test/__fixtures__/custompages/mixed-docs/legacy-page.md ===
 ---
 title: This is the document title
 privacy:
@@ -227,8 +227,8 @@ appearance:
 
 Body
 
-=== END writeFileSync to file: __tests__/__fixtures__/custompages/mixed-docs/legacy-page.md ===
-=== BEGIN writeFileSync to file: __tests__/__fixtures__/custompages/mixed-docs/new-doc-slug.mdx ===
+=== END writeFileSync to file: test/__fixtures__/custompages/mixed-docs/legacy-page.md ===
+=== BEGIN writeFileSync to file: test/__fixtures__/custompages/mixed-docs/new-doc-slug.mdx ===
 ---
 title: This is the document title
 slug: some-slug
@@ -236,17 +236,17 @@ slug: some-slug
 
 Body
 
-=== END writeFileSync to file: __tests__/__fixtures__/custompages/mixed-docs/new-doc-slug.mdx ===
-=== BEGIN writeFileSync to file: __tests__/__fixtures__/custompages/mixed-docs/simple-doc.md ===
+=== END writeFileSync to file: test/__fixtures__/custompages/mixed-docs/new-doc-slug.mdx ===
+=== BEGIN writeFileSync to file: test/__fixtures__/custompages/mixed-docs/simple-doc.md ===
 ---
 title: This is the document title
 ---
 
 Body
 
-=== END writeFileSync to file: __tests__/__fixtures__/custompages/mixed-docs/simple-doc.md ===
+=== END writeFileSync to file: test/__fixtures__/custompages/mixed-docs/simple-doc.md ===
 ✅ The following files have been automatically fixed:
-- __tests__/__fixtures__/custompages/mixed-docs/legacy-page.md (2 issues)
+- test/__fixtures__/custompages/mixed-docs/legacy-page.md (2 issues)
 
 Please review the changes. Once everything looks good, re-run \`rdme custompages upload\` to upload these files to ReadMe.
 ",
@@ -261,29 +261,29 @@ exports[`custompages upload > given that the file path is a directory > should h
     "skipped": [],
     "updated": [
       {
-        "filePath": "__tests__/__fixtures__/custompages/complex-frontmatter/basic.md",
+        "filePath": "test/__fixtures__/custompages/complex-frontmatter/basic.md",
         "response": {},
         "result": "updated",
         "slug": "basic",
       },
       {
-        "filePath": "__tests__/__fixtures__/custompages/complex-frontmatter/complex.md",
+        "filePath": "test/__fixtures__/custompages/complex-frontmatter/complex.md",
         "response": {},
         "result": "updated",
         "slug": "complex",
       },
     ],
   },
-  "stderr": "- 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/complex-frontmatter\` directory...
-✔ 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/complex-frontmatter\` directory... 2 file(s) found!
+  "stderr": "- 🔍 Looking for Markdown and/or HTML files in the \`test/__fixtures__/custompages/complex-frontmatter\` directory...
+✔ 🔍 Looking for Markdown and/or HTML files in the \`test/__fixtures__/custompages/complex-frontmatter\` directory... 2 file(s) found!
 - 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
 - 🚀 Uploading files to ReadMe...
 ✔ 🚀 Uploading files to ReadMe... done!
 ",
   "stdout": "🔄 Successfully updated 2 page(s) in ReadMe:
-   - basic (__tests__/__fixtures__/custompages/complex-frontmatter/basic.md)
-   - complex (__tests__/__fixtures__/custompages/complex-frontmatter/complex.md)
+   - basic (test/__fixtures__/custompages/complex-frontmatter/basic.md)
+   - complex (test/__fixtures__/custompages/complex-frontmatter/complex.md)
 ",
 }
 `;
@@ -296,36 +296,36 @@ exports[`custompages upload > given that the file path is a directory > should u
     "skipped": [],
     "updated": [
       {
-        "filePath": "__tests__/__fixtures__/custompages/existing-docs/simple-doc.md",
+        "filePath": "test/__fixtures__/custompages/existing-docs/simple-doc.md",
         "response": {},
         "result": "updated",
         "slug": "simple-doc",
       },
       {
-        "filePath": "__tests__/__fixtures__/custompages/existing-docs/subdir/another-doc.md",
+        "filePath": "test/__fixtures__/custompages/existing-docs/subdir/another-doc.md",
         "response": {},
         "result": "updated",
         "slug": "another-doc",
       },
       {
-        "filePath": "__tests__/__fixtures__/custompages/existing-docs/subdir/html-file.html",
+        "filePath": "test/__fixtures__/custompages/existing-docs/subdir/html-file.html",
         "response": {},
         "result": "updated",
         "slug": "html-file",
       },
     ],
   },
-  "stderr": "- 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/existing-docs\` directory...
-✔ 🔍 Looking for Markdown and/or HTML files in the \`__tests__/__fixtures__/custompages/existing-docs\` directory... 3 file(s) found!
+  "stderr": "- 🔍 Looking for Markdown and/or HTML files in the \`test/__fixtures__/custompages/existing-docs\` directory...
+✔ 🔍 Looking for Markdown and/or HTML files in the \`test/__fixtures__/custompages/existing-docs\` directory... 3 file(s) found!
 - 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
 - 🚀 Uploading files to ReadMe...
 ✔ 🚀 Uploading files to ReadMe... done!
 ",
   "stdout": "🔄 Successfully updated 3 page(s) in ReadMe:
-   - simple-doc (__tests__/__fixtures__/custompages/existing-docs/simple-doc.md)
-   - another-doc (__tests__/__fixtures__/custompages/existing-docs/subdir/another-doc.md)
-   - html-file (__tests__/__fixtures__/custompages/existing-docs/subdir/html-file.html)
+   - simple-doc (test/__fixtures__/custompages/existing-docs/simple-doc.md)
+   - another-doc (test/__fixtures__/custompages/existing-docs/subdir/another-doc.md)
+   - html-file (test/__fixtures__/custompages/existing-docs/subdir/html-file.html)
 ",
 }
 `;
@@ -337,7 +337,7 @@ exports[`custompages upload > given that the file path is a single file > and th
     "failed": [],
     "skipped": [
       {
-        "filePath": "__tests__/__fixtures__/custompages/mixed-docs/legacy-page.md",
+        "filePath": "test/__fixtures__/custompages/mixed-docs/legacy-page.md",
         "result": "skipped",
         "slug": "legacy-page",
       },
@@ -348,7 +348,7 @@ exports[`custompages upload > given that the file path is a single file > and th
 ⚠ 🔬 Validating frontmatter data... issues found in 1 file(s).
 ",
   "stdout": "Automatically fixing issues in 1 file(s)...
-=== BEGIN writeFileSync to file: __tests__/__fixtures__/custompages/mixed-docs/legacy-page.md ===
+=== BEGIN writeFileSync to file: test/__fixtures__/custompages/mixed-docs/legacy-page.md ===
 ---
 title: This is the document title
 privacy:
@@ -359,9 +359,9 @@ appearance:
 
 Body
 
-=== END writeFileSync to file: __tests__/__fixtures__/custompages/mixed-docs/legacy-page.md ===
+=== END writeFileSync to file: test/__fixtures__/custompages/mixed-docs/legacy-page.md ===
 ✅ The following files have been automatically fixed:
-- __tests__/__fixtures__/custompages/mixed-docs/legacy-page.md (2 issues)
+- test/__fixtures__/custompages/mixed-docs/legacy-page.md (2 issues)
 
 Please review the changes. Once everything looks good, re-run \`rdme custompages upload\` to upload these files to ReadMe.
 ",
@@ -373,7 +373,7 @@ exports[`custompages upload > given that the file path is a single file > and th
   "result": {
     "created": [
       {
-        "filePath": "__tests__/__fixtures__/custompages/new-docs/new-doc.md",
+        "filePath": "test/__fixtures__/custompages/new-docs/new-doc.md",
         "response": {},
         "result": "created",
         "slug": "new-doc",
@@ -389,14 +389,14 @@ exports[`custompages upload > given that the file path is a single file > and th
 ✔ 🚀 Uploading files to ReadMe... done!
 ",
   "stdout": "🌱 Successfully created 1 page(s) in ReadMe:
-   - new-doc (__tests__/__fixtures__/custompages/new-docs/new-doc.md)
+   - new-doc (test/__fixtures__/custompages/new-docs/new-doc.md)
 ",
 }
 `;
 
 exports[`custompages upload > given that the file path is a single file > and the command is being run in a CI environment > should error out if the file has validation errors 1`] = `
 {
-  "error": [Error: 1 file(s) have issues that should be fixed before uploading to ReadMe. Please run \`rdme custompages upload __tests__/__fixtures__/custompages/mixed-docs/legacy-page.md --dry-run\` in a non-CI environment to fix them.],
+  "error": [Error: 1 file(s) have issues that should be fixed before uploading to ReadMe. Please run \`rdme custompages upload test/__fixtures__/custompages/mixed-docs/legacy-page.md --dry-run\` in a non-CI environment to fix them.],
   "stderr": "- 🔬 Validating frontmatter data...
 ⚠ 🔬 Validating frontmatter data... issues found in 1 file(s).
 ",
@@ -415,7 +415,7 @@ something went so so wrong],
 ✖ 🎭 Uploading files to ReadMe (but not really because it's a dry run)... 1 file(s) failed.
 ",
   "stdout": "🚨 Unable to fetch data about the following 1 page(s):
-   - __tests__/__fixtures__/custompages/slug-docs/new-doc-slug.md: bad request
+   - test/__fixtures__/custompages/slug-docs/new-doc-slug.md: bad request
 ",
 }
 `;
@@ -429,7 +429,7 @@ exports[`custompages upload > given that the file path is a single file > given 
 ✖ 🎭 Uploading files to ReadMe (but not really because it's a dry run)... 1 file(s) failed.
 ",
   "stdout": "🚨 Unable to fetch data about the following 1 page(s):
-   - __tests__/__fixtures__/custompages/slug-docs/new-doc-slug.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+   - test/__fixtures__/custompages/slug-docs/new-doc-slug.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
 ",
 }
 `;
@@ -439,7 +439,7 @@ exports[`custompages upload > given that the file path is a single file > given 
   "result": {
     "created": [
       {
-        "filePath": "__tests__/__fixtures__/custompages/new-docs/new-doc.md",
+        "filePath": "test/__fixtures__/custompages/new-docs/new-doc.md",
         "response": null,
         "result": "created",
         "slug": "new-doc",
@@ -455,7 +455,7 @@ exports[`custompages upload > given that the file path is a single file > given 
 ✔ 🎭 Uploading files to ReadMe (but not really because it's a dry run)... done!
 ",
   "stdout": "🌱 The following 1 page(s) do not currently exist in ReadMe and will be created:
-   - new-doc (__tests__/__fixtures__/custompages/new-docs/new-doc.md)
+   - new-doc (test/__fixtures__/custompages/new-docs/new-doc.md)
 ",
 }
 `;
@@ -468,7 +468,7 @@ exports[`custompages upload > given that the file path is a single file > given 
     "skipped": [],
     "updated": [
       {
-        "filePath": "__tests__/__fixtures__/custompages/slug-docs/new-doc-slug.md",
+        "filePath": "test/__fixtures__/custompages/slug-docs/new-doc-slug.md",
         "response": null,
         "result": "updated",
         "slug": "some-slug",
@@ -481,7 +481,7 @@ exports[`custompages upload > given that the file path is a single file > given 
 ✔ 🎭 Uploading files to ReadMe (but not really because it's a dry run)... done!
 ",
   "stdout": "🔄 The following 1 page(s) already exist in ReadMe and will be updated:
-   - some-slug (__tests__/__fixtures__/custompages/slug-docs/new-doc-slug.md)
+   - some-slug (test/__fixtures__/custompages/slug-docs/new-doc-slug.md)
 ",
 }
 `;
@@ -503,7 +503,7 @@ exports[`custompages upload > given that the file path is a single file > given 
     "failed": [],
     "skipped": [
       {
-        "filePath": "__tests__/__fixtures__/custompages/mixed-docs/legacy-page.md",
+        "filePath": "test/__fixtures__/custompages/mixed-docs/legacy-page.md",
         "result": "skipped",
         "slug": "legacy-page",
       },
@@ -513,7 +513,7 @@ exports[`custompages upload > given that the file path is a single file > given 
   "stderr": "- 🔬 Validating frontmatter data...
 ⚠ 🔬 Validating frontmatter data... issues found in 1 file(s).
 ",
-  "stdout": "=== BEGIN writeFileSync to file: __tests__/__fixtures__/custompages/mixed-docs/legacy-page.md ===
+  "stdout": "=== BEGIN writeFileSync to file: test/__fixtures__/custompages/mixed-docs/legacy-page.md ===
 ---
 title: This is the document title
 privacy:
@@ -524,9 +524,9 @@ appearance:
 
 Body
 
-=== END writeFileSync to file: __tests__/__fixtures__/custompages/mixed-docs/legacy-page.md ===
+=== END writeFileSync to file: test/__fixtures__/custompages/mixed-docs/legacy-page.md ===
 ✅ The following files have been automatically fixed:
-- __tests__/__fixtures__/custompages/mixed-docs/legacy-page.md (2 issues)
+- test/__fixtures__/custompages/mixed-docs/legacy-page.md (2 issues)
 
 Please review the changes. Once everything looks good, re-run \`rdme custompages upload\` to upload these files to ReadMe.
 ",
@@ -544,7 +544,7 @@ your metadata is whack],
 ✖ 🚀 Uploading files to ReadMe... 1 file(s) failed.
 ",
   "stdout": "🚨 Received errors when attempting to upload 1 page(s):
-   - __tests__/__fixtures__/custompages/mixed-docs/legacy-page.md: bad request
+   - test/__fixtures__/custompages/mixed-docs/legacy-page.md: bad request
 ",
 }
 `;
@@ -554,7 +554,7 @@ exports[`custompages upload > given that the file path is a single file > given 
   "result": {
     "created": [
       {
-        "filePath": "__tests__/__fixtures__/custompages/mixed-docs/invalid-attributes.md",
+        "filePath": "test/__fixtures__/custompages/mixed-docs/invalid-attributes.md",
         "response": {},
         "result": "created",
         "slug": "invalid-attributes",
@@ -573,7 +573,7 @@ exports[`custompages upload > given that the file path is a single file > given 
 ✔ 🚀 Uploading files to ReadMe... done!
 ",
   "stdout": "🌱 Successfully created 1 page(s) in ReadMe:
-   - invalid-attributes (__tests__/__fixtures__/custompages/mixed-docs/invalid-attributes.md)
+   - invalid-attributes (test/__fixtures__/custompages/mixed-docs/invalid-attributes.md)
 ",
 }
 `;
@@ -583,7 +583,7 @@ exports[`custompages upload > given that the file path is a single file > given 
   "result": {
     "created": [
       {
-        "filePath": "__tests__/__fixtures__/custompages/slug-docs/new-doc-slug.md",
+        "filePath": "test/__fixtures__/custompages/slug-docs/new-doc-slug.md",
         "response": {},
         "result": "created",
         "slug": "some-slug",
@@ -599,7 +599,7 @@ exports[`custompages upload > given that the file path is a single file > given 
 ✔ 🚀 Uploading files to ReadMe... done!
 ",
   "stdout": "🌱 Successfully created 1 page(s) in ReadMe:
-   - some-slug (__tests__/__fixtures__/custompages/slug-docs/new-doc-slug.md)
+   - some-slug (test/__fixtures__/custompages/slug-docs/new-doc-slug.md)
 ",
 }
 `;
@@ -612,7 +612,7 @@ exports[`custompages upload > given that the file path is a single file > given 
     "skipped": [],
     "updated": [
       {
-        "filePath": "__tests__/__fixtures__/custompages/slug-docs/new-doc-slug.md",
+        "filePath": "test/__fixtures__/custompages/slug-docs/new-doc-slug.md",
         "response": {},
         "result": "updated",
         "slug": "some-slug",
@@ -625,7 +625,7 @@ exports[`custompages upload > given that the file path is a single file > given 
 ✔ 🚀 Uploading files to ReadMe... done!
 ",
   "stdout": "🔄 Successfully updated 1 page(s) in ReadMe:
-   - some-slug (__tests__/__fixtures__/custompages/slug-docs/new-doc-slug.md)
+   - some-slug (test/__fixtures__/custompages/slug-docs/new-doc-slug.md)
 ",
 }
 `;
@@ -635,7 +635,7 @@ exports[`custompages upload > given that the file path is a single file > should
   "result": {
     "created": [
       {
-        "filePath": "__tests__/__fixtures__/custompages/new-docs/new-doc.md",
+        "filePath": "test/__fixtures__/custompages/new-docs/new-doc.md",
         "response": {},
         "result": "created",
         "slug": "new-doc",
@@ -651,7 +651,7 @@ exports[`custompages upload > given that the file path is a single file > should
 ✔ 🚀 Uploading files to ReadMe... done!
 ",
   "stdout": "🌱 Successfully created 1 page(s) in ReadMe:
-   - new-doc (__tests__/__fixtures__/custompages/new-docs/new-doc.md)
+   - new-doc (test/__fixtures__/custompages/new-docs/new-doc.md)
 ",
 }
 `;
@@ -661,7 +661,7 @@ exports[`custompages upload > given that the file path is a single file > should
   "result": {
     "created": [
       {
-        "filePath": "__tests__/__fixtures__/custompages/new-docs/new-doc.md",
+        "filePath": "test/__fixtures__/custompages/new-docs/new-doc.md",
         "response": {},
         "result": "created",
         "slug": "new-doc",
@@ -678,7 +678,7 @@ exports[`custompages upload > given that the file path is a single file > should
 ✔ 🚀 Uploading files to ReadMe... done!
 ",
   "stdout": "🌱 Successfully created 1 page(s) in ReadMe:
-   - new-doc (__tests__/__fixtures__/custompages/new-docs/new-doc.md)
+   - new-doc (test/__fixtures__/custompages/new-docs/new-doc.md)
 ",
 }
 `;
@@ -688,7 +688,7 @@ exports[`custompages upload > given that the file path is a single file > should
   "result": {
     "created": [
       {
-        "filePath": "__tests__/__fixtures__/custompages/new-docs/new-doc.md",
+        "filePath": "test/__fixtures__/custompages/new-docs/new-doc.md",
         "response": {},
         "result": "created",
         "slug": "new-doc",
@@ -704,7 +704,7 @@ exports[`custompages upload > given that the file path is a single file > should
 ✔ 🚀 Uploading files to ReadMe... done!
 ",
   "stdout": "🌱 Successfully created 1 page(s) in ReadMe:
-   - new-doc (__tests__/__fixtures__/custompages/new-docs/new-doc.md)
+   - new-doc (test/__fixtures__/custompages/new-docs/new-doc.md)
 ",
 }
 `;
@@ -720,7 +720,7 @@ something went so so wrong],
 ✖ 🚀 Uploading files to ReadMe... 1 file(s) failed.
 ",
   "stdout": "🚨 Received errors when attempting to upload 1 page(s):
-   - __tests__/__fixtures__/custompages/new-docs/new-doc.md: bad request
+   - test/__fixtures__/custompages/new-docs/new-doc.md: bad request
 ",
 }
 `;
@@ -734,7 +734,7 @@ exports[`custompages upload > given that the file path is a single file > should
 ✖ 🚀 Uploading files to ReadMe... 1 file(s) failed.
 ",
   "stdout": "🚨 Received errors when attempting to upload 1 page(s):
-   - __tests__/__fixtures__/custompages/new-docs/new-doc.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+   - test/__fixtures__/custompages/new-docs/new-doc.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
 ",
 }
 `;
@@ -764,7 +764,7 @@ exports[`custompages upload > given that the file path is a single file > should
         "error": [APIv2Error: ReadMe API error: bad request
 
 something went so so wrong],
-        "filePath": "__tests__/__fixtures__/custompages/new-docs/new-doc.md",
+        "filePath": "test/__fixtures__/custompages/new-docs/new-doc.md",
         "result": "failed",
         "slug": "new-doc",
       },
@@ -778,7 +778,7 @@ something went so so wrong],
 ✖ 🚀 Uploading files to ReadMe... 1 file(s) failed.
 ",
   "stdout": "🚨 Received errors when attempting to upload 1 page(s):
-   - __tests__/__fixtures__/custompages/new-docs/new-doc.md: bad request
+   - test/__fixtures__/custompages/new-docs/new-doc.md: bad request
 ",
 }
 `;

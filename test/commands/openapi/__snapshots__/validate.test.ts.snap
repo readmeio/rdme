@@ -12,8 +12,8 @@ See more help with --help],
 
 exports[`rdme openapi validate > CI tests > should successfully validate prompt and not run GHA onboarding 1`] = `
 {
-  "result": "__tests__/__fixtures__/petstore-simple-weird-version.json is a valid OpenAPI API definition!",
-  "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+  "result": "test/__fixtures__/petstore-simple-weird-version.json is a valid OpenAPI API definition!",
+  "stderr": "- Validating the API definition located at test/__fixtures__/petstore-simple-weird-version.json...
 ",
   "stdout": "",
 }
@@ -28,9 +28,9 @@ Almost done! Push your newly created file (.github/workflows/validate-test-opt-s
 
 🦉 If you have any more questions, feel free to drop us a line! support@readme.io
 ",
-  "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+  "stderr": "- Validating the API definition located at test/__fixtures__/petstore-simple-weird-version.json...
 ",
-  "stdout": "__tests__/__fixtures__/petstore-simple-weird-version.json is a valid OpenAPI API definition!
+  "stdout": "test/__fixtures__/petstore-simple-weird-version.json is a valid OpenAPI API definition!
 
 🚀 Let's get you set up with GitHub Actions! 🚀
 
@@ -61,7 +61,7 @@ jobs:
       - name: Run \`openapi validate\` command 🚀
         uses: readmeio/rdme@v7
         with:
-          rdme: openapi validate __tests__/__fixtures__/petstore-simple-weird-version.json
+          rdme: openapi validate test/__fixtures__/petstore-simple-weird-version.json
 "
 `;
 
@@ -111,7 +111,7 @@ jobs:
       - name: Run \`openapi validate\` command 🚀
         uses: readmeio/rdme@v7
         with:
-          rdme: openapi validate petstore.json --working-directory=./__tests__/__fixtures__/relative-ref-oas
+          rdme: openapi validate petstore.json --working-directory=./test/__fixtures__/relative-ref-oas
 "
 `;
 
@@ -124,9 +124,9 @@ Almost done! Push your newly created file (.github/workflows/validate-test-opt-s
 
 🦉 If you have any more questions, feel free to drop us a line! support@readme.io
 ",
-  "stderr": "- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+  "stderr": "- Validating the API definition located at test/__fixtures__/petstore-simple-weird-version.json...
 ",
-  "stdout": "__tests__/__fixtures__/petstore-simple-weird-version.json is a valid OpenAPI API definition!
+  "stdout": "test/__fixtures__/petstore-simple-weird-version.json is a valid OpenAPI API definition!
 
 🐙 Looks like you're running this command in a GitHub Repository! 🐙
 
@@ -161,7 +161,7 @@ jobs:
       - name: Run \`openapi validate\` command 🚀
         uses: readmeio/rdme@v7
         with:
-          rdme: openapi validate __tests__/__fixtures__/petstore-simple-weird-version.json
+          rdme: openapi validate test/__fixtures__/petstore-simple-weird-version.json
 "
 `;
 
@@ -175,9 +175,9 @@ Almost done! Push your newly created file (.github/workflows/validate-test-file.
 🦉 If you have any more questions, feel free to drop us a line! support@readme.io
 ",
   "stderr": "- Looking for API definitions...
-- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+- Validating the API definition located at test/__fixtures__/petstore-simple-weird-version.json...
 ",
-  "stdout": "__tests__/__fixtures__/petstore-simple-weird-version.json is a valid OpenAPI API definition!
+  "stdout": "test/__fixtures__/petstore-simple-weird-version.json is a valid OpenAPI API definition!
 
 🐙 Looks like you're running this command in a GitHub Repository! 🐙
 
@@ -212,7 +212,7 @@ jobs:
       - name: Run \`openapi validate\` command 🚀
         uses: readmeio/rdme@v7
         with:
-          rdme: openapi validate __tests__/__fixtures__/petstore-simple-weird-version.json
+          rdme: openapi validate test/__fixtures__/petstore-simple-weird-version.json
 "
 `;
 
@@ -220,9 +220,9 @@ exports[`rdme openapi validate > GHA onboarding E2E tests > should reject if use
 {
   "error": [Error: GitHub Actions workflow creation cancelled. If you ever change your mind, you can run this command again with the \`--github\` flag.],
   "stderr": "- Looking for API definitions...
-- Validating the API definition located at __tests__/__fixtures__/petstore-simple-weird-version.json...
+- Validating the API definition located at test/__fixtures__/petstore-simple-weird-version.json...
 ",
-  "stdout": "__tests__/__fixtures__/petstore-simple-weird-version.json is a valid OpenAPI API definition!
+  "stdout": "test/__fixtures__/petstore-simple-weird-version.json is a valid OpenAPI API definition!
 
 🐙 Looks like you're running this command in a GitHub Repository! 🐙
 
@@ -257,8 +257,8 @@ ADDITIONAL PROPERTY must NOT have additional properties
   27 |           "pet"
   28 |         ],
   29 |         "summary": "Finds Pets by status",],
-  "stderr": "- Validating the API definition located at ./__tests__/__fixtures__/very-invalid-oas.json...
-✖ Validating the API definition located at ./__tests__/__fixtures__/very-invalid-oas.json...
+  "stderr": "- Validating the API definition located at ./test/__fixtures__/very-invalid-oas.json...
+✖ Validating the API definition located at ./test/__fixtures__/very-invalid-oas.json...
 ",
   "stdout": "",
 }
@@ -269,8 +269,8 @@ exports[`rdme openapi validate > error handling > should throw an error if an in
   "error": [ValidationError: API definition schema validation failed.
 
 Missing $ref pointer "#/components/schemas/Error". Token "Error" does not exist.],
-  "stderr": "- Validating the API definition located at ./__tests__/__fixtures__/invalid-oas.json...
-✖ Validating the API definition located at ./__tests__/__fixtures__/invalid-oas.json...
+  "stderr": "- Validating the API definition located at ./test/__fixtures__/invalid-oas.json...
+✖ Validating the API definition located at ./test/__fixtures__/invalid-oas.json...
 ",
   "stdout": "",
 }
@@ -289,8 +289,8 @@ REQUIRED must have required property 'name'
   27 |         "type": "mutualTLS"
   28 |       }
   29 |     }],
-  "stderr": "- Validating the API definition located at ./__tests__/__fixtures__/invalid-oas-3.1.json...
-✖ Validating the API definition located at ./__tests__/__fixtures__/invalid-oas-3.1.json...
+  "stderr": "- Validating the API definition located at ./test/__fixtures__/invalid-oas-3.1.json...
+✖ Validating the API definition located at ./test/__fixtures__/invalid-oas-3.1.json...
 ",
   "stdout": "",
 }
@@ -309,8 +309,8 @@ ADDITIONAL PROPERTY must NOT have additional properties
   26 |       }
   27 |     }
   28 |   ],],
-  "stderr": "- Validating the API definition located at ./__tests__/__fixtures__/invalid-swagger.json...
-✖ Validating the API definition located at ./__tests__/__fixtures__/invalid-swagger.json...
+  "stderr": "- Validating the API definition located at ./test/__fixtures__/invalid-swagger.json...
+✖ Validating the API definition located at ./test/__fixtures__/invalid-swagger.json...
 ",
   "stdout": "",
 }
@@ -319,8 +319,8 @@ ADDITIONAL PROPERTY must NOT have additional properties
 exports[`rdme openapi validate > error handling > should throw an error if invalid JSON is supplied 1`] = `
 {
   "error": [SyntaxError: Unexpected end of JSON input],
-  "stderr": "- Validating the API definition located at ./__tests__/__fixtures__/invalid-json/yikes.json...
-✖ Validating the API definition located at ./__tests__/__fixtures__/invalid-json/yikes.json...
+  "stderr": "- Validating the API definition located at ./test/__fixtures__/invalid-json/yikes.json...
+✖ Validating the API definition located at ./test/__fixtures__/invalid-json/yikes.json...
 ",
   "stdout": "",
 }

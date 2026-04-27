@@ -5,13 +5,13 @@ exports[`rdme changelog upload > given that the file path is a directory > shoul
   "result": {
     "created": [
       {
-        "filePath": "__tests__/__fixtures__/changelog/existing-docs/simple-doc.md",
+        "filePath": "test/__fixtures__/changelog/existing-docs/simple-doc.md",
         "response": {},
         "result": "created",
         "slug": "simple-doc",
       },
       {
-        "filePath": "__tests__/__fixtures__/changelog/existing-docs/subdir/another-doc.md",
+        "filePath": "test/__fixtures__/changelog/existing-docs/subdir/another-doc.md",
         "response": {},
         "result": "created",
         "slug": "another-doc",
@@ -21,25 +21,25 @@ exports[`rdme changelog upload > given that the file path is a directory > shoul
     "skipped": [],
     "updated": [],
   },
-  "stderr": "- 🔍 Looking for Markdown files in the \`__tests__/__fixtures__/changelog/existing-docs\` directory...
-✔ 🔍 Looking for Markdown files in the \`__tests__/__fixtures__/changelog/existing-docs\` directory... 2 file(s) found!
+  "stderr": "- 🔍 Looking for Markdown files in the \`test/__fixtures__/changelog/existing-docs\` directory...
+✔ 🔍 Looking for Markdown files in the \`test/__fixtures__/changelog/existing-docs\` directory... 2 file(s) found!
 - 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
 - 🚀 Uploading files to ReadMe...
 ✔ 🚀 Uploading files to ReadMe... done!
 ",
   "stdout": "🌱 Successfully created 2 page(s) in ReadMe:
-   - simple-doc (__tests__/__fixtures__/changelog/existing-docs/simple-doc.md)
-   - another-doc (__tests__/__fixtures__/changelog/existing-docs/subdir/another-doc.md)
+   - simple-doc (test/__fixtures__/changelog/existing-docs/simple-doc.md)
+   - another-doc (test/__fixtures__/changelog/existing-docs/subdir/another-doc.md)
 ",
 }
 `;
 
 exports[`rdme changelog upload > given that the file path is a directory > should error out if the directory does not contain any Markdown files 1`] = `
 {
-  "error": [Error: The directory you provided (__tests__/__fixtures__/ref-oas) doesn't contain any of the following file extensions: .markdown, .md, .mdx.],
-  "stderr": "- 🔍 Looking for Markdown files in the \`__tests__/__fixtures__/ref-oas\` directory...
-✖ 🔍 Looking for Markdown files in the \`__tests__/__fixtures__/ref-oas\` directory... no files found.
+  "error": [Error: The directory you provided (test/__fixtures__/ref-oas) doesn't contain any of the following file extensions: .markdown, .md, .mdx.],
+  "stderr": "- 🔍 Looking for Markdown files in the \`test/__fixtures__/ref-oas\` directory...
+✖ 🔍 Looking for Markdown files in the \`test/__fixtures__/ref-oas\` directory... no files found.
 ",
   "stdout": "",
 }
@@ -48,22 +48,22 @@ exports[`rdme changelog upload > given that the file path is a directory > shoul
 exports[`rdme changelog upload > given that the file path is a directory > should handle a mix of creates and updates and failures and skipped files (dry run) 1`] = `
 {
   "error": [AggregateError: Multiple dry runs failed. To see more detailed errors for a page, run \`rdme changelog upload <path-to-page.md>\` --dry-run.],
-  "stderr": "- 🔍 Looking for Markdown files in the \`__tests__/__fixtures__/changelog/mixed-docs\` directory...
-✔ 🔍 Looking for Markdown files in the \`__tests__/__fixtures__/changelog/mixed-docs\` directory... 5 file(s) found!
+  "stderr": "- 🔍 Looking for Markdown files in the \`test/__fixtures__/changelog/mixed-docs\` directory...
+✔ 🔍 Looking for Markdown files in the \`test/__fixtures__/changelog/mixed-docs\` directory... 5 file(s) found!
  ›   Warning: Skipping pre-upload validation of the Markdown file(s). This is 
  ›   not recommended.
 - 🎭 Uploading files to ReadMe (but not really because it's a dry run)...
 ✖ 🎭 Uploading files to ReadMe (but not really because it's a dry run)... 2 file(s) failed.
 ",
   "stdout": "🌱 The following 1 page(s) do not currently exist in ReadMe and will be created:
-   - invalid-attributes (__tests__/__fixtures__/changelog/mixed-docs/invalid-attributes.md)
+   - invalid-attributes (test/__fixtures__/changelog/mixed-docs/invalid-attributes.md)
 🔄 The following 1 page(s) already exist in ReadMe and will be updated:
-   - legacy-flag (__tests__/__fixtures__/changelog/mixed-docs/legacy-flag.md)
+   - legacy-flag (test/__fixtures__/changelog/mixed-docs/legacy-flag.md)
 ⏭️ The following 1 page(s) will be skipped due to no frontmatter data:
-   - doc-sans-attributes (__tests__/__fixtures__/changelog/mixed-docs/doc-sans-attributes.md)
+   - doc-sans-attributes (test/__fixtures__/changelog/mixed-docs/doc-sans-attributes.md)
 🚨 Unable to fetch data about the following 2 page(s):
-   - __tests__/__fixtures__/changelog/mixed-docs/new-doc-slug.mdx: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
-   - __tests__/__fixtures__/changelog/mixed-docs/simple-doc.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+   - test/__fixtures__/changelog/mixed-docs/new-doc-slug.mdx: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+   - test/__fixtures__/changelog/mixed-docs/simple-doc.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
 ",
 }
 `;
@@ -71,22 +71,22 @@ exports[`rdme changelog upload > given that the file path is a directory > shoul
 exports[`rdme changelog upload > given that the file path is a directory > should handle a mix of creates and updates and failures and skipped files 1`] = `
 {
   "error": [AggregateError: Multiple page uploads failed. To see more detailed errors for a page, run \`rdme changelog upload <path-to-page.md>\`.],
-  "stderr": "- 🔍 Looking for Markdown files in the \`__tests__/__fixtures__/changelog/mixed-docs\` directory...
-✔ 🔍 Looking for Markdown files in the \`__tests__/__fixtures__/changelog/mixed-docs\` directory... 5 file(s) found!
+  "stderr": "- 🔍 Looking for Markdown files in the \`test/__fixtures__/changelog/mixed-docs\` directory...
+✔ 🔍 Looking for Markdown files in the \`test/__fixtures__/changelog/mixed-docs\` directory... 5 file(s) found!
  ›   Warning: Skipping pre-upload validation of the Markdown file(s). This is 
  ›   not recommended.
 - 🚀 Uploading files to ReadMe...
 ✖ 🚀 Uploading files to ReadMe... 2 file(s) failed.
 ",
   "stdout": "🌱 Successfully created 1 page(s) in ReadMe:
-   - invalid-attributes (__tests__/__fixtures__/changelog/mixed-docs/invalid-attributes.md)
+   - invalid-attributes (test/__fixtures__/changelog/mixed-docs/invalid-attributes.md)
 🔄 Successfully updated 1 page(s) in ReadMe:
-   - legacy-flag (__tests__/__fixtures__/changelog/mixed-docs/legacy-flag.md)
+   - legacy-flag (test/__fixtures__/changelog/mixed-docs/legacy-flag.md)
 ⏭️ Skipped 1 page(s) in ReadMe due to no frontmatter data:
-   - doc-sans-attributes (__tests__/__fixtures__/changelog/mixed-docs/doc-sans-attributes.md)
+   - doc-sans-attributes (test/__fixtures__/changelog/mixed-docs/doc-sans-attributes.md)
 🚨 Received errors when attempting to upload 2 page(s):
-   - __tests__/__fixtures__/changelog/mixed-docs/new-doc-slug.mdx: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
-   - __tests__/__fixtures__/changelog/mixed-docs/simple-doc.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+   - test/__fixtures__/changelog/mixed-docs/new-doc-slug.mdx: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+   - test/__fixtures__/changelog/mixed-docs/simple-doc.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
 ",
 }
 `;
@@ -96,7 +96,7 @@ exports[`rdme changelog upload > given that the file path is a directory > shoul
   "result": {
     "created": [
       {
-        "filePath": "__tests__/__fixtures__/changelog/mixed-docs/invalid-attributes.md",
+        "filePath": "test/__fixtures__/changelog/mixed-docs/invalid-attributes.md",
         "response": {},
         "result": "created",
         "slug": "invalid-attributes",
@@ -105,49 +105,49 @@ exports[`rdme changelog upload > given that the file path is a directory > shoul
     "failed": [
       {
         "error": [APIv2Error: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
-        "filePath": "__tests__/__fixtures__/changelog/mixed-docs/new-doc-slug.mdx",
+        "filePath": "test/__fixtures__/changelog/mixed-docs/new-doc-slug.mdx",
         "result": "failed",
         "slug": "some-slug",
       },
       {
         "error": [APIv2Error: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
-        "filePath": "__tests__/__fixtures__/changelog/mixed-docs/simple-doc.md",
+        "filePath": "test/__fixtures__/changelog/mixed-docs/simple-doc.md",
         "result": "failed",
         "slug": "simple-doc",
       },
     ],
     "skipped": [
       {
-        "filePath": "__tests__/__fixtures__/changelog/mixed-docs/doc-sans-attributes.md",
+        "filePath": "test/__fixtures__/changelog/mixed-docs/doc-sans-attributes.md",
         "result": "skipped",
         "slug": "doc-sans-attributes",
       },
     ],
     "updated": [
       {
-        "filePath": "__tests__/__fixtures__/changelog/mixed-docs/legacy-flag.md",
+        "filePath": "test/__fixtures__/changelog/mixed-docs/legacy-flag.md",
         "response": {},
         "result": "updated",
         "slug": "legacy-flag",
       },
     ],
   },
-  "stderr": "- 🔍 Looking for Markdown files in the \`__tests__/__fixtures__/changelog/mixed-docs\` directory...
-✔ 🔍 Looking for Markdown files in the \`__tests__/__fixtures__/changelog/mixed-docs\` directory... 5 file(s) found!
+  "stderr": "- 🔍 Looking for Markdown files in the \`test/__fixtures__/changelog/mixed-docs\` directory...
+✔ 🔍 Looking for Markdown files in the \`test/__fixtures__/changelog/mixed-docs\` directory... 5 file(s) found!
  ›   Warning: Skipping pre-upload validation of the Markdown file(s). This is 
  ›   not recommended.
 - 🚀 Uploading files to ReadMe...
 ✖ 🚀 Uploading files to ReadMe... 2 file(s) failed.
 ",
   "stdout": "🌱 Successfully created 1 page(s) in ReadMe:
-   - invalid-attributes (__tests__/__fixtures__/changelog/mixed-docs/invalid-attributes.md)
+   - invalid-attributes (test/__fixtures__/changelog/mixed-docs/invalid-attributes.md)
 🔄 Successfully updated 1 page(s) in ReadMe:
-   - legacy-flag (__tests__/__fixtures__/changelog/mixed-docs/legacy-flag.md)
+   - legacy-flag (test/__fixtures__/changelog/mixed-docs/legacy-flag.md)
 ⏭️ Skipped 1 page(s) in ReadMe due to no frontmatter data:
-   - doc-sans-attributes (__tests__/__fixtures__/changelog/mixed-docs/doc-sans-attributes.md)
+   - doc-sans-attributes (test/__fixtures__/changelog/mixed-docs/doc-sans-attributes.md)
 🚨 Received errors when attempting to upload 2 page(s):
-   - __tests__/__fixtures__/changelog/mixed-docs/new-doc-slug.mdx: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
-   - __tests__/__fixtures__/changelog/mixed-docs/simple-doc.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+   - test/__fixtures__/changelog/mixed-docs/new-doc-slug.mdx: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+   - test/__fixtures__/changelog/mixed-docs/simple-doc.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
 ",
 }
 `;
@@ -159,35 +159,35 @@ exports[`rdme changelog upload > given that the file path is a directory > shoul
     "failed": [],
     "skipped": [
       {
-        "filePath": "__tests__/__fixtures__/changelog/mixed-docs/doc-sans-attributes.md",
+        "filePath": "test/__fixtures__/changelog/mixed-docs/doc-sans-attributes.md",
         "result": "skipped",
         "slug": "doc-sans-attributes",
       },
       {
-        "filePath": "__tests__/__fixtures__/changelog/mixed-docs/invalid-attributes.md",
+        "filePath": "test/__fixtures__/changelog/mixed-docs/invalid-attributes.md",
         "result": "skipped",
         "slug": "invalid-attributes",
       },
       {
-        "filePath": "__tests__/__fixtures__/changelog/mixed-docs/legacy-flag.md",
+        "filePath": "test/__fixtures__/changelog/mixed-docs/legacy-flag.md",
         "result": "skipped",
         "slug": "legacy-flag",
       },
       {
-        "filePath": "__tests__/__fixtures__/changelog/mixed-docs/new-doc-slug.mdx",
+        "filePath": "test/__fixtures__/changelog/mixed-docs/new-doc-slug.mdx",
         "result": "skipped",
         "slug": "some-slug",
       },
       {
-        "filePath": "__tests__/__fixtures__/changelog/mixed-docs/simple-doc.md",
+        "filePath": "test/__fixtures__/changelog/mixed-docs/simple-doc.md",
         "result": "skipped",
         "slug": "simple-doc",
       },
     ],
     "updated": [],
   },
-  "stderr": "- 🔍 Looking for Markdown files in the \`__tests__/__fixtures__/changelog/mixed-docs\` directory...
-✔ 🔍 Looking for Markdown files in the \`__tests__/__fixtures__/changelog/mixed-docs\` directory... 5 file(s) found!
+  "stderr": "- 🔍 Looking for Markdown files in the \`test/__fixtures__/changelog/mixed-docs\` directory...
+✔ 🔍 Looking for Markdown files in the \`test/__fixtures__/changelog/mixed-docs\` directory... 5 file(s) found!
 - 🔬 Validating frontmatter data...
 ⚠ 🔬 Validating frontmatter data... issues found in 2 file(s).
  ›   Warning: 1 file(s) have issues that cannot be fixed automatically. 
@@ -195,11 +195,11 @@ exports[`rdme changelog upload > given that the file path is a directory > shoul
  ›   these issues as well. Please get in touch with us at support@readme.io if 
  ›   you need a hand.
 ",
-  "stdout": "=== BEGIN writeFileSync to file: __tests__/__fixtures__/changelog/mixed-docs/doc-sans-attributes.md ===
+  "stdout": "=== BEGIN writeFileSync to file: test/__fixtures__/changelog/mixed-docs/doc-sans-attributes.md ===
 Body
 
-=== END writeFileSync to file: __tests__/__fixtures__/changelog/mixed-docs/doc-sans-attributes.md ===
-=== BEGIN writeFileSync to file: __tests__/__fixtures__/changelog/mixed-docs/invalid-attributes.md ===
+=== END writeFileSync to file: test/__fixtures__/changelog/mixed-docs/doc-sans-attributes.md ===
+=== BEGIN writeFileSync to file: test/__fixtures__/changelog/mixed-docs/invalid-attributes.md ===
 ---
 type: false
 title: This is the changelog title
@@ -207,8 +207,8 @@ title: This is the changelog title
 
 Body
 
-=== END writeFileSync to file: __tests__/__fixtures__/changelog/mixed-docs/invalid-attributes.md ===
-=== BEGIN writeFileSync to file: __tests__/__fixtures__/changelog/mixed-docs/legacy-flag.md ===
+=== END writeFileSync to file: test/__fixtures__/changelog/mixed-docs/invalid-attributes.md ===
+=== BEGIN writeFileSync to file: test/__fixtures__/changelog/mixed-docs/legacy-flag.md ===
 ---
 title: This is the changelog title
 privacy:
@@ -217,8 +217,8 @@ privacy:
 
 Body
 
-=== END writeFileSync to file: __tests__/__fixtures__/changelog/mixed-docs/legacy-flag.md ===
-=== BEGIN writeFileSync to file: __tests__/__fixtures__/changelog/mixed-docs/new-doc-slug.mdx ===
+=== END writeFileSync to file: test/__fixtures__/changelog/mixed-docs/legacy-flag.md ===
+=== BEGIN writeFileSync to file: test/__fixtures__/changelog/mixed-docs/new-doc-slug.mdx ===
 ---
 title: This is the changelog title
 slug: some-slug
@@ -226,17 +226,17 @@ slug: some-slug
 
 Body
 
-=== END writeFileSync to file: __tests__/__fixtures__/changelog/mixed-docs/new-doc-slug.mdx ===
-=== BEGIN writeFileSync to file: __tests__/__fixtures__/changelog/mixed-docs/simple-doc.md ===
+=== END writeFileSync to file: test/__fixtures__/changelog/mixed-docs/new-doc-slug.mdx ===
+=== BEGIN writeFileSync to file: test/__fixtures__/changelog/mixed-docs/simple-doc.md ===
 ---
 title: This is the changelog title
 ---
 
 Body
 
-=== END writeFileSync to file: __tests__/__fixtures__/changelog/mixed-docs/simple-doc.md ===
+=== END writeFileSync to file: test/__fixtures__/changelog/mixed-docs/simple-doc.md ===
 ✅ The following files have been automatically fixed:
-- __tests__/__fixtures__/changelog/mixed-docs/legacy-flag.md (1 issue)
+- test/__fixtures__/changelog/mixed-docs/legacy-flag.md (1 issue)
 
 Please review the changes. Once everything looks good, re-run \`rdme changelog upload\` to upload these files to ReadMe.
 ",
@@ -251,29 +251,29 @@ exports[`rdme changelog upload > given that the file path is a directory > shoul
     "skipped": [],
     "updated": [
       {
-        "filePath": "__tests__/__fixtures__/changelog/complex-frontmatter/basic.md",
+        "filePath": "test/__fixtures__/changelog/complex-frontmatter/basic.md",
         "response": {},
         "result": "updated",
         "slug": "basic",
       },
       {
-        "filePath": "__tests__/__fixtures__/changelog/complex-frontmatter/complex.md",
+        "filePath": "test/__fixtures__/changelog/complex-frontmatter/complex.md",
         "response": {},
         "result": "updated",
         "slug": "complex",
       },
     ],
   },
-  "stderr": "- 🔍 Looking for Markdown files in the \`__tests__/__fixtures__/changelog/complex-frontmatter\` directory...
-✔ 🔍 Looking for Markdown files in the \`__tests__/__fixtures__/changelog/complex-frontmatter\` directory... 2 file(s) found!
+  "stderr": "- 🔍 Looking for Markdown files in the \`test/__fixtures__/changelog/complex-frontmatter\` directory...
+✔ 🔍 Looking for Markdown files in the \`test/__fixtures__/changelog/complex-frontmatter\` directory... 2 file(s) found!
 - 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
 - 🚀 Uploading files to ReadMe...
 ✔ 🚀 Uploading files to ReadMe... done!
 ",
   "stdout": "🔄 Successfully updated 2 page(s) in ReadMe:
-   - basic (__tests__/__fixtures__/changelog/complex-frontmatter/basic.md)
-   - complex (__tests__/__fixtures__/changelog/complex-frontmatter/complex.md)
+   - basic (test/__fixtures__/changelog/complex-frontmatter/basic.md)
+   - complex (test/__fixtures__/changelog/complex-frontmatter/complex.md)
 ",
 }
 `;
@@ -286,29 +286,29 @@ exports[`rdme changelog upload > given that the file path is a directory > shoul
     "skipped": [],
     "updated": [
       {
-        "filePath": "__tests__/__fixtures__/changelog/existing-docs/simple-doc.md",
+        "filePath": "test/__fixtures__/changelog/existing-docs/simple-doc.md",
         "response": {},
         "result": "updated",
         "slug": "simple-doc",
       },
       {
-        "filePath": "__tests__/__fixtures__/changelog/existing-docs/subdir/another-doc.md",
+        "filePath": "test/__fixtures__/changelog/existing-docs/subdir/another-doc.md",
         "response": {},
         "result": "updated",
         "slug": "another-doc",
       },
     ],
   },
-  "stderr": "- 🔍 Looking for Markdown files in the \`__tests__/__fixtures__/changelog/existing-docs\` directory...
-✔ 🔍 Looking for Markdown files in the \`__tests__/__fixtures__/changelog/existing-docs\` directory... 2 file(s) found!
+  "stderr": "- 🔍 Looking for Markdown files in the \`test/__fixtures__/changelog/existing-docs\` directory...
+✔ 🔍 Looking for Markdown files in the \`test/__fixtures__/changelog/existing-docs\` directory... 2 file(s) found!
 - 🔬 Validating frontmatter data...
 ✔ 🔬 Validating frontmatter data... no issues found!
 - 🚀 Uploading files to ReadMe...
 ✔ 🚀 Uploading files to ReadMe... done!
 ",
   "stdout": "🔄 Successfully updated 2 page(s) in ReadMe:
-   - simple-doc (__tests__/__fixtures__/changelog/existing-docs/simple-doc.md)
-   - another-doc (__tests__/__fixtures__/changelog/existing-docs/subdir/another-doc.md)
+   - simple-doc (test/__fixtures__/changelog/existing-docs/simple-doc.md)
+   - another-doc (test/__fixtures__/changelog/existing-docs/subdir/another-doc.md)
 ",
 }
 `;
@@ -320,7 +320,7 @@ exports[`rdme changelog upload > given that the file path is a single file > and
     "failed": [],
     "skipped": [
       {
-        "filePath": "__tests__/__fixtures__/changelog/legacy-docs/autofixable.md",
+        "filePath": "test/__fixtures__/changelog/legacy-docs/autofixable.md",
         "result": "skipped",
         "slug": "autofixable",
       },
@@ -331,7 +331,7 @@ exports[`rdme changelog upload > given that the file path is a single file > and
 ⚠ 🔬 Validating frontmatter data... issues found in 1 file(s).
 ",
   "stdout": "Automatically fixing issues in 1 file(s)...
-=== BEGIN writeFileSync to file: __tests__/__fixtures__/changelog/legacy-docs/autofixable.md ===
+=== BEGIN writeFileSync to file: test/__fixtures__/changelog/legacy-docs/autofixable.md ===
 ---
 type: added
 title: This is the changelog title
@@ -341,9 +341,9 @@ privacy:
 
 Body
 
-=== END writeFileSync to file: __tests__/__fixtures__/changelog/legacy-docs/autofixable.md ===
+=== END writeFileSync to file: test/__fixtures__/changelog/legacy-docs/autofixable.md ===
 ✅ The following files have been automatically fixed:
-- __tests__/__fixtures__/changelog/legacy-docs/autofixable.md (1 issue)
+- test/__fixtures__/changelog/legacy-docs/autofixable.md (1 issue)
 
 Please review the changes. Once everything looks good, re-run \`rdme changelog upload\` to upload these files to ReadMe.
 ",
@@ -355,7 +355,7 @@ exports[`rdme changelog upload > given that the file path is a single file > and
   "result": {
     "created": [
       {
-        "filePath": "__tests__/__fixtures__/changelog/new-docs/new-doc.md",
+        "filePath": "test/__fixtures__/changelog/new-docs/new-doc.md",
         "response": {},
         "result": "created",
         "slug": "new-doc",
@@ -371,14 +371,14 @@ exports[`rdme changelog upload > given that the file path is a single file > and
 ✔ 🚀 Uploading files to ReadMe... done!
 ",
   "stdout": "🌱 Successfully created 1 page(s) in ReadMe:
-   - new-doc (__tests__/__fixtures__/changelog/new-docs/new-doc.md)
+   - new-doc (test/__fixtures__/changelog/new-docs/new-doc.md)
 ",
 }
 `;
 
 exports[`rdme changelog upload > given that the file path is a single file > and the command is being run in a CI environment > should error out if the file has validation errors 1`] = `
 {
-  "error": [Error: 1 file(s) have issues that should be fixed before uploading to ReadMe. Please run \`rdme changelog upload __tests__/__fixtures__/changelog/legacy-docs/autofixable.md --dry-run\` in a non-CI environment to fix them.],
+  "error": [Error: 1 file(s) have issues that should be fixed before uploading to ReadMe. Please run \`rdme changelog upload test/__fixtures__/changelog/legacy-docs/autofixable.md --dry-run\` in a non-CI environment to fix them.],
   "stderr": "- 🔬 Validating frontmatter data...
 ⚠ 🔬 Validating frontmatter data... issues found in 1 file(s).
 ",
@@ -397,7 +397,7 @@ something went so so wrong],
 ✖ 🎭 Uploading files to ReadMe (but not really because it's a dry run)... 1 file(s) failed.
 ",
   "stdout": "🚨 Unable to fetch data about the following 1 page(s):
-   - __tests__/__fixtures__/changelog/slug-docs/new-doc-slug.md: bad request
+   - test/__fixtures__/changelog/slug-docs/new-doc-slug.md: bad request
 ",
 }
 `;
@@ -411,7 +411,7 @@ exports[`rdme changelog upload > given that the file path is a single file > giv
 ✖ 🎭 Uploading files to ReadMe (but not really because it's a dry run)... 1 file(s) failed.
 ",
   "stdout": "🚨 Unable to fetch data about the following 1 page(s):
-   - __tests__/__fixtures__/changelog/slug-docs/new-doc-slug.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+   - test/__fixtures__/changelog/slug-docs/new-doc-slug.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
 ",
 }
 `;
@@ -421,7 +421,7 @@ exports[`rdme changelog upload > given that the file path is a single file > giv
   "result": {
     "created": [
       {
-        "filePath": "__tests__/__fixtures__/changelog/new-docs/new-doc.md",
+        "filePath": "test/__fixtures__/changelog/new-docs/new-doc.md",
         "response": null,
         "result": "created",
         "slug": "new-doc",
@@ -437,7 +437,7 @@ exports[`rdme changelog upload > given that the file path is a single file > giv
 ✔ 🎭 Uploading files to ReadMe (but not really because it's a dry run)... done!
 ",
   "stdout": "🌱 The following 1 page(s) do not currently exist in ReadMe and will be created:
-   - new-doc (__tests__/__fixtures__/changelog/new-docs/new-doc.md)
+   - new-doc (test/__fixtures__/changelog/new-docs/new-doc.md)
 ",
 }
 `;
@@ -450,7 +450,7 @@ exports[`rdme changelog upload > given that the file path is a single file > giv
     "skipped": [],
     "updated": [
       {
-        "filePath": "__tests__/__fixtures__/changelog/slug-docs/new-doc-slug.md",
+        "filePath": "test/__fixtures__/changelog/slug-docs/new-doc-slug.md",
         "response": null,
         "result": "updated",
         "slug": "some-slug",
@@ -463,7 +463,7 @@ exports[`rdme changelog upload > given that the file path is a single file > giv
 ✔ 🎭 Uploading files to ReadMe (but not really because it's a dry run)... done!
 ",
   "stdout": "🔄 The following 1 page(s) already exist in ReadMe and will be updated:
-   - some-slug (__tests__/__fixtures__/changelog/slug-docs/new-doc-slug.md)
+   - some-slug (test/__fixtures__/changelog/slug-docs/new-doc-slug.md)
 ",
 }
 `;
@@ -485,7 +485,7 @@ exports[`rdme changelog upload > given that the file path is a single file > giv
     "failed": [],
     "skipped": [
       {
-        "filePath": "__tests__/__fixtures__/changelog/legacy-docs/autofixable.md",
+        "filePath": "test/__fixtures__/changelog/legacy-docs/autofixable.md",
         "result": "skipped",
         "slug": "autofixable",
       },
@@ -495,7 +495,7 @@ exports[`rdme changelog upload > given that the file path is a single file > giv
   "stderr": "- 🔬 Validating frontmatter data...
 ⚠ 🔬 Validating frontmatter data... issues found in 1 file(s).
 ",
-  "stdout": "=== BEGIN writeFileSync to file: __tests__/__fixtures__/changelog/legacy-docs/autofixable.md ===
+  "stdout": "=== BEGIN writeFileSync to file: test/__fixtures__/changelog/legacy-docs/autofixable.md ===
 ---
 type: added
 title: This is the changelog title
@@ -505,9 +505,9 @@ privacy:
 
 Body
 
-=== END writeFileSync to file: __tests__/__fixtures__/changelog/legacy-docs/autofixable.md ===
+=== END writeFileSync to file: test/__fixtures__/changelog/legacy-docs/autofixable.md ===
 ✅ The following files have been automatically fixed:
-- __tests__/__fixtures__/changelog/legacy-docs/autofixable.md (1 issue)
+- test/__fixtures__/changelog/legacy-docs/autofixable.md (1 issue)
 
 Please review the changes. Once everything looks good, re-run \`rdme changelog upload\` to upload these files to ReadMe.
 ",
@@ -525,7 +525,7 @@ your hidden flag is whack],
 ✖ 🚀 Uploading files to ReadMe... 1 file(s) failed.
 ",
   "stdout": "🚨 Received errors when attempting to upload 1 page(s):
-   - __tests__/__fixtures__/changelog/legacy-docs/autofixable.md: bad request
+   - test/__fixtures__/changelog/legacy-docs/autofixable.md: bad request
 ",
 }
 `;
@@ -535,7 +535,7 @@ exports[`rdme changelog upload > given that the file path is a single file > giv
   "result": {
     "created": [
       {
-        "filePath": "__tests__/__fixtures__/changelog/legacy-docs/unfixable.md",
+        "filePath": "test/__fixtures__/changelog/legacy-docs/unfixable.md",
         "response": {},
         "result": "created",
         "slug": "unfixable",
@@ -554,7 +554,7 @@ exports[`rdme changelog upload > given that the file path is a single file > giv
 ✔ 🚀 Uploading files to ReadMe... done!
 ",
   "stdout": "🌱 Successfully created 1 page(s) in ReadMe:
-   - unfixable (__tests__/__fixtures__/changelog/legacy-docs/unfixable.md)
+   - unfixable (test/__fixtures__/changelog/legacy-docs/unfixable.md)
 ",
 }
 `;
@@ -564,7 +564,7 @@ exports[`rdme changelog upload > given that the file path is a single file > giv
   "result": {
     "created": [
       {
-        "filePath": "__tests__/__fixtures__/changelog/slug-docs/new-doc-slug.md",
+        "filePath": "test/__fixtures__/changelog/slug-docs/new-doc-slug.md",
         "response": {},
         "result": "created",
         "slug": "some-slug",
@@ -580,7 +580,7 @@ exports[`rdme changelog upload > given that the file path is a single file > giv
 ✔ 🚀 Uploading files to ReadMe... done!
 ",
   "stdout": "🌱 Successfully created 1 page(s) in ReadMe:
-   - some-slug (__tests__/__fixtures__/changelog/slug-docs/new-doc-slug.md)
+   - some-slug (test/__fixtures__/changelog/slug-docs/new-doc-slug.md)
 ",
 }
 `;
@@ -593,7 +593,7 @@ exports[`rdme changelog upload > given that the file path is a single file > giv
     "skipped": [],
     "updated": [
       {
-        "filePath": "__tests__/__fixtures__/changelog/slug-docs/new-doc-slug.md",
+        "filePath": "test/__fixtures__/changelog/slug-docs/new-doc-slug.md",
         "response": {},
         "result": "updated",
         "slug": "some-slug",
@@ -606,7 +606,7 @@ exports[`rdme changelog upload > given that the file path is a single file > giv
 ✔ 🚀 Uploading files to ReadMe... done!
 ",
   "stdout": "🔄 Successfully updated 1 page(s) in ReadMe:
-   - some-slug (__tests__/__fixtures__/changelog/slug-docs/new-doc-slug.md)
+   - some-slug (test/__fixtures__/changelog/slug-docs/new-doc-slug.md)
 ",
 }
 `;
@@ -616,7 +616,7 @@ exports[`rdme changelog upload > given that the file path is a single file > sho
   "result": {
     "created": [
       {
-        "filePath": "__tests__/__fixtures__/changelog/new-docs/new-doc.md",
+        "filePath": "test/__fixtures__/changelog/new-docs/new-doc.md",
         "response": {},
         "result": "created",
         "slug": "new-doc",
@@ -632,7 +632,7 @@ exports[`rdme changelog upload > given that the file path is a single file > sho
 ✔ 🚀 Uploading files to ReadMe... done!
 ",
   "stdout": "🌱 Successfully created 1 page(s) in ReadMe:
-   - new-doc (__tests__/__fixtures__/changelog/new-docs/new-doc.md)
+   - new-doc (test/__fixtures__/changelog/new-docs/new-doc.md)
 ",
 }
 `;
@@ -648,7 +648,7 @@ something went so so wrong],
 ✖ 🚀 Uploading files to ReadMe... 1 file(s) failed.
 ",
   "stdout": "🚨 Received errors when attempting to upload 1 page(s):
-   - __tests__/__fixtures__/changelog/new-docs/new-doc.md: bad request
+   - test/__fixtures__/changelog/new-docs/new-doc.md: bad request
 ",
 }
 `;
@@ -662,7 +662,7 @@ exports[`rdme changelog upload > given that the file path is a single file > sho
 ✖ 🚀 Uploading files to ReadMe... 1 file(s) failed.
 ",
   "stdout": "🚨 Received errors when attempting to upload 1 page(s):
-   - __tests__/__fixtures__/changelog/new-docs/new-doc.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+   - test/__fixtures__/changelog/new-docs/new-doc.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
 ",
 }
 `;
@@ -692,7 +692,7 @@ exports[`rdme changelog upload > given that the file path is a single file > sho
         "error": [APIv2Error: ReadMe API error: bad request
 
 something went so so wrong],
-        "filePath": "__tests__/__fixtures__/changelog/new-docs/new-doc.md",
+        "filePath": "test/__fixtures__/changelog/new-docs/new-doc.md",
         "result": "failed",
         "slug": "new-doc",
       },
@@ -706,7 +706,7 @@ something went so so wrong],
 ✖ 🚀 Uploading files to ReadMe... 1 file(s) failed.
 ",
   "stdout": "🚨 Received errors when attempting to upload 1 page(s):
-   - __tests__/__fixtures__/changelog/new-docs/new-doc.md: bad request
+   - test/__fixtures__/changelog/new-docs/new-doc.md: bad request
 ",
 }
 `;

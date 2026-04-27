@@ -103,7 +103,7 @@ jobs:
         id: openapi-validate-fail
         continue-on-error: true
         with:
-          rdme: openapi validate rdme-repo/__tests__/__fixtures__/invalid-oas.json
+          rdme: openapi validate rdme-repo/test/__fixtures__/invalid-oas.json
 
       - name: Assert that previous validation step failed
         if: ${{ steps.openapi-validate-fail.outcome == 'failure' }}

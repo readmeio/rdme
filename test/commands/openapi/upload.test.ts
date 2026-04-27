@@ -15,8 +15,8 @@ import { runCommand } from '../../helpers/oclif.js';
 
 const key = 'rdme_123';
 const branch = '1.0.0';
-const filename = '__tests__/__fixtures__/petstore-simple-weird-version.json';
-const yamlFile = '__tests__/__fixtures__/postman/petstore.collection.yaml';
+const filename = 'test/__fixtures__/petstore-simple-weird-version.json';
+const yamlFile = 'test/__fixtures__/postman/petstore.collection.yaml';
 const fileUrl = 'https://example.com/openapi.json';
 const slugifiedFilename = slugify.default(filename);
 const slugifiedYamlFile = slugify.default(yamlFile);

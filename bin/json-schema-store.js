@@ -8,7 +8,7 @@ const files = [
   {
     // JSON Schema for GitHub Actions Workflow file
     // See: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
-    filePath: '__tests__/helpers/github-workflow-schema.json',
+    filePath: 'test/helpers/github-workflow-schema.json',
     url: 'https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/github-workflow.json',
   },
 ];

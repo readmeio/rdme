@@ -40,49 +40,49 @@ describe('rdme openapi validate', () => {
   });
 
   it('should discover and upload an API definition if none is provided', async () => {
-    const result = await run(['--working-directory', './__tests__/__fixtures__/relative-ref-oas']);
+    const result = await run(['--working-directory', './test/__fixtures__/relative-ref-oas']);
     expect(result).toMatchSnapshot();
   });
 
   it('should use specified working directory', async () => {
-    const result = await run(['petstore.json', '--working-directory', './__tests__/__fixtures__/relative-ref-oas']);
+    const result = await run(['petstore.json', '--working-directory', './test/__fixtures__/relative-ref-oas']);
     expect(result).toMatchSnapshot();
   });
 
   it('should use specified working directory (legacy flag)', async () => {
-    const result = await run(['petstore.json', '--workingDirectory', './__tests__/__fixtures__/relative-ref-oas']);
+    const result = await run(['petstore.json', '--workingDirectory', './test/__fixtures__/relative-ref-oas']);
     expect(result).toMatchSnapshot();
   });
 
   it('should adhere to .gitignore in subdirectories', async () => {
     fs.copyFileSync(
       require.resolve('@readme/oas-examples/3.0/json/petstore-simple.json'),
-      './__tests__/__fixtures__/nested-gitignored-oas/nest/petstore-ignored.json',
+      './test/__fixtures__/nested-gitignored-oas/nest/petstore-ignored.json',
     );
 
-    const result = await run(['--working-directory', './__tests__/__fixtures__/nested-gitignored-oas']);
+    const result = await run(['--working-directory', './test/__fixtures__/nested-gitignored-oas']);
     expect(result).toMatchSnapshot();
   });
 
   describe('error handling', () => {
     it('should throw an error if invalid JSON is supplied', () => {
-      return expect(run(['./__tests__/__fixtures__/invalid-json/yikes.json'])).resolves.toMatchSnapshot();
+      return expect(run(['./test/__fixtures__/invalid-json/yikes.json'])).resolves.toMatchSnapshot();
     });
 
     it('should throw an error if an invalid OpenAPI 3.0 definition is supplied', () => {
-      return expect(run(['./__tests__/__fixtures__/invalid-oas.json'])).resolves.toMatchSnapshot();
+      return expect(run(['./test/__fixtures__/invalid-oas.json'])).resolves.toMatchSnapshot();
     });
 
     it('should throw an error if an invalid OpenAPI 3.1 definition is supplied', () => {
-      return expect(run(['./__tests__/__fixtures__/invalid-oas-3.1.json'])).resolves.toMatchSnapshot();
+      return expect(run(['./test/__fixtures__/invalid-oas-3.1.json'])).resolves.toMatchSnapshot();
     });
 
     it('should throw an error if an invalid Swagger definition is supplied', () => {
-      return expect(run(['./__tests__/__fixtures__/invalid-swagger.json'])).resolves.toMatchSnapshot();
+      return expect(run(['./test/__fixtures__/invalid-swagger.json'])).resolves.toMatchSnapshot();
     });
 
     it('should throw an error if an invalid API definition has many errors', () => {
-      return expect(run(['./__tests__/__fixtures__/very-invalid-oas.json'])).resolves.toMatchSnapshot();
+      return expect(run(['./test/__fixtures__/very-invalid-oas.json'])).resolves.toMatchSnapshot();
     });
   });
 
@@ -97,13 +97,13 @@ describe('rdme openapi validate', () => {
 
     it('should successfully validate prompt and not run GHA onboarding', async () => {
       vi.stubEnv('TEST_RDME_CREATEGHA', 'true');
-      const spec = '__tests__/__fixtures__/petstore-simple-weird-version.json';
+      const spec = 'test/__fixtures__/petstore-simple-weird-version.json';
 
       await expect(run([spec])).resolves.toMatchSnapshot();
     });
 
     it('should fail if user attempts to pass `--github` flag in CI environment', async () => {
-      const spec = '__tests__/__fixtures__/petstore-simple-weird-version.json';
+      const spec = 'test/__fixtures__/petstore-simple-weird-version.json';
 
       await expect(run([spec, '--github'])).resolves.toMatchSnapshot();
     });
@@ -123,7 +123,7 @@ describe('rdme openapi validate', () => {
     });
 
     it('should create GHA workflow if user passes in spec via prompts', async () => {
-      const spec = '__tests__/__fixtures__/petstore-simple-weird-version.json';
+      const spec = 'test/__fixtures__/petstore-simple-weird-version.json';
       const fileName = 'validate-test-file';
       prompts.inject([spec, true, 'validate-test-branch', fileName]);
 
@@ -133,7 +133,7 @@ describe('rdme openapi validate', () => {
     });
 
     it('should create GHA workflow if user passes in spec via opt', async () => {
-      const spec = '__tests__/__fixtures__/petstore-simple-weird-version.json';
+      const spec = 'test/__fixtures__/petstore-simple-weird-version.json';
       const fileName = 'validate-test-opt-spec-file';
       prompts.inject([true, 'validate-test-opt-spec-branch', fileName]);
 
@@ -149,7 +149,7 @@ describe('rdme openapi validate', () => {
       prompts.inject([true, 'validate-test-opt-spec-github-branch', fileName]);
 
       await expect(
-        run([spec, '--working-directory', './__tests__/__fixtures__/relative-ref-oas']),
+        run([spec, '--working-directory', './test/__fixtures__/relative-ref-oas']),
       ).resolves.toMatchSnapshot();
 
       expect(yamlOutput).toMatchSnapshot();
@@ -157,7 +157,7 @@ describe('rdme openapi validate', () => {
     });
 
     it('should create GHA workflow if user passes in spec via opt (github flag enabled)', async () => {
-      const spec = '__tests__/__fixtures__/petstore-simple-weird-version.json';
+      const spec = 'test/__fixtures__/petstore-simple-weird-version.json';
       const fileName = 'validate-test-opt-spec-github-file';
       prompts.inject(['validate-test-opt-spec-github-branch', fileName]);
 
@@ -168,7 +168,7 @@ describe('rdme openapi validate', () => {
     });
 
     it('should reject if user says no to creating GHA workflow', () => {
-      const spec = '__tests__/__fixtures__/petstore-simple-weird-version.json';
+      const spec = 'test/__fixtures__/petstore-simple-weird-version.json';
       prompts.inject([spec, false]);
       return expect(run()).resolves.toMatchSnapshot();
     });

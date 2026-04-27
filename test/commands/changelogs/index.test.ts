@@ -92,13 +92,13 @@ describe('rdme changelogs', () => {
         .basicAuth({ user: key })
         .reply(200, { slug: anotherDoc.slug, body: anotherDoc.doc.content });
 
-      return run([`./__tests__/${fixturesBaseDir}/existing-docs`, '--key', key]).then(updatedDocs => {
+      return run([`./test/${fixturesBaseDir}/existing-docs`, '--key', key]).then(updatedDocs => {
         // All changelogs should have been updated because their hashes from the GET request were different from what they
         // are currently.
         expect(updatedDocs).toBe(
           [
-            `✏️ successfully updated 'simple-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`,
-            `✏️ successfully updated 'another-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/subdir/another-doc.md`,
+            `✏️ successfully updated 'simple-doc' with contents from test/${fixturesBaseDir}/existing-docs/simple-doc.md`,
+            `✏️ successfully updated 'another-doc' with contents from test/${fixturesBaseDir}/existing-docs/subdir/another-doc.md`,
           ].join('\n'),
         );
 
@@ -118,15 +118,15 @@ describe('rdme changelogs', () => {
         .basicAuth({ user: key })
         .reply(200, { slug: anotherDoc.slug, lastUpdatedHash: 'anOldHash' });
 
-      return run([`./__tests__/${fixturesBaseDir}/existing-docs`, '--key', key, '--dryRun']).then(updatedDocs => {
+      return run([`./test/${fixturesBaseDir}/existing-docs`, '--key', key, '--dryRun']).then(updatedDocs => {
         // All changelogs should have been updated because their hashes from the GET request were different from what they
         // are currently.
         expect(updatedDocs).toBe(
           [
-            `🎭 dry run! This will update 'simple-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/simple-doc.md with the following metadata: ${JSON.stringify(
+            `🎭 dry run! This will update 'simple-doc' with contents from test/${fixturesBaseDir}/existing-docs/simple-doc.md with the following metadata: ${JSON.stringify(
               simpleDoc.doc.data,
             )}`,
-            `🎭 dry run! This will update 'another-doc' with contents from __tests__/${fixturesBaseDir}/existing-docs/subdir/another-doc.md with the following metadata: ${JSON.stringify(
+            `🎭 dry run! This will update 'another-doc' with contents from test/${fixturesBaseDir}/existing-docs/subdir/another-doc.md with the following metadata: ${JSON.stringify(
               anotherDoc.doc.data,
             )}`,
           ].join('\n'),
@@ -147,7 +147,7 @@ describe('rdme changelogs', () => {
         .basicAuth({ user: key })
         .reply(200, { slug: anotherDoc.slug, lastUpdatedHash: anotherDoc.hash });
 
-      return run([`./__tests__/${fixturesBaseDir}/existing-docs`, '--key', key]).then(skippedDocs => {
+      return run([`./test/${fixturesBaseDir}/existing-docs`, '--key', key]).then(skippedDocs => {
         expect(skippedDocs).toBe(
           [
             '`simple-doc` was not updated because there were no changes.',
@@ -170,7 +170,7 @@ describe('rdme changelogs', () => {
         .basicAuth({ user: key })
         .reply(200, { slug: anotherDoc.slug, lastUpdatedHash: anotherDoc.hash });
 
-      return run([`./__tests__/${fixturesBaseDir}/existing-docs`, '--key', key, '--dryRun']).then(skippedDocs => {
+      return run([`./test/${fixturesBaseDir}/existing-docs`, '--key', key, '--dryRun']).then(skippedDocs => {
         expect(skippedDocs).toBe(
           [
             '🎭 dry run! `simple-doc` will not be updated because there were no changes.',
@@ -205,8 +205,8 @@ describe('rdme changelogs', () => {
         .basicAuth({ user: key })
         .reply(201, { slug, _id: id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
-      await expect(run([`./__tests__/${fixturesBaseDir}/new-docs`, '--key', key])).resolves.toBe(
-        `🌱 successfully created 'new-doc' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/new-docs/new-doc.md`,
+      await expect(run([`./test/${fixturesBaseDir}/new-docs`, '--key', key])).resolves.toBe(
+        `🌱 successfully created 'new-doc' (ID: 1234) with contents from test/${fixturesBaseDir}/new-docs/new-doc.md`,
       );
 
       getMock.done();
@@ -227,8 +227,8 @@ describe('rdme changelogs', () => {
           help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
         });
 
-      await expect(run([`./__tests__/${fixturesBaseDir}/new-docs`, '--key', key, '--dryRun'])).resolves.toBe(
-        `🎭 dry run! This will create 'new-doc' with contents from __tests__/${fixturesBaseDir}/new-docs/new-doc.md with the following metadata: ${JSON.stringify(
+      await expect(run([`./test/${fixturesBaseDir}/new-docs`, '--key', key, '--dryRun'])).resolves.toBe(
+        `🎭 dry run! This will create 'new-doc' with contents from test/${fixturesBaseDir}/new-docs/new-doc.md with the following metadata: ${JSON.stringify(
           doc.data,
         )}`,
       );
@@ -267,7 +267,7 @@ describe('rdme changelogs', () => {
         .basicAuth({ user: key })
         .reply(400, errorObject);
 
-      const fullDirectory = `__tests__/${fixturesBaseDir}/${folder}`;
+      const fullDirectory = `test/${fixturesBaseDir}/${folder}`;
 
       const formattedErrorObject = {
         ...errorObject,
@@ -305,8 +305,8 @@ describe('rdme changelogs', () => {
         .basicAuth({ user: key })
         .reply(201, { slug: doc.data.slug, _id: id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
-      await expect(run([`./__tests__/${fixturesBaseDir}/slug-docs`, '--key', key])).resolves.toBe(
-        `🌱 successfully created 'marc-actually-wrote-a-test' (ID: 1234) with contents from __tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`,
+      await expect(run([`./test/${fixturesBaseDir}/slug-docs`, '--key', key])).resolves.toBe(
+        `🌱 successfully created 'marc-actually-wrote-a-test' (ID: 1234) with contents from test/${fixturesBaseDir}/slug-docs/new-doc-slug.md`,
       );
 
       getMock.done();

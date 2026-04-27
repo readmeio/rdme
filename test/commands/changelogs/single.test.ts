@@ -62,8 +62,8 @@ describe('rdme changelogs (single)', () => {
         .basicAuth({ user: key })
         .reply(201, { slug, _id: id, body: doc.content, ...doc.data });
 
-      await expect(run([`./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, '--key', key])).resolves.toBe(
-        `🌱 successfully created 'new-doc' (ID: 1234) with contents from ./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`,
+      await expect(run([`./test/${fixturesBaseDir}/new-docs/new-doc.md`, '--key', key])).resolves.toBe(
+        `🌱 successfully created 'new-doc' (ID: 1234) with contents from ./test/${fixturesBaseDir}/new-docs/new-doc.md`,
       );
 
       getMock.done();
@@ -84,8 +84,8 @@ describe('rdme changelogs (single)', () => {
           help: 'If you need help, email support@readme.io and mention log "fake-metrics-uuid".',
         });
 
-      await expect(run(['--dryRun', `./__tests__/${fixturesBaseDir}/new-docs/new-doc.md`, '--key', key])).resolves.toBe(
-        `🎭 dry run! This will create 'new-doc' with contents from ./__tests__/${fixturesBaseDir}/new-docs/new-doc.md with the following metadata: ${JSON.stringify(
+      await expect(run(['--dryRun', `./test/${fixturesBaseDir}/new-docs/new-doc.md`, '--key', key])).resolves.toBe(
+        `🎭 dry run! This will create 'new-doc' with contents from ./test/${fixturesBaseDir}/new-docs/new-doc.md with the following metadata: ${JSON.stringify(
           doc.data,
         )}`,
       );
@@ -94,7 +94,7 @@ describe('rdme changelogs (single)', () => {
     });
 
     it('should skip if it does not contain any frontmatter attributes', async () => {
-      const filePath = `./__tests__/${fixturesBaseDir}/failure-docs/doc-sans-attributes.md`;
+      const filePath = `./test/${fixturesBaseDir}/failure-docs/doc-sans-attributes.md`;
 
       await expect(run([filePath, '--key', key])).resolves.toBe(
         `⏭️  no frontmatter attributes found for ${filePath}, skipping`,
@@ -113,7 +113,7 @@ describe('rdme changelogs (single)', () => {
 
       const getMock = getAPIv1Mock().get(`/api/v1/changelogs/${slug}`).basicAuth({ user: key }).reply(500, errorObject);
 
-      const filePath = `./__tests__/${fixturesBaseDir}/failure-docs/${slug}.md`;
+      const filePath = `./test/${fixturesBaseDir}/failure-docs/${slug}.md`;
 
       const formattedErrorObject = {
         ...errorObject,
@@ -148,8 +148,8 @@ describe('rdme changelogs (single)', () => {
         .basicAuth({ user: key })
         .reply(201, { slug: doc.data.slug, _id: id, body: doc.content, ...doc.data, lastUpdatedHash: hash });
 
-      await expect(run([`./__tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`, '--key', key])).resolves.toBe(
-        `🌱 successfully created 'marc-actually-wrote-a-test' (ID: 1234) with contents from ./__tests__/${fixturesBaseDir}/slug-docs/new-doc-slug.md`,
+      await expect(run([`./test/${fixturesBaseDir}/slug-docs/new-doc-slug.md`, '--key', key])).resolves.toBe(
+        `🌱 successfully created 'marc-actually-wrote-a-test' (ID: 1234) with contents from ./test/${fixturesBaseDir}/slug-docs/new-doc-slug.md`,
       );
 
       getMock.done();
@@ -187,9 +187,9 @@ describe('rdme changelogs (single)', () => {
           body: simpleDoc.doc.content,
         });
 
-      return run([`./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, '--key', key]).then(updatedDocs => {
+      return run([`./test/${fixturesBaseDir}/existing-docs/simple-doc.md`, '--key', key]).then(updatedDocs => {
         expect(updatedDocs).toBe(
-          `✏️ successfully updated 'simple-doc' with contents from ./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`,
+          `✏️ successfully updated 'simple-doc' with contents from ./test/${fixturesBaseDir}/existing-docs/simple-doc.md`,
         );
 
         getMock.done();
@@ -205,13 +205,13 @@ describe('rdme changelogs (single)', () => {
         .basicAuth({ user: key })
         .reply(200, { slug: simpleDoc.slug, lastUpdatedHash: 'anOldHash' });
 
-      return run(['--dryRun', `./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, '--key', key]).then(
+      return run(['--dryRun', `./test/${fixturesBaseDir}/existing-docs/simple-doc.md`, '--key', key]).then(
         updatedDocs => {
           // All changelogs should have been updated because their hashes from the GET request were different from what they
           // are currently.
           expect(updatedDocs).toBe(
             [
-              `🎭 dry run! This will update 'simple-doc' with contents from ./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md with the following metadata: ${JSON.stringify(
+              `🎭 dry run! This will update 'simple-doc' with contents from ./test/${fixturesBaseDir}/existing-docs/simple-doc.md with the following metadata: ${JSON.stringify(
                 simpleDoc.doc.data,
               )}`,
             ].join('\n'),
@@ -230,7 +230,7 @@ describe('rdme changelogs (single)', () => {
         .basicAuth({ user: key })
         .reply(200, { slug: simpleDoc.slug, lastUpdatedHash: simpleDoc.hash });
 
-      return run([`./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, '--key', key]).then(skippedDocs => {
+      return run([`./test/${fixturesBaseDir}/existing-docs/simple-doc.md`, '--key', key]).then(skippedDocs => {
         expect(skippedDocs).toBe('`simple-doc` was not updated because there were no changes.');
 
         getMock.done();
@@ -243,7 +243,7 @@ describe('rdme changelogs (single)', () => {
         .basicAuth({ user: key })
         .reply(200, { slug: simpleDoc.slug, lastUpdatedHash: simpleDoc.hash });
 
-      return run(['--dryRun', `./__tests__/${fixturesBaseDir}/existing-docs/simple-doc.md`, '--key', key]).then(
+      return run(['--dryRun', `./test/${fixturesBaseDir}/existing-docs/simple-doc.md`, '--key', key]).then(
         skippedDocs => {
           expect(skippedDocs).toBe('🎭 dry run! `simple-doc` will not be updated because there were no changes.');
 

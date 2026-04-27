@@ -17,7 +17,7 @@
         "description": "",
         "operationId": "addPet",
         "requestBody": {
-          "$ref": "__tests__/__fixtures__/ref-oas/external-components.json#/requestBodies/Petty"
+          "$ref": "test/__fixtures__/ref-oas/external-components.json#/requestBodies/Petty"
         },
         "responses": {
           "405": {
@@ -36,7 +36,7 @@
         "description": "",
         "operationId": "updatePet",
         "requestBody": {
-          "$ref": "__tests__/__fixtures__/ref-oas/external-components.json#/requestBodies/Petty"
+          "$ref": "test/__fixtures__/ref-oas/external-components.json#/requestBodies/Petty"
         },
         "responses": {
           "400": {
@@ -80,12 +80,12 @@
             "content": {
               "application/xml": {
                 "schema": {
-                  "$ref": "__tests__/__fixtures__/ref-oas/external-components.json#/schemas/Petty"
+                  "$ref": "test/__fixtures__/ref-oas/external-components.json#/schemas/Petty"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "__tests__/__fixtures__/ref-oas/external-components.json#/schemas/Petty"
+                  "$ref": "test/__fixtures__/ref-oas/external-components.json#/schemas/Petty"
                 }
               }
             }

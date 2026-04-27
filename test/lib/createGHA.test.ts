@@ -115,7 +115,7 @@ describe('#createGHA', () => {
       it.skip('should create workflow directory if it does not exist', async () => {
         expect.assertions(3);
 
-        const repoRoot = '__tests__/__fixtures__';
+        const repoRoot = 'test/__fixtures__';
 
         git.revparse = vi.fn(() => {
           return Promise.resolve(repoRoot) as unknown as Response<string>;

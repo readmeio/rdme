@@ -53,7 +53,7 @@ describe(`rdme ${topic} upload`, () => {
         })
         .reply(201, {});
 
-      const result = await run(['__tests__/__fixtures__/changelog/new-docs/new-doc.md', '--key', key]);
+      const result = await run(['test/__fixtures__/changelog/new-docs/new-doc.md', '--key', key]);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -65,7 +65,7 @@ describe(`rdme ${topic} upload`, () => {
       it('should not create anything in ReadMe', async () => {
         const mock = getAPIv2Mock({ authorization }).get(`/${route}/new-doc`).reply(404);
 
-        const result = await run(['__tests__/__fixtures__/changelog/new-docs/new-doc.md', '--key', key, '--dry-run']);
+        const result = await run(['test/__fixtures__/changelog/new-docs/new-doc.md', '--key', key, '--dry-run']);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -76,12 +76,7 @@ describe(`rdme ${topic} upload`, () => {
       it('should not update anything in ReadMe', async () => {
         const mock = getAPIv2Mock({ authorization }).get(`/${route}/some-slug`).reply(200);
 
-        const result = await run([
-          '__tests__/__fixtures__/changelog/slug-docs/new-doc-slug.md',
-          '--key',
-          key,
-          '--dry-run',
-        ]);
+        const result = await run(['test/__fixtures__/changelog/slug-docs/new-doc-slug.md', '--key', key, '--dry-run']);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -92,12 +87,7 @@ describe(`rdme ${topic} upload`, () => {
       it('should error out if a non-404 error is returned from the GET request', async () => {
         const mock = getAPIv2Mock({ authorization }).get(`/${route}/some-slug`).reply(500);
 
-        const result = await run([
-          '__tests__/__fixtures__/changelog/slug-docs/new-doc-slug.md',
-          '--key',
-          key,
-          '--dry-run',
-        ]);
+        const result = await run(['test/__fixtures__/changelog/slug-docs/new-doc-slug.md', '--key', key, '--dry-run']);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -112,12 +102,7 @@ describe(`rdme ${topic} upload`, () => {
           status: 500,
         });
 
-        const result = await run([
-          '__tests__/__fixtures__/changelog/slug-docs/new-doc-slug.md',
-          '--key',
-          key,
-          '--dry-run',
-        ]);
+        const result = await run(['test/__fixtures__/changelog/slug-docs/new-doc-slug.md', '--key', key, '--dry-run']);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -139,7 +124,7 @@ describe(`rdme ${topic} upload`, () => {
           })
           .reply(201, {});
 
-        const result = await run(['__tests__/__fixtures__/changelog/slug-docs/new-doc-slug.md', '--key', key]);
+        const result = await run(['test/__fixtures__/changelog/slug-docs/new-doc-slug.md', '--key', key]);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -158,7 +143,7 @@ describe(`rdme ${topic} upload`, () => {
           })
           .reply(201, {});
 
-        const result = await run(['__tests__/__fixtures__/changelog/slug-docs/new-doc-slug.md', '--key', key]);
+        const result = await run(['test/__fixtures__/changelog/slug-docs/new-doc-slug.md', '--key', key]);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -171,11 +156,11 @@ describe(`rdme ${topic} upload`, () => {
       it('should fix the frontmatter issues in the file', async () => {
         prompts.inject([true]);
 
-        const result = await run(['__tests__/__fixtures__/changelog/legacy-docs/autofixable.md', '--key', key]);
+        const result = await run(['test/__fixtures__/changelog/legacy-docs/autofixable.md', '--key', key]);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).toHaveBeenCalledWith(
-          '__tests__/__fixtures__/changelog/legacy-docs/autofixable.md',
+          'test/__fixtures__/changelog/legacy-docs/autofixable.md',
           expect.stringContaining('view: anyone_with_link'),
           { encoding: 'utf-8' },
         );
@@ -184,7 +169,7 @@ describe(`rdme ${topic} upload`, () => {
       it('should exit if the user declines to fix the issues', async () => {
         prompts.inject([false]);
 
-        const result = await run(['__tests__/__fixtures__/changelog/legacy-docs/autofixable.md', '--key', key]);
+        const result = await run(['test/__fixtures__/changelog/legacy-docs/autofixable.md', '--key', key]);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -204,7 +189,7 @@ describe(`rdme ${topic} upload`, () => {
           .reply(400, { title: 'bad request', detail: 'your hidden flag is whack' });
 
         const result = await run([
-          '__tests__/__fixtures__/changelog/legacy-docs/autofixable.md',
+          'test/__fixtures__/changelog/legacy-docs/autofixable.md',
           '--key',
           key,
           '--skip-validation',
@@ -228,7 +213,7 @@ describe(`rdme ${topic} upload`, () => {
           })
           .reply(201, {});
 
-        const result = await run(['__tests__/__fixtures__/changelog/legacy-docs/unfixable.md', '--key', key]);
+        const result = await run(['test/__fixtures__/changelog/legacy-docs/unfixable.md', '--key', key]);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -248,7 +233,7 @@ describe(`rdme ${topic} upload`, () => {
         const postMock = getAPIv2MockForGHA({
           authorization,
           'x-readme-source-url':
-            'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/__tests__/__fixtures__/changelog/new-docs/new-doc.md',
+            'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/test/__fixtures__/changelog/new-docs/new-doc.md',
         })
           .post(`/${route}`, {
             type: 'added',
@@ -258,7 +243,7 @@ describe(`rdme ${topic} upload`, () => {
           })
           .reply(201, {});
 
-        const result = await run(['__tests__/__fixtures__/changelog/new-docs/new-doc.md', '--key', key]);
+        const result = await run(['test/__fixtures__/changelog/new-docs/new-doc.md', '--key', key]);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -268,7 +253,7 @@ describe(`rdme ${topic} upload`, () => {
       });
 
       it('should error out if the file has validation errors', async () => {
-        const result = await run(['__tests__/__fixtures__/changelog/legacy-docs/autofixable.md', '--key', key]);
+        const result = await run(['test/__fixtures__/changelog/legacy-docs/autofixable.md', '--key', key]);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -276,7 +261,7 @@ describe(`rdme ${topic} upload`, () => {
 
       it('should bypass prompt if `--confirm-autofixes` flag is passed', async () => {
         const result = await run([
-          '__tests__/__fixtures__/changelog/legacy-docs/autofixable.md',
+          'test/__fixtures__/changelog/legacy-docs/autofixable.md',
           '--key',
           key,
           '--confirm-autofixes',
@@ -284,7 +269,7 @@ describe(`rdme ${topic} upload`, () => {
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).toHaveBeenCalledWith(
-          '__tests__/__fixtures__/changelog/legacy-docs/autofixable.md',
+          'test/__fixtures__/changelog/legacy-docs/autofixable.md',
           expect.stringContaining('view: anyone_with_link'),
           { encoding: 'utf-8' },
         );
@@ -294,7 +279,7 @@ describe(`rdme ${topic} upload`, () => {
     it('should error out if a non-404 error is returned from the GET request', async () => {
       const mock = getAPIv2Mock({ authorization }).get(`/${route}/new-doc`).reply(500);
 
-      const result = await run(['__tests__/__fixtures__/changelog/new-docs/new-doc.md', '--key', key]);
+      const result = await run(['test/__fixtures__/changelog/new-docs/new-doc.md', '--key', key]);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -309,7 +294,7 @@ describe(`rdme ${topic} upload`, () => {
         status: 500,
       });
 
-      const result = await run(['__tests__/__fixtures__/changelog/new-docs/new-doc.md', '--key', key]);
+      const result = await run(['test/__fixtures__/changelog/new-docs/new-doc.md', '--key', key]);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -324,13 +309,7 @@ describe(`rdme ${topic} upload`, () => {
         status: 500,
       });
 
-      const result = await run([
-        '__tests__/__fixtures__/changelog/new-docs/new-doc.md',
-        '--key',
-        key,
-        '--max-errors',
-        '-1',
-      ]);
+      const result = await run(['test/__fixtures__/changelog/new-docs/new-doc.md', '--key', key, '--max-errors', '-1']);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -373,7 +352,7 @@ describe(`rdme ${topic} upload`, () => {
         })
         .reply(201, {});
 
-      const result = await run([`__tests__/__fixtures__/${topic}/existing-docs`, '--key', key]);
+      const result = await run([`test/__fixtures__/${topic}/existing-docs`, '--key', key]);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -398,7 +377,7 @@ describe(`rdme ${topic} upload`, () => {
         })
         .reply(201, {});
 
-      const result = await run([`__tests__/__fixtures__/${topic}/existing-docs`, '--key', key]);
+      const result = await run([`test/__fixtures__/${topic}/existing-docs`, '--key', key]);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -431,7 +410,7 @@ describe(`rdme ${topic} upload`, () => {
         })
         .reply(201, {});
 
-      const result = await run(['__tests__/__fixtures__/changelog/complex-frontmatter', '--key', key]);
+      const result = await run(['test/__fixtures__/changelog/complex-frontmatter', '--key', key]);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -440,7 +419,7 @@ describe(`rdme ${topic} upload`, () => {
     });
 
     it('should error out if the directory does not contain any Markdown files', async () => {
-      const result = await run(['__tests__/__fixtures__/ref-oas', '--key', key]);
+      const result = await run(['test/__fixtures__/ref-oas', '--key', key]);
 
       expect(result).toMatchSnapshot();
     });
@@ -448,7 +427,7 @@ describe(`rdme ${topic} upload`, () => {
     it('should handle a mix of valid and invalid and autofixable files', async () => {
       prompts.inject([true]);
 
-      const result = await run(['__tests__/__fixtures__/changelog/mixed-docs', '--key', key]);
+      const result = await run(['test/__fixtures__/changelog/mixed-docs', '--key', key]);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).toHaveBeenCalledTimes(5);
@@ -490,7 +469,7 @@ describe(`rdme ${topic} upload`, () => {
         })
         .reply(500, {});
 
-      const result = await run(['__tests__/__fixtures__/changelog/mixed-docs', '--key', key, '--skip-validation']);
+      const result = await run(['test/__fixtures__/changelog/mixed-docs', '--key', key, '--skip-validation']);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -535,7 +514,7 @@ describe(`rdme ${topic} upload`, () => {
         .reply(500, {});
 
       const result = await run([
-        '__tests__/__fixtures__/changelog/mixed-docs',
+        'test/__fixtures__/changelog/mixed-docs',
         '--key',
         key,
         '--max-errors',
@@ -561,7 +540,7 @@ describe(`rdme ${topic} upload`, () => {
         .reply(500);
 
       const result = await run([
-        '__tests__/__fixtures__/changelog/mixed-docs',
+        'test/__fixtures__/changelog/mixed-docs',
         '--key',
         key,
         '--dry-run',

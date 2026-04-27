@@ -58,7 +58,7 @@ origin  ${remoteUrl} (push)
 /**
  * Helper functions for setting up and tearing down tests for our GitHub Action onboarding.
  *
- * @see {@link __tests__/lib/createGHA.test.ts}
+ * @see {@link test/lib/createGHA.test.ts}
  */
 export const gitMock = {
   before: function before(

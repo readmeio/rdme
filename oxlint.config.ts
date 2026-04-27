@@ -38,7 +38,7 @@ export default defineConfig({
   },
   overrides: [
     {
-      files: ['__tests__/**/*.test.{js,ts}'],
+      files: ['test/**/*.test.{js,ts}'],
       ...oxlintConfigVitest,
       rules: Object.assign(structuredClone(oxlintConfigVitest.rules), {
         // We've had troubles in the past where our test coverage required us to use Vitest mocks

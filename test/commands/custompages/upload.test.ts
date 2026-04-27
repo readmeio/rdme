@@ -49,7 +49,7 @@ describe('custompages upload', () => {
         })
         .reply(201, {});
 
-      const result = await run(['__tests__/__fixtures__/custompages/new-docs/new-doc.md', '--key', key]);
+      const result = await run(['test/__fixtures__/custompages/new-docs/new-doc.md', '--key', key]);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -69,7 +69,7 @@ describe('custompages upload', () => {
         .reply(201, {});
 
       const result = await run([
-        '__tests__/__fixtures__/custompages/new-docs/new-doc.md',
+        'test/__fixtures__/custompages/new-docs/new-doc.md',
         '--key',
         key,
         '--branch',
@@ -94,7 +94,7 @@ describe('custompages upload', () => {
         .reply(201, {});
 
       const result = await run([
-        '__tests__/__fixtures__/custompages/new-docs/new-doc.md',
+        'test/__fixtures__/custompages/new-docs/new-doc.md',
         '--key',
         key,
         '--version',
@@ -111,7 +111,7 @@ describe('custompages upload', () => {
       it('should not create anything in ReadMe', async () => {
         const mock = getAPIv2Mock({ authorization }).get('/branches/stable/custom_pages/new-doc').reply(404);
 
-        const result = await run(['__tests__/__fixtures__/custompages/new-docs/new-doc.md', '--key', key, '--dry-run']);
+        const result = await run(['test/__fixtures__/custompages/new-docs/new-doc.md', '--key', key, '--dry-run']);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -123,7 +123,7 @@ describe('custompages upload', () => {
         const mock = getAPIv2Mock({ authorization }).get('/branches/stable/custom_pages/some-slug').reply(200);
 
         const result = await run([
-          '__tests__/__fixtures__/custompages/slug-docs/new-doc-slug.md',
+          'test/__fixtures__/custompages/slug-docs/new-doc-slug.md',
           '--key',
           key,
           '--dry-run',
@@ -139,7 +139,7 @@ describe('custompages upload', () => {
         const mock = getAPIv2Mock({ authorization }).get('/branches/stable/custom_pages/some-slug').reply(500);
 
         const result = await run([
-          '__tests__/__fixtures__/custompages/slug-docs/new-doc-slug.md',
+          'test/__fixtures__/custompages/slug-docs/new-doc-slug.md',
           '--key',
           key,
           '--dry-run',
@@ -159,7 +159,7 @@ describe('custompages upload', () => {
         });
 
         const result = await run([
-          '__tests__/__fixtures__/custompages/slug-docs/new-doc-slug.md',
+          'test/__fixtures__/custompages/slug-docs/new-doc-slug.md',
           '--key',
           key,
           '--dry-run',
@@ -184,7 +184,7 @@ describe('custompages upload', () => {
           })
           .reply(201, {});
 
-        const result = await run(['__tests__/__fixtures__/custompages/slug-docs/new-doc-slug.md', '--key', key]);
+        const result = await run(['test/__fixtures__/custompages/slug-docs/new-doc-slug.md', '--key', key]);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -202,7 +202,7 @@ describe('custompages upload', () => {
           })
           .reply(201, {});
 
-        const result = await run(['__tests__/__fixtures__/custompages/slug-docs/new-doc-slug.md', '--key', key]);
+        const result = await run(['test/__fixtures__/custompages/slug-docs/new-doc-slug.md', '--key', key]);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -215,11 +215,11 @@ describe('custompages upload', () => {
       it('should fix the frontmatter issues in the file', async () => {
         prompts.inject([true]);
 
-        const result = await run(['__tests__/__fixtures__/custompages/mixed-docs/legacy-page.md', '--key', key]);
+        const result = await run(['test/__fixtures__/custompages/mixed-docs/legacy-page.md', '--key', key]);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).toHaveBeenCalledWith(
-          '__tests__/__fixtures__/custompages/mixed-docs/legacy-page.md',
+          'test/__fixtures__/custompages/mixed-docs/legacy-page.md',
           expect.stringContaining('view: anyone_with_link'),
           { encoding: 'utf-8' },
         );
@@ -228,7 +228,7 @@ describe('custompages upload', () => {
       it('should exit if the user declines to fix the issues', async () => {
         prompts.inject([false]);
 
-        const result = await run(['__tests__/__fixtures__/custompages/mixed-docs/legacy-page.md', '--key', key]);
+        const result = await run(['test/__fixtures__/custompages/mixed-docs/legacy-page.md', '--key', key]);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -248,7 +248,7 @@ describe('custompages upload', () => {
           .reply(400, { title: 'bad request', detail: 'your metadata is whack' });
 
         const result = await run([
-          '__tests__/__fixtures__/custompages/mixed-docs/legacy-page.md',
+          'test/__fixtures__/custompages/mixed-docs/legacy-page.md',
           '--key',
           key,
           '--skip-validation',
@@ -272,7 +272,7 @@ describe('custompages upload', () => {
           })
           .reply(201, {});
 
-        const result = await run(['__tests__/__fixtures__/custompages/mixed-docs/invalid-attributes.md', '--key', key]);
+        const result = await run(['test/__fixtures__/custompages/mixed-docs/invalid-attributes.md', '--key', key]);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -292,7 +292,7 @@ describe('custompages upload', () => {
         const postMock = getAPIv2MockForGHA({
           authorization,
           'x-readme-source-url':
-            'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/__tests__/__fixtures__/custompages/new-docs/new-doc.md',
+            'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/test/__fixtures__/custompages/new-docs/new-doc.md',
         })
           .post('/branches/stable/custom_pages', {
             slug: 'new-doc',
@@ -301,7 +301,7 @@ describe('custompages upload', () => {
           })
           .reply(201, {});
 
-        const result = await run(['__tests__/__fixtures__/custompages/new-docs/new-doc.md', '--key', key]);
+        const result = await run(['test/__fixtures__/custompages/new-docs/new-doc.md', '--key', key]);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -311,7 +311,7 @@ describe('custompages upload', () => {
       });
 
       it('should error out if the file has validation errors', async () => {
-        const result = await run(['__tests__/__fixtures__/custompages/mixed-docs/legacy-page.md', '--key', key]);
+        const result = await run(['test/__fixtures__/custompages/mixed-docs/legacy-page.md', '--key', key]);
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -319,7 +319,7 @@ describe('custompages upload', () => {
 
       it('should bypass prompt if `--confirm-autofixes` flag is passed', async () => {
         const result = await run([
-          '__tests__/__fixtures__/custompages/mixed-docs/legacy-page.md',
+          'test/__fixtures__/custompages/mixed-docs/legacy-page.md',
           '--key',
           key,
           '--confirm-autofixes',
@@ -327,7 +327,7 @@ describe('custompages upload', () => {
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).toHaveBeenCalledWith(
-          '__tests__/__fixtures__/custompages/mixed-docs/legacy-page.md',
+          'test/__fixtures__/custompages/mixed-docs/legacy-page.md',
           expect.stringContaining('view: anyone_with_link'),
           { encoding: 'utf-8' },
         );
@@ -337,7 +337,7 @@ describe('custompages upload', () => {
     it('should error out if a non-404 error is returned from the GET request', async () => {
       const mock = getAPIv2Mock({ authorization }).get('/branches/stable/custom_pages/new-doc').reply(500);
 
-      const result = await run(['__tests__/__fixtures__/custompages/new-docs/new-doc.md', '--key', key]);
+      const result = await run(['test/__fixtures__/custompages/new-docs/new-doc.md', '--key', key]);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -352,7 +352,7 @@ describe('custompages upload', () => {
         status: 500,
       });
 
-      const result = await run(['__tests__/__fixtures__/custompages/new-docs/new-doc.md', '--key', key]);
+      const result = await run(['test/__fixtures__/custompages/new-docs/new-doc.md', '--key', key]);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -368,7 +368,7 @@ describe('custompages upload', () => {
       });
 
       const result = await run([
-        '__tests__/__fixtures__/custompages/new-docs/new-doc.md',
+        'test/__fixtures__/custompages/new-docs/new-doc.md',
         '--key',
         key,
         '--max-errors',
@@ -427,7 +427,7 @@ describe('custompages upload', () => {
         })
         .reply(201, {});
 
-      const result = await run(['__tests__/__fixtures__/custompages/existing-docs', '--key', key]);
+      const result = await run(['test/__fixtures__/custompages/existing-docs', '--key', key]);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -462,7 +462,7 @@ describe('custompages upload', () => {
         })
         .reply(201, {});
 
-      const result = await run(['__tests__/__fixtures__/custompages/existing-docs', '--key', key]);
+      const result = await run(['test/__fixtures__/custompages/existing-docs', '--key', key]);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -499,7 +499,7 @@ describe('custompages upload', () => {
         })
         .reply(201, {});
 
-      const result = await run(['__tests__/__fixtures__/custompages/complex-frontmatter', '--key', key]);
+      const result = await run(['test/__fixtures__/custompages/complex-frontmatter', '--key', key]);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -508,7 +508,7 @@ describe('custompages upload', () => {
     });
 
     it('should error out if the directory does not contain any Markdown or HTML files', async () => {
-      const result = await run(['__tests__/__fixtures__/ref-oas', '--key', key]);
+      const result = await run(['test/__fixtures__/ref-oas', '--key', key]);
 
       expect(result).toMatchSnapshot();
     });
@@ -516,7 +516,7 @@ describe('custompages upload', () => {
     it('should handle a mix of valid and invalid and autofixable files', async () => {
       prompts.inject([true]);
 
-      const result = await run(['__tests__/__fixtures__/custompages/mixed-docs', '--key', key]);
+      const result = await run(['test/__fixtures__/custompages/mixed-docs', '--key', key]);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).toHaveBeenCalledTimes(5);
@@ -559,7 +559,7 @@ describe('custompages upload', () => {
         })
         .reply(500, {});
 
-      const result = await run(['__tests__/__fixtures__/custompages/mixed-docs', '--key', key, '--skip-validation']);
+      const result = await run(['test/__fixtures__/custompages/mixed-docs', '--key', key, '--skip-validation']);
 
       expect(result).toMatchSnapshot();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
@@ -605,7 +605,7 @@ describe('custompages upload', () => {
         .reply(500, {});
 
       const result = await run([
-        '__tests__/__fixtures__/custompages/mixed-docs',
+        'test/__fixtures__/custompages/mixed-docs',
         '--key',
         key,
         '--max-errors',
@@ -631,7 +631,7 @@ describe('custompages upload', () => {
         .reply(500);
 
       const result = await run([
-        '__tests__/__fixtures__/custompages/mixed-docs',
+        'test/__fixtures__/custompages/mixed-docs',
         '--key',
         key,
         '--dry-run',
