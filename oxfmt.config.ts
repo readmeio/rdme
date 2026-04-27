@@ -8,7 +8,7 @@ export default defineConfig(
     },
     ignorePatterns: [
       // invalid files
-      '__tests__/__fixtures__/invalid-json/yikes.json',
+      'test/__fixtures__/invalid-json/yikes.json',
 
       // test result artifacts
       'coverage/',

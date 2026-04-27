@@ -56,7 +56,7 @@
     "prepare": "husky",
     "pretest": "npm run build",
     "schemas:check": "./bin/json-schema-store.js",
-    "schemas:write": "./bin/json-schema-store.js --update && npx oxfmt --write __tests__/helpers/github-workflow-schema.json",
+    "schemas:write": "./bin/json-schema-store.js --update && npx oxfmt --write test/helpers/github-workflow-schema.json",
     "test": "vitest run --coverage",
     "version": "npm run build:gha && oclif manifest && npm run build:docs"
   },

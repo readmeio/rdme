@@ -17,4 +17,4 @@ jobs:
       - name: Run `openapi:validate` command
         uses: ./ # in actual production usage, this value should be 'readmeio/rdme@XX'
         with:
-          rdme: openapi:validate __tests__/__fixtures__/ref-oas/petstore.json
+          rdme: openapi:validate test/__fixtures__/ref-oas/petstore.json
