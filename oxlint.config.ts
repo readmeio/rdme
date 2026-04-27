@@ -8,7 +8,7 @@ export default defineConfig({
   options: {
     reportUnusedDisableDirectives: 'error',
   },
-  ignorePatterns: ['coverage/**', 'dist/**', 'dist-gha/**'],
+  ignorePatterns: ['coverage/', 'dist/', 'dist-gha/'],
   env: {
     browser: true,
     commonjs: true,
