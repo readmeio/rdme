@@ -110,8 +110,8 @@
     "@types/semver": "^7.3.12",
     "@types/toposort": "^2.0.7",
     "@types/unzipper": "^0.10.11",
-    "@vitest/coverage-v8": "^4.0.18",
-    "@vitest/expect": "^4.0.18",
+    "@vitest/coverage-v8": "^4.1.5",
+    "@vitest/expect": "^4.1.5",
     "husky": "^9.0.10",
     "knip": "^6.7.0",
     "nock": "^14.0.0",
@@ -124,7 +124,7 @@
     "tsx": "^4.19.2",
     "type-fest": "^5.4.3",
     "typescript": "^5.8.2",
-    "vitest": "^4.0.18"
+    "vitest": "^4.1.5"
   },
   "commitlint": {
     "extends": [
