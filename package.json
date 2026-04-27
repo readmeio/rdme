@@ -79,13 +79,12 @@
     "unzipper": "^0.12.3"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.3.13",
     "@commitlint/cli": "^20.4.1",
     "@commitlint/config-conventional": "^20.4.1",
     "@oclif/test": "^4.1.16",
     "@readme/better-ajv-errors": "^2.3.2",
     "@readme/oas-examples": "^7.2.1",
-    "@readme/standards": "^2.1.1",
+    "@readme/oxlint-config": "^1.1.2",
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-node-resolve": "^16.0.0",
@@ -100,11 +99,12 @@
     "@vitest/coverage-v8": "^4.0.18",
     "@vitest/expect": "^4.0.18",
     "husky": "^9.0.10",
-    "knip": "^5.83.0",
+    "knip": "^6.7.0",
     "nock": "^14.0.0",
     "oclif": "^4.22.73",
     "openapi-types": "^12.1.3",
-    "prettier": "^3.8.1",
+    "oxfmt": "^0.47.0",
+    "oxlint": "^1.62.0",
     "rollup": "^4.57.1",
     "rollup-plugin-esbuild": "^6.2.0",
     "tsx": "^4.19.2",
@@ -116,17 +116,16 @@
     "build": "tsc",
     "build:docs": "oclif readme --multi --output-dir documentation/commands --no-aliases",
     "build:gha": "npm run build && rollup --config",
-    "lint": "knip && npm run lint:ts && npm run prettier && npm run schemas:check",
-    "lint:ts": "biome check --error-on-warnings",
-    "lint:ts:write": "biome check --write",
+    "format": "npx oxlint --fix && npx oxfmt --write",
+    "lint": "knip && npm run lint:ts && npx oxfmt && npm run schemas:check",
+    "lint:ts": "npx oxlint",
+    "lint:ts:write": "npx oxlint --fix",
     "prebuild": "rm -rf dist/",
     "prepack": "npm run build",
     "prepare": "husky",
     "pretest": "npm run build",
-    "prettier": "prettier --check .",
-    "prettier:write": "prettier --write .",
     "schemas:check": "./bin/json-schema-store.js",
-    "schemas:write": "./bin/json-schema-store.js --update",
+    "schemas:write": "./bin/json-schema-store.js --update && npx oxfmt --write __tests__/helpers/github-workflow-schema.json",
     "test": "vitest run --coverage",
     "version": "npm run build:gha && oclif manifest && npm run build:docs"
   },
@@ -185,6 +184,5 @@
         "description": "Manage your API definition (e.g., syncing, validation, analysis, conversion, etc.). Supports OpenAPI, Swagger, and Postman collections, in either JSON or YAML formats."
       }
     }
-  },
-  "prettier": "@readme/standards/prettier"
+  }
 }

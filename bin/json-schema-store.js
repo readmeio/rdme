@@ -1,10 +1,8 @@
 #! /usr/bin/env node
 
 // @ts-check
+import { createHash } from 'node:crypto';
 import fs from 'node:fs/promises';
-import path from 'node:path';
-
-import prettier from 'prettier';
 
 const files = [
   {
@@ -15,6 +13,12 @@ const files = [
   },
 ];
 
+function getObjectHash(data) {
+  return createHash('sha1')
+    .update(Buffer.from(JSON.stringify(data), 'utf8'))
+    .digest('hex');
+}
+
 /**
  * Handles the checks and refreshes for our JSON Schema Store files.
  *
@@ -22,8 +26,7 @@ const files = [
  */
 async function refreshSchemas() {
   const isUpdate = process.argv.includes('--update');
-  // grab prettier config from repo root
-  const prettierConfig = await prettier.resolveConfig(path.join(new URL('.', import.meta.url).pathname, '.'));
+
   try {
     await Promise.all(
       files.map(async file => {
@@ -32,13 +35,12 @@ async function refreshSchemas() {
           return res.json();
         });
 
-        const formattedFile = await prettier.format(JSON.stringify(rawFile), { parser: 'json', ...prettierConfig });
-
         if (isUpdate) {
-          await fs.writeFile(file.filePath, formattedFile);
+          await fs.writeFile(file.filePath, JSON.stringify(rawFile));
         } else {
           const currentFile = await fs.readFile(file.filePath, { encoding: 'utf-8' });
-          if (currentFile !== formattedFile) {
+          const currentData = JSON.parse(currentFile);
+          if (getObjectHash(currentData) !== getObjectHash(rawFile)) {
             throw new Error(`${file.filePath} is outdated! Run \`npm run schemas:write\` to update.`);
           }
         }
