@@ -1,5 +1,5 @@
-import type { OASDocument } from 'oas/types';
 import type { Analysis, AnalyzedFeature } from '../../lib/analyzeOas.js';
+import type { OASDocument } from 'oas/types';
 
 import { Flags } from '@oclif/core';
 import chalk from 'chalk';
@@ -246,6 +246,8 @@ export default class OpenAPIInspectCommand extends BaseCommand<typeof OpenAPIIns
       .reduce((prev, next) => Object.assign(prev, next));
 
     const { preparedSpec, definitionVersion } = await prepareOas.call(this);
+
+    // oxlint-disable-next-line readme/json-parse-try-catch -- If this fails we should fail.
     const parsedPreparedSpec: OASDocument = JSON.parse(preparedSpec);
 
     const spinner = ora({ ...oraOptions() });

@@ -1,5 +1,5 @@
-import type { OpenAPI } from 'openapi-types';
 import type { CommandIdForTopic, OpenAPICommands } from '../index.js';
+import type { OpenAPI } from 'openapi-types';
 
 import chalk from 'chalk';
 import OASNormalize from 'oas-normalize';

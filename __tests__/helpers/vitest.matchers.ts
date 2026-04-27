@@ -1,9 +1,10 @@
+// oxlint-disable typescript/no-empty-object-type -- This is the type for a custom matcher.
 import type { ExpectationResult } from '@vitest/expect';
 import type { AnySchema } from 'ajv';
 
 import betterAjvErrors from '@readme/better-ajv-errors';
 import { Ajv } from 'ajv';
-import jsYaml from 'js-yaml';
+import { load as loadYAML } from 'js-yaml';
 
 interface CustomMatchers<R = unknown> {
   /**
@@ -13,7 +14,6 @@ interface CustomMatchers<R = unknown> {
 }
 
 declare module 'vitest' {
-  // biome-ignore lint/suspicious/noExplicitAny: This is the type for a custom matcher.
   interface Assertion<T = any> extends CustomMatchers<T> {}
   interface AsymmetricMatchersContaining extends CustomMatchers {}
 }
@@ -26,7 +26,7 @@ export function toBeValidSchema(
 ): ExpectationResult {
   const ajv = new Ajv({ strictTypes: false, strictTuples: false });
 
-  const data = jsYaml.load(yaml);
+  const data = loadYAML(yaml);
 
   const validate = ajv.compile(schema);
   const valid = validate(data);
@@ -34,9 +34,10 @@ export function toBeValidSchema(
   if (!valid) {
     let output = 'expected YAML to be valid';
 
-    if (validate.errors)
+    if (validate.errors) {
       // @ts-expect-error this still works, not sure why TS is flagging it
       output = `${output}, here's the validation error\n\n${betterAjvErrors(schema, data, validate.errors)}`;
+    }
 
     return {
       message: () => output,

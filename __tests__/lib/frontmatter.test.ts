@@ -1,6 +1,6 @@
-import type { SchemaObject } from 'oas/types';
 import type { APIv2PageCommands } from '../../src/index.js';
 import type { PageMetadata } from '../../src/lib/readPage.js';
+import type { SchemaObject } from 'oas/types';
 
 import fs from 'node:fs';
 
