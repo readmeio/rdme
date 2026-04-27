@@ -31,11 +31,8 @@ describe.each([
       parentPages: {},
     });
     vi.spyOn(fs, 'writeFileSync').mockImplementation((file, data) => {
-      // biome-ignore lint/suspicious/noConsole: useful testing output
       console.log(`=== BEGIN writeFileSync to file: ${file} ===`);
-      // biome-ignore lint/suspicious/noConsole: useful testing output
       console.log(data);
-      // biome-ignore lint/suspicious/noConsole: useful testing output
       console.log(`=== END writeFileSync to file: ${file} ===`);
     });
   });

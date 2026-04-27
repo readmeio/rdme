@@ -356,7 +356,6 @@ export async function handleAPIv1Res(
     const text = await res.text();
     debug(`received status code ${res.status} from ${res.url} with JSON response: ${text}`);
     try {
-      // biome-ignore lint/suspicious/noExplicitAny: We do not have TS types for APIv1 responses.
       const body = JSON.parse(text) as any;
       if (body.error && rejectOnJsonError) {
         throw new APIv1Error(body);

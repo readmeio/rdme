@@ -1,4 +1,3 @@
-/** biome-ignore-all lint/suspicious/noConsole: We're testing console output. */
 import type { MockInstance } from 'vitest';
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';

@@ -62,6 +62,7 @@ describe('rdme openapi inspect', () => {
       },
     ];
 
+    // oxlint-disable vitest/no-conditional-expect
     it.each(cases)('should generate a report for $spec (w/ $feature)', async ({ spec, feature, shouldSoftError }) => {
       const args = [require.resolve(spec)].concat(...feature.map(f => ['--feature', f]));
       const { result, error } = await run(args);
@@ -71,5 +72,6 @@ describe('rdme openapi inspect', () => {
         expect(error).toMatchSnapshot();
       }
     });
+    // oxlint-enable vitest/no-conditional-expect
   });
 });

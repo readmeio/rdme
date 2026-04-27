@@ -110,10 +110,10 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
     // If this is a soft error then we should output the result as a regular log but exit the CLI
     // with an error status code.
     if (err.name === 'SoftError') {
-      // biome-ignore lint/suspicious/noConsole: We are printing errors to the terminal.
+      // oxlint-disable-next-line no-console -- We are printing errors to the terminal.
       console.log(err.message);
     } else {
-      // biome-ignore lint/suspicious/noConsole: We are printing errors to the terminal.
+      // oxlint-disable-next-line no-console -- We are printing errors to the terminal.
       console.error(chalk.red(`\n${message}\n`));
     }
 

@@ -42,7 +42,6 @@ type OpenAPIAction = CommandIdForTopic<'openapi'>;
 function capitalizeSpecType<T extends 'openapi' | 'postman' | 'swagger' | 'unknown'>(
   type: T,
 ): T extends 'openapi' ? 'OpenAPI' : Capitalize<T> {
-  // biome-ignore lint/suspicious/noExplicitAny: Casting to `any` makes this properly narrow.
   return (type === 'openapi' ? 'OpenAPI' : type.charAt(0).toUpperCase() + type.slice(1)) as any;
 }
 

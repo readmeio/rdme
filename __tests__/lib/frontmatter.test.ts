@@ -386,7 +386,7 @@ describe('#readPage', () => {
 
     // The data should be empty because we disabled the javascript engine
     // by providing a parse function that returns an empty object
-    expect(result.data).toEqual({});
+    expect(result.data).toStrictEqual({});
     expect(result.content).toContain('# Page content');
   });
 
@@ -404,7 +404,7 @@ category: some-category
 
     const result = readPage.call(command, testFilePath);
 
-    expect(result.data).toEqual({
+    expect(result.data).toStrictEqual({
       title: 'Normal Page',
       category: 'some-category',
     });
