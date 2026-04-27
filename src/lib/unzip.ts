@@ -30,7 +30,7 @@ export async function attemptUnzip(pathInput: string): Promise<MarkdownFileScanR
       const newWorkingDir = path.join(outputDir, path.basename(pathInput, '.zip'));
 
       return { pathInput: newWorkingDir, zipped: true as const, unzippedDir: newWorkingDir };
-    } catch (_e) {
+    } catch {
       return { pathInput, zipped: false as const };
     }
   }

@@ -21,7 +21,7 @@ describe('BaseCommand', () => {
   let run: (args?: string[]) => OclifOutput;
 
   describe('#runRdmeCommand', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       configStore.clear();
       run = runCommand(TestCommand as CommandClass);
     });

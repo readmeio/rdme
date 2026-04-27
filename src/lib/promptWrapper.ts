@@ -42,9 +42,10 @@ export default async function promptTerminal<T extends string = string>(
   }
 
   if (Array.isArray(questions)) {
-    // biome-ignore lint/style/noParameterAssign: This is safe to rewrite our incoming questions for `prompts`.
+    // oxlint-disable-next-line no-param-reassign -- This is safe to rewrite our incoming questions for `prompts`.
     questions = questions.map(question => ({ onRender, ...question }));
   } else {
+    // oxlint-disable-next-line no-param-reassign
     questions.onRender = onRender;
   }
 

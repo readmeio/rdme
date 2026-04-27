@@ -1,4 +1,3 @@
-/** biome-ignore-all lint/suspicious/noConsole: We're testing console output. */
 import type { MockInstance } from 'vitest';
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -26,7 +25,7 @@ describe('#readmeAPIv1Fetch()', () => {
       const mock = getAPIv1Mock()
         .get('/api/v1')
         .basicAuth({ user: key })
-        .reply(200, function () {
+        .reply(200, function mock() {
           return this.req.headers;
         });
 
@@ -54,7 +53,7 @@ describe('#readmeAPIv1Fetch()', () => {
         const mock = getAPIv1Mock()
           .get('/api/v1')
           .basicAuth({ user: key })
-          .reply(200, function () {
+          .reply(200, function mock() {
             return this.req.headers;
           });
 
@@ -80,7 +79,7 @@ describe('#readmeAPIv1Fetch()', () => {
         const mock = getAPIv1Mock()
           .get('/api/v1')
           .basicAuth({ user: key })
-          .reply(200, function () {
+          .reply(200, function mock() {
             return this.req.headers;
           });
 
@@ -102,12 +101,13 @@ describe('#readmeAPIv1Fetch()', () => {
 
       it('should omit source URL header if URL is invalid', async () => {
         const key = 'API_KEY';
+        // oxlint-disable-next-line unicorn/no-useless-undefined
         vi.stubEnv('GITHUB_SERVER_URL', undefined);
 
         const mock = getAPIv1Mock()
           .get('/api/v1')
           .basicAuth({ user: key })
-          .reply(200, function () {
+          .reply(200, function mock() {
             return this.req.headers;
           });
 
@@ -131,7 +131,7 @@ describe('#readmeAPIv1Fetch()', () => {
         const mock = getAPIv1Mock()
           .get('/api/v1')
           .basicAuth({ user: key })
-          .reply(200, function () {
+          .reply(200, function mock() {
             return this.req.headers;
           });
 
@@ -158,7 +158,7 @@ describe('#readmeAPIv1Fetch()', () => {
         const mock = getAPIv1Mock()
           .get('/api/v1')
           .basicAuth({ user: key })
-          .reply(200, function () {
+          .reply(200, function mock() {
             return this.req.headers;
           });
 
@@ -184,7 +184,7 @@ describe('#readmeAPIv1Fetch()', () => {
     const mock = getAPIv1Mock()
       .get('/api/v1')
       .basicAuth({ user: key })
-      .reply(200, function () {
+      .reply(200, function mock() {
         return this.req.headers;
       });
 
@@ -207,7 +207,7 @@ describe('#readmeAPIv1Fetch()', () => {
   it('should make fetch call if no other request options are provided', async () => {
     const mock = getAPIv1Mock()
       .get('/api/v1/doesnt-need-auth')
-      .reply(200, function () {
+      .reply(200, function mock() {
         return this.req.headers;
       });
 
