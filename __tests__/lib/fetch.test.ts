@@ -101,7 +101,8 @@ describe('#readmeAPIv1Fetch()', () => {
 
       it('should omit source URL header if URL is invalid', async () => {
         const key = 'API_KEY';
-        vi.stubEnv('GITHUB_SERVER_URL', null);
+        // oxlint-disable-next-line unicorn/no-useless-undefined
+        vi.stubEnv('GITHUB_SERVER_URL', undefined);
 
         const mock = getAPIv1Mock()
           .get('/api/v1')
