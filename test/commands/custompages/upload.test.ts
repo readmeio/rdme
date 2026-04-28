@@ -58,6 +58,30 @@ describe('custompages upload', () => {
       mock.done();
     });
 
+    it('should fall back to PATCH when POST returns 409 Conflict', async () => {
+      const mock = getAPIv2Mock({ authorization })
+        .get('/branches/stable/custom_pages/new-doc')
+        .reply(404)
+        .post('/branches/stable/custom_pages', {
+          slug: 'new-doc',
+          title: 'This is the document title',
+          content: { body: '\nBody\n', type: 'markdown' },
+        })
+        .reply(409)
+        .patch('/branches/stable/custom_pages/new-doc', {
+          title: 'This is the document title',
+          content: { body: '\nBody\n', type: 'markdown' },
+        })
+        .reply(201, {});
+
+      const result = await run(['test/__fixtures__/custompages/new-docs/new-doc.md', '--key', key]);
+
+      expect(result).toMatchSnapshot();
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
+
+      mock.done();
+    });
+
     it('should allow for user to specify branch via --branch flag', async () => {
       const mock = getAPIv2Mock({ authorization })
         .get('/branches/1.2.3/custom_pages/new-doc')

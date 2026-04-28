@@ -822,6 +822,32 @@ exports[`rdme docs upload > given that the file path is a single file > should e
 }
 `;
 
+exports[`rdme docs upload > given that the file path is a single file > should fall back to PATCH when POST returns 409 Conflict 1`] = `
+{
+  "result": {
+    "created": [],
+    "failed": [],
+    "skipped": [],
+    "updated": [
+      {
+        "filePath": "test/__fixtures__/docs/new-docs/new-doc.md",
+        "response": {},
+        "result": "updated",
+        "slug": "new-doc",
+      },
+    ],
+  },
+  "stderr": "- 🔬 Validating frontmatter data...
+✔ 🔬 Validating frontmatter data... no issues found!
+- 🚀 Uploading files to ReadMe...
+✔ 🚀 Uploading files to ReadMe... done!
+",
+  "stdout": "🔄 Successfully updated 1 page(s) in ReadMe:
+   - new-doc (test/__fixtures__/docs/new-docs/new-doc.md)
+",
+}
+`;
+
 exports[`rdme docs upload > given that the file path is a single file > should gracefully handle errors that claim they are JSON but are not 1`] = `
 {
   "error": [Error: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
@@ -1683,6 +1709,32 @@ exports[`rdme reference upload > given that the file path is a single file > sho
   "error": [Error: Invalid file extension (.json). Must be one of the following: .markdown, .md, .mdx],
   "stderr": "",
   "stdout": "",
+}
+`;
+
+exports[`rdme reference upload > given that the file path is a single file > should fall back to PATCH when POST returns 409 Conflict 1`] = `
+{
+  "result": {
+    "created": [],
+    "failed": [],
+    "skipped": [],
+    "updated": [
+      {
+        "filePath": "test/__fixtures__/docs/new-docs/new-doc.md",
+        "response": {},
+        "result": "updated",
+        "slug": "new-doc",
+      },
+    ],
+  },
+  "stderr": "- 🔬 Validating frontmatter data...
+✔ 🔬 Validating frontmatter data... no issues found!
+- 🚀 Uploading files to ReadMe...
+✔ 🚀 Uploading files to ReadMe... done!
+",
+  "stdout": "🔄 Successfully updated 1 page(s) in ReadMe:
+   - new-doc (test/__fixtures__/docs/new-docs/new-doc.md)
+",
 }
 `;
 

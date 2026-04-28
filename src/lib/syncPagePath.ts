@@ -135,12 +135,12 @@ async function pushPage(
       payload = customPagePayload;
     }
 
-    const createPage = (): CreatePushResult | Promise<CreatePushResult> => {
+    const createPage = async (): Promise<CreatePushResult | UpdatePushResult> => {
       if (dryRun) {
         return { filePath, response: null, result: 'created', slug };
       }
 
-      return this.readmeAPIFetch(
+      const res = await this.readmeAPIFetch(
         route,
         { method: 'POST', headers, body: JSON.stringify(payload) },
         {
@@ -149,11 +149,29 @@ async function pushPage(
             type: 'path',
           },
         },
-      )
-        .then(res => this.handleAPIRes(res))
-        .then(res => {
-          return { filePath, response: res?.data || {}, result: 'created', slug };
-        });
+      );
+
+      // If the server returns a 409 Conflict then the page already exists. We can fall back to a
+      // PATCH request instead of failing, or letting the server silently create a duplicate with
+      // a `-1` slug suffix.
+      if (res.status === 409) {
+        this.debug(`POST for ${slug} returned 409 Conflict, falling back to PATCH`);
+        // oxlint-disable-next-line no-use-before-define -- @todo REMOVE THIS
+        return updatePage();
+      }
+
+      const parsed = await this.handleAPIRes(res);
+      const responseSlug = parsed?.data?.slug;
+
+      // If the server created the page with a slug different than what we requested then we should
+      // alert the user.
+      if (responseSlug && responseSlug !== slug) {
+        this.warn(
+          `⚠️ Slug mismatch for ${filePath}: requested "${slug}" but server created "${responseSlug}". This may indicate a duplicate.`,
+        );
+      }
+
+      return { filePath, response: parsed?.data || {}, result: 'created', slug };
     };
 
     const updatePage = (): Promise<UpdatePushResult> | UpdatePushResult => {

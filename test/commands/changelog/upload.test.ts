@@ -62,6 +62,32 @@ describe(`rdme ${topic} upload`, () => {
       mock.done();
     });
 
+    it('should fall back to PATCH when POST returns 409 Conflict', async () => {
+      const mock = getAPIv2Mock({ authorization })
+        .get(`/${route}/new-doc`)
+        .reply(404)
+        .post(`/${route}`, {
+          type: 'added',
+          slug: 'new-doc',
+          title: 'This is the changelog title',
+          content: { body: '\nBody\n' },
+        })
+        .reply(409)
+        .patch(`/${route}/new-doc`, {
+          type: 'added',
+          title: 'This is the changelog title',
+          content: { body: '\nBody\n' },
+        })
+        .reply(201, {});
+
+      const result = await run(['test/__fixtures__/changelog/new-docs/new-doc.md', '--key', key]);
+
+      expect(result).toMatchSnapshot();
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
+
+      mock.done();
+    });
+
     describe('given that the --dry-run flag is passed', () => {
       it('should not create anything in ReadMe', async () => {
         const mock = getAPIv2Mock({ authorization }).get(`/${route}/new-doc`).reply(404);

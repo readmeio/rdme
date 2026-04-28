@@ -683,6 +683,32 @@ exports[`rdme changelog upload > given that the file path is a single file > sho
 }
 `;
 
+exports[`rdme changelog upload > given that the file path is a single file > should fall back to PATCH when POST returns 409 Conflict 1`] = `
+{
+  "result": {
+    "created": [],
+    "failed": [],
+    "skipped": [],
+    "updated": [
+      {
+        "filePath": "test/__fixtures__/changelog/new-docs/new-doc.md",
+        "response": {},
+        "result": "updated",
+        "slug": "new-doc",
+      },
+    ],
+  },
+  "stderr": "- 🔬 Validating frontmatter data...
+✔ 🔬 Validating frontmatter data... no issues found!
+- 🚀 Uploading files to ReadMe...
+✔ 🚀 Uploading files to ReadMe... done!
+",
+  "stdout": "🔄 Successfully updated 1 page(s) in ReadMe:
+   - new-doc (test/__fixtures__/changelog/new-docs/new-doc.md)
+",
+}
+`;
+
 exports[`rdme changelog upload > given that the file path is a single file > should not throw an error if \`max-errors\` flag is set to -1 1`] = `
 {
   "result": {
