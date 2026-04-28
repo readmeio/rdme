@@ -1,4 +1,4 @@
-// biome-ignore lint/style/noRestrictedImports: `ci-info` is safe to use here but nowhere else.
+// oxlint-disable-next-line no-restricted-imports -- `ci-info` is safe to use here but nowhere else.
 import ci from 'ci-info';
 
 /**

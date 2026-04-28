@@ -1,5 +1,5 @@
-import type { OASDocument } from 'oas/types';
 import type { Analysis, AnalyzedFeature } from '../../lib/analyzeOas.js';
+import type { OASDocument } from 'oas/types';
 
 import { Flags } from '@oclif/core';
 import chalk from 'chalk';
