@@ -1,8 +1,8 @@
-import type { Hook } from '@oclif/core';
-import type { SchemaObject } from 'oas/types';
 import type { APIv2PageCommands, CommandClass } from '../index.js';
 import type { APIv2ErrorResponse } from './apiError.js';
 import type { SpecFileType } from './prepareOas.js';
+import type { Hook } from '@oclif/core';
+import type { SchemaObject } from 'oas/types';
 
 import path from 'node:path';
 
@@ -13,11 +13,26 @@ import { APIv1Error, APIv2Error } from './apiError.js';
 import config from './config.js';
 import { getPkgVersion } from './getPkg.js';
 import { git } from './git.js';
-import isCI, { ciName, isGHA } from './isCI.js';
+import isCI, { ciName, isGHA, isTest } from './isCI.js';
 import { debug, warn } from './logger.js';
 import readmeAPIv2Oas from './types/openapiDoc.js';
 
 const SUCCESS_NO_CONTENT = 204;
+
+/**
+ * Configuration for retry logic with exponential backoff.
+ * Used when the API returns 5xx server errors.
+ */
+export const MAX_RETRIES = 3;
+const INITIAL_DELAY_MS = 1000;
+
+/**
+ * Determines if a response status code is retryable.
+ * Only retry on 5xx server errors, not on 4xx client errors.
+ */
+function isRetryableStatus(status: number): boolean {
+  return status >= 500 && status < 600;
+}
 
 /**
  * This contains a few pieces of information about a file so
@@ -60,7 +75,7 @@ export interface Mappings {
 /**
  * A generic response body type for responses from the ReadMe API.
  */
-// biome-ignore lint/suspicious/noExplicitAny: Generic typing for responses.
+// oxlint-disable-next-line typescript/no-empty-object-type -- Generic typing for responses.
 export interface ResponseBody extends Record<string, any> {}
 
 export const emptyMappings: Mappings = { categories: {}, parentPages: {} };
@@ -82,7 +97,7 @@ function parseWarningHeader(
     let previous: WarningHeader;
 
     return warnings.reduce<WarningHeader[]>((all, w) => {
-      // biome-ignore lint/style/noParameterAssign: We need to mutate this variable for reducing.
+      // oxlint-disable-next-line no-param-reassign -- We need to mutate this variable for reducing.
       w = w.trim();
       const newError = w.match(/^([0-9]{3}) (.*)/);
       if (newError) {
@@ -134,6 +149,7 @@ async function normalizeFilePath(opts: FilePathDetails) {
  */
 function sanitizeHeaders(headers: Headers) {
   const raw = Array.from(headers.entries()).reduce<Record<string, string>>((prev, current) => {
+    // oxlint-disable-next-line no-param-reassign -- We need to mutate this variable for reducing.
     prev[current[0]] = current[0].toLowerCase() === 'authorization' ? 'redacted' : current[1];
     return prev;
   }, {});
@@ -305,13 +321,41 @@ export async function readmeAPIv2Fetch<T extends Hook.Context = Hook.Context>(
     `making ${(options.method || 'get').toUpperCase()} request to ${fullUrl} ${proxy ? `with proxy ${proxy} and ` : ''}with headers: ${sanitizeHeaders(headers)}`,
   );
 
-  return fetch(fullUrl, {
+  const fetchOptions: RequestInit & { dispatcher?: ProxyAgent } = {
     ...options,
     headers,
-    // @ts-expect-error we need to clean up our undici usage here ASAP
     dispatcher: proxy ? new ProxyAgent(proxy) : undefined,
-  })
-    .then(res => {
+  };
+
+  // Retry logic with exponential backoff for 5xx server errors
+  let lastError: Error | undefined;
+
+  // oxlint-disable no-await-in-loop -- Sequential delays required for retry logic with exponential backoff
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt += 1) {
+    if (attempt > 0) {
+      const delay = (isTest() ? 10 : INITIAL_DELAY_MS) * 2 ** (attempt - 1);
+      this.debug(`retrying request (attempt ${attempt}/${MAX_RETRIES}) after ${delay}ms delay`);
+      await new Promise(resolve => {
+        setTimeout(resolve, delay);
+      });
+    }
+
+    try {
+      const res = await fetch(fullUrl, fetchOptions);
+
+      // If we get a 5xx error and have retries left, log and continue to next attempt
+      if (isRetryableStatus(res.status) && attempt < MAX_RETRIES) {
+        const body = await res.text();
+        this.debug(
+          `received retryable status ${res.status} (attempt ${attempt + 1}/${MAX_RETRIES + 1}), will retry. Response preview: ${body.slice(0, 200)}`,
+        );
+
+        lastError = new Error(`Server returned ${res.status}`);
+        // oxlint-disable-next-line no-continue
+        continue;
+      }
+
+      // Handle warning headers on successful responses
       const warningHeader = res.headers.get('Warning');
       if (warningHeader) {
         this.debug(`received warning header: ${warningHeader}`);
@@ -320,13 +364,24 @@ export async function readmeAPIv2Fetch<T extends Hook.Context = Hook.Context>(
           this.warn(`⚠️ ReadMe API Warning: ${warning.message}`);
         });
       }
+
       return res;
-    })
-    .catch(e => {
-      this.debug(`error making fetch request: ${e}`);
+    } catch (e) {
+      this.debug(`error making fetch request (attempt ${attempt + 1}/${MAX_RETRIES + 1}): ${e}`);
       this.debug(e.stack);
-      throw e;
-    });
+      lastError = e;
+
+      // If we've exhausted all retries then throw the error, otherwise continue to next retry
+      // attempt.
+      if (attempt >= MAX_RETRIES) {
+        throw e;
+      }
+    }
+  }
+  // oxlint-enable no-await-in-loop
+
+  // This should only be reached if all retries failed
+  throw lastError || new Error('Request failed after maximum retries');
 }
 
 /**
@@ -355,7 +410,6 @@ export async function handleAPIv1Res(
     const text = await res.text();
     debug(`received status code ${res.status} from ${res.url} with JSON response: ${text}`);
     try {
-      // biome-ignore lint/suspicious/noExplicitAny: We do not have TS types for APIv1 responses.
       const body = JSON.parse(text) as any;
       if (body.error && rejectOnJsonError) {
         throw new APIv1Error(body);

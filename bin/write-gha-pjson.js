@@ -21,6 +21,7 @@ function writeGitHubActionsPackageJson() {
   // set the correct targets for GitHub Actions
   current.oclif.commands.target = newTarget;
   Object.values(current.oclif.hooks).forEach(hook => {
+    // oxlint-disable-next-line no-param-reassign
     hook.target = newTarget;
   });
 
@@ -30,7 +31,7 @@ function writeGitHubActionsPackageJson() {
 
   // Add GitHub Actions debug statement
   // (we cannot use the '@actions/core' package here since we do not have access to any of our npm dependencies)
-  // biome-ignore lint/suspicious/noConsole: This file is a wrapper for emitting logs to GH Actions.
+  // oxlint-disable-next-line no-console -- This file is a wrapper for emitting logs to GH Actions.
   console.log(`::debug::writing package.json to dist-gha: ${JSON.stringify(current)}`);
 
   // write the new package.json file

@@ -250,9 +250,11 @@ function sortFiles(
   files: PageMetadata<GuidesOrReferenceRequestSchema>[],
 ): PageMetadata<GuidesOrReferenceRequestSchema>[] {
   const filesBySlug = files.reduce<Record<string, PageMetadata<GuidesOrReferenceRequestSchema>>>((bySlug, obj) => {
+    // oxlint-disable-next-line no-param-reassign
     bySlug[obj.slug] = obj;
     return bySlug;
   }, {});
+
   const dependencies = Object.values(filesBySlug).reduce<
     [PageMetadata<GuidesOrReferenceRequestSchema>, PageMetadata<GuidesOrReferenceRequestSchema>][]
   >((edges, obj) => {

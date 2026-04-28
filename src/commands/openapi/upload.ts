@@ -8,7 +8,7 @@ import type {
 import nodePath from 'node:path';
 
 import { Flags } from '@oclif/core';
-import yaml from 'js-yaml';
+import { dump as dumpYAML } from 'js-yaml';
 import ora from 'ora';
 import prompts from 'prompts';
 import slugify from 'slugify';
@@ -108,8 +108,9 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     let count = 0;
     let status: APIUploadStatus = 'pending';
 
+    // oxlint-disable no-await-in-loop -- We need to wait between requests to avoid hitting rate limits.
     while (this.isStatusPending(status) && count < 10) {
-      // biome-ignore lint/performance/noAwaitInLoops: We need to wait between requests to avoid hitting rate limits.
+      // oxlint-disable-next-line no-loop-func -- False positive.
       await new Promise(resolve => {
         // exponential backoff — wait 1s, 2s, 4s, 8s, 16s, 32s, 30s, 30s, 30s, 30s, etc.
         setTimeout(resolve, Math.min(isTest() ? 1 : 1000 * 2 ** count, 30000));
@@ -123,6 +124,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       status = response?.data?.upload?.status;
       count += 1;
     }
+    // oxlint-enable no-await-in-loop
 
     if (this.isStatusPending(status)) {
       throw new Error('Sorry, this upload timed out. Please try again later.');
@@ -244,7 +246,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     // Convert YAML files back to YAML before uploading
     let specToUpload = preparedSpec;
     if (sendYaml) {
-      specToUpload = yaml.dump(JSON.parse(preparedSpec));
+      specToUpload = dumpYAML(JSON.parse(preparedSpec));
     }
 
     const fallbackExtension = sendYaml ? '.yml' : '.json';

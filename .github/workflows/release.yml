@@ -7,8 +7,10 @@ on:
       - v9
 
 permissions:
+  # See provenance docs: https://docs.npmjs.com/generating-provenance-statements#publishing-packages-with-provenance-via-github-actions
   id-token: write
   contents: write
+  packages: write
 
 env:
   REGISTRY: ghcr.io
@@ -17,10 +19,6 @@ env:
 jobs:
   release:
     runs-on: ubuntu-latest
-    permissions:
-      # See provenance docs: https://docs.npmjs.com/generating-provenance-statements#publishing-packages-with-provenance-via-github-actions
-      id-token: write
-      packages: write
     steps:
       - uses: actions/checkout@v6
         with:
@@ -48,7 +46,7 @@ jobs:
         run: npx semantic-release
 
       - name: Sync changes back to next
-        if: ${{ github.ref }} == 'refs/heads/main'
+        if: ${{ github.ref == 'refs/heads/main' }}
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.RELEASE_GH_TOKEN }}
@@ -59,7 +57,7 @@ jobs:
     name: Post-release checks
     needs: release
     runs-on: ubuntu-latest
-    if: ${{ github.ref }} == 'refs/heads/next'
+    if: ${{ github.ref == 'refs/heads/next' }}
     steps:
       - name: Set up Node.js
         uses: actions/setup-node@v6

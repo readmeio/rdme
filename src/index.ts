@@ -1,7 +1,3 @@
-/** biome-ignore-all lint/performance/noBarrelFile: this barrel file is being exported for use in oclif + plugins */
-
-import type { ValueOf } from 'type-fest';
-
 import ChangelogUploadCommand from './commands/changelog/upload.js';
 import ChangelogsCommand from './commands/changelogs.js';
 import CustomPagesUploadCommand from './commands/custompages/upload.js';
@@ -62,7 +58,7 @@ export const COMMANDS = {
   whoami: WhoAmICommand,
 } as const;
 
-export type CommandClass = ValueOf<typeof COMMANDS>;
+export type CommandClass = (typeof COMMANDS)[keyof typeof COMMANDS];
 
 /**
  * A type-safe way to get the command IDs in the CLI for a specific topic.

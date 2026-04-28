@@ -2,23 +2,23 @@
   "name": "@readme/create",
   "version": "0.0.2",
   "description": "Sync your OpenAPI definition to ReadMe",
-  "bin": "./bin/create.sh",
+  "keywords": [
+    "api",
+    "apis",
+    "openapi",
+    "readme",
+    "swagger"
+  ],
+  "homepage": "https://github.com/readmeio/rdme#readme",
+  "bugs": {
+    "url": "https://github.com/readmeio/rdme/issues"
+  },
+  "license": "MIT",
+  "author": "ReadMe <support@readme.io> (https://readme.com)",
   "repository": {
     "type": "git",
     "url": "https://github.com/readmeio/rdme.git",
     "directory": "packages/create"
   },
-  "keywords": [
-    "api",
-    "apis",
-    "readme",
-    "openapi",
-    "swagger"
-  ],
-  "author": "ReadMe <support@readme.io> (https://readme.com)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/readmeio/rdme/issues"
-  },
-  "homepage": "https://github.com/readmeio/rdme#readme"
+  "bin": "./bin/create.sh"
 }
