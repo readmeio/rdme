@@ -548,35 +548,31 @@ describe(`rdme ${topic} upload`, () => {
       mock.done();
     });
 
-    it(
-      'should handle a mix of creates and updates and failures and skipped files (dry run)',
-      { timeout: 30000 },
-      async () => {
-        const mock = getAPIv2Mock({ authorization })
-          .get(`/${route}/invalid-attributes`)
-          .reply(404)
-          .get(`/${route}/legacy-flag`)
-          .reply(200)
-          .get(`/${route}/some-slug`)
-          .times(MAX_RETRIES + 1)
-          .reply(500)
-          .get(`/${route}/simple-doc`)
-          .times(MAX_RETRIES + 1)
-          .reply(500);
+    it('should handle a mix of creates and updates and failures and skipped files (dry run)', async () => {
+      const mock = getAPIv2Mock({ authorization })
+        .get(`/${route}/invalid-attributes`)
+        .reply(404)
+        .get(`/${route}/legacy-flag`)
+        .reply(200)
+        .get(`/${route}/some-slug`)
+        .times(MAX_RETRIES + 1)
+        .reply(500)
+        .get(`/${route}/simple-doc`)
+        .times(MAX_RETRIES + 1)
+        .reply(500);
 
-        const result = await run([
-          'test/__fixtures__/changelog/mixed-docs',
-          '--key',
-          key,
-          '--dry-run',
-          '--skip-validation',
-        ]);
+      const result = await run([
+        'test/__fixtures__/changelog/mixed-docs',
+        '--key',
+        key,
+        '--dry-run',
+        '--skip-validation',
+      ]);
 
-        expect(result).toMatchSnapshot();
-        expect(fs.writeFileSync).not.toHaveBeenCalled();
+      expect(result).toMatchSnapshot();
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
 
-        mock.done();
-      },
-    );
+      mock.done();
+    });
   });
 });

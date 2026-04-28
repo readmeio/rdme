@@ -135,36 +135,25 @@ async function pushPage(
       payload = customPagePayload;
     }
 
-    const createPage = async (): Promise<CreatePushResult | UpdatePushResult> => {
+    const createPage = (): CreatePushResult | Promise<CreatePushResult> => {
       if (dryRun) {
         return { filePath, response: null, result: 'created', slug };
       }
 
-      const createRes = await this.readmeAPIFetch(
+      return this.readmeAPIFetch(
         route,
         { method: 'POST', headers, body: JSON.stringify(payload) },
-        { filePath, fileType: 'path' },
-      );
-
-      // If the server returns 409 Conflict, the page already exists —
-      // fall back to PATCH instead of failing or letting the server
-      // silently create a duplicate with a -1 suffix.
-      if (createRes.status === 409) {
-        this.debug(`POST for ${slug} returned 409 Conflict, falling back to PATCH`);
-        return updatePage();
-      }
-
-      const parsed = await this.handleAPIRes(createRes);
-      const responseSlug = parsed?.data?.slug;
-
-      // Warn if the server assigned a different slug (e.g. appended -1)
-      if (responseSlug && responseSlug !== slug) {
-        this.warn(
-          `⚠️ Slug mismatch for ${filePath}: requested "${slug}" but server created "${responseSlug}". This may indicate a duplicate.`,
-        );
-      }
-
-      return { filePath, response: parsed?.data || {}, result: 'created', slug };
+        {
+          file: {
+            path: filePath,
+            type: 'path',
+          },
+        },
+      )
+        .then(res => this.handleAPIRes(res))
+        .then(res => {
+          return { filePath, response: res?.data || {}, result: 'created', slug };
+        });
     };
 
     const updatePage = (): Promise<UpdatePushResult> | UpdatePushResult => {
@@ -182,7 +171,12 @@ async function pushPage(
           headers,
           body: JSON.stringify(payload),
         },
-        { filePath, fileType: 'path' },
+        {
+          file: {
+            path: filePath,
+            type: 'path',
+          },
+        },
       )
         .then(res => this.handleAPIRes(res))
         .then(res => {
@@ -190,45 +184,20 @@ async function pushPage(
         });
     };
 
-    // Retry transient GET failures to avoid false 404s that cause duplicate POSTs.
-    // Without this, a transient 5xx/429 on GET can lead to a subsequent re-run
-    // where the page exists but GET returns a stale 404, causing the client to
-    // POST a duplicate that the server renames with a -1 suffix.
-    const maxRetries = 3;
-    let lastRes: Response | undefined;
-    for (let attempt = 0; attempt < maxRetries; attempt++) {
-      lastRes = await this.readmeAPIFetch(`${route}/${slug}`, {
-        method: 'GET',
-        headers,
-      });
-
-      if (lastRes.ok || lastRes.status === 404) {
-        break;
+    return this.readmeAPIFetch(`${route}/${slug}`, {
+      method: 'GET',
+      headers,
+    }).then(async res => {
+      if (!res.ok) {
+        if (res.status !== 404) {
+          return this.handleAPIRes(res);
+        }
+        this.debug(`error retrieving data for ${slug}, creating page`);
+        return createPage();
       }
-
-      // Transient error (429, 5xx) — retry with exponential backoff
-      const isRetryable = lastRes.status === 429 || lastRes.status >= 500;
-      if (!isRetryable || attempt === maxRetries - 1) {
-        break;
-      }
-
-      const delay = Math.min(1000 * 2 ** attempt, 10000);
-      this.debug(
-        `GET ${slug} returned ${lastRes.status}, retrying in ${delay}ms (attempt ${attempt + 1}/${maxRetries})`,
-      );
-      await new Promise(resolve => setTimeout(resolve, delay));
-    }
-
-    const res = lastRes!;
-    if (!res.ok) {
-      if (res.status !== 404) {
-        return this.handleAPIRes(res);
-      }
-      this.debug(`error retrieving data for ${slug}, creating page`);
-      return createPage();
-    }
-    this.debug(`data received for ${slug}, updating page`);
-    return updatePage();
+      this.debug(`data received for ${slug}, updating page`);
+      return updatePage();
+    });
   } catch (e) {
     return { error: e, filePath, result: 'failed', slug };
   }
@@ -324,7 +293,6 @@ export default async function syncPagePath(this: APIv2PageUploadCommands): Promi
 
   // push the files to ReadMe
   const rawResults: PromiseSettledResult<PushResult>[] = [];
-  const UPLOAD_DELAY_MS = 100; // small delay between uploads to reduce rate-limit pressure
   for await (const fileData of sortedFiles) {
     try {
       const res = await pushPage.call(this, fileData);
@@ -341,11 +309,6 @@ export default async function syncPagePath(this: APIv2PageUploadCommands): Promi
       count.failed += 1;
     } finally {
       uploadSpinner.suffixText = `(${count.succeeded} succeeded, ${count.failed} failed)`;
-    }
-
-    // Throttle to avoid overwhelming the API on large uploads
-    if (UPLOAD_DELAY_MS > 0) {
-      await new Promise(resolve => setTimeout(resolve, UPLOAD_DELAY_MS));
     }
   }
 

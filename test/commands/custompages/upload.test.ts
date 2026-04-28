@@ -639,35 +639,31 @@ describe('custompages upload', () => {
       mock.done();
     });
 
-    it(
-      'should handle a mix of creates and updates and failures and skipped files (dry run)',
-      { timeout: 30000 },
-      async () => {
-        const mock = getAPIv2Mock({ authorization })
-          .get('/branches/stable/custom_pages/invalid-attributes')
-          .reply(404)
-          .get('/branches/stable/custom_pages/legacy-page')
-          .reply(200)
-          .get('/branches/stable/custom_pages/some-slug')
-          .times(MAX_RETRIES + 1)
-          .reply(500)
-          .get('/branches/stable/custom_pages/simple-doc')
-          .times(MAX_RETRIES + 1)
-          .reply(500);
+    it('should handle a mix of creates and updates and failures and skipped files (dry run)', async () => {
+      const mock = getAPIv2Mock({ authorization })
+        .get('/branches/stable/custom_pages/invalid-attributes')
+        .reply(404)
+        .get('/branches/stable/custom_pages/legacy-page')
+        .reply(200)
+        .get('/branches/stable/custom_pages/some-slug')
+        .times(MAX_RETRIES + 1)
+        .reply(500)
+        .get('/branches/stable/custom_pages/simple-doc')
+        .times(MAX_RETRIES + 1)
+        .reply(500);
 
-        const result = await run([
-          'test/__fixtures__/custompages/mixed-docs',
-          '--key',
-          key,
-          '--dry-run',
-          '--skip-validation',
-        ]);
+      const result = await run([
+        'test/__fixtures__/custompages/mixed-docs',
+        '--key',
+        key,
+        '--dry-run',
+        '--skip-validation',
+      ]);
 
-        expect(result).toMatchSnapshot();
-        expect(fs.writeFileSync).not.toHaveBeenCalled();
+      expect(result).toMatchSnapshot();
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
 
-        mock.done();
-      },
-    );
+      mock.done();
+    });
   });
 });

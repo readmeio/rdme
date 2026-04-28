@@ -40,9 +40,9 @@ function isRetryableStatus(status: number): boolean {
  */
 interface FilePathDetails {
   /** The URL or local file path */
-  filePath: string;
+  path: string;
   /** This is derived from the `oas-normalize` `type` property. */
-  fileType: SpecFileType;
+  type: SpecFileType;
 }
 
 function getProxy() {
@@ -132,16 +132,17 @@ export function getUserAgent() {
  * Creates a relative path for the file from the root of the repo,
  * otherwise returns the path
  */
-async function normalizeFilePath(opts: FilePathDetails) {
-  if (opts.fileType === 'path') {
+async function normalizeFilePath(file: FilePathDetails) {
+  if (file.type === 'path') {
     const repoRoot = await git.revparse(['--show-toplevel']).catch(e => {
       debug(`[fetch] error grabbing git root: ${e.message}`);
       return '';
     });
 
-    return path.relative(repoRoot, opts.filePath);
+    return path.relative(repoRoot, file.path);
   }
-  return opts.filePath;
+
+  return file.path;
 }
 
 /**
@@ -164,16 +165,20 @@ function sanitizeHeaders(headers: Headers) {
 export async function readmeAPIv1Fetch(
   /** The pathname to make the request to. Must have a leading slash. */
   pathname: string,
-  options: RequestInit = { headers: new Headers() },
-  /** optional object containing information about the file being sent.
-   * We use this to construct a full source URL for the file. */
-  fileOpts: FilePathDetails = { filePath: '', fileType: false },
+  request: RequestInit = { headers: new Headers() },
+  options?: {
+    /**
+     * Optional object containing information about the file being sent. We use this to construct a
+     * full source URL for the file.
+     */
+    file?: FilePathDetails;
+  },
 ) {
   let source = 'cli';
-  let headers = options.headers as Headers;
+  let headers = request.headers as Headers;
 
-  if (!(options.headers instanceof Headers)) {
-    headers = new Headers(options.headers);
+  if (!(request.headers instanceof Headers)) {
+    headers = new Headers(request.headers);
   }
 
   headers.set('User-Agent', getUserAgent());
@@ -186,21 +191,22 @@ export async function readmeAPIv1Fetch(
     if (process.env.GITHUB_RUN_NUMBER) headers.set('x-github-run-number', process.env.GITHUB_RUN_NUMBER);
     if (process.env.GITHUB_SHA) headers.set('x-github-sha', process.env.GITHUB_SHA);
 
-    const filePath = await normalizeFilePath(fileOpts);
-
-    if (filePath) {
-      /**
-       * Constructs a full URL to the file using GitHub Actions runner variables
-       * @see {@link https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables}
-       * @example https://github.com/readmeio/rdme/blob/cb4129d5c7b51ff3b50f933a9c7d0c3d0d33d62c/documentation/rdme.md
-       */
-      try {
-        const sourceUrl = new URL(
-          `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/blob/${process.env.GITHUB_SHA}/${filePath}`,
-        ).href;
-        headers.set('x-readme-source-url', sourceUrl);
-      } catch (e) {
-        debug(`error constructing github source url: ${e.message}`);
+    if (options?.file) {
+      const filePath = await normalizeFilePath(options.file);
+      if (filePath) {
+        /**
+         * Constructs a full URL to the file using GitHub Actions runner variables
+         * @see {@link https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables}
+         * @example https://github.com/readmeio/rdme/blob/cb4129d5c7b51ff3b50f933a9c7d0c3d0d33d62c/documentation/rdme.md
+         */
+        try {
+          const sourceUrl = new URL(
+            `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/blob/${process.env.GITHUB_SHA}/${filePath}`,
+          ).href;
+          headers.set('x-readme-source-url', sourceUrl);
+        } catch (e) {
+          debug(`error constructing github source url: ${e.message}`);
+        }
       }
     }
   }
@@ -211,19 +217,19 @@ export async function readmeAPIv1Fetch(
 
   headers.set('x-readme-source', source);
 
-  if (fileOpts.filePath && fileOpts.fileType === 'url') {
-    headers.set('x-readme-source-url', fileOpts.filePath);
+  if (options?.file && options?.file.path && options?.file.type === 'url') {
+    headers.set('x-readme-source-url', options?.file.path);
   }
 
   const fullUrl = `${config.host.v1}${pathname}`;
   const proxy = getProxy();
 
   debug(
-    `making ${(options.method || 'get').toUpperCase()} request to ${fullUrl} ${proxy ? `with proxy ${proxy} and ` : ''}with headers: ${sanitizeHeaders(headers)}`,
+    `making ${(request.method || 'get').toUpperCase()} request to ${fullUrl} ${proxy ? `with proxy ${proxy} and ` : ''}with headers: ${sanitizeHeaders(headers)}`,
   );
 
   return fetch(fullUrl, {
-    ...options,
+    ...request,
     headers,
     // @ts-expect-error we need to clean up our undici usage here ASAP
     dispatcher: proxy ? new ProxyAgent(proxy) : undefined,
@@ -250,22 +256,29 @@ export async function readmeAPIv1Fetch(
  */
 export async function readmeAPIv2Fetch<T extends Hook.Context = Hook.Context>(
   /**
-   * `this` does not have to be a hook, it can also be a Command class.
-   * This type ensures that `this` has the `config` and `debug` properties.
+   * `this` does not have to be a hook, it can also be a Command class. This type ensures that
+   * `this` has the `config` and `debug` properties.
    */
   this: T,
+
   /** The pathname to make the request to. Must have a leading slash. */
   pathname: string,
-  options: RequestInit = { headers: new Headers() },
-  /** optional object containing information about the file being sent.
-   * We use this to construct a full source URL for the file. */
-  fileOpts: FilePathDetails = { filePath: '', fileType: false },
+
+  request: RequestInit = { headers: new Headers() },
+
+  options?: {
+    /**
+     * Optional object containing information about the file being sent. We use this to construct a
+     * full source URL for the file.
+     */
+    file: FilePathDetails;
+  },
 ) {
   let source = 'cli';
-  let headers = options.headers as Headers;
+  let headers = request.headers as Headers;
 
-  if (!(options.headers instanceof Headers)) {
-    headers = new Headers(options.headers);
+  if (!(request.headers instanceof Headers)) {
+    headers = new Headers(request.headers);
   }
 
   headers.set(
@@ -285,21 +298,22 @@ export async function readmeAPIv2Fetch<T extends Hook.Context = Hook.Context>(
     if (process.env.GITHUB_RUN_NUMBER) headers.set('x-github-run-number', process.env.GITHUB_RUN_NUMBER);
     if (process.env.GITHUB_SHA) headers.set('x-github-sha', process.env.GITHUB_SHA);
 
-    const filePath = await normalizeFilePath(fileOpts);
-
-    if (filePath) {
-      /**
-       * Constructs a full URL to the file using GitHub Actions runner variables
-       * @see {@link https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables}
-       * @example https://github.com/readmeio/rdme/blob/cb4129d5c7b51ff3b50f933a9c7d0c3d0d33d62c/documentation/rdme.md
-       */
-      try {
-        const sourceUrl = new URL(
-          `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/blob/${process.env.GITHUB_SHA}/${filePath}`,
-        ).href;
-        headers.set('x-readme-source-url', sourceUrl);
-      } catch (e) {
-        this.debug(`error constructing github source url: ${e.message}`);
+    if (options?.file) {
+      const filePath = await normalizeFilePath(options.file);
+      if (filePath) {
+        /**
+         * Constructs a full URL to the file using GitHub Actions runner variables
+         * @see {@link https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables}
+         * @example https://github.com/readmeio/rdme/blob/cb4129d5c7b51ff3b50f933a9c7d0c3d0d33d62c/documentation/rdme.md
+         */
+        try {
+          const sourceUrl = new URL(
+            `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/blob/${process.env.GITHUB_SHA}/${filePath}`,
+          ).href;
+          headers.set('x-readme-source-url', sourceUrl);
+        } catch (e) {
+          this.debug(`error constructing github source url: ${e.message}`);
+        }
       }
     }
   }
@@ -310,19 +324,19 @@ export async function readmeAPIv2Fetch<T extends Hook.Context = Hook.Context>(
 
   headers.set('x-readme-source', source);
 
-  if (fileOpts.filePath && fileOpts.fileType === 'url') {
-    headers.set('x-readme-source-url', fileOpts.filePath);
+  if (options?.file && options?.file.path && options?.file.type === 'url') {
+    headers.set('x-readme-source-url', options.file.path);
   }
 
   const fullUrl = `${config.host.v2}${pathname}`;
   const proxy = getProxy();
 
   this.debug(
-    `making ${(options.method || 'get').toUpperCase()} request to ${fullUrl} ${proxy ? `with proxy ${proxy} and ` : ''}with headers: ${sanitizeHeaders(headers)}`,
+    `making ${(request.method || 'get').toUpperCase()} request to ${fullUrl} ${proxy ? `with proxy ${proxy} and ` : ''}with headers: ${sanitizeHeaders(headers)}`,
   );
 
   const fetchOptions: RequestInit & { dispatcher?: ProxyAgent } = {
-    ...options,
+    ...request,
     headers,
     dispatcher: proxy ? new ProxyAgent(proxy) : undefined,
   };

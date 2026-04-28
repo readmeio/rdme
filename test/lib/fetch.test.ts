@@ -69,7 +69,12 @@ describe('#readmeAPIv1Fetch()', () => {
             method: 'get',
             headers: cleanAPIv1Headers(key),
           },
-          { filePath: 'openapi.json', fileType: 'path' },
+          {
+            file: {
+              path: 'openapi.json',
+              type: 'path',
+            },
+          },
         ).then(handleAPIv1Res);
 
         expect(headers['x-readme-source-url']).toBe(
@@ -95,7 +100,12 @@ describe('#readmeAPIv1Fetch()', () => {
             method: 'get',
             headers: cleanAPIv1Headers(key),
           },
-          { filePath: './📈 Dashboard & Metrics/openapi.json', fileType: 'path' },
+          {
+            file: {
+              path: './📈 Dashboard & Metrics/openapi.json',
+              type: 'path',
+            },
+          },
         ).then(handleAPIv1Res);
 
         expect(headers['x-readme-source-url']).toBe(
@@ -123,7 +133,12 @@ describe('#readmeAPIv1Fetch()', () => {
             method: 'get',
             headers: cleanAPIv1Headers(key),
           },
-          { filePath: './📈 Dashboard & Metrics/openapi.json', fileType: 'path' },
+          {
+            file: {
+              path: './📈 Dashboard & Metrics/openapi.json',
+              type: 'path',
+            },
+          },
         ).then(handleAPIv1Res);
 
         expect(headers['x-readme-source-url']).toBeUndefined();
@@ -147,7 +162,12 @@ describe('#readmeAPIv1Fetch()', () => {
             method: 'get',
             headers: cleanAPIv1Headers(key),
           },
-          { filePath: './openapi.json', fileType: 'path' },
+          {
+            file: {
+              path: './openapi.json',
+              type: 'path',
+            },
+          },
         ).then(handleAPIv1Res);
 
         expect(headers['x-readme-source-url']).toBe(
@@ -174,7 +194,12 @@ describe('#readmeAPIv1Fetch()', () => {
             method: 'get',
             headers: cleanAPIv1Headers(key),
           },
-          { filePath, fileType: 'url' },
+          {
+            file: {
+              path: filePath,
+              type: 'url',
+            },
+          },
         ).then(handleAPIv1Res);
 
         expect(headers['x-readme-source-url']).toBe(filePath);
