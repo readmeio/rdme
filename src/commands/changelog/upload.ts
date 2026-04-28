@@ -1,7 +1,9 @@
+import type { FullUploadResults } from '../../lib/syncPagePath.js';
+
 import BaseCommand from '../../lib/baseCommand.js';
 import { keyFlag } from '../../lib/flags.js';
 import { args, baseFlags, description, examples, summary } from '../../lib/pageCommandProperties.js';
-import syncPagePath, { type FullUploadResults } from '../../lib/syncPagePath.js';
+import syncPagePath from '../../lib/syncPagePath.js';
 
 export default class ChangelogUploadCommand extends BaseCommand<typeof ChangelogUploadCommand> {
   id = 'changelog upload' as const;

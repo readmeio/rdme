@@ -1,7 +1,9 @@
+import type { FullUploadResults } from '../../lib/syncPagePath.js';
+
 import BaseCommand from '../../lib/baseCommand.js';
 import { branchFlag, keyFlag } from '../../lib/flags.js';
 import { args, baseFlags, description, examples, summary } from '../../lib/pageCommandProperties.js';
-import syncPagePath, { type FullUploadResults } from '../../lib/syncPagePath.js';
+import syncPagePath from '../../lib/syncPagePath.js';
 
 export default class CustomPagesUploadCommand extends BaseCommand<typeof CustomPagesUploadCommand> {
   id = 'custompages upload' as const;

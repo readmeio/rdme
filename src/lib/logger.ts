@@ -28,7 +28,7 @@ function debug(input: unknown) {
 function error(input: string) {
   /* istanbul ignore next */
   if (isGHA() && !isTest()) return core.error(input);
-  // biome-ignore lint/suspicious/noConsole: This is our wrapper for `console.error()`.
+  // oxlint-disable-next-line no-console -- This is our wrapper for `console.error()`.
   return console.error(chalk.red(input));
 }
 
@@ -47,9 +47,9 @@ function info(
   /* istanbul ignore next */
   if (isGHA() && !isTest()) return core.notice(input);
   /* istanbul ignore next */
-  // biome-ignore lint/suspicious/noConsole: This is our wrapper for `console.info()`.
+  // oxlint-disable-next-line no-console -- This is our wrapper for `console.info()`.
   if (!opts.includeEmojiPrefix) return console.info(input);
-  // biome-ignore lint/suspicious/noConsole: This is our wrapper for `console.info()`.
+  // oxlint-disable-next-line no-console -- This is our wrapper for `console.info()`.
   return console.info(`ℹ️  ${input}`);
 }
 
@@ -80,7 +80,7 @@ function warn(
 ) {
   /* istanbul ignore next */
   if (isGHA() && !isTest()) return core.warning(input);
-  // biome-ignore lint/suspicious/noConsole: This is our wrapper for `console.warn()`.
+  // oxlint-disable-next-line no-console -- This is our wrapper for `console.warn()`.
   return console.warn(chalk.yellow(`⚠️  ${prefix} ${input}`));
 }
 
