@@ -7,7 +7,7 @@ import { defineConfig } from 'rollup';
 import { minify } from 'rollup-plugin-esbuild';
 
 const basePlugins = [
-  commonjs(),
+  commonjs({ ignoreDynamicRequires: true }),
   json(),
   nodeResolve({
     // see here: https://github.com/rollup/plugins/tree/master/packages/node-resolve#exportconditions
