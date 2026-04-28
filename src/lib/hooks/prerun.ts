@@ -1,3 +1,4 @@
+// oxlint-disable no-param-reassign
 import type { Hook } from '@oclif/core';
 
 import { Flags } from '@oclif/core';
@@ -31,6 +32,7 @@ const hook: Hook.Prerun = async function run(options) {
               { includeEmojiPrefix: false },
             );
           }
+
           return input;
         },
         // `default` is run if no `--key` flag is passed
@@ -42,13 +44,16 @@ const hook: Hook.Prerun = async function run(options) {
             this.debug('api key found in config, returning');
             return apiKey;
           }
+
           if (isCI()) {
             throw new Error('No project API key provided. Please use `--key`.');
           }
+
           // if in non-CI and the user hasn't passed in a key, we prompt them to log in
           info("Looks like you're missing a ReadMe API key, let's fix that! 🦉", { includeEmojiPrefix: false });
           const result = await loginFlow.call(this);
           info(result, { includeEmojiPrefix: false });
+
           // loginFlow sets the configstore value, so let's use that
           return configstore.get('apiKey');
         },
