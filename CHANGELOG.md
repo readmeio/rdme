@@ -1,3 +1,10 @@
+# [10.7.0-next.1](https://github.com/readmeio/rdme/compare/v10.6.2...v10.7.0-next.1) (2026-04-28)
+
+
+### Features
+
+* **api:** add exponential backoff retry for 5xx errors ([#1401](https://github.com/readmeio/rdme/issues/1401)) ([af4e0ea](https://github.com/readmeio/rdme/commit/af4e0eac632ba109aa96436f16a06bc108403387)), closes [#1325](https://github.com/readmeio/rdme/issues/1325)
+
 ## [10.6.2](https://github.com/readmeio/rdme/compare/v10.6.1...v10.6.2) (2026-02-24)
 
 
