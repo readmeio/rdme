@@ -23,7 +23,7 @@ const SUCCESS_NO_CONTENT = 204;
  * Configuration for retry logic with exponential backoff.
  * Used when the API returns 5xx server errors.
  */
-const MAX_RETRIES = 3;
+export const MAX_RETRIES = 3;
 const INITIAL_DELAY_MS = 1000;
 
 /**
@@ -330,12 +330,14 @@ export async function readmeAPIv2Fetch<T extends Hook.Context = Hook.Context>(
   // Retry logic with exponential backoff for 5xx server errors
   let lastError: Error | undefined;
 
-  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+  // oxlint-disable no-await-in-loop -- Sequential delays required for retry logic with exponential backoff
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt += 1) {
     if (attempt > 0) {
       const delay = (isTest() ? 10 : INITIAL_DELAY_MS) * 2 ** (attempt - 1);
       this.debug(`retrying request (attempt ${attempt}/${MAX_RETRIES}) after ${delay}ms delay`);
-      // biome-ignore lint/performance/noAwaitInLoops: Sequential delays required for retry logic with exponential backoff
-      await new Promise(resolve => setTimeout(resolve, delay));
+      await new Promise(resolve => {
+        setTimeout(resolve, delay);
+      });
     }
 
     try {
@@ -347,7 +349,9 @@ export async function readmeAPIv2Fetch<T extends Hook.Context = Hook.Context>(
         this.debug(
           `received retryable status ${res.status} (attempt ${attempt + 1}/${MAX_RETRIES + 1}), will retry. Response preview: ${body.slice(0, 200)}`,
         );
+
         lastError = new Error(`Server returned ${res.status}`);
+        // oxlint-disable-next-line no-continue
         continue;
       }
 
@@ -367,13 +371,14 @@ export async function readmeAPIv2Fetch<T extends Hook.Context = Hook.Context>(
       this.debug(e.stack);
       lastError = e;
 
-      // If we've exhausted all retries, throw the error
+      // If we've exhausted all retries then throw the error, otherwise continue to next retry
+      // attempt.
       if (attempt >= MAX_RETRIES) {
         throw e;
       }
-      // Otherwise, continue to next retry attempt
     }
   }
+  // oxlint-enable no-await-in-loop
 
   // This should only be reached if all retries failed
   throw lastError || new Error('Request failed after maximum retries');

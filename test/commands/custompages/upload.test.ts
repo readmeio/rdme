@@ -6,6 +6,7 @@ import prompts from 'prompts';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import CustomPagesCommand from '../../../src/commands/custompages/upload.js';
+import { MAX_RETRIES } from '../../../src/lib/readmeAPIFetch.js';
 import { getAPIv1Mock, getAPIv2Mock, getAPIv2MockForGHA } from '../../helpers/get-api-mock.js';
 import { githubActionsEnv } from '../../helpers/git-mock.js';
 import { runCommand } from '../../helpers/oclif.js';
@@ -136,8 +137,10 @@ describe('custompages upload', () => {
       });
 
       it('should error out if a non-404 error is returned from the GET request', async () => {
-        // .times(4) accounts for initial request + 3 retries
-        const mock = getAPIv2Mock({ authorization }).get('/branches/stable/custom_pages/some-slug').times(4).reply(500);
+        const mock = getAPIv2Mock({ authorization })
+          .get('/branches/stable/custom_pages/some-slug')
+          .times(MAX_RETRIES + 1)
+          .reply(500);
 
         const result = await run([
           'test/__fixtures__/custompages/slug-docs/new-doc-slug.md',
@@ -153,10 +156,9 @@ describe('custompages upload', () => {
       });
 
       it('should error out if a non-404 error is returned from the GET request (with a json body)', async () => {
-        // .times(4) accounts for initial request + 3 retries
         const mock = getAPIv2Mock({ authorization })
           .get('/branches/stable/custom_pages/some-slug')
-          .times(4)
+          .times(MAX_RETRIES + 1)
           .reply(500, {
             title: 'bad request',
             detail: 'something went so so wrong',
@@ -340,8 +342,10 @@ describe('custompages upload', () => {
     });
 
     it('should error out if a non-404 error is returned from the GET request', async () => {
-      // .times(4) accounts for initial request + 3 retries
-      const mock = getAPIv2Mock({ authorization }).get('/branches/stable/custom_pages/new-doc').times(4).reply(500);
+      const mock = getAPIv2Mock({ authorization })
+        .get('/branches/stable/custom_pages/new-doc')
+        .times(MAX_RETRIES + 1)
+        .reply(500);
 
       const result = await run(['test/__fixtures__/custompages/new-docs/new-doc.md', '--key', key]);
 
@@ -352,12 +356,14 @@ describe('custompages upload', () => {
     });
 
     it('should error out if a non-404 error is returned from the GET request (with a json body)', async () => {
-      // .times(4) accounts for initial request + 3 retries
-      const mock = getAPIv2Mock({ authorization }).get('/branches/stable/custom_pages/new-doc').times(4).reply(500, {
-        title: 'bad request',
-        detail: 'something went so so wrong',
-        status: 500,
-      });
+      const mock = getAPIv2Mock({ authorization })
+        .get('/branches/stable/custom_pages/new-doc')
+        .times(MAX_RETRIES + 1)
+        .reply(500, {
+          title: 'bad request',
+          detail: 'something went so so wrong',
+          status: 500,
+        });
 
       const result = await run(['test/__fixtures__/custompages/new-docs/new-doc.md', '--key', key]);
 
@@ -368,12 +374,14 @@ describe('custompages upload', () => {
     });
 
     it('should not throw an error if `max-errors` flag is set to -1', async () => {
-      // .times(4) accounts for initial request + 3 retries
-      const mock = getAPIv2Mock({ authorization }).get('/branches/stable/custom_pages/new-doc').times(4).reply(500, {
-        title: 'bad request',
-        detail: 'something went so so wrong',
-        status: 500,
-      });
+      const mock = getAPIv2Mock({ authorization })
+        .get('/branches/stable/custom_pages/new-doc')
+        .times(MAX_RETRIES + 1)
+        .reply(500, {
+          title: 'bad request',
+          detail: 'something went so so wrong',
+          status: 500,
+        });
 
       const result = await run([
         'test/__fixtures__/custompages/new-docs/new-doc.md',
@@ -531,7 +539,6 @@ describe('custompages upload', () => {
     });
 
     it('should handle a mix of creates and updates and failures and skipped files', async () => {
-      // Note: .times(4) on 500 responses accounts for initial request + 3 retries
       const mock = getAPIv2Mock({ authorization })
         .get('/branches/stable/custom_pages/invalid-attributes')
         .reply(404)
@@ -558,7 +565,7 @@ describe('custompages upload', () => {
           title: 'This is the document title',
           content: { body: '\nBody\n', type: 'markdown' },
         })
-        .times(4)
+        .times(MAX_RETRIES + 1)
         .reply(500, {})
         .get('/branches/stable/custom_pages/simple-doc')
         .reply(404)
@@ -567,7 +574,7 @@ describe('custompages upload', () => {
           title: 'This is the document title',
           content: { body: '\nBody\n', type: 'markdown' },
         })
-        .times(4)
+        .times(MAX_RETRIES + 1)
         .reply(500, {});
 
       const result = await run(['test/__fixtures__/custompages/mixed-docs', '--key', key, '--skip-validation']);
@@ -579,7 +586,6 @@ describe('custompages upload', () => {
     });
 
     it('should handle a mix of creates and updates and failures and skipped files and not error out with `max-errors` flag', async () => {
-      // Note: .times(4) on 500 responses accounts for initial request + 3 retries
       const mock = getAPIv2Mock({ authorization })
         .get('/branches/stable/custom_pages/invalid-attributes')
         .reply(404)
@@ -606,7 +612,7 @@ describe('custompages upload', () => {
           title: 'This is the document title',
           content: { body: '\nBody\n', type: 'markdown' },
         })
-        .times(4)
+        .times(MAX_RETRIES + 1)
         .reply(500, {})
         .get('/branches/stable/custom_pages/simple-doc')
         .reply(404)
@@ -615,7 +621,7 @@ describe('custompages upload', () => {
           title: 'This is the document title',
           content: { body: '\nBody\n', type: 'markdown' },
         })
-        .times(4)
+        .times(MAX_RETRIES + 1)
         .reply(500, {});
 
       const result = await run([
@@ -634,17 +640,16 @@ describe('custompages upload', () => {
     });
 
     it('should handle a mix of creates and updates and failures and skipped files (dry run)', async () => {
-      // Note: .times(4) on 500 responses accounts for initial request + 3 retries
       const mock = getAPIv2Mock({ authorization })
         .get('/branches/stable/custom_pages/invalid-attributes')
         .reply(404)
         .get('/branches/stable/custom_pages/legacy-page')
         .reply(200)
         .get('/branches/stable/custom_pages/some-slug')
-        .times(4)
+        .times(MAX_RETRIES + 1)
         .reply(500)
         .get('/branches/stable/custom_pages/simple-doc')
-        .times(4)
+        .times(MAX_RETRIES + 1)
         .reply(500);
 
       const result = await run([
