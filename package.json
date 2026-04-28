@@ -52,6 +52,7 @@
     "lint:ts": "npx oxlint",
     "lint:ts:write": "npx oxlint --fix",
     "prebuild": "rm -rf dist/",
+    "prebuild:gha": "rm -rf dist-gha/",
     "prepack": "npm run build",
     "prepare": "husky",
     "pretest": "npm run build",
