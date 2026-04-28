@@ -26,7 +26,14 @@ export default defineConfig([
   },
   {
     input: 'dist/index.js',
-    output: { file: 'dist-gha/commands.js', format: 'esm', inlineDynamicImports: true },
+    output: {
+      // We're exporting as CommonJS so Rollup can emit `require()` where dependencies still use
+      // it (e.g. `@oclif/core`, `@nodable/entities`) because an ESM bundle alongside `type: module`
+      // in `dist-gha/package.json` leaves bare `require()` calls that crash at  runtime.
+      file: 'dist-gha/commands.cjs',
+      format: 'cjs',
+      inlineDynamicImports: true,
+    },
     plugins: [
       ...basePlugins,
       // this disgusting workaround is required to prevent runtime errors,
