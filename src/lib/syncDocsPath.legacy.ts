@@ -109,6 +109,7 @@ async function pushDoc(
       return updateDoc(body);
     })
     .catch(err => {
+      // oxlint-disable-next-line no-param-reassign
       err.message = `Error uploading ${chalk.underline(filePath)}:\n\n${err.message}`;
       throw err;
     });
@@ -128,9 +129,11 @@ const byParentDoc = (left: PageMetadata, right: PageMetadata) => {
 function sortFiles(this: ChangelogsCommand, filePaths: string[]): PageMetadata[] {
   const files = filePaths.map(file => readPage.call(this, file)).sort(byParentDoc);
   const filesBySlug = files.reduce<Record<string, PageMetadata>>((bySlug, obj) => {
+    // oxlint-disable-next-line no-param-reassign
     bySlug[obj.slug] = obj;
     return bySlug;
   }, {});
+
   const dependencies = Object.values(filesBySlug).reduce<[PageMetadata, PageMetadata][]>((edges, obj) => {
     if (obj.data.parentDocSlug && filesBySlug[obj.data.parentDocSlug as string]) {
       edges.push([filesBySlug[obj.data.parentDocSlug as string], filesBySlug[obj.slug]]);

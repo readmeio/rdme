@@ -116,6 +116,7 @@ export default class OpenAPIResolveCommand extends BaseCommand<typeof OpenAPIRes
       for (const prop of Object.keys(schema.properties)) {
         let property = JSON.parse(JSON.stringify(schema.properties[prop]));
         property = this.replaceRefWithObjectProxySchemes(property, circularRefs, schemaName);
+        // oxlint-disable-next-line no-param-reassign
         schema.properties[prop] = property;
 
         // Handle arrays with item references
@@ -139,6 +140,7 @@ export default class OpenAPIResolveCommand extends BaseCommand<typeof OpenAPIRes
     /** List of circular reference paths. */
     circularRefs: string[],
   ): void {
+    // oxlint-disable-next-line typescript/no-this-alias
     const self = this;
     const createdRefs = new Set<string>();
 
@@ -156,11 +158,13 @@ export default class OpenAPIResolveCommand extends BaseCommand<typeof OpenAPIRes
         const schema = schemas[originalSchemaName];
 
         if ('properties' in schema) {
+          // oxlint-disable-next-line no-param-reassign
           schemas[refSchemaName] = {
             type: 'object',
             properties: { ...schema.properties },
           };
         } else if ('$ref' in schema) {
+          // oxlint-disable-next-line no-param-reassign
           schemas[refSchemaName] = {
             $ref: schema.$ref,
           };
@@ -305,7 +309,7 @@ export default class OpenAPIResolveCommand extends BaseCommand<typeof OpenAPIRes
       );
       this.replaceCircularRefs(schemas, remainingCircularRefs);
 
-      // biome-ignore lint/performance/noAwaitInLoops: Awaiting here is necessary to ensure we get all of the remaining circular references
+      // oxlint-disable-next-line no-await-in-loop -- Awaiting here is necessary to ensure we get all of the remaining circular references
       remainingCircularRefs = await this.getCircularRefs(spec);
       iterationCount += 1;
     }
@@ -325,7 +329,7 @@ export default class OpenAPIResolveCommand extends BaseCommand<typeof OpenAPIRes
         );
         this.replaceAllRefsWithObject(schemas, remainingCircularRefs);
 
-        // biome-ignore lint/performance/noAwaitInLoops: Awaiting here is necessary to ensure we get all of the remaining circular references
+        // oxlint-disable-next-line no-await-in-loop -- Awaiting here is necessary to ensure we get all of the remaining circular references
         remainingCircularRefs = await this.getCircularRefs(spec);
         this.debug(
           `After iteration ${objectReplacementIterationCount + 1}, remaining circular references: ${remainingCircularRefs.length}`,
