@@ -213,7 +213,9 @@ async function pushPage(
       }
 
       const delay = Math.min(1000 * 2 ** attempt, 10000);
-      this.debug(`GET ${slug} returned ${lastRes.status}, retrying in ${delay}ms (attempt ${attempt + 1}/${maxRetries})`);
+      this.debug(
+        `GET ${slug} returned ${lastRes.status}, retrying in ${delay}ms (attempt ${attempt + 1}/${maxRetries})`,
+      );
       await new Promise(resolve => setTimeout(resolve, delay));
     }
 
