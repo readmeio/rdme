@@ -61,7 +61,7 @@
     "version": "npm run build:gha && oclif manifest && npm run build:docs"
   },
   "dependencies": {
-    "@actions/core": "^2.0.2",
+    "@actions/core": "^3.0.1",
     "@oclif/core": "^4.0.29",
     "@oclif/plugin-autocomplete": "^3.2.46",
     "@oclif/plugin-help": "^6.2.45",
