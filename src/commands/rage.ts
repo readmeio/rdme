@@ -17,6 +17,7 @@ export default class RageCommand extends BaseCommand<typeof RageCommand> {
     const plugins: Record<string, string> = {};
     for (const [pluginName, plugin] of this.config.plugins.entries()) {
       // Don't report core plugins as being installed because they ship with rdme.
+      // oxlint-disable-next-line no-continue
       if (plugin.type === 'core') continue;
       plugins[pluginName] = plugin.version;
     }

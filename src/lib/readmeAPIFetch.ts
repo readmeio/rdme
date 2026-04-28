@@ -1,8 +1,8 @@
-import type { Hook } from '@oclif/core';
-import type { SchemaObject } from 'oas/types';
 import type { APIv2PageCommands, CommandClass } from '../index.js';
 import type { APIv2ErrorResponse } from './apiError.js';
 import type { SpecFileType } from './prepareOas.js';
+import type { Hook } from '@oclif/core';
+import type { SchemaObject } from 'oas/types';
 
 import path from 'node:path';
 
@@ -75,7 +75,7 @@ export interface Mappings {
 /**
  * A generic response body type for responses from the ReadMe API.
  */
-// biome-ignore lint/suspicious/noExplicitAny: Generic typing for responses.
+// oxlint-disable-next-line typescript/no-empty-object-type -- Generic typing for responses.
 export interface ResponseBody extends Record<string, any> {}
 
 export const emptyMappings: Mappings = { categories: {}, parentPages: {} };
@@ -97,7 +97,7 @@ function parseWarningHeader(
     let previous: WarningHeader;
 
     return warnings.reduce<WarningHeader[]>((all, w) => {
-      // biome-ignore lint/style/noParameterAssign: We need to mutate this variable for reducing.
+      // oxlint-disable-next-line no-param-reassign -- We need to mutate this variable for reducing.
       w = w.trim();
       const newError = w.match(/^([0-9]{3}) (.*)/);
       if (newError) {
@@ -149,6 +149,7 @@ async function normalizeFilePath(opts: FilePathDetails) {
  */
 function sanitizeHeaders(headers: Headers) {
   const raw = Array.from(headers.entries()).reduce<Record<string, string>>((prev, current) => {
+    // oxlint-disable-next-line no-param-reassign -- We need to mutate this variable for reducing.
     prev[current[0]] = current[0].toLowerCase() === 'authorization' ? 'redacted' : current[1];
     return prev;
   }, {});
@@ -404,7 +405,6 @@ export async function handleAPIv1Res(
     const text = await res.text();
     debug(`received status code ${res.status} from ${res.url} with JSON response: ${text}`);
     try {
-      // biome-ignore lint/suspicious/noExplicitAny: We do not have TS types for APIv1 responses.
       const body = JSON.parse(text) as any;
       if (body.error && rejectOnJsonError) {
         throw new APIv1Error(body);
