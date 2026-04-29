@@ -48,7 +48,7 @@
     "build:docs": "oclif readme --multi --output-dir documentation/commands --no-aliases",
     "build:gha": "npm run build && rollup --config",
     "format": "npx oxlint --fix && npx oxfmt --write",
-    "lint": "knip && npm run lint:ts && npx oxfmt && npm run schemas:check",
+    "lint": "knip && npm run lint:ts && npx oxfmt --check && npm run schemas:check",
     "lint:ts": "npx oxlint",
     "lint:ts:write": "npx oxlint --fix",
     "prebuild": "rm -rf dist/",

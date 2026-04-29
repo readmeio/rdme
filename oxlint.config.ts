@@ -9,6 +9,9 @@ export default defineConfig({
     reportUnusedDisableDirectives: 'error',
   },
   ignorePatterns: ['coverage/', 'dist/', 'dist-gha/'],
+  categories: {
+    suspicious: 'error',
+  },
   env: {
     browser: true,
     commonjs: true,
@@ -31,6 +34,8 @@ export default defineConfig({
         ],
       },
     ],
+
+    'oxc/no-this-in-exported-function': 'off',
 
     // We don't need to wrap `JSON.parse()` in a try/catch block because if JSON parsing anything
     // ever fails then we should fail.

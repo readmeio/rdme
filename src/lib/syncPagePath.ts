@@ -203,12 +203,12 @@ async function pushPage(
   }
 }
 
-const byParentPage = (
+function byParentPage(
   left: PageMetadata<GuidesOrReferenceRequestSchema>,
   right: PageMetadata<GuidesOrReferenceRequestSchema>,
-) => {
+) {
   return (right.data.parent?.uri ? 1 : 0) - (left.data.parent?.uri ? 1 : 0);
-};
+}
 
 /**
  * Sorts files based on their `parent.uri` attribute. If a file has a `parent.uri` attribute,
@@ -289,7 +289,7 @@ export default async function syncPagePath(this: APIv2PageUploadCommands): Promi
   const sortedFiles =
     this.route === 'changelogs' || this.route === 'custom_pages'
       ? (unsortedFiles as PageMetadata<PageRequestSchema<typeof this.route>>[])
-      : sortFiles((unsortedFiles as PageMetadata<PageRequestSchema<typeof this.route>>[]).sort(byParentPage));
+      : sortFiles((unsortedFiles as PageMetadata<PageRequestSchema<typeof this.route>>[]).toSorted(byParentPage));
 
   // push the files to ReadMe
   const rawResults: PromiseSettledResult<PushResult>[] = [];

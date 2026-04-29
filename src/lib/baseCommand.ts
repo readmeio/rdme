@@ -126,6 +126,7 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
    * when being run from a GitHub Actions runner.
    */
   protected async _run<U>(): Promise<U> {
+    // oxlint-disable-next-line no-underscore-dangle
     const result: U = await super._run();
     if (isGHA() && !isTest() && result) {
       core.setOutput('rdme', result);

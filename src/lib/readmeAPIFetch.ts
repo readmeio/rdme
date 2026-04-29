@@ -432,6 +432,7 @@ export async function handleAPIv1Res(
       debug(`received the following error when attempting to parse JSON response: ${e.message}`);
       throw new Error(
         'The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.',
+        { cause: e },
       );
     }
   }
@@ -487,6 +488,7 @@ export async function handleAPIv2Res<R extends ResponseBody = ResponseBody, T ex
       this.debug(`received the following error when attempting to parse JSON response: ${e.message}`);
       throw new Error(
         'The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.',
+        { cause: e },
       );
     }
   }
