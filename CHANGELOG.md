@@ -1,3 +1,10 @@
+# [10.7.0-next.2](https://github.com/readmeio/rdme/compare/v10.7.0-next.1...v10.7.0-next.2) (2026-04-29)
+
+
+### Bug Fixes
+
+* **gha:** updating `actions/checkout` to v6 ([f6cf4cc](https://github.com/readmeio/rdme/commit/f6cf4cca71c1ed6e7a9e97612e206ba973957da6))
+
 # [10.7.0-next.1](https://github.com/readmeio/rdme/compare/v10.6.2...v10.7.0-next.1) (2026-04-28)
 
 
