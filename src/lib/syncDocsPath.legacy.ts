@@ -62,7 +62,12 @@ async function pushDoc(
           ...payload,
         }),
       },
-      { filePath, fileType: 'path' },
+      {
+        file: {
+          path: filePath,
+          type: 'path',
+        },
+      },
     )
       .then(handleAPIv1Res)
       .then(res => `🌱 successfully created '${res.slug}' (ID: ${res._id}) with contents from ${filePath}`);
@@ -88,7 +93,12 @@ async function pushDoc(
         headers: cleanAPIv1Headers(key, selectedVersion, new Headers({ 'Content-Type': 'application/json' })),
         body: JSON.stringify(payload),
       },
-      { filePath, fileType: 'path' },
+      {
+        file: {
+          path: filePath,
+          type: 'path',
+        },
+      },
     )
       .then(handleAPIv1Res)
       .then(res => `✏️ successfully updated '${res.slug}' with contents from ${filePath}`);
