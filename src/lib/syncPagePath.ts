@@ -143,7 +143,12 @@ async function pushPage(
       return this.readmeAPIFetch(
         route,
         { method: 'POST', headers, body: JSON.stringify(payload) },
-        { filePath, fileType: 'path' },
+        {
+          file: {
+            path: filePath,
+            type: 'path',
+          },
+        },
       )
         .then(res => this.handleAPIRes(res))
         .then(res => {
@@ -166,7 +171,12 @@ async function pushPage(
           headers,
           body: JSON.stringify(payload),
         },
-        { filePath, fileType: 'path' },
+        {
+          file: {
+            path: filePath,
+            type: 'path',
+          },
+        },
       )
         .then(res => this.handleAPIRes(res))
         .then(res => {

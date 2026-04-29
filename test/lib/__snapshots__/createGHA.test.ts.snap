@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repo 📚
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Run \`changelogs\` command 🚀
         uses: readmeio/rdme@v7
@@ -73,7 +73,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repo 📚
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Run \`changelogs\` command 🚀
         uses: readmeio/rdme@v7
@@ -114,7 +114,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repo 📚
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Run \`changelogs\` command 🚀
         uses: readmeio/rdme@v7
@@ -155,7 +155,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repo 📚
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Run \`changelogs\` command 🚀
         uses: readmeio/rdme@v7
@@ -192,7 +192,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repo 📚
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Run \`openapi:validate\` command 🚀
         uses: readmeio/rdme@v7
@@ -229,7 +229,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repo 📚
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Run \`openapi:validate\` command 🚀
         uses: readmeio/rdme@v7
