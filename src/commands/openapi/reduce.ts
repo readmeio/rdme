@@ -6,7 +6,7 @@ import path from 'node:path';
 import { Flags } from '@oclif/core';
 import chalk from 'chalk';
 import Oas from 'oas';
-import oasReducer from 'oas/reducer';
+import { OpenAPIReducer } from 'oas/reducer';
 import ora from 'ora';
 import prompts from 'prompts';
 
@@ -173,13 +173,26 @@ export default class OpenAPIReduceCommand extends BaseCommand<typeof OpenAPIRedu
     let reducedSpec: OASDocument;
 
     try {
-      reducedSpec = oasReducer(parsedPreparedSpec, {
-        tags: promptResults.tags || [],
-        paths: (promptResults.paths || []).reduce((acc: Record<string, string[]>, p: string) => {
-          acc[p] = promptResults.methods;
-          return acc;
-        }, {}),
-      });
+      const reducer = OpenAPIReducer.init(parsedPreparedSpec);
+      if (promptResults.tags?.length) {
+        promptResults.tags.forEach((reducedTag: string) => {
+          reducer.byTag(reducedTag);
+        });
+      }
+
+      if (promptResults.paths?.length) {
+        promptResults.paths.forEach((reducedPath: string) => {
+          if (promptResults.methods?.length) {
+            promptResults.methods.forEach((reducedMethod: string) => {
+              reducer.byOperation(reducedPath, reducedMethod);
+            });
+          } else {
+            reducer.byPath(reducedPath);
+          }
+        });
+      }
+
+      reducedSpec = reducer.reduce();
 
       spinner.succeed(`${spinner.text} done! ✅`);
     } catch (err) {

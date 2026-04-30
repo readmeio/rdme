@@ -1,3 +1,4 @@
+// oxlint-disable no-console -- We are printing errors to the terminal.
 import type { COMMANDS } from '../index.js';
 import type { CreateGHAHook, CreateGHAHookOptsInClass } from './hooks/createGHA.js';
 import type { ResponseBody } from './readmeAPIFetch.js';
@@ -110,10 +111,8 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
     // If this is a soft error then we should output the result as a regular log but exit the CLI
     // with an error status code.
     if (err.name === 'SoftError') {
-      // oxlint-disable-next-line no-console -- We are printing errors to the terminal.
       console.log(err.message);
     } else {
-      // oxlint-disable-next-line no-console -- We are printing errors to the terminal.
       console.error(chalk.red(`\n${message}\n`));
     }
 

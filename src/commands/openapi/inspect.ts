@@ -1,4 +1,5 @@
 import type { Analysis, AnalyzedFeature } from '../../lib/analyzeOas.js';
+import type { OASAnalysisFeature } from 'oas/analyzer/types';
 import type { OASDocument } from 'oas/types';
 
 import { Flags } from '@oclif/core';
@@ -17,8 +18,11 @@ function pluralize(str: string, count: number) {
   return count > 1 ? `${str}s` : str;
 }
 
-function getFeatureDocsURL(feature: AnalyzedFeature, definitionVersion: string): string | undefined {
-  if (!feature.url) {
+function getFeatureDocsURL(
+  feature: AnalyzedFeature | OASAnalysisFeature,
+  definitionVersion: string,
+): string | undefined {
+  if (!('url' in feature) || !feature.url) {
     return undefined;
   }
 
@@ -62,29 +66,6 @@ function buildFeaturesReport(analysis: Analysis, features: string[]) {
       }
     }
   });
-
-  if (features.includes('readme')) {
-    // Add some spacing between our OpenAPI and ReadMe extension reports (but only if our last
-    // entry wasn't an empty line).
-    if (features.length > 1 && report[report.length - 1].length) {
-      report.push('');
-    }
-
-    Object.entries(analysis.readme).forEach(([feature, info]) => {
-      if (info.hidden) {
-        return;
-      }
-
-      if (!info.present) {
-        report.push(`${feature}: You do not use this.`);
-        hasUnusedFeature = true;
-      } else {
-        report.push(`${feature}:`);
-        report.push(...(info.locations as string[]).map(loc => ` · ${chalk.yellow(loc)}`));
-        report.push('');
-      }
-    });
-  }
 
   // Because we add a little bit of padding between our report and the "analyzing your spec" copy
   // if this second entry in the report is an empty line then we can safely remove it so we don't
@@ -151,19 +132,24 @@ function buildFullReport(analysis: Analysis, definitionVersion: string, tableBor
 
   report.push(''); // Extra bit of space between our general API information and feature tables.
 
-  // Build out a view of all OpenAPI and ReadMe features that we discovered.
-  [
-    { component: 'openapi', header: 'OpenAPI Features', emoji: '🌲' },
-    { component: 'readme', header: 'ReadMe-Specific Features and Extensions', emoji: '🦉' },
-  ].forEach(({ component, header, emoji }) => {
+  // Build out a view of all OpenAPI features that we discovered.
+  (
+    [
+      {
+        component: 'openapi',
+        header: 'OpenAPI Features',
+        emoji: '🌲',
+      },
+    ] as const
+  ).forEach(({ component, header, emoji }) => {
     const tableData: string[][] = [
       [chalk.bold.yellow('Feature'), chalk.bold.yellow('Used?'), chalk.bold.yellow('Description')],
-      ...(Object.entries(analysis[component as 'openapi' | 'readme'])
+      ...(Object.entries(analysis[component])
         .map(([feature, info]) => {
-          if (info.hidden) return false;
+          if ('hidden' in info && info.hidden) return false;
 
           const descriptions: string[] = [];
-          if (info.description) {
+          if ('description' in info && info.description) {
             descriptions.push(info.description);
           }
 

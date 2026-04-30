@@ -1,5 +1,10 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`rdme openapi inspect > feature reports > should generate a report for '@readme/oas-examples/3.0/json/readme-…' (w/ [ 'circularRefs' ]) 1`] = `
+[SoftError: 
+circularRefs: You do not use this.]
+`;
+
 exports[`rdme openapi inspect > feature reports > should generate a report for '@readme/oas-examples/3.0/json/readme-…' (w/ [ 'polymorphism' ]) 1`] = `
 "
 polymorphism:
@@ -59,32 +64,6 @@ polymorphism:
  · #/paths/~1version/post/responses/400/content/application~1json/schema"
 `;
 
-exports[`rdme openapi inspect > feature reports > should generate a report for '@readme/oas-examples/3.0/json/readme-…' (w/ [ 'readme' ]) 1`] = `
-[SoftError: 
-x-default: You do not use this.
-x-readme.code-samples:
- · #/paths/~1x-code-samples/get/x-code-samples
- · #/paths/~1x-code-samples/post/x-readme/code-samples
-
-x-readme.headers:
- · #/paths/~1x-headers/patch/x-headers
- · #/paths/~1x-headers/post/x-readme/headers
-
-x-readme.explorer-enabled:
- · #/paths/~1x-explorer-enabled/patch
- · #/paths/~1x-explorer-enabled/post
-
-x-readme.proxy-enabled:
- · #/paths/~1x-proxy-enabled/patch
- · #/paths/~1x-proxy-enabled/post
-
-x-readme.samples-languages:
- · node
- · python
- · shell
- · swift]
-`;
-
 exports[`rdme openapi inspect > feature reports > should generate a report for '@readme/oas-examples/3.0/json/schema-…' (w/ [ 'additionalProperties', …(1) ]) 1`] = `
 "
 additionalProperties:
@@ -106,48 +85,6 @@ circularRefs:
  · #/components/schemas/ZoneOffset/properties/rules"
 `;
 
-exports[`rdme openapi inspect > feature reports > should generate a report for '@readme/oas-examples/3.0/json/schema-…' (w/ [ 'additionalProperties', …(2) ]) 1`] = `
-[SoftError: 
-additionalProperties:
- · #/components/schemas/BodyPart/properties/headers/additionalProperties
- · #/components/schemas/BodyPart/properties/mediaType/properties/parameters/additionalProperties
- · #/components/schemas/BodyPart/properties/parameterizedHeaders/additionalProperties
- · #/components/schemas/ContentDisposition/properties/parameters/additionalProperties
- · #/components/schemas/FormDataBodyPart/properties/headers/additionalProperties
- · #/components/schemas/FormDataBodyPart/properties/mediaType/properties/parameters/additionalProperties
- · #/components/schemas/FormDataBodyPart/properties/parameterizedHeaders/additionalProperties
- · #/components/schemas/FormDataContentDisposition/properties/parameters/additionalProperties
- · #/components/schemas/MultiPart/properties/headers/additionalProperties
- · #/components/schemas/MultiPart/properties/mediaType/properties/parameters/additionalProperties
- · #/components/schemas/MultiPart/properties/parameterizedHeaders/additionalProperties
- · #/components/schemas/ParameterizedHeader/properties/parameters/additionalProperties
-
-circularRefs:
- · #/components/schemas/MultiPart/properties/parent
- · #/components/schemas/ZoneOffset/properties/rules
-
-x-default: You do not use this.
-x-readme.code-samples: You do not use this.
-x-readme.headers: You do not use this.
-x-readme.explorer-enabled: You do not use this.
-x-readme.proxy-enabled: You do not use this.
-x-readme.samples-languages: You do not use this.]
-`;
-
-exports[`rdme openapi inspect > feature reports > should generate a report for '@readme/oas-examples/3.0/json/schema-…' (w/ [ 'circularRefs', 'readme' ]) 1`] = `
-[SoftError: 
-circularRefs:
- · #/components/schemas/MultiPart/properties/parent
- · #/components/schemas/ZoneOffset/properties/rules
-
-x-default: You do not use this.
-x-readme.code-samples: You do not use this.
-x-readme.headers: You do not use this.
-x-readme.explorer-enabled: You do not use this.
-x-readme.proxy-enabled: You do not use this.
-x-readme.samples-languages: You do not use this.]
-`;
-
 exports[`rdme openapi inspect > feature reports > should generate a report for '@readme/oas-examples/3.1/json/train-t…' (w/ [ 'commonParameters' ]) 1`] = `
 "
 commonParameters:
@@ -157,7 +94,7 @@ commonParameters:
 
 exports[`rdme openapi inspect > feature reports > should throw an error if an invalid feature is supplied 1`] = `
 {
-  "error": [Error: Expected --feature=reamde to be one of: additionalProperties, callbacks, circularRefs, commonParameters, discriminators, links, style, polymorphism, serverVariables, webhooks, xml, xmlRequests, xmlResponses, xmlSchemas, readme
+  "error": [Error: Expected --feature=reamde to be one of: additionalProperties, callbacks, circularRefs, commonParameters, discriminators, links, style, polymorphism, serverVariables, webhooks, xmlRequests, xmlResponses, xmlSchemas
 See more help with --help],
   "stderr": "",
   "stdout": "",
@@ -230,25 +167,6 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
 │                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#server- │
 │                            │       │ variable-object                                                                  │
 ├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ webhooks                   │ 🔴    │ Webhooks allow you to describe out of band requests that may be initiated by     │
-│                            │       │ your users.                                                                      │
-│                            │       │                                                                                  │
-│                            │       │ This feature is not available on OpenAPI v3.0.                                   │
-├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ xml                        │ 🟢    │ Any schema that utilizes the XML object for defining its shape in an XML         │
-│                            │       │ payload, or a request or response that defines an XML payload.                   │
-│                            │       │                                                                                  │
-│                            │       │ This is deprecated in favor of \`xmlRequests\`, \`xmlResponses\`, and \`xmlSchemas\`.  │
-│                            │       │                                                                                  │
-│                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#xml-    │
-│                            │       │ object                                                                           │
-├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ xmlSchemas                 │ 🟢    │ Any schema that utilizes the XML object for defining its shape in an XML         │
-│                            │       │ payload.                                                                         │
-│                            │       │                                                                                  │
-│                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#xml-    │
-│                            │       │ object                                                                           │
-├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
 │ xmlRequests                │ 🔴    │ Any request body that accepts an XML payload.                                    │
 │                            │       │                                                                                  │
 │                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.           │
@@ -258,43 +176,17 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
 │                            │       │                                                                                  │
 │                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#media-  │
 │                            │       │ type-object                                                                      │
-└────────────────────────────┴───────┴──────────────────────────────────────────────────────────────────────────────────┘
-
-🦉 ReadMe-Specific Features and Extensions
-┌────────────────────────────┬───────┬──────────────────────────────────────────────────────────────────────────────────┐
-│ Feature                    │ Used? │ Description                                                                      │
 ├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ x-default                  │ 🔴    │ The x-default extension allows you to define static authentication credential    │
-│                            │       │ defaults for OAuth 2 and API Key security types.                                 │
+│ xmlSchemas                 │ 🟢    │ Any schema that utilizes the XML object for defining its shape in an XML         │
+│                            │       │ payload.                                                                         │
 │                            │       │                                                                                  │
-│                            │       │ https://docs.readme.com/main/docs/openapi-extensions#authentication-defaults     │
+│                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#xml-    │
+│                            │       │ object                                                                           │
 ├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ x-readme.code-samples      │ 🔴    │ The x-readme.code-samples extension allows you to custom, create static code     │
-│                            │       │ samples on your API documentation.                                               │
+│ webhooks                   │ 🔴    │ Webhooks allow you to describe out of band requests that may be initiated by     │
+│                            │       │ your users.                                                                      │
 │                            │       │                                                                                  │
-│                            │       │ https://docs.readme.com/main/docs/openapi-extensions#custom-code-samples         │
-├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ x-readme.headers           │ 🔴    │ The x-readme.headers extension allows you define headers that should always be   │
-│                            │       │ present on your API or a specific operation, as well as what its value should    │
-│                            │       │ be.                                                                              │
-│                            │       │                                                                                  │
-│                            │       │ https://docs.readme.com/main/docs/openapi-extensions#static-headers              │
-├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ x-readme.explorer-enabled  │ 🔴    │ The x-readme.explorer-enabled extension allows you to toggle your API            │
-│                            │       │ documentation being interactive or not.                                          │
-│                            │       │                                                                                  │
-│                            │       │ https://docs.readme.com/main/docs/openapi-extensions#disable-the-api-explorer    │
-├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ x-readme.proxy-enabled     │ 🔴    │ The x-readme.proxy-enabled extension allows you to toggle if API requests from   │
-│                            │       │ API documentation should be routed through ReadMe's CORS Proxy. You should only  │
-│                            │       │ need to use this if your API does not support CORS.                              │
-│                            │       │                                                                                  │
-│                            │       │ https://docs.readme.com/main/docs/openapi-extensions#cors-proxy-enabled          │
-├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ x-readme.samples-languages │ 🔴    │ The x-readme.samples-languages extension allows you to toggle what languages are │
-│                            │       │ shown by default for code snippets in your API documentation.                    │
-│                            │       │                                                                                  │
-│                            │       │ https://docs.readme.com/main/docs/openapi-extensions#code-sample-languages       │
+│                            │       │ This feature is not available on OpenAPI v3.0.                                   │
 └────────────────────────────┴───────┴──────────────────────────────────────────────────────────────────────────────────┘
 "
 `;
@@ -365,25 +257,6 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
 │                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#server- │
 │                            │       │ variable-object                                                                  │
 ├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ webhooks                   │ 🔴    │ Webhooks allow you to describe out of band requests that may be initiated by     │
-│                            │       │ your users.                                                                      │
-│                            │       │                                                                                  │
-│                            │       │ This feature is not available on OpenAPI v3.0.                                   │
-├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ xml                        │ 🔴    │ Any schema that utilizes the XML object for defining its shape in an XML         │
-│                            │       │ payload, or a request or response that defines an XML payload.                   │
-│                            │       │                                                                                  │
-│                            │       │ This is deprecated in favor of \`xmlRequests\`, \`xmlResponses\`, and \`xmlSchemas\`.  │
-│                            │       │                                                                                  │
-│                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#xml-    │
-│                            │       │ object                                                                           │
-├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ xmlSchemas                 │ 🔴    │ Any schema that utilizes the XML object for defining its shape in an XML         │
-│                            │       │ payload.                                                                         │
-│                            │       │                                                                                  │
-│                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#xml-    │
-│                            │       │ object                                                                           │
-├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
 │ xmlRequests                │ 🔴    │ Any request body that accepts an XML payload.                                    │
 │                            │       │                                                                                  │
 │                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.           │
@@ -393,43 +266,17 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
 │                            │       │                                                                                  │
 │                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#media-  │
 │                            │       │ type-object                                                                      │
-└────────────────────────────┴───────┴──────────────────────────────────────────────────────────────────────────────────┘
-
-🦉 ReadMe-Specific Features and Extensions
-┌────────────────────────────┬───────┬──────────────────────────────────────────────────────────────────────────────────┐
-│ Feature                    │ Used? │ Description                                                                      │
 ├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ x-default                  │ 🔴    │ The x-default extension allows you to define static authentication credential    │
-│                            │       │ defaults for OAuth 2 and API Key security types.                                 │
+│ xmlSchemas                 │ 🔴    │ Any schema that utilizes the XML object for defining its shape in an XML         │
+│                            │       │ payload.                                                                         │
 │                            │       │                                                                                  │
-│                            │       │ https://docs.readme.com/main/docs/openapi-extensions#authentication-defaults     │
+│                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#xml-    │
+│                            │       │ object                                                                           │
 ├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ x-readme.code-samples      │ 🟢    │ The x-readme.code-samples extension allows you to custom, create static code     │
-│                            │       │ samples on your API documentation.                                               │
+│ webhooks                   │ 🔴    │ Webhooks allow you to describe out of band requests that may be initiated by     │
+│                            │       │ your users.                                                                      │
 │                            │       │                                                                                  │
-│                            │       │ https://docs.readme.com/main/docs/openapi-extensions#custom-code-samples         │
-├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ x-readme.headers           │ 🟢    │ The x-readme.headers extension allows you define headers that should always be   │
-│                            │       │ present on your API or a specific operation, as well as what its value should    │
-│                            │       │ be.                                                                              │
-│                            │       │                                                                                  │
-│                            │       │ https://docs.readme.com/main/docs/openapi-extensions#static-headers              │
-├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ x-readme.explorer-enabled  │ 🟢    │ The x-readme.explorer-enabled extension allows you to toggle your API            │
-│                            │       │ documentation being interactive or not.                                          │
-│                            │       │                                                                                  │
-│                            │       │ https://docs.readme.com/main/docs/openapi-extensions#disable-the-api-explorer    │
-├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ x-readme.proxy-enabled     │ 🟢    │ The x-readme.proxy-enabled extension allows you to toggle if API requests from   │
-│                            │       │ API documentation should be routed through ReadMe's CORS Proxy. You should only  │
-│                            │       │ need to use this if your API does not support CORS.                              │
-│                            │       │                                                                                  │
-│                            │       │ https://docs.readme.com/main/docs/openapi-extensions#cors-proxy-enabled          │
-├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ x-readme.samples-languages │ 🟢    │ The x-readme.samples-languages extension allows you to toggle what languages are │
-│                            │       │ shown by default for code snippets in your API documentation.                    │
-│                            │       │                                                                                  │
-│                            │       │ https://docs.readme.com/main/docs/openapi-extensions#code-sample-languages       │
+│                            │       │ This feature is not available on OpenAPI v3.0.                                   │
 └────────────────────────────┴───────┴──────────────────────────────────────────────────────────────────────────────────┘
 "
 `;
@@ -500,25 +347,6 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
 │                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#server- │
 │                            │       │ variable-object                                                                  │
 ├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ webhooks                   │ 🔴    │ Webhooks allow you to describe out of band requests that may be initiated by     │
-│                            │       │ your users.                                                                      │
-│                            │       │                                                                                  │
-│                            │       │ This feature is not available on OpenAPI v3.0.                                   │
-├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ xml                        │ 🔴    │ Any schema that utilizes the XML object for defining its shape in an XML         │
-│                            │       │ payload, or a request or response that defines an XML payload.                   │
-│                            │       │                                                                                  │
-│                            │       │ This is deprecated in favor of \`xmlRequests\`, \`xmlResponses\`, and \`xmlSchemas\`.  │
-│                            │       │                                                                                  │
-│                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#xml-    │
-│                            │       │ object                                                                           │
-├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ xmlSchemas                 │ 🔴    │ Any schema that utilizes the XML object for defining its shape in an XML         │
-│                            │       │ payload.                                                                         │
-│                            │       │                                                                                  │
-│                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#xml-    │
-│                            │       │ object                                                                           │
-├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
 │ xmlRequests                │ 🔴    │ Any request body that accepts an XML payload.                                    │
 │                            │       │                                                                                  │
 │                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.           │
@@ -528,43 +356,17 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
 │                            │       │                                                                                  │
 │                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#media-  │
 │                            │       │ type-object                                                                      │
-└────────────────────────────┴───────┴──────────────────────────────────────────────────────────────────────────────────┘
-
-🦉 ReadMe-Specific Features and Extensions
-┌────────────────────────────┬───────┬──────────────────────────────────────────────────────────────────────────────────┐
-│ Feature                    │ Used? │ Description                                                                      │
 ├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ x-default                  │ 🔴    │ The x-default extension allows you to define static authentication credential    │
-│                            │       │ defaults for OAuth 2 and API Key security types.                                 │
+│ xmlSchemas                 │ 🔴    │ Any schema that utilizes the XML object for defining its shape in an XML         │
+│                            │       │ payload.                                                                         │
 │                            │       │                                                                                  │
-│                            │       │ https://docs.readme.com/main/docs/openapi-extensions#authentication-defaults     │
+│                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#xml-    │
+│                            │       │ object                                                                           │
 ├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ x-readme.code-samples      │ 🔴    │ The x-readme.code-samples extension allows you to custom, create static code     │
-│                            │       │ samples on your API documentation.                                               │
+│ webhooks                   │ 🔴    │ Webhooks allow you to describe out of band requests that may be initiated by     │
+│                            │       │ your users.                                                                      │
 │                            │       │                                                                                  │
-│                            │       │ https://docs.readme.com/main/docs/openapi-extensions#custom-code-samples         │
-├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ x-readme.headers           │ 🔴    │ The x-readme.headers extension allows you define headers that should always be   │
-│                            │       │ present on your API or a specific operation, as well as what its value should    │
-│                            │       │ be.                                                                              │
-│                            │       │                                                                                  │
-│                            │       │ https://docs.readme.com/main/docs/openapi-extensions#static-headers              │
-├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ x-readme.explorer-enabled  │ 🔴    │ The x-readme.explorer-enabled extension allows you to toggle your API            │
-│                            │       │ documentation being interactive or not.                                          │
-│                            │       │                                                                                  │
-│                            │       │ https://docs.readme.com/main/docs/openapi-extensions#disable-the-api-explorer    │
-├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ x-readme.proxy-enabled     │ 🔴    │ The x-readme.proxy-enabled extension allows you to toggle if API requests from   │
-│                            │       │ API documentation should be routed through ReadMe's CORS Proxy. You should only  │
-│                            │       │ need to use this if your API does not support CORS.                              │
-│                            │       │                                                                                  │
-│                            │       │ https://docs.readme.com/main/docs/openapi-extensions#cors-proxy-enabled          │
-├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ x-readme.samples-languages │ 🔴    │ The x-readme.samples-languages extension allows you to toggle what languages are │
-│                            │       │ shown by default for code snippets in your API documentation.                    │
-│                            │       │                                                                                  │
-│                            │       │ https://docs.readme.com/main/docs/openapi-extensions#code-sample-languages       │
+│                            │       │ This feature is not available on OpenAPI v3.0.                                   │
 └────────────────────────────┴───────┴──────────────────────────────────────────────────────────────────────────────────┘
 "
 `;
@@ -634,26 +436,6 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
 │                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#server- │
 │                            │       │ variable-object                                                                  │
 ├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ webhooks                   │ 🟢    │ Webhooks allow you to describe out of band requests that may be initiated by     │
-│                            │       │ your users.                                                                      │
-│                            │       │                                                                                  │
-│                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#user-   │
-│                            │       │ content-oaswebhooks                                                              │
-├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ xml                        │ 🟢    │ Any schema that utilizes the XML object for defining its shape in an XML         │
-│                            │       │ payload, or a request or response that defines an XML payload.                   │
-│                            │       │                                                                                  │
-│                            │       │ This is deprecated in favor of \`xmlRequests\`, \`xmlResponses\`, and \`xmlSchemas\`.  │
-│                            │       │                                                                                  │
-│                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#xml-    │
-│                            │       │ object                                                                           │
-├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ xmlSchemas                 │ 🟢    │ Any schema that utilizes the XML object for defining its shape in an XML         │
-│                            │       │ payload.                                                                         │
-│                            │       │                                                                                  │
-│                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#xml-    │
-│                            │       │ object                                                                           │
-├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
 │ xmlRequests                │ 🟢    │ Any request body that accepts an XML payload.                                    │
 │                            │       │                                                                                  │
 │                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.           │
@@ -663,43 +445,18 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
 │                            │       │                                                                                  │
 │                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#media-  │
 │                            │       │ type-object                                                                      │
-└────────────────────────────┴───────┴──────────────────────────────────────────────────────────────────────────────────┘
-
-🦉 ReadMe-Specific Features and Extensions
-┌────────────────────────────┬───────┬──────────────────────────────────────────────────────────────────────────────────┐
-│ Feature                    │ Used? │ Description                                                                      │
 ├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ x-default                  │ 🔴    │ The x-default extension allows you to define static authentication credential    │
-│                            │       │ defaults for OAuth 2 and API Key security types.                                 │
+│ xmlSchemas                 │ 🟢    │ Any schema that utilizes the XML object for defining its shape in an XML         │
+│                            │       │ payload.                                                                         │
 │                            │       │                                                                                  │
-│                            │       │ https://docs.readme.com/main/docs/openapi-extensions#authentication-defaults     │
+│                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#xml-    │
+│                            │       │ object                                                                           │
 ├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ x-readme.code-samples      │ 🔴    │ The x-readme.code-samples extension allows you to custom, create static code     │
-│                            │       │ samples on your API documentation.                                               │
+│ webhooks                   │ 🟢    │ Webhooks allow you to describe out of band requests that may be initiated by     │
+│                            │       │ your users.                                                                      │
 │                            │       │                                                                                  │
-│                            │       │ https://docs.readme.com/main/docs/openapi-extensions#custom-code-samples         │
-├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ x-readme.headers           │ 🔴    │ The x-readme.headers extension allows you define headers that should always be   │
-│                            │       │ present on your API or a specific operation, as well as what its value should    │
-│                            │       │ be.                                                                              │
-│                            │       │                                                                                  │
-│                            │       │ https://docs.readme.com/main/docs/openapi-extensions#static-headers              │
-├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ x-readme.explorer-enabled  │ 🔴    │ The x-readme.explorer-enabled extension allows you to toggle your API            │
-│                            │       │ documentation being interactive or not.                                          │
-│                            │       │                                                                                  │
-│                            │       │ https://docs.readme.com/main/docs/openapi-extensions#disable-the-api-explorer    │
-├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ x-readme.proxy-enabled     │ 🔴    │ The x-readme.proxy-enabled extension allows you to toggle if API requests from   │
-│                            │       │ API documentation should be routed through ReadMe's CORS Proxy. You should only  │
-│                            │       │ need to use this if your API does not support CORS.                              │
-│                            │       │                                                                                  │
-│                            │       │ https://docs.readme.com/main/docs/openapi-extensions#cors-proxy-enabled          │
-├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ x-readme.samples-languages │ 🔴    │ The x-readme.samples-languages extension allows you to toggle what languages are │
-│                            │       │ shown by default for code snippets in your API documentation.                    │
-│                            │       │                                                                                  │
-│                            │       │ https://docs.readme.com/main/docs/openapi-extensions#code-sample-languages       │
+│                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#user-   │
+│                            │       │ content-oaswebhooks                                                              │
 └────────────────────────────┴───────┴──────────────────────────────────────────────────────────────────────────────────┘
 "
 `;
