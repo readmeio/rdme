@@ -6,7 +6,6 @@ import path from 'node:path';
 
 import chalk from 'chalk';
 import ora from 'ora';
-import toposort from 'toposort';
 
 import { APIv2Error } from './apiError.js';
 import { oraOptions } from './logger.js';
@@ -203,16 +202,42 @@ async function pushPage(
   }
 }
 
-function byParentPage(
+function numericPosition(data: GuidesOrReferenceRequestSchema): number {
+  const p = data.position;
+  if (typeof p === 'number' && Number.isFinite(p)) return p;
+  if (typeof p === 'string') {
+    const n = Number(p);
+    if (Number.isFinite(n)) return n;
+  }
+
+  return Number.POSITIVE_INFINITY;
+}
+
+function compareUploadPriority(
   left: PageMetadata<GuidesOrReferenceRequestSchema>,
   right: PageMetadata<GuidesOrReferenceRequestSchema>,
-) {
-  return (right.data.parent?.uri ? 1 : 0) - (left.data.parent?.uri ? 1 : 0);
+): number {
+  const leftPos = numericPosition(left.data);
+  const rightPos = numericPosition(right.data);
+  if (leftPos !== rightPos) {
+    // Avoid `Infinity - Infinity` -> `NaN` which would poison sort when both sides do not have a
+    // `position`.
+    return leftPos < rightPos ? -1 : 1;
+  }
+
+  return left.slug.localeCompare(right.slug, undefined, {
+    numeric: true,
+    sensitivity: 'base',
+  });
 }
 
 /**
- * Sorts files based on their `parent.uri` attribute. If a file has a `parent.uri` attribute,
- * it will be sorted after the file it references.
+ * Sort files for uploading.
+ *
+ * Every page is uploaded after its parent as defined by `parent.uri` when present and when the
+ * parent is in the same upload batch. Pages within these batches are then sorted by ascending
+ * `position` when present; ties are broken by natural order of the page `slug` (numeric substrings
+ * compare as numbers, e.g. `page-4` before `page-10`).
  *
  * @see {@link https://github.com/readmeio/rdme/pull/973}
  * @returns An array of sorted PageMetadata objects
@@ -226,17 +251,47 @@ function sortFiles(
     return bySlug;
   }, {});
 
-  const dependencies = Object.values(filesBySlug).reduce<
-    [PageMetadata<GuidesOrReferenceRequestSchema>, PageMetadata<GuidesOrReferenceRequestSchema>][]
-  >((edges, obj) => {
-    if (obj.data.parent?.uri && filesBySlug[obj.data.parent.uri]) {
-      edges.push([filesBySlug[obj.data.parent.uri], filesBySlug[obj.slug]]);
+  const slugs = Object.keys(filesBySlug);
+  const inDegree = new Map<string, number>();
+  const childrenByParent = new Map<string, string[]>();
+
+  for (const obj of Object.values(filesBySlug)) {
+    const parentKey = obj.data.parent?.uri;
+    if (parentKey && filesBySlug[parentKey]) {
+      if (!childrenByParent.has(parentKey)) {
+        childrenByParent.set(parentKey, []);
+      }
+
+      childrenByParent.get(parentKey)!.push(obj.slug);
+      inDegree.set(obj.slug, (inDegree.get(obj.slug) ?? 0) + 1);
+    } else {
+      inDegree.set(obj.slug, 0);
     }
+  }
 
-    return edges;
-  }, []);
+  const sorted: PageMetadata<GuidesOrReferenceRequestSchema>[] = [];
+  const ready = slugs.filter(slug => (inDegree.get(slug) ?? 0) === 0);
+  ready.sort((a, b) => compareUploadPriority(filesBySlug[a], filesBySlug[b]));
 
-  return toposort.array(files, dependencies);
+  while (ready.length > 0) {
+    const nextSlug = ready.shift()!;
+    sorted.push(filesBySlug[nextSlug]);
+
+    for (const childSlug of childrenByParent.get(nextSlug) ?? []) {
+      const newDeg = (inDegree.get(childSlug) ?? 0) - 1;
+      inDegree.set(childSlug, newDeg);
+      if (newDeg === 0) {
+        ready.push(childSlug);
+        ready.sort((a, b) => compareUploadPriority(filesBySlug[a], filesBySlug[b]));
+      }
+    }
+  }
+
+  if (sorted.length !== files.length) {
+    throw new Error('Cyclic dependency');
+  }
+
+  return sorted;
 }
 
 /**
@@ -289,7 +344,7 @@ export default async function syncPagePath(this: APIv2PageUploadCommands): Promi
   const sortedFiles =
     this.route === 'changelogs' || this.route === 'custom_pages'
       ? (unsortedFiles as PageMetadata<PageRequestSchema<typeof this.route>>[])
-      : sortFiles((unsortedFiles as PageMetadata<PageRequestSchema<typeof this.route>>[]).toSorted(byParentPage));
+      : sortFiles(unsortedFiles as PageMetadata<GuidesOrReferenceRequestSchema>[]);
 
   // push the files to ReadMe
   const rawResults: PromiseSettledResult<PushResult>[] = [];

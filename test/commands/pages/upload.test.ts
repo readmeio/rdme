@@ -1,3 +1,4 @@
+import type { FullUploadResults } from '../../../src/lib/syncPagePath.js';
 import type { OclifOutput } from '../../helpers/oclif.js';
 
 import fs from 'node:fs';
@@ -565,6 +566,247 @@ describe.each([
 
         expect(result).toMatchSnapshot();
         expect(fs.writeFileSync).not.toHaveBeenCalled();
+
+        mock.done();
+      });
+    });
+
+    describe('given that the directory has explicit frontmatter positions set', () => {
+      it('should upload root pages by ascending position (not filename order)', async () => {
+        const mock = getAPIv2Mock({ authorization })
+          .get(`/branches/stable/${route}/z-first`)
+          .reply(404)
+          .post(`/branches/stable/${route}`, {
+            slug: 'z-first',
+            title: 'Z file (position #1)',
+            category: { uri: `/branches/stable/categories/${route}/category-slug` },
+            position: 0,
+            content: { body: '\nBody\n' },
+          })
+          .reply(201, {})
+          .get(`/branches/stable/${route}/a-second`)
+          .reply(404)
+          .post(`/branches/stable/${route}`, {
+            slug: 'a-second',
+            title: 'A file (position #2)',
+            category: { uri: `/branches/stable/categories/${route}/category-slug` },
+            position: 1,
+            content: { body: '\nBody\n' },
+          })
+          .reply(201, {});
+
+        const result = await run(['test/__fixtures__/docs/position-order-roots', '--key', key]);
+
+        expect(result).toMatchSnapshot();
+        expect(fs.writeFileSync).not.toHaveBeenCalled();
+
+        expect((result.result as unknown as FullUploadResults).created.map(page => page.slug)).toStrictEqual([
+          'z-first',
+          'a-second',
+        ]);
+
+        mock.done();
+      });
+
+      it('should upload root pages using a natural sort order of their `position` values (1 -> 2 -> 3 -> 20)', async () => {
+        const mock = getAPIv2Mock({ authorization })
+          .get(`/branches/stable/${route}/page-1`)
+          .reply(404)
+          .get(`/branches/stable/${route}/page-2`)
+          .reply(404)
+          .get(`/branches/stable/${route}/page-3`)
+          .reply(404)
+          .get(`/branches/stable/${route}/page-4`)
+          .reply(404)
+          .get(`/branches/stable/${route}/page-10`)
+          .reply(404)
+
+          .post(`/branches/stable/${route}`, {
+            slug: 'page-1',
+            title: 'Page 1 (position #1)',
+            category: { uri: `/branches/stable/categories/${route}/category-slug` },
+            position: 1,
+            content: { body: '\nBody\n' },
+          })
+          .reply(201, {})
+          .post(`/branches/stable/${route}`, {
+            slug: 'page-2',
+            title: 'Page 2 (position #2)',
+            category: { uri: `/branches/stable/categories/${route}/category-slug` },
+            position: 2,
+            content: { body: '\nBody\n' },
+          })
+          .reply(201, {})
+          .post(`/branches/stable/${route}`, {
+            slug: 'page-3',
+            title: 'Page 3 (position #3)',
+            category: { uri: `/branches/stable/categories/${route}/category-slug` },
+            position: 3,
+            content: { body: '\nBody\n' },
+          })
+          .reply(201, {})
+          .post(`/branches/stable/${route}`, {
+            slug: 'page-4',
+            title: 'Page 4 (position #4)',
+            category: { uri: `/branches/stable/categories/${route}/category-slug` },
+            position: 4,
+            content: { body: '\nBody\n' },
+          })
+          .reply(201, {})
+          .post(`/branches/stable/${route}`, {
+            slug: 'page-10',
+            title: 'Page 10 (position #10)',
+            category: { uri: `/branches/stable/categories/${route}/category-slug` },
+            position: 10,
+            content: { body: '\nBody\n' },
+          })
+          .reply(201, {});
+
+        const result = await run(['test/__fixtures__/docs/position-order-natural', '--key', key]);
+
+        expect(result).toMatchSnapshot();
+        expect(fs.writeFileSync).not.toHaveBeenCalled();
+
+        expect((result.result as unknown as FullUploadResults).created.map(page => page.slug)).toStrictEqual([
+          'page-1',
+          'page-2',
+          'page-3',
+          'page-4',
+          'page-10',
+        ]);
+
+        mock.done();
+      });
+
+      it('should order sibling uploads by ascending position under the same parent', async () => {
+        const mock = getAPIv2Mock({ authorization })
+          .get(`/branches/stable/${route}/parent-hub`)
+          .reply(404)
+          .post(`/branches/stable/${route}`, {
+            slug: 'parent-hub',
+            title: 'Parent hub',
+            category: { uri: `/branches/stable/categories/${route}/category-slug` },
+            position: 0,
+            content: { body: '\nBody\n' },
+          })
+          .reply(201, {})
+
+          // `child-c`, `child-a`, and `child-b` should not have been uploaded yet.
+          .get(`/branches/stable/${route}/child-a`)
+          .reply(404)
+          .get(`/branches/stable/${route}/child-b`)
+          .reply(404)
+          .get(`/branches/stable/${route}/child-c`)
+          .reply(404)
+
+          // `child-c` should be uploaded first because its position is lowest, then `child-a`
+          // followed by `child-b`
+          .post(`/branches/stable/${route}`, {
+            slug: 'child-c',
+            title: 'Child C - position #1',
+            category: { uri: `/branches/stable/categories/${route}/category-slug` },
+            position: 10,
+            parent: { uri: `/branches/stable/${route}/parent-hub` },
+            content: { body: '\nBody\n' },
+          })
+          .reply(201, {})
+          .post(`/branches/stable/${route}`, {
+            slug: 'child-a',
+            title: 'Child A - position #2',
+            category: { uri: `/branches/stable/categories/${route}/category-slug` },
+            position: 20,
+            parent: { uri: `/branches/stable/${route}/parent-hub` },
+            content: { body: '\nBody\n' },
+          })
+          .reply(201, {})
+          .post(`/branches/stable/${route}`, {
+            slug: 'child-b',
+            title: 'Child B - position #3',
+            category: { uri: `/branches/stable/categories/${route}/category-slug` },
+            position: 30,
+            parent: { uri: `/branches/stable/${route}/parent-hub` },
+            content: { body: '\nBody\n' },
+          })
+          .reply(201, {});
+
+        const result = await run(['test/__fixtures__/docs/position-order-siblings', '--key', key]);
+
+        expect(result).toMatchSnapshot();
+        expect(fs.writeFileSync).not.toHaveBeenCalled();
+
+        expect((result.result as unknown as FullUploadResults).created.map(page => page.slug)).toStrictEqual([
+          'parent-hub',
+          'child-c',
+          'child-a',
+          'child-b',
+        ]);
+
+        mock.done();
+      });
+    });
+
+    describe('given that the direcotry does NOT have explicit frontmatter positions set', () => {
+      it('should upload root pages using a natural sort order of their slugs when `position` is missing', async () => {
+        const mock = getAPIv2Mock({ authorization })
+          .get(`/branches/stable/${route}/page-1`)
+          .reply(404)
+          .get(`/branches/stable/${route}/page-2`)
+          .reply(404)
+          .get(`/branches/stable/${route}/page-3`)
+          .reply(404)
+          .get(`/branches/stable/${route}/page-4`)
+          .reply(404)
+          .get(`/branches/stable/${route}/page-10`)
+          .reply(404)
+
+          .post(`/branches/stable/${route}`, {
+            slug: 'page-1',
+            title: 'Page 1 (position #1)',
+            category: { uri: `/branches/stable/categories/${route}/category-slug` },
+            content: { body: '\nBody\n' },
+          })
+          .reply(201, {})
+          .post(`/branches/stable/${route}`, {
+            slug: 'page-2',
+            title: 'Page 2 (position #2)',
+            category: { uri: `/branches/stable/categories/${route}/category-slug` },
+            content: { body: '\nBody\n' },
+          })
+          .reply(201, {})
+          .post(`/branches/stable/${route}`, {
+            slug: 'page-3',
+            title: 'Page 3 (position #3)',
+            category: { uri: `/branches/stable/categories/${route}/category-slug` },
+            content: { body: '\nBody\n' },
+          })
+          .reply(201, {})
+          .post(`/branches/stable/${route}`, {
+            slug: 'page-4',
+            title: 'Page 4 (position #4)',
+            category: { uri: `/branches/stable/categories/${route}/category-slug` },
+            content: { body: '\nBody\n' },
+          })
+          .reply(201, {})
+          .post(`/branches/stable/${route}`, {
+            slug: 'page-10',
+            title: 'Page 10 (position #10)',
+            category: { uri: `/branches/stable/categories/${route}/category-slug` },
+            content: { body: '\nBody\n' },
+          })
+          .reply(201, {});
+
+        const result = await run(['test/__fixtures__/docs/position-order-missing', '--key', key]);
+
+        expect(result).toMatchSnapshot();
+        expect(fs.writeFileSync).not.toHaveBeenCalled();
+
+        expect((result.result as unknown as FullUploadResults).created.map(page => page.slug)).toStrictEqual([
+          'page-1',
+          'page-2',
+          'page-3',
+          'page-4',
+          'page-10',
+        ]);
 
         mock.done();
       });
