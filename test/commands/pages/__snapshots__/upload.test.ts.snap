@@ -1,5 +1,61 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`rdme docs upload > given that the file path is a directory > given that the direcotry does NOT have explicit frontmatter positions set > should upload root pages using a natural sort order of their slugs when \`position\` is missing 1`] = `
+{
+  "result": {
+    "created": [
+      {
+        "filePath": "test/__fixtures__/docs/position-order-missing/page-1.md",
+        "response": {},
+        "result": "created",
+        "slug": "page-1",
+      },
+      {
+        "filePath": "test/__fixtures__/docs/position-order-missing/page-2.md",
+        "response": {},
+        "result": "created",
+        "slug": "page-2",
+      },
+      {
+        "filePath": "test/__fixtures__/docs/position-order-missing/page-3.md",
+        "response": {},
+        "result": "created",
+        "slug": "page-3",
+      },
+      {
+        "filePath": "test/__fixtures__/docs/position-order-missing/page-4.md",
+        "response": {},
+        "result": "created",
+        "slug": "page-4",
+      },
+      {
+        "filePath": "test/__fixtures__/docs/position-order-missing/page-10.md",
+        "response": {},
+        "result": "created",
+        "slug": "page-10",
+      },
+    ],
+    "failed": [],
+    "skipped": [],
+    "updated": [],
+  },
+  "stderr": "- 🔍 Looking for Markdown files in the \`test/__fixtures__/docs/position-order-missing\` directory...
+✔ 🔍 Looking for Markdown files in the \`test/__fixtures__/docs/position-order-missing\` directory... 5 file(s) found!
+- 🔬 Validating frontmatter data...
+✔ 🔬 Validating frontmatter data... no issues found!
+- 🚀 Uploading files to ReadMe...
+✔ 🚀 Uploading files to ReadMe... done!
+",
+  "stdout": "🌱 Successfully created 5 page(s) in ReadMe:
+   - page-1 (test/__fixtures__/docs/position-order-missing/page-1.md)
+   - page-2 (test/__fixtures__/docs/position-order-missing/page-2.md)
+   - page-3 (test/__fixtures__/docs/position-order-missing/page-3.md)
+   - page-4 (test/__fixtures__/docs/position-order-missing/page-4.md)
+   - page-10 (test/__fixtures__/docs/position-order-missing/page-10.md)
+",
+}
+`;
+
 exports[`rdme docs upload > given that the file path is a directory > given that the directory contains parent/child docs > should upload parents before children 1`] = `
 {
   "result": {
@@ -49,21 +105,161 @@ exports[`rdme docs upload > given that the file path is a directory > given that
 }
 `;
 
+exports[`rdme docs upload > given that the file path is a directory > given that the directory has explicit frontmatter positions set > should order sibling uploads by ascending position under the same parent 1`] = `
+{
+  "result": {
+    "created": [
+      {
+        "filePath": "test/__fixtures__/docs/position-order-siblings/parent-hub.md",
+        "response": {},
+        "result": "created",
+        "slug": "parent-hub",
+      },
+      {
+        "filePath": "test/__fixtures__/docs/position-order-siblings/child-c.md",
+        "response": {},
+        "result": "created",
+        "slug": "child-c",
+      },
+      {
+        "filePath": "test/__fixtures__/docs/position-order-siblings/child-a.md",
+        "response": {},
+        "result": "created",
+        "slug": "child-a",
+      },
+      {
+        "filePath": "test/__fixtures__/docs/position-order-siblings/child-b.md",
+        "response": {},
+        "result": "created",
+        "slug": "child-b",
+      },
+    ],
+    "failed": [],
+    "skipped": [],
+    "updated": [],
+  },
+  "stderr": "- 🔍 Looking for Markdown files in the \`test/__fixtures__/docs/position-order-siblings\` directory...
+✔ 🔍 Looking for Markdown files in the \`test/__fixtures__/docs/position-order-siblings\` directory... 4 file(s) found!
+- 🔬 Validating frontmatter data...
+✔ 🔬 Validating frontmatter data... no issues found!
+- 🚀 Uploading files to ReadMe...
+✔ 🚀 Uploading files to ReadMe... done!
+",
+  "stdout": "🌱 Successfully created 4 page(s) in ReadMe:
+   - parent-hub (test/__fixtures__/docs/position-order-siblings/parent-hub.md)
+   - child-c (test/__fixtures__/docs/position-order-siblings/child-c.md)
+   - child-a (test/__fixtures__/docs/position-order-siblings/child-a.md)
+   - child-b (test/__fixtures__/docs/position-order-siblings/child-b.md)
+",
+}
+`;
+
+exports[`rdme docs upload > given that the file path is a directory > given that the directory has explicit frontmatter positions set > should upload root pages by ascending position (not filename order) 1`] = `
+{
+  "result": {
+    "created": [
+      {
+        "filePath": "test/__fixtures__/docs/position-order-roots/z-first.md",
+        "response": {},
+        "result": "created",
+        "slug": "z-first",
+      },
+      {
+        "filePath": "test/__fixtures__/docs/position-order-roots/a-second.md",
+        "response": {},
+        "result": "created",
+        "slug": "a-second",
+      },
+    ],
+    "failed": [],
+    "skipped": [],
+    "updated": [],
+  },
+  "stderr": "- 🔍 Looking for Markdown files in the \`test/__fixtures__/docs/position-order-roots\` directory...
+✔ 🔍 Looking for Markdown files in the \`test/__fixtures__/docs/position-order-roots\` directory... 2 file(s) found!
+- 🔬 Validating frontmatter data...
+✔ 🔬 Validating frontmatter data... no issues found!
+- 🚀 Uploading files to ReadMe...
+✔ 🚀 Uploading files to ReadMe... done!
+",
+  "stdout": "🌱 Successfully created 2 page(s) in ReadMe:
+   - z-first (test/__fixtures__/docs/position-order-roots/z-first.md)
+   - a-second (test/__fixtures__/docs/position-order-roots/a-second.md)
+",
+}
+`;
+
+exports[`rdme docs upload > given that the file path is a directory > given that the directory has explicit frontmatter positions set > should upload root pages using a natural sort order of their \`position\` values (1 -> 2 -> 3 -> 20) 1`] = `
+{
+  "result": {
+    "created": [
+      {
+        "filePath": "test/__fixtures__/docs/position-order-natural/page-1.md",
+        "response": {},
+        "result": "created",
+        "slug": "page-1",
+      },
+      {
+        "filePath": "test/__fixtures__/docs/position-order-natural/page-2.md",
+        "response": {},
+        "result": "created",
+        "slug": "page-2",
+      },
+      {
+        "filePath": "test/__fixtures__/docs/position-order-natural/page-3.md",
+        "response": {},
+        "result": "created",
+        "slug": "page-3",
+      },
+      {
+        "filePath": "test/__fixtures__/docs/position-order-natural/page-4.md",
+        "response": {},
+        "result": "created",
+        "slug": "page-4",
+      },
+      {
+        "filePath": "test/__fixtures__/docs/position-order-natural/page-10.md",
+        "response": {},
+        "result": "created",
+        "slug": "page-10",
+      },
+    ],
+    "failed": [],
+    "skipped": [],
+    "updated": [],
+  },
+  "stderr": "- 🔍 Looking for Markdown files in the \`test/__fixtures__/docs/position-order-natural\` directory...
+✔ 🔍 Looking for Markdown files in the \`test/__fixtures__/docs/position-order-natural\` directory... 5 file(s) found!
+- 🔬 Validating frontmatter data...
+✔ 🔬 Validating frontmatter data... no issues found!
+- 🚀 Uploading files to ReadMe...
+✔ 🚀 Uploading files to ReadMe... done!
+",
+  "stdout": "🌱 Successfully created 5 page(s) in ReadMe:
+   - page-1 (test/__fixtures__/docs/position-order-natural/page-1.md)
+   - page-2 (test/__fixtures__/docs/position-order-natural/page-2.md)
+   - page-3 (test/__fixtures__/docs/position-order-natural/page-3.md)
+   - page-4 (test/__fixtures__/docs/position-order-natural/page-4.md)
+   - page-10 (test/__fixtures__/docs/position-order-natural/page-10.md)
+",
+}
+`;
+
 exports[`rdme docs upload > given that the file path is a directory > should create a page in ReadMe for each file in the directory and its subdirectories 1`] = `
 {
   "result": {
     "created": [
       {
-        "filePath": "test/__fixtures__/docs/existing-docs/simple-doc.md",
-        "response": {},
-        "result": "created",
-        "slug": "simple-doc",
-      },
-      {
         "filePath": "test/__fixtures__/docs/existing-docs/subdir/another-doc.md",
         "response": {},
         "result": "created",
         "slug": "another-doc",
+      },
+      {
+        "filePath": "test/__fixtures__/docs/existing-docs/simple-doc.md",
+        "response": {},
+        "result": "created",
+        "slug": "simple-doc",
       },
     ],
     "failed": [],
@@ -78,8 +274,8 @@ exports[`rdme docs upload > given that the file path is a directory > should cre
 ✔ 🚀 Uploading files to ReadMe... done!
 ",
   "stdout": "🌱 Successfully created 2 page(s) in ReadMe:
-   - simple-doc (test/__fixtures__/docs/existing-docs/simple-doc.md)
    - another-doc (test/__fixtures__/docs/existing-docs/subdir/another-doc.md)
+   - simple-doc (test/__fixtures__/docs/existing-docs/simple-doc.md)
 ",
 }
 `;
@@ -111,8 +307,8 @@ exports[`rdme docs upload > given that the file path is a directory > should han
 ⏭️ The following 1 page(s) will be skipped due to no frontmatter data:
    - doc-sans-attributes (test/__fixtures__/docs/mixed-docs/doc-sans-attributes.md)
 🚨 Unable to fetch data about the following 2 page(s):
-   - test/__fixtures__/docs/mixed-docs/new-doc-slug.mdx: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
    - test/__fixtures__/docs/mixed-docs/simple-doc.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+   - test/__fixtures__/docs/mixed-docs/new-doc-slug.mdx: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
 ",
 }
 `;
@@ -134,8 +330,8 @@ exports[`rdme docs upload > given that the file path is a directory > should han
 ⏭️ Skipped 1 page(s) in ReadMe due to no frontmatter data:
    - doc-sans-attributes (test/__fixtures__/docs/mixed-docs/doc-sans-attributes.md)
 🚨 Received errors when attempting to upload 2 page(s):
-   - test/__fixtures__/docs/mixed-docs/new-doc-slug.mdx: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
    - test/__fixtures__/docs/mixed-docs/simple-doc.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+   - test/__fixtures__/docs/mixed-docs/new-doc-slug.mdx: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
 ",
 }
 `;
@@ -154,15 +350,15 @@ exports[`rdme docs upload > given that the file path is a directory > should han
     "failed": [
       {
         "error": [APIv2Error: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
-        "filePath": "test/__fixtures__/docs/mixed-docs/new-doc-slug.mdx",
-        "result": "failed",
-        "slug": "some-slug",
-      },
-      {
-        "error": [APIv2Error: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
         "filePath": "test/__fixtures__/docs/mixed-docs/simple-doc.md",
         "result": "failed",
         "slug": "simple-doc",
+      },
+      {
+        "error": [APIv2Error: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
+        "filePath": "test/__fixtures__/docs/mixed-docs/new-doc-slug.mdx",
+        "result": "failed",
+        "slug": "some-slug",
       },
     ],
     "skipped": [
@@ -195,8 +391,8 @@ exports[`rdme docs upload > given that the file path is a directory > should han
 ⏭️ Skipped 1 page(s) in ReadMe due to no frontmatter data:
    - doc-sans-attributes (test/__fixtures__/docs/mixed-docs/doc-sans-attributes.md)
 🚨 Received errors when attempting to upload 2 page(s):
-   - test/__fixtures__/docs/mixed-docs/new-doc-slug.mdx: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
    - test/__fixtures__/docs/mixed-docs/simple-doc.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+   - test/__fixtures__/docs/mixed-docs/new-doc-slug.mdx: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
 ",
 }
 `;
@@ -339,16 +535,16 @@ exports[`rdme docs upload > given that the file path is a directory > should upd
     "skipped": [],
     "updated": [
       {
-        "filePath": "test/__fixtures__/docs/existing-docs/simple-doc.md",
-        "response": {},
-        "result": "updated",
-        "slug": "simple-doc",
-      },
-      {
         "filePath": "test/__fixtures__/docs/existing-docs/subdir/another-doc.md",
         "response": {},
         "result": "updated",
         "slug": "another-doc",
+      },
+      {
+        "filePath": "test/__fixtures__/docs/existing-docs/simple-doc.md",
+        "response": {},
+        "result": "updated",
+        "slug": "simple-doc",
       },
     ],
   },
@@ -360,8 +556,8 @@ exports[`rdme docs upload > given that the file path is a directory > should upd
 ✔ 🚀 Uploading files to ReadMe... done!
 ",
   "stdout": "🔄 Successfully updated 2 page(s) in ReadMe:
-   - simple-doc (test/__fixtures__/docs/existing-docs/simple-doc.md)
    - another-doc (test/__fixtures__/docs/existing-docs/subdir/another-doc.md)
+   - simple-doc (test/__fixtures__/docs/existing-docs/simple-doc.md)
 ",
 }
 `;
@@ -864,6 +1060,62 @@ something went so so wrong],
 }
 `;
 
+exports[`rdme reference upload > given that the file path is a directory > given that the direcotry does NOT have explicit frontmatter positions set > should upload root pages using a natural sort order of their slugs when \`position\` is missing 1`] = `
+{
+  "result": {
+    "created": [
+      {
+        "filePath": "test/__fixtures__/docs/position-order-missing/page-1.md",
+        "response": {},
+        "result": "created",
+        "slug": "page-1",
+      },
+      {
+        "filePath": "test/__fixtures__/docs/position-order-missing/page-2.md",
+        "response": {},
+        "result": "created",
+        "slug": "page-2",
+      },
+      {
+        "filePath": "test/__fixtures__/docs/position-order-missing/page-3.md",
+        "response": {},
+        "result": "created",
+        "slug": "page-3",
+      },
+      {
+        "filePath": "test/__fixtures__/docs/position-order-missing/page-4.md",
+        "response": {},
+        "result": "created",
+        "slug": "page-4",
+      },
+      {
+        "filePath": "test/__fixtures__/docs/position-order-missing/page-10.md",
+        "response": {},
+        "result": "created",
+        "slug": "page-10",
+      },
+    ],
+    "failed": [],
+    "skipped": [],
+    "updated": [],
+  },
+  "stderr": "- 🔍 Looking for Markdown files in the \`test/__fixtures__/docs/position-order-missing\` directory...
+✔ 🔍 Looking for Markdown files in the \`test/__fixtures__/docs/position-order-missing\` directory... 5 file(s) found!
+- 🔬 Validating frontmatter data...
+✔ 🔬 Validating frontmatter data... no issues found!
+- 🚀 Uploading files to ReadMe...
+✔ 🚀 Uploading files to ReadMe... done!
+",
+  "stdout": "🌱 Successfully created 5 page(s) in ReadMe:
+   - page-1 (test/__fixtures__/docs/position-order-missing/page-1.md)
+   - page-2 (test/__fixtures__/docs/position-order-missing/page-2.md)
+   - page-3 (test/__fixtures__/docs/position-order-missing/page-3.md)
+   - page-4 (test/__fixtures__/docs/position-order-missing/page-4.md)
+   - page-10 (test/__fixtures__/docs/position-order-missing/page-10.md)
+",
+}
+`;
+
 exports[`rdme reference upload > given that the file path is a directory > given that the directory contains parent/child docs > should upload parents before children 1`] = `
 {
   "result": {
@@ -913,21 +1165,161 @@ exports[`rdme reference upload > given that the file path is a directory > given
 }
 `;
 
+exports[`rdme reference upload > given that the file path is a directory > given that the directory has explicit frontmatter positions set > should order sibling uploads by ascending position under the same parent 1`] = `
+{
+  "result": {
+    "created": [
+      {
+        "filePath": "test/__fixtures__/docs/position-order-siblings/parent-hub.md",
+        "response": {},
+        "result": "created",
+        "slug": "parent-hub",
+      },
+      {
+        "filePath": "test/__fixtures__/docs/position-order-siblings/child-c.md",
+        "response": {},
+        "result": "created",
+        "slug": "child-c",
+      },
+      {
+        "filePath": "test/__fixtures__/docs/position-order-siblings/child-a.md",
+        "response": {},
+        "result": "created",
+        "slug": "child-a",
+      },
+      {
+        "filePath": "test/__fixtures__/docs/position-order-siblings/child-b.md",
+        "response": {},
+        "result": "created",
+        "slug": "child-b",
+      },
+    ],
+    "failed": [],
+    "skipped": [],
+    "updated": [],
+  },
+  "stderr": "- 🔍 Looking for Markdown files in the \`test/__fixtures__/docs/position-order-siblings\` directory...
+✔ 🔍 Looking for Markdown files in the \`test/__fixtures__/docs/position-order-siblings\` directory... 4 file(s) found!
+- 🔬 Validating frontmatter data...
+✔ 🔬 Validating frontmatter data... no issues found!
+- 🚀 Uploading files to ReadMe...
+✔ 🚀 Uploading files to ReadMe... done!
+",
+  "stdout": "🌱 Successfully created 4 page(s) in ReadMe:
+   - parent-hub (test/__fixtures__/docs/position-order-siblings/parent-hub.md)
+   - child-c (test/__fixtures__/docs/position-order-siblings/child-c.md)
+   - child-a (test/__fixtures__/docs/position-order-siblings/child-a.md)
+   - child-b (test/__fixtures__/docs/position-order-siblings/child-b.md)
+",
+}
+`;
+
+exports[`rdme reference upload > given that the file path is a directory > given that the directory has explicit frontmatter positions set > should upload root pages by ascending position (not filename order) 1`] = `
+{
+  "result": {
+    "created": [
+      {
+        "filePath": "test/__fixtures__/docs/position-order-roots/z-first.md",
+        "response": {},
+        "result": "created",
+        "slug": "z-first",
+      },
+      {
+        "filePath": "test/__fixtures__/docs/position-order-roots/a-second.md",
+        "response": {},
+        "result": "created",
+        "slug": "a-second",
+      },
+    ],
+    "failed": [],
+    "skipped": [],
+    "updated": [],
+  },
+  "stderr": "- 🔍 Looking for Markdown files in the \`test/__fixtures__/docs/position-order-roots\` directory...
+✔ 🔍 Looking for Markdown files in the \`test/__fixtures__/docs/position-order-roots\` directory... 2 file(s) found!
+- 🔬 Validating frontmatter data...
+✔ 🔬 Validating frontmatter data... no issues found!
+- 🚀 Uploading files to ReadMe...
+✔ 🚀 Uploading files to ReadMe... done!
+",
+  "stdout": "🌱 Successfully created 2 page(s) in ReadMe:
+   - z-first (test/__fixtures__/docs/position-order-roots/z-first.md)
+   - a-second (test/__fixtures__/docs/position-order-roots/a-second.md)
+",
+}
+`;
+
+exports[`rdme reference upload > given that the file path is a directory > given that the directory has explicit frontmatter positions set > should upload root pages using a natural sort order of their \`position\` values (1 -> 2 -> 3 -> 20) 1`] = `
+{
+  "result": {
+    "created": [
+      {
+        "filePath": "test/__fixtures__/docs/position-order-natural/page-1.md",
+        "response": {},
+        "result": "created",
+        "slug": "page-1",
+      },
+      {
+        "filePath": "test/__fixtures__/docs/position-order-natural/page-2.md",
+        "response": {},
+        "result": "created",
+        "slug": "page-2",
+      },
+      {
+        "filePath": "test/__fixtures__/docs/position-order-natural/page-3.md",
+        "response": {},
+        "result": "created",
+        "slug": "page-3",
+      },
+      {
+        "filePath": "test/__fixtures__/docs/position-order-natural/page-4.md",
+        "response": {},
+        "result": "created",
+        "slug": "page-4",
+      },
+      {
+        "filePath": "test/__fixtures__/docs/position-order-natural/page-10.md",
+        "response": {},
+        "result": "created",
+        "slug": "page-10",
+      },
+    ],
+    "failed": [],
+    "skipped": [],
+    "updated": [],
+  },
+  "stderr": "- 🔍 Looking for Markdown files in the \`test/__fixtures__/docs/position-order-natural\` directory...
+✔ 🔍 Looking for Markdown files in the \`test/__fixtures__/docs/position-order-natural\` directory... 5 file(s) found!
+- 🔬 Validating frontmatter data...
+✔ 🔬 Validating frontmatter data... no issues found!
+- 🚀 Uploading files to ReadMe...
+✔ 🚀 Uploading files to ReadMe... done!
+",
+  "stdout": "🌱 Successfully created 5 page(s) in ReadMe:
+   - page-1 (test/__fixtures__/docs/position-order-natural/page-1.md)
+   - page-2 (test/__fixtures__/docs/position-order-natural/page-2.md)
+   - page-3 (test/__fixtures__/docs/position-order-natural/page-3.md)
+   - page-4 (test/__fixtures__/docs/position-order-natural/page-4.md)
+   - page-10 (test/__fixtures__/docs/position-order-natural/page-10.md)
+",
+}
+`;
+
 exports[`rdme reference upload > given that the file path is a directory > should create a page in ReadMe for each file in the directory and its subdirectories 1`] = `
 {
   "result": {
     "created": [
       {
-        "filePath": "test/__fixtures__/reference/existing-docs/simple-doc.md",
-        "response": {},
-        "result": "created",
-        "slug": "simple-doc",
-      },
-      {
         "filePath": "test/__fixtures__/reference/existing-docs/subdir/another-doc.md",
         "response": {},
         "result": "created",
         "slug": "another-doc",
+      },
+      {
+        "filePath": "test/__fixtures__/reference/existing-docs/simple-doc.md",
+        "response": {},
+        "result": "created",
+        "slug": "simple-doc",
       },
     ],
     "failed": [],
@@ -942,8 +1334,8 @@ exports[`rdme reference upload > given that the file path is a directory > shoul
 ✔ 🚀 Uploading files to ReadMe... done!
 ",
   "stdout": "🌱 Successfully created 2 page(s) in ReadMe:
-   - simple-doc (test/__fixtures__/reference/existing-docs/simple-doc.md)
    - another-doc (test/__fixtures__/reference/existing-docs/subdir/another-doc.md)
+   - simple-doc (test/__fixtures__/reference/existing-docs/simple-doc.md)
 ",
 }
 `;
@@ -975,8 +1367,8 @@ exports[`rdme reference upload > given that the file path is a directory > shoul
 ⏭️ The following 1 page(s) will be skipped due to no frontmatter data:
    - doc-sans-attributes (test/__fixtures__/docs/mixed-docs/doc-sans-attributes.md)
 🚨 Unable to fetch data about the following 2 page(s):
-   - test/__fixtures__/docs/mixed-docs/new-doc-slug.mdx: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
    - test/__fixtures__/docs/mixed-docs/simple-doc.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+   - test/__fixtures__/docs/mixed-docs/new-doc-slug.mdx: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
 ",
 }
 `;
@@ -998,8 +1390,8 @@ exports[`rdme reference upload > given that the file path is a directory > shoul
 ⏭️ Skipped 1 page(s) in ReadMe due to no frontmatter data:
    - doc-sans-attributes (test/__fixtures__/docs/mixed-docs/doc-sans-attributes.md)
 🚨 Received errors when attempting to upload 2 page(s):
-   - test/__fixtures__/docs/mixed-docs/new-doc-slug.mdx: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
    - test/__fixtures__/docs/mixed-docs/simple-doc.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+   - test/__fixtures__/docs/mixed-docs/new-doc-slug.mdx: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
 ",
 }
 `;
@@ -1018,15 +1410,15 @@ exports[`rdme reference upload > given that the file path is a directory > shoul
     "failed": [
       {
         "error": [APIv2Error: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
-        "filePath": "test/__fixtures__/docs/mixed-docs/new-doc-slug.mdx",
-        "result": "failed",
-        "slug": "some-slug",
-      },
-      {
-        "error": [APIv2Error: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
         "filePath": "test/__fixtures__/docs/mixed-docs/simple-doc.md",
         "result": "failed",
         "slug": "simple-doc",
+      },
+      {
+        "error": [APIv2Error: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
+        "filePath": "test/__fixtures__/docs/mixed-docs/new-doc-slug.mdx",
+        "result": "failed",
+        "slug": "some-slug",
       },
     ],
     "skipped": [
@@ -1059,8 +1451,8 @@ exports[`rdme reference upload > given that the file path is a directory > shoul
 ⏭️ Skipped 1 page(s) in ReadMe due to no frontmatter data:
    - doc-sans-attributes (test/__fixtures__/docs/mixed-docs/doc-sans-attributes.md)
 🚨 Received errors when attempting to upload 2 page(s):
-   - test/__fixtures__/docs/mixed-docs/new-doc-slug.mdx: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
    - test/__fixtures__/docs/mixed-docs/simple-doc.md: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
+   - test/__fixtures__/docs/mixed-docs/new-doc-slug.mdx: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.
 ",
 }
 `;
@@ -1203,16 +1595,16 @@ exports[`rdme reference upload > given that the file path is a directory > shoul
     "skipped": [],
     "updated": [
       {
-        "filePath": "test/__fixtures__/reference/existing-docs/simple-doc.md",
-        "response": {},
-        "result": "updated",
-        "slug": "simple-doc",
-      },
-      {
         "filePath": "test/__fixtures__/reference/existing-docs/subdir/another-doc.md",
         "response": {},
         "result": "updated",
         "slug": "another-doc",
+      },
+      {
+        "filePath": "test/__fixtures__/reference/existing-docs/simple-doc.md",
+        "response": {},
+        "result": "updated",
+        "slug": "simple-doc",
       },
     ],
   },
@@ -1224,8 +1616,8 @@ exports[`rdme reference upload > given that the file path is a directory > shoul
 ✔ 🚀 Uploading files to ReadMe... done!
 ",
   "stdout": "🔄 Successfully updated 2 page(s) in ReadMe:
-   - simple-doc (test/__fixtures__/reference/existing-docs/simple-doc.md)
    - another-doc (test/__fixtures__/reference/existing-docs/subdir/another-doc.md)
+   - simple-doc (test/__fixtures__/reference/existing-docs/simple-doc.md)
 ",
 }
 `;
