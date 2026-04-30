@@ -1,5 +1,5 @@
 ---
-title: "Child B - position #3"
+title: 'Child B - position #3'
 category:
   uri: category-slug
 position: 30

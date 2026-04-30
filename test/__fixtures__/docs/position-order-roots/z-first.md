@@ -1,5 +1,5 @@
 ---
-title: "Z file (position #1)"
+title: 'Z file (position #1)'
 category:
   uri: category-slug
 position: 0
