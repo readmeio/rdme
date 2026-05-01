@@ -1,3 +1,10 @@
+# [10.7.0-next.4](https://github.com/readmeio/rdme/compare/v10.7.0-next.3...v10.7.0-next.4) (2026-05-01)
+
+
+### Bug Fixes
+
+* **openapi:** upgrading our OpenAPI library resolve `inspect` and `reduce` issues ([#1450](https://github.com/readmeio/rdme/issues/1450)) ([9f8f982](https://github.com/readmeio/rdme/commit/9f8f9828c0f771f97717ea6700aacb9fea6d85c1))
+
 # [10.7.0-next.3](https://github.com/readmeio/rdme/compare/v10.7.0-next.2...v10.7.0-next.3) (2026-04-30)
 
 
