@@ -47,17 +47,7 @@ describe('rdme openapi inspect', () => {
       // Soft error cases where we may or may not contain the features we're querying for.
       {
         spec: '@readme/oas-examples/3.0/json/readme-extensions.json',
-        feature: ['readme'],
-        shouldSoftError: true,
-      },
-      {
-        spec: '@readme/oas-examples/3.0/json/schema-circular.json',
-        feature: ['additionalProperties', 'circularRefs', 'readme'],
-        shouldSoftError: true,
-      },
-      {
-        spec: '@readme/oas-examples/3.0/json/schema-circular.json',
-        feature: ['circularRefs', 'readme'],
+        feature: ['circularRefs'],
         shouldSoftError: true,
       },
     ];
@@ -67,8 +57,10 @@ describe('rdme openapi inspect', () => {
       const args = [require.resolve(spec)].concat(...feature.map(f => ['--feature', f]));
       const { result, error } = await run(args);
       if (!shouldSoftError) {
+        expect(result).toBeDefined();
         expect(result).toMatchSnapshot();
       } else {
+        expect(error).toBeDefined();
         expect(error).toMatchSnapshot();
       }
     });

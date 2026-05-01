@@ -1,7 +1,7 @@
 import type { OASAnalysis, OASAnalysisFeature } from 'oas/analyzer/types';
 import type { OASDocument } from 'oas/types';
 
-import analyzer from 'oas/analyzer';
+import { analyzer } from 'oas/analyzer';
 
 export interface AnalyzedFeature extends OASAnalysisFeature {
   description: string;
@@ -31,41 +31,20 @@ export interface Analysis extends OASAnalysis {
     discriminators: AnalyzedFeature;
     links: AnalyzedFeature;
     polymorphism: AnalyzedFeature;
+    refNames: OASAnalysisFeature;
     serverVariables: AnalyzedFeature;
     style: AnalyzedFeature;
     webhooks: AnalyzedFeature;
-    /**
-     * @deprecated The data contained within this has been split apart into `xmlRequests`, `xmlResponses`, and `xmlSchemas`. This property will be removed in a future release.
-     */
-    xml: AnalyzedFeature;
     xmlRequests: AnalyzedFeature;
     xmlResponses: AnalyzedFeature;
     xmlSchemas: AnalyzedFeature;
   };
-  readme: {
-    /**
-     * RAW_BODY is specific to our Manual API editor and we don't recommend anyone writing their
-     * own API definition should use it so this is considered deprecated.
-     */
-    raw_body?: AnalyzedFeature;
-
-    'x-default': AnalyzedFeature;
-    'x-readme-ref-name': AnalyzedFeature;
-
-    'x-readme.code-samples': AnalyzedFeature;
-    'x-readme.explorer-enabled': AnalyzedFeature;
-    'x-readme.headers': AnalyzedFeature;
-    'x-readme.proxy-enabled': AnalyzedFeature;
-
-    /**
-     * @deprecated `samples-enabled` is deprecated.
-     */
-    'x-readme.samples-enabled'?: AnalyzedFeature;
-    'x-readme.samples-languages'?: AnalyzedFeature;
-  };
 }
 
-const OPENAPI_FEATURE_DOCS: Record<keyof Analysis['openapi'], Pick<AnalyzedFeature, 'description' | 'url'>> = {
+const OPENAPI_FEATURE_DOCS: Record<
+  keyof Analysis['openapi'],
+  Pick<AnalyzedFeature, 'description' | 'hidden' | 'url'>
+> = {
   additionalProperties: {
     description: 'additionalProperties allows you to document dictionaries where the keys are user-supplied strings.',
     url: {
@@ -122,6 +101,11 @@ const OPENAPI_FEATURE_DOCS: Record<keyof Analysis['openapi'], Pick<AnalyzedFeatu
       '3.1': 'https://json-schema.org/understanding-json-schema/reference/combining.html',
     },
   },
+  refNames: {
+    description:
+      'Determines the presence of the `x-readme-ref-name` extension that ReadMe uses when dereferencing API definitions.',
+    hidden: true,
+  },
   serverVariables: {
     description: 'Server variables allow to do user-supplied variable subsitituions within your API server URL.',
     url: {
@@ -133,14 +117,6 @@ const OPENAPI_FEATURE_DOCS: Record<keyof Analysis['openapi'], Pick<AnalyzedFeatu
     description: 'Webhooks allow you to describe out of band requests that may be initiated by your users.',
     url: {
       '3.1': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#user-content-oaswebhooks',
-    },
-  },
-  xml: {
-    description:
-      'Any schema that utilizes the XML object for defining its shape in an XML payload, or a request or response that defines an XML payload.\n\nThis is deprecated in favor of `xmlRequests`, `xmlResponses`, and `xmlSchemas`.',
-    url: {
-      '3.0': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#xml-object',
-      '3.1': 'https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#xml-object',
     },
   },
   xmlRequests: {
@@ -166,53 +142,6 @@ const OPENAPI_FEATURE_DOCS: Record<keyof Analysis['openapi'], Pick<AnalyzedFeatu
   },
 };
 
-const README_FEATURE_DOCS: Record<keyof Analysis['readme'], Pick<AnalyzedFeature, 'description' | 'hidden' | 'url'>> = {
-  'x-default': {
-    description:
-      'The x-default extension allows you to define static authentication credential defaults for OAuth 2 and API Key security types.',
-    url: 'https://docs.readme.com/main/docs/openapi-extensions#authentication-defaults',
-  },
-  'x-readme-ref-name': {
-    description:
-      'x-readme-ref-name is added by our tooling after dereferencing in order to preserve original reference schema names.',
-    hidden: true,
-  },
-  'x-readme.code-samples': {
-    description:
-      'The x-readme.code-samples extension allows you to custom, create static code samples on your API documentation.',
-    url: 'https://docs.readme.com/main/docs/openapi-extensions#custom-code-samples',
-  },
-  'x-readme.headers': {
-    description:
-      'The x-readme.headers extension allows you define headers that should always be present on your API or a specific operation, as well as what its value should be.',
-    url: 'https://docs.readme.com/main/docs/openapi-extensions#static-headers',
-  },
-  'x-readme.explorer-enabled': {
-    description:
-      'The x-readme.explorer-enabled extension allows you to toggle your API documentation being interactive or not.',
-    url: 'https://docs.readme.com/main/docs/openapi-extensions#disable-the-api-explorer',
-  },
-  'x-readme.proxy-enabled': {
-    description:
-      "The x-readme.proxy-enabled extension allows you to toggle if API requests from API documentation should be routed through ReadMe's CORS Proxy. You should only need to use this if your API does not support CORS.",
-    url: 'https://docs.readme.com/main/docs/openapi-extensions#cors-proxy-enabled',
-  },
-  'x-readme.samples-languages': {
-    description:
-      'The x-readme.samples-languages extension allows you to toggle what languages are shown by default for code snippets in your API documentation.',
-    url: 'https://docs.readme.com/main/docs/openapi-extensions#code-sample-languages',
-  },
-  'x-readme.samples-enabled': {
-    description:
-      'The x-readme.samples-enabled extension allowed you to disable code samples on specific endpoints. It is no longer supported and can be safely removed from your API definition.',
-    url: 'https://docs.readme.com/main/docs/openapi-extensions#disable-code-examples',
-  },
-  raw_body: {
-    description:
-      "The RAW_BODY property allows you to define that a request body should have its payload delivered as a raw string. This legacy feature is specific to our Manual API editor and we don't recommend you use it outside of that context, instead opting for a traditional `type: string, format: blob` schema definition.",
-  },
-};
-
 /**
  * Analyze a given OpenAPI or Swagger definition for any OpenAPI, JSON Schema, and ReadMe-specific
  * feature uses it may contain.
@@ -230,33 +159,15 @@ async function analyzeOas(definition: OASDocument) {
       });
     }
 
-    if (analysis.readme) {
-      Object.entries(README_FEATURE_DOCS).forEach(([feature, docs]) => {
-        // If this ReadMe feature isn't in our resulted analysis result then it's a deprecated
-        // feature that this API definition doesn't contain so we don't need to inform the user of
-        // something they neither use, can't use anyways, nor should know about.
-        if (!(feature in analysis.readme)) {
-          return;
-        }
-
-        analysis.readme[feature as keyof Analysis['readme']] = {
-          ...analysis.readme[feature as keyof Analysis['readme']],
-          ...docs,
-        } as AnalyzedFeature;
-      });
-    }
-
     return analysis;
   });
 }
 
 export function getSupportedFeatures() {
-  return [
-    // OpenAPI features
-    ...Object.keys(OPENAPI_FEATURE_DOCS),
-
-    'readme', // A catch-all for ReadMe features and extensions. Will look for everything.
-  ];
+  return Object.keys(OPENAPI_FEATURE_DOCS).filter(feature => {
+    // We don't need to expose `refNames` and `x-readme-ref-name` extension lookups in this command.
+    return feature !== 'refNames';
+  });
 }
 
 export default analyzeOas;

@@ -26,11 +26,9 @@ describe('#getSupportedFeatures', () => {
       'polymorphism',
       'serverVariables',
       'webhooks',
-      'xml',
       'xmlRequests',
       'xmlResponses',
       'xmlSchemas',
-      'readme',
     ]);
   });
 });

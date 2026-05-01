@@ -116,7 +116,16 @@ describe('rdme openapi reduce', () => {
 
         expect(fsWriteFileSyncSpy).toHaveBeenCalledWith('output.json', expect.any(String));
         expect(Object.keys(reducedSpec.paths)).toStrictEqual(['/pet', '/pet/{petId}']);
-        expect(Object.keys(reducedSpec.paths['/pet'])).toStrictEqual(['post']);
+        expect(Object.keys(reducedSpec.paths['/pet'])).toStrictEqual([
+          'post',
+
+          // Though we didn't ask for PUT to be included it comes back because the `$ref` pointer
+          // that it and POST use is identical and during the bundling process we use to combine
+          // local external file `$ref` pointers into a single object that shared `$ref` pointer
+          // was deduplicated into a single schemam, making the request body of POST is now `$ref`
+          // pointer to the request body of PUT.
+          'put',
+        ]);
         expect(Object.keys(reducedSpec.paths['/pet/{petId}'])).toStrictEqual(['get']);
       });
 
@@ -144,7 +153,7 @@ describe('rdme openapi reduce', () => {
 
         expect(fsWriteFileSyncSpy).toHaveBeenCalledWith('output.json', expect.any(String));
         expect(Object.keys(reducedSpec.paths)).toStrictEqual(['/pet', '/pet/{petId}']);
-        expect(Object.keys(reducedSpec.paths['/pet'])).toStrictEqual(['post']);
+        expect(Object.keys(reducedSpec.paths['/pet'])).toStrictEqual(['post', 'put']);
         expect(Object.keys(reducedSpec.paths['/pet/{petId}'])).toStrictEqual(['get']);
         expect(reducedSpec.info.title).toBe(title);
       });
