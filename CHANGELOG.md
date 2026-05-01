@@ -1,3 +1,10 @@
+# [10.7.0-next.3](https://github.com/readmeio/rdme/compare/v10.7.0-next.2...v10.7.0-next.3) (2026-04-30)
+
+
+### Bug Fixes
+
+* `position` sorts should dictate the order that files are uploaded ([#1449](https://github.com/readmeio/rdme/issues/1449)) ([907ac56](https://github.com/readmeio/rdme/commit/907ac569dd03f43faea4d65fa482d4694af05213))
+
 # [10.7.0-next.2](https://github.com/readmeio/rdme/compare/v10.7.0-next.1...v10.7.0-next.2) (2026-04-29)
 
 
