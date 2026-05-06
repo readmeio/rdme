@@ -480,7 +480,7 @@ describe('rdme openapi upload', () => {
             },
           })
           .get(`/branches/${branch}/apis/${slugifiedFilename}`)
-          .times(10)
+          .times(25)
           .reply(200, {
             data: {
               upload: { status: 'pending' },
