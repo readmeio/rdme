@@ -212,7 +212,7 @@ If you're using the `rdme` GitHub Action, update your GitHub Actions workflow fi
    - `open`
 
    The following commands will be replaced in `v10`. See "Command Replacements" in [the `v10` migration guide above](#migrating-to-rdme10) for more info:
-   - `docs` (and its `guides` alias) → `docs upload`
+   - `docs` (and its `guides` alias) → `docs upload` for the Guides section (or `reference upload` if uploading Markdown to your API reference section)
    - `changelogs` → `changelog upload`
    - `custompages` → `custompages upload`
    - `openapi` → `openapi upload`
