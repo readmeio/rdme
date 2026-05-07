@@ -1,3 +1,10 @@
+# [10.7.0-next.5](https://github.com/readmeio/rdme/compare/v10.7.0-next.4...v10.7.0-next.5) (2026-05-07)
+
+
+### Bug Fixes
+
+* bumping up our polling queue for OpenAPI uploads from 10 to 25 ([#1456](https://github.com/readmeio/rdme/issues/1456)) ([c531a12](https://github.com/readmeio/rdme/commit/c531a1215fcac8957fe9be6596f117653bb9d3f9))
+
 # [10.7.0-next.4](https://github.com/readmeio/rdme/compare/v10.7.0-next.3...v10.7.0-next.4) (2026-05-01)
 
 
