@@ -1,3 +1,18 @@
+# [10.7.0](https://github.com/readmeio/rdme/compare/v10.6.2...v10.7.0) (2026-05-07)
+
+
+### Bug Fixes
+
+* `position` sorts should dictate the order that files are uploaded ([#1449](https://github.com/readmeio/rdme/issues/1449)) ([907ac56](https://github.com/readmeio/rdme/commit/907ac569dd03f43faea4d65fa482d4694af05213))
+* bumping up our polling queue for OpenAPI uploads from 10 to 25 ([#1456](https://github.com/readmeio/rdme/issues/1456)) ([c531a12](https://github.com/readmeio/rdme/commit/c531a1215fcac8957fe9be6596f117653bb9d3f9))
+* **gha:** updating `actions/checkout` to v6 ([f6cf4cc](https://github.com/readmeio/rdme/commit/f6cf4cca71c1ed6e7a9e97612e206ba973957da6))
+* **openapi:** upgrading our OpenAPI library resolve `inspect` and `reduce` issues ([#1450](https://github.com/readmeio/rdme/issues/1450)) ([9f8f982](https://github.com/readmeio/rdme/commit/9f8f9828c0f771f97717ea6700aacb9fea6d85c1))
+
+
+### Features
+
+* **api:** add exponential backoff retry for 5xx errors ([#1401](https://github.com/readmeio/rdme/issues/1401)) ([af4e0ea](https://github.com/readmeio/rdme/commit/af4e0eac632ba109aa96436f16a06bc108403387)), closes [#1325](https://github.com/readmeio/rdme/issues/1325)
+
 # [10.7.0-next.5](https://github.com/readmeio/rdme/compare/v10.7.0-next.4...v10.7.0-next.5) (2026-05-07)
 
 
