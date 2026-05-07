@@ -109,7 +109,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     let status: APIUploadStatus = 'pending';
 
     // oxlint-disable no-await-in-loop -- We need to wait between requests to avoid hitting rate limits.
-    while (this.isStatusPending(status) && count < 10) {
+    while (this.isStatusPending(status) && count < 25) {
       // oxlint-disable-next-line no-loop-func -- False positive.
       await new Promise(resolve => {
         // exponential backoff — wait 1s, 2s, 4s, 8s, 16s, 32s, 30s, 30s, 30s, 30s, etc.
