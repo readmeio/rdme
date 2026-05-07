@@ -124,6 +124,7 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
    * that takes the result and sets a GitHub step output parameter to the result
    * when being run from a GitHub Actions runner.
    */
+  // oxlint-disable-next-line no-underscore-dangle
   protected async _run<U>(): Promise<U> {
     // oxlint-disable-next-line no-underscore-dangle
     const result: U = await super._run();
