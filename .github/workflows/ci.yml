@@ -163,5 +163,3 @@ jobs:
         uses: ./rdme-repo/
         with:
           rdme: openapi upload "oas-examples-repo/3.1/json/petstore.json" --key="${{ secrets.RDME_REFACTORED_TEST_PROJECT_API_KEY }}"
-        env:
-          DEBUG: "*"
