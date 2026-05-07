@@ -1,3 +1,10 @@
+## [10.7.1-next.1](https://github.com/readmeio/rdme/compare/v10.7.0...v10.7.1-next.1) (2026-05-07)
+
+
+### Bug Fixes
+
+* updating our transitive `ip-address` dependency ([#1459](https://github.com/readmeio/rdme/issues/1459)) ([ec04846](https://github.com/readmeio/rdme/commit/ec04846d31193bda994dc0e1f2d885dfc19f370f))
+
 # [10.7.0](https://github.com/readmeio/rdme/compare/v10.6.2...v10.7.0) (2026-05-07)
 
 
