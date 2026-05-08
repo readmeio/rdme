@@ -1,7 +1,6 @@
 import type { CommandClass } from '../../src/index.js';
 
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 
 import { Config } from '@oclif/core';
 import { captureOutput } from '@oclif/test';
@@ -21,9 +20,7 @@ export const mockVersion = '7.0.0';
  * @see {@link https://oclif.io/docs/testing}
  */
 export function setupOclifConfig() {
-  // Resolve the repository root so `Config.load` picks up `package.json` hooks (e.g. `prerun`).
-  // https://stackoverflow.com/a/61829368
-  const root = path.resolve(fileURLToPath(new URL('.', import.meta.url)), '..', '..');
+  const root = path.join(new URL('.', import.meta.url).pathname, '.');
 
   return Config.load({
     root,
