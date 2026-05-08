@@ -1,3 +1,10 @@
+## [10.7.1-next.2](https://github.com/readmeio/rdme/compare/v10.7.1-next.1...v10.7.1-next.2) (2026-05-08)
+
+
+### Bug Fixes
+
+* **gha:** argument parsing when using quotations ([#1461](https://github.com/readmeio/rdme/issues/1461)) ([ed4a6ed](https://github.com/readmeio/rdme/commit/ed4a6ed763c5e5260c1c6745bac23eb99610eecd)), closes [#1374](https://github.com/readmeio/rdme/issues/1374)
+
 ## [10.7.1-next.1](https://github.com/readmeio/rdme/compare/v10.7.0...v10.7.1-next.1) (2026-05-07)
 
 
