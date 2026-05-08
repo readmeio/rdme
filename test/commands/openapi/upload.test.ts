@@ -5,9 +5,10 @@ import fs from 'node:fs/promises';
 import nock from 'nock';
 import prompts from 'prompts';
 import slugify from 'slugify';
-import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import Command from '../../../src/commands/openapi/upload.js';
+import configstore from '../../../src/lib/configstore.js';
 import petstore from '../../__fixtures__/petstore-simple-weird-version.json' with { type: 'json' };
 import { getAPIv2Mock, getAPIv2MockForGHA } from '../../helpers/get-api-mock.js';
 import { githubActionsEnv } from '../../helpers/git-mock.js';
@@ -41,6 +42,47 @@ describe('rdme openapi upload', () => {
       const result = await run(['--slug', customSlug, '--legacy-id', legacyId, filename, '--key', key]);
 
       expect(result).toMatchSnapshot();
+    });
+
+    describe('API key validation', () => {
+      it('should error when `--key` is empty', async () => {
+        const result = await run(['--branch', branch, filename, '--key', '']);
+
+        expect(result.error?.message).toContain('No project API key was specified.');
+      });
+
+      it('should error when `--key` is whitespace-only', async () => {
+        const result = await run(['--branch', branch, filename, '--key', '   ']);
+
+        expect(result.error?.message).toContain('No project API key was specified.');
+      });
+
+      describe('in CI without env or configstore key', () => {
+        const originalGet = configstore.get.bind(configstore);
+
+        beforeEach(() => {
+          vi.stubEnv('TEST_RDME_CI', 'true');
+          vi.stubEnv('RDME_API_KEY', '');
+          vi.stubEnv('README_API_KEY', '');
+          vi.spyOn(configstore, 'get').mockImplementation((storeKey: string) => {
+            if (storeKey === 'apiKey') return;
+            return originalGet(storeKey);
+          });
+        });
+
+        afterEach(() => {
+          vi.unstubAllEnvs();
+          vi.restoreAllMocks();
+        });
+
+        it('should error with guidance when no API key is available', async () => {
+          const result = await run(['--branch', branch, filename]);
+
+          expect(result.error?.message).toMatchInlineSnapshot(
+            `"No project API key was provided. Please provide one with \`--key\` or the \`RDME_API_KEY\` or \`README_API_KEY\` environment variables."`,
+          );
+        });
+      });
     });
   });
 
