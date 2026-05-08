@@ -40,11 +40,10 @@ export function runCommand(Command: CommandClass) {
     const oclifConfig = await setupOclifConfig();
     return captureOutput<string>(
       async () => {
-        // Match production `execute()` / `config.runCommand()` behavior: run `prerun` so `--key`
-        // defaults and validation stay consistent with the real CLI.
         await oclifConfig.runHook('prerun', { argv: args ?? [], Command });
 
-        // @ts-expect-error currently we have mismatching return types in our commands we can fix this later but it's not a priority right now.
+        // @ts-expect-error currently we have mismatching return types in our commands.
+        // we can fix this later but it's not a priority right now.
         return Command.run(args ?? [], oclifConfig);
       },
       { testNodeEnv },
