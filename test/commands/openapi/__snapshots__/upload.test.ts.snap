@@ -69,10 +69,25 @@ exports[`rdme openapi upload > given that the --dry-run flag is passed > should 
 {
   "result": undefined,
   "stderr": "- Validating the API definition located at test/__fixtures__/petstore-simple-weird-version.json...
- ›   Warning: The slug of your API Definition will be set to 
- ›   test__fixtures__petstore-simple-weird-version.json in ReadMe. This slug is
- ›    not visible to your end users. To set this slug to something else, use 
- ›   the \`--slug\` flag.
+ ›   Warning: This OpenAPI file is located in a subfolder and no \`--slug\` was 
+ ›   provided.
+ ›
+ ›   You are uploading:
+ ›     test/__fixtures__/petstore-simple-weird-version.json
+ ›
+ ›   In rdme v10, the file path is flattened and used to infer a slug:
+ ›     test/__fixtures__/petstore-simple-weird-version.json  →  
+ ›   test__fixtures__petstore-simple-weird-version.json
+ ›
+ ›   If you intend to update an existing definition, this often creates a new 
+ ›   API definition instead of updating an existing one.
+ ›
+ ›   We recommend you cancel and rerun with:
+ ›     rdme openapi upload test/__fixtures__/petstore-simple-weird-version.json
+ ›    --slug=petstore-simple-weird-version.json
+ ›
+ ›   To suppress this warning and confirmation in the future, use 
+ ›   \`--confirm-overwrite\`.
 ",
   "stdout": "--- Dry Run Result 🌵 ---
 File slug: test__fixtures__petstore-simple-weird-version.json
@@ -92,10 +107,6 @@ exports[`rdme openapi upload > given that the --dry-run flag is passed > should 
 {
   "result": undefined,
   "stderr": "- Validating the API definition located at test/__fixtures__/petstore-simple-weird-version.json...
- ›   Warning: The slug of your API Definition will be set to 
- ›   test__fixtures__petstore-simple-weird-version.json in ReadMe. This slug is
- ›    not visible to your end users. To set this slug to something else, use 
- ›   the \`--slug\` flag.
 ",
   "stdout": "--- Dry Run Result 🌵 ---
 File slug: test__fixtures__petstore-simple-weird-version.json
@@ -196,9 +207,6 @@ exports[`rdme openapi upload > given that the API definition is a URL > should c
     "uri": "/branches/1.0.0/apis/openapi.json",
   },
   "stderr": "- Validating the API definition located at https://example.com/openapi.json...
- ›   Warning: The slug of your API Definition will be set to openapi.json in 
- ›   ReadMe. This slug is not visible to your end users. To set this slug to 
- ›   something else, use the \`--slug\` flag.
 - Creating your API definition to ReadMe...
 ✔ Creating your API definition to ReadMe... done!
 ",
@@ -214,9 +222,6 @@ exports[`rdme openapi upload > given that the API definition is a URL > should c
     "uri": "/branches/1.0.0/apis/no-extension.json",
   },
   "stderr": "- Validating the API definition located at https://example.com/no-extension...
- ›   Warning: The slug of your API Definition will be set to no-extension.json 
- ›   in ReadMe. This slug is not visible to your end users. To set this slug to
- ›    something else, use the \`--slug\` flag.
 - Creating your API definition to ReadMe...
 ✔ Creating your API definition to ReadMe... done!
 ",
@@ -233,9 +238,6 @@ exports[`rdme openapi upload > given that the API definition is a URL > should c
   },
   "stderr": "- Validating the API definition located at https://example.com/no-extension...
  ›   Warning: Support for Postman collections is currently experimental.
- ›   Warning: The slug of your API Definition will be set to no-extension.json 
- ›   in ReadMe. This slug is not visible to your end users. To set this slug to
- ›    something else, use the \`--slug\` flag.
 - Creating your API definition to ReadMe...
 ✔ Creating your API definition to ReadMe... done!
 ",
@@ -296,9 +298,6 @@ exports[`rdme openapi upload > given that the API definition is a URL > should u
     "uri": "/branches/1.0.0/apis/openapi.json",
   },
   "stderr": "- Validating the API definition located at https://example.com/openapi.json...
- ›   Warning: The slug of your API Definition will be set to openapi.json in 
- ›   ReadMe. This slug is not visible to your end users. To set this slug to 
- ›   something else, use the \`--slug\` flag.
 - Updating your API definition to ReadMe...
 ✔ Updating your API definition to ReadMe... done!
 ",
@@ -314,9 +313,6 @@ exports[`rdme openapi upload > given that the API definition is a URL > should u
     "uri": "/branches/1.0.0/apis/openapi.json",
   },
   "stderr": "- Validating the API definition located at https://example.com/no-extension...
- ›   Warning: The slug of your API Definition will be set to no-extension.json 
- ›   in ReadMe. This slug is not visible to your end users. To set this slug to
- ›    something else, use the \`--slug\` flag.
 - Updating your API definition to ReadMe...
 ✔ Updating your API definition to ReadMe... done!
 ",
@@ -448,6 +444,22 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
 }
 `;
 
+exports[`rdme openapi upload > given that the API definition is a local file > and the command is being run in a CI environment > should create a new API definition from a nested path without prompting in CI 1`] = `
+{
+  "result": {
+    "status": "done",
+    "uri": "/branches/1.0.0/apis/test__fixtures__petstore-simple-weird-version.json",
+  },
+  "stderr": "- Validating the API definition located at test/__fixtures__/petstore-simple-weird-version.json...
+- Creating your API definition to ReadMe...
+✔ Creating your API definition to ReadMe... done!
+",
+  "stdout": "::warning::This OpenAPI file is located in a subfolder and no \`--slug\` was provided.%0A%0AYou are uploading:%0A  test/__fixtures__/petstore-simple-weird-version.json%0A%0AIn rdme v10, the file path is flattened and used to infer a slug:%0A  test/__fixtures__/petstore-simple-weird-version.json  →  test__fixtures__petstore-simple-weird-version.json%0A%0AIf you intend to update an existing definition, this often creates a new API definition instead of updating an existing one.%0A%0AWe recommend you cancel and rerun with:%0A  rdme openapi upload test/__fixtures__/petstore-simple-weird-version.json --slug=petstore-simple-weird-version.json%0A%0ATo suppress this warning and confirmation in the future, use \`--confirm-overwrite\`.
+🚀 Your API definition (test__fixtures__petstore-simple-weird-version.json) was successfully created in ReadMe!
+",
+}
+`;
+
 exports[`rdme openapi upload > given that the API definition is a local file > and the command is being run in a CI environment > should error out if an object ID is passed and there is a legacy match found 1`] = `
 {
   "error": [Error: The slug you provided matches a legacy API definition ID, which have been deprecated in ReadMe. To fix this, update your \`--slug\` flag to  \`legacy-spec.json\`.],
@@ -467,8 +479,7 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
 - Updating your API definition to ReadMe...
 ✔ Updating your API definition to ReadMe... done!
 ",
-  "stdout": "::warning::The slug of your API Definition will be set to test__fixtures__petstore-simple-weird-version.json in ReadMe. This slug is not visible to your end users. To set this slug to something else, use the \`--slug\` flag.
-🚀 Your API definition (test__fixtures__petstore-simple-weird-version.json) was successfully updated in ReadMe!
+  "stdout": "🚀 Your API definition (test__fixtures__petstore-simple-weird-version.json) was successfully updated in ReadMe!
 ",
 }
 `;
@@ -477,10 +488,25 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
 {
   "error": [Error: Sorry, this upload timed out. Please try again later.],
   "stderr": "- Validating the API definition located at test/__fixtures__/petstore-simple-weird-version.json...
- ›   Warning: The slug of your API Definition will be set to 
- ›   test__fixtures__petstore-simple-weird-version.json in ReadMe. This slug is
- ›    not visible to your end users. To set this slug to something else, use 
- ›   the \`--slug\` flag.
+ ›   Warning: This OpenAPI file is located in a subfolder and no \`--slug\` was 
+ ›   provided.
+ ›
+ ›   You are uploading:
+ ›     test/__fixtures__/petstore-simple-weird-version.json
+ ›
+ ›   In rdme v10, the file path is flattened and used to infer a slug:
+ ›     test/__fixtures__/petstore-simple-weird-version.json  →  
+ ›   test__fixtures__petstore-simple-weird-version.json
+ ›
+ ›   If you intend to update an existing definition, this often creates a new 
+ ›   API definition instead of updating an existing one.
+ ›
+ ›   We recommend you cancel and rerun with:
+ ›     rdme openapi upload test/__fixtures__/petstore-simple-weird-version.json
+ ›    --slug=petstore-simple-weird-version.json
+ ›
+ ›   To suppress this warning and confirmation in the future, use 
+ ›   \`--confirm-overwrite\`.
 - Creating your API definition to ReadMe...
 ",
   "stdout": "",
@@ -491,10 +517,25 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
 {
   "error": [Error: The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.],
   "stderr": "- Validating the API definition located at test/__fixtures__/petstore-simple-weird-version.json...
- ›   Warning: The slug of your API Definition will be set to 
- ›   test__fixtures__petstore-simple-weird-version.json in ReadMe. This slug is
- ›    not visible to your end users. To set this slug to something else, use 
- ›   the \`--slug\` flag.
+ ›   Warning: This OpenAPI file is located in a subfolder and no \`--slug\` was 
+ ›   provided.
+ ›
+ ›   You are uploading:
+ ›     test/__fixtures__/petstore-simple-weird-version.json
+ ›
+ ›   In rdme v10, the file path is flattened and used to infer a slug:
+ ›     test/__fixtures__/petstore-simple-weird-version.json  →  
+ ›   test__fixtures__petstore-simple-weird-version.json
+ ›
+ ›   If you intend to update an existing definition, this often creates a new 
+ ›   API definition instead of updating an existing one.
+ ›
+ ›   We recommend you cancel and rerun with:
+ ›     rdme openapi upload test/__fixtures__/petstore-simple-weird-version.json
+ ›    --slug=petstore-simple-weird-version.json
+ ›
+ ›   To suppress this warning and confirmation in the future, use 
+ ›   \`--confirm-overwrite\`.
 - Creating your API definition to ReadMe...
 ",
   "stdout": "",
@@ -503,14 +544,30 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
 
 exports[`rdme openapi upload > given that the API definition is a local file > and the upload status initially is a pending state > should poll the API once and handle an unexpected state with a 2xx 1`] = `
 {
-  "error": [Error: Your API definition upload failed with an unexpected error. Please get in touch with us at support@readme.io.],
+  "error": [Error: Your API definition upload failed with the following reason:
+
+The API definition has validation errors.],
   "stderr": "- Validating the API definition located at test/__fixtures__/petstore-simple-weird-version.json...
- ›   Warning: The slug of your API Definition will be set to 
- ›   test__fixtures__petstore-simple-weird-version.json in ReadMe. This slug is
- ›    not visible to your end users. To set this slug to something else, use 
- ›   the \`--slug\` flag.
+ ›   Warning: This OpenAPI file is located in a subfolder and no \`--slug\` was 
+ ›   provided.
+ ›
+ ›   You are uploading:
+ ›     test/__fixtures__/petstore-simple-weird-version.json
+ ›
+ ›   In rdme v10, the file path is flattened and used to infer a slug:
+ ›     test/__fixtures__/petstore-simple-weird-version.json  →  
+ ›   test__fixtures__petstore-simple-weird-version.json
+ ›
+ ›   If you intend to update an existing definition, this often creates a new 
+ ›   API definition instead of updating an existing one.
+ ›
+ ›   We recommend you cancel and rerun with:
+ ›     rdme openapi upload test/__fixtures__/petstore-simple-weird-version.json
+ ›    --slug=petstore-simple-weird-version.json
+ ›
+ ›   To suppress this warning and confirmation in the future, use 
+ ›   \`--confirm-overwrite\`.
 - Creating your API definition to ReadMe...
-✖ Creating your API definition to ReadMe... uploaded but not yet processed by ReadMe. Polling for completion...
 ",
   "stdout": "",
 }
@@ -523,10 +580,6 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
     "uri": "/branches/1.0.0/apis/test__fixtures__petstore-simple-weird-version.json",
   },
   "stderr": "- Validating the API definition located at test/__fixtures__/petstore-simple-weird-version.json...
- ›   Warning: The slug of your API Definition will be set to 
- ›   test__fixtures__petstore-simple-weird-version.json in ReadMe. This slug is
- ›    not visible to your end users. To set this slug to something else, use 
- ›   the \`--slug\` flag.
 - Updating your API definition to ReadMe...
 ✔ Updating your API definition to ReadMe... uploaded but not yet processed by ReadMe. Polling for completion... done!
 ",
@@ -542,10 +595,25 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
     "uri": "/branches/1.0.0/apis/test__fixtures__petstore-simple-weird-version.json",
   },
   "stderr": "- Validating the API definition located at test/__fixtures__/petstore-simple-weird-version.json...
- ›   Warning: The slug of your API Definition will be set to 
- ›   test__fixtures__petstore-simple-weird-version.json in ReadMe. This slug is
- ›    not visible to your end users. To set this slug to something else, use 
- ›   the \`--slug\` flag.
+ ›   Warning: This OpenAPI file is located in a subfolder and no \`--slug\` was 
+ ›   provided.
+ ›
+ ›   You are uploading:
+ ›     test/__fixtures__/petstore-simple-weird-version.json
+ ›
+ ›   In rdme v10, the file path is flattened and used to infer a slug:
+ ›     test/__fixtures__/petstore-simple-weird-version.json  →  
+ ›   test__fixtures__petstore-simple-weird-version.json
+ ›
+ ›   If you intend to update an existing definition, this often creates a new 
+ ›   API definition instead of updating an existing one.
+ ›
+ ›   We recommend you cancel and rerun with:
+ ›     rdme openapi upload test/__fixtures__/petstore-simple-weird-version.json
+ ›    --slug=petstore-simple-weird-version.json
+ ›
+ ›   To suppress this warning and confirmation in the future, use 
+ ›   \`--confirm-overwrite\`.
 - Creating your API definition to ReadMe...
 ✔ Creating your API definition to ReadMe... uploaded but not yet processed by ReadMe. Polling for completion... done!
 ",
@@ -561,10 +629,25 @@ exports[`rdme openapi upload > given that the API definition is a local file > g
     "uri": "/branches/stable/apis/test__fixtures__petstore-simple-weird-version.json",
   },
   "stderr": "- Validating the API definition located at test/__fixtures__/petstore-simple-weird-version.json...
- ›   Warning: The slug of your API Definition will be set to 
- ›   test__fixtures__petstore-simple-weird-version.json in ReadMe. This slug is
- ›    not visible to your end users. To set this slug to something else, use 
- ›   the \`--slug\` flag.
+ ›   Warning: This OpenAPI file is located in a subfolder and no \`--slug\` was 
+ ›   provided.
+ ›
+ ›   You are uploading:
+ ›     test/__fixtures__/petstore-simple-weird-version.json
+ ›
+ ›   In rdme v10, the file path is flattened and used to infer a slug:
+ ›     test/__fixtures__/petstore-simple-weird-version.json  →  
+ ›   test__fixtures__petstore-simple-weird-version.json
+ ›
+ ›   If you intend to update an existing definition, this often creates a new 
+ ›   API definition instead of updating an existing one.
+ ›
+ ›   We recommend you cancel and rerun with:
+ ›     rdme openapi upload test/__fixtures__/petstore-simple-weird-version.json
+ ›    --slug=petstore-simple-weird-version.json
+ ›
+ ›   To suppress this warning and confirmation in the future, use 
+ ›   \`--confirm-overwrite\`.
 - Creating your API definition to ReadMe...
 ✔ Creating your API definition to ReadMe... done!
 ",
@@ -580,10 +663,87 @@ exports[`rdme openapi upload > given that the API definition is a local file > g
     "uri": "/branches/1.2.3/apis/test__fixtures__petstore-simple-weird-version.json",
   },
   "stderr": "- Validating the API definition located at test/__fixtures__/petstore-simple-weird-version.json...
- ›   Warning: The slug of your API Definition will be set to 
- ›   test__fixtures__petstore-simple-weird-version.json in ReadMe. This slug is
- ›    not visible to your end users. To set this slug to something else, use 
- ›   the \`--slug\` flag.
+ ›   Warning: This OpenAPI file is located in a subfolder and no \`--slug\` was 
+ ›   provided.
+ ›
+ ›   You are uploading:
+ ›     test/__fixtures__/petstore-simple-weird-version.json
+ ›
+ ›   In rdme v10, the file path is flattened and used to infer a slug:
+ ›     test/__fixtures__/petstore-simple-weird-version.json  →  
+ ›   test__fixtures__petstore-simple-weird-version.json
+ ›
+ ›   If you intend to update an existing definition, this often creates a new 
+ ›   API definition instead of updating an existing one.
+ ›
+ ›   We recommend you cancel and rerun with:
+ ›     rdme openapi upload test/__fixtures__/petstore-simple-weird-version.json
+ ›    --slug=petstore-simple-weird-version.json
+ ›
+ ›   To suppress this warning and confirmation in the future, use 
+ ›   \`--confirm-overwrite\`.
+- Creating your API definition to ReadMe...
+✔ Creating your API definition to ReadMe... done!
+",
+  "stdout": "🚀 Your API definition (test__fixtures__petstore-simple-weird-version.json) was successfully created in ReadMe!
+",
+}
+`;
+
+exports[`rdme openapi upload > given that the API definition is a local file > nested path create confirmation (CX-2743) > should abort if the user declines the nested path prompt 1`] = `
+{
+  "error": [Error: Aborting, no changes were made.],
+  "stderr": "- Validating the API definition located at test/__fixtures__/petstore-simple-weird-version.json...
+ ›   Warning: This OpenAPI file is located in a subfolder and no \`--slug\` was 
+ ›   provided.
+ ›
+ ›   You are uploading:
+ ›     test/__fixtures__/petstore-simple-weird-version.json
+ ›
+ ›   In rdme v10, the file path is flattened and used to infer a slug:
+ ›     test/__fixtures__/petstore-simple-weird-version.json  →  
+ ›   test__fixtures__petstore-simple-weird-version.json
+ ›
+ ›   If you intend to update an existing definition, this often creates a new 
+ ›   API definition instead of updating an existing one.
+ ›
+ ›   We recommend you cancel and rerun with:
+ ›     rdme openapi upload test/__fixtures__/petstore-simple-weird-version.json
+ ›    --slug=petstore-simple-weird-version.json
+ ›
+ ›   To suppress this warning and confirmation in the future, use 
+ ›   \`--confirm-overwrite\`.
+",
+  "stdout": "",
+}
+`;
+
+exports[`rdme openapi upload > given that the API definition is a local file > nested path create confirmation (CX-2743) > should create a new API definition without prompting when \`--confirm-overwrite\` is passed 1`] = `
+{
+  "result": {
+    "status": "done",
+    "uri": "/branches/1.0.0/apis/test__fixtures__petstore-simple-weird-version.json",
+  },
+  "stderr": "- Validating the API definition located at test/__fixtures__/petstore-simple-weird-version.json...
+ ›   Warning: This OpenAPI file is located in a subfolder and no \`--slug\` was 
+ ›   provided.
+ ›
+ ›   You are uploading:
+ ›     test/__fixtures__/petstore-simple-weird-version.json
+ ›
+ ›   In rdme v10, the file path is flattened and used to infer a slug:
+ ›     test/__fixtures__/petstore-simple-weird-version.json  →  
+ ›   test__fixtures__petstore-simple-weird-version.json
+ ›
+ ›   If you intend to update an existing definition, this often creates a new 
+ ›   API definition instead of updating an existing one.
+ ›
+ ›   We recommend you cancel and rerun with:
+ ›     rdme openapi upload test/__fixtures__/petstore-simple-weird-version.json
+ ›    --slug=petstore-simple-weird-version.json
+ ›
+ ›   To suppress this warning and confirmation in the future, use 
+ ›   \`--confirm-overwrite\`.
 - Creating your API definition to ReadMe...
 ✔ Creating your API definition to ReadMe... done!
 ",
@@ -599,10 +759,25 @@ exports[`rdme openapi upload > given that the API definition is a local file > s
     "uri": "/branches/1.0.0/apis/test__fixtures__petstore-simple-weird-version.json",
   },
   "stderr": "- Validating the API definition located at test/__fixtures__/petstore-simple-weird-version.json...
- ›   Warning: The slug of your API Definition will be set to 
- ›   test__fixtures__petstore-simple-weird-version.json in ReadMe. This slug is
- ›    not visible to your end users. To set this slug to something else, use 
- ›   the \`--slug\` flag.
+ ›   Warning: This OpenAPI file is located in a subfolder and no \`--slug\` was 
+ ›   provided.
+ ›
+ ›   You are uploading:
+ ›     test/__fixtures__/petstore-simple-weird-version.json
+ ›
+ ›   In rdme v10, the file path is flattened and used to infer a slug:
+ ›     test/__fixtures__/petstore-simple-weird-version.json  →  
+ ›   test__fixtures__petstore-simple-weird-version.json
+ ›
+ ›   If you intend to update an existing definition, this often creates a new 
+ ›   API definition instead of updating an existing one.
+ ›
+ ›   We recommend you cancel and rerun with:
+ ›     rdme openapi upload test/__fixtures__/petstore-simple-weird-version.json
+ ›    --slug=petstore-simple-weird-version.json
+ ›
+ ›   To suppress this warning and confirmation in the future, use 
+ ›   \`--confirm-overwrite\`.
 - Creating your API definition to ReadMe...
 ✔ Creating your API definition to ReadMe... done!
 ",
@@ -619,10 +794,25 @@ exports[`rdme openapi upload > given that the API definition is a local file > s
   },
   "stderr": " ›   Warning: The "--version" flag has been deprecated. Use "--branch" instead.
 - Validating the API definition located at test/__fixtures__/petstore-simple-weird-version.json...
- ›   Warning: The slug of your API Definition will be set to 
- ›   test__fixtures__petstore-simple-weird-version.json in ReadMe. This slug is
- ›    not visible to your end users. To set this slug to something else, use 
- ›   the \`--slug\` flag.
+ ›   Warning: This OpenAPI file is located in a subfolder and no \`--slug\` was 
+ ›   provided.
+ ›
+ ›   You are uploading:
+ ›     test/__fixtures__/petstore-simple-weird-version.json
+ ›
+ ›   In rdme v10, the file path is flattened and used to infer a slug:
+ ›     test/__fixtures__/petstore-simple-weird-version.json  →  
+ ›   test__fixtures__petstore-simple-weird-version.json
+ ›
+ ›   If you intend to update an existing definition, this often creates a new 
+ ›   API definition instead of updating an existing one.
+ ›
+ ›   We recommend you cancel and rerun with:
+ ›     rdme openapi upload test/__fixtures__/petstore-simple-weird-version.json
+ ›    --slug=petstore-simple-weird-version.json
+ ›
+ ›   To suppress this warning and confirmation in the future, use 
+ ›   \`--confirm-overwrite\`.
 - Creating your API definition to ReadMe...
 ✔ Creating your API definition to ReadMe... done!
 ",
@@ -639,10 +829,25 @@ exports[`rdme openapi upload > given that the API definition is a local file > s
   },
   "stderr": "- Validating the API definition located at test/__fixtures__/postman/petstore.collection.yaml...
  ›   Warning: Support for Postman collections is currently experimental.
- ›   Warning: The slug of your API Definition will be set to 
- ›   test__fixtures__postmanpetstore.collection.yaml in ReadMe. This slug is 
- ›   not visible to your end users. To set this slug to something else, use the
- ›    \`--slug\` flag.
+ ›   Warning: This Postman collection is located in a subfolder and no \`--slug\`
+ ›    was provided.
+ ›
+ ›   You are uploading:
+ ›     test/__fixtures__/postman/petstore.collection.yaml
+ ›
+ ›   In rdme v10, the file path is flattened and used to infer a slug:
+ ›     test/__fixtures__/postman/petstore.collection.yaml  →  
+ ›   test__fixtures__postmanpetstore.collection.yaml
+ ›
+ ›   If you intend to update an existing definition, this often creates a new 
+ ›   API definition instead of updating an existing one.
+ ›
+ ›   We recommend you cancel and rerun with:
+ ›     rdme openapi upload test/__fixtures__/postman/petstore.collection.yaml 
+ ›   --slug=petstore.collection.yaml
+ ›
+ ›   To suppress this warning and confirmation in the future, use 
+ ›   \`--confirm-overwrite\`.
 - Creating your API definition to ReadMe...
 ✔ Creating your API definition to ReadMe... done!
 ",
@@ -655,10 +860,25 @@ exports[`rdme openapi upload > given that the API definition is a local file > s
 {
   "error": [Error: Your API definition upload failed with an unexpected error. Please get in touch with us at support@readme.io.],
   "stderr": "- Validating the API definition located at test/__fixtures__/petstore-simple-weird-version.json...
- ›   Warning: The slug of your API Definition will be set to 
- ›   test__fixtures__petstore-simple-weird-version.json in ReadMe. This slug is
- ›    not visible to your end users. To set this slug to something else, use 
- ›   the \`--slug\` flag.
+ ›   Warning: This OpenAPI file is located in a subfolder and no \`--slug\` was 
+ ›   provided.
+ ›
+ ›   You are uploading:
+ ›     test/__fixtures__/petstore-simple-weird-version.json
+ ›
+ ›   In rdme v10, the file path is flattened and used to infer a slug:
+ ›     test/__fixtures__/petstore-simple-weird-version.json  →  
+ ›   test__fixtures__petstore-simple-weird-version.json
+ ›
+ ›   If you intend to update an existing definition, this often creates a new 
+ ›   API definition instead of updating an existing one.
+ ›
+ ›   We recommend you cancel and rerun with:
+ ›     rdme openapi upload test/__fixtures__/petstore-simple-weird-version.json
+ ›    --slug=petstore-simple-weird-version.json
+ ›
+ ›   To suppress this warning and confirmation in the future, use 
+ ›   \`--confirm-overwrite\`.
 - Creating your API definition to ReadMe...
 ✖ Creating your API definition to ReadMe...
 ",
@@ -673,10 +893,6 @@ exports[`rdme openapi upload > given that the API definition is a local file > s
     "uri": "/branches/1.0.0/apis/test__fixtures__petstore-simple-weird-version.json",
   },
   "stderr": "- Validating the API definition located at test/__fixtures__/petstore-simple-weird-version.json...
- ›   Warning: The slug of your API Definition will be set to 
- ›   test__fixtures__petstore-simple-weird-version.json in ReadMe. This slug is
- ›    not visible to your end users. To set this slug to something else, use 
- ›   the \`--slug\` flag.
 - Updating your API definition to ReadMe...
 ✔ Updating your API definition to ReadMe... done!
 ",

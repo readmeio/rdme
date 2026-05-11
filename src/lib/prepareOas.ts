@@ -13,7 +13,7 @@ import readdirRecursive from './readdirRecursive.js';
 
 export type SpecFileType = OASNormalize['type'];
 
-type SpecType = 'OpenAPI' | 'Postman' | 'Swagger';
+export type SpecType = 'OpenAPI' | 'Postman' | 'Swagger' | 'Unknown';
 
 interface FoundSpecFile {
   /** path to the spec file */
@@ -100,7 +100,7 @@ export default async function prepareOas(this: OpenAPICommands) {
               this.debug(`specification type for ${file}: ${specification}`);
               this.debug(`version for ${file}: ${version}`);
               return ['openapi', 'swagger', 'postman'].includes(specification)
-                ? { filePath: file, specType: capitalizeSpecType(specification) as SpecType, version }
+                ? { filePath: file, specType: capitalizeSpecType(specification), version }
                 : null;
             })
             .catch(e => {
