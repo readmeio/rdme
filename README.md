@@ -109,12 +109,12 @@ To ensure you're getting the latest features and security updates, we recommend 
 
 ## Authentication
 
-For local CLI usage with a single project, you can authenticate `rdme` to your ReadMe project using `rdme login`. Once you follow the prompts and are successfully authenticated, your API key will be saved to a local configuration file (`~/.config/configstore/rdme-production.json`) and you won't have to provide the `--key` option to commands that require it.
+For local CLI usage with a single project, you can authenticate `rdme` to your ReadMe project using `rdme login`. Once you follow the prompts and are successfully authenticated, your API key will be saved to a local configuration file (`~/.config/configstore/rdme-production.json`) and you won't have to provide the `--key` flag to commands that require it.
 
 > [!WARNING]
-> For security reasons, we strongly recommend providing a project API key via the `--key` option in automations or CI environments (GitHub Actions, CircleCI, Travis CI, etc.). It's also recommended if you're working with multiple ReadMe projects to avoid accidentally overwriting existing data.
+> For security reasons, we strongly recommend providing a project API key via the `--key` flag in automations or CI environments (GitHub Actions, CircleCI, Travis CI, etc.). It's also recommended if you're working with multiple ReadMe projects to avoid accidentally overwriting existing data.
 
-You can also pass in your API key via environment variable. Here is the order of precedence when passing your API key into `rdme`:
+You can also pass in your API key via an environment variable. Here is the order of precedence when passing your API key into `rdme`:
 
 1. The `--key` option. If that isn't present, we look for...
 1. The `RDME_API_KEY` environment variable. If that isn't present, we look for...
@@ -166,7 +166,7 @@ rdme openapi validate --github
 
 This will run through the `openapi validate` command, ask you a few quick questions, and then automatically create a fully functional GitHub Actions workflow file for you. 🪄
 
-You can see examples featuring the latest version in [our docs](https://docs.readme.com/main/docs/rdme#github-actions-examples). We recommend [configuring Dependabot to keep your actions up-to-date](https://docs.github.com/code-security/dependabot/working-with-dependabot/keeping-your-actions-up-to-date-with-dependabot). 
+You can see examples featuring the latest version in [our docs](https://docs.readme.com/main/docs/rdme#github-actions-examples). We recommend [configuring Dependabot to keep your actions up-to-date](https://docs.github.com/code-security/dependabot/working-with-dependabot/keeping-your-actions-up-to-date-with-dependabot).
 
 -->
 

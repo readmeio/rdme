@@ -20,7 +20,6 @@ export const mockVersion = '7.0.0';
  * @see {@link https://oclif.io/docs/testing}
  */
 export function setupOclifConfig() {
-  // https://stackoverflow.com/a/61829368
   const root = path.join(new URL('.', import.meta.url).pathname, '.');
 
   return Config.load({
@@ -39,9 +38,16 @@ export function setupOclifConfig() {
 export function runCommand(Command: CommandClass) {
   return async function runCommandAgainstArgs(args?: string[]) {
     const oclifConfig = await setupOclifConfig();
-    // @ts-expect-error currently we have mismatching return types in our commands.
-    // we can fix this later but it's not a priority right now.
-    return captureOutput<string>(() => Command.run(args, oclifConfig), { testNodeEnv });
+    return captureOutput<string>(
+      async () => {
+        await oclifConfig.runHook('prerun', { argv: args ?? [], Command });
+
+        // @ts-expect-error currently we have mismatching return types in our commands.
+        // we can fix this later but it's not a priority right now.
+        return Command.run(args ?? [], oclifConfig);
+      },
+      { testNodeEnv },
+    );
   };
 }
 

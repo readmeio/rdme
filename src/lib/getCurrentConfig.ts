@@ -2,6 +2,15 @@ import type { Hook } from '@oclif/core';
 
 import configstore from './configstore.js';
 
+export function normalizeAPIKey(value: string | undefined): string | undefined {
+  if (value === undefined) {
+    return undefined;
+  }
+
+  const trimmed = value.trim();
+  return trimmed.length > 0 ? trimmed : undefined;
+}
+
 /**
  * Retrieves stored user data values from env variables or configstore,
  * with env variables taking precedent
@@ -12,16 +21,20 @@ export default function getCurrentConfig(this: Hook.Context): {
   project?: string;
 } {
   const apiKey = (() => {
-    if (process.env.RDME_API_KEY) {
+    const rdmeAPIKey = normalizeAPIKey(process.env.RDME_API_KEY);
+    if (rdmeAPIKey) {
       this.debug('using RDME_API_KEY env var for api key');
-      return process.env.RDME_API_KEY;
-    } else if (process.env.README_API_KEY) {
+      return rdmeAPIKey;
+    }
+
+    const readmeAPIKey = normalizeAPIKey(process.env.README_API_KEY);
+    if (readmeAPIKey) {
       this.debug('using README_API_KEY env var for api key');
-      return process.env.README_API_KEY;
+      return readmeAPIKey;
     }
 
     this.debug('falling back to configstore value for api key');
-    return configstore.get<string>('apiKey');
+    return normalizeAPIKey(configstore.get<string>('apiKey'));
   })();
 
   const email = (() => {
