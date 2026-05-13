@@ -1,3 +1,10 @@
+# [10.8.0-next.2](https://github.com/readmeio/rdme/compare/v10.8.0-next.1...v10.8.0-next.2) (2026-05-13)
+
+
+### Bug Fixes
+
+* mistyped type guard ([25fde5c](https://github.com/readmeio/rdme/commit/25fde5c3cdf967241aa4f868a120a392193d43ed))
+
 # [10.8.0-next.1](https://github.com/readmeio/rdme/compare/v10.7.1-next.3...v10.8.0-next.1) (2026-05-13)
 
 
