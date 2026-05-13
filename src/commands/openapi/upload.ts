@@ -107,7 +107,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     return status.includes('pending');
   }
 
-  private isStatusFailed(status: APIUploadStatus): status is 'pending_update' | 'pending' {
+  private isStatusFailed(status: APIUploadStatus): status is 'failed_update' | 'failed' {
     return status === 'failed' || status === 'failed_update';
   }
 
