@@ -1,3 +1,18 @@
+# [10.8.0](https://github.com/readmeio/rdme/compare/v10.7.0...v10.8.0) (2026-05-13)
+
+
+### Bug Fixes
+
+* **gha:** argument parsing when using quotations ([#1461](https://github.com/readmeio/rdme/issues/1461)) ([ed4a6ed](https://github.com/readmeio/rdme/commit/ed4a6ed763c5e5260c1c6745bac23eb99610eecd)), closes [#1374](https://github.com/readmeio/rdme/issues/1374)
+* improving our error messages when API keys aren't supplied ([#1463](https://github.com/readmeio/rdme/issues/1463)) ([a381af0](https://github.com/readmeio/rdme/commit/a381af015ee726f77a823baf25f32041eede994e))
+* mistyped type guard ([25fde5c](https://github.com/readmeio/rdme/commit/25fde5c3cdf967241aa4f868a120a392193d43ed))
+* updating our transitive `ip-address` dependency ([#1459](https://github.com/readmeio/rdme/issues/1459)) ([ec04846](https://github.com/readmeio/rdme/commit/ec04846d31193bda994dc0e1f2d885dfc19f370f))
+
+
+### Features
+
+* improved messaging around inferred OpenAPI slugs when `--slug` is missing ([#1465](https://github.com/readmeio/rdme/issues/1465)) ([ee37d2e](https://github.com/readmeio/rdme/commit/ee37d2e696b60b1c1dc5b5c752826496037ff35d))
+
 # [10.8.0-next.2](https://github.com/readmeio/rdme/compare/v10.8.0-next.1...v10.8.0-next.2) (2026-05-13)
 
 
