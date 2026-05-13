@@ -1,5 +1,7 @@
+import type { SpecType } from '../../lib/prepareOas.js';
 import type {
   APIDefinitionsRepresentation,
+  APIUploadFailureReason,
   APIUploadSingleResponseRepresentation,
   APIUploadStatus,
   StagedAPIUploadResponseRepresentation,
@@ -21,6 +23,10 @@ import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
 
 const yamlExtensions = ['.yaml', '.yml'];
+
+function isNestedLocalSpecPath(specPath: string): boolean {
+  return nodePath.dirname(nodePath.normalize(specPath)) !== '.';
+}
 
 export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUploadCommand> {
   id = 'openapi upload' as const;
@@ -101,12 +107,17 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     return status.includes('pending');
   }
 
+  private isStatusFailed(status: APIUploadStatus): status is 'failed_update' | 'failed' {
+    return status === 'failed' || status === 'failed_update';
+  }
+
   /**
    * Poll the ReadMe API until the upload is complete.
    */
   private async pollAPIUntilUploadIsComplete(slug: string, headers: Headers) {
     let count = 0;
     let status: APIUploadStatus = 'pending';
+    let reason: APIUploadFailureReason | undefined;
 
     // oxlint-disable no-await-in-loop -- We need to wait between requests to avoid hitting rate limits.
     while (this.isStatusPending(status) && count < 25) {
@@ -122,6 +133,10 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       )) as APIUploadSingleResponseRepresentation;
 
       status = response?.data?.upload?.status;
+      if (this.isStatusFailed(status)) {
+        reason = response?.data?.upload?.reason;
+      }
+
       count += 1;
     }
     // oxlint-enable no-await-in-loop
@@ -130,7 +145,34 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       throw new Error('Sorry, this upload timed out. Please try again later.');
     }
 
-    return status;
+    return { status, reason };
+  }
+
+  private slugifiedFilenameWarningMessage(specPath: string, filename: string, specType: SpecType): string {
+    const suggestedSlug = nodePath.basename(specPath);
+
+    let specTypeLabel: string;
+    if (specType === 'Postman') {
+      specTypeLabel = 'Postman collection';
+    } else if (specType === 'Swagger') {
+      specTypeLabel = 'Swagger file';
+    } else {
+      specTypeLabel = 'OpenAPI file';
+    }
+
+    return [
+      `This ${specTypeLabel} is located in a subfolder and no \`--slug\` was provided.`,
+      '',
+      `You are uploading:\n  ${specPath}`,
+      '',
+      `In rdme v10, the file path is flattened and used to infer a slug:\n  ${specPath}  →  ${filename}`,
+      '',
+      'If you intend to update an existing definition, this often creates a new API definition instead of updating an existing one.',
+      '',
+      `We recommend you cancel and rerun with:\n  ${this.config.bin} ${this.id} ${specPath} --slug=${suggestedSlug}`,
+      '',
+      'To suppress this warning and confirmation in the future, use `--confirm-overwrite`.',
+    ].join('\n');
   }
 
   async run() {
@@ -264,13 +306,6 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
         `No filename could be inferred from the provided URL, so the slug will default to ${filename}. To set a custom slug, use the \`--slug\` flag.`,
       );
     }
-    // if the resulting file name is different than the original path input and the user hasn't provided a slug or legacy ID,
-    // warn them that the slug may not be what they expect
-    else if (filename !== specPath && !this.flags['legacy-id'] && !this.flags.slug) {
-      this.warn(
-        `The slug of your API Definition will be set to ${filename} in ReadMe. This slug is not visible to your end users. To set this slug to something else, use the \`--slug\` flag.`,
-      );
-    }
 
     const matchingAPIDefinition = existingAPIDefinitions.find(d => {
       if (this.flags['legacy-id']) {
@@ -295,6 +330,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
           ),
         );
       }
+
       filename = matchingAPIDefinition.filename;
       this.warn(
         `The \`--legacy-id\` flag will be removed in a future version. We recommend passing \`--slug ${filename}\` for maximum compatibility and readability.`,
@@ -302,8 +338,26 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       this.debug(`using existing legacy ID ${this.flags['legacy-id']} with filename ${filename}`);
     }
 
+    // if we have a matching API definition based on legacy-id or slug, we'll use PUT to update it.
+    // otherwise, we'll use POST to create it
+    const method = matchingAPIDefinition ? 'PUT' : 'POST';
+
+    // if the file we're going to be creating is a nested local path and it wasn't supplied via
+    // the `--slug` or `--legacy-id` flags then we should confirm with the user that the slug we
+    // inferred from it is what they actually want it to be.
+    const shouldConfirmSlugifiedFilename =
+      method === 'POST' &&
+      !specFileTypeIsUrl &&
+      !this.flags.slug &&
+      !this.flags['legacy-id'] &&
+      isNestedLocalSpecPath(specPath);
+
     // this is where we return early if the --dry-run flag is provided
     if (this.flags['dry-run']) {
+      if (shouldConfirmSlugifiedFilename) {
+        this.warn(this.slugifiedFilenameWarningMessage(specPath, filename, specType));
+      }
+
       this.log('--- Dry Run Result 🌵 ---');
       this.log(`File slug: ${filename}`);
       this.log(`Branch: ${branch}`);
@@ -320,10 +374,26 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       return;
     }
 
-    // if we have a matching API definition based on legacy-id or slug, we'll use PUT to update it. otherwise, we'll use POST to create it
-    const method = matchingAPIDefinition ? 'PUT' : 'POST';
-
     this.debug(`making a ${method} request`);
+
+    if (shouldConfirmSlugifiedFilename) {
+      this.warn(this.slugifiedFilenameWarningMessage(specPath, filename, specType));
+
+      prompts.override({
+        confirmNestedPathCreate: isCI() || this.flags['confirm-overwrite'] ? true : undefined,
+      });
+
+      const { confirmNestedPathCreate } = await promptTerminal({
+        type: 'confirm',
+        name: 'confirmNestedPathCreate',
+        message: 'Continue anyway?',
+        initial: false,
+      });
+
+      if (!confirmNestedPathCreate) {
+        throw new Error('Aborting, no changes were made.');
+      }
+    }
 
     // if the file already exists, ask the user if they want to overwrite it
     if (method === 'PUT') {
@@ -368,10 +438,17 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
     if (response?.data?.upload?.status && response?.data?.uri) {
       let status = response.data.upload.status;
+      let reason: APIUploadFailureReason | undefined;
 
       if (this.isStatusPending(status)) {
         spinner.text = `${spinner.text} uploaded but not yet processed by ReadMe. Polling for completion...`;
-        status = await this.pollAPIUntilUploadIsComplete(response.data.uri, headers);
+        ({ status, reason } = await this.pollAPIUntilUploadIsComplete(response.data.uri, headers));
+      }
+
+      if (this.isStatusFailed(status)) {
+        if (reason) {
+          throw new Error(`Your API definition upload failed with the following reason:\n\n${reason}`);
+        }
       }
 
       if (status === 'done') {

@@ -72,6 +72,7 @@ export type StagedAPIUploadResponseRepresentation = FromSchema<
 >;
 
 export type APIUploadStatus = APIUploadSingleResponseRepresentation['data']['upload']['status'];
+export type APIUploadFailureReason = APIUploadSingleResponseRepresentation['data']['upload']['reason'];
 
 /**
  * Derived from our API documentation, this is the schema for the page objects
