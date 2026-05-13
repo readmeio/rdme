@@ -19,7 +19,6 @@ export default defineConfig({
     node: true,
   },
   rules: {
-    'class-methods-use-this': 'off',
     'max-classes-per-file': 'off',
 
     'no-restricted-imports': [
