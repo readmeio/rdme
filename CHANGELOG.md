@@ -1,3 +1,10 @@
+## [10.7.1-next.3](https://github.com/readmeio/rdme/compare/v10.7.1-next.2...v10.7.1-next.3) (2026-05-11)
+
+
+### Bug Fixes
+
+* improving our error messages when API keys aren't supplied ([#1463](https://github.com/readmeio/rdme/issues/1463)) ([a381af0](https://github.com/readmeio/rdme/commit/a381af015ee726f77a823baf25f32041eede994e))
+
 ## [10.7.1-next.2](https://github.com/readmeio/rdme/compare/v10.7.1-next.1...v10.7.1-next.2) (2026-05-08)
 
 
