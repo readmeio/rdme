@@ -125,9 +125,6 @@
     "typescript": "^6.0.3",
     "vitest": "^4.1.6"
   },
-  "overrides": {
-    "@aws-sdk/xml-builder": "3.972.19"
-  },
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
