@@ -1,3 +1,17 @@
+# [10.8.0-next.2](https://github.com/readmeio/rdme/compare/v10.8.0-next.1...v10.8.0-next.2) (2026-05-13)
+
+
+### Bug Fixes
+
+* mistyped type guard ([25fde5c](https://github.com/readmeio/rdme/commit/25fde5c3cdf967241aa4f868a120a392193d43ed))
+
+# [10.8.0-next.1](https://github.com/readmeio/rdme/compare/v10.7.1-next.3...v10.8.0-next.1) (2026-05-13)
+
+
+### Features
+
+* improved messaging around inferred OpenAPI slugs when `--slug` is missing ([#1465](https://github.com/readmeio/rdme/issues/1465)) ([ee37d2e](https://github.com/readmeio/rdme/commit/ee37d2e696b60b1c1dc5b5c752826496037ff35d))
+
 ## [10.7.1-next.3](https://github.com/readmeio/rdme/compare/v10.7.1-next.2...v10.7.1-next.3) (2026-05-11)
 
 
