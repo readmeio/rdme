@@ -368,9 +368,9 @@ describe('#readPage', () => {
     const maliciousContent = `---js
 {
   title: "Test",
-  malicious: (function() { 
+  malicious: (function() {
     // This should never execute
-    return "executed"; 
+    return "executed";
   })()
 }
 ---
