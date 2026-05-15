@@ -1,5 +1,4 @@
 import type { APIv2PageCommands } from '../index.js';
-import type { BaseCommand } from '../utils.js';
 import type { Mappings } from './readmeAPIFetch.js';
 import type { PageMetadata } from './readPage.js';
 import type { ErrorObject } from 'ajv';
@@ -22,21 +21,14 @@ const addFormats = _addFormats as unknown as typeof _addFormats.default;
  * Parse and extract the frontmatter from a Markdown file.
  *
  */
-export function parse(this: BaseCommand<any>, filePath: string) {
-  const content = fs.readFileSync(filePath, 'utf8');
+export function parse(content: string) {
   const match = content.match(/^---\n([\s\S]*?)\n---/);
   if (!match) {
-    this.warn(`no frontmatter found in ${filePath}`);
     return null;
   }
 
-  try {
-    const loaded = loadYAML(match[1]);
-    return isRecord(loaded) ? loaded : null;
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    this.error(`Error parsing frontmatter in ${filePath}: ${message}`);
-  }
+  const loaded = loadYAML(match[1]);
+  return isRecord(loaded) ? loaded : null;
 }
 
 /**

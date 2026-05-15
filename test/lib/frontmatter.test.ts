@@ -17,78 +17,42 @@ import { readPage } from '../../src/lib/readPage.js';
 import { setupOclifConfig } from '../helpers/oclif.js';
 
 describe('#parse', () => {
-  let ctx: APIv2PageCommands;
-
-  beforeEach(() => {
-    ctx = {
-      error: vi.fn(),
-      warn: vi.fn(),
-    } as unknown as APIv2PageCommands;
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
   it('should return parsed frontmatter as a plain object', () => {
-    const filePath = '/tmp/rdme-parse-test.md';
-    vi.spyOn(fs, 'readFileSync').mockReturnValue(
-      `---
+    const content = `---
 slug: intro
 title: Introduction
 ---
-# Body`,
-    );
+# Body`;
 
-    const result = parse.call(ctx, filePath);
-
-    expect(result).toStrictEqual({ slug: 'intro', title: 'Introduction' });
-    expect(ctx.warn).not.toHaveBeenCalled();
-    expect(ctx.error).not.toHaveBeenCalled();
+    expect(parse(content)).toStrictEqual({ slug: 'intro', title: 'Introduction' });
   });
 
   it('should return null and warn when no YAML frontmatter block is found', () => {
-    const filePath = '/tmp/rdme-parse-no-fm.md';
-    vi.spyOn(fs, 'readFileSync').mockReturnValue('# Title only\n\nNo frontmatter here.');
+    const content = '# Title only\n\nNo frontmatter here.';
 
-    const result = parse.call(ctx, filePath);
-
-    expect(result).toBeNull();
-    expect(ctx.warn).toHaveBeenCalledWith(`no frontmatter found in ${filePath}`);
-    expect(ctx.error).not.toHaveBeenCalled();
+    expect(parse(content)).toBeNull();
   });
 
   it('should return null and error when YAML is invalid', () => {
-    const filePath = '/tmp/rdme-parse-bad-yaml.md';
-    vi.spyOn(fs, 'readFileSync').mockReturnValue(
-      `---
+    const content = `---
 slug: [
   bad: yaml
 ---
-`,
-    );
+`;
 
-    const result = parse.call(ctx, filePath);
-
-    expect(result).toBeUndefined();
-    expect(ctx.error).toHaveBeenCalledWith(expect.stringMatching(/^Error parsing frontmatter in .*bad-yaml/));
+    expect(() => {
+      parse(content);
+    }).toThrow(/unexpected end of the stream within a flow collection/);
   });
 
   it('should return null when YAML parses to a non-object root (e.g. array)', () => {
-    const filePath = '/tmp/rdme-parse-array-root.md';
-    vi.spyOn(fs, 'readFileSync').mockReturnValue(
-      `---
+    const content = `---
 - one
 - two
 ---
-`,
-    );
+`;
 
-    const result = parse.call(ctx, filePath);
-
-    expect(result).toBeNull();
-    expect(ctx.warn).not.toHaveBeenCalled();
-    expect(ctx.error).not.toHaveBeenCalled();
+    expect(parse(content)).toBeNull();
   });
 });
 
