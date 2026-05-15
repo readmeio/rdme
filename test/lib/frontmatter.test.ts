@@ -11,10 +11,86 @@ import CustomPagesUploadCommand from '../../src/commands/custompages/upload.js';
 import DocsMigrateCommand from '../../src/commands/docs/migrate.js';
 import DocsUploadCommand from '../../src/commands/docs/upload.js';
 import RefUploadCommand from '../../src/commands/reference/upload.js';
-import { fix, writeFixes } from '../../src/lib/frontmatter.js';
+import { fix, parse, writeFixes } from '../../src/lib/frontmatter.js';
 import { emptyMappings, fetchSchema } from '../../src/lib/readmeAPIFetch.js';
 import { readPage } from '../../src/lib/readPage.js';
 import { setupOclifConfig } from '../helpers/oclif.js';
+
+describe('#parse', () => {
+  let ctx: APIv2PageCommands;
+
+  beforeEach(() => {
+    ctx = {
+      error: vi.fn(),
+      warn: vi.fn(),
+    } as unknown as APIv2PageCommands;
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('should return parsed frontmatter as a plain object', () => {
+    const filePath = '/tmp/rdme-parse-test.md';
+    vi.spyOn(fs, 'readFileSync').mockReturnValue(
+      `---
+slug: intro
+title: Introduction
+---
+# Body`,
+    );
+
+    const result = parse.call(ctx, filePath);
+
+    expect(result).toStrictEqual({ slug: 'intro', title: 'Introduction' });
+    expect(ctx.warn).not.toHaveBeenCalled();
+    expect(ctx.error).not.toHaveBeenCalled();
+  });
+
+  it('should return null and warn when no YAML frontmatter block is found', () => {
+    const filePath = '/tmp/rdme-parse-no-fm.md';
+    vi.spyOn(fs, 'readFileSync').mockReturnValue('# Title only\n\nNo frontmatter here.');
+
+    const result = parse.call(ctx, filePath);
+
+    expect(result).toBeNull();
+    expect(ctx.warn).toHaveBeenCalledWith(`no frontmatter found in ${filePath}`);
+    expect(ctx.error).not.toHaveBeenCalled();
+  });
+
+  it('should return null and error when YAML is invalid', () => {
+    const filePath = '/tmp/rdme-parse-bad-yaml.md';
+    vi.spyOn(fs, 'readFileSync').mockReturnValue(
+      `---
+slug: [
+  bad: yaml
+---
+`,
+    );
+
+    const result = parse.call(ctx, filePath);
+
+    expect(result).toBeUndefined();
+    expect(ctx.error).toHaveBeenCalledWith(expect.stringMatching(/^Error parsing frontmatter in .*bad-yaml/));
+  });
+
+  it('should return null when YAML parses to a non-object root (e.g. array)', () => {
+    const filePath = '/tmp/rdme-parse-array-root.md';
+    vi.spyOn(fs, 'readFileSync').mockReturnValue(
+      `---
+- one
+- two
+---
+`,
+    );
+
+    const result = parse.call(ctx, filePath);
+
+    expect(result).toBeNull();
+    expect(ctx.warn).not.toHaveBeenCalled();
+    expect(ctx.error).not.toHaveBeenCalled();
+  });
+});
 
 describe.each([
   ['guides upload', DocsUploadCommand],
