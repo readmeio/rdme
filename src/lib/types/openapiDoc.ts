@@ -14,7 +14,7 @@ const document = {
     description: 'Create beautiful product and API documentation with our developer friendly platform.',
     version: '2.0.0',
     title: 'ReadMe API',
-    'x-readme-deploy': '5.428.0',
+    'x-readme-deploy': '5.732.0',
     termsOfService: 'https://readme.com/tos',
     contact: {
       name: 'API Support',
@@ -431,8 +431,13 @@ const document = {
                                   'url',
                                 ],
                               },
+                              sync_url: {
+                                type: 'string',
+                                nullable: true,
+                                description: 'The source URL for API definitions ingested via URL.',
+                              },
                             },
-                            required: ['current', 'original'],
+                            required: ['current', 'original', 'sync_url'],
                             additionalProperties: false,
                             description: 'The sources by which this API definition was ingested.',
                           },
@@ -666,8 +671,13 @@ const document = {
                                 'url',
                               ],
                             },
+                            sync_url: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'The source URL for API definitions ingested via URL.',
+                            },
                           },
-                          required: ['current', 'original'],
+                          required: ['current', 'original', 'sync_url'],
                           additionalProperties: false,
                           description: 'The sources by which this API definition was ingested.',
                         },
@@ -1274,12 +1284,6 @@ const document = {
                 type: 'object',
                 properties: {
                   title: { type: 'string', description: "The category's name." },
-                  section: {
-                    type: 'string',
-                    enum: ['guide', 'reference'],
-                    default: 'guide',
-                    description: 'The section of your documentation where the category resides.',
-                  },
                   position: { type: 'number', description: "The position of the category in your project's sidebar." },
                 },
                 additionalProperties: false,
@@ -1526,6 +1530,18 @@ const document = {
                   },
                   slug: { type: 'string' },
                   title: { type: 'string' },
+                  i18n: {
+                    type: 'object',
+                    properties: {
+                      lang: {
+                        type: 'string',
+                        enum: ['en', 'de', 'es', 'fr', 'it', 'ja', 'ko', 'nl', 'pt', 'zh'],
+                        default: 'en',
+                        description: 'The language of the changelog.',
+                      },
+                    },
+                    additionalProperties: false,
+                  },
                   type: {
                     type: 'string',
                     enum: ['none', 'added', 'fixed', 'improved', 'deprecated', 'removed'],
@@ -1566,8 +1582,11 @@ const document = {
                         },
                         content: {
                           type: 'object',
-                          properties: { body: { type: 'string', nullable: true } },
-                          required: ['body'],
+                          properties: {
+                            body: { type: 'string', nullable: true },
+                            html: { type: 'string', nullable: true },
+                          },
+                          required: ['body', 'html'],
                           additionalProperties: false,
                         },
                         created_at: {
@@ -1618,6 +1637,18 @@ const document = {
                         },
                         slug: { type: 'string' },
                         title: { type: 'string' },
+                        i18n: {
+                          type: 'object',
+                          properties: {
+                            lang: {
+                              type: 'string',
+                              enum: ['en', 'de', 'es', 'fr', 'it', 'ja', 'ko', 'nl', 'pt', 'zh'],
+                              default: 'en',
+                              description: 'The language of the changelog.',
+                            },
+                          },
+                          additionalProperties: false,
+                        },
                         type: {
                           type: 'string',
                           enum: ['none', 'added', 'fixed', 'improved', 'deprecated', 'removed'],
@@ -1654,6 +1685,7 @@ const document = {
                         'privacy',
                         'slug',
                         'title',
+                        'i18n',
                         'links',
                         'updated_at',
                         'uri',
@@ -1740,8 +1772,11 @@ const document = {
                           },
                           content: {
                             type: 'object',
-                            properties: { body: { type: 'string', nullable: true } },
-                            required: ['body'],
+                            properties: {
+                              body: { type: 'string', nullable: true },
+                              html: { type: 'string', nullable: true },
+                            },
+                            required: ['body', 'html'],
                             additionalProperties: false,
                           },
                           created_at: {
@@ -1793,6 +1828,18 @@ const document = {
                           },
                           slug: { type: 'string' },
                           title: { type: 'string' },
+                          i18n: {
+                            type: 'object',
+                            properties: {
+                              lang: {
+                                type: 'string',
+                                enum: ['en', 'de', 'es', 'fr', 'it', 'ja', 'ko', 'nl', 'pt', 'zh'],
+                                default: 'en',
+                                description: 'The language of the changelog.',
+                              },
+                            },
+                            additionalProperties: false,
+                          },
                           type: {
                             type: 'string',
                             enum: ['none', 'added', 'fixed', 'improved', 'deprecated', 'removed'],
@@ -1829,6 +1876,7 @@ const document = {
                           'privacy',
                           'slug',
                           'title',
+                          'i18n',
                           'links',
                           'updated_at',
                           'uri',
@@ -1896,8 +1944,11 @@ const document = {
                         },
                         content: {
                           type: 'object',
-                          properties: { body: { type: 'string', nullable: true } },
-                          required: ['body'],
+                          properties: {
+                            body: { type: 'string', nullable: true },
+                            html: { type: 'string', nullable: true },
+                          },
+                          required: ['body', 'html'],
                           additionalProperties: false,
                         },
                         created_at: {
@@ -1948,6 +1999,18 @@ const document = {
                         },
                         slug: { type: 'string' },
                         title: { type: 'string' },
+                        i18n: {
+                          type: 'object',
+                          properties: {
+                            lang: {
+                              type: 'string',
+                              enum: ['en', 'de', 'es', 'fr', 'it', 'ja', 'ko', 'nl', 'pt', 'zh'],
+                              default: 'en',
+                              description: 'The language of the changelog.',
+                            },
+                          },
+                          additionalProperties: false,
+                        },
                         type: {
                           type: 'string',
                           enum: ['none', 'added', 'fixed', 'improved', 'deprecated', 'removed'],
@@ -1984,6 +2047,7 @@ const document = {
                         'privacy',
                         'slug',
                         'title',
+                        'i18n',
                         'links',
                         'updated_at',
                         'uri',
@@ -2081,6 +2145,18 @@ const document = {
                   },
                   slug: { type: 'string' },
                   title: { type: 'string' },
+                  i18n: {
+                    type: 'object',
+                    properties: {
+                      lang: {
+                        type: 'string',
+                        enum: ['en', 'de', 'es', 'fr', 'it', 'ja', 'ko', 'nl', 'pt', 'zh'],
+                        default: 'en',
+                        description: 'The language of the changelog.',
+                      },
+                    },
+                    additionalProperties: false,
+                  },
                   type: {
                     type: 'string',
                     enum: ['none', 'added', 'fixed', 'improved', 'deprecated', 'removed'],
@@ -2137,8 +2213,11 @@ const document = {
                         },
                         content: {
                           type: 'object',
-                          properties: { body: { type: 'string', nullable: true } },
-                          required: ['body'],
+                          properties: {
+                            body: { type: 'string', nullable: true },
+                            html: { type: 'string', nullable: true },
+                          },
+                          required: ['body', 'html'],
                           additionalProperties: false,
                         },
                         created_at: {
@@ -2189,6 +2268,18 @@ const document = {
                         },
                         slug: { type: 'string' },
                         title: { type: 'string' },
+                        i18n: {
+                          type: 'object',
+                          properties: {
+                            lang: {
+                              type: 'string',
+                              enum: ['en', 'de', 'es', 'fr', 'it', 'ja', 'ko', 'nl', 'pt', 'zh'],
+                              default: 'en',
+                              description: 'The language of the changelog.',
+                            },
+                          },
+                          additionalProperties: false,
+                        },
                         type: {
                           type: 'string',
                           enum: ['none', 'added', 'fixed', 'improved', 'deprecated', 'removed'],
@@ -2225,10 +2316,130 @@ const document = {
                         'privacy',
                         'slug',
                         'title',
+                        'i18n',
                         'links',
                         'updated_at',
                         'uri',
                       ],
+                      additionalProperties: false,
+                    },
+                  },
+                  required: ['data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/discuss/{identifier}': {
+      get: {
+        operationId: 'getDiscuss',
+        summary: 'Get a discussion',
+        tags: ['Discuss'],
+        description: 'Get a discussion from your ReadMe project.',
+        parameters: [
+          {
+            schema: { type: 'string', pattern: '[a-f\\d]{24}' },
+            in: 'path',
+            name: 'identifier',
+            required: true,
+            description: 'A unique identifier for the resource.',
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    data: {
+                      type: 'object',
+                      properties: {
+                        author: {
+                          type: 'object',
+                          properties: {
+                            id: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'User ID of the discussion author (if logged in).',
+                            },
+                            name: { type: 'string', description: 'Name of the user who created the discussion.' },
+                            email: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'Email of the user who created the discussion.',
+                            },
+                          },
+                          required: ['id', 'name', 'email'],
+                          additionalProperties: false,
+                        },
+                        content: {
+                          type: 'object',
+                          properties: { body: { type: 'string', description: 'The body content of the discussion.' } },
+                          required: ['body'],
+                          additionalProperties: false,
+                        },
+                        is_faq: {
+                          type: 'boolean',
+                          default: false,
+                          description: 'Whether this discussion is marked as a FAQ.',
+                        },
+                        solved: {
+                          type: 'boolean',
+                          default: false,
+                          description: 'Whether this discussion has been solved.',
+                        },
+                        tags: {
+                          type: 'array',
+                          items: { type: 'string' },
+                          default: [],
+                          description: 'Tags associated with this discussion.',
+                        },
+                        title: { type: 'string', description: 'The title of the discussion.' },
+                        views: {
+                          type: 'number',
+                          default: 0,
+                          description: 'Number of times this discussion has been viewed.',
+                        },
+                        votes: {
+                          type: 'number',
+                          default: 0,
+                          description: 'Number of votes this discussion has received.',
+                        },
+                        created_at: {
+                          type: 'string',
+                          format: 'date-time',
+                          description: 'An ISO 8601 formatted date for when the discussion was created.',
+                        },
+                        id: { type: 'string', description: 'The unique identifier for this discussion.' },
+                        links: {
+                          type: 'object',
+                          properties: {
+                            project: {
+                              type: 'string',
+                              pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)',
+                              description: 'A URI to the project that this discussion belongs to.',
+                            },
+                          },
+                          required: ['project'],
+                          additionalProperties: false,
+                        },
+                        updated_at: {
+                          type: 'string',
+                          format: 'date-time',
+                          description: 'An ISO 8601 formatted date for when the discussion was updated.',
+                        },
+                        uri: {
+                          type: 'string',
+                          pattern: '\\/discuss\\/([a-f\\d]{24})',
+                          description: 'The unique identifier for this discussion.',
+                        },
+                      },
+                      required: ['author', 'content', 'title', 'created_at', 'id', 'links', 'updated_at', 'uri'],
                       additionalProperties: false,
                     },
                   },
@@ -2301,7 +2512,7 @@ const document = {
                       view: {
                         type: 'string',
                         enum: ['public', 'anyone_with_link'],
-                        default: 'anyone_with_link',
+                        default: 'public',
                         description: 'The visibility of this custom page.',
                       },
                     },
@@ -2327,6 +2538,14 @@ const document = {
             name: 'branch',
             required: true,
             description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
+          },
+          {
+            schema: { type: 'string' },
+            in: 'header',
+            name: 'prefer',
+            required: false,
+            description:
+              'By default, the supplied `slug` will be made unique during custom page creation if it already exists, however if you do not want this behavior you can supply `prefer: handling=strict` to receive a 409 Conflict instead.',
           },
         ],
         responses: {
@@ -2401,7 +2620,7 @@ const document = {
                             view: {
                               type: 'string',
                               enum: ['public', 'anyone_with_link'],
-                              default: 'anyone_with_link',
+                              default: 'public',
                               description: 'The visibility of this custom page.',
                             },
                           },
@@ -2566,7 +2785,7 @@ const document = {
                               view: {
                                 type: 'string',
                                 enum: ['public', 'anyone_with_link'],
-                                default: 'anyone_with_link',
+                                default: 'public',
                                 description: 'The visibility of this custom page.',
                               },
                             },
@@ -2665,6 +2884,13 @@ const document = {
             required: true,
             description: 'A URL-safe representation of the resource.',
           },
+          {
+            schema: { type: 'string' },
+            in: 'header',
+            name: 'if-none-match',
+            required: false,
+            description: 'An ETag value to compare against the resource.',
+          },
         ],
         responses: {
           '200': {
@@ -2738,7 +2964,7 @@ const document = {
                             view: {
                               type: 'string',
                               enum: ['public', 'anyone_with_link'],
-                              default: 'anyone_with_link',
+                              default: 'public',
                               description: 'The visibility of this custom page.',
                             },
                           },
@@ -2808,6 +3034,7 @@ const document = {
               },
             },
           },
+          '304': { description: 'Not Modified', content: { 'application/json': { schema: {} } } },
         },
       },
       delete: {
@@ -2896,7 +3123,7 @@ const document = {
                       view: {
                         type: 'string',
                         enum: ['public', 'anyone_with_link'],
-                        default: 'anyone_with_link',
+                        default: 'public',
                         description: 'The visibility of this custom page.',
                       },
                     },
@@ -2927,6 +3154,14 @@ const document = {
             name: 'slug',
             required: true,
             description: 'A URL-safe representation of the resource.',
+          },
+          {
+            schema: { type: 'string' },
+            in: 'header',
+            name: 'prefer',
+            required: false,
+            description:
+              'By default, the supplied `slug` will be made unique during custom page updates if it already exists, however if you do not want this behavior you can supply `prefer: handling=strict` to receive a 409 Conflict instead.',
           },
         ],
         responses: {
@@ -3001,7 +3236,7 @@ const document = {
                             view: {
                               type: 'string',
                               enum: ['public', 'anyone_with_link'],
-                              default: 'anyone_with_link',
+                              default: 'public',
                               description: 'The visibility of this custom page.',
                             },
                           },
@@ -3148,7 +3383,7 @@ const document = {
                                   properties: {
                                     slug: { type: 'string' },
                                     title: { type: 'string', nullable: true },
-                                    type: { type: 'string', enum: ['basic', 'endpoint'] },
+                                    type: { type: 'string', enum: ['basic', 'endpoint', 'changelog', 'custom_page'] },
                                   },
                                   required: ['slug', 'title', 'type'],
                                   additionalProperties: false,
@@ -3178,6 +3413,7 @@ const document = {
                       description: { type: 'string', nullable: true },
                       keywords: { type: 'string', nullable: true },
                       title: { type: 'string', nullable: true },
+                      x_import: { type: 'string', nullable: true },
                       image: {
                         type: 'object',
                         properties: { uri: { type: 'string', pattern: '\\/images\\/([a-f\\d]{24})', nullable: true } },
@@ -3201,7 +3437,12 @@ const document = {
                   privacy: {
                     type: 'object',
                     properties: {
-                      view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
+                      view: {
+                        type: 'string',
+                        enum: ['public', 'anyone_with_link'],
+                        default: 'public',
+                        description: 'The visibility of this page.',
+                      },
                     },
                     additionalProperties: false,
                   },
@@ -3235,6 +3476,14 @@ const document = {
             name: 'branch',
             required: true,
             description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
+          },
+          {
+            schema: { type: 'string' },
+            in: 'header',
+            name: 'prefer',
+            required: false,
+            description:
+              'By default, the supplied `slug` will be made unique during guide creation if it already exists, however if you do not want this behavior you can supply `prefer: handling=strict` to receive a 409 Conflict instead.',
           },
         ],
         responses: {
@@ -3316,7 +3565,10 @@ const document = {
                                         properties: {
                                           slug: { type: 'string' },
                                           title: { type: 'string', nullable: true },
-                                          type: { type: 'string', enum: ['basic', 'endpoint'] },
+                                          type: {
+                                            type: 'string',
+                                            enum: ['basic', 'endpoint', 'changelog', 'custom_page'],
+                                          },
                                         },
                                         required: ['slug', 'title', 'type'],
                                         additionalProperties: false,
@@ -3367,8 +3619,14 @@ const document = {
                               description: 'A comma-separated list of keywords to place into your page metadata.',
                             },
                             title: { type: 'string', nullable: true },
+                            x_import: {
+                              type: 'string',
+                              nullable: true,
+                              description:
+                                'A URI to the external docs page that this page is being imported from. Set while a page is mid-import and removed once the import completes; its presence signals that the page is read-only and still hydrating.',
+                            },
                           },
-                          required: ['description', 'image', 'keywords', 'title'],
+                          required: ['description', 'image', 'keywords', 'title', 'x_import'],
                           additionalProperties: false,
                         },
                         parent: {
@@ -3388,7 +3646,12 @@ const document = {
                         privacy: {
                           type: 'object',
                           properties: {
-                            view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
+                            view: {
+                              type: 'string',
+                              enum: ['public', 'anyone_with_link'],
+                              default: 'public',
+                              description: 'The visibility of this page.',
+                            },
                           },
                           additionalProperties: false,
                         },
@@ -3416,8 +3679,13 @@ const document = {
                               format: 'uri',
                               description: 'A URL to this page on your ReadMe hub.',
                             },
+                            github_url: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'link to the github of this page',
+                            },
                           },
-                          required: ['dash', 'hub'],
+                          required: ['dash', 'hub', 'github_url'],
                           additionalProperties: false,
                         },
                         links: {
@@ -3533,6 +3801,13 @@ const document = {
             required: true,
             description: 'A URL-safe representation of the resource.',
           },
+          {
+            schema: { type: 'string' },
+            in: 'header',
+            name: 'if-none-match',
+            required: false,
+            description: 'An ETag value to compare against the resource.',
+          },
         ],
         responses: {
           '200': {
@@ -3613,7 +3888,10 @@ const document = {
                                         properties: {
                                           slug: { type: 'string' },
                                           title: { type: 'string', nullable: true },
-                                          type: { type: 'string', enum: ['basic', 'endpoint'] },
+                                          type: {
+                                            type: 'string',
+                                            enum: ['basic', 'endpoint', 'changelog', 'custom_page'],
+                                          },
                                         },
                                         required: ['slug', 'title', 'type'],
                                         additionalProperties: false,
@@ -3664,8 +3942,14 @@ const document = {
                               description: 'A comma-separated list of keywords to place into your page metadata.',
                             },
                             title: { type: 'string', nullable: true },
+                            x_import: {
+                              type: 'string',
+                              nullable: true,
+                              description:
+                                'A URI to the external docs page that this page is being imported from. Set while a page is mid-import and removed once the import completes; its presence signals that the page is read-only and still hydrating.',
+                            },
                           },
-                          required: ['description', 'image', 'keywords', 'title'],
+                          required: ['description', 'image', 'keywords', 'title', 'x_import'],
                           additionalProperties: false,
                         },
                         parent: {
@@ -3685,7 +3969,12 @@ const document = {
                         privacy: {
                           type: 'object',
                           properties: {
-                            view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
+                            view: {
+                              type: 'string',
+                              enum: ['public', 'anyone_with_link'],
+                              default: 'public',
+                              description: 'The visibility of this page.',
+                            },
                           },
                           additionalProperties: false,
                         },
@@ -3713,8 +4002,13 @@ const document = {
                               format: 'uri',
                               description: 'A URL to this page on your ReadMe hub.',
                             },
+                            github_url: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'link to the github of this page',
+                            },
                           },
-                          required: ['dash', 'hub'],
+                          required: ['dash', 'hub', 'github_url'],
                           additionalProperties: false,
                         },
                         links: {
@@ -3802,6 +4096,7 @@ const document = {
               },
             },
           },
+          '304': { description: 'Not Modified', content: { 'application/json': { schema: {} } } },
         },
       },
       delete: {
@@ -3903,7 +4198,7 @@ const document = {
                                   properties: {
                                     slug: { type: 'string' },
                                     title: { type: 'string', nullable: true },
-                                    type: { type: 'string', enum: ['basic', 'endpoint'] },
+                                    type: { type: 'string', enum: ['basic', 'endpoint', 'changelog', 'custom_page'] },
                                   },
                                   required: ['slug', 'title', 'type'],
                                   additionalProperties: false,
@@ -3933,6 +4228,7 @@ const document = {
                       description: { type: 'string', nullable: true },
                       keywords: { type: 'string', nullable: true },
                       title: { type: 'string', nullable: true },
+                      x_import: { type: 'string', nullable: true },
                       image: {
                         type: 'object',
                         properties: { uri: { type: 'string', pattern: '\\/images\\/([a-f\\d]{24})', nullable: true } },
@@ -3956,7 +4252,12 @@ const document = {
                   privacy: {
                     type: 'object',
                     properties: {
-                      view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
+                      view: {
+                        type: 'string',
+                        enum: ['public', 'anyone_with_link'],
+                        default: 'public',
+                        description: 'The visibility of this page.',
+                      },
                     },
                     additionalProperties: false,
                   },
@@ -3995,6 +4296,14 @@ const document = {
             name: 'slug',
             required: true,
             description: 'A URL-safe representation of the resource.',
+          },
+          {
+            schema: { type: 'string' },
+            in: 'header',
+            name: 'prefer',
+            required: false,
+            description:
+              'By default, the supplied `slug` will be made unique during guide updates if it already exists, however if you do not want this behavior you can supply `prefer: handling=strict` to receive a 409 Conflict instead.',
           },
         ],
         responses: {
@@ -4076,7 +4385,10 @@ const document = {
                                         properties: {
                                           slug: { type: 'string' },
                                           title: { type: 'string', nullable: true },
-                                          type: { type: 'string', enum: ['basic', 'endpoint'] },
+                                          type: {
+                                            type: 'string',
+                                            enum: ['basic', 'endpoint', 'changelog', 'custom_page'],
+                                          },
                                         },
                                         required: ['slug', 'title', 'type'],
                                         additionalProperties: false,
@@ -4127,8 +4439,14 @@ const document = {
                               description: 'A comma-separated list of keywords to place into your page metadata.',
                             },
                             title: { type: 'string', nullable: true },
+                            x_import: {
+                              type: 'string',
+                              nullable: true,
+                              description:
+                                'A URI to the external docs page that this page is being imported from. Set while a page is mid-import and removed once the import completes; its presence signals that the page is read-only and still hydrating.',
+                            },
                           },
-                          required: ['description', 'image', 'keywords', 'title'],
+                          required: ['description', 'image', 'keywords', 'title', 'x_import'],
                           additionalProperties: false,
                         },
                         parent: {
@@ -4148,7 +4466,12 @@ const document = {
                         privacy: {
                           type: 'object',
                           properties: {
-                            view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
+                            view: {
+                              type: 'string',
+                              enum: ['public', 'anyone_with_link'],
+                              default: 'public',
+                              description: 'The visibility of this page.',
+                            },
                           },
                           additionalProperties: false,
                         },
@@ -4176,8 +4499,13 @@ const document = {
                               format: 'uri',
                               description: 'A URL to this page on your ReadMe hub.',
                             },
+                            github_url: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'link to the github of this page',
+                            },
                           },
-                          required: ['dash', 'hub'],
+                          required: ['dash', 'hub', 'github_url'],
                           additionalProperties: false,
                         },
                         links: {
@@ -4256,6 +4584,53 @@ const document = {
                         'updated_at',
                         'uri',
                       ],
+                      additionalProperties: false,
+                    },
+                  },
+                  required: ['data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+          '204': { description: 'No Content' },
+        },
+      },
+    },
+    '/fonts/{slot}': {
+      post: {
+        operationId: 'uploadFont',
+        summary: 'Upload a custom font',
+        tags: ['Fonts'],
+        description: 'Upload a custom font file for your ReadMe project.',
+        requestBody: {
+          content: {
+            'multipart/form-data': {
+              schema: { type: 'object', properties: { file: {} }, additionalProperties: false },
+            },
+          },
+        },
+        parameters: [
+          {
+            schema: { type: 'string', enum: ['heading', 'body_regular', 'body_medium', 'body_semibold', 'code'] },
+            in: 'path',
+            name: 'slot',
+            required: true,
+            description: 'The font slot to upload to.',
+          },
+        ],
+        responses: {
+          '201': {
+            description: 'Created',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    data: {
+                      type: 'object',
+                      properties: { url: { type: 'string' }, filename: { type: 'string' }, format: { type: 'string' } },
+                      required: ['url', 'filename', 'format'],
                       additionalProperties: false,
                     },
                   },
@@ -4582,7 +4957,19 @@ const document = {
             'application/json': {
               schema: {
                 type: 'object',
-                properties: { question: { type: 'string', description: 'The question being asked to Owlbot.' } },
+                properties: {
+                  question: { type: 'string', description: 'The question being asked to Owlbot.' },
+                  chat_id: {
+                    type: 'string',
+                    maxLength: 200,
+                    description: 'An identifier for the conversation, used for tracing.',
+                  },
+                  message_id: {
+                    type: 'string',
+                    maxLength: 200,
+                    description: 'An identifier for the message, used for tracing.',
+                  },
+                },
                 required: ['question'],
                 additionalProperties: false,
               },
@@ -4638,6 +5025,113 @@ const document = {
         },
       },
     },
+    '/owlbot/export': {
+      post: {
+        operationId: 'exportOwlbotLogs',
+        summary: 'Export Owlbot QA logs as CSV',
+        tags: ['Owlbot AI'],
+        description:
+          'Kicks off an async export of Owlbot QA logs as a CSV file. Returns an export ID that can be used to poll for the result via `GET /owlbot/export/:id`.',
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  range_start: {
+                    type: 'string',
+                    pattern: '^\\d{4}-\\d{2}-\\d{2}$',
+                    description:
+                      'Start date for the export range (YYYY-MM-DD format, e.g. "2025-01-01"). Defaults to 30 days ago.',
+                  },
+                  range_end: {
+                    type: 'string',
+                    pattern: '^\\d{4}-\\d{2}-\\d{2}$',
+                    description:
+                      'End date for the export range (YYYY-MM-DD format, e.g. "2025-01-31"). Defaults to today.',
+                  },
+                },
+                additionalProperties: false,
+              },
+            },
+          },
+        },
+        responses: {
+          '202': {
+            description: 'Accepted',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    data: {
+                      type: 'object',
+                      properties: {
+                        id: {
+                          type: 'string',
+                          pattern: '^owlbot-logs-',
+                          description: 'The export ID. Poll `GET /owlbot/export/:id` to retrieve the download URL.',
+                        },
+                      },
+                      required: ['id'],
+                      additionalProperties: false,
+                    },
+                  },
+                  required: ['data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/owlbot/export/{id}': {
+      get: {
+        operationId: 'getOwlbotExport',
+        summary: 'Retrieve an Owlbot export',
+        tags: ['Owlbot AI'],
+        description:
+          'Check the status of an Owlbot QA log export. Returns a signed download URL when the export is ready, or a 202 if still processing.',
+        parameters: [
+          {
+            schema: { type: 'string', pattern: '^owlbot-logs-' },
+            in: 'path',
+            name: 'id',
+            required: true,
+            description: 'The export ID returned by `POST /owlbot/export`.',
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    data: {
+                      type: 'object',
+                      properties: {
+                        url: {
+                          type: 'string',
+                          description: 'A signed URL to download the exported CSV. Expires in 10 minutes.',
+                        },
+                      },
+                      required: ['url'],
+                      additionalProperties: false,
+                    },
+                  },
+                  required: ['data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+          '202': { description: 'Accepted' },
+        },
+      },
+    },
     '/projects/me': {
       get: {
         operationId: 'getProject',
@@ -4655,6 +5149,94 @@ const document = {
                     data: {
                       type: 'object',
                       properties: {
+                        ai: {
+                          type: 'object',
+                          properties: {
+                            chat: {
+                              type: 'object',
+                              properties: {
+                                knowledge: {
+                                  type: 'object',
+                                  properties: {
+                                    custom_knowledge: {
+                                      type: 'string',
+                                      nullable: true,
+                                      default: null,
+                                      description: 'Custom knowledge content for AI chat.',
+                                    },
+                                    use_project_knowledge: {
+                                      type: 'boolean',
+                                      default: false,
+                                      description: 'Whether to use project indexing for AI chat.',
+                                    },
+                                  },
+                                  additionalProperties: false,
+                                },
+                                models: {
+                                  type: 'array',
+                                  items: {
+                                    type: 'object',
+                                    properties: {
+                                      enabled: { type: 'boolean', default: false },
+                                      id: { type: 'string' },
+                                      provider: { type: 'string' },
+                                      name: { type: 'string' },
+                                    },
+                                    required: ['id', 'provider', 'name'],
+                                    additionalProperties: false,
+                                  },
+                                  default: [],
+                                  description: 'AI models configuration for chat.',
+                                },
+                              },
+                              required: ['knowledge'],
+                              additionalProperties: false,
+                              description: 'AI chat configuration for the project.',
+                            },
+                            owlbot: {
+                              type: 'object',
+                              properties: {
+                                enabled: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description: 'Whether the Owlbot AI add-on is enabled.',
+                                },
+                                new_experience: {
+                                  type: 'boolean',
+                                  default: true,
+                                  description: 'Whether to use the new Owlbot experience.',
+                                },
+                                v2: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description: 'Whether agentic AI chat (v2) with UIMessage format is enabled.',
+                                },
+                                is_paying: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description: 'Whether the customer is paying for the AI Booster Pack.',
+                                },
+                                trial: {
+                                  type: 'object',
+                                  properties: {
+                                    is_paying: {
+                                      type: 'boolean',
+                                      default: false,
+                                      description: 'Whether the trial user has enabled the AI Booster Pack.',
+                                    },
+                                  },
+                                  additionalProperties: false,
+                                },
+                              },
+                              required: ['trial'],
+                              additionalProperties: false,
+                              description: 'AI Owlbot configuration for the project.',
+                            },
+                          },
+                          required: ['chat', 'owlbot'],
+                          additionalProperties: false,
+                          description: 'AI configuration for the project.',
+                        },
                         allow_crawlers: {
                           type: 'string',
                           enum: ['enabled', 'disabled'],
@@ -4681,9 +5263,10 @@ const document = {
                               properties: {
                                 primary_color: { type: 'string', nullable: true },
                                 link_color: { type: 'string', nullable: true },
+                                link_color_dark: { type: 'string', nullable: true },
                                 theme: { type: 'string', enum: ['system', 'light', 'dark'], default: 'light' },
                               },
-                              required: ['primary_color', 'link_color'],
+                              required: ['primary_color', 'link_color', 'link_color_dark'],
                               additionalProperties: false,
                             },
                             changelog: {
@@ -5041,9 +5624,132 @@ const document = {
                               required: ['callouts'],
                               additionalProperties: false,
                             },
+                            typography: {
+                              type: 'object',
+                              properties: {
+                                heading_font: {
+                                  type: 'string',
+                                  nullable: true,
+                                  default: null,
+                                  description:
+                                    'The font family used for headings. When null, the system default font stack is used.',
+                                },
+                                body_font: {
+                                  type: 'string',
+                                  nullable: true,
+                                  default: null,
+                                  description:
+                                    'The font family used for body text. When null, the system default font stack is used.',
+                                },
+                                code_font: {
+                                  type: 'string',
+                                  nullable: true,
+                                  default: null,
+                                  description:
+                                    'The font family used for code blocks. When null, the system default monospace font stack is used.',
+                                },
+                                spacing: { type: 'string', enum: ['comfortable', 'condensed'], nullable: true },
+                                custom_heading: {
+                                  type: 'object',
+                                  properties: {
+                                    url: { type: 'string', nullable: true },
+                                    filename: { type: 'string', nullable: true },
+                                    format: {
+                                      type: 'string',
+                                      enum: ['woff2', 'woff', 'truetype', 'opentype'],
+                                      nullable: true,
+                                    },
+                                  },
+                                  required: ['url', 'filename', 'format'],
+                                  additionalProperties: false,
+                                  description: 'Custom uploaded font for headings.',
+                                },
+                                custom_body: {
+                                  type: 'object',
+                                  properties: {
+                                    regular: {
+                                      type: 'object',
+                                      properties: {
+                                        url: { type: 'string', nullable: true },
+                                        filename: { type: 'string', nullable: true },
+                                        format: {
+                                          type: 'string',
+                                          enum: ['woff2', 'woff', 'truetype', 'opentype'],
+                                          nullable: true,
+                                        },
+                                      },
+                                      required: ['url', 'filename', 'format'],
+                                      additionalProperties: false,
+                                    },
+                                    medium: {
+                                      type: 'object',
+                                      properties: {
+                                        url: { type: 'string', nullable: true },
+                                        filename: { type: 'string', nullable: true },
+                                        format: {
+                                          type: 'string',
+                                          enum: ['woff2', 'woff', 'truetype', 'opentype'],
+                                          nullable: true,
+                                        },
+                                      },
+                                      required: ['url', 'filename', 'format'],
+                                      additionalProperties: false,
+                                    },
+                                    semibold: {
+                                      type: 'object',
+                                      properties: {
+                                        url: { type: 'string', nullable: true },
+                                        filename: { type: 'string', nullable: true },
+                                        format: {
+                                          type: 'string',
+                                          enum: ['woff2', 'woff', 'truetype', 'opentype'],
+                                          nullable: true,
+                                        },
+                                      },
+                                      required: ['url', 'filename', 'format'],
+                                      additionalProperties: false,
+                                    },
+                                  },
+                                  required: ['regular', 'medium', 'semibold'],
+                                  additionalProperties: false,
+                                  description:
+                                    'Custom uploaded fonts for body text. Supports regular (400), medium (500), and semibold (600) weights.',
+                                },
+                                custom_code: {
+                                  type: 'object',
+                                  properties: {
+                                    url: { type: 'string', nullable: true },
+                                    filename: { type: 'string', nullable: true },
+                                    format: {
+                                      type: 'string',
+                                      enum: ['woff2', 'woff', 'truetype', 'opentype'],
+                                      nullable: true,
+                                    },
+                                  },
+                                  required: ['url', 'filename', 'format'],
+                                  additionalProperties: false,
+                                  description: 'Custom uploaded font for code blocks.',
+                                },
+                              },
+                              required: ['spacing', 'custom_heading', 'custom_body', 'custom_code'],
+                              additionalProperties: false,
+                            },
                             navigation: {
                               type: 'object',
                               properties: {
+                                collapsible_categories: {
+                                  type: 'string',
+                                  enum: ['enabled', 'disabled'],
+                                  default: 'disabled',
+                                  description: 'Should categories be collapsible?',
+                                },
+                                breadcrumbs: {
+                                  type: 'string',
+                                  enum: ['enabled', 'disabled'],
+                                  default: 'disabled',
+                                  description:
+                                    'Should navigation breadcrumbs appear on your guides and API reference pages?',
+                                },
                                 first_page: {
                                   type: 'string',
                                   enum: ['documentation', 'reference', 'landing_page'],
@@ -5135,8 +5841,9 @@ const document = {
                                           default: 'disabled',
                                           nullable: true,
                                         },
+                                        schema: { type: 'string', format: 'uri', nullable: true },
                                       },
-                                      required: ['label'],
+                                      required: ['label', 'schema'],
                                       additionalProperties: false,
                                     },
                                     guides: {
@@ -5295,6 +6002,12 @@ const document = {
                                 options: {
                                   type: 'object',
                                   properties: {
+                                    ask_ai: {
+                                      type: 'string',
+                                      enum: ['enabled', 'disabled'],
+                                      default: 'disabled',
+                                      description: 'Enable "Ask AI" in the AI dropdown.',
+                                    },
                                     chatgpt: {
                                       type: 'string',
                                       enum: ['enabled', 'disabled'],
@@ -5313,11 +6026,35 @@ const document = {
                                       default: 'enabled',
                                       description: 'Enable "Copy to Clipboard" within in the AI dropdown.',
                                     },
-                                    copilot: {
-                                      type: 'string',
-                                      enum: ['enabled', 'disabled'],
-                                      default: 'enabled',
-                                      description: 'Enable Copilot in the AI dropdown.',
+                                    mcp: {
+                                      type: 'object',
+                                      properties: {
+                                        command: {
+                                          type: 'string',
+                                          enum: ['enabled', 'disabled'],
+                                          default: 'enabled',
+                                          description: 'Enable "Copy MCP Command" option in the AI dropdown.',
+                                        },
+                                        config: {
+                                          type: 'string',
+                                          enum: ['enabled', 'disabled'],
+                                          default: 'enabled',
+                                          description: 'Enable "Copy MCP Config" option in the AI dropdown.',
+                                        },
+                                        cursor: {
+                                          type: 'string',
+                                          enum: ['enabled', 'disabled'],
+                                          default: 'enabled',
+                                          description: 'Enable "Connect to Cursor" MCP option in the AI dropdown.',
+                                        },
+                                        vscode: {
+                                          type: 'string',
+                                          enum: ['enabled', 'disabled'],
+                                          default: 'enabled',
+                                          description: 'Enable "Connect to VS Code" MCP option in the AI dropdown.',
+                                        },
+                                      },
+                                      additionalProperties: false,
                                     },
                                     view_as_markdown: {
                                       type: 'string',
@@ -5326,10 +6063,130 @@ const document = {
                                       description: 'Enable "View as Markdown" in the AI dropdown.',
                                     },
                                   },
+                                  required: ['mcp'],
                                   additionalProperties: false,
                                 },
                               },
                               required: ['options'],
+                              additionalProperties: false,
+                            },
+                            landing_page: {
+                              type: 'object',
+                              properties: {
+                                promo: {
+                                  type: 'object',
+                                  properties: {
+                                    title: {
+                                      type: 'string',
+                                      nullable: true,
+                                      description: 'Landing page hero section title.',
+                                    },
+                                    text: {
+                                      type: 'string',
+                                      nullable: true,
+                                      description: 'Landing page hero section text.',
+                                    },
+                                    content_type: {
+                                      type: 'string',
+                                      enum: ['none', 'buttons', 'search', 'html'],
+                                      default: 'none',
+                                      description: 'Landing page hero section content.',
+                                    },
+                                    html: {
+                                      type: 'string',
+                                      nullable: true,
+                                      description: 'Custom HTML for the landing page hero section.',
+                                    },
+                                    button_primary: {
+                                      type: 'string',
+                                      nullable: true,
+                                      description: 'Primary action for the landing page hero section.',
+                                    },
+                                    button_secondary: {
+                                      type: 'string',
+                                      nullable: true,
+                                      description: 'Secondary action for the landing page hero section.',
+                                    },
+                                  },
+                                  required: ['title', 'text', 'html', 'button_primary', 'button_secondary'],
+                                  additionalProperties: false,
+                                },
+                                sections: {
+                                  type: 'array',
+                                  items: {
+                                    type: 'object',
+                                    properties: {
+                                      type: {
+                                        type: 'string',
+                                        enum: ['links', 'docs', 'text', 'text-media', 'three', 'html'],
+                                      },
+                                      alignment: { type: 'string', enum: ['left', 'center', 'right'], nullable: true },
+                                      title: { type: 'string', nullable: true },
+                                      text: { type: 'string', nullable: true },
+                                      html: { type: 'string', nullable: true },
+                                      page_type: {
+                                        type: 'string',
+                                        enum: ['Documentation', 'Reference'],
+                                        nullable: true,
+                                      },
+                                      side: { type: 'string', enum: ['left', 'right'], nullable: true },
+                                      media_type: { type: 'string', enum: ['html', 'image', 'code'], nullable: true },
+                                      media_html: { type: 'string', nullable: true },
+                                      media_image: { type: 'string', nullable: true },
+                                      media_code: { type: 'string', nullable: true },
+                                      group0: {
+                                        type: 'object',
+                                        properties: {
+                                          title: { type: 'string', nullable: true },
+                                          text: { type: 'string', nullable: true },
+                                        },
+                                        required: ['title', 'text'],
+                                        additionalProperties: false,
+                                        nullable: true,
+                                      },
+                                      group1: {
+                                        type: 'object',
+                                        properties: {
+                                          title: { type: 'string', nullable: true },
+                                          text: { type: 'string', nullable: true },
+                                        },
+                                        required: ['title', 'text'],
+                                        additionalProperties: false,
+                                        nullable: true,
+                                      },
+                                      group2: {
+                                        type: 'object',
+                                        properties: {
+                                          title: { type: 'string', nullable: true },
+                                          text: { type: 'string', nullable: true },
+                                        },
+                                        required: ['title', 'text'],
+                                        additionalProperties: false,
+                                        nullable: true,
+                                      },
+                                    },
+                                    required: [
+                                      'type',
+                                      'alignment',
+                                      'title',
+                                      'text',
+                                      'html',
+                                      'page_type',
+                                      'side',
+                                      'media_type',
+                                      'media_html',
+                                      'media_image',
+                                      'media_code',
+                                      'group0',
+                                      'group1',
+                                      'group2',
+                                    ],
+                                    additionalProperties: false,
+                                  },
+                                  description: 'Landing page content.',
+                                },
+                              },
+                              required: ['promo', 'sections'],
                               additionalProperties: false,
                             },
                             whats_next_label: {
@@ -5348,8 +6205,10 @@ const document = {
                             'layout',
                             'logo',
                             'markdown',
+                            'typography',
                             'navigation',
                             'ai',
+                            'landing_page',
                             'whats_next_label',
                           ],
                           additionalProperties: false,
@@ -5365,10 +6224,11 @@ const document = {
                           type: 'object',
                           properties: {
                             jwt_secret: { type: 'string' },
+                            jwt_expiration_time: { type: 'number' },
                             login_url: { type: 'string', nullable: true },
                             logout_url: { type: 'string', nullable: true },
                           },
-                          required: ['jwt_secret', 'login_url', 'logout_url'],
+                          required: ['jwt_secret', 'jwt_expiration_time', 'login_url', 'logout_url'],
                           additionalProperties: false,
                         },
                         default_version: {
@@ -5471,6 +6331,32 @@ const document = {
                           nullable: true,
                           description:
                             'The URL for your company\'s main website. We\'ll link to it in various places so people can "Go Home".',
+                        },
+                        i18n: {
+                          type: 'object',
+                          properties: {
+                            defaultLanguage: {
+                              type: 'string',
+                              enum: ['en', 'de', 'es', 'fr', 'it', 'ja', 'ko', 'nl', 'pt', 'zh'],
+                              description: 'The primary language used for this project.',
+                            },
+                            languages: {
+                              type: 'array',
+                              items: {
+                                type: 'string',
+                                enum: ['en', 'de', 'es', 'fr', 'it', 'ja', 'ko', 'nl', 'pt', 'zh'],
+                              },
+                              description: 'The list of languages this project supports.',
+                            },
+                            state: {
+                              type: 'string',
+                              enum: ['disabled', 'enabled'],
+                              description: 'If internationalization support is enabled or disabled.',
+                            },
+                          },
+                          required: ['defaultLanguage', 'languages', 'state'],
+                          additionalProperties: false,
+                          description: 'Internationalization settings for the project.',
                         },
                         integrations: {
                           type: 'object',
@@ -5589,8 +6475,9 @@ const document = {
                                 key: { type: 'string', nullable: true },
                                 client_id: { type: 'string', nullable: true },
                                 client_secret: { type: 'string', nullable: true },
+                                is_connected: { type: 'boolean' },
                               },
-                              required: ['key', 'client_id', 'client_secret'],
+                              required: ['key', 'client_id', 'client_secret', 'is_connected'],
                               additionalProperties: false,
                             },
                             koala: {
@@ -5695,6 +6582,54 @@ const document = {
                               default: 'disabled',
                               description: "The availability of the project's MCP server.",
                             },
+                            custom_tools: {
+                              type: 'array',
+                              items: {
+                                type: 'object',
+                                properties: {
+                                  title: { type: 'string', description: 'The title of the tool.' },
+                                  description: { type: 'string', description: 'The description of the tool.' },
+                                  body: { type: 'string', description: 'The body of the tool.' },
+                                },
+                                required: ['title', 'description', 'body'],
+                                additionalProperties: false,
+                              },
+                              default: [],
+                              description: 'Custom tools that the user can add to the MCP server.',
+                            },
+                            disabled_routes: {
+                              type: 'array',
+                              items: { type: 'string' },
+                              default: [],
+                              description: 'Array of route paths that are disabled in the MCP server.',
+                            },
+                            disabled_tools: {
+                              type: 'array',
+                              items: { type: 'string' },
+                              default: [],
+                              description:
+                                'Array of tool names that will be prevented from being added to the MCP server.',
+                            },
+                            has_password: {
+                              type: 'boolean',
+                              default: false,
+                              description: 'Whether the MCP server has a password set. Read-only.',
+                            },
+                            privacy: {
+                              type: 'object',
+                              properties: {
+                                password: {
+                                  type: 'string',
+                                  nullable: true,
+                                  default: null,
+                                  description:
+                                    'Set a password for MCP server access. When set, users must provide this password or an API key to access the MCP server. This field can be set, but it will not be returned by the API.',
+                                },
+                              },
+                              additionalProperties: false,
+                              default: { password: null },
+                              description: 'Privacy settings for the MCP server.',
+                            },
                           },
                           additionalProperties: false,
                           description: "Configuration for the project's Model Context Protocol (MCP) server.",
@@ -5710,6 +6645,7 @@ const document = {
                             jwt: { type: 'boolean', default: false },
                             logs: { type: 'boolean', default: false },
                             metricsSDK: { type: 'boolean', default: false },
+                            ai_ready: { type: 'boolean', default: false },
                           },
                           additionalProperties: false,
                         },
@@ -5724,6 +6660,12 @@ const document = {
                               description:
                                 'The page you wish to be served to your users when they encounter a 404. This can either map to the `uri` of a Custom Page on your project or be set to `null`. If `null` then the default ReadMe 404 page will be served. The version within the `uri` must be mapped to your stable version.',
                             },
+                            default_visibility: {
+                              type: 'string',
+                              enum: ['public', 'anyone_with_link'],
+                              default: 'public',
+                              description: 'The default visibility for pages when they are initially created.',
+                            },
                           },
                           required: ['not_found'],
                           additionalProperties: false,
@@ -5733,6 +6675,29 @@ const document = {
                           nullable: true,
                           description:
                             "Does the project have a parent project (enterprise)? If so, this resolves to the parent's subdomain.",
+                        },
+                        owner: {
+                          type: 'object',
+                          properties: {
+                            id: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'The unique identifier of the project owner.',
+                            },
+                            email: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'The email of the project owner. Only visible to god-mode users.',
+                            },
+                            name: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'The name of the project owner. Only visible to god-mode users.',
+                            },
+                          },
+                          required: ['id', 'email', 'name'],
+                          additionalProperties: false,
+                          description: 'Information about the project owner.',
                         },
                         plan: {
                           type: 'object',
@@ -5746,12 +6711,21 @@ const document = {
                                 'enterprise',
                                 'free',
                                 'freelaunch',
+                                'freelaunch2026',
                                 'opensource',
+                                'pro2026',
+                                'pro2026-annual',
                                 'startup',
                                 'startup2018',
                                 'startup-annual-2024',
                               ],
                               default: 'free',
+                            },
+                            override: {
+                              type: 'string',
+                              nullable: true,
+                              default: null,
+                              description: 'The plan override for the project. Only visible to god-mode users.',
                             },
                             grace_period: {
                               type: 'object',
@@ -5761,9 +6735,27 @@ const document = {
                               },
                               additionalProperties: false,
                             },
+                            stripe_subscription_id: {
+                              type: 'string',
+                              nullable: true,
+                              default: null,
+                              description:
+                                'The Stripe subscription ID for the project. Only visible to god-mode users.',
+                            },
                             trial: {
                               type: 'object',
                               properties: {
+                                active: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description: 'Whether the project is currently in an active trial.',
+                                },
+                                enabled: {
+                                  type: 'boolean',
+                                  nullable: true,
+                                  default: null,
+                                  description: 'Whether the trial deadline is enabled. Only visible to god-mode users.',
+                                },
                                 expired: { type: 'boolean', default: false },
                                 end_date: {
                                   type: 'string',
@@ -5776,6 +6768,22 @@ const document = {
                             },
                           },
                           required: ['grace_period', 'trial'],
+                          additionalProperties: false,
+                        },
+                        metrics: {
+                          type: 'object',
+                          properties: {
+                            monthly_purchase_limit: {
+                              type: 'number',
+                              default: 0,
+                              description: 'The monthly purchase limit for the Developer Dashboard add-on.',
+                            },
+                            monthly_limit: {
+                              type: 'number',
+                              default: 0,
+                              description: 'The monthly limit for the API Logs.',
+                            },
+                          },
                           additionalProperties: false,
                         },
                         privacy: {
@@ -5824,6 +6832,13 @@ const document = {
                               default: 'enabled',
                               description: 'Enable SDK-generated request code snippets.',
                             },
+                            experimental_performance_mode: {
+                              type: 'string',
+                              enum: ['enabled', 'disabled'],
+                              default: 'disabled',
+                              description:
+                                'Should the experimental performance mode be enabled? This will reduce the size of API definitions that we used within API Reference pages and should overall improve page load times. Please note that this feature is still very experimental and will be eventually enabled for all customers.',
+                            },
                             sdk_snippets: {
                               type: 'object',
                               properties: {
@@ -5848,6 +6863,19 @@ const document = {
                               enum: ['enabled', 'disabled'],
                               default: 'disabled',
                               description: 'When `enabled`, allows editing the request body with a JSON editor.',
+                            },
+                            method_badge_style: {
+                              type: 'string',
+                              enum: ['classic', 'modern'],
+                              default: 'classic',
+                              description: 'The style of the HTTP method badges used in the API Reference.',
+                            },
+                            request_examples: {
+                              type: 'string',
+                              enum: ['expanded', 'collapsed'],
+                              default: 'collapsed',
+                              description:
+                                'When `expanded`, the first available request example auto-populates the request form.',
                             },
                             request_history: {
                               type: 'string',
@@ -5875,6 +6903,12 @@ const document = {
                               default: 'collapsed',
                               description:
                                 'When `expanded`, response schemas will be expanded by default if a 200 level response schema exists.',
+                            },
+                            show_method_in_sidebar: {
+                              type: 'string',
+                              enum: ['enabled', 'disabled'],
+                              default: 'enabled',
+                              description: 'When `enabled`, the HTTP method badge will be shown in the sidebar.',
                             },
                           },
                           required: ['sdk_snippets'],
@@ -5904,7 +6938,7 @@ const document = {
                         llms_txt: {
                           type: 'string',
                           enum: ['enabled', 'disabled'],
-                          default: 'disabled',
+                          default: 'enabled',
                           description:
                             'Expose an `llms.txt` file to help AI assistants understand your documentation structure.',
                         },
@@ -5971,6 +7005,18 @@ const document = {
                           pattern: '^[a-f\\d]{24}$',
                           description: 'The unique, immutable, identifier for the project.',
                         },
+                        created_at: {
+                          type: 'string',
+                          format: 'date-time',
+                          nullable: true,
+                          description: 'The date the project was created.',
+                        },
+                        updated_at: {
+                          type: 'string',
+                          format: 'date-time',
+                          nullable: true,
+                          description: 'The date the project was last updated.',
+                        },
                         features: {
                           type: 'object',
                           properties: {
@@ -5983,9 +7029,41 @@ const document = {
                           },
                           additionalProperties: false,
                         },
+                        feature_rules: {
+                          type: 'object',
+                          properties: {
+                            merge: {
+                              type: 'object',
+                              properties: {
+                                requirements: {
+                                  type: 'array',
+                                  items: { type: 'string', enum: ['approval', 'lint'] },
+                                  default: [],
+                                  description: 'Any states that will block the ability to merge a branch.',
+                                },
+                                allow_override: {
+                                  type: 'array',
+                                  items: { type: 'string', enum: ['editor'] },
+                                  default: [],
+                                  description:
+                                    'All permission levels lower than Admin that are able to override a merge that is blocked. Admins can always override.',
+                                },
+                              },
+                              additionalProperties: false,
+                            },
+                          },
+                          required: ['merge'],
+                          additionalProperties: false,
+                        },
                         git: {
                           type: 'object',
                           properties: {
+                            repository_name: {
+                              type: 'string',
+                              nullable: true,
+                              default: null,
+                              description: 'The internal Git repository name.',
+                            },
                             connection: {
                               type: 'object',
                               properties: {
@@ -5994,7 +7072,7 @@ const document = {
                                   properties: {
                                     provider_type: {
                                       type: 'string',
-                                      enum: ['github', 'github_enterprise_server'],
+                                      enum: ['github', 'github_enterprise_server', 'bitbucket', 'gitlab'],
                                       description: 'The type of provider for the repository.',
                                     },
                                     name: {
@@ -6006,6 +7084,19 @@ const document = {
                                       description:
                                         'The full name of the repository (e.g., `owner-org/repo-with-content`).',
                                     },
+                                    privacy: {
+                                      type: 'object',
+                                      properties: {
+                                        private: { type: 'boolean' },
+                                        visibility: {
+                                          type: 'string',
+                                          enum: ['public', 'private', 'internal'],
+                                          description: 'Whether this repo is private, public, or internal.',
+                                        },
+                                      },
+                                      required: ['private', 'visibility'],
+                                      additionalProperties: false,
+                                    },
                                     url: {
                                       type: 'string',
                                       format: 'uri',
@@ -6013,7 +7104,7 @@ const document = {
                                         'The URL of the repository (e.g., `https://github.com/owner-org/repo-with-content`).',
                                     },
                                   },
-                                  required: ['provider_type', 'name', 'full_name', 'url'],
+                                  required: ['provider_type', 'name', 'full_name', 'privacy', 'url'],
                                   additionalProperties: false,
                                   nullable: true,
                                 },
@@ -6027,7 +7118,7 @@ const document = {
                                     },
                                     provider_type: {
                                       type: 'string',
-                                      enum: ['github', 'github_enterprise_server'],
+                                      enum: ['github', 'github_enterprise_server', 'bitbucket', 'gitlab'],
                                       description: 'The type of provider for the organization.',
                                     },
                                   },
@@ -6046,8 +7137,39 @@ const document = {
                               required: ['repository', 'organization'],
                               additionalProperties: false,
                             },
+                            remediation_status: {
+                              type: 'string',
+                              enum: ['pending', 'running', 'completed', 'failed'],
+                              nullable: true,
+                              description: 'Current remediation job status for this project.',
+                            },
+                            remediated_at: {
+                              type: 'string',
+                              format: 'date-time',
+                              nullable: true,
+                              default: null,
+                              description: 'ISO timestamp of the last completed remediation run.',
+                            },
+                            remediation_initiated_by: {
+                              type: 'string',
+                              nullable: true,
+                              default: null,
+                              description: 'Email of the user who initiated the last remediation.',
+                            },
+                            remediation_dry_run: {
+                              type: 'boolean',
+                              nullable: true,
+                              default: null,
+                              description: 'Whether the last remediation was a dry run.',
+                            },
+                            remediation_job_id: {
+                              type: 'string',
+                              nullable: true,
+                              default: null,
+                              description: 'BullMQ root job ID of the most recent remediation run.',
+                            },
                           },
-                          required: ['connection'],
+                          required: ['connection', 'remediation_status'],
                           additionalProperties: false,
                         },
                         permissions: {
@@ -6097,15 +7219,25 @@ const document = {
                                 merge: {
                                   type: 'object',
                                   properties: {
-                                    admin: { type: 'boolean', description: 'Whether admin role can perform merges' },
-                                    editor: { type: 'boolean', description: 'Whether editor role can perform merges' },
+                                    admin: { type: 'boolean', description: 'Whether admin role can perform merges.' },
+                                    editor: { type: 'boolean', description: 'Whether editor role can perform merges.' },
                                   },
                                   required: ['admin', 'editor'],
                                   additionalProperties: false,
                                   description: 'Role-based access control for merging branches',
                                 },
+                                approve: {
+                                  type: 'object',
+                                  properties: {
+                                    admin: { type: 'boolean', description: 'Whether admin role can approve changes.' },
+                                    editor: { type: 'boolean', description: 'Whether editor role can approve changes' },
+                                  },
+                                  required: ['admin', 'editor'],
+                                  additionalProperties: false,
+                                  description: 'Role-based access control for approving changes',
+                                },
                               },
-                              required: ['merge'],
+                              required: ['merge', 'approve'],
                               additionalProperties: false,
                             },
                           },
@@ -6130,6 +7262,20 @@ const document = {
                           },
                           additionalProperties: false,
                         },
+                        notification_settings: {
+                          type: 'object',
+                          properties: {
+                            project_topic_key: {
+                              type: 'string',
+                              nullable: true,
+                              default: null,
+                              description:
+                                'The Novu Topic Key associated with this project for managing notification subscriptions.',
+                            },
+                          },
+                          additionalProperties: false,
+                          description: 'Notification settings for the project.',
+                        },
                         uri: {
                           type: 'string',
                           pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)',
@@ -6137,6 +7283,7 @@ const document = {
                         },
                       },
                       required: [
+                        'ai',
                         'api_designer',
                         'appearance',
                         'canonical_url',
@@ -6145,23 +7292,30 @@ const document = {
                         'description',
                         'health_check',
                         'homepage_url',
+                        'i18n',
                         'integrations',
                         'mcp',
                         'name',
                         'onboarding_completed',
                         'pages',
                         'parent',
+                        'owner',
                         'plan',
+                        'metrics',
                         'privacy',
                         'redirects',
                         'reference',
                         'seo',
                         'subdomain',
                         'id',
+                        'created_at',
+                        'updated_at',
                         'features',
+                        'feature_rules',
                         'git',
                         'permissions',
                         'refactored',
+                        'notification_settings',
                         'uri',
                       ],
                       additionalProperties: false,
@@ -6173,6 +7327,2253 @@ const document = {
               },
             },
           },
+        },
+      },
+    },
+    '/projects/me/children': {
+      post: {
+        operationId: 'createChildProject',
+        summary: 'Create a child project on your Enterprise group',
+        tags: ['Projects'],
+        description:
+          'Create a new project and attach it to your Enterrpise group as a child.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).\n\n>❗\n> This route is only available to [ReadMe Enterprise](https://readme.com/enterprise) customers.',
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  name: { type: 'string', description: 'The name of the project.' },
+                  subdomain: {
+                    type: 'string',
+                    pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
+                    maxLength: 30,
+                    description: 'The subdomain of your project.',
+                  },
+                  privacy: {
+                    type: 'object',
+                    properties: {
+                      openapi: {
+                        type: 'string',
+                        enum: ['public', 'admin'],
+                        default: 'admin',
+                        description: "The visibility your OpenAPI definitions on your project's `/openapi` page.",
+                      },
+                      password: {
+                        type: 'string',
+                        nullable: true,
+                        description:
+                          "The project's password for when `privacy.view` is `password`. This field can be set, but it will not be returned by the API.",
+                      },
+                      view: {
+                        type: 'string',
+                        enum: ['public', 'admin', 'password', 'custom_login'],
+                        default: 'public',
+                        description:
+                          '* `public` - Site is available to the public.\n* `admin` - Site is only available to users that have project permissions.\n* `password` - Site is gated behind a password authentication system.\n* `custom_login` - Users who view your site will be forwarded to a URL of your choice, having them login there and be forwarded back to your ReadMe site.',
+                      },
+                    },
+                    required: ['password'],
+                    additionalProperties: false,
+                  },
+                },
+                required: ['name', 'subdomain'],
+                additionalProperties: false,
+              },
+            },
+          },
+          required: true,
+        },
+        responses: {
+          '201': {
+            description: 'Created',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    data: {
+                      type: 'object',
+                      properties: {
+                        ai: {
+                          type: 'object',
+                          properties: {
+                            chat: {
+                              type: 'object',
+                              properties: {
+                                knowledge: {
+                                  type: 'object',
+                                  properties: {
+                                    custom_knowledge: {
+                                      type: 'string',
+                                      nullable: true,
+                                      default: null,
+                                      description: 'Custom knowledge content for AI chat.',
+                                    },
+                                    use_project_knowledge: {
+                                      type: 'boolean',
+                                      default: false,
+                                      description: 'Whether to use project indexing for AI chat.',
+                                    },
+                                  },
+                                  additionalProperties: false,
+                                },
+                                models: {
+                                  type: 'array',
+                                  items: {
+                                    type: 'object',
+                                    properties: {
+                                      enabled: { type: 'boolean', default: false },
+                                      id: { type: 'string' },
+                                      provider: { type: 'string' },
+                                      name: { type: 'string' },
+                                    },
+                                    required: ['id', 'provider', 'name'],
+                                    additionalProperties: false,
+                                  },
+                                  default: [],
+                                  description: 'AI models configuration for chat.',
+                                },
+                              },
+                              required: ['knowledge'],
+                              additionalProperties: false,
+                              description: 'AI chat configuration for the project.',
+                            },
+                            owlbot: {
+                              type: 'object',
+                              properties: {
+                                enabled: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description: 'Whether the Owlbot AI add-on is enabled.',
+                                },
+                                new_experience: {
+                                  type: 'boolean',
+                                  default: true,
+                                  description: 'Whether to use the new Owlbot experience.',
+                                },
+                                v2: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description: 'Whether agentic AI chat (v2) with UIMessage format is enabled.',
+                                },
+                                is_paying: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description: 'Whether the customer is paying for the AI Booster Pack.',
+                                },
+                                trial: {
+                                  type: 'object',
+                                  properties: {
+                                    is_paying: {
+                                      type: 'boolean',
+                                      default: false,
+                                      description: 'Whether the trial user has enabled the AI Booster Pack.',
+                                    },
+                                  },
+                                  additionalProperties: false,
+                                },
+                              },
+                              required: ['trial'],
+                              additionalProperties: false,
+                              description: 'AI Owlbot configuration for the project.',
+                            },
+                          },
+                          required: ['chat', 'owlbot'],
+                          additionalProperties: false,
+                          description: 'AI configuration for the project.',
+                        },
+                        allow_crawlers: {
+                          type: 'string',
+                          enum: ['enabled', 'disabled'],
+                          default: 'enabled',
+                          description: 'Allow indexing by robots.',
+                        },
+                        api_designer: {
+                          type: 'object',
+                          properties: {
+                            allow_editing: {
+                              type: 'string',
+                              enum: ['enabled', 'disabled'],
+                              default: 'enabled',
+                              description: 'API Designer is enabled for this project.',
+                            },
+                          },
+                          additionalProperties: false,
+                        },
+                        appearance: {
+                          type: 'object',
+                          properties: {
+                            brand: {
+                              type: 'object',
+                              properties: {
+                                primary_color: { type: 'string', nullable: true },
+                                link_color: { type: 'string', nullable: true },
+                                link_color_dark: { type: 'string', nullable: true },
+                                theme: { type: 'string', enum: ['system', 'light', 'dark'], default: 'light' },
+                              },
+                              required: ['primary_color', 'link_color', 'link_color_dark'],
+                              additionalProperties: false,
+                            },
+                            changelog: {
+                              type: 'object',
+                              properties: {
+                                layout: { type: 'string', enum: ['collapsed', 'continuous'], default: 'collapsed' },
+                                show_author: {
+                                  type: 'boolean',
+                                  default: true,
+                                  description: 'Should the changelog author be shown?',
+                                },
+                                show_exact_date: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description:
+                                    'Should the exact date of the changelog entry be shown, or should it be relative?',
+                                },
+                              },
+                              additionalProperties: false,
+                            },
+                            custom_code: {
+                              type: 'object',
+                              properties: {
+                                css: {
+                                  type: 'string',
+                                  nullable: true,
+                                  description:
+                                    'A chunk of custom CSS that you can use to override default CSS that we provide.',
+                                },
+                                js: {
+                                  type: 'string',
+                                  nullable: true,
+                                  description:
+                                    'A chunk of custom JS that you can use to override or add new behaviors to your documentation. Please note that we do not do any validation on the code that goes in here so you have the potential to negatively impact your users with broken code.',
+                                },
+                                html: {
+                                  type: 'object',
+                                  properties: {
+                                    header: {
+                                      type: 'string',
+                                      nullable: true,
+                                      description:
+                                        'A block of custom HTML that will be added to your `<head>` tag. Good for things like `<meta>` tags or loading external CSS.',
+                                    },
+                                    home_footer: {
+                                      type: 'string',
+                                      nullable: true,
+                                      description:
+                                        'A block of custom HTML that will appear in a `<footer>` element on all of your pages',
+                                    },
+                                    page_footer: {
+                                      type: 'string',
+                                      nullable: true,
+                                      description:
+                                        'A block of custom HTML that will be added before the closing `</body>` tag of your pages.',
+                                    },
+                                  },
+                                  required: ['header', 'home_footer', 'page_footer'],
+                                  additionalProperties: false,
+                                },
+                              },
+                              required: ['css', 'js', 'html'],
+                              additionalProperties: false,
+                            },
+                            footer: {
+                              type: 'object',
+                              properties: { readme_logo: { type: 'string', enum: ['hide', 'show'], default: 'show' } },
+                              additionalProperties: false,
+                            },
+                            header: {
+                              type: 'object',
+                              properties: {
+                                type: {
+                                  type: 'string',
+                                  enum: ['solid', 'gradient', 'line', 'overlay'],
+                                  default: 'solid',
+                                },
+                                gradient_color: { type: 'string', nullable: true },
+                                link_style: {
+                                  type: 'string',
+                                  enum: ['buttons', 'tabs'],
+                                  default: 'buttons',
+                                  description:
+                                    'The styling setting of the subnav links. This value is only used if `appearance.header.type` is `line`.',
+                                },
+                                overlay: {
+                                  type: 'object',
+                                  properties: {
+                                    image: {
+                                      type: 'object',
+                                      properties: {
+                                        name: { type: 'string', nullable: true },
+                                        width: {
+                                          type: 'number',
+                                          nullable: true,
+                                          description: 'The pixel width of the image. This is not present for SVGs.',
+                                        },
+                                        height: {
+                                          type: 'number',
+                                          nullable: true,
+                                          description: 'The pixel height of the image. This is not present for SVGs.',
+                                        },
+                                        color: {
+                                          type: 'string',
+                                          pattern:
+                                            '^(?:#[0-9a-fA-F]{3}|#[0-9a-fA-F]{4}|#[0-9a-fA-F]{6}|#[0-9a-fA-F]{8})$',
+                                          nullable: true,
+                                          description: 'The primary color contained within your image.',
+                                        },
+                                        links: {
+                                          type: 'object',
+                                          properties: {
+                                            original_url: {
+                                              type: 'string',
+                                              format: 'uri',
+                                              nullable: true,
+                                              description:
+                                                'If your image was resized upon upload this will be a URL to the original file.',
+                                            },
+                                          },
+                                          required: ['original_url'],
+                                          additionalProperties: false,
+                                        },
+                                        uri: {
+                                          type: 'string',
+                                          pattern: '\\/images\\/([a-f\\d]{24})',
+                                          nullable: true,
+                                          description:
+                                            'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
+                                        },
+                                        url: { type: 'string', format: 'uri', nullable: true },
+                                      },
+                                      required: ['name', 'width', 'height', 'color', 'links', 'uri', 'url'],
+                                      additionalProperties: false,
+                                    },
+                                    type: {
+                                      type: 'string',
+                                      enum: ['triangles', 'blueprint', 'grain', 'map', 'circuits', 'custom'],
+                                      default: 'triangles',
+                                      description:
+                                        'The header overlay type. This value is only used if `appearance.header.type` is `overlay`.',
+                                    },
+                                    fill: {
+                                      type: 'string',
+                                      enum: ['auto', 'tile', 'tile-x', 'tile-y', 'cover', 'contain'],
+                                      default: 'auto',
+                                      description:
+                                        'The header fill type. This is only used if `appearance.header.overlay.type` is `custom`.',
+                                    },
+                                    position: {
+                                      type: 'string',
+                                      enum: [
+                                        'top-left',
+                                        'top-center',
+                                        'top-right',
+                                        'center-left',
+                                        'center-center',
+                                        'center-right',
+                                        'bottom-left',
+                                        'bottom-center',
+                                        'bottom-right',
+                                      ],
+                                      default: 'top-left',
+                                      description:
+                                        'The positioning of the header. This is only used if `appearance.header.overlay.type` is `custom`.',
+                                    },
+                                  },
+                                  required: ['image'],
+                                  additionalProperties: false,
+                                },
+                              },
+                              required: ['gradient_color', 'overlay'],
+                              additionalProperties: false,
+                            },
+                            layout: {
+                              type: 'object',
+                              properties: {
+                                full_width: {
+                                  type: 'string',
+                                  enum: ['enabled', 'disabled'],
+                                  default: 'disabled',
+                                  description: 'Should the page layout stretch to use the full page width?',
+                                },
+                                style: {
+                                  type: 'string',
+                                  enum: ['classic', 'modern', 'compact', 'sidebar'],
+                                  default: 'classic',
+                                  description: 'The shape and style of your documentation hub pages.',
+                                },
+                              },
+                              additionalProperties: false,
+                            },
+                            logo: {
+                              type: 'object',
+                              properties: {
+                                dark_mode: {
+                                  type: 'object',
+                                  properties: {
+                                    name: { type: 'string', nullable: true },
+                                    width: {
+                                      type: 'number',
+                                      nullable: true,
+                                      description: 'The pixel width of the image. This is not present for SVGs.',
+                                    },
+                                    height: {
+                                      type: 'number',
+                                      nullable: true,
+                                      description: 'The pixel height of the image. This is not present for SVGs.',
+                                    },
+                                    color: {
+                                      type: 'string',
+                                      pattern: '^(?:#[0-9a-fA-F]{3}|#[0-9a-fA-F]{4}|#[0-9a-fA-F]{6}|#[0-9a-fA-F]{8})$',
+                                      nullable: true,
+                                      description: 'The primary color contained within your image.',
+                                    },
+                                    links: {
+                                      type: 'object',
+                                      properties: {
+                                        original_url: {
+                                          type: 'string',
+                                          format: 'uri',
+                                          nullable: true,
+                                          description:
+                                            'If your image was resized upon upload this will be a URL to the original file.',
+                                        },
+                                      },
+                                      required: ['original_url'],
+                                      additionalProperties: false,
+                                    },
+                                    uri: {
+                                      type: 'string',
+                                      pattern: '\\/images\\/([a-f\\d]{24})',
+                                      nullable: true,
+                                      description:
+                                        'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
+                                    },
+                                    url: { type: 'string', format: 'uri', nullable: true },
+                                  },
+                                  required: ['name', 'width', 'height', 'color', 'links', 'uri', 'url'],
+                                  additionalProperties: false,
+                                },
+                                main: {
+                                  type: 'object',
+                                  properties: {
+                                    name: { type: 'string', nullable: true },
+                                    width: {
+                                      type: 'number',
+                                      nullable: true,
+                                      description: 'The pixel width of the image. This is not present for SVGs.',
+                                    },
+                                    height: {
+                                      type: 'number',
+                                      nullable: true,
+                                      description: 'The pixel height of the image. This is not present for SVGs.',
+                                    },
+                                    color: {
+                                      type: 'string',
+                                      pattern: '^(?:#[0-9a-fA-F]{3}|#[0-9a-fA-F]{4}|#[0-9a-fA-F]{6}|#[0-9a-fA-F]{8})$',
+                                      nullable: true,
+                                      description: 'The primary color contained within your image.',
+                                    },
+                                    links: {
+                                      type: 'object',
+                                      properties: {
+                                        original_url: {
+                                          type: 'string',
+                                          format: 'uri',
+                                          nullable: true,
+                                          description:
+                                            'If your image was resized upon upload this will be a URL to the original file.',
+                                        },
+                                      },
+                                      required: ['original_url'],
+                                      additionalProperties: false,
+                                    },
+                                    uri: {
+                                      type: 'string',
+                                      pattern: '\\/images\\/([a-f\\d]{24})',
+                                      nullable: true,
+                                      description:
+                                        'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
+                                    },
+                                    url: { type: 'string', format: 'uri', nullable: true },
+                                  },
+                                  required: ['name', 'width', 'height', 'color', 'links', 'uri', 'url'],
+                                  additionalProperties: false,
+                                },
+                                favicon: {
+                                  type: 'object',
+                                  properties: {
+                                    name: { type: 'string', nullable: true },
+                                    width: {
+                                      type: 'number',
+                                      nullable: true,
+                                      description: 'The pixel width of the image. This is not present for SVGs.',
+                                    },
+                                    height: {
+                                      type: 'number',
+                                      nullable: true,
+                                      description: 'The pixel height of the image. This is not present for SVGs.',
+                                    },
+                                    color: {
+                                      type: 'string',
+                                      pattern: '^(?:#[0-9a-fA-F]{3}|#[0-9a-fA-F]{4}|#[0-9a-fA-F]{6}|#[0-9a-fA-F]{8})$',
+                                      nullable: true,
+                                      description: 'The primary color contained within your image.',
+                                    },
+                                    links: {
+                                      type: 'object',
+                                      properties: {
+                                        original_url: {
+                                          type: 'string',
+                                          format: 'uri',
+                                          nullable: true,
+                                          description:
+                                            'If your image was resized upon upload this will be a URL to the original file.',
+                                        },
+                                      },
+                                      required: ['original_url'],
+                                      additionalProperties: false,
+                                    },
+                                    uri: {
+                                      type: 'string',
+                                      pattern: '\\/images\\/([a-f\\d]{24})',
+                                      nullable: true,
+                                      description:
+                                        'A URI to the `getImages` endpoint for this image. If the is a legacy image then this `uri` will be `null`. And if you wish to delete this image then you should set this to `null`.',
+                                    },
+                                    url: { type: 'string', format: 'uri', nullable: true },
+                                  },
+                                  required: ['name', 'width', 'height', 'color', 'links', 'uri', 'url'],
+                                  additionalProperties: false,
+                                },
+                                size: { type: 'string', enum: ['default', 'large'], default: 'default' },
+                              },
+                              required: ['dark_mode', 'main', 'favicon'],
+                              additionalProperties: false,
+                            },
+                            markdown: {
+                              type: 'object',
+                              properties: {
+                                callouts: {
+                                  type: 'object',
+                                  properties: {
+                                    icon_font: {
+                                      type: 'string',
+                                      enum: ['emojis', 'fontawesome'],
+                                      default: 'emojis',
+                                      description: 'Handles the types of icons that are shown in Markdown callouts.',
+                                    },
+                                  },
+                                  additionalProperties: false,
+                                },
+                              },
+                              required: ['callouts'],
+                              additionalProperties: false,
+                            },
+                            typography: {
+                              type: 'object',
+                              properties: {
+                                heading_font: {
+                                  type: 'string',
+                                  nullable: true,
+                                  default: null,
+                                  description:
+                                    'The font family used for headings. When null, the system default font stack is used.',
+                                },
+                                body_font: {
+                                  type: 'string',
+                                  nullable: true,
+                                  default: null,
+                                  description:
+                                    'The font family used for body text. When null, the system default font stack is used.',
+                                },
+                                code_font: {
+                                  type: 'string',
+                                  nullable: true,
+                                  default: null,
+                                  description:
+                                    'The font family used for code blocks. When null, the system default monospace font stack is used.',
+                                },
+                                spacing: { type: 'string', enum: ['comfortable', 'condensed'], nullable: true },
+                                custom_heading: {
+                                  type: 'object',
+                                  properties: {
+                                    url: { type: 'string', nullable: true },
+                                    filename: { type: 'string', nullable: true },
+                                    format: {
+                                      type: 'string',
+                                      enum: ['woff2', 'woff', 'truetype', 'opentype'],
+                                      nullable: true,
+                                    },
+                                  },
+                                  required: ['url', 'filename', 'format'],
+                                  additionalProperties: false,
+                                  description: 'Custom uploaded font for headings.',
+                                },
+                                custom_body: {
+                                  type: 'object',
+                                  properties: {
+                                    regular: {
+                                      type: 'object',
+                                      properties: {
+                                        url: { type: 'string', nullable: true },
+                                        filename: { type: 'string', nullable: true },
+                                        format: {
+                                          type: 'string',
+                                          enum: ['woff2', 'woff', 'truetype', 'opentype'],
+                                          nullable: true,
+                                        },
+                                      },
+                                      required: ['url', 'filename', 'format'],
+                                      additionalProperties: false,
+                                    },
+                                    medium: {
+                                      type: 'object',
+                                      properties: {
+                                        url: { type: 'string', nullable: true },
+                                        filename: { type: 'string', nullable: true },
+                                        format: {
+                                          type: 'string',
+                                          enum: ['woff2', 'woff', 'truetype', 'opentype'],
+                                          nullable: true,
+                                        },
+                                      },
+                                      required: ['url', 'filename', 'format'],
+                                      additionalProperties: false,
+                                    },
+                                    semibold: {
+                                      type: 'object',
+                                      properties: {
+                                        url: { type: 'string', nullable: true },
+                                        filename: { type: 'string', nullable: true },
+                                        format: {
+                                          type: 'string',
+                                          enum: ['woff2', 'woff', 'truetype', 'opentype'],
+                                          nullable: true,
+                                        },
+                                      },
+                                      required: ['url', 'filename', 'format'],
+                                      additionalProperties: false,
+                                    },
+                                  },
+                                  required: ['regular', 'medium', 'semibold'],
+                                  additionalProperties: false,
+                                  description:
+                                    'Custom uploaded fonts for body text. Supports regular (400), medium (500), and semibold (600) weights.',
+                                },
+                                custom_code: {
+                                  type: 'object',
+                                  properties: {
+                                    url: { type: 'string', nullable: true },
+                                    filename: { type: 'string', nullable: true },
+                                    format: {
+                                      type: 'string',
+                                      enum: ['woff2', 'woff', 'truetype', 'opentype'],
+                                      nullable: true,
+                                    },
+                                  },
+                                  required: ['url', 'filename', 'format'],
+                                  additionalProperties: false,
+                                  description: 'Custom uploaded font for code blocks.',
+                                },
+                              },
+                              required: ['spacing', 'custom_heading', 'custom_body', 'custom_code'],
+                              additionalProperties: false,
+                            },
+                            navigation: {
+                              type: 'object',
+                              properties: {
+                                collapsible_categories: {
+                                  type: 'string',
+                                  enum: ['enabled', 'disabled'],
+                                  default: 'disabled',
+                                  description: 'Should categories be collapsible?',
+                                },
+                                breadcrumbs: {
+                                  type: 'string',
+                                  enum: ['enabled', 'disabled'],
+                                  default: 'disabled',
+                                  description:
+                                    'Should navigation breadcrumbs appear on your guides and API reference pages?',
+                                },
+                                first_page: {
+                                  type: 'string',
+                                  enum: ['documentation', 'reference', 'landing_page'],
+                                  default: 'landing_page',
+                                  description:
+                                    'The page that users will first see when they access your documentation hub.',
+                                },
+                                left: {
+                                  type: 'array',
+                                  items: {
+                                    type: 'object',
+                                    properties: {
+                                      type: {
+                                        type: 'string',
+                                        enum: [
+                                          'home',
+                                          'guides',
+                                          'discussions',
+                                          'changelog',
+                                          'search_box',
+                                          'link_url',
+                                          'custom_page',
+                                          'user_controls',
+                                          'reference',
+                                          'recipes',
+                                        ],
+                                      },
+                                      title: { type: 'string', nullable: true },
+                                      url: { type: 'string', nullable: true },
+                                      custom_page: { type: 'string', nullable: true },
+                                    },
+                                    required: ['type', 'title', 'url', 'custom_page'],
+                                    additionalProperties: false,
+                                  },
+                                  description:
+                                    'The navigation settings for the left side of your projects navigation bar.',
+                                },
+                                links: {
+                                  type: 'object',
+                                  properties: {
+                                    changelog: {
+                                      type: 'object',
+                                      properties: {
+                                        label: { type: 'string', enum: ['Changelog'] },
+                                        alias: { type: 'string', nullable: true },
+                                        visibility: {
+                                          type: 'string',
+                                          enum: ['enabled', 'disabled'],
+                                          default: 'enabled',
+                                        },
+                                      },
+                                      required: ['label', 'alias'],
+                                      additionalProperties: false,
+                                    },
+                                    discussions: {
+                                      type: 'object',
+                                      properties: {
+                                        label: { type: 'string', enum: ['Discussions'] },
+                                        alias: { type: 'string', nullable: true },
+                                        visibility: {
+                                          type: 'string',
+                                          enum: ['enabled', 'disabled'],
+                                          default: 'enabled',
+                                        },
+                                      },
+                                      required: ['label', 'alias'],
+                                      additionalProperties: false,
+                                    },
+                                    home: {
+                                      type: 'object',
+                                      properties: {
+                                        label: { type: 'string', enum: ['Home'] },
+                                        visibility: {
+                                          type: 'string',
+                                          enum: ['enabled', 'disabled'],
+                                          default: 'enabled',
+                                        },
+                                      },
+                                      required: ['label'],
+                                      additionalProperties: false,
+                                    },
+                                    graphql: {
+                                      type: 'object',
+                                      properties: {
+                                        label: { type: 'string', enum: ['GraphQL'] },
+                                        visibility: {
+                                          type: 'string',
+                                          enum: ['enabled', 'disabled'],
+                                          default: 'disabled',
+                                          nullable: true,
+                                        },
+                                        schema: { type: 'string', format: 'uri', nullable: true },
+                                      },
+                                      required: ['label', 'schema'],
+                                      additionalProperties: false,
+                                    },
+                                    guides: {
+                                      type: 'object',
+                                      properties: {
+                                        label: { type: 'string', enum: ['Guides'] },
+                                        alias: { type: 'string', nullable: true },
+                                        visibility: {
+                                          type: 'string',
+                                          enum: ['enabled', 'disabled'],
+                                          default: 'enabled',
+                                        },
+                                      },
+                                      required: ['label', 'alias'],
+                                      additionalProperties: false,
+                                    },
+                                    recipes: {
+                                      type: 'object',
+                                      properties: {
+                                        label: { type: 'string', enum: ['Recipes'] },
+                                        alias: { type: 'string', nullable: true },
+                                        visibility: {
+                                          type: 'string',
+                                          enum: ['enabled', 'disabled'],
+                                          default: 'disabled',
+                                        },
+                                      },
+                                      required: ['label', 'alias'],
+                                      additionalProperties: false,
+                                    },
+                                    reference: {
+                                      type: 'object',
+                                      properties: {
+                                        label: { type: 'string', enum: ['API Reference'] },
+                                        alias: { type: 'string', nullable: true },
+                                        visibility: {
+                                          type: 'string',
+                                          enum: ['enabled', 'disabled'],
+                                          default: 'enabled',
+                                        },
+                                      },
+                                      required: ['label', 'alias'],
+                                      additionalProperties: false,
+                                    },
+                                  },
+                                  required: [
+                                    'changelog',
+                                    'discussions',
+                                    'home',
+                                    'graphql',
+                                    'guides',
+                                    'recipes',
+                                    'reference',
+                                  ],
+                                  additionalProperties: false,
+                                },
+                                logo_link: {
+                                  type: 'string',
+                                  enum: ['landing_page', 'homepage'],
+                                  default: 'homepage',
+                                  description:
+                                    'Where users will be directed to when they click on your logo in the navigation bar.',
+                                },
+                                page_icons: {
+                                  type: 'string',
+                                  enum: ['enabled', 'disabled'],
+                                  default: 'enabled',
+                                  description: 'Should the links in your project navigation bar include icons?',
+                                },
+                                right: {
+                                  type: 'array',
+                                  items: {
+                                    type: 'object',
+                                    properties: {
+                                      type: {
+                                        type: 'string',
+                                        enum: [
+                                          'home',
+                                          'guides',
+                                          'discussions',
+                                          'changelog',
+                                          'search_box',
+                                          'link_url',
+                                          'custom_page',
+                                          'user_controls',
+                                          'reference',
+                                          'recipes',
+                                        ],
+                                      },
+                                      title: { type: 'string', nullable: true },
+                                      url: { type: 'string', nullable: true },
+                                      custom_page: { type: 'string', nullable: true },
+                                    },
+                                    required: ['type', 'title', 'url', 'custom_page'],
+                                    additionalProperties: false,
+                                  },
+                                  description:
+                                    'The navigation settings for the right side of your projects navigation bar.',
+                                },
+                                sub_nav: {
+                                  type: 'array',
+                                  items: {
+                                    type: 'object',
+                                    properties: {
+                                      type: {
+                                        type: 'string',
+                                        enum: [
+                                          'home',
+                                          'guides',
+                                          'discussions',
+                                          'changelog',
+                                          'search_box',
+                                          'link_url',
+                                          'custom_page',
+                                          'user_controls',
+                                          'reference',
+                                          'recipes',
+                                        ],
+                                      },
+                                      title: { type: 'string', nullable: true },
+                                      url: { type: 'string', nullable: true },
+                                      custom_page: { type: 'string', nullable: true },
+                                    },
+                                    required: ['type', 'title', 'url', 'custom_page'],
+                                    additionalProperties: false,
+                                  },
+                                  description: 'The navigation settings for your projects subnavigation bar.',
+                                },
+                                subheader_layout: { type: 'string', enum: ['links', 'dropdown'], default: 'links' },
+                                version: {
+                                  type: 'string',
+                                  enum: ['enabled', 'disabled'],
+                                  default: 'enabled',
+                                  description:
+                                    'Should your current documentation version be shown in the navigation bar?',
+                                },
+                              },
+                              required: ['left', 'links', 'right', 'sub_nav'],
+                              additionalProperties: false,
+                            },
+                            table_of_contents: {
+                              type: 'string',
+                              enum: ['enabled', 'disabled'],
+                              default: 'enabled',
+                              description: 'Should your guides show a table of contents?',
+                            },
+                            ai: {
+                              type: 'object',
+                              properties: {
+                                dropdown: {
+                                  type: 'string',
+                                  enum: ['enabled', 'disabled'],
+                                  default: 'disabled',
+                                  description: 'Should your pages show a share with AI dropdown?',
+                                },
+                                options: {
+                                  type: 'object',
+                                  properties: {
+                                    ask_ai: {
+                                      type: 'string',
+                                      enum: ['enabled', 'disabled'],
+                                      default: 'disabled',
+                                      description: 'Enable "Ask AI" in the AI dropdown.',
+                                    },
+                                    chatgpt: {
+                                      type: 'string',
+                                      enum: ['enabled', 'disabled'],
+                                      default: 'enabled',
+                                      description: 'Enable ChatGPT in the AI dropdown.',
+                                    },
+                                    claude: {
+                                      type: 'string',
+                                      enum: ['enabled', 'disabled'],
+                                      default: 'enabled',
+                                      description: 'Enable Claude in the AI dropdown.',
+                                    },
+                                    clipboard: {
+                                      type: 'string',
+                                      enum: ['enabled', 'disabled'],
+                                      default: 'enabled',
+                                      description: 'Enable "Copy to Clipboard" within in the AI dropdown.',
+                                    },
+                                    mcp: {
+                                      type: 'object',
+                                      properties: {
+                                        command: {
+                                          type: 'string',
+                                          enum: ['enabled', 'disabled'],
+                                          default: 'enabled',
+                                          description: 'Enable "Copy MCP Command" option in the AI dropdown.',
+                                        },
+                                        config: {
+                                          type: 'string',
+                                          enum: ['enabled', 'disabled'],
+                                          default: 'enabled',
+                                          description: 'Enable "Copy MCP Config" option in the AI dropdown.',
+                                        },
+                                        cursor: {
+                                          type: 'string',
+                                          enum: ['enabled', 'disabled'],
+                                          default: 'enabled',
+                                          description: 'Enable "Connect to Cursor" MCP option in the AI dropdown.',
+                                        },
+                                        vscode: {
+                                          type: 'string',
+                                          enum: ['enabled', 'disabled'],
+                                          default: 'enabled',
+                                          description: 'Enable "Connect to VS Code" MCP option in the AI dropdown.',
+                                        },
+                                      },
+                                      additionalProperties: false,
+                                    },
+                                    view_as_markdown: {
+                                      type: 'string',
+                                      enum: ['enabled', 'disabled'],
+                                      default: 'enabled',
+                                      description: 'Enable "View as Markdown" in the AI dropdown.',
+                                    },
+                                  },
+                                  required: ['mcp'],
+                                  additionalProperties: false,
+                                },
+                              },
+                              required: ['options'],
+                              additionalProperties: false,
+                            },
+                            landing_page: {
+                              type: 'object',
+                              properties: {
+                                promo: {
+                                  type: 'object',
+                                  properties: {
+                                    title: {
+                                      type: 'string',
+                                      nullable: true,
+                                      description: 'Landing page hero section title.',
+                                    },
+                                    text: {
+                                      type: 'string',
+                                      nullable: true,
+                                      description: 'Landing page hero section text.',
+                                    },
+                                    content_type: {
+                                      type: 'string',
+                                      enum: ['none', 'buttons', 'search', 'html'],
+                                      default: 'none',
+                                      description: 'Landing page hero section content.',
+                                    },
+                                    html: {
+                                      type: 'string',
+                                      nullable: true,
+                                      description: 'Custom HTML for the landing page hero section.',
+                                    },
+                                    button_primary: {
+                                      type: 'string',
+                                      nullable: true,
+                                      description: 'Primary action for the landing page hero section.',
+                                    },
+                                    button_secondary: {
+                                      type: 'string',
+                                      nullable: true,
+                                      description: 'Secondary action for the landing page hero section.',
+                                    },
+                                  },
+                                  required: ['title', 'text', 'html', 'button_primary', 'button_secondary'],
+                                  additionalProperties: false,
+                                },
+                                sections: {
+                                  type: 'array',
+                                  items: {
+                                    type: 'object',
+                                    properties: {
+                                      type: {
+                                        type: 'string',
+                                        enum: ['links', 'docs', 'text', 'text-media', 'three', 'html'],
+                                      },
+                                      alignment: { type: 'string', enum: ['left', 'center', 'right'], nullable: true },
+                                      title: { type: 'string', nullable: true },
+                                      text: { type: 'string', nullable: true },
+                                      html: { type: 'string', nullable: true },
+                                      page_type: {
+                                        type: 'string',
+                                        enum: ['Documentation', 'Reference'],
+                                        nullable: true,
+                                      },
+                                      side: { type: 'string', enum: ['left', 'right'], nullable: true },
+                                      media_type: { type: 'string', enum: ['html', 'image', 'code'], nullable: true },
+                                      media_html: { type: 'string', nullable: true },
+                                      media_image: { type: 'string', nullable: true },
+                                      media_code: { type: 'string', nullable: true },
+                                      group0: {
+                                        type: 'object',
+                                        properties: {
+                                          title: { type: 'string', nullable: true },
+                                          text: { type: 'string', nullable: true },
+                                        },
+                                        required: ['title', 'text'],
+                                        additionalProperties: false,
+                                        nullable: true,
+                                      },
+                                      group1: {
+                                        type: 'object',
+                                        properties: {
+                                          title: { type: 'string', nullable: true },
+                                          text: { type: 'string', nullable: true },
+                                        },
+                                        required: ['title', 'text'],
+                                        additionalProperties: false,
+                                        nullable: true,
+                                      },
+                                      group2: {
+                                        type: 'object',
+                                        properties: {
+                                          title: { type: 'string', nullable: true },
+                                          text: { type: 'string', nullable: true },
+                                        },
+                                        required: ['title', 'text'],
+                                        additionalProperties: false,
+                                        nullable: true,
+                                      },
+                                    },
+                                    required: [
+                                      'type',
+                                      'alignment',
+                                      'title',
+                                      'text',
+                                      'html',
+                                      'page_type',
+                                      'side',
+                                      'media_type',
+                                      'media_html',
+                                      'media_image',
+                                      'media_code',
+                                      'group0',
+                                      'group1',
+                                      'group2',
+                                    ],
+                                    additionalProperties: false,
+                                  },
+                                  description: 'Landing page content.',
+                                },
+                              },
+                              required: ['promo', 'sections'],
+                              additionalProperties: false,
+                            },
+                            whats_next_label: {
+                              type: 'string',
+                              nullable: true,
+                              description:
+                                'What should we call the next steps section of your guides? Defaults to "What\'s Next".',
+                            },
+                          },
+                          required: [
+                            'brand',
+                            'changelog',
+                            'custom_code',
+                            'footer',
+                            'header',
+                            'layout',
+                            'logo',
+                            'markdown',
+                            'typography',
+                            'navigation',
+                            'ai',
+                            'landing_page',
+                            'whats_next_label',
+                          ],
+                          additionalProperties: false,
+                        },
+                        canonical_url: {
+                          type: 'string',
+                          format: 'uri',
+                          nullable: true,
+                          description:
+                            "The canonical base URL for your project defaults to your project's base URL, but you can override the canonical base URL with this field.",
+                        },
+                        custom_login: {
+                          type: 'object',
+                          properties: {
+                            jwt_secret: { type: 'string' },
+                            jwt_expiration_time: { type: 'number' },
+                            login_url: { type: 'string', nullable: true },
+                            logout_url: { type: 'string', nullable: true },
+                          },
+                          required: ['jwt_secret', 'jwt_expiration_time', 'login_url', 'logout_url'],
+                          additionalProperties: false,
+                        },
+                        default_version: {
+                          type: 'object',
+                          properties: {
+                            name: {
+                              type: 'string',
+                              pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
+                              description: 'The version of your project that users are directed to by default.',
+                            },
+                          },
+                          required: ['name'],
+                          additionalProperties: false,
+                        },
+                        description: {
+                          type: 'string',
+                          nullable: true,
+                          description:
+                            'The description of your project. This is used in the page meta description and is seen by search engines and sites like Facebook.',
+                        },
+                        glossary: {
+                          type: 'array',
+                          items: {
+                            type: 'object',
+                            properties: {
+                              term: {
+                                type: 'string',
+                                description:
+                                  'Glossary term is what gets displayed in your documentation when embedded.',
+                              },
+                              definition: {
+                                type: 'string',
+                                description:
+                                  'Glossary definition is revealed to users when they mouse over the glossary term.',
+                              },
+                            },
+                            required: ['term', 'definition'],
+                            additionalProperties: false,
+                          },
+                          default: [],
+                          description:
+                            'List of glossary terms in your project that can be used within your documentation.',
+                        },
+                        health_check: {
+                          type: 'object',
+                          properties: {
+                            provider: {
+                              type: 'string',
+                              enum: ['manual', 'statuspage', 'none'],
+                              default: 'none',
+                              description:
+                                'The type of provider you wish to use for for managing your APIs health: manually or through [Atlassian Statuspage](https://www.atlassian.com/software/statuspage).',
+                            },
+                            settings: {
+                              type: 'object',
+                              properties: {
+                                manual: {
+                                  type: 'object',
+                                  properties: {
+                                    status: {
+                                      type: 'string',
+                                      enum: ['up', 'down'],
+                                      default: 'up',
+                                      description:
+                                        'If you are manually managing your APIs health this is a status boolean indicating if your API is up or down.',
+                                    },
+                                    url: {
+                                      type: 'string',
+                                      nullable: true,
+                                      description:
+                                        'The URL that we will show to your users when your API is down. This is only used when `health_check.provider` is set to `manual`.',
+                                    },
+                                  },
+                                  required: ['url'],
+                                  additionalProperties: false,
+                                },
+                                statuspage: {
+                                  type: 'object',
+                                  properties: {
+                                    id: {
+                                      type: 'string',
+                                      nullable: true,
+                                      description:
+                                        'If managing your APIs health through [Statuspage](https://www.atlassian.com/software/statuspage) this is your Statuspage ID.',
+                                    },
+                                  },
+                                  required: ['id'],
+                                  additionalProperties: false,
+                                },
+                              },
+                              required: ['manual', 'statuspage'],
+                              additionalProperties: false,
+                            },
+                          },
+                          required: ['settings'],
+                          additionalProperties: false,
+                        },
+                        homepage_url: {
+                          type: 'string',
+                          nullable: true,
+                          description:
+                            'The URL for your company\'s main website. We\'ll link to it in various places so people can "Go Home".',
+                        },
+                        i18n: {
+                          type: 'object',
+                          properties: {
+                            defaultLanguage: {
+                              type: 'string',
+                              enum: ['en', 'de', 'es', 'fr', 'it', 'ja', 'ko', 'nl', 'pt', 'zh'],
+                              description: 'The primary language used for this project.',
+                            },
+                            languages: {
+                              type: 'array',
+                              items: {
+                                type: 'string',
+                                enum: ['en', 'de', 'es', 'fr', 'it', 'ja', 'ko', 'nl', 'pt', 'zh'],
+                              },
+                              description: 'The list of languages this project supports.',
+                            },
+                            state: {
+                              type: 'string',
+                              enum: ['disabled', 'enabled'],
+                              description: 'If internationalization support is enabled or disabled.',
+                            },
+                          },
+                          required: ['defaultLanguage', 'languages', 'state'],
+                          additionalProperties: false,
+                          description: 'Internationalization settings for the project.',
+                        },
+                        integrations: {
+                          type: 'object',
+                          properties: {
+                            aws: {
+                              type: 'object',
+                              properties: {
+                                readme_webhook_login: {
+                                  type: 'object',
+                                  properties: {
+                                    external_id: { type: 'string', nullable: true },
+                                    region: {
+                                      type: 'string',
+                                      enum: [
+                                        'af-south-1',
+                                        'ap-east-1',
+                                        'ap-northeast-1',
+                                        'ap-northeast-2',
+                                        'ap-northeast-3',
+                                        'ap-south-1',
+                                        'ap-south-2',
+                                        'ap-southeast-1',
+                                        'ap-southeast-2',
+                                        'ap-southeast-3',
+                                        'ap-southeast-4',
+                                        'ap-southeast-5',
+                                        'ca-central-1',
+                                        'ca-west-1',
+                                        'cn-north-1',
+                                        'cn-northwest-1',
+                                        'eu-central-1',
+                                        'eu-central-2',
+                                        'eu-north-1',
+                                        'eu-south-1',
+                                        'eu-south-2',
+                                        'eu-west-1',
+                                        'eu-west-2',
+                                        'eu-west-3',
+                                        'il-central-1',
+                                        'me-central-1',
+                                        'me-south-1',
+                                        'sa-east-1',
+                                        'us-east-1',
+                                        'us-east-2',
+                                        'us-west-1',
+                                        'us-west-2',
+                                      ],
+                                      nullable: true,
+                                    },
+                                    role_arn: { type: 'string', nullable: true },
+                                    usage_plan_id: { type: 'string', nullable: true },
+                                  },
+                                  required: ['external_id', 'region', 'role_arn', 'usage_plan_id'],
+                                  additionalProperties: false,
+                                },
+                              },
+                              required: ['readme_webhook_login'],
+                              additionalProperties: false,
+                            },
+                            bing: {
+                              type: 'object',
+                              properties: { verify: { type: 'string', nullable: true } },
+                              required: ['verify'],
+                              additionalProperties: false,
+                            },
+                            google: {
+                              type: 'object',
+                              properties: {
+                                analytics: {
+                                  type: 'string',
+                                  nullable: true,
+                                  description:
+                                    "Your Google Analytics ID. If it starts with UA-, we'll use Universal Analytics otherwise Google Analytics 4.",
+                                },
+                                site_verification: { type: 'string', nullable: true },
+                              },
+                              required: ['analytics', 'site_verification'],
+                              additionalProperties: false,
+                            },
+                            heap: {
+                              type: 'object',
+                              properties: { id: { type: 'string', nullable: true } },
+                              required: ['id'],
+                              additionalProperties: false,
+                            },
+                            intercom: {
+                              type: 'object',
+                              properties: {
+                                app_id: { type: 'string', nullable: true },
+                                secure_mode: {
+                                  type: 'object',
+                                  properties: {
+                                    key: {
+                                      type: 'string',
+                                      nullable: true,
+                                      description:
+                                        'By supplying a secure mode key you will opt into [Intercoms Identity Verification](https://docs.intercom.io/configuring-intercom/enable-secure-mode) system.',
+                                    },
+                                    email_only: {
+                                      type: 'boolean',
+                                      default: false,
+                                      description:
+                                        'Should ReadMe only identify users by their email addresses? This integrates better with your existing Intercom but is possibly less secure.',
+                                    },
+                                  },
+                                  required: ['key'],
+                                  additionalProperties: false,
+                                },
+                              },
+                              required: ['app_id', 'secure_mode'],
+                              additionalProperties: false,
+                            },
+                            postman: {
+                              type: 'object',
+                              properties: {
+                                key: { type: 'string', nullable: true },
+                                client_id: { type: 'string', nullable: true },
+                                client_secret: { type: 'string', nullable: true },
+                                is_connected: { type: 'boolean' },
+                              },
+                              required: ['key', 'client_id', 'client_secret', 'is_connected'],
+                              additionalProperties: false,
+                            },
+                            koala: {
+                              type: 'object',
+                              properties: { key: { type: 'string', nullable: true } },
+                              required: ['key'],
+                              additionalProperties: false,
+                            },
+                            localize: {
+                              type: 'object',
+                              properties: { key: { type: 'string', nullable: true } },
+                              required: ['key'],
+                              additionalProperties: false,
+                            },
+                            recaptcha: {
+                              type: 'object',
+                              properties: {
+                                site_key: { type: 'string', nullable: true },
+                                secret_key: { type: 'string', nullable: true },
+                              },
+                              required: ['site_key', 'secret_key'],
+                              additionalProperties: false,
+                              description: 'https://docs.readme.com/main/docs/recaptcha',
+                            },
+                            segment: {
+                              type: 'object',
+                              properties: {
+                                key: { type: 'string', nullable: true },
+                                domain: {
+                                  type: 'string',
+                                  nullable: true,
+                                  description:
+                                    'If you are proxying [Segment](https://segment.com/) requests through a custom domain this is that domain. More information about this configuration can be found [here](https://docs.readme.com/main/docs/segment#using-a-custom-domain-with-segment).',
+                                },
+                              },
+                              required: ['key', 'domain'],
+                              additionalProperties: false,
+                            },
+                            speakeasy: {
+                              type: 'object',
+                              properties: {
+                                key: { type: 'string', nullable: true, description: 'The API key for Speakeasy.' },
+                                spec_url: {
+                                  type: 'string',
+                                  nullable: true,
+                                  description: 'The URL to the Speakeasy spec file.',
+                                },
+                              },
+                              required: ['key', 'spec_url'],
+                              additionalProperties: false,
+                            },
+                            stainless: {
+                              type: 'object',
+                              properties: {
+                                key: { type: 'string', nullable: true, description: 'The API key for Stainless.' },
+                                name: {
+                                  type: 'string',
+                                  nullable: true,
+                                  description: 'The name of the Stainless project.',
+                                },
+                              },
+                              required: ['key', 'name'],
+                              additionalProperties: false,
+                            },
+                            typekit: {
+                              type: 'object',
+                              properties: { key: { type: 'string', nullable: true } },
+                              required: ['key'],
+                              additionalProperties: false,
+                            },
+                            zendesk: {
+                              type: 'object',
+                              properties: { subdomain: { type: 'string', nullable: true } },
+                              required: ['subdomain'],
+                              additionalProperties: false,
+                            },
+                          },
+                          required: [
+                            'aws',
+                            'bing',
+                            'google',
+                            'heap',
+                            'intercom',
+                            'postman',
+                            'koala',
+                            'localize',
+                            'recaptcha',
+                            'segment',
+                            'speakeasy',
+                            'stainless',
+                            'typekit',
+                            'zendesk',
+                          ],
+                          additionalProperties: false,
+                        },
+                        mcp: {
+                          type: 'object',
+                          properties: {
+                            state: {
+                              type: 'string',
+                              enum: ['enabled', 'disabled'],
+                              default: 'disabled',
+                              description: "The availability of the project's MCP server.",
+                            },
+                            custom_tools: {
+                              type: 'array',
+                              items: {
+                                type: 'object',
+                                properties: {
+                                  title: { type: 'string', description: 'The title of the tool.' },
+                                  description: { type: 'string', description: 'The description of the tool.' },
+                                  body: { type: 'string', description: 'The body of the tool.' },
+                                },
+                                required: ['title', 'description', 'body'],
+                                additionalProperties: false,
+                              },
+                              default: [],
+                              description: 'Custom tools that the user can add to the MCP server.',
+                            },
+                            disabled_routes: {
+                              type: 'array',
+                              items: { type: 'string' },
+                              default: [],
+                              description: 'Array of route paths that are disabled in the MCP server.',
+                            },
+                            disabled_tools: {
+                              type: 'array',
+                              items: { type: 'string' },
+                              default: [],
+                              description:
+                                'Array of tool names that will be prevented from being added to the MCP server.',
+                            },
+                            has_password: {
+                              type: 'boolean',
+                              default: false,
+                              description: 'Whether the MCP server has a password set. Read-only.',
+                            },
+                            privacy: {
+                              type: 'object',
+                              properties: {
+                                password: {
+                                  type: 'string',
+                                  nullable: true,
+                                  default: null,
+                                  description:
+                                    'Set a password for MCP server access. When set, users must provide this password or an API key to access the MCP server. This field can be set, but it will not be returned by the API.',
+                                },
+                              },
+                              additionalProperties: false,
+                              default: { password: null },
+                              description: 'Privacy settings for the MCP server.',
+                            },
+                          },
+                          additionalProperties: false,
+                          description: "Configuration for the project's Model Context Protocol (MCP) server.",
+                        },
+                        name: { type: 'string', description: 'The name of the project.' },
+                        onboarding_completed: {
+                          type: 'object',
+                          properties: {
+                            api: { type: 'boolean', default: false },
+                            appearance: { type: 'boolean', default: false },
+                            documentation: { type: 'boolean', default: false },
+                            domain: { type: 'boolean', default: false },
+                            jwt: { type: 'boolean', default: false },
+                            logs: { type: 'boolean', default: false },
+                            metricsSDK: { type: 'boolean', default: false },
+                            ai_ready: { type: 'boolean', default: false },
+                          },
+                          additionalProperties: false,
+                        },
+                        pages: {
+                          type: 'object',
+                          properties: {
+                            not_found: {
+                              type: 'string',
+                              pattern:
+                                '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/custom_pages\\/([a-f\\d]{24}|([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
+                              nullable: true,
+                              description:
+                                'The page you wish to be served to your users when they encounter a 404. This can either map to the `uri` of a Custom Page on your project or be set to `null`. If `null` then the default ReadMe 404 page will be served. The version within the `uri` must be mapped to your stable version.',
+                            },
+                            default_visibility: {
+                              type: 'string',
+                              enum: ['public', 'anyone_with_link'],
+                              default: 'public',
+                              description: 'The default visibility for pages when they are initially created.',
+                            },
+                          },
+                          required: ['not_found'],
+                          additionalProperties: false,
+                        },
+                        parent: {
+                          type: 'string',
+                          nullable: true,
+                          description:
+                            "Does the project have a parent project (enterprise)? If so, this resolves to the parent's subdomain.",
+                        },
+                        owner: {
+                          type: 'object',
+                          properties: {
+                            id: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'The unique identifier of the project owner.',
+                            },
+                            email: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'The email of the project owner. Only visible to god-mode users.',
+                            },
+                            name: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'The name of the project owner. Only visible to god-mode users.',
+                            },
+                          },
+                          required: ['id', 'email', 'name'],
+                          additionalProperties: false,
+                          description: 'Information about the project owner.',
+                        },
+                        plan: {
+                          type: 'object',
+                          properties: {
+                            type: {
+                              type: 'string',
+                              enum: [
+                                'business',
+                                'business2018',
+                                'business-annual-2024',
+                                'enterprise',
+                                'free',
+                                'freelaunch',
+                                'freelaunch2026',
+                                'opensource',
+                                'pro2026',
+                                'pro2026-annual',
+                                'startup',
+                                'startup2018',
+                                'startup-annual-2024',
+                              ],
+                              default: 'free',
+                            },
+                            override: {
+                              type: 'string',
+                              nullable: true,
+                              default: null,
+                              description: 'The plan override for the project. Only visible to god-mode users.',
+                            },
+                            grace_period: {
+                              type: 'object',
+                              properties: {
+                                enabled: { type: 'boolean', default: false },
+                                end_date: { type: 'string', format: 'date-time', nullable: true, default: null },
+                              },
+                              additionalProperties: false,
+                            },
+                            stripe_subscription_id: {
+                              type: 'string',
+                              nullable: true,
+                              default: null,
+                              description:
+                                'The Stripe subscription ID for the project. Only visible to god-mode users.',
+                            },
+                            trial: {
+                              type: 'object',
+                              properties: {
+                                active: {
+                                  type: 'boolean',
+                                  default: false,
+                                  description: 'Whether the project is currently in an active trial.',
+                                },
+                                enabled: {
+                                  type: 'boolean',
+                                  nullable: true,
+                                  default: null,
+                                  description: 'Whether the trial deadline is enabled. Only visible to god-mode users.',
+                                },
+                                expired: { type: 'boolean', default: false },
+                                end_date: {
+                                  type: 'string',
+                                  format: 'date-time',
+                                  description: 'The end date for your two week trial.',
+                                },
+                              },
+                              required: ['end_date'],
+                              additionalProperties: false,
+                            },
+                          },
+                          required: ['grace_period', 'trial'],
+                          additionalProperties: false,
+                        },
+                        metrics: {
+                          type: 'object',
+                          properties: {
+                            monthly_purchase_limit: {
+                              type: 'number',
+                              default: 0,
+                              description: 'The monthly purchase limit for the Developer Dashboard add-on.',
+                            },
+                            monthly_limit: {
+                              type: 'number',
+                              default: 0,
+                              description: 'The monthly limit for the API Logs.',
+                            },
+                          },
+                          additionalProperties: false,
+                        },
+                        privacy: {
+                          type: 'object',
+                          properties: {
+                            openapi: {
+                              type: 'string',
+                              enum: ['public', 'admin'],
+                              default: 'admin',
+                              description: "The visibility your OpenAPI definitions on your project's `/openapi` page.",
+                            },
+                            password: {
+                              type: 'string',
+                              nullable: true,
+                              description:
+                                "The project's password for when `privacy.view` is `password`. This field can be set, but it will not be returned by the API.",
+                            },
+                            view: {
+                              type: 'string',
+                              enum: ['public', 'admin', 'password', 'custom_login'],
+                              default: 'public',
+                              description:
+                                '* `public` - Site is available to the public.\n* `admin` - Site is only available to users that have project permissions.\n* `password` - Site is gated behind a password authentication system.\n* `custom_login` - Users who view your site will be forwarded to a URL of your choice, having them login there and be forwarded back to your ReadMe site.',
+                            },
+                          },
+                          required: ['password'],
+                          additionalProperties: false,
+                        },
+                        redirects: {
+                          type: 'array',
+                          items: {
+                            type: 'object',
+                            properties: { from: { type: 'string' }, to: { type: 'string' } },
+                            required: ['from', 'to'],
+                            additionalProperties: false,
+                          },
+                          description:
+                            'A collection of page redirects that ReadMe will permanently redirect users to when attempting to render a 404. Check out our [redirect docs](https://docs.readme.com/main/docs/error-pages#section-redirects) for more information on how they are handled.',
+                        },
+                        reference: {
+                          type: 'object',
+                          properties: {
+                            api_sdk_snippets: {
+                              type: 'string',
+                              enum: ['enabled', 'disabled'],
+                              default: 'enabled',
+                              description: 'Enable SDK-generated request code snippets.',
+                            },
+                            experimental_performance_mode: {
+                              type: 'string',
+                              enum: ['enabled', 'disabled'],
+                              default: 'disabled',
+                              description:
+                                'Should the experimental performance mode be enabled? This will reduce the size of API definitions that we used within API Reference pages and should overall improve page load times. Please note that this feature is still very experimental and will be eventually enabled for all customers.',
+                            },
+                            sdk_snippets: {
+                              type: 'object',
+                              properties: {
+                                external: {
+                                  type: 'string',
+                                  enum: ['active', 'disabled', 'enabled'],
+                                  default: 'disabled',
+                                  description: 'State of external SDK snippets feature.',
+                                },
+                              },
+                              additionalProperties: false,
+                            },
+                            defaults: {
+                              type: 'string',
+                              enum: ['always_use', 'use_only_if_required'],
+                              default: 'use_only_if_required',
+                              description:
+                                'When `always_use`, any `default` values defined in your API definition are used to populate your request data in the API Explorer, even if the parameter is not marked as `required`.',
+                            },
+                            json_editor: {
+                              type: 'string',
+                              enum: ['enabled', 'disabled'],
+                              default: 'disabled',
+                              description: 'When `enabled`, allows editing the request body with a JSON editor.',
+                            },
+                            method_badge_style: {
+                              type: 'string',
+                              enum: ['classic', 'modern'],
+                              default: 'classic',
+                              description: 'The style of the HTTP method badges used in the API Reference.',
+                            },
+                            request_examples: {
+                              type: 'string',
+                              enum: ['expanded', 'collapsed'],
+                              default: 'collapsed',
+                              description:
+                                'When `expanded`, the first available request example auto-populates the request form.',
+                            },
+                            request_history: {
+                              type: 'string',
+                              enum: ['enabled', 'disabled'],
+                              default: 'enabled',
+                              description: 'When `enabled`, request history for API endpoints are shown.',
+                            },
+                            oauth_flows: {
+                              type: 'string',
+                              enum: ['enabled', 'disabled'],
+                              default: 'disabled',
+                              description:
+                                'When `enabled`, enable the new OAuth Flows experience in the API Reference section.',
+                            },
+                            response_examples: {
+                              type: 'string',
+                              enum: ['expanded', 'collapsed'],
+                              default: 'collapsed',
+                              description:
+                                'When `expanded`, response examples will be expanded by default if a 200 level response exists.',
+                            },
+                            response_schemas: {
+                              type: 'string',
+                              enum: ['expanded', 'collapsed'],
+                              default: 'collapsed',
+                              description:
+                                'When `expanded`, response schemas will be expanded by default if a 200 level response schema exists.',
+                            },
+                            show_method_in_sidebar: {
+                              type: 'string',
+                              enum: ['enabled', 'disabled'],
+                              default: 'enabled',
+                              description: 'When `enabled`, the HTTP method badge will be shown in the sidebar.',
+                            },
+                          },
+                          required: ['sdk_snippets'],
+                          additionalProperties: false,
+                          description:
+                            'Contains options to configure interactive sections on your API Reference pages.',
+                        },
+                        seo: {
+                          type: 'object',
+                          properties: {
+                            overwrite_title_tag: {
+                              type: 'string',
+                              enum: ['enabled', 'disabled'],
+                              default: 'disabled',
+                              description:
+                                "Overwrite pages' <title> tag with their custom metadata title (if present).",
+                            },
+                          },
+                          additionalProperties: false,
+                        },
+                        sitemap: {
+                          type: 'string',
+                          enum: ['enabled', 'disabled'],
+                          default: 'disabled',
+                          description: 'Expose a `sitemap.xml` directory on your project.',
+                        },
+                        llms_txt: {
+                          type: 'string',
+                          enum: ['enabled', 'disabled'],
+                          default: 'enabled',
+                          description:
+                            'Expose an `llms.txt` file to help AI assistants understand your documentation structure.',
+                        },
+                        subdomain: {
+                          type: 'string',
+                          pattern: '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
+                          maxLength: 30,
+                          description: 'The subdomain of your project.',
+                        },
+                        suggested_edits: {
+                          type: 'string',
+                          enum: ['enabled', 'disabled'],
+                          default: 'enabled',
+                          description: 'Allow users to suggest edits to your documentation.',
+                        },
+                        variable_defaults: {
+                          type: 'array',
+                          items: {
+                            type: 'object',
+                            properties: {
+                              id: { type: 'string', description: 'Variable Identifier' },
+                              name: { type: 'string', description: 'The key name of the variable.' },
+                              default: { type: 'string', description: 'The default value of the variable.' },
+                              source: {
+                                type: 'string',
+                                enum: ['server', 'security', 'custom', ''],
+                                default: '',
+                                description:
+                                  'The variables source. This can come from a user input or from syncing an OpenAPI definition.',
+                              },
+                              type: {
+                                type: 'string',
+                                enum: ['http', 'apiKey', 'openIdConnect', 'oauth2', ''],
+                                description:
+                                  'If variable `source` is `security`, include the OpenAPI security auth type.',
+                              },
+                              scheme: {
+                                type: 'string',
+                                description:
+                                  'If variable `source` is `security`, include the OpenAPI security auth scheme.',
+                              },
+                            },
+                            required: ['id', 'name'],
+                            additionalProperties: false,
+                          },
+                          default: [],
+                        },
+                        webhooks: {
+                          type: 'array',
+                          items: {
+                            type: 'object',
+                            properties: {
+                              action: { type: 'string', enum: ['login'], default: 'login' },
+                              timeout: { type: 'number', default: 5000 },
+                              url: { type: 'string', format: 'uri' },
+                            },
+                            required: ['url'],
+                            additionalProperties: false,
+                          },
+                          default: [],
+                        },
+                        id: {
+                          type: 'string',
+                          pattern: '^[a-f\\d]{24}$',
+                          description: 'The unique, immutable, identifier for the project.',
+                        },
+                        created_at: {
+                          type: 'string',
+                          format: 'date-time',
+                          nullable: true,
+                          description: 'The date the project was created.',
+                        },
+                        updated_at: {
+                          type: 'string',
+                          format: 'date-time',
+                          nullable: true,
+                          description: 'The date the project was last updated.',
+                        },
+                        features: {
+                          type: 'object',
+                          properties: {
+                            mdx: {
+                              type: 'string',
+                              enum: ['enabled', 'disabled'],
+                              default: 'disabled',
+                              description: 'If this project supports MDX.',
+                            },
+                          },
+                          additionalProperties: false,
+                        },
+                        feature_rules: {
+                          type: 'object',
+                          properties: {
+                            merge: {
+                              type: 'object',
+                              properties: {
+                                requirements: {
+                                  type: 'array',
+                                  items: { type: 'string', enum: ['approval', 'lint'] },
+                                  default: [],
+                                  description: 'Any states that will block the ability to merge a branch.',
+                                },
+                                allow_override: {
+                                  type: 'array',
+                                  items: { type: 'string', enum: ['editor'] },
+                                  default: [],
+                                  description:
+                                    'All permission levels lower than Admin that are able to override a merge that is blocked. Admins can always override.',
+                                },
+                              },
+                              additionalProperties: false,
+                            },
+                          },
+                          required: ['merge'],
+                          additionalProperties: false,
+                        },
+                        git: {
+                          type: 'object',
+                          properties: {
+                            repository_name: {
+                              type: 'string',
+                              nullable: true,
+                              default: null,
+                              description: 'The internal Git repository name.',
+                            },
+                            connection: {
+                              type: 'object',
+                              properties: {
+                                repository: {
+                                  type: 'object',
+                                  properties: {
+                                    provider_type: {
+                                      type: 'string',
+                                      enum: ['github', 'github_enterprise_server', 'bitbucket', 'gitlab'],
+                                      description: 'The type of provider for the repository.',
+                                    },
+                                    name: {
+                                      type: 'string',
+                                      description: 'The name of the repository (e.g., `repo-with-content`).',
+                                    },
+                                    full_name: {
+                                      type: 'string',
+                                      description:
+                                        'The full name of the repository (e.g., `owner-org/repo-with-content`).',
+                                    },
+                                    privacy: {
+                                      type: 'object',
+                                      properties: {
+                                        private: { type: 'boolean' },
+                                        visibility: {
+                                          type: 'string',
+                                          enum: ['public', 'private', 'internal'],
+                                          description: 'Whether this repo is private, public, or internal.',
+                                        },
+                                      },
+                                      required: ['private', 'visibility'],
+                                      additionalProperties: false,
+                                    },
+                                    url: {
+                                      type: 'string',
+                                      format: 'uri',
+                                      description:
+                                        'The URL of the repository (e.g., `https://github.com/owner-org/repo-with-content`).',
+                                    },
+                                  },
+                                  required: ['provider_type', 'name', 'full_name', 'privacy', 'url'],
+                                  additionalProperties: false,
+                                  nullable: true,
+                                },
+                                organization: {
+                                  type: 'object',
+                                  properties: {
+                                    name: {
+                                      type: 'string',
+                                      description:
+                                        'The name of the organization the linked repository is a part of (e.g., `owner-org`).',
+                                    },
+                                    provider_type: {
+                                      type: 'string',
+                                      enum: ['github', 'github_enterprise_server', 'bitbucket', 'gitlab'],
+                                      description: 'The type of provider for the organization.',
+                                    },
+                                  },
+                                  required: ['name', 'provider_type'],
+                                  additionalProperties: false,
+                                  nullable: true,
+                                },
+                                status: {
+                                  type: 'string',
+                                  enum: ['active', 'inactive', 'none'],
+                                  default: 'none',
+                                  description:
+                                    'Indicates if the project has a bi-directional sync connection set up. Below is the meaning of each possible value:\n- `active` - the project has an external repository connected and the connection to the repository is active.\n- `inactive` - the project has an external repository connected but the connection to the repository is inactive.\n- `none` - the project is not connected to an external repository.',
+                                },
+                              },
+                              required: ['repository', 'organization'],
+                              additionalProperties: false,
+                            },
+                            remediation_status: {
+                              type: 'string',
+                              enum: ['pending', 'running', 'completed', 'failed'],
+                              nullable: true,
+                              description: 'Current remediation job status for this project.',
+                            },
+                            remediated_at: {
+                              type: 'string',
+                              format: 'date-time',
+                              nullable: true,
+                              default: null,
+                              description: 'ISO timestamp of the last completed remediation run.',
+                            },
+                            remediation_initiated_by: {
+                              type: 'string',
+                              nullable: true,
+                              default: null,
+                              description: 'Email of the user who initiated the last remediation.',
+                            },
+                            remediation_dry_run: {
+                              type: 'boolean',
+                              nullable: true,
+                              default: null,
+                              description: 'Whether the last remediation was a dry run.',
+                            },
+                            remediation_job_id: {
+                              type: 'string',
+                              nullable: true,
+                              default: null,
+                              description: 'BullMQ root job ID of the most recent remediation run.',
+                            },
+                          },
+                          required: ['connection', 'remediation_status'],
+                          additionalProperties: false,
+                        },
+                        permissions: {
+                          type: 'object',
+                          properties: {
+                            appearance: {
+                              type: 'object',
+                              properties: {
+                                private_label: {
+                                  type: 'string',
+                                  enum: ['enabled', 'disabled'],
+                                  default: 'disabled',
+                                  description:
+                                    'If this project is allowed to private label their Hub and remove all ReadMe branding.',
+                                },
+                                custom_code: {
+                                  type: 'object',
+                                  properties: {
+                                    css: {
+                                      type: 'string',
+                                      enum: ['enabled', 'disabled'],
+                                      default: 'disabled',
+                                      description: 'If this project is allowed to utilize custom CSS.',
+                                    },
+                                    html: {
+                                      type: 'string',
+                                      enum: ['enabled', 'disabled'],
+                                      default: 'disabled',
+                                      description: 'If this project is allowed to utilize custom HTML.',
+                                    },
+                                    js: {
+                                      type: 'string',
+                                      enum: ['enabled', 'disabled'],
+                                      default: 'disabled',
+                                      description: 'If this project is allowed to utilize custom JS.',
+                                    },
+                                  },
+                                  additionalProperties: false,
+                                },
+                              },
+                              required: ['custom_code'],
+                              additionalProperties: false,
+                            },
+                            branches: {
+                              type: 'object',
+                              properties: {
+                                merge: {
+                                  type: 'object',
+                                  properties: {
+                                    admin: { type: 'boolean', description: 'Whether admin role can perform merges.' },
+                                    editor: { type: 'boolean', description: 'Whether editor role can perform merges.' },
+                                  },
+                                  required: ['admin', 'editor'],
+                                  additionalProperties: false,
+                                  description: 'Role-based access control for merging branches',
+                                },
+                                approve: {
+                                  type: 'object',
+                                  properties: {
+                                    admin: { type: 'boolean', description: 'Whether admin role can approve changes.' },
+                                    editor: { type: 'boolean', description: 'Whether editor role can approve changes' },
+                                  },
+                                  required: ['admin', 'editor'],
+                                  additionalProperties: false,
+                                  description: 'Role-based access control for approving changes',
+                                },
+                              },
+                              required: ['merge', 'approve'],
+                              additionalProperties: false,
+                            },
+                          },
+                          required: ['appearance', 'branches'],
+                          additionalProperties: false,
+                        },
+                        refactored: {
+                          type: 'object',
+                          properties: {
+                            status: {
+                              type: 'string',
+                              enum: ['enabled', 'disabled'],
+                              default: 'disabled',
+                              description: 'Indicates if the project has our new Unified UI experience.',
+                            },
+                            migrated: {
+                              type: 'string',
+                              enum: ['failed', 'processing', 'successful', 'unknown'],
+                              default: 'unknown',
+                              description: 'Indicates if the project has been migrated from Dash to Superhub.',
+                            },
+                          },
+                          additionalProperties: false,
+                        },
+                        notification_settings: {
+                          type: 'object',
+                          properties: {
+                            project_topic_key: {
+                              type: 'string',
+                              nullable: true,
+                              default: null,
+                              description:
+                                'The Novu Topic Key associated with this project for managing notification subscriptions.',
+                            },
+                          },
+                          additionalProperties: false,
+                          description: 'Notification settings for the project.',
+                        },
+                        uri: {
+                          type: 'string',
+                          pattern: '\\/projects\\/(me|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)',
+                          description: 'A URI to the project resource.',
+                        },
+                      },
+                      required: [
+                        'ai',
+                        'api_designer',
+                        'appearance',
+                        'canonical_url',
+                        'custom_login',
+                        'default_version',
+                        'description',
+                        'health_check',
+                        'homepage_url',
+                        'i18n',
+                        'integrations',
+                        'mcp',
+                        'name',
+                        'onboarding_completed',
+                        'pages',
+                        'parent',
+                        'owner',
+                        'plan',
+                        'metrics',
+                        'privacy',
+                        'redirects',
+                        'reference',
+                        'seo',
+                        'subdomain',
+                        'id',
+                        'created_at',
+                        'updated_at',
+                        'features',
+                        'feature_rules',
+                        'git',
+                        'permissions',
+                        'refactored',
+                        'notification_settings',
+                        'uri',
+                      ],
+                      additionalProperties: false,
+                    },
+                  },
+                  required: ['data'],
+                  additionalProperties: false,
+                },
+              },
+            },
+          },
+          '409': { description: 'Conflict', content: { 'application/json': { schema: {} } } },
         },
       },
     },
@@ -6250,7 +9651,7 @@ const document = {
                                   properties: {
                                     slug: { type: 'string' },
                                     title: { type: 'string', nullable: true },
-                                    type: { type: 'string', enum: ['basic', 'endpoint'] },
+                                    type: { type: 'string', enum: ['basic', 'endpoint', 'changelog', 'custom_page'] },
                                   },
                                   required: ['slug', 'title', 'type'],
                                   additionalProperties: false,
@@ -6280,6 +9681,7 @@ const document = {
                       description: { type: 'string', nullable: true },
                       keywords: { type: 'string', nullable: true },
                       title: { type: 'string', nullable: true },
+                      x_import: { type: 'string', nullable: true },
                       image: {
                         type: 'object',
                         properties: { uri: { type: 'string', pattern: '\\/images\\/([a-f\\d]{24})', nullable: true } },
@@ -6303,7 +9705,12 @@ const document = {
                   privacy: {
                     type: 'object',
                     properties: {
-                      view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
+                      view: {
+                        type: 'string',
+                        enum: ['public', 'anyone_with_link'],
+                        default: 'public',
+                        description: 'The visibility of this page.',
+                      },
                     },
                     additionalProperties: false,
                   },
@@ -6332,6 +9739,19 @@ const document = {
                                 '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/recipes\\/(([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+)',
                               description:
                                 'URI of the recipe that this API reference is connected to. The recipe and API reference must exist within the same version.',
+                            },
+                            title: { type: 'string', description: 'The title of the connected recipe.' },
+                            slug: { type: 'string', description: 'The slug of the connected recipe.' },
+                            appearance: {
+                              type: 'object',
+                              properties: {
+                                background_color: {
+                                  type: 'string',
+                                  description: 'The background color of the recipe tile.',
+                                },
+                                emoji: { type: 'string', nullable: true },
+                              },
+                              additionalProperties: false,
                             },
                           },
                           additionalProperties: false,
@@ -6362,76 +9782,76 @@ const document = {
                         properties: {
                           additional_properties: {
                             type: 'boolean',
-                            default: false,
+                            default: true,
                             description:
                               'This API operation uses `additionalProperties` for handling extra schema properties.',
                           },
                           callbacks: {
                             type: 'boolean',
-                            default: false,
+                            default: true,
                             description: 'This API operation has `callbacks` documented.',
                           },
                           circular_references: {
                             type: 'boolean',
-                            default: false,
+                            default: true,
                             description: 'This API operation contains `$ref` schema pointers that resolve to itself.',
                           },
                           common_parameters: {
                             type: 'boolean',
-                            default: false,
+                            default: true,
                             description: 'This API operation utilizes common parameters set at the path level.',
                           },
                           discriminators: {
                             type: 'boolean',
-                            default: false,
+                            default: true,
                             description:
                               'This API operation utilizes `discriminator` for discriminating between different parts in a polymorphic schema.',
                           },
                           links: {
                             type: 'boolean',
-                            default: false,
+                            default: true,
                             description: 'This API operation has `links` documented.',
                           },
                           polymorphism: {
                             type: 'boolean',
-                            default: false,
+                            default: true,
                             description: 'This API operation contains polymorphic schemas.',
                           },
                           references: {
                             type: 'boolean',
-                            default: false,
+                            default: true,
                             description:
                               'This API operation, after being dereferenced, has `x-readme-ref-name` entries defining what the original `$ref` schema pointers were named.',
                           },
                           server_variables: {
                             type: 'boolean',
-                            default: false,
+                            default: true,
                             description:
                               'This API operation has composable variables configured for its server definition.',
                           },
                           style: {
                             type: 'boolean',
-                            default: false,
+                            default: true,
                             description: 'This API operation has parameters that have specific `style` serializations.',
                           },
                           webhooks: {
                             type: 'boolean',
-                            default: false,
+                            default: true,
                             description: 'This API definition has `webhooks` documented.',
                           },
                           xml_requests: {
                             type: 'boolean',
-                            default: false,
+                            default: true,
                             description: 'This API operation has request bodies that accept XML.',
                           },
                           xml_responses: {
                             type: 'boolean',
-                            default: false,
+                            default: true,
                             description: 'This API operation has response payloads that return XML.',
                           },
                           xml_schemas: {
                             type: 'boolean',
-                            default: false,
+                            default: true,
                             description: 'This API operation has parameters or schemas that can serialize to XML.',
                           },
                         },
@@ -6459,6 +9879,19 @@ const document = {
                           '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
                         nullable: true,
                       },
+                      validation: {
+                        type: 'object',
+                        properties: {
+                          status: {
+                            type: 'string',
+                            enum: ['pending', 'valid', 'valid-with-warnings', 'invalid'],
+                            description: 'Whether the API definition is valid or not.',
+                          },
+                          reason: { type: 'string', nullable: true },
+                        },
+                        additionalProperties: false,
+                        description: 'The validation state of the API definition.',
+                      },
                     },
                     additionalProperties: false,
                   },
@@ -6480,6 +9913,14 @@ const document = {
             name: 'branch',
             required: true,
             description: "Project version number, `stable` for your project's stable version, or a valid branch name.",
+          },
+          {
+            schema: { type: 'string' },
+            in: 'header',
+            name: 'prefer',
+            required: false,
+            description:
+              'By default, the supplied `slug` will be made unique during reference creation if it already exists, however if you do not want this behavior you can supply `prefer: handling=strict` to receive a 409 Conflict instead.',
           },
         ],
         responses: {
@@ -6561,7 +10002,10 @@ const document = {
                                         properties: {
                                           slug: { type: 'string' },
                                           title: { type: 'string', nullable: true },
-                                          type: { type: 'string', enum: ['basic', 'endpoint'] },
+                                          type: {
+                                            type: 'string',
+                                            enum: ['basic', 'endpoint', 'changelog', 'custom_page'],
+                                          },
                                         },
                                         required: ['slug', 'title', 'type'],
                                         additionalProperties: false,
@@ -6612,8 +10056,14 @@ const document = {
                               description: 'A comma-separated list of keywords to place into your page metadata.',
                             },
                             title: { type: 'string', nullable: true },
+                            x_import: {
+                              type: 'string',
+                              nullable: true,
+                              description:
+                                'A URI to the external docs page that this page is being imported from. Set while a page is mid-import and removed once the import completes; its presence signals that the page is read-only and still hydrating.',
+                            },
                           },
-                          required: ['description', 'image', 'keywords', 'title'],
+                          required: ['description', 'image', 'keywords', 'title', 'x_import'],
                           additionalProperties: false,
                         },
                         parent: {
@@ -6633,7 +10083,12 @@ const document = {
                         privacy: {
                           type: 'object',
                           properties: {
-                            view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
+                            view: {
+                              type: 'string',
+                              enum: ['public', 'anyone_with_link'],
+                              default: 'public',
+                              description: 'The visibility of this page.',
+                            },
                           },
                           additionalProperties: false,
                         },
@@ -6663,6 +10118,7 @@ const document = {
                             },
                             path: { type: 'string', description: 'The endpoint path.' },
                             schema: {
+                              type: 'string',
                               nullable: true,
                               description:
                                 'The API schema for this reference endpoint. This schema may be a reduced (i.e., only contains the necessary information for this endpoint) and/or dereferenced version of the full API definition, depending upon the query parameters used for this request.',
@@ -6672,78 +10128,78 @@ const document = {
                               properties: {
                                 additional_properties: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description:
                                     'This API operation uses `additionalProperties` for handling extra schema properties.',
                                 },
                                 callbacks: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description: 'This API operation has `callbacks` documented.',
                                 },
                                 circular_references: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description:
                                     'This API operation contains `$ref` schema pointers that resolve to itself.',
                                 },
                                 common_parameters: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description: 'This API operation utilizes common parameters set at the path level.',
                                 },
                                 discriminators: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description:
                                     'This API operation utilizes `discriminator` for discriminating between different parts in a polymorphic schema.',
                                 },
                                 links: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description: 'This API operation has `links` documented.',
                                 },
                                 polymorphism: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description: 'This API operation contains polymorphic schemas.',
                                 },
                                 references: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description:
                                     'This API operation, after being dereferenced, has `x-readme-ref-name` entries defining what the original `$ref` schema pointers were named.',
                                 },
                                 server_variables: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description:
                                     'This API operation has composable variables configured for its server definition.',
                                 },
                                 style: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description:
                                     'This API operation has parameters that have specific `style` serializations.',
                                 },
                                 webhooks: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description: 'This API definition has `webhooks` documented.',
                                 },
                                 xml_requests: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description: 'This API operation has request bodies that accept XML.',
                                 },
                                 xml_responses: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description: 'This API operation has response payloads that return XML.',
                                 },
                                 xml_schemas: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description:
                                     'This API operation has parameters or schemas that can serialize to XML.',
                                 },
@@ -6774,8 +10230,27 @@ const document = {
                               nullable: true,
                               description: 'A URI to the API resource.',
                             },
+                            validation: {
+                              type: 'object',
+                              properties: {
+                                status: {
+                                  type: 'string',
+                                  enum: ['pending', 'valid', 'valid-with-warnings', 'invalid'],
+                                  description: 'Whether the API definition is valid or not.',
+                                },
+                                reason: {
+                                  type: 'string',
+                                  nullable: true,
+                                  description:
+                                    'The reason(s) for for the APIs validation state. If the API is valid then this may contain any fixable warnings.',
+                                },
+                              },
+                              required: ['status', 'reason'],
+                              additionalProperties: false,
+                              description: 'The validation state of the API definition.',
+                            },
                           },
-                          required: ['method', 'path', 'stats', 'source', 'uri'],
+                          required: ['method', 'path', 'stats', 'source', 'uri', 'validation'],
                           additionalProperties: false,
                           description: 'Information about the API that this reference page is attached to.',
                         },
@@ -6794,8 +10269,26 @@ const document = {
                                     description:
                                       'URI of the recipe that this API reference is connected to. The recipe and API reference must exist within the same version.',
                                   },
+                                  title: { type: 'string', description: 'The title of the connected recipe.' },
+                                  slug: { type: 'string', description: 'The slug of the connected recipe.' },
+                                  appearance: {
+                                    type: 'object',
+                                    properties: {
+                                      background_color: {
+                                        type: 'string',
+                                        description: 'The background color of the recipe tile.',
+                                      },
+                                      emoji: {
+                                        type: 'string',
+                                        nullable: true,
+                                        description: 'The emoji icon for the recipe tile.',
+                                      },
+                                    },
+                                    required: ['background_color', 'emoji'],
+                                    additionalProperties: false,
+                                  },
                                 },
-                                required: ['uri'],
+                                required: ['uri', 'title', 'slug', 'appearance'],
                                 additionalProperties: false,
                               },
                               nullable: true,
@@ -6818,8 +10311,13 @@ const document = {
                               format: 'uri',
                               description: 'A URL to this page on your ReadMe hub.',
                             },
+                            github_url: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'link to the github of this page',
+                            },
                           },
-                          required: ['dash', 'hub'],
+                          required: ['dash', 'hub', 'github_url'],
                           additionalProperties: false,
                         },
                         links: {
@@ -6922,6 +10420,14 @@ const document = {
           'Delete a page from the API Reference section of your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).',
         parameters: [
           {
+            schema: { type: 'boolean', default: false },
+            in: 'query',
+            name: 'cleanup_definition',
+            required: false,
+            description:
+              'For a reference page that is documenting an endpoint and has an underlying API definition file, setting this parameter to `true` will remove the endpoint from the underlying API definition if that page is the only one rendering out that endpoint.',
+          },
+          {
             schema: {
               type: 'string',
               pattern: '(v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?',
@@ -7013,7 +10519,7 @@ const document = {
                                   properties: {
                                     slug: { type: 'string' },
                                     title: { type: 'string', nullable: true },
-                                    type: { type: 'string', enum: ['basic', 'endpoint'] },
+                                    type: { type: 'string', enum: ['basic', 'endpoint', 'changelog', 'custom_page'] },
                                   },
                                   required: ['slug', 'title', 'type'],
                                   additionalProperties: false,
@@ -7043,6 +10549,7 @@ const document = {
                       description: { type: 'string', nullable: true },
                       keywords: { type: 'string', nullable: true },
                       title: { type: 'string', nullable: true },
+                      x_import: { type: 'string', nullable: true },
                       image: {
                         type: 'object',
                         properties: { uri: { type: 'string', pattern: '\\/images\\/([a-f\\d]{24})', nullable: true } },
@@ -7066,7 +10573,12 @@ const document = {
                   privacy: {
                     type: 'object',
                     properties: {
-                      view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
+                      view: {
+                        type: 'string',
+                        enum: ['public', 'anyone_with_link'],
+                        default: 'public',
+                        description: 'The visibility of this page.',
+                      },
                     },
                     additionalProperties: false,
                   },
@@ -7096,6 +10608,19 @@ const document = {
                               description:
                                 'URI of the recipe that this API reference is connected to. The recipe and API reference must exist within the same version.',
                             },
+                            title: { type: 'string', description: 'The title of the connected recipe.' },
+                            slug: { type: 'string', description: 'The slug of the connected recipe.' },
+                            appearance: {
+                              type: 'object',
+                              properties: {
+                                background_color: {
+                                  type: 'string',
+                                  description: 'The background color of the recipe tile.',
+                                },
+                                emoji: { type: 'string', nullable: true },
+                              },
+                              additionalProperties: false,
+                            },
                           },
                           additionalProperties: false,
                         },
@@ -7113,82 +10638,82 @@ const document = {
                         description: 'The endpoint HTTP method.',
                       },
                       path: { type: 'string', description: 'The endpoint path.' },
-                      schema: { nullable: true, type: 'string' },
+                      schema: { type: 'string', nullable: true },
                       stats: {
                         type: 'object',
                         properties: {
                           additional_properties: {
                             type: 'boolean',
-                            default: false,
+                            default: true,
                             description:
                               'This API operation uses `additionalProperties` for handling extra schema properties.',
                           },
                           callbacks: {
                             type: 'boolean',
-                            default: false,
+                            default: true,
                             description: 'This API operation has `callbacks` documented.',
                           },
                           circular_references: {
                             type: 'boolean',
-                            default: false,
+                            default: true,
                             description: 'This API operation contains `$ref` schema pointers that resolve to itself.',
                           },
                           common_parameters: {
                             type: 'boolean',
-                            default: false,
+                            default: true,
                             description: 'This API operation utilizes common parameters set at the path level.',
                           },
                           discriminators: {
                             type: 'boolean',
-                            default: false,
+                            default: true,
                             description:
                               'This API operation utilizes `discriminator` for discriminating between different parts in a polymorphic schema.',
                           },
                           links: {
                             type: 'boolean',
-                            default: false,
+                            default: true,
                             description: 'This API operation has `links` documented.',
                           },
                           polymorphism: {
                             type: 'boolean',
-                            default: false,
+                            default: true,
                             description: 'This API operation contains polymorphic schemas.',
                           },
                           references: {
                             type: 'boolean',
-                            default: false,
+                            default: true,
                             description:
                               'This API operation, after being dereferenced, has `x-readme-ref-name` entries defining what the original `$ref` schema pointers were named.',
                           },
                           server_variables: {
                             type: 'boolean',
-                            default: false,
+                            default: true,
                             description:
                               'This API operation has composable variables configured for its server definition.',
                           },
                           style: {
                             type: 'boolean',
-                            default: false,
+                            default: true,
                             description: 'This API operation has parameters that have specific `style` serializations.',
                           },
                           webhooks: {
                             type: 'boolean',
-                            default: false,
+                            default: true,
                             description: 'This API definition has `webhooks` documented.',
                           },
                           xml_requests: {
                             type: 'boolean',
-                            default: false,
+                            default: true,
                             description: 'This API operation has request bodies that accept XML.',
                           },
                           xml_responses: {
                             type: 'boolean',
-                            default: false,
+                            default: true,
                             description: 'This API operation has response payloads that return XML.',
                           },
                           xml_schemas: {
                             type: 'boolean',
-                            default: false,
+                            default: true,
                             description: 'This API operation has parameters or schemas that can serialize to XML.',
                           },
                         },
@@ -7215,6 +10740,19 @@ const document = {
                         pattern:
                           '\\/(versions|branches)\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)\\/apis\\/((([a-z0-9-_ ]|[^\\\\x00-\\\\x7F])+.(json|yaml|yml)))',
                         nullable: true,
+                      },
+                      validation: {
+                        type: 'object',
+                        properties: {
+                          status: {
+                            type: 'string',
+                            enum: ['pending', 'valid', 'valid-with-warnings', 'invalid'],
+                            description: 'Whether the API definition is valid or not.',
+                          },
+                          reason: { type: 'string', nullable: true },
+                        },
+                        additionalProperties: false,
+                        description: 'The validation state of the API definition.',
                       },
                     },
                     additionalProperties: false,
@@ -7246,6 +10784,14 @@ const document = {
             required: true,
             description: 'A URL-safe representation of the resource.',
           },
+          {
+            schema: { type: 'string' },
+            in: 'header',
+            name: 'prefer',
+            required: false,
+            description:
+              'By default, the supplied `slug` will be made unique during reference updates if it already exists, however if you do not want this behavior you can supply `prefer: handling=strict` to receive a 409 Conflict instead.',
+          },
         ],
         responses: {
           '200': {
@@ -7326,7 +10872,10 @@ const document = {
                                         properties: {
                                           slug: { type: 'string' },
                                           title: { type: 'string', nullable: true },
-                                          type: { type: 'string', enum: ['basic', 'endpoint'] },
+                                          type: {
+                                            type: 'string',
+                                            enum: ['basic', 'endpoint', 'changelog', 'custom_page'],
+                                          },
                                         },
                                         required: ['slug', 'title', 'type'],
                                         additionalProperties: false,
@@ -7377,8 +10926,14 @@ const document = {
                               description: 'A comma-separated list of keywords to place into your page metadata.',
                             },
                             title: { type: 'string', nullable: true },
+                            x_import: {
+                              type: 'string',
+                              nullable: true,
+                              description:
+                                'A URI to the external docs page that this page is being imported from. Set while a page is mid-import and removed once the import completes; its presence signals that the page is read-only and still hydrating.',
+                            },
                           },
-                          required: ['description', 'image', 'keywords', 'title'],
+                          required: ['description', 'image', 'keywords', 'title', 'x_import'],
                           additionalProperties: false,
                         },
                         parent: {
@@ -7398,7 +10953,12 @@ const document = {
                         privacy: {
                           type: 'object',
                           properties: {
-                            view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
+                            view: {
+                              type: 'string',
+                              enum: ['public', 'anyone_with_link'],
+                              default: 'public',
+                              description: 'The visibility of this page.',
+                            },
                           },
                           additionalProperties: false,
                         },
@@ -7437,78 +10997,78 @@ const document = {
                               properties: {
                                 additional_properties: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description:
                                     'This API operation uses `additionalProperties` for handling extra schema properties.',
                                 },
                                 callbacks: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description: 'This API operation has `callbacks` documented.',
                                 },
                                 circular_references: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description:
                                     'This API operation contains `$ref` schema pointers that resolve to itself.',
                                 },
                                 common_parameters: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description: 'This API operation utilizes common parameters set at the path level.',
                                 },
                                 discriminators: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description:
                                     'This API operation utilizes `discriminator` for discriminating between different parts in a polymorphic schema.',
                                 },
                                 links: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description: 'This API operation has `links` documented.',
                                 },
                                 polymorphism: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description: 'This API operation contains polymorphic schemas.',
                                 },
                                 references: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description:
                                     'This API operation, after being dereferenced, has `x-readme-ref-name` entries defining what the original `$ref` schema pointers were named.',
                                 },
                                 server_variables: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description:
                                     'This API operation has composable variables configured for its server definition.',
                                 },
                                 style: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description:
                                     'This API operation has parameters that have specific `style` serializations.',
                                 },
                                 webhooks: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description: 'This API definition has `webhooks` documented.',
                                 },
                                 xml_requests: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description: 'This API operation has request bodies that accept XML.',
                                 },
                                 xml_responses: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description: 'This API operation has response payloads that return XML.',
                                 },
                                 xml_schemas: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description:
                                     'This API operation has parameters or schemas that can serialize to XML.',
                                 },
@@ -7539,8 +11099,27 @@ const document = {
                               nullable: true,
                               description: 'A URI to the API resource.',
                             },
+                            validation: {
+                              type: 'object',
+                              properties: {
+                                status: {
+                                  type: 'string',
+                                  enum: ['pending', 'valid', 'valid-with-warnings', 'invalid'],
+                                  description: 'Whether the API definition is valid or not.',
+                                },
+                                reason: {
+                                  type: 'string',
+                                  nullable: true,
+                                  description:
+                                    'The reason(s) for for the APIs validation state. If the API is valid then this may contain any fixable warnings.',
+                                },
+                              },
+                              required: ['status', 'reason'],
+                              additionalProperties: false,
+                              description: 'The validation state of the API definition.',
+                            },
                           },
-                          required: ['method', 'path', 'stats', 'source', 'uri'],
+                          required: ['method', 'path', 'stats', 'source', 'uri', 'validation'],
                           additionalProperties: false,
                           description: 'Information about the API that this reference page is attached to.',
                         },
@@ -7559,8 +11138,26 @@ const document = {
                                     description:
                                       'URI of the recipe that this API reference is connected to. The recipe and API reference must exist within the same version.',
                                   },
+                                  title: { type: 'string', description: 'The title of the connected recipe.' },
+                                  slug: { type: 'string', description: 'The slug of the connected recipe.' },
+                                  appearance: {
+                                    type: 'object',
+                                    properties: {
+                                      background_color: {
+                                        type: 'string',
+                                        description: 'The background color of the recipe tile.',
+                                      },
+                                      emoji: {
+                                        type: 'string',
+                                        nullable: true,
+                                        description: 'The emoji icon for the recipe tile.',
+                                      },
+                                    },
+                                    required: ['background_color', 'emoji'],
+                                    additionalProperties: false,
+                                  },
                                 },
-                                required: ['uri'],
+                                required: ['uri', 'title', 'slug', 'appearance'],
                                 additionalProperties: false,
                               },
                               nullable: true,
@@ -7583,8 +11180,13 @@ const document = {
                               format: 'uri',
                               description: 'A URL to this page on your ReadMe hub.',
                             },
+                            github_url: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'link to the github of this page',
+                            },
                           },
-                          required: ['dash', 'hub'],
+                          required: ['dash', 'hub', 'github_url'],
                           additionalProperties: false,
                         },
                         links: {
@@ -7675,6 +11277,7 @@ const document = {
               },
             },
           },
+          '204': { description: 'No Content' },
         },
       },
       get: {
@@ -7684,14 +11287,6 @@ const document = {
         description:
           'Get a page from the API Reference section of your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).',
         parameters: [
-          {
-            schema: { type: 'string', enum: ['true', 'false'], default: 'false' },
-            in: 'query',
-            name: 'dereference',
-            required: false,
-            description:
-              'Whether or not to dereference the attached API definition. Defaults to `false` if not specified (subject to change while API v2 is still in beta).',
-          },
           {
             schema: { type: 'string', enum: ['true', 'false'], default: 'true' },
             in: 'query',
@@ -7717,6 +11312,13 @@ const document = {
             required: true,
             description: 'A URL-safe representation of the resource.',
           },
+          {
+            schema: { type: 'string' },
+            in: 'header',
+            name: 'if-none-match',
+            required: false,
+            description: 'An ETag value to compare against the resource.',
+          },
         ],
         responses: {
           '200': {
@@ -7797,7 +11399,10 @@ const document = {
                                         properties: {
                                           slug: { type: 'string' },
                                           title: { type: 'string', nullable: true },
-                                          type: { type: 'string', enum: ['basic', 'endpoint'] },
+                                          type: {
+                                            type: 'string',
+                                            enum: ['basic', 'endpoint', 'changelog', 'custom_page'],
+                                          },
                                         },
                                         required: ['slug', 'title', 'type'],
                                         additionalProperties: false,
@@ -7848,8 +11453,14 @@ const document = {
                               description: 'A comma-separated list of keywords to place into your page metadata.',
                             },
                             title: { type: 'string', nullable: true },
+                            x_import: {
+                              type: 'string',
+                              nullable: true,
+                              description:
+                                'A URI to the external docs page that this page is being imported from. Set while a page is mid-import and removed once the import completes; its presence signals that the page is read-only and still hydrating.',
+                            },
                           },
-                          required: ['description', 'image', 'keywords', 'title'],
+                          required: ['description', 'image', 'keywords', 'title', 'x_import'],
                           additionalProperties: false,
                         },
                         parent: {
@@ -7869,7 +11480,12 @@ const document = {
                         privacy: {
                           type: 'object',
                           properties: {
-                            view: { type: 'string', enum: ['public', 'anyone_with_link'], default: 'anyone_with_link' },
+                            view: {
+                              type: 'string',
+                              enum: ['public', 'anyone_with_link'],
+                              default: 'public',
+                              description: 'The visibility of this page.',
+                            },
                           },
                           additionalProperties: false,
                         },
@@ -7899,6 +11515,7 @@ const document = {
                             },
                             path: { type: 'string', description: 'The endpoint path.' },
                             schema: {
+                              type: 'string',
                               nullable: true,
                               description:
                                 'The API schema for this reference endpoint. This schema may be a reduced (i.e., only contains the necessary information for this endpoint) and/or dereferenced version of the full API definition, depending upon the query parameters used for this request.',
@@ -7908,78 +11525,78 @@ const document = {
                               properties: {
                                 additional_properties: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description:
                                     'This API operation uses `additionalProperties` for handling extra schema properties.',
                                 },
                                 callbacks: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description: 'This API operation has `callbacks` documented.',
                                 },
                                 circular_references: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description:
                                     'This API operation contains `$ref` schema pointers that resolve to itself.',
                                 },
                                 common_parameters: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description: 'This API operation utilizes common parameters set at the path level.',
                                 },
                                 discriminators: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description:
                                     'This API operation utilizes `discriminator` for discriminating between different parts in a polymorphic schema.',
                                 },
                                 links: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description: 'This API operation has `links` documented.',
                                 },
                                 polymorphism: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description: 'This API operation contains polymorphic schemas.',
                                 },
                                 references: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description:
                                     'This API operation, after being dereferenced, has `x-readme-ref-name` entries defining what the original `$ref` schema pointers were named.',
                                 },
                                 server_variables: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description:
                                     'This API operation has composable variables configured for its server definition.',
                                 },
                                 style: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description:
                                     'This API operation has parameters that have specific `style` serializations.',
                                 },
                                 webhooks: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description: 'This API definition has `webhooks` documented.',
                                 },
                                 xml_requests: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description: 'This API operation has request bodies that accept XML.',
                                 },
                                 xml_responses: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description: 'This API operation has response payloads that return XML.',
                                 },
                                 xml_schemas: {
                                   type: 'boolean',
-                                  default: false,
+                                  default: true,
                                   description:
                                     'This API operation has parameters or schemas that can serialize to XML.',
                                 },
@@ -8010,8 +11627,27 @@ const document = {
                               nullable: true,
                               description: 'A URI to the API resource.',
                             },
+                            validation: {
+                              type: 'object',
+                              properties: {
+                                status: {
+                                  type: 'string',
+                                  enum: ['pending', 'valid', 'valid-with-warnings', 'invalid'],
+                                  description: 'Whether the API definition is valid or not.',
+                                },
+                                reason: {
+                                  type: 'string',
+                                  nullable: true,
+                                  description:
+                                    'The reason(s) for for the APIs validation state. If the API is valid then this may contain any fixable warnings.',
+                                },
+                              },
+                              required: ['status', 'reason'],
+                              additionalProperties: false,
+                              description: 'The validation state of the API definition.',
+                            },
                           },
-                          required: ['method', 'path', 'stats', 'source', 'uri'],
+                          required: ['method', 'path', 'stats', 'source', 'uri', 'validation'],
                           additionalProperties: false,
                           description: 'Information about the API that this reference page is attached to.',
                         },
@@ -8030,8 +11666,26 @@ const document = {
                                     description:
                                       'URI of the recipe that this API reference is connected to. The recipe and API reference must exist within the same version.',
                                   },
+                                  title: { type: 'string', description: 'The title of the connected recipe.' },
+                                  slug: { type: 'string', description: 'The slug of the connected recipe.' },
+                                  appearance: {
+                                    type: 'object',
+                                    properties: {
+                                      background_color: {
+                                        type: 'string',
+                                        description: 'The background color of the recipe tile.',
+                                      },
+                                      emoji: {
+                                        type: 'string',
+                                        nullable: true,
+                                        description: 'The emoji icon for the recipe tile.',
+                                      },
+                                    },
+                                    required: ['background_color', 'emoji'],
+                                    additionalProperties: false,
+                                  },
                                 },
-                                required: ['uri'],
+                                required: ['uri', 'title', 'slug', 'appearance'],
                                 additionalProperties: false,
                               },
                               nullable: true,
@@ -8054,8 +11708,13 @@ const document = {
                               format: 'uri',
                               description: 'A URL to this page on your ReadMe hub.',
                             },
+                            github_url: {
+                              type: 'string',
+                              nullable: true,
+                              description: 'link to the github of this page',
+                            },
                           },
-                          required: ['dash', 'hub'],
+                          required: ['dash', 'hub', 'github_url'],
                           additionalProperties: false,
                         },
                         links: {
@@ -8146,6 +11805,7 @@ const document = {
               },
             },
           },
+          '304': { description: 'Not Modified', content: { 'application/json': { schema: {} } } },
         },
       },
     },
@@ -8297,10 +11957,10 @@ const document = {
                               view: {
                                 type: 'string',
                                 enum: ['public', 'anyone_with_link'],
+                                default: 'public',
                                 description: 'Who can view the recipe.',
                               },
                             },
-                            required: ['view'],
                             additionalProperties: false,
                           },
                           title: { type: 'string' },
@@ -8444,6 +12104,7 @@ const document = {
                       view: {
                         type: 'string',
                         enum: ['public', 'anyone_with_link'],
+                        default: 'public',
                         description: 'Who can view the recipe.',
                       },
                     },
@@ -8595,10 +12256,10 @@ const document = {
                             view: {
                               type: 'string',
                               enum: ['public', 'anyone_with_link'],
+                              default: 'public',
                               description: 'Who can view the recipe.',
                             },
                           },
-                          required: ['view'],
                           additionalProperties: false,
                         },
                         title: { type: 'string' },
@@ -8795,10 +12456,10 @@ const document = {
                             view: {
                               type: 'string',
                               enum: ['public', 'anyone_with_link'],
+                              default: 'public',
                               description: 'Who can view the recipe.',
                             },
                           },
-                          required: ['view'],
                           additionalProperties: false,
                         },
                         title: { type: 'string' },
@@ -8968,6 +12629,7 @@ const document = {
                       view: {
                         type: 'string',
                         enum: ['public', 'anyone_with_link'],
+                        default: 'public',
                         description: 'Who can view the recipe.',
                       },
                     },
@@ -9128,10 +12790,10 @@ const document = {
                             view: {
                               type: 'string',
                               enum: ['public', 'anyone_with_link'],
+                              default: 'public',
                               description: 'Who can view the recipe.',
                             },
                           },
-                          required: ['view'],
                           additionalProperties: false,
                         },
                         title: { type: 'string' },
@@ -9199,7 +12861,8 @@ const document = {
             in: 'query',
             name: 'section',
             required: false,
-            description: 'The section to search within.',
+            description:
+              'The section of your ReadMe project to search within. If omitted, all enabled sections are searched.',
           },
           {
             schema: { type: 'string' },
@@ -9213,7 +12876,23 @@ const document = {
             in: 'query',
             name: 'projects',
             required: false,
-            description: 'Limit search to only these projects in an Enterprise group.',
+            description:
+              'Limit search to only these projects in an Enterprise group. If omitted, all child projects with the appropriate permissions are searched. This parameter is only applicable to Enterprise projects.',
+          },
+          {
+            schema: { type: 'number', minimum: 1, default: 1 },
+            in: 'query',
+            name: 'page',
+            required: false,
+            description:
+              'Used to specify further pages (starts at 1). The product of `page` and `per_page` may not exceed 1000.',
+          },
+          {
+            schema: { type: 'number', minimum: 1, maximum: 50, default: 15 },
+            in: 'query',
+            name: 'per_page',
+            required: false,
+            description: 'Number of items to include in pagination (up to 50).',
           },
         ],
         responses: {
@@ -9225,6 +12904,19 @@ const document = {
                   type: 'object',
                   properties: {
                     total: { type: 'number' },
+                    page: { type: 'number' },
+                    per_page: { type: 'number' },
+                    paging: {
+                      type: 'object',
+                      properties: {
+                        next: { type: 'string', nullable: true },
+                        previous: { type: 'string', nullable: true },
+                        first: { type: 'string', nullable: true },
+                        last: { type: 'string', nullable: true },
+                      },
+                      required: ['next', 'previous', 'first', 'last'],
+                      additionalProperties: false,
+                    },
                     data: {
                       type: 'array',
                       items: {
@@ -9249,22 +12941,10 @@ const document = {
                             items: {
                               type: 'object',
                               properties: {
-                                score: { type: 'number' },
-                                path: { type: 'string', enum: ['title', 'excerpt', 'searchContents'] },
-                                texts: {
-                                  type: 'array',
-                                  items: {
-                                    type: 'object',
-                                    properties: {
-                                      value: { type: 'string' },
-                                      type: { type: 'string', enum: ['hit', 'text'] },
-                                    },
-                                    required: ['value', 'type'],
-                                    additionalProperties: false,
-                                  },
-                                },
+                                value: { type: 'string' },
+                                type: { type: 'string', enum: ['hit', 'text'] },
                               },
-                              required: ['score', 'path', 'texts'],
+                              required: ['value', 'type'],
                               additionalProperties: false,
                             },
                           },
@@ -9308,7 +12988,7 @@ const document = {
                       },
                     },
                   },
-                  required: ['total', 'data'],
+                  required: ['total', 'page', 'per_page', 'paging', 'data'],
                   additionalProperties: false,
                 },
               },
@@ -9372,21 +13052,7 @@ const document = {
           'Get a collection of branches in your ReadMe project.\n\n>📘\n> This route is only available to projects that are using [ReadMe Refactored](https://docs.readme.com/main/docs/welcome-to-readme-refactored).',
         parameters: [
           {
-            schema: { type: 'number', minimum: 1, default: 1 },
-            in: 'query',
-            name: 'page',
-            required: false,
-            description: 'Used to specify further pages (starts at 1).',
-          },
-          {
-            schema: { type: 'number', minimum: 1, maximum: 100, default: 10 },
-            in: 'query',
-            name: 'per_page',
-            required: false,
-            description: 'Number of items to include in pagination (up to 100, defaults to 10).',
-          },
-          {
-            schema: { type: 'string', enum: ['created', 'updated', 'semver'], default: 'semver' },
+            schema: { type: 'string', enum: ['created', 'review_status', 'semver', 'updated'], default: 'semver' },
             in: 'query',
             name: 'sort_by',
             required: false,
@@ -9411,19 +13077,6 @@ const document = {
                       type: 'object',
                       properties: {
                         total: { type: 'number' },
-                        page: { type: 'number' },
-                        per_page: { type: 'number' },
-                        paging: {
-                          type: 'object',
-                          properties: {
-                            next: { type: 'string', nullable: true },
-                            previous: { type: 'string', nullable: true },
-                            first: { type: 'string', nullable: true },
-                            last: { type: 'string', nullable: true },
-                          },
-                          required: ['next', 'previous', 'first', 'last'],
-                          additionalProperties: false,
-                        },
                         data: {
                           type: 'array',
                           items: {
@@ -9438,6 +13091,21 @@ const document = {
                                 type: 'string',
                                 nullable: true,
                                 description: 'A non-semver display name for the version.',
+                              },
+                              i18n: {
+                                type: 'object',
+                                properties: {
+                                  lang: { type: 'string', nullable: true, description: 'The language of the version.' },
+                                  parsed_version: {
+                                    type: 'string',
+                                    nullable: true,
+                                    description: 'The parsed version without the language code.',
+                                  },
+                                },
+                                required: ['lang', 'parsed_version'],
+                                additionalProperties: false,
+                                description:
+                                  'Internationalization information for the version. This feature is gated and still in active development, so the values in this object will generally be set to `null`.',
                               },
                               name: {
                                 type: 'string',
@@ -9487,6 +13155,7 @@ const document = {
                             required: [
                               'base',
                               'display_name',
+                              'i18n',
                               'name',
                               'privacy',
                               'release_stage',
@@ -9500,26 +13169,13 @@ const document = {
                         },
                         type: { type: 'string', enum: ['version'] },
                       },
-                      required: ['total', 'page', 'per_page', 'paging', 'data', 'type'],
+                      required: ['total', 'data', 'type'],
                       additionalProperties: false,
                     },
                     {
                       type: 'object',
                       properties: {
                         total: { type: 'number' },
-                        page: { type: 'number' },
-                        per_page: { type: 'number' },
-                        paging: {
-                          type: 'object',
-                          properties: {
-                            next: { type: 'string', nullable: true },
-                            previous: { type: 'string', nullable: true },
-                            first: { type: 'string', nullable: true },
-                            last: { type: 'string', nullable: true },
-                          },
-                          required: ['next', 'previous', 'first', 'last'],
-                          additionalProperties: false,
-                        },
                         data: {
                           type: 'array',
                           items: {
@@ -9537,6 +13193,25 @@ const document = {
                                     type: 'string',
                                     nullable: true,
                                     description: 'A non-semver display name for the version.',
+                                  },
+                                  i18n: {
+                                    type: 'object',
+                                    properties: {
+                                      lang: {
+                                        type: 'string',
+                                        nullable: true,
+                                        description: 'The language of the version.',
+                                      },
+                                      parsed_version: {
+                                        type: 'string',
+                                        nullable: true,
+                                        description: 'The parsed version without the language code.',
+                                      },
+                                    },
+                                    required: ['lang', 'parsed_version'],
+                                    additionalProperties: false,
+                                    description:
+                                      'Internationalization information for the version. This feature is gated and still in active development, so the values in this object will generally be set to `null`.',
                                   },
                                   name: {
                                     type: 'string',
@@ -9587,6 +13262,7 @@ const document = {
                                 required: [
                                   'base',
                                   'display_name',
+                                  'i18n',
                                   'name',
                                   'privacy',
                                   'release_stage',
@@ -9641,14 +13317,284 @@ const document = {
                                   '\\/branches\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)',
                                 description: 'A URI to the branch resource.',
                               },
+                              review: {
+                                type: 'object',
+                                properties: {
+                                  branch: {
+                                    type: 'object',
+                                    properties: {
+                                      uri: {
+                                        type: 'string',
+                                        description:
+                                          'A URI to the version or branch resource that this custom block belongs to.',
+                                      },
+                                      name: {
+                                        type: 'string',
+                                        description:
+                                          'A friendly name automatically generated from your internal version number or branch name.',
+                                      },
+                                    },
+                                    required: ['uri', 'name'],
+                                    additionalProperties: false,
+                                  },
+                                  status: {
+                                    type: 'string',
+                                    enum: ['draft', 'ready', 'approved'],
+                                    default: 'draft',
+                                    description: 'The current review status.',
+                                  },
+                                  reviewers: {
+                                    type: 'array',
+                                    items: {
+                                      type: 'object',
+                                      properties: {
+                                        user: {
+                                          type: 'object',
+                                          properties: {
+                                            email: {
+                                              type: 'string',
+                                              nullable: true,
+                                              default: null,
+                                              description: 'The email address of the user who approved the branch.',
+                                            },
+                                            name: {
+                                              type: 'string',
+                                              nullable: true,
+                                              default: null,
+                                              description: 'The name of the user who approved the branch.',
+                                            },
+                                          },
+                                          additionalProperties: false,
+                                          description: 'Information about the user who approved the branch.',
+                                        },
+                                        action: {
+                                          type: 'string',
+                                          enum: ['approve', 'revoke'],
+                                          description: 'The action taken by the user when the review was made.',
+                                        },
+                                        created_at: {
+                                          type: 'string',
+                                          format: 'date-time',
+                                          description: 'An ISO 8601 formatted date for when the reviewer was created.',
+                                        },
+                                        updated_at: {
+                                          type: 'string',
+                                          format: 'date-time',
+                                          nullable: true,
+                                          default: null,
+                                          description:
+                                            'An ISO 8601 formatted date for when the reviewer was last updated.',
+                                        },
+                                      },
+                                      required: ['user', 'action', 'created_at'],
+                                      additionalProperties: false,
+                                    },
+                                    default: [],
+                                    description: 'A list of reviewers.',
+                                  },
+                                  ready_at: {
+                                    type: 'string',
+                                    nullable: true,
+                                    default: null,
+                                    description: 'An ISO 8601 formatted date for when the review was set to ready.',
+                                  },
+                                  ready_by: {
+                                    type: 'object',
+                                    properties: {
+                                      email: {
+                                        type: 'string',
+                                        nullable: true,
+                                        default: null,
+                                        description: 'User email who set the review to ready.',
+                                      },
+                                      name: {
+                                        type: 'string',
+                                        nullable: true,
+                                        default: null,
+                                        description: 'User name who set the review to ready.',
+                                      },
+                                    },
+                                    additionalProperties: false,
+                                    description: 'User who set the review to ready',
+                                  },
+                                  created_by: {
+                                    type: 'object',
+                                    properties: {
+                                      email: {
+                                        type: 'string',
+                                        nullable: true,
+                                        default: null,
+                                        description: 'User email who created the branch.',
+                                      },
+                                      name: {
+                                        type: 'string',
+                                        nullable: true,
+                                        default: null,
+                                        description: 'User name who created the branch.',
+                                      },
+                                    },
+                                    additionalProperties: false,
+                                    description: 'User who created the branch.',
+                                  },
+                                  merged_at: {
+                                    type: 'string',
+                                    nullable: true,
+                                    default: null,
+                                    description: 'An ISO 8601 formatted date for when the branch was last merged.',
+                                  },
+                                  contributors: {
+                                    type: 'array',
+                                    items: {
+                                      type: 'object',
+                                      properties: {
+                                        user: {
+                                          type: 'object',
+                                          properties: {
+                                            email: {
+                                              type: 'string',
+                                              nullable: true,
+                                              default: null,
+                                              description:
+                                                'The email address of the user who contributed to the branch.',
+                                            },
+                                            name: {
+                                              type: 'string',
+                                              nullable: true,
+                                              default: null,
+                                              description:
+                                                'The email address of the user who contributed to the branch.',
+                                            },
+                                          },
+                                          additionalProperties: false,
+                                          description: 'Information about the user who contributed to the branch.',
+                                        },
+                                        updated_at: {
+                                          type: 'string',
+                                          format: 'date-time',
+                                          nullable: true,
+                                          default: null,
+                                          description:
+                                            'An ISO 8601 formatted date for when the contributor last updated.',
+                                        },
+                                      },
+                                      required: ['user'],
+                                      additionalProperties: false,
+                                    },
+                                    default: [],
+                                    description: 'A list of contributors to the branch.',
+                                  },
+                                  tagged_reviewers: {
+                                    type: 'array',
+                                    items: {
+                                      type: 'object',
+                                      properties: {
+                                        user: {
+                                          type: 'object',
+                                          properties: {
+                                            email: {
+                                              type: 'string',
+                                              nullable: true,
+                                              default: null,
+                                              description: 'The email address of the tagged reviewer.',
+                                            },
+                                            name: {
+                                              type: 'string',
+                                              nullable: true,
+                                              default: null,
+                                              description: 'The name of the tagged reviewer.',
+                                            },
+                                          },
+                                          additionalProperties: false,
+                                          description: 'Information about the tagged reviewer.',
+                                        },
+                                        requested_at: {
+                                          type: 'string',
+                                          format: 'date-time',
+                                          description: 'An ISO 8601 formatted date for when the reviewer was tagged.',
+                                        },
+                                        requested_by: {
+                                          type: 'object',
+                                          properties: {
+                                            email: {
+                                              type: 'string',
+                                              nullable: true,
+                                              default: null,
+                                              description: 'The email address of the user who requested the review.',
+                                            },
+                                            name: {
+                                              type: 'string',
+                                              nullable: true,
+                                              default: null,
+                                              description: 'The name of the user who requested the review.',
+                                            },
+                                          },
+                                          additionalProperties: false,
+                                          description: 'The user who requested the review.',
+                                        },
+                                      },
+                                      required: ['user', 'requested_at', 'requested_by'],
+                                      additionalProperties: false,
+                                    },
+                                    default: [],
+                                    description: 'A list of tagged reviewers for this branch.',
+                                  },
+                                  updated_at: {
+                                    type: 'string',
+                                    format: 'date-time',
+                                    description: 'An ISO 8601 formatted date for when the review was last updated.',
+                                  },
+                                  report: {
+                                    type: 'object',
+                                    properties: {
+                                      id: {
+                                        type: 'string',
+                                        nullable: true,
+                                        default: null,
+                                        description: 'A report id or matching job id.',
+                                      },
+                                    },
+                                    additionalProperties: false,
+                                    description: 'Information about the reporting job',
+                                  },
+                                  project: {
+                                    type: 'string',
+                                    description: 'The project ID that this review belongs to.',
+                                  },
+                                  notification_settings: {
+                                    type: 'object',
+                                    properties: {
+                                      branch_topic_key: {
+                                        type: 'string',
+                                        nullable: true,
+                                        default: null,
+                                        description:
+                                          'The Novu Topic Key associated with this branch for managing notification subscriptions.',
+                                      },
+                                    },
+                                    additionalProperties: false,
+                                    description: 'Notification settings for the branch review.',
+                                  },
+                                },
+                                required: [
+                                  'branch',
+                                  'ready_by',
+                                  'created_by',
+                                  'updated_at',
+                                  'report',
+                                  'project',
+                                  'notification_settings',
+                                ],
+                                additionalProperties: false,
+                                description: 'The review status to the branch resource.',
+                              },
                             },
-                            required: ['base', 'href', 'name', 'updated_at', 'uri'],
+                            required: ['base', 'href', 'name', 'updated_at', 'uri', 'review'],
                             additionalProperties: false,
                           },
                         },
                         type: { type: 'string', enum: ['branch'] },
                       },
-                      required: ['total', 'page', 'per_page', 'paging', 'data', 'type'],
+                      required: ['total', 'data', 'type'],
                       additionalProperties: false,
                     },
                   ],
@@ -9672,7 +13618,11 @@ const document = {
                   {
                     type: 'object',
                     properties: {
-                      base: { type: 'string', description: 'The clean string of version we are basing off of.' },
+                      base: {
+                        type: 'string',
+                        description:
+                          'The clean string of version we are basing off of. Defaults to the stable version.',
+                      },
                       display_name: { type: 'string', description: 'A non-semver display name for the version.' },
                       name: {
                         type: 'string',
@@ -9705,7 +13655,7 @@ const document = {
                         description: 'Whether the version is current or deprecated.',
                       },
                     },
-                    required: ['base', 'name'],
+                    required: ['name'],
                     additionalProperties: false,
                   },
                   {
@@ -9747,6 +13697,21 @@ const document = {
                               type: 'string',
                               nullable: true,
                               description: 'A non-semver display name for the version.',
+                            },
+                            i18n: {
+                              type: 'object',
+                              properties: {
+                                lang: { type: 'string', nullable: true, description: 'The language of the version.' },
+                                parsed_version: {
+                                  type: 'string',
+                                  nullable: true,
+                                  description: 'The parsed version without the language code.',
+                                },
+                              },
+                              required: ['lang', 'parsed_version'],
+                              additionalProperties: false,
+                              description:
+                                'Internationalization information for the version. This feature is gated and still in active development, so the values in this object will generally be set to `null`.',
                             },
                             name: {
                               type: 'string',
@@ -9796,6 +13761,7 @@ const document = {
                           required: [
                             'base',
                             'display_name',
+                            'i18n',
                             'name',
                             'privacy',
                             'release_stage',
@@ -9829,6 +13795,25 @@ const document = {
                                   type: 'string',
                                   nullable: true,
                                   description: 'A non-semver display name for the version.',
+                                },
+                                i18n: {
+                                  type: 'object',
+                                  properties: {
+                                    lang: {
+                                      type: 'string',
+                                      nullable: true,
+                                      description: 'The language of the version.',
+                                    },
+                                    parsed_version: {
+                                      type: 'string',
+                                      nullable: true,
+                                      description: 'The parsed version without the language code.',
+                                    },
+                                  },
+                                  required: ['lang', 'parsed_version'],
+                                  additionalProperties: false,
+                                  description:
+                                    'Internationalization information for the version. This feature is gated and still in active development, so the values in this object will generally be set to `null`.',
                                 },
                                 name: {
                                   type: 'string',
@@ -9878,6 +13863,7 @@ const document = {
                               required: [
                                 'base',
                                 'display_name',
+                                'i18n',
                                 'name',
                                 'privacy',
                                 'release_stage',
@@ -9932,8 +13918,273 @@ const document = {
                                 '\\/branches\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)',
                               description: 'A URI to the branch resource.',
                             },
+                            review: {
+                              type: 'object',
+                              properties: {
+                                branch: {
+                                  type: 'object',
+                                  properties: {
+                                    uri: {
+                                      type: 'string',
+                                      description:
+                                        'A URI to the version or branch resource that this custom block belongs to.',
+                                    },
+                                    name: {
+                                      type: 'string',
+                                      description:
+                                        'A friendly name automatically generated from your internal version number or branch name.',
+                                    },
+                                  },
+                                  required: ['uri', 'name'],
+                                  additionalProperties: false,
+                                },
+                                status: {
+                                  type: 'string',
+                                  enum: ['draft', 'ready', 'approved'],
+                                  default: 'draft',
+                                  description: 'The current review status.',
+                                },
+                                reviewers: {
+                                  type: 'array',
+                                  items: {
+                                    type: 'object',
+                                    properties: {
+                                      user: {
+                                        type: 'object',
+                                        properties: {
+                                          email: {
+                                            type: 'string',
+                                            nullable: true,
+                                            default: null,
+                                            description: 'The email address of the user who approved the branch.',
+                                          },
+                                          name: {
+                                            type: 'string',
+                                            nullable: true,
+                                            default: null,
+                                            description: 'The name of the user who approved the branch.',
+                                          },
+                                        },
+                                        additionalProperties: false,
+                                        description: 'Information about the user who approved the branch.',
+                                      },
+                                      action: {
+                                        type: 'string',
+                                        enum: ['approve', 'revoke'],
+                                        description: 'The action taken by the user when the review was made.',
+                                      },
+                                      created_at: {
+                                        type: 'string',
+                                        format: 'date-time',
+                                        description: 'An ISO 8601 formatted date for when the reviewer was created.',
+                                      },
+                                      updated_at: {
+                                        type: 'string',
+                                        format: 'date-time',
+                                        nullable: true,
+                                        default: null,
+                                        description:
+                                          'An ISO 8601 formatted date for when the reviewer was last updated.',
+                                      },
+                                    },
+                                    required: ['user', 'action', 'created_at'],
+                                    additionalProperties: false,
+                                  },
+                                  default: [],
+                                  description: 'A list of reviewers.',
+                                },
+                                ready_at: {
+                                  type: 'string',
+                                  nullable: true,
+                                  default: null,
+                                  description: 'An ISO 8601 formatted date for when the review was set to ready.',
+                                },
+                                ready_by: {
+                                  type: 'object',
+                                  properties: {
+                                    email: {
+                                      type: 'string',
+                                      nullable: true,
+                                      default: null,
+                                      description: 'User email who set the review to ready.',
+                                    },
+                                    name: {
+                                      type: 'string',
+                                      nullable: true,
+                                      default: null,
+                                      description: 'User name who set the review to ready.',
+                                    },
+                                  },
+                                  additionalProperties: false,
+                                  description: 'User who set the review to ready',
+                                },
+                                created_by: {
+                                  type: 'object',
+                                  properties: {
+                                    email: {
+                                      type: 'string',
+                                      nullable: true,
+                                      default: null,
+                                      description: 'User email who created the branch.',
+                                    },
+                                    name: {
+                                      type: 'string',
+                                      nullable: true,
+                                      default: null,
+                                      description: 'User name who created the branch.',
+                                    },
+                                  },
+                                  additionalProperties: false,
+                                  description: 'User who created the branch.',
+                                },
+                                merged_at: {
+                                  type: 'string',
+                                  nullable: true,
+                                  default: null,
+                                  description: 'An ISO 8601 formatted date for when the branch was last merged.',
+                                },
+                                contributors: {
+                                  type: 'array',
+                                  items: {
+                                    type: 'object',
+                                    properties: {
+                                      user: {
+                                        type: 'object',
+                                        properties: {
+                                          email: {
+                                            type: 'string',
+                                            nullable: true,
+                                            default: null,
+                                            description: 'The email address of the user who contributed to the branch.',
+                                          },
+                                          name: {
+                                            type: 'string',
+                                            nullable: true,
+                                            default: null,
+                                            description: 'The email address of the user who contributed to the branch.',
+                                          },
+                                        },
+                                        additionalProperties: false,
+                                        description: 'Information about the user who contributed to the branch.',
+                                      },
+                                      updated_at: {
+                                        type: 'string',
+                                        format: 'date-time',
+                                        nullable: true,
+                                        default: null,
+                                        description:
+                                          'An ISO 8601 formatted date for when the contributor last updated.',
+                                      },
+                                    },
+                                    required: ['user'],
+                                    additionalProperties: false,
+                                  },
+                                  default: [],
+                                  description: 'A list of contributors to the branch.',
+                                },
+                                tagged_reviewers: {
+                                  type: 'array',
+                                  items: {
+                                    type: 'object',
+                                    properties: {
+                                      user: {
+                                        type: 'object',
+                                        properties: {
+                                          email: {
+                                            type: 'string',
+                                            nullable: true,
+                                            default: null,
+                                            description: 'The email address of the tagged reviewer.',
+                                          },
+                                          name: {
+                                            type: 'string',
+                                            nullable: true,
+                                            default: null,
+                                            description: 'The name of the tagged reviewer.',
+                                          },
+                                        },
+                                        additionalProperties: false,
+                                        description: 'Information about the tagged reviewer.',
+                                      },
+                                      requested_at: {
+                                        type: 'string',
+                                        format: 'date-time',
+                                        description: 'An ISO 8601 formatted date for when the reviewer was tagged.',
+                                      },
+                                      requested_by: {
+                                        type: 'object',
+                                        properties: {
+                                          email: {
+                                            type: 'string',
+                                            nullable: true,
+                                            default: null,
+                                            description: 'The email address of the user who requested the review.',
+                                          },
+                                          name: {
+                                            type: 'string',
+                                            nullable: true,
+                                            default: null,
+                                            description: 'The name of the user who requested the review.',
+                                          },
+                                        },
+                                        additionalProperties: false,
+                                        description: 'The user who requested the review.',
+                                      },
+                                    },
+                                    required: ['user', 'requested_at', 'requested_by'],
+                                    additionalProperties: false,
+                                  },
+                                  default: [],
+                                  description: 'A list of tagged reviewers for this branch.',
+                                },
+                                updated_at: {
+                                  type: 'string',
+                                  format: 'date-time',
+                                  description: 'An ISO 8601 formatted date for when the review was last updated.',
+                                },
+                                report: {
+                                  type: 'object',
+                                  properties: {
+                                    id: {
+                                      type: 'string',
+                                      nullable: true,
+                                      default: null,
+                                      description: 'A report id or matching job id.',
+                                    },
+                                  },
+                                  additionalProperties: false,
+                                  description: 'Information about the reporting job',
+                                },
+                                project: { type: 'string', description: 'The project ID that this review belongs to.' },
+                                notification_settings: {
+                                  type: 'object',
+                                  properties: {
+                                    branch_topic_key: {
+                                      type: 'string',
+                                      nullable: true,
+                                      default: null,
+                                      description:
+                                        'The Novu Topic Key associated with this branch for managing notification subscriptions.',
+                                    },
+                                  },
+                                  additionalProperties: false,
+                                  description: 'Notification settings for the branch review.',
+                                },
+                              },
+                              required: [
+                                'branch',
+                                'ready_by',
+                                'created_by',
+                                'updated_at',
+                                'report',
+                                'project',
+                                'notification_settings',
+                              ],
+                              additionalProperties: false,
+                              description: 'The review status to the branch resource.',
+                            },
                           },
-                          required: ['base', 'href', 'name', 'updated_at', 'uri'],
+                          required: ['base', 'href', 'name', 'updated_at', 'uri', 'review'],
                           additionalProperties: false,
                         },
                         type: { type: 'string', enum: ['branch'] },
@@ -9991,6 +14242,21 @@ const document = {
                               nullable: true,
                               description: 'A non-semver display name for the version.',
                             },
+                            i18n: {
+                              type: 'object',
+                              properties: {
+                                lang: { type: 'string', nullable: true, description: 'The language of the version.' },
+                                parsed_version: {
+                                  type: 'string',
+                                  nullable: true,
+                                  description: 'The parsed version without the language code.',
+                                },
+                              },
+                              required: ['lang', 'parsed_version'],
+                              additionalProperties: false,
+                              description:
+                                'Internationalization information for the version. This feature is gated and still in active development, so the values in this object will generally be set to `null`.',
+                            },
                             name: {
                               type: 'string',
                               pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
@@ -10039,6 +14305,7 @@ const document = {
                           required: [
                             'base',
                             'display_name',
+                            'i18n',
                             'name',
                             'privacy',
                             'release_stage',
@@ -10072,6 +14339,25 @@ const document = {
                                   type: 'string',
                                   nullable: true,
                                   description: 'A non-semver display name for the version.',
+                                },
+                                i18n: {
+                                  type: 'object',
+                                  properties: {
+                                    lang: {
+                                      type: 'string',
+                                      nullable: true,
+                                      description: 'The language of the version.',
+                                    },
+                                    parsed_version: {
+                                      type: 'string',
+                                      nullable: true,
+                                      description: 'The parsed version without the language code.',
+                                    },
+                                  },
+                                  required: ['lang', 'parsed_version'],
+                                  additionalProperties: false,
+                                  description:
+                                    'Internationalization information for the version. This feature is gated and still in active development, so the values in this object will generally be set to `null`.',
                                 },
                                 name: {
                                   type: 'string',
@@ -10121,6 +14407,7 @@ const document = {
                               required: [
                                 'base',
                                 'display_name',
+                                'i18n',
                                 'name',
                                 'privacy',
                                 'release_stage',
@@ -10175,8 +14462,273 @@ const document = {
                                 '\\/branches\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)',
                               description: 'A URI to the branch resource.',
                             },
+                            review: {
+                              type: 'object',
+                              properties: {
+                                branch: {
+                                  type: 'object',
+                                  properties: {
+                                    uri: {
+                                      type: 'string',
+                                      description:
+                                        'A URI to the version or branch resource that this custom block belongs to.',
+                                    },
+                                    name: {
+                                      type: 'string',
+                                      description:
+                                        'A friendly name automatically generated from your internal version number or branch name.',
+                                    },
+                                  },
+                                  required: ['uri', 'name'],
+                                  additionalProperties: false,
+                                },
+                                status: {
+                                  type: 'string',
+                                  enum: ['draft', 'ready', 'approved'],
+                                  default: 'draft',
+                                  description: 'The current review status.',
+                                },
+                                reviewers: {
+                                  type: 'array',
+                                  items: {
+                                    type: 'object',
+                                    properties: {
+                                      user: {
+                                        type: 'object',
+                                        properties: {
+                                          email: {
+                                            type: 'string',
+                                            nullable: true,
+                                            default: null,
+                                            description: 'The email address of the user who approved the branch.',
+                                          },
+                                          name: {
+                                            type: 'string',
+                                            nullable: true,
+                                            default: null,
+                                            description: 'The name of the user who approved the branch.',
+                                          },
+                                        },
+                                        additionalProperties: false,
+                                        description: 'Information about the user who approved the branch.',
+                                      },
+                                      action: {
+                                        type: 'string',
+                                        enum: ['approve', 'revoke'],
+                                        description: 'The action taken by the user when the review was made.',
+                                      },
+                                      created_at: {
+                                        type: 'string',
+                                        format: 'date-time',
+                                        description: 'An ISO 8601 formatted date for when the reviewer was created.',
+                                      },
+                                      updated_at: {
+                                        type: 'string',
+                                        format: 'date-time',
+                                        nullable: true,
+                                        default: null,
+                                        description:
+                                          'An ISO 8601 formatted date for when the reviewer was last updated.',
+                                      },
+                                    },
+                                    required: ['user', 'action', 'created_at'],
+                                    additionalProperties: false,
+                                  },
+                                  default: [],
+                                  description: 'A list of reviewers.',
+                                },
+                                ready_at: {
+                                  type: 'string',
+                                  nullable: true,
+                                  default: null,
+                                  description: 'An ISO 8601 formatted date for when the review was set to ready.',
+                                },
+                                ready_by: {
+                                  type: 'object',
+                                  properties: {
+                                    email: {
+                                      type: 'string',
+                                      nullable: true,
+                                      default: null,
+                                      description: 'User email who set the review to ready.',
+                                    },
+                                    name: {
+                                      type: 'string',
+                                      nullable: true,
+                                      default: null,
+                                      description: 'User name who set the review to ready.',
+                                    },
+                                  },
+                                  additionalProperties: false,
+                                  description: 'User who set the review to ready',
+                                },
+                                created_by: {
+                                  type: 'object',
+                                  properties: {
+                                    email: {
+                                      type: 'string',
+                                      nullable: true,
+                                      default: null,
+                                      description: 'User email who created the branch.',
+                                    },
+                                    name: {
+                                      type: 'string',
+                                      nullable: true,
+                                      default: null,
+                                      description: 'User name who created the branch.',
+                                    },
+                                  },
+                                  additionalProperties: false,
+                                  description: 'User who created the branch.',
+                                },
+                                merged_at: {
+                                  type: 'string',
+                                  nullable: true,
+                                  default: null,
+                                  description: 'An ISO 8601 formatted date for when the branch was last merged.',
+                                },
+                                contributors: {
+                                  type: 'array',
+                                  items: {
+                                    type: 'object',
+                                    properties: {
+                                      user: {
+                                        type: 'object',
+                                        properties: {
+                                          email: {
+                                            type: 'string',
+                                            nullable: true,
+                                            default: null,
+                                            description: 'The email address of the user who contributed to the branch.',
+                                          },
+                                          name: {
+                                            type: 'string',
+                                            nullable: true,
+                                            default: null,
+                                            description: 'The email address of the user who contributed to the branch.',
+                                          },
+                                        },
+                                        additionalProperties: false,
+                                        description: 'Information about the user who contributed to the branch.',
+                                      },
+                                      updated_at: {
+                                        type: 'string',
+                                        format: 'date-time',
+                                        nullable: true,
+                                        default: null,
+                                        description:
+                                          'An ISO 8601 formatted date for when the contributor last updated.',
+                                      },
+                                    },
+                                    required: ['user'],
+                                    additionalProperties: false,
+                                  },
+                                  default: [],
+                                  description: 'A list of contributors to the branch.',
+                                },
+                                tagged_reviewers: {
+                                  type: 'array',
+                                  items: {
+                                    type: 'object',
+                                    properties: {
+                                      user: {
+                                        type: 'object',
+                                        properties: {
+                                          email: {
+                                            type: 'string',
+                                            nullable: true,
+                                            default: null,
+                                            description: 'The email address of the tagged reviewer.',
+                                          },
+                                          name: {
+                                            type: 'string',
+                                            nullable: true,
+                                            default: null,
+                                            description: 'The name of the tagged reviewer.',
+                                          },
+                                        },
+                                        additionalProperties: false,
+                                        description: 'Information about the tagged reviewer.',
+                                      },
+                                      requested_at: {
+                                        type: 'string',
+                                        format: 'date-time',
+                                        description: 'An ISO 8601 formatted date for when the reviewer was tagged.',
+                                      },
+                                      requested_by: {
+                                        type: 'object',
+                                        properties: {
+                                          email: {
+                                            type: 'string',
+                                            nullable: true,
+                                            default: null,
+                                            description: 'The email address of the user who requested the review.',
+                                          },
+                                          name: {
+                                            type: 'string',
+                                            nullable: true,
+                                            default: null,
+                                            description: 'The name of the user who requested the review.',
+                                          },
+                                        },
+                                        additionalProperties: false,
+                                        description: 'The user who requested the review.',
+                                      },
+                                    },
+                                    required: ['user', 'requested_at', 'requested_by'],
+                                    additionalProperties: false,
+                                  },
+                                  default: [],
+                                  description: 'A list of tagged reviewers for this branch.',
+                                },
+                                updated_at: {
+                                  type: 'string',
+                                  format: 'date-time',
+                                  description: 'An ISO 8601 formatted date for when the review was last updated.',
+                                },
+                                report: {
+                                  type: 'object',
+                                  properties: {
+                                    id: {
+                                      type: 'string',
+                                      nullable: true,
+                                      default: null,
+                                      description: 'A report id or matching job id.',
+                                    },
+                                  },
+                                  additionalProperties: false,
+                                  description: 'Information about the reporting job',
+                                },
+                                project: { type: 'string', description: 'The project ID that this review belongs to.' },
+                                notification_settings: {
+                                  type: 'object',
+                                  properties: {
+                                    branch_topic_key: {
+                                      type: 'string',
+                                      nullable: true,
+                                      default: null,
+                                      description:
+                                        'The Novu Topic Key associated with this branch for managing notification subscriptions.',
+                                    },
+                                  },
+                                  additionalProperties: false,
+                                  description: 'Notification settings for the branch review.',
+                                },
+                              },
+                              required: [
+                                'branch',
+                                'ready_by',
+                                'created_by',
+                                'updated_at',
+                                'report',
+                                'project',
+                                'notification_settings',
+                              ],
+                              additionalProperties: false,
+                              description: 'The review status to the branch resource.',
+                            },
                           },
-                          required: ['base', 'href', 'name', 'updated_at', 'uri'],
+                          required: ['base', 'href', 'name', 'updated_at', 'uri', 'review'],
                           additionalProperties: false,
                         },
                         type: { type: 'string', enum: ['branch'] },
@@ -10285,6 +14837,21 @@ const document = {
                               nullable: true,
                               description: 'A non-semver display name for the version.',
                             },
+                            i18n: {
+                              type: 'object',
+                              properties: {
+                                lang: { type: 'string', nullable: true, description: 'The language of the version.' },
+                                parsed_version: {
+                                  type: 'string',
+                                  nullable: true,
+                                  description: 'The parsed version without the language code.',
+                                },
+                              },
+                              required: ['lang', 'parsed_version'],
+                              additionalProperties: false,
+                              description:
+                                'Internationalization information for the version. This feature is gated and still in active development, so the values in this object will generally be set to `null`.',
+                            },
                             name: {
                               type: 'string',
                               pattern: 'stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?',
@@ -10333,6 +14900,7 @@ const document = {
                           required: [
                             'base',
                             'display_name',
+                            'i18n',
                             'name',
                             'privacy',
                             'release_stage',
@@ -10366,6 +14934,25 @@ const document = {
                                   type: 'string',
                                   nullable: true,
                                   description: 'A non-semver display name for the version.',
+                                },
+                                i18n: {
+                                  type: 'object',
+                                  properties: {
+                                    lang: {
+                                      type: 'string',
+                                      nullable: true,
+                                      description: 'The language of the version.',
+                                    },
+                                    parsed_version: {
+                                      type: 'string',
+                                      nullable: true,
+                                      description: 'The parsed version without the language code.',
+                                    },
+                                  },
+                                  required: ['lang', 'parsed_version'],
+                                  additionalProperties: false,
+                                  description:
+                                    'Internationalization information for the version. This feature is gated and still in active development, so the values in this object will generally be set to `null`.',
                                 },
                                 name: {
                                   type: 'string',
@@ -10415,6 +15002,7 @@ const document = {
                               required: [
                                 'base',
                                 'display_name',
+                                'i18n',
                                 'name',
                                 'privacy',
                                 'release_stage',
@@ -10469,8 +15057,273 @@ const document = {
                                 '\\/branches\\/((v{0,1})(stable|([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?(-.*)?)(_(.*))?)',
                               description: 'A URI to the branch resource.',
                             },
+                            review: {
+                              type: 'object',
+                              properties: {
+                                branch: {
+                                  type: 'object',
+                                  properties: {
+                                    uri: {
+                                      type: 'string',
+                                      description:
+                                        'A URI to the version or branch resource that this custom block belongs to.',
+                                    },
+                                    name: {
+                                      type: 'string',
+                                      description:
+                                        'A friendly name automatically generated from your internal version number or branch name.',
+                                    },
+                                  },
+                                  required: ['uri', 'name'],
+                                  additionalProperties: false,
+                                },
+                                status: {
+                                  type: 'string',
+                                  enum: ['draft', 'ready', 'approved'],
+                                  default: 'draft',
+                                  description: 'The current review status.',
+                                },
+                                reviewers: {
+                                  type: 'array',
+                                  items: {
+                                    type: 'object',
+                                    properties: {
+                                      user: {
+                                        type: 'object',
+                                        properties: {
+                                          email: {
+                                            type: 'string',
+                                            nullable: true,
+                                            default: null,
+                                            description: 'The email address of the user who approved the branch.',
+                                          },
+                                          name: {
+                                            type: 'string',
+                                            nullable: true,
+                                            default: null,
+                                            description: 'The name of the user who approved the branch.',
+                                          },
+                                        },
+                                        additionalProperties: false,
+                                        description: 'Information about the user who approved the branch.',
+                                      },
+                                      action: {
+                                        type: 'string',
+                                        enum: ['approve', 'revoke'],
+                                        description: 'The action taken by the user when the review was made.',
+                                      },
+                                      created_at: {
+                                        type: 'string',
+                                        format: 'date-time',
+                                        description: 'An ISO 8601 formatted date for when the reviewer was created.',
+                                      },
+                                      updated_at: {
+                                        type: 'string',
+                                        format: 'date-time',
+                                        nullable: true,
+                                        default: null,
+                                        description:
+                                          'An ISO 8601 formatted date for when the reviewer was last updated.',
+                                      },
+                                    },
+                                    required: ['user', 'action', 'created_at'],
+                                    additionalProperties: false,
+                                  },
+                                  default: [],
+                                  description: 'A list of reviewers.',
+                                },
+                                ready_at: {
+                                  type: 'string',
+                                  nullable: true,
+                                  default: null,
+                                  description: 'An ISO 8601 formatted date for when the review was set to ready.',
+                                },
+                                ready_by: {
+                                  type: 'object',
+                                  properties: {
+                                    email: {
+                                      type: 'string',
+                                      nullable: true,
+                                      default: null,
+                                      description: 'User email who set the review to ready.',
+                                    },
+                                    name: {
+                                      type: 'string',
+                                      nullable: true,
+                                      default: null,
+                                      description: 'User name who set the review to ready.',
+                                    },
+                                  },
+                                  additionalProperties: false,
+                                  description: 'User who set the review to ready',
+                                },
+                                created_by: {
+                                  type: 'object',
+                                  properties: {
+                                    email: {
+                                      type: 'string',
+                                      nullable: true,
+                                      default: null,
+                                      description: 'User email who created the branch.',
+                                    },
+                                    name: {
+                                      type: 'string',
+                                      nullable: true,
+                                      default: null,
+                                      description: 'User name who created the branch.',
+                                    },
+                                  },
+                                  additionalProperties: false,
+                                  description: 'User who created the branch.',
+                                },
+                                merged_at: {
+                                  type: 'string',
+                                  nullable: true,
+                                  default: null,
+                                  description: 'An ISO 8601 formatted date for when the branch was last merged.',
+                                },
+                                contributors: {
+                                  type: 'array',
+                                  items: {
+                                    type: 'object',
+                                    properties: {
+                                      user: {
+                                        type: 'object',
+                                        properties: {
+                                          email: {
+                                            type: 'string',
+                                            nullable: true,
+                                            default: null,
+                                            description: 'The email address of the user who contributed to the branch.',
+                                          },
+                                          name: {
+                                            type: 'string',
+                                            nullable: true,
+                                            default: null,
+                                            description: 'The email address of the user who contributed to the branch.',
+                                          },
+                                        },
+                                        additionalProperties: false,
+                                        description: 'Information about the user who contributed to the branch.',
+                                      },
+                                      updated_at: {
+                                        type: 'string',
+                                        format: 'date-time',
+                                        nullable: true,
+                                        default: null,
+                                        description:
+                                          'An ISO 8601 formatted date for when the contributor last updated.',
+                                      },
+                                    },
+                                    required: ['user'],
+                                    additionalProperties: false,
+                                  },
+                                  default: [],
+                                  description: 'A list of contributors to the branch.',
+                                },
+                                tagged_reviewers: {
+                                  type: 'array',
+                                  items: {
+                                    type: 'object',
+                                    properties: {
+                                      user: {
+                                        type: 'object',
+                                        properties: {
+                                          email: {
+                                            type: 'string',
+                                            nullable: true,
+                                            default: null,
+                                            description: 'The email address of the tagged reviewer.',
+                                          },
+                                          name: {
+                                            type: 'string',
+                                            nullable: true,
+                                            default: null,
+                                            description: 'The name of the tagged reviewer.',
+                                          },
+                                        },
+                                        additionalProperties: false,
+                                        description: 'Information about the tagged reviewer.',
+                                      },
+                                      requested_at: {
+                                        type: 'string',
+                                        format: 'date-time',
+                                        description: 'An ISO 8601 formatted date for when the reviewer was tagged.',
+                                      },
+                                      requested_by: {
+                                        type: 'object',
+                                        properties: {
+                                          email: {
+                                            type: 'string',
+                                            nullable: true,
+                                            default: null,
+                                            description: 'The email address of the user who requested the review.',
+                                          },
+                                          name: {
+                                            type: 'string',
+                                            nullable: true,
+                                            default: null,
+                                            description: 'The name of the user who requested the review.',
+                                          },
+                                        },
+                                        additionalProperties: false,
+                                        description: 'The user who requested the review.',
+                                      },
+                                    },
+                                    required: ['user', 'requested_at', 'requested_by'],
+                                    additionalProperties: false,
+                                  },
+                                  default: [],
+                                  description: 'A list of tagged reviewers for this branch.',
+                                },
+                                updated_at: {
+                                  type: 'string',
+                                  format: 'date-time',
+                                  description: 'An ISO 8601 formatted date for when the review was last updated.',
+                                },
+                                report: {
+                                  type: 'object',
+                                  properties: {
+                                    id: {
+                                      type: 'string',
+                                      nullable: true,
+                                      default: null,
+                                      description: 'A report id or matching job id.',
+                                    },
+                                  },
+                                  additionalProperties: false,
+                                  description: 'Information about the reporting job',
+                                },
+                                project: { type: 'string', description: 'The project ID that this review belongs to.' },
+                                notification_settings: {
+                                  type: 'object',
+                                  properties: {
+                                    branch_topic_key: {
+                                      type: 'string',
+                                      nullable: true,
+                                      default: null,
+                                      description:
+                                        'The Novu Topic Key associated with this branch for managing notification subscriptions.',
+                                    },
+                                  },
+                                  additionalProperties: false,
+                                  description: 'Notification settings for the branch review.',
+                                },
+                              },
+                              required: [
+                                'branch',
+                                'ready_by',
+                                'created_by',
+                                'updated_at',
+                                'report',
+                                'project',
+                                'notification_settings',
+                              ],
+                              additionalProperties: false,
+                              description: 'The review status to the branch resource.',
+                            },
                           },
-                          required: ['base', 'href', 'name', 'updated_at', 'uri'],
+                          required: ['base', 'href', 'name', 'updated_at', 'uri', 'review'],
                           additionalProperties: false,
                         },
                         type: { type: 'string', enum: ['branch'] },
@@ -10519,6 +15372,8 @@ const document = {
     { name: 'Categories' },
     { name: 'Changelog' },
     { name: 'Custom Pages' },
+    { name: 'Discuss' },
+    { name: 'Fonts' },
     { name: 'Guides' },
     { name: 'Images' },
     { name: 'IP Addresses' },
