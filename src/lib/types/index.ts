@@ -41,6 +41,13 @@ type PageResponseSchemaRaw<T extends PageRoute> = T extends 'custom_pages' | 'gu
     ? (typeof readmeAPIv2Oas)['paths']['/changelogs/{identifier}']['patch']['responses']['200']['content']['application/json']['schema']
     : never;
 
+/** Category schemas */
+type CategoryResponseSchemaRaw =
+  (typeof readmeAPIv2Oas)['paths']['/branches/{branch}/categories/{section}']['get']['responses']['200']['content']['application/json']['schema'];
+
+type CategoryPagesResponseSchemaRaw =
+  (typeof readmeAPIv2Oas)['paths']['/branches/{branch}/categories/{section}/{title}/pages']['get']['responses']['200']['content']['application/json']['schema'];
+
 /**
  * Derived from our API documentation, this is the schema for the `project` object
  * as we receive it from the ReadMe API.
@@ -92,6 +99,19 @@ export type PageRequestSchema<T extends PageRoute> = FromSchema<
  */
 export type PageResponseSchema<T extends PageRoute> = FromSchema<
   PageResponseSchemaRaw<T>,
+  { keepDefaultedPropertiesOptional: true }
+>;
+
+/**
+ * This is the schema for category as we receive them from the ReadMe API.
+ */
+export type CategoryResponseSchema = FromSchema<CategoryResponseSchemaRaw, { keepDefaultedPropertiesOptional: true }>;
+
+/**
+ * This is the schema for the pages within a category as we receive them from the ReadMe API.
+ */
+export type CategoryPagesResponseSchema = FromSchema<
+  CategoryPagesResponseSchemaRaw,
   { keepDefaultedPropertiesOptional: true }
 >;
 
