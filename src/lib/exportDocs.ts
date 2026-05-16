@@ -236,7 +236,7 @@ function restructureFiles(this: APIv2PageExportCommands, tempFolder: string, fin
   }
 
   restructureSpinner.suffixText = '';
-  restructureSpinner.succeed(`${restructureSpinner.text}done!`);
+  restructureSpinner.succeed(`${restructureSpinner.text} done!`);
   this.debug(`Files moved: ${finalFolder}`);
 
   fs.rmSync(tempFolder, { recursive: true, force: true });
