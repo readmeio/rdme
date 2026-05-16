@@ -3,7 +3,54 @@
 
 Upload or export API Reference pages in your ReadMe project.
 
+* [`rdme reference export FOLDER`](#rdme-reference-export-folder)
 * [`rdme reference upload PATH`](#rdme-reference-upload-path)
+
+## `rdme reference export FOLDER`
+
+Export API References from your ReadMe project to local Markdown files.
+
+```
+USAGE
+  $ rdme reference export FOLDER --key <value> [--branch <value>] [--docs-only]
+
+ARGUMENTS
+  FOLDER  Directory to write exported Markdown into.
+
+FLAGS
+  --key=<value>     (required) ReadMe project API key
+  --branch=<value>  [default: stable] ReadMe project version
+  --docs-only       Skip pages with an empty body unless the page type is `link`.
+
+DESCRIPTION
+  Export API References from your ReadMe project to local Markdown files.
+
+  Downloads API References from your ReadMe project API for the given branch and writes them to a directory to be later
+  uploaded with `rdme reference upload`.
+
+EXAMPLES
+  Export API references from the stable branch into `./reference`:
+
+    $ rdme reference export ./reference
+
+  Export API references from a specific project version:
+
+    $ rdme reference export ./reference --branch=1.0
+
+  Export a specific version, omitting empty reference pages:
+
+    $ rdme reference export ./reference --branch=1.0 --docs-only
+
+FLAG DESCRIPTIONS
+  --key=<value>  ReadMe project API key
+
+    An API key for your ReadMe project. Note that API authentication is required despite being omitted from the example
+    usage. See our docs for more information: https://github.com/readmeio/rdme/tree/v10#authentication
+
+  --branch=<value>  ReadMe project version
+
+    Defaults to `stable` (i.e., your main project version).
+```
 
 ## `rdme reference upload PATH`
 
