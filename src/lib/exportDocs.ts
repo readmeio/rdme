@@ -112,7 +112,18 @@ function buildFileMap(this: APIv2PageExportCommands, files: string[]): Map<strin
   const fileMap = new Map<string, FileMapEntry>();
 
   for (const filePath of files) {
-    const frontmatter = parseFrontmatter.call(this, filePath);
+    let frontmatter: Record<string, unknown> | null = null;
+    try {
+      const content = fs.readFileSync(filePath, 'utf8');
+      frontmatter = parseFrontmatter(content);
+      if (frontmatter === null) {
+        this.warn(`no frontmatter found in ${filePath}`);
+      }
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      this.error(`Error parsing frontmatter in ${filePath}: ${message}`);
+    }
+
     if (frontmatter) {
       const slug = frontmatter.slug;
       if (typeof slug === 'string' && slug) {
@@ -225,7 +236,7 @@ function restructureFiles(this: APIv2PageExportCommands, tempFolder: string, fin
   }
 
   restructureSpinner.suffixText = '';
-  restructureSpinner.succeed(`${restructureSpinner.text} done!`);
+  restructureSpinner.succeed(`${restructureSpinner.text}done!`);
   this.debug(`Files moved: ${finalFolder}`);
 
   fs.rmSync(tempFolder, { recursive: true, force: true });
@@ -286,7 +297,6 @@ export async function exportDocs(this: APIv2PageExportCommands): Promise<FullExp
               ? `/branches/${encodeURIComponent(branch)}/reference/${encodeURIComponent(page.slug)}`
               : `/branches/${encodeURIComponent(branch)}/guides/${encodeURIComponent(page.slug)}`;
 
-            // const pageResult = await fetchJSON.call(this, pagePath);
             const data = await this.readmeAPIFetch(pagePath, {
               method: 'GET',
               headers,
@@ -323,7 +333,7 @@ export async function exportDocs(this: APIv2PageExportCommands): Promise<FullExp
                 const yamlFront = dumpYAML(frontmatter, { sortKeys: true });
                 const md = `---\n${yamlFront}---\n${body}`;
 
-                fs.writeFileSync(path.join(tempFolder, `${output.slug}.md`), md, 'utf8');
+                fs.writeFileSync(path.join(tempFolder, `${output.slug}.md`), md, { encoding: 'utf-8' });
                 downloads.completed.push(output);
               }
             }
