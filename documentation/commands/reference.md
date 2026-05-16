@@ -1,7 +1,7 @@
 `rdme reference`
 ================
 
-Upload Markdown files to the Reference section of your ReadMe project.
+Upload or export API Reference pages in your ReadMe project.
 
 * [`rdme reference upload PATH`](#rdme-reference-upload-path)
 

@@ -177,12 +177,6 @@
     "scope": "readme",
     "topicSeparator": " ",
     "topics": {
-      "changelog": {
-        "description": "Upload or export Changelogs in your ReadMe project."
-      },
-      "custompages": {
-        "description": "Upload or export Custom Pages in your ReadMe project."
-      },
       "docs": {
         "description": "Upload or export Guides in your ReadMe project."
       },

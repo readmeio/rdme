@@ -1,7 +1,7 @@
 `rdme docs`
 ===========
 
-Upload Markdown files to the Guides section of your ReadMe project.
+Upload or export Guides in your ReadMe project.
 
 * [`rdme docs upload PATH`](#rdme-docs-upload-path)
 
