@@ -82,6 +82,7 @@
     "oas-normalize": "^16.0.4",
     "ora": "^9.4.0",
     "prompts": "^2.4.2",
+    "remove-undefined-objects": "^8.0.1",
     "semver": "^7.8.0",
     "simple-git": "^3.36.0",
     "slugify": "^1.6.9",
@@ -176,8 +177,14 @@
     "scope": "readme",
     "topicSeparator": " ",
     "topics": {
+      "docs": {
+        "description": "Upload or export Guides in your ReadMe project."
+      },
       "openapi": {
         "description": "Manage your API definition (e.g., syncing, validation, analysis, conversion, etc.). Supports OpenAPI, Swagger, and Postman collections, in either JSON or YAML formats."
+      },
+      "reference": {
+        "description": "Upload or export API Reference pages in your ReadMe project."
       }
     }
   },

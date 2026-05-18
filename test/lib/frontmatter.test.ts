@@ -11,10 +11,50 @@ import CustomPagesUploadCommand from '../../src/commands/custompages/upload.js';
 import DocsMigrateCommand from '../../src/commands/docs/migrate.js';
 import DocsUploadCommand from '../../src/commands/docs/upload.js';
 import RefUploadCommand from '../../src/commands/reference/upload.js';
-import { fix, writeFixes } from '../../src/lib/frontmatter.js';
+import { fix, parse, writeFixes } from '../../src/lib/frontmatter.js';
 import { emptyMappings, fetchSchema } from '../../src/lib/readmeAPIFetch.js';
 import { readPage } from '../../src/lib/readPage.js';
 import { setupOclifConfig } from '../helpers/oclif.js';
+
+describe('#parse', () => {
+  it('should return parsed frontmatter as a plain object', () => {
+    const content = `---
+slug: intro
+title: Introduction
+---
+# Body`;
+
+    expect(parse(content)).toStrictEqual({ slug: 'intro', title: 'Introduction' });
+  });
+
+  it('should return null and warn when no YAML frontmatter block is found', () => {
+    const content = '# Title only\n\nNo frontmatter here.';
+
+    expect(parse(content)).toBeNull();
+  });
+
+  it('should return null and error when YAML is invalid', () => {
+    const content = `---
+slug: [
+  bad: yaml
+---
+`;
+
+    expect(() => {
+      parse(content);
+    }).toThrow(/unexpected end of the stream within a flow collection/);
+  });
+
+  it('should return null when YAML parses to a non-object root (e.g. array)', () => {
+    const content = `---
+- one
+- two
+---
+`;
+
+    expect(parse(content)).toBeNull();
+  });
+});
 
 describe.each([
   ['guides upload', DocsUploadCommand],

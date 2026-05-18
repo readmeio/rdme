@@ -1,6 +1,7 @@
 import ChangelogUploadCommand from './commands/changelog/upload.js';
 import ChangelogsCommand from './commands/changelogs.js';
 import CustomPagesUploadCommand from './commands/custompages/upload.js';
+import DocsExportCommand from './commands/docs/export.js';
 import DocsMigrateCommand from './commands/docs/migrate.js';
 import DocsUploadCommand from './commands/docs/upload.js';
 import LoginCommand from './commands/login.js';
@@ -12,6 +13,7 @@ import OpenAPIResolveCommand from './commands/openapi/resolve.js';
 import OpenAPIUploadCommand from './commands/openapi/upload.js';
 import OpenAPIValidateCommand from './commands/openapi/validate.js';
 import RageCommand from './commands/rage.js';
+import ReferenceExportCommand from './commands/reference/export.js';
 import RefUploadCommand from './commands/reference/upload.js';
 import WhoAmICommand from './commands/whoami.js';
 
@@ -38,6 +40,7 @@ export const COMMANDS = {
 
   'custompages:upload': CustomPagesUploadCommand,
 
+  'docs:export': DocsExportCommand,
   'docs:migrate': DocsMigrateCommand,
   'docs:upload': DocsUploadCommand,
 
@@ -53,6 +56,7 @@ export const COMMANDS = {
 
   rage: RageCommand,
 
+  'reference:export': ReferenceExportCommand,
   'reference:upload': RefUploadCommand,
 
   whoami: WhoAmICommand,
@@ -85,6 +89,13 @@ export type APIv2PageUploadCommands =
   | CustomPagesUploadCommand
   | DocsUploadCommand
   | RefUploadCommand;
+
+/**
+ * Commands that leverage the APIv2 representations for exporting pages (e.g., Guides, API
+ * Reference, etc.).
+ *
+ */
+export type APIv2PageExportCommands = DocsExportCommand | ReferenceExportCommand;
 
 /**
  * Commands that leverage the APIv2 representations for interfacing with pages
