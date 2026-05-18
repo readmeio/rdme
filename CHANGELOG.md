@@ -1,3 +1,15 @@
+# [10.9.0](https://github.com/readmeio/rdme/compare/v10.8.0...v10.9.0) (2026-05-18)
+
+
+### Bug Fixes
+
+* empty commit to trigger a release ([7b960c5](https://github.com/readmeio/rdme/commit/7b960c52364ca35565a2c62621e78cef5e8ddc97))
+
+
+### Features
+
+* creation of a new `export` command for rdme-compatible files ([#1468](https://github.com/readmeio/rdme/issues/1468)) ([2ab6109](https://github.com/readmeio/rdme/commit/2ab61091a818e05b59648e9e50d5a364f2accdf7))
+
 # [10.9.0-next.1](https://github.com/readmeio/rdme/compare/v10.8.0...v10.9.0-next.1) (2026-05-18)
 
 
