@@ -1,3 +1,10 @@
+## [10.9.1-next.1](https://github.com/readmeio/rdme/compare/v10.9.0...v10.9.1-next.1) (2026-05-22)
+
+
+### Bug Fixes
+
+* **gha:** move from node 20 to node 24 ([#1470](https://github.com/readmeio/rdme/issues/1470)) ([893f158](https://github.com/readmeio/rdme/commit/893f158f57b0f461b6f842f764f6ef1e3bfa8c38)), closes [#1469](https://github.com/readmeio/rdme/issues/1469)
+
 # [10.9.0](https://github.com/readmeio/rdme/compare/v10.8.0...v10.9.0) (2026-05-18)
 
 
