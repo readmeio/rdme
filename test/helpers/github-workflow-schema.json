@@ -166,6 +166,7 @@
         "artifact-metadata": { "$ref": "#/definitions/permissions-level" },
         "attestations": { "$ref": "#/definitions/permissions-level" },
         "checks": { "$ref": "#/definitions/permissions-level" },
+        "code-quality": { "$ref": "#/definitions/permissions-level" },
         "contents": { "$ref": "#/definitions/permissions-level" },
         "deployments": { "$ref": "#/definitions/permissions-level" },
         "discussions": { "$ref": "#/definitions/permissions-level" },
