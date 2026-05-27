@@ -1,5 +1,6 @@
 import type { OclifOutput } from '../../helpers/oclif.js';
 
+import { randomUUID } from 'node:crypto';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -168,6 +169,87 @@ Child body`),
 
       mock.done();
     } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it('should not write outside the export directory when category URI contains path traversal', async () => {
+    const tmpDir = tempExportDir();
+    const parentDir = path.dirname(tmpDir);
+    const escapeDir = path.join(parentDir, `escape-${randomUUID()}`);
+
+    try {
+      const evilCategory = '%2e%2e%2fescape';
+      const mock = getAPIv2Mock({ authorization })
+        .get(`/branches/stable/categories/${route}`)
+        .reply(200, { data: [{ title: evilCategory }] })
+        .get(`/branches/stable/categories/${route}/${encodeURIComponent(evilCategory)}/pages`)
+        .reply(200, { data: [{ slug: 'rdme-cat-poc' }] })
+        .get(`/branches/stable/${route}/rdme-cat-poc`)
+        .reply(200, {
+          data: {
+            slug: 'rdme-cat-poc',
+            title: 'PoC',
+            type: 'basic',
+            content: { body: 'TRAVERSAL POC FILE.' },
+            category: { uri: `/branches/stable/categories/${route}/${evilCategory}` },
+          },
+        });
+
+      const output = await run([tmpDir, '--key', key]);
+
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
+      expect(fs.copyFileSync).not.toHaveBeenCalled();
+      expect(fs.existsSync(escapeDir)).toBe(false);
+
+      expect(output.stderr).toMatchSnapshot();
+      expect(output.result).toMatchObject({ failed: ['rdme-cat-poc'] });
+
+      mock.done();
+    } finally {
+      if (fs.existsSync(escapeDir)) {
+        fs.rmSync(escapeDir, { recursive: true, force: true });
+      }
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it('should not write outside the export directory when slug contains path traversal', async () => {
+    const tmpDir = tempExportDir();
+    const parentDir = path.dirname(tmpDir);
+    const evilDir = path.join(parentDir, `evil-${randomUUID()}`);
+
+    try {
+      const mock = getAPIv2Mock({ authorization })
+        .get(`/branches/stable/categories/${route}`)
+        .reply(200, { data: [{ title: 'Main' }] })
+        .get(`/branches/stable/categories/${route}/Main/pages`)
+        .reply(200, { data: [{ slug: '../../evil' }] })
+        .get(`/branches/stable/${route}/${encodeURIComponent('../../evil')}`)
+        .reply(200, {
+          data: {
+            slug: '../../evil',
+            title: 'Evil',
+            type: 'basic',
+            content: { body: 'malicious body' },
+            category: { uri: `https://api.readme.com/v2/branches/stable/categories/${route}/main` },
+          },
+        });
+
+      const output = await run([tmpDir, '--key', key]);
+
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
+      expect(fs.copyFileSync).not.toHaveBeenCalled();
+      expect(fs.existsSync(evilDir)).toBe(false);
+
+      expect(output.stderr).toMatchSnapshot();
+      expect(output.result).toMatchObject({ failed: ['../../evil'] });
+
+      mock.done();
+    } finally {
+      if (fs.existsSync(evilDir)) {
+        fs.rmSync(evilDir, { recursive: true, force: true });
+      }
       fs.rmSync(tmpDir, { recursive: true, force: true });
     }
   });

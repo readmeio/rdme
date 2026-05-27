@@ -13,6 +13,7 @@ import { isRecord } from '../utils.js';
 
 import { parse as parseFrontmatter } from './frontmatter.js';
 import { oraOptions } from './logger.js';
+import { decodeURILastSegment, isSafePathSegment, resolvePathWithinRoot } from './safePath.js';
 
 type ChangelogsRequestSchema = PageRequestSchema<'changelogs'>;
 type CustomPagesRequestSchema = PageRequestSchema<'custom_pages'>;
@@ -47,7 +48,7 @@ interface FileMapEntry {
  * Scrub out unnecessary data from the API and simplify fields.
  *
  */
-function scrub(data: GeneralRequestSchema): Record<string, unknown> | undefined {
+function scrub(data: GeneralRequestSchema): Record<string, unknown> | null | undefined {
   const denylist = new Set(['api', 'href', 'links', 'project', 'renderable', 'updated_at', 'uri']);
 
   /** API defaults (to ensure we omit these when they're unchanged) */
@@ -79,10 +80,14 @@ function scrub(data: GeneralRequestSchema): Record<string, unknown> | undefined 
 
       scrubbed[key] = filtered;
     } else if (key === 'category' && isRecord(value) && typeof value.uri === 'string') {
-      const name = decodeURIComponent(value.uri.split('/').pop() || '');
+      const name = decodeURILastSegment(value.uri);
+      if (name === null) return null;
+
       scrubbed[key] = { uri: name };
     } else if (key === 'parent' && isRecord(value) && typeof value.uri === 'string') {
-      const slugPart = decodeURIComponent(value.uri.split('/').pop() || '');
+      const slugPart = decodeURILastSegment(value.uri);
+      if (slugPart === null) return null;
+
       scrubbed[key] = { uri: slugPart };
     } else if (!(key in DEFAULTS && value === DEFAULTS[key as keyof typeof DEFAULTS])) {
       scrubbed[key] = value;
@@ -121,7 +126,7 @@ function buildFileMap(this: APIv2PageExportCommands, files: string[]): Map<strin
       }
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
-      this.error(`Error parsing frontmatter in ${filePath}: ${message}`);
+      throw new Error(`Error parsing frontmatter in ${filePath}: ${message}`, { cause: err });
     }
 
     if (frontmatter) {
@@ -159,14 +164,13 @@ function buildPath(
   visited: Set<string> = new Set(),
 ): string | null {
   if (visited.has(slug)) {
-    this.error(`Circular reference detected for slug: ${slug}`);
+    throw new Error(`Circular reference detected for slug: ${slug}`);
   }
   visited.add(slug);
 
   const fileInfo = fileMap.get(slug);
   if (!fileInfo) {
-    this.error(`File not found for slug: ${slug}`);
-    return null;
+    throw new Error(`File not found for slug: ${slug}`);
   }
 
   const parts: string[] = [];
@@ -230,7 +234,11 @@ function restructureFiles(this: APIv2PageExportCommands, tempFolder: string, fin
   this.debug('Copying files to final structure:');
 
   for (const r of results) {
-    const dest = path.join(finalFolder, r.newPath);
+    const dest = resolvePathWithinRoot(finalFolder, r.newPath);
+    if (!dest) {
+      throw new Error(`Refusing to write outside export directory: ${r.newPath}`);
+    }
+
     fs.mkdirSync(path.dirname(dest), { recursive: true });
     fs.copyFileSync(r.oldPath, dest);
   }
@@ -329,12 +337,35 @@ export async function exportDocs(this: APIv2PageExportCommands): Promise<FullExp
                   parentCounts[parentKey] += 1;
                 }
 
-                const frontmatter = scrub(output);
-                const yamlFront = dumpYAML(frontmatter, { sortKeys: true });
-                const md = `---\n${yamlFront}---\n${body}`;
+                const pageSlug = output.slug;
+                if (!pageSlug || !isSafePathSegment(pageSlug)) {
+                  this.warn(`Skipping page "${String(pageSlug)}": slug is invalid.`);
+                  this.debug(
+                    `"${String(pageSlug)}" contains directory separators and is not safe to use within the filesystem.`,
+                  );
+                  downloads.failed.push(String(pageSlug));
+                } else {
+                  const frontmatter = scrub(output);
+                  if (!frontmatter) {
+                    this.warn(`Skipping page "${pageSlug}": category or parent URI in API response is invalid.`);
+                    this.debug(
+                      `"${String(pageSlug)}" is invalid because its category or parent URI contains directory separators and is not safe to use within the filesystem.`,
+                    );
+                    downloads.failed.push(pageSlug);
+                  } else {
+                    const yamlFront = dumpYAML(frontmatter, { sortKeys: true });
+                    const md = `---\n${yamlFront}---\n${body}`;
+                    const tempPath = resolvePathWithinRoot(tempFolder, `${pageSlug}.md`);
 
-                fs.writeFileSync(path.join(tempFolder, `${output.slug}.md`), md, { encoding: 'utf-8' });
-                downloads.completed.push(output);
+                    if (!tempPath) {
+                      this.warn(`Skipping page "${pageSlug}": refused to write outside the temporary export folder.`);
+                      downloads.failed.push(pageSlug);
+                    } else {
+                      fs.writeFileSync(tempPath, md, { encoding: 'utf-8' });
+                      downloads.completed.push(output);
+                    }
+                  }
+                }
               }
             }
           } finally {
