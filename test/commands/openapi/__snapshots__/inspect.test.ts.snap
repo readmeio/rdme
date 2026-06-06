@@ -94,7 +94,7 @@ commonParameters:
 
 exports[`rdme openapi inspect > feature reports > should throw an error if an invalid feature is supplied 1`] = `
 {
-  "error": [Error: Expected --feature=reamde to be one of: additionalProperties, callbacks, circularRefs, commonParameters, discriminators, links, style, polymorphism, serverVariables, webhooks, xmlRequests, xmlResponses, xmlSchemas
+  "error": [Error: Expected --feature=reamde to be one of: additionalProperties, callbacks, circularRefs, commonParameters, discriminators, links, style, polymorphism, references, serverVariables, webhooks, xmlRequests, xmlResponses, xmlSchemas
 See more help with --help],
   "stderr": "",
   "stdout": "",
@@ -160,6 +160,11 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
 │                            │       │                                                                                  │
 │                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#schema- │
 │                            │       │ object                                                                           │
+├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
+│ references                 │ 🟢    │ Determines the presence of the \`$ref\` pointers.                                  │
+│                            │       │                                                                                  │
+│                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.           │
+│                            │       │ md#reference-object                                                              │
 ├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
 │ serverVariables            │ 🔴    │ Server variables allow to do user-supplied variable subsitituions within your    │
 │                            │       │ API server URL.                                                                  │
@@ -251,6 +256,11 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
 │                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#schema- │
 │                            │       │ object                                                                           │
 ├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
+│ references                 │ 🟢    │ Determines the presence of the \`$ref\` pointers.                                  │
+│                            │       │                                                                                  │
+│                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.           │
+│                            │       │ md#reference-object                                                              │
+├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
 │ serverVariables            │ 🔴    │ Server variables allow to do user-supplied variable subsitituions within your    │
 │                            │       │ API server URL.                                                                  │
 │                            │       │                                                                                  │
@@ -341,6 +351,11 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
 │                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#schema- │
 │                            │       │ object                                                                           │
 ├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
+│ references                 │ 🟢    │ Determines the presence of the \`$ref\` pointers.                                  │
+│                            │       │                                                                                  │
+│                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.           │
+│                            │       │ md#reference-object                                                              │
+├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
 │ serverVariables            │ 🔴    │ Server variables allow to do user-supplied variable subsitituions within your    │
 │                            │       │ API server URL.                                                                  │
 │                            │       │                                                                                  │
@@ -429,6 +444,11 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
 │                            │       │ different schemas.                                                               │
 │                            │       │                                                                                  │
 │                            │       │ https://json-schema.org/understanding-json-schema/reference/combining.html       │
+├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
+│ references                 │ 🟢    │ Determines the presence of the \`$ref\` pointers.                                  │
+│                            │       │                                                                                  │
+│                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.           │
+│                            │       │ md#reference-object                                                              │
 ├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
 │ serverVariables            │ 🔴    │ Server variables allow to do user-supplied variable subsitituions within your    │
 │                            │       │ API server URL.                                                                  │
