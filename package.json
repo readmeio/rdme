@@ -82,7 +82,7 @@
     "oas-normalize": "^16.0.4",
     "ora": "^9.4.0",
     "prompts": "^2.4.2",
-    "remove-undefined-objects": "^8.0.1",
+    "remove-undefined-objects": "^9.0.0",
     "semver": "^7.8.0",
     "simple-git": "^3.36.0",
     "slugify": "^1.6.9",
