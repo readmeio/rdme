@@ -24,6 +24,7 @@ describe('#getSupportedFeatures', () => {
       'links',
       'style',
       'polymorphism',
+      'references',
       'serverVariables',
       'webhooks',
       'xmlRequests',

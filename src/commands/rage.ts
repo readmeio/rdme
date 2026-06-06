@@ -1,4 +1,4 @@
-import { supportsColor } from 'chalk';
+import { supportsColor } from 'chalk'; // oxlint-disable-line unicorn/import-style
 import { getBorderCharacters, table } from 'table';
 
 import BaseCommand from '../lib/baseCommand.js';

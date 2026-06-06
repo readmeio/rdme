@@ -87,6 +87,7 @@ describe('hooks', () => {
       });
 
       it('should properly prompt for login if not in CI', async () => {
+        // oxlint-disable-next-line prefer-arrow-callback -- False positive, `this` can't be used in arrow functions.
         vi.mocked(loginFlow).mockImplementation(function (this: Hook.Context) {
           configstore.set('apiKey', 'login-flow-key');
           return Promise.resolve('Logged in successfully.');
