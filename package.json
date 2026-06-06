@@ -94,7 +94,7 @@
     "unzipper": "^0.12.3"
   },
   "devDependencies": {
-    "@commitlint/cli": "^20.5.2",
+    "@commitlint/cli": "^21.0.2",
     "@commitlint/config-conventional": "^20.5.0",
     "@oclif/test": "^4.1.18",
     "@readme/better-ajv-errors": "^2.3.2",
