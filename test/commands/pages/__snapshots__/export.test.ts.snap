@@ -1,0 +1,31 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`rdme docs upload > should not write outside the export directory when category URI contains path traversal 1`] = `
+"- 📩 Exporting files from ReadMe...
+ ›   Warning: Skipping page "rdme-cat-poc": category or parent URI in API 
+ ›   response is invalid.
+✖ 📩 Exporting files from ReadMe... 1 file(s) failed.
+"
+`;
+
+exports[`rdme docs upload > should not write outside the export directory when slug contains path traversal 1`] = `
+"- 📩 Exporting files from ReadMe...
+ ›   Warning: Skipping page "../../evil": slug is invalid.
+✖ 📩 Exporting files from ReadMe... 1 file(s) failed.
+"
+`;
+
+exports[`rdme reference upload > should not write outside the export directory when category URI contains path traversal 1`] = `
+"- 📩 Exporting files from ReadMe...
+ ›   Warning: Skipping page "rdme-cat-poc": category or parent URI in API 
+ ›   response is invalid.
+✖ 📩 Exporting files from ReadMe... 1 file(s) failed.
+"
+`;
+
+exports[`rdme reference upload > should not write outside the export directory when slug contains path traversal 1`] = `
+"- 📩 Exporting files from ReadMe...
+ ›   Warning: Skipping page "../../evil": slug is invalid.
+✖ 📩 Exporting files from ReadMe... 1 file(s) failed.
+"
+`;
