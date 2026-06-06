@@ -1,6 +1,6 @@
 {
   "name": "rdme",
-  "version": "10.9.1-next.2",
+  "version": "10.9.1",
   "description": "ReadMe's official CLI and GitHub Action.",
   "keywords": [
     "api",

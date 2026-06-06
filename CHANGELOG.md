@@ -1,3 +1,11 @@
+## [10.9.1](https://github.com/readmeio/rdme/compare/v10.9.0...v10.9.1) (2026-06-06)
+
+
+### Bug Fixes
+
+* **export:** sanitize URIs before using them as directory paths ([#1471](https://github.com/readmeio/rdme/issues/1471)) ([ce2568c](https://github.com/readmeio/rdme/commit/ce2568c366827feaa4efe8ca35777ed1d3dfd51b))
+* **gha:** move from node 20 to node 24 ([#1470](https://github.com/readmeio/rdme/issues/1470)) ([893f158](https://github.com/readmeio/rdme/commit/893f158f57b0f461b6f842f764f6ef1e3bfa8c38)), closes [#1469](https://github.com/readmeio/rdme/issues/1469)
+
 ## [10.9.1-next.2](https://github.com/readmeio/rdme/compare/v10.9.1-next.1...v10.9.1-next.2) (2026-06-06)
 
 

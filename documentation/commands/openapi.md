@@ -53,20 +53,22 @@ Analyze an OpenAPI/Swagger definition for various OpenAPI and ReadMe feature usa
 ```
 USAGE
   $ rdme openapi inspect [SPEC] [--feature
-    additionalProperties|callbacks|circularRefs|commonParameters|discriminators|links|style|polymorphism|serverVariables
-    |webhooks|xmlRequests|xmlResponses|xmlSchemas...] [--working-directory <value>]
+    additionalProperties|callbacks|circularRefs|commonParameters|discriminators|links|style|polymorphism|references|serv
+    erVariables|webhooks|xmlRequests|xmlResponses|xmlSchemas...] [--working-directory <value>]
 
 ARGUMENTS
   [SPEC]  A path to your API definition — either a local file path or a URL. If your working directory and all
           subdirectories contain a single OpenAPI file, you can omit the path.
 
 FLAGS
-  --feature=<option>...        A specific OpenAPI or ReadMe feature you wish to see detailed information on (if it
-                               exists). If any features supplied do not exist within the API definition an exit(1) code
-                               will be returned alongside the report.
-                               <options: additionalProperties|callbacks|circularRefs|commonParameters|discriminators|lin
-                               ks|style|polymorphism|serverVariables|webhooks|xmlRequests|xmlResponses|xmlSchemas>
-  --working-directory=<value>  Working directory (for usage with relative external references)
+  --feature=<option>...
+      A specific OpenAPI or ReadMe feature you wish to see detailed information on (if it exists). If any features
+      supplied do not exist within the API definition an exit(1) code will be returned alongside the report.
+      <options: additionalProperties|callbacks|circularRefs|commonParameters|discriminators|links|style|polymorphism|refer
+      ences|serverVariables|webhooks|xmlRequests|xmlResponses|xmlSchemas>
+
+  --working-directory=<value>
+      Working directory (for usage with relative external references)
 
 DESCRIPTION
   Analyze an OpenAPI/Swagger definition for various OpenAPI and ReadMe feature usage.
