@@ -1,3 +1,10 @@
+## [10.9.1-next.2](https://github.com/readmeio/rdme/compare/v10.9.1-next.1...v10.9.1-next.2) (2026-06-06)
+
+
+### Bug Fixes
+
+* **export:** sanitize URIs before using them as directory paths ([#1471](https://github.com/readmeio/rdme/issues/1471)) ([ce2568c](https://github.com/readmeio/rdme/commit/ce2568c366827feaa4efe8ca35777ed1d3dfd51b))
+
 ## [10.9.1-next.1](https://github.com/readmeio/rdme/compare/v10.9.0...v10.9.1-next.1) (2026-05-22)
 
 
