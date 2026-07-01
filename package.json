@@ -75,7 +75,7 @@
     "debug": "^4.3.3",
     "gray-matter": "^4.0.1",
     "ignore": "^7.0.0",
-    "js-yaml": "^4.2.0",
+    "js-yaml": "^5.2.0",
     "json-schema-to-ts": "^3.1.1",
     "mime-types": "^3.0.1",
     "oas": "^34.0.2",
