@@ -52,28 +52,25 @@ async function pushDoc(
       )}`;
     }
 
-    return (
-      readmeAPIv1Fetch(
-        `/api/v1/${type}`,
-        {
-          method: 'post',
-          headers: cleanAPIv1Headers(key, selectedVersion, new Headers({ 'Content-Type': 'application/json' })),
-          body: JSON.stringify({
-            slug,
-            ...payload,
-          }),
+    return readmeAPIv1Fetch(
+      `/api/v1/${type}`,
+      {
+        method: 'post',
+        headers: cleanAPIv1Headers(key, selectedVersion, new Headers({ 'Content-Type': 'application/json' })),
+        body: JSON.stringify({
+          slug,
+          ...payload,
+        }),
+      },
+      {
+        file: {
+          path: filePath,
+          type: 'path',
         },
-        {
-          file: {
-            path: filePath,
-            type: 'path',
-          },
-        },
-      )
-        .then(handleAPIv1Res)
-        // oxlint-disable-next-line no-underscore-dangle -- `_id` is property in the response.
-        .then(res => `🌱 successfully created '${res.slug}' (ID: ${res._id}) with contents from ${filePath}`)
-    );
+      },
+    )
+      .then(handleAPIv1Res)
+      .then(res => `🌱 successfully created '${res.slug}' (ID: ${res._id}) with contents from ${filePath}`);
   }
 
   function updateDoc(existingDoc: typeof payload) {
