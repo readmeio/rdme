@@ -294,7 +294,7 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
 exports[`rdme openapi inspect > full reports > should generate a report for @readme/oas-examples/3.0/json/readme-legacy.json 1`] = `
 "Here are some interesting things we found in your API definition. 🕵️
 
- · Your dereferenced file size is 0.33 MB.
+ · Your dereferenced file size is 0.31 MB.
  · You are using 3 media types throughout your API: application/json, multipart/form-data, and text/event-stream
  · You have a total of 36 operations in your API.
  · Your raw file size is 0.06 MB.
@@ -389,7 +389,7 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
 exports[`rdme openapi inspect > full reports > should generate a report for @readme/oas-examples/3.1/json/train-travel.json 1`] = `
 "Here are some interesting things we found in your API definition. 🕵️
 
- · Your dereferenced file size is 0.15 MB.
+ · Your dereferenced file size is 0.14 MB.
  · You are using 2 media types throughout your API: application/json and application/xml
  · You have a total of 9 operations in your API.
  · Your raw file size is 0.03 MB.

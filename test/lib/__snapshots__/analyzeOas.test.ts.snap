@@ -94,12 +94,6 @@ exports[`#analyzeOas > should analyze an OpenAPI definition 1`] = `
         "3.1": "https://json-schema.org/understanding-json-schema/reference/combining.html",
       },
     },
-    "refNames": {
-      "description": "Determines the presence of the \`x-readme-ref-name\` extension that ReadMe uses when dereferencing API definitions.",
-      "hidden": true,
-      "locations": [],
-      "present": false,
-    },
     "references": {
       "description": "Determines the presence of the \`$ref\` pointers.",
       "locations": [
