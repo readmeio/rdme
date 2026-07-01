@@ -118,7 +118,7 @@
     "nock": "^14.0.15",
     "oclif": "^4.23.10",
     "openapi-types": "^12.1.3",
-    "oxfmt": "^0.53.0",
+    "oxfmt": "^0.57.0",
     "oxlint": "^1.68.0",
     "rollup": "^4.61.1",
     "rollup-plugin-esbuild": "^6.2.0",
