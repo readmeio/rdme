@@ -78,7 +78,7 @@
     "js-yaml": "^4.2.0",
     "json-schema-to-ts": "^3.1.1",
     "mime-types": "^3.0.1",
-    "oas": "^34.0.2",
+    "oas": "^37.0.0",
     "oas-normalize": "^16.0.5",
     "ora": "^9.4.0",
     "prompts": "^2.4.2",
