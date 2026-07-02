@@ -1,3 +1,10 @@
+## [10.9.2](https://github.com/readmeio/rdme/compare/v10.9.1...v10.9.2) (2026-07-02)
+
+
+### Bug Fixes
+
+* **pages:** preserve `link` frontmatter during dry-run autofix ([#1491](https://github.com/readmeio/rdme/issues/1491)) ([d91b0a3](https://github.com/readmeio/rdme/commit/d91b0a32de5cc780c43564c66e70175e5d1a77dd))
+
 ## [10.9.1](https://github.com/readmeio/rdme/compare/v10.9.0...v10.9.1) (2026-06-06)
 
 
