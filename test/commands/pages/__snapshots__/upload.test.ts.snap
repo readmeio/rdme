@@ -796,6 +796,45 @@ Please review the changes. Once everything looks good, re-run \`rdme docs upload
 }
 `;
 
+exports[`rdme docs upload > given that the file path is a single file > given that the file has frontmatter issues > should migrate legacy link frontmatter to content.link during dry run 1`] = `
+{
+  "result": {
+    "created": [],
+    "failed": [],
+    "skipped": [
+      {
+        "filePath": "test/__fixtures__/docs/legacy-link.md",
+        "result": "skipped",
+        "slug": "legacy-link",
+      },
+    ],
+    "updated": [],
+  },
+  "stderr": "- 🔬 Validating frontmatter data...
+⚠ 🔬 Validating frontmatter data... issues found in 1 file(s).
+",
+  "stdout": "=== BEGIN writeFileSync to file: test/__fixtures__/docs/legacy-link.md ===
+---
+category:
+  uri: some-category-uri
+title: External Link
+type: link
+content:
+  link:
+    url: 'https://example.com'
+    new_tab: true
+---
+
+
+=== END writeFileSync to file: test/__fixtures__/docs/legacy-link.md ===
+✅ The following files have been automatically fixed:
+- test/__fixtures__/docs/legacy-link.md (1 issue)
+
+Please review the changes. Once everything looks good, re-run \`rdme docs upload\` to upload these files to ReadMe.
+",
+}
+`;
+
 exports[`rdme docs upload > given that the file path is a single file > given that the file has frontmatter issues > should skip client-side validation if the --skip-validation flag is passed 1`] = `
 {
   "error": [APIv2Error: ReadMe API error: bad request
@@ -1850,6 +1889,45 @@ Body
 === END writeFileSync to file: test/__fixtures__/docs/mixed-docs/legacy-category.md ===
 ✅ The following files have been automatically fixed:
 - test/__fixtures__/docs/mixed-docs/legacy-category.md (1 issue)
+
+Please review the changes. Once everything looks good, re-run \`rdme reference upload\` to upload these files to ReadMe.
+",
+}
+`;
+
+exports[`rdme reference upload > given that the file path is a single file > given that the file has frontmatter issues > should migrate legacy link frontmatter to content.link during dry run 1`] = `
+{
+  "result": {
+    "created": [],
+    "failed": [],
+    "skipped": [
+      {
+        "filePath": "test/__fixtures__/docs/legacy-link.md",
+        "result": "skipped",
+        "slug": "legacy-link",
+      },
+    ],
+    "updated": [],
+  },
+  "stderr": "- 🔬 Validating frontmatter data...
+⚠ 🔬 Validating frontmatter data... issues found in 1 file(s).
+",
+  "stdout": "=== BEGIN writeFileSync to file: test/__fixtures__/docs/legacy-link.md ===
+---
+category:
+  uri: some-category-uri
+title: External Link
+type: link
+content:
+  link:
+    url: 'https://example.com'
+    new_tab: true
+---
+
+
+=== END writeFileSync to file: test/__fixtures__/docs/legacy-link.md ===
+✅ The following files have been automatically fixed:
+- test/__fixtures__/docs/legacy-link.md (1 issue)
 
 Please review the changes. Once everything looks good, re-run \`rdme reference upload\` to upload these files to ReadMe.
 ",

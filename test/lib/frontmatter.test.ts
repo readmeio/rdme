@@ -305,7 +305,21 @@ describe.each([
 
   it.todo('should fix metadata object');
 
-  it.todo('should fix content.link object');
+  it('should fix legacy link object', () => {
+    const data = {
+      title: 'Hello, world!',
+      type: 'link',
+      link: {
+        url: 'https://example.com',
+        new_tab: true,
+      },
+    };
+
+    const result = fix.call(command, data, schema, emptyMappings);
+
+    expect(result.hasIssues).toBe(true);
+    expect(result.updatedData).toMatchSnapshot();
+  });
 
   it.todo('should fix content.next object');
 

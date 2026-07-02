@@ -236,6 +236,24 @@ describe.each([
         );
       });
 
+      it('should migrate legacy link frontmatter to content.link during dry run', async () => {
+        prompts.inject([true]);
+
+        const result = await run(['test/__fixtures__/docs/legacy-link.md', '--key', key, '--dry-run']);
+
+        expect(result).toMatchSnapshot();
+        expect(fs.writeFileSync).toHaveBeenCalledWith(
+          'test/__fixtures__/docs/legacy-link.md',
+          expect.stringContaining("url: 'https://example.com'"),
+          { encoding: 'utf-8' },
+        );
+        expect(fs.writeFileSync).toHaveBeenCalledWith(
+          'test/__fixtures__/docs/legacy-link.md',
+          expect.stringContaining('content:'),
+          { encoding: 'utf-8' },
+        );
+      });
+
       it('should fix the frontmatter issues in the file and insert the proper category mapping', async () => {
         nock.cleanAll();
         const mappingsMock = getAPIv1Mock()

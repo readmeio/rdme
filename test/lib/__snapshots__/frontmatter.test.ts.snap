@@ -42,6 +42,13 @@ exports[`#fix (changelog upload) > should fix legacy category slug 1`] = `
 }
 `;
 
+exports[`#fix (changelog upload) > should fix legacy link object 1`] = `
+{
+  "title": "Hello, world!",
+  "type": "link",
+}
+`;
+
 exports[`#fix (changelog upload) > should fix legacy parent page id and use mappings 1`] = `
 {
   "title": "Hello, world!",
@@ -179,6 +186,12 @@ exports[`#fix (custompages upload) > should fix legacy category id and use fallb
 `;
 
 exports[`#fix (custompages upload) > should fix legacy category slug 1`] = `
+{
+  "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (custompages upload) > should fix legacy link object 1`] = `
 {
   "title": "Hello, world!",
 }
@@ -324,6 +337,19 @@ exports[`#fix (guides migrate) > should fix legacy category slug 1`] = `
     "uri": "some-slug",
   },
   "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (guides migrate) > should fix legacy link object 1`] = `
+{
+  "content": {
+    "link": {
+      "new_tab": true,
+      "url": "https://example.com",
+    },
+  },
+  "title": "Hello, world!",
+  "type": "link",
 }
 `;
 
@@ -496,6 +522,19 @@ exports[`#fix (guides upload) > should fix legacy category slug 1`] = `
 }
 `;
 
+exports[`#fix (guides upload) > should fix legacy link object 1`] = `
+{
+  "content": {
+    "link": {
+      "new_tab": true,
+      "url": "https://example.com",
+    },
+  },
+  "title": "Hello, world!",
+  "type": "link",
+}
+`;
+
 exports[`#fix (guides upload) > should fix legacy parent page id and use mappings 1`] = `
 {
   "parent": {
@@ -662,6 +701,19 @@ exports[`#fix (reference upload) > should fix legacy category slug 1`] = `
     "uri": "some-slug",
   },
   "title": "Hello, world!",
+}
+`;
+
+exports[`#fix (reference upload) > should fix legacy link object 1`] = `
+{
+  "content": {
+    "link": {
+      "new_tab": true,
+      "url": "https://example.com",
+    },
+  },
+  "title": "Hello, world!",
+  "type": "link",
 }
 `;
 

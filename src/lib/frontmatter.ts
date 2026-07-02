@@ -154,6 +154,13 @@ export function fix(
                     updatedData.content = { excerpt: extractedValue };
                   }
                   break;
+                case 'link':
+                  if (typeof updatedData.content === 'object' && updatedData.content) {
+                    (updatedData.content as Record<string, unknown>).link = extractedValue;
+                  } else {
+                    updatedData.content = { link: extractedValue };
+                  }
+                  break;
                 case 'categorySlug':
                   updatedData.category = { uri: extractedValue };
                   break;
