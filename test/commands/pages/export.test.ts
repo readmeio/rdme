@@ -214,6 +214,93 @@ Child body`),
     }
   });
 
+  it('should nest children of skipped empty pages under the skipped page directory', async () => {
+    if (route !== 'reference') return;
+
+    const tmpDir = tempExportDir();
+    try {
+      const mock = getAPIv2Mock({ authorization })
+        .get(`/branches/stable/categories/${route}`)
+        .reply(200, { data: [{ title: 'Model API' }] })
+        .get(`/branches/stable/categories/${route}/${encodeURIComponent('Model API')}/pages`)
+        .reply(200, { data: [{ slug: 'model-jobs' }, { slug: 'update-model-job' }] })
+        .get(`/branches/stable/${route}/model-jobs`)
+        .reply(200, {
+          data: {
+            slug: 'model-jobs',
+            title: 'Model Jobs',
+            type: 'basic',
+            content: { body: null },
+            category: { uri: `/branches/stable/categories/${route}/${encodeURIComponent('Model API')}` },
+          },
+        })
+        .get(`/branches/stable/${route}/update-model-job`)
+        .reply(200, {
+          data: {
+            slug: 'update-model-job',
+            title: 'Update model job',
+            type: 'endpoint',
+            content: { body: 'Updates the specified model job.' },
+            category: { uri: `/branches/stable/categories/${route}/${encodeURIComponent('Model API')}` },
+            parent: { uri: `/branches/stable/${route}/model-jobs` },
+          },
+        });
+
+      const output = await run([tmpDir, '--key', key]);
+
+      expect(output.error).toBeUndefined();
+      expect(output.result).toMatchObject({ failed: [], skipped: 1 });
+
+      expect(fs.writeFileSync).toHaveBeenCalledTimes(1);
+      expect(fs.copyFileSync).toHaveBeenCalledTimes(1);
+      expect(fs.copyFileSync).toHaveBeenCalledWith(
+        path.join(tmpDir, '.temp_download', 'update-model-job.md'),
+        path.join(tmpDir, 'Model API', 'model-jobs', 'update-model-job.md'),
+      );
+
+      mock.done();
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it('should place children under their category when a parent page is missing entirely', async () => {
+    const tmpDir = tempExportDir();
+    try {
+      const mock = getAPIv2Mock({ authorization })
+        .get(`/branches/stable/categories/${route}`)
+        .reply(200, { data: [{ title: 'Docs' }] })
+        .get(`/branches/stable/categories/${route}/Docs/pages`)
+        .reply(200, { data: [{ slug: 'orphan-doc' }] })
+        .get(`/branches/stable/${route}/orphan-doc`)
+        .reply(200, {
+          data: {
+            slug: 'orphan-doc',
+            title: 'Orphan',
+            type: 'basic',
+            content: { body: 'Orphan body' },
+            category: { uri: `https://api.readme.com/v2/branches/stable/categories/${route}/docs` },
+            parent: { uri: `https://api.readme.com/v2/branches/stable/${route}/ghost-parent` },
+          },
+        });
+
+      const output = await run([tmpDir, '--key', key]);
+
+      expect(output.error).toBeUndefined();
+      expect(output.stderr).toContain('Parent page "ghost-parent" was not exported');
+
+      expect(fs.copyFileSync).toHaveBeenCalledTimes(1);
+      expect(fs.copyFileSync).toHaveBeenCalledWith(
+        path.join(tmpDir, '.temp_download', 'orphan-doc.md'),
+        path.join(tmpDir, 'docs', 'orphan-doc.md'),
+      );
+
+      mock.done();
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
   it('should not write outside the export directory when slug contains path traversal', async () => {
     const tmpDir = tempExportDir();
     const parentDir = path.dirname(tmpDir);
