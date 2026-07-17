@@ -1,3 +1,10 @@
+## [10.9.3](https://github.com/readmeio/rdme/compare/v10.9.2...v10.9.3) (2026-07-17)
+
+
+### Bug Fixes
+
+* **export:** don't crash when a skipped empty page is the parent of exported pages ([#1493](https://github.com/readmeio/rdme/issues/1493)) ([4281ac7](https://github.com/readmeio/rdme/commit/4281ac71846d944fc700c074cd1d9cb4126eea63))
+
 ## [10.9.2-next.1](https://github.com/readmeio/rdme/compare/v10.9.1...v10.9.2-next.1) (2026-07-17)
 
 ### Bug Fixes
