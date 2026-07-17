@@ -42,6 +42,16 @@ interface FileMapEntry {
   parent: string | undefined;
   slug: string;
   title: unknown;
+  /**
+   * Pages that were skipped during download (e.g., empty non-link pages) but are still needed to
+   * resolve the directory hierarchy of their children. Virtual entries have no file of their own.
+   */
+  virtual?: boolean;
+}
+
+interface SkippedPageMeta {
+  category: string | undefined;
+  parent: string | undefined;
 }
 
 /**
@@ -164,13 +174,15 @@ function buildPath(
   visited: Set<string> = new Set(),
 ): string | null {
   if (visited.has(slug)) {
-    throw new Error(`Circular reference detected for slug: ${slug}`);
+    this.warn(`Circular parent reference detected for slug "${slug}". Its children will be placed under its category.`);
+    return null;
   }
   visited.add(slug);
 
   const fileInfo = fileMap.get(slug);
   if (!fileInfo) {
-    throw new Error(`File not found for slug: ${slug}`);
+    this.warn(`Parent page "${slug}" was not exported. Its children will be placed under its category.`);
+    return null;
   }
 
   const parts: string[] = [];
@@ -193,7 +205,12 @@ function buildPath(
   return parts.join('/');
 }
 
-function restructureFiles(this: APIv2PageExportCommands, tempFolder: string, finalFolder: string): void {
+function restructureFiles(
+  this: APIv2PageExportCommands,
+  tempFolder: string,
+  finalFolder: string,
+  skippedPages: Map<string, SkippedPageMeta> = new Map(),
+): void {
   const restructureSpinner = ora({ ...oraOptions() }).start('🗃️  Restructuring files...');
 
   const files = findMarkdownFiles(tempFolder);
@@ -202,17 +219,33 @@ function restructureFiles(this: APIv2PageExportCommands, tempFolder: string, fin
   const fileMap = buildFileMap.call(this, files);
   this.debug(`Parsed ${fileMap.size} files with valid frontmatter`);
 
-  const results: { slug: string; oldPath: string; newPath: string; title: unknown }[] = [];
-  for (const [slug] of fileMap) {
-    const newPathBuilt = buildPath.call(this, slug, fileMap);
-    if (newPathBuilt) {
-      const info = fileMap.get(slug)!;
-      results.push({
+  // Pages that were skipped during download can still be parents of exported pages, so add them
+  // as virtual entries to preserve the directory hierarchy of their children.
+  for (const [slug, meta] of skippedPages) {
+    if (!fileMap.has(slug)) {
+      fileMap.set(slug, {
+        category: meta.category,
+        filePath: '',
+        parent: meta.parent,
         slug,
-        oldPath: info.filePath,
-        newPath: `${newPathBuilt}.md`,
-        title: info.title,
+        title: undefined,
+        virtual: true,
       });
+    }
+  }
+
+  const results: { slug: string; oldPath: string; newPath: string; title: unknown }[] = [];
+  for (const [slug, info] of fileMap) {
+    if (!info.virtual) {
+      const newPathBuilt = buildPath.call(this, slug, fileMap);
+      if (newPathBuilt) {
+        results.push({
+          slug,
+          oldPath: info.filePath,
+          newPath: `${newPathBuilt}.md`,
+          title: info.title,
+        });
+      }
     }
   }
 
@@ -268,6 +301,8 @@ export async function exportDocs(this: APIv2PageExportCommands): Promise<FullExp
       failed: [],
       skipped: 0,
     };
+
+    const skippedPages = new Map<string, SkippedPageMeta>();
 
     this.debug(`Exporting pages from \`${branch}\` to ${tempFolder}`);
 
@@ -325,6 +360,24 @@ export async function exportDocs(this: APIv2PageExportCommands): Promise<FullExp
               if (skipForDocsOnly) {
                 this.debug(`Skipping empty ${output.type} page because it is not a link: ${output.slug}`);
                 downloads.skipped += 1;
+
+                // Skipped pages can still be parents of exported pages, so retain the metadata
+                // needed to resolve their children's directory hierarchy later on.
+                if (typeof output.slug === 'string' && isSafePathSegment(output.slug)) {
+                  const categoryName =
+                    isRecord(output.category) && typeof output.category.uri === 'string'
+                      ? decodeURILastSegment(output.category.uri)
+                      : null;
+                  const parentSlug =
+                    isRecord(output.parent) && typeof output.parent.uri === 'string'
+                      ? decodeURILastSegment(output.parent.uri)
+                      : null;
+
+                  skippedPages.set(output.slug, {
+                    category: categoryName ?? undefined,
+                    parent: parentSlug ?? undefined,
+                  });
+                }
               } else {
                 if (isGuideOrReferenceRequest(this.route, output)) {
                   const parentKey =
@@ -391,7 +444,7 @@ export async function exportDocs(this: APIv2PageExportCommands): Promise<FullExp
         this.log(`   - ${slug}`);
       });
     } else {
-      restructureFiles.call(this, tempFolder, outputDir);
+      restructureFiles.call(this, tempFolder, outputDir, skippedPages);
 
       this.log('');
       this.log(`All files have been saved to: ${outputDir}`);
