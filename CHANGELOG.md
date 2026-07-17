@@ -1,3 +1,11 @@
+## [10.9.2-next.1](https://github.com/readmeio/rdme/compare/v10.9.1...v10.9.2-next.1) (2026-07-17)
+
+
+### Bug Fixes
+
+* **export:** don't crash when a skipped empty page is the parent of exported pages ([#1493](https://github.com/readmeio/rdme/issues/1493)) ([4281ac7](https://github.com/readmeio/rdme/commit/4281ac71846d944fc700c074cd1d9cb4126eea63))
+* **pages:** preserve `link` frontmatter during dry-run autofix ([#1491](https://github.com/readmeio/rdme/issues/1491)) ([d91b0a3](https://github.com/readmeio/rdme/commit/d91b0a32de5cc780c43564c66e70175e5d1a77dd))
+
 ## [10.9.1](https://github.com/readmeio/rdme/compare/v10.9.0...v10.9.1) (2026-06-06)
 
 
