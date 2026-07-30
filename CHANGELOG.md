@@ -1,3 +1,10 @@
+## [10.9.4-next.1](https://github.com/readmeio/rdme/compare/v10.9.3...v10.9.4-next.1) (2026-07-30)
+
+
+### Bug Fixes
+
+* **openapi:** upgrade our bundler to resolver issues with `$ref` resolutions ([#1499](https://github.com/readmeio/rdme/issues/1499)) ([ae74f2b](https://github.com/readmeio/rdme/commit/ae74f2bd955c26b13253bafd3987a944a586c3a7))
+
 ## [10.9.3](https://github.com/readmeio/rdme/compare/v10.9.2...v10.9.3) (2026-07-17)
 
 
