@@ -22,13 +22,16 @@
         "type": "object",
         "properties": {
           "referenceToB": {
-            "$ref": "#/components/schemas/ObjectB"
+            "type": "object"
           }
         }
       },
       "ObjectB": {
         "title": "Cyclic Schema Example",
         "$ref": "#/components/schemas/ObjectARef"
+      },
+      "ObjectBRef": {
+        "$ref": "#/components/schemas/ObjectA"
       },
       "ObjectARef": {
         "type": "object",

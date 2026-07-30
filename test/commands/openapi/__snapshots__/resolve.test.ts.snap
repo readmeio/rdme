@@ -56,7 +56,8 @@ exports[`openapi resolve > resolving > should support resolving circular referen
 - Identifying and resolving circular/recursive references in your API definition...
 ✔ Identifying and resolving circular/recursive references in your API definition... done! ✅
 ",
-  "stdout": "Your API definition has been processed and saved to output.json!
+  "stdout": "ℹ️  Unresolved circular references remain. These references will be replaced with empty objects.
+Your API definition has been processed and saved to output.json!
 ",
 }
 `;

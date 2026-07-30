@@ -1,4 +1,4 @@
-import type { OASAnalysis, OASAnalysisFeature } from 'oas/analyzer/types';
+import type { OASAnalysisFeature, OASAnalysisGeneral } from 'oas/analyzer/types';
 import type { OASDocument } from 'oas/types';
 
 import { analyzer } from 'oas/analyzer';
@@ -22,7 +22,12 @@ export interface AnalyzedFeature extends OASAnalysisFeature {
       };
 }
 
-export interface Analysis extends OASAnalysis {
+export interface Analysis {
+  general: {
+    mediaTypes?: OASAnalysisGeneral;
+    operationTotal?: OASAnalysisGeneral;
+    securityTypes?: OASAnalysisGeneral;
+  };
   openapi: {
     additionalProperties: AnalyzedFeature;
     callbacks: AnalyzedFeature;
@@ -31,7 +36,7 @@ export interface Analysis extends OASAnalysis {
     discriminators: AnalyzedFeature;
     links: AnalyzedFeature;
     polymorphism: AnalyzedFeature;
-    references: OASAnalysisFeature;
+    references: AnalyzedFeature;
     serverVariables: AnalyzedFeature;
     style: AnalyzedFeature;
     webhooks: AnalyzedFeature;
@@ -144,29 +149,38 @@ const OPENAPI_FEATURE_DOCS: Record<
   },
 };
 
+export function getSupportedFeatures(): (keyof Analysis['openapi'])[] {
+  return Object.keys(OPENAPI_FEATURE_DOCS) as (keyof Analysis['openapi'])[];
+}
+
 /**
  * Analyze a given OpenAPI or Swagger definition for any OpenAPI, JSON Schema, and ReadMe-specific
  * feature uses it may contain.
  *
  */
-async function analyzeOas(definition: OASDocument) {
+async function analyzeOas(definition: OASDocument): Promise<Analysis> {
   return analyzer(definition).then(analysisResult => {
-    const analysis = analysisResult as Analysis;
-    if (analysis.openapi) {
-      Object.entries(OPENAPI_FEATURE_DOCS).forEach(([feature, docs]) => {
-        analysis.openapi[feature as keyof Analysis['openapi']] = {
-          ...analysis.openapi[feature as keyof Analysis['openapi']],
-          ...docs,
-        };
-      });
-    }
+    // `oas` v38+ returns OpenAPI features at the top level; reshape them under `openapi` so
+    // callers (and our docs merge) can keep a stable shape.
+    const openapi = {} as Analysis['openapi'];
+    getSupportedFeatures().forEach(feature => {
+      openapi[feature] = {
+        present: false,
+        locations: [],
+        ...analysisResult[feature],
+        ...OPENAPI_FEATURE_DOCS[feature],
+      };
+    });
 
-    return analysis;
+    return {
+      general: {
+        mediaTypes: analysisResult.mediaTypes,
+        operationTotal: analysisResult.operationTotal,
+        securityTypes: analysisResult.securityTypes,
+      },
+      openapi,
+    };
   });
-}
-
-export function getSupportedFeatures() {
-  return Object.keys(OPENAPI_FEATURE_DOCS);
 }
 
 export default analyzeOas;

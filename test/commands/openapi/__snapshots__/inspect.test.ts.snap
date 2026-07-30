@@ -81,8 +81,15 @@ additionalProperties:
  · #/components/schemas/ParameterizedHeader/properties/parameters/additionalProperties
 
 circularRefs:
+ · #/components/schemas/BodyPart/properties/parent
+ · #/components/schemas/FormDataBodyPart/properties/parent
+ · #/components/schemas/MultiPart/properties/bodyParts/items
  · #/components/schemas/MultiPart/properties/parent
- · #/components/schemas/ZoneOffset/properties/rules"
+ · #/components/schemas/ZoneId/properties/rules
+ · #/components/schemas/ZoneOffset/properties/rules
+ · #/components/schemas/ZoneOffsetTransition/properties/offsetAfter
+ · #/components/schemas/ZoneOffsetTransition/properties/offsetBefore
+ · #/components/schemas/ZoneRules/properties/transitions/items"
 `;
 
 exports[`rdme openapi inspect > feature reports > should generate a report for '@readme/oas-examples/3.1/json/train-t…' (w/ [ 'commonParameters' ]) 1`] = `
@@ -104,10 +111,8 @@ See more help with --help],
 exports[`rdme openapi inspect > full reports > should generate a report for @readme/oas-examples/3.0/json/petstore.json 1`] = `
 "Here are some interesting things we found in your API definition. 🕵️
 
- · Your dereferenced file size is 0.03 MB.
  · You are using 4 media types throughout your API: application/json, application/x-www-form-urlencoded, application/xml, and multipart/form-data
  · You have a total of 20 operations in your API.
- · Your raw file size is 0.01 MB.
  · You are using 2 security types throughout your API: apiKey and oauth2
 
 🌲 OpenAPI Features
@@ -172,6 +177,11 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
 │                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#server- │
 │                            │       │ variable-object                                                                  │
 ├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
+│ webhooks                   │ 🔴    │ Webhooks allow you to describe out of band requests that may be initiated by     │
+│                            │       │ your users.                                                                      │
+│                            │       │                                                                                  │
+│                            │       │ This feature is not available on OpenAPI v3.0.                                   │
+├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
 │ xmlRequests                │ 🔴    │ Any request body that accepts an XML payload.                                    │
 │                            │       │                                                                                  │
 │                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.           │
@@ -187,11 +197,6 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
 │                            │       │                                                                                  │
 │                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#xml-    │
 │                            │       │ object                                                                           │
-├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ webhooks                   │ 🔴    │ Webhooks allow you to describe out of band requests that may be initiated by     │
-│                            │       │ your users.                                                                      │
-│                            │       │                                                                                  │
-│                            │       │ This feature is not available on OpenAPI v3.0.                                   │
 └────────────────────────────┴───────┴──────────────────────────────────────────────────────────────────────────────────┘
 "
 `;
@@ -199,10 +204,8 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
 exports[`rdme openapi inspect > full reports > should generate a report for @readme/oas-examples/3.0/json/readme-extensions.json 1`] = `
 "Here are some interesting things we found in your API definition. 🕵️
 
- · Your dereferenced file size is 0.01 MB.
  · You are using a single media type throughout your API: application/json
  · You have a total of 12 operations in your API.
- · Your raw file size is 0.01 MB.
  · You are using a single security type throughout your API: oauth2
 
 🌲 OpenAPI Features
@@ -267,6 +270,11 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
 │                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#server- │
 │                            │       │ variable-object                                                                  │
 ├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
+│ webhooks                   │ 🔴    │ Webhooks allow you to describe out of band requests that may be initiated by     │
+│                            │       │ your users.                                                                      │
+│                            │       │                                                                                  │
+│                            │       │ This feature is not available on OpenAPI v3.0.                                   │
+├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
 │ xmlRequests                │ 🔴    │ Any request body that accepts an XML payload.                                    │
 │                            │       │                                                                                  │
 │                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.           │
@@ -282,11 +290,6 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
 │                            │       │                                                                                  │
 │                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#xml-    │
 │                            │       │ object                                                                           │
-├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ webhooks                   │ 🔴    │ Webhooks allow you to describe out of band requests that may be initiated by     │
-│                            │       │ your users.                                                                      │
-│                            │       │                                                                                  │
-│                            │       │ This feature is not available on OpenAPI v3.0.                                   │
 └────────────────────────────┴───────┴──────────────────────────────────────────────────────────────────────────────────┘
 "
 `;
@@ -294,10 +297,8 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
 exports[`rdme openapi inspect > full reports > should generate a report for @readme/oas-examples/3.0/json/readme-legacy.json 1`] = `
 "Here are some interesting things we found in your API definition. 🕵️
 
- · Your dereferenced file size is 0.31 MB.
  · You are using 3 media types throughout your API: application/json, multipart/form-data, and text/event-stream
  · You have a total of 36 operations in your API.
- · Your raw file size is 0.06 MB.
  · You are using a single security type throughout your API: http
 
 🌲 OpenAPI Features
@@ -362,6 +363,11 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
 │                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#server- │
 │                            │       │ variable-object                                                                  │
 ├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
+│ webhooks                   │ 🔴    │ Webhooks allow you to describe out of band requests that may be initiated by     │
+│                            │       │ your users.                                                                      │
+│                            │       │                                                                                  │
+│                            │       │ This feature is not available on OpenAPI v3.0.                                   │
+├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
 │ xmlRequests                │ 🔴    │ Any request body that accepts an XML payload.                                    │
 │                            │       │                                                                                  │
 │                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.           │
@@ -377,11 +383,6 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
 │                            │       │                                                                                  │
 │                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.4.md#xml-    │
 │                            │       │ object                                                                           │
-├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ webhooks                   │ 🔴    │ Webhooks allow you to describe out of band requests that may be initiated by     │
-│                            │       │ your users.                                                                      │
-│                            │       │                                                                                  │
-│                            │       │ This feature is not available on OpenAPI v3.0.                                   │
 └────────────────────────────┴───────┴──────────────────────────────────────────────────────────────────────────────────┘
 "
 `;
@@ -389,10 +390,8 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
 exports[`rdme openapi inspect > full reports > should generate a report for @readme/oas-examples/3.1/json/train-travel.json 1`] = `
 "Here are some interesting things we found in your API definition. 🕵️
 
- · Your dereferenced file size is 0.14 MB.
- · You are using 2 media types throughout your API: application/json and application/xml
+ · You are using 4 media types throughout your API: application/json, application/problem+json, application/problem+xml, and application/xml
  · You have a total of 9 operations in your API.
- · Your raw file size is 0.03 MB.
  · You are using a single security type throughout your API: oauth2
 
 🌲 OpenAPI Features
@@ -456,6 +455,12 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
 │                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#server- │
 │                            │       │ variable-object                                                                  │
 ├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
+│ webhooks                   │ 🟢    │ Webhooks allow you to describe out of band requests that may be initiated by     │
+│                            │       │ your users.                                                                      │
+│                            │       │                                                                                  │
+│                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#user-   │
+│                            │       │ content-oaswebhooks                                                              │
+├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
 │ xmlRequests                │ 🟢    │ Any request body that accepts an XML payload.                                    │
 │                            │       │                                                                                  │
 │                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.           │
@@ -471,12 +476,6 @@ exports[`rdme openapi inspect > full reports > should generate a report for @rea
 │                            │       │                                                                                  │
 │                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#xml-    │
 │                            │       │ object                                                                           │
-├────────────────────────────┼───────┼──────────────────────────────────────────────────────────────────────────────────┤
-│ webhooks                   │ 🟢    │ Webhooks allow you to describe out of band requests that may be initiated by     │
-│                            │       │ your users.                                                                      │
-│                            │       │                                                                                  │
-│                            │       │ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md#user-   │
-│                            │       │ content-oaswebhooks                                                              │
 └────────────────────────────┴───────┴──────────────────────────────────────────────────────────────────────────────────┘
 "
 `;

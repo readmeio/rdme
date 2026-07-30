@@ -64,7 +64,9 @@ export default class OpenAPIResolveCommand extends BaseCommand<typeof OpenAPIRes
     /** The OpenAPI document to analyze. */
     spec: OASDocument,
   ): Promise<string[]> {
-    const analysis = await analyzeOas(spec);
+    // `oas` caches analyzer results on the definition object (WeakMap). Resolve mutates
+    // `spec` in place between passes, so analyze a clone each time to avoid stale results.
+    const analysis = await analyzeOas(structuredClone(spec));
     const circularRefs = analysis.openapi.circularRefs;
     return Array.isArray(circularRefs.locations) ? circularRefs.locations : [];
   }

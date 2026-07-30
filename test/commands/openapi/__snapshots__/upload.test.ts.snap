@@ -283,7 +283,7 @@ exports[`rdme openapi upload > given that the API definition is a URL > should c
 
 exports[`rdme openapi upload > given that the API definition is a URL > should handle issues fetching from the URL 1`] = `
 {
-  "error": [Error: Unknown file detected.],
+  "error": [Error: Failed to fetch https://example.com/openapi.json: Bad Request],
   "stderr": "- Validating the API definition located at https://example.com/openapi.json...
 ✖ Validating the API definition located at https://example.com/openapi.json...
 ",

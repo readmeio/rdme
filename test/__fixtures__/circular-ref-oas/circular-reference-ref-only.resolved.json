@@ -27,7 +27,7 @@
         }
       },
       "ObjectB": {
-        "$ref": "#/components/schemas/ObjectA"
+        "$ref": "#/components/schemas/ObjectARef"
       },
       "ObjectARef": {
         "type": "object",
