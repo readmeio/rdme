@@ -40,6 +40,17 @@
           }
         }
       },
+      "EntityRef": {
+        "type": "object",
+        "properties": {
+          "relatedEntity": {
+            "type": "object"
+          },
+          "Entity": {
+            "type": "object"
+          }
+        }
+      },
       "RelatedEntityRef": {
         "type": "object",
         "properties": {
@@ -47,17 +58,6 @@
             "type": "object"
           },
           "RelatedEntity": {
-            "type": "object"
-          }
-        }
-      },
-      "EntityRef": {
-        "type": "object",
-        "properties": {
-          "relatedEntity": {
-            "$ref": "#/components/schemas/RelatedEntityRef"
-          },
-          "Entity": {
             "type": "object"
           }
         }

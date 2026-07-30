@@ -49,7 +49,7 @@
         "type": "object",
         "properties": {
           "nodeB": {
-            "$ref": "#/components/schemas/NodeB"
+            "$ref": "#/components/schemas/NodeBRef"
           }
         }
       },
@@ -73,7 +73,7 @@
         "type": "object",
         "properties": {
           "nodeE": {
-            "$ref": "#/components/schemas/NodeE"
+            "$ref": "#/components/schemas/NodeERef"
           }
         }
       },
@@ -89,7 +89,7 @@
         "type": "object",
         "properties": {
           "nodeF": {
-            "$ref": "#/components/schemas/NodeF"
+            "$ref": "#/components/schemas/NodeFRef"
           }
         }
       },
@@ -97,7 +97,7 @@
         "type": "object",
         "properties": {
           "nodeG": {
-            "$ref": "#/components/schemas/NodeG"
+            "$ref": "#/components/schemas/NodeGRef"
           }
         }
       },
@@ -105,7 +105,7 @@
         "type": "object",
         "properties": {
           "nodeH": {
-            "$ref": "#/components/schemas/NodeH"
+            "$ref": "#/components/schemas/NodeHRef"
           }
         }
       },
@@ -133,6 +133,14 @@
           }
         }
       },
+      "NodeFRef": {
+        "type": "object",
+        "properties": {
+          "nodeG": {
+            "type": "object"
+          }
+        }
+      },
       "DeepRecursiveNodeRef": {
         "type": "object",
         "properties": {
@@ -141,11 +149,19 @@
           }
         }
       },
+      "NodeBRef": {
+        "type": "object",
+        "properties": {
+          "nodeA": {
+            "type": "object"
+          }
+        }
+      },
       "NodeARef": {
         "type": "object",
         "properties": {
           "nodeB": {
-            "type": "object"
+            "$ref": "#/components/schemas/NodeBRef"
           }
         }
       },
@@ -157,10 +173,34 @@
           }
         }
       },
+      "NodeERef": {
+        "type": "object",
+        "properties": {
+          "nodeD": {
+            "type": "object"
+          }
+        }
+      },
       "NodeDRef": {
         "type": "object",
         "properties": {
           "nodeE": {
+            "$ref": "#/components/schemas/NodeERef"
+          }
+        }
+      },
+      "NodeGRef": {
+        "type": "object",
+        "properties": {
+          "nodeH": {
+            "type": "object"
+          }
+        }
+      },
+      "NodeHRef": {
+        "type": "object",
+        "properties": {
+          "complexNode": {
             "type": "object"
           }
         }
@@ -170,30 +210,6 @@
         "properties": {
           "nodeF": {
             "$ref": "#/components/schemas/NodeFRef"
-          }
-        }
-      },
-      "NodeFRef": {
-        "type": "object",
-        "properties": {
-          "nodeG": {
-            "$ref": "#/components/schemas/NodeGRef"
-          }
-        }
-      },
-      "NodeGRef": {
-        "type": "object",
-        "properties": {
-          "nodeH": {
-            "$ref": "#/components/schemas/NodeHRef"
-          }
-        }
-      },
-      "NodeHRef": {
-        "type": "object",
-        "properties": {
-          "complexNode": {
-            "type": "object"
           }
         }
       }

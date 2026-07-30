@@ -88,14 +88,13 @@ function buildFeaturesReport(analysis: Analysis, features: string[]) {
 function buildFullReport(analysis: Analysis, definitionVersion: string, tableBorder: Record<string, string>) {
   const report: string[] = ['Here are some interesting things we found in your API definition. 🕵️', ''];
 
-  const allowedKeys = ['dereferencedFileSize', 'mediaTypes', 'operationTotal', 'rawFileSize', 'securityTypes'];
-  const sizeKeys = ['rawFileSize', 'dereferencedFileSize'];
+  const allowedKeys = ['dereferencedFileSize', 'mediaTypes', 'operationTotal', 'securityTypes'];
 
   // General API definition statistics
   report.push(
     ...(Object.entries(analysis.general || {})
       .filter(([key]) => allowedKeys.includes(key))
-      .map(([key, info]) => {
+      .map(([, info]) => {
         if (Array.isArray(info.found)) {
           if (!info.found.length) return false;
 
@@ -110,16 +109,13 @@ function buildFullReport(analysis: Analysis, definitionVersion: string, tableBor
 
         if (info.found === 0) return false;
 
-        const isSizeKey = sizeKeys.includes(key);
         const isPlural = info.found > 1;
 
-        let baseMessage = isSizeKey
-          ? `Your ${info.name.toLowerCase()} is ${chalk.bold(info.found)} MB.`
-          : isPlural
-            ? `You have a total of ${chalk.bold(info.found)} ${pluralize(info.name.toLowerCase(), info.found)} in your API.`
-            : `You have a single ${info.name.toLowerCase()} in your API.`;
+        let baseMessage = isPlural
+          ? `You have a total of ${chalk.bold(info.found)} ${pluralize(info.name.toLowerCase(), info.found)} in your API.`
+          : `You have a single ${info.name.toLowerCase()} in your API.`;
 
-        const wowThreshold = isSizeKey ? 10 : 200;
+        const wowThreshold = 200;
         if (info.found > wowThreshold) {
           baseMessage += ` ${chalk.cyanBright('Wow! 🤯')}`;
         }
