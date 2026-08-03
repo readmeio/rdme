@@ -1,3 +1,11 @@
+## [10.9.4](https://github.com/readmeio/rdme/compare/v10.9.3...v10.9.4) (2026-08-03)
+
+
+### Bug Fixes
+
+* empty commit to force a release ([d25c11d](https://github.com/readmeio/rdme/commit/d25c11d7d483fab56f97000574fd30bad8eee628))
+* **openapi:** upgrade our bundler to resolver issues with `$ref` resolutions ([#1499](https://github.com/readmeio/rdme/issues/1499)) ([ae74f2b](https://github.com/readmeio/rdme/commit/ae74f2bd955c26b13253bafd3987a944a586c3a7))
+
 ## [10.9.4-next.1](https://github.com/readmeio/rdme/compare/v10.9.3...v10.9.4-next.1) (2026-07-30)
 
 
