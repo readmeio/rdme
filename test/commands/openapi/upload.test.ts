@@ -14,6 +14,46 @@ import { getAPIv2Mock, getAPIv2MockForGHA } from '../../helpers/get-api-mock.js'
 import { githubActionsEnv } from '../../helpers/git-mock.js';
 import { runCommand } from '../../helpers/oclif.js';
 
+const { dnsLookup } = vi.hoisted(() => ({
+  dnsLookup: vi.fn<() => Promise<{ address: string; family: number }[]>>(() =>
+    Promise.resolve([{ address: '93.184.216.34', family: 4 }]),
+  ),
+}));
+
+// `@apidevtools/json-schema-ref-parser` imports `lookup` as a named export from
+// `node:dns/promises` when determining URL safety.
+vi.mock(import('node:dns/promises'), async importOriginal => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    lookup: dnsLookup as unknown as typeof actual.lookup,
+    default: {
+      ...actual.default,
+      lookup: dnsLookup as unknown as typeof actual.lookup,
+    },
+  };
+});
+
+// `HTTPResolver` pins connections via a separate `undici` `fetch` + `Agent` dispatcher.
+// That dispatcher bypasses `nock` and will attempt a real TCP connect to whatever DNS
+// returned (here, our mocked public IP).
+//
+// Route those requests through the global `fetch` (no dispatcher) so `nock` can intercept.
+vi.mock(import('undici'), async importOriginal => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    fetch: ((input: unknown, init?: RequestInit & { dispatcher?: unknown }) => {
+      if (init && 'dispatcher' in init) {
+        const { dispatcher: _dispatcher, ...rest } = init;
+        return globalThis.fetch(input as RequestInfo | URL, rest);
+      }
+
+      return globalThis.fetch(input as RequestInfo | URL, init);
+    }) as unknown as typeof actual.fetch,
+  };
+});
+
 const key = 'rdme_123';
 const branch = '1.0.0';
 const filename = 'test/__fixtures__/petstore-simple-weird-version.json';
