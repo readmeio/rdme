@@ -69,7 +69,7 @@
     "@oclif/plugin-warn-if-update-available": "^3.1.68",
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
-    "chalk": "^5.3.0",
+    "chalk": "^6.0.0",
     "ci-info": "^4.4.0",
     "configstore": "^7.0.0",
     "debug": "^4.3.3",
