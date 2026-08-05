@@ -1,3 +1,11 @@
+## [10.9.5](https://github.com/readmeio/rdme/compare/v10.9.4...v10.9.5) (2026-08-05)
+
+
+### Bug Fixes
+
+* empty commit to force a release ([d4ea864](https://github.com/readmeio/rdme/commit/d4ea864d58ec5492452ab4727b56e9e7c34a0209))
+* **openapi:** improved protections against retrieving invalid URLs ([#1512](https://github.com/readmeio/rdme/issues/1512)) ([cd28601](https://github.com/readmeio/rdme/commit/cd286011695461aa718370cd3b38fd03a308596f))
+
 ## [10.9.5-next.1](https://github.com/readmeio/rdme/compare/v10.9.4...v10.9.5-next.1) (2026-08-05)
 
 
