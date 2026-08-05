@@ -1,3 +1,10 @@
+## [10.9.5-next.1](https://github.com/readmeio/rdme/compare/v10.9.4...v10.9.5-next.1) (2026-08-05)
+
+
+### Bug Fixes
+
+* **openapi:** improved protections against retrieving invalid URLs ([#1512](https://github.com/readmeio/rdme/issues/1512)) ([cd28601](https://github.com/readmeio/rdme/commit/cd286011695461aa718370cd3b38fd03a308596f))
+
 ## [10.9.4](https://github.com/readmeio/rdme/compare/v10.9.3...v10.9.4) (2026-08-03)
 
 
