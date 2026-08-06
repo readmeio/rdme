@@ -88,6 +88,13 @@ jobs:
         with:
           rdme: openapi validate oas-examples-repo/3.1/json/petstore.json
 
+      # URL resolution uses `@apidevtools/json-schema-ref-parser`'s HTTP resolver, which
+      # dynamically imports `undici`. Regression guard for https://github.com/readmeio/rdme/issues/1513
+      - name: Run `openapi validate` command from a URL
+        uses: ./rdme-repo/
+        with:
+          rdme: openapi validate https://raw.githubusercontent.com/readmeio/oas-examples/main/3.1/json/petstore.json
+
       - name: Run `openapi validate` command (legacy topic separator)
         uses: ./rdme-repo/
         with:

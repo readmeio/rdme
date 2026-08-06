@@ -7,6 +7,18 @@ import { defineConfig } from 'rollup';
 import { minify } from 'rollup-plugin-esbuild';
 
 const basePlugins = [
+  // `@apidevtools/json-schema-ref-parser` intentionally does `await import(undiciModuleName)`
+  // (variable-based) so browser bundlers skip Node-only `undici`. Rollup can't resolve that,
+  // then minify rewrites it to a bare `import("undici")` — which fails in the GitHub Action
+  // because we ship `dist-gha/` without `node_modules`. Force a string-literal import so
+  // undici is inlined. See https://github.com/readmeio/rdme/issues/1513
+  replace({
+    delimiters: ['', ''],
+    preventAssignment: true,
+    values: {
+      'import(undiciModuleName)': 'import("undici")',
+    },
+  }),
   commonjs(),
   json(),
   nodeResolve({
