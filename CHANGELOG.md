@@ -1,3 +1,12 @@
+## [10.9.6-next.1](https://github.com/readmeio/rdme/compare/v10.9.5...v10.9.6-next.1) (2026-08-06)
+
+
+### Bug Fixes
+
+* empty commit to force a release ([2d2b204](https://github.com/readmeio/rdme/commit/2d2b204e9b19f0fd6b47dfed0b8c309e0bfc8f54))
+* empty commit to force a release ([c278eb7](https://github.com/readmeio/rdme/commit/c278eb7ffde95244e42f1fdc4714f891ee3b4079))
+* **gha:** bundle undici for OpenAPI URL uploads ([#1514](https://github.com/readmeio/rdme/issues/1514)) ([322ef94](https://github.com/readmeio/rdme/commit/322ef94fa83dfc0c172ea65822589632a82b5e7f)), closes [#1513](https://github.com/readmeio/rdme/issues/1513)
+
 ## [10.9.5](https://github.com/readmeio/rdme/compare/v10.9.4...v10.9.5) (2026-08-05)
 
 
