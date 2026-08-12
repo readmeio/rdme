@@ -220,6 +220,9 @@ DESCRIPTION
   For the best and most explicit results, we recommend using the `--slug` flag to set a slug for your API definition,
   especially if you're managing many API definitions at scale.
 
+  If your API definition is still processing when the polling window ends, the command will exit successfully while
+  processing continues in the background.
+
 EXAMPLES
   You can pass in a file name like so:
 

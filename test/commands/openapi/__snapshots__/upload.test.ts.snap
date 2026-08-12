@@ -484,9 +484,12 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
 }
 `;
 
-exports[`rdme openapi upload > given that the API definition is a local file > and the upload status initially is a pending state > should poll the API and handle timeouts 1`] = `
+exports[`rdme openapi upload > given that the API definition is a local file > and the upload status initially is a pending state > should poll the API and handle a pending result when the polling window ends 1`] = `
 {
-  "error": [Error: Sorry, this upload timed out. Please try again later.],
+  "result": {
+    "status": "pending",
+    "uri": "/branches/1.0.0/apis/test__fixtures__petstore-simple-weird-version.json",
+  },
   "stderr": "- Validating the API definition located at test/__fixtures__/petstore-simple-weird-version.json...
  ›   Warning: This OpenAPI file is located in a subfolder and no \`--slug\` was 
  ›   provided.
@@ -508,8 +511,25 @@ exports[`rdme openapi upload > given that the API definition is a local file > a
  ›   To suppress this warning and confirmation in the future, use 
  ›   \`--confirm-overwrite\`.
 - Creating your API definition to ReadMe...
+ℹ Creating your API definition to ReadMe... uploaded but not yet processed by ReadMe. Polling for completion... still processing in the background.
 ",
-  "stdout": "",
+  "stdout": "Your API definition (test__fixtures__petstore-simple-weird-version.json) was accepted and is still being processed by ReadMe. Processing will continue in the background. Do not retry this upload while it is still processing. Check ReadMe later to confirm that processing completed successfully.
+",
+}
+`;
+
+exports[`rdme openapi upload > given that the API definition is a local file > and the upload status initially is a pending state > should poll the API and handle a pending update result when the polling window ends 1`] = `
+{
+  "result": {
+    "status": "pending_update",
+    "uri": "/branches/1.0.0/apis/test__fixtures__petstore-simple-weird-version.json",
+  },
+  "stderr": "- Validating the API definition located at test/__fixtures__/petstore-simple-weird-version.json...
+- Updating your API definition to ReadMe...
+ℹ Updating your API definition to ReadMe... uploaded but not yet processed by ReadMe. Polling for completion... still processing in the background.
+",
+  "stdout": "Your API definition (test__fixtures__petstore-simple-weird-version.json) was accepted and is still being processed by ReadMe. Processing will continue in the background. Do not retry this upload while it is still processing. Check ReadMe later to confirm that processing completed successfully.
+",
 }
 `;
 

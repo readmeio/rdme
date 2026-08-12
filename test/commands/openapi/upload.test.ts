@@ -588,7 +588,7 @@ describe('rdme openapi upload', () => {
         mock.done();
       });
 
-      it('should poll the API and handle timeouts', async () => {
+      it('should poll the API and handle a pending result when the polling window ends', async () => {
         prompts.inject([true]);
         const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
           .get(`/branches/${branch}/apis`)
@@ -619,6 +619,52 @@ describe('rdme openapi upload', () => {
 
         const result = await run(['--branch', branch, filename, '--key', key]);
 
+        expect(result.error).toBeUndefined();
+        expect(result.result).toStrictEqual({
+          status: 'pending',
+          uri: `/branches/${branch}/apis/${slugifiedFilename}`,
+        });
+        expect(result).toMatchSnapshot();
+
+        mock.done();
+      });
+
+      it('should poll the API and handle a pending update result when the polling window ends', async () => {
+        prompts.inject([true]);
+        const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+          .get(`/branches/${branch}/apis`)
+          .reply(200, { data: [{ filename: slugifiedFilename }] })
+          .put(
+            `/branches/${branch}/apis/${slugifiedFilename}`,
+            body =>
+              body.match(
+                `form-data; name="schema"; filename="${slugifiedFilename}"\r\nContent-Type: application/json`,
+              ) &&
+              // asserts that we're sending JSON
+              body.match(`{"openapi":"3.0.0","info":{"version":"1.2.3","title":"Single Path",`),
+          )
+          .reply(200, {
+            data: {
+              upload: { status: 'pending_update' },
+              uri: `/branches/${branch}/apis/${slugifiedFilename}`,
+            },
+          })
+          .get(`/branches/${branch}/apis/${slugifiedFilename}`)
+          .times(25)
+          .reply(200, {
+            data: {
+              upload: { status: 'pending_update' },
+              uri: `/branches/${branch}/apis/${slugifiedFilename}`,
+            },
+          });
+
+        const result = await run(['--branch', branch, filename, '--key', key]);
+
+        expect(result.error).toBeUndefined();
+        expect(result.result).toStrictEqual({
+          status: 'pending_update',
+          uri: `/branches/${branch}/apis/${slugifiedFilename}`,
+        });
         expect(result).toMatchSnapshot();
 
         mock.done();
