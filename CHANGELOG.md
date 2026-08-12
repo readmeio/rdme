@@ -1,3 +1,10 @@
+## [10.9.7-next.1](https://github.com/readmeio/rdme/compare/v10.9.6...v10.9.7-next.1) (2026-08-12)
+
+
+### Bug Fixes
+
+* **openapi:** treat pending uploads as accepted ([#1515](https://github.com/readmeio/rdme/issues/1515)) ([757950c](https://github.com/readmeio/rdme/commit/757950ce49652bd36a95c4cdf04b757b28a907a1))
+
 ## [10.9.6](https://github.com/readmeio/rdme/compare/v10.9.5...v10.9.6) (2026-08-06)
 
 
