@@ -23,6 +23,7 @@ import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
 
 const yamlExtensions = ['.yaml', '.yml'];
+const defaultWaitTimeoutSeconds = 12 * 60;
 
 function isNestedLocalSpecPath(specPath: string): boolean {
   return nodePath.dirname(nodePath.normalize(specPath)) !== '.';
@@ -80,6 +81,14 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
         'If included, use the version specified in the `info.version` field in your OpenAPI definition for your ReadMe project version. This flag is mutually exclusive with `--branch`.',
       exclusive: ['branch'],
     }),
+    timeout: Flags.integer({
+      summary: 'Number of seconds to wait for the upload to finish processing.',
+      description:
+        'Must be between 1 and 3,600 seconds. If the API definition is still processing when the timeout is reached, the command will exit successfully while processing continues in the background.',
+      default: defaultWaitTimeoutSeconds,
+      max: 3600,
+      min: 1,
+    }),
     'working-directory': workingDirectoryFlag,
   };
 
@@ -115,20 +124,31 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
   /**
    * Poll the ReadMe API until the upload is complete or the polling window ends.
    */
-  private async pollAPIUntilUploadCompletesOrPollingEnds(slug: string, headers: Headers) {
+  private async pollAPIUntilUploadCompletesOrPollingEnds(slug: string, headers: Headers, timeoutSeconds: number) {
     let count = 0;
     let status: APIUploadStatus = 'pending';
     let reason: APIUploadFailureReason | undefined;
+    let elapsedMilliseconds = 0;
+    const timeoutMilliseconds = timeoutSeconds * 1000;
 
     // oxlint-disable no-await-in-loop -- We need to wait between requests to avoid hitting rate limits.
-    while (this.isStatusPending(status) && count < 25) {
-      // oxlint-disable-next-line no-loop-func -- False positive.
+    while (this.isStatusPending(status)) {
+      const remainingMilliseconds = timeoutMilliseconds - elapsedMilliseconds;
+
+      if (remainingMilliseconds <= 0) {
+        break;
+      }
+
+      const pollingDelayMilliseconds = Math.min(1000 * 2 ** count, 30_000, remainingMilliseconds);
+
       await new Promise(resolve => {
-        // exponential backoff — wait 1s, 2s, 4s, 8s, 16s, 32s, 30s, 30s, 30s, 30s, etc.
-        setTimeout(resolve, Math.min(isTest() ? 1 : 1000 * 2 ** count, 30000));
+        // Exponential backoff — wait 1s, 2s, 4s, 8s, 16s, then up to 30s between requests.
+        setTimeout(resolve, isTest() ? 1 : pollingDelayMilliseconds);
       });
 
-      this.debug(`polling API for status of ${slug}, count is ${count}`);
+      elapsedMilliseconds += pollingDelayMilliseconds;
+
+      this.debug(`polling API for status of ${slug}, count is ${count}, timeout is ${timeoutSeconds}s`);
       const response = (await this.readmeAPIFetch(slug, { headers }).then(res =>
         this.handleAPIRes(res),
       )) as APIUploadSingleResponseRepresentation;
@@ -439,7 +459,11 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
       if (this.isStatusPending(status)) {
         spinner.text = `${spinner.text} uploaded but not yet processed by ReadMe. Polling for completion...`;
-        ({ status, reason } = await this.pollAPIUntilUploadCompletesOrPollingEnds(response.data.uri, headers));
+        ({ status, reason } = await this.pollAPIUntilUploadCompletesOrPollingEnds(
+          response.data.uri,
+          headers,
+          this.flags.timeout,
+        ));
       }
 
       if (this.isStatusFailed(status)) {

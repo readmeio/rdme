@@ -84,6 +84,18 @@ describe('rdme openapi upload', () => {
       expect(result).toMatchSnapshot();
     });
 
+    it('should throw if `--timeout` is less than one second', async () => {
+      const result = await run([filename, '--key', key, '--timeout', '0']);
+
+      expect(result.error?.message).toContain('Expected an integer greater than or equal to 1 but received: 0');
+    });
+
+    it('should throw if `--timeout` is more than one hour', async () => {
+      const result = await run([filename, '--key', key, '--timeout', '3601']);
+
+      expect(result.error?.message).toContain('Expected an integer less than or equal to 3600 but received: 3601');
+    });
+
     describe('API key validation', () => {
       it('should error when `--key` is empty', async () => {
         const result = await run(['--branch', branch, filename, '--key', '']);
@@ -609,7 +621,7 @@ describe('rdme openapi upload', () => {
             },
           })
           .get(`/branches/${branch}/apis/${slugifiedFilename}`)
-          .times(25)
+          .times(28)
           .reply(200, {
             data: {
               upload: { status: 'pending' },
@@ -625,6 +637,46 @@ describe('rdme openapi upload', () => {
           uri: `/branches/${branch}/apis/${slugifiedFilename}`,
         });
         expect(result).toMatchSnapshot();
+
+        mock.done();
+      });
+
+      it('should use a custom polling timeout', async () => {
+        prompts.inject([true]);
+        const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+          .get(`/branches/${branch}/apis`)
+          .reply(200, { data: [] })
+          .post(
+            `/branches/${branch}/apis`,
+            body =>
+              body.match(
+                `form-data; name="schema"; filename="${slugifiedFilename}"\r\nContent-Type: application/json`,
+              ) &&
+              // asserts that we're sending JSON
+              body.match(`{"openapi":"3.0.0","info":{"version":"1.2.3","title":"Single Path",`),
+          )
+          .reply(200, {
+            data: {
+              upload: { status: 'pending' },
+              uri: `/branches/${branch}/apis/${slugifiedFilename}`,
+            },
+          })
+          .get(`/branches/${branch}/apis/${slugifiedFilename}`)
+          .times(2)
+          .reply(200, {
+            data: {
+              upload: { status: 'pending' },
+              uri: `/branches/${branch}/apis/${slugifiedFilename}`,
+            },
+          });
+
+        const result = await run(['--branch', branch, filename, '--key', key, '--timeout', '3']);
+
+        expect(result.error).toBeUndefined();
+        expect(result.result).toStrictEqual({
+          status: 'pending',
+          uri: `/branches/${branch}/apis/${slugifiedFilename}`,
+        });
 
         mock.done();
       });
@@ -650,7 +702,7 @@ describe('rdme openapi upload', () => {
             },
           })
           .get(`/branches/${branch}/apis/${slugifiedFilename}`)
-          .times(25)
+          .times(28)
           .reply(200, {
             data: {
               upload: { status: 'pending_update' },
