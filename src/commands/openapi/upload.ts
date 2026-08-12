@@ -38,6 +38,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     'If the spec is a local file, the inferred slug takes the relative path and slugifies it (e.g., the slug for `docs/api/petstore.json` will be `docs-api-petstore.json`).',
     'If the spec is a URL, the inferred slug is the base file name from the URL (e.g., the slug for `https://example.com/docs/petstore.json` will be `petstore.json`).',
     "For the best and most explicit results, we recommend using the `--slug` flag to set a slug for your API definition, especially if you're managing many API definitions at scale.",
+    'If your API definition is still processing when the polling window ends, the command will exit successfully while processing continues in the background.',
   ].join('\n\n');
 
   static args = {
@@ -112,9 +113,9 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
   }
 
   /**
-   * Poll the ReadMe API until the upload is complete.
+   * Poll the ReadMe API until the upload is complete or the polling window ends.
    */
-  private async pollAPIUntilUploadIsComplete(slug: string, headers: Headers) {
+  private async pollAPIUntilUploadCompletesOrPollingEnds(slug: string, headers: Headers) {
     let count = 0;
     let status: APIUploadStatus = 'pending';
     let reason: APIUploadFailureReason | undefined;
@@ -140,10 +141,6 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       count += 1;
     }
     // oxlint-enable no-await-in-loop
-
-    if (this.isStatusPending(status)) {
-      throw new Error('Sorry, this upload timed out. Please try again later.');
-    }
 
     return { status, reason };
   }
@@ -442,13 +439,21 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
       if (this.isStatusPending(status)) {
         spinner.text = `${spinner.text} uploaded but not yet processed by ReadMe. Polling for completion...`;
-        ({ status, reason } = await this.pollAPIUntilUploadIsComplete(response.data.uri, headers));
+        ({ status, reason } = await this.pollAPIUntilUploadCompletesOrPollingEnds(response.data.uri, headers));
       }
 
       if (this.isStatusFailed(status)) {
         if (reason) {
           throw new Error(`Your API definition upload failed with the following reason:\n\n${reason}`);
         }
+      }
+
+      if (this.isStatusPending(status)) {
+        spinner.info(`${spinner.text} still processing in the background.`);
+        this.log(
+          `Your API definition (${filename}) was accepted and is still being processed by ReadMe. Processing will continue in the background. Do not retry this upload while it is still processing. Check ReadMe later to confirm that processing completed successfully.`,
+        );
+        return { uri: response.data.uri, status };
       }
 
       if (status === 'done') {
