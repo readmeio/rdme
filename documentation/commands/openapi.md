@@ -186,7 +186,7 @@ Upload (or re-upload) your API definition to ReadMe.
 ```
 USAGE
   $ rdme openapi upload [SPEC] --key <value> [--confirm-overwrite] [--dry-run] [--slug <value>] [--title <value>]
-    [--useSpecVersion | --branch <value>] [--working-directory <value>]
+    [--useSpecVersion | --branch <value>] [--timeout <value>] [--working-directory <value>]
 
 ARGUMENTS
   [SPEC]  A path to your API definition — either a local file path or a URL. If your working directory and all
@@ -201,6 +201,7 @@ FLAGS
   --slug=<value>               Override the slug (i.e., the unique identifier) for your API definition.
   --title=<value>              An override value for the `info.title` field in the API definition
   --useSpecVersion             Use the OpenAPI `info.version` field for your ReadMe project version
+  --timeout=<value>            [default: 720] Number of seconds to wait for the upload to finish processing.
   --working-directory=<value>  Working directory (for usage with relative external references)
 
 DESCRIPTION
@@ -268,6 +269,11 @@ FLAG DESCRIPTIONS
 
     If included, use the version specified in the `info.version` field in your OpenAPI definition for your ReadMe
     project version. This flag is mutually exclusive with `--branch`.
+
+  --timeout=<value>  Number of seconds to wait for the upload to finish processing.
+
+    Must be between 1 and 3,600 seconds. If the API definition is still processing when the timeout is reached, the
+    command will exit successfully while processing continues in the background.
 ```
 
 ## `rdme openapi validate [SPEC]`
