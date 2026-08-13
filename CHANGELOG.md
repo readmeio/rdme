@@ -1,3 +1,10 @@
+# [10.10.0-next.1](https://github.com/readmeio/rdme/compare/v10.9.7-next.1...v10.10.0-next.1) (2026-08-12)
+
+
+### Features
+
+* **openapi:** add configurable upload timeout ([#1516](https://github.com/readmeio/rdme/issues/1516)) ([8c44efe](https://github.com/readmeio/rdme/commit/8c44efe12a399a4088edb289d810e5a20d60028f))
+
 ## [10.9.7-next.1](https://github.com/readmeio/rdme/compare/v10.9.6...v10.9.7-next.1) (2026-08-12)
 
 
