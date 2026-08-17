@@ -381,6 +381,21 @@ describe('#writeFixes', () => {
     });
   });
 
+  it('should not execute JavaScript embedded in page content', () => {
+    const emitWarning = vi.spyOn(process, 'emitWarning').mockImplementation(() => {});
+    const maliciousPageData = {
+      ...mockPageData,
+      content: `---javascript
+({ malicious: process.emitWarning('JavaScript was executed') })
+---
+# Page content`,
+    };
+
+    writeFixes.call(command, maliciousPageData, { updated: true });
+
+    expect(emitWarning).not.toHaveBeenCalled();
+  });
+
   it('should write changes to current directory', () => {
     writeFixes.call(command, mockPageData, { updated: true }, '.');
 
