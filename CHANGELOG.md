@@ -1,3 +1,10 @@
+# [10.10.0-next.2](https://github.com/readmeio/rdme/compare/v10.10.0-next.1...v10.10.0-next.2) (2026-08-17)
+
+
+### Bug Fixes
+
+* Disable javascript execution in 2nd frontmatter ([#1518](https://github.com/readmeio/rdme/issues/1518)) ([922cbde](https://github.com/readmeio/rdme/commit/922cbde6877dc82b610cd787a049d49be851b821))
+
 # [10.10.0-next.1](https://github.com/readmeio/rdme/compare/v10.9.7-next.1...v10.10.0-next.1) (2026-08-12)
 
 
