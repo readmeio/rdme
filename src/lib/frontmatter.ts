@@ -206,7 +206,9 @@ export function writeFixes(
   /** output directory to write to */
   outputDirArg?: string,
 ) {
-  const result = grayMatter.stringify(metadata.content, updatedData);
+  // Pass content as object to prevent grayMatter from reparsing, which uses
+  // its javascript engine and can execute arbitrary js.
+  const result = grayMatter.stringify({ content: metadata.content }, updatedData);
   const outputPath = outputDirArg ? path.join(outputDirArg, metadata.filePath) : metadata.filePath;
   this.debug(`writing fixes to ${outputPath}`);
   const outputDir = path.dirname(outputPath);
