@@ -208,7 +208,13 @@ export function writeFixes(
 ) {
   // Pass content as object to prevent grayMatter from reparsing, which uses
   // its javascript engine and can execute arbitrary js.
-  const result = grayMatter.stringify({ content: metadata.content }, updatedData);
+  const result = grayMatter.stringify({ content: metadata.content }, updatedData, {
+    // disable the javascript engine, which is a built-in RCE
+    //
+    // * @see https://github.com/readmeio/rdme/security/advisories/GHSA-f65r-8r74-m6v5
+    // * @see https://github.com/jonschlinkert/gray-matter/issues/131#issuecomment-3566662412
+    engines: { javascript: { parse: () => ({}) } },
+  });
   const outputPath = outputDirArg ? path.join(outputDirArg, metadata.filePath) : metadata.filePath;
   this.debug(`writing fixes to ${outputPath}`);
   const outputDir = path.dirname(outputPath);
