@@ -49,6 +49,11 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
   static flags = {
     key: keyFlag,
     ...branchFlag(['This flag is mutually exclusive with `--useSpecVersion`.']),
+    'apply-tag-changes': Flags.boolean({
+      summary: 'Apply OAS tag changes to existing endpoint pages.',
+      description:
+        'If set when updating an API definition, existing endpoint pages will be moved to their tags in the uploaded file. Pages moved to another category are not affected.',
+    }),
     'confirm-overwrite': Flags.boolean({
       description:
         'If set, file overwrites will be made without a confirmation prompt. This flag can be a useful in automated environments where prompts cannot be responded to.',
@@ -384,6 +389,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       this.log(`Spec Version: ${specVersion}`);
       this.log(`Send as YAML: ${sendYaml}`);
       this.log(`Overwrite Existing: ${matchingAPIDefinition ? 'Yes' : 'No'}`);
+      this.log(`Apply Tag Changes: ${method === 'PUT' ? (this.flags['apply-tag-changes'] ? 'Yes' : 'No') : 'N/A'}`);
       if (existingAPIDefinitions.length) {
         this.log(`Existing API Definitions: ${filenames}`);
       }
@@ -436,6 +442,9 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
     this.debug(`initializing form data payload with filename "${filename}" and content type "${type}"`);
     body.append('schema', new File([specToUpload], filename, { type }));
+    if (method === 'PUT' && this.flags['apply-tag-changes']) {
+      body.append('apply_tag_changes', 'true');
+    }
 
     const options: RequestInit = { headers, method, body };
 

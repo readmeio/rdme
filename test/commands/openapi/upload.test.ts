@@ -149,7 +149,8 @@ describe('rdme openapi upload', () => {
           body =>
             body.match(`form-data; name="schema"; filename="${slugifiedFilename}"\r\nContent-Type: application/json`) &&
             // asserts that we're sending JSON
-            body.match(`{"openapi":"3.0.0","info":{"version":"1.2.3","title":"Single Path",`),
+            body.match(`{"openapi":"3.0.0","info":{"version":"1.2.3","title":"Single Path",`) &&
+            !body.match('form-data; name="apply_tag_changes"'),
         )
         .reply(200, {
           data: {
@@ -158,7 +159,7 @@ describe('rdme openapi upload', () => {
           },
         });
 
-      const result = await run(['--branch', branch, filename, '--key', key]);
+      const result = await run(['--branch', branch, filename, '--key', key, '--apply-tag-changes']);
 
       expect(result).toMatchSnapshot();
 
@@ -224,7 +225,8 @@ describe('rdme openapi upload', () => {
           body =>
             body.match(`form-data; name="schema"; filename="${slugifiedFilename}"\r\nContent-Type: application/json`) &&
             // asserts that we're sending JSON
-            body.match(`{"openapi":"3.0.0","info":{"version":"1.2.3","title":"Single Path",`),
+            body.match(`{"openapi":"3.0.0","info":{"version":"1.2.3","title":"Single Path",`) &&
+            !body.match('form-data; name="apply_tag_changes"'),
         )
         .reply(200, {
           data: {
@@ -236,6 +238,36 @@ describe('rdme openapi upload', () => {
       const result = await run(['--branch', branch, filename, '--key', key]);
 
       expect(result).toMatchSnapshot();
+
+      mock.done();
+    });
+
+    it('should apply tag changes when updating an existing API definition', async () => {
+      prompts.inject([true]);
+
+      const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .get(`/branches/${branch}/apis`)
+        .reply(200, { data: [{ filename: slugifiedFilename }] })
+        .put(
+          `/branches/1.0.0/apis/${slugifiedFilename}`,
+          body =>
+            body.match(`form-data; name="schema"; filename="${slugifiedFilename}"\r\nContent-Type: application/json`) &&
+            body.match('form-data; name="apply_tag_changes"\r\n\r\ntrue'),
+        )
+        .reply(200, {
+          data: {
+            upload: { status: 'done' },
+            uri: `/branches/${branch}/apis/${slugifiedFilename}`,
+          },
+        });
+
+      const result = await run(['--branch', branch, filename, '--key', key, '--apply-tag-changes']);
+
+      expect(result.error).toBeUndefined();
+      expect(result.result).toStrictEqual({
+        status: 'done',
+        uri: `/branches/${branch}/apis/${slugifiedFilename}`,
+      });
 
       mock.done();
     });

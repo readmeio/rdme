@@ -185,8 +185,8 @@ Upload (or re-upload) your API definition to ReadMe.
 
 ```
 USAGE
-  $ rdme openapi upload [SPEC] --key <value> [--confirm-overwrite] [--dry-run] [--slug <value>] [--title <value>]
-    [--useSpecVersion | --branch <value>] [--timeout <value>] [--working-directory <value>]
+  $ rdme openapi upload [SPEC] --key <value> [--apply-tag-changes] [--confirm-overwrite] [--dry-run] [--slug
+    <value>] [--title <value>] [--useSpecVersion | --branch <value>] [--timeout <value>] [--working-directory <value>]
 
 ARGUMENTS
   [SPEC]  A path to your API definition — either a local file path or a URL. If your working directory and all
@@ -195,6 +195,7 @@ ARGUMENTS
 FLAGS
   --key=<value>                (required) ReadMe project API key
   --branch=<value>             [default: stable] ReadMe project version
+  --apply-tag-changes          Apply OAS tag changes to existing endpoint pages.
   --confirm-overwrite          If set, file overwrites will be made without a confirmation prompt. This flag can be a
                                useful in automated environments where prompts cannot be responded to.
   --dry-run                    Outputs what would be done, but does not actually upload anything.
@@ -251,6 +252,11 @@ FLAG DESCRIPTIONS
   --branch=<value>  ReadMe project version
 
     Defaults to `stable` (i.e., your main project version). This flag is mutually exclusive with `--useSpecVersion`.
+
+  --apply-tag-changes  Apply OAS tag changes to existing endpoint pages.
+
+    If set when updating an API definition, existing endpoint pages will be moved to their tags in the uploaded file.
+    Pages moved to another category are not affected.
 
   --dry-run  Outputs what would be done, but does not actually upload anything.
 

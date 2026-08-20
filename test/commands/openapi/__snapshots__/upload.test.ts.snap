@@ -98,6 +98,7 @@ Spec Path: test/__fixtures__/petstore-simple-weird-version.json
 Spec Version: 1.2.3
 Send as YAML: false
 Overwrite Existing: No
+Apply Tag Changes: N/A
 ---------------------
 ",
 }
@@ -117,6 +118,7 @@ Spec Path: test/__fixtures__/petstore-simple-weird-version.json
 Spec Version: 1.2.3
 Send as YAML: false
 Overwrite Existing: Yes
+Apply Tag Changes: No
 Existing API Definitions: \`test__fixtures__petstore-simple-weird-version.json\`
 ---------------------
 ",
