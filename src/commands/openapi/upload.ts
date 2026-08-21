@@ -211,21 +211,20 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
     const headers = new Headers({ authorization: `Bearer ${this.flags.key}` });
 
-    // Best-effort lookup of the project this key targets, so output can say where the upload is
-    // going (users have uploaded to the wrong project unknowingly). Must never block the upload.
-    let project: string | undefined;
-    try {
-      const projectResponse = (await this.readmeAPIFetch('/projects/me', { headers }).then(res =>
-        this.handleAPIRes(res),
-      )) as ProjectRepresentation;
-      project = projectResponse?.data?.subdomain || projectResponse?.data?.name || undefined;
-    } catch (e) {
-      this.debug(`unable to fetch project metadata: ${e}`);
-    }
-
-    const existingAPIDefinitions: APIDefinitionsRepresentation['data'] =
-      (await this.readmeAPIFetch(`/branches/${branch}/apis`, { headers }).then(res => this.handleAPIRes(res)))?.data ||
-      [];
+    const [project, existingAPIDefinitions] = await Promise.all([
+      // Best-effort lookup of the project this key targets, so output can say where the upload is
+      // going (users have uploaded to the wrong project unknowingly). Must never block the upload.
+      this.readmeAPIFetch('/projects/me', { headers })
+        .then(res => this.handleAPIRes<ProjectRepresentation>(res))
+        .then(res => res?.data?.subdomain ?? null)
+        .catch((e: Error) => {
+          this.debug(`unable to fetch project metadata: ${e.message}`);
+          return null;
+        }),
+      this.readmeAPIFetch(`/branches/${branch}/apis`, { headers })
+        .then(res => this.handleAPIRes<APIDefinitionsRepresentation>(res))
+        .then(res => res?.data || []),
+    ]);
 
     const filenames = new Intl.ListFormat('en', {
       style: 'long',
@@ -390,6 +389,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
       this.log('--- Dry Run Result 🌵 ---');
       this.log(`File slug: ${filename}`);
+      this.log(`Project: ${project || 'unknown'}`);
       this.log(`Branch: ${branch}`);
       this.log(`Spec Type: ${specType}`);
       this.log(`Spec File Type: ${specFileType}`);

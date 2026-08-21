@@ -1516,6 +1516,36 @@ describe('rdme openapi upload', () => {
       mock.done();
     });
 
+    it('should include the project in dry-run output', async () => {
+      const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .get('/projects/me')
+        .reply(200, { data: { name: 'Owl Factory', subdomain: 'owl-factory' } })
+        .get(`/branches/${branch}/apis`)
+        .reply(200, { data: [] });
+
+      const result = await run(['--branch', branch, filename, '--key', key, '--dry-run']);
+
+      expect(result.error).toBeUndefined();
+      expect(result.stdout).toContain('Project: owl-factory');
+
+      mock.done();
+    });
+
+    it('should show the project as unknown in dry-run output when the project lookup fails', async () => {
+      const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .get('/projects/me')
+        .reply(401, { title: 'Unauthorized', status: 401 })
+        .get(`/branches/${branch}/apis`)
+        .reply(200, { data: [] });
+
+      const result = await run(['--branch', branch, filename, '--key', key, '--dry-run']);
+
+      expect(result.error).toBeUndefined();
+      expect(result.stdout).toContain('Project: unknown');
+
+      mock.done();
+    });
+
     it('should fall back to the standard messaging when the project lookup fails', async () => {
       prompts.inject([true]);
       const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
