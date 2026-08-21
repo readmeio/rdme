@@ -4,6 +4,7 @@ import type {
   APIUploadFailureReason,
   APIUploadSingleResponseRepresentation,
   APIUploadStatus,
+  ProjectRepresentation,
   StagedAPIUploadResponseRepresentation,
 } from '../../lib/types/index.js';
 
@@ -209,6 +210,18 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     }
 
     const headers = new Headers({ authorization: `Bearer ${this.flags.key}` });
+
+    // Best-effort lookup of the project this key targets, so output can say where the upload is
+    // going (users have uploaded to the wrong project unknowingly). Must never block the upload.
+    let project: string | undefined;
+    try {
+      const projectResponse = (await this.readmeAPIFetch('/projects/me', { headers }).then(res =>
+        this.handleAPIRes(res),
+      )) as ProjectRepresentation;
+      project = projectResponse?.data?.subdomain || projectResponse?.data?.name || undefined;
+    } catch (e) {
+      this.debug(`unable to fetch project metadata: ${e}`);
+    }
 
     const existingAPIDefinitions: APIDefinitionsRepresentation['data'] =
       (await this.readmeAPIFetch(`/branches/${branch}/apis`, { headers }).then(res => this.handleAPIRes(res)))?.data ||
@@ -422,7 +435,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       const { confirm } = await promptTerminal({
         type: 'confirm',
         name: 'confirm',
-        message: `This will overwrite the existing API definition for ${filename}. Are you sure you want to continue?`,
+        message: `This will overwrite the existing API definition for ${filename}${project ? ` in the ${project} project` : ''}. Are you sure you want to continue?`,
       });
 
       if (!confirm) {
@@ -475,7 +488,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       if (this.isStatusPending(status)) {
         spinner.info(`${spinner.text} still processing in the background.`);
         this.log(
-          `Your API definition (${filename}) was accepted and is still being processed by ReadMe. Processing will continue in the background. Do not retry this upload while it is still processing. Check ReadMe later to confirm that processing completed successfully.`,
+          `Your API definition (${filename}) was accepted${project ? ` into your ${project} project` : ''} and is still being processed by ReadMe. Processing will continue in the background. Do not retry this upload while it is still processing. Check ReadMe later to confirm that processing completed successfully.`,
         );
         return { uri: response.data.uri, status };
       }
@@ -483,7 +496,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       if (status === 'done') {
         spinner.succeed(`${spinner.text} done!`);
         this.log(
-          `🚀 Your API definition (${filename}) was successfully ${method === 'POST' ? 'created' : 'updated'} in ReadMe!`,
+          `🚀 Your API definition (${filename}) was successfully ${method === 'POST' ? 'created' : 'updated'} in ${project ? `your ${project} project in ` : ''}ReadMe!`,
         );
         return { uri: response.data.uri, status };
       }
