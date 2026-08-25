@@ -1546,6 +1546,31 @@ describe('rdme openapi upload', () => {
       mock.done();
     });
 
+    it('should not retry a failing project lookup', async () => {
+      prompts.inject([true]);
+      const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .get('/projects/me')
+        .reply(502, 'Bad Gateway')
+        .get(`/branches/${branch}/apis`)
+        .reply(200, { data: [{ filename: slugifiedFilename }] })
+        .put(`/branches/${branch}/apis/${slugifiedFilename}`)
+        .reply(200, {
+          data: {
+            upload: { status: 'done' },
+            uri: `/branches/${branch}/apis/${slugifiedFilename}`,
+          },
+        });
+
+      const result = await run(['--branch', branch, filename, '--key', key]);
+
+      expect(result.error).toBeUndefined();
+      expect(result.stdout).toContain(
+        `🚀 Your API definition (${slugifiedFilename}) was successfully updated in ReadMe!`,
+      );
+
+      mock.done();
+    });
+
     it('should fall back to the standard messaging when the project lookup fails', async () => {
       prompts.inject([true]);
       const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })

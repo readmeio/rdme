@@ -214,7 +214,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     const [project, existingAPIDefinitions] = await Promise.all([
       // Best-effort lookup of the project this key targets, so output can say where the upload is
       // going (users have uploaded to the wrong project unknowingly). Must never block the upload.
-      this.readmeAPIFetch('/projects/me', { headers })
+      this.readmeAPIFetch('/projects/me', { headers }, { retries: 0 })
         .then(res => this.handleAPIRes<ProjectRepresentation>(res))
         .then(res => res?.data?.subdomain ?? null)
         .catch((e: Error) => {
