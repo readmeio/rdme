@@ -14,11 +14,25 @@ import { getAPIv2Mock, getAPIv2MockForGHA } from '../../helpers/get-api-mock.js'
 import { githubActionsEnv } from '../../helpers/git-mock.js';
 import { runCommand } from '../../helpers/oclif.js';
 
-const { dnsLookup } = vi.hoisted(() => ({
+const { dnsLookup, promptSpy } = vi.hoisted(() => ({
   dnsLookup: vi.fn<() => Promise<{ address: string; family: number }[]>>(() =>
     Promise.resolve([{ address: '93.184.216.34', family: 4 }]),
   ),
+  promptSpy: vi.fn(),
 }));
+
+// Pass-through spy so tests can assert on prompt messages (`prompts.inject` bypasses rendering,
+// so prompt text is otherwise unobservable in captured output).
+vi.mock(import('../../../src/lib/promptWrapper.js'), async importOriginal => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    default: ((...args: Parameters<typeof actual.default>) => {
+      promptSpy(...args);
+      return actual.default(...args);
+    }) as typeof actual.default,
+  };
+});
 
 // `@apidevtools/json-schema-ref-parser` imports `lookup` as a named export from
 // `node:dns/promises` when determining URL safety.
@@ -1435,6 +1449,156 @@ describe('rdme openapi upload', () => {
       expect(result).toMatchSnapshot();
 
       getMock.done();
+    });
+  });
+
+  describe('project context in output', () => {
+    it('should include the project subdomain in the overwrite prompt and success message', async () => {
+      prompts.inject([true]);
+      const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .get('/projects/me')
+        .reply(200, { data: { name: 'Owl Factory', subdomain: 'owl-factory' } })
+        .get(`/branches/${branch}/apis`)
+        .reply(200, { data: [{ filename: slugifiedFilename }] })
+        .put(`/branches/${branch}/apis/${slugifiedFilename}`)
+        .reply(200, {
+          data: {
+            upload: { status: 'done' },
+            uri: `/branches/${branch}/apis/${slugifiedFilename}`,
+          },
+        });
+
+      const result = await run(['--branch', branch, filename, '--key', key]);
+
+      expect(result.error).toBeUndefined();
+      expect(result.stdout).toContain(
+        `🚀 Your API definition (${slugifiedFilename}) was successfully updated in your owl-factory project in ReadMe!`,
+      );
+      expect(promptSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: `This will overwrite the existing API definition for ${slugifiedFilename} in the owl-factory project. Are you sure you want to continue?`,
+        }),
+      );
+
+      mock.done();
+    });
+
+    it('should include the project subdomain in the still-processing message when polling ends', async () => {
+      prompts.inject([true]);
+      const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .get('/projects/me')
+        .reply(200, { data: { name: 'Owl Factory', subdomain: 'owl-factory' } })
+        .get(`/branches/${branch}/apis`)
+        .reply(200, { data: [] })
+        .post(`/branches/${branch}/apis`)
+        .reply(200, {
+          data: {
+            upload: { status: 'pending' },
+            uri: `/branches/${branch}/apis/${slugifiedFilename}`,
+          },
+        })
+        .get(`/branches/${branch}/apis/${slugifiedFilename}`)
+        .times(28)
+        .reply(200, {
+          data: {
+            upload: { status: 'pending' },
+            uri: `/branches/${branch}/apis/${slugifiedFilename}`,
+          },
+        });
+
+      const result = await run(['--branch', branch, filename, '--key', key]);
+
+      expect(result.error).toBeUndefined();
+      expect(result.stdout).toContain(
+        `Your API definition (${slugifiedFilename}) was accepted into your owl-factory project and is still being processed by ReadMe.`,
+      );
+
+      mock.done();
+    });
+
+    it('should include the project in dry-run output', async () => {
+      const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .get('/projects/me')
+        .reply(200, { data: { name: 'Owl Factory', subdomain: 'owl-factory' } })
+        .get(`/branches/${branch}/apis`)
+        .reply(200, { data: [] });
+
+      const result = await run(['--branch', branch, filename, '--key', key, '--dry-run']);
+
+      expect(result.error).toBeUndefined();
+      expect(result.stdout).toContain('Project: owl-factory');
+
+      mock.done();
+    });
+
+    it('should show the project as unknown in dry-run output when the project lookup fails', async () => {
+      const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .get('/projects/me')
+        .reply(401, { title: 'Unauthorized', status: 401 })
+        .get(`/branches/${branch}/apis`)
+        .reply(200, { data: [] });
+
+      const result = await run(['--branch', branch, filename, '--key', key, '--dry-run']);
+
+      expect(result.error).toBeUndefined();
+      expect(result.stdout).toContain('Project: unknown');
+
+      mock.done();
+    });
+
+    it('should not retry a failing project lookup', async () => {
+      prompts.inject([true]);
+      const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .get('/projects/me')
+        .reply(502, 'Bad Gateway')
+        .get(`/branches/${branch}/apis`)
+        .reply(200, { data: [{ filename: slugifiedFilename }] })
+        .put(`/branches/${branch}/apis/${slugifiedFilename}`)
+        .reply(200, {
+          data: {
+            upload: { status: 'done' },
+            uri: `/branches/${branch}/apis/${slugifiedFilename}`,
+          },
+        });
+
+      const result = await run(['--branch', branch, filename, '--key', key]);
+
+      expect(result.error).toBeUndefined();
+      expect(result.stdout).toContain(
+        `🚀 Your API definition (${slugifiedFilename}) was successfully updated in ReadMe!`,
+      );
+
+      mock.done();
+    });
+
+    it('should fall back to the standard messaging when the project lookup fails', async () => {
+      prompts.inject([true]);
+      const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .get('/projects/me')
+        .reply(401, { title: 'Unauthorized', status: 401 })
+        .get(`/branches/${branch}/apis`)
+        .reply(200, { data: [{ filename: slugifiedFilename }] })
+        .put(`/branches/${branch}/apis/${slugifiedFilename}`)
+        .reply(200, {
+          data: {
+            upload: { status: 'done' },
+            uri: `/branches/${branch}/apis/${slugifiedFilename}`,
+          },
+        });
+
+      const result = await run(['--branch', branch, filename, '--key', key]);
+
+      expect(result.error).toBeUndefined();
+      expect(result.stdout).toContain(
+        `🚀 Your API definition (${slugifiedFilename}) was successfully updated in ReadMe!`,
+      );
+      expect(promptSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: `This will overwrite the existing API definition for ${slugifiedFilename}. Are you sure you want to continue?`,
+        }),
+      );
+
+      mock.done();
     });
   });
 });

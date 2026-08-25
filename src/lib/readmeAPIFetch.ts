@@ -268,6 +268,12 @@ export async function readmeAPIv2Fetch<T extends Hook.Context = Hook.Context>(
      * full source URL for the file.
      */
     file?: FilePathDetails;
+
+    /**
+     * Number of retries for 5xx server errors and network failures. Defaults to
+     * {@link MAX_RETRIES}. Set to `0` to disable retries.
+     */
+    retries?: number;
   },
 ) {
   let source = 'cli';
@@ -339,12 +345,13 @@ export async function readmeAPIv2Fetch<T extends Hook.Context = Hook.Context>(
 
   // Retry logic with exponential backoff for 5xx server errors
   let lastError: Error | undefined;
+  const maxRetries = opts?.retries ?? MAX_RETRIES;
 
   // oxlint-disable no-await-in-loop -- Sequential delays required for retry logic with exponential backoff
-  for (let attempt = 0; attempt <= MAX_RETRIES; attempt += 1) {
+  for (let attempt = 0; attempt <= maxRetries; attempt += 1) {
     if (attempt > 0) {
       const delay = (isTest() ? 10 : INITIAL_DELAY_MS) * 2 ** (attempt - 1);
-      this.debug(`retrying request (attempt ${attempt}/${MAX_RETRIES}) after ${delay}ms delay`);
+      this.debug(`retrying request (attempt ${attempt}/${maxRetries}) after ${delay}ms delay`);
       await new Promise(resolve => {
         setTimeout(resolve, delay);
       });
@@ -354,10 +361,10 @@ export async function readmeAPIv2Fetch<T extends Hook.Context = Hook.Context>(
       const res = await fetch(fullUrl, fetchOptions);
 
       // If we get a 5xx error and have retries left, log and continue to next attempt
-      if (isRetryableStatus(res.status) && attempt < MAX_RETRIES) {
+      if (isRetryableStatus(res.status) && attempt < maxRetries) {
         const body = await res.text();
         this.debug(
-          `received retryable status ${res.status} (attempt ${attempt + 1}/${MAX_RETRIES + 1}), will retry. Response preview: ${body.slice(0, 200)}`,
+          `received retryable status ${res.status} (attempt ${attempt + 1}/${maxRetries + 1}), will retry. Response preview: ${body.slice(0, 200)}`,
         );
 
         lastError = new Error(`Server returned ${res.status}`);
@@ -377,13 +384,13 @@ export async function readmeAPIv2Fetch<T extends Hook.Context = Hook.Context>(
 
       return res;
     } catch (e) {
-      this.debug(`error making fetch request (attempt ${attempt + 1}/${MAX_RETRIES + 1}): ${e}`);
+      this.debug(`error making fetch request (attempt ${attempt + 1}/${maxRetries + 1}): ${e}`);
       this.debug(e.stack);
       lastError = e;
 
       // If we've exhausted all retries then throw the error, otherwise continue to next retry
       // attempt.
-      if (attempt >= MAX_RETRIES) {
+      if (attempt >= maxRetries) {
         throw e;
       }
     }

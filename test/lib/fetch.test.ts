@@ -454,6 +454,20 @@ describe('#readmeAPIv2Fetch()', () => {
       mock.done();
     });
 
+    it('should not retry when retries is 0', async () => {
+      const oclifConfig = await setupOclifConfig();
+      const command = new DocsUploadCommand([], oclifConfig);
+      vi.spyOn(command, 'debug').mockImplementation(() => {});
+
+      const mock = getAPIv2Mock().get('/test-no-retries').reply(502, 'Bad Gateway');
+
+      const res = await readmeAPIv2Fetch.call(command, '/test-no-retries', { method: 'get' }, { retries: 0 });
+
+      expect(res.status).toBe(502);
+
+      mock.done();
+    });
+
     it('should not retry on 4xx errors', async () => {
       const oclifConfig = await setupOclifConfig();
       const command = new DocsUploadCommand([], oclifConfig);
