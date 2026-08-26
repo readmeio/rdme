@@ -4,6 +4,7 @@ import type {
   APIUploadFailureReason,
   APIUploadSingleResponseRepresentation,
   APIUploadStatus,
+  ProjectRepresentation,
   StagedAPIUploadResponseRepresentation,
 } from '../../lib/types/index.js';
 
@@ -215,9 +216,20 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
     const headers = new Headers({ authorization: `Bearer ${this.flags.key}` });
 
-    const existingAPIDefinitions: APIDefinitionsRepresentation['data'] =
-      (await this.readmeAPIFetch(`/branches/${branch}/apis`, { headers }).then(res => this.handleAPIRes(res)))?.data ||
-      [];
+    const [project, existingAPIDefinitions] = await Promise.all([
+      // Best-effort lookup of the project this key targets, so output can say where the upload is
+      // going (users have uploaded to the wrong project unknowingly). Must never block the upload.
+      this.readmeAPIFetch('/projects/me', { headers }, { retries: 0 })
+        .then(res => this.handleAPIRes<ProjectRepresentation>(res))
+        .then(res => res?.data?.subdomain ?? null)
+        .catch((e: Error) => {
+          this.debug(`unable to fetch project metadata: ${e.message}`);
+          return null;
+        }),
+      this.readmeAPIFetch(`/branches/${branch}/apis`, { headers })
+        .then(res => this.handleAPIRes<APIDefinitionsRepresentation>(res))
+        .then(res => res?.data || []),
+    ]);
 
     const filenames = new Intl.ListFormat('en', {
       style: 'long',
@@ -382,6 +394,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
 
       this.log('--- Dry Run Result 🌵 ---');
       this.log(`File slug: ${filename}`);
+      this.log(`Project: ${project || 'unknown'}`);
       this.log(`Branch: ${branch}`);
       this.log(`Spec Type: ${specType}`);
       this.log(`Spec File Type: ${specFileType}`);
@@ -428,7 +441,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       const { confirm } = await promptTerminal({
         type: 'confirm',
         name: 'confirm',
-        message: `This will overwrite the existing API definition for ${filename}. Are you sure you want to continue?`,
+        message: `This will overwrite the existing API definition for ${filename}${project ? ` in the ${project} project` : ''}. Are you sure you want to continue?`,
       });
 
       if (!confirm) {
@@ -484,7 +497,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       if (this.isStatusPending(status)) {
         spinner.info(`${spinner.text} still processing in the background.`);
         this.log(
-          `Your API definition (${filename}) was accepted and is still being processed by ReadMe. Processing will continue in the background. Do not retry this upload while it is still processing. Check ReadMe later to confirm that processing completed successfully.`,
+          `Your API definition (${filename}) was accepted${project ? ` into your ${project} project` : ''} and is still being processed by ReadMe. Processing will continue in the background. Do not retry this upload while it is still processing. Check ReadMe later to confirm that processing completed successfully.`,
         );
         return { uri: response.data.uri, status };
       }
@@ -492,7 +505,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       if (status === 'done') {
         spinner.succeed(`${spinner.text} done!`);
         this.log(
-          `🚀 Your API definition (${filename}) was successfully ${method === 'POST' ? 'created' : 'updated'} in ReadMe!`,
+          `🚀 Your API definition (${filename}) was successfully ${method === 'POST' ? 'created' : 'updated'} in ${project ? `your ${project} project in ` : ''}ReadMe!`,
         );
         return { uri: response.data.uri, status };
       }

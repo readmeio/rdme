@@ -91,6 +91,7 @@ exports[`rdme openapi upload > given that the --dry-run flag is passed > should 
 ",
   "stdout": "--- Dry Run Result 🌵 ---
 File slug: test__fixtures__petstore-simple-weird-version.json
+Project: unknown
 Branch: 1.0.0
 Spec Type: OpenAPI
 Spec File Type: path
@@ -111,6 +112,7 @@ exports[`rdme openapi upload > given that the --dry-run flag is passed > should 
 ",
   "stdout": "--- Dry Run Result 🌵 ---
 File slug: test__fixtures__petstore-simple-weird-version.json
+Project: unknown
 Branch: 1.0.0
 Spec Type: OpenAPI
 Spec File Type: path

@@ -1,3 +1,10 @@
+# [10.10.0-next.3](https://github.com/readmeio/rdme/compare/v10.10.0-next.2...v10.10.0-next.3) (2026-08-25)
+
+
+### Features
+
+* **openapi:** surface target project in upload output ([#1520](https://github.com/readmeio/rdme/issues/1520)) ([53579cc](https://github.com/readmeio/rdme/commit/53579ccd931b66628ac1dc7debad168d50aa221b))
+
 # [10.10.0-next.2](https://github.com/readmeio/rdme/compare/v10.10.0-next.1...v10.10.0-next.2) (2026-08-17)
 
 
