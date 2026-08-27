@@ -7,7 +7,8 @@ import getCurrentConfig, { normalizeAPIKey } from '../../src/lib/getCurrentConfi
 
 describe('#normalizeAPIKey()', () => {
   it('returns undefined for missing or whitespace-only values', () => {
-    expect(normalizeAPIKey(undefined)).toBeUndefined();
+    const missing: string | undefined = undefined;
+    expect(normalizeAPIKey(missing)).toBeUndefined();
     expect(normalizeAPIKey('')).toBeUndefined();
     expect(normalizeAPIKey('   ')).toBeUndefined();
     expect(normalizeAPIKey('\t\n')).toBeUndefined();

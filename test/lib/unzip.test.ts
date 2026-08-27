@@ -35,12 +35,13 @@ describe('#attemptUnzip', () => {
 
     const result = await attemptUnzip(zipPath);
 
-    expect(result.zipped).toBe(true);
-    if (result.zipped) {
-      expect(result.pathInput).toBe(result.unzippedDir);
-      expect(result.pathInput.endsWith(`${path.sep}guides`)).toBe(true);
-      expect(fs.existsSync(path.join(result.pathInput, 'intro.md'))).toBe(true);
-    }
+    expect(result).toStrictEqual({
+      zipped: true,
+      pathInput: expect.stringMatching(/[/\\]guides$/),
+      unzippedDir: expect.stringMatching(/[/\\]guides$/),
+    });
+    expect(result.pathInput).toBe((result as { unzippedDir: string }).unzippedDir);
+    expect(fs.existsSync(path.join(result.pathInput, 'intro.md'))).toBe(true);
   });
 
   it('should not throw when a .zip file cannot be extracted', async () => {

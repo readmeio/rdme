@@ -36,7 +36,7 @@ describe('#readdirRecursive', () => {
   });
 
   it('should recursively list files including ignored and git metadata when ignoreGit is false', () => {
-    const files = readdirRecursive('.').sort();
+    const files = readdirRecursive('.');
 
     expect(files).toContain(path.join('.', 'keep.md'));
     expect(files).toContain(path.join('.', 'secret.txt'));
