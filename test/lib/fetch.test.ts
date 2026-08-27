@@ -6,6 +6,8 @@ import pkg from '../../package.json' with { type: 'json' };
 import DocsUploadCommand from '../../src/commands/docs/upload.js';
 import {
   cleanAPIv1Headers,
+  emptyMappings,
+  fetchMappings,
   fetchSchema,
   handleAPIv1Res,
   readmeAPIv1Fetch,
@@ -401,6 +403,47 @@ describe('#fetchSchema', () => {
     const schema = fetchSchema.call(command);
 
     expect(schema.type).toBe('object');
+  });
+});
+
+describe('#fetchMappings', () => {
+  it('should skip the mappings request when no API key is present', async () => {
+    const oclifConfig = await setupOclifConfig();
+    const command = new DocsUploadCommand([], oclifConfig);
+    command.flags = { key: '' } as typeof command.flags;
+    vi.spyOn(command, 'debug').mockImplementation(() => {});
+
+    await expect(fetchMappings.call(command)).resolves.toStrictEqual(emptyMappings);
+  });
+
+  it('should return mappings from a successful migration API response', async () => {
+    const oclifConfig = await setupOclifConfig();
+    const command = new DocsUploadCommand([], oclifConfig);
+    command.flags = { key: 'API_KEY' } as typeof command.flags;
+    vi.spyOn(command, 'debug').mockImplementation(() => {});
+
+    const mappings = {
+      categories: { '5f92cbf10cf217478ba93561': 'getting-started' },
+      parentPages: { abc: 'parent-slug' },
+    };
+    const mock = getAPIv1Mock().get('/api/v1/migration').basicAuth({ user: 'API_KEY' }).reply(200, mappings);
+
+    await expect(fetchMappings.call(command)).resolves.toStrictEqual(mappings);
+
+    mock.done();
+  });
+
+  it('should fall back to empty mappings when the migration API returns an error', async () => {
+    const oclifConfig = await setupOclifConfig();
+    const command = new DocsUploadCommand([], oclifConfig);
+    command.flags = { key: 'API_KEY' } as typeof command.flags;
+    vi.spyOn(command, 'debug').mockImplementation(() => {});
+
+    const mock = getAPIv1Mock().get('/api/v1/migration').basicAuth({ user: 'API_KEY' }).reply(401, { error: 'denied' });
+
+    await expect(fetchMappings.call(command)).resolves.toStrictEqual(emptyMappings);
+
+    mock.done();
   });
 });
 

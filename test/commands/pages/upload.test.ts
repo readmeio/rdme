@@ -830,6 +830,13 @@ describe.each([
       });
     });
 
+    it('should error when pages form a cyclic parent chain', async () => {
+      const result = await run(['test/__fixtures__/docs/cyclic-parents', '--key', key]);
+
+      expect(result.error).toBeInstanceOf(Error);
+      expect(result.error?.message).toBe('Cyclic dependency');
+    });
+
     it('should error out if the directory does not contain any Markdown files', async () => {
       const result = await run(['test/__fixtures__/ref-oas', '--key', key]);
 
