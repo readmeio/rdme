@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { APIv1Error } from '../../src/lib/apiError.js';
+import { APIv1Error, APIv2Error } from '../../src/lib/apiError.js';
 
 const response = {
   error: 'VERSION_FORK_EMPTY',
@@ -38,5 +38,33 @@ describe('#APIv1Error', () => {
 
     expect(error.code).toBe(msg);
     expect(error.message).toBe(msg);
+  });
+});
+
+describe('#APIv2Error', () => {
+  it('should include the title, detail, and field errors from the API', () => {
+    const error = new APIv2Error({
+      title: 'Validation failed',
+      detail: 'The page could not be saved.',
+      errors: [
+        { key: 'slug', message: 'is required' },
+        { key: 'title', message: 'must be a string' },
+      ],
+    });
+
+    expect(error.name).toBe('APIv2Error');
+    expect(error.response.title).toBe('Validation failed');
+    expect(error.message).toContain('ReadMe API error: Validation failed');
+    expect(error.message).toContain('The page could not be saved.');
+    expect(error.message).toContain('slug: is required');
+    expect(error.message).toContain('title: must be a string');
+  });
+
+  it('should use a generic message when the API response has no title', () => {
+    const error = new APIv2Error({});
+
+    expect(error.message).toBe(
+      'The ReadMe API responded with an unexpected error. Please try again and if this issue persists, get in touch with us at support@readme.io.',
+    );
   });
 });

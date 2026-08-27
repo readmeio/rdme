@@ -340,4 +340,116 @@ Child body`),
       fs.rmSync(tmpDir, { recursive: true, force: true });
     }
   });
+
+  it('should place circular parent chains under their category instead of aborting the export', async () => {
+    const tmpDir = tempExportDir();
+    try {
+      const mock = getAPIv2Mock({ authorization })
+        .get(`/branches/stable/categories/${route}`)
+        .reply(200, { data: [{ title: 'Docs' }] })
+        .get(`/branches/stable/categories/${route}/Docs/pages`)
+        .reply(200, { data: [{ slug: 'page-a' }, { slug: 'page-b' }] })
+        .get(`/branches/stable/${route}/page-a`)
+        .reply(200, {
+          data: {
+            slug: 'page-a',
+            title: 'Page A',
+            type: 'basic',
+            content: { body: 'A body' },
+            category: { uri: `https://api.readme.com/v2/branches/stable/categories/${route}/docs` },
+            parent: { uri: `https://api.readme.com/v2/branches/stable/${route}/page-b` },
+          },
+        })
+        .get(`/branches/stable/${route}/page-b`)
+        .reply(200, {
+          data: {
+            slug: 'page-b',
+            title: 'Page B',
+            type: 'basic',
+            content: { body: 'B body' },
+            category: { uri: `https://api.readme.com/v2/branches/stable/categories/${route}/docs` },
+            parent: { uri: `https://api.readme.com/v2/branches/stable/${route}/page-a` },
+          },
+        });
+
+      const output = await run([tmpDir, '--key', key]);
+
+      expect(output.error).toBeUndefined();
+      expect(output.stderr).toContain('Circular parent reference detected for slug "page-a"');
+      expect(output.stderr).toContain('Circular parent reference detected for slug "page-b"');
+
+      expect(fs.copyFileSync).toHaveBeenCalledTimes(2);
+      expect(fs.copyFileSync).toHaveBeenCalledWith(
+        path.join(tmpDir, '.temp_download', 'page-a.md'),
+        path.join(tmpDir, 'docs', 'page-a.md'),
+      );
+      expect(fs.copyFileSync).toHaveBeenCalledWith(
+        path.join(tmpDir, '.temp_download', 'page-b.md'),
+        path.join(tmpDir, 'docs', 'page-b.md'),
+      );
+
+      mock.done();
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it('should warn and continue when a category contains no pages', async () => {
+    const tmpDir = tempExportDir();
+    try {
+      const mock = getAPIv2Mock({ authorization })
+        .get(`/branches/stable/categories/${route}`)
+        .reply(200, { data: [{ title: 'Empty' }] })
+        .get(`/branches/stable/categories/${route}/Empty/pages`)
+        .reply(200, { data: [] });
+
+      const output = await run([tmpDir, '--key', key]);
+
+      expect(output.error).toBeUndefined();
+      expect(output.stderr).toContain('No pages found within the "Empty" category');
+      expect(output.result).toMatchObject({ completed: [], failed: [], skipped: 0 });
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
+
+      mock.done();
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it('should skip a page when its individual fetch fails and still export the rest', async () => {
+    const tmpDir = tempExportDir();
+    try {
+      const mock = getAPIv2Mock({ authorization })
+        .get(`/branches/stable/categories/${route}`)
+        .reply(200, { data: [{ title: 'Main' }] })
+        .get(`/branches/stable/categories/${route}/Main/pages`)
+        .reply(200, { data: [{ slug: 'missing' }, { slug: 'intro' }] })
+        .get(`/branches/stable/${route}/missing`)
+        .reply(404, { title: 'Not found' })
+        .get(`/branches/stable/${route}/intro`)
+        .reply(200, {
+          data: {
+            slug: 'intro',
+            title: 'Introduction',
+            type: 'basic',
+            content: { body: 'Hello world' },
+            category: { uri: `https://api.readme.com/v2/branches/stable/categories/${route}/main` },
+          },
+        });
+
+      const output = await run([tmpDir, '--key', key]);
+
+      expect(output.error).toBeUndefined();
+      expect(output.stderr).toContain('Failed to fetch page "missing"');
+      expect(output.result).toMatchObject({ failed: ['missing'] });
+      // A failed page fetch keeps already-downloaded files in the temp folder but
+      // skips the final restructure so a partial export is not published.
+      expect(fs.writeFileSync).toHaveBeenCalledTimes(1);
+      expect(fs.copyFileSync).not.toHaveBeenCalled();
+
+      mock.done();
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
 });
