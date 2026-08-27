@@ -381,11 +381,11 @@ Child body`),
       expect(fs.copyFileSync).toHaveBeenCalledTimes(2);
       expect(fs.copyFileSync).toHaveBeenCalledWith(
         path.join(tmpDir, '.temp_download', 'page-a.md'),
-        path.join(tmpDir, 'docs', 'page-a.md'),
+        path.join(tmpDir, 'docs', 'page-b', 'page-a', 'index.md'),
       );
       expect(fs.copyFileSync).toHaveBeenCalledWith(
         path.join(tmpDir, '.temp_download', 'page-b.md'),
-        path.join(tmpDir, 'docs', 'page-b.md'),
+        path.join(tmpDir, 'docs', 'page-a', 'page-b', 'index.md'),
       );
 
       mock.done();
