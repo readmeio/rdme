@@ -2,7 +2,9 @@ import type { APIv2PageCommands } from '../../src/index.js';
 import type { PageMetadata } from '../../src/lib/readPage.js';
 import type { SchemaObject } from 'oas/types';
 
+import crypto from 'node:crypto';
 import fs from 'node:fs';
+import fsPromises from 'node:fs/promises';
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -13,7 +15,7 @@ import DocsUploadCommand from '../../src/commands/docs/upload.js';
 import RefUploadCommand from '../../src/commands/reference/upload.js';
 import { fix, parse, writeFixes } from '../../src/lib/frontmatter.js';
 import { emptyMappings, fetchSchema } from '../../src/lib/readmeAPIFetch.js';
-import { readPage } from '../../src/lib/readPage.js';
+import { findPages, readPage } from '../../src/lib/readPage.js';
 import { setupOclifConfig } from '../helpers/oclif.js';
 
 describe('#parse', () => {
@@ -478,5 +480,87 @@ category: some-category
       category: 'some-category',
     });
     expect(result.content).toContain('# Page content');
+  });
+
+  it('should use the frontmatter slug when present', () => {
+    vi.spyOn(fs, 'readFileSync').mockReturnValue(`---
+title: Custom
+slug: custom-slug
+---
+`);
+
+    const result = readPage.call(command, 'docs/Whatever.MD');
+
+    expect(result.slug).toBe('custom-slug');
+  });
+
+  it('should fall back to the lowercased filename when no slug is set', () => {
+    vi.spyOn(fs, 'readFileSync').mockReturnValue(`---
+title: Custom
+---
+`);
+
+    const result = readPage.call(command, 'docs/Getting-Started.MDX');
+
+    expect(result.slug).toBe('getting-started');
+  });
+
+  it('should hash the raw file contents including frontmatter', () => {
+    const raw = `---
+title: Hashed
+---
+# Body`;
+    vi.spyOn(fs, 'readFileSync').mockReturnValue(raw);
+
+    const result = readPage.call(command, 'docs/hashed.md');
+
+    expect(result.hash).toBe(crypto.createHash('sha1').update(raw).digest('hex'));
+  });
+});
+
+describe('#findPages', () => {
+  let command: DocsUploadCommand;
+
+  beforeEach(async () => {
+    const oclifConfig = await setupOclifConfig();
+    command = new DocsUploadCommand([], oclifConfig);
+    vi.spyOn(command, 'debug').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('should throw a friendly error when the path does not exist', async () => {
+    await expect(findPages.call(command, 'test/__fixtures__/does-not-exist')).rejects.toThrow(
+      "Oops! We couldn't locate a file or directory at the path you provided.",
+    );
+  });
+
+  it('should rethrow unexpected filesystem errors', async () => {
+    const err = Object.assign(new Error('permission denied'), { code: 'EACCES' });
+    vi.spyOn(fsPromises, 'stat').mockRejectedValue(err);
+
+    await expect(findPages.call(command, 'docs')).rejects.toThrow(err);
+  });
+
+  it('should throw when a directory contains no matching files', async () => {
+    await expect(findPages.call(command, 'test/__fixtures__/ref-oas')).rejects.toThrow(
+      "The directory you provided (test/__fixtures__/ref-oas) doesn't contain any of the following file extensions: .markdown, .md, .mdx.",
+    );
+  });
+
+  it('should throw when a single file has an invalid extension', async () => {
+    await expect(findPages.call(command, 'test/__fixtures__/ref-oas/petstore.json')).rejects.toThrow(
+      'Invalid file extension (.json). Must be one of the following: .markdown, .md, .mdx',
+    );
+  });
+
+  it('should read a directory of markdown files', async () => {
+    const pages = await findPages.call(command, 'test/__fixtures__/docs/new-docs');
+
+    expect(pages).toHaveLength(1);
+    expect(pages[0].slug).toBe('new-doc');
+    expect(pages[0].filePath).toContain('new-doc.md');
   });
 });
