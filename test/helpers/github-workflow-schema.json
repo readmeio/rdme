@@ -178,7 +178,9 @@
         "pull-requests": { "$ref": "#/definitions/permissions-level" },
         "repository-projects": { "$ref": "#/definitions/permissions-level" },
         "security-events": { "$ref": "#/definitions/permissions-level" },
-        "statuses": { "$ref": "#/definitions/permissions-level" }
+        "statuses": { "$ref": "#/definitions/permissions-level" },
+        "vulnerability-alerts": { "type": "string", "enum": ["read", "none"] },
+        "copilot-requests": { "type": "string", "enum": ["write"] }
       }
     },
     "permissions-level": { "type": "string", "enum": ["read", "write", "none"] },
