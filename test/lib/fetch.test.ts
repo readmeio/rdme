@@ -4,12 +4,14 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import pkg from '../../package.json' with { type: 'json' };
 import DocsUploadCommand from '../../src/commands/docs/upload.js';
+import { APIv1Error, APIv2Error } from '../../src/lib/apiError.js';
 import {
   cleanAPIv1Headers,
   emptyMappings,
   fetchMappings,
   fetchSchema,
   handleAPIv1Res,
+  handleAPIv2Res,
   readmeAPIv1Fetch,
   readmeAPIv2Fetch,
 } from '../../src/lib/readmeAPIFetch.js';
@@ -445,6 +447,19 @@ describe('#fetchMappings', () => {
 
     mock.done();
   });
+
+  it('should fall back to empty mappings when the mappings request throws', async () => {
+    const oclifConfig = await setupOclifConfig();
+    const command = new DocsUploadCommand([], oclifConfig);
+    command.flags = { key: 'API_KEY' } as typeof command.flags;
+    vi.spyOn(command, 'debug').mockImplementation(() => {});
+
+    const mock = getAPIv1Mock().get('/api/v1/migration').basicAuth({ user: 'API_KEY' }).replyWithError('ECONNRESET');
+
+    await expect(fetchMappings.call(command)).resolves.toStrictEqual(emptyMappings);
+
+    mock.done();
+  });
 });
 
 describe('#readmeAPIv2Fetch()', () => {
@@ -541,5 +556,170 @@ describe('#readmeAPIv2Fetch()', () => {
 
       mock.done();
     });
+
+    it('should retry on network failures and succeed', async () => {
+      const oclifConfig = await setupOclifConfig();
+      const command = new DocsUploadCommand([], oclifConfig);
+      vi.spyOn(command, 'debug').mockImplementation(() => {});
+
+      const mock = getAPIv2Mock()
+        .get('/test-network')
+        .replyWithError('ECONNRESET')
+        .get('/test-network')
+        .replyWithError('ECONNRESET')
+        .get('/test-network')
+        .reply(200, { recovered: true });
+
+      const res = await readmeAPIv2Fetch.call(command, '/test-network', { method: 'get' });
+
+      expect(res.status).toBe(200);
+      await expect(res.json()).resolves.toStrictEqual({ recovered: true });
+
+      mock.done();
+    });
+
+    it('should throw after exhausting retries on persistent network failures', async () => {
+      const oclifConfig = await setupOclifConfig();
+      const command = new DocsUploadCommand([], oclifConfig);
+      vi.spyOn(command, 'debug').mockImplementation(() => {});
+
+      const mock = getAPIv2Mock().get('/test-network-fail').times(4).replyWithError('ECONNRESET');
+
+      await expect(readmeAPIv2Fetch.call(command, '/test-network-fail', { method: 'get' })).rejects.toThrow(
+        /ECONNRESET/,
+      );
+
+      mock.done();
+    });
+  });
+});
+
+describe('#handleAPIv1Res', () => {
+  it('returns an empty object for 204 responses', async () => {
+    const mock = getAPIv1Mock().delete('/api/v1/empty').reply(204);
+
+    const res = await readmeAPIv1Fetch('/api/v1/empty', { method: 'delete' });
+
+    await expect(handleAPIv1Res(res)).resolves.toStrictEqual({});
+
+    mock.done();
+  });
+
+  it('throws APIv1Error when the JSON body contains an error', async () => {
+    const mock = getAPIv1Mock().get('/api/v1/err').reply(400, {
+      error: 'LOGIN_INVALID',
+      message: 'Either your email address or password is incorrect',
+      help: 'If you need help, email support@readme.io.',
+    });
+
+    const res = await readmeAPIv1Fetch('/api/v1/err');
+
+    await expect(handleAPIv1Res(res)).rejects.toBeInstanceOf(APIv1Error);
+
+    mock.done();
+  });
+
+  it('returns the JSON body when rejectOnJsonError is false', async () => {
+    const body = {
+      error: 'LOGIN_TWOFACTOR',
+      message: 'You must provide a two-factor code',
+    };
+    const mock = getAPIv1Mock().get('/api/v1/2fa').reply(401, body);
+
+    const res = await readmeAPIv1Fetch('/api/v1/2fa');
+
+    await expect(handleAPIv1Res(res, false)).resolves.toMatchObject(body);
+
+    mock.done();
+  });
+
+  it('throws a generic error when the JSON body cannot be parsed', async () => {
+    const mock = getAPIv1Mock().get('/api/v1/bad-json').reply(200, 'not-json', {
+      'Content-Type': 'application/json',
+    });
+
+    const res = await readmeAPIv1Fetch('/api/v1/bad-json');
+
+    await expect(handleAPIv1Res(res)).rejects.toThrow('The ReadMe API responded with an unexpected error');
+
+    mock.done();
+  });
+
+  it('rejects non-JSON response bodies', async () => {
+    const mock = getAPIv1Mock().get('/api/v1/plain').reply(500, 'gateway exploded', {
+      'Content-Type': 'text/plain',
+    });
+
+    const res = await readmeAPIv1Fetch('/api/v1/plain');
+
+    await expect(handleAPIv1Res(res)).rejects.toBe('gateway exploded');
+
+    mock.done();
+  });
+});
+
+describe('#handleAPIv2Res', () => {
+  it('returns an empty object for 204 responses', async () => {
+    const oclifConfig = await setupOclifConfig();
+    const command = new DocsUploadCommand([], oclifConfig);
+    vi.spyOn(command, 'debug').mockImplementation(() => {});
+
+    const mock = getAPIv2Mock().delete('/empty').reply(204);
+
+    const res = await readmeAPIv2Fetch.call(command, '/empty', { method: 'delete' });
+
+    await expect(handleAPIv2Res.call(command, res)).resolves.toStrictEqual({});
+
+    mock.done();
+  });
+
+  it('throws APIv2Error for unsuccessful JSON responses', async () => {
+    const oclifConfig = await setupOclifConfig();
+    const command = new DocsUploadCommand([], oclifConfig);
+    vi.spyOn(command, 'debug').mockImplementation(() => {});
+
+    const mock = getAPIv2Mock().get('/err').reply(422, {
+      title: 'Validation failed',
+      detail: 'The page could not be saved.',
+    });
+
+    const res = await readmeAPIv2Fetch.call(command, '/err', { method: 'get' });
+
+    await expect(handleAPIv2Res.call(command, res)).rejects.toBeInstanceOf(APIv2Error);
+
+    mock.done();
+  });
+
+  it('throws a generic error when the JSON body cannot be parsed', async () => {
+    const oclifConfig = await setupOclifConfig();
+    const command = new DocsUploadCommand([], oclifConfig);
+    vi.spyOn(command, 'debug').mockImplementation(() => {});
+
+    const mock = getAPIv2Mock().get('/bad-json').reply(200, 'not-json', {
+      'Content-Type': 'application/json',
+    });
+
+    const res = await readmeAPIv2Fetch.call(command, '/bad-json', { method: 'get' });
+
+    await expect(handleAPIv2Res.call(command, res)).rejects.toThrow(
+      'The ReadMe API responded with an unexpected error',
+    );
+
+    mock.done();
+  });
+
+  it('throws a generic error for non-JSON responses', async () => {
+    const oclifConfig = await setupOclifConfig();
+    const command = new DocsUploadCommand([], oclifConfig);
+    vi.spyOn(command, 'debug').mockImplementation(() => {});
+
+    const res = new Response('gateway exploded', {
+      status: 200,
+      headers: { 'content-type': '' },
+    });
+
+    await expect(handleAPIv2Res.call(command, res)).rejects.toThrow(
+      'The ReadMe API responded with an unexpected error',
+    );
   });
 });
