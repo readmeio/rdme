@@ -214,9 +214,79 @@ Child body`),
     }
   });
 
-  it('should nest children of skipped empty pages under the skipped page directory', async () => {
-    if (route !== 'reference') return;
+  it('should export empty non-link pages by default so parent grouping pages are not dropped', async () => {
+    const tmpDir = tempExportDir();
+    try {
+      const mock = getAPIv2Mock({ authorization })
+        .get(`/branches/stable/categories/${route}`)
+        .reply(200, { data: [{ title: 'Model API' }] })
+        .get(`/branches/stable/categories/${route}/${encodeURIComponent('Model API')}/pages`)
+        .reply(200, { data: [{ slug: 'model-jobs' }] })
+        .get(`/branches/stable/${route}/model-jobs`)
+        .reply(200, {
+          data: {
+            slug: 'model-jobs',
+            title: 'Model Jobs',
+            type: 'basic',
+            content: { body: null },
+            category: { uri: `/branches/stable/categories/${route}/${encodeURIComponent('Model API')}` },
+          },
+        });
 
+      const output = await run([tmpDir, '--key', key]);
+
+      expect(output.error).toBeUndefined();
+      expect(output.result).toMatchObject({ failed: [], skipped: 0 });
+      expect(fs.writeFileSync).toHaveBeenCalledTimes(1);
+      expect(fs.writeFileSync).toHaveBeenCalledWith(
+        path.join(tmpDir, '.temp_download', 'model-jobs.md'),
+        expect.stringContaining('slug: model-jobs'),
+        { encoding: 'utf-8' },
+      );
+      expect(fs.copyFileSync).toHaveBeenCalledWith(
+        path.join(tmpDir, '.temp_download', 'model-jobs.md'),
+        path.join(tmpDir, 'Model API', 'model-jobs.md'),
+      );
+
+      mock.done();
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it('should skip empty non-link pages when --docs-only is set', async () => {
+    const tmpDir = tempExportDir();
+    try {
+      const mock = getAPIv2Mock({ authorization })
+        .get(`/branches/stable/categories/${route}`)
+        .reply(200, { data: [{ title: 'Model API' }] })
+        .get(`/branches/stable/categories/${route}/${encodeURIComponent('Model API')}/pages`)
+        .reply(200, { data: [{ slug: 'model-jobs' }] })
+        .get(`/branches/stable/${route}/model-jobs`)
+        .reply(200, {
+          data: {
+            slug: 'model-jobs',
+            title: 'Model Jobs',
+            type: 'basic',
+            content: { body: null },
+            category: { uri: `/branches/stable/categories/${route}/${encodeURIComponent('Model API')}` },
+          },
+        });
+
+      const output = await run([tmpDir, '--key', key, '--docs-only']);
+
+      expect(output.error).toBeUndefined();
+      expect(output.result).toMatchObject({ completed: [], failed: [], skipped: 1 });
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
+      expect(fs.copyFileSync).not.toHaveBeenCalled();
+
+      mock.done();
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it('should nest children of skipped empty pages under the skipped page directory', async () => {
     const tmpDir = tempExportDir();
     try {
       const mock = getAPIv2Mock({ authorization })
@@ -246,7 +316,7 @@ Child body`),
           },
         });
 
-      const output = await run([tmpDir, '--key', key]);
+      const output = await run([tmpDir, '--key', key, '--docs-only']);
 
       expect(output.error).toBeUndefined();
       expect(output.result).toMatchObject({ failed: [], skipped: 1 });
