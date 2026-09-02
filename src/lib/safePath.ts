@@ -9,7 +9,6 @@ export function isSafePathSegment(segment: unknown): boolean {
   if (!segment || typeof segment !== 'string') return false;
   if (segment === '.' || segment === '..') return false;
 
-  // oxlint-disable-next-line no-control-regex
   if (/[\0/\\]/.test(segment)) return false;
 
   if (segment.includes('..')) return false;
