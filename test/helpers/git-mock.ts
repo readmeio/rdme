@@ -78,8 +78,6 @@ export const gitMock = {
       return Promise.resolve(process.cwd()) as unknown as Response<string>;
     });
 
-    // Vitest 5's setSystemTime also mocks Temporal when it exists (Node 26+).
-    // Pin Date only so workflow timestamps stay stable without faking other clocks.
     vi.useFakeTimers({ toFake: ['Date'] });
     vi.setSystemTime(new Date('2022'));
 
