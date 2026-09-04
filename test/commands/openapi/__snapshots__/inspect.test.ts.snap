@@ -1,11 +1,11 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`rdme openapi inspect > feature reports > should generate a report for '@readme/oas-examples/3.0/json/readme-…' (w/ [ 'circularRefs' ]) 1`] = `
+exports[`rdme openapi inspect > feature reports > should generate a report for @readme/oas-examples/3.0/json/readme-ex… (w/ [ 'circularRefs' ]) 1`] = `
 [SoftError: 
 circularRefs: You do not use this.]
 `;
 
-exports[`rdme openapi inspect > feature reports > should generate a report for '@readme/oas-examples/3.0/json/readme-…' (w/ [ 'polymorphism' ]) 1`] = `
+exports[`rdme openapi inspect > feature reports > should generate a report for @readme/oas-examples/3.0/json/readme-le… (w/ [ 'polymorphism' ]) 1`] = `
 "
 polymorphism:
  · #/components/responses/authForbidden/content/application~1json/schema
@@ -64,7 +64,7 @@ polymorphism:
  · #/paths/~1version/post/responses/400/content/application~1json/schema"
 `;
 
-exports[`rdme openapi inspect > feature reports > should generate a report for '@readme/oas-examples/3.0/json/schema-…' (w/ [ 'additionalProperties', …(1) ]) 1`] = `
+exports[`rdme openapi inspect > feature reports > should generate a report for @readme/oas-examples/3.0/json/schema-ci… (w/ [ 'additionalProperties', …(1) ]) 1`] = `
 "
 additionalProperties:
  · #/components/schemas/BodyPart/properties/headers/additionalProperties
@@ -92,7 +92,7 @@ circularRefs:
  · #/components/schemas/ZoneRules/properties/transitions/items"
 `;
 
-exports[`rdme openapi inspect > feature reports > should generate a report for '@readme/oas-examples/3.1/json/train-t…' (w/ [ 'commonParameters' ]) 1`] = `
+exports[`rdme openapi inspect > feature reports > should generate a report for @readme/oas-examples/3.1/json/train-tra… (w/ [ 'commonParameters' ]) 1`] = `
 "
 commonParameters:
  · #/paths/~1bookings~1{bookingId}/parameters

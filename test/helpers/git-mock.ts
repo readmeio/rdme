@@ -2,6 +2,7 @@ import type { Response } from 'simple-git';
 
 import fs from 'node:fs';
 
+import prompts from 'prompts';
 import { vi } from 'vitest';
 
 import configstore from '../../src/lib/configstore.js';
@@ -73,6 +74,11 @@ export const gitMock = {
 
     git.remote = getGitRemoteMock();
 
+    git.revparse = vi.fn(() => {
+      return Promise.resolve(process.cwd()) as unknown as Response<string>;
+    });
+
+    vi.useFakeTimers({ toFake: ['Date'] });
     vi.setSystemTime(new Date('2022'));
 
     vi.stubEnv('TEST_RDME_CREATEGHA', 'true');
@@ -84,8 +90,14 @@ export const gitMock = {
   after: function after() {
     configstore.clear();
     fs.writeFileSync = fsWriteFileSync;
+    vi.useRealTimers();
     vi.clearAllMocks();
     vi.unstubAllEnvs();
+    prompts.override({});
+    // `prompts.inject` concatenates onto an internal queue; drain leftovers so they
+    // cannot leak into the next test (especially after `--github` overrides a prompt).
+    // oxlint-disable-next-line no-underscore-dangle -- prompts stores the inject queue on this internal field.
+    (prompts as typeof prompts & { _injected?: unknown[] })._injected = [];
   },
 };
 
