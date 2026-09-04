@@ -98,6 +98,7 @@ export const gitMock = {
     prompts.override({});
     // `prompts.inject` concatenates onto an internal queue; drain leftovers so they
     // cannot leak into the next test (especially after `--github` overrides a prompt).
+    // oxlint-disable-next-line no-underscore-dangle -- prompts stores the inject queue on this internal field.
     (prompts as typeof prompts & { _injected?: unknown[] })._injected = [];
   },
 };
