@@ -51,20 +51,19 @@ describe('#createGHA', () => {
     describe.each<{
       cmd: string;
       /** used to differentiate describe blocks */
-      label: string;
+      name: string;
       opts: Record<string, string>;
     }>([
       // `openapi:validate` is the ID we define in src/index.ts for backwards compatibility,
       // hence we're using this command ID here
-      { cmd: 'openapi:validate', opts: { spec: 'petstore.json' }, label: '' },
-      { cmd: 'changelogs', opts: { key, path: './changelogs' }, label: '' },
+      { cmd: 'openapi:validate', opts: { spec: 'petstore.json' }, name: 'openapi:validate' },
+      { cmd: 'changelogs', opts: { key, path: './changelogs' }, name: 'changelogs' },
       {
         cmd: 'changelogs',
-
-        label: ' (single)',
+        name: 'changelogs (single)',
         opts: { key, path: './changelogs/rdme.md' },
       },
-    ])('$cmd $label', ({ cmd, opts }) => {
+    ])('$name', ({ cmd, opts }) => {
       let CurrentCommand: Command.Class;
 
       beforeEach(async () => {
