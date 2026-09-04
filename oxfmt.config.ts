@@ -11,6 +11,7 @@ export default defineConfig(
       'test/__fixtures__/invalid-json/yikes.json',
 
       // test result artifacts
+      '.vitest/',
       'coverage/',
 
       // release build artifacts
