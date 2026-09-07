@@ -350,6 +350,32 @@ describe.each([
   });
 });
 
+describe('#fix (guides link merge)', () => {
+  it('should merge a legacy link onto an existing content object', async () => {
+    const oclifConfig = await setupOclifConfig();
+    const command = new DocsUploadCommand([], oclifConfig);
+    const schema = fetchSchema.call(command);
+    const data = {
+      title: 'Hello, world!',
+      type: 'link',
+      excerpt: 'Existing excerpt',
+      link: {
+        url: 'https://example.com',
+        new_tab: true,
+      },
+    };
+
+    const result = fix.call(command, data, schema, emptyMappings);
+
+    expect(result.hasIssues).toBe(true);
+    expect(result.updatedData).not.toHaveProperty('link');
+    expect(result.updatedData.content).toStrictEqual({
+      excerpt: 'Existing excerpt',
+      link: { url: 'https://example.com', new_tab: true },
+    });
+  });
+});
+
 describe('#writeFixes', () => {
   let command: DocsUploadCommand;
 

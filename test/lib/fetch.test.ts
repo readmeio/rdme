@@ -592,6 +592,51 @@ describe('#readmeAPIv2Fetch()', () => {
       mock.done();
     });
   });
+
+  describe('warning response header', () => {
+    it('should surface Warning headers from v2 responses', async () => {
+      const oclifConfig = await setupOclifConfig();
+      const command = new DocsUploadCommand([], oclifConfig);
+      vi.spyOn(command, 'debug').mockImplementation(() => {});
+      const warnSpy = vi.spyOn(command, 'warn').mockImplementation((input: Error | string) => input);
+
+      const mock = getAPIv2Mock().get('/test-warning').reply(
+        200,
+        { ok: true },
+        {
+          Warning: '199 - "deprecated field"',
+        },
+      );
+
+      const res = await readmeAPIv2Fetch.call(command, '/test-warning', { method: 'get' });
+
+      expect(res.status).toBe(200);
+      expect(warnSpy).toHaveBeenCalledWith('⚠️ ReadMe API Warning: deprecated field');
+
+      mock.done();
+    });
+
+    it('should set x-readme-source-url from a remote spec URL', async () => {
+      const oclifConfig = await setupOclifConfig();
+      const command = new DocsUploadCommand([], oclifConfig);
+      vi.spyOn(command, 'debug').mockImplementation(() => {});
+
+      const specUrl = 'https://example.com/openapi.json';
+      const mock = getAPIv2Mock()
+        .get('/test-source-url')
+        .reply(200, function reply() {
+          return this.req.headers;
+        });
+
+      const headers = await readmeAPIv2Fetch
+        .call(command, '/test-source-url', { method: 'get' }, { file: { path: specUrl, type: 'url' } })
+        .then(res => res.json());
+
+      expect(headers['x-readme-source-url']).toBe(specUrl);
+
+      mock.done();
+    });
+  });
 });
 
 describe('#handleAPIv1Res', () => {

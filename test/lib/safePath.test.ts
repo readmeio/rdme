@@ -18,6 +18,7 @@ describe('#isSafePathSegment', () => {
     ['foo/bar', false],
     ['foo\\bar', false],
     ['has\0null', false],
+    ['foo..bar', false],
   ])('isSafePathSegment(%j) -> %s', (segment, expected) => {
     expect(isSafePathSegment(segment)).toBe(expected);
   });

@@ -1,6 +1,8 @@
 import type { OclifOutput } from '../../helpers/oclif.js';
 
 import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 
 import prompts from 'prompts';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -65,6 +67,14 @@ describe('rdme openapi validate', () => {
   });
 
   describe('error handling', () => {
+    it('should throw an error if no API definition can be discovered', async () => {
+      const result = await run(['--working-directory', './test/__fixtures__/docs/new-docs']);
+
+      expect(result.error).toBeInstanceOf(Error);
+      expect(result.error?.message).toContain("We couldn't find an OpenAPI or Swagger definition.");
+      expect(result.error?.message).toContain('rdme openapi validate ./path/to/api/definition');
+    });
+
     it('should throw an error if invalid JSON is supplied', () => {
       return expect(run(['./test/__fixtures__/invalid-json/yikes.json'])).resolves.toMatchSnapshot();
     });
@@ -106,6 +116,22 @@ describe('rdme openapi validate', () => {
       const spec = 'test/__fixtures__/petstore-simple-weird-version.json';
 
       await expect(run([spec, '--github'])).resolves.toMatchSnapshot();
+    });
+
+    it('should refuse to pick among multiple discovered API definitions', async () => {
+      const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'rdme-multi-oas-'));
+      const spec = require.resolve('@readme/oas-examples/3.0/json/petstore.json');
+      fs.copyFileSync(spec, path.join(tmpDir, 'one.json'));
+      fs.copyFileSync(spec, path.join(tmpDir, 'two.json'));
+
+      try {
+        const result = await run(['--working-directory', tmpDir]);
+
+        expect(result.error).toBeInstanceOf(Error);
+        expect(result.error?.message).toBe('Multiple API definitions found in current directory. Please specify file.');
+      } finally {
+        fs.rmSync(tmpDir, { recursive: true, force: true });
+      }
     });
   });
 

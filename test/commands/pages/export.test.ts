@@ -254,6 +254,54 @@ Child body`),
     }
   });
 
+  it('should still export empty link pages when --docs-only is set', async () => {
+    const tmpDir = tempExportDir();
+    try {
+      const mock = getAPIv2Mock({ authorization })
+        .get(`/branches/stable/categories/${route}`)
+        .reply(200, { data: [{ title: 'Links' }] })
+        .get(`/branches/stable/categories/${route}/Links/pages`)
+        .reply(200, { data: [{ slug: 'external' }] })
+        .get(`/branches/stable/${route}/external`)
+        .reply(200, {
+          data: {
+            slug: 'external',
+            title: 'External docs',
+            type: 'link',
+            content: {
+              body: '',
+              link: { url: 'https://example.com/docs', new_tab: true },
+            },
+            category: { uri: `https://api.readme.com/v2/branches/stable/categories/${route}/links` },
+          },
+        });
+
+      const output = await run([tmpDir, '--key', key, '--docs-only']);
+
+      expect(output.error).toBeUndefined();
+      expect(output.result).toMatchObject({ failed: [], skipped: 0 });
+      expect(fs.writeFileSync).toHaveBeenCalledTimes(1);
+      expect(fs.writeFileSync).toHaveBeenCalledWith(
+        path.join(tmpDir, '.temp_download', 'external.md'),
+        expect.stringContaining('url: https://example.com/docs'),
+        { encoding: 'utf-8' },
+      );
+      expect(fs.writeFileSync).toHaveBeenCalledWith(
+        path.join(tmpDir, '.temp_download', 'external.md'),
+        expect.stringContaining('type: link'),
+        { encoding: 'utf-8' },
+      );
+      expect(fs.copyFileSync).toHaveBeenCalledWith(
+        path.join(tmpDir, '.temp_download', 'external.md'),
+        path.join(tmpDir, 'links', 'external.md'),
+      );
+
+      mock.done();
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
   it('should skip empty non-link pages when --docs-only is set', async () => {
     const tmpDir = tempExportDir();
     try {
@@ -457,6 +505,58 @@ Child body`),
         path.join(tmpDir, '.temp_download', 'page-b.md'),
         path.join(tmpDir, 'docs', 'page-a', 'page-b', 'index.md'),
       );
+
+      mock.done();
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it('should skip a page when its parent URI decodes to an unsafe path segment', async () => {
+    const tmpDir = tempExportDir();
+    try {
+      const mock = getAPIv2Mock({ authorization })
+        .get(`/branches/stable/categories/${route}`)
+        .reply(200, { data: [{ title: 'Main' }] })
+        .get(`/branches/stable/categories/${route}/Main/pages`)
+        .reply(200, { data: [{ slug: 'child' }] })
+        .get(`/branches/stable/${route}/child`)
+        .reply(200, {
+          data: {
+            slug: 'child',
+            title: 'Child',
+            type: 'basic',
+            content: { body: 'Child body' },
+            category: { uri: `https://api.readme.com/v2/branches/stable/categories/${route}/main` },
+            parent: { uri: `/branches/stable/${route}/%2e%2e%2fescape` },
+          },
+        });
+
+      const output = await run([tmpDir, '--key', key]);
+
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
+      expect(fs.copyFileSync).not.toHaveBeenCalled();
+      expect(output.stderr).toContain('Skipping page "child"');
+      expect(output.stderr).toContain('invalid');
+      expect(output.result).toMatchObject({ failed: ['child'] });
+
+      mock.done();
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it('should remove the temporary download folder when the categories request fails', async () => {
+    const tmpDir = tempExportDir();
+    try {
+      const mock = getAPIv2Mock({ authorization })
+        .get(`/branches/stable/categories/${route}`)
+        .reply(500, { title: 'Internal error' });
+
+      const output = await run([tmpDir, '--key', key]);
+
+      expect(output.error).toBeDefined();
+      expect(fs.existsSync(path.join(tmpDir, '.temp_download'))).toBe(false);
 
       mock.done();
     } finally {

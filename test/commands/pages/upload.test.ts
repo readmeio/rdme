@@ -2,6 +2,8 @@ import type { FullUploadResults } from '../../../src/lib/syncPagePath.js';
 import type { OclifOutput } from '../../helpers/oclif.js';
 
 import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 
 import nock from 'nock';
 import prompts from 'prompts';
@@ -827,6 +829,71 @@ describe.each([
         ]);
 
         mock.done();
+      });
+
+      it('should treat string `position` values as numbers when ordering uploads', async () => {
+        const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'rdme-position-string-'));
+        // `writeFileSync` is mocked in this suite; use the promise API to persist fixtures.
+        await fs.promises.writeFile(
+          path.join(tmpDir, 'later.md'),
+          `---
+title: Later
+category:
+  uri: category-slug
+position: "10"
+---
+
+Body
+`,
+        );
+        await fs.promises.writeFile(
+          path.join(tmpDir, 'earlier.md'),
+          `---
+title: Earlier
+category:
+  uri: category-slug
+position: "2"
+---
+
+Body
+`,
+        );
+
+        try {
+          const mock = getAPIv2Mock({ authorization })
+            .get(`/branches/stable/${route}/later`)
+            .reply(404)
+            .get(`/branches/stable/${route}/earlier`)
+            .reply(404)
+            .post(`/branches/stable/${route}`, {
+              slug: 'earlier',
+              title: 'Earlier',
+              category: { uri: `/branches/stable/categories/${route}/category-slug` },
+              position: '2',
+              content: { body: '\nBody\n' },
+            })
+            .reply(201, {})
+            .post(`/branches/stable/${route}`, {
+              slug: 'later',
+              title: 'Later',
+              category: { uri: `/branches/stable/categories/${route}/category-slug` },
+              position: '10',
+              content: { body: '\nBody\n' },
+            })
+            .reply(201, {});
+
+          const result = await run([tmpDir, '--key', key]);
+
+          expect(result.error).toBeUndefined();
+          expect((result.result as unknown as FullUploadResults).created.map(page => page.slug)).toStrictEqual([
+            'earlier',
+            'later',
+          ]);
+
+          mock.done();
+        } finally {
+          fs.rmSync(tmpDir, { recursive: true, force: true });
+        }
       });
     });
 
