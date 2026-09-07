@@ -13,4 +13,8 @@ describe('exportCommandProperties', () => {
       expect(flags(section).key).toBeDefined();
     },
   );
+
+  it('should throw for an unknown section', () => {
+    expect(() => summary('Unknown' as never)).toThrow(TypeError);
+  });
 });

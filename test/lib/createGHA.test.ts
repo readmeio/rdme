@@ -13,6 +13,7 @@ import configstore from '../../src/lib/configstore.js';
 import createGHA, { getConfigStoreKey, getGHAFileName } from '../../src/lib/createGHA/index.js';
 import { getMajorPkgVersion } from '../../src/lib/getPkg.js';
 import { git } from '../../src/lib/git.js';
+import createGHAHook from '../../src/lib/hooks/createGHA.js';
 import { getGitRemoteMock, gitMock } from '../helpers/git-mock.js';
 import ghaWorkflowSchema from '../helpers/github-workflow-schema.json' with { type: 'json' };
 import { setupOclifConfig } from '../helpers/oclif.js';
@@ -418,6 +419,25 @@ describe('#createGHA', () => {
       expect(result).toContain("you're all set");
       expect(result).not.toContain('README_API_KEY');
       expect(yamlOutput).toContain('rdme: openapi validate petstore.json');
+    });
+
+    it('returns the original command result in the default test environment', async () => {
+      vi.stubEnv('TEST_RDME_CREATEGHA', '');
+
+      await expect(createGHA.call(ctx, 'success!', commandWithKey, { key })).resolves.toBe('success!');
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
+    });
+
+    it('delegates the oclif hook to createGHA', async () => {
+      vi.stubEnv('TEST_RDME_CREATEGHA', '');
+
+      await expect(
+        createGHAHook.call(ctx, {
+          result: 'hook-ok',
+          command: commandWithKey,
+          parsedOpts: { key },
+        }),
+      ).resolves.toBe('hook-ok');
     });
   });
 });

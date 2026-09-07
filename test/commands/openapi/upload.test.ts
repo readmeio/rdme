@@ -1575,6 +1575,21 @@ describe('rdme openapi upload', () => {
       mock.done();
     });
 
+    it('should treat a project response without a subdomain as unknown', async () => {
+      const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .get('/projects/me')
+        .reply(200, { data: { name: 'Owl Factory' } })
+        .get(`/branches/${branch}/apis`)
+        .reply(200, { data: [] });
+
+      const result = await run(['--branch', branch, filename, '--key', key, '--dry-run']);
+
+      expect(result.error).toBeUndefined();
+      expect(result.stdout).toContain('Project: unknown');
+
+      mock.done();
+    });
+
     it('should include the project in dry-run output', async () => {
       const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
         .get('/projects/me')

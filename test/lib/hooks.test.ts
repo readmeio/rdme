@@ -103,6 +103,10 @@ describe('hooks', () => {
       it('should properly pass key flag', async () => {
         const keyFlag = await getKeyFlagAfterPrerun(mockContext, options);
 
+        await expect(keyFlag.parse?.call(mockContext)).rejects.toThrow('No project API key was specified.');
+        await expect(keyFlag.parse?.call(mockContext, null as unknown as string)).rejects.toThrow(
+          'No project API key was specified.',
+        );
         await expect(keyFlag.parse?.call(mockContext, '')).rejects.toThrow('No project API key was specified.');
         await expect(keyFlag.parse?.call(mockContext, '   ')).rejects.toThrow('No project API key was specified.');
 

@@ -288,6 +288,30 @@ describe.each([
         expect(fs.writeFileSync).not.toHaveBeenCalled();
       });
 
+      it('should record a failed page when skip-validation leaves a non-string category URI', async () => {
+        const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'rdme-upload-bad-category-'));
+        try {
+          await fs.promises.writeFile(
+            path.join(tmpDir, 'bad-category.md'),
+            `---
+title: Bad category
+category:
+  uri: 123
+---
+
+Body
+`,
+          );
+
+          const result = await run([tmpDir, '--key', key, '--skip-validation']);
+
+          expect(result.error).toBeInstanceOf(TypeError);
+          expect(result.stderr).toContain('file(s) failed');
+        } finally {
+          fs.rmSync(tmpDir, { recursive: true, force: true });
+        }
+      });
+
       it('should skip client-side validation if the --skip-validation flag is passed', async () => {
         const mock = getAPIv2Mock({ authorization })
           .get(`/branches/stable/${route}/legacy-category`)

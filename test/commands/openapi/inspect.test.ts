@@ -87,4 +87,54 @@ describe('rdme openapi inspect', () => {
       expect(output.error?.message).toBe('analyzer down');
     });
   });
+
+  describe('report edge cases', () => {
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    it('should generate a report for a Swagger 2.0 definition', async () => {
+      const spec = require.resolve('@readme/oas-examples/2.0/json/petstore.json');
+      const { result, error } = await run([spec]);
+
+      expect(error).toBeUndefined();
+      expect(result).toContain('OpenAPI Features');
+    });
+
+    it('should highlight unusually large APIs and omit empty or hidden stats', async () => {
+      const original = analyzeOas.default;
+      vi.spyOn(analyzeOas, 'default').mockImplementation(async spec => {
+        const analysis = await original(spec);
+        analysis.general.operationTotal = { name: 'Operation', found: 201 };
+        analysis.general.mediaTypes = { name: 'Media Type', found: [] };
+        analysis.general.securityTypes = { name: 'Security Scheme', found: 0 };
+        analysis.openapi.style.hidden = true;
+        analysis.openapi.links.url = 'https://example.com/links';
+        return analysis;
+      });
+
+      const spec = require.resolve('@readme/oas-examples/3.0/json/petstore.json');
+      const { result, error } = await run([spec]);
+
+      expect(error).toBeUndefined();
+      expect(result).toContain('Wow!');
+      expect(result).toContain('https://example.com/links');
+      expect(result).not.toContain('style');
+    });
+
+    it('should fall back when a 3.1 feature has no 3.1 docs URL', async () => {
+      const original = analyzeOas.default;
+      vi.spyOn(analyzeOas, 'default').mockImplementation(async spec => {
+        const analysis = await original(spec);
+        analysis.openapi.webhooks.url = { '3.0': 'https://example.com/webhooks-3.0' };
+        return analysis;
+      });
+
+      const spec = require.resolve('@readme/oas-examples/3.1/json/train-travel.json');
+      const { result, error } = await run([spec]);
+
+      expect(error).toBeUndefined();
+      expect(result).toContain('This feature is not available on OpenAPI v3.1.');
+    });
+  });
 });

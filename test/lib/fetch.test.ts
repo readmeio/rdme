@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import pkg from '../../package.json' with { type: 'json' };
 import DocsUploadCommand from '../../src/commands/docs/upload.js';
 import { APIv1Error, APIv2Error } from '../../src/lib/apiError.js';
+import { git } from '../../src/lib/git.js';
 import {
   cleanAPIv1Headers,
   emptyMappings,
@@ -115,7 +116,6 @@ describe('#readmeAPIv1Fetch()', () => {
 
       it('should omit source URL header when git cannot resolve the repo root', async () => {
         const key = 'API_KEY';
-        const { git } = await import('../../src/lib/git.js');
         const originalRevparse = git.revparse;
         git.revparse = vi.fn(() => Promise.reject(new Error('not a repo'))) as typeof git.revparse;
 

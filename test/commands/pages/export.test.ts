@@ -10,6 +10,7 @@ import { afterEach, beforeEach, beforeAll, describe, expect, it, vi } from 'vite
 
 import DocsExportCommand from '../../../src/commands/docs/export.js';
 import ReferenceExportCommand from '../../../src/commands/reference/export.js';
+import * as safePath from '../../../src/lib/safePath.js';
 import { getAPIv2Mock } from '../../helpers/get-api-mock.js';
 import { runCommand } from '../../helpers/oclif.js';
 
@@ -660,6 +661,55 @@ Child body`),
     }
   });
 
+  it('should refuse to restructure a file whose category path escapes the export directory', async () => {
+    const tmpDir = tempExportDir();
+    try {
+      vi.mocked(fs.writeFileSync).mockImplementation((file, data) => {
+        const filePath = String(file);
+        const fd = fs.openSync(filePath, 'w');
+        fs.writeSync(fd, typeof data === 'string' ? data : String(data));
+        fs.closeSync(fd);
+        if (filePath.endsWith(`${path.sep}intro.md`)) {
+          const extra = fs.openSync(path.join(path.dirname(filePath), 'escape.md'), 'w');
+          fs.writeSync(
+            extra,
+            `---
+slug: escape
+category:
+  uri: ..
+---
+`,
+          );
+          fs.closeSync(extra);
+        }
+      });
+
+      const mock = getAPIv2Mock({ authorization })
+        .get(`/branches/stable/categories/${route}`)
+        .reply(200, { data: [{ title: 'Main' }] })
+        .get(`/branches/stable/categories/${route}/Main/pages`)
+        .reply(200, { data: [{ slug: 'intro' }] })
+        .get(`/branches/stable/${route}/intro`)
+        .reply(200, {
+          data: {
+            slug: 'intro',
+            title: 'Introduction',
+            type: 'basic',
+            content: { body: 'Hello world' },
+            category: { uri: `https://api.readme.com/v2/branches/stable/categories/${route}/main` },
+          },
+        });
+
+      const output = await run([tmpDir, '--key', key]);
+
+      expect(output.error?.message).toBe('Refusing to write outside export directory: ../escape.md');
+
+      mock.done();
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
   it('should throw when a downloaded file has unparseable frontmatter', async () => {
     const tmpDir = tempExportDir();
     try {
@@ -694,6 +744,45 @@ Child body`),
       const output = await run([tmpDir, '--key', key]);
 
       expect(output.error?.message).toMatch(/Error parsing frontmatter in .*bad-yaml\.md/);
+
+      mock.done();
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it('should skip a page when the temporary export path cannot be resolved', async () => {
+    const tmpDir = tempExportDir();
+    const originalResolve = safePath.resolvePathWithinRoot;
+    vi.spyOn(safePath, 'resolvePathWithinRoot').mockImplementation((root, ...segments) => {
+      if (String(root).includes('.temp_download') && String(segments[0]).endsWith('.md')) {
+        return null;
+      }
+      return originalResolve(root, ...segments);
+    });
+
+    try {
+      const mock = getAPIv2Mock({ authorization })
+        .get(`/branches/stable/categories/${route}`)
+        .reply(200, { data: [{ title: 'Main' }] })
+        .get(`/branches/stable/categories/${route}/Main/pages`)
+        .reply(200, { data: [{ slug: 'intro' }] })
+        .get(`/branches/stable/${route}/intro`)
+        .reply(200, {
+          data: {
+            slug: 'intro',
+            title: 'Introduction',
+            type: 'basic',
+            content: { body: 'Hello world' },
+            category: { uri: `https://api.readme.com/v2/branches/stable/categories/${route}/main` },
+          },
+        });
+
+      const output = await run([tmpDir, '--key', key]);
+
+      expect(output.error).toBeUndefined();
+      expect(output.stderr).toContain('refused to write outside');
+      expect(output.result).toMatchObject({ failed: ['intro'] });
 
       mock.done();
     } finally {
