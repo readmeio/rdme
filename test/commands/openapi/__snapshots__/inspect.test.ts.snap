@@ -5,6 +5,13 @@ exports[`rdme openapi inspect > feature reports > should generate a report for @
 circularRefs: You do not use this.]
 `;
 
+exports[`rdme openapi inspect > feature reports > should generate a report for @readme/oas-examples/3.0/json/readme-ex… (w/ [ 'circularRefs', 'webhooks' ]) 1`] = `
+[SoftError: 
+circularRefs: You do not use this.
+
+webhooks: You do not use this.]
+`;
+
 exports[`rdme openapi inspect > feature reports > should generate a report for @readme/oas-examples/3.0/json/readme-le… (w/ [ 'polymorphism' ]) 1`] = `
 "
 polymorphism:

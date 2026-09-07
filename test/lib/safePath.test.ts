@@ -40,6 +40,10 @@ describe('#decodeURILastSegment', () => {
   it('returns null for malformed percent-encoding that decodeURIComponent rejects', () => {
     expect(decodeURILastSegment('/branches/1.0/categories/guides/%E0%A4%A')).toBeNull();
   });
+
+  it('returns null when the URI has an empty last segment', () => {
+    expect(decodeURILastSegment('/branches/1.0/categories/guides/')).toBeNull();
+  });
 });
 
 describe('#resolvePathWithinRoot', () => {

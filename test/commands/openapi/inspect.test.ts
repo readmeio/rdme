@@ -1,8 +1,9 @@
 import type { OclifOutput } from '../../helpers/oclif.js';
 
-import { beforeAll, describe, expect, it } from 'vitest';
+import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import Command from '../../../src/commands/openapi/inspect.js';
+import * as analyzeOas from '../../../src/lib/analyzeOas.js';
 import { runCommand } from '../../helpers/oclif.js';
 
 describe('rdme openapi inspect', () => {
@@ -50,6 +51,11 @@ describe('rdme openapi inspect', () => {
         feature: ['circularRefs'],
         shouldSoftError: true,
       },
+      {
+        spec: '@readme/oas-examples/3.0/json/readme-extensions.json',
+        feature: ['circularRefs', 'webhooks'],
+        shouldSoftError: true,
+      },
     ];
 
     // oxlint-disable vitest/no-conditional-expect
@@ -65,5 +71,20 @@ describe('rdme openapi inspect', () => {
       }
     });
     // oxlint-enable vitest/no-conditional-expect
+  });
+
+  describe('analyzer failures', () => {
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    it('should fail the spinner when analysis throws', async () => {
+      vi.spyOn(analyzeOas, 'default').mockRejectedValue(new Error('analyzer down'));
+      const spec = require.resolve('@readme/oas-examples/3.0/json/petstore.json');
+      const output = await run([spec]);
+
+      expect(output.error).toBeInstanceOf(Error);
+      expect(output.error?.message).toBe('analyzer down');
+    });
   });
 });

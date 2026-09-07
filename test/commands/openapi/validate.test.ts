@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
+import OASNormalize from 'oas-normalize';
 import prompts from 'prompts';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -89,6 +90,19 @@ describe('rdme openapi validate', () => {
 
     it('should throw an error if an invalid Swagger definition is supplied', () => {
       return expect(run(['./test/__fixtures__/invalid-swagger.json'])).resolves.toMatchSnapshot();
+    });
+
+    it('should throw an error if converting the definition fails', async () => {
+      vi.spyOn(OASNormalize.prototype, 'convert').mockRejectedValue(new Error('cannot convert this definition'));
+      const spec = require.resolve('@readme/oas-examples/3.0/json/petstore.json');
+
+      try {
+        const result = await run([spec]);
+        expect(result.error).toBeInstanceOf(Error);
+        expect(result.error?.message).toBe('cannot convert this definition');
+      } finally {
+        vi.restoreAllMocks();
+      }
     });
 
     it('should throw an error if an invalid API definition has many errors', () => {

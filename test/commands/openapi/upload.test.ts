@@ -321,6 +321,65 @@ describe('rdme openapi upload', () => {
       });
     });
 
+    it('should abort if the user declines overwriting an existing API definition', async () => {
+      prompts.inject([false]);
+      const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .get(`/branches/${branch}/apis`)
+        .reply(200, { data: [{ filename: slugifiedFilename }] });
+
+      const result = await run(['--branch', branch, filename, '--key', key, '--slug', slugifiedFilename]);
+
+      expect(result.error).toBeInstanceOf(Error);
+      expect(result.error?.message).toBe('Aborting, no changes were made.');
+
+      mock.done();
+    });
+
+    it('should throw when the upload response is missing a status and URI', async () => {
+      prompts.inject([true]);
+      const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .get(`/branches/${branch}/apis`)
+        .reply(200, { data: [] })
+        .post(`/branches/${branch}/apis`)
+        .reply(200, { data: {} });
+
+      const result = await run(['--branch', branch, filename, '--key', key]);
+
+      expect(result.error?.message).toContain('unexpected error');
+
+      mock.done();
+    });
+
+    it('should fail the spinner when the upload request is rejected', async () => {
+      prompts.inject([true]);
+      const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .get(`/branches/${branch}/apis`)
+        .reply(200, { data: [] })
+        .post(`/branches/${branch}/apis`)
+        .reply(400, { title: 'Bad request', detail: 'upload exploded' });
+
+      const result = await run(['--branch', branch, filename, '--key', key]);
+
+      expect(result.error).toBeDefined();
+      expect(result.error?.message).toContain('Bad request');
+
+      mock.done();
+    });
+
+    it('should label nested Swagger files in the slug warning', async () => {
+      const swaggerPath = require.resolve('@readme/oas-examples/2.0/json/petstore.json');
+      const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+        .get(`/branches/${branch}/apis`)
+        .reply(200, { data: [] });
+
+      const result = await run(['--branch', branch, swaggerPath, '--key', key, '--dry-run']);
+
+      expect(result.error).toBeUndefined();
+      expect(result.stderr).toContain('This Swagger file is located in a subfolder');
+
+      mock.done();
+    });
+
     describe('and the `--slug` flag is passed', () => {
       it('should use the provided slug (no file extension) as the filename', async () => {
         const customSlug = 'custom-slug';

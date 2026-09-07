@@ -564,6 +564,143 @@ Child body`),
     }
   });
 
+  it('should warn when downloaded files have no frontmatter or slug', async () => {
+    const tmpDir = tempExportDir();
+    try {
+      vi.mocked(fs.writeFileSync).mockImplementation((file, data) => {
+        const filePath = String(file);
+        const fd = fs.openSync(filePath, 'w');
+        fs.writeSync(fd, typeof data === 'string' ? data : String(data));
+        fs.closeSync(fd);
+        if (filePath.endsWith(`${path.sep}intro.md`)) {
+          const tempFolder = path.dirname(filePath);
+          for (const [name, contents] of [
+            ['no-frontmatter.md', '# just a heading\n'],
+            ['no-slug.md', '---\ntitle: Missing slug\n---\n'],
+          ] as const) {
+            const extra = fs.openSync(path.join(tempFolder, name), 'w');
+            fs.writeSync(extra, contents);
+            fs.closeSync(extra);
+          }
+        }
+      });
+
+      const mock = getAPIv2Mock({ authorization })
+        .get(`/branches/stable/categories/${route}`)
+        .reply(200, { data: [{ title: 'Main' }] })
+        .get(`/branches/stable/categories/${route}/Main/pages`)
+        .reply(200, { data: [{ slug: 'intro' }] })
+        .get(`/branches/stable/${route}/intro`)
+        .reply(200, {
+          data: {
+            slug: 'intro',
+            title: 'Introduction',
+            type: 'basic',
+            content: { body: 'Hello world' },
+            category: { uri: `https://api.readme.com/v2/branches/stable/categories/${route}/main` },
+          },
+        });
+
+      const output = await run([tmpDir, '--key', key]);
+
+      expect(output.error).toBeUndefined();
+      expect(output.stderr).toContain('no frontmatter found');
+      expect(output.stderr).toContain('No slug found');
+
+      mock.done();
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it('should include markdown files found in subdirectories of the temp download folder', async () => {
+    const tmpDir = tempExportDir();
+    try {
+      vi.mocked(fs.writeFileSync).mockImplementation((file, data) => {
+        const filePath = String(file);
+        const fd = fs.openSync(filePath, 'w');
+        fs.writeSync(fd, typeof data === 'string' ? data : String(data));
+        fs.closeSync(fd);
+        if (filePath.endsWith(`${path.sep}intro.md`)) {
+          const nestedDir = path.join(path.dirname(filePath), 'nested');
+          fs.mkdirSync(nestedDir, { recursive: true });
+          const extra = fs.openSync(path.join(nestedDir, 'nested-page.md'), 'w');
+          fs.writeSync(extra, '---\nslug: nested-page\ntitle: Nested\n---\n');
+          fs.closeSync(extra);
+        }
+      });
+
+      const mock = getAPIv2Mock({ authorization })
+        .get(`/branches/stable/categories/${route}`)
+        .reply(200, { data: [{ title: 'Main' }] })
+        .get(`/branches/stable/categories/${route}/Main/pages`)
+        .reply(200, { data: [{ slug: 'intro' }] })
+        .get(`/branches/stable/${route}/intro`)
+        .reply(200, {
+          data: {
+            slug: 'intro',
+            title: 'Introduction',
+            type: 'basic',
+            content: { body: 'Hello world' },
+            category: { uri: `https://api.readme.com/v2/branches/stable/categories/${route}/main` },
+          },
+        });
+
+      const output = await run([tmpDir, '--key', key]);
+
+      expect(output.error).toBeUndefined();
+      expect(fs.copyFileSync).toHaveBeenCalledWith(
+        expect.stringContaining('nested-page.md'),
+        expect.stringContaining('nested-page.md'),
+      );
+
+      mock.done();
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it('should throw when a downloaded file has unparseable frontmatter', async () => {
+    const tmpDir = tempExportDir();
+    try {
+      vi.mocked(fs.writeFileSync).mockImplementation((file, data) => {
+        const filePath = String(file);
+        const fd = fs.openSync(filePath, 'w');
+        fs.writeSync(fd, typeof data === 'string' ? data : String(data));
+        fs.closeSync(fd);
+        if (filePath.endsWith(`${path.sep}intro.md`)) {
+          const extra = fs.openSync(path.join(path.dirname(filePath), 'bad-yaml.md'), 'w');
+          fs.writeSync(extra, '---\nslug: [\n---\n');
+          fs.closeSync(extra);
+        }
+      });
+
+      const mock = getAPIv2Mock({ authorization })
+        .get(`/branches/stable/categories/${route}`)
+        .reply(200, { data: [{ title: 'Main' }] })
+        .get(`/branches/stable/categories/${route}/Main/pages`)
+        .reply(200, { data: [{ slug: 'intro' }] })
+        .get(`/branches/stable/${route}/intro`)
+        .reply(200, {
+          data: {
+            slug: 'intro',
+            title: 'Introduction',
+            type: 'basic',
+            content: { body: 'Hello world' },
+            category: { uri: `https://api.readme.com/v2/branches/stable/categories/${route}/main` },
+          },
+        });
+
+      const output = await run([tmpDir, '--key', key]);
+
+      expect(output.error?.message).toMatch(/Error parsing frontmatter in .*bad-yaml\.md/);
+
+      mock.done();
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
   it('should warn and continue when a category contains no pages', async () => {
     const tmpDir = tempExportDir();
     try {
