@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import pkg from '../../package.json' with { type: 'json' };
 import DocsUploadCommand from '../../src/commands/docs/upload.js';
 import { APIv1Error, APIv2Error } from '../../src/lib/apiError.js';
+import { git } from '../../src/lib/git.js';
 import {
   cleanAPIv1Headers,
   emptyMappings,
@@ -15,7 +16,7 @@ import {
   readmeAPIv1Fetch,
   readmeAPIv2Fetch,
 } from '../../src/lib/readmeAPIFetch.js';
-import { getAPIv1Mock, getAPIv2Mock } from '../helpers/get-api-mock.js';
+import { getAPIv1Mock, getAPIv2Mock, getAPIv2MockForGHA } from '../helpers/get-api-mock.js';
 import { githubActionsEnv } from '../helpers/git-mock.js';
 import { setupOclifConfig } from '../helpers/oclif.js';
 
@@ -109,6 +110,67 @@ describe('#readmeAPIv1Fetch()', () => {
         expect(headers['x-readme-source-url']).toBe(
           'https://github.com/octocat/Hello-World/blob/ffac537e6cbbf934b08745a378932722df287a53/%F0%9F%93%88%20Dashboard%20&%20Metrics/openapi.json',
         );
+
+        mock.done();
+      });
+
+      it('should still send a source URL when git cannot resolve the repo root', async () => {
+        const key = 'API_KEY';
+        const originalRevparse = git.revparse;
+        git.revparse = vi.fn(() => Promise.reject(new Error('not a repo'))) as typeof git.revparse;
+
+        const mock = getAPIv1Mock()
+          .get('/api/v1')
+          .basicAuth({ user: key })
+          .reply(200, function mock() {
+            return this.req.headers;
+          });
+
+        try {
+          const headers = await readmeAPIv1Fetch(
+            '/api/v1',
+            {
+              method: 'get',
+              headers: cleanAPIv1Headers(key),
+            },
+            {
+              file: { path: '/abs/path/openapi.json', type: 'path' },
+            },
+          ).then(handleAPIv1Res);
+
+          // `normalizeFilePath` falls back to `path.relative('', file.path)` when git has no
+          // repo root, so the constructed URL still includes the filename.
+          expect(headers['x-readme-source-url']).toContain('openapi.json');
+        } finally {
+          git.revparse = originalRevparse;
+        }
+
+        mock.done();
+      });
+
+      it('should omit source URL header if GITHUB_SERVER_URL cannot be parsed', async () => {
+        const key = 'API_KEY';
+        vi.stubEnv('GITHUB_SERVER_URL', 'not-a-valid-url');
+
+        const mock = getAPIv1Mock()
+          .get('/api/v1')
+          .basicAuth({ user: key })
+          .reply(200, function mock() {
+            return this.req.headers;
+          });
+
+        const headers = await readmeAPIv1Fetch(
+          '/api/v1',
+          {
+            method: 'get',
+            headers: cleanAPIv1Headers(key),
+          },
+          {
+            file: { path: 'openapi.json', type: 'path' },
+          },
+        ).then(handleAPIv1Res);
+
+        expect(headers['x-readme-source-url']).toBeUndefined();
 
         mock.done();
       });
@@ -382,6 +444,13 @@ describe('#cleanAPIv1Headers()', () => {
     ]);
   });
 
+  it('should set x-readme-version from the version argument', () => {
+    expect(Array.from(cleanAPIv1Headers('test', '1.2.3'))).toStrictEqual([
+      ['authorization', 'Basic dGVzdDo='],
+      ['x-readme-version', '1.2.3'],
+    ]);
+  });
+
   it('should pass in properly defined headers', () => {
     const headers = new Headers({
       'x-readme-version': '1234',
@@ -588,6 +657,83 @@ describe('#readmeAPIv2Fetch()', () => {
       await expect(readmeAPIv2Fetch.call(command, '/test-network-fail', { method: 'get' })).rejects.toThrow(
         /ECONNRESET/,
       );
+
+      mock.done();
+    });
+  });
+
+  describe('GitHub Actions source URL', () => {
+    beforeEach(() => {
+      githubActionsEnv.before();
+    });
+
+    afterEach(() => {
+      githubActionsEnv.after();
+    });
+
+    it('should omit source URL header if GITHUB_SERVER_URL cannot be parsed', async () => {
+      vi.stubEnv('GITHUB_SERVER_URL', 'not-a-valid-url');
+      const oclifConfig = await setupOclifConfig();
+      const command = new DocsUploadCommand([], oclifConfig);
+      vi.spyOn(command, 'debug').mockImplementation(() => {});
+
+      const mock = getAPIv2MockForGHA()
+        .get('/test-source-url')
+        .reply(200, function reply() {
+          return this.req.headers;
+        });
+
+      const headers = await readmeAPIv2Fetch
+        .call(command, '/test-source-url', { method: 'get' }, { file: { path: 'openapi.json', type: 'path' } })
+        .then(res => res.json());
+
+      expect(headers['x-readme-source-url']).toBeUndefined();
+      expect(command.debug).toHaveBeenCalledWith(expect.stringMatching(/error constructing github source url/));
+
+      mock.done();
+    });
+  });
+
+  describe('warning response header', () => {
+    it('should surface Warning headers from v2 responses', async () => {
+      const oclifConfig = await setupOclifConfig();
+      const command = new DocsUploadCommand([], oclifConfig);
+      vi.spyOn(command, 'debug').mockImplementation(() => {});
+      const warnSpy = vi.spyOn(command, 'warn').mockImplementation((input: Error | string) => input);
+
+      const mock = getAPIv2Mock().get('/test-warning').reply(
+        200,
+        { ok: true },
+        {
+          Warning: '199 - "deprecated field"',
+        },
+      );
+
+      const res = await readmeAPIv2Fetch.call(command, '/test-warning', { method: 'get' });
+
+      expect(res.status).toBe(200);
+      expect(warnSpy).toHaveBeenCalledWith('⚠️ ReadMe API Warning: deprecated field');
+
+      mock.done();
+    });
+
+    it('should set x-readme-source-url from a remote spec URL', async () => {
+      const oclifConfig = await setupOclifConfig();
+      const command = new DocsUploadCommand([], oclifConfig);
+      vi.spyOn(command, 'debug').mockImplementation(() => {});
+
+      const specUrl = 'https://example.com/openapi.json';
+      const mock = getAPIv2Mock()
+        .get('/test-source-url')
+        .reply(200, function reply() {
+          return this.req.headers;
+        });
+
+      const headers = await readmeAPIv2Fetch
+        .call(command, '/test-source-url', { method: 'get' }, { file: { path: specUrl, type: 'url' } })
+        .then(res => res.json());
+
+      expect(headers['x-readme-source-url']).toBe(specUrl);
 
       mock.done();
     });

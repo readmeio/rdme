@@ -1,16 +1,19 @@
-import type { Command, Config } from '@oclif/core';
+import type { Command, Config, Hook } from '@oclif/core';
 import type { Response } from 'simple-git';
 import type { MockInstance } from 'vitest';
 
 import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 
 import prompts from 'prompts';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import configstore from '../../src/lib/configstore.js';
-import { getConfigStoreKey, getGHAFileName } from '../../src/lib/createGHA/index.js';
+import createGHA, { getConfigStoreKey, getGHAFileName } from '../../src/lib/createGHA/index.js';
 import { getMajorPkgVersion } from '../../src/lib/getPkg.js';
 import { git } from '../../src/lib/git.js';
+import createGHAHook from '../../src/lib/hooks/createGHA.js';
 import { getGitRemoteMock, gitMock } from '../helpers/git-mock.js';
 import ghaWorkflowSchema from '../helpers/github-workflow-schema.json' with { type: 'json' };
 import { setupOclifConfig } from '../helpers/oclif.js';
@@ -284,6 +287,157 @@ describe('#createGHA', () => {
       it('should clean up weird characters', () => {
         expect(getGHAFileName('Hello_World-Test*Ex@mple!')).toBe('.github/workflows/hello-world-test-ex-mple-.yml');
       });
+    });
+  });
+
+  /**
+   * These cases stay skipped at the oclif-hook layer because git mocks do not propagate through
+   * `Config.runHook`. Calling `createGHA` from source covers the same contracts (and the generated
+   * workflow command string) without depending on oclif's hook loader.
+   */
+  describe('source-level git gates and workflow contents', () => {
+    const ctx = { debug: vi.fn() } as unknown as Hook.Context;
+    const commandWithKey = {
+      id: 'docs upload',
+      args: { path: {} },
+      flags: {
+        key: { type: 'option' },
+        github: { type: 'boolean' },
+        'dry-run': { type: 'boolean' },
+        branch: { type: 'option' },
+      },
+    } as unknown as Command.Class;
+    const commandWithoutKey = {
+      id: 'openapi validate',
+      args: { spec: {} },
+      flags: {
+        github: { type: 'boolean' },
+      },
+    } as unknown as Command.Class;
+
+    it('throws when the command id cannot be determined', async () => {
+      await expect(createGHA.call(ctx, 'success!', { args: {}, flags: {} } as Command.Class, {})).rejects.toThrow(
+        'unable to determine command ID yikes',
+      );
+    });
+
+    it('returns the original command result when the working directory is not a git repo', async () => {
+      git.checkIsRepo = vi.fn(() => {
+        return Promise.reject(new Error('not a repo')) as unknown as Response<boolean>;
+      });
+      git.remote = getGitRemoteMock('', '', '');
+
+      await expect(createGHA.call(ctx, 'success!', commandWithKey, { key })).resolves.toBe('success!');
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
+    });
+
+    it('returns the original command result when the repo has no remotes', async () => {
+      git.remote = getGitRemoteMock('', '', '');
+
+      await expect(createGHA.call(ctx, 'success!', commandWithKey, { key })).resolves.toBe('success!');
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
+    });
+
+    it('returns the original command result when the remote cannot be reached', async () => {
+      git.remote = getGitRemoteMock('bad-remote', 'http://somebadurl.git');
+
+      await expect(createGHA.call(ctx, 'success!', commandWithKey, { key })).resolves.toBe('success!');
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
+    });
+
+    it('returns the original command result when remotes are not GitHub', async () => {
+      git.remote = getGitRemoteMock('origin', 'https://gitlab.com/org/repo.git', 'main');
+
+      await expect(createGHA.call(ctx, 'success!', commandWithKey, { key })).resolves.toBe('success!');
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
+    });
+
+    it('still runs onboarding when `--github` is set even if the directory is not a repo', async () => {
+      git.checkIsRepo = vi.fn(() => {
+        return Promise.reject(new Error('not a repo')) as unknown as Response<boolean>;
+      });
+      prompts.inject(['main', 'rdme-forced-github']);
+
+      const result = await createGHA.call(ctx, 'success!', commandWithKey, { key, github: true, path: './docs' });
+
+      expect(result).toContain('Your GitHub Actions workflow file has been created!');
+      expect(fs.writeFileSync).toHaveBeenCalledWith(getGHAFileName('rdme-forced-github'), expect.any(String));
+    });
+
+    it('creates the GitHub workflow directory when it does not exist', async () => {
+      const existsSpy = vi.spyOn(fs, 'existsSync').mockReturnValue(false);
+      const mkdirSpy = vi.spyOn(fs, 'mkdirSync').mockReturnValue(undefined as never);
+      prompts.inject([true, 'main', 'rdme-mkdir']);
+
+      await createGHA.call(ctx, '', commandWithKey, { key, path: './docs' });
+
+      expect(mkdirSpy).toHaveBeenCalledWith('.github/workflows', { recursive: true });
+      existsSpy.mockRestore();
+      mkdirSpy.mockRestore();
+    });
+
+    it('switches into the repo root before writing the workflow file', async () => {
+      const repoRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'rdme-gha-root-'));
+      git.revparse = vi.fn(() => {
+        return Promise.resolve(repoRoot) as unknown as Response<string>;
+      });
+      prompts.inject([false]);
+
+      await expect(createGHA.call(ctx, '', commandWithKey, { key })).rejects.toThrow(
+        'GitHub Actions workflow creation cancelled',
+      );
+      expect(process.cwd()).toBe(repoRoot);
+
+      process.chdir(testWorkingDir);
+      fs.rmSync(repoRoot, { recursive: true, force: true });
+    });
+
+    it('builds a workflow command string that redacts the key and omits `--github`', async () => {
+      prompts.inject([true, 'release', 'rdme-docs-upload']);
+
+      const result = await createGHA.call(ctx, 'done', commandWithKey, {
+        path: './docs',
+        key: 'supersecretKEY',
+        github: true,
+        'dry-run': true,
+        branch: '1.0.0',
+      });
+
+      const secretRef = `\${{ secrets.README_API_KEY }}`;
+      expect(yamlOutput).toContain(`rdme: docs upload ./docs --key=${secretRef} --dry-run --branch=1.0.0`);
+      expect(yamlOutput).not.toContain('supersecretKEY');
+      expect(yamlOutput).not.toContain('--github');
+      expect(result).toContain('••••••••••••etKEY');
+      expect(result).toContain('README_API_KEY');
+    });
+
+    it('does not ask the user to create an API key secret for commands without `--key`', async () => {
+      prompts.inject([true, 'main', 'rdme-openapi-validate']);
+
+      const result = await createGHA.call(ctx, '', commandWithoutKey, { spec: 'petstore.json' });
+
+      expect(result).toContain("you're all set");
+      expect(result).not.toContain('README_API_KEY');
+      expect(yamlOutput).toContain('rdme: openapi validate petstore.json');
+    });
+
+    it('returns the original command result in the default test environment', async () => {
+      vi.stubEnv('TEST_RDME_CREATEGHA', '');
+
+      await expect(createGHA.call(ctx, 'success!', commandWithKey, { key })).resolves.toBe('success!');
+      expect(fs.writeFileSync).not.toHaveBeenCalled();
+    });
+
+    it('delegates the oclif hook to createGHA', async () => {
+      vi.stubEnv('TEST_RDME_CREATEGHA', '');
+
+      await expect(
+        createGHAHook.call(ctx, {
+          result: 'hook-ok',
+          command: commandWithKey,
+          parsedOpts: { key },
+        }),
+      ).resolves.toBe('hook-ok');
     });
   });
 });

@@ -18,6 +18,7 @@ describe('#isSafePathSegment', () => {
     ['foo/bar', false],
     ['foo\\bar', false],
     ['has\0null', false],
+    ['foo..bar', false],
   ])('isSafePathSegment(%j) -> %s', (segment, expected) => {
     expect(isSafePathSegment(segment)).toBe(expected);
   });
@@ -38,6 +39,10 @@ describe('#decodeURILastSegment', () => {
 
   it('returns null for malformed percent-encoding that decodeURIComponent rejects', () => {
     expect(decodeURILastSegment('/branches/1.0/categories/guides/%E0%A4%A')).toBeNull();
+  });
+
+  it('returns null when the URI has an empty last segment', () => {
+    expect(decodeURILastSegment('/branches/1.0/categories/guides/')).toBeNull();
   });
 });
 

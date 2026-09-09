@@ -1,0 +1,71 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Resolve schema edges",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/x": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pet"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Pet": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "$ref": "#/components/schemas/Name"
+          }
+        }
+      },
+      "Name": {
+        "type": "string"
+      },
+      "Tags": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "Alias": {
+        "$ref": "#/components/schemas/Pet"
+      },
+      "Holder": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PetRef"
+            }
+          }
+        }
+      },
+      "PetRef": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

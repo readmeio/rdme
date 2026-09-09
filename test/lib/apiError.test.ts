@@ -32,6 +32,16 @@ describe('#APIv1Error', () => {
     expect(error.code).toBe(response.error);
   });
 
+  it('should use the API message when help text is omitted', () => {
+    const error = new APIv1Error({
+      error: 'VERSION_EMPTY',
+      message: 'You need to specify a version.',
+    });
+
+    expect(error.code).toBe('VERSION_EMPTY');
+    expect(error.message).toBe('You need to specify a version.');
+  });
+
   it('should be able to handle generic non-API errors', () => {
     const msg = 'i am an generic javascript error';
     const error = new APIv1Error(msg);
