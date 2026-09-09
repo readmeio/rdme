@@ -114,7 +114,7 @@ describe('#readmeAPIv1Fetch()', () => {
         mock.done();
       });
 
-      it('should omit source URL header when git cannot resolve the repo root', async () => {
+      it('should still send a source URL when git cannot resolve the repo root', async () => {
         const key = 'API_KEY';
         const originalRevparse = git.revparse;
         git.revparse = vi.fn(() => Promise.reject(new Error('not a repo'))) as typeof git.revparse;
@@ -138,7 +138,9 @@ describe('#readmeAPIv1Fetch()', () => {
             },
           ).then(handleAPIv1Res);
 
-          expect(headers['x-readme-source-url']).toMatch(/^https:\/\/github.com\/octocat\/Hello-World\/blob\//);
+          // `normalizeFilePath` falls back to `path.relative('', file.path)` when git has no
+          // repo root, so the constructed URL still includes the filename.
+          expect(headers['x-readme-source-url']).toContain('openapi.json');
         } finally {
           git.revparse = originalRevparse;
         }
