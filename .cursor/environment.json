@@ -1,0 +1,4 @@
+{
+  "name": "rdme",
+  "install": "npm ci && npm run build"
+}
