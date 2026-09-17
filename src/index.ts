@@ -4,6 +4,8 @@ import CustomPagesUploadCommand from './commands/custompages/upload.js';
 import DocsExportCommand from './commands/docs/export.js';
 import DocsMigrateCommand from './commands/docs/migrate.js';
 import DocsUploadCommand from './commands/docs/upload.js';
+import GlossaryExportCommand from './commands/glossary/export.js';
+import GlossaryUploadCommand from './commands/glossary/upload.js';
 import LoginCommand from './commands/login.js';
 import LogoutCommand from './commands/logout.js';
 import OpenAPIConvertCommand from './commands/openapi/convert.js';
@@ -43,6 +45,9 @@ export const COMMANDS = {
   'docs:export': DocsExportCommand,
   'docs:migrate': DocsMigrateCommand,
   'docs:upload': DocsUploadCommand,
+
+  'glossary:export': GlossaryExportCommand,
+  'glossary:upload': GlossaryUploadCommand,
 
   login: LoginCommand,
   logout: LogoutCommand,

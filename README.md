@@ -188,6 +188,7 @@ npm run build && npm run build:docs
 * [`rdme changelog`](documentation/commands/changelog.md) - Upload Markdown files to the Changelog section of your ReadMe project.
 * [`rdme custompages`](documentation/commands/custompages.md) - Upload Markdown or HTML files to the Custom Pages section of your ReadMe project.
 * [`rdme docs`](documentation/commands/docs.md) - Upload or export Guides in your ReadMe project.
+* [`rdme glossary`](documentation/commands/glossary.md) - Upload or export glossary terms in your ReadMe project.
 * [`rdme help`](documentation/commands/help.md) - Display help for rdme.
 * [`rdme login`](documentation/commands/login.md) - Login to a ReadMe project.
 * [`rdme logout`](documentation/commands/logout.md) - Logs the currently authenticated user out of ReadMe.
