@@ -11,8 +11,10 @@ export interface Glossary {
 }
 
 export interface GlossaryUploadResponse {
-  changes: { added: number; updated: number; removed: number; duplicates_ignored: number };
-  data: Pick<Glossary, 'terms'>;
+  data: {
+    changes: { added: number; updated: number; removed: number; duplicates_ignored: number };
+    terms: GlossaryTerm[];
+  };
 }
 
 const parseTerms = (terms: unknown): GlossaryTerm[] => {

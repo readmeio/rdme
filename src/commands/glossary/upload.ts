@@ -81,7 +81,7 @@ export default class GlossaryUploadCommand extends BaseCommand<typeof GlossaryUp
       { file: { path: this.args.file, type: 'path' } },
     );
     const result = await this.handleAPIRes<GlossaryUploadResponse>(response);
-    const { added, updated, removed, duplicates_ignored: duplicates } = result.changes;
+    const { added, updated, removed, duplicates_ignored: duplicates } = result.data.changes;
     this.info(
       `Glossary uploaded: ${added} added, ${updated} updated, ${removed} removed, ${duplicates} duplicate entries ignored.`,
     );

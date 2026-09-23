@@ -43,7 +43,7 @@ describe('glossary upload', () => {
       }),
     );
 
-    const result = { data: { terms: [a] }, changes };
+    const result = { data: { terms: [a], changes } };
     const mock = getAPIv2Mock(headers)
       .patch(endpoint, { terms: [a] })
       .reply(200, result);
@@ -60,8 +60,7 @@ describe('glossary upload', () => {
     const mock = getAPIv2Mock(headers)
       .put(endpoint, { terms: [] })
       .reply(200, {
-        data: { terms: [] },
-        changes: { ...changes, added: 0 },
+        data: { terms: [], changes: { ...changes, added: 0 } },
       });
     const output = await run([file, '--key', key, '--replace']);
     expect(output.error).toBeUndefined();
