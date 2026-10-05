@@ -84,7 +84,7 @@
     "prompts": "^2.4.2",
     "remove-undefined-objects": "^9.0.0",
     "semver": "^7.8.5",
-    "simple-git": "^3.36.0",
+    "simple-git": "^4.0.2",
     "slugify": "^1.6.9",
     "string-argv": "^0.3.2",
     "table": "^6.8.1",
