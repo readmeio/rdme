@@ -66,7 +66,7 @@
     "@oclif/plugin-autocomplete": "^3.2.53",
     "@oclif/plugin-help": "^6.2.53",
     "@oclif/plugin-plugins": "^5.4.80",
-    "@oclif/plugin-warn-if-update-available": "^3.1.68",
+    "@oclif/plugin-warn-if-update-available": "^4.0.1",
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
     "chalk": "^5.3.0",
