@@ -96,7 +96,7 @@
   "devDependencies": {
     "@commitlint/cli": "^21.2.0",
     "@commitlint/config-conventional": "^21.2.0",
-    "@oclif/test": "^4.1.20",
+    "@oclif/test": "^5.0.1",
     "@readme/better-ajv-errors": "^2.3.2",
     "@readme/oas-examples": "^8.2.2",
     "@readme/oxlint-config": "^1.6.0",
