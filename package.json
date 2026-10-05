@@ -62,7 +62,7 @@
   },
   "dependencies": {
     "@actions/core": "^3.0.1",
-    "@oclif/core": "^4.11.11",
+    "@oclif/core": "^5.1.2",
     "@oclif/plugin-autocomplete": "^3.2.53",
     "@oclif/plugin-help": "^6.2.53",
     "@oclif/plugin-plugins": "^5.4.80",
