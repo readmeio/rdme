@@ -15,7 +15,7 @@ const headers = { authorization: `Bearer ${key}` };
 const endpoint = '/projects/me/glossary';
 const a = { term: 'A', definition: 'First' };
 const b = { term: 'B', definition: 'Second' };
-const changes = { added: 1, updated: 0, removed: 0, duplicates_ignored: 0 };
+const changes = { added: 1, updated: 0, removed: 0 };
 
 let directory: string;
 let file: string;
@@ -50,6 +50,7 @@ describe('glossary upload', () => {
     const output = await run([file, '--key', key]);
     expect(output.error).toBeUndefined();
     expect(output.result).toStrictEqual(result);
+    expect(output.stdout).toContain('Glossary uploaded: 1 added, 0 updated, 0 removed.');
     expect(output.stderr).toContain('Ignoring group_terms');
     mock.done();
   });

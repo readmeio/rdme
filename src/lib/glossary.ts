@@ -12,7 +12,7 @@ export interface Glossary {
 
 export interface GlossaryUploadResponse {
   data: {
-    changes: { added: number; updated: number; removed: number; duplicates_ignored: number };
+    changes: { added: number; updated: number; removed: number };
     terms: GlossaryTerm[];
   };
 }
