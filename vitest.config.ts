@@ -16,6 +16,9 @@ export default defineConfig({
   },
   test: {
     coverage: {
+      // Vitest 5 matches include/exclude against project-relative paths and no longer
+      // ships a default exclude list, so pin coverage to source files.
+      include: ['src'],
       exclude: [...coverageConfigDefaults.exclude, '**/dist-gha/**'],
     },
     // We'll defer to `@oclif/test` for console interception

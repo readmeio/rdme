@@ -2,7 +2,7 @@ import fs from 'node:fs';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { validateFilePath, validateSubdomain } from '../../src/lib/validatePromptInput.js';
+import { cleanFileName, validateFilePath, validateSubdomain } from '../../src/lib/validatePromptInput.js';
 
 describe('#validateFilePath', () => {
   afterEach(() => {
@@ -34,6 +34,25 @@ describe('#validateFilePath', () => {
     expect(validateFilePath(testPath)).toBe(true);
     expect(fs.existsSync).toHaveBeenCalledWith(testPath);
   });
+
+  it('should apply getFullPath before checking existence', () => {
+    expect.assertions(3);
+
+    fs.existsSync = vi.fn(() => false);
+    const getFullPath = vi.fn((file: string) => `.github/workflows/${file}.yml`);
+
+    expect(validateFilePath('rdme-openapi', getFullPath)).toBe(true);
+    expect(getFullPath).toHaveBeenCalledWith('rdme-openapi');
+    expect(fs.existsSync).toHaveBeenCalledWith('.github/workflows/rdme-openapi.yml');
+  });
+});
+
+describe('#cleanFileName', () => {
+  it('should replace non-alphanumeric characters with hyphens', () => {
+    expect(cleanFileName('Hello World!')).toBe('Hello-World-');
+    expect(cleanFileName('rdme-openapi:upload')).toBe('rdme-openapi-upload');
+    expect(cleanFileName('already-ok_123')).toBe('already-ok-123');
+  });
 });
 
 describe('#validateSubdomain', () => {
@@ -56,4 +75,11 @@ describe('#validateSubdomain', () => {
       'Project subdomain must contain only letters, numbers and dashes.',
     );
   });
+
+  it.each(['', '-', '-leading', 'trailing-', 'consec--utive', 'under_score', 'dot.value'])(
+    'should reject invalid subdomain %j',
+    value => {
+      expect(validateSubdomain(value)).toBe('Project subdomain must contain only letters, numbers and dashes.');
+    },
+  );
 });

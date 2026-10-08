@@ -1,11 +1,13 @@
 import type { PageObject } from '../../helpers/page.types.js';
 
 import fs from 'node:fs';
+import fsPromises from 'node:fs/promises';
+import os from 'node:os';
 import path from 'node:path';
 
 import chalk from 'chalk';
 import grayMatter from 'gray-matter';
-import { beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import Command from '../../../src/commands/changelogs.js';
 import { APIv1Error } from '../../../src/lib/apiError.js';
@@ -40,6 +42,150 @@ describe('rdme changelogs', () => {
         "The directory you provided (.github/workflows) doesn't contain any of the following required files: .markdown, .md.",
       ),
     );
+  });
+
+  it('should rethrow filesystem errors other than a missing path', async () => {
+    const denied = Object.assign(new Error('permission denied'), { code: 'EACCES' });
+    vi.spyOn(fsPromises, 'stat').mockRejectedValue(denied);
+
+    await expect(run(['./test/__fixtures__/changelogs/new-docs', '--key', key])).rejects.toBe(denied);
+
+    vi.restoreAllMocks();
+  });
+
+  it('should upload child changelogs after their parentDocSlug target', async () => {
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'rdme-changelogs-parent-'));
+    try {
+      fs.writeFileSync(
+        path.join(tmpDir, 'parent.md'),
+        `---
+title: Parent changelog
+---
+
+Parent body
+`,
+      );
+      fs.writeFileSync(
+        path.join(tmpDir, 'child.md'),
+        `---
+title: Child changelog
+parentDocSlug: parent
+---
+
+Child body
+`,
+      );
+
+      const getMocks = getAPIv1Mock()
+        .get('/api/v1/changelogs/parent')
+        .basicAuth({ user: key })
+        .reply(404, { error: 'CHANGELOG_NOTFOUND' })
+        .get('/api/v1/changelogs/child')
+        .basicAuth({ user: key })
+        .reply(404, { error: 'CHANGELOG_NOTFOUND' });
+
+      const postMocks = getAPIv1Mock()
+        .post('/api/v1/changelogs', body => body.slug === 'parent')
+        .basicAuth({ user: key })
+        .reply(201, { slug: 'parent', _id: '1' })
+        .post('/api/v1/changelogs', body => body.slug === 'child')
+        .basicAuth({ user: key })
+        .reply(201, { slug: 'child', _id: '2' });
+
+      const result = await run([tmpDir, '--key', key]);
+
+      expect(result).toContain("successfully created 'parent'");
+      expect(result).toContain("successfully created 'child'");
+      expect(result.indexOf("successfully created 'parent'")).toBeLessThan(
+        result.indexOf("successfully created 'child'"),
+      );
+
+      getMocks.done();
+      postMocks.done();
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it('should sort changelogs that use the legacy parentDoc attribute', async () => {
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'rdme-changelogs-parentdoc-'));
+    try {
+      fs.writeFileSync(
+        path.join(tmpDir, 'child.md'),
+        `---
+title: Child changelog
+parentDoc: 5f92cbf10cf217478ba93561
+---
+
+Child body
+`,
+      );
+      fs.writeFileSync(
+        path.join(tmpDir, 'parent.md'),
+        `---
+title: Parent changelog
+---
+
+Parent body
+`,
+      );
+
+      const getMocks = getAPIv1Mock()
+        .get('/api/v1/changelogs/parent')
+        .basicAuth({ user: key })
+        .reply(404, { error: 'CHANGELOG_NOTFOUND' })
+        .get('/api/v1/changelogs/child')
+        .basicAuth({ user: key })
+        .reply(404, { error: 'CHANGELOG_NOTFOUND' });
+
+      const postMocks = getAPIv1Mock()
+        .post('/api/v1/changelogs', body => body.slug === 'parent')
+        .basicAuth({ user: key })
+        .reply(201, { slug: 'parent', _id: '1' })
+        .post('/api/v1/changelogs', body => body.slug === 'child')
+        .basicAuth({ user: key })
+        .reply(201, { slug: 'child', _id: '2' });
+
+      const result = await run([tmpDir, '--key', key]);
+
+      expect(result).toContain("successfully created 'parent'");
+      expect(result).toContain("successfully created 'child'");
+
+      getMocks.done();
+      postMocks.done();
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it('should error when parentDocSlug values form a cycle', async () => {
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'rdme-changelogs-cycle-'));
+    try {
+      fs.writeFileSync(
+        path.join(tmpDir, 'a.md'),
+        `---
+title: A
+parentDocSlug: b
+---
+
+A
+`,
+      );
+      fs.writeFileSync(
+        path.join(tmpDir, 'b.md'),
+        `---
+title: B
+parentDocSlug: a
+---
+
+B
+`,
+      );
+
+      await expect(run([tmpDir, '--key', key])).rejects.toThrow(/Cyclic dependency/);
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
   });
 
   describe('existing changelogs', () => {

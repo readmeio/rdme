@@ -96,6 +96,16 @@ describe('rdme openapi reduce', () => {
         expect(Object.keys(reducedSpec.paths['/pet/findByStatus'])).toStrictEqual(['get']);
       });
 
+      it('should reduce every method on a path when no methods are selected', async () => {
+        const spec = require.resolve('@readme/oas-examples/3.0/json/petstore.json');
+        prompts.inject(['paths', ['/pet'], [], 'output.json']);
+
+        const { result, error } = await run([spec]);
+        expect(error).toBeUndefined();
+        expect(result).toBe('Your reduced API definition has been saved to output.json! 🤏');
+        expect(Object.keys(reducedSpec.paths)).toContain('/pet');
+      });
+
       it('should reduce with no prompts via opts', async () => {
         await expect(
           run([

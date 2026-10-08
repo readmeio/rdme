@@ -103,6 +103,10 @@ describe('hooks', () => {
       it('should properly pass key flag', async () => {
         const keyFlag = await getKeyFlagAfterPrerun(mockContext, options);
 
+        await expect(keyFlag.parse?.call(mockContext)).rejects.toThrow('No project API key was specified.');
+        await expect(keyFlag.parse?.call(mockContext, null as unknown as string)).rejects.toThrow(
+          'No project API key was specified.',
+        );
         await expect(keyFlag.parse?.call(mockContext, '')).rejects.toThrow('No project API key was specified.');
         await expect(keyFlag.parse?.call(mockContext, '   ')).rejects.toThrow('No project API key was specified.');
 
@@ -137,6 +141,23 @@ describe('hooks', () => {
 
         expect(mockContext.debug).toHaveBeenCalledWith('api key found in config, returning');
       });
+
+      it('should error if login succeeds but no API key was persisted', async () => {
+        vi.mocked(loginFlow).mockResolvedValue('Logged in successfully.');
+
+        const keyFlag = await getKeyFlagAfterPrerun(mockContext, options);
+
+        await expect(keyFlag.default?.call(mockContext)).rejects.toThrow("We couldn't find your API key.");
+      });
+    });
+
+    it('should skip key flag rewriting when the command has no `--key` flag', async () => {
+      const mockContext = { debug: vi.fn() } as unknown as Hook.Context;
+      const options = { Command: { flags: {} } };
+
+      await prerun.call(mockContext, options as never);
+
+      expect(mockContext.debug).toHaveBeenCalledWith('current command does not have --key flag');
     });
   });
 });

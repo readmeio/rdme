@@ -4,7 +4,7 @@ import nock from 'nock';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import pkg from '../../package.json' with { type: 'json' };
-import { getNodeVersion, getPkgVersion, getPkgVersionFromNPM } from '../../src/lib/getPkg.js';
+import { getMajorPkgVersion, getNodeVersion, getPkgVersion, getPkgVersionFromNPM } from '../../src/lib/getPkg.js';
 
 describe('#getNodeVersion()', () => {
   it('should return a major version', () => {
@@ -45,5 +45,13 @@ describe('#getPkgVersion()', () => {
     await expect(getPkgVersionFromNPM('latest')).resolves.toBe(pkg.version);
 
     mock.done();
+  });
+
+  it('should return the package.json version when no dist tag is requested', async () => {
+    await expect(getPkgVersionFromNPM()).resolves.toBe(pkg.version);
+  });
+
+  it('should return the major version from package.json', async () => {
+    await expect(getMajorPkgVersion()).resolves.toBe(Number(pkg.version.split('.')[0]));
   });
 });

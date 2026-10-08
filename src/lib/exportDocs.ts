@@ -289,7 +289,7 @@ export async function exportDocs(this: APIv2PageExportCommands): Promise<FullExp
   const tempFolder = path.join(outputDir, '.temp_download');
 
   const { branch } = this.flags;
-  const docsOnly = this.route !== 'guides';
+  const docsOnly = Boolean(this.flags['docs-only']);
 
   const key = this.flags.key;
   const headers = new Headers({ authorization: `Bearer ${key}`, 'Content-Type': 'application/json' });

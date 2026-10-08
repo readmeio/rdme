@@ -8,7 +8,7 @@ export default defineConfig({
   options: {
     reportUnusedDisableDirectives: 'error',
   },
-  ignorePatterns: ['coverage/', 'dist/', 'dist-gha/'],
+  ignorePatterns: ['.vitest/', 'coverage/', 'dist/', 'dist-gha/'],
   categories: {
     suspicious: 'error',
   },

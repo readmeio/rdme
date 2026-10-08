@@ -41,6 +41,10 @@ describe('normalizeStringArgvForGha()', () => {
     expect(normalizeStringArgvForGha(argv)).toStrictEqual(['whoami', '--title=']);
   });
 
+  it('leaves a one-character unquoted value unchanged', () => {
+    expect(normalizeStringArgvForGha(['--tag=a'])).toStrictEqual(['--tag=a']);
+  });
+
   it('does not strip mismatched or partial quotes', () => {
     expect(normalizeStringArgvForGha(['--key="unfinished'])).toStrictEqual(['--key="unfinished']);
     expect(normalizeStringArgvForGha(['--url=https://example.com?q="x"'])).toStrictEqual([
