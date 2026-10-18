@@ -421,7 +421,7 @@ describe(`rdme ${topic} upload`, () => {
             keywords: 'some-keyword',
           },
           author: {
-            id: 'some-author-id',
+            id: '507f1f77bcf86cd799439011',
           },
         })
         .reply(201, {});

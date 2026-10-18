@@ -377,7 +377,8 @@ describe('#createGHA', () => {
     });
 
     it('switches into the repo root before writing the workflow file', async () => {
-      const repoRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'rdme-gha-root-'));
+      // macOS resolves `/var` to `/private/var`, and `process.cwd()` returns that real path.
+      const repoRoot = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'rdme-gha-root-')));
       git.revparse = vi.fn(() => {
         return Promise.resolve(repoRoot) as unknown as Response<string>;
       });
