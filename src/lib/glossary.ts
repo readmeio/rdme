@@ -1,21 +1,6 @@
+import type { GlossaryResponseSchema, GlossaryTerm } from './types/index.js';
+
 import { isRecord } from '../utils.js';
-
-export interface GlossaryTerm {
-  definition: string;
-  term: string;
-}
-
-export interface Glossary {
-  group_terms: GlossaryTerm[] | null;
-  terms: GlossaryTerm[];
-}
-
-export interface GlossaryUploadResponse {
-  data: {
-    changes: { added: number; updated: number; removed: number };
-    terms: GlossaryTerm[];
-  };
-}
 
 const parseTerms = (terms: unknown): GlossaryTerm[] => {
   if (!Array.isArray(terms)) throw new Error('Glossary terms must be an array.');
@@ -35,7 +20,7 @@ const parseTerms = (terms: unknown): GlossaryTerm[] => {
 };
 
 /** Validate the upload before making requests, including during a dry run. */
-export function parseGlossary(input: unknown): Pick<Glossary, 'terms'> {
+export function parseGlossary(input: unknown): Pick<GlossaryResponseSchema['data'], 'terms'> {
   if (!isRecord(input) || !Array.isArray(input.terms)) {
     throw new Error(
       'Glossary files must contain a "terms" array. Use { "terms": [] } to clear project terms with --replace.',

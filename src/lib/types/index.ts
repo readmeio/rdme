@@ -120,3 +120,19 @@ export type CategoryPagesResponseSchema = FromSchema<
  * as we receive it from the ReadMe API.
  */
 export type APIDefinitionsRepresentation = FromSchema<apiDefinitionsSchema, { keepDefaultedPropertiesOptional: true }>;
+
+/** Glossary schemas */
+type GlossaryResponseSchemaRaw =
+  (typeof readmeAPIv2Oas)['paths']['/projects/me/glossary']['get']['responses']['200']['content']['application/json']['schema'];
+
+type GlossaryUploadResponseSchemaRaw =
+  (typeof readmeAPIv2Oas)['paths']['/projects/me/glossary']['patch']['responses']['200']['content']['application/json']['schema'];
+
+export type GlossaryResponseSchema = FromSchema<GlossaryResponseSchemaRaw, { keepDefaultedPropertiesOptional: true }>;
+
+export type GlossaryUploadResponseSchema = FromSchema<
+  GlossaryUploadResponseSchemaRaw,
+  { keepDefaultedPropertiesOptional: true }
+>;
+
+export type GlossaryTerm = GlossaryResponseSchema['data']['terms'][number];

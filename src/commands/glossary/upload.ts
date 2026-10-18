@@ -1,4 +1,4 @@
-import type { Glossary, GlossaryUploadResponse } from '../../lib/glossary.js';
+import type { GlossaryResponseSchema, GlossaryUploadResponseSchema } from '../../lib/types/index.js';
 
 import fs from 'node:fs/promises';
 
@@ -64,7 +64,7 @@ export default class GlossaryUploadCommand extends BaseCommand<typeof GlossaryUp
 
     if (this.flags['dry-run']) {
       const response = await this.readmeAPIFetch('/projects/me/glossary', { headers });
-      const { data } = await this.handleAPIRes<{ data: Glossary }>(response);
+      const { data } = await this.handleAPIRes<GlossaryResponseSchema>(response);
       const terms = previewGlossary(data.terms, glossary.terms, replace);
       this.info(`Dry run: would ${replace ? 'replace' : 'merge'} project glossary terms. No changes saved.`);
       this.log(JSON.stringify({ terms }, null, 2));
@@ -80,7 +80,7 @@ export default class GlossaryUploadCommand extends BaseCommand<typeof GlossaryUp
       },
       { file: { path: this.args.file, type: 'path' } },
     );
-    const result = await this.handleAPIRes<GlossaryUploadResponse>(response);
+    const result = await this.handleAPIRes<GlossaryUploadResponseSchema>(response);
     const { added, updated, removed } = result.data.changes;
     this.info(`Glossary uploaded: ${added} added, ${updated} updated, ${removed} removed.`);
     return result;

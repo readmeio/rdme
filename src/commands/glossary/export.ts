@@ -1,4 +1,4 @@
-import type { Glossary } from '../../lib/glossary.js';
+import type { GlossaryResponseSchema } from '../../lib/types/index.js';
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -48,7 +48,7 @@ export default class GlossaryExportCommand extends BaseCommand<typeof GlossaryEx
     const response = await this.readmeAPIFetch(`/projects/me/glossary${query}`, {
       headers: { authorization: `Bearer ${this.flags.key}` },
     });
-    const { data } = await this.handleAPIRes<{ data: Glossary }>(response);
+    const { data } = await this.handleAPIRes<GlossaryResponseSchema>(response);
     const glossary = { terms: data.terms, ...(data.group_terms !== null ? { group_terms: data.group_terms } : {}) };
 
     await fs.mkdir(path.dirname(this.args.file), { recursive: true });
