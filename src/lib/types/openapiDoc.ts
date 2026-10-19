@@ -1,4 +1,4 @@
-import type { OASDocument } from 'oas/types';
+import type { OAS31Document, OASDocument } from 'oas/types';
 
 /**
  * This is a snapshot of the OpenAPI description for ReadMe APIv2.
@@ -29618,4 +29618,31 @@ const document = {
   ],
 } as const satisfies OASDocument & { info: { 'x-readme-deploy': string } };
 
-export default document;
+/**
+ * The paths within our OpenAPI description that we derive types from (e.g., `FromSchema<>` and
+ * the schemas we hand off to `ajv` for runtime validation).
+ *
+ * TypeScript refuses to serialize the inferred type of the full `document` into a declaration file
+ * because it's too large (TS7056), so we only expose literal types for the paths that we actually
+ * rely on. If you need to type something off of a new path, add it here.
+ */
+const paths = {
+  '/branches/{branch}/apis': document.paths['/branches/{branch}/apis'],
+  '/branches/{branch}/apis/{filename}': document.paths['/branches/{branch}/apis/{filename}'],
+  '/branches/{branch}/categories/{section}': document.paths['/branches/{branch}/categories/{section}'],
+  '/branches/{branch}/categories/{section}/{title}/pages':
+    document.paths['/branches/{branch}/categories/{section}/{title}/pages'],
+  '/branches/{branch}/custom_pages/{slug}': document.paths['/branches/{branch}/custom_pages/{slug}'],
+  '/branches/{branch}/guides': document.paths['/branches/{branch}/guides'],
+  '/branches/{branch}/guides/{slug}': document.paths['/branches/{branch}/guides/{slug}'],
+  '/branches/{branch}/reference/{slug}': document.paths['/branches/{branch}/reference/{slug}'],
+  '/changelogs/{identifier}': document.paths['/changelogs/{identifier}'],
+  '/projects/me': document.paths['/projects/me'],
+  '/projects/{subdomain}/apikeys/{api_key_id}': document.paths['/projects/{subdomain}/apikeys/{api_key_id}'],
+};
+
+/**
+ * The full document is still available at runtime, but its type only carries literal types for
+ * the paths listed in `paths` above. Everything else is typed loosely as an OpenAPI 3.1 document.
+ */
+export default document as OAS31Document & { info: { 'x-readme-deploy': string }; paths: typeof paths };
