@@ -28,7 +28,7 @@ export default class GlossaryExportCommand extends BaseCommand<typeof GlossaryEx
     key: keyFlag,
     'include-group': Flags.boolean({
       description:
-        'Include terms inherited from the project’s Enterprise group in a separate `group_terms` list. Only applicable to projects within an Enterprise group.',
+        "Include terms inherited from the project's Enterprise group in a separate `group_terms` list. Only applicable to projects within an Enterprise group.",
     }),
   };
 
