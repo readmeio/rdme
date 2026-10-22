@@ -29638,6 +29638,7 @@ const paths = {
   '/branches/{branch}/reference/{slug}': document.paths['/branches/{branch}/reference/{slug}'],
   '/changelogs/{identifier}': document.paths['/changelogs/{identifier}'],
   '/projects/me': document.paths['/projects/me'],
+  '/projects/me/glossary': document.paths['/projects/me/glossary'],
   '/projects/{subdomain}/apikeys/{api_key_id}': document.paths['/projects/{subdomain}/apikeys/{api_key_id}'],
 };
 
