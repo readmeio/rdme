@@ -19,7 +19,7 @@ ARGUMENTS
 
 FLAGS
   --key=<value>    (required) ReadMe project API key
-  --include-group  Include terms inherited from the project’s Enterprise group in a separate `group_terms` list. Only
+  --include-group  Include terms inherited from the project's Enterprise group in a separate `group_terms` list. Only
                    applicable to projects within an Enterprise group.
 
 DESCRIPTION

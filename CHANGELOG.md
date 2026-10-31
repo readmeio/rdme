@@ -1,3 +1,10 @@
+# [10.10.0-next.5](https://github.com/readmeio/rdme/compare/v10.10.0-next.4...v10.10.0-next.5) (2026-10-31)
+
+
+### Features
+
+* **glossary:** add upload and export commands ([#1533](https://github.com/readmeio/rdme/issues/1533)) ([2b49b61](https://github.com/readmeio/rdme/commit/2b49b61db32aedd0547356697bc567516b78f911))
+
 # [10.10.0-next.4](https://github.com/readmeio/rdme/compare/v10.10.0-next.3...v10.10.0-next.4) (2026-08-31)
 
 
