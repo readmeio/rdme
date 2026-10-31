@@ -613,6 +613,122 @@ Body
 
         mock.done();
       });
+
+      it('should upload a parent before its child when parent.uri is a full address', async () => {
+        const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'rdme-parent-uri-'));
+        // `writeFileSync` is mocked in this suite; use the promise API to persist fixtures.
+        const parentUri = `/branches/stable/${route}/zz-group`;
+        const middleUri = `/branches/stable/${route}/mm-middle`;
+        await fs.promises.writeFile(
+          path.join(tmpDir, 'aa-page.md'),
+          `---
+title: AA page
+parent:
+  uri: ${middleUri}
+---
+
+Body
+`,
+        );
+        await fs.promises.writeFile(
+          path.join(tmpDir, 'mm-middle.md'),
+          `---
+title: MM middle
+parent:
+  uri: ${parentUri}
+---
+
+Body
+`,
+        );
+        await fs.promises.writeFile(
+          path.join(tmpDir, 'zz-group.md'),
+          `---
+title: ZZ group
+---
+
+Body
+`,
+        );
+
+        try {
+          const mock = getAPIv2Mock({ authorization })
+            .get(`/branches/stable/${route}/zz-group`)
+            .reply(404)
+            .post(`/branches/stable/${route}`, {
+              slug: 'zz-group',
+              title: 'ZZ group',
+              content: { body: '\nBody\n' },
+            })
+            .reply(201, {})
+            .get(`/branches/stable/${route}/mm-middle`)
+            .reply(404)
+            .post(`/branches/stable/${route}`, {
+              slug: 'mm-middle',
+              title: 'MM middle',
+              parent: { uri: parentUri },
+              content: { body: '\nBody\n' },
+            })
+            .reply(201, {})
+            .get(`/branches/stable/${route}/aa-page`)
+            .reply(404)
+            .post(`/branches/stable/${route}`, {
+              slug: 'aa-page',
+              title: 'AA page',
+              parent: { uri: middleUri },
+              content: { body: '\nBody\n' },
+            })
+            .reply(201, {});
+
+          const result = await run([tmpDir, '--key', key]);
+
+          expect(result.error).toBeUndefined();
+          expect((result.result as unknown as FullUploadResults).created.map(page => page.slug)).toStrictEqual([
+            'zz-group',
+            'mm-middle',
+            'aa-page',
+          ]);
+
+          mock.done();
+        } finally {
+          fs.rmSync(tmpDir, { recursive: true, force: true });
+        }
+      });
+
+      it('should error when full parent addresses form a cycle', async () => {
+        const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'rdme-parent-uri-cycle-'));
+        await fs.promises.writeFile(
+          path.join(tmpDir, 'page-a.md'),
+          `---
+title: Page A
+parent:
+  uri: /branches/stable/${route}/page-b
+---
+
+Body
+`,
+        );
+        await fs.promises.writeFile(
+          path.join(tmpDir, 'page-b.md'),
+          `---
+title: Page B
+parent:
+  uri: /branches/stable/${route}/page-a
+---
+
+Body
+`,
+        );
+
+        try {
+          const result = await run([tmpDir, '--key', key]);
+
+          expect(result.error).toBeInstanceOf(Error);
+          expect(result.error?.message).toBe('Cyclic dependency');
+        } finally {
+          fs.rmSync(tmpDir, { recursive: true, force: true });
+        }
+      });
     });
 
     describe('given that the directory has explicit frontmatter positions set', () => {

@@ -10,6 +10,7 @@ import ora from 'ora';
 import { APIv2Error } from './apiError.js';
 import { oraOptions } from './logger.js';
 import { allowedMarkdownExtensions, findPages } from './readPage.js';
+import { decodeURILastSegment } from './safePath.js';
 import { categoryUriRegexPattern, parentUriRegexPattern } from './types/index.js';
 import { validateFrontmatter } from './validateFrontmatter.js';
 
@@ -232,14 +233,37 @@ function compareUploadPriority(
 }
 
 /**
+ * Resolve `parent.uri` to a slug in this upload batch.
+ *
+ * The value may be a bare slug (`zz-group`) or the full page address
+ * (`/branches/1.0/reference/zz-group`). The batch is keyed by slug, so a full address matches
+ * only once its last path segment is taken. A trailing slash is ignored so it does not hide
+ * that segment.
+ */
+function parentSlugInBatch(
+  parentUri: string | null | undefined,
+  filesBySlug: Record<string, PageMetadata<GuidesOrReferenceRequestSchema>>,
+): string | undefined {
+  if (!parentUri) return undefined;
+  if (filesBySlug[parentUri]) return parentUri;
+
+  const slug = decodeURILastSegment(parentUri.replace(/\/+$/, ''));
+  if (slug && filesBySlug[slug]) return slug;
+
+  return undefined;
+}
+
+/**
  * Sort files for uploading.
  *
  * Every page is uploaded after its parent as defined by `parent.uri` when present and when the
- * parent is in the same upload batch. Pages within these batches are then sorted by ascending
- * `position` when present; ties are broken by natural order of the page `slug` (numeric substrings
- * compare as numbers, e.g. `page-4` before `page-10`).
+ * parent is in the same upload batch. `parent.uri` may be a bare slug or a full page address.
+ * Pages within these batches are then sorted by ascending `position` when present; ties are
+ * broken by natural order of the page `slug` (numeric substrings compare as numbers, e.g.
+ * `page-4` before `page-10`).
  *
  * @see {@link https://github.com/readmeio/rdme/pull/973}
+ * @see {@link https://github.com/readmeio/rdme/issues/1552}
  * @returns An array of sorted PageMetadata objects
  */
 function sortFiles(
@@ -256,7 +280,7 @@ function sortFiles(
   const childrenByParent = new Map<string, string[]>();
 
   for (const obj of Object.values(filesBySlug)) {
-    const parentKey = obj.data.parent?.uri;
+    const parentKey = parentSlugInBatch(obj.data.parent?.uri, filesBySlug);
     if (parentKey && filesBySlug[parentKey]) {
       if (!childrenByParent.has(parentKey)) {
         childrenByParent.set(parentKey, []);
