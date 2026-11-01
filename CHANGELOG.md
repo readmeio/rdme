@@ -1,3 +1,10 @@
+# [10.10.0-next.6](https://github.com/readmeio/rdme/compare/v10.10.0-next.5...v10.10.0-next.6) (2026-11-01)
+
+
+### Bug Fixes
+
+* issue where child pages could be uploaded before their parents ([#1554](https://github.com/readmeio/rdme/issues/1554)) ([8ad0fd2](https://github.com/readmeio/rdme/commit/8ad0fd200f78a84288c8e821c7ece68280bb9771))
+
 # [10.10.0-next.5](https://github.com/readmeio/rdme/compare/v10.10.0-next.4...v10.10.0-next.5) (2026-10-31)
 
 
