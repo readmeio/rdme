@@ -729,6 +729,55 @@ Body
           fs.rmSync(tmpDir, { recursive: true, force: true });
         }
       });
+
+      it('should keep uploading the rest of the batch when parent.uri is not a string', async () => {
+        const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'rdme-parent-uri-type-'));
+        // `writeFileSync` is mocked in this suite; use the promise API to persist fixtures.
+        await fs.promises.writeFile(
+          path.join(tmpDir, 'bad-page.md'),
+          `---
+title: Bad page
+parent:
+  uri: 123
+---
+
+Body
+`,
+        );
+        await fs.promises.writeFile(
+          path.join(tmpDir, 'good-page.md'),
+          `---
+title: Good page
+---
+
+Body
+`,
+        );
+
+        try {
+          const mock = getAPIv2Mock({ authorization })
+            .get(`/branches/stable/${route}/good-page`)
+            .reply(404)
+            .post(`/branches/stable/${route}`, {
+              slug: 'good-page',
+              title: 'Good page',
+              content: { body: '\nBody\n' },
+            })
+            .reply(201, {});
+
+          const result = await run([tmpDir, '--key', key, '--skip-validation', '--max-errors', '-1']);
+
+          expect(result.error).toBeUndefined();
+          const upload = result.result as unknown as FullUploadResults;
+          expect(upload.created.map(page => page.slug)).toStrictEqual(['good-page']);
+          expect(upload.failed.map(page => page.slug)).toStrictEqual(['bad-page']);
+          expect(upload.failed[0]?.error).toBeInstanceOf(TypeError);
+
+          mock.done();
+        } finally {
+          fs.rmSync(tmpDir, { recursive: true, force: true });
+        }
+      });
     });
 
     describe('given that the directory has explicit frontmatter positions set', () => {

@@ -241,10 +241,10 @@ function compareUploadPriority(
  * that segment.
  */
 function parentSlugInBatch(
-  parentUri: string | null | undefined,
+  parentUri: unknown,
   filesBySlug: Record<string, PageMetadata<GuidesOrReferenceRequestSchema>>,
 ): string | undefined {
-  if (!parentUri) return undefined;
+  if (typeof parentUri !== 'string' || !parentUri) return undefined;
   if (filesBySlug[parentUri]) return parentUri;
 
   const slug = decodeURILastSegment(parentUri.replace(/\/+$/, ''));
