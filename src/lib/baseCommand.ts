@@ -4,7 +4,7 @@ import type { CreateGHAHook, CreateGHAHookOptsInClass } from './hooks/createGHA.
 import type { ResponseBody } from './readmeAPIFetch.js';
 import type { Config, Hook, Interfaces } from '@oclif/core';
 
-import { format } from 'node:util';
+import { format, inspect } from 'node:util';
 
 import * as core from '@actions/core';
 import { Errors, Command as OclifCommand } from '@oclif/core';
@@ -14,6 +14,10 @@ import debugPkg from 'debug';
 import { isGHA, isTest } from './isCI.js';
 import { info } from './logger.js';
 import { handleAPIv2Res, readmeAPIv2Fetch } from './readmeAPIFetch.js';
+import { redactLoggedValue, redactSensitiveOptions } from './secrets.js';
+import { neutralizeWorkflowCommands } from './workflowCommands.js';
+
+export { neutralizeWorkflowCommands } from './workflowCommands.js';
 
 type Flags<T extends typeof OclifCommand> = Interfaces.InferredFlags<(typeof BaseCommand)['baseFlags'] & T['flags']>;
 type Args<T extends typeof OclifCommand> = Interfaces.InferredArgs<T['args']>;
@@ -40,11 +44,14 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
     // this is a lightweight reimplementation of the @oclif/core debug function
     // with some debug logging functionality for github actions
     this.debug = (formatter: unknown, ...args: unknown[]) => {
+      const safeFormatter = redactLoggedValue(formatter);
+      const safeArgs = args.map(arg => redactLoggedValue(arg));
+
       if (isGHA() && !isTest()) {
-        core.debug(`${scope}: ${format(formatter, ...args)}`);
+        core.debug(`${scope}: ${format(safeFormatter, ...safeArgs)}`);
       }
 
-      return debug(formatter, ...args);
+      return debug(safeFormatter, ...safeArgs);
     };
   }
 
@@ -72,6 +79,21 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
    */
   async runRdmeCommand<C extends keyof typeof COMMANDS>(command: C, argv?: string[]) {
     return this.config.runCommand<Awaited<ReturnType<(typeof COMMANDS)[C]['prototype']['run']>>>(command, argv);
+  }
+
+  /**
+   * @see {@link neutralizeWorkflowCommands}
+   */
+  public log(message = '', ...args: any[]): void {
+    if (!(isGHA() && !isTest())) {
+      super.log(message, ...args);
+      return;
+    }
+
+    const template = typeof message === 'string' ? message : inspect(message);
+    // Hand the rendered text to oclif as a value. A second `util.format` would turn a
+    // leftover `%%` (already reduced once) into a single `%`.
+    super.log('%s', neutralizeWorkflowCommands(format(template, ...args)));
   }
 
   public warn(input: Error | string): Error | string {
@@ -146,7 +168,7 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
       strict: this.ctor.strict,
     });
 
-    this.debug('parsed flags: %o', flags);
+    this.debug('parsed flags: %o', redactSensitiveOptions(flags));
     this.debug('parsed args: %o', args);
     this.flags = flags as Flags<T>;
     this.args = args as Args<T>;

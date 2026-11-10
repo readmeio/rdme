@@ -1,6 +1,7 @@
 import type { Hook } from '@oclif/core';
 
 import configstore from './configstore.js';
+import { maskForGitHubActions } from './secrets.js';
 
 export function normalizeAPIKey(value: string | undefined): string | undefined {
   if (value === undefined) {
@@ -36,6 +37,8 @@ export default function getCurrentConfig(this: Hook.Context): {
     this.debug('falling back to configstore value for api key');
     return normalizeAPIKey(configstore.get<string>('apiKey'));
   })();
+
+  if (apiKey) maskForGitHubActions(apiKey);
 
   const email = (() => {
     if (process.env.RDME_EMAIL) {

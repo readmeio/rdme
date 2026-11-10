@@ -6,6 +6,7 @@ import configStore from './configstore.js';
 import getCurrentConfig from './getCurrentConfig.js';
 import promptTerminal from './promptWrapper.js';
 import { handleAPIv1Res, readmeAPIv1Fetch } from './readmeAPIFetch.js';
+import { maskForGitHubActions } from './secrets.js';
 import { validateSubdomain } from './validatePromptInput.js';
 
 interface LoginBody {
@@ -79,6 +80,13 @@ export default async function loginFlow(
     return Promise.reject(new Error('You must provide a valid email address.'));
   }
 
+  // Register credentials before the request so a proxy or client error that
+  // echoes them is masked. The login response is redacted separately.
+  maskForGitHubActions(password);
+  if (otp) {
+    maskForGitHubActions(otp);
+  }
+
   const payload: LoginBody = { email, password, project };
 
   // if the user passed in a `otp` option, include that in the login payload
@@ -96,11 +104,13 @@ export default async function loginFlow(
           message: 'What is your 2FA token?',
         });
 
+        maskForGitHubActions(otpPrompt.otp);
         return loginFetch({ email, password, project, token: otpPrompt.otp }).then(handleAPIv1Res);
       }
       throw err;
     })
     .then(res => {
+      maskForGitHubActions(res.apiKey);
       configStore.set('apiKey', res.apiKey);
       configStore.set('email', email);
       configStore.set('project', project);

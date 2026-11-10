@@ -33,6 +33,7 @@ vi.mock('../../src/lib/loginFlow.js', () => ({
 import configstore from '../../src/lib/configstore.js';
 import prerun from '../../src/lib/hooks/prerun.js';
 import loginFlow from '../../src/lib/loginFlow.js';
+import * as secrets from '../../src/lib/secrets.js';
 
 // `oclif` doesn't make their types for flags portable enough for these tests so we need to rebuild
 // them.
@@ -111,6 +112,14 @@ describe('hooks', () => {
         await expect(keyFlag.parse?.call(mockContext, '   ')).rejects.toThrow('No project API key was specified.');
 
         await expect(keyFlag.parse?.call(mockContext, '  my-api-key  ')).resolves.toBe('my-api-key');
+      });
+
+      it('registers a --key value for Actions log masking', async () => {
+        const mask = vi.spyOn(secrets, 'maskForGitHubActions');
+        const keyFlag = await getKeyFlagAfterPrerun(mockContext, options);
+
+        await expect(keyFlag.parse?.call(mockContext, '  my-api-key  ')).resolves.toBe('my-api-key');
+        expect(mask).toHaveBeenCalledWith('my-api-key');
       });
 
       it.each([

@@ -422,6 +422,23 @@ describe('#createGHA', () => {
       expect(yamlOutput).toContain('rdme: openapi validate petstore.json');
     });
 
+    it('redacts credential flags before writing the onboarding debug log', async () => {
+      vi.stubEnv('TEST_RDME_CREATEGHA', '');
+      (ctx.debug as MockInstance).mockClear();
+
+      await createGHA.call(ctx, 'success!', commandWithKey, {
+        key: 'rdme_dummy123',
+        password: 'hunter2hunter2',
+        project: 'owl',
+      });
+
+      const logged = (ctx.debug as MockInstance).mock.calls.map(call => String(call[0])).join('\n');
+      expect(logged).not.toContain('rdme_dummy123');
+      expect(logged).not.toContain('hunter2hunter2');
+      expect(logged).toContain('[REDACTED]');
+      expect(logged).toContain('owl');
+    });
+
     it('returns the original command result in the default test environment', async () => {
       vi.stubEnv('TEST_RDME_CREATEGHA', '');
 

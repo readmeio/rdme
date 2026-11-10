@@ -9,6 +9,7 @@ import getCurrentConfig, { normalizeAPIKey } from '../getCurrentConfig.js';
 import isCI from '../isCI.js';
 import { info } from '../logger.js';
 import loginFlow from '../loginFlow.js';
+import { maskForGitHubActions } from '../secrets.js';
 
 const hook: Hook.Prerun = async function run(options) {
   this.debug('configstore location:', configstore.path);
@@ -25,6 +26,7 @@ const hook: Hook.Prerun = async function run(options) {
           throw new Error('No project API key was specified.');
         }
 
+        maskForGitHubActions(trimmed);
         return trimmed;
       },
 
@@ -50,7 +52,7 @@ const hook: Hook.Prerun = async function run(options) {
         const result = await loginFlow.call(this);
         info(result, { includeEmojiPrefix: false });
 
-        // loginFlow sets the configstore value, so let's use that
+        // loginFlow stored this key and already registered it for log masking.
         const storedKey = normalizeAPIKey(configstore.get<string>('apiKey'));
         if (!storedKey) {
           throw new Error("We couldn't find your API key.");

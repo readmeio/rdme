@@ -3,23 +3,39 @@ import chalk from 'chalk';
 import debugModule from 'debug';
 
 import { isGHA, isTest } from './isCI.js';
+import { redactLoggedValue } from './secrets.js';
+import { installDebugSanitizer } from './workflowCommands.js';
+
+// The `debug` package writes stderr. Install before any `debug()` call so `DEBUG=*` cannot forge
+// a workflow command. `core.debug` below stays a real command.
+installDebugSanitizer();
 
 const debugPackage = debugModule('rdme');
 
+function renderForActions(value: unknown) {
+  if (typeof value === 'string') return value;
+  try {
+    return JSON.stringify(value);
+  } catch {
+    return String(value);
+  }
+}
+
 /**
  * Wrapper for debug statements.
+ *
+ * The value is redacted once and that result is what both sinks receive. `core.debug` is the
+ * Actions log. The `debug` package writes stderr, which the Actions runner also records.
  */
 function debug(input: unknown) {
+  const safe = redactLoggedValue(input);
+
   /* istanbul ignore next */
   if (isGHA() && !isTest()) {
-    if (typeof input === 'object') {
-      core.debug(`rdme: ${JSON.stringify(input)}`);
-    } else {
-      core.debug(`rdme: ${input}`);
-    }
+    core.debug(`rdme: ${renderForActions(safe)}`);
   }
 
-  return debugPackage(input);
+  return debugPackage(safe);
 }
 
 /**
