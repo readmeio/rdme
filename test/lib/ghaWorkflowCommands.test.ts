@@ -1,3 +1,4 @@
+// oxlint-disable import/first -- `vi.mock` is hoisted and has to sit next to the import it replaces.
 import type { CommandClass } from '../../src/index.js';
 
 import fs from 'node:fs';
@@ -7,12 +8,37 @@ import { captureOutput } from '@oclif/test';
 import nock from 'nock';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
+/**
+ * `ci-info` freezes `isCI` / `GITHUB_ACTIONS` at import. These tests set `NODE_ENV=production`,
+ * which would make that frozen detection report a real Actions run and change headers and
+ * `::set-output`. Follow only the test flags so local and CI runs match.
+ */
+vi.mock(import('../../src/lib/isCI.js'), async importOriginal => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    default: () => !!process.env.TEST_RDME_CI,
+    isGHA: () => !!process.env.TEST_RDME_GHA,
+  };
+});
+
 import DocsExportCommand from '../../src/commands/docs/export.js';
 import DocsUploadCommand from '../../src/commands/docs/upload.js';
 import OpenAPIUploadCommand from '../../src/commands/openapi/upload.js';
 import BaseCommand, { neutralizeWorkflowCommands } from '../../src/lib/baseCommand.js';
 import { getAPIv1Mock, getAPIv2MockForGHA } from '../helpers/get-api-mock.js';
 import { setupOclifConfig } from '../helpers/oclif.js';
+
+/** Runner metadata that would otherwise leak into request logs or divert `core.setOutput`. */
+const runnerEnv = [
+  'GITHUB_OUTPUT',
+  'GITHUB_REPOSITORY',
+  'GITHUB_RUN_ATTEMPT',
+  'GITHUB_RUN_ID',
+  'GITHUB_RUN_NUMBER',
+  'GITHUB_SERVER_URL',
+  'GITHUB_SHA',
+] as const;
 
 const key = 'rdme_123';
 const authorization = `Bearer ${key}`;
@@ -30,10 +56,12 @@ class LogCommand extends BaseCommand<typeof BaseCommand> {
 
 /**
  * `runCommand` keeps `NODE_ENV=rdme-test`, which skips this sanitizer so snapshots stay stable.
- * These tests opt into a real Actions process instead.
+ * These tests opt into the Actions logging path via `TEST_RDME_GHA` instead.
  */
 async function runInGitHubActions(Command: CommandClass, args: string[], prepare?: () => void) {
   vi.stubEnv('TEST_RDME_GHA', 'true');
+  // A missing value deletes the var. The real runner's env would change request logs and `::set-output`.
+  for (const name of runnerEnv) vi.stubEnv(name);
   const oclifConfig = await setupOclifConfig();
 
   try {
