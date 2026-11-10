@@ -72,6 +72,20 @@ describe('BaseCommand', () => {
     expect(command.flags.otp).toBe(otp);
   });
 
+  it('does not debug a dash-prefixed password', async () => {
+    const config = await setupOclifConfig();
+    const password = '-hunter2-unique';
+    const command = new LoginCommand(
+      ['--email', 'user@example.com', '--password', password, '--project', 'proj'],
+      config,
+    );
+    const logged = await debugDuringInit(command);
+    expect(logged).not.toContain(password);
+    expect(logged).toContain('[REDACTED]');
+    expect(logged).toContain('user@example.com');
+    expect(command.flags.password).toBe(password);
+  });
+
   it('does not debug the api key flag', async () => {
     const config = await setupOclifConfig();
     const key = 'rdme_flagkey_998877';

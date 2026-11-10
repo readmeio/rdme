@@ -191,6 +191,13 @@ describe('secret redaction', () => {
         'owl',
       ]);
     });
+
+    it('redacts a credential value that starts with a dash and leaves the next flag', () => {
+      expect(
+        redactArgv(['login', '--password', '-hunter2-unique', '--otp=-also-secret', '--project', 'owl']),
+      ).toStrictEqual(['login', '--password', '[REDACTED]', '--otp=[REDACTED]', '--project', 'owl']);
+      expect(redactArgv(['--password', '--email', 'a@b.co'])).toStrictEqual(['--password', '--email', 'a@b.co']);
+    });
   });
 
   describe('#maskForGitHubActions()', () => {

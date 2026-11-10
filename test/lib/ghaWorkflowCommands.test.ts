@@ -5,6 +5,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import { captureOutput } from '@oclif/test';
+import debugModule from 'debug';
 import nock from 'nock';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -26,6 +27,7 @@ import DocsExportCommand from '../../src/commands/docs/export.js';
 import DocsUploadCommand from '../../src/commands/docs/upload.js';
 import OpenAPIUploadCommand from '../../src/commands/openapi/upload.js';
 import BaseCommand, { neutralizeWorkflowCommands } from '../../src/lib/baseCommand.js';
+import { writeCommandResult } from '../../src/lib/workflowCommands.js';
 import { getAPIv1Mock, getAPIv2MockForGHA } from '../helpers/get-api-mock.js';
 import { setupOclifConfig } from '../helpers/oclif.js';
 
@@ -146,6 +148,51 @@ describe('GitHub Actions workflow commands', () => {
       expect(output.error).toBeUndefined();
     });
 
+    it('does not let repo-derived text forge a workflow command on the debug stderr writer', async () => {
+      vi.stubEnv('NODE_ENV', 'production');
+      vi.stubEnv('TEST_RDME_GHA', 'true');
+
+      const previousColors = debugModule.inspectOpts?.colors;
+      debugModule.inspectOpts = debugModule.inspectOpts ?? {};
+      debugModule.inspectOpts.colors = false;
+
+      const config = await setupOclifConfig();
+      const command = new LogCommand([], config);
+      const previousNamespaces = debugModule.disable();
+      debugModule.enable('rdme*');
+      const stdout: string[] = [];
+      const stderr: string[] = [];
+      const writeOut = process.stdout.write;
+      const writeErr = process.stderr.write;
+      process.stdout.write = (chunk => {
+        stdout.push(String(chunk));
+        return true;
+      }) as typeof process.stdout.write;
+      process.stderr.write = (chunk => {
+        stderr.push(String(chunk));
+        return true;
+      }) as typeof process.stderr.write;
+
+      try {
+        command.debug('version in spec: %s', '1.0 ##[error]forged');
+        command.debug('spec %s', `docs/##[error]forged.json\n${forgedError}`);
+      } finally {
+        process.stdout.write = writeOut;
+        process.stderr.write = writeErr;
+        if (debugModule.inspectOpts) debugModule.inspectOpts.colors = previousColors;
+        debugModule.enable(previousNamespaces);
+      }
+
+      const err = stderr.join('');
+      const out = stdout.join('');
+      // `core.debug` is a real command. The runner parses `::debug::` before `##[`.
+      expect(out.split('\n').some(line => line.startsWith('::debug::') && line.includes('##[error]forged'))).toBe(true);
+      expect(out.split('\n').some(line => /^[\s\u0085]*::error\b/u.test(line))).toBe(false);
+      expect(err).toContain('version in spec:');
+      expect(err).not.toContain('##[');
+      expect(err.split('\n').some(line => /^[\s\u0085]*::/u.test(line))).toBe(false);
+    });
+
     it('leaves local stdout unchanged', async () => {
       const config = await setupOclifConfig();
       const command = new LogCommand([], config);
@@ -154,6 +201,37 @@ describe('GitHub Actions workflow commands', () => {
         // oxlint-disable-next-line require-await
         async () => {
           command.log(`ok\n${forgedError}`);
+        },
+        { testNodeEnv: 'production' },
+      );
+
+      expect(output.stdout.split(/\r?\n/).some(line => line.startsWith(forgedError))).toBe(true);
+    });
+  });
+
+  describe('command result', () => {
+    it('does not print a workflow command from a repository filename', async () => {
+      vi.stubEnv('TEST_RDME_GHA', 'true');
+
+      const output = await captureOutput(
+        // oxlint-disable-next-line require-await
+        async () => {
+          writeCommandResult(`##[error]forged.json is a valid OpenAPI API definition!\n${forgedError}`);
+        },
+        { testNodeEnv: 'production' },
+      );
+
+      expect(output.stdout).toContain('is a valid OpenAPI API definition!');
+      expect(output.stdout).not.toContain('##[');
+      expect(output.stdout.split('\n').some(line => /^[\s\u0085]*::/u.test(line))).toBe(false);
+      expect(output.error).toBeUndefined();
+    });
+
+    it('prints a command result unchanged outside GitHub Actions', async () => {
+      const output = await captureOutput(
+        // oxlint-disable-next-line require-await
+        async () => {
+          writeCommandResult(`ok\n${forgedError}`);
         },
         { testNodeEnv: 'production' },
       );

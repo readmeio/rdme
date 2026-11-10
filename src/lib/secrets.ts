@@ -159,7 +159,9 @@ export function redactResponseBody(text: string) {
 /**
  * Returns a copy of an argv list with values for credential flags removed.
  *
- * Accepts both `--password value` and `--password=value`.
+ * Accepts `--password value`, `--password=value`, and a value that itself starts with a dash
+ * (`--password -hunter2`). Oclif logs `this.argv` before parsing, so that value has to be removed
+ * here. A following `--flag` is left for its own pass.
  */
 export function redactArgv(argv: readonly string[]) {
   const redacted: string[] = [];
@@ -170,7 +172,8 @@ export function redactArgv(argv: readonly string[]) {
     const equals = token.startsWith('--') ? token.indexOf('=') : -1;
     const flag = (equals === -1 ? token : token.slice(0, equals)).toLowerCase();
     const next = argv[index + 1];
-    const takesNext = equals === -1 && next !== undefined && !next.startsWith('-');
+    // `-hunter2` is a value. `--email` is another flag and must not be swallowed.
+    const takesNext = equals === -1 && next !== undefined && !next.startsWith('--');
 
     if (!SENSITIVE_ARGV_FLAGS.has(flag)) {
       redacted.push(token);

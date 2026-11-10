@@ -15,23 +15,12 @@ import { isGHA, isTest } from './isCI.js';
 import { info } from './logger.js';
 import { handleAPIv2Res, readmeAPIv2Fetch } from './readmeAPIFetch.js';
 import { redactLoggedValue, redactSensitiveOptions } from './secrets.js';
+import { neutralizeWorkflowCommands } from './workflowCommands.js';
+
+export { neutralizeWorkflowCommands } from './workflowCommands.js';
 
 type Flags<T extends typeof OclifCommand> = Interfaces.InferredFlags<(typeof BaseCommand)['baseFlags'] & T['flags']>;
 type Args<T extends typeof OclifCommand> = Interfaces.InferredArgs<T['args']>;
-
-// Not whitespace to .NET's `char.IsWhiteSpace` or JS `\s`, so the runner can't trim it away.
-const ZWSP = '\u200B';
-
-// rdme is Node, but the GitHub Actions runner is a .NET app that decides what in our output is a workflow
-// command, so this follows its rules: https://github.com/actions/runner/blob/ecb5f298fad8b116679389f6df064c1a0229d148/src/Runner.Common/ActionCommand.cs#L51-L132
-export function neutralizeWorkflowCommands(text: string): string {
-  // .NET's `TrimStart()` strips U+0085 before checking for `::`, while JS `\s` doesn't match it.
-  // The legacy `##[cmd` format is matched anywhere in a line, so it's broken everywhere.
-  return text
-    .split(/\r\n|\r|\n/)
-    .map(line => line.replace(/^([\s\u0085]*)::/u, `$1:${ZWSP}:`).replaceAll('##[', `#${ZWSP}#[`))
-    .join('\n');
-}
 
 /**
  * This is a light wrapper around the oclif command class that adds some

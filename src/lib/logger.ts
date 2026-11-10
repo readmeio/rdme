@@ -4,6 +4,11 @@ import debugModule from 'debug';
 
 import { isGHA, isTest } from './isCI.js';
 import { redactLoggedValue } from './secrets.js';
+import { installDebugSanitizer } from './workflowCommands.js';
+
+// The `debug` package writes stderr. Install before any `debug()` call so `DEBUG=*` cannot forge
+// a workflow command. `core.debug` below stays a real command.
+installDebugSanitizer();
 
 const debugPackage = debugModule('rdme');
 
