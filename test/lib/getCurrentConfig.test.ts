@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import configstore from '../../src/lib/configstore.js';
 import getCurrentConfig, { normalizeAPIKey } from '../../src/lib/getCurrentConfig.js';
+import * as secrets from '../../src/lib/secrets.js';
 
 describe('#normalizeAPIKey()', () => {
   it('returns undefined for missing or whitespace-only values', () => {
@@ -25,6 +26,7 @@ describe('#getCurrentConfig()', () => {
 
   afterEach(() => {
     vi.unstubAllEnvs();
+    vi.restoreAllMocks();
     configstore.clear();
   });
 
@@ -50,6 +52,14 @@ describe('#getCurrentConfig()', () => {
     vi.stubEnv('README_API_KEY', '\t');
 
     expect(getCurrentConfig.call(ctx).apiKey).toBe('from-store');
+  });
+
+  it('registers the resolved API key for Actions log masking', () => {
+    const mask = vi.spyOn(secrets, 'maskForGitHubActions');
+    vi.stubEnv('RDME_API_KEY', 'from-rdme');
+
+    expect(getCurrentConfig.call(ctx).apiKey).toBe('from-rdme');
+    expect(mask).toHaveBeenCalledWith('from-rdme');
   });
 
   it('prefers RDME_EMAIL and RDME_PROJECT environment variables over configstore', () => {

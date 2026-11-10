@@ -1,0 +1,131 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`GitHub Actions workflow commands > BaseCommand#log > does not let repo-derived text start a workflow command in GitHub Actions 1`] = `
+"docs/page.md
+:​:warning::x
+100%% done
+:​:error title=forged::injected
+   - a/b
+:​:notice::x
+   - file.md: Nope
+:​:error title=forged::from-api
+"
+`;
+
+exports[`GitHub Actions workflow commands > docs export > does not emit a workflow command from a page slug 1`] = `
+"::add-mask::rdme_123
+::debug::rdme: init version: @oclif/core@4.14.0 argv: [%0A  'test/__fixtures__/gha-export-out',%0A  '--key',%0A  '[REDACTED]',%0A  [length]: 3%0A]
+::add-mask::rdme_123
+::add-mask::rdme_123
+::debug::rdme: parsed flags: [Object: null prototype] {%0A  key: '[REDACTED]',%0A  branch: 'stable',%0A  'docs-only': false%0A}
+::debug::rdme: parsed args: [Object: null prototype] { folder: 'test/__fixtures__/gha-export-out' }
+::debug::rdme: Exporting pages from \`stable\` to test/__fixtures__/gha-export-out/.temp_download
+::debug::rdme: making GET request to https://api.readme.com/v2/branches/stable/categories/guides with headers: {"accept":"application/json","authorization":"redacted","content-type":"application/json","user-agent":"rdme-github/7.0.0","x-readme-source":"cli-gh"}
+::debug::rdme: received status code 200 from https://api.readme.com/v2/branches/stable/categories/guides with content type: application/json
+::debug::rdme: received status code 200 from https://api.readme.com/v2/branches/stable/categories/guides with JSON response: {"data":[{"title":"Main"}]}
+::debug::rdme: Obtaining the pages for category: Main
+::debug::rdme: making GET request to https://api.readme.com/v2/branches/stable/categories/guides/Main/pages with headers: {"accept":"application/json","authorization":"redacted","content-type":"application/json","user-agent":"rdme-github/7.0.0","x-readme-source":"cli-gh"}
+::debug::rdme: received status code 200 from https://api.readme.com/v2/branches/stable/categories/guides/Main/pages with content type: application/json
+::debug::rdme: received status code 200 from https://api.readme.com/v2/branches/stable/categories/guides/Main/pages with JSON response: {"data":[{"slug":"a/b\\n::notice::x"}]}
+::debug::rdme: making GET request to https://api.readme.com/v2/branches/stable/guides/a%252Fb%250A%253A%253Anotice%253A%253Ax with headers: {"accept":"application/json","authorization":"redacted","content-type":"application/json","user-agent":"rdme-github/7.0.0","x-readme-source":"cli-gh"}
+::debug::rdme: received status code 404 from https://api.readme.com/v2/branches/stable/guides/a%252Fb%250A%253A%253Anotice%253A%253Ax with content type: 
+::debug::rdme: received status code 404 from https://api.readme.com/v2/branches/stable/guides/a%252Fb%250A%253A%253Anotice%253A%253Ax with non-JSON response: 
+::warning::Failed to fetch page "a/b%0A::notice::x". Skipping.
+
+🚨 Received errors when attempting to download 1 page(s):
+   - a/b
+:​:notice::x
+
+::set-output name=rdme::{"completed":[],"failed":["a/b\\n::notice::x"],"skipped":0}
+"
+`;
+
+exports[`GitHub Actions workflow commands > docs upload > does not emit a workflow command from a frontmatter slug 1`] = `
+"::add-mask::rdme_123
+::debug::rdme: init version: @oclif/core@4.14.0 argv: [%0A  'test/__fixtures__/docs/gha-inject/page.md',%0A  '--key',%0A  '[REDACTED]',%0A  '--dry-run',%0A  [length]: 4%0A]
+::add-mask::rdme_123
+::add-mask::rdme_123
+::debug::rdme: parsed flags: [Object: null prototype] {%0A  key: '[REDACTED]',%0A  branch: 'stable',%0A  'dry-run': true,%0A  'max-errors': 0%0A}
+::debug::rdme: parsed args: [Object: null prototype] {%0A  path: 'test/__fixtures__/docs/gha-inject/page.md'%0A}
+::debug::rdme: number of files: 1
+::debug::rdme: reading file test/__fixtures__/docs/gha-inject/page.md
+::debug::rdme: frontmatter for test/__fixtures__/docs/gha-inject/page.md: {"content":"\\nBody\\n","data":{"title":"T","slug":"ok\\n::error title=forged::injected"},"isEmpty":false,"excerpt":""}
+::debug::rdme: making GET request to https://dash.readme.com/api/v1/migration with headers: {"accept":"application/json","authorization":"redacted","user-agent":"rdme-github/10.10.0","x-readme-source":"cli-gh"}
+::debug::rdme: received a successful response when fetching mappings
+::debug::rdme: validating frontmatter for test/__fixtures__/docs/gha-inject/page.md
+::debug::rdme: found 0 files with issues: []
+::debug::rdme: making GET request to https://api.readme.com/v2/branches/stable/guides/ok%0A::error title=forged::injected with headers: {"accept":"application/json","authorization":"redacted","content-type":"application/json","user-agent":"rdme-github/7.0.0","x-readme-source":"cli-gh"}
+::debug::rdme: error retrieving data for ok%0A::error title=forged::injected, creating page
+🌱 The following 1 page(s) do not currently exist in ReadMe and will be created:
+   - ok
+:​:error title=forged::injected (test/__fixtures__/docs/gha-inject/page.md)
+
+::set-output name=rdme::{"created":[{"filePath":"test/__fixtures__/docs/gha-inject/page.md","response":null,"result":"created","slug":"ok\\n::error title=forged::injected"}],"updated":[],"skipped":[],"failed":[]}
+"
+`;
+
+exports[`GitHub Actions workflow commands > docs upload > does not emit a workflow command from an API error title 1`] = `
+"::add-mask::rdme_123
+::debug::rdme: init version: @oclif/core@4.14.0 argv: [%0A  'test/__fixtures__/docs/new-docs/new-doc.md',%0A  '--key',%0A  '[REDACTED]',%0A  '--dry-run',%0A  '--max-errors=-1',%0A  [length]: 5%0A]
+::add-mask::rdme_123
+::add-mask::rdme_123
+::debug::rdme: parsed flags: [Object: null prototype] {%0A  key: '[REDACTED]',%0A  branch: 'stable',%0A  'dry-run': true,%0A  'max-errors': -1%0A}
+::debug::rdme: parsed args: [Object: null prototype] {%0A  path: 'test/__fixtures__/docs/new-docs/new-doc.md'%0A}
+::debug::rdme: number of files: 1
+::debug::rdme: reading file test/__fixtures__/docs/new-docs/new-doc.md
+::debug::rdme: frontmatter for test/__fixtures__/docs/new-docs/new-doc.md: {"content":"\\nBody\\n","data":{"category":{"uri":"category-slug"},"title":"This is the document title"},"isEmpty":false,"excerpt":""}
+::debug::rdme: making GET request to https://dash.readme.com/api/v1/migration with headers: {"accept":"application/json","authorization":"redacted","user-agent":"rdme-github/10.10.0","x-readme-source":"cli-gh"}
+::debug::rdme: received a successful response when fetching mappings
+::debug::rdme: validating frontmatter for test/__fixtures__/docs/new-docs/new-doc.md
+::debug::rdme: 1 errors found: [{"instancePath":"/category/uri","schemaPath":"#/properties/category/properties/uri/pattern","keyword":"pattern","params":{"pattern":"\\\\/(versions|branches)\\\\/((v{0,1})(stable|\\\\bmain(?:-[a-z]{2})?(?![\\\\w.-])|([0-9]+)(?:\\\\.([0-9]+))?(?:\\\\.([0-9]+))?(-.*)?)(_(.*))?)\\\\/categories\\\\/([a-z0-9][a-z0-9_-]{0,29})\\\\/((.*))"},"message":"must match pattern \\"\\\\/(versions|branches)\\\\/((v{0,1})(stable|\\\\bmain(?:-[a-z]{2})?(?![\\\\w.-])|([0-9]+)(?:\\\\.([0-9]+))?(?:\\\\.([0-9]+))?(-.*)?)(_(.*))?)\\\\/categories\\\\/([a-z0-9][a-z0-9_-]{0,29})\\\\/((.*))\\""}]
+::debug::rdme: removing category uri pattern error
+::debug::rdme: found 0 files with issues: []
+::debug::rdme: normalizing category uri category-slug for test/__fixtures__/docs/new-docs/new-doc.md
+::debug::rdme: making GET request to https://api.readme.com/v2/branches/stable/guides/new-doc with headers: {"accept":"application/json","authorization":"redacted","content-type":"application/json","user-agent":"rdme-github/7.0.0","x-readme-source":"cli-gh"}
+::debug::rdme: received status code 400 from https://api.readme.com/v2/branches/stable/guides/new-doc with content type: application/json
+::debug::rdme: received status code 400 from https://api.readme.com/v2/branches/stable/guides/new-doc with JSON response: {"title":"Nope\\n::error title=forged::from-api"}
+🚨 Unable to fetch data about the following 1 page(s):
+   - test/__fixtures__/docs/new-docs/new-doc.md: Nope
+:​:error title=forged::from-api
+
+::set-output name=rdme::{"created":[],"updated":[],"skipped":[],"failed":[{"error":{"name":"APIv2Error","response":{"title":"Nope\\n::error title=forged::from-api"}},"filePath":"test/__fixtures__/docs/new-docs/new-doc.md","result":"failed","slug":"new-doc"}]}
+"
+`;
+
+exports[`GitHub Actions workflow commands > openapi upload > does not emit a workflow command from info.version 1`] = `
+"::add-mask::rdme_123
+::debug::rdme: init version: @oclif/core@4.14.0 argv: [%0A  'test/__fixtures__/gha-inject-petstore.json',%0A  '--key',%0A  '[REDACTED]',%0A  '--branch',%0A  'stable',%0A  '--slug',%0A  'petstore.json',%0A  '--dry-run',%0A  [length]: 8%0A]
+::add-mask::rdme_123
+::add-mask::rdme_123
+::debug::rdme: parsed flags: [Object: null prototype] {%0A  key: '[REDACTED]',%0A  branch: 'stable',%0A  'dry-run': true,%0A  slug: 'petstore.json',%0A  timeout: 720%0A}
+::debug::rdme: parsed args: [Object: null prototype] {%0A  spec: 'test/__fixtures__/gha-inject-petstore.json'%0A}
+::debug::rdme: about to normalize spec located at test/__fixtures__/gha-inject-petstore.json
+::debug::rdme: spec normalized
+::debug::rdme: converting the spec to OpenAPI 3.0 (if necessary)
+::debug::rdme: 👇👇👇👇👇 spec validated! logging spec below 👇👇👇👇👇
+::debug::rdme: [Object: null prototype] {%0A  openapi: '3.0.0',%0A  info: [Object: null prototype] {%0A    version: '1.0\\n::warning::x',%0A    title: 'Single Path',%0A    description: 'This is a slimmed down single path version of the Petstore definition.'%0A  },%0A  servers: [ [Object: null prototype] { url: 'https://httpbin.org' } ],%0A  paths: [Object: null prototype] {%0A    '/pet/{id}': [Object: null prototype] {%0A      parameters: [Array],%0A      put: [Object: null prototype],%0A      get: [Object: null prototype]%0A    }%0A  },%0A  components: [Object: null prototype] {%0A    securitySchemes: [Object: null prototype] { apiKey: [Object: null prototype] }%0A  }%0A}
+::debug::rdme: 👆👆👆👆👆 finished logging spec 👆👆👆👆👆
+::debug::rdme: spec type: OpenAPI
+::debug::rdme: version in spec: 1.0%0A::warning::x
+::debug::rdme: spec bundled
+::debug::rdme: making GET request to https://api.readme.com/v2/projects/me with headers: {"accept":"application/json","authorization":"redacted","user-agent":"rdme-github/7.0.0","x-readme-source":"cli-gh"}
+::debug::rdme: making GET request to https://api.readme.com/v2/branches/stable/apis with headers: {"accept":"application/json","authorization":"redacted","user-agent":"rdme-github/7.0.0","x-readme-source":"cli-gh"}
+::debug::rdme: received status code 200 from https://api.readme.com/v2/projects/me with content type: application/json
+::debug::rdme: received status code 200 from https://api.readme.com/v2/branches/stable/apis with content type: application/json
+::debug::rdme: received status code 200 from https://api.readme.com/v2/projects/me with JSON response: {"data":{"subdomain":"owl"}}
+::debug::rdme: received status code 200 from https://api.readme.com/v2/branches/stable/apis with JSON response: {"data":[]}
+::debug::rdme: found 0 existing API definitions: 
+--- Dry Run Result 🌵 ---
+File slug: petstore.json
+Project: owl
+Branch: stable
+Spec Type: OpenAPI
+Spec File Type: path
+Spec Path: test/__fixtures__/gha-inject-petstore.json
+Spec Version: 1.0
+:​:warning::x
+Send as YAML: false
+Overwrite Existing: No
+---------------------
+"
+`;

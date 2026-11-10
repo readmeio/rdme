@@ -12,6 +12,7 @@ import { getGitData } from '../git.js';
 import isCI, { isNpmScript, isTest } from '../isCI.js';
 import { info } from '../logger.js';
 import promptTerminal from '../promptWrapper.js';
+import { redactSensitiveOptions } from '../secrets.js';
 import { cleanFileName, validateFilePath } from '../validatePromptInput.js';
 
 import yamlBase from './baseFile.js';
@@ -101,7 +102,8 @@ export default async function createGHA(
   const { args, flags, id: commandId } = command;
   if (!commandId) throw new Error('unable to determine command ID yikes');
   this.debug(`running GHA onboarding for ${commandId} command`);
-  this.debug(`opts used in createGHA: ${JSON.stringify(parsedOpts)}`);
+  // Hook `this.debug` is not BaseCommand's logger, so redact the flag bag before the call.
+  this.debug(`opts used in createGHA: ${JSON.stringify(redactSensitiveOptions(parsedOpts))}`);
 
   // if in a CI environment,
   // don't even bother running the git commands

@@ -4,7 +4,7 @@ import type { CreateGHAHook, CreateGHAHookOptsInClass } from './hooks/createGHA.
 import type { ResponseBody } from './readmeAPIFetch.js';
 import type { Config, Hook, Interfaces } from '@oclif/core';
 
-import { format } from 'node:util';
+import { format, inspect } from 'node:util';
 
 import * as core from '@actions/core';
 import { Errors, Command as OclifCommand } from '@oclif/core';
@@ -14,9 +14,24 @@ import debugPkg from 'debug';
 import { isGHA, isTest } from './isCI.js';
 import { info } from './logger.js';
 import { handleAPIv2Res, readmeAPIv2Fetch } from './readmeAPIFetch.js';
+import { redactLoggedValue, redactSensitiveOptions } from './secrets.js';
 
 type Flags<T extends typeof OclifCommand> = Interfaces.InferredFlags<(typeof BaseCommand)['baseFlags'] & T['flags']>;
 type Args<T extends typeof OclifCommand> = Interfaces.InferredArgs<T['args']>;
+
+// Not whitespace to .NET's `char.IsWhiteSpace` or JS `\s`, so the runner can't trim it away.
+const ZWSP = '\u200B';
+
+// rdme is Node, but the GitHub Actions runner is a .NET app that decides what in our output is a workflow
+// command, so this follows its rules: https://github.com/actions/runner/blob/ecb5f298fad8b116679389f6df064c1a0229d148/src/Runner.Common/ActionCommand.cs#L51-L132
+export function neutralizeWorkflowCommands(text: string): string {
+  // .NET's `TrimStart()` strips U+0085 before checking for `::`, while JS `\s` doesn't match it.
+  // The legacy `##[cmd` format is matched anywhere in a line, so it's broken everywhere.
+  return text
+    .split(/\r\n|\r|\n/)
+    .map(line => line.replace(/^([\s\u0085]*)::/u, `$1:${ZWSP}:`).replaceAll('##[', `#${ZWSP}#[`))
+    .join('\n');
+}
 
 /**
  * This is a light wrapper around the oclif command class that adds some
@@ -40,11 +55,14 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
     // this is a lightweight reimplementation of the @oclif/core debug function
     // with some debug logging functionality for github actions
     this.debug = (formatter: unknown, ...args: unknown[]) => {
+      const safeFormatter = redactLoggedValue(formatter);
+      const safeArgs = args.map(arg => redactLoggedValue(arg));
+
       if (isGHA() && !isTest()) {
-        core.debug(`${scope}: ${format(formatter, ...args)}`);
+        core.debug(`${scope}: ${format(safeFormatter, ...safeArgs)}`);
       }
 
-      return debug(formatter, ...args);
+      return debug(safeFormatter, ...safeArgs);
     };
   }
 
@@ -72,6 +90,21 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
    */
   async runRdmeCommand<C extends keyof typeof COMMANDS>(command: C, argv?: string[]) {
     return this.config.runCommand<Awaited<ReturnType<(typeof COMMANDS)[C]['prototype']['run']>>>(command, argv);
+  }
+
+  /**
+   * @see {@link neutralizeWorkflowCommands}
+   */
+  public log(message = '', ...args: any[]): void {
+    if (!(isGHA() && !isTest())) {
+      super.log(message, ...args);
+      return;
+    }
+
+    const template = typeof message === 'string' ? message : inspect(message);
+    // Hand the rendered text to oclif as a value. A second `util.format` would turn a
+    // leftover `%%` (already reduced once) into a single `%`.
+    super.log('%s', neutralizeWorkflowCommands(format(template, ...args)));
   }
 
   public warn(input: Error | string): Error | string {
@@ -146,7 +179,7 @@ export default abstract class BaseCommand<T extends typeof OclifCommand> extends
       strict: this.ctor.strict,
     });
 
-    this.debug('parsed flags: %o', flags);
+    this.debug('parsed flags: %o', redactSensitiveOptions(flags));
     this.debug('parsed args: %o', args);
     this.flags = flags as Flags<T>;
     this.args = args as Args<T>;
