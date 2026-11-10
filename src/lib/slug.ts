@@ -24,12 +24,14 @@ function isSingleUrlSegment(slug: string): boolean {
 }
 
 /**
- * Require `slug` to be one URL path segment. `filePath` is only used in the error.
+ * Require `value` to be one URL path segment. `filePath` is only used in the error.
+ * `kind` selects the noun in that error (`slug` or `branch`).
  */
-export function assertSlug(slug: unknown, filePath: string): string {
-  if (typeof slug !== 'string' || !isSingleUrlSegment(slug)) {
-    throw new Error(`Invalid slug in ${filePath}: slugs must be a single URL-safe path segment.`);
+export function assertSlug(value: unknown, filePath: string, kind: 'branch' | 'slug' = 'slug'): string {
+  if (typeof value !== 'string' || !isSingleUrlSegment(value)) {
+    const noun = kind === 'branch' ? 'branches' : 'slugs';
+    throw new Error(`Invalid ${kind} in ${filePath}: ${noun} must be a single URL-safe path segment.`);
   }
 
-  return slug;
+  return value;
 }

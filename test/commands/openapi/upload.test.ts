@@ -1,6 +1,8 @@
 import type { OclifOutput } from '../../helpers/oclif.js';
 
 import fs from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
 
 import nock from 'nock';
 import prompts from 'prompts';
@@ -993,6 +995,48 @@ describe('rdme openapi upload', () => {
         expect(result).toMatchSnapshot();
 
         mock.done();
+      });
+
+      it('rejects an info.version that is not one path segment before calling the API', async () => {
+        const specPath = path.join(os.tmpdir(), `rdme-spec-version-${process.pid}.json`);
+        const spec = structuredClone(petstore);
+        spec.info.version = '../../projects/me';
+        await fs.writeFile(specPath, JSON.stringify(spec));
+
+        const victim = getAPIv2Mock({ authorization: `Bearer ${key}` })
+          .get('/branches/projects/me/apis')
+          .reply(200, { data: [] });
+
+        try {
+          const { error } = await run(['--useSpecVersion', specPath, '--key', key]);
+
+          expect(error?.message).toBe(
+            `Invalid branch in ${specPath}: branches must be a single URL-safe path segment.`,
+          );
+          expect(victim.pendingMocks()).toHaveLength(1);
+        } finally {
+          nock.cleanAll();
+          await fs.rm(specPath, { force: true });
+        }
+      });
+
+      it('rejects a --slug that is not one path segment before uploading', async () => {
+        const list = getAPIv2Mock({ authorization: `Bearer ${key}` })
+          .get('/branches/stable/apis')
+          .reply(200, { data: [] });
+        const upload = getAPIv2Mock({ authorization: `Bearer ${key}` })
+          .post('/branches/stable/apis')
+          .reply(200, { data: { upload: { status: 'done' }, uri: '/branches/stable/apis/secret.json' } });
+
+        try {
+          const { error } = await run([filename, '--key', key, '--branch', 'stable', '--slug', '../secret.json']);
+
+          expect(error?.message).toBe(`Invalid slug in ${filename}: slugs must be a single URL-safe path segment.`);
+          list.done();
+          expect(upload.pendingMocks()).toHaveLength(1);
+        } finally {
+          nock.cleanAll();
+        }
       });
     });
   });

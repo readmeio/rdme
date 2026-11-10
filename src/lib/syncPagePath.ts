@@ -11,6 +11,7 @@ import { APIv2Error } from './apiError.js';
 import { oraOptions } from './logger.js';
 import { allowedMarkdownExtensions, findPages } from './readPage.js';
 import { decodeURILastSegment } from './safePath.js';
+import { assertSlug } from './slug.js';
 import { categoryUriRegexPattern, parentUriRegexPattern } from './types/index.js';
 import { validateFrontmatter } from './validateFrontmatter.js';
 
@@ -79,9 +80,11 @@ async function pushPage(
   let route = `/${this.route}`;
   // the changelog route is not versioned
   const branch = this.route === 'changelogs' ? null : this.flags.branch;
-  if (branch) {
-    route = `/branches/${branch}${route}`;
+  const branchPath = branch ? encodeURIComponent(branch) : null;
+  if (branchPath) {
+    route = `/branches/${branchPath}${route}`;
   }
+  const slugPath = encodeURIComponent(slug);
 
   const headers = new Headers({ authorization: `Bearer ${key}`, 'Content-Type': 'application/json' });
 
@@ -108,7 +111,7 @@ async function pushPage(
         this.debug(`normalizing category uri ${uri} for ${filePath}`);
         // remove leading and trailing slashes
         uri = uri.replace(/^\/|\/$/g, '');
-        payload.category.uri = `/branches/${branch}/categories/${this.route}/${uri}`;
+        payload.category.uri = `/branches/${branchPath}/categories/${this.route}/${uri}`;
       }
     }
 
@@ -120,7 +123,7 @@ async function pushPage(
         this.debug(`normalizing parent uri ${uri} for ${filePath}`);
         // remove leading and trailing slashes
         uri = uri.replace(/^\/|\/$/g, '');
-        payload.parent.uri = `/branches/${branch}/${this.route}/${uri}`;
+        payload.parent.uri = `/branches/${branchPath}/${this.route}/${uri}`;
       }
     }
 
@@ -165,7 +168,7 @@ async function pushPage(
       delete payload.slug;
 
       return this.readmeAPIFetch(
-        `${route}/${slug}`,
+        `${route}/${slugPath}`,
         {
           method: 'PATCH',
           headers,
@@ -184,7 +187,7 @@ async function pushPage(
         });
     };
 
-    return this.readmeAPIFetch(`${route}/${slug}`, {
+    return this.readmeAPIFetch(`${route}/${slugPath}`, {
       method: 'GET',
       headers,
     }).then(async res => {
@@ -356,6 +359,24 @@ export default async function syncPagePath(this: APIv2PageUploadCommands): Promi
     unsortedFiles = validationResults.pages;
   }
 
+  // topological sort the files
+  const sortedFiles =
+    this.route === 'changelogs' || this.route === 'custom_pages'
+      ? (unsortedFiles as PageMetadata<PageRequestSchema<typeof this.route>>[])
+      : sortFiles(unsortedFiles as PageMetadata<GuidesOrReferenceRequestSchema>[]);
+
+  // Refuse a slug or branch that is not one URL segment before any page request,
+  // including a sibling that would otherwise upload first.
+  if (this.route !== 'changelogs') {
+    assertSlug(this.flags.branch, pathInput, 'branch');
+  }
+
+  for (const fileData of sortedFiles) {
+    if (Object.keys(fileData.data).length) {
+      assertSlug(fileData.slug, fileData.filePath);
+    }
+  }
+
   const uploadSpinner = ora({ ...oraOptions() }).start(
     dryRun
       ? "🎭 Uploading files to ReadMe (but not really because it's a dry run)..."
@@ -363,12 +384,6 @@ export default async function syncPagePath(this: APIv2PageUploadCommands): Promi
   );
 
   const count = { succeeded: 0, failed: 0 };
-
-  // topological sort the files
-  const sortedFiles =
-    this.route === 'changelogs' || this.route === 'custom_pages'
-      ? (unsortedFiles as PageMetadata<PageRequestSchema<typeof this.route>>[])
-      : sortFiles(unsortedFiles as PageMetadata<GuidesOrReferenceRequestSchema>[]);
 
   // push the files to ReadMe
   const rawResults: PromiseSettledResult<PushResult>[] = [];

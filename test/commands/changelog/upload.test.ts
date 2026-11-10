@@ -1,7 +1,10 @@
 import type { OclifOutput } from '../../helpers/oclif.js';
 
 import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 
+import nock from 'nock';
 import prompts from 'prompts';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -60,6 +63,24 @@ describe(`rdme ${topic} upload`, () => {
       expect(fs.writeFileSync).not.toHaveBeenCalled();
 
       mock.done();
+    });
+
+    it('rejects a frontmatter slug that is not one path segment before requesting the page', async () => {
+      const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'rdme-changelog-slug-'));
+      const filePath = path.join(tmpDir, 'evil.md');
+      await fs.promises.writeFile(filePath, `---\ntype: added\ntitle: Evil\nslug: '../guides/victim'\n---\n\nBody\n`);
+
+      const victim = getAPIv2Mock({ authorization }).get('/guides/victim').reply(200, { data: {} });
+
+      try {
+        const { error } = await run([filePath, '--key', key]);
+
+        expect(error?.message).toBe(`Invalid slug in ${filePath}: slugs must be a single URL-safe path segment.`);
+        expect(victim.pendingMocks()).toHaveLength(1);
+      } finally {
+        nock.cleanAll();
+        fs.rmSync(tmpDir, { recursive: true, force: true });
+      }
     });
 
     describe('given that the --dry-run flag is passed', () => {

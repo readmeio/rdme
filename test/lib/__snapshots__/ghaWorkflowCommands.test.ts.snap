@@ -40,30 +40,6 @@ exports[`GitHub Actions workflow commands > docs export > does not emit a workfl
 "
 `;
 
-exports[`GitHub Actions workflow commands > docs upload > does not emit a workflow command from a frontmatter slug 1`] = `
-"::add-mask::rdme_123
-::debug::rdme: init version: @oclif/core@4.14.0 argv: [%0A  'test/__fixtures__/docs/gha-inject/page.md',%0A  '--key',%0A  '[REDACTED]',%0A  '--dry-run',%0A  [length]: 4%0A]
-::add-mask::rdme_123
-::add-mask::rdme_123
-::debug::rdme: parsed flags: [Object: null prototype] {%0A  key: '[REDACTED]',%0A  branch: 'stable',%0A  'dry-run': true,%0A  'max-errors': 0%0A}
-::debug::rdme: parsed args: [Object: null prototype] {%0A  path: 'test/__fixtures__/docs/gha-inject/page.md'%0A}
-::debug::rdme: number of files: 1
-::debug::rdme: reading file test/__fixtures__/docs/gha-inject/page.md
-::debug::rdme: frontmatter for test/__fixtures__/docs/gha-inject/page.md: {"content":"\\nBody\\n","data":{"title":"T","slug":"ok\\n::error title=forged::injected"},"isEmpty":false,"excerpt":""}
-::debug::rdme: making GET request to https://dash.readme.com/api/v1/migration with headers: {"accept":"application/json","authorization":"redacted","user-agent":"rdme-github/7.0.0","x-readme-source":"cli-gh"}
-::debug::rdme: received a successful response when fetching mappings
-::debug::rdme: validating frontmatter for test/__fixtures__/docs/gha-inject/page.md
-::debug::rdme: found 0 files with issues: []
-::debug::rdme: making GET request to https://api.readme.com/v2/branches/stable/guides/ok%0A::error title=forged::injected with headers: {"accept":"application/json","authorization":"redacted","content-type":"application/json","user-agent":"rdme-github/7.0.0","x-readme-source":"cli-gh"}
-::debug::rdme: error retrieving data for ok%0A::error title=forged::injected, creating page
-🌱 The following 1 page(s) do not currently exist in ReadMe and will be created:
-   - ok
-:​:error title=forged::injected (test/__fixtures__/docs/gha-inject/page.md)
-
-::set-output name=rdme::{"created":[{"filePath":"test/__fixtures__/docs/gha-inject/page.md","response":null,"result":"created","slug":"ok\\n::error title=forged::injected"}],"updated":[],"skipped":[],"failed":[]}
-"
-`;
-
 exports[`GitHub Actions workflow commands > docs upload > does not emit a workflow command from an API error title 1`] = `
 "::add-mask::rdme_123
 ::debug::rdme: init version: @oclif/core@4.14.0 argv: [%0A  'test/__fixtures__/docs/new-docs/new-doc.md',%0A  '--key',%0A  '[REDACTED]',%0A  '--dry-run',%0A  '--max-errors=-1',%0A  [length]: 5%0A]
@@ -89,6 +65,24 @@ exports[`GitHub Actions workflow commands > docs upload > does not emit a workfl
 :​:error title=forged::from-api
 
 ::set-output name=rdme::{"created":[],"updated":[],"skipped":[],"failed":[{"error":{"name":"APIv2Error","response":{"title":"Nope\\n::error title=forged::from-api"}},"filePath":"test/__fixtures__/docs/new-docs/new-doc.md","result":"failed","slug":"new-doc"}]}
+"
+`;
+
+exports[`GitHub Actions workflow commands > docs upload > rejects a frontmatter slug that would inject a workflow command 1`] = `
+"::add-mask::rdme_123
+::debug::rdme: init version: @oclif/core@4.14.0 argv: [%0A  'test/__fixtures__/docs/gha-inject/page.md',%0A  '--key',%0A  '[REDACTED]',%0A  '--dry-run',%0A  [length]: 4%0A]
+::add-mask::rdme_123
+::add-mask::rdme_123
+::debug::rdme: parsed flags: [Object: null prototype] {%0A  key: '[REDACTED]',%0A  branch: 'stable',%0A  'dry-run': true,%0A  'max-errors': 0%0A}
+::debug::rdme: parsed args: [Object: null prototype] {%0A  path: 'test/__fixtures__/docs/gha-inject/page.md'%0A}
+::debug::rdme: number of files: 1
+::debug::rdme: reading file test/__fixtures__/docs/gha-inject/page.md
+::debug::rdme: frontmatter for test/__fixtures__/docs/gha-inject/page.md: {"content":"\\nBody\\n","data":{"title":"T","slug":"ok\\n::error title=forged::injected"},"isEmpty":false,"excerpt":""}
+::debug::rdme: making GET request to https://dash.readme.com/api/v1/migration with headers: {"accept":"application/json","authorization":"redacted","user-agent":"rdme-github/7.0.0","x-readme-source":"cli-gh"}
+::debug::rdme: received a successful response when fetching mappings
+::debug::rdme: validating frontmatter for test/__fixtures__/docs/gha-inject/page.md
+::debug::rdme: found 0 files with issues: []
+::error::Invalid slug in test/__fixtures__/docs/gha-inject/page.md: slugs must be a single URL-safe path segment.
 "
 `;
 

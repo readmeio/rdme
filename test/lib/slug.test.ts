@@ -5,8 +5,14 @@ import { assertSlug } from '../../src/lib/slug.js';
 describe('#assertSlug', () => {
   const filePath = 'changelog.md';
 
-  it.each(['hello', 'foo..bar', 'hello world', 'café', '100%', '__proto__'])('accepts %j', slug => {
+  it.each(['hello', 'foo..bar', 'hello world', 'café', '100%', '__proto__', '1.0+beta'])('accepts %j', slug => {
     expect(assertSlug(slug, filePath)).toBe(slug);
+  });
+
+  it('names the branch in the error', () => {
+    expect(() => assertSlug('../projects/me', filePath, 'branch')).toThrow(
+      `Invalid branch in ${filePath}: branches must be a single URL-safe path segment.`,
+    );
   });
 
   it.each([

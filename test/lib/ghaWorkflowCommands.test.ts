@@ -247,8 +247,7 @@ describe('GitHub Actions workflow commands', () => {
   });
 
   describe('docs upload', () => {
-    it('does not emit a workflow command from a frontmatter slug', async () => {
-      const slugPath = '/branches/stable/guides/ok::error%20title=forged::injected';
+    it('rejects a frontmatter slug that would inject a workflow command', async () => {
       const scopes: nock.Scope[] = [];
 
       const output = await runInGitHubActions(
@@ -260,12 +259,16 @@ describe('GitHub Actions workflow commands', () => {
               categories: {},
               parentPages: {},
             }),
-            getAPIv2MockForGHA({ authorization }).get(slugPath).reply(404),
           );
         },
       );
 
+      // GitHub Actions reports the failure with `core.setFailed`, which does not reject the command.
       expect(output.error).toBeUndefined();
+      expect(output.stdout).toContain(
+        'Invalid slug in test/__fixtures__/docs/gha-inject/page.md: slugs must be a single URL-safe path segment.',
+      );
+      expect(output.stdout).not.toMatch(/^::error title=forged/m);
       expect(stableStdout(output.stdout)).toMatchSnapshot();
       scopes.forEach(scope => scope.done());
     });
