@@ -1,3 +1,10 @@
+## [10.10.1](https://github.com/readmeio/rdme/compare/v10.10.0...v10.10.1) (2026-11-10)
+
+
+### Bug Fixes
+
+* **gha:** github actions logging output ([#1556](https://github.com/readmeio/rdme/issues/1556)) ([70f70f0](https://github.com/readmeio/rdme/commit/70f70f0a543216a140374de5691d5f22b4ddfa8a))
+
 # [10.10.0](https://github.com/readmeio/rdme/compare/v10.9.6...v10.10.0) (2026-11-01)
 
 
