@@ -23,13 +23,14 @@ vi.mock(import('../../src/lib/isCI.js'), async importOriginal => {
   };
 });
 
+import pkg from '../../package.json' with { type: 'json' };
 import DocsExportCommand from '../../src/commands/docs/export.js';
 import DocsUploadCommand from '../../src/commands/docs/upload.js';
 import OpenAPIUploadCommand from '../../src/commands/openapi/upload.js';
 import BaseCommand, { neutralizeWorkflowCommands } from '../../src/lib/baseCommand.js';
 import { writeCommandResult } from '../../src/lib/workflowCommands.js';
 import { getAPIv1Mock, getAPIv2MockForGHA } from '../helpers/get-api-mock.js';
-import { setupOclifConfig } from '../helpers/oclif.js';
+import { mockVersion, setupOclifConfig } from '../helpers/oclif.js';
 
 /** Runner metadata that would otherwise leak into request logs or divert `core.setOutput`. */
 const runnerEnv = [
@@ -84,7 +85,12 @@ async function runInGitHubActions(Command: CommandClass, args: string[], prepare
 const userAgentSuffix = ` ${process.platform}-${process.arch === 'ia32' ? 'x86' : process.arch} node-${process.version}`;
 
 function stableStdout(stdout: string) {
-  return stdout.replaceAll(userAgentSuffix, '');
+  // v1 calls `getUserAgent()` without an oclif context, so that header uses `package.json`.
+  // v2 uses the mocked oclif version. Fold both to the mock so a release does not change snapshots.
+  return stdout
+    .replaceAll(userAgentSuffix, '')
+    .replaceAll(`rdme-github/${pkg.version}`, `rdme-github/${mockVersion}`)
+    .replaceAll(/ with proxy \S+ and /g, ' ');
 }
 
 describe('GitHub Actions workflow commands', () => {

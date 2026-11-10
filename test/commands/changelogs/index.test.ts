@@ -7,6 +7,7 @@ import path from 'node:path';
 
 import chalk from 'chalk';
 import grayMatter from 'gray-matter';
+import nock from 'nock';
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import Command from '../../../src/commands/changelogs.js';
@@ -18,6 +19,12 @@ import { runCommandAndReturnResult } from '../../helpers/oclif.js';
 const fixturesBaseDir = '__fixtures__/changelogs';
 const fullFixturesDir = `${__dirname}./../../${fixturesBaseDir}`;
 const key = 'API_KEY';
+
+async function writeChangelog(dir: string, name: string, frontmatter: string, body = 'Body') {
+  const filePath = path.join(dir, name);
+  await fsPromises.writeFile(filePath, `---\n${frontmatter}\n---\n\n${body}\n`);
+  return filePath;
+}
 
 describe('rdme changelogs', () => {
   let run: (args?: string[]) => Promise<string>;
@@ -270,10 +277,18 @@ B
         expect(updatedDocs).toBe(
           [
             `🎭 dry run! This will update 'simple-doc' with contents from test/${fixturesBaseDir}/existing-docs/simple-doc.md with the following metadata: ${JSON.stringify(
-              simpleDoc.doc.data,
+              {
+                body: simpleDoc.doc.content,
+                lastUpdatedHash: simpleDoc.hash,
+                title: simpleDoc.doc.data.title,
+              },
             )}`,
             `🎭 dry run! This will update 'another-doc' with contents from test/${fixturesBaseDir}/existing-docs/subdir/another-doc.md with the following metadata: ${JSON.stringify(
-              anotherDoc.doc.data,
+              {
+                body: anotherDoc.doc.content,
+                lastUpdatedHash: anotherDoc.hash,
+                title: anotherDoc.doc.data.title,
+              },
             )}`,
           ].join('\n'),
         );
@@ -361,7 +376,9 @@ B
 
     it('should return creation info for dry run', async () => {
       const slug = 'new-doc';
-      const doc = grayMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
+      const fileContents = fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`));
+      const doc = grayMatter(fileContents);
+      const hash = hashFileContents(fileContents);
 
       const getMock = getAPIv1Mock()
         .get(`/api/v1/changelogs/${slug}`)
@@ -375,7 +392,13 @@ B
 
       await expect(run([`./test/${fixturesBaseDir}/new-docs`, '--key', key, '--dryRun'])).resolves.toBe(
         `🎭 dry run! This will create 'new-doc' with contents from test/${fixturesBaseDir}/new-docs/new-doc.md with the following metadata: ${JSON.stringify(
-          doc.data,
+          {
+            body: doc.content,
+            lastUpdatedHash: hash,
+            title: doc.data.title,
+            type: doc.data.type,
+            slug,
+          },
         )}`,
       );
 
@@ -426,6 +449,132 @@ B
 
       getMocks.done();
       postMocks.done();
+    });
+  });
+
+  describe('slug safety', () => {
+    it('does not request siblings when one changelog slug is unsafe', async () => {
+      const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'rdme-changelogs-slug-mix-'));
+      const sibling = getAPIv1Mock()
+        .get('/api/v1/changelogs/sibling')
+        .basicAuth({ user: key })
+        .reply(404, { error: 'CHANGELOG_NOTFOUND' });
+
+      try {
+        await writeChangelog(tmpDir, 'ok.md', 'title: Sibling');
+        await writeChangelog(tmpDir, 'evil.md', "title: Evil\nslug: '../docs/victim'");
+
+        await expect(run([tmpDir, '--key', key])).rejects.toThrow(/Invalid slug/);
+        expect(sibling.pendingMocks()).toHaveLength(1);
+      } finally {
+        nock.cleanAll();
+        fs.rmSync(tmpDir, { recursive: true, force: true });
+      }
+    });
+
+    it('encodes a reserved character in the path and sends the raw slug in the body', async () => {
+      const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'rdme-changelogs-encode-'));
+      const slug = '100%';
+      let posted: Record<string, unknown> | undefined;
+
+      const getMock = getAPIv1Mock()
+        .get(`/api/v1/changelogs/${encodeURIComponent(slug)}`)
+        .basicAuth({ user: key })
+        .reply(404, { error: 'CHANGELOG_NOTFOUND' });
+      const postMock = getAPIv1Mock()
+        .post('/api/v1/changelogs', body => {
+          posted = body;
+          return body.slug === slug;
+        })
+        .basicAuth({ user: key })
+        .reply(201, { slug, _id: '1' });
+
+      try {
+        await writeChangelog(tmpDir, 'percent.md', `title: Percent\nslug: '${slug}'`);
+
+        await expect(run([tmpDir, '--key', key])).resolves.toContain("successfully created '100%'");
+        expect(posted).toMatchObject({ slug, title: 'Percent' });
+        getMock.done();
+        postMock.done();
+      } finally {
+        nock.cleanAll();
+        fs.rmSync(tmpDir, { recursive: true, force: true });
+      }
+    });
+
+    it('omits frontmatter keys the changelog API does not accept', async () => {
+      const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'rdme-changelogs-body-'));
+      let posted: Record<string, unknown> | undefined;
+
+      const getMock = getAPIv1Mock()
+        .get('/api/v1/changelogs/probe')
+        .basicAuth({ user: key })
+        .reply(404, { error: 'CHANGELOG_NOTFOUND' });
+      const postMock = getAPIv1Mock()
+        .post('/api/v1/changelogs', body => {
+          posted = body;
+          return true;
+        })
+        .basicAuth({ user: key })
+        .reply(201, { slug: 'probe', _id: '1' });
+
+      try {
+        await writeChangelog(
+          tmpDir,
+          'probe.md',
+          `title: Probe
+type: added
+hidden: false
+metadata:
+  keywords: keep-me
+category: somewhere-else
+htmlmode: true
+parentDocSlug: not-a-changelog-field`,
+        );
+
+        await expect(run([tmpDir, '--key', key])).resolves.toContain("successfully created 'probe'");
+        expect(posted).toMatchObject({
+          title: 'Probe',
+          type: 'added',
+          hidden: false,
+          metadata: { keywords: 'keep-me' },
+          slug: 'probe',
+        });
+        expect(posted).not.toHaveProperty('category');
+        expect(posted).not.toHaveProperty('htmlmode');
+        expect(posted).not.toHaveProperty('parentDocSlug');
+        expect(posted).toHaveProperty('body');
+        expect(posted).toHaveProperty('lastUpdatedHash');
+        getMock.done();
+        postMock.done();
+      } finally {
+        nock.cleanAll();
+        fs.rmSync(tmpDir, { recursive: true, force: true });
+      }
+    });
+
+    it('uploads a changelog whose slug is __proto__', async () => {
+      const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'rdme-changelogs-proto-'));
+
+      const getMock = getAPIv1Mock()
+        .get('/api/v1/changelogs/__proto__')
+        .basicAuth({ user: key })
+        .reply(404, { error: 'CHANGELOG_NOTFOUND' });
+      const postMock = getAPIv1Mock()
+        .post('/api/v1/changelogs', body => body.slug === '__proto__')
+        .basicAuth({ user: key })
+        .reply(201, { slug: '__proto__', _id: '1' });
+
+      try {
+        await writeChangelog(tmpDir, 'proto.md', 'title: Proto\nslug: __proto__');
+
+        await expect(run([tmpDir, '--key', key])).resolves.toContain("successfully created '__proto__'");
+        getMock.done();
+        postMock.done();
+      } finally {
+        nock.cleanAll();
+        fs.rmSync(tmpDir, { recursive: true, force: true });
+      }
     });
   });
 
