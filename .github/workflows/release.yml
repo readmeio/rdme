@@ -119,8 +119,13 @@ jobs:
 
       - run: npm ci
 
+      # `v10` is an annotated tag. A fresh runner has no tagger identity, so
+      # `git tag --message` fails after the package has already published.
       - name: Push the unprefixed tag and the floating major tag
-        run: node bin/push-extra-release-tags.js
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          node bin/push-extra-release-tags.js
 
   postrelease:
     needs: publish
