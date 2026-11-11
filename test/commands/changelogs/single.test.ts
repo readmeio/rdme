@@ -72,7 +72,9 @@ describe('rdme changelogs (single)', () => {
 
     it('should return creation info for dry run', async () => {
       const slug = 'new-doc';
-      const doc = grayMatter(fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`)));
+      const fileContents = fs.readFileSync(path.join(fullFixturesDir, `/new-docs/${slug}.md`));
+      const doc = grayMatter(fileContents);
+      const hash = hashFileContents(fileContents);
 
       const getMock = getAPIv1Mock()
         .get(`/api/v1/changelogs/${slug}`)
@@ -86,7 +88,13 @@ describe('rdme changelogs (single)', () => {
 
       await expect(run(['--dryRun', `./test/${fixturesBaseDir}/new-docs/new-doc.md`, '--key', key])).resolves.toBe(
         `🎭 dry run! This will create 'new-doc' with contents from ./test/${fixturesBaseDir}/new-docs/new-doc.md with the following metadata: ${JSON.stringify(
-          doc.data,
+          {
+            body: doc.content,
+            lastUpdatedHash: hash,
+            title: doc.data.title,
+            type: doc.data.type,
+            slug,
+          },
         )}`,
       );
 
@@ -212,7 +220,11 @@ describe('rdme changelogs (single)', () => {
           expect(updatedDocs).toBe(
             [
               `🎭 dry run! This will update 'simple-doc' with contents from ./test/${fixturesBaseDir}/existing-docs/simple-doc.md with the following metadata: ${JSON.stringify(
-                simpleDoc.doc.data,
+                {
+                  body: simpleDoc.doc.content,
+                  lastUpdatedHash: simpleDoc.hash,
+                  title: simpleDoc.doc.data.title,
+                },
               )}`,
             ].join('\n'),
           );

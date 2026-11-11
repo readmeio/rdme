@@ -1,6 +1,8 @@
 import type { OclifOutput } from '../../helpers/oclif.js';
 
 import fs from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
 
 import nock from 'nock';
 import prompts from 'prompts';
@@ -993,6 +995,71 @@ describe('rdme openapi upload', () => {
         expect(result).toMatchSnapshot();
 
         mock.done();
+      });
+
+      it('accepts an info.version formatted like v1.0-alpha', async () => {
+        const prerelease = 'v1.0-alpha';
+        const specPath = path.join(os.tmpdir(), `rdme-spec-prerelease-${process.pid}.json`);
+        const spec = structuredClone(petstore);
+        spec.info.version = prerelease;
+        await fs.writeFile(specPath, JSON.stringify(spec));
+
+        const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+          .get('/projects/me')
+          .reply(200, { data: { subdomain: 'owl' } })
+          .get(`/branches/${prerelease}/apis`)
+          .reply(200, { data: [] });
+
+        try {
+          const { error, stdout } = await run(['--useSpecVersion', specPath, '--key', key, '--dry-run']);
+
+          expect(error).toBeUndefined();
+          expect(stdout).toContain(`Branch: ${prerelease}`);
+          mock.done();
+        } finally {
+          nock.cleanAll();
+          await fs.rm(specPath, { force: true });
+        }
+      });
+
+      it('rejects an info.version that is not one path segment before calling the API', async () => {
+        const specPath = path.join(os.tmpdir(), `rdme-spec-version-${process.pid}.json`);
+        const spec = structuredClone(petstore);
+        spec.info.version = '../../projects/me';
+        await fs.writeFile(specPath, JSON.stringify(spec));
+
+        const victim = getAPIv2Mock({ authorization: `Bearer ${key}` })
+          .get('/branches/projects/me/apis')
+          .reply(200, { data: [] });
+
+        try {
+          const { error } = await run(['--useSpecVersion', specPath, '--key', key]);
+
+          expect(error?.message).toBe(`Invalid slug in ${specPath}: slugs must be a single URL-safe path segment.`);
+          expect(victim.pendingMocks()).toHaveLength(1);
+        } finally {
+          nock.cleanAll();
+          await fs.rm(specPath, { force: true });
+        }
+      });
+
+      it('rejects a --slug that is not one path segment before uploading', async () => {
+        const list = getAPIv2Mock({ authorization: `Bearer ${key}` })
+          .get('/branches/stable/apis')
+          .reply(200, { data: [] });
+        const upload = getAPIv2Mock({ authorization: `Bearer ${key}` })
+          .post('/branches/stable/apis')
+          .reply(200, { data: { upload: { status: 'done' }, uri: '/branches/stable/apis/secret.json' } });
+
+        try {
+          const { error } = await run([filename, '--key', key, '--branch', 'stable', '--slug', '../secret.json']);
+
+          expect(error?.message).toBe(`Invalid slug in ${filename}: slugs must be a single URL-safe path segment.`);
+          list.done();
+          expect(upload.pendingMocks()).toHaveLength(1);
+        } finally {
+          nock.cleanAll();
+        }
       });
     });
   });

@@ -22,6 +22,7 @@ import isCI, { isTest } from '../../lib/isCI.js';
 import { oraOptions } from '../../lib/logger.js';
 import prepareOas from '../../lib/prepareOas.js';
 import promptTerminal from '../../lib/promptWrapper.js';
+import { assertSlug } from '../../lib/slug.js';
 
 const yamlExtensions = ['.yaml', '.yml'];
 const defaultWaitTimeoutSeconds = 12 * 60;
@@ -197,6 +198,8 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     const { preparedSpec, specFileType, specType, specPath, specVersion } = await prepareOas.call(this);
 
     const branch = this.flags.useSpecVersion ? specVersion : this.flags.branch;
+    assertSlug(branch, specPath);
+    const branchPath = encodeURIComponent(branch);
 
     const specFileTypeIsUrl = specFileType === 'url';
 
@@ -221,7 +224,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
           this.debug(`unable to fetch project metadata: ${e.message}`);
           return null;
         }),
-      this.readmeAPIFetch(`/branches/${branch}/apis`, { headers })
+      this.readmeAPIFetch(`/branches/${branchPath}/apis`, { headers })
         .then(res => this.handleAPIRes<APIDefinitionsRepresentation>(res))
         .then(res => res?.data || []),
     ]);
@@ -367,6 +370,9 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
       this.debug(`using existing legacy ID ${this.flags['legacy-id']} with filename ${filename}`);
     }
 
+    assertSlug(filename, specPath);
+    const filenamePath = encodeURIComponent(filename);
+
     // if we have a matching API definition based on legacy-id or slug, we'll use PUT to update it.
     // otherwise, we'll use POST to create it
     const method = matchingAPIDefinition ? 'PUT' : 'POST';
@@ -457,7 +463,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     );
 
     const response = (await this.readmeAPIFetch(
-      `/branches/${branch}/apis${method === 'POST' ? '' : `/${filename}`}`,
+      `/branches/${branchPath}/apis${method === 'POST' ? '' : `/${filenamePath}`}`,
       options,
     )
       .then(res => this.handleAPIRes(res))

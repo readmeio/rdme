@@ -7,13 +7,84 @@ import path from 'node:path';
 import chalk from 'chalk';
 import toposort from 'toposort';
 
+import { isRecord } from '../utils.js';
+
 import { APIv1Error } from './apiError.js';
 import readdirRecursive from './readdirRecursive.js';
 import { cleanAPIv1Headers, handleAPIv1Res, readmeAPIv1Fetch } from './readmeAPIFetch.js';
 import { readPage } from './readPage.js';
+import { assertSlug } from './slug.js';
 
-/** API path within ReadMe to update (e.g. `docs`, `changelogs`, etc.) */
-type PageType = 'changelogs' | 'custompages' | 'docs';
+/**
+ * SEO fields stored on a v1 changelog. Other keys are dropped so this object
+ * cannot carry arbitrary properties.
+ */
+interface ChangelogMetadata {
+  description?: unknown;
+  image?: unknown;
+  keywords?: unknown;
+  title?: unknown;
+}
+
+const CHANGELOG_METADATA_KEYS = ['description', 'image', 'keywords', 'title'] as const;
+
+/**
+ * Body written to `POST` or `PUT /api/v1/changelogs`. `slug` is added on create.
+ * `lastUpdatedHash` is the file hash rdme uses to skip unchanged posts.
+ */
+interface ChangelogPayload {
+  body: string;
+  hidden?: unknown;
+  lastUpdatedHash: string;
+  metadata?: ChangelogMetadata;
+  title?: unknown;
+  type?: unknown;
+}
+
+type PreparedChangelog =
+  | { filePath: string; skipped: true }
+  | { filePath: string; payload: ChangelogPayload; skipped: false; slug: string };
+
+function changelogMetadata(value: unknown): ChangelogMetadata | undefined {
+  if (!isRecord(value)) return undefined;
+
+  const metadata: ChangelogMetadata = {};
+  for (const key of CHANGELOG_METADATA_KEYS) {
+    if (Object.hasOwn(value, key)) metadata[key] = value[key];
+  }
+
+  return Object.keys(metadata).length ? metadata : undefined;
+}
+
+function changelogPayload(content: string, data: PageMetadata['data'], hash: string): ChangelogPayload {
+  const payload: ChangelogPayload = {
+    body: content,
+    lastUpdatedHash: hash,
+  };
+
+  if (Object.hasOwn(data, 'hidden')) payload.hidden = data.hidden;
+  const metadata = changelogMetadata(data.metadata);
+  if (metadata) payload.metadata = metadata;
+  if (Object.hasOwn(data, 'title')) payload.title = data.title;
+  if (Object.hasOwn(data, 'type')) payload.type = data.type;
+
+  return payload;
+}
+
+/**
+ * Skip files with no frontmatter. Otherwise require the slug to be one URL path
+ * segment and return the body that will be sent.
+ */
+function prepareChangelog(fileData: PageMetadata): PreparedChangelog {
+  if (!Object.keys(fileData.data).length) return { filePath: fileData.filePath, skipped: true };
+
+  return {
+    filePath: fileData.filePath,
+    payload: changelogPayload(fileData.content, fileData.data, fileData.hash),
+    skipped: false,
+    slug: assertSlug(fileData.slug, fileData.filePath),
+  };
+}
 
 /**
  * Reads the contents of the specified Markdown or HTML file
@@ -25,30 +96,28 @@ async function pushDoc(
   this: ChangelogsCommand,
   /** the project version */
   selectedVersion: string | undefined,
-  fileData: PageMetadata,
+  prepared: PreparedChangelog,
 ) {
-  const type: PageType = this.id;
+  const type: 'changelogs' = this.id;
   const { key, dryRun }: { dryRun: boolean; key: string } = this.flags;
-  const { content, data, filePath, hash, slug } = fileData;
+  const { filePath } = prepared;
 
   // TODO: ideally we should offer a zero-configuration approach that doesn't
   // require YAML frontmatter, but that will have to be a breaking change
-  if (!Object.keys(data).length) {
+  if (prepared.skipped) {
     this.debug(`No frontmatter attributes found for ${filePath}, not syncing`);
     return `⏭️  no frontmatter attributes found for ${filePath}, skipping`;
   }
 
-  const payload: {
-    body?: string;
-    html?: string;
-    htmlmode?: boolean;
-    lastUpdatedHash: string;
-  } = { body: content, ...data, lastUpdatedHash: hash };
+  const { payload, slug } = prepared;
+  const slugPath = encodeURIComponent(slug);
 
   function createDoc() {
+    const requestBody = { ...payload, slug };
+
     if (dryRun) {
       return `🎭 dry run! This will create '${slug}' with contents from ${filePath} with the following metadata: ${JSON.stringify(
-        data,
+        requestBody,
       )}`;
     }
 
@@ -57,10 +126,7 @@ async function pushDoc(
       {
         method: 'post',
         headers: cleanAPIv1Headers(key, selectedVersion, new Headers({ 'Content-Type': 'application/json' })),
-        body: JSON.stringify({
-          slug,
-          ...payload,
-        }),
+        body: JSON.stringify(requestBody),
       },
       {
         file: {
@@ -73,8 +139,8 @@ async function pushDoc(
       .then(res => `🌱 successfully created '${res.slug}' (ID: ${res._id}) with contents from ${filePath}`);
   }
 
-  function updateDoc(existingDoc: typeof payload) {
-    if (hash === existingDoc.lastUpdatedHash) {
+  function updateDoc(existingDoc: { lastUpdatedHash?: string }) {
+    if (payload.lastUpdatedHash === existingDoc.lastUpdatedHash) {
       return `${dryRun ? '🎭 dry run! ' : ''}\`${slug}\` ${
         dryRun ? 'will not be' : 'was not'
       } updated because there were no changes.`;
@@ -82,12 +148,12 @@ async function pushDoc(
 
     if (dryRun) {
       return `🎭 dry run! This will update '${slug}' with contents from ${filePath} with the following metadata: ${JSON.stringify(
-        data,
+        payload,
       )}`;
     }
 
     return readmeAPIv1Fetch(
-      `/api/v1/${type}/${slug}`,
+      `/api/v1/${type}/${slugPath}`,
       {
         method: 'put',
         headers: cleanAPIv1Headers(key, selectedVersion, new Headers({ 'Content-Type': 'application/json' })),
@@ -104,7 +170,7 @@ async function pushDoc(
       .then(res => `✏️ successfully updated '${res.slug}' with contents from ${filePath}`);
   }
 
-  return readmeAPIv1Fetch(`/api/v1/${type}/${slug}`, {
+  return readmeAPIv1Fetch(`/api/v1/${type}/${slugPath}`, {
     method: 'get',
     headers: cleanAPIv1Headers(key, selectedVersion, new Headers({ Accept: 'application/json' })),
   })
@@ -138,19 +204,15 @@ const byParentDoc = (left: PageMetadata, right: PageMetadata) => {
  */
 function sortFiles(this: ChangelogsCommand, filePaths: string[]): PageMetadata[] {
   const files = filePaths.map(file => readPage.call(this, file)).toSorted(byParentDoc);
-  const filesBySlug = files.reduce<Record<string, PageMetadata>>((bySlug, obj) => {
-    // oxlint-disable-next-line no-param-reassign
-    bySlug[obj.slug] = obj;
-    return bySlug;
-  }, {});
+  // A plain object keyed by slug treats `__proto__` and `constructor` as special.
+  const filesBySlug = new Map(files.map(file => [file.slug, file]));
 
-  const dependencies = Object.values(filesBySlug).reduce<[PageMetadata, PageMetadata][]>((edges, obj) => {
-    if (obj.data.parentDocSlug && filesBySlug[obj.data.parentDocSlug as string]) {
-      edges.push([filesBySlug[obj.data.parentDocSlug as string], filesBySlug[obj.slug]]);
-    }
-
-    return edges;
-  }, []);
+  const dependencies: [PageMetadata, PageMetadata][] = [];
+  for (const file of filesBySlug.values()) {
+    const parentSlug = file.data.parentDocSlug;
+    const parent = typeof parentSlug === 'string' ? filesBySlug.get(parentSlug) : undefined;
+    if (parent) dependencies.push([parent, file]);
+  }
 
   return toposort.array(files, dependencies);
 }
@@ -205,13 +267,12 @@ export default async function syncDocsPath(
       return Promise.reject(e);
     }
 
-    output = (
-      await Promise.all(
-        sortedFiles.map(async fileData => {
-          return pushDoc.call(this, selectedVersion, fileData);
-        }),
-      )
-    ).join('\n');
+    // Prepare every file before the first request so one bad slug cannot race a sibling upload.
+    const preparedFiles = sortedFiles.map(fileData => prepareChangelog(fileData));
+
+    output = (await Promise.all(preparedFiles.map(prepared => pushDoc.call(this, selectedVersion, prepared)))).join(
+      '\n',
+    );
   } else {
     const fileExtension = path.extname(pathInput).toLowerCase();
     if (!allowedFileExtensions.includes(fileExtension)) {
@@ -225,7 +286,7 @@ export default async function syncDocsPath(
     }
 
     const fileData = readPage.call(this, pathInput);
-    output = await pushDoc.call(this, selectedVersion, fileData);
+    output = await pushDoc.call(this, selectedVersion, prepareChangelog(fileData));
   }
   return Promise.resolve(chalk.green(output));
 }

@@ -23,13 +23,14 @@ vi.mock(import('../../src/lib/isCI.js'), async importOriginal => {
   };
 });
 
+import pkg from '../../package.json' with { type: 'json' };
 import DocsExportCommand from '../../src/commands/docs/export.js';
 import DocsUploadCommand from '../../src/commands/docs/upload.js';
 import OpenAPIUploadCommand from '../../src/commands/openapi/upload.js';
 import BaseCommand, { neutralizeWorkflowCommands } from '../../src/lib/baseCommand.js';
 import { writeCommandResult } from '../../src/lib/workflowCommands.js';
 import { getAPIv1Mock, getAPIv2MockForGHA } from '../helpers/get-api-mock.js';
-import { setupOclifConfig } from '../helpers/oclif.js';
+import { mockVersion, setupOclifConfig } from '../helpers/oclif.js';
 
 /** Runner metadata that would otherwise leak into request logs or divert `core.setOutput`. */
 const runnerEnv = [
@@ -84,7 +85,12 @@ async function runInGitHubActions(Command: CommandClass, args: string[], prepare
 const userAgentSuffix = ` ${process.platform}-${process.arch === 'ia32' ? 'x86' : process.arch} node-${process.version}`;
 
 function stableStdout(stdout: string) {
-  return stdout.replaceAll(userAgentSuffix, '');
+  // v1 calls `getUserAgent()` without an oclif context, so that header uses `package.json`.
+  // v2 uses the mocked oclif version. Fold both to the mock so a release does not change snapshots.
+  return stdout
+    .replaceAll(userAgentSuffix, '')
+    .replaceAll(`rdme-github/${pkg.version}`, `rdme-github/${mockVersion}`)
+    .replaceAll(/ with proxy \S+ and /g, ' ');
 }
 
 describe('GitHub Actions workflow commands', () => {
@@ -241,8 +247,7 @@ describe('GitHub Actions workflow commands', () => {
   });
 
   describe('docs upload', () => {
-    it('does not emit a workflow command from a frontmatter slug', async () => {
-      const slugPath = '/branches/stable/guides/ok::error%20title=forged::injected';
+    it('rejects a frontmatter slug that would inject a workflow command', async () => {
       const scopes: nock.Scope[] = [];
 
       const output = await runInGitHubActions(
@@ -254,12 +259,16 @@ describe('GitHub Actions workflow commands', () => {
               categories: {},
               parentPages: {},
             }),
-            getAPIv2MockForGHA({ authorization }).get(slugPath).reply(404),
           );
         },
       );
 
+      // GitHub Actions reports the failure with `core.setFailed`, which does not reject the command.
       expect(output.error).toBeUndefined();
+      expect(output.stdout).toContain(
+        'Invalid slug in test/__fixtures__/docs/gha-inject/page.md: slugs must be a single URL-safe path segment.',
+      );
+      expect(output.stdout).not.toMatch(/^::error title=forged/m);
       expect(stableStdout(output.stdout)).toMatchSnapshot();
       scopes.forEach(scope => scope.done());
     });

@@ -11,6 +11,7 @@ import { APIv2Error } from './apiError.js';
 import { oraOptions } from './logger.js';
 import { allowedMarkdownExtensions, findPages } from './readPage.js';
 import { decodeURILastSegment } from './safePath.js';
+import { assertSlug } from './slug.js';
 import { categoryUriRegexPattern, parentUriRegexPattern } from './types/index.js';
 import { validateFrontmatter } from './validateFrontmatter.js';
 
@@ -79,9 +80,11 @@ async function pushPage(
   let route = `/${this.route}`;
   // the changelog route is not versioned
   const branch = this.route === 'changelogs' ? null : this.flags.branch;
-  if (branch) {
-    route = `/branches/${branch}${route}`;
+  const branchPath = branch ? encodeURIComponent(branch) : null;
+  if (branchPath) {
+    route = `/branches/${branchPath}${route}`;
   }
+  const slugPath = encodeURIComponent(slug);
 
   const headers = new Headers({ authorization: `Bearer ${key}`, 'Content-Type': 'application/json' });
 
@@ -165,7 +168,7 @@ async function pushPage(
       delete payload.slug;
 
       return this.readmeAPIFetch(
-        `${route}/${slug}`,
+        `${route}/${slugPath}`,
         {
           method: 'PATCH',
           headers,
@@ -184,7 +187,7 @@ async function pushPage(
         });
     };
 
-    return this.readmeAPIFetch(`${route}/${slug}`, {
+    return this.readmeAPIFetch(`${route}/${slugPath}`, {
       method: 'GET',
       headers,
     }).then(async res => {
@@ -242,13 +245,13 @@ function compareUploadPriority(
  */
 function parentSlugInBatch(
   parentUri: unknown,
-  filesBySlug: Record<string, PageMetadata<GuidesOrReferenceRequestSchema>>,
+  filesBySlug: Map<string, PageMetadata<GuidesOrReferenceRequestSchema>>,
 ): string | undefined {
   if (typeof parentUri !== 'string' || !parentUri) return undefined;
-  if (filesBySlug[parentUri]) return parentUri;
+  if (filesBySlug.has(parentUri)) return parentUri;
 
   const slug = decodeURILastSegment(parentUri.replace(/\/+$/, ''));
-  if (slug && filesBySlug[slug]) return slug;
+  if (slug && filesBySlug.has(slug)) return slug;
 
   return undefined;
 }
@@ -269,24 +272,25 @@ function parentSlugInBatch(
 function sortFiles(
   files: PageMetadata<GuidesOrReferenceRequestSchema>[],
 ): PageMetadata<GuidesOrReferenceRequestSchema>[] {
-  const filesBySlug = files.reduce<Record<string, PageMetadata<GuidesOrReferenceRequestSchema>>>((bySlug, obj) => {
-    // oxlint-disable-next-line no-param-reassign
-    bySlug[obj.slug] = obj;
-    return bySlug;
-  }, {});
+  // A plain object keyed by slug treats `__proto__` and `constructor` as special.
+  const filesBySlug = new Map(files.map(file => [file.slug, file]));
+  const pageBySlug = (slug: string): PageMetadata<GuidesOrReferenceRequestSchema> => {
+    const page = filesBySlug.get(slug);
+    if (!page) throw new Error(`Missing page for slug ${slug}`);
+    return page;
+  };
+  const byPriority = (left: string, right: string) => compareUploadPriority(pageBySlug(left), pageBySlug(right));
 
-  const slugs = Object.keys(filesBySlug);
+  const slugs = [...filesBySlug.keys()];
   const inDegree = new Map<string, number>();
   const childrenByParent = new Map<string, string[]>();
 
-  for (const obj of Object.values(filesBySlug)) {
+  for (const obj of filesBySlug.values()) {
     const parentKey = parentSlugInBatch(obj.data.parent?.uri, filesBySlug);
-    if (parentKey && filesBySlug[parentKey]) {
-      if (!childrenByParent.has(parentKey)) {
-        childrenByParent.set(parentKey, []);
-      }
-
-      childrenByParent.get(parentKey)!.push(obj.slug);
+    if (parentKey && filesBySlug.has(parentKey)) {
+      const children = childrenByParent.get(parentKey) ?? [];
+      children.push(obj.slug);
+      childrenByParent.set(parentKey, children);
       inDegree.set(obj.slug, (inDegree.get(obj.slug) ?? 0) + 1);
     } else {
       inDegree.set(obj.slug, 0);
@@ -295,18 +299,19 @@ function sortFiles(
 
   const sorted: PageMetadata<GuidesOrReferenceRequestSchema>[] = [];
   const ready = slugs.filter(slug => (inDegree.get(slug) ?? 0) === 0);
-  ready.sort((a, b) => compareUploadPriority(filesBySlug[a], filesBySlug[b]));
+  ready.sort(byPriority);
 
   while (ready.length > 0) {
-    const nextSlug = ready.shift()!;
-    sorted.push(filesBySlug[nextSlug]);
+    const nextSlug = ready.shift();
+    if (!nextSlug) break;
+    sorted.push(pageBySlug(nextSlug));
 
     for (const childSlug of childrenByParent.get(nextSlug) ?? []) {
       const newDeg = (inDegree.get(childSlug) ?? 0) - 1;
       inDegree.set(childSlug, newDeg);
       if (newDeg === 0) {
         ready.push(childSlug);
-        ready.sort((a, b) => compareUploadPriority(filesBySlug[a], filesBySlug[b]));
+        ready.sort(byPriority);
       }
     }
   }
@@ -356,6 +361,24 @@ export default async function syncPagePath(this: APIv2PageUploadCommands): Promi
     unsortedFiles = validationResults.pages;
   }
 
+  // topological sort the files
+  const sortedFiles =
+    this.route === 'changelogs' || this.route === 'custom_pages'
+      ? (unsortedFiles as PageMetadata<PageRequestSchema<typeof this.route>>[])
+      : sortFiles(unsortedFiles as PageMetadata<GuidesOrReferenceRequestSchema>[]);
+
+  // Refuse a slug or branch that is not one URL segment before any page request,
+  // including a sibling that would otherwise upload first.
+  if (this.route !== 'changelogs') {
+    assertSlug(this.flags.branch, pathInput);
+  }
+
+  for (const fileData of sortedFiles) {
+    if (Object.keys(fileData.data).length) {
+      assertSlug(fileData.slug, fileData.filePath);
+    }
+  }
+
   const uploadSpinner = ora({ ...oraOptions() }).start(
     dryRun
       ? "🎭 Uploading files to ReadMe (but not really because it's a dry run)..."
@@ -363,12 +386,6 @@ export default async function syncPagePath(this: APIv2PageUploadCommands): Promi
   );
 
   const count = { succeeded: 0, failed: 0 };
-
-  // topological sort the files
-  const sortedFiles =
-    this.route === 'changelogs' || this.route === 'custom_pages'
-      ? (unsortedFiles as PageMetadata<PageRequestSchema<typeof this.route>>[])
-      : sortFiles(unsortedFiles as PageMetadata<GuidesOrReferenceRequestSchema>[]);
 
   // push the files to ReadMe
   const rawResults: PromiseSettledResult<PushResult>[] = [];
