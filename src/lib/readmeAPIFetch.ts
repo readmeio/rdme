@@ -16,7 +16,7 @@ import { git } from './git.js';
 import isCI, { ciName, isGHA, isTest } from './isCI.js';
 import { debug, warn } from './logger.js';
 import { redactProxyFromText, redactProxyUrl, redactResponseBody } from './secrets.js';
-import readmeAPIv2Oas from './types/openapiDoc.js';
+import { readmeApiPaths } from './types/openapiDoc.js';
 
 const SUCCESS_NO_CONTENT = 204;
 
@@ -588,5 +588,5 @@ export async function fetchMappings(this: CommandClass['prototype']): Promise<Ma
 export function fetchSchema(this: APIv2PageCommands) {
   const oasPath =
     this.route === 'changelogs' ? '/changelogs/{identifier}' : (`/branches/{branch}/${this.route}/{slug}` as const);
-  return readmeAPIv2Oas.paths[oasPath].patch.requestBody.content['application/json'].schema satisfies SchemaObject;
+  return readmeApiPaths[oasPath].patch.requestBody.content['application/json'].schema satisfies SchemaObject;
 }

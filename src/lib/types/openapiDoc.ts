@@ -1,4 +1,5 @@
-import type { OAS31Document, OASDocument } from 'oas/types';
+import type { ReadmeApiPaths } from './openapiPaths.js';
+import type { OASDocument } from 'oas/types';
 
 /**
  * This is a snapshot of the OpenAPI description for ReadMe APIv2.
@@ -29622,9 +29623,11 @@ const document = {
  * The paths within our OpenAPI description that we derive types from (e.g., `FromSchema<>` and
  * the schemas we hand off to `ajv` for runtime validation).
  *
- * TypeScript refuses to serialize the inferred type of the full `document` into a declaration file
- * because it's too large (TS7056), so we only expose literal types for the paths that we actually
- * rely on. If you need to type something off of a new path, add it here.
+ * Serializing the literal type of this object into a declaration file is most of `tsc` (GET
+ * `/projects/me` alone is about 11k lines). That type is checked in as `ReadmeApiPaths` in
+ * `openapiPaths.d.ts` and regenerated with `npm run build:openapi-types`. The assertion below
+ * points declaration emit at the checked-in type instead of rebuilding it on every compile.
+ * Add a path here, then regenerate that file.
  */
 const paths = {
   '/branches/{branch}/apis': document.paths['/branches/{branch}/apis'],
@@ -29643,7 +29646,7 @@ const paths = {
 };
 
 /**
- * The full document is still available at runtime, but its type only carries literal types for
- * the paths listed in `paths` above. Everything else is typed loosely as an OpenAPI 3.1 document.
+ * Same runtime object as `paths`, typed as the checked-in literal type.
+ * `as unknown as` skips a structural compare against that literal, which is the slow part of `tsc`.
  */
-export default document as OAS31Document & { info: { 'x-readme-deploy': string }; paths: typeof paths };
+export const readmeApiPaths = paths as unknown as ReadmeApiPaths;

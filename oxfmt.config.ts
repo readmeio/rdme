@@ -17,6 +17,8 @@ export default defineConfig(
       // release build artifacts
       'CHANGELOG.md',
       'dist/',
+      // Regenerated literal type. Formatting it rewrites ~1.3MB for no behavior change.
+      'src/lib/types/openapiPaths.d.ts',
       'documentation/commands',
       'dist-gha/',
     ],

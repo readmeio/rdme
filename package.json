@@ -44,14 +44,15 @@
     "./utils": "./dist/utils.js"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && node bin/openapi-paths.js copy",
+    "build:openapi-types": "node bin/openapi-paths.js write",
     "build:docs": "oclif readme --multi --output-dir documentation/commands --no-aliases",
     "build:gha": "npm run build && rollup --config",
     "format": "npx oxlint --fix && npx oxfmt --write",
     "lint": "knip && npm run lint:ts && npx oxfmt --check && npm run schemas:check",
     "lint:ts": "npx oxlint",
     "lint:ts:write": "npx oxlint --fix",
-    "prebuild": "rm -rf dist/",
+    "prebuild": "node bin/openapi-paths.js check && rm -rf dist/",
     "prepack": "npm run build",
     "prepare": "husky",
     "pretest": "npm run build",

@@ -1,52 +1,52 @@
 import type { APIv2PageUploadCommands } from '../../index.js';
+import type { ReadmeApiPaths } from './openapiPaths.js';
 import type { FromSchema } from 'json-schema-to-ts';
 
-import readmeAPIv2Oas from './openapiDoc.js';
+import { readmeApiPaths } from './openapiDoc.js';
 
 export const categoryUriRegexPattern =
-  readmeAPIv2Oas.paths['/branches/{branch}/guides'].post.requestBody.content['application/json'].schema.properties
-    .category.properties.uri.pattern;
+  readmeApiPaths['/branches/{branch}/guides'].post.requestBody.content['application/json'].schema.properties.category
+    .properties.uri.pattern;
 
 export const parentUriRegexPattern =
-  readmeAPIv2Oas.paths['/branches/{branch}/guides'].post.requestBody.content['application/json'].schema.properties
-    .parent.properties.uri.pattern;
+  readmeApiPaths['/branches/{branch}/guides'].post.requestBody.content['application/json'].schema.properties.parent
+    .properties.uri.pattern;
 
-type projectSchema =
-  (typeof readmeAPIv2Oas)['paths']['/projects/me']['get']['responses']['200']['content']['application/json']['schema'];
+type projectSchema = ReadmeApiPaths['/projects/me']['get']['responses']['200']['content']['application/json']['schema'];
 
 type apiKeySchema =
-  (typeof readmeAPIv2Oas)['paths']['/projects/{subdomain}/apikeys/{api_key_id}']['get']['responses']['200']['content']['application/json']['schema'];
+  ReadmeApiPaths['/projects/{subdomain}/apikeys/{api_key_id}']['get']['responses']['200']['content']['application/json']['schema'];
 
 type apiUploadSingleResponseSchema =
-  (typeof readmeAPIv2Oas)['paths']['/branches/{branch}/apis/{filename}']['get']['responses']['200']['content']['application/json']['schema'];
+  ReadmeApiPaths['/branches/{branch}/apis/{filename}']['get']['responses']['200']['content']['application/json']['schema'];
 
 type stagedApiUploadResponseSchema =
-  (typeof readmeAPIv2Oas)['paths']['/branches/{branch}/apis']['post']['responses']['202']['content']['application/json']['schema'];
+  ReadmeApiPaths['/branches/{branch}/apis']['post']['responses']['202']['content']['application/json']['schema'];
 
 type apiDefinitionsSchema =
-  (typeof readmeAPIv2Oas)['paths']['/branches/{branch}/apis']['get']['responses']['200']['content']['application/json']['schema'];
+  ReadmeApiPaths['/branches/{branch}/apis']['get']['responses']['200']['content']['application/json']['schema'];
 
 /** Page schemas */
 export type PageRoute = APIv2PageUploadCommands['route'];
 
 type PageRequestSchemaRaw<T extends PageRoute> = T extends 'custom_pages' | 'guides' | 'reference'
-  ? (typeof readmeAPIv2Oas)['paths'][`/branches/{branch}/${T}/{slug}`]['patch']['requestBody']['content']['application/json']['schema']
+  ? ReadmeApiPaths[`/branches/{branch}/${T}/{slug}`]['patch']['requestBody']['content']['application/json']['schema']
   : T extends 'changelogs'
-    ? (typeof readmeAPIv2Oas)['paths']['/changelogs/{identifier}']['patch']['requestBody']['content']['application/json']['schema']
+    ? ReadmeApiPaths['/changelogs/{identifier}']['patch']['requestBody']['content']['application/json']['schema']
     : never;
 
 type PageResponseSchemaRaw<T extends PageRoute> = T extends 'custom_pages' | 'guides' | 'reference'
-  ? (typeof readmeAPIv2Oas)['paths'][`/branches/{branch}/${T}/{slug}`]['patch']['responses']['200']['content']['application/json']['schema']
+  ? ReadmeApiPaths[`/branches/{branch}/${T}/{slug}`]['patch']['responses']['200']['content']['application/json']['schema']
   : T extends 'changelogs'
-    ? (typeof readmeAPIv2Oas)['paths']['/changelogs/{identifier}']['patch']['responses']['200']['content']['application/json']['schema']
+    ? ReadmeApiPaths['/changelogs/{identifier}']['patch']['responses']['200']['content']['application/json']['schema']
     : never;
 
 /** Category schemas */
 type CategoryResponseSchemaRaw =
-  (typeof readmeAPIv2Oas)['paths']['/branches/{branch}/categories/{section}']['get']['responses']['200']['content']['application/json']['schema'];
+  ReadmeApiPaths['/branches/{branch}/categories/{section}']['get']['responses']['200']['content']['application/json']['schema'];
 
 type CategoryPagesResponseSchemaRaw =
-  (typeof readmeAPIv2Oas)['paths']['/branches/{branch}/categories/{section}/{title}/pages']['get']['responses']['200']['content']['application/json']['schema'];
+  ReadmeApiPaths['/branches/{branch}/categories/{section}/{title}/pages']['get']['responses']['200']['content']['application/json']['schema'];
 
 /**
  * Derived from our API documentation, this is the schema for the `project` object
@@ -123,10 +123,10 @@ export type APIDefinitionsRepresentation = FromSchema<apiDefinitionsSchema, { ke
 
 /** Glossary schemas */
 type GlossaryResponseSchemaRaw =
-  (typeof readmeAPIv2Oas)['paths']['/projects/me/glossary']['get']['responses']['200']['content']['application/json']['schema'];
+  ReadmeApiPaths['/projects/me/glossary']['get']['responses']['200']['content']['application/json']['schema'];
 
 type GlossaryUploadResponseSchemaRaw =
-  (typeof readmeAPIv2Oas)['paths']['/projects/me/glossary']['patch']['responses']['200']['content']['application/json']['schema'];
+  ReadmeApiPaths['/projects/me/glossary']['patch']['responses']['200']['content']['application/json']['schema'];
 
 export type GlossaryResponseSchema = FromSchema<GlossaryResponseSchemaRaw, { keepDefaultedPropertiesOptional: true }>;
 

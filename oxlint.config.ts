@@ -8,7 +8,7 @@ export default defineConfig({
   options: {
     reportUnusedDisableDirectives: 'error',
   },
-  ignorePatterns: ['.vitest/', 'coverage/', 'dist/', 'dist-gha/'],
+  ignorePatterns: ['.vitest/', 'coverage/', 'dist/', 'dist-gha/', 'src/lib/types/openapiPaths.d.ts'],
   categories: {
     suspicious: 'error',
   },
