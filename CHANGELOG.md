@@ -1,4 +1,6 @@
-## [10.10.2-next.1](https://github.com/readmeio/rdme/compare/v10.10.1...v10.10.2-next.1) (2026-11-11)
+## 10.10.2-next.1
+
+[Compare with v10.10.1](https://github.com/readmeio/rdme/compare/v10.10.1...v10.10.2-next.1) (2026-11-11)
 
 
 ### Bug Fixes

@@ -1,70 +1,153 @@
 name: Release
+
+# Keep this filename. npm trusted publishing is bound to `release.yml`.
+# Do not rename it, add a GitHub Environment, set `registry-url` on setup-node,
+# or set `NPM_TOKEN` / `NODE_AUTH_TOKEN`. Provenance is attached automatically.
 on:
   push:
     branches:
       - main
-      - next
       - v9
 
-permissions:
-  # See provenance docs: https://docs.npmjs.com/generating-provenance-statements#publishing-packages-with-provenance-via-github-actions
-  id-token: write
-  contents: write
-  packages: write
+permissions: {}
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
-  release:
+  select-mode:
     runs-on: ubuntu-latest
+    outputs:
+      mode: ${{ steps.select-mode.outputs.mode }}
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # `@changesets/cli` requires Node ^22.11.
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - id: select-mode
+        uses: changesets/action/select-mode@v2
+
+  version:
+    needs: select-mode
+    if: needs.select-mode.outputs.mode == 'version'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
+          persist-credentials: false
           token: ${{ secrets.RELEASE_GH_TOKEN }}
 
       - uses: actions/setup-node@v7
         with:
-          node-version: 20
-          cache: 'npm'
+          node-version: 22
+          cache: npm
 
-      - name: Install dependencies and build TS
-        run: npm ci && npm run build
+      - run: npm ci
 
-      - name: Install semantic-release and friends
-        run: npm i --no-save semantic-release@24 @semantic-release/changelog@6 @semantic-release/exec@6 @semantic-release/git@10
-
-      - name: Run semantic-release workflow
-        env:
-          GH_TOKEN: ${{ secrets.RELEASE_GH_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # See provenance docs: https://docs.npmjs.com/generating-provenance-statements#publishing-packages-with-provenance-via-github-actions
-          NPM_CONFIG_PROVENANCE: 'true'
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npx semantic-release
-
-      - name: Sync changes back to next
-        if: ${{ github.ref == 'refs/heads/main' }}
-        uses: ad-m/github-push-action@master
+      # `publish-script` is not executed in this job. It is set so the version
+      # pull request says that merging it publishes. Publishing is the job below.
+      - uses: changesets/action@v2
         with:
-          github_token: ${{ secrets.RELEASE_GH_TOKEN }}
-          branch: next
+          github-token: ${{ secrets.RELEASE_GH_TOKEN }}
+          version-script: npm run release:version
+          publish-script: npm run release:publish
+          commit-message: 'build(release): version packages'
+          pr-title: 'build(release): version packages'
 
-  # quick assertion to validate that rdme CLI can be installed and run on ubuntu
-  postrelease:
-    name: Post-release checks
-    needs: release
+  publish:
+    needs: select-mode
+    if: needs.select-mode.outputs.mode == 'publish'
     runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/next' }}
+    outputs:
+      published: ${{ steps.publish.outputs.published }}
+      packages: ${{ steps.publish.outputs.published-packages }}
+    permissions:
+      contents: write
+      id-token: write
     steps:
-      - name: Set up Node.js
-        uses: actions/setup-node@v7
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          # Release builds should not reuse a package cache.
+          package-manager-cache: false
+
+      - run: npm ci
+
+      # Node 22 ships npm 10. Trusted publishing needs npm 11.5.1 or newer.
+      - run: npm install -g npm@11
+
+      - id: publish
+        uses: changesets/action/publish@v2
+        with:
+          github-token: ${{ secrets.RELEASE_GH_TOKEN }}
+          script: npm run release:publish
+
+  tags:
+    needs: publish
+    if: needs.publish.result == 'success' && needs.publish.outputs.published == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          token: ${{ secrets.RELEASE_GH_TOKEN }}
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # `v10` is an annotated tag. A fresh runner has no tagger identity, so
+      # `git tag --message` fails after the package has already published.
+      - name: Push the unprefixed tag and the floating major tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          node bin/push-extra-release-tags.js
+
+  postrelease:
+    needs: publish
+    if: needs.publish.result == 'success' && needs.publish.outputs.published == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/setup-node@v7
         with:
           node-version: lts/*
-      - name: Install `rdme` from npm
-        run: npm install -g rdme@next
-      - name: Print rdme CLI version
-        run: rdme --version
-        timeout-minutes: 1
+
+      - name: Install the published CLI
+        env:
+          VERSION: ${{ fromJSON(needs.publish.outputs.packages)[0].version }}
+        run: |
+          for attempt in 1 2 3 4 5 6 7 8 9 10; do
+            if npm install -g "rdme@${VERSION}" && [ "$(rdme --version | awk '{print $1}')" = "rdme/${VERSION}" ]; then
+              rdme --version
+              exit 0
+            fi
+            echo "rdme@${VERSION} is not installable yet (attempt ${attempt})"
+            sleep 20
+          done
+          exit 1
