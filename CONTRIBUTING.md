@@ -26,6 +26,8 @@ bin/run.js openapi validate test/__fixtures__/ref-oas/petstore.json
 
 Your changes to the command code may make changes to [the command reference documents](./documentation/commands) — it is up to you whether you include those changes in your PR or if you let the release process take care of it. More information on that can be found in [`MAINTAINERS.md`](./MAINTAINERS.md).
 
+If the change should ship in the next stable release, run `npx changeset`, pick the semver bump, and commit the file it writes. Merging the pull request does not publish. A maintainer publishes by merging the Version Packages pull request.
+
 ## ReadMe Development 🦉
 
 If you're a ReadMe team member that's testing `rdme` against a non-production ReadMe environment, you can either set the `RDME_LOCALHOST=true` environment variable (which points your CLI to the localhost version of ReadMe) or modify the URLs in `src/lib/config.ts` directly.

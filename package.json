@@ -52,7 +52,9 @@
     "lint:ts": "npx oxlint",
     "lint:ts:write": "npx oxlint --fix",
     "prebuild": "rm -rf dist/",
-    "prepack": "npm run build",
+    "prepack": "npm run build && oclif manifest",
+    "release:publish": "node bin/publish.js",
+    "release:version": "changeset version && npm run version",
     "prepare": "husky",
     "pretest": "npm run build",
     "schemas:check": "./bin/json-schema-store.js",
@@ -94,6 +96,8 @@
     "unzipper": "^0.12.3"
   },
   "devDependencies": {
+    "@changesets/changelog-github": "^1.0.1",
+    "@changesets/cli": "^3.0.3",
     "@commitlint/cli": "^21.2.0",
     "@commitlint/config-conventional": "^21.2.0",
     "@oclif/test": "^4.1.20",

@@ -1,65 +1,49 @@
 # Maintainers
 
-This doc describes how releases are published to GitHub and `npm`.
+Releases publish to GitHub and npm from `main`. The `v9` branch is only for the 9.x maintenance line. There is no prerelease branch and no `next` dist-tag.
 
-## Automatic Packaging + Publishing 📦
+## Opening a release
 
-Nearly all of our release process is automated. In this section, we discuss everything that takes place!
+Merging a pull request does not publish. A change ships only when someone merges the **Version Packages** pull request.
 
-> [!NOTE]
-> You don't _need_ to know everything that takes place here, this is mostly for my own documentation purposes! But if you are tagging an actual release, there are a couple of outstanding steps that are described in [the next section](#one-more-thing-☝️) 👇
+1. The pull request that should ship includes a changeset (`npx changeset`). The file records the bump (`patch`, `minor`, or `major`) and the changelog sentence.
+2. After that pull request merges to `main`, the release workflow updates one open pull request titled `build(release): version packages`. That pull request bumps `package.json`, writes `CHANGELOG.md`, rebuilds `dist-gha` and the command docs, and deletes the consumed changeset files. New changelog entries are inserted above the first heading that starts with a version (`## 10.10.2`). Keep that shape. A heading like `## [10.10.2](...)` is ignored, and the entry would be written further down the file.
+3. Merge the Version Packages pull request when the release should go out. The workflow then runs `npm publish` on the `latest` dist-tag through npm trusted publishing, pushes the `vX.Y.Z` tag, and opens the GitHub release.
+4. The same workflow also pushes the unprefixed tag (`10.10.2` as well as `v10.10.2`) and moves the floating `v10` tag. GitHub Action users should pin `readmeio/rdme@v10`.
 
-When code is merged into the `main` or `next` branches, a release workflow (powered by [`semantic-release`](https://github.com/semantic-release/semantic-release)) automatically kicks off that does the following:
+Dependency updates and other pull requests that should not release omit the changeset. `npx changeset --empty` records that the omission was intentional.
 
-- All commit messages since the last release are analyzed to determine whether or not the new changes warrant a new release (i.e., if the changes are features or fixes as opposed to smaller housekeeping changes) 🧐
-- Based on the changes, the version is bumped in [`package.json`](./package.json) 🥊 For example, say the current version is `8.5.1` and the commit history includes a new feature. This would result in a minor semver bump, which would produce the following tags:
-  - A release tag like `v8.6.0` if on the `main` or `v9` branches
-  - A prerelease tag like `v8.6.0-next.1` if on the `next` branch
-- A few other files, such as [`CHANGELOG.md`](./CHANGELOG.md), [the command reference pages](./documentation/commands), and our GitHub Actions bundle files, are updated based on this code 🪵
-- A build commit (like [this](https://github.com/readmeio/rdme/commit/533a2db50b39c3b6130b3af07bebaed38218db4c)) is created with all of the updated files (e.g., `package.json`, `CHANGELOG.md`, etc.) 🆕
-- A couple duplicated tags are created for the current commit so our users can refer to them differently in their GitHub Actions (e.g., `8.6.0`, `v8`) 🔖
-- The new commit and tags are pushed to GitHub 📌
-- The new version is published to the `npm` registry 🚀 The package [distribution tag](https://docs.npmjs.com/adding-dist-tags-to-packages) will depend on which branch is being pushed to:
-  - If on the `main` branch, a version is pushed on the main distribution tag (a.k.a. `latest`, which is used when someone runs `npm i rdme` with no other specifiers).
-  - If on the `next` branch, the prerelease distribution tag (a.k.a. [`next`](https://www.npmjs.com/package/rdme/v/next)) is updated.
-  - If on the `v9` branch, there is no distribution tag, but any minor/patch changes on this branch are automatically released to the 9.x release channel.
-- A [GitHub release is created](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository#creating-a-release) for the tag 🐙
-- If on the `main` branch, the new changes are backported to the `next` branch so both branches remain in sync 🔄
+The workflow file must stay `.github/workflows/release.yml`. Trusted publishing is bound to that filename. The publish job is the only job with `id-token: write`. It must not set `NPM_TOKEN`, `NODE_AUTH_TOKEN`, or `registry-url` on `actions/setup-node`, and it must not use a GitHub Environment. Provenance is attached automatically.
 
-### Maintaining two major release channels
+`@changesets/cli` requires Node 22.11 or newer. The publish job installs npm 11 because trusted publishing requires npm 11.5.1 or newer. The package itself still supports Node 20.
 
-We maintain two different release channels:
+After a publish, confirm the version was published by GitHub Actions:
 
-- one for `v9` (so we can have a release that supports all functionality pre-ReadMe Refactored, more in [our migration guide](./documentation/migration-guide.md))
-- one for the latest release (`v10`, as of this writing — `v10` and onward are for customers on ReadMe Refactored only)
+```sh
+npm view rdme@<version> --json
+```
 
-All new feature development should be on the `next` branch. If the feature does not interact with the ReadMe API in anyway (e.g., a docs change, an OpenAPI utility command), we can backport the change to the `v9` branch.
+`_npmUser.name` should be `GitHub Actions`, and `dist.attestations` should be present. The post-release job retries `npm install -g rdme@<version>` until the registry is serving it.
 
-Here's the recommended approach:
+You can still edit the GitHub release notes after they are created.
 
-1. Once the pull request has been merged into `next`, grab the merge commit SHA.
-2. Check out the `v9` branch, create a new branch based off of that branch, and cherry-pick the aformentioned commit SHA:
+## 9.x
 
-   ```sh
-   git checkout v9
-   git checkout -b my-v9-backport-branch
-   git cherry-pick SHA
-   ```
+Fixes that do not call the ReadMe API can be released to the 9.x line.
 
-3. Create a new pull request and set the base branch to `v9`.
-4. Once CI passes and you get the necessary approvals, merge that pull request in.
-5. The final step ensures that everything in the `next` branch is a superset of everything in the `v9` branch. To do this, checkout the `next` branch and merge `v9` into it.
+1. Cherry-pick the commit from `main` onto a branch based on `v9`.
+2. Add a changeset. Use `patch` or `minor` only. A major bump fails the publish job.
+3. Open the pull request against `v9`.
+4. Merge the Version Packages pull request that the workflow opens against `v9`.
 
-   ```sh
-   git checkout next
-   git merge v9
-   ```
+That publish uses `npm publish --tag release-v9`. Publishing 9.x without that tag would move `latest` backwards. `v9` is a branch name, so the floating major tag is not moved for these releases.
 
-## One more thing ☝️
+## After this cutover
 
-> [!NOTE]
-> This section is only worth adhering to if you're building an actual release and not a prelease (i.e., changes are being merged into the `main` branch).
+These steps are repository settings, not code:
 
-While nearly all of our release process is automated, there's one more step left before we call it a day — enhancing [the GitHub release](https://github.com/readmeio/rdme/releases)! The automation auto-generates and publishes a GitHub release, but it's often nice to add some human-generated language for folks that discover our tool via [the GitHub Marketplace listing](https://github.com/marketplace/actions/rdme-sync-to-readme).
-
-I like to summarize the changes and note any highlights in a blurb above the auto-generated release notes. These release links are nice for sharing with customers, on socials, etc. and because of the way that GitHub's algorithm works, they present a great opportunity for our developer tools to get more visibility — so definitely worth putting a little thought and care into these!
+1. Make `main` the default branch.
+2. Retarget open pull requests that still point at `next`.
+3. Delete the `next` branch. `uses: readmeio/rdme@next` is a git ref and stops resolving when the branch is gone.
+4. After the first stable publish from this workflow, remove the leftover npm dist-tag with `npm dist-tag rm rdme next`. That needs **Allow npm dist-tag** on the trusted publisher. Tell anyone still installing `rdme@next` to install `rdme` with no tag.
+5. When a published version shows a trusted publisher, delete the `NPM_TOKEN` secret and set the package's publishing access to require two-factor authentication and disallow tokens.

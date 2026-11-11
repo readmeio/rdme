@@ -1,16 +1,14 @@
 name: Sync docs to ReadMe
 
-# Run workflow for every push to the `main`/`next branches
-# (or on pushes to pull requests against these branches)
+# Run workflow for every push to `main`
+# (or on pushes to pull requests against `main`)
 on:
   push:
     branches:
       - main
-      - next
   pull_request:
     branches:
       - main
-      - next
 
 jobs:
   sync:
