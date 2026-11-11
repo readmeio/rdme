@@ -997,6 +997,31 @@ describe('rdme openapi upload', () => {
         mock.done();
       });
 
+      it('accepts an info.version formatted like v1.0-alpha', async () => {
+        const prerelease = 'v1.0-alpha';
+        const specPath = path.join(os.tmpdir(), `rdme-spec-prerelease-${process.pid}.json`);
+        const spec = structuredClone(petstore);
+        spec.info.version = prerelease;
+        await fs.writeFile(specPath, JSON.stringify(spec));
+
+        const mock = getAPIv2Mock({ authorization: `Bearer ${key}` })
+          .get('/projects/me')
+          .reply(200, { data: { subdomain: 'owl' } })
+          .get(`/branches/${prerelease}/apis`)
+          .reply(200, { data: [] });
+
+        try {
+          const { error, stdout } = await run(['--useSpecVersion', specPath, '--key', key, '--dry-run']);
+
+          expect(error).toBeUndefined();
+          expect(stdout).toContain(`Branch: ${prerelease}`);
+          mock.done();
+        } finally {
+          nock.cleanAll();
+          await fs.rm(specPath, { force: true });
+        }
+      });
+
       it('rejects an info.version that is not one path segment before calling the API', async () => {
         const specPath = path.join(os.tmpdir(), `rdme-spec-version-${process.pid}.json`);
         const spec = structuredClone(petstore);
@@ -1010,9 +1035,7 @@ describe('rdme openapi upload', () => {
         try {
           const { error } = await run(['--useSpecVersion', specPath, '--key', key]);
 
-          expect(error?.message).toBe(
-            `Invalid branch in ${specPath}: branches must be a single URL-safe path segment.`,
-          );
+          expect(error?.message).toBe(`Invalid slug in ${specPath}: slugs must be a single URL-safe path segment.`);
           expect(victim.pendingMocks()).toHaveLength(1);
         } finally {
           nock.cleanAll();

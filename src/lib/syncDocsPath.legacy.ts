@@ -41,10 +41,9 @@ interface ChangelogPayload {
   type?: unknown;
 }
 
-interface PreparedChangelog {
-  payload: ChangelogPayload;
-  slug: string;
-}
+type PreparedChangelog =
+  | { filePath: string; skipped: true }
+  | { filePath: string; payload: ChangelogPayload; skipped: false; slug: string };
 
 function changelogMetadata(value: unknown): ChangelogMetadata | undefined {
   if (!isRecord(value)) return undefined;
@@ -76,11 +75,13 @@ function changelogPayload(content: string, data: PageMetadata['data'], hash: str
  * Skip files with no frontmatter. Otherwise require the slug to be one URL path
  * segment and return the body that will be sent.
  */
-function prepareChangelog(fileData: PageMetadata): PreparedChangelog | undefined {
-  if (!Object.keys(fileData.data).length) return undefined;
+function prepareChangelog(fileData: PageMetadata): PreparedChangelog {
+  if (!Object.keys(fileData.data).length) return { filePath: fileData.filePath, skipped: true };
 
   return {
+    filePath: fileData.filePath,
     payload: changelogPayload(fileData.content, fileData.data, fileData.hash),
+    skipped: false,
     slug: assertSlug(fileData.slug, fileData.filePath),
   };
 }
@@ -95,16 +96,15 @@ async function pushDoc(
   this: ChangelogsCommand,
   /** the project version */
   selectedVersion: string | undefined,
-  fileData: PageMetadata,
-  prepared: PreparedChangelog | undefined,
+  prepared: PreparedChangelog,
 ) {
   const type: 'changelogs' = this.id;
   const { key, dryRun }: { dryRun: boolean; key: string } = this.flags;
-  const { filePath, hash } = fileData;
+  const { filePath } = prepared;
 
   // TODO: ideally we should offer a zero-configuration approach that doesn't
   // require YAML frontmatter, but that will have to be a breaking change
-  if (!prepared) {
+  if (prepared.skipped) {
     this.debug(`No frontmatter attributes found for ${filePath}, not syncing`);
     return `⏭️  no frontmatter attributes found for ${filePath}, skipping`;
   }
@@ -140,7 +140,7 @@ async function pushDoc(
   }
 
   function updateDoc(existingDoc: { lastUpdatedHash?: string }) {
-    if (hash === existingDoc.lastUpdatedHash) {
+    if (payload.lastUpdatedHash === existingDoc.lastUpdatedHash) {
       return `${dryRun ? '🎭 dry run! ' : ''}\`${slug}\` ${
         dryRun ? 'will not be' : 'was not'
       } updated because there were no changes.`;
@@ -268,18 +268,11 @@ export default async function syncDocsPath(
     }
 
     // Prepare every file before the first request so one bad slug cannot race a sibling upload.
-    const preparedFiles = sortedFiles.map(fileData => ({
-      fileData,
-      prepared: prepareChangelog(fileData),
-    }));
+    const preparedFiles = sortedFiles.map(fileData => prepareChangelog(fileData));
 
-    output = (
-      await Promise.all(
-        preparedFiles.map(async ({ fileData, prepared }) => {
-          return pushDoc.call(this, selectedVersion, fileData, prepared);
-        }),
-      )
-    ).join('\n');
+    output = (await Promise.all(preparedFiles.map(prepared => pushDoc.call(this, selectedVersion, prepared)))).join(
+      '\n',
+    );
   } else {
     const fileExtension = path.extname(pathInput).toLowerCase();
     if (!allowedFileExtensions.includes(fileExtension)) {
@@ -293,7 +286,7 @@ export default async function syncDocsPath(
     }
 
     const fileData = readPage.call(this, pathInput);
-    output = await pushDoc.call(this, selectedVersion, fileData, prepareChangelog(fileData));
+    output = await pushDoc.call(this, selectedVersion, prepareChangelog(fileData));
   }
   return Promise.resolve(chalk.green(output));
 }

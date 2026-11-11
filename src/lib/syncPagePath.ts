@@ -111,7 +111,7 @@ async function pushPage(
         this.debug(`normalizing category uri ${uri} for ${filePath}`);
         // remove leading and trailing slashes
         uri = uri.replace(/^\/|\/$/g, '');
-        payload.category.uri = `/branches/${branchPath}/categories/${this.route}/${uri}`;
+        payload.category.uri = `/branches/${branch}/categories/${this.route}/${uri}`;
       }
     }
 
@@ -123,7 +123,7 @@ async function pushPage(
         this.debug(`normalizing parent uri ${uri} for ${filePath}`);
         // remove leading and trailing slashes
         uri = uri.replace(/^\/|\/$/g, '');
-        payload.parent.uri = `/branches/${branchPath}/${this.route}/${uri}`;
+        payload.parent.uri = `/branches/${branch}/${this.route}/${uri}`;
       }
     }
 
@@ -245,13 +245,13 @@ function compareUploadPriority(
  */
 function parentSlugInBatch(
   parentUri: unknown,
-  filesBySlug: Record<string, PageMetadata<GuidesOrReferenceRequestSchema>>,
+  filesBySlug: Map<string, PageMetadata<GuidesOrReferenceRequestSchema>>,
 ): string | undefined {
   if (typeof parentUri !== 'string' || !parentUri) return undefined;
-  if (filesBySlug[parentUri]) return parentUri;
+  if (filesBySlug.has(parentUri)) return parentUri;
 
   const slug = decodeURILastSegment(parentUri.replace(/\/+$/, ''));
-  if (slug && filesBySlug[slug]) return slug;
+  if (slug && filesBySlug.has(slug)) return slug;
 
   return undefined;
 }
@@ -272,24 +272,25 @@ function parentSlugInBatch(
 function sortFiles(
   files: PageMetadata<GuidesOrReferenceRequestSchema>[],
 ): PageMetadata<GuidesOrReferenceRequestSchema>[] {
-  const filesBySlug = files.reduce<Record<string, PageMetadata<GuidesOrReferenceRequestSchema>>>((bySlug, obj) => {
-    // oxlint-disable-next-line no-param-reassign
-    bySlug[obj.slug] = obj;
-    return bySlug;
-  }, {});
+  // A plain object keyed by slug treats `__proto__` and `constructor` as special.
+  const filesBySlug = new Map(files.map(file => [file.slug, file]));
+  const pageBySlug = (slug: string): PageMetadata<GuidesOrReferenceRequestSchema> => {
+    const page = filesBySlug.get(slug);
+    if (!page) throw new Error(`Missing page for slug ${slug}`);
+    return page;
+  };
+  const byPriority = (left: string, right: string) => compareUploadPriority(pageBySlug(left), pageBySlug(right));
 
-  const slugs = Object.keys(filesBySlug);
+  const slugs = [...filesBySlug.keys()];
   const inDegree = new Map<string, number>();
   const childrenByParent = new Map<string, string[]>();
 
-  for (const obj of Object.values(filesBySlug)) {
+  for (const obj of filesBySlug.values()) {
     const parentKey = parentSlugInBatch(obj.data.parent?.uri, filesBySlug);
-    if (parentKey && filesBySlug[parentKey]) {
-      if (!childrenByParent.has(parentKey)) {
-        childrenByParent.set(parentKey, []);
-      }
-
-      childrenByParent.get(parentKey)!.push(obj.slug);
+    if (parentKey && filesBySlug.has(parentKey)) {
+      const children = childrenByParent.get(parentKey) ?? [];
+      children.push(obj.slug);
+      childrenByParent.set(parentKey, children);
       inDegree.set(obj.slug, (inDegree.get(obj.slug) ?? 0) + 1);
     } else {
       inDegree.set(obj.slug, 0);
@@ -298,18 +299,19 @@ function sortFiles(
 
   const sorted: PageMetadata<GuidesOrReferenceRequestSchema>[] = [];
   const ready = slugs.filter(slug => (inDegree.get(slug) ?? 0) === 0);
-  ready.sort((a, b) => compareUploadPriority(filesBySlug[a], filesBySlug[b]));
+  ready.sort(byPriority);
 
   while (ready.length > 0) {
-    const nextSlug = ready.shift()!;
-    sorted.push(filesBySlug[nextSlug]);
+    const nextSlug = ready.shift();
+    if (!nextSlug) break;
+    sorted.push(pageBySlug(nextSlug));
 
     for (const childSlug of childrenByParent.get(nextSlug) ?? []) {
       const newDeg = (inDegree.get(childSlug) ?? 0) - 1;
       inDegree.set(childSlug, newDeg);
       if (newDeg === 0) {
         ready.push(childSlug);
-        ready.sort((a, b) => compareUploadPriority(filesBySlug[a], filesBySlug[b]));
+        ready.sort(byPriority);
       }
     }
   }
@@ -368,7 +370,7 @@ export default async function syncPagePath(this: APIv2PageUploadCommands): Promi
   // Refuse a slug or branch that is not one URL segment before any page request,
   // including a sibling that would otherwise upload first.
   if (this.route !== 'changelogs') {
-    assertSlug(this.flags.branch, pathInput, 'branch');
+    assertSlug(this.flags.branch, pathInput);
   }
 
   for (const fileData of sortedFiles) {

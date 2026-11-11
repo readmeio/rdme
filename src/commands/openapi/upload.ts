@@ -198,7 +198,7 @@ export default class OpenAPIUploadCommand extends BaseCommand<typeof OpenAPIUplo
     const { preparedSpec, specFileType, specType, specPath, specVersion } = await prepareOas.call(this);
 
     const branch = this.flags.useSpecVersion ? specVersion : this.flags.branch;
-    assertSlug(branch, specPath, 'branch');
+    assertSlug(branch, specPath);
     const branchPath = encodeURIComponent(branch);
 
     const specFileTypeIsUrl = specFileType === 'url';

@@ -91,7 +91,7 @@ describe.each([
         ]);
 
         expect(error?.message).toBe(
-          'Invalid branch in test/__fixtures__/docs/new-docs/new-doc.md: branches must be a single URL-safe path segment.',
+          'Invalid slug in test/__fixtures__/docs/new-docs/new-doc.md: slugs must be a single URL-safe path segment.',
         );
         expect(victim.pendingMocks()).toHaveLength(1);
       } finally {
@@ -99,10 +99,54 @@ describe.each([
       }
     });
 
-    it('encodes a slug and a branch that are one path segment', async () => {
+    it('uploads a page whose slug is __proto__', async () => {
+      const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'rdme-page-proto-'));
+      const filePath = await writePage(tmpDir, 'proto.md', '__proto__');
+      const mock = getAPIv2Mock({ authorization })
+        .get(`/branches/stable/${route}/${encodeURIComponent('__proto__')}`)
+        .reply(404)
+        .post(`/branches/stable/${route}`)
+        .reply(201, { data: {} });
+
+      try {
+        const { error } = await run([filePath, '--key', key]);
+
+        expect(error).toBeUndefined();
+        mock.done();
+      } finally {
+        nock.cleanAll();
+        fs.rmSync(tmpDir, { recursive: true, force: true });
+      }
+    });
+
+    it('does not treat a parent uri of constructor as a page in the batch', async () => {
+      const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'rdme-page-ctor-'));
+      const filePath = path.join(tmpDir, 'child.md');
+      await fs.promises.writeFile(
+        filePath,
+        `---\ntitle: Child\nslug: child\ncategory:\n  uri: category-slug\nparent:\n  uri: constructor\n---\n\nBody\n`,
+      );
+      const mock = getAPIv2Mock({ authorization })
+        .get(`/branches/stable/${route}/child`)
+        .reply(404)
+        .post(`/branches/stable/${route}`)
+        .reply(201, { data: {} });
+
+      try {
+        const { error } = await run([filePath, '--key', key]);
+
+        expect(error).toBeUndefined();
+        mock.done();
+      } finally {
+        nock.cleanAll();
+        fs.rmSync(tmpDir, { recursive: true, force: true });
+      }
+    });
+
+    it('encodes a slug and accepts a prerelease branch', async () => {
       const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'rdme-page-encode-'));
       const filePath = await writePage(tmpDir, 'percent.md', '100%');
-      const branch = '1.0+beta';
+      const branch = 'v1.0-alpha';
       const mock = getAPIv2Mock({ authorization })
         .get(`/branches/${encodeURIComponent(branch)}/${route}/${encodeURIComponent('100%')}`)
         .reply(404);
