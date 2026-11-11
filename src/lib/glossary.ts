@@ -3,7 +3,7 @@ import type { GlossaryResponseSchema, GlossaryTerm } from './types/index.js';
 import { isRecord } from '../utils.js';
 
 const parseTerms = (terms: unknown): GlossaryTerm[] => {
-  if (!Array.isArray(terms)) throw new Error('Glossary terms must be an array.');
+  if (!Array.isArray(terms)) throw new TypeError('Glossary terms must be an array.');
   return terms.map((entry: unknown, index) => {
     if (
       !isRecord(entry) ||
