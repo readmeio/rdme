@@ -456,7 +456,7 @@ B
     it('does not request siblings when one changelog slug is unsafe', async () => {
       const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'rdme-changelogs-slug-mix-'));
       const sibling = getAPIv1Mock()
-        .get('/api/v1/changelogs/sibling')
+        .get('/api/v1/changelogs/ok')
         .basicAuth({ user: key })
         .reply(404, { error: 'CHANGELOG_NOTFOUND' });
 
