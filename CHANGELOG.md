@@ -1,3 +1,10 @@
+## [10.10.1-next.2](https://github.com/readmeio/rdme/compare/v10.10.1-next.1...v10.10.1-next.2) (2026-11-11)
+
+
+### Bug Fixes
+
+* stop upload path segments from retargeting API requests ([#1557](https://github.com/readmeio/rdme/issues/1557)) ([f35a295](https://github.com/readmeio/rdme/commit/f35a295571ca5d5f3ec22df33c98d6ddba5f003d))
+
 ## [10.10.1-next.1](https://github.com/readmeio/rdme/compare/v10.10.0...v10.10.1-next.1) (2026-11-10)
 
 
