@@ -28,18 +28,10 @@
       },
       "ObjectB": {
         "title": "Cyclic Schema Example",
-        "$ref": "#/components/schemas/ObjectARef"
+        "$ref": "#/components/schemas/ObjectA"
       },
       "ObjectBRef": {
         "$ref": "#/components/schemas/ObjectA"
-      },
-      "ObjectARef": {
-        "type": "object",
-        "properties": {
-          "referenceToB": {
-            "type": "object"
-          }
-        }
       }
     }
   }
