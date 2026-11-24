@@ -21,6 +21,12 @@ type Schema = OpenAPIV31.ReferenceObject | OpenAPIV31.SchemaObject;
 
 type SchemaCollection = Record<string, Schema>;
 
+// A location ending at `properties` names no property. The same cycle is also reported at the
+// property itself, so there is nothing to replace here.
+function isBarePropertiesLocation(refParts: string[], schema: Schema | undefined) {
+  return refParts.length === 5 && refParts[4] === 'properties' && !!schema && !('$ref' in schema);
+}
+
 export default class OpenAPIResolveCommand extends BaseCommand<typeof OpenAPIResolveCommand> {
   id = 'openapi resolve' as const;
 
@@ -189,6 +195,11 @@ export default class OpenAPIResolveCommand extends BaseCommand<typeof OpenAPIRes
       const propertyName = refParts[5];
       const schema = schemas[schemaName];
 
+      if (isBarePropertiesLocation(refParts, schema)) {
+        this.debug(`Skipping circular reference location without a property name: ${refPath}`);
+        return;
+      }
+
       let property: Schema;
 
       if ('properties' in schema && schema.properties?.[propertyName]) {
@@ -268,6 +279,11 @@ export default class OpenAPIResolveCommand extends BaseCommand<typeof OpenAPIRes
       let schema = schemas?.[schemaName];
       if (!schema) {
         this.warn(`Schema not found for: ${schemaName}`);
+        return;
+      }
+
+      if (isBarePropertiesLocation(refParts, schema)) {
+        this.debug(`Skipping circular reference location without a property name: ${refPath}`);
         return;
       }
 
@@ -363,7 +379,7 @@ export default class OpenAPIResolveCommand extends BaseCommand<typeof OpenAPIRes
       throw new Error('The file does not contain component schemas.');
     }
 
-    const schemas: SchemaCollection = parsedSpec.components?.schemas;
+    const schemas = parsedSpec.components?.schemas as SchemaCollection;
 
     const spinner = ora({ ...oraOptions() });
     spinner.start('Identifying and resolving circular/recursive references in your API definition...');

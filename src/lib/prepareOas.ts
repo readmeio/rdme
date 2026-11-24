@@ -1,5 +1,4 @@
 import type { CommandIdForTopic, OpenAPICommands } from '../index.js';
-import type { OpenAPI } from 'openapi-types';
 
 import chalk from 'chalk';
 import OASNormalize from 'oas-normalize';
@@ -176,7 +175,7 @@ export default async function prepareOas(this: OpenAPICommands) {
       throw err;
     });
 
-  let api: OpenAPI.Document;
+  let api: Awaited<ReturnType<OASNormalize['convert']>>;
   await oas.validate().catch((err: Error) => {
     spinner.fail();
     this.debug(`raw validation error object: ${JSON.stringify(err)}`);
